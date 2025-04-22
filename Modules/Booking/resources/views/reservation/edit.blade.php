@@ -225,7 +225,7 @@
                                                     <div class="d-flex align-items-center justify-content-end flex-wrap row-gap-3 mb-3">
                                                         <div class="dropdown me-2">
                                                             <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="filtercollapse">
-                                                                <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }} <span class="count text-center ms-2 fs-12">0</span>
+                                                                <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
                                                             </a>
                                                         </div>
                                                         <div class="top-search me-2">
