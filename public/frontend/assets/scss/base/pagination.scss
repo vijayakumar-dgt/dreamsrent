@@ -1,0 +1,72 @@
+/*-----------------
+    4. Pagination
+-----------------------*/
+
+.pagination {
+    .pagination {
+        margin-bottom: 25px;
+        width: 100%;
+        text-align: center;                    
+        .previtem {
+            @include respond-below(custom575) {
+                display: none;
+            } 
+            a {
+                color: $__gray;
+                font-size: $__font__size__14;
+                min-width: 150px;
+                padding: 15px 38px;
+                border-radius: 10px;
+                i {
+                    margin-right: 8px;
+                }
+            }  
+        } 
+        .nextlink {
+            @include respond-below(custom575) {
+                display: none;
+            } 
+            a {
+                color: $__gray;
+                font-size: $__font__size__14;
+                min-width: 150px;
+                padding: 15px 38px;
+                border-radius: 10px;
+                i {
+                    margin-left: 8px;
+                }
+            }  
+        } 
+    }
+    .pagination-center {
+        justify-content: $__center;
+        display: flex;
+        .page-group {
+            .page-item {
+                a {
+                    border: 1px solid $__light__gray;
+                    background: $__white;
+                    border-radius: 10px;
+                    padding: 10px 19px;
+                    margin: 0 12px 0 0;
+                    color: $__gray;
+                    width: 46px;
+                    height: 46px;
+                    display: $__flex;
+                    justify-content: $__center;
+                    align-items: $__center;                        
+                }
+                .active {
+                    background-color: $__dark__blues;
+                    color: $__white;
+                }                    
+            }
+            ul {
+                display: $__flex;
+                align-items: $__center;
+                justify-content: $__center;
+                margin: 0 0 0 10px;
+            }
+        }            
+    } 
+}

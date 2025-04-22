@@ -1,0 +1,11 @@
+{
+    "CarInfo": true,
+    "Communication": true,
+    "GeneralSetting": true,
+    "Booking": true,
+    "Page": true,
+    "MenuManagement": true,
+    "Report": true,
+    "RolesPermission": true,
+    "Installer": false
+}

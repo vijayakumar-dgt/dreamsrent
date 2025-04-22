@@ -1,0 +1,58 @@
+/*-----------------
+    17. Our Team
+-----------------------*/
+
+.our-team-section {
+    background: $__alice__blue;
+    position: $__relative;
+    @include margin-padding(null, 80px 0 55px);
+    @include respond-below(custom991) {
+        @include margin-padding(null, 60px 0 35px);
+    }
+    @include respond-below(custom767) {
+        @include margin-padding(null, 40px 0 15px);
+    }
+    .our-team {
+        text-align: $__center;
+        border-bottom: 3px solid $__white;
+        background: $__white;
+        box-shadow: 0px 4px 24px rgba(225, 225, 225, 0.25);
+        border-radius: 0px 10px 10px;
+        @include margin-padding(0 0 25px, null);
+        transition: all 0.2s ease-out 0s;
+        .team-prof {
+            @include margin-padding(null, 30px);
+            .team-designation {
+                @include margin-padding(null, 0 0 30px);
+                display: $__block;
+            }            
+            .team-post-title {
+                font-weight: $__bold;
+                font-size: $__font__size__24;
+                margin-bottom: 10px;
+            }
+        }        
+        .profile-pic {
+            position: $__relative;
+            overflow: $__hidden;
+            img {
+                width: 100%;
+                height: 100%;
+                transform: translateZ(0);
+                transition: all 2000ms cubic-bezier(0.19, 1, 0.22, 1) 0ms;
+            }
+        }
+    } 
+    .our-team:hover {
+        border-bottom: 3px solid $__primarycolor;
+        transition: all 0.2s ease-out 0s;
+        .profile-pic {
+            img {
+                -webkit-transform: scale(1.15);
+                -moz-transform: scale(1.15);
+                transform: scale(1.15);
+            }
+        }
+        
+    }
+}

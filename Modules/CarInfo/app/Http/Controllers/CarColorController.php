@@ -1,0 +1,174 @@
+<?php
+
+namespace Modules\CarInfo\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Modules\CarInfo\Models\CarColor;
+
+class CarColorController extends Controller
+{
+    public function index()
+    {
+        return view('carinfo::car_color.index');
+    }
+
+    public function store(Request $request)
+    {
+        $authUser = current_user();
+        $languageId = $authUser->language_id ?? 1;
+    
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'value' => 'required',
+        ], [
+            'name.required' => __('admin.rentals.color_name_required'),
+            'value.required' => __('admin.rentals.color_code_required'),
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 422,
+                'errors' => $validator->errors()->toArray()
+            ], 422);
+        }
+        
+        $id = $request->id ?? '';
+        $successMsg = empty($id) ? __('admin.rentals.vehicle_color_create_success') : __('admin.rentals.vehicle_color_update_success');
+        $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
+    
+        try {
+    
+            $data = [
+                'name' => $request->name,
+                'value' => $request->value,
+                'status' => $request->status ?? 1,
+                'language_id' => $languageId
+            ];
+    
+            if (empty($id)) {
+                CarColor::create($data);
+            } else {
+                CarColor::where('id', $id)->update($data);
+            }
+    
+            return response()->json([
+                'status' => 'success',
+                'code'   => 200,
+                'message' => $successMsg
+            ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 500,
+                'message' => $errorMsg
+            ], 500);
+        }
+    }
+    
+
+    public function list(Request $request)
+    {
+        $orderBy = $request->order_by ?? 'desc';
+
+        try {
+            $authUser = current_user(); 
+            $language_id = $authUser->language_id;
+
+            $data = CarColor::orderBy('id', $orderBy)->where("language_id", $language_id)->get();
+
+            return response()->json([
+                'code' => 200,
+                'message' => __('admin.common.default_retrieve_success'),
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'message' => __('admin.common.default_retrieve_error'),
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function edit(Request $request)
+    {
+        $id = $request->id;
+        $carColor = CarColor::find($id);
+
+        return response()->json([
+            'status' => 'success',
+            'code'   => 200,
+            'data' => $carColor
+        ], 200);
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+
+            $id = $request->id;
+
+            CarColor::where('id', $id)->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'code'   => 200,
+                'message' => __('admin.rentals.vehicle_color_delete_success')
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 500,
+                'message' => __('admin.common.default_delete_error')
+            ], 500);
+        }
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->ids;
+
+        if (!$ids || count($ids) == 0) {
+            return response()->json(['success' => false, 'message' => 'No items selected.']);
+        }
+
+        CarColor::whereIn('id', $ids)->delete();
+
+        return response()->json(['success' => true, 'message' => 'Selected items deleted successfully.']);
+    }
+
+    public function getVehicleColors(Request $request)
+    {
+        $orderBy = $request->order_by ?? 'asc';
+        $search = $request->search ?? null;
+
+        try {
+
+            $data = CarColor::when(function ($query) use ($search) {
+                    return $query->where('name', 'LIKE', "%{$search}%");
+                })
+                ->orderBy('id', $orderBy)
+                ->where('status', 1)
+                ->get([
+                    'id',
+                    'name'
+                ]);
+
+            return response()->json([
+                'code' => 200,
+                'message' => __('admin.common.default_retrieve_success'),
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'message' => __('admin.common.default_retrieve_error'),
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+}

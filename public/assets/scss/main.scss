@@ -1,0 +1,74 @@
+/****** Utils ******/
+@import "utils/variables";
+@import "utils/mixins";
+
+/******* Base *******/
+@import "base/base";
+@import "base/background";
+
+/******* Components ******/
+@import "components/avatar";
+@import "components/boostrap";
+@import "components/button";
+@import "components/badge";
+@import "components/border";
+@import "components/calendar";
+@import "components/chart";
+@import "components/call";
+@import "components/dropdown";
+@import "components/email";
+@import "components/file-manager";
+@import "components/file-upload";
+@import "components/icons";
+@import "components/progress";
+@import "components/pagination";
+@import "components/font";
+@import "components/typography";
+@import "components/alerts";
+@import "components/popovers";
+@import "components/forms";
+@import "components/notes";
+@import "components/todo";
+@import "components/tables";
+@import "components/accordion";
+@import "components/breadcrumb";
+@import "components/cards";
+@import "components/tooltips";
+@import "components/navs-tabs";
+@import "components/ribbon";
+@import "components/popup";
+@import "components/grid";
+@import "components/timeline";
+@import "components/sweetalert";
+@import "components/incoming-call";
+
+/****** Layout ******/
+@import "layout/common";
+@import "layout/content";
+@import "layout/header";
+@import "layout/sidebar";
+@import "layout/notification";
+@import "layout/theme";
+
+/******* Vendors ******/
+@import "vendors/select2";
+@import "vendors/datatables";
+@import "vendors/rangepicker-plugin";
+
+/******* Pages ******/
+@import "pages/login";
+@import "pages/brands";
+@import "pages/reservation";
+@import "pages/car";
+@import "pages/ui-pages";
+@import "pages/customer";
+@import "pages/pages";
+@import "pages/quotations";
+@import "pages/blogs";
+@import "pages/dashboard";
+@import "pages/coupons";
+@import "pages/rental-report";
+@import "pages/invoice";
+@import "pages/settings";
+@import "pages/chat";
+@import "pages/circle-progress";

@@ -1,0 +1,615 @@
+(async () => {
+    await loadTranslationFile('admin', 'common, general_settings');
+    const permissions = await loadUserPermissions();
+
+
+$(document).ready(function() {
+    loadTaxRates();
+    loadTaxGroups();
+    getTaxRates();
+
+    $("#tax_rate_form").validate({
+        rules: {
+            tax_name: {
+                required: true,
+                minlength: 3,
+                maxlength: 30,
+            },
+            tax_rate: {
+                required: true,
+            },
+        },
+        messages:{
+            tax_name: {
+                required: _l('admin.general_settings.tax_name_required'),
+                minlength: _l('admin.general_settings.tax_name_minlength'),
+                maxlength: _l('admin.general_settings.tax_name_maxlength'),
+            },
+            tax_rate: {
+                required: _l('admin.general_settings.tax_rate_required'),
+            },
+        },
+        errorPlacement: function (error, element) {
+            if (element.hasClass("select2-hidden-accessible")) {
+                var errorId = element.attr("id") + "_error";
+                $("#" + errorId).text(error.text());
+            } else {
+                var errorId = element.attr("id") + "_error";
+                $("#" + errorId).text(error.text());
+            }
+        },    
+        highlight: function (element) {
+            if ($(element).hasClass("select2-hidden-accessible")) {
+                $(element).next(".select2-container").addClass("is-invalid").removeClass('is-valid');
+            }
+            $(element).addClass("is-invalid").removeClass("is-valid");
+        },
+        unhighlight: function (element) {
+            if ($(element).hasClass("select2-hidden-accessible")) {
+                $(element).next(".select2-container").removeClass("is-invalid").addClass('is-valid');
+            }
+            $(element).removeClass("is-invalid").addClass("is-valid");
+            var errorId = element.id + "_error";
+            $("#" + errorId).text("");
+        },
+        onkeyup: function(element) {
+            $(element).valid();
+        },
+        onchange: function(element) {
+            $(element).valid();
+        },
+        submitHandler: function(form) {
+            let formData = new FormData(form);
+            if ($('#id').val() != '') {
+                formData.set('status', $("#status").is(":checked") ? 1 : 0);
+            }
+
+            $.ajax({
+                type:"POST",
+                url:"/admin/settings/tax-rate/store",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function () {
+                    $('.submitBtn').attr('disabled', true).html(`
+                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..
+                    `);
+                },
+                success:function(resp){
+                    $(".error-text").text("");
+                    $(".form-control, .form-check-input").removeClass("is-invalid is-valid");
+                    $(".submitBtn").removeAttr("disabled").html($("#id").val() ? _l('admin.common.save_changes') : _l('admin.common.create_new'));
+                    if (resp.code === 200) {
+                        showToast('success', resp.message);
+                        $("#tax_rate_modal").modal('hide');
+                        loadTaxRates();
+                        getTaxRates();
+                    }
+                },
+                error:function(error){
+                    $(".error-text").text("");
+                    $(".form-control, .form-check-input").removeClass("is-invalid is-valid");
+                    $(".submitBtn").removeAttr("disabled").html($("#id").val() ? _l('admin.common.save_changes') : _l('admin.common.create_new'));
+                    if (error.responseJSON.code === 422) {
+                        $.each(error.responseJSON.errors, function(key, val) {
+                            $("#" + key).addClass("is-invalid");
+                            $("#" + key + "_error").text(val[0]);
+                        });
+                    } else {
+                        showToast('error', error.responseJSON.message);
+                    }
+                }
+            });
+        }
+    });
+
+    $("#tax_group_form").validate({
+        rules: {
+            tax_group_name: {
+                required: true,
+                minlength: 3,
+                maxlength: 30,
+            },
+            "sub_tax[]": {
+                required: true,
+            },
+        },
+        messages:{
+            tax_group_name: {
+                required: _l('admin.general_settings.tax_group_name_required'),
+                minlength: _l('admin.general_settings.tax_group_name_minlength'),
+                maxlength: _l('admin.general_settings.tax_group_name_maxlength'),
+            },
+            "sub_tax[]": {
+                required: _l('admin.general_settings.sub_taxes_required'),
+            },
+        },
+        errorPlacement: function (error, element) {
+            if (element.hasClass("select2-hidden-accessible")) {
+                var errorId = element.attr("id") + "_error";
+                $("#" + errorId).text(error.text());
+            } else {
+                var errorId = element.attr("id") + "_error";
+                $("#" + errorId).text(error.text());
+            }
+        },    
+        highlight: function (element) {
+            if ($(element).hasClass("select2-hidden-accessible")) {
+                $(element).next(".select2-container").addClass("is-invalid").removeClass('is-valid');
+            }
+            $(element).addClass("is-invalid").removeClass("is-valid");
+        },
+        unhighlight: function (element) {
+            if ($(element).hasClass("select2-hidden-accessible")) {
+                $(element).next(".select2-container").removeClass("is-invalid").addClass('is-valid');
+            }
+            $(element).removeClass("is-invalid").addClass("is-valid");
+            var errorId = element.id + "_error";
+            $("#" + errorId).text("");
+        },
+        onkeyup: function(element) {
+            $(element).valid();
+        },
+        onchange: function(element) {
+            $(element).valid();
+        },
+        submitHandler: function(form) {
+            let formData = new FormData(form);
+            if ($('#tax_group_id').val() != '') {
+                formData.set('status', $("#status").is(":checked") ? 1 : 0);
+                formData.set('id', $("#tax_group_id").val());
+            }
+
+            $.ajax({
+                type:"POST",
+                url:"/admin/settings/tax-group/store",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function () {
+                    $('.submitBtn').attr('disabled', true).html(`
+                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..
+                    `);
+                },
+                success:function(resp){
+                    $(".error-text").text("");
+                    $(".form-control, .form-check-input, .select2-container").removeClass("is-invalid is-valid");
+                    $(".submitBtn").removeAttr("disabled").html($("#tax_group_id").val() ? _l('admin.common.save_changes') : _l('admin.common.create_new'));
+                    if (resp.code === 200) {
+                        showToast('success', resp.message);
+                        $("#tax_group_modal").modal('hide');
+                        loadTaxGroups();
+                    }
+                },
+                error:function(error){
+                    $(".error-text").text("");
+                    $(".form-control, .form-check-input, .select2-container").removeClass("is-invalid is-valid");
+                    $(".submitBtn").removeAttr("disabled").html($("#tax_group_id").val() ? _l('admin.common.save_changes') : _l('admin.common.create_new'));
+                    if (error.responseJSON.code === 422) {
+                        $.each(error.responseJSON.errors, function(key, val) {
+                            $("#" + key).addClass("is-invalid");
+                            $("#" + key + "_error").text(val[0]);
+                        });
+                    } else {
+                        showToast('error', error.responseJSON.message);
+                    }
+                }
+            });
+        }
+    });
+
+});
+
+function loadTaxRates(){
+    $.ajax({
+        url:"/admin/settings/tax-rate/list",
+        type:"GET",
+        success:function(response){
+            let tableBody = "";
+            if ($.fn.DataTable.isDataTable("#taxRateTable")) {
+                $("#taxRateTable").DataTable().destroy();
+            }
+
+            if (response.code === 200 && response.data.length > 0) {
+                let data = response.data;
+                
+                $.each(data, function(index, value) {
+                    tableBody += `
+                    <tr>         
+                        <td>
+                            <p class="text-gray-9 fw-semibold fs-14">${value.tax_name}</p>
+                        </td>
+                        <td>
+                            <p class="text-gray-9">${value.tax_rate}%</p>
+                        </td>
+                        <td>
+                            <p class="text-gray-9">${value.created_on}</p>
+                        </td>
+                        ${hasPermission(permissions, 'finance_settings', 'edit') || hasPermission(permissions, 'finance_settings', 'delete') ?
+
+                        `<td>
+                            <div class="dropdown">
+                                <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="ti ti-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end p-2">
+                                  ${hasPermission(permissions, 'finance_settings', 'edit') ?
+                                    `<li>
+                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editTaxRate(${value.id})"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                    </li>`:''}
+                                      ${hasPermission(permissions, 'finance_settings', 'delete') ?
+                                    `<li>
+                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteTaxRate(${value.id})" data-bs-toggle="modal" data-bs-target="#delete_tax_rate"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                    </li>`:''}
+                                </ul>
+                            </div>
+                        </td>`:''}
+                    </tr>  `
+                });
+
+            } else{
+                tableBody += `
+                        <tr>
+                            <td colspan="6" class="text-center">${_l('admin.common.empty_table')}</td>
+                        </tr>`;
+                $('.table-footer').empty();
+            }
+            $("#taxRateTable tbody").html(tableBody);
+
+            if ((response.data.length > 0)) {
+                $('#taxRateTable').DataTable({
+                    ordering: true,
+                    searching: false,
+                    pageLength: 10,
+                    lengthChange: false,
+                    language: {
+                        emptyTable: _l("admin.common.empty_table"),
+                        info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
+                        infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
+                        infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
+                        lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
+                        search: _l("admin.common.search") + ":",
+                        zeroRecords: _l("admin.common.no_matching_records"),
+                        paginate: {
+                            first: _l("admin.common.first"),
+                            last: _l("admin.common.last"),
+                            next: _l("admin.common.next"),
+                            previous: _l("admin.common.previous"),
+                        },
+                    },
+                    "drawCallback": function() {
+                        $(".dataTables_info").addClass('d-none');
+                        $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
+
+                        var tableWrapper = $(this).closest('.dataTables_wrapper');
+                        var info = tableWrapper.find('.dataTables_info');
+                        var pagination = tableWrapper.find('.dataTables_paginate');
+
+                        $('.first-table .table-footer').empty()
+                            .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
+                                .append($('<div class="datatable-info"></div>').append(info.clone(true)))
+                                .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
+                        );
+                        $(".first-table .table-footer").find(".dataTables_paginate").removeClass("d-none");
+                    }
+                });
+            }
+        },
+        error:function(error){
+            if (error.responseJSON.code === 500) {
+                showToast('error', error.responseJSON.message);
+            } else {
+                showToast('error', _l('admin.common.default_retrieve_error'));
+            }
+        },
+        complete: function() {
+            $('.first-table').find(".table-loader, .input-loader, .label-loader, .button-loader").hide();
+            $('.first-table').find('.real-table, .table-footer, .real-label, .real-input, .real-button').removeClass('d-none');
+        }
+        
+    });
+}
+
+function loadTaxGroups(){
+    $.ajax({
+        url:"/admin/settings/tax-group/list",
+        type:"GET",
+        success:function(response){
+            let tableBody = "";
+            if ($.fn.DataTable.isDataTable("#taxGroupTable")) {
+                $("#taxGroupTable").DataTable().destroy();
+            }
+
+            if (response.code === 200 && response.data.length > 0) {
+                let data = response.data;
+                
+                $.each(data, function(index, value) {
+                    tableBody += `
+                    <tr>         
+                        <td>
+                            <p class="text-gray-9 fw-semibold fs-14">${value.tax_name}</p>
+                        </td>
+                        <td>
+                            <p class="text-gray-9">${value.total_tax_rate}%</p>
+                        </td>
+                        <td>
+                            <p class="text-gray-9">${value.created_on}</p>
+                        </td>
+                            ${hasPermission(permissions, 'finance_settings', 'edit') || hasPermission(permissions, 'finance_settings', 'delete') ?
+                        `<td>
+                            <div class="dropdown">
+                                <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="ti ti-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end p-2">
+                                ${hasPermission(permissions, 'finance_settings', 'edit') ?
+                                    `<li>
+                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editTaxGroup(${value.id})"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                    </li>`:''}
+                                    ${hasPermission(permissions, 'finance_settings', 'delete') ?
+                                    `<li>
+                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteTaxGroup(${value.id})" data-bs-toggle="modal" data-bs-target="#delete_tax_group"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                    </li>`:''}
+                                </ul>
+                            </div>
+                        </td>`:''}
+                    </tr>  `
+                });
+
+            } else{
+                tableBody += `
+                        <tr>
+                            <td colspan="6" class="text-center">${_l('admin.common.empty_table')}</td>
+                        </tr>`;
+                $('.second-table .table-footer').empty();
+            }
+            $("#taxGroupTable tbody").html(tableBody);
+
+            if ((response.data.length > 0)) {
+                $('#taxGroupTable').DataTable({
+                    ordering: true,
+                    searching: false,
+                    pageLength: 10,
+                    lengthChange: false,
+                    language: {
+                        emptyTable: _l("admin.common.empty_table"),
+                        info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
+                        infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
+                        infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
+                        lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
+                        search: _l("admin.common.search") + ":",
+                        zeroRecords: _l("admin.common.no_matching_records"),
+                        paginate: {
+                            first: _l("admin.common.first"),
+                            last: _l("admin.common.last"),
+                            next: _l("admin.common.next"),
+                            previous: _l("admin.common.previous"),
+                        },
+                    },
+                    "drawCallback": function() {
+                        $(".dataTables_info").addClass('d-none');
+                        $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
+
+                        var tableWrapper = $(this).closest('.dataTables_wrapper');
+                        var info = tableWrapper.find('.dataTables_info');
+                        var pagination = tableWrapper.find('.dataTables_paginate');
+
+                        $('.second-table .table-footer').empty()
+                            .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
+                                .append($('<div class="datatable-info"></div>').append(info.clone(true)))
+                                .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
+                        );
+                        $(".second-table .table-footer").find(".dataTables_paginate").removeClass("d-none");
+                    }
+                });
+            }
+        },
+        error:function(error){
+            if (error.responseJSON.code === 500) {
+                showToast('error', error.responseJSON.message);
+            } else {
+                showToast('error', _l('admin.common.default_retrieve_error'));
+            }
+        },
+        complete: function() {
+            $('.second-table').find(".table-loader, .input-loader, .label-loader, .button-loader").hide();
+            $('.second-table').find('.real-table, .table-footer, .real-label, .real-input, .real-button').removeClass('d-none');
+        }
+        
+    });
+}
+
+function getTaxRates(){
+    $.ajax({
+        url:"/admin/settings/get-tax-rates",
+        type:"GET",
+        success:function(response){
+            if (response.code === 200) {
+                let data = response.data;
+                let taxRateOptions = '';
+                $.each(data, function(index, value) {
+                    taxRateOptions += `<option value="${value.id}">${value.tax_name}</option>`;
+                });
+                $('#sub_tax').html(taxRateOptions);
+            }
+        },
+        error:function(error){
+            if (error.responseJSON.code === 500) {
+                showToast('error', error.responseJSON.message);
+            } else {
+                showToast('error', _l('admin.common.default_retrieve_error'));
+            }
+        }
+    });
+}
+
+$(document).on('click', '.first-table .dataTables_paginate a', function() {
+    $(".first-table .table-footer").find(".dataTables_paginate").removeClass("d-none");
+});
+
+$("#add_tax_rate").on('click', function() {
+    $("#tax_rate_form .modal-title").text(_l('admin.general_settings.create_tax_rate'));
+    $(".submitBtn").text(_l('admin.common.create_new'));
+    $("#tax_rate_form")[0].reset();
+    $("#id").val('');
+    $(".error-text").text("");
+    $(".form-control, .form-check-input").removeClass("is-invalid is-valid");
+    $('#tax_rate_form .statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
+});
+
+$("#tax_rate").on("input", function () {
+    $(this).val($(this).val().replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1"));
+});
+
+$("#delete_tax_rate_form").on('submit', function(e){
+    e.preventDefault();
+    $.ajax({
+        url:"/admin/settings/tax-rate/delete",
+        type:"POST",
+        data: {
+            id: $('#delete_tax_rate_id').val()
+        },
+        headers: {
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            if(response.code === 200){
+                showToast('success', response.message);
+                $("#delete_tax_rate").modal('hide');
+                loadTaxRates();
+                getTaxRates();
+            }
+        },
+        error: function(res) {
+            if(res.responseJSON.code === 500){
+                showToast('error', res.responseJSON.message);
+            } else {
+                showToast('error', _l('admin.common.default_delete_error'));
+            }
+        }
+    });
+});
+
+$(document).on('click', '.second-table .dataTables_paginate a', function() {
+    $(".second-table .table-footer").find(".dataTables_paginate").removeClass("d-none");
+});
+
+$("#add_tax_group").on('click', function() {
+    $("#tax_group_form .modal-title").text(_l('admin.general_settings.create_tax_group'));
+    $(".submitBtn").text(_l('admin.common.create_new'));
+    $("#tax_group_form")[0].reset();
+    $("#tax_group_id").val('');
+    $('#sub_tax').val('').trigger('change');
+    $(".error-text").text("");
+    $(".form-control, .form-check-input, .select2-container").removeClass("is-invalid is-valid");
+    $('#tax_group_form .statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
+});
+
+$("#delete_tax_group_form").on('submit', function(e){
+    e.preventDefault();
+    $.ajax({
+        url:"/admin/settings/tax-group/delete",
+        type:"POST",
+        data: {
+            id: $('#delete_tax_group_id').val()
+        },
+        headers: {
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            if(response.code === 200){
+                showToast('success', response.message);
+                $("#delete_tax_group").modal('hide');
+                loadTaxGroups();
+            }
+        },
+        error: function(res) {
+            if(res.responseJSON.code === 500){
+                showToast('error', res.responseJSON.message);
+            } else {
+                showToast('error', _l('admin.common.default_delete_error'));
+            }
+        }
+    });
+});
+
+}) ();
+
+function editTaxRate(id){
+    $.ajax({
+        url:"/admin/settings/tax-rate/edit/"+id,
+        type:"GET",
+        success:function(response){
+            $(".error-text").text("");
+            $(".form-control, .form-check-input, .select2-container").removeClass("is-invalid is-valid");
+            if (response.code === 200) {
+                $('#id').val(response.data.id);
+                $('#tax_name').val(response.data.tax_name);
+                $('#tax_rate').val(response.data.tax_rate);
+                $('#status').prop("checked", response.data.status == 1 ? true : false);
+                $("#tax_rate_modal").modal('show');
+
+                $("#tax_rate_modal .modal-title").text(_l('admin.general_settings.edit_tax_rate'));
+                $(".submitBtn").text(_l('admin.common.save_changes'));
+                $('#tax_rate_form .statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+            }
+        },
+        error:function(error){
+            if (error.responseJSON.code === 500) {
+                showToast('error', error.responseJSON.message);
+            } else {
+                showToast('error', _l('admin.common.default_retrieve_error'));
+            }
+        }
+    });
+}
+
+function deleteTaxRate(id){
+    $('#delete_tax_rate').modal('show');
+    $('#delete_tax_rate_id').val(id);
+}
+
+function editTaxGroup(id){
+    
+    $.ajax({
+        url:"/admin/settings/tax-group/edit/"+id,
+        type:"GET",
+        success:function(response){
+            $(".error-text").text("");
+            $(".form-control, .form-check-input, .select2-container").removeClass("is-invalid is-valid");
+            if (response.code === 200) {
+                $('#tax_group_id').val(response.data.id);
+                $('#tax_group_name').val(response.data.tax_name);
+                $('#group_status').prop("checked", response.data.status == 1 ? true : false);
+                var selectedIds = response.data.tax_rates.map(tax => tax.id);
+                $('#sub_tax').val(selectedIds).trigger('change');
+                $("#tax_group_modal .modal-title").text(_l('admin.general_settings.edit_tax_group'));
+                $(".submitBtn").text(_l('admin.common.save_changes'));
+                $('#tax_group_form .statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+                $("#tax_group_modal").modal('show');
+            }
+        },
+        error:function(error){
+            if (error.responseJSON.code === 500) {
+                showToast('error', error.responseJSON.message);
+            } else {
+                showToast('error', _l('admin.common.default_retrieve_error'));
+            }
+        }
+    });
+}
+
+function deleteTaxGroup(id){
+    $('#delete_tax_group').modal('show');
+    $('#delete_tax_group_id').val(id);
+}

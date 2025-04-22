@@ -1,0 +1,282 @@
+@extends('admin.admin')
+
+@section('content')
+    <div class="page-wrapper">
+			<div class="content">
+				 <!-- Breadcrumb -->
+				 <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
+					<div class="my-auto mb-2">
+						<h2 class="mb-1">{{ __('admin.general_settings.settings') }}</h2>
+						<nav>
+							<ol class="breadcrumb mb-0">
+								<li class="breadcrumb-item">
+									<a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
+								</li>
+								<li class="breadcrumb-item active" aria-current="page">{{ __('admin.general_settings.settings') }}</li>
+							</ol>
+						</nav>
+					</div>
+				</div>
+				<!-- /Breadcrumb -->
+				<div class="row">
+                    @include('admin.partials.general_settings_side_menu')
+                    <div class="col-xl-9">
+                            <div class="card">
+                                <form id="companySettingForm" enctype="multipart/form-data">
+                                    <div class="card-header">
+                                        <div class="skeleton header-skeleton label-loader"></div>
+                                        <h5 class="fw-bold d-none real-label">{{ __('admin.general_settings.website_settings') }}</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Company Settings Section -->
+                                        <div class="localization-content mb-3">
+                                            <div class="skeleton section-title-skeleton label-loader"></div>
+                                            <h6 class="fw-bold mb-3 d-none real-label">{{ __('admin.general_settings.company_settings') }}</h6>
+                                            <input type="hidden" name="group_id" id="group_id" class="form-control" value="1">
+
+                                            <!-- Profile Photo Upload -->
+                                            <div class="mb-3">
+                                                <div class="skeleton label-skeleton label-loader"></div>
+                                                <label class="form-label d-none real-label">{{ __('admin.general_settings.profile_photo') }}</label>
+                                                <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
+                                                    <div class="skeleton image-skeleton image-loader"></div>
+                                                    <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames d-none real-label">
+                                                        <img id="profile_photo_preview" src="/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
+                                                        <a href="javascript:void(0);" class="uploadimgtrash btn btn-sm rounded-circle" onclick="removeImage()">
+                                                            <i class="ti ti-trash fs-12"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div class="profile-upload">
+                                                        <div class="skeleton button-skeleton label-loader"></div>
+                                                        <div class="profile-uploader d-flex align-items-center d-none real-label">
+                                                            <div class="drag-upload-btn btn btn-md btn-dark">
+                                                                <i class="ti ti-photo-up fs-14"></i>
+                                                                {{ __('admin.common.change') }}
+                                                                <input type="file" class="form-control image-sign" id="company_profile_photo" name="company_profile_photo" accept="image/*" onchange="previewImage(event)">
+                                                            </div>
+                                                        </div>
+                                                        <div class="skeleton text-skeleton label-loader"></div>
+                                                        <div class="mt-2 d-none real-label">
+                                                            <p class="fs-14">{{ __('admin.common.recommended_size_is') }} 500px x 500px</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span id="company_profile_photo_error" class="text-danger error-text"></span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Basic Information Section -->
+                                        <div class="localization-content mb-3">
+                                            <div class="skeleton section-title-skeleton label-loader"></div>
+                                            <h6 class="fw-bold mb-3 d-none real-label">{{ __('admin.general_settings.basic_information') }}</h6>
+
+                                            <div class="row">
+                                                <!-- Organization Name -->
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <div class="skeleton label-skeleton label-loader"></div>
+                                                        <label class="form-label d-none real-label">{{ __('admin.general_settings.organization_name') }} <span class="text-danger">*</span></label>
+                                                        <div class="skeleton input-skeleton input-loader"></div>
+                                                        <input type="text" class="form-control d-none real-label" id="organization_name" name="organization_name" maxlength="30">
+                                                        <span id="organization_name_error" class="text-danger error-text"></span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Owner Name -->
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <div class="skeleton label-skeleton label-loader"></div>
+                                                        <label class="form-label d-none real-label">{{ __('admin.general_settings.owner_name') }} <span class="text-danger">*</span></label>
+                                                        <div class="skeleton input-skeleton input-loader"></div>
+                                                        <input type="text" class="form-control d-none real-label" id="owner_name" name="owner_name" maxlength="30">
+                                                        <span id="owner_name_error" class="text-danger error-text"></span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Email Address -->
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <div class="skeleton label-skeleton label-loader"></div>
+                                                        <label class="form-label d-none real-label">{{ __('admin.general_settings.email_address') }} <span class="text-danger">*</span></label>
+                                                        <div class="skeleton input-skeleton input-loader"></div>
+                                                        <input type="email" class="form-control d-none real-label" id="company_email" name="company_email" maxlength="50">
+                                                        <span id="company_email_error" class="text-danger error-text"></span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Phone Number -->
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <div class="skeleton label-skeleton label-loader"></div>
+                                                        <label class="form-label d-none real-label">{{ __('admin.common.phone_number') }} <span class="text-danger">*</span></label>
+                                                        <div class="skeleton input-skeleton input-loader"></div>
+                                                        <input type="text" class="form-control d-none real-label company_phone" id="company_phone" name="company_phone">
+                                                        <input type="hidden" id="international_phone_number" name="international_phone_number">
+                                                        <span id="company_phone_error" class="text-danger error-text"></span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Industry -->
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <div class="skeleton label-skeleton label-loader"></div>
+                                                        <label class="form-label d-none real-label">{{ __('admin.general_settings.industry') }} <span class="text-danger">*</span></label>
+                                                        <div class="skeleton select-skeleton input-loader"></div>
+                                                        <select class="form-control select d-none real-label" id="industry" name="industry">
+                                                            <option value="">{{ __('admin.common.select') }}</option>
+                                                            @foreach($industries as $industry)
+                                                                <option value="{{ $industry->id }}">{{ $industry->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <span id="industry_error" class="text-danger error-text"></span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Team Size -->
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <div class="skeleton label-skeleton label-loader"></div>
+                                                        <label class="form-label d-none real-label">{{ __('admin.general_settings.team_size') }} <span class="text-danger">*</span></label>
+                                                        <div class="skeleton select-skeleton input-loader"></div>
+                                                        <select class="form-control select d-none real-label" id="team_size" name="team_size">
+                                                            <option value="">{{ __('admin.common.select') }}</option>
+                                                            @foreach($teamSizes as $teamSize)
+                                                                <option value="{{ $teamSize->id }}">{{ $teamSize->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <span id="team_size_error" class="text-danger error-text"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Address Information Section -->
+                                        <div class="localization-content mb-3">
+                                            <div class="skeleton section-title-skeleton label-loader"></div>
+                                            <h6 class="fw-bold mb-3 d-none real-label">{{ __('admin.general_settings.address_information') }}</h6>
+
+                                            <div class="row">
+                                                <!-- Address Line -->
+                                                <div class="col-md-12">
+                                                    <div class="mb-3">
+                                                        <div class="skeleton label-skeleton label-loader"></div>
+                                                        <label class="form-label d-none real-label">{{ __('admin.general_settings.address_line') }}</label>
+                                                        <div class="skeleton input-skeleton input-loader"></div>
+                                                        <input type="text" class="form-control d-none real-label" id="company_address_line" name="company_address_line" maxlength="100">
+                                                        <span id="company_address_line_error" class="text-danger error-text"></span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Country -->
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <div class="skeleton label-skeleton label-loader"></div>
+                                                        <label class="form-label d-none real-label">{{ __('admin.common.country') }} <span class="text-danger">*</span></label>
+                                                        <div class="skeleton select-skeleton input-loader"></div>
+                                                        <select name="country" class="form-control select2 d-none real-label" id="country"></select>
+                                                        <span id="country_error" class="text-danger error-text"></span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- State -->
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <div class="skeleton label-skeleton label-loader"></div>
+                                                        <label class="form-label d-none real-label">{{ __('admin.common.state') }} <span class="text-danger">*</span></label>
+                                                        <div class="skeleton select-skeleton input-loader"></div>
+                                                        <select name="state" class="form-control select2 d-none real-label" id="state"></select>
+                                                        <span id="state_error" class="text-danger error-text"></span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- City -->
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <div class="skeleton label-skeleton label-loader"></div>
+                                                        <label class="form-label d-none real-label">{{ __('admin.common.city') }} <span class="text-danger">*</span></label>
+                                                        <div class="skeleton select-skeleton input-loader"></div>
+                                                        <select name="city" id="city" class="form-control select2 d-none real-label"></select>
+                                                        <span id="city_error" class="text-danger error-text"></span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Postal Code -->
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <div class="skeleton label-skeleton label-loader"></div>
+                                                        <label class="form-label d-none real-label">{{ __('admin.common.postal_code') }}</label>
+                                                        <div class="skeleton input-skeleton input-loader"></div>
+                                                        <input type="text" class="form-control d-none real-label" id="company_postal_code" name="company_postal_code" maxlength="6">
+                                                        <span id="company_postal_code_error" class="text-danger error-text"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Footer Section -->
+                                    <div class="card-footer">
+                                        <div class="d-flex align-items-center justify-content-end">
+                                            <div class="skeleton button-skeleton label-loader me-2"></div>
+                                            <a href="javascript:void(0);" class="btn btn-light me-2 d-none real-label">{{ __('admin.general_settings.cancel') }}</a>
+                                            @if (hasPermission($permissions, 'website_settings', 'edit'))
+                                            <div class="skeleton button-skeleton label-loader"></div>
+                                            <button type="submit" class="btn btn-primary companysave d-none real-label">{{ __('admin.general_settings.save_changes') }}s</button>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </form>
+                                <form id="ownerSettingForm" enctype="multipart/form-data">
+                                    <div class="mb-3" style="padding: 1.25rem;">
+                                        <h6 class="mb-1">{{ __('admin.general_settings.transfer_ownership') }}</h6>
+                                        <p class="mb-2">{{ __('admin.general_settings.transfer_ownership_description') }}</p>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="d-flex align-items-end justify-content-between">
+                                                    <div class="w-100 me-3">
+                                                        <label class="form-label">{{ __('admin.general_settings.owner') }}</label>
+                                                        <select class="select form-control" name="owner_id">
+                                                            <option value="">{{ __('admin.general_settings.select_owner') }}</option>
+                                                            @if($users->isNotEmpty())
+                                                                @foreach($users as $user)
+                                                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                                @endforeach
+                                                            @else
+                                                                <option disabled>No data found</option>
+                                                            @endif
+                                                        </select>
+                                                        <span id="owner_id_error" class="text-danger error-text"></span>
+                                                    </div>
+
+                                                    <button type="submit" class="btn btn-primary ownershipChange mb-1">{{ __('admin.common.update') }}</button>
+                                            
+                                                </div>
+                                            </div>
+                                            <div>
+                                        </div>
+
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+					</div>
+				</div>
+			</div>
+        @include('admin.partials.footer')
+	</div>
+@endsection
+@push('scripts')
+    <script src="{{ asset('assets/js/general_setting/company.js') }}"></script>
+@endpush
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,40 @@
+/*-----------------
+	3. General
+-----------------------*/
+
+body{
+	font-family: $__body__font__family;
+	font-size: $__body__font__size;
+	color: $__gray_light;
+	background: $__cylindrical;
+	overflow-x: hidden;
+	@include respond-below(custom991){
+		font-size:$__font__size__15;
+	}
+}
+a {
+	cursor: pointer;
+	@include transition(all 0.2s ease);
+	&:hover{
+		@include transition(all 0.2s ease);
+	}
+	&:focus {
+		outline: 0;
+	}
+}
+p {
+	&:last-child{
+		margin-bottom:0;
+	}
+}
+strong{
+	font-weight: $__bold;
+}
+.form-control {
+	&:focus {
+		border-color: #bbb;
+		box-shadow: none;
+		outline: 0 none;
+	}
+    
+}

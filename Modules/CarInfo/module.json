@@ -1,0 +1,11 @@
+{
+    "name": "CarInfo",
+    "alias": "carinfo",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\CarInfo\\Providers\\CarInfoServiceProvider"
+    ],
+    "files": []
+}

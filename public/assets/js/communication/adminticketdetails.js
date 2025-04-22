@@ -1,0 +1,252 @@
+
+(async () => {
+    await loadTranslationFile('admin', 'common, support');
+
+$(document).ready(function () {
+
+    $('.summernote').summernote({
+        height: 150,
+        placeholder: 'Type your Reply here...',
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+    });
+
+    ticketDetails();
+});
+$("#editTickets").validate({
+    rules: {
+        assign_staff: {
+            required: false
+        },
+        status: {
+            required: true
+        },
+        reply: {
+            required: true,
+            maxlength: 60
+        }
+    },
+    messages: {
+        assign_staff: {
+            required: "Please select a staff member"
+        },
+        status: {
+            required: "Please select a status"
+        },
+        reply: {
+            required: "Please enter a reply",
+            maxlength: "Reply must be a maximum of 60 words"
+        }
+    },
+    errorPlacement: function (error, element) {
+        var errorId = element.attr("id") + "Error";
+        $("#" + errorId).text(error.text());
+    },
+    highlight: function (element) {
+        $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+    unhighlight: function (element) {
+        $(element).removeClass("is-invalid").addClass("is-valid");
+        var errorId = $(element).attr("id") + "Error";
+        $("#" + errorId).text("");
+    },
+    onkeyup: function (element) {
+        $(element).valid();
+    },
+    onchange: function (element) {
+        $(element).valid();
+    },
+    submitHandler: function (form) {
+        let ticketId = localStorage.getItem("ticketId");
+
+        if (!ticketId) {
+            showToast('error', 'Ticket ID not found. Please refresh and try again.');
+            return;
+        }
+
+        $('#reply').val($('.summernote').summernote('code'));
+
+        let editData = new FormData(form);
+        editData.append("ticketid", ticketId);
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/ticket/update",
+            data: editData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            beforeSend: function () {
+                $('.send_reply_btn').attr('disabled', true).html(`
+                    <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.sending')}..
+                `);
+            },
+            complete: function () {
+                $('.send_reply_btn').attr('disabled', false).html(_l('admin.support.send_reply'));
+            },
+            success: function (resp) {
+                if (resp.code === 200) {
+                    showToast('success', resp.message);
+                    $("#edit_ticket").modal("hide");
+                    $("#editTickets")[0].reset();
+                    $('.summernote').summernote('code', '');
+                    ticketDetails();
+                }
+            },
+            error: function (error) {
+                $(".error-message").text("");
+                $(".form-control").removeClass("is-invalid is-valid");
+
+                if (error.responseJSON.code === 422) {
+                    $.each(error.responseJSON.errors, function (key, val) {
+                        $("#" + key).addClass("is-invalid");
+                        $("#" + key + "Error").text(val[0]);
+                    });
+                } else {
+                    showToast('error', error.responseJSON.message || "Something went wrong.");
+                }
+            }
+        });
+    }
+
+
+});
+
+function ticketDetails() {
+    let ticketId = localStorage.getItem("ticketId");
+    if (!ticketId) {
+        console.warn("No ticketId found in localStorage. Skipping API call.");
+        return;
+    }
+    $.ajax({
+        url: "/admin/ticket/list",
+        type: "GET",
+        data: {
+            ticketId: ticketId
+        },
+        success: function (response) {
+
+            let ticket = response.data[0];
+
+            if (!ticket) {
+                showToast('error', 'No ticket found');
+                return;
+            }
+
+            $(".ticket_id").html(`#${ticket.ticket_id} - <span class="text-default category_name">${ticket.category?.name || ''}</span>`);
+            $(".user_name").text(`${ticket.user?.user_detail?.first_name || ''} ${ticket.user?.user_detail?.last_name || ''}`);
+            $(".Priority").text(ticket.priority);
+            $(".assigne_name").text(ticket.assignee?.user_detail?.first_name || 'Unassigned');
+            $(".created_at").text(new Date(ticket.created_at).toLocaleDateString());
+            $(".update_at").text(new Date(ticket.updated_at).toLocaleDateString());
+            $(".ticket_description").html(ticket.description || '');
+
+            $("#status").val(ticket.status).trigger('change');
+
+            const attachmentContainer = $(".attachmentContainer");
+            attachmentContainer.html("");
+
+            if (ticket.attachment) {
+                let attachments = [];
+
+                try {
+                    attachments = JSON.parse(ticket.attachment);
+                } catch (e) {
+                    attachments = ticket.attachment.split(',');
+                }
+
+                attachments.forEach(file => {
+                    file = file.replace(/\\/g, '/');
+
+                    const fileUrl = `/storage/${file}`;
+                    const fileName = file.split('/').pop();
+                    const ext = fileName.split('.').pop().toLowerCase();
+                    const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext);
+                    const isPdf = ext === 'pdf';
+
+                    let attachmentHTML = `
+                        <div class="bg-light br-5 p-3 d-flex align-items-center border mb-2">
+                            <span class="avatar bg-white d-flex align-items-center justify-content-center me-2">
+                                ${isPdf ? `<img src="/assets/img/icons/pdf.svg" alt="pdf" class="w-10 h-10">` : ''}
+                                ${isImage ? `<img src="${fileUrl}" alt="img" class="w-10 h-10 rounded">` : ''}
+                            </span>
+                            <div class="me-2">
+                                <h6 class="fs-14 fw-medium mb-0">${fileName}</h6>
+                                <p class="fs-12 mb-0">${ext.toUpperCase()} File</p>
+                            </div>
+                            <a href="${fileUrl}" target="_blank" class="ms-auto btn btn-sm btn-primary d-flex align-items-center">
+                                <i class="ti ti-download fs-16 me-1"></i> ${_l('admin.common.download')}
+                            </a>
+                        </div>
+                    `;
+
+                    attachmentContainer.append(attachmentHTML);
+                });
+            } else {
+                attachmentContainer.html(`<p>${_l('admin.support.no_attachment_found')}</p>`);
+            }
+            if (!ticket || !ticket.ticket_histories.length) {
+                $(".ticket_histroy").html(`<p class="text-center">${_l('admin.common.no_history_found')}</p>`);
+                return;
+            }
+
+            let historyHtml = "";
+
+            ticket.ticket_histories.forEach(history => {
+                let userImage = history.user && history.user.profile_image
+                    ? history.user.profile_image
+                    : "/assets/img/profiles/avatar-20.jpg";
+
+                let userName = history.user ? history.user.name : "Unknown User";
+                let createdAt = new Date(history.created_at).toLocaleString();
+
+                historyHtml += `
+                    <div class="comment-item mt-3">
+                        <div class="d-flex align-items-center mb-1">
+                            <span class="avatar avatar-l me-2 flex-shrink-0">
+                                <img src="${userImage}" alt="User Profile Image" class="img-fluid rounded-circle">
+                            </span>
+                            <div>
+                                <h6 class="mb-1">${userName}</h6>
+                                <p><i class="ti ti-calendar-bolt me-1"></i> ${_l('admin.common.updated_on')} ${createdAt}</p>
+                            </div>
+                        </div>
+                        <div class="border-bottom p-2">
+                            <p>${history.description}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            $(".ticket_histroy").html(historyHtml);
+
+            const statusMap = {
+                1: 'Open',
+                2: 'Assigned',
+                3: 'In Progress',
+                4: 'Closed'
+            };
+            let statusText = statusMap[ticket.status] || 'Unknown';
+            $(".status-text").text(statusText);
+        },
+        error: function (error) {
+            showToast('error', error.responseJSON?.error || "An error occurred while retrieving tickets!");
+        },
+        complete: function () {
+            $('.skeleton').remove();
+            $('.real-label').removeClass('d-none');
+            $(".table-loader, .input-loader, .label-loader").hide();
+            $('.real-table, .real-label, .real-input').removeClass('d-none');
+        }
+    });
+}
+
+}) ();

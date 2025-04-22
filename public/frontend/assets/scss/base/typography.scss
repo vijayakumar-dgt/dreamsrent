@@ -1,0 +1,124 @@
+/*-----------------
+    2. Typography
+-----------------------*/
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,500;1,600;1,700;1,900&display=swap');
+
+
+$__body__font__family: 'Fira Sans', sans-serif;
+
+$__highbold:900;
+$__bold:700;
+$__semibold:600;
+$__medium:500;
+$__regular:400;
+$__light:300;
+
+$__body__font__size:16px;
+$__menu__font__size:16px;
+$__button__font__size:18px;
+$__font__size__8:8px;
+$__font__size__10:10px;
+$__font__size__11:11px;
+$__font__size__12:12px;
+$__font__size__13:13px;
+$__font__size__14:14px;
+$__font__size__15:15px;
+$__font__size__16:16px;
+$__font__size__17:17px;
+$__font__size__19:19px;
+$__font__size__18:18px;
+$__font__size__20:20px;
+$__font__size__22:22px;
+$__font__size__24:24px;
+$__font__size__26:26px;
+$__font__size__28:28px;
+$__font__size__32:32px;
+$__font__size__36:36px;
+$__font__size__38:38px;
+$__font__size__40:40px;
+$__font__size__48:48px;
+$__font__size__42:42px;
+$__font__size__50:50px;
+$__font__size__52:52px;
+$__font__size__62:62px;
+
+
+
+a {
+	color: $title;
+	cursor: pointer;
+	text-decoration: none;
+	@include transition(all 0.5s ease);
+	&:hover {
+	  color: $primary;
+	  @include transition(all 0.5s ease);
+	}
+	&:focus {
+	  outline: 0;
+	}
+  }
+h1 {
+	font-weight: 900;
+	font-size: $__font__size__62;
+	color: #201F1D;
+	@include respond-below(custom1199){
+		font-size:$__font__size__36;
+	}
+}
+h2 {
+	font-weight: 900;
+	font-size:$__font__size__36;
+	color: #111111;;
+	@include respond-below(custom991){
+		font-size:$__font__size__26;
+	}
+}
+h3 {
+	font-weight: 700;
+	font-size: $font-size-28;
+	color: #111111;
+	@include respond-below(lg){
+		font-size:$font-size-24;
+	}
+	@include respond-below(md){
+		font-size:$font-size-20;
+	}
+}
+h4 {
+	font-size:$__font__size__28;
+	color: #2F2F2F;
+	@include respond-below(custom991){
+		font-size:$__font__size__20;
+	}
+}
+h5 {
+	font-size:$__font__size__18;
+	color: $title;
+	@include respond-below(custom991){
+		font-size:$__font__size__16;
+	}
+}
+h6 {
+	font-weight:$__medium;
+	font-size:$__font__size__18;
+	color: #111111;
+	@include respond-below(custom991){
+		font-size:$__font__size__16;
+	}
+}
+.display-1 {
+	font-weight: $font-weight-bold;
+	font-size: $font-size-62;
+	color: $title;
+	@include respond-below(xl){
+		font-size:$font-size-50;
+	}
+	@include respond-below(lg){
+		font-size:$font-size-40;
+	}
+	@include respond-below(md){
+		font-size:$font-size-24;
+	}
+
+}

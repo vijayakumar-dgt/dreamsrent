@@ -1,0 +1,88 @@
+/*-----------------
+    22. About Us
+-----------------------*/
+
+.about-img {
+	position: $__relative;
+	@include margin-padding(0 0 24px 0, null);
+	img {
+		border-radius: 10px;
+		@include margin-padding(null, 0 0 0 10px);
+	}
+	.about-exp {
+		position: $__absolute;
+		background: $__primarycolor;
+		border-radius: 10px;
+		width: 370px;
+		height: 100%;
+		@include respond-below(custom767) {
+			width: 230px;
+		}			
+		span {
+			font-weight: $__medium;
+			font-size: $__font__size__28;
+			color: $__white;
+			display: inline-block;
+			margin: 250px -122px;
+			transform: rotate(-90deg);
+				@include respond-below(custom767) {
+					font-size: $__font__size__18;
+					margin: 275px -90px;
+				}							
+				@include respond-below(custom575) {
+					font-size: $__font__size__16;
+					margin: 115px -75px;
+				}
+		}
+	}
+}
+.abt-img {
+	padding: 30px 0 30px 60px;
+	position: $__relative;
+	z-index: 1;
+}
+.about-content {
+	@include margin-padding(0 0 0 50px, null);
+		@include respond-below(custom991) {
+			@include margin-padding(0, null);
+		}
+	h6 {
+		font-size: $__font__size__18;
+		color: $__dark__blues;
+		font-weight: $__medium;
+		text-transform: uppercase;
+		@include margin-padding(0 0 12px, null);
+	}
+	h2 {
+		font-size: $__font__size__38;
+		font-weight: $__medium;
+		@include margin-padding(0 0 30px, null);
+		@include respond-below(custom991) {
+			font-size: $__font__size__28;
+		}
+		@include respond-below(custom767) {
+			font-size: $__font__size__24;
+		}
+	}
+	p {
+		@include margin-padding(0 0 14px, null);
+	}
+	ul {
+		li {
+			position: $__relative;
+			@include margin-padding(0 0 15px, 0 0 0 25px);
+			color: $__gray__lightdark;
+			&::before {
+				position: absolute;
+				top: 0;
+				left: 0;
+				content: '\f058';
+				font-family: 'FontAwesome';
+				color: $__dark__blues;
+			}
+			&:last-child {
+				@include margin-padding(0, null);
+			}
+		}
+	}
+}

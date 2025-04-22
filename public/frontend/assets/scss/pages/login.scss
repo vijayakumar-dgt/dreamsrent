@@ -1,0 +1,215 @@
+/*-----------------
+    12. Login
+-----------------------*/
+
+.login-body {
+    margin: $__auto;
+    .log-header {
+        background: #FFFFFF;
+        padding: 22px;
+        box-shadow: 0px 4px 24px rgba(225, 225, 225, 0.25);
+    }
+}
+.logo-dark{
+	margin: $__auto;
+    display: $__block;
+}
+.login-wrapper {
+    width: $__full__width;
+    height: $__full__height;
+    vertical-align: $__middle;
+    @include margin-padding(0, 100px 0);
+    background: $__cylindrical;
+        @include respond-below(custom991) {
+            @include margin-padding(0, 50px 0);
+        }    
+        @include respond-below(custom575) {
+            @include margin-padding(0, 0);
+        }   
+    .loginbox {
+        background-color: $__white;
+        box-shadow: 0px 4px 24px rgba(225, 225, 225, 0.25);
+        display: $__flex;
+        margin: $__auto;
+        max-width: 635px;
+        width: 100%;
+        @include rounded(5px);
+        .login-left {
+            align-items: $__center;
+            background: linear-gradient(180deg, #8BC34A, #00bcd4);
+            flex-direction: column;
+             @extend %justify-content-center;
+            padding: 80px;
+            width: 635px;
+            display: flex;
+            @include rounded(6px 0 0 6px);
+        }
+        .login-auth {
+            @extend %display-flex-center;
+             @extend %justify-content-center;
+            padding: 20px;
+            width: 635px;
+            @include respond-below(custom320) {             
+                width: 100%;
+            }
+            .login-auth-wrap {
+                max-width: 100%;
+                flex: 0 0 100%;
+                .sign-group {
+                    @extend %display-flex-center;
+                    span {
+                        i {
+                            line-height: 0;
+                            margin-right: 6px;
+                        }
+                    }
+                    a {
+                        font-size: $__font__size__14;
+                        @include margin-padding(0 0 40px, 0);
+                        &:hover {
+                            color: $__primarycolor;
+                        }
+                    }
+                }
+                .input-block {
+                    label {
+                        @include margin-padding(0 0 10px 0, null);
+                    } 
+                }
+                h1 {
+                    @include margin-padding(0 0 10px, null);
+                    font-size: 28px;
+                    font-weight: $__bold;
+                }
+            }
+            .forgotpass a {
+                color: $__gray__lightdark;
+                &:hover {
+                    color: $__dark__blues;
+                    text-decoration: $__underline;
+                }
+            }
+            .dont-have {
+                color: $__gray__lightdark;
+                margin-top: 30px;
+                a {
+                    color: $__light_grass;
+                    &:hover {
+                        text-decoration: $__underline;
+                    }
+                }
+            }
+            .social-login {
+                text-align: $__center;
+
+                span {
+                    color: $__gray__lightdark;
+                    margin-right: 8px;
+                    display: inline-flex;
+                }
+                a {
+                    background: $__light__grayish;
+                    border: 1px solid $__light__grayish;
+                    box-shadow: inset 0 0 0 0 $__white;
+                    text-align: $__center;
+                    @include margin-padding(0 0 15px, 10px 0);
+                    font-size: $__font__size__16;
+                    line-height: 20px;
+                    color: $__graybackblue;
+                    @include rounded(4px); 
+                    &:hover {
+                        background-color: $__white;
+                        border-color: $__light__grayish;
+                        color: $__grayish__blue;
+                        box-shadow: inset 0 50px 0 0 $__white;
+                    }
+                    &.facebook {
+                        background-color: #4b75bd;
+                    }
+                    &.google {
+                        background-color: #fe5240;
+                    }
+                }
+            }
+        }
+        .account-subtitle {
+            color: $__gray__lightdark;
+            @include margin-padding(0 0 30px, null);
+        }
+        .login-or {
+            color: $__gray__lightdark;
+            @include margin-padding(20px auto 20px, 20px 0 20px);
+            position: $__relative;
+            max-width: 385px;
+        }
+        .or-line {
+            background-color: $__cloud__grays;
+            height: 1px;
+            margin-bottom: 0;
+            margin-top: 0;
+            display: $__block;
+            @include respond-below(custom575) {
+                display: $__none;
+            }
+        }
+        .span-or {
+            background-color: $__white;
+            display: $__block;
+            left: 15%;
+            position: $__absolute;
+            text-align: $__center;
+            top: 8px;
+            width: 280px;   
+            @include respond-below(custom575) {
+                left: 0;
+            }         
+        } 
+        .span-or-log {
+            background-color: $__white;
+            color: $__gray__lightdark;
+            display: $__block;
+            left: 25%;
+            position: $__absolute;
+            text-align: $__center;
+            top: 6px;
+            width: 200px;   
+            @include respond-below(custom575) {
+                left: 0;
+            }         
+        } 
+        .lock-user {
+            margin-bottom: 20px;
+            text-align: $__center;
+            img {
+                margin-bottom: 15px;
+                width: 100px;
+            }
+        }
+        .toggle-password,.toggle-password-two {
+            position: $__absolute;
+            right: 17px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: $__gray__lightdark;
+            cursor: $__pointer;
+            &.fa-eye {
+                margin-right: 1px;
+                font-weight: $__medium;
+            }
+        }
+    }
+}     
+.log-footer {
+    background: $__cylindrical;    
+    .copyright {
+        border-top: 0;
+        @include margin-padding(null, 28px 0);
+        text-align: $__center;
+        .copyright-text {
+            p {
+                font-size: $__font__size__14;
+                color: $__gray;
+            }
+        }
+    }
+}  

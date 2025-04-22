@@ -1,0 +1,26 @@
+[
+    {
+        "module_name": "Coupon",
+        "module_image": "https://indian-retailer.s3.ap-south-1.amazonaws.com/s3fs-public/2022-10/Coupons.jpg",
+        "module_price": 20,
+        "module_version": "V.1",
+        "git_link": "https://github.com/ranjithmadeswaran/coupons.git",
+        "purchase_link": "https://themeforest.net/item/truelysell-service-booking-wordpress-theme/43398124"
+    },
+    {
+        "module_name": "Report",
+        "module_image": "https://blogassets.leverageedu.com/blog/wp-content/uploads/2020/05/07214531/Report-Writing.jpg",
+        "module_price": 20,
+        "module_version": "V.1",
+        "git_link": "https://github.com/ranjithmadeswaran/report.git",
+        "purchase_link": "https://themeforest.net/item/truelysell-service-booking-wordpress-theme/43398124"
+    },
+    {
+        "module_name": "Advertisement",
+        "module_image": "https://www.feedough.com/wp-content/uploads/2021/08/advertisement.png",
+        "module_price": 20,
+        "module_version": "V.1",
+        "git_link": "https://github.com/ranjithmadeswaran/advertisement.git",
+        "purchase_link": "https://themeforest.net/item/truelysell-service-booking-wordpress-theme/43398124"
+    }
+]

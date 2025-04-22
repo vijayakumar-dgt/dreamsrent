@@ -1,0 +1,122 @@
+/*-----------------
+    18. Contact
+-----------------------*/
+
+.contact-section {
+    position: $__relative;
+    @include margin-padding(null, 80px 0);
+    @include respond-below(custom991) {
+        @include margin-padding(null, 50px 0);
+    }
+    .contact-info-area {
+        @include margin-padding(0 0 80px, null);
+        @include respond-below(custom991) {
+            @include margin-padding(0 0 30px, null);
+        }
+        @include respond-below(custom575) {
+            @include margin-padding(0 0 15px, null);
+        }
+        .single-contact-info {
+            text-align: center;
+            background: $__white;
+            border: 2px solid $__light__gooses;
+            box-shadow: 0px 4px 24px rgba(225, 225, 225, 0.25);
+            border-radius: 10px;
+            @include margin-padding(null, 20px);
+            -webkit-transition: all .5s;
+            transition: all .5s;
+                @include respond-below(custom992) {
+                    @include margin-padding(null, 15px);
+                }                 
+                @include respond-below(custom991) {
+                    @include margin-padding(0 0 24px, null);
+                } 
+            i {
+                @extend %justify-content-center;
+                @extend %display-flex-center;
+                color: $__white;
+                -webkit-transition: all 0.5s;
+                transition: all 0.5s;
+                font-size: $__font__size__26;
+                width: 70px;
+                height: 70px;
+                @include margin-padding(0 auto 15px, null);
+                line-height: 50px;
+                background: $__warningcolor;
+                border-radius: 50%;
+                    @include respond-below(custom992) {
+                        width: 35px;
+                        height: 35px;
+                        font-size: $__font__size__16;
+                    } 
+            }
+            h3 {
+                font-weight: $__medium;
+                font-size: $__font__size__20;
+                @include margin-padding(0 0 10px, null);
+                -webkit-transition: all .5s;
+                transition: all .5s;
+                    @include respond-below(custom992) {
+                        font-size: $__font__size__16;
+                    } 
+            }
+            a {
+                font-size: $__font__size__16;
+                color: $__sandstone;
+                -webkit-transition: all .5s;
+                transition: all .5s;
+                @include respond-below(custom992) {
+                    font-size: $__font__size__13;
+                }
+            }
+            &:hover {
+                background: $__dark__blues;
+                -webkit-transition: all .5s;
+                transition: all .5s;
+                i {                    
+                    background: $__white;
+                    -webkit-transition: all .5s;
+                    transition: all .5s;
+                    color: $__dark__blues;
+                }
+                h3 {
+                    color: $__white;
+                    -webkit-transition: all .5s;
+                    transition: all .5s;
+                }
+                a {
+                    color: $__white;
+                    -webkit-transition: all .5s;
+                    transition: all .5s;
+                }
+            }
+        }
+    }
+    .form-info-area {
+        background: $__white;
+        border: 2px solid $__light__gooses;
+        box-shadow: 0px 4px 24px rgba(225, 225, 225, 0.25);
+        border-radius: 10px;
+        @include margin-padding(null, 24px);
+        img {
+            border-radius: 10px;
+            @include respond-below(custom991) {
+                display: $__none   
+            }  
+        }
+        h1 {
+            font-weight: $__medium;
+            font-size: $__font__size__38;
+            color: $__graybackblue;
+            @include margin-padding(0 0 30px, null);
+            @include respond-below(custom992) {
+                font-size: $__font__size__28;
+                @include margin-padding(0 0 15px, null);
+            }  
+        }
+    }
+    textarea.form-control {
+        height: 120px;
+        resize: $__none;
+    }
+}

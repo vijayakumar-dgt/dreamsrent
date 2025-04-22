@@ -1,0 +1,470 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const userPhoneInput = document.querySelector(".user_phone");
+    const intlPhoneInput = document.querySelector("#international_phone_number");
+    const userProfileForm = document.querySelector("#userProfileForm");
+    
+    if (userPhoneInput && userProfileForm) {
+        const iti = intlTelInput(userPhoneInput, {
+            utilsScript: `${window.location.origin}/frontend/assets/plugins/intltelinput/js/utils.js`,
+            separateDialCode: true,
+        });
+
+        userPhoneInput.classList.add("iti");
+        userPhoneInput.parentElement.classList.add("intl-tel-input");
+
+        userProfileForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const intlNumber = iti.getNumber();
+            if (intlNumber) {
+                intlPhoneInput.value = intlNumber;
+            }
+        });
+    }
+
+});
+
+(async () => {
+    await loadTranslationFile('web', 'user,common');
+
+    $(document).ready(function () {
+
+        // fetchCountries();
+        $('.custom-select2').select2();
+        setTimeout(function () {
+            $("#country").trigger('change');
+        }, 100);
+        $("#country").on('change', function () {
+            let id = $(this).val();
+            if (id) {
+                fetchStatesByCountry(id);
+            } else {
+                $("#state").empty();
+                $("#state").append('<option value="">Select</option>');
+                $("#city").empty();
+                $("#city").append('<option value="">Select</option>');
+            }
+        });
+    
+        $("#state").on('change', function () {
+            let id = $(this).val();
+            if (id) {
+                fetchCitiesByState(id);
+            } else {
+                $("#city").empty();
+                $("#city").append('<option value="">Select</option>');
+            }
+        });
+    
+        $("#userProfileForm").validate({
+            rules: {
+                profile_photo: {
+                    required: false,
+                    extension: "jpeg|jpg|png",
+                    filesize: 2048
+                },
+                first_name: {
+                    required: true,
+                    maxlength: 30
+                },
+                last_name: {
+                    required: true,
+                    maxlength: 30
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                user_phone: {
+                    required: true,
+                    maxlength: 15 // Adjusted for international numbers
+                },
+                address_line: {
+                    required: true,
+                    maxlength: 50
+                },
+                country: {
+                    required: true,
+                },
+                state: {
+                    required: true,
+                },
+                city: {
+                    required: true,
+                },
+                postal_code: {
+                    required: true,
+                    pattern: /^[0-9a-zA-Z]+$/ // Pattern for alphanumeric postal code
+                },
+            },
+            messages: {
+                first_name: {
+                    required: "Please enter your first name",
+                    maxlength: "First name cannot exceed 30 characters"
+                },
+                last_name: {
+                    required: "Please enter your last name",
+                    maxlength: "Last name cannot exceed 30 characters"
+                },
+                email: {
+                    required: "Please enter your email address",
+                    email: "Please enter a valid email address"
+                },
+                user_phone: {
+                    required: "Please enter your phone number",
+                    maxlength: "Phone number cannot exceed 15 digits"
+                },
+                address_line: {
+                    required: "Please enter your address",
+                    maxlength: "Address cannot exceed 50 characters"
+                },
+                postal_code: {
+                    required: "Please enter your postal code",
+                    pattern: "Please enter a valid postal code"
+                },
+            },
+            errorPlacement: function (error, element) {
+                if (element.hasClass("select2-hidden-accessible")) {
+                    var errorId = element.attr("id") + "_error";
+                    $("#" + errorId).text(error.text());
+                } else {
+                    var errorId = element.attr("id") + "_error";
+                    $("#" + errorId).text(error.text());
+                }
+            },
+            highlight: function (element) {
+                if ($(element).hasClass("select2-hidden-accessible")) {
+                    $(element).next(".select2-container").addClass("is-invalid").removeClass('is-valid');
+                }
+                $(element).addClass("is-invalid").removeClass("is-valid");
+            },
+            unhighlight: function (element) {
+                if ($(element).hasClass("select2-hidden-accessible")) {
+                    $(element).next(".select2-container").removeClass("is-invalid").addClass('is-valid');
+                }
+                $(element).removeClass("is-invalid").addClass("is-valid");
+                var errorId = element.id + "_error";
+                $("#" + errorId).text("");
+            },
+            onkeyup: function(element) {
+                $(element).valid();
+            },
+            onchange: function(element) {
+                $(element).valid();
+            },
+            submitHandler: function (form) {
+                let adminProfileData = new FormData(form);
+                adminProfileData.set('user_phone', $('#international_phone_number').val());
+    
+                // CSRF Token
+                adminProfileData.append("_token", $('meta[name="csrf-token"]').attr('content'));
+    
+                $(".btn-primary").text('Please Wait...').prop('disabled', true);
+    
+                $.ajax({
+                    type: "POST",
+                    url: "/userprofile",
+                    data: adminProfileData,
+                    processData: false,
+                    contentType: false,
+                    success: function (resp) {
+                        showToast('success', resp.message);
+                        if (resp.data.profile_image) {
+                            $('.header_profile_image').attr('src', resp.data.profile_image);
+                        }
+                        $(".btn-primary").text('Save Changes').prop('disabled', false);
+                    },
+                    error: function (error) {
+                        $(".btn-primary").text('Save Changes').prop('disabled', false);
+                        if (error.responseJSON && error.responseJSON.code === 422) {
+                            $.each(error.responseJSON.errors, function (key, val) {
+                                $("#" + key).addClass("is-invalid");
+                                $("#" + key + "_error").text(val[0]);
+                            });
+                        } else {
+                            showToast('error', error.responseJSON?.message || "An error occurred.");
+                        }
+                    }
+                });
+            }
+        });
+    
+        $.validator.addMethod("filesize", function (value, element, param) {
+            if (element.files.length === 0) return true;
+            return element.files[0].size <= param * 1024;
+        }, "File size must be less than {0} KB.");    
+    
+    });
+    
+})();
+
+
+$('#profile_photo').on('change', function (event) {
+    let file = this.files[0];
+    let error = '';
+
+    if (file) {
+        let allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        if (!allowedTypes.includes(file.type)) {
+            error = 'Only jpg, jpeg and png formats are allowed.';
+        }
+
+        if (file.size > 2 * 1024 * 1024) {
+            error = 'Image size should be less than 2MB.';
+        }
+
+        if (error) {
+            $('#profile_photo_error').text(error);
+            $('#profile_photo_preview').attr('src', '').addClass('d-none');
+            return;
+        }
+
+        let img = new Image();
+        let objectURL = URL.createObjectURL(file);
+        img.onload = function () {
+            if (this.width < 180 || this.height < 180) {
+                $('#profile_photo_error').text('Image should be at least 180 x 180 pixels.');
+                $('#profile_photo_preview').attr('src', '').addClass('d-none');
+            } else {
+                $('#profile_photo_error').text('');
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#profile_photo_preview').attr('src', e.target.result).removeClass('d-none');
+                };
+                reader.readAsDataURL(file);
+            }
+            URL.revokeObjectURL(objectURL);
+        };
+        img.src = objectURL;
+    }
+
+    $(this).valid();
+});
+
+function removeImage() {
+    const preview = document.getElementById('profile_photo_preview');
+    const fileInput = document.getElementById('profile_photo');
+
+    preview.src = '/custom/img/default-profile.png';
+    fileInput.value = '';
+    $('#profile_photo_error').text('');
+}
+function fetchCountries() {
+    $.ajax({
+        type: "GET",
+        url: "/api/countries",
+        headers: {
+            'accept': 'application/json'
+        },
+        success: function (response) {
+            if (response.code === 200) {
+                let data = response.data;
+                $("#country").empty();
+                $("#country").append('<option value="">Select Country</option>');
+                $.each(data, function (key, value) {
+                    $("#country").append('<option value="' + value.id + '">' + value.name + '</option>');
+                });
+            }
+        }
+    });
+}
+
+function fetchStatesByCountry(country_id) {
+    $.ajax({
+        type: "POST",
+        url: "/api/states",
+        data: { country_id: country_id },
+        headers: {
+            'accept': 'application/json',
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+            if (response.code === 200) {
+                let data = response.data;
+                $("#state").empty();
+                $("#state").append('<option value="">Select</option>');
+                $.each(data, function (key, value) {
+                    $("#state").append('<option value="' + value.id + '">' + value.name + '</option>');
+                });
+                let defaultState = $("#state").data('default-id');
+                setTimeout(function () {
+                    if(defaultState) {
+                        $("#state").val(defaultState).trigger('change');
+                    }
+                }, 100);
+                // empty cities
+                $("#city").empty();
+                $("#city").append('<option value="">Select</option>');
+            }
+        }
+    });
+}
+
+function fetchCitiesByState(state_id) {
+    $.ajax({
+        type: "POST",
+        url: "/api/cities",
+        data: { state_id: state_id },
+        headers: {
+            'accept': 'application/json',
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+            if (response.code === 200) {
+                let data = response.data;
+                $("#city").empty();
+                $("#city").append('<option value="">Select</option>');
+                $.each(data, function (key, value) {
+                    $("#city").append('<option value="' + value.id + '">' + value.name + '</option>');
+                });
+                let defaultState = $("#city").data('default-id');
+                setTimeout(function () {
+                    if(defaultState) {
+                        $("#city").val(defaultState).trigger('change');
+                    }
+                }, 100);
+                $("#city").trigger('change');
+            }
+        }
+    });
+}
+function fetchCountryAjax(id) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "GET",
+            url: "/api/countries",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    let data = response.data;
+                    $("#country").empty();
+                    $("#country").append('<option value="">Select</option>');
+                    $.each(data, function (key, value) {
+                        if (value.id === id) {
+                            $("#country").append('<option value="' + value.id + '" selected>' + value.name + '</option>');
+                        } else {
+                            $("#country").append('<option value="' + value.id + '">' + value.name + '</option>');
+                        }
+                    });
+                    resolve();
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                reject({
+                    message: 'Something went wrong'
+                });
+            }
+
+        });
+    });
+}
+
+function fetchStateAjax(country_id, id) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "POST",
+            url: "/api/states",
+            data: { country_id: country_id },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'accept': 'application/json'
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    let data = response.data;
+                    $("#state").empty();
+                    $("#state").append('<option value="">Select</option>');
+                    $.each(data, function (key, value) {
+                        if (value.id === id) {
+                            $("#state").append('<option value="' + value.id + '" selected>' + value.name + '</option>');
+                        } else {
+                            $("#state").append('<option value="' + value.id + '">' + value.name + '</option>');
+                        }
+                    });
+                    $("#state").trigger('change');
+                    resolve();
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                reject({
+                    message: 'Something went wrong'
+                });
+            }
+        })
+    });
+}
+
+function fetchCityAjax(state_id, id) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "POST",
+            url: "/api/cities",
+            data: { state_id: state_id },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'accept': 'application/json'
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    let data = response.data;
+                    $("#city").empty();
+                    $("#city").append('<option value="">Select</option>');
+                    $.each(data, function (key, value) {
+                        if (value.id === id) {
+                            $("#city").append('<option value="' + value.id + '" selected>' + value.name + '</option>');
+                        } else {
+                            $("#city").append('<option value="' + value.id + '">' + value.name + '</option>');
+                        }
+                    });
+                    $("#city").trigger('change');
+                    resolve();
+                }
+            },
+            error: function (error) {
+                console.log(error);
+                reject({
+                    message: 'Something went wrong'
+                });
+            }
+        })
+    });
+}
+
+function setUserId(element) {
+    const userId = element.getAttribute('data-user-id');
+    document.getElementById('deleteUserId').value = userId;
+}
+
+function confirmDelete() {
+    const userId = $('#deleteUserId').val();
+
+
+    $.ajax({
+        url: `/admin/delete-account/${userId}`,
+        type: 'post',
+
+        contentType: 'application/json',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (data) {
+            if (data.success) {
+                alert('Your account has been deleted successfully.');
+                window.location.href = '/logout';
+            } else {
+                alert(data.message || 'An error occurred while deleting your account.');
+            }
+        },
+        error: function (xhr) {
+            console.error('Error:', xhr.responseText);
+            alert('Failed to delete your account. Please try again later.');
+        }
+    });
+}
+
+
+

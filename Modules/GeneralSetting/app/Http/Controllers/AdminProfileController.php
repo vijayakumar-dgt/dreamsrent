@@ -1,0 +1,171 @@
+<?php
+
+namespace Modules\GeneralSetting\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\UserDetail;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class AdminProfileController extends Controller
+{
+    public function adminProfile(Request $request)
+    {
+        return view('generalsetting::adminProfile.index');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'            => 'required|exists:users,id',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'first_name'    => 'required|string|max:255',
+            'last_name'     => 'required|string|max:255',
+            'email'         => 'required|email|unique:users,email,' . $request->id,
+            'phone'         => 'required|numeric',
+            'address_line'  => 'nullable|string|max:255',
+            'country'       => 'required|integer|exists:countries,id',
+            'state'         => 'required|integer|exists:states,id',
+            'city'          => 'required|integer|exists:cities,id',
+            'postal_code'   => 'nullable|string|max:10',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'  => 'error',
+                'code'    => 422,
+                'message' =>  __('admin.general_settings.validation_failed'),
+                'errors'  => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $user = Auth::guard('admin')->user();
+
+            // Update User table
+            $user->update([
+                'email'        => $request->email,
+                'phone_number' => $request->phone,
+            ]);
+
+            // Handle profile photo upload
+            $profilePhoto = null;
+            if ($request->hasFile('profile_photo')) {
+                $profilePhoto = $request->file('profile_photo')->store('profile_photos', 'public');
+
+                // Optional: Delete old photo if exists
+                if ($user->userDetail && $user->userDetail->profile_image) {
+                    Storage::disk('public')->delete($user->userDetail->profile_image);
+                }
+            }
+
+            // Update or create user detail
+            UserDetail::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'first_name'    => $request->first_name,
+                    'last_name'     => $request->last_name,
+                    'mobile_number' => $request->phone,
+                    'address'       => $request->address_line,
+                    'country_id'    => $request->country,
+                    'state_id'      => $request->state,
+                    'city_id'       => $request->city,
+                    'postal_code'   => $request->postal_code,
+                    'profile_image' => $profilePhoto ?? $user->userDetail->profile_image ?? null,
+                ]
+            );
+
+            return response()->json([
+                'status'  => 'success',
+                'code'    => 200,
+                'message' => __('admin.general_settings.profile_update_success')
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'code'    => 500,
+                'message' =>  __('admin.general_settings.profile_update_error'),
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getProfile($id)
+    {
+        try {
+            $user = Auth::guard('admin')->user();
+
+            if (!$user) {
+                return response()->json([
+                    'status'  => 'error',
+                    'code'    => 404,
+                    'message' => 'User not found'
+                ], 404);
+            }
+
+            $profile = [
+                'id'            => $user->id,
+                'email'         => $user->email,
+                'phone'         => $user->phone_number,
+                'first_name'    => $user->userDetail->first_name ?? null,
+                'last_name'     => $user->userDetail->last_name ?? null,
+                'address_line'  => $user->userDetail->address ?? null,
+                'country'       => $user->userDetail->country_id ?? null,
+                'state'         => $user->userDetail->state_id ?? null,
+                'city'          => $user->userDetail->city_id ?? null,
+                'postal_code'   => $user->userDetail->postal_code ?? null,
+                'profile_photo' => $user->userDetail->profile_image
+                                    ? asset('storage/' . $user->userDetail->profile_image)
+                                    : null,
+            ];
+
+            return response()->json([
+                'status'  => 'success',
+                'code'    => 200,
+                'message' =>  __('admin.general_settings.profile_update_success'),
+                'data'    => $profile
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => 'error',
+                'code'    => 500,
+                'message' =>  __('admin.general_settings.profile_update_error'),
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function checkPassword(Request $request)
+    {
+        $id = $request->id;
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(false);
+        }
+
+        $isValid = Hash::check($request->current_password, $user->password);
+
+        return response()->json($isValid);
+
+    }
+
+    public function deleteAccount($id, Request $request)
+    {
+        $user = Auth::guard('admin')->user();
+
+        if (!$user) {
+            return response()->json(['success' => false, 'message' =>   __('admin.general_settings.user_not_found')], 404);
+        }
+
+        $user->delete();
+
+        return response()->json(['success' => true, 'message' =>  __('admin.general_settings.account_deleted_successfully')]);
+    }
+
+}

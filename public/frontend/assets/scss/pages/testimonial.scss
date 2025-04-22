@@ -1,0 +1,171 @@
+/*-----------------
+    21. Testimonials
+-----------------------*/
+
+.testimonials-section {
+    position: $__relative;
+    @include margin-padding(null, 80px 0);
+    &.about-testimonial  {
+    	.review-box ~ p {
+    		margin-bottom: 24px;
+    		@include respond-below(custom991) {  
+    			margin-bottom: 20px;
+    		}
+    	}
+    }
+		@include respond-below(custom991) {            
+			@include margin-padding(null, 50px 0);
+		}
+		@include respond-below(custom767) {            
+			@include margin-padding(null, 40px 0);
+		}
+	.testimonial-group {
+		@include margin-padding(0 0 40px, null);
+		@include respond-below(custom767) {    
+			@include margin-padding(0 0 20px, null);
+		}
+	}
+	.owl-stage-outer {
+		@include margin-padding(0 0 16px, null);
+		@include respond-below(custom991) {  
+			@include margin-padding(0 0 6px, null);
+		}
+	}
+	.card-body {		
+		-webkit-transition: 500ms all ease;
+		-o-transition: 500ms all ease;
+		transition: 500ms all ease;
+		-moz-transition: 500ms all ease;
+		-ms-transition: 500ms all ease;
+		-webkit-box-shadow: 0px 4px 24px rgba(225, 225, 225, 0.25);
+		box-shadow: 0px 4px 24px rgba(225, 225, 225, 0.25);
+		border-radius: 8px;
+		&:hover {
+			background-color: $__dark__blues;
+			.review-img {
+				border: 3px solid $__white;
+			}
+			.review-details {
+				h6 {
+					color: $__white;
+				}
+				p {
+					font-size: $__font__size__14;
+					margin-bottom: 0;
+				}
+			}
+			.list-rating {			
+				p {					
+					span {
+						color: $__white;
+					}
+				}
+			}
+			p {
+				color: $__white;
+			}
+		}
+	}
+	.review-box {
+		@extend %display-flex-center;
+		align-items: center;
+		@include margin-padding(0 0 15px, null);
+		@include respond-below(custom991) {            
+			@include margin-padding(0 0 15px, null);
+        }
+		.review-img {
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+			border: 3px solid $__blue__light;
+			-webkit-transition: 500ms all ease;
+			-o-transition: 500ms all ease;
+			transition: 500ms all ease;
+			-moz-transition: 500ms all ease;
+			-ms-transition: 500ms all ease;
+			@include respond-below(custom991) {            
+				width: 40px;
+				height: 40px;
+			}
+			img {
+				border-radius: 50px;
+			}
+		}	
+		.review-details {
+			margin-left: 15px;
+			@include respond-below(custom991) { 
+				margin-left: 12px;
+			}
+			h6 {
+				font-weight: 500;
+				font-size: $__font__size__20;
+				-webkit-transition: 500ms all ease;
+				-o-transition: 500ms all ease;
+				transition: 500ms all ease;
+				-moz-transition: 500ms all ease;
+				-ms-transition: 500ms all ease;
+				@include margin-padding(0 0 5px, null);
+				@include respond-below(custom1199) {
+					font-size: $__font__size__18;
+				}
+				@include respond-below(custom991) { 
+					font-size: 16px;
+				}
+			}
+		}
+	}	
+			.list-rating {
+				display: $__inline__flex;
+				margin-top: 0;
+				.list-rating-star {
+					@extend %display-flex-center;
+					i {
+						font-size: $__font__size__12;
+						line-height: 0;
+						color: $__primarycolor;
+					}
+				}				
+				p {
+					font-size: $__font__size__14;
+					line-height: 0;
+					-webkit-transition: 500ms all ease;
+					-o-transition: 500ms all ease;
+					transition: 500ms all ease;
+					-moz-transition: 500ms all ease;
+					-ms-transition: 500ms all ease;
+					span {
+						font-size: $__font__size__14;
+						@include margin-padding(0 5px 0, null);	
+						-webkit-transition: 500ms all ease;
+						-o-transition: 500ms all ease;
+						transition: 500ms all ease;
+						-moz-transition: 500ms all ease;
+						-ms-transition: 500ms all ease;
+					}
+				}
+			}
+	p {
+		-webkit-transition: 500ms all ease;
+		-o-transition: 500ms all ease;
+		transition: 500ms all ease;
+		-moz-transition: 500ms all ease;
+		-ms-transition: 500ms all ease;
+	}
+	.quotes-head {		
+		@include position(absolute, 24px, 24px, null, null);
+		&::before {
+			content: "";
+			display: $__block;
+			width: 28px;
+			height: 28px;
+			background: url(../img/quote.svg) no-repeat center center;			
+			@include margin-padding(0 0 20px, null);
+			opacity: 0.3;
+			@include respond-below(custom991) {           
+				width: 18px;
+				height: 18px; 
+				@include margin-padding(0 0 20px, null);
+			}
+		}
+	}	
+}

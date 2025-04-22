@@ -1,0 +1,105 @@
+/*-----------------
+    14. FAQ
+-----------------------*/
+
+.faq-section {
+	background: $__alice__blue;
+    .faq-card {
+        @include margin-padding(0 0 20px, 20px 20px);
+        border: 1px solid $__light__gooses;
+        box-shadow: 0px 4px 4px 0px #F1F1F140;
+        border-radius: 5px;
+            @include respond-below(custom991) {
+                @include margin-padding(0 0 15px, null);
+            }
+        &:last-child {
+            margin-bottom: 0;
+        }
+        p {     
+            @include margin-padding(15px 0 0, null);
+        }
+    }
+    .faq-title {
+        font-weight: $__bold;
+        font-size: $__font__size__18;
+        >a {
+            display: $__block;
+            position: $__relative;
+            color: $__black-gray;
+            font-size: $__font__size__16;
+                @include respond-below(custom991) {
+                    font-size: $__font__size__15;
+                }
+            &:after {
+                font-family: "Fontawesome";
+                content: "\f13a";
+                position: $__absolute;
+                top: 50%;
+                right: 0;
+                font-size: $__font__size__16;
+                color: $__note__lights;
+                @include transform(translateY(-50%));
+                @extend %animation-effect;
+                @include respond-below(custom767) { 
+                    top: 0px;
+                    right: -20px;
+                }
+            }
+            &:not(.collapsed) {
+                &:after {
+                    content: "\f139";
+                    color: $__primarycolor;
+                    @extend %animation-effect;
+                }
+            }
+        }
+    }
+}
+.faq-card {
+        @include margin-padding(0 0 20px, 20px 40px 20px 20px);
+        border: 1px solid $__blue__light;
+        border-radius: 5px;
+            @include respond-below(custom991) {
+                @include margin-padding(0 0 15px, null);
+            }
+        &:last-child {
+            margin-bottom: 0;
+        }
+        p {     
+            @include margin-padding(15px 0 0, null);
+        }
+    }
+    .faq-title {
+        font-weight: $__medium;
+        font-size: $__font__size__18;
+        >a {
+            display: $__block;
+            position: $__relative;
+            color: $__black-gray;
+            font-size: $__font__size__18;
+                @include respond-below(custom991) {
+                    font-size: $__font__size__15;
+                }
+            &:after {
+                font-family: "Fontawesome";
+                content: "\f13a";
+                position: $__absolute;
+                top: 50%;
+                right: -15px;
+                font-size: $__font__size__16;
+                color: $__note__lights;
+                @extend %animation-effect;
+                transform: translateY(-50%);
+                @include respond-below(custom767) { 
+                    right: -20px;
+                }
+            }
+            &:not(.collapsed) {
+                &:after {
+                    content: "\f139";
+                    color: $__primarycolor;
+                    @extend %animation-effect;
+                }
+            }
+        }
+    }

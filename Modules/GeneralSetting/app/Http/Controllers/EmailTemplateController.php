@@ -1,0 +1,185 @@
+<?php
+
+namespace Modules\GeneralSetting\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Email;
+use Modules\GeneralSetting\Models\EmailTemplate;
+use Modules\GeneralSetting\Models\NotificationTag;
+use Modules\GeneralSetting\Models\NotificationType;
+
+class EmailTemplateController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $tags = NotificationTag::where('status',true)->get();
+        $notificationTypes = NotificationType::where('status',true)->get();
+        return view('generalsetting::system_settings.email_template',compact('tags','notificationTypes'));
+    }
+
+    public function store(Request $request)
+    {
+        $existing = EmailTemplate::where('notification_type', $request->notification_type)
+            ->when($request->id, function ($query) use ($request) {
+                $query->where('id', '!=', $request->id);
+            })
+            ->whereNull('deleted_at')
+            ->first();
+
+        $rules = [
+            'title' => 'required',
+            'notification_type' => 'required',
+            'subject' => 'required|string|max:255',
+            'sms_content' => 'required|string|max:500',
+            'description' => 'required',
+        ];
+
+        $messages = [
+            'description.required' =>  __('admin.general_settings.description_not_empty'),
+            'subject.required' =>  __('admin.general_settings.subject_required'),
+            'sms_content.required' => __('admin.general_settings.sms_required'),
+        ];
+
+        if ($existing) {
+            $rules['notification_type'] = ['required', function ($attribute, $value, $fail) {
+                $fail('An email template already exists for the selected notification type.');
+            }];
+        }
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 422,
+                'errors' => $validator->errors()->toArray()
+            ], 422);
+        }
+
+        $description = strip_tags(trim($request->description));
+        if (empty($description)) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 422,
+                'message' => __('admin.general_settings.description_not_empty'),
+                'errors' => [
+                    'description' => ['Description cannot be empty']
+                ]
+            ], 422);
+        }
+
+        try {
+            $successMessage =  __('admin.general_settings.email_template_success');
+
+            if ($request->has('id') && $request->id != '') {
+                $emailTemplate = EmailTemplate::find($request->id);
+                if (!$emailTemplate) {
+                    return response()->json([
+                        'status' => 'error',
+                        'code' => 500,
+                        'message' => __('admin.general_settings.email_template_not_found'),
+                    ]);
+                }
+                $emailTemplate->status = $request->has('status') && $request->status == 'on' ? 1 : 0;
+                $successMessage = __('admin.general_settings.email_template_updated_success');
+            } else {
+                $emailTemplate = new EmailTemplate();
+            }
+
+            $emailTemplate->title = $request->title;
+            $emailTemplate->notification_type = $request->notification_type;
+            $emailTemplate->subject = $request->subject;
+            $emailTemplate->sms_content = $request->sms_content;
+            $emailTemplate->notification_content = $request->notification_content;
+            $emailTemplate->description = $request->description;
+            $emailTemplate->save();
+
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'message' => $successMessage
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 422,
+                'message' => $th->getMessage()
+            ], 422);
+        }
+    }
+
+    public function getEmailTemplates(Request $request)
+    {
+        $pageLength = $request->length;
+        $offset     = $request->start;
+        $emailTemplates = EmailTemplate::query();
+        if($request->has('keyword') && $request->keyword != ""){
+            $emailTemplates = $emailTemplates->where(function($query) use ($request){
+                          $query->where('title','like','%'.$request->keyword.'%');
+            });
+        }
+        $emailTemplates = $emailTemplates->orderBy('id','desc');
+        $emailTemplates = $emailTemplates->skip($offset)->take($pageLength)->get();
+        $totalRecords = $filteredRecords = EmailTemplate::count();
+        return response()->json([
+            'draw' => $request->draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
+            'data' => $emailTemplates
+        ]);
+    }
+
+
+    public function getEmailTemplate($id)
+    {
+        $emailTemplate = EmailTemplate::find($id);
+        return response()->json([
+            'status' => 'success',
+            'code'   => 200,
+            'data'   => $emailTemplate
+        ],200);
+    }
+
+    public function deleteEmailTeplate(Request $request)
+    {
+        try {
+            $template = EmailTemplate::findOrFail($request->id);
+            $template->delete();
+            return response()->json([
+                'status' => 'success',
+                'code'   => 200,
+                'message' =>  __('admin.general_settings.email_template_deleted_success'),
+            ],200);
+        }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return response()->json([
+                'status' => 'error',
+                'code'   => 422,
+                'message' => 'Currency not found'
+            ],422);
+        }catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 422,
+                'message' => $th->getMessage()
+            ],422);
+        }
+    }
+
+    public function getTags($id)
+    {
+        $notificationType = NotificationType::find($id);
+        $defaultTags = NotificationTag::where('status',true)->pluck('title')->toArray();
+        $tags = $notificationType && $notificationType->tags ? json_decode($notificationType->tags) : $defaultTags;
+        return response()->json([
+            'status' => 'success',
+            'code'   => 200,
+            'data'   => $notificationType,
+            'tags'   => $tags
+        ]);
+    }
+}
