@@ -14,24 +14,24 @@
             placeholder: _l('admin.general_settings.message_here'),
             callbacks: {
                 onChange: function(contents) {
-                    $('#description').val(contents); 
-                    $('#description').valid(); 
+                    $('#description').val(contents);
+                    $('#description').valid();
                 }
             }
          });
-    
+
          $(document).on('change','.select',function(){
              $(this).valid();
          });
          $(document).on('click','.var_placeholder', function(){
              let placeholder = $(this).data('placeholder');
              placeholder = '{' + placeholder + '}';
-           
+
              $("#description").summernote('editor.saveRange');
              $("#description").summernote('editor.restoreRange');
              $("#description").summernote('editor.insertText', placeholder);
          });
-    
+
          $("#mailTemplateForm").validate({
             rules: {
                 title: {
@@ -82,11 +82,11 @@
                 },
                 notification_content: {
                     required: _l('admin.general_settings.enter_notification_content'),
-                    minlength: l('admin.general_settings.enter_atleast_3character'),
-                    maxlength: l('admin.general_settings.enter_atleast_120character'),
+                    minlength: _l('admin.general_settings.enter_atleast_3character'),
+                    maxlength: _l('admin.general_settings.enter_atleast_120character'),
                 },
                 description: {
-                    customRequired:  l('admin.general_settings.enter_description'),
+                    customRequired:  _l('admin.general_settings.enter_description'),
                 }
             },
             errorPlacement: function (error, element) {
@@ -147,14 +147,14 @@
                 });
             }
         });
-    
+
         //customRequired
         jQuery.validator.addMethod("customRequired", function(value, element) {
             console.log('custom required');
             let content = $(element).summernote('isEmpty') ? '' : $(element).summernote('code');
             return content.trim().length > 0; // Ensure it's not empty
         }, "Please enter description");
-    
+
         function initTable(){
             table =  $("#emailTemplateTable").DataTable({
                 processing: false,
@@ -207,13 +207,13 @@
                                                 <i class="ti ti-dots-vertical"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                 ${ hasPermission(permissions, 'system_settings', 'edit') ? 
-    
+                                                 ${ hasPermission(permissions, 'system_settings', 'edit') ?
+
                                                 `<li>
                                                     <a class="dropdown-item rounded-1" href="javascript:void(${row.id});" id="editTemplate" data-id="${row.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                                                 </li>`:''}
-                                                    ${ hasPermission(permissions, 'system_settings', 'delete') ? 
-    
+                                                    ${ hasPermission(permissions, 'system_settings', 'delete') ?
+
                                                 `<li>
                                                     <a class="dropdown-item rounded-1" href="javascript:void(${row.id});" id="deleteTemplate" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
                                                 </li>`:''}
@@ -221,7 +221,7 @@
                                         </div>`;
                          },
                          visible: hasPermission(permissions, 'system_settings', 'edit') || hasPermission(permissions, 'system_settings', 'delete')
-    
+
                      }
                 ],
                 "drawCallback": function() {
@@ -232,7 +232,7 @@
                      var tableWrapper = $(this).closest('.dataTables_wrapper');
                      var info = tableWrapper.find('.dataTables_info');
                      var pagination = tableWrapper.find('.dataTables_paginate');
-    
+
                      // Clear the card-footer and append info and pagination
                      $('.table-footer').empty()
                          .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
@@ -258,7 +258,7 @@
                 },
              });
         }
-    
+
         $(document).on('click','#editTemplate', function(){
             let id = $(this).data('id');
             $.ajax({
@@ -284,7 +284,7 @@
                }
             });
         });
-    
+
         $(document).on('click','#add_new_template', function(){
             $("#mailTemplateForm")[0].reset();
             $("#modalfootdiv").removeClass('justify-content-between');
@@ -294,12 +294,12 @@
             $("#description").summernote('code','');
             $("#notification_type").val('').trigger('change');
         });
-    
+
         $(document).on('click','#deleteTemplate', function(){
             let delete_id = $(this).data('id');
             $("#deleteForm #delete_id").val(delete_id);
         });
-    
+
         $("#deleteForm").on("submit", function(e){
             e.preventDefault();
             $("#deleteForm .submitbtn").prop('disabled',true);
@@ -323,7 +323,7 @@
                 }
             });
         });
-    
+
         $(document).on('click','#viewTemplate', function(e){
               e.preventDefault();
               let id = $(this).data('id');
@@ -334,16 +334,16 @@
                    // Highlight the placeholders (e.g., {name})
                     let description = response.data.description;
                     let regex = /{([^}]*)}/g;
-    
+
                     // Replace all placeholders at once
                     description = description.replace(regex, (match, placeholder) => {
                         return `<span class="text-info var_placeholder" data-placeholder="${placeholder}">${match}</span>`;
                     });
-    
+
                     // Update preview
                     $("#view_template_title").text(response.data.title);
                     $("#preview_box").html(description);
-    
+
                     // $("#preview_box").html(response.data.description);
                   }
               });
@@ -374,7 +374,7 @@ function getTags(id){
                 }
                 $("#placeholders").html(placeholders);
             }
-            
+
         }
     });
 }
