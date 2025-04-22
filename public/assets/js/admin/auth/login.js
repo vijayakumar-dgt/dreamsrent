@@ -1,4 +1,15 @@
 $(document).ready(function(){
+    $(document).ready(function () {
+        $('.copy-login-details').on('click', function (event) {
+            event.preventDefault(); // Prevent default anchor behavior
+
+            const email = $(this).data('email');
+            const password = $(this).data('password');
+
+            $('#loginForm input[name="email"]').val(email);
+            $('#loginForm input[name="password"]').val(password);
+        });
+    });
     $(".submitbtn").attr("disabled", false);
     $("#loginForm").validate({
         rules: {
@@ -36,7 +47,7 @@ $(document).ready(function(){
             // $(element).closest(".input-group").removeClass("is-invalid"); // Remove from input group
             var errorId = element.id + "_error";
             $("#" + errorId).text("");
-        },        
+        },
         onkeyup: function(element) {
             $(element).valid();
         },

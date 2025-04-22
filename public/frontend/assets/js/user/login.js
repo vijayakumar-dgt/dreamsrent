@@ -85,6 +85,17 @@ $(document).ready(function () {
             });
         }
     });
+    $(document).ready(function () {
+        $('.copy-login-details').on('click', function (event) {
+            event.preventDefault(); // Prevent default anchor behavior
+
+            const email = $(this).data('email');
+            const password = $(this).data('password');
+
+            $('#userLoginForm input[name="email"]').val(email);
+            $('#userLoginForm input[name="password"]').val(password);
+        });
+    });
 });
 
 function isValidEmail(email) {
