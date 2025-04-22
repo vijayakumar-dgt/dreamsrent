@@ -110,11 +110,14 @@ if (!function_exists('uploadedAsset')) {
     {
         $disk = config('filesystems.default');
 
+        // Use getBaseUrl() for consistent domain
+        $baseUrl = getBaseUrl();
+
         // Default response structure
         $defaultImages = [
-            'profile' => url('/custom/img/default-profile.png'),
-            'default2' => url('/custom/img/default-placeholder-image.png'),
-            'default' => url('/custom/img/default-image-02.jpg')
+            'profile' => $baseUrl . '/custom/img/default-profile.png',
+            'default2' => $baseUrl . '/custom/img/default-placeholder-image.png',
+            'default' => $baseUrl . '/custom/img/default-image-02.jpg'
         ];
 
         // If file does not exist, return default image
@@ -132,15 +135,15 @@ if (!function_exists('uploadedAsset')) {
         $formattedSize = formatFileSize($fileSize);
 
         // Format URL properly for public/local disks
-        if ($disk == 'public' || $disk == 'local') {
-            $fileUrl = url(preg_replace('#/+#', '/', str_replace(url('/'), '', $fileUrl)));
+        if ($disk === 'public' || $disk === 'local') {
+            $fileUrl = $baseUrl . '/' . ltrim(parse_url($fileUrl, PHP_URL_PATH), '/');
         }
 
-        // Return full details or only the file URL
         return $fileFullDetails
             ? ['url' => $fileUrl, 'file_name' => $fileName, 'extension' => $fileExtension, 'size' => $formattedSize]
             : $fileUrl;
     }
+
 }
 
 
@@ -284,7 +287,7 @@ function sendNotification($email,$slug,$notifyData=[]){
 
         return $text;
     };
-    
+
     if(!$email){
         return null;
     }
@@ -294,7 +297,7 @@ function sendNotification($email,$slug,$notifyData=[]){
         'sms_content' => $replaced($template->sms_content),
         'notification_content' => $replaced($template->notification_content),
     ];
-    
+
     if(!empty($parsedTemplate)){
         $payload = [
             'to_email' => $email,
@@ -303,7 +306,7 @@ function sendNotification($email,$slug,$notifyData=[]){
         ];
         $emailPayload   = new Request($payload);
         $emailController = new EmailController;
-        $emailController->sendEmail($emailPayload);   
+        $emailController->sendEmail($emailPayload);
         $user = User::where('email', $email)->first();
         if($user){
             Notification::create([
@@ -340,5 +343,17 @@ function isAccessMenu($menu){
         return $value;
     }
     return 0;
+}
+
+if (!function_exists('getBaseUrl')) {
+    function getBaseUrl()
+    {
+        if (app()->runningInConsole()) {
+            return 1;
+            return config('app.url');
+        }
+
+        return request()->getSchemeAndHttpHost();
+    }
 }
 

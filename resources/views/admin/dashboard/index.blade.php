@@ -144,31 +144,36 @@
                             <a href="/admin/vehiclelist" class="text-decoration-underline fw-medium">{{ __('admin.dashboard.view_all') }}</a>
                         </div>
                         <div class="mb-2">
-                            <img src="{{ asset('storage/' .$carTypes[0]->vehicle_image)}}" alt="img" class="rounded w-100">
+                            @php
+                            $imagePath = 'storage/' . ($carTypes[0]->vehicle_image ?? " ");
+                            $defaultImage = asset('custom/img/default-profile.png');
+                            @endphp
+
+                            <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="img" class="rounded w-100">
                         </div>
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                             <div>
-                                <h6 class="fs-14 fw-semibold">{{$carTypes[0]->name}}</h6>
+                                <h6 class="fs-14 fw-semibold">{{$carTypes[0]->name ?? ""}}</h6>
                             </div>
-                            <h6 class="fs-14 fw-semibold">{{$symbol}}{{ json_decode($carTypes[0]->vehicle_price)[0]->daily }} <span class="fw-normal text-gray-5">/{{ __('admin.dashboard.from_last_week') }}day</span></h6>
+                            <h6 class="fs-14 fw-semibold">{{$symbol}}{{ json_decode(($carTypes[0]->vehicle_price)[0]->daily ?? " ") }} <span class="fw-normal text-gray-5">/{{ __('admin.dashboard.from_last_week') }}day</span></h6>
                         </div>
                         <div class="row g-2 justify-content-center mb-3">
                             <div class="col-sm-4 col-6 d-flex">
                                 <div class="bg-light p-2 br-5 flex-fill text-center">
                                     <h6 class="fs-14 fw-semibold">{{ __('admin.dashboard.fuel_type') }}</h6>
-                                    <span class="fs-13">{{$carTypes[0]->fuel_type}}</span>
+                                    <span class="fs-13">{{$carTypes[0]->fuel_type ?? ""}}</span>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-6 d-flex">
                                 <div class="bg-light p-2 br-5 flex-fill text-center">
                                     <h6 class="fs-14 fw-semibold">{{ __('admin.dashboard.passengers') }}</h6>
-                                    <span class="fs-13">{{$carTypes[0]->passenger_capacity}}</span>
+                                    <span class="fs-13">{{$carTypes[0]->passenger_capacity ?? ""}}</span>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-6 d-flex">
                                 <div class="bg-light p-2 br-5 flex-fill text-center">
                                     <h6 class="fs-14 fw-semibold">{{ __('admin.dashboard.driving_type') }}</h6>
-                                    <span class="fs-13">{{$carTypes[0]->driving_name}}</span>
+                                    <span class="fs-13">{{$carTypes[0]->driving_name ?? ""}}</span>
                                 </div>
                             </div>
                         </div>
