@@ -157,6 +157,9 @@ class InstallerController extends Controller
 
     public function account()
     {
+        session()->put('step-1-complete', true);
+        session()->put('step-2-complete', true);
+        session()->put('step-3-complete', true);
         $step = Configuration::stepExists();
         // $step = '1';
         // dd($step);
