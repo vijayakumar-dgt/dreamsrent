@@ -38,7 +38,7 @@
 				<div class="loginbox">
 					<div class="login-auth">
 						<div class="login-auth-wrap">
-							<div class="sign-group">
+							<div class="sign-group d-none">
 								<a href="{{ route('home') }}" class="btn sign-up"><span><i class="fe feather-corner-down-left" aria-hidden="true"></i></span> Back To Home</a>
 							</div>
 							<h1>Sign In</h1>
