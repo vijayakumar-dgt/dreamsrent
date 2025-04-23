@@ -88,6 +88,7 @@ class RolesPermissionController extends Controller
     public function list(Request $request): JsonResponse
     {
         try {
+            $userId = $this->authUser->id ?? $request->user_id;
             $query = Role::query();
     
             if (!empty($request->search)) {
@@ -112,7 +113,7 @@ class RolesPermissionController extends Controller
             $length = $request->length ?? 10;
     
             $filterTotalRecords = $query->count();
-            $totalRecords = Role::count();
+            $totalRecords = Role::where('user_id', $userId)->count();
     
             $data = $query->skip($start)->take($length)->get()->map(function ($role) {
                 $role->encrypted_role_id = customEncrypt($role->id, Role::$roleSecretKey);
