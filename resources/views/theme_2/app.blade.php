@@ -15,10 +15,15 @@
 	<meta name="keywords" content="{{ isset($meta_keywords) ? $meta_keywords : '' }}">
 	<!-- Favicon -->
 	<link rel="shortcut icon" href="{{ isset($favicon) ? asset($favicon) : asset('frontend/assets/img/favicon.png') }}">
-
+	@php
+		$isRTL = isRTL(app()->getLocale());
+	@endphp
+	@if($isRTL)
 	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.rtl.min.css') }}">
+	@else
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}">
-
+	@endif
 	<!-- Fontawesome CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/all.min.css') }}">
@@ -46,9 +51,12 @@
 
 	@stack('styles')
 
-	<!-- Main CSS -->
+	@if($isRTL)
+ 	<!-- Main CSS -->
+	<link rel="stylesheet" href="{{ asset('frontend/assets/css/style-rtl.css') }}">
+    @else
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
-
+    @endif
 	{{-- Custom CSS --}}
 	<link rel="stylesheet" href="{{ asset('assets/css/custom/custom-style.css') }}">
 
@@ -115,9 +123,11 @@
 
 	<script src="{{ asset('frontend/assets/js/custom/lang_script.js') }}"></script>
 	@stack('scripts')
-	<!-- Custom JS -->
+	@if($isRTL)
+	<script src="{{ asset('frontend/assets/js/script-rtl.js') }}"></script>
+	@else
 	<script src="{{ asset('frontend/assets/js/script.js') }}"></script>
-
+    @endif
 	<script src="{{ asset('frontend/assets/js/custom/custom-script.js') }}"></script>
 
 </body>
