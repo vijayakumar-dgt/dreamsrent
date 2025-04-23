@@ -20,6 +20,7 @@ $(document).ready(function() {
                 },
                 extension: "jpeg|jpg|png|svg",
                 filesize: 2048,
+                imageDimension:[180,180],
             },
             brand_icon: {
                 required: function () {
@@ -27,6 +28,7 @@ $(document).ready(function() {
                 },
                 extension: "jpeg|jpg|png|svg",
                 filesize: 2048,
+                iconDimension:[25,25],
             },
         },
         messages:{
@@ -141,61 +143,85 @@ $(document).ready(function() {
         if (element.files.length === 0) return true;
         return element.files[0].size <= param * 1024;
     }, "File size must be less than {0} KB.");
+
+    $.validator.addMethod("iconDimension", function (value, element) {
+        if (element.files.length === 0) return true;
+    
+        let file = element.files[0];
+        let img = new Image();
+        let valid = false;
+    
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            img.src = e.target.result;
+        };
+    
+        img.onload = function () {
+            valid = img.width >= 10 && img.width <= 25 && img.height >= 10 && img.height <= 25;
+            $(element).data("valid-dimension", valid);
+            $(element).valid();
+        };
+    
+        reader.readAsDataURL(file);
+    
+        return $(element).data("valid-dimension") !== false;
+    }, _l('admin.rentals.brand_icon_dimension'));
+
+    $.validator.addMethod("imageDimension", function (value, element) {
+        if (element.files.length === 0) return true;
+    
+        let file = element.files[0];
+        let img = new Image();
+        let valid = false;
+    
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            img.src = e.target.result;
+        };
+    
+        img.onload = function () {
+            valid = img.width >= 180 || img.height >= 180;
+            $(element).data("valid-dimension", valid);
+            $(element).valid();
+        };
+    
+        reader.readAsDataURL(file);
+    
+        return $(element).data("valid-dimension") !== false;
+    }, _l('admin.common.image_pixel'));
+
 });
 
 $('#brand_image').on('change', function (event) {
-    if ($(this).val() !== '') {
-        $(this).valid();
-    }
-    let reader = new FileReader();
-    reader.onload = function (e) {
-        $('#imagePreview').attr('src', e.target.result).show();
+    $(this).valid();
+    if(this.files && this.files[0]){
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            $('#imagePreview').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(this.files[0]);
+        $("#imagePreview").show();
         $('.upload_icon').hide();
-    };
-    reader.readAsDataURL(event.target.files[0]);
-    var file = this.files[0];
-    if (file) {
-        var img = new Image();
-        var objectURL = URL.createObjectURL(file);
-        
-        img.onload = function () {
-            if (this.width < 180 || this.height < 180) {
-                $("#brand_image_error").text(_l('admin.common.image_pixel', {width: 180, height: 180}));
-                $("#brand_image").addClass("is-invalid").removeClass("is-valid");
-            }
-            URL.revokeObjectURL(objectURL);
-        };
-        img.src = objectURL;
+    }else{
+        $("#imagePreview").hide();
+        $(".upload_icon").show();
     }
 });
 
 $('#brand_icon').on('change', function (event) {
-    if ($(this).val() !== '') {
-        $(this).valid();
-    }
-    let reader = new FileReader();
-    reader.onload = function (e) {
-        $('#iconPreview').attr('src', e.target.result).show();
-        $('.upload_icon_2').hide();
-    };
-    reader.readAsDataURL(event.target.files[0]);
-    var file = this.files[0];
-    if (file) {
-        var img = new Image();
-        var objectURL = URL.createObjectURL(file);
-        
-        img.onload = function () {
-            if (this.width < 10 || this.height < 10) {
-                $("#brand_icon_error").text(_l('admin.common.icon_pixel', {width: 10, height: 10}));
-                $("#brand_icon").addClass("is-invalid").removeClass("is-valid");
-            }
-            else if (this.width > 25 || this.height > 25) {
-                $("#brand_icon_error").text(_l('admin.common.icon_pixel_less_than', {width: 25, height: 25}));
-                $("#brand_icon").addClass("is-invalid").removeClass("is-valid");
-            }
-            URL.revokeObjectURL(objectURL);
-        };
-        img.src = objectURL;
+    $(this).valid();
+    if (this.files && this.files[0]) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            $('#iconPreview').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(this.files[0]);
+        $("#iconPreview").show();
+        $(".upload_icon_2").hide();
+
+    }else{
+        $("#iconPreview").hide();
+        $(".upload_icon_2").show();
     }
 });
 
