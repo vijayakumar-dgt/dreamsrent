@@ -90,6 +90,8 @@ class RolesPermissionController extends Controller
         try {
             $userId = $this->authUser->id ?? $request->user_id;
             $query = Role::query();
+
+            $query->where('created_by', $userId);
     
             if (!empty($request->search)) {
                 $search = $request->search;
@@ -113,7 +115,7 @@ class RolesPermissionController extends Controller
             $length = $request->length ?? 10;
     
             $filterTotalRecords = $query->count();
-            $totalRecords = Role::where('user_id', $userId)->count();
+            $totalRecords = Role::where('created_by', $userId)->count();
     
             $data = $query->skip($start)->take($length)->get()->map(function ($role) {
                 $role->encrypted_role_id = customEncrypt($role->id, Role::$roleSecretKey);
