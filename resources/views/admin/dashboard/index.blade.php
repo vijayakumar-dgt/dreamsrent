@@ -181,7 +181,7 @@
                         <a href="/admin/vehiclelist" class="btn btn-white d-flex align-items-center justify-content-center">{{ __('admin.dashboard.view_details') }}<i class="ti ti-chevron-right ms-1"></i></a>
                         @else
                         <div class="d-flex justify-content-center align-items-center">
-                            <span class="text-muted">No Data Found</span>
+                            <span class="text-muted no-datas">{{ __('admin.blog.no_data_found') }}</span>
                         </div>
                         @endif
                     </div>
@@ -263,7 +263,7 @@
                                 @endforeach
                                 @else
                                 <tr>
-                                    <td colspan="5" class="text-center">{{ __('admin.blog.no_data_found') }}</td>
+                                    <td colspan="5" class="text-center no-datas">{{ __('admin.blog.no_data_found') }}</td>
                                 </tr>
                                 @endif
                             </table>
@@ -419,7 +419,7 @@
                                 @endforeach
                                 @else
                                 <tr>
-                                    <td colspan="5" class="text-center">{{ __('admin.blog.no_data_found') }}</td>
+                                    <td colspan="5" class="text-center no-datas">{{ __('admin.blog.no_data_found') }}</td>
                                 </tr>
                                 @endif
                             </table>
@@ -488,7 +488,7 @@
                                 @endforeach
                                 @else
                                 <tr>
-                                    <td colspan="5" class="text-center">{{ __('admin.blog.no_data_found') }}</td>
+                                    <td colspan="5" class="text-center no-datas">{{ __('admin.blog.no_data_found') }}</td>
                                 </tr>
                                 @endif
                             </table>

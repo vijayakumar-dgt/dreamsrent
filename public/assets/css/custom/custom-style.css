@@ -850,3 +850,13 @@
 .admin-security-settings .form-control.is-valid, .was-validated .form-control:valid{
   background-image: none !important;
 }
+.no-datas{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 100%;
+    text-align: center;
+  }
+
