@@ -167,8 +167,8 @@
 					</div>
                     <form action="" id="damageTypeForm">
                         @csrf
-						<input type="" name="id" id="id">
-						<input type="" name="language_id" id="language_id">
+						<input type="hidden" name="id" id="id">
+						<input type="hidden" name="language_id" id="language_id">
                     <div class="modal-body">
 						<div class="mb-3">
 							<label class="form-label">{{ __('admin.rentals.damage_type') }} <span class="text-danger">*</span></label>

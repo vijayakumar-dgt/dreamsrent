@@ -108,11 +108,11 @@
                                         <span class="sortbytitle">{{__('web.home.show')}} : </span>
                                         <div class="sorting-select select-one">
                                             <select class="form-control select" id="pageLength">
-                                                <option value="5">5</option>
-                                                <option value="10">10</option>
+                                                <option value="6">6</option>
+                                                <option value="9">9</option>
+                                                <option value="12">12</option>
                                                 <option value="15">15</option>
-                                                <option value="20">20</option>
-                                                <option value="30">30</option>
+                                                <option value="18">18</option>
                                             </select>
                                         </div>
                                     </li>

@@ -340,6 +340,8 @@ if ($(".booking_timepicker").length > 0) {
             next: "fas fa-angle-right",
             previous: "fas fa-angle-left",
         },
+        stepping: 15, // Set interval to 15 minutes
+        minDate: moment(), // Ensure no past times can be selected
     }).on("dp.change", function (e) {
         const pickupTime = e.date;
         const pickupDate = $(".bookingpickupdate").data("DateTimePicker").date();
@@ -362,7 +364,6 @@ if ($(".booking_timepicker").length > 0) {
         }
     });
 }
-
 
 if ($(".bookingreturndate").length > 0) {
     $(".bookingreturndate").datetimepicker({
@@ -411,6 +412,8 @@ if ($(".booking_return_timepicker").length > 0) {
             next: "fas fa-angle-right",
             previous: "fas fa-angle-left",
         },
+        stepping: 15, // 15-minute interval
+        minDate: moment(), // Ensure return time cannot be in the past
     }).on("dp.change", function (e) {
         const returnTime = e.date;
         const pickupTime = $(".booking_timepicker").data("DateTimePicker").date();
@@ -431,6 +434,7 @@ if ($(".booking_return_timepicker").length > 0) {
         }
     });
 }
+
 
 function listReviews() {
     $.ajax({
@@ -896,6 +900,9 @@ function handlePriceChange() {
     $("#return_date, #return_time").prop("readonly", false);
 
     switch (selectedPriceType) {
+        case "daily":
+            returnDateTime.add(1, "days");
+            break;
         case "weekly":
             returnDateTime.add(7, "days");
             $("#return_date, #return_time").prop("readonly", true);

@@ -9,7 +9,7 @@
 	<meta name="author" content="Dreams technologies - Bootstrap Admin Template">
 	<meta name="robots" content="noindex, nofollow">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-	<title>Dreamsrent Admin Template</title>
+	<title>{{ isset($title) ? $title : config('app.name') }}</title>
 
 	<!-- Favicon -->
 	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/img/favicon.png') }}">

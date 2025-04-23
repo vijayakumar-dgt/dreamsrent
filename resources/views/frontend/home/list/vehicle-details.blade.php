@@ -738,9 +738,9 @@
                         <div class="location-content">
                             <div class="delivery-tab">
                                 <ul class="nav">
-                                    <li>
+                                    <li class="d-none">
                                         <label class="booking_custom_check">
-                                            <input type="radio" name="rent_type" id="location_delivery" checked>
+                                            <input type="radio" name="rent_type" id="location_delivery" >
                                             <span class="booking_checkmark">
                                                 <span class="checked-title">{{__('web.home.delivery')}}</span>
                                             </span>
@@ -748,7 +748,7 @@
                                     </li>
                                     <li>
                                         <label class="booking_custom_check">
-                                            <input type="radio" name="rent_type" id="location_pickup">
+                                            <input type="radio" name="rent_type" id="location_pickup" checked>
                                             <span class="booking_checkmark">
                                                 <span class="checked-title">{{ __('web.home.self_pickup') }}</span>
                                             </span>
