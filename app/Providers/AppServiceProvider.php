@@ -113,9 +113,9 @@ class AppServiceProvider extends ServiceProvider
             $theme = $defaultTheme ? $defaultTheme->value : 1;
 
             $logoSetting = GeneralSetting::where('group_id',16)->pluck('value','key')->toArray();
-            $logo = isset($logoSetting['logo_image']) && $logoSetting['logo_image'] ? '/'.$logoSetting['logo_image'] : asset('frontend/assets/img/logo.svg');
-            $favicon = isset($logoSetting['favicon_image']) && $logoSetting['favicon_image'] ? '/'.$logoSetting['favicon_image'] : asset('frontend/assets/img/favicon.png');
-            $smallLogo = isset($logoSetting['small_image']) && $logoSetting['small_image'] ? '/'.$logoSetting['small_image'] : asset('frontend/assets/img/logo-small.png');
+            $logo = isset($logoSetting['logo_image']) && file_exists(public_path($logoSetting['logo_image'])) ? '/'.$logoSetting['logo_image'] : asset('frontend/assets/img/logo.svg');
+            $favicon = isset($logoSetting['favicon_image']) && file_exists(public_path($logoSetting['favicon_image'])) ? '/'.$logoSetting['favicon_image'] : asset('frontend/assets/img/favicon.png');
+            $smallLogo = isset($logoSetting['small_image']) && file_exists(public_path($logoSetting['small_image'])) ? '/'.$logoSetting['small_image'] : asset('frontend/assets/img/logo-small.png');
             $view->with([
                 'theme' => $theme,
                 'layout' => "theme_{$theme}.app",
