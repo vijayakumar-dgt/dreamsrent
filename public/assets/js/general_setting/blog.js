@@ -160,6 +160,28 @@ $(document).ready(function () {
         });
     });
 });
+    $(document).ready(function () {
+
+    const blogContainer = document.getElementById("blogList");
+const gridViewBtn = document.getElementById("gridViewBtn");
+const listViewBtn = document.getElementById("listViewBtn");
+
+gridViewBtn.addEventListener("click", function () {
+    blogContainer.classList.remove("list-view");
+    blogContainer.classList.add("grid-view");
+
+    gridViewBtn.classList.add("bg-primary", "text-white");
+    listViewBtn.classList.remove("bg-primary", "text-white");
+});
+
+listViewBtn.addEventListener("click", function () {
+    blogContainer.classList.remove("grid-view");
+    blogContainer.classList.add("list-view");
+
+    listViewBtn.classList.add("bg-primary", "text-white");
+    gridViewBtn.classList.remove("bg-primary", "text-white");
+});
+});
 
 $(document).on("click", "#blog-edit", function () {
     let blogId = $(this).data("id");
@@ -189,7 +211,7 @@ $("#saveBlogBtn").click(function () {
     });
 });
 
-
+$(document).ready(function () {
 const inputAdd = document.getElementById("featured_image_add");
 const fileNameDisplayAdd = document.getElementById("selectedFileNameAdd");
 const preview = document.querySelector(".preview-image-add");
@@ -222,8 +244,9 @@ inputAdd.addEventListener("change", function (event) {
         reader.readAsDataURL(file);
     }
 });
+});
 
-
+$(document).ready(function () {
 const input = document.getElementById("featured_image");
 const fileNameDisplay = document.getElementById("selectedFileName");
 const previewContainer = document.querySelector(".preview-image");
@@ -262,26 +285,9 @@ input.addEventListener("change", function (event) {
         reader.readAsDataURL(file);
     }
 });
-
-const blogContainer = document.getElementById("blogList");
-const gridViewBtn = document.getElementById("gridViewBtn");
-const listViewBtn = document.getElementById("listViewBtn");
-
-gridViewBtn.addEventListener("click", function () {
-    blogContainer.classList.remove("list-view");
-    blogContainer.classList.add("grid-view");
-
-    gridViewBtn.classList.add("bg-primary", "text-white");
-    listViewBtn.classList.remove("bg-primary", "text-white");
 });
 
-listViewBtn.addEventListener("click", function () {
-    blogContainer.classList.remove("grid-view");
-    blogContainer.classList.add("list-view");
 
-    listViewBtn.classList.add("bg-primary", "text-white");
-    gridViewBtn.classList.remove("bg-primary", "text-white");
-});
 
 document.addEventListener("DOMContentLoaded", function () {
     const itemsPerPage = 9;
@@ -313,6 +319,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+$(document).ready(function () {
 const blogList = document.getElementById('blogList');
 const allBlogs = Array.from(blogList.querySelectorAll('.blog-item'));
 const sortDropdownItems = document.querySelectorAll('.dropdown-item-blog');
@@ -405,5 +412,6 @@ loadMoreBtn.addEventListener('click', function () {
 
 // Initial load
 applyFiltersAndRender();
+});
 
 })();
