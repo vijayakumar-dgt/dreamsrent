@@ -2421,5 +2421,7 @@ return [
     'blog_tag_deleted!' => 'تم حذف علامة المدونة!',
     'please_enter_the_name' => 'الرجاء إدخال الاسم',
     'no_blog_found' => 'لم يتم العثور على مدونة',
+    'no_data_found' => 'لم يتم العثور على بيانات',
+    'image_dimensions_must_be_exactly_735_310_pixels' => 'يجب أن تكون أبعاد الصورة 735 × 310 بكسل بالضبط',
   ],
 ];
