@@ -71,7 +71,7 @@
                             <div class="article-content">
                                 <h5><a href="/blog-details/{{$latest->slug}}">{{$latest->title}}</a></h5>
                                 <div class="article-date">
-                                    <i class="fa-solid fa-calendar-days"></i>
+                                    <i class="fa-solid fa-calendar-day"></i>
                                     <span>{{ \Carbon\Carbon::parse($latest->created_at)->format('d M Y') }}</span>
                                 </div>
                             </div>

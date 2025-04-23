@@ -4297,6 +4297,7 @@ table .badge {
   -ms-flex: 33.33%;
   flex: 33.33%;
   max-width: 33.33%;
+  padding-top: 2px;
 }
 .listing-item .listing-content .listing-details-group ul li span img {
   line-height: 0;
@@ -5029,6 +5030,7 @@ table .badge {
 
 .blog-section.news-section .grid-blog {
   margin-bottom: 40px;
+  width: 100%;
 }
 @media (max-width: 991.96px) {
   .blog-section.news-section .grid-blog {
@@ -12435,8 +12437,11 @@ iframe {
 }
 @media (max-width: 767.96px) {
   .faq-section .faq-title > a:after {
-    top: 0px;
-    right: -20px;
+    top: 12px;
+    right: -10px;
+  }
+  .faq-section .faq-card{
+    padding: 15px 25px 15px 15px;
   }
 }
 .faq-section .faq-title > a:not(.collapsed):after {
@@ -15122,7 +15127,7 @@ iframe {
 .detail-product .slick-slide {
   margin: 0 10px;
   overflow: hidden;
-  
+
 }
 .detail-product .slider-nav-thumbnails .slick-track .slick-slide.slick-active{
   width: 25% !important;
@@ -24410,4 +24415,60 @@ input.form-control.rounded-pill:focus {
 
 .custom-pagination .page-link:hover:not(.disabled):not(.active) {
   background-color: #e0e0e0;
+}
+
+/* New code */
+
+.listing-item .listing-content .listing-details-group ul{
+  justify-content: space-between;
+
+}
+.theiaStickySidebars{
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+}
+.theiaStickySidebar .reset-filter{
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  font-size: 16px;
+  color: #FF0000;
+}
+.theiaStickySidebar .reset-filter:hover {
+  color: #e60000;
+}
+.blog-section .grid-blog{
+  width: 100%;
+}
+#blog-description{
+  margin-bottom: 16px;
+}
+.blog-content .date-icon{
+  margin-left: 0px !important;
+}
+.custom-cal{
+  margin-top: 8px;
+}
+
+
+@media (max-width:576px){
+  .custom-pagination .number-btn {
+    width: 29px;
+  }
+  .custom-calendar{
+    margin-top: 8px !important;
+  }
+  .faq-section .faq-card {
+      padding: 15px 35px 15px 15px;
+  }
+  .faq-section .faq-title > a:after {
+    top: 11px;
+    right: -20px;
+  }
+  .listing-item .listing-content .listing-details-group ul li {
+    flex: 49%;
+    max-width: 49%;
+    padding-top: 5px;
+  }
 }

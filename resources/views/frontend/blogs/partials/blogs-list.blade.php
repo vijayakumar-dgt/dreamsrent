@@ -22,7 +22,7 @@
                             <a href="javascript:void(0)"> <span> {{$blogPost->customer}} </span></a>
                         </div>
                     </li>
-                    <li class="date-icon ms-3"><i class="fa-solid fa-calendar-days"></i> <span>{{ \Carbon\Carbon::parse($blogPost->created_at)->format('d M Y') }}</span></li>
+                    <li class="date-icon ms-3"><i class="fa-solid fa-calendar-days custom-calendar"></i> <span>{{ \Carbon\Carbon::parse($blogPost->created_at)->format('d M Y') }}</span></li>
                 </ul>
                 <p class="blog-category mb-0">
                     <a href="javascript:void(0)"><span>{{$blogPost->category}}</span></a>
@@ -37,7 +37,7 @@
 @endforeach
 @else
  <h4 class="no-blog">No Blogs Found</h4>
-@endif 
+@endif
 
 <!--Pagination-->
 <div class="pagination">

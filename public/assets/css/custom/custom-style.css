@@ -859,4 +859,15 @@
     width: 100%;
     text-align: center;
   }
+  .list-view .blog-img{
 
+  }
+  .blogs-cover.list-view .blog-item {
+    width: 70%;
+    flex: 0 0 70%;
+    margin: auto;
+  }
+  .blogs-cover.list-view .blog-img img {
+    width: 900px !important;
+    height: 310px !important;
+  }

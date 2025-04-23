@@ -1,4 +1,4 @@
-<section class="blog-section news-section pt-0">
+<section class="blog-section news-section">
     <div class="container">
         <!-- Heading title-->
         <div class="section-heading" data-aos="fade-down">
