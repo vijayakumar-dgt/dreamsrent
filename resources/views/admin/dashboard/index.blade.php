@@ -143,6 +143,7 @@
                             <h5>{{ __('admin.dashboard.newly_added_cars') }}</h5>
                             <a href="/admin/vehiclelist" class="text-decoration-underline fw-medium">{{ __('admin.dashboard.view_all') }}</a>
                         </div>
+                        @if(count($carTypes) != 0)
                         <div class="mb-2">
                             @php
                             $imagePath = 'storage/' . ($carTypes[0]->vehicle_image ?? " ");
@@ -178,7 +179,13 @@
                             </div>
                         </div>
                         <a href="/admin/vehiclelist" class="btn btn-white d-flex align-items-center justify-content-center">{{ __('admin.dashboard.view_details') }}<i class="ti ti-chevron-right ms-1"></i></a>
+                        @else
+                        <div class="d-flex justify-content-center align-items-center">
+                            <span class="text-muted">No Data Found</span>
+                        </div>
+                        @endif
                     </div>
+
                 </div>
             </div>
             @endif
@@ -198,6 +205,7 @@
                         </div>
                         <div class="table-responsive">
                             <table class="table custom-table1">
+                                @if(count($reservations) != 0)
                                 @foreach($reservations as $reservation)
                                 <tr>
                                     <td>
@@ -253,6 +261,11 @@
                                     </td>
                                 </tr>
                                 @endforeach
+                                @else
+                                <tr>
+                                    <td colspan="5" class="text-center">{{ __('admin.blog.no_data_found') }}</td>
+                                </tr>
+                                @endif
                             </table>
                         </div>
 
@@ -379,6 +392,7 @@
                         </div>
                         <div class="table-responsive">
                             <table class="table custom-table1">
+                                @if(count($maintenances) != 0)
                                 @foreach($maintenances as $maintenance)
                                 <tr>
                                     <td>
@@ -403,6 +417,11 @@
                                     </td>
                                 </tr>
                                 @endforeach
+                                @else
+                                <tr>
+                                    <td colspan="5" class="text-center">{{ __('admin.blog.no_data_found') }}</td>
+                                </tr>
+                                @endif
                             </table>
                         </div>
                     </div>
@@ -438,6 +457,7 @@
                         </div>
                         <div class="table-responsive">
                             <table class="table custom-table1">
+                                @if(count($drivers) != 0)
                                 @foreach($drivers as $driver)
                                 <tr>
                                     <td>
@@ -466,6 +486,11 @@
                                     </td>
                                 </tr>
                                 @endforeach
+                                @else
+                                <tr>
+                                    <td colspan="5" class="text-center">{{ __('admin.blog.no_data_found') }}</td>
+                                </tr>
+                                @endif
                             </table>
                         </div>
                     </div>
@@ -501,6 +526,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @if(count($invoices) != 0)
                                     @foreach($invoices as $invoice)
                                     <tr>
                                         <td><a href="invoice-details.html" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
@@ -546,6 +572,11 @@
                                         </td>
                                     </tr>
                                     @endforeach
+                                    @else
+                                    <tr>
+                                        <td colspan="7" class="text-center">{{ __('admin.blog.no_data_found') }}</td>
+                                    </tr>
+                                    @endif
                                 </tbody>
                             </table>
                         </div>

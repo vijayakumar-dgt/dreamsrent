@@ -168,7 +168,7 @@ class BlogsController extends Controller
 
     public function blogStore(Request $request)
     {
-       
+
         $request->validate([
             'title' => 'required|string|max:255',
             'language' => 'required',
@@ -234,12 +234,12 @@ class BlogsController extends Controller
             $path = $file->store('blog_images', 'public');
             $blog->image = $path;
         }
-      
+
 
         $blog->save();
 
         return response()->json(['success' => true]);
     }
 
-    
+
 }

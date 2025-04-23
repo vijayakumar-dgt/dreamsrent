@@ -33,15 +33,15 @@
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
             <div class="d-flex align-items-center flex-wrap row-gap-3">
                 <div class="dropdown me-2">
-                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="selectedFilterText">
+                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="selectedFilterTextCategory">
                         <i class="ti ti-filter me-1"></i> {{__('admin.blog.sort_by')}} : <span>{{__('admin.blog.latest')}}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end p-2">
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="latest">{{__('admin.blog.latest')}}</a></li>
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="asc">{{__('admin.blog.ascending')}}</a></li>
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="desc">{{__('admin.blog.descending')}}</a></li>
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="last_month">{{__('admin.blog.last_month')}}</a></li>
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="last_7_days">{{__('admin.blog.last_7_days')}}</a></li>
+                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-category" data-sort="latest">{{__('admin.blog.latest')}}</a></li>
+                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-category" data-sort="asc">{{__('admin.blog.ascending')}}</a></li>
+                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-category" data-sort="desc">{{__('admin.blog.descending')}}</a></li>
+                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-category" data-sort="last_month">{{__('admin.blog.last_month')}}</a></li>
+                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-category" data-sort="last_7_days">{{__('admin.blog.last_7_days')}}</a></li>
                     </ul>
                 </div>
             </div>
@@ -51,8 +51,8 @@
                         <span class="input-icon">
                             <i class="ti ti-search"></i>
                         </span>
-                        <input type="text" class="form-control" id="searchInput" placeholder="{{__('admin.blog.search')}}">
-                        </div>
+                        <input type="text" class="form-control" id="searchInputCategory" placeholder="{{__('admin.blog.search')}}">
+                    </div>
                 </div>
             </div>
         </div>
@@ -73,13 +73,14 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if(count($categories) != 0)
                     @foreach($categories as $category)
                     <tr data-created="{{ $category->created_at }}" data-name="{{ strtolower($category->name) }}">
                         <td>
                             <span class="text-gray-9">{{$category->name}}</span>
                         </td>
                         <td>
-                            <?php 
+                            <?php
                             $count = Modules\GeneralSetting\Models\BlogPost::where('category', $category->id)->count();
                             ?>
                             <span class="text-gray-9">{{$count}}</span>
@@ -125,6 +126,15 @@
                         @endif
                     </tr>
                     @endforeach
+                    @elseif(count($categories) == 0)
+                    <tr>
+                        <td></td>
+                        <td colspan="5" class="text-center">{{ __('admin.blog.no_data_found') }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -230,6 +240,6 @@
 
 
 @push('scripts')
-<script src="{{ asset('assets/js/general_setting/blog.js') }}"></script>
+<script src="{{ asset('assets/js/general_setting/blog-category.js') }}"></script>
 
 @endpush

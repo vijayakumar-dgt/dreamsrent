@@ -152,11 +152,11 @@ $(document).ready(function () {
 });
 
 const originalRows = Array.from(
-    document.querySelectorAll(".datatable tbody tr")
+    document.querySelectorAll("#blogTagTable tbody tr")
 );
-const tbody = document.querySelector(".datatable tbody");
+const tbody = document.querySelector("#blogTagTable tbody");
 
-document.querySelectorAll(".sort-option").forEach(function (item) {
+document.querySelectorAll(".sort-option-tag").forEach(function (item) {
     item.addEventListener("click", function () {
         const sortType = this.getAttribute("data-sort");
         const dropdownLabel = document
@@ -207,8 +207,8 @@ document.querySelectorAll(".sort-option").forEach(function (item) {
     });
 });
 
-const searchInput = document.getElementById('searchInput');
-    const tableRows = document.querySelectorAll('.datatable tbody tr');
+const searchInput = document.getElementById('searchInputTag');
+    const tableRows = document.querySelectorAll('#blogTagTable tbody tr');
 
     searchInput.addEventListener('input', function () {
         const query = this.value.toLowerCase();

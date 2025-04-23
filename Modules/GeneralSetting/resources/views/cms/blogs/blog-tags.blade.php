@@ -32,16 +32,16 @@
         <!-- Table Header -->
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
             <div class="d-flex align-items-center flex-wrap row-gap-3">
-                <div class="dropdown me-2">
+            <div class="dropdown me-2">
                     <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="selectedFilterText">
                         <i class="ti ti-filter me-1"></i> {{__('admin.blog.sort_by')}} : <span>{{__('admin.blog.latest')}}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end p-2">
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="latest">{{__('admin.blog.latest')}}</a></li>
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="asc">{{__('admin.blog.ascending')}}</a></li>
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="desc">{{__('admin.blog.descending')}}</a></li>
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="last_month">{{__('admin.blog.last_month')}}</a></li>
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="last_7_days">{{__('admin.blog.last_7_days')}}</a></li>
+                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-tag" data-sort="latest">{{__('admin.blog.latest')}}</a></li>
+                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-tag" data-sort="asc">{{__('admin.blog.ascending')}}</a></li>
+                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-tag" data-sort="desc">{{__('admin.blog.descending')}}</a></li>
+                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-tag" data-sort="last_month">{{__('admin.blog.last_month')}}</a></li>
+                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-tag" data-sort="last_7_days">{{__('admin.blog.last_7_days')}}</a></li>
                     </ul>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                         <span class="input-icon">
                             <i class="ti ti-search"></i>
                         </span>
-                        <input type="text" class="form-control" id="searchInput" placeholder="{{__('admin.blog.search')}}">
+                        <input type="text" class="form-control" id="searchInputTag" placeholder="{{__('admin.blog.search')}}">
                         </div>
                 </div>
             </div>

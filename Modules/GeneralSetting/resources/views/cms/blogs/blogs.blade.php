@@ -41,15 +41,15 @@
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
             <div class="d-flex align-items-center flex-wrap row-gap-3">
                 <div class="dropdown me-2">
-                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                        <i class="ti ti-filter me-1"></i> {{__('admin.blog.sort_by')}} : <span id="selectedFilter">{{__('admin.blog.latest')}}</span>
+                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="selectedFilterTextCategory">
+                        <i class="ti ti-filter me-1"></i> {{__('admin.blog.sort_by')}} : <span>{{__('admin.blog.latest')}}</span>
                     </a>
-                    <ul id="sortDropdown" class="dropdown-menu dropdown-menu-end p-2">
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1" data-filter="latest">{{__('admin.blog.latest')}}</a></li>
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1" data-filter="asc">{{__('admin.blog.ascending')}}</a></li>
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1" data-filter="desc">{{__('admin.blog.descending')}}</a></li>
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1" data-filter="last_month">{{__('admin.blog.last_month')}}</a></li>
-                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1" data-filter="last_7_days">{{__('admin.blog.last_7_days')}}</a></li>
+                    <ul id="sortDropdownBlog" class="dropdown-menu dropdown-menu-end p-2">
+                        <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="latest">{{__('admin.blog.latest')}}</a></li>
+                        <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="asc">{{__('admin.blog.ascending')}}</a></li>
+                        <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="desc">{{__('admin.blog.descending')}}</a></li>
+                        <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="last_month">{{__('admin.blog.last_month')}}</a></li>
+                        <li><a href="javascript:void(0);" class="dropdown-item dropdown-item-blog rounded-1" data-filter="last_7_days">{{__('admin.blog.last_7_days')}}</a></li>
                     </ul>
                 </div>
 
@@ -65,7 +65,7 @@
                         <span class="input-icon">
                             <i class="ti ti-search"></i>
                         </span>
-                        <input type="text" class="form-control" id="searchInput" placeholder="{{__('admin.blog.search')}}">
+                        <input type="text" class="form-control" id="searchInputBlog" placeholder="{{__('admin.blog.search')}}">
                     </div>
                 </div>
             </div>
@@ -77,7 +77,7 @@
                 <h6 class="me-3">{{__('admin.blog.filter')}}</h6>
                 <div class="dropdown me-3">
                     <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                    {{__('admin.blog.category')}}
+                        {{__('admin.blog.category')}}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-lg p-2">
                         @foreach($categories as $category)
@@ -105,12 +105,12 @@
                     <div class="card-body p-0">
                         <div class="blog-img">
                             <a href="/admin/content/blog-details/{{$blogPost->slug}}">
-                            @php
-                                    $imagePath = 'storage/' . $blogPost->image;
-                                    $defaultImage = asset('custom/img/default-image-02.jpg');
-                                    @endphp
+                                @php
+                                $imagePath = 'storage/' . $blogPost->image;
+                                $defaultImage = asset('custom/img/default-image-02.jpg');
+                                @endphp
 
-                                    <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image">
+                                <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image">
                             </a>
                             <div class="edit-delete-btns d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center">
@@ -133,12 +133,12 @@
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <div class="d-flex align-items-center">
                                     <a href="javascript:void(0);">
-                                    @php
-                                    $imagePath = 'storage/' . $blogPost->profile_image;
-                                    $defaultImage = asset('custom/img/default-profile.png');
-                                    @endphp
+                                        @php
+                                        $imagePath = 'storage/' . $blogPost->profile_image;
+                                        $defaultImage = asset('custom/img/default-profile.png');
+                                        @endphp
 
-                                    <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image" class="avatar avatar-sm rounded-circle me-1">
+                                        <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image" class="avatar avatar-sm rounded-circle me-1">
                                     </a>
                                     <a href="javascript:void(0);" class="fs-16">{{$blogPost->name}}</a>
                                 </div>
@@ -153,17 +153,17 @@
                 </div>
             </div>
             @endforeach
-            
+
         </div>
         <div class="d-flex align-items-center justify-content-center mt-3">
-            @if(count($blogPosts) != 0)
-                <a href="javascript:void(0);" class="load-btn btn btn-primary">
-                    <i class="ti ti-loader me-1"></i> {{__('admin.blog.load_more')}}
-                </a>
-             @else
-             <p>{{__('admin.blog.load_more')}}</p> 
-             @endif  
-            </div>
+            @if(count($blogPosts) != 0 && count($blogPosts) > 6)
+            <a href="javascript:void(0);" class="load-btn btn btn-primary mt-3">
+                <i class="ti ti-loader me-1"></i> {{__('admin.blog.load_more')}}
+            </a>
+            @else
+             <p>{{__('admin.blog.no_blog_found')}}</p> 
+            @endif
+        </div>
         <!-- Blogs -->
     </div>
     @include('admin.partials.footer')

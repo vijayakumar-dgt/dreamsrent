@@ -1,6 +1,18 @@
 (async () => {
     await loadTranslationFile('admin', 'blog, common');
 
+    $(document).ready(function () {
+        $('.summernote').summernote({
+            height: 300,
+            placeholder: _l('admin.cms.enter_your_description'),
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+    });
     if ($('.blogCategoryTable').length > 0) {
         $('.blogCategoryTable').DataTable({
             ordering: true,
@@ -50,126 +62,10 @@
     }
     
 
-$(document).ready(function () {
-    $(document).ready(function () {
-        $('.summernote').summernote({
-            height: 300,
-            placeholder: _l('admin.cms.enter_your_description'),
-            toolbar: [
-                ['style', ['bold', 'italic', 'underline', 'clear']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['insert', ['link', 'picture', 'video']],
-                ['view', ['fullscreen', 'codeview', 'help']]
-            ]
-        });
-    });
-    // Setup CSRF token for all AJAX
-    $.ajaxSetup({
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-    });
-
-    // Create Category
-    $("#create_category_btn").click(function () {
-        
-    const title = $("#add_category_name").val().trim();
-
-    // Validate
-    if (!title) {
-        showToast("error", _l('admin.blog.please_enter_the_name'));
-        return;
-    }
-        $.ajax({
-            url: "/admin/content/categories",
-            type: "POST",
-            data: {
-                name: $("#add_category_name").val(),
-                language_id: $("#add_language").val(),
-            },
-            success: function (response) {
-                showToast("success",  _l('admin.blog.blog_category_created!'));
-                location.reload(); // Or update list dynamically
-                $("#add_Category").modal("hide");
-            },
-            error: function (xhr) {
-                showToast("error", xhr.responseJSON.message);
-            },
-        });
-    });
-
-    // Open Edit Modal and Fill Data
-    $(document).on("click", ".open-edit-modal", function () {
-        let id = $(this).data("id");
-        let name = $(this).data("name");
-        let status = $(this).data("status");
-
-        $("#edit_category_id").val(id);
-        $("#edit_category_name").val(name);
-        $("#edit_category_status").prop("checked", status == 1);
-        $("#edit_Category").modal("show");
-    });
-
-    // Update Category
-    $("#update_category_btn").click(function () {
-        const title = $("#edit_category_name").val().trim();
-
-        // Validate
-        if (!title) {
-            showToast("error", _l('admin.blog.please_enter_the_name'));
-            return;
-        }
-
-        let id = $("#edit_category_id").val();
-
-        $.ajax({
-            url: "/admin/content/categories/" + id,
-            type: "POST", // use POST here
-            data: {
-                _token: $('meta[name="csrf-token"]').attr("content"), // csrf
-                _method: "PUT", // spoof PUT method
-                name: $("#edit_category_name").val(),
-                status: $("#edit_category_status").is(":checked") ? 1 : 0,
-            },
-            success: function (response) {
-                showToast("success", _l('admin.blog.blog_category_updated!'));
-                location.reload();
-                $("#edit_Category").modal("hide");
-            },
-            error: function (xhr) {
-                showToast("error", xhr.responseJSON.message);
-            },
-        });
-    });
-
-    // Open Delete Modal
-    $(document).on("click", ".open-delete-modal", function () {
-        let id = $(this).data("id");
-        $("#delete_category_id").val(id);
-        $("#delete_Category").modal("show");
-    });
-
-    // Delete Category
-    $("#delete_category_btn").click(function () {
-        let id = $("#delete_category_id").val();
-        $.ajax({
-            url: "/admin/content/categories/" + id,
-            type: "POST",
-            success: function (response) {
-                showToast("success",  _l('admin.blog.blog_category_deleted!'));
-                location.reload();
-                $("#delete_Category").modal("hide");
-            },
-            error: function (xhr) {
-                showToast("error", xhr.responseJSON.message);
-            },
-        });
-    });
-});
 
 $("#create_blog_btn").click(function () {
     // Get form values
-    const image = document.getElementById("featured_image").files[0];
+    const image = document.getElementById("featured_image_add").files[0];
     const title = $("#blog_title").val().trim();
     const language = $("#blog_language").val().trim();
     const category = $("#blog_category").val();
@@ -293,158 +189,78 @@ $("#saveBlogBtn").click(function () {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const blogList = document.getElementById("blogList");
-    const allBlogItems = Array.from(document.querySelectorAll(".blog-item"));
-    const checkboxes = document.querySelectorAll(".category-checkbox");
-    const sortLinks = document.querySelectorAll("#sortDropdown .dropdown-item");
-    const selectedFilterSpan = document.getElementById("selectedFilter");
 
-    const searchInput = document.getElementById("searchInput");
+const inputAdd = document.getElementById("featured_image_add");
+const fileNameDisplayAdd = document.getElementById("selectedFileNameAdd");
+const preview = document.querySelector(".preview-image-add");
 
-    searchInput.addEventListener("input", applyFilters);
+inputAdd.addEventListener("change", function (event) {
+    const file = event.target.files[0];
 
-    let currentSort = "latest";
+    if (file && file.type.startsWith("image/")) {
+        const reader = new FileReader();
 
-    function getSelectedCategories() {
-        return Array.from(checkboxes)
-            .filter((cb) => cb.checked)
-            .map((cb) => cb.value);
-    }
-
-    function applyFilters() {
-        const selectedCategories = getSelectedCategories();
-        const searchText = searchInput.value.toLowerCase().trim();
-
-        let filtered = [...allBlogItems];
-
-        // 🔍 Filter by category
-        if (selectedCategories.length > 0) {
-            filtered = filtered.filter((item) =>
-                selectedCategories.includes(String(item.dataset.category))
-            );
-        }
-
-        // 🔍 Filter by search text
-        if (searchText !== "") {
-            filtered = filtered.filter((item) => {
-                const title = item.dataset.title?.toLowerCase() || "";
-                return title.includes(searchText);
-            });
-        }
-
-        // 🔁 Sort (same as before)
-        if (currentSort === "asc") {
-            filtered.sort(
-                (a, b) => new Date(a.dataset.date) - new Date(b.dataset.date)
-            );
-        } else if (currentSort === "desc") {
-            filtered.sort(
-                (a, b) => new Date(b.dataset.date) - new Date(a.dataset.date)
-            );
-        } else if (currentSort === "last_month") {
-            const lastMonth = new Date();
-            lastMonth.setMonth(lastMonth.getMonth() - 1);
-            filtered = filtered.filter(
-                (item) => new Date(item.dataset.date) >= lastMonth
-            );
-        } else if (currentSort === "last_7_days") {
-            const last7 = new Date();
-            last7.setDate(last7.getDate() - 7);
-            filtered = filtered.filter(
-                (item) => new Date(item.dataset.date) >= last7
-            );
-        } else {
-            filtered.sort(
-                (a, b) => new Date(b.dataset.date) - new Date(a.dataset.date)
-            );
-        }
-
-        // 🧼 Render filtered list
-        blogList.innerHTML = "";
-        filtered.forEach((item) => blogList.appendChild(item));
-    }
-
-    // Bind checkbox change
-    checkboxes.forEach((cb) => {
-        cb.addEventListener("change", applyFilters);
-    });
-
-    // Bind sort dropdown
-    sortLinks.forEach((link) => {
-        link.addEventListener("click", function () {
-            currentSort = this.dataset.filter;
-            if (selectedFilterSpan)
-                selectedFilterSpan.textContent = this.textContent;
-            applyFilters();
-        });
-    });
-
-    // Initial render
-    applyFilters();
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    const input = document.getElementById("imageInput");
-    const fileNameDisplay = document.getElementById("selectedFileName");
-    const preview = document.querySelector(".preview-image");
-
-    input.addEventListener("change", function (event) {
-        const file = event.target.files[0];
-
-        // Show selected file name
-        if (file) {
-            fileNameDisplay.textContent = file.name;
-        } else {
-            fileNameDisplay.textContent = "No file chosen";
-        }
-
-        // Preview image
-        if (file && file.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                if (preview) {
-                    preview.src = e.target.result;
+        reader.onload = function (e) {
+            const img = new Image();
+            img.onload = function () {
+                if (img.width === 735 && img.height === 310) {
+                    // Valid dimensions
+                    fileNameDisplayAdd.textContent = file.name;
+                    if (preview) {
+                        preview.src = e.target.result;
+                    }
+                } else {
+                    showToast("error", _l('admin.blog.image_dimensions_must_be_exactly_735_310_pixels'));
+                    inputAdd.value = "";
+                    fileNameDisplayAdd.textContent = _l('admin.blog.no_file_chosen');
+                    if (preview) preview.src = "";
                 }
             };
-            reader.readAsDataURL(file);
-        }
-    });
+            img.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    }
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const input = document.getElementById("featured_image");
-    const fileNameDisplay = document.getElementById("selectedFileName");
-    const previewContainer = document.querySelector(".preview-image");
 
-    input.addEventListener("change", function (event) {
-        const file = event.target.files[0];
+const input = document.getElementById("featured_image");
+const fileNameDisplay = document.getElementById("selectedFileName");
+const previewContainer = document.querySelector(".preview-image");
 
-        // Show selected file name
-        if (file) {
-            fileNameDisplay.textContent = file.name;
-        } else {
-            fileNameDisplay.textContent = "No file chosen";
-        }
+input.addEventListener("change", function (event) {
+    const file = event.target.files[0];
 
-        // Preview image
-        if (file && file.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                // Clear existing image
-                previewContainer.innerHTML = "";
+    if (file && file.type.startsWith("image/")) {
+        const reader = new FileReader();
 
-                // Create new image
-                const newImage = document.createElement("img");
-                newImage.src = e.target.result;
-                newImage.classList.add("rounded-2", "img-fluid");
+        reader.onload = function (e) {
+            const img = new Image();
+            img.onload = function () {
+                if (img.width === 735 && img.height === 310) {
+                    // Valid dimensions
+                    fileNameDisplay.textContent = file.name;
 
-                // Append new image
-                previewContainer.appendChild(newImage);
+                    // Clear existing image
+                    previewContainer.innerHTML = "";
+
+                    // Create and append new image
+                    const newImage = document.createElement("img");
+                    newImage.src = e.target.result;
+                    newImage.classList.add("rounded-2", "img-fluid");
+                    previewContainer.appendChild(newImage);
+                } else {
+                    showToast("error", _l('admin.blog.image_dimensions_must_be_exactly_735_310_pixels'));
+                    input.value = "";
+                    fileNameDisplay.textContent =  _l('admin.blog.no_file_chosen');
+                    previewContainer.innerHTML = "";
+                }
             };
-            reader.readAsDataURL(file);
-        }
-    });
+            img.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    }
 });
 
 const blogContainer = document.getElementById("blogList");
@@ -496,5 +312,98 @@ document.addEventListener("DOMContentLoaded", function () {
         loadMoreBtn.addEventListener("click", showItems);
     }
 });
+
+const blogList = document.getElementById('blogList');
+const allBlogs = Array.from(blogList.querySelectorAll('.blog-item'));
+const sortDropdownItems = document.querySelectorAll('.dropdown-item-blog');
+const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
+const searchInput = document.getElementById('searchInputBlog');
+const loadMoreBtn = document.querySelector('.load-btn');
+const selectedFilterTextCategory = document.getElementById('selectedFilterTextCategory').querySelector('span');
+
+let currentSort = 'latest';
+let selectedCategories = [];
+let searchKeyword = '';
+let filteredBlogs = [];
+let visibleCount = 6;
+
+function filterAndSortBlogs() {
+    filteredBlogs = allBlogs.filter(blog => {
+        const matchesCategory =
+            selectedCategories.length === 0 || selectedCategories.includes(blog.dataset.category);
+        const matchesSearch =
+            blog.dataset.title.toLowerCase().includes(searchKeyword.toLowerCase());
+        return matchesCategory && matchesSearch;
+    });
+
+    switch (currentSort) {
+        case 'asc':
+            filteredBlogs.sort((a, b) => a.dataset.title.localeCompare(b.dataset.title));
+            break;
+        case 'desc':
+            filteredBlogs.sort((a, b) => b.dataset.title.localeCompare(a.dataset.title));
+            break;
+        case 'latest':
+            filteredBlogs.sort((a, b) => new Date(b.dataset.date) - new Date(a.dataset.date));
+            break;
+        case 'last_month':
+            const lastMonth = new Date();
+            lastMonth.setMonth(lastMonth.getMonth() - 1);
+            filteredBlogs = filteredBlogs.filter(item => new Date(item.dataset.date) >= lastMonth);
+            break;
+        case 'last_7_days':
+            const last7Days = new Date();
+            last7Days.setDate(last7Days.getDate() - 7);
+            filteredBlogs = filteredBlogs.filter(item => new Date(item.dataset.date) >= last7Days);
+            break;
+    }
+}
+
+function renderBlogs() {
+    blogList.innerHTML = '';
+    const blogsToShow = filteredBlogs.slice(0, visibleCount);
+    blogsToShow.forEach(blog => blogList.appendChild(blog));
+    if (visibleCount >= filteredBlogs.length) {
+        loadMoreBtn.style.display = 'none';
+    } else {
+        loadMoreBtn.style.display = 'inline-block';
+    }
+}
+
+function applyFiltersAndRender() {
+    visibleCount = 6;
+    filterAndSortBlogs();
+    renderBlogs();
+}
+
+sortDropdownItems.forEach(item => {
+    item.addEventListener('click', function () {
+        currentSort = this.getAttribute('data-filter');
+        selectedFilterTextCategory.innerText = this.innerText;
+        applyFiltersAndRender();
+    });
+});
+
+categoryCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function () {
+        selectedCategories = Array.from(categoryCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+        applyFiltersAndRender();
+    });
+});
+
+searchInput.addEventListener('input', function () {
+    searchKeyword = this.value;
+    applyFiltersAndRender();
+});
+
+loadMoreBtn.addEventListener('click', function () {
+    visibleCount += 6;
+    renderBlogs();
+});
+
+// Initial load
+applyFiltersAndRender();
 
 })();

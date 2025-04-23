@@ -107,6 +107,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @if(count($comments) != 0)
                     @foreach($comments as $comment)
                     <tr>
                         <td>
@@ -130,6 +131,14 @@
 
                     </tr>
                     @endforeach
+                    @elseif(count($comments) == 0)
+                    <tr>
+                    <td></td>
+                    <td colspan="4" class="text-center">{{ __('admin.blog.no_data_found') }}</td>
+                    <td></td>
+                    <td></td>
+                    </tr>
+                    @endif
                 </tbody>
             </table>
         </div>

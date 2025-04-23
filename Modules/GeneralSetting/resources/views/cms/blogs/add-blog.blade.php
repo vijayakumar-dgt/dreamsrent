@@ -24,7 +24,7 @@
                                     <label class="form-label">{{__('admin.blog.featured_image')}} <span class="text-danger">*</span></label>
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 
-                                        <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames p-2 preview-image">
+                                        <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames p-2 preview-image-add">
                                             <img src="{{ asset('/custom/img/default-image-02.jpg') }}" class="rounded-2 img-fluid" alt="brands">
                                         </div>
                                         <div class="profile-upload">
@@ -32,12 +32,12 @@
                                                 <div class="drag-upload-btn btn btn-md btn-dark">
                                                     <i class="ti ti-photo-up fs-14"></i>
                                                     {{__('admin.blog.upload')}}
-                                                    <input type="file" id="featured_image" name="image" class="form-control image-sign" multiple="" required>
+                                                    <input type="file" id="featured_image_add" name="image" class="form-control image-sign" multiple="" required>
                                                 </div>
-                                                <span id="selectedFileName" class="fs-14 text-muted">{{__('admin.blog.no_file_chosen')}}</span>
+                                                <span id="selectedFileNameAdd" class="fs-14 text-muted">{{__('admin.blog.no_file_chosen')}}</span>
                                             </div>
                                             <div class="mt-2">
-                                                <p class="fs-14">{{__('admin.blog.upload_image_size_180180_within_5mb')}}</p>
+                                                <p class="fs-14">{{__('admin.blog.image_dimensions_must_be_exactly_735_310_pixels')}}</p>
                                             </div>
                                         </div>
                                     </div>
