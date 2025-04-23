@@ -19,7 +19,11 @@ class AdminUserController extends Controller
 {
     public function index(Request $request): View
     {
-        $roles = Role::select('id', 'role_name')->where('status', 1)->get();
+        $userId = current_user()->id ?? $request->user_id;
+        $roles = Role::select('id', 'role_name')
+            ->where('status', 1)
+            ->where('created_by', $userId)
+            ->get();
         return view('admin.users', compact('roles'));
     }
 
@@ -106,6 +110,7 @@ class AdminUserController extends Controller
             $userDetailsData = [
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
+                'parent_id' => current_user()->id ?? $request->user_id
             ];
 
             if (empty($id)) {
@@ -168,6 +173,8 @@ class AdminUserController extends Controller
             $columnName = $request->columns[$columnIndex]['data'] ?? 'full_name';
             $orderDir = $request->order[0]['dir'] ?? 'asc';
 
+            $userId = current_user()->id ?? $request->user_id;
+
             $query = User::select(
                     'users.id',
                     'users.name as username', 
@@ -181,7 +188,7 @@ class AdminUserController extends Controller
                 )
                 ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
                 ->join('roles', 'roles.id', '=', 'users.role_id')
-                ->where(['users.user_type' => 2]);
+                ->where(['user_details.parent_id' => $userId]);
 
             if ($request->has('search') && !empty($request->search)) {
                 $search = $request->search;
@@ -233,7 +240,9 @@ class AdminUserController extends Controller
                 $query->orderBy($columnName, $orderDir);
             }
 
-            $totalRecords = User::where(['users.user_type' => 2])->count();
+            $totalRecords = User::leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
+                ->where(['user_details.parent_id' => $userId])
+                ->count();
             $filteredRecords = $query->count();
 
             $query->offset($start)->limit($length);

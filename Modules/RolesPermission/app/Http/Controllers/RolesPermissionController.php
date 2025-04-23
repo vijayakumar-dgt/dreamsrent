@@ -178,6 +178,9 @@ class RolesPermissionController extends Controller
         $userId = $this->authUser->id ?? $request->user_id;
 
         $userType = User::where('id', $userId)->value('user_type');
+        if ($userType == 2) {
+            $userType = 1;
+        }
         
         $role = Role::select('id', 'role_name')->where('id', $roleId)->first();
         $modules = ModuleModel::select('id', 'module_name', 'module_slug', 'parent_id')

@@ -10,23 +10,29 @@
         e.preventDefault();
         formData = new FormData();
 
+        const roleId = $('#role_id').val();
+        const processedModules = new Set(); // To track processed module_ids
         let index = 0;
-        formData.append('role_id', $('#role_id').val());
-        $('table tbody tr').each(function() {
-            let row = $(this);
-            let permission_id = row.find('td:eq(0)').data('permission_id') || '';
-            let module_id = row.find('td:eq(0)').data('module_id');
-    
-            if (!module_id) return;
-    
-            formData.append(`permissions[${index}][id]`, permission_id);
-            formData.append(`permissions[${index}][module_id]`, module_id);
+
+        formData.append('role_id', roleId);
+
+        $('table tbody tr').each(function () {
+            const row = $(this);
+            const moduleId = row.find('td:eq(0)').data('module_id');
+
+            if (!moduleId || processedModules.has(moduleId)) return;
+
+            processedModules.add(moduleId);
+            const permissionId = row.find('td:eq(0)').data('permission_id') || '';
+
+            formData.append(`permissions[${index}][id]`, permissionId);
+            formData.append(`permissions[${index}][module_id]`, moduleId);
             formData.append(`permissions[${index}][create]`, row.find('.perm-create').is(':checked') ? 1 : 0);
             formData.append(`permissions[${index}][edit]`, row.find('.perm-edit').is(':checked') ? 1 : 0);
             formData.append(`permissions[${index}][delete]`, row.find('.perm-delete').is(':checked') ? 1 : 0);
             formData.append(`permissions[${index}][view]`, row.find('.perm-view').is(':checked') ? 1 : 0);
             formData.append(`permissions[${index}][allow_all]`, row.find('.perm-allow-all').is(':checked') ? 1 : 0);
-    
+
             index++;
         });
 
@@ -46,13 +52,12 @@
                 `);
             },
             success:function(resp){
-                console.log(resp);
                 $(".error-text").text("");
                 $(".form-control, .select2-container").removeClass("is-invalid is-valid");
                 $(".submitbtn").removeAttr("disabled").html(_l('admin.common.submit'));
                 if (resp.code === 200) {
                     showToast('success', resp.message);
-                    // window.location.href = '/admin/roles-permissions';
+                    window.location.href = '/admin/roles-permissions';
                 }
             },
             error:function(error){
