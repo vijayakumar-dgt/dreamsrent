@@ -751,7 +751,7 @@
                                             <div class="care-more-info">
                                                 <h5>{{ $vehicle->name }}</h5>
                                                 <p>{{ old('delivery_return_location', request('delivery_return_location')) }}</p>
-                                                <a href="listing-details.html">{{__('web.home.view_vehicle_details')}}</a>
+                                                <a href="">{{__('web.home.view_vehicle_details')}}</a>
                                             </div>
                                         </div>
                                         <div class="booking-vehicle-rates">
@@ -917,7 +917,7 @@
                                 </div>
                                 <div id="accordion_collapse_two" class="accordion-collapse collapse">
                                     <div class="booking-sidebar-body">
-                                        <form action="booking-checkout.html">
+                                        <form action="">
                                             <div class="d-flex align-items-center">
                                                 <div class="form-custom flex-fill">
                                                     <input type="text" class="form-control mb-0" placeholder="{{__('web.home.coupon_code')}}">

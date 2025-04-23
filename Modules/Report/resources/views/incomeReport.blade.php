@@ -12,7 +12,7 @@
                 <nav>
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item">
-                            <a href="index.html">{{__('admin.common.home')}}</a>
+                            <a href="/admin">{{__('admin.common.home')}}</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">{{__('admin.common.reports')}}</li>
                     </ol>
@@ -50,7 +50,7 @@
                                 </div>
                                 <div>
                                     <p class="mb-0">{{__('admin.reports.top_earning_vehicle')}}</p>
-                                    <h6 class="fw-semibold">{{$vehicle->name}}</h6>
+                                    <h6 class="fw-semibold">{{$vehicle->name ?? '-'}}</h6>
                                 </div>
                             </div>
                             <span class="avatar avatar-md bg-orange rounded-circle">
