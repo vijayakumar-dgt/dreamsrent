@@ -2,14 +2,14 @@
 <div class="sidebar" id="sidebar">
     <!-- Logo -->
     <div class="sidebar-logo">
-        <a href="index.html" class="logo logo-normal">
-            <img src="{{ asset('assets/img/logo.svg') }}" alt="Logo">
+        <a href="{{ route('dashboard') }}" class="logo logo-normal">
+            <img src="{{ $logo }}" alt="Logo">
         </a>
-        <a href="index.html" class="logo-small">
-            <img src="{{ asset('assets/img/logo-small.svg') }}" alt="Logo">
+        <a href="{{ route('dashboard') }}" class="logo-small">
+            <img src="{{ $smallLogo }}" alt="Logo">
         </a>
-        <a href="index.html" class="dark-logo">
-            <img src="{{ asset('assets/img/logo-white.svg') }}" alt="Logo">
+        <a href="{{ route('dashboard') }}" class="dark-logo">
+            <img src="{{ $logo }}" alt="Logo">
         </a>
     </div>
     <!-- /Logo -->
