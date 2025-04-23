@@ -333,7 +333,7 @@
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
-                                <a href="customer-details.html" class="avatar avatar-rounded me-2 flex-shrink-0">
+                                <a href="" class="avatar avatar-rounded me-2 flex-shrink-0">
                                     @php
                                     $imagePath = 'storage/' . $booking->profile_image;
                                     $defaultImage = asset('custom/img/default-profile.png');

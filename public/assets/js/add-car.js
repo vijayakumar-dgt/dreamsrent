@@ -76,26 +76,26 @@
     $(document).ready(function () {
         let selectedStatus = null;
         let currentSortType = null;
-    
+
         function getFilterData(includeStatus = false) {
             let vehicleIds = [];
             let vehicleTypeIds = [];
             let vehicleLocationIds = [];
             let sortByDate = $("#sort_by_date").val() || null;
             let name = $("#name").val().trim() || null;
-    
+
             $("input[name='vehicle_id']:checked").each(function () {
                 vehicleIds.push($(this).val());
             });
-    
+
             $("input[name='vehicle_type_id']:checked").each(function () {
                 vehicleTypeIds.push($(this).val());
             });
-    
+
             $("input[name='vehicle_location_id']:checked").each(function () {
                 vehicleLocationIds.push($(this).val());
             });
-    
+
             let filterData = {
                 name: name,
                 vehicle_id: vehicleIds.length > 0 ? vehicleIds : null,
@@ -104,31 +104,31 @@
                 sort_by: currentSortType || null,
                 sort_by_date: sortByDate,
             };
-    
+
             if (includeStatus && selectedStatus !== null) {
                 filterData.status = selectedStatus;
             }
-    
+
             return filterData;
         }
-    
+
         function fetchFilteredData(includeStatus = false) {
             let filterData = getFilterData(includeStatus);
             initTable(filterData);
             $("#loader-table").show();
             $(".real-data").addClass("d-none");
         }
-    
+
         // Name & Date sorting listeners
         $("#name, #sort_by_date").on("change keyup", function () {
             fetchFilteredData(); // Without status
         });
-    
+
         // Apply Filter (with status)
         $("#applyFilter").click(function () {
             fetchFilteredData(true);
         });
-    
+
         // Clear Filters
         $("#clearFilter").click(function () {
             $("input[type='checkbox']").prop("checked", false);
@@ -140,31 +140,31 @@
             $("#sortLabel").text("{{ __('admin.page.latest') }}"); // Reset label
             fetchFilteredData(); // Without status
         });
-    
+
         // Status Dropdown Handler
         $(".statusFilter .dropdown-item").click(function () {
             $(".statusFilter .dropdown-item").removeClass("active");
             $(this).addClass("active");
-    
+
             let statusText = $(this).text().trim();
             selectedStatus = statusText === "Active" ? 1 : statusText === "Inactive" ? 0 : null;
         });
-    
+
         // Sort Dropdown Handler
         window.filterSort = function (element, sortType) {
             $("#sortFilter a").removeClass("active");
             $(element).addClass("active");
-    
+
             currentSortType = sortType;
-    
+
             // Update label
             $("#sortLabel").text($(element).text().trim());
-    
+
             // Trigger filter
             fetchFilteredData();
         };
     });
-    
+
     function initTable(filterData) {
         $.ajax({
             url: "/admin/vehicle-list",
@@ -243,11 +243,11 @@
                             </td>
                             <td>
                             <div class="d-flex align-items-start">
-								<a href="car-details.html" class="avatar me-2 flex-shrink-0">
+								<a href=" " class="avatar me-2 flex-shrink-0">
 									<img src="${value.vehicle_image}" class="rounded-3" alt="">
 								</a>
 								<div class="text-start">
-									<h6><a href="car-details.html" class="fs-14 fw-semibold">${ucfirst(
+									<h6><a href=" " class="fs-14 fw-semibold">${ucfirst(
                                         value.name
                                     )}</a></h6>
 									<p>${value.car_type ? value.car_type.name : ""}</p>
@@ -1572,7 +1572,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>                                                            
+                    </div>
                 </div>`;
 
                     $("#car_damage_append").append(newDamage);
@@ -2352,7 +2352,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 </div>
                 <div class="d-flex align-items-center icon-list">
-                    <a href="#" class="edit-icon me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance" 
+                    <a href="#" class="edit-icon me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance"
                     data-id="${uniqueId}" data-price="${insurancePrice}" data-price-type="${insurancePriceType}"><i class="ti ti-edit"></i></a>
                     <a href="#" class="trash-icon" data-bs-toggle="modal" data-bs-target="#delete_insurance"><i class="ti ti-trash"></i></a>
                 </div>

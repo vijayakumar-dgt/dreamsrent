@@ -14,7 +14,7 @@
                 <nav class=" d-none real-label">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item">
-                            <a href="index.html">{{ __('admin.rentals.home') }}</a>
+                            <a href="/admin">{{ __('admin.rentals.home') }}</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">{{ __('admin.rentals.all_vehicle') }}</li>
                     </ol>
