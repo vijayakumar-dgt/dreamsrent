@@ -62,6 +62,7 @@
                     },
                     extension: "jpeg|jpg|png|svg",
                     filesize: 2048,
+                    extraImageDimension:[180,180],
                 },
                 description: {
                     required: true,
@@ -157,7 +158,7 @@
         };
     
         img.onload = function () {
-            valid = img.width >= 10 && img.width <= 20 && img.height >= 10 && img.height <= 20;
+            valid = img.width >= 10 && img.width <= 25 && img.height >= 10 && img.height <= 25;
             $(element).data("valid-dimension", valid);
             $(element).valid();
         };
@@ -165,7 +166,31 @@
         reader.readAsDataURL(file);
     
         return $(element).data("valid-dimension") !== false;
-    }, _l('admin.rentals.icon_dimension'));
+    }, _l('admin.rentals.extra_service_icon_dimension'));
+
+    $.validator.addMethod("extraImageDimension", function (value, element) {
+        if (element.files.length === 0) return true;
+    
+        let file = element.files[0];
+        let img = new Image();
+        let valid = false;
+    
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            img.src = e.target.result;
+        };
+    
+        img.onload = function () {
+            valid = img.width >= 180 && img.width <= 180 && img.height >= 180 && img.height <= 180;
+            $(element).data("valid-dimension", valid);
+            $(element).valid();
+        };
+    
+        reader.readAsDataURL(file);
+    
+        return $(element).data("valid-dimension") !== false;
+    }, _l('admin.rentals.extra_service_image_dimension'));
+
     $(document).on('click','.status_option',function(){
         $('.status_option').removeClass('active');
         $(this).addClass('active');

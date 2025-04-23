@@ -1100,6 +1100,8 @@ return array(
     'icon_required' => 'Please select icon',
     'icon_extension' => 'Only jpeg, jpg,svg and png files are allowed.',
     'icon_dimension' => 'Icon dimensions must be between 50x50 and 150x150 pixels (inclusive).',
+    'extra_service_icon_dimension' => 'Icon dimensions must be between 10x10 and 25x25 pixels (inclusive).',
+    'extra_service_image_dimension' => 'Image dimensions must be 180x180 pixels.',
     'edit_type' => 'Edit Type',
     'create_type' => 'Create Type',
     'vehicle_types' => 'Vehicle Types',

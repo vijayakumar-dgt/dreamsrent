@@ -1085,6 +1085,8 @@ return [
     'icon_required' => 'الرجاء اختيار الأيقونة',
     'icon_extension' => 'يُسمح فقط بملفات jpeg و jpg و svg و png.',
     'icon_dimension' => 'يجب أن تكون أبعاد الأيقونة بين 50x50 و 150x150 بكسل (شاملة).',
+    'extra_service_icon_dimension' => 'يجب أن تكون أبعاد الرمز بين 10 × 10 و 25 × 25 بكسل (شاملة).',
+    'extra_service_image_dimension' => 'يجب أن تكون أبعاد الصورة 180 × 180 بكسل.',
     'edit_type' => 'تعديل النوع',
     'create_type' => 'إنشاء النوع',
     'vehicle_types' => 'أنواع المركبات',
