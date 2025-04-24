@@ -74,7 +74,7 @@
                                 <div class="booking-info-body">
                                     <ul class="booking-radio-btns">
 
-                                        <li style="cursor: not-allowed;">
+                                    <li class="disabled pe-none cursor-not-allowed">
                                             <label class="booking_custom_check">
                                                 <input type="radio" name="rent_type" id="location_pickup"
                                                     {{ request('rent_value') == 'self_pickup' ? 'checked' : '' }} value="self_pickup">
@@ -184,7 +184,7 @@
                                 <div class="booking-info-body">
                                     <ul class="booking-radio-btns">
                                         @foreach ($filteredPrices as $type => $price)
-                                        <li style="cursor: not-allowed;">
+                                        <li class="disabled pe-none cursor-not-allowed">
                                             <label class="booking_custom_check">
                                                 <input type="radio" name="price_type" value="{{ $type }}"
                                                     {{ request('price_type') == $type ? 'checked' : '' }} disabled>
@@ -299,7 +299,7 @@
                                                 </button>
 
 
-                                                <button type="button" class="btn btn-secondary remove-adon-btn" style="display: none;">
+                                                <button type="button" class="btn btn-secondary remove-adon-btn d-none">
                                                     <i class="bx bx-minus-circle me-2"></i>{{__('web.home.remove')}}
                                                 </button>
 
