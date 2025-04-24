@@ -89,8 +89,7 @@
                     
                     <div>
                         <a href="/admin/messages" class="btn btn-menubar position-relative">
-                            <i class="ti ti-mail"></i>
-                            <span class="badge bg-danger rounded-pill"></span>
+                            <i class="ti ti-message"></i>
                         </a>
                     </div>
                     <div>

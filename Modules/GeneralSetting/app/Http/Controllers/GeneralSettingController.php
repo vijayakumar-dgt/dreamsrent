@@ -1206,6 +1206,7 @@ class GeneralSettingController extends Controller
 
         if ($request->isAll === "true") {
             UserDevice::where('user_id', Auth::user()->id)->delete();
+            Auth::guard('admin')->logout();
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
