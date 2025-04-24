@@ -13,7 +13,18 @@ function DbBackUpTable() {
             success: function(response) {
                 let tableBody = $("#backup-list");
                 tableBody.empty();
-
+    
+                if (response.data.length === 0) {
+                    tableBody.append(`
+                        <tr>
+                            <td colspan="3">
+                                <p class="text-gray-9 text-center m-0">${_l('admin.common.empty_table')}</p>
+                            </td>
+                        </tr>
+                    `);
+                    return;
+                }
+    
                 response.data.forEach(backup => {
                     let row = `
                         <tr>
@@ -31,20 +42,20 @@ function DbBackUpTable() {
                                         <i class="ti ti-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                                        ${ hasPermission(permissions, 'other_settings', 'edit') ? 
-
-                                        `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="restoreBackup('${backup.name}')">
-                                                <i class="ti ti-restore me-1"></i>${_l('admin.general_settings.restore')}
-                                            </a>
-                                        </li>`:''}
-                                                                            ${ hasPermission(permissions, 'other_settings', 'delete') ? 
-
-                                        `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_backup" onclick="deleteBackup(${backup.id})">
-                                                <i class="ti ti-trash me-1"></i>${_l('admin.general_settings.delete')}
-                                            </a>
-                                        </li>`:''}
+                                        ${ hasPermission(permissions, 'other_settings', 'edit') ? 
+                                            `<li>
+                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="restoreBackup('${backup.name}')">
+                                                    <i class="ti ti-restore me-1"></i>${_l('admin.general_settings.restore')}
+                                                </a>
+                                            </li>` : ''
+                                        }
+                                        ${ hasPermission(permissions, 'other_settings', 'delete') ? 
+                                            `<li>
+                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_backup" onclick="deleteBackup(${backup.id})">
+                                                    <i class="ti ti-trash me-1"></i>${_l('admin.general_settings.delete')}
+                                                </a>
+                                            </li>` : ''
+                                        }
                                     </ul>
                                 </div>
                             </td>
@@ -58,6 +69,7 @@ function DbBackUpTable() {
             }
         });
     });
+    
 
 }
     

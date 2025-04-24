@@ -53,19 +53,19 @@
                                 <div class="row">
                                     <div class="col-lg-4 col-md-6 d-flex">
                                         <div class="balance-inner credit-info">
-                                            <h6 class="total_credit">$1,23,464</h6>
+                                            <h6 class="total_credit"></h6>
                                             <p>{{ __('web.user.total_credit') }}</p>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6 d-flex">
                                         <div class="balance-inner debit-info">
-                                            <h6 class="total_debit">$7,357</h6>
+                                            <h6 class="total_debit"></h6>
                                             <p>{{ __('web.user.total_debit') }}</p>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6 d-flex">
                                         <div class="balance-inner transaction-info">
-                                            <h6 class="available_balance">$6,56,415</h6>
+                                            <h6 class="available_balance"></h6>
                                             <p>{{ __('web.user.total_transaction') }}</p>
                                         </div>
                                     </div>
