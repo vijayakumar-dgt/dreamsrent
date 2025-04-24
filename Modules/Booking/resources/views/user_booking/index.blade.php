@@ -286,30 +286,29 @@
                                                     <div class="adon-name">
                                                         <h6>{{ $service->extraService->name }}</h6>
                                                         <a href="javascript:void(0);" class="d-inline-flex align-items-center adon-info-btn">
-                                                            <i class="bx bx-info-circle me-2"></i> {{__('web.home.more_information')}}
+                                                            <i class="bx bx-info-circle me-2"></i> {{ __('web.home.more_information') }}
                                                             <i class="bx bx-chevron-down ms-2 arrow-icon"></i>
                                                         </a>
                                                     </div>
                                                 </div>
                                                 <span class="adon-price">{{ $currencySymbol }}{{ number_format($service->price, 2) }}</span>
 
-
+                                                <!-- Add Button -->
                                                 <button type="button" class="btn add-addon-btn">
                                                     <i class="bx bx-plus-circle me-2"></i>{{ __('web.home.add') }}
                                                 </button>
 
-
-                                                <button type="button" class="btn btn-secondary remove-adon-btn d-none">
-                                                    <i class="bx bx-minus-circle me-2"></i>{{__('web.home.remove')}}
+                                                <button type="button" class="btn btn-dark remove-adon-btn d-none">
+                                                    <i class="bx bx-minus-circle me-2"></i>{{ __('web.home.remove') }}
                                                 </button>
 
                                                 <input type="checkbox" name="add_extra" hidden>
-                                                <input type="hidden" name="extra_id[]" id="extra_id" value="{{ $service->extraService->id }}">
-                                                <input type="hidden" name="extra_price[]" id="extra_id" value="{{ $service->price }}">
-                                                <input type="hidden" name="extra_type[]" id="extra_type" value="{{ $service->value }}">
+                                                <input type="hidden" name="extra_id[]" value="{{ $service->extraService->id }}">
+                                                <input type="hidden" name="extra_price[]" value="{{ $service->price }}">
+                                                <input type="hidden" name="extra_type[]" value="{{ $service->value }}">
                                             </div>
                                             <div class="more-adon-info">
-                                                <p>{{ $service->extraService->description }}</p> 
+                                                <p>{{ $service->extraService->description }}</p>
                                             </div>
                                         </li>
                                         @endforeach
@@ -848,7 +847,7 @@
                                                 <li class="d-block">
                                                     <div class="driver-profile-info">
                                                         @if(!empty($driverInfo->driver_name))
-                                                        <div class="acting-driver-info" style="display: none;">
+                                                        <div class="acting-driver-info">
                                                             <span class="driver-profile">
                                                                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRJ0tCOel3GeTItNxpqvhsILtxfV8yrbD5yA&s" alt="Img">
                                                             </span>
@@ -861,7 +860,7 @@
                                                         </div>
                                                         @endif
 
-                                                        <div class="self-driver-info" style="display: none;">
+                                                        <div class="self-driver-info">
                                                             <div class="driver-name">
                                                                 <h5>{{__('web.home.self_drive')}}</h5>
                                                             </div>

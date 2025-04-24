@@ -265,29 +265,21 @@
             }
         }
 
-        // Add Extra Service
         $(".add-addon-btn").on("click", function () {
             let parent = $(this).closest("li");
             let serviceId = parent.data("service-id");
             let serviceName = parent.find(".adon-name h6").text();
             let servicePrice = parseFloat(
-                parent
-                    .find(".adon-price")
-                    .text()
-                    .replace(currencySymbol, "")
-                    .trim()
+                parent.find(".adon-price").text().replace(currencySymbol, "").trim()
             );
-
+        
             parent.find("input[name='add_extra']").prop("checked", true);
-            $(this).hide();
-            parent.find(".remove-adon-btn").show();
-
+            $(this).addClass("d-none");
+            parent.find(".remove-adon-btn").removeClass("d-none");
+        
             $extraChargesList.find(".no-service-message").remove();
-
-            if (
-                $extraChargesList.find(`li[data-service-id="${serviceId}"]`)
-                    .length === 0
-            ) {
+        
+            if ($extraChargesList.find(`li[data-service-id="${serviceId}"]`).length === 0) {
                 $extraChargesList.append(`
                     <li data-service-id="${serviceId}">
                         <h6>${serviceName}</h6>
@@ -296,37 +288,31 @@
                 `);
                 totalExtraServicePrice += servicePrice;
             }
-
+        
             updateTotalPrice();
         });
-
-        // Remove Extra Service
+        
         $(".remove-adon-btn").on("click", function () {
             let parent = $(this).closest("li");
             let serviceId = parent.data("service-id");
             let servicePrice = parseFloat(
-                parent
-                    .find(".adon-price")
-                    .text()
-                    .replace(currencySymbol, "")
-                    .trim()
+                parent.find(".adon-price").text().replace(currencySymbol, "").trim()
             );
-
+        
             parent.find("input[name='add_extra']").prop("checked", false);
-            $(this).hide();
-            parent.find(".add-addon-btn").show();
-
-            let $selectedService = $extraChargesList.find(
-                `li[data-service-id="${serviceId}"]`
-            );
+            $(this).addClass("d-none");
+            parent.find(".add-addon-btn").removeClass("d-none");
+        
+            let $selectedService = $extraChargesList.find(`li[data-service-id="${serviceId}"]`);
             if ($selectedService.length > 0) {
                 totalExtraServicePrice -= servicePrice;
                 $selectedService.remove();
             }
-
+        
             checkEmptyCart();
             updateTotalPrice();
         });
+        
 
         // Select Insurance
         $(".insurance-select").on("click", function () {
