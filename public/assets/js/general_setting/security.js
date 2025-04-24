@@ -4,7 +4,12 @@
     $(document).ready(function () {
    
         getSecuritySettings();
+<<<<<<< Updated upstream
         
+=======
+      
+    
+>>>>>>> Stashed changes
         $(document).on('click','.changePasswordBtn', function(){
             resetPasswordForm();
         });
@@ -171,6 +176,7 @@
             let $strong = $('#strong');
             let $heavy = $('#heavy');
     
+<<<<<<< Updated upstream
             
             let lowerCaseRegExp = /[a-zA-Z]/;  
             let numberRegExp = /[0-9]/;        
@@ -178,6 +184,16 @@
             let whitespaceRegExp = /\s/;       
     
     
+=======
+          
+            let lowerCaseRegExp = /[a-zA-Z]/;  
+            let numberRegExp = /[0-9]/;      
+            let specialCharRegExp = /[#?!@$%^&*()_+\-=<>:{}[\]\\|~`]/;
+            let whitespaceRegExp = /\s/;    
+    
+    
+        
+>>>>>>> Stashed changes
             $passwordInput.on('keyup', function () {
                 let passwordValue = $(this).val();
                 let passwordLength = passwordValue.length;
@@ -189,6 +205,10 @@
     
                 let passwordStrength = 0;
     
+<<<<<<< Updated upstream
+=======
+               
+>>>>>>> Stashed changes
                 if (hasWhitespace) {
                     passwordStrength = 0;
                 } else {
@@ -197,6 +217,10 @@
                     if (hasSpecialChar) passwordStrength++;
                     if (passwordLength >= 8) passwordStrength++;
     
+<<<<<<< Updated upstream
+=======
+                 
+>>>>>>> Stashed changes
                     if (passwordLength < 8) {
                         passwordStrength = 1;
                     }
@@ -205,7 +229,11 @@
             });
     
             function updateStrength(passwordStrength){
+<<<<<<< Updated upstream
                 
+=======
+               
+>>>>>>> Stashed changes
                 $passwordStrength.find('span').removeClass('active');
     
                 $passwordStrength.removeClass('poor-active avg-active strong-active heavy-active');
@@ -237,6 +265,10 @@
     
     
     
+<<<<<<< Updated upstream
+=======
+      
+>>>>>>> Stashed changes
         function checkCurrentPhoneNumber(){
             return new Promise((resolve, reject) => {
                 let currentPhoneNumber = $('#current_phonenumber').val();
@@ -348,7 +380,11 @@
                 });
             }
         });
+<<<<<<< Updated upstream
         
+=======
+      
+>>>>>>> Stashed changes
         function checkCurrentEmail(){
             return new Promise((resolve, reject) => {
                 let currentemail = $('#current_email').val();
@@ -444,7 +480,11 @@
                 });
             }
         });
+<<<<<<< Updated upstream
       
+=======
+       
+>>>>>>> Stashed changes
     
         function getSecuritySettings() {
             $.ajax({

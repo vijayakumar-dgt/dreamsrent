@@ -112,7 +112,7 @@ $(document).ready(function(){
         },
         submitHandler: function(form) {
             let _formData = new FormData(form);
-        //    $("#localizationForm .submitbtn").text('Please Wait...');
+      
             $("#localizationForm .submitbtn").attr("disabled", true);
             $.ajax({
                 type:"POST",
@@ -138,8 +138,7 @@ $(document).ready(function(){
                         toastr.error(resp.message);
                     }
                     getLocalizationSettings();
-                    //   $("#localizationForm .submitbtn").text('Save Changes');
-                    //   $("#localizationForm .submitbtn").prop('disabled', false);
+                   
                 },
                 error:function(error){
                     $(".error-text").text("");
@@ -152,8 +151,7 @@ $(document).ready(function(){
                     } else {
                             showToast('error', error.responseJSON.message);
                     }
-                    //   $("#localizationForm .submitbtn").text('Save Changes');
-                    //   $("#localizationForm .submitbtn").prop('disabled', false);
+                  
                     getLocalizationSettings();
                 }
             });

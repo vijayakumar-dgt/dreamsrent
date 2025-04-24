@@ -30,7 +30,11 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                             <h6 class="fw-bold">{{ __('admin.general_settings.language') }}</h6>
+<<<<<<< Updated upstream
                           
+=======
+                           
+>>>>>>> Stashed changes
                         </div>
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                             <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">

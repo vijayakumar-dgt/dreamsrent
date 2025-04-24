@@ -6,7 +6,7 @@
         loadLogoSettings();
     
     
-        // Trigger validation on file change
+    
         $('input[type="file"]').on('change', function () {
             $(this).valid();
         });
@@ -145,7 +145,7 @@ function loadLogoSettings() {
 
                 $('.real-label').removeClass('d-none');
                 $('.label-loader, .input-loader, .image-loader').addClass('d-none');
-                // showToast('success', response.message);
+             
             }
         },
         error: function(xhr) {

@@ -106,7 +106,7 @@ $(document).ready(function() {
             },
             success: function (response) {
                 if (response.code === 200) {
-                    // Update UI elements
+                   
                     $("#lngicon").attr('src', response.icon);
                     $(".lngTitile").text(response.language.trans_lang.name);
                     $("#modalProgressBar").css('width', response.progress + "%")
@@ -114,7 +114,7 @@ $(document).ready(function() {
                     $(".modalProgress").text(response.progress + "%");
                     $(".langTitle").text(response.uppercaseName);
     
-                    // Generate table HTML
+                  
                     let html = "";
                     if (response.data && Object.keys(response.data).length > 0) {
                         let data = response.data;
@@ -133,7 +133,7 @@ $(document).ready(function() {
                         html = `<tr><td colspan="2" class="text-center">No Data Found</td></tr>`;
                     }
     
-                    // Refresh DataTable correctly
+                   
                     const $table = $("#languageSetupTable");
                     if ($.fn.DataTable.isDataTable($table)) {
                         $table.DataTable().clear().destroy();
@@ -149,7 +149,7 @@ $(document).ready(function() {
                         "pageLength": 10
                     });
     
-                    // Show modal
+                   
                     $("#language_setup").modal('show');
                 } else {
                     showToast('error', response.message);
@@ -222,7 +222,7 @@ $(document).ready(function() {
                 }
             },
             complete: function() {
-                // $("#language_setup").modal('hide');
+              
                 loadLanguageModules();
             }
         });

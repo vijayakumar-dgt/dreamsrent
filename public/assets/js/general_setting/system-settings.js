@@ -13,6 +13,7 @@ function DbBackUpTable() {
             success: function(response) {
                 let tableBody = $("#system-backup-list");
                 tableBody.empty(); 
+<<<<<<< Updated upstream
                 if(response.data.length === 0){
                     tableBody.append(`
                         <tr>
@@ -22,6 +23,9 @@ function DbBackUpTable() {
                         </tr>
                     `);
                 }
+=======
+
+>>>>>>> Stashed changes
                 response.data.forEach(backup => {
                     let row = `
                         <tr>

@@ -17,10 +17,10 @@ $(document).ready(function () {
                 required: true
             },
             login: {
-                required: false // Checkbox, so not always required
+                required: false
             },
             register: {
-                required: false // Checkbox, so not always required
+                required: false 
             }
         },
         messages: {
@@ -56,7 +56,7 @@ $(document).ready(function () {
         submitHandler: function (form) {
             let otpData = new FormData(form);
 
-            // Convert checkboxes from "on" to 1 or 0
+         
             otpData.set("login", $("#login").is(":checked") ? "1" : "0");
             otpData.set("register", $("#register").is(":checked") ? "1" : "0");
 
@@ -127,20 +127,20 @@ $(document).ready(function () {
 
                         if (element.length) {
                             if (element.is(":checkbox")) {
-                                // Handle checkboxes
+                               
                                 element.prop("checked", setting.value == 1);
                             } else if (element.is("select")) {
-                                // Ensure the value exists in the select options; if not, append it
+                               
                                 const optionExists = element.find(`option[value="${setting.value}"]`).length > 0;
 
                                 if (!optionExists) {
                                     element.append(`<option value="${setting.value}">${setting.value}</option>`);
                                 }
 
-                                // Set the value and trigger change event
+                               
                                 element.val(setting.value).trigger('change');
                             } else {
-                                // Handle other input fields
+                               
                                 element.val(setting.value);
                             }
                         }

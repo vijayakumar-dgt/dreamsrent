@@ -181,10 +181,21 @@
                 ],
                 "drawCallback": function() {
                      $(".dataTables_info").addClass('d-none');
+<<<<<<< Updated upstream
                      $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
                      var tableWrapper = $(this).closest('.dataTables_wrapper');
                      var info = tableWrapper.find('.dataTables_info');
                      var pagination = tableWrapper.find('.dataTables_paginate');
+=======
+                    
+                     $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
+                    
+                     var tableWrapper = $(this).closest('.dataTables_wrapper');
+                     var info = tableWrapper.find('.dataTables_info');
+                     var pagination = tableWrapper.find('.dataTables_paginate');
+    
+                     
+>>>>>>> Stashed changes
                      $('.table-footer').empty()
                          .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
                              .append($('<div class="datatable-info"></div>').append(info.clone(true)))

@@ -79,8 +79,7 @@
             },
             submitHandler: function(form) {
                 let seoData = new FormData(form);
-                // $(".btn-primary").text('Please Wait...').prop('disabled', true);
-    
+               
                 $.ajax({
                     type: "POST",
                     url: "/admin/settings/seosetup/store",
@@ -103,7 +102,7 @@
                         if (resp.code === 200) {
                             loadSeoSettings();
                             showToast('success', resp.message);
-                            // $(".btn-primary").text('Save Changes').prop('disabled', false);
+                          
                         }
                     },
                     error: function(error) {
@@ -119,7 +118,7 @@
                             showToast('error', error.responseJSON.message);
                         }
     
-                        // $(".btn-primary").text('Save Changes').prop('disabled', false);
+                       
                     }
                 });
             }
@@ -131,7 +130,7 @@
             $.ajax({
                 url: '/admin/settings/company/list',
                 type: 'POST',
-                data: { 'group_id': 6 }, // Adjust group_id if needed
+                data: { 'group_id': 6 },
                 headers: {
                     'Accept': 'application/json',
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -143,13 +142,13 @@
                         settings.forEach(setting => {
                             const element = $('#' + setting.key);
     
-                            // Meta Image Preview
+                          
                             if (setting.key === 'metaImage' && setting.value) {
                                 const imageUrl = `/storage/${setting.value}`;
                                 $('#profile_photo_preview').attr('src', imageUrl).show();
                             }
     
-                            // SEO - Site Meta
+                          
                             else if (setting.key === 'siteDescription') {
                                 $('#siteDescription').val(setting.value);
                             }
@@ -161,7 +160,7 @@
                                 });
                             }
     
-                            // SEO - OG Meta
+                           
                             else if (setting.key === 'OGmetaTitle') {
                                 $('#ogmetaTitle').val(setting.value);
                             }
@@ -200,7 +199,7 @@
 
 
 
-// Image preview function
+
 function previewImage(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -236,6 +235,6 @@ function removeImage() {
     const preview = document.getElementById('profile_photo_preview');
     const fileInput = document.getElementById('profile_photo');
 
-    preview.src = '/assets/img/settings/company-logo-01.jpg'; // Default placeholder
-    fileInput.value = ''; // Clear the file input
+    preview.src = '/assets/img/settings/company-logo-01.jpg'; 
+    fileInput.value = '';
 }

@@ -16,7 +16,7 @@
                     minlength: 3
                 },
                 is_default: {
-                    required: false // Checkbox, not always required
+                    required: false 
                 }
             },
             messages: {
@@ -49,11 +49,10 @@
             },
             submitHandler: function (form) {
                 let signatureData = new FormData(form);
-                // $(".btn-primary").text('Please Wait...').prop('disabled', true);
-    
+             
                 $.ajax({
                     type: "POST",
-                    url: "/admin/settings/signatures/store", // Adjust API endpoint
+                    url: "/admin/settings/signatures/store",
                     data: signatureData,
                     processData: false,
                     contentType: false,
@@ -72,10 +71,10 @@
                     success: function (resp) {
                         if (resp.code === 200) {
                             showToast('success', resp.message);
-                            $('#addSignatureForm')[0].reset(); // Reset form after success
-                            // $(".btn-primary").text('Create New').prop('disabled', false);
+                            $('#addSignatureForm')[0].reset(); 
+                         
                             $('#add_signatures').modal('hide');
-                            signatureTable(); // Refresh signature list if needed
+                            signatureTable(); 
                         }
                     },
                     error: function (error) {
@@ -91,7 +90,7 @@
                             showToast('error', error.responseJSON.message);
                         }
     
-                        // $(".btn-primary").text('Create New').prop('disabled', false);
+                       
                     }
                 });
             }
@@ -142,8 +141,7 @@
             },
             submitHandler: function (form) {
                 let editData = new FormData(form);
-                // $(".btn-primary").text('Saving...').prop('disabled', true);
-    
+              
                 $.ajax({
                     type: "POST",
                     url: "/admin/settings/signatures/update",
@@ -166,7 +164,6 @@
                         if (resp.code === 200) {
                             showToast('success', resp.message);
                             $('#editSignatureForm')[0].reset();
-                            // $(".btn-primary").text('Save Changes').prop('disabled', false);
                             $('#edit_signature').modal('hide');
                             signatureTable();
                         }
@@ -184,7 +181,6 @@
                             showToast('error', error.responseJSON.message);
                         }
     
-                        // $(".btn-primary").text('Save Changes').prop('disabled', false);
                     }
                 });
             }
@@ -194,7 +190,7 @@
     
     function signatureTable(){
         $.ajax({
-            url: "/admin/settings/signatures/list", // Your actual API endpoint
+            url: "/admin/settings/signatures/list",
             type: "GET",
             success: function(response) {
                 let tableBody = "";
@@ -297,11 +293,7 @@
             complete: function() {
                 $(".table-loader, .input-loader, .label-loader").hide();
                 $('.real-table, .real-label, .real-input').removeClass('d-none');
-                // if($('#signatureTable').DataTable().rows().count() == 0){
-                //     $(".table-footer").addClass('d-none');
-                // } else {
-                //     $(".table-footer").removeClass('d-none');
-                // }
+              
             },
         });
     
@@ -311,14 +303,14 @@
 
 
 function editSignature(id, name, image, status, isDefault) {
-    // Set values in the modal fields
+   
     $('#edit_signature_id').val(id);
     $('#edit_signature_name').val(name);
     $('#edit_signature_preview').attr('src', `${image}`);
     $('#edit_signature_status').prop('checked', status === 1);
     $('#edit_signature_default').prop('checked', isDefault === 1);
 
-    // Open the edit modal
+   
     $('#edit_signature').modal('show');
 }
 
@@ -385,6 +377,6 @@ function removeImage() {
     const preview = document.getElementById('profile_photo_preview');
     const fileInput = document.getElementById('profile_photo');
 
-    preview.src = '/assets/img/settings/company-logo-01.jpg'; // Default placeholder
-    fileInput.value = ''; // Clear the file input
+    preview.src = '/assets/img/settings/company-logo-01.jpg';
+    fileInput.value = ''; 
 }

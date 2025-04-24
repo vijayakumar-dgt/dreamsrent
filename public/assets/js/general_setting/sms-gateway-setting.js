@@ -19,11 +19,7 @@ $(document).ready(function() {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
-                if (response.code === 200) {
-                    console.log(`${gateway} status updated successfully!`);
-                } else {
-                    console.log(`Failed to update ${gateway} status.`);
-                }
+               
                 loadSMSSetting();
 
             },

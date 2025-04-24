@@ -59,16 +59,14 @@ document.addEventListener('DOMContentLoaded', function () {
             const selected = this.textContent.trim();
             filterText.textContent = selected;
 
-            // Reset rows
             tableRows.forEach(row => row.style.display = '');
 
-            // Apply filter
             switch (selected) {
                 case 'Ascending':
-                    sortTable(1, true); // Created Date ascending
+                    sortTable(1, true);
                     break;
                 case 'Desending':
-                    sortTable(1, false); // Created Date descending
+                    sortTable(1, false); 
                     break;
                 case 'Last Month':
                     filterByDateRange(30);
@@ -78,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     break;
                 case 'Latest':
                 default:
-                    sortTable(1, false); // Default: Latest first
+                    sortTable(1, false);
                     break;
             }
         });

@@ -78,7 +78,7 @@
                                     <div class="d-flex justify-content-end">
                                         <!-- Skeleton Loader for Buttons -->
                                         <div class="skeleton button-skeleton label-loader me-3"></div>
-                                        <a href="javascript:void(0);" class="btn btn-light me-3 d-none real-label" data-bs-dismiss="modal">{{__('admin.general_settings.cancel')}}</a>
+                                        <a href="{{ route('dashboard') }}" class="btn btn-light me-3 d-none real-label" data-bs-dismiss="modal">{{__('admin.general_settings.cancel')}}</a>
                                         <div class="skeleton button-skeleton label-loader"></div>
                                         @if (hasPermission($permissions, 'copyright', 'edit'))
 

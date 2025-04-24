@@ -4,9 +4,9 @@
 
     $(document).ready(function () {
         $('#add_FAQ').on('show.bs.modal', function () {
-            $('#addFaq')[0].reset(); // Reset the form
-            $('.text-danger').text(''); // Clear error messages
-            $('.form-control').removeClass('is-invalid'); // Remove validation error styles
+            $('#addFaq')[0].reset(); 
+            $('.text-danger').text(''); 
+            $('.form-control').removeClass('is-invalid'); 
         });
 
         $("#addFaq").validate({
@@ -199,7 +199,7 @@
     });
     function faqTable(filters = {}) {
         const selectedLang = $('#language_id').val();
-    filters.language_id = selectedLang; // Always include selected language_id
+    filters.language_id = selectedLang;
         $.ajax({
             url: "/admin/faq/list",
             type: "GET",
@@ -212,7 +212,7 @@
                 let tableBody = "";
 
                 if ($.fn.DataTable.isDataTable("#faqTable")) {
-                    $("#faqTable").DataTable().clear().destroy(); // Properly clear and destroy DataTable
+                    $("#faqTable").DataTable().clear().destroy(); 
                 }
 
                 if (response.data && response.data.length > 0) {
@@ -270,7 +270,7 @@
 
                 $("#faqTable tbody").html(tableBody);
 
-                // Initialize DataTable after updating the table
+               
                 if (response.data.length > 0) {
                     $('#faqTable').DataTable({
                         ordering: true,
@@ -321,7 +321,7 @@
     }
 
     $(document).ready(function() {
-        // Sorting
+       
         $('.sort-option').on('click', function() {
             $('.sort-option').removeClass('active');
             $(this).addClass('active');
@@ -329,7 +329,7 @@
             faqTable({ sort_by: sortBy });
         });
 
-        // Filtering
+      
         $('.filter-option').on('click', function() {
             $('.filter-option').removeClass('active');
             $(this).addClass('active');
@@ -337,17 +337,17 @@
             faqTable({ status: status });
         });
 
-        // Apply Filters Button
+      
         $('#applyFilters').on('click', function() {
             let selectedStatus = $('.filter-option.active').data('status') ?? ''; // Get active status filter
             let selectedSort = $('.sort-option.active').data('sort') ?? 'desc'; // Get active sorting option
             faqTable({ status: selectedStatus, sort_by: selectedSort });
         });
 
-        // Clear Filters
+       
         $('#clearFilters').on('click', function() {
-            $('.filter-option, .sort-option').removeClass('active'); // Reset all active classes
-            faqTable({}); // Reset table with default data
+            $('.filter-option, .sort-option').removeClass('active');
+            faqTable({}); 
         });
 
         $('#language_id').on('change', function () {
@@ -355,7 +355,7 @@
         });
 
 
-        // Initial Table Load
+     
         faqTable();
     });
 

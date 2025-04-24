@@ -130,7 +130,7 @@
     
     $("#search").on("input", function () {
         let searchQuery = $(this).val().trim();
-        initTable(searchQuery); // Call initTable with search query
+        initTable(searchQuery);
     });
     
     function initTable(search = "") {

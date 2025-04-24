@@ -13,7 +13,7 @@
                     minlength: 10
                 },
                 maintenance_status: {
-                    required: false // Checkbox, not always required
+                    required: false 
                 }
             },
             messages: {
@@ -50,7 +50,7 @@
                 let maintenanceStatus = $("#maintenance_status").prop("checked") ? 1 : 0;
                 maintenanceData.set("maintenance_status", maintenanceStatus);
     
-                // $(".btn-primary").text('Please Wait...').prop('disabled', true);
+              
     
                 $.ajax({
                     type: "POST",
@@ -74,7 +74,7 @@
                         if (resp.code === 200) {
                             loadMaintenanceSettings();
                             showToast('success', resp.message);
-                            // $(".btn-primary").text('Save Changes').prop('disabled', false);
+                          
                         }
                     },
                     error: function (error) {
@@ -90,7 +90,7 @@
                             showToast('error', error.responseJSON.message);
                         }
     
-                        // $(".btn-primary").text('Save Changes').prop('disabled', false);
+                       
                     }
                 });
             }
@@ -165,6 +165,6 @@ function removeImage() {
     const preview = document.getElementById('profile_photo_preview');
     const fileInput = document.getElementById('profile_photo');
 
-    preview.src = '/assets/img/settings/company-logo-01.jpg'; // Default placeholder
-    fileInput.value = ''; // Clear the file input
+    preview.src = '/assets/img/settings/company-logo-01.jpg'; 
+    fileInput.value = ''; 
 }

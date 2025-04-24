@@ -4968,6 +4968,7 @@
         },
         {
             "name": "spatie/laravel-backup",
+<<<<<<< Updated upstream
             "version": "9.3.0",
             "source": {
                 "type": "git",
@@ -4978,6 +4979,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/spatie/laravel-backup/zipball/ab7580bc1d2785da560c7ef273e6904a100fdc3e",
                 "reference": "ab7580bc1d2785da560c7ef273e6904a100fdc3e",
+=======
+            "version": "9.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-backup.git",
+                "reference": "94f2fc556323ec57a6ab30d35d233a634645c135"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-backup/zipball/94f2fc556323ec57a6ab30d35d233a634645c135",
+                "reference": "94f2fc556323ec57a6ab30d35d233a634645c135",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -5052,7 +5065,11 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-backup/issues",
+<<<<<<< Updated upstream
                 "source": "https://github.com/spatie/laravel-backup/tree/9.3.0"
+=======
+                "source": "https://github.com/spatie/laravel-backup/tree/9.3.1"
+>>>>>>> Stashed changes
             },
             "funding": [
                 {
@@ -5064,7 +5081,11 @@
                     "type": "other"
                 }
             ],
+<<<<<<< Updated upstream
             "time": "2025-04-23T14:58:49+00:00"
+=======
+            "time": "2025-04-24T08:37:26+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "spatie/laravel-package-tools",

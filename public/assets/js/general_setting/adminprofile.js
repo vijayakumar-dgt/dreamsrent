@@ -100,7 +100,7 @@
             var btnId = '#change_password';
             var data = new FormData(form);
             data.append('id', $('#id').val());
-            console.log('test');
+           
 
         }
     });
@@ -226,9 +226,6 @@ $(document).ready(function() {
             adminProfileData.set("phone", fullPhoneNumber);
             adminProfileData.set("international_phone_number", fullPhoneNumber);
 
-            // $(".btn-primary").text('Please Wait...').prop('disabled', true);
-
-
             $.ajax({
                 type: "POST",
                 url: "/admin/update_profile",
@@ -246,7 +243,6 @@ $(document).ready(function() {
                 success: function(resp) {
                     if (resp.code === 200) {
                         showToast('success', resp.message);
-                        // $(".btn-primary").text('Save Changes').prop('disabled', false);
                         profile_list();
                     }
                 },
@@ -263,7 +259,6 @@ $(document).ready(function() {
                         showToast('error', error.responseJSON.message);
                     }
 
-                    // $(".btn-primary").text('Save Changes').prop('disabled', false);
                 }
             });
         }
@@ -298,7 +293,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             if ($("#adminProfileForm").valid()) {
-                // $("#adminProfileForm").submit();
+              
             }
         });
     }
@@ -407,8 +402,8 @@ function removeImage() {
     const preview = document.getElementById('profile_photo_preview');
     const fileInput = document.getElementById('profile_photo');
 
-    preview.src = '/assets/img/customer/customer-01.jpg'; // Default placeholder
-    fileInput.value = ''; // Clear the file input
+    preview.src = '/assets/img/customer/customer-01.jpg'; 
+    fileInput.value = ''; 
 }
 function fetchCountries(){
     $.ajax({
@@ -447,7 +442,7 @@ function fetchStatesByCountry(country_id){
                 $.each(data, function(key, value){
                     $("#state").append('<option value="'+value.id+'">'+value.name+'</option>');
                 });
-                // empty cities
+              
                 $("#city").empty();
                 $("#city").append('<option value="">Select City</option>');
             }
@@ -500,7 +495,7 @@ function fetchCountryAjax(id){
                }
            },
            error:function(error){
-               console.log(error);
+           
                reject({
                    message: 'Something went wrong'
                });
@@ -536,7 +531,7 @@ function fetchStateAjax(country_id,id){
                }
            },
            error:function(error){
-               console.log(error);
+              
                reject({
                    message: _l('admin.general_settings.retrive_error'),
                });
@@ -571,7 +566,7 @@ function fetchCityAjax(state_id,id){
                }
            },
            error:function(error){
-               console.log(error);
+             
                reject({
                    message: _l('admin.general_settings.retrive_error'),
                });

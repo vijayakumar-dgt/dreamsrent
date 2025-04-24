@@ -28,7 +28,7 @@
                     </div>
                     <div class="card-body">
                         <div class="payment-section">
-                            <h6 class="mb-3">{{ __('admin.general_settings.other_settings') }}</h6>
+                            <h6 class="mb-3">{{ __('admin.general_settings.sitemap') }}</h6>
                                 <!-- Table Header -->
                                 <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                                     <div class="top-search me-2">

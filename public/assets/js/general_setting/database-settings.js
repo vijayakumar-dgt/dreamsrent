@@ -12,7 +12,11 @@ function DbBackUpTable() {
             dataType: 'json',
             success: function(response) {
                 let tableBody = $("#backup-list");
+<<<<<<< Updated upstream
                 tableBody.empty();
+=======
+                tableBody.empty(); 
+>>>>>>> Stashed changes
 
                 response.data.forEach(backup => {
                     let row = `

@@ -13,11 +13,11 @@ $(document).ready(function () {
 
         let selectedRow = selectedPlugin.closest("tr");
 
-        // Extract values using class names
+    
         let moduleName = selectedRow.find(".name").text().trim();
         let moduleVersion = selectedRow.find(".version").text().trim();
         let modulePrice = selectedRow.find(".price").text().trim().replace("$", "");
-        let gitLink = selectedPlugin.val(); // Git link is in the radio button value
+        let gitLink = selectedPlugin.val(); 
 
         $("#module_name").val(moduleName);
         $("#module_version").val(moduleVersion);
