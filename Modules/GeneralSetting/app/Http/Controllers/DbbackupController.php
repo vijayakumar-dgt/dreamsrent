@@ -68,9 +68,8 @@ class DbbackupController extends Controller
         try {
             $backups = Dbbackup::where('type', 1)->orderBy('created_at', 'desc')->get();
 
-            $baseUrl = asset('storage/dbbackups');
+            $baseUrl = asset('storage/database');
 
-            // Format data for response
             $formattedBackups = $backups->map(function ($backup) use ($baseUrl) {
                 return [
                     'id' => $backup->id,
