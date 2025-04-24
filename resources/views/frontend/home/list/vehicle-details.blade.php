@@ -124,7 +124,6 @@
             </div>
             <div class="details-btn">
                 <span class="total-badge"><i class='bx bx-calendar-edit'></i>{{__('web.home.total_bookings')}} : {{ $bookingCount }}</span>
-                {{-- <a href="#"> <i class='bx bx-git-compare'></i>Compare</a> --}}
             </div>
         </div>
     </div>
@@ -140,10 +139,7 @@
                             <span class="badge-km d-none"><i class="fa-solid fa-person-walking"></i>4.2 Km Away</span>
                             <a href="javascript:void(0);" class="fav-icon"><i class="fa-regular fa-heart"></i></a>
                         </div>
-                        {{-- <ul>
-                            <li class="del-airport"><i class="fa-solid fa-check"></i>Airport delivery</li>
-                            <li class="del-home"><i class="fa-solid fa-check"></i>Home delivery</li>
-                        </ul> --}}
+                       
                     </div>
                     <div class="slider detail-bigimg">
                         <div class="product-img">
@@ -309,15 +305,7 @@
                                         <h6 class="vehicle_mileage">16 Km</h6>
                                     </div>
                                 </div>
-                                {{-- <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
-                                    <div class="feature-img">
-                                        <img src="/frontend/assets/img/specification/specification-icon-6.svg" alt="Icon">
-                                    </div>
-                                    <div class="featues-info">
-                                        <span>Drivetrian </span>
-                                        <h6>Front Wheel</h6>
-                                    </div>
-                                </div> --}}
+                              
                                 <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                     <div class="feature-img">
                                         <img src="/frontend/assets/img/specification/specification-icon-7.svg" alt="Icon">
@@ -327,15 +315,7 @@
                                         <h6 class="vehicle_year"> 2018</h6>
                                     </div>
                                 </div>
-                                {{-- <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
-                                    <div class="feature-img">
-                                        <img src="/frontend/assets/img/specification/specification-icon-8.svg" alt="Icon">
-                                    </div>
-                                    <div class="featues-info">
-                                        <span>AC </span>
-                                        <h6> Air Condition</h6>
-                                    </div>
-                                </div> --}}
+                               
                                 <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                     <div class="feature-img">
                                         <img src="/frontend/assets/img/specification/specification-icon-9.svg" alt="Icon">
@@ -354,24 +334,7 @@
                                         <h6 class="vehicle_doors"> 4 Doors</h6>
                                     </div>
                                 </div>
-                                {{-- <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
-                                    <div class="feature-img">
-                                        <img src="/frontend/assets/img/specification/specification-icon-11.svg" alt="Icon">
-                                    </div>
-                                    <div class="featues-info">
-                                        <span>Brake </span>
-                                        <h6> ABS</h6>
-                                    </div>
-                                </div> --}}
-                                {{-- <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
-                                    <div class="feature-img">
-                                        <img src="/frontend/assets/img/specification/specification-icon-12.svg" alt="Icon">
-                                    </div>
-                                    <div class="featues-info">
-                                        <span>Engine (Hp) </span>
-                                        <h6> 3,000</h6>
-                                    </div>
-                                </div> --}}
+                             
                             </div>
                         </div>
                     </div>
@@ -1043,7 +1006,6 @@
                     <div class="owner-detail">
                         <div class="owner-img">
                             <a href="#"><img src="{{ $data['author_profile'] }}" alt="User"></a>
-                            {{-- <span class="badge-check"><img src="/frontend/assets/img/icons/badge-check.svg" alt="User"></span> --}}
                         </div>
                         <div class="reviewbox-list-rating">
                             <h5><a>{{ $data['author_name'] }}</a></h5>
@@ -1063,42 +1025,9 @@
                             <span>{{ $data['author_location'] ?? "" }}</span>
                         </li>
                     </ul>
-                    {{-- <div class="message-btn">
-                        <a href="#" class="btn btn-order">Message to owner</a>
-                        <a href="#" class="chat-link"><i class="fa-brands fa-whatsapp"></i>Chat Via Whatsapp</a>
-                    </div> --}}
+                  
                 </div>
-                {{-- <div class="review-sec share-car mt-0">
-                    <div class="review-header">
-                        <h4>View Car Location</h4>
-                    </div>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6509170.989457427!2d-123.80081967108484!3d37.192957227641294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornia%2C%20USA!5e0!3m2!1sen!2sin!4v1669181581381!5m2!1sen!2sin" class="iframe-video"></iframe>
-                </div> --}}
-                {{-- <div class="review-sec share-car mt-0 mb-0">
-                    <div class="review-header">
-                        <h4>Share</h4>
-                    </div>
-                    <ul class="nav-social">
-                        <li>
-                            <a href="javascript:void(0)"><i class="fa-brands fa-facebook-f fa-facebook fi-icon"></i></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><i class="fab fa-instagram fi-icon"></i></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><i class="fab fa-behance fi-icon"></i></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><i class="fa-brands fa-pinterest-p fi-icon"></i></a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><i class="fab fa-twitter fi-icon"></i> </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)"><i class="fab fa-linkedin fi-icon"></i></a>
-                        </li>
-                    </ul>
-                </div> --}}
+               
             </div>
         </div>
         <div id="recommended-vehicle">
@@ -1106,7 +1035,6 @@
         </div>
     </div>
 </section>
-{{-- Enquiry Modal Start --}}
 <div class="modal new-modal fade enquire-mdl" id="enquiry" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

@@ -9,9 +9,7 @@
 <li class="notification-message">
     <a href="#">
         <div class="media d-flex">
-            {{-- <span class="avatar avatar-lg flex-shrink-0">
-                <img class="avatar-img rounded-circle" alt="User Image" src="{{ asset('assets/img/profiles/avatar-01.jpg') }}">
-            </span> --}}
+
             <div class="media-body flex-grow-1">
                 <p class="noti-details"><span class="noti-title">{{ $notificationContent }}</span></p>
                 <p class="noti-time"><span class="notification-time">{{ $notification->created_at->diffForHumans() }}</span></p>

@@ -66,7 +66,6 @@
                                               <h6>{{ ucfirst($user->name) }}</h6>
                                           </div>
                                           <div class="chat-user-time">
-                                              {{-- <span class="time">02:40 PM</span> --}}
                                           </div>    
                                       </div>
                                   </a>    

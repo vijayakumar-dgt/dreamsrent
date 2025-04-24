@@ -266,7 +266,6 @@
                                         <th>{{__('web.common.total')}}</th>
                                         <th>{{ __('web.user.payment_method') }}</th>
                                         <th>{{__('web.common.status')}}</th>
-                                        {{-- <th class="">{{__('web.common.action')}}</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>

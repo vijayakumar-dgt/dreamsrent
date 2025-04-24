@@ -2,7 +2,6 @@ var email = localStorage.getItem("email");
 if (email) {
     $('#email').val(email);
 }
-console.log(email);
 $("#changePasswordForm").validate({
     rules: {
         current_password: {

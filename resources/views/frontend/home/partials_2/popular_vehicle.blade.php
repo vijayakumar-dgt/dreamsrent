@@ -25,7 +25,6 @@
                         <div class="fav-item">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="featured-text">{{ $content['brand'] ?? "" }}</span>
-                                {{-- <span class="availability">Available</span> --}}
                             </div>
                             @if(current_user() != null)
                             <a href="javascript:void(0)" class="fav-icon wishlist-icon {{ $content['wishlist'] ? 'selected' : '' }}" data-id="{{ $content['id'] }}">

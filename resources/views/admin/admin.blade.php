@@ -124,7 +124,6 @@
 	<!-- jQuery (needed for Summernote) -->
 
 	<!-- Summernote JS -->
-	{{-- <script src="{{ asset('assets/plugins/summernote/summernote-lite.min.js') }}"></script> --}}
 
 	<!-- Mobile Input -->
 	<script src="{{ asset('assets/plugins/intltelinput/js/intlTelInput.js') }}"></script>

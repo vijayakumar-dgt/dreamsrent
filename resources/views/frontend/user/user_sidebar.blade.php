@@ -27,12 +27,7 @@
                         <i class="feather-bell"></i> {{ __('web.user.notifications') }}
                     </a>
                 </li>
-                {{-- <li>
-                    <a href="{{ route('user.integration') }}"
-                    class="{{ request()->routeIs('user.integration') ? 'active' : '' }}">
-                        <i class="feather-git-merge"></i> Integration
-                    </a>
-                </li> --}}
+               
             </ul>
         </div>
     </div>

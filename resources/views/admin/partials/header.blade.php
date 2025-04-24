@@ -124,9 +124,7 @@
                             <a class="dropdown-item d-flex align-items-center" href="/admin/notifications">
                                 <i class="ti ti-bell"></i>{{ __('web.user.notifications') }}
                             </a>
-                            {{-- <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
-                                <i class="ti ti-moon"></i>Dark Mode
-                            </a> --}}
+                          
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('admin.security-settings') }}">
                                 <i class="ti ti-exchange"></i>Change Password
                             </a>

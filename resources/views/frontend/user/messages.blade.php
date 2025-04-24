@@ -55,7 +55,6 @@
                                         </div>
                                         <div>
                                             <div class="last-chat-time block">{{ $lastMessage ? $lastMessage->created_at->diffForHumans() : '' }}</div>
-                                            {{-- <div class="badge badge-success rounded-pill">15</div> --}}
                                         </div>
                                     </div>
                                 </a>
@@ -78,20 +77,9 @@
                                 </div>
                                 <div class="media-body flex-grow-1">
                                     <div class="user-name">{{ $receiver->name }}</div>
-                                    {{-- <div class="user-status">online</div> --}}
                                 </div>
                             </div>
-                            {{-- <div class="chat-options">
-                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#voice_call">
-                                    <i class="feather-phone"></i>
-                                </a>
-                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#video_call">
-                                    <i class="feather-video"></i>
-                                </a>
-                                <a href="javascript:void(0)">
-                                    <i class="feather-more-vertical"></i>
-                                </a>
-                            </div> --}}
+                         
                         </div>
                         <div class="chat-body">
                             <div class="chat-scroll" id="messagebody">

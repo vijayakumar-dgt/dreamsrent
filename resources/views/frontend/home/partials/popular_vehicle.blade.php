@@ -13,7 +13,6 @@
                 <div class="listing-tabs-group">
                     <ul class="nav listing-buttons gap-3" data-bs-tabs="tabs">
                         @foreach($vehicleBrand as $brand)
-                        {{-- @php dd($brand); @endphp --}}
                         <li>
                             <a class="@if($loop->first) active @endif" @if($loop->first) aria-current="true" @endif data-bs-toggle="tab" href="#tab_{{ $brand->brand_name ?? "" }}">
                                 <span>

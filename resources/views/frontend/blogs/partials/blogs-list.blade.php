@@ -44,19 +44,16 @@
 @if ($blogPosts->lastPage() > 1)
     <nav class="d-flex justify-content-center mt-4">
         <ul class="pagination custom-pagination mb-0">
-            {{-- Prev --}}
             <li class="page-item {{ $blogPosts->onFirstPage() ? 'disabled' : '' }}">
                 <a class="page-link prev-next" href="{{ $blogPosts->previousPageUrl() }}">&larr; Prev</a>
             </li>
 
-            {{-- Page Numbers --}}
             @for ($i = 1; $i <= $blogPosts->lastPage(); $i++)
                 <li class="page-item {{ $blogPosts->currentPage() == $i ? 'active' : '' }}">
                     <a class="page-link number-btn" href="{{ $blogPosts->url($i) }}">{{ $i }}</a>
                 </li>
             @endfor
 
-            {{-- Next --}}
             <li class="page-item {{ !$blogPosts->hasMorePages() ? 'disabled' : '' }}">
                 <a class="page-link prev-next" href="{{ $blogPosts->nextPageUrl() }}">Next &rarr;</a>
             </li>

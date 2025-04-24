@@ -1,4 +1,3 @@
-{{-- @dd($section['section_content']) --}}
 <section class="blog-section-four">
     <div class="container">
         <div class="section-heading heading-four" data-aos="fade-down">

@@ -49,9 +49,7 @@
             @endif
         </div>
 
-        {{-- <div class="view-all-btn text-center aos" data-aos="fade-down">
-            <a href="listing-grid.html" class="btn btn-secondary">{{ __('web.home.view_all') }}<i class="bx bx-right-arrow-alt ms-1"></i></a>
-        </div> --}}
+      
 
         <div class="client-slider owl-carousel">
             <div>

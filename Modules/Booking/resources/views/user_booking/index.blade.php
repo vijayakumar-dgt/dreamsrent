@@ -73,15 +73,7 @@
                                 </div>
                                 <div class="booking-info-body">
                                     <ul class="booking-radio-btns">
-                                        {{-- <li style="cursor: not-allowed;">
-                                            <label class="booking_custom_check">
-                                                <input type="radio" name="rent_type" id="location_delivery"
-                                                    {{ request('rent_value') == 'delivery' ? 'checked' : '' }} value="delivery">
-                                                <span class="booking_checkmark">
-                                                    <span class="checked-title"> {{ __('web.user.delivery') }}</span>
-                                                </span>
-                                            </label>
-                                        </li> --}}
+
                                         <li style="cursor: not-allowed;">
                                             <label class="booking_custom_check">
                                                 <input type="radio" name="rent_type" id="location_pickup"
@@ -292,14 +284,14 @@
                                                         <img src="{{ $service->extraService->icon }}" alt="{{ $service->extraService->name }}" class="extra-service-icon">
                                                     </span>
                                                     <div class="adon-name">
-                                                        <h6>{{ $service->extraService->name }}</h6> {{-- Name --}}
+                                                        <h6>{{ $service->extraService->name }}</h6>
                                                         <a href="javascript:void(0);" class="d-inline-flex align-items-center adon-info-btn">
                                                             <i class="bx bx-info-circle me-2"></i> {{__('web.home.more_information')}}
                                                             <i class="bx bx-chevron-down ms-2 arrow-icon"></i>
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <span class="adon-price">{{ $currencySymbol }}{{ number_format($service->price, 2) }}</span> {{-- Price --}}
+                                                <span class="adon-price">{{ $currencySymbol }}{{ number_format($service->price, 2) }}</span>
 
 
                                                 <button type="button" class="btn add-addon-btn">
@@ -317,7 +309,7 @@
                                                 <input type="hidden" name="extra_type[]" id="extra_type" value="{{ $service->value }}">
                                             </div>
                                             <div class="more-adon-info">
-                                                <p>{{ $service->extraService->description }}</p> {{-- Description --}}
+                                                <p>{{ $service->extraService->description }}</p> 
                                             </div>
                                         </li>
                                         @endforeach
@@ -875,7 +867,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
                                                 </li>
                                             </ul>
                                         </div>

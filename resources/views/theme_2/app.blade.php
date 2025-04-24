@@ -57,7 +57,6 @@
     @else
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
     @endif
-	{{-- Custom CSS --}}
 	<link rel="stylesheet" href="{{ asset('assets/css/custom/custom-style.css') }}">
 
 </head>

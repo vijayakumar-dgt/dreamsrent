@@ -140,11 +140,7 @@
                                             <i class="feather-list"></i>
                                         </a>
                                     </li>
-                                    {{-- <li>
-                                        <a href="listing-map.html">
-                                            <i class="feather-map-pin"></i>
-                                        </a>
-                                    </li> --}}
+                                   
                                 </ul>
                             </div>
                         </div>
@@ -406,7 +402,6 @@
         </div>
     </div>
 </section>
-{{-- @include('frontend.home.list.vehicle_grid_view') --}}
 @endsection
 @push('scripts')
 <script src="{{ asset('frontend/assets/js/custom/home/list.js') }}"></script>
