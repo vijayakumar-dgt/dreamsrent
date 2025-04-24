@@ -13,10 +13,10 @@ class PaymentController extends Controller
     public function index()
     {
         $GetPayments = Booking::select("payment_type")->distinct()->pluck("payment_type")->toArray();
-    
+
         return view("admin.payment.index", compact('GetPayments'));
     }
-    
+
 
     public function paymentList(Request $request)
     {
@@ -24,16 +24,15 @@ class PaymentController extends Controller
         $search = $request->search ?? null;
         $paymentStatuses = $request->payment_status ?? [];
         $paymentTypes = $request->payment_type ?? [];
+        $bookingBy = $request->booking_by ?? 'user';
 
         try {
             $query = Booking::with('userInfo');
 
-            // Filter: Payment Type
             if (!empty($paymentTypes)) {
                 $query->whereIn('payment_type', $paymentTypes);
             }
-            
-            // Filter: Search
+
             if (!empty($search)) {
                 $query->where(function ($q) use ($search) {
                     $q->whereHas('userInfo', function ($sub) use ($search) {
@@ -43,41 +42,43 @@ class PaymentController extends Controller
                     ->orWhere('payment_type', 'LIKE', "%{$search}%");
                 });
             }
-            
-            // Filter: Payment Status
+
             if (!empty($paymentStatuses)) {
                 $query->whereIn('payment_status', $paymentStatuses);
             }
-            
-            // Sort & Date Filters
+
+            if (!empty($bookingBy)) {
+                $query->where('booking_by', $bookingBy);
+            }
+
             switch ($sortby) {
                 case 'asc':
                     $query->orderBy('id', 'asc');
                     break;
-            
+
                 case 'desc':
                     $query->orderBy('id', 'desc');
                     break;
-            
+
                 case 'last_month':
                     $query->whereBetween('created_at', [
                         now()->subMonth()->startOfMonth(),
                         now()->subMonth()->endOfMonth(),
                     ])->orderBy('created_at', 'desc');
                     break;
-            
+
                 case 'last_7_days':
                     $query->where('created_at', '>=', now()->subDays(7))
                           ->orderBy('created_at', 'desc');
                     break;
-            
+
                 case 'latest':
                 default:
                     $query->orderBy('created_at', 'desc');
                     break;
             }
 
-            $bookings = $query->get(); // or whatever per-page you want
+            $bookings = $query->get();
 
             $data = $bookings->map(function ($booking) {
                 $userInfo = $booking->userInfo;
@@ -105,4 +106,5 @@ class PaymentController extends Controller
             ], 500);
         }
     }
+
 }

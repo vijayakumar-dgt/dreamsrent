@@ -60,9 +60,7 @@
         <div class="booking-detail-info">
             <div class="row">
 
-                <!--++++++++++++++++++++++++++++++++++ -->
-                <!-- //Location details  -->
-                <!--++++++++++++++++++++++++++++++++++ -->
+
 
                 <div class="col-lg-8" id="first-field">
                     <div class="booking-information-main">
@@ -270,9 +268,7 @@
                     </div>
                 </div>
 
-                <!--++++++++++++++++++++++++++++++++++ -->
-                <!-- //ExtraService and insurance details  -->
-                <!--++++++++++++++++++++++++++++++++++ -->
+
 
                 <div class="col-lg-8 d-none" id="second-field">
                     <div class="booking-information-main">
@@ -305,12 +301,12 @@
                                                 </div>
                                                 <span class="adon-price">{{ $currencySymbol }}{{ number_format($service->price, 2) }}</span> {{-- Price --}}
 
-                                                <!-- Add Button -->
+
                                                 <button type="button" class="btn add-addon-btn">
                                                     <i class="bx bx-plus-circle me-2"></i>{{ __('web.home.add') }}
                                                 </button>
 
-                                                <!-- Remove Button (Hidden by Default) -->
+
                                                 <button type="button" class="btn btn-secondary remove-adon-btn" style="display: none;">
                                                     <i class="bx bx-minus-circle me-2"></i>{{__('web.home.remove')}}
                                                 </button>
@@ -451,8 +447,7 @@
                                                         <ul>
                                                             <li>{{__('web.home.no_of_rides_completed')}} : {{ $driverInfo_ride }}</li>
                                                             <input type="hidden" id="driver_rider" value="{{  $driverInfo_ride }}">
-                                                            <!-- <li>{{__('web.common.price')}} : ${{ $driverInfo_price }}</li> -->
-                                                            <!-- <input type="hidden" id="driver_price" value="{{ $driverInfo_price }}"> -->
+
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -479,7 +474,7 @@
                                                 <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
                                                     data-bs-original-title="{{ $insurance->first_benefit }}">
                                                     +{{ $insurance->benefits_count }} {{__('web.home.benefits')}}
-                                                    <!-- <i class="bx bxs-info-circle text-gray-5 ms-1"></i> -->
+
                                                 </a>
                                             </div>
                                         </div>
@@ -508,9 +503,7 @@
                     </div>
                 </div>
 
-                <!--++++++++++++++++++++++++++++++++++ -->
-                <!-- //User Info details  -->
-                <!--++++++++++++++++++++++++++++++++++ -->
+
 
                 <div class="col-lg-8 d-none" id="third-field">
                     <div class="booking-information-main">
@@ -522,8 +515,7 @@
                                         <h5>{{__('web.home.billing_information')}}</h5>
                                     </div>
                                     <div class="d-flex align-items-center">
-                                        <!-- <h6>Returning customer?</h6> -->
-                                        <!-- <a href="javascript:void(0);" class="btn btn-secondary ms-3" data-bs-toggle="modal" data-bs-target="#sign_in_modal"><i class="bx bx-user me-2"></i>Sign In</a> -->
+
                                     </div>
 
                                 </div>
@@ -657,9 +649,7 @@
                 </div>
 
 
-                <!--++++++++++++++++++++++++++++++++++ -->
-                <!-- //ChcekOut and Payment details  -->
-                <!--++++++++++++++++++++++++++++++++++ -->
+
 
 
                 <div class="col-lg-8 d-none" id="fourth-field">
@@ -714,7 +704,7 @@
                                             @endauth
                                         </ul>
                                     </div>
-                                    <!-- //need work -->
+
                                 </div>
                             </div>
 
@@ -726,11 +716,7 @@
                     </div>
                 </div>
 
-                <!--++++++++++++++++++++++++++++++++++ -->
-                <!--++++++++++++++++++++++++++++++++++ -->
-                <!-- //Side Bar details  -->
-                <!--++++++++++++++++++++++++++++++++++ -->
-                <!--++++++++++++++++++++++++++++++++++ -->
+
                 <div class="col-lg-4 theiaStickySidebar">
                     <div class="booking-sidebar">
                         <div class="booking-sidebar-card">
@@ -807,13 +793,10 @@
                                                 <h6>{{__('web.common.rental_type')}}</h6>
                                                 <p id="rentalTypeText"></p>
                                             </li>
-                                            <!-- <li>
-                                                <h6>{{__('web.home.booking_type')}}</h6>
-                                                <p id="selectedPriceType"></p>
-                                            </li> -->
+
                                             <li>
                                                 <h6>{{__('web.home.delivery_location_and_time')}}</h6>
-                                                <!-- <p>{{ Str::ucfirst(request('delivery_location')) }}</p> -->
+
                                                 <p>
                                                     {{ Carbon::parse(request('pickup_date'))->format('d/m/Y') }} -
                                                     {{ Carbon::parse(request('pickup_time'))->format('H:i') }}
@@ -821,7 +804,6 @@
                                             </li>
                                             <li>
                                                 <h6>{{__('web.home.return_location_and_time')}}</h6>
-                                                <!-- <p>{{ Str::ucfirst(request('delivery_return_location')) }}</p> -->
                                                 <p>
                                                     {{ Carbon::parse(request('return_date'))->format('d/m/Y') }} -
                                                     {{ Carbon::parse(request('return_time'))->format('H:i') }}
@@ -882,7 +864,6 @@
                                                                 <h5 id="driver_name_display">{{ $driverInfo->driver_name }}</h5>
                                                                 <ul>
                                                                     <li>{{__('web.home.no_of_rides_completed')}}: <span id="driver_rides_display">{{ $driverInfo_ride }}</span></li>
-                                                                    <!-- <li>{{__('web.common.price')}}: $<span id="driver_price_display">{{ $driverInfo_price }}</span></li> -->
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -894,9 +875,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!-- <div class="change-driver">
-                                                        <a href="javascript:void(0);" class="btn btn-secondary d-inline-flex align-items-center"><i class="bx bx-check-circle me-2"></i>Change Driver</a>
-                                                    </div> -->
+                                                    
                                                 </li>
                                             </ul>
                                         </div>
@@ -954,6 +933,5 @@
 @endsection
 
 @push('scripts')
-<!-- Sticky Sidebar JS -->
 <script src="{{ asset('frontend/assets/js/booking/user-booking.js') }}"></script>
 @endpush

@@ -24,28 +24,7 @@ class InstallerController extends Controller
 {
     use InstallerMethods;
 
-    // public function __construct()
-    // {
-    //     set_time_limit(8000000);
 
-    //     $this->middleware(function (Request $request, Closure $next) {
-    //         $data = purchaseVerificationHashed(InstallerInfo::getLicenseFilePath());
-
-    //         if (isset($data['success']) && $data['success']) {
-    //             return $next($request);
-    //         }
-
-    //         if (strtolower(config('app.app_mode')) === 'demo') {
-    //             return $next($request);
-    //         }
-
-    //         return redirect()->route('setup.verify')
-    //             ->withInput()
-    //             ->withErrors([
-    //                 'errors' => $data['message'] ?? 'License key not found'
-    //             ]);
-    //     });
-    // }
 
     public function requirements()
     {
@@ -57,7 +36,7 @@ class InstallerController extends Controller
             if($step == 5){
                 return redirect()->route( 'setup.complete' );
             }
-            // return redirect()->route( 'setup.account' );
+
         }
 
 
@@ -67,7 +46,7 @@ class InstallerController extends Controller
     {
         if ($this->requirementsCompleteStatus()) {
             session()->put( 'requirements-complete', true );
-            // changeEnvValues('DB_DATABASE', '');
+
 
             return view('installer::database', ['isLocalHost' => InstallerInfo::isRemoteLocal()]);
 
@@ -161,8 +140,7 @@ class InstallerController extends Controller
         session()->put('step-2-complete', true);
         session()->put('step-3-complete', true);
         $step = Configuration::stepExists();
-        // $step = '1';
-        // dd($step);
+
         if ( $step >= 1 && $step < 5 && $this->requirementsCompleteStatus()) {
             $admin = $step >= 2 ? User::select('name','email')->first() : null;
             return view( 'installer::account',compact('admin') );
@@ -176,16 +154,16 @@ class InstallerController extends Controller
     public function accountSubmit(Request $request)
     {
         try {
-            // Validate the incoming request
+
             $request->validate([
                 'name' => 'required|string',
                 'email' => 'required|email',
                 'password' => 'required|same:confirm_password',
             ]);
 
-            // Create or update the admin record
+
             $admin = User::updateOrCreate(
-                ['email' => $request->email], // Find by email to update or create
+                ['email' => $request->email],
                 [
                     'name' => $request->name,
                     'password' => Hash::make($request->password),
@@ -199,17 +177,17 @@ class InstallerController extends Controller
 
             );
 
-            // Update the setup step
+
             Configuration::updateStep(2);
             session()->put('step-4-complete', true);
 
-            // Return success response
+
             return response()->json(['success' => true, 'message' => 'Admin Account Successfully Created'], 200);
         } catch (\Exception $e) {
-            // Log the specific error message and stack trace
+
             Log::error($e->getMessage(), ['trace' => $e->getTraceAsString()]);
 
-            // Return a detailed error response for debugging
+
             return response()->json(['success' => false, 'message' => 'Failed to Create Admin Account', 'error' => $e->getMessage()], 200);
         }
     }
@@ -218,7 +196,7 @@ class InstallerController extends Controller
     public function configuration()
     {
         $step = Configuration::stepExists();
-        // $step = '2';
+
         if($step == 5 || !$this->requirementsCompleteStatus()){
             return redirect()->route( 'setup.requirements' );
         }
@@ -259,7 +237,7 @@ class InstallerController extends Controller
     }
     public function smtp() {
         $step = Configuration::stepExists();
-        // $step = '3';
+
 
         if($step == 4 || !$this->requirementsCompleteStatus()){
             return redirect()->route( 'setup.complete' );
@@ -334,7 +312,7 @@ class InstallerController extends Controller
 
     public function setupComplete() {
         session()->put( 'step-7-complete', true );
-        // dd("test");
+
         if ( Configuration::setupStepCheck( 4 )  && $this->requirementsCompleteStatus() ) {
             $envContent = File::get( base_path( '.env' ) );
             $envContent = preg_replace( ['/APP_ENV=(.*)\s/','/APP_DEBUG=(.*)\s/',], ['APP_ENV=' . 'production' . "\n",'APP_DEBUG=' . 'false' . "\n",], $envContent );
@@ -357,7 +335,7 @@ class InstallerController extends Controller
 
     public function launchWebsite($type)
     {
-        // dd($type);
+       
         $result = $this->completedSetup($type);
         $filePath = base_path('modules_statuses.json');
 

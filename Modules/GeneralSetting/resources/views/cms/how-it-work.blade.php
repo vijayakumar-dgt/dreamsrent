@@ -62,11 +62,9 @@
 
                                     <!-- Description Field -->
                                     <div class="mb-3">
-                                        <!-- Skeleton Loader for Label -->
                                         <div class="skeleton label-skeleton label-loader"></div>
                                         <label for="howitwork_description" class="form-label d-none real-label">{{__('admin.general_settings.description')}}</label>
 
-                                        <!-- Skeleton Loader for Textarea -->
                                         <div class="skeleton textarea-skeleton input-loader"></div>
                                         <textarea id="howitwork_description" name="howitwork_description" class="form-control summernote d-none real-label"></textarea>
                                         <span id="howitwork_description_error" class="text-danger error-text"></span>
@@ -76,7 +74,6 @@
                                 <!-- Card Footer -->
                                 <div class="card-footer">
                                     <div class="d-flex justify-content-end">
-                                        <!-- Skeleton Loader for Buttons -->
                                         <div class="skeleton button-skeleton label-loader me-3"></div>
                                         <a href="javascript:void(0);" class="btn btn-light me-3 d-none real-label" data-bs-dismiss="modal">{{__('admin.general_settings.cancel')}}</a>
                                         <div class="skeleton button-skeleton label-loader"></div>

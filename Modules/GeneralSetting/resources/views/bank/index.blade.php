@@ -50,7 +50,7 @@
 
                                         <div class="skeleton label-skeleton label-loader"></div>
                                         <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center d-none real-label" data-bs-toggle="modal" data-bs-target="#add_bank" id="bank_clear"><i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new_account') }}</a>
-                                  @endif 
+                                  @endif
                                     </div>
                                 </div>
                             </div>
@@ -167,7 +167,6 @@
                                 </table>
                             </div>
 
-                            <!-- Custom Data Table -->
                             <div class="custom-datatable-filter table-responsive brandstable country-table d-none real-table">
                                 <table class="table datatable" id="bankTable">
                                     <thead class="thead-light">
@@ -177,7 +176,6 @@
                                             <th>{{ __('admin.general_settings.branch') }}</th>
                                             <th>{{ __('admin.general_settings.account_number') }}</th>
                                             <th>{{ __('admin.general_settings.ifsc') }}</th>
-                                            <!-- <th>CREATED ON</th> -->
                                             <th>{{ __('admin.general_settings.status') }}</th>
                                             @if (hasPermission($permissions, 'finance_settings', 'edit') || hasPermission($permissions, 'finance_settings', 'delete'))
 

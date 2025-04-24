@@ -102,12 +102,7 @@
                                     </div>
                                     <span>{{ $currencySymbol }}{{ $booking->total_insurance_price ?? 0 }}</span>
                                 </li>
-                                <!-- <li>
-                                    <div>
-                                        <p>{{__('web.home.delivery_charges_rate')}}</p>
-                                    </div>
-                                    <span>{{ $currencySymbol }}{{ $booking->driver_price ?? 0 }}</span>
-                                </li> -->
+
                                 <li>
                                     <div>
                                         <p>{{__('web.home.vehicle_total_price')}}</p>
@@ -214,7 +209,6 @@
                                     <h6>Ruban</h6>
                                     <ul>
                                         <li>{{__('web.home.no_of_rides_completed')}} : 32</li>
-                                        <!-- <li>{{ __('web.home.price') }} : $100</li> -->
                                     </ul>
                                 </div>
                             </div>
