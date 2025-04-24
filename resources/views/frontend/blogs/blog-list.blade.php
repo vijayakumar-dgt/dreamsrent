@@ -30,7 +30,7 @@
                 </div>
 
             </div>
-            <div class="col-lg-4 theiaStickySidebar">
+            <div class="col-lg-4">
                 <div class="rightsidebar">
                     <div class="card">
                         <h4><img src="assets/img/icons/details-icon.svg" alt="details-icon"> {{__('web.blog.filter')}}</h4>
