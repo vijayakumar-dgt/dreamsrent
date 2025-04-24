@@ -160,27 +160,29 @@ $(document).ready(function () {
         });
     });
 });
-    $(document).ready(function () {
-
+   $(document).ready(function () {
     const blogContainer = document.getElementById("blogList");
-const gridViewBtn = document.getElementById("gridViewBtn");
-const listViewBtn = document.getElementById("listViewBtn");
+    const gridViewBtn = document.getElementById("gridViewBtn");
+    const listViewBtn = document.getElementById("listViewBtn");
 
-gridViewBtn.addEventListener("click", function () {
-    blogContainer.classList.remove("list-view");
-    blogContainer.classList.add("grid-view");
+    // Only proceed if all required elements exist
+    if (blogContainer && gridViewBtn && listViewBtn) {
+        gridViewBtn.addEventListener("click", function () {
+            blogContainer.classList.remove("list-view");
+            blogContainer.classList.add("grid-view");
 
-    gridViewBtn.classList.add("bg-primary", "text-white");
-    listViewBtn.classList.remove("bg-primary", "text-white");
-});
+            gridViewBtn.classList.add("bg-primary", "text-white");
+            listViewBtn.classList.remove("bg-primary", "text-white");
+        });
 
-listViewBtn.addEventListener("click", function () {
-    blogContainer.classList.remove("grid-view");
-    blogContainer.classList.add("list-view");
+        listViewBtn.addEventListener("click", function () {
+            blogContainer.classList.remove("grid-view");
+            blogContainer.classList.add("list-view");
 
-    listViewBtn.classList.add("bg-primary", "text-white");
-    gridViewBtn.classList.remove("bg-primary", "text-white");
-});
+            listViewBtn.classList.add("bg-primary", "text-white");
+            gridViewBtn.classList.remove("bg-primary", "text-white");
+        });
+    }
 });
 
 $(document).on("click", "#blog-edit", function () {
@@ -216,7 +218,8 @@ const inputAdd = document.getElementById("featured_image_add");
 const fileNameDisplayAdd = document.getElementById("selectedFileNameAdd");
 const preview = document.querySelector(".preview-image-add");
 
-inputAdd.addEventListener("change", function (event) {
+if (inputAdd) {
+    inputAdd.addEventListener("change", function (event) {
     const file = event.target.files[0];
 
     if (file && file.type.startsWith("image/")) {
@@ -244,6 +247,7 @@ inputAdd.addEventListener("change", function (event) {
         reader.readAsDataURL(file);
     }
 });
+}
 });
 
 $(document).ready(function () {
@@ -251,7 +255,8 @@ const input = document.getElementById("imageInput");
 const fileNameDisplay = document.getElementById("selectedFileName");
 const previewContainer = document.querySelector(".preview-image");
 
-input.addEventListener("change", function (event) {
+if (input) {
+    input.addEventListener("change", function (event) {
     const file = event.target.files[0];
 
     if (file && file.type.startsWith("image/")) {
@@ -285,6 +290,7 @@ input.addEventListener("change", function (event) {
         reader.readAsDataURL(file);
     }
 });
+}
 });
 
 
@@ -321,12 +327,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 $(document).ready(function () {
 const blogList = document.getElementById('blogList');
-const allBlogs = Array.from(blogList.querySelectorAll('.blog-item'));
+let allBlogs = [];
+
+if (blogList) {
+    allBlogs = Array.from(blogList.querySelectorAll('.blog-item'));
+}
 const sortDropdownItems = document.querySelectorAll('.dropdown-item-blog');
 const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
 const searchInput = document.getElementById('searchInputBlog');
 const loadMoreBtn = document.querySelector('.load-btn');
-const selectedFilterTextCategory = document.getElementById('selectedFilterTextCategory').querySelector('span');
+const selectedFilterTextCategoryWrapper = document.getElementById('selectedFilterTextCategory');
+let selectedFilterTextCategory = null;
+
+if (selectedFilterTextCategoryWrapper) {
+    selectedFilterTextCategory = selectedFilterTextCategoryWrapper.querySelector('span');
+}
 
 let currentSort = 'latest';
 let selectedCategories = [];
@@ -367,13 +382,19 @@ function filterAndSortBlogs() {
 }
 
 function renderBlogs() {
-    blogList.innerHTML = '';
+    if (blogList) {
+        blogList.innerHTML = '';
+    }
     const blogsToShow = filteredBlogs.slice(0, visibleCount);
     blogsToShow.forEach(blog => blogList.appendChild(blog));
     if (visibleCount >= filteredBlogs.length) {
-        loadMoreBtn.style.display = 'none';
+        if (loadMoreBtn) {
+            loadMoreBtn.style.display = 'none';
+        }
     } else {
-        loadMoreBtn.style.display = 'inline-block';
+        if (loadMoreBtn) {
+            loadMoreBtn.style.display = 'inline-block';
+        }
     }
 }
 
@@ -400,15 +421,20 @@ categoryCheckboxes.forEach(checkbox => {
     });
 });
 
-searchInput.addEventListener('input', function () {
-    searchKeyword = this.value;
-    applyFiltersAndRender();
-});
+if (searchInput) {
+    searchInput.addEventListener('input', function () {
+        searchKeyword = this.value;
+        applyFiltersAndRender();
+    });
+}
 
-loadMoreBtn.addEventListener('click', function () {
-    visibleCount += 6;
-    renderBlogs();
-});
+if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', function () {
+        visibleCount += 6;
+        renderBlogs();
+    });
+}
+
 
 // Initial load
 applyFiltersAndRender();
