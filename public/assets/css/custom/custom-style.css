@@ -877,3 +877,6 @@
   max-height: 380px !important;
   object-fit: cover !important;
 }
+.dash-height{
+  height: 200px;
+}
