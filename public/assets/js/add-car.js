@@ -17,9 +17,9 @@
         });
 
         function formatColor(option) {
-            if (!option.id) return option.text; // Default text for placeholder
+            if (!option.id) return option.text;
 
-            var colorCode = $(option.element).data("color"); // Get the color code from data attribute
+            var colorCode = $(option.element).data("color");
             return $(`<div style="display: flex; align-items: center;">
                     <span style="display: inline-block; width: 15px; height: 15px; background-color: ${colorCode}; border: 1px solid #ccc; margin-right: 8px;"></span>
                     ${option.text}
@@ -27,8 +27,8 @@
         }
 
         $("#color_id").select2({
-            templateResult: formatColor, // Customize dropdown options
-            templateSelection: formatColor, // Customize selected item display
+            templateResult: formatColor,
+            templateSelection: formatColor,
             width: "100%",
         });
     });
@@ -38,7 +38,6 @@
             $(".singleCheckbox").prop("checked", $(this).prop("checked"));
         });
 
-        // Uncheck "Check All" if any individual checkbox is unchecked
         $(".singleCheckbox").on("change", function () {
             if (
                 $(".singleCheckbox:checked").length ===
@@ -54,7 +53,6 @@
     document.addEventListener("DOMContentLoaded", function () {
         let select = document.getElementById("sort_by");
 
-        // Set "Ascending" as default if no option is selected
         let savedSort = localStorage.getItem("sort_by") || "ascending";
         select.value = savedSort;
 
@@ -63,7 +61,6 @@
             select.options[0].text = "Selected : " + selectedOption.text;
         }
 
-        // Update text on page load
         updateSelectText();
 
         select.addEventListener("change", function () {
@@ -72,10 +69,11 @@
         });
     });
 
-    //Filter options Scripts:
     $(document).ready(function () {
         let selectedStatus = null;
         let currentSortType = null;
+
+        $("#sort_by_date").val("");
 
         function getFilterData(includeStatus = false) {
             let vehicleIds = [];
@@ -99,8 +97,10 @@
             let filterData = {
                 name: name,
                 vehicle_id: vehicleIds.length > 0 ? vehicleIds : null,
-                vehicle_type_id: vehicleTypeIds.length > 0 ? vehicleTypeIds : null,
-                vehicle_location_id: vehicleLocationIds.length > 0 ? vehicleLocationIds : null,
+                vehicle_type_id:
+                    vehicleTypeIds.length > 0 ? vehicleTypeIds : null,
+                vehicle_location_id:
+                    vehicleLocationIds.length > 0 ? vehicleLocationIds : null,
                 sort_by: currentSortType || null,
                 sort_by_date: sortByDate,
             };
@@ -119,17 +119,14 @@
             $(".real-data").addClass("d-none");
         }
 
-        // Name & Date sorting listeners
         $("#name, #sort_by_date").on("change keyup", function () {
-            fetchFilteredData(); // Without status
+            fetchFilteredData();
         });
 
-        // Apply Filter (with status)
         $("#applyFilter").click(function () {
             fetchFilteredData(true);
         });
 
-        // Clear Filters
         $("#clearFilter").click(function () {
             $("input[type='checkbox']").prop("checked", false);
             $(".dropdown-menu-md .dropdown-item").removeClass("active");
@@ -137,30 +134,31 @@
             $("#sort_by_date").val("");
             selectedStatus = null;
             currentSortType = null;
-            $("#sortLabel").text("{{ __('admin.page.latest') }}"); // Reset label
-            fetchFilteredData(); // Without status
+            $("#sortLabel").text("{{ __('admin.page.latest') }}");
+            fetchFilteredData();
         });
 
-        // Status Dropdown Handler
         $(".statusFilter .dropdown-item").click(function () {
             $(".statusFilter .dropdown-item").removeClass("active");
             $(this).addClass("active");
 
             let statusText = $(this).text().trim();
-            selectedStatus = statusText === "Active" ? 1 : statusText === "Inactive" ? 0 : null;
+            selectedStatus =
+                statusText === "Active"
+                    ? 1
+                    : statusText === "Inactive"
+                    ? 0
+                    : null;
         });
 
-        // Sort Dropdown Handler
         window.filterSort = function (element, sortType) {
             $("#sortFilter a").removeClass("active");
             $(element).addClass("active");
 
             currentSortType = sortType;
 
-            // Update label
             $("#sortLabel").text($(element).text().trim());
 
-            // Trigger filter
             fetchFilteredData();
         };
     });
@@ -187,7 +185,6 @@
                     function formatDateTime(dateString) {
                         let date = new Date(dateString);
 
-                        // Format date as "25 May 2025"
                         let optionsDate = {
                             day: "2-digit",
                             month: "short",
@@ -198,7 +195,6 @@
                             optionsDate
                         );
 
-                        // Format time as "01:00 PM"
                         let optionsTime = {
                             hour: "2-digit",
                             minute: "2-digit",
@@ -243,13 +239,13 @@
                             </td>
                             <td>
                             <div class="d-flex align-items-start">
-								<p class="avatar me-2 flex-shrink-0">
+								<a href="car-details.html" class="avatar me-2 flex-shrink-0">
 									<img src="${value.vehicle_image}" class="rounded-3" alt="">
-								</p>
+								</a>
 								<div class="text-start">
-									<h6><p  class="fs-14 fw-semibold">${ucfirst(
+									<h6><a href="car-details.html" class="fs-14 fw-semibold">${ucfirst(
                                         value.name
-                                    )}</p></h6>
+                                    )}</a></h6>
 									<p>${value.car_type ? value.car_type.name : ""}</p>
 								</div>
 							</div>
@@ -280,9 +276,10 @@
                                     }
                                 </span>
                             </td>
-             ${hasPermission(permissions, 'vehicles', 'edit') || hasPermission(permissions, 'vehicles', 'delete') ?
-
-                            `<td>
+             ${
+                 hasPermission(permissions, "vehicles", "edit") ||
+                 hasPermission(permissions, "vehicles", "delete")
+                     ? `<td>
                                 <div class="dropdown">
                                     <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="ti ti-dots-vertical"></i>
@@ -325,14 +322,16 @@
                                     </ul>
                                 </div>
                             </td>`
-                                                                      : ""
-                                                              }
+                     : ""
+             }
                         </tr>`;
                     });
                 } else {
                     tableBody += `
                             <tr>
-                                <td colspan="7" class="text-center">${ _l("admin.common.empty_table") }e</td>
+                                <td colspan="7" class="text-center">${_l(
+                                    "admin.common.empty_table"
+                                )}e</td>
                             </tr>`;
                     $(".table-footer").empty();
                 }
@@ -340,16 +339,14 @@
                 if (response.data.length > 0) {
                     $("#vehicleListIndex").DataTable({
                         ordering: false,
-                        searching: false, // Hides the search box
-                        pageLength: 10, // default page length
-                        lengthChange: false, // Hides the length menu
+                        searching: false,
+                        pageLength: 10,
+                        lengthChange: false,
                         drawCallback: function () {
                             $(".dataTables_info").addClass("d-none");
-                            // Only hide pagination inside the table (within the .dataTables_wrapper)
                             $(
                                 ".dataTables_wrapper .dataTables_paginate"
                             ).addClass("d-none");
-                            // Move the info and pagination to the card-footer
                             var tableWrapper = $(this).closest(
                                 ".dataTables_wrapper"
                             );
@@ -358,7 +355,6 @@
                                 ".dataTables_paginate"
                             );
 
-                            // Clear the card-footer and append info and pagination
                             $(".table-footer")
                                 .empty()
                                 .append(
@@ -386,18 +382,11 @@
                 $(".label-loader, .input-loader").hide();
                 $(".real-label, .real-input, .real-data").removeClass("d-none");
             },
-            error: function (error) {
-                console.log("error");
-            },
+            error: function (error) {},
         });
     }
 
-    //Add Car Information
-    //Add Car Information
     $(document).ready(function () {
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // (Basic Info Validation and scripts)
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         $("#carBasicInfoForm").validate({
             rules: {
                 vehicle_image: {
@@ -495,7 +484,7 @@
                     var errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 } else if (element.attr("name") === "vehicle_image") {
-                    $("#vehicle_image_error_container").html(error); // Append error to a separate div
+                    $("#vehicle_image_error_container").html(error);
                 } else {
                     error.addClass("text-danger");
                     element.closest(".mb-3").append(error);
@@ -563,9 +552,6 @@
             }
         });
 
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // (Features & Amenities Validation and scripts)
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         $("#priceTariffNext").on("click", function (event) {
             event.preventDefault();
 
@@ -593,9 +579,6 @@
             }
         });
 
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // (Pricing & Tariff Validation and scripts)
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         $("#priceTariffForm").validate({
             rules: {
                 daily: {
@@ -676,12 +659,10 @@
                 "yearly_price",
             ];
 
-            // Check if at least one price type is selected (checkboxes)
             let hasPriceType = priceTypes.some((priceType) => {
                 return $(`[name="${priceType}"]`).is(":checked");
             });
 
-            // Check if at least one price value is entered (input fields)
             let hasPriceValue = priceValues.some((priceValue) => {
                 return $(`[name="${priceValue}"]`).val().trim() !== "";
             });
@@ -737,7 +718,6 @@
             if (editingId) {
                 let editElement = $("#" + editingId);
 
-                // Update text labels
                 editElement.find("h6").text(seasonName);
                 editElement.find(".start-date span").text(startDate);
                 editElement.find(".end-date span").text(endDate);
@@ -746,7 +726,6 @@
                 editElement.find(".monthly-price span").text(`$${monthlyRate}`);
                 editElement.find(".late-fee span").text(`$${lateFee}`);
 
-                // Update hidden input values
                 editElement
                     .find("input[name='seasonal_title[]']")
                     .val(seasonName);
@@ -769,7 +748,6 @@
                     .find("input[name='seasonal_late_fee[]']")
                     .val(lateFee);
 
-                // Reset form labels and buttons
                 $("#seas_title").text("Create Seasonal Pricing");
                 $("#price_btn").text("Create New");
                 editingId = null;
@@ -836,7 +814,7 @@
             }
 
             $("#add_price").modal("hide");
-            $("#add_price input").val(""); // Clear input fields
+            $("#add_price input").val("");
         });
 
         $(document).on("click", ".edit-icon", function () {
@@ -889,7 +867,6 @@
                 ? "Unlimited"
                 : baseKilometers;
 
-            // Validation
             if (
                 !tariffName ||
                 !dailyPrice ||
@@ -905,7 +882,6 @@
             if (editingTariffId) {
                 let editElement = $("#" + editingTariffId);
 
-                // Update text labels
                 editElement.find("h6").text(tariffName);
                 editElement.find(".daily-price span").text(`$${dailyPrice}`);
                 editElement.find(".from-days span").text(fromDays);
@@ -913,7 +889,6 @@
                 editElement.find(".base-km span").text(isUnlimited);
                 editElement.find(".extra-price span").text(`$${extraPrice}`);
 
-                // Update hidden input values
                 editElement
                     .find("input[name='tariff_title[]']")
                     .val(tariffName);
@@ -931,7 +906,6 @@
                     .find("input[name='tariff_extra_price[]']")
                     .val(extraPrice);
 
-                // Reset form labels and buttons
                 $("#tarrif_title").text("Add New Tariff");
                 $("#tarrif_btn").text("Create Tariff");
                 editingTariffId = null;
@@ -996,7 +970,6 @@
             $("#t_base").prop("disabled", false);
         });
 
-        // Edit Tariff
         $(document).on("click", ".edit-tariff", function () {
             editingTariffId = $(this).data("id");
             let editElement = $("#" + editingTariffId);
@@ -1025,7 +998,6 @@
             $("#tarrif_btn").text("Update");
         });
 
-        // Delete Tariff
         $(document).on("click", ".trash-tariff", function () {
             deletingTariffId = $(this).data("id");
         });
@@ -1040,7 +1012,6 @@
             $("#delete_tarrif").modal("hide");
         });
 
-        // Handle "Unlimited" Checkbox
         $("#unlimited1").on("change", function () {
             if ($(this).prop("checked")) {
                 $("#t_base").val("").prop("disabled", true);
@@ -1049,9 +1020,6 @@
             }
         });
 
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // (Car Documents validation and scripts)
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         $("#carDocumentForm").validate({
             rules: {
                 "car_document[]": {
@@ -1102,7 +1070,6 @@
             },
         });
 
-        // (Documents validation and scripts)
         let docSelectedFiles = new Map();
         const docAllowedExtensions = ["pdf", "doc", "docx", "txt"];
 
@@ -1208,7 +1175,6 @@
             docUpdateFileInput();
         });
 
-        // (policy validation and scripts)
         let policySelectedFiles = new Map();
         const policyAllowedExtensions = ["pdf", "doc", "docx", "txt"];
 
@@ -1290,7 +1256,6 @@
                 dataTransfer.items.add(file);
             });
 
-            // Ensure policy documents are correctly assigned to the right input field
             $("#policy_document")[0].files = dataTransfer.files;
         }
 
@@ -1315,113 +1280,112 @@
             policyUpdateFileInput();
         });
 
-        // (image validation and scripts)
-        let selectedImages = new Map(); // Store selected images (key: file name, value: file object)
-        const allowedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"]; // Allowed image formats
+        let selectedImages = new Map();
+        const allowedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 
         $("#car_images").on("change", function (event) {
             let files = event.target.files;
-            let maxFileSize = 50 * 1024 * 1024; // 50MB in bytes
-            let imageListContainer = $("#car_images_append"); // Container for displaying images
+            let maxFileSize = 50 * 1024 * 1024;
+            let imageListContainer = $("#car_images_append");
+            let validFiles = [];
+            let remainingChecks = files.length;
 
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
                 let fileExtension = file.name.split(".").pop().toLowerCase();
 
-                // Validate file format
                 if (!allowedImageExtensions.includes(fileExtension)) {
                     showToast(
                         "error",
                         "Only JPG, PNG, GIF, and WEBP images are allowed."
                     );
+                    remainingChecks--;
                     continue;
                 }
 
-                // Validate file size
                 if (file.size > maxFileSize) {
                     showToast("error", "File exceeds the 50MB limit.");
+                    remainingChecks--;
                     continue;
                 }
 
-                // Prevent duplicates
                 if (selectedImages.has(file.name)) {
                     showToast("error", "File is already added.");
+                    remainingChecks--;
                     continue;
                 }
 
-                let imageUrl = URL.createObjectURL(file); // Generate preview URL
-
-                // Validate image dimensions
+                let imageUrl = URL.createObjectURL(file);
                 let img = new Image();
                 img.src = imageUrl;
+
                 img.onload = function () {
-                    if (this.width !== 500 || this.height !== 500) {
+                    if (this.width !== 690 || this.height !== 420) {
                         showToast(
                             "error",
-                            "Image must be exactly 500x500 pixels."
+                            "Image must be exactly 690x420 pixels."
                         );
-                        URL.revokeObjectURL(imageUrl); // Revoke object URL to free memory
-                        return;
+                        URL.revokeObjectURL(imageUrl);
+                    } else {
+                        selectedImages.set(file.name, file);
+                        validFiles.push(file);
+
+                        let imageItem = $(`
+                            <div class="uploaded-img" data-file="${file.name}">
+                                <img src="${imageUrl}" alt="img">
+                                <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
+                            </div>
+                        `);
+                        imageListContainer.append(imageItem);
                     }
 
-                    selectedImages.set(file.name, file); // Store valid image in Map
-
-                    let imageItem = $(`
-                    <div class="uploaded-img" data-file="${file.name}">
-                        <img src="${imageUrl}" alt="img">
-                        <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
-                    </div>
-                `);
-
-                    imageListContainer.append(imageItem);
-                    updateImageInput(); // Update input field with selected valid images
+                    remainingChecks--;
+                    if (remainingChecks === 0) {
+                        updateImageInput(validFiles);
+                    }
                 };
 
                 img.onerror = function () {
                     showToast("error", "Invalid image file.");
                     URL.revokeObjectURL(imageUrl);
+                    remainingChecks--;
+                    if (remainingChecks === 0) {
+                        updateImageInput(validFiles);
+                    }
                 };
             }
         });
 
-        // Function to update input field with only valid selected images
-        function updateImageInput() {
+        function updateImageInput(validFiles) {
             let dataTransfer = new DataTransfer();
-
-            selectedImages.forEach((file) => {
+            validFiles.forEach((file) => {
                 dataTransfer.items.add(file);
             });
-
-            let fileInput = $("#car_images")[0];
-            fileInput.files = dataTransfer.files;
+            $("#car_images")[0].files = dataTransfer.files;
         }
 
-        // Delete image event
         $(document).on("click", ".delete-image", function () {
             let imageItem = $(this).closest(".uploaded-img");
             let fileName = imageItem.data("file");
 
-            selectedImages.delete(fileName); // Remove image from Map
-            imageItem.remove(); // Remove from UI
+            selectedImages.delete(fileName);
+            imageItem.remove();
 
-            updateImageInput(); // Update input field
+            updateImageInput();
         });
 
         $("#car_video").on("input", function () {
             let videoUrl = $(this).val().trim();
             let videoContainer = $("#car_video_append");
 
-            // Regular expression to validate YouTube URLs
             let youtubeRegex =
                 /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
 
-            // If input is empty, remove the appended video
             if (videoUrl === "") {
                 videoContainer.html("");
                 return;
             }
 
-            // Check if the entered URL matches the YouTube format
             if (youtubeRegex.test(videoUrl)) {
                 let videoItem = `
                     <img src="/assets/img/car/car-lg-01.jpg" alt="img">
@@ -1430,9 +1394,9 @@
                     </a>
             `;
 
-                videoContainer.html(videoItem); // Append or replace the video
+                videoContainer.html(videoItem);
             } else {
-                videoContainer.html(""); // Remove invalid input if it doesn’t match the format
+                videoContainer.html("");
             }
         });
 
@@ -1447,25 +1411,17 @@
                     formDataCollection[item.name] = item.value;
                 });
 
-                console.log(formDataCollection);
-
                 $("#fifth-field").hide();
                 $("#sixth-field").show();
                 $("#fifthBar").removeClass("active").addClass("activated");
                 $("#sixthBar").addClass("active");
             } else {
-                // toastr.error("Please upload valid documents before proceeding.");
             }
         });
-
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // (Damage validation and scripts)
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         let editingDamageId = null;
         let deletingDamageId = null;
 
-        // Image Preview on File Selection
         $("#dam_image").on("change", function (event) {
             let file = event.target.files[0];
 
@@ -1477,7 +1433,6 @@
             }
         });
 
-        // Add or Edit Damage Entry
         $("#damage_btn").on("click", function () {
             let damageImage = $("#dam_image")[0].files[0];
             let damageName = $("#dam_name").val();
@@ -1495,7 +1450,6 @@
             }
 
             if (!damageType || damageType === "Select Type") {
-                // adjust placeholder text if different
                 showToast("error", "Please select a damage type.");
                 return;
             }
@@ -1518,7 +1472,6 @@
                     };
                     reader.readAsDataURL(damageImage);
                 } else {
-                    // If no new image selected, keep the previous image
                     editElement
                         .find("input[name='damage_image[]']")
                         .val(prevImageSrc);
@@ -1578,7 +1531,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>                                                            
                 </div>`;
 
                     $("#car_damage_append").append(newDamage);
@@ -2358,7 +2311,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                 </div>
                 <div class="d-flex align-items-center icon-list">
-                    <a href="#" class="edit-icon me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance"
+                    <a href="#" class="edit-icon me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance" 
                     data-id="${uniqueId}" data-price="${insurancePrice}" data-price-type="${insurancePriceType}"><i class="ti ti-edit"></i></a>
                     <a href="#" class="trash-icon" data-bs-toggle="modal" data-bs-target="#delete_insurance"><i class="ti ti-trash"></i></a>
                 </div>
@@ -2513,9 +2466,11 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $("#delImg").on("click", function () {
+        // Clear the file input field
         $("#vehicle_image").val("");
 
-        $(".frames img").attr("src", "").hide();
+        // Remove the selected image (hide or reset to a default)
+        $(".frames img").attr("src", "").hide(); // Hides the image after removal
     });
 });
 

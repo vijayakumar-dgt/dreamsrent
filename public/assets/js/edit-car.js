@@ -37,6 +37,85 @@
         });
     });
 
+    function getDamageInfo() {
+        let vehicleId = $("#vehicle_id").val();
+
+        $.ajax({
+            url: "/admin/get-damage-info",
+            type: "GET",
+            data: { vehicle_id: vehicleId },
+            success: function (response) {
+                if (response.success && response.data.length > 0) {
+                    $("#car_damage_append").html("");
+                    response.data.forEach((damage) => {
+                        adddamage(damage);
+                    });
+                } else {
+                    showToast("error", "No damage data found.");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching damage data:", error);
+            },
+        });
+    }
+
+    let DamageCounter = 0; // Ensure global unique IDs
+
+    function adddamage(damage) {
+        console.log(damage);
+        let uniqueID = "damage_" + DamageCounter++;
+
+        let currentDate = new Date(
+            damage.created_at || Date.now()
+        ).toLocaleDateString("en-US", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        });
+
+        let imageUrl = damage.image;
+        let newDamage = `
+            <div id="${uniqueID}" class="bg-white p-20 br-5 border mb-2">
+                <input type="hidden" name="damage_id[]" value="${uniqueID}">
+                <input type="hidden" name="damage_image[]" value="${imageUrl}">
+                <div class="row align-items-center row-gap-3">
+                    <div class="col-xxl-8 col-md-7">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <h6 class="fs-14 fw-medium">${damage.damage_type}</h6>
+                            <input type="hidden" name="damage_loaction[]" value="${damage.damage_type}">
+                            <span class="badge bg-pink-transparent badge-sm">${damage.damage_loaction}</span>
+                            <input type="hidden" name="damage_location[]" value="${damage.damage_loaction}">
+                        </div>
+                        <p class="fs-13">${damage.description}</p>
+                        <input type="hidden" name="damage_description[]" value="${damage.description}">
+                    </div>
+                    <div class="col-xxl-4 col-md-5">
+                        <div class="d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
+                            <p class="mb-0">Added on : ${currentDate}</p>
+                            <div class="icon-list d-flex align-items-center">
+                                <a href="#" class="edit-damage me-2" data-id="${uniqueID}" data-bs-toggle="modal" data-bs-target="#add-damage">
+                                    <i class="ti ti-edit"></i>
+                                </a>
+                                <a href="#" class="trash-damage" data-id="${uniqueID}" data-bs-toggle="modal" data-bs-target="#delete_damage">
+                                    <i class="ti ti-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>                                                            
+            </div>
+        `;
+
+        $("#car_damage_append").append(newDamage);
+        updateDamageCount();
+    }
+
+    function updateDamageCount() {
+        let totalDamages = $("#car_damage_append > div").length;
+        $("#damage_count").text(totalDamages.toString().padStart(2, "0"));
+    }
+
     function getInsuranceInfo() {
         let vehicleId = $("#vehicle_id").val();
 
@@ -399,85 +478,6 @@
 
         $(".car_faq_append").append(faqItem);
         updateFaqCount();
-    }
-
-    function getDamageInfo() {
-        let vehicleId = $("#vehicle_id").val();
-
-        $.ajax({
-            url: "/admin/get-damage-info",
-            type: "GET",
-            data: { vehicle_id: vehicleId },
-            success: function (response) {
-                if (response.success && response.data.length > 0) {
-                    $("#car_damage_append").html("");
-                    response.data.forEach((damage) => {
-                        adddamage(damage);
-                    });
-                } else {
-                    showToast("error", "No damage data found.");
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching damage data:", error);
-            },
-        });
-    }
-
-    let DamageCounter = 0; // Ensure global unique IDs
-
-    function adddamage(damage) {
-        console.log(damage);
-        let uniqueID = "damage_" + DamageCounter++;
-
-        let currentDate = new Date(
-            damage.created_at || Date.now()
-        ).toLocaleDateString("en-US", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-        });
-
-        let imageUrl = damage.image;
-        let newDamage = `
-            <div id="${uniqueID}" class="bg-white p-20 br-5 border mb-2">
-                <input type="hidden" name="damage_id[]" value="${uniqueID}">
-                <input type="hidden" name="damage_image[]" value="${imageUrl}">
-                <div class="row align-items-center row-gap-3">
-                    <div class="col-xxl-8 col-md-7">
-                        <div class="d-flex align-items-center gap-2 mb-1">
-                            <h6 class="fs-14 fw-medium">${damage.damage_type}</h6>
-                            <input type="hidden" name="damage_loaction[]" value="${damage.damage_type}">
-                            <span class="badge bg-pink-transparent badge-sm">${damage.damage_loaction}</span>
-                            <input type="hidden" name="damage_location[]" value="${damage.damage_loaction}">
-                        </div>
-                        <p class="fs-13">${damage.description}</p>
-                        <input type="hidden" name="damage_description[]" value="${damage.description}">
-                    </div>
-                    <div class="col-xxl-4 col-md-5">
-                        <div class="d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
-                            <p class="mb-0">Added on : ${currentDate}</p>
-                            <div class="icon-list d-flex align-items-center">
-                                <a href="#" class="edit-damage me-2" data-id="${uniqueID}" data-bs-toggle="modal" data-bs-target="#add-damage">
-                                    <i class="ti ti-edit"></i>
-                                </a>
-                                <a href="#" class="trash-damage" data-id="${uniqueID}" data-bs-toggle="modal" data-bs-target="#delete_damage">
-                                    <i class="ti ti-trash"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>                                                            
-            </div>
-        `;
-
-        $("#car_damage_append").append(newDamage);
-        updateDamageCount();
-    }
-
-    function updateDamageCount() {
-        let totalDamages = $("#car_damage_append > div").length;
-        $("#damage_count").text(totalDamages.toString().padStart(2, "0"));
     }
 
     function getDocumentsInfo() {
@@ -920,11 +920,9 @@
         });
     }
 
-    //Add Car Information
+    
     $(document).ready(function () {
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // (Basic Info Validation and scripts)
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      
         $("#carBasicInfoForm").validate({
             rules: {
                 vehicle_image: {
@@ -1879,81 +1877,78 @@
 
         $("#car_images").on("change", function (event) {
             let files = event.target.files;
-            let maxFileSize = 50 * 1024 * 1024; // 50MB in bytes
-            let imageListContainer = $("#car_images_append"); // Container for displaying images
-
+            let maxFileSize = 50 * 1024 * 1024;
+            let imageListContainer = $("#car_images_append");
+            let validFiles = [];
+            let remainingChecks = files.length;
+        
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
                 let fileExtension = file.name.split(".").pop().toLowerCase();
-
-                // Validate file format
+        
                 if (!allowedImageExtensions.includes(fileExtension)) {
-                    showToast(
-                        "error",
-                        "Only JPG, PNG, GIF, and WEBP images are allowed."
-                    );
+                    showToast("error", "Only JPG, PNG, GIF, and WEBP images are allowed.");
+                    remainingChecks--;
                     continue;
                 }
-
-                // Validate file size
+        
                 if (file.size > maxFileSize) {
                     showToast("error", "File exceeds the 50MB limit.");
+                    remainingChecks--;
                     continue;
                 }
-
-                // Prevent duplicates
+        
                 if (selectedImages.has(file.name)) {
                     showToast("error", "File is already added.");
+                    remainingChecks--;
                     continue;
                 }
-
-                let imageUrl = URL.createObjectURL(file); // Generate preview URL
-
-                // Validate image dimensions
+        
+                let imageUrl = URL.createObjectURL(file);
                 let img = new Image();
                 img.src = imageUrl;
+        
                 img.onload = function () {
-                    if (this.width !== 500 || this.height !== 500) {
-                        showToast(
-                            "error",
-                            "Image must be exactly 500x500 pixels."
-                        );
-                        URL.revokeObjectURL(imageUrl); // Revoke object URL to free memory
-                        return;
+                    if (this.width !== 690 || this.height !== 420) {
+                        showToast("error", "Image must be exactly 690x420 pixels.");
+                        URL.revokeObjectURL(imageUrl);
+                    } else {
+                        selectedImages.set(file.name, file);
+                        validFiles.push(file);
+        
+                        let imageItem = $(`
+                            <div class="uploaded-img" data-file="${file.name}">
+                                <img src="${imageUrl}" alt="img">
+                                <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
+                            </div>
+                        `);
+                        imageListContainer.append(imageItem);
                     }
-
-                    selectedImages.set(file.name, file); // Store valid image in Map
-
-                    let imageItem = $(`
-                        <div class="uploaded-img" data-file="${file.name}">
-                            <img src="${imageUrl}" alt="img">
-                            <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
-                        </div>
-                    `);
-
-                    imageListContainer.append(imageItem);
-                    updateImageInput(); // Update input field with selected valid images
+        
+                    remainingChecks--;
+                    if (remainingChecks === 0) {
+                        updateImageInput(validFiles);
+                    }
                 };
-
+        
                 img.onerror = function () {
                     showToast("error", "Invalid image file.");
                     URL.revokeObjectURL(imageUrl);
+                    remainingChecks--;
+                    if (remainingChecks === 0) {
+                        updateImageInput(validFiles);
+                    }
                 };
             }
         });
-
-        // Function to update input field with only valid selected images
-        function updateImageInput() {
+        
+        function updateImageInput(validFiles) {
             let dataTransfer = new DataTransfer();
-
-            selectedImages.forEach((file) => {
+            validFiles.forEach(file => {
                 dataTransfer.items.add(file);
             });
-
-            let fileInput = $("#car_images")[0];
-            fileInput.files = dataTransfer.files;
+            $("#car_images")[0].files = dataTransfer.files;
         }
-
         // Delete image event
         $(document).on("click", ".delete-image", function () {
             let imageItem = $(this).closest(".uploaded-img");
@@ -2679,19 +2674,30 @@
                 let damagePayload = [];
 
                 $("input[name='damage_image[]']").each(function (index) {
-                    let imageEl = $(this);
-                    let nameEl = $("input[name='damage_name[]']").eq(index);
-                    let locationEl = $("input[name='damage_location[]']").eq(index);
-                    let descriptionEl = $("input[name='damage_description[]']").eq(index);
-                    let damageIdEl = $("input[name='damage_id[]']").eq(index);
-                
-                    let image = imageEl.val() ? imageEl.val().trim() : '';
-                    let name = nameEl.length ? nameEl.val().trim() : '';
-                    let location = locationEl.length ? locationEl.val().trim() : '';
-                    let description = descriptionEl.length ? descriptionEl.val().trim() : '';
-                    let damageId = damageIdEl.length ? damageIdEl.val().trim() : '';
-                
-                    if (image !== "" && name !== "" && location !== "" && description !== "") {
+                    let image = $(this).val().trim();
+                    let name = $("input[name='damage_name[]']")
+                        .eq(index)
+                        .val()
+                        .trim();
+                    let location = $("input[name='damage_location[]']")
+                        .eq(index)
+                        .val()
+                        .trim();
+                    let description = $("input[name='damage_description[]']")
+                        .eq(index)
+                        .val()
+                        .trim();
+                    let damageId = $("input[name='damage_id[]']")
+                        .eq(index)
+                        .val()
+                        .trim(); // Get Damage ID
+
+                    if (
+                        image !== "" &&
+                        name !== "" &&
+                        location !== "" &&
+                        description !== ""
+                    ) {
                         damagePayload.push({
                             image: image,
                             name: name,
@@ -2699,7 +2705,7 @@
                             description: description,
                         });
                     }
-                });                
+                });
 
                 finalFormData.append(
                     "vehicle_damage",
