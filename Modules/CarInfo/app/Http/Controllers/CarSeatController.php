@@ -70,13 +70,25 @@ class CarSeatController extends Controller
         }
     }
 
+ 
     public function list(Request $request)
     {
         $orderBy = $request->order_by ?? 'desc';
+        $search = $request->input('search');
+        $status = $request->input('status');
 
         try {
+            $query = SeatType::orderBy('id', $orderBy);
 
-            $data = SeatType::orderBy('id', $orderBy)->get();
+            if (!empty($search)) {
+                $query->where('seat_type', 'LIKE', "%{$search}%"); // Change 'name' to your actual searchable column
+            }
+
+            if ($status !== null && $status !== '') {
+                $query->where('status', $status); // Assumes 'status' column exists in categories table
+            }
+
+            $data = $query->get();
 
             return response()->json([
                 'code' => 200,

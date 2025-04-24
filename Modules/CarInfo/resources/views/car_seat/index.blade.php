@@ -50,10 +50,10 @@
 					</a>
 					<ul class="dropdown-menu  dropdown-menu-end p-2" id="status_filter">
 						<li>
-							<a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="1">{{ __('admin.common.active') }}</a>
+							<a href="javascript:void(0);" class="dropdown-item rounded-1 statusfilter" data-status="1">{{ __('admin.common.active') }}</a>
 						</li>
 						<li>
-							<a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="0">{{ __('admin.common.inactive') }}</a>
+							<a href="javascript:void(0);" class="dropdown-item rounded-1 statusfilter" data-status="0">{{ __('admin.common.inactive') }}</a>
 						</li>
 					</ul>
 				</div>
