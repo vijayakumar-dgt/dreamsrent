@@ -52,7 +52,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card mb-3">
+                            <div class="card mb-3 d-none">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-xl-4">

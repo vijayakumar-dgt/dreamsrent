@@ -4,10 +4,7 @@
     $(document).ready(function () {
    
         getSecuritySettings();
-        // $("#current_password").on('blur', function () {
-        //     checkCurrentPassword("#current_password");
-        // });
-    
+        
         $(document).on('click','.changePasswordBtn', function(){
             resetPasswordForm();
         });
@@ -174,14 +171,13 @@
             let $strong = $('#strong');
             let $heavy = $('#heavy');
     
-            // Regex patterns for validation
-            let lowerCaseRegExp = /[a-zA-Z]/;  // Matches at least one letter
-            let numberRegExp = /[0-9]/;        // Matches at least one number
+            
+            let lowerCaseRegExp = /[a-zA-Z]/;  
+            let numberRegExp = /[0-9]/;        
             let specialCharRegExp = /[#?!@$%^&*()_+\-=<>:{}[\]\\|~`]/;
-            let whitespaceRegExp = /\s/;       // Matches whitespace
+            let whitespaceRegExp = /\s/;       
     
     
-            // Handle input event
             $passwordInput.on('keyup', function () {
                 let passwordValue = $(this).val();
                 let passwordLength = passwordValue.length;
@@ -193,7 +189,6 @@
     
                 let passwordStrength = 0;
     
-                // Reset strength if whitespace is found
                 if (hasWhitespace) {
                     passwordStrength = 0;
                 } else {
@@ -202,7 +197,6 @@
                     if (hasSpecialChar) passwordStrength++;
                     if (passwordLength >= 8) passwordStrength++;
     
-                    // Ensure that a minimum length is required for higher scores
                     if (passwordLength < 8) {
                         passwordStrength = 1;
                     }
@@ -211,7 +205,7 @@
             });
     
             function updateStrength(passwordStrength){
-                //remove active class from all bars
+                
                 $passwordStrength.find('span').removeClass('active');
     
                 $passwordStrength.removeClass('poor-active avg-active strong-active heavy-active');
@@ -243,7 +237,6 @@
     
     
     
-        // Phone number update section start
         function checkCurrentPhoneNumber(){
             return new Promise((resolve, reject) => {
                 let currentPhoneNumber = $('#current_phonenumber').val();
@@ -355,8 +348,7 @@
                 });
             }
         });
-        //<-- Phone number update section end -->
-        //<-- Email update section start -->
+        
         function checkCurrentEmail(){
             return new Promise((resolve, reject) => {
                 let currentemail = $('#current_email').val();
@@ -452,7 +444,7 @@
                 });
             }
         });
-        //<-- Email update section end -->
+      
     
         function getSecuritySettings() {
             $.ajax({
@@ -535,6 +527,11 @@
                     if(response.code === 200){
                         getSecuritySettings();
                         showToast('success', response.message);
+                        setTimeout(function () {
+                            if(isAll){
+                                location.reload();
+                            } 
+                        }, 3000);
                     }
                 }
             });

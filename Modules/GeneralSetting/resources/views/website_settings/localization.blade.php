@@ -230,7 +230,7 @@
                                             </div>
                                        </div>
                                 </div>
-                                <div class="localization-list">
+                                <div class="localization-list d-none">
                                     <div class="skeleton label-skeleton label-loader"></div>
                                     <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.currency_switcher') }}  <span class="text-danger">*</span></p>
                                     <div>
