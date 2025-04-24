@@ -650,7 +650,7 @@ class PageController extends Controller
                         $order = $matches[3] ?? 'asc';
 
                         $brands = DB::table('brands')
-                            ->select('id', 'brand_image', 'brand_name', 'status')
+                            ->select('id', 'brand_image','brand_icon', 'brand_name', 'status')
                             ->where('language_id', $lang_id)
                             ->where('status', 1)
                             ->whereNull('deleted_at')
@@ -659,6 +659,7 @@ class PageController extends Controller
                             ->get()
                             ->map(function ($brand) {
                                 $brand->brand_image = asset('storage/' . $brand->brand_image); // Convert to URL format
+                                $brand->brand_icon = asset('storage/' . $brand->brand_icon);
                                 return $brand;
                             });
 
@@ -987,7 +988,7 @@ class PageController extends Controller
                                 'id' => $blog->id,
                                 'title' => $blog->title,
                                 'slug' => $blog->slug ?? Str::slug($blog->title),
-                                'image' => asset('storage/' . $blog->image),
+                                'image' => uploadedAsset($blog->image),
                                 'category' => $blog->category,
                                 'description' => $blog->description,
                                 'updated_at' => \Carbon\Carbon::parse($blog->updated_at)->format('F j, Y'),

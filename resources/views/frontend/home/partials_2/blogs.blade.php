@@ -12,7 +12,7 @@
             <div class="col-lg-4 col-md-6 d-flex">
                 <div class="blog-item flex-fill">
                     <div class="blog-img">
-                        <img src="{{ $content['image'] ?? '' }}" class="img-fluid" alt="img">
+                        <img src="{{ $content['image'] ?? '' }}" class="img-fluid home-blogimg" alt="img">
                     </div>
                     <div class="blog-content">
                         <div class="d-flex align-center justify-content-between blog-category">

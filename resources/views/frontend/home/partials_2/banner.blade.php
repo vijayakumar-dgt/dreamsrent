@@ -64,7 +64,7 @@
                    </div>
                    <div class="search-input">
                        <div class="input-block">
-                           <label>{{ __('web.home.drop_location') }}</label>
+                           <label>{{ __('web.user.drop_location') }}</label>
                            <div class="group-img position-relative">
                             <input type="text" name="droplocation" id="drop-location-input" autocomplete="off" class="form-control" placeholder="{{ __('web.home.location_place_holder') }}">
                             <span><i class="feather-map-pin"></i></span>
