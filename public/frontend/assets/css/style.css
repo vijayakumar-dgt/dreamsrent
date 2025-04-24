@@ -10687,8 +10687,9 @@ table .badge {
 }
 .brand-wrap img {
   margin: 0 auto 12px;
-  height: auto;
+  height: 50px !important;
   width: auto !important;
+  object-fit: contain;
 }
 .brand-wrap p {
   color: #fff;

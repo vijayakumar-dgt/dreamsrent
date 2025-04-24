@@ -9,14 +9,14 @@
             @if(!empty($section['section_content']) && count($section['section_content']) > 0)
             @foreach($section['section_content'] as $content)
             <div class="col-lg-4 col-md-6">
-                <div class="listing-item listing-item-two">
+                <div class="listing-item listing-item-two theme2-popularcar">
                     <div class="listing-img">
                         <div class="img-slider owl-carousel">
                             @if(!empty($content['multiple_vehicle_images'] && count($content['multiple_vehicle_images']) > 0))
                             @foreach($content['multiple_vehicle_images'] as $image)
                             <div class="slide-images">
                                 <a href="/vehicle-details/{{ $content['slug'] }}">
-                                    <img src="{{ $image }}" class="img-fluid" alt="">
+                                    <img src="{{ $image }}" class="img-fluid popular-vehicle-img" alt="">
                                 </a>
                             </div>
                             @endforeach
