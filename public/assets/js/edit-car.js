@@ -441,7 +441,6 @@
     let faqCounter = 0; // Global counter to ensure unique IDs
 
     function addFaq(faq) {
-
         let uniqueID = "faq_" + faqCounter++; // Increment counter for each FAQ
 
         let faqItem = `
@@ -488,7 +487,6 @@
             type: "GET",
             data: { vehicle_id: vehicleId },
             success: function (response) {
-
                 if (response.success) {
                     // Clear existing content before appending new data
                     $("#car_images_append").html("");
@@ -915,14 +913,11 @@
                 $(".label-loader, .input-loader").hide();
                 $(".real-label, .real-input, .real-data").removeClass("d-none");
             },
-            error: function (error) {
-            },
+            error: function (error) {},
         });
     }
 
-    
     $(document).ready(function () {
-      
         $("#carBasicInfoForm").validate({
             rules: {
                 vehicle_image: {
@@ -1058,13 +1053,13 @@
                 var img = new Image();
                 img.src = URL.createObjectURL(file);
                 img.onload = function () {
-                    if (this.width !== 500 || this.height !== 500) {
+                    if (this.width !== 690 || this.height !== 420) {
                         $("#vehicle_image_error_container").html(
-                            '<span class="text-danger">The image must be 500px × 500px.</span>'
+                            '<span class="text-danger">The image must be 690px × 420px.</span>'
                         );
-                        $("#vehicle_image").val(""); // Clear the file input
+                        $("#vehicle_image").val("");
                     } else {
-                        $("#vehicle_image_error_container").html(""); // Clear the error if valid
+                        $("#vehicle_image_error_container").html("");
                     }
                 };
             }
@@ -1870,108 +1865,89 @@
             });
         });
 
-        // (image validation and scripts)
-        // (image validation and scripts)
-        let selectedImages = new Map(); // Store selected images (key: file name, value: file object)
-        const allowedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"]; // Allowed image formats
+        let selectedImages = new Map();
+        const allowedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+        const maxFileSize = 50 * 1024 * 1024;
 
         $("#car_images").on("change", function (event) {
             let files = event.target.files;
-            let maxFileSize = 50 * 1024 * 1024;
             let imageListContainer = $("#car_images_append");
             let validFiles = [];
             let remainingChecks = files.length;
-        
+
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
-                let fileExtension = file.name.split(".").pop().toLowerCase();
-        
-                if (!allowedImageExtensions.includes(fileExtension)) {
-                    showToast("error", "Only JPG, PNG, GIF, and WEBP images are allowed.");
+                let ext = file.name.split(".").pop().toLowerCase();
+
+                if (
+                    !allowedImageExtensions.includes(ext) ||
+                    file.size > maxFileSize ||
+                    selectedImages.has(file.name)
+                ) {
                     remainingChecks--;
                     continue;
                 }
-        
-                if (file.size > maxFileSize) {
-                    showToast("error", "File exceeds the 50MB limit.");
-                    remainingChecks--;
-                    continue;
-                }
-        
-                if (selectedImages.has(file.name)) {
-                    showToast("error", "File is already added.");
-                    remainingChecks--;
-                    continue;
-                }
-        
+
                 let imageUrl = URL.createObjectURL(file);
                 let img = new Image();
                 img.src = imageUrl;
-        
+
                 img.onload = function () {
-                    if (this.width !== 690 || this.height !== 420) {
-                        showToast("error", "Image must be exactly 690x420 pixels.");
-                        URL.revokeObjectURL(imageUrl);
-                    } else {
+                    if (this.width === 690 && this.height === 420) {
                         selectedImages.set(file.name, file);
                         validFiles.push(file);
-        
-                        let imageItem = $(`
+
+                        imageListContainer.append(`
                             <div class="uploaded-img" data-file="${file.name}">
                                 <img src="${imageUrl}" alt="img">
                                 <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
                             </div>
                         `);
-                        imageListContainer.append(imageItem);
+                    } else {
+                        URL.revokeObjectURL(imageUrl);
                     }
-        
+
                     remainingChecks--;
-                    if (remainingChecks === 0) {
-                        updateImageInput(validFiles);
-                    }
+                    if (remainingChecks === 0) updateImageInput(validFiles);
                 };
-        
+
                 img.onerror = function () {
-                    showToast("error", "Invalid image file.");
                     URL.revokeObjectURL(imageUrl);
                     remainingChecks--;
-                    if (remainingChecks === 0) {
-                        updateImageInput(validFiles);
-                    }
+                    if (remainingChecks === 0) updateImageInput(validFiles);
                 };
             }
         });
-        
-        function updateImageInput(validFiles) {
-            let dataTransfer = new DataTransfer();
-            validFiles.forEach(file => {
-                dataTransfer.items.add(file);
-            });
-            $("#car_images")[0].files = dataTransfer.files;
+
+        function updateImageInput(
+            validFiles = Array.from(selectedImages.values())
+        ) {
+            let dt = new DataTransfer();
+            validFiles.forEach((file) => dt.items.add(file));
+            $("#car_images")[0].files = dt.files;
         }
-        // Delete image event
+
         $(document).on("click", ".delete-image", function () {
             let imageItem = $(this).closest(".uploaded-img");
             let fileName = imageItem.data("file");
 
-            // Confirm before deleting
             if (!confirm("Are you sure you want to delete this image?")) return;
 
-            // If the image is a newly uploaded file (not yet saved in the database)
+            // Newly added (not in DB yet)
             if (selectedImages.has(fileName)) {
-                selectedImages.delete(fileName); // Remove image from Map
-                imageItem.remove(); // Remove from UI
-                updateImageInput(); // Update input field
+                selectedImages.delete(fileName);
+                imageItem.remove();
+                updateImageInput();
                 return;
             }
 
-            // If it's an existing image from the database, send AJAX request
+            // Existing DB image
             $.ajax({
                 url: "/admin/vehicle/image/delete",
                 type: "POST",
                 data: {
-                    vehicle_id: $("#vehicle_id").val(), // Hidden input field with vehicle_id
-                    image_path: fileName, // Send image path
+                    vehicle_id: $("#vehicle_id").val(),
+                    image_path: fileName,
                 },
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
@@ -1980,14 +1956,8 @@
                 },
                 success: function (response) {
                     if (response.success) {
-                        showToast("success", "Image deleted successfully.");
-                        imageItem.remove(); // Remove from UI
-                    } else {
-                        showToast("error", response.message);
+                        imageItem.remove();
                     }
-                },
-                error: function () {
-                    showToast("error", "Failed to delete image.");
                 },
             });
         });
@@ -2031,7 +2001,6 @@
                 carBasicInfoFormData.forEach(function (item) {
                     formDataCollection[item.name] = item.value;
                 });
-
 
                 $("#fifth-field").hide();
                 $("#sixth-field").show();

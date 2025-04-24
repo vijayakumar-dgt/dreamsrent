@@ -95,7 +95,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-4 d-flex">
+                                <div class="col-xl-4 d-flex d-none">
                                     <div class="card flex-fill">
                                         <div class="card-body">
                                             <div>

@@ -1190,7 +1190,7 @@ return [
     'featured_image' => 'الصورة المميزة',
     'upload_featured_image' => 'تحميل الصورة المميزة',
     'change' => 'تغيير',
-    'recommended_size' => 'الحجم الموصى به 500×500 بكسل',
+    'recommended_size' => 'الحجم الموصى به 420×690 بكسل',
     'vehicle_info' => 'معلومات المركبة',
     'add_vehicle_info' => 'أضف معلومات حول المركبة',
     'name' => 'الاسم',

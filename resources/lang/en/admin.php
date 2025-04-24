@@ -1208,7 +1208,7 @@ return array(
     'featured_image' => 'Featured Image',
     'upload_featured_image' => 'Upload Featured Image',
     'change' => 'Change',
-    'recommended_size' => 'Recommended size is 500px x 500px',
+    'recommended_size' => 'Recommended size is 690px x 420px',
     'vehicle_info' => 'Vehicle Info',
     'add_vehicle_info' => 'Add Information About Vehicle',
     'name' => 'Name',

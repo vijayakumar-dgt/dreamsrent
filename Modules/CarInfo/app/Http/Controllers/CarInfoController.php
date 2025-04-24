@@ -1851,34 +1851,39 @@ class CarInfoController extends Controller
 
     public function deleteVehicleImage(Request $request)
     {
-        // dd($request);
         $request->validate([
             'vehicle_id' => 'required|exists:vehicle_metas,vehicle_id',
             'image_path' => 'required|string',
         ]);
-
+    
         $vehicleMeta = VehicleMeta::where('vehicle_id', $request->vehicle_id)
             ->where('key', 'vehicle_image')
             ->first();
-
+    
         if (!$vehicleMeta) {
             return response()->json(['success' => false, 'message' => 'Vehicle images not found.'], 404);
         }
-
+    
         $images = json_decode($vehicleMeta->value, true);
-
+    
+        // Extract relative path from full URL if needed
+        $imageToDelete = parse_url($request->image_path, PHP_URL_PATH);
+        $relativePath = ltrim(str_replace('/storage/', '', $imageToDelete), '/');
+    
         // Find and remove image
-        if (($key = array_search($request->image_path, $images)) !== false) {
+        if (($key = array_search($relativePath, $images)) !== false) {
             unset($images[$key]);
-            Storage::delete($request->image_path); // Delete from storage
-            $vehicleMeta->value = json_encode(array_values($images)); // Update JSON
+            Storage::delete($relativePath); // Delete from storage
+            $vehicleMeta->value = json_encode(array_values($images)); // Reindex and save
             $vehicleMeta->save();
-
+    
             return response()->json(['success' => true, 'message' => 'Image deleted successfully.']);
         }
-
+    
         return response()->json(['success' => false, 'message' => 'Image not found in database.'], 404);
     }
+    
+
 
     public function deleteVehiclePolicy(Request $request)
     {

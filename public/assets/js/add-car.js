@@ -522,17 +522,17 @@
                 var img = new Image();
                 img.src = URL.createObjectURL(file);
                 img.onload = function () {
-                    if (this.width !== 500 || this.height !== 500) {
+                    if (this.width !== 690 || this.height !== 420) {
                         $("#vehicle_image_error_container").html(
-                            '<span class="text-danger">The image must be 500px × 500px.</span>'
+                            '<span class="text-danger">The image must be 690px × 420px.</span>'
                         );
-                        $("#vehicle_image").val(""); // Clear the file input
+                        $("#vehicle_image").val("");
                     } else {
-                        $("#vehicle_image_error_container").html(""); // Clear the error if valid
+                        $("#vehicle_image_error_container").html("");
                     }
                 };
             }
-        });
+        });        
 
         $("#featAmenNext").on("click", function (event) {
             event.preventDefault();
@@ -1282,97 +1282,75 @@
 
         let selectedImages = new Map();
         const allowedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
-
+        
         $("#car_images").on("change", function (event) {
             let files = event.target.files;
             let maxFileSize = 50 * 1024 * 1024;
             let imageListContainer = $("#car_images_append");
             let validFiles = [];
-            let remainingChecks = files.length;
-
+            let pending = files.length;
+        
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
-                let fileExtension = file.name.split(".").pop().toLowerCase();
-
-                if (!allowedImageExtensions.includes(fileExtension)) {
-                    showToast(
-                        "error",
-                        "Only JPG, PNG, GIF, and WEBP images are allowed."
-                    );
-                    remainingChecks--;
+                let ext = file.name.split(".").pop().toLowerCase();
+        
+                if (
+                    !allowedImageExtensions.includes(ext) ||
+                    file.size > maxFileSize ||
+                    selectedImages.has(file.name)
+                ) {
+                    pending--;
                     continue;
                 }
-
-                if (file.size > maxFileSize) {
-                    showToast("error", "File exceeds the 50MB limit.");
-                    remainingChecks--;
-                    continue;
-                }
-
-                if (selectedImages.has(file.name)) {
-                    showToast("error", "File is already added.");
-                    remainingChecks--;
-                    continue;
-                }
-
+        
                 let imageUrl = URL.createObjectURL(file);
                 let img = new Image();
                 img.src = imageUrl;
-
+        
                 img.onload = function () {
-                    if (this.width !== 690 || this.height !== 420) {
-                        showToast(
-                            "error",
-                            "Image must be exactly 690x420 pixels."
-                        );
-                        URL.revokeObjectURL(imageUrl);
-                    } else {
+                    if (this.width === 690 && this.height === 420) {
                         selectedImages.set(file.name, file);
                         validFiles.push(file);
-
-                        let imageItem = $(`
+        
+                        imageListContainer.append(`
                             <div class="uploaded-img" data-file="${file.name}">
                                 <img src="${imageUrl}" alt="img">
                                 <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
                             </div>
                         `);
-                        imageListContainer.append(imageItem);
+                    } else {
+                        URL.revokeObjectURL(imageUrl);
                     }
-
-                    remainingChecks--;
-                    if (remainingChecks === 0) {
-                        updateImageInput(validFiles);
-                    }
+        
+                    pending--;
+                    if (pending === 0) updateImageInput(validFiles);
                 };
-
+        
                 img.onerror = function () {
-                    showToast("error", "Invalid image file.");
                     URL.revokeObjectURL(imageUrl);
-                    remainingChecks--;
-                    if (remainingChecks === 0) {
-                        updateImageInput(validFiles);
-                    }
+                    pending--;
+                    if (pending === 0) updateImageInput(validFiles);
                 };
             }
         });
-
+        
         function updateImageInput(validFiles) {
-            let dataTransfer = new DataTransfer();
-            validFiles.forEach((file) => {
-                dataTransfer.items.add(file);
-            });
-            $("#car_images")[0].files = dataTransfer.files;
+            let dt = new DataTransfer();
+            validFiles.forEach(file => dt.items.add(file));
+            $("#car_images")[0].files = dt.files;
         }
-
+        
         $(document).on("click", ".delete-image", function () {
-            let imageItem = $(this).closest(".uploaded-img");
-            let fileName = imageItem.data("file");
-
+            let item = $(this).closest(".uploaded-img");
+            let fileName = item.data("file");
+        
             selectedImages.delete(fileName);
-            imageItem.remove();
-
-            updateImageInput();
+            item.remove();
+        
+            let updatedFiles = Array.from(selectedImages.values());
+            updateImageInput(updatedFiles);
         });
+        
 
         $("#car_video").on("input", function () {
             let videoUrl = $(this).val().trim();
