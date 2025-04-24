@@ -214,7 +214,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- Notification Type --}}
                         <div class="row mb-3">
                             <div class="col-lg-12">
                                 <div class="mb-0">
@@ -240,7 +239,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- Placeholder --}}
                         <div class="row mb-3">
                             <div class="col-lg-12">
                                 <div class="mb-0">
@@ -256,7 +254,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- Description --}}
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-0">

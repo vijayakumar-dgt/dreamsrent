@@ -246,7 +246,6 @@
                         <input type="text" class="form-control" name="name" id="name">
                         <span id="name_error" class="text-danger error-text"></span>
                     </div>
-                    {{-- Email,Phone --}}
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label">{{ __('admin.common.email')}} <span class="text-danger">*</span></label>
@@ -259,7 +258,6 @@
                             <span id="phone_error" class="text-danger error-text"></span>
                         </div>
                     </div>
-                    {{--address --}}
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <label class="form-label">{{ __('admin.common.address')}} <span class="text-danger">*</span></label>
@@ -267,7 +265,6 @@
                             <span id="address_error" class="text-danger error-text"></span>
                         </div>
                     </div>
-                    {{--Country,State --}}
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label">{{ __('admin.common.country')}} <span class="text-danger">*</span></label>
@@ -284,7 +281,6 @@
                             <span id="state_error" class="text-danger error-text"></span>
                         </div>
                     </div>
-                    {{-- city, pincode --}}
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label">{{ __('admin.common.city')}} <span class="text-danger">*</span></label>
@@ -297,10 +293,8 @@
                             <span id="pincode_error" class="text-danger error-text"></span>
                         </div>
                     </div>
-                    {{-- Working Days --}}
                     <p>{{ __('admin.manage.working_days') }} <em class="text-danger">*</em></p>
                     <span class="text-danger error-text" id="monday_error"></span>
-                    {{--toggle switch with day label  --}}
                     <div class="mb-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="form-check form-check-md form-switch me-3">
@@ -320,7 +314,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- Tuesday --}}
                     <div class="mb-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="form-check form-check-md form-switch me-3">
@@ -341,7 +334,6 @@
                         </div>
                     </div>
 
-                    {{-- Wednesday --}}
                     <div class="mb-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="form-check form-check-md form-switch me-3">
@@ -361,7 +353,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- Thursday --}}
                     <div class="mb-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="form-check form-check-md form-switch me-3">
@@ -381,7 +372,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- Friday --}}
                     <div class="mb-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="form-check form-check-md form-switch me-3">
@@ -401,7 +391,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- Saturday --}}
                     <div class="mb-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="form-check form-check-md form-switch me-3">
@@ -421,7 +410,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- Sunday --}}
                     <div class="mb-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="form-check form-check-md form-switch me-3">

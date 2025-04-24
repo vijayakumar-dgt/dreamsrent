@@ -215,7 +215,6 @@
     @include('admin.partials.footer')
 
 </div>    
-{{-- Inspection Add/Edit Modal Start --}}
 <div class="modal fade" id="add_inspection">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -340,7 +339,6 @@
         </div>
     </div>
 </div>
-{{-- Inspection Add/Edit Modal End --}}
 
  <!-- Delete Modal Start-->
  <div class="modal fade deletemodal" id="delete-modal">

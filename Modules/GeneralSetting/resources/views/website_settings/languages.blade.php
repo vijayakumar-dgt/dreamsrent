@@ -63,7 +63,6 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <a href="javascript:void(0);" class="btn btn-dark"><i class="ti ti-download me-1"></i>Import Sample</a> --}}
                         </div>
                         <div class="custom-datatable-filter table-responsive table-loader">
                             <table class="table table-bordered">

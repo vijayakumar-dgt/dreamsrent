@@ -7,7 +7,7 @@
 function DbBackUpTable() {
     $(document).ready(function() {
         $.ajax({
-            url: '/admin/settings/dbbackups',
+            url: '/admin/settings/database',
             method: 'GET',
             dataType: 'json',
             success: function(response) {

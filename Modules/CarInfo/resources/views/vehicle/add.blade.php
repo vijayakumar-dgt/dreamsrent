@@ -376,7 +376,7 @@
 															name="feature_id[]"
 															type="checkbox"
 															id="amenity_{{ $SafetyFeatureValues->id }}"
-															value="{{ $SafetyFeatureValues->id }}"> {{-- <-- value added --}}
+															value="{{ $SafetyFeatureValues->id }}">
 													</div>
 													<label class="form-check-label" for="amenity_{{ $SafetyFeatureValues->id }}">
 														{{ $SafetyFeatureValues->feature }}

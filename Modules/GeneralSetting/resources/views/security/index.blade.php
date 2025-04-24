@@ -92,7 +92,6 @@
                                         </div>
                                         <div class="col-xl-4">
                                             <div class="d-flex justify-content-end">
-                                                {{-- <a href="javascript:void(0);" class="btn btn-light me-2">{{ __('admin.general_settings.remove') }}</a> --}}
                                                 <a href="javascript:void(0);" class="btn btn-dark changePhoneNumberBtn" data-bs-toggle="modal" data-bs-target="#change_phonenumber">{{ __('admin.rentals.change') }}</a>
                                             </div>
                                         </div>
@@ -115,30 +114,13 @@
                                         </div>
                                         <div class="col-xl-4">
                                             <div class="d-flex justify-content-end">
-                                                {{-- <a href="javascript:void(0);" class="btn btn-light me-2">{{ __('admin.general_settings.remove') }}</a> --}}
                                                 <a href="javascript:void(0);" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#change_email">{{ __('admin.rentals.change') }}</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="card mb-3">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-xl-6">
-                                            <div>
-                                                <h6 class="fs-14 fw-medium">{{ __('admin.general_settings.deactivate_account') }}</h6>
-                                                <p class="fs-13">{{ __('admin.general_settings.account_shutdown_reactive_again') }}</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-6">
-                                            <div class="d-flex justify-content-end">
-                                                <a href="javascript:void(0);" class="btn btn-dark">{{ __('admin.general_settings.deactivate') }}</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
+                       
                             <div class="card">
                                 <div class="card-body">
                                     <div class="mb-3">

@@ -30,36 +30,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                             <h6 class="fw-bold">{{ __('admin.general_settings.language') }}</h6>
-                            {{-- <div class="d-flex align-items-center">
-                                <div class="dropdown me-3">
-                                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                                        <i class="ti ti-language me-1"></i>Language
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-lg p-2">
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                English
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                German
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                Arabic
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                French
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <a href="javascript:void(0);" class="btn btn-primary"><i class="ti ti-plus me-1"></i>Add New Language</a>
-                            </div> --}}
+                          
                         </div>
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                             <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
@@ -201,7 +172,6 @@
     @include('admin.partials.footer')
 </div>
 
-{{-- Language Setup --}}
 <div class="modal language fade addmodal" id="language_setup">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
@@ -330,7 +300,6 @@
         </div>
     </div>
 </div>
-{{-- Language Setup --}}
 
 @endsection
 @push('scripts')

@@ -78,12 +78,7 @@
                 <p class="mb-3">{{ __('admin.general_settings.confirmation_generate_backup') }}</p>
                 <div class="d-flex justify-content-center">
                     <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
-                    {{-- @if (session('success'))
-                            <div class="alert alert-success">{{ session('success') }}</div>
-                        @endif
-                        @if (session('error'))
-                            <div class="alert alert-danger">{{ session('error') }}</div>
-                        @endif --}}
+
 
                         <a href="{{ route('backup') }}" class="btn btn-primary">{{ __('admin.general_settings.generate_backup') }}</a>
 
