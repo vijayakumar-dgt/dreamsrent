@@ -126,12 +126,11 @@
             initTable(searchQuery, currentStatus);
         });
 
-        // Trigger on clicking status filter
         $(".statusfilter").on("click", function () {
-            $(".statusfilter").removeClass("active"); // Reset
-            $(this).addClass("active"); // Set current active
-            currentStatus = $(this).data("status"); // Get selected status
-            $("#status_text").text($(this).text()); // Update dropdown label
+            $(".statusfilter").removeClass("active");
+            $(this).addClass("active");
+            currentStatus = $(this).data("status");
+            $("#status_text").text($(this).text());
             let searchQuery = $("#search").val().trim();
             initTable(searchQuery, currentStatus);
         });
@@ -402,7 +401,7 @@
             $(".error-text").text("");
             $(".form-control").removeClass("is-invalid is-valid");
             $("#statusDiv")
-                .hide()
+                .addClass('d-none')
                 .parent()
                 .removeClass("justify-content-between")
                 .addClass("justify-content-end");
@@ -607,7 +606,7 @@
                     );
                     $(".submitbtn").text(_l("admin.common.save_changes"));
                     $("#statusDiv")
-                        .show()
+                        .removeClass('d-none')
                         .parent()
                         .removeClass("justify-content-end")
                         .addClass("justify-content-between");

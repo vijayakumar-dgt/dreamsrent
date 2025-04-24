@@ -236,7 +236,7 @@
 $("#add_new_damage_type").click(function(){
     $("#add_damage_type .modal-title").text(_l('admin.rentals.create_damage_type'));
     $("#add_damage_type .submitbtn").text(_l('admin.common.create_new'));
-    $("#status_div").hide();
+    $("#status_div").addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');;
     $("#damageTypeForm")[0].reset();
     $("#damageTypeForm #id").val('');
     $(".error-text").text("");
@@ -260,7 +260,7 @@ function editDamageType(id){
              }
              $("#add_damage_type .modal-title").text(_l('admin.rentals.edit_damage_type'));
              $("#add_damage_type .submitbtn").text(_l('admin.common.save_changes'));
-             $("#status_div").show();
+             $("#status_div").removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
              $("#add_damage_type").modal('show');
              $(".error-text").text("");
              $(".form-control").removeClass("is-invalid is-valid");

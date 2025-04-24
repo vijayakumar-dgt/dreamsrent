@@ -68,7 +68,6 @@ class InspectionController extends Controller
         $errorMessage = empty($request->id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
-            $successMessage = "";
             if($request->has('id') && $request->id != null){
                 $inspection = Inspection::find($request->id);
             }else{

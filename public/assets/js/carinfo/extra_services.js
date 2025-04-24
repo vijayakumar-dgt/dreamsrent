@@ -341,7 +341,7 @@
         $(".icon_placeholder").show();
         $("#image_preview").hide();
         $(".image_placeholder").show();
-        $('#statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
+        $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
     });
     
 })();
@@ -386,7 +386,7 @@ function editExtraService(id){
              $(".error-text").text("");
              $(".form-control").removeClass("is-invalid is-valid");
              $(".icon_asterisk").hide();
-             $('#statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+             $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
          }
          
         }

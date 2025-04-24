@@ -364,7 +364,7 @@
         $(".error-text").text("");
         $(".form-control").removeClass("is-invalid is-valid");
         $("#statusDiv")
-            .hide()
+            .addClass('d-none')
             .parent()
             .removeClass("justify-content-between")
             .addClass("justify-content-end");
@@ -557,7 +557,7 @@ function editSeatType(id) {
                 );
                 $(".submitbtn").text(_l("admin.common.save_changes"));
                 $("#statusDiv")
-                    .show()
+                    .removeClass('d-none')
                     .parent()
                     .removeClass("justify-content-end")
                     .addClass("justify-content-between");

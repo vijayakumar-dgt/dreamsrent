@@ -213,7 +213,7 @@
             $("#seasonForm #id").val('');
             $(".error-text").text("");
             $(".form-control").removeClass("is-invalid is-valid");
-            $('#statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
+            $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
         });
      
         $("#deleteSeason").on('submit', function (e) {
@@ -261,7 +261,7 @@
                     $("#add_season").modal('show');
                     $(".error-text").text("");
                     $(".form-control").removeClass("is-invalid is-valid");
-                    $('#statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+                    $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
                 } else {
                     showToast('error', response.message);
                 }

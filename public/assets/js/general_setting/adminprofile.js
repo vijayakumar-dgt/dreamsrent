@@ -601,8 +601,7 @@ function confirmDelete() {
             }
         },
         error: function(xhr) {
-            console.error('Error:', xhr.responseText);
-            alert(_l('admin.general_settings.retrive_error'));
+            showToast('error', _l('admin.common.default_delete_error'));
         }
     });
 }

@@ -106,12 +106,11 @@
         initTable(searchQuery, currentStatus);
     });
 
-    // Trigger on clicking status filter
     $(".statusfilter").on("click", function () {
-        $(".statusfilter").removeClass("active"); // Reset
-        $(this).addClass("active"); // Set current active
-        currentStatus = $(this).data("status"); // Get selected status
-        $("#status_text").text($(this).text()); // Update dropdown label
+        $(".statusfilter").removeClass("active");
+        $(this).addClass("active");
+        currentStatus = $(this).data("status");
+        $("#status_text").text($(this).text());
         let searchQuery = $("#search").val().trim();
         initTable(searchQuery, currentStatus);
     });
@@ -274,7 +273,7 @@
         $("#id").val("");
         $(".error-text").text("");
         $(".form-control").removeClass("is-invalid is-valid");
-        $('#statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
+        $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
     });
 
     $(document).ready(function () {
@@ -437,7 +436,7 @@ function editSteeringType(id) {
 
                 $("#steering_type_modal .modal-title").text(_l('admin.rentals.edit_steering_type'));
                 $(".submitbtn").text(_l('admin.common.save_changes'));
-                $('#statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+                $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
                 $("#steering_type_modal").modal("show");
             }
         },

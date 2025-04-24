@@ -8,7 +8,6 @@ $(document).ready(function(){
         inspection_by: _l('admin.rentals.user'),
     };
     $('#add_inspection').on('shown.bs.modal', function (e) {
-        console.log('select2addmodal initialized');
     
         const $vehicle = $("#vehicle_info_id");
     
@@ -179,7 +178,7 @@ $(document).ready(function(){
                     $('.submitbtn').attr('disabled', false).html($("#id").val() ? _l('admin.common.save_changes') : _l('admin.common.create_new'));
                 },
                success:function(resp){
-                   if (resp.code === 200) {
+                   if (resp.code == 200) {
                        showToast('success', resp.message);
                        $("#add_inspection").modal('hide');
                        initTable();
@@ -371,7 +370,7 @@ $(document).on('click','#add_new_inspection', function(){
     $("#inspectionForm input[type=checkbox]").prop('checked', false);
     $(".error-text").text("");
     $(".form-control").removeClass("is-invalid is-valid");
-    $('#statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
+    $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
 });
 
 function editInspection(id){
@@ -413,7 +412,7 @@ function editInspection(id){
                 $("#add_inspection .submitbtn").text(_l('admin.common.save_changes'));
                 $(".error-text").text("");
                 $(".form-control").removeClass("is-invalid is-valid");
-                $('#statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+                $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
 
                 $("#add_inspection").modal('show');
             

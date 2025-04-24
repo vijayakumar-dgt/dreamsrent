@@ -244,7 +244,7 @@
         $("#carTransmissionForm")[0].reset();
         $("#id").val('');
         $(".error-text").text("");
-        $('#statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
+        $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
         $(".form-control").removeClass("is-invalid is-valid");
     });
 
@@ -306,7 +306,7 @@ function editCarTransmission(id) {
 
                 $("#car_transmission_modal .modal-title").text(_l('admin.rentals.edit_vehicle_transmission'));
                 $(".submitbtn").text(_l('admin.common.save_changes'));
-                $('#statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+                $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
                 $("#car_transmission_modal").modal('show');
             }
 
