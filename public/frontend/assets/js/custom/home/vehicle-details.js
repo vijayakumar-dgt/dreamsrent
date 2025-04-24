@@ -937,44 +937,41 @@ function handlePriceChange() {
 
 function renderDescription(vehicle) {
     const descriptionSection = $(".description_section");
-    descriptionSection.empty().hide();
+    const descriptionList = descriptionSection.find(".description-list");
+
+    descriptionList.empty(); 
+    descriptionSection.hide();
 
     if (vehicle.description && vehicle.description.trim() !== "") {
         const maxLength = 500;
         const description = vehicle.description.trim();
-        let html = `
-            <div class="review-header">
-                <h4>${_l("web.home.desc_of_listing")}</h4>
-            </div>
-            <div class="description-list">`;
 
-        if (description.length > maxLength) {
-            const visibleText = description.substring(0, maxLength);
-            const hiddenText = description.substring(maxLength);
+        if ($("<div>").html(description).text().length > maxLength) {
+            
+            const plainText = $("<div>").html(description).text();
+            const visibleText = plainText.substring(0, maxLength);
 
-            html += `
-                <div class="visible-text">${visibleText}</div>
+            
+            const html = `
+                <div class="visible-text">${visibleText}...</div>
                 <div class="read-more">
-                    <div class="more-text" style="display: none;">${hiddenText}</div>
+                    <div class="more-text mt-2" style="display: none;">${description}</div>
                     <a href="javascript:void(0);" class="more-link">${_l("web.home.show_more")}</a>
                 </div>`;
+
+            descriptionList.html(html);
         } else {
-            html += `<div class="visible-text">${description}</div>`;
+            descriptionList.html(`<div class="visible-text">${description}</div>`);
         }
 
-        html += `</div>`; 
+        descriptionSection.show();
 
-        descriptionSection.html(html).show();
-
-        descriptionSection.find(".more-link").off("click").on("click", function () {
+        descriptionList.find(".more-link").off("click").on("click", function () {
             const moreText = $(this).siblings(".more-text");
-            if (moreText.is(":visible")) {
-                moreText.slideUp();
-                $(this).text(_l("web.home.show_more"));
-            } else {
-                moreText.slideDown();
-                $(this).text(_l("web.home.show_less"));
-            }
+            const isVisible = moreText.is(":visible");
+
+            moreText.slideToggle(200);
+            $(this).text(isVisible ? _l("web.home.show_more") : _l("web.home.show_less"));
         });
     }
 }

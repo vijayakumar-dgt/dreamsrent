@@ -1109,5 +1109,5 @@
 <script src="/frontend/assets/plugins/fancybox/fancybox.umd.js"></script>
 <script src="{{ asset('assets/plugins/intltelinput/js/intlTelInput.js') }}"></script>
 
-<script src="{{ asset('/frontend/assets/js/custom/home/vehicle-details.js?v=1.0') }}"></script>
+<script src="{{ asset('/frontend/assets/js/custom/home/vehicle-details.js?v=1.1') }}"></script>
 @endpush
