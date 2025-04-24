@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                console.log(`${type}_l('admin.general_setting.success')`);
+               
                 loadStorageSettings();
 
             } else {
@@ -158,7 +158,7 @@ loadStorageSettings();
                 if (response.code === 200) {
                     const settings = response.data;
 
-                    // Handle checkbox settings like aws_storage and local_storage
+                   
                     settings.forEach(setting => {
                         const element = $('#' + setting.key);
                         if (element.length && element.attr('type') === 'checkbox') {
@@ -166,7 +166,7 @@ loadStorageSettings();
                         }
                     });
 
-                    // AWS settings object for mapping
+                
                     const awsSettings = {
                         aws_access_key: '',
                         aws_secret_key: '',
@@ -175,14 +175,14 @@ loadStorageSettings();
                         aws_base_url: ''
                     };
 
-                    // Map settings data to awsSettings object
+                   
                     settings.forEach(setting => {
                         if (awsSettings.hasOwnProperty(setting.key)) {
                             awsSettings[setting.key] = setting.value;
                         }
                     });
 
-                    // Populate form fields
+          
                     $('#aws_access_key').val(awsSettings.aws_access_key);
                     $('#aws_secret_key').val(awsSettings.aws_secret_key);
                     $('#aws_bucket_name').val(awsSettings.aws_bucket_name);

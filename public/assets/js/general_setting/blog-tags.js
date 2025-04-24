@@ -48,18 +48,18 @@
     });
 
 $(document).ready(function () {
-    // Setup CSRF token for all AJAX
+    
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
     });
 
-    // Create Tag
+  
     $("#create_tag_btn").click(function () {
         const title = $("#add_tag_name").val().trim();
 
-        // Validate
+       
         if (!title) {
             showToast("error", _l('admin.blog.please_enter_the_name'));
             return;
@@ -73,7 +73,7 @@ $(document).ready(function () {
             },
             success: function (response) {
                 showToast("success", _l('admin.blog.blog_tag_created!'));
-                location.reload(); // Or update list dynamically
+                location.reload(); 
                 $("#add_Tag").modal("hide");
             },
             error: function (xhr) {
@@ -82,7 +82,7 @@ $(document).ready(function () {
         });
     });
 
-    // Open Edit Modal and Fill Data
+    
     $(document).on("click", ".open-edit-modal", function () {
         let id = $(this).data("id");
         let name = $(this).data("name");
@@ -94,11 +94,11 @@ $(document).ready(function () {
         $("#edit_Tag").modal("show");
     });
 
-    // Update Tag
+  
     $("#update_tag_btn").click(function () {
         const title = $("#edit_tag_name").val().trim();
 
-        // Validate
+       
         if (!title) {
             showToast("error", _l('admin.blog.please_enter_the_name'));
             return;
@@ -108,10 +108,10 @@ $(document).ready(function () {
 
         $.ajax({
             url: "/admin/content/tags/" + id,
-            type: "POST", // use POST here
+            type: "POST", 
             data: {
                 _token: $('meta[name="csrf-token"]').attr("content"), // csrf
-                _method: "PUT", // spoof PUT method
+                _method: "PUT", 
                 name: $("#edit_tag_name").val(),
                 status: $("#edit_tag_status").is(":checked") ? 1 : 0,
             },
@@ -126,14 +126,14 @@ $(document).ready(function () {
         });
     });
 
-    // Open Delete Modal
+  
     $(document).on("click", ".open-delete-modal", function () {
         let id = $(this).data("id");
         $("#delete_tag_id").val(id);
         $("#delete_Tag").modal("show");
     });
 
-    // Delete Tag
+   
     $("#delete_tag_btn").click(function () {
         let id = $("#delete_tag_id").val();
         $.ajax({
@@ -164,11 +164,11 @@ document.querySelectorAll(".sort-option-tag").forEach(function (item) {
             .querySelector("span");
         dropdownLabel.textContent = this.textContent.trim();
 
-        // Reset rows to original before filtering/sorting
+      
         tbody.innerHTML = "";
         originalRows.forEach((row) => tbody.appendChild(row.cloneNode(true)));
 
-        // Work with cloned rows
+        
         const rows = Array.from(tbody.querySelectorAll("tr"));
         let resultRows = [...rows];
 
@@ -201,7 +201,7 @@ document.querySelectorAll(".sort-option-tag").forEach(function (item) {
             });
         }
 
-        // Re-render filtered/sorted rows
+       
         tbody.innerHTML = "";
         resultRows.forEach((row) => tbody.appendChild(row));
     });
@@ -216,7 +216,7 @@ const searchInput = document.getElementById('searchInputTag');
         tableRows.forEach(row => {
             const rowText = row.textContent.toLowerCase();
 
-            // Show or hide row based on match
+          
             if (rowText.includes(query)) {
                 row.style.display = '';
             } else {

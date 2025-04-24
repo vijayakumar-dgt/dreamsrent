@@ -98,7 +98,7 @@ $("#create_blog_btn").click(function () {
         return;
     }
 
-    // If validation passes, append to FormData
+
     const formData = new FormData();
     formData.append("image", image);
     formData.append("title", title);
@@ -110,7 +110,7 @@ $("#create_blog_btn").click(function () {
     formData.append("description", description);
 
     $.ajax({
-        url: "/admin/content/blog-store", // update if different
+        url: "/admin/content/blog-store",
         method: "POST",
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -129,13 +129,13 @@ $("#create_blog_btn").click(function () {
 });
 
 $(document).ready(function () {
-    // Set blog ID in modal
+
     $(".blog-delete").on("click", function () {
         var blogId = $(this).data("id");
         $("#delete_blog_id").val(blogId);
     });
 
-    // AJAX delete
+
     $("#confirmDelete").on("click", function () {
         var blogId = $("#delete_blog_id").val();
 
@@ -147,9 +147,9 @@ $(document).ready(function () {
             },
             success: function (response) {
                 showToast("success", _l('admin.blog.blog_deleted!'));
-                location.reload(); // Or update list dynamically
+                location.reload(); 
                 $("#delete_blogs").modal("hide");
-                // Optionally remove blog from DOM
+                
                 $('a[data-id="' + blogId + '"]')
                     .closest(".blog-img")
                     .remove();
@@ -229,7 +229,7 @@ if (inputAdd) {
             const img = new Image();
             img.onload = function () {
                 if (img.width === 735 && img.height === 310) {
-                    // Valid dimensions
+                   
                     fileNameDisplayAdd.textContent = file.name;
                     if (preview) {
                         preview.src = e.target.result;
@@ -266,13 +266,13 @@ if (input) {
             const img = new Image();
             img.onload = function () {
                 if (img.width === 735 && img.height === 310) {
-                    // Valid dimensions
+                   
                     fileNameDisplay.textContent = file.name;
 
-                    // Clear existing image
+                    
                     previewContainer.innerHTML = "";
 
-                    // Create and append new image
+                   
                     const newImage = document.createElement("img");
                     newImage.src = e.target.result;
                     newImage.classList.add("rounded-2", "img-fluid");
@@ -316,7 +316,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loadMoreBtn.style.display = "none";
     }
 
-    // Initially hide all and show first batch
+   
     blogItems.forEach(item => item.style.display = "none");
     showItems();
 
@@ -436,7 +436,7 @@ if (loadMoreBtn) {
 }
 
 
-// Initial load
+
 applyFiltersAndRender();
 });
 

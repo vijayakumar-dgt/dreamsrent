@@ -4,7 +4,8 @@
     $(document).ready(function () {
    
         getSecuritySettings();
-        
+      
+    
         $(document).on('click','.changePasswordBtn', function(){
             resetPasswordForm();
         });
@@ -171,13 +172,14 @@
             let $strong = $('#strong');
             let $heavy = $('#heavy');
     
-            
+          
             let lowerCaseRegExp = /[a-zA-Z]/;  
-            let numberRegExp = /[0-9]/;        
+            let numberRegExp = /[0-9]/;      
             let specialCharRegExp = /[#?!@$%^&*()_+\-=<>:{}[\]\\|~`]/;
-            let whitespaceRegExp = /\s/;       
+            let whitespaceRegExp = /\s/;    
     
     
+        
             $passwordInput.on('keyup', function () {
                 let passwordValue = $(this).val();
                 let passwordLength = passwordValue.length;
@@ -189,6 +191,7 @@
     
                 let passwordStrength = 0;
     
+               
                 if (hasWhitespace) {
                     passwordStrength = 0;
                 } else {
@@ -197,6 +200,7 @@
                     if (hasSpecialChar) passwordStrength++;
                     if (passwordLength >= 8) passwordStrength++;
     
+                 
                     if (passwordLength < 8) {
                         passwordStrength = 1;
                     }
@@ -205,7 +209,7 @@
             });
     
             function updateStrength(passwordStrength){
-                
+               
                 $passwordStrength.find('span').removeClass('active');
     
                 $passwordStrength.removeClass('poor-active avg-active strong-active heavy-active');
@@ -237,6 +241,7 @@
     
     
     
+      
         function checkCurrentPhoneNumber(){
             return new Promise((resolve, reject) => {
                 let currentPhoneNumber = $('#current_phonenumber').val();
@@ -348,7 +353,7 @@
                 });
             }
         });
-        
+      
         function checkCurrentEmail(){
             return new Promise((resolve, reject) => {
                 let currentemail = $('#current_email').val();
@@ -444,7 +449,7 @@
                 });
             }
         });
-      
+       
     
         function getSecuritySettings() {
             $.ajax({

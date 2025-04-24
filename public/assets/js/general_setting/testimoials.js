@@ -234,9 +234,9 @@
             const preview = $("#edit_testimonial_preview");
 
             if (file) {
-                if (file.size > 2 * 1024 * 1024) { // Check file size (5MB)
+                if (file.size > 2 * 1024 * 1024) { 
                     showToast('error', _l('admin.common.image_size'));
-                    $(this).val(""); // Reset file input
+                    $(this).val(""); 
                     return;
                 }
 
@@ -246,10 +246,10 @@
 
                     img.onload = function () {
                         if (img.width === 180 && img.height === 180) {
-                            preview.attr("src", e.target.result).show(); // Update preview
+                            preview.attr("src", e.target.result).show(); 
                         } else {
                             showToast('error', _l('admin.cms.testimonial_image_size'));
-                            $("#edit_testimonial_image").val(""); // Reset file input
+                            $("#edit_testimonial_image").val(""); 
                         }
                     };
                 };
@@ -258,16 +258,16 @@
             }
         });
 
-        // Image Preview
+      
         $("#testimonial_image").on("change", function (event) {
             const file = event.target.files[0];
             const reader = new FileReader();
             const preview = $("#testimonial_image_preview");
 
             if (file) {
-                if (file.size > 2 * 1024 * 1024) { // Check file size (5MB)
+                if (file.size > 2 * 1024 * 1024) { 
                     showToast('error', _l('admin.common.image_size'));
-                    $(this).val(""); // Reset file input
+                    $(this).val(""); 
                     return;
                 }
 
@@ -277,10 +277,10 @@
 
                     img.onload = function () {
                         if (img.width === 180 && img.height === 180) {
-                            preview.attr("src", e.target.result).show(); // Update preview
+                            preview.attr("src", e.target.result).show();
                         } else {
                             showToast('error', _l('admin.cms.testimonial_image_size'));
-                            $("#testimonial_image").val(""); // Reset file input
+                            $("#testimonial_image").val(""); 
                         }
                     };
                 };
@@ -292,7 +292,7 @@
     $(document).on('click', '.sort-option', function() {
         const selectedSort = $(this).text().trim();
         $('.dropdown-toggle .sort').text(`Sort By : ${selectedSort}`);
-        applyFilters(); // Load with current filters and sort
+        applyFilters(); 
     });
 
     $('.filterbox .text-purple').on('click', function() {
@@ -310,12 +310,12 @@
         const selectedRatings = [];
 
         $('.filterbox input[type="checkbox"]:checked').each(function() {
-            selectedRatings.push($(this).parent().text().trim()[0]); // Get first char (1-5)
+            selectedRatings.push($(this).parent().text().trim()[0]); 
         });
 
         const filters = {
             sort: sortText,
-            search: searchText, // Add search parameter
+            search: searchText, 
             ratings: selectedRatings
         };
 
@@ -484,17 +484,17 @@
 
 
 function editTestimonial(id, customerName, image, review, ratings, status) {
-    // Set values in the modal fields
+  
     $('#edit_testimonial_id').val(id);
     $('#edit_testimonial_name').val(customerName);
     $('#edit_testimonial_review').val(review);
     $('#edit_testimonial_status').prop('checked', status === 1);
     $('#edit_testimonial_preview').attr('src', image.startsWith("http") ? image : image);
 
-    // Set ratings
+   
     $('#edit_testimonial_ratings').val(ratings).trigger('change');
 
-    // Open the edit modal
+  
     $('#edit_testimonial').modal('show');
 }
 
@@ -532,7 +532,7 @@ $("#deleteTestimonial").on('submit', function(e){
     });
 });
 
-// Custom method for file size validation
+
 $.validator.addMethod("filesize", function (value, element, param) {
     return this.optional(element) || (element.files[0] && element.files[0].size <= param);
 }, "File size is too large.");

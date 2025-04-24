@@ -1,3 +1,4 @@
+
 @extends('admin.admin')
 
 @section('content')
@@ -32,7 +33,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="skeleton section-title-skeleton label-loader"></div>
-                                    <h6 class="fw-bold mb-3 d-none real-label">{{ __('admin.general_settings.seo_setup_site_meta') }}</h6>
+                                    <h6 class="fw-bold mb-3 d-none real-label">{{ __('admin.general_settings.seo_setup_settings') }}</h6>
 
                                     <input type="hidden" name="group_id" id="group_id" class="form-control" value="6">
 
@@ -130,7 +131,7 @@
                                 <div class="card-footer">
                                     <div class="d-flex justify-content-end">
                                         <div class="skeleton button-skeleton label-loader me-3"></div>
-                                        <a href="javascript:void(0);" class="btn btn-light me-3 d-none real-label" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                                        <a href="{{ route('dashboard') }}" class="btn btn-light me-3 d-none real-label" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
                                         @if (hasPermission($permissions, 'website_settings', 'edit'))
                                         <div class="skeleton button-skeleton label-loader"></div>
                                         <button type="submit" class="btn btn-primary d-none real-label">{{ __('admin.common.save_changes') }}</button>

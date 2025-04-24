@@ -33,7 +33,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="skeleton section-title-skeleton label-loader"></div>
-                                    <h6 class="fw-bold mb-3 d-none real-label">{{ __('admin.general_settings.website_settings') }}</h6>
+                                    <h6 class="fw-bold mb-3 d-none real-label">{{ __('admin.general_settings.maintenance_mode') }}</h6>
 
                                     <!-- Image Upload Field -->
                                     <div class="mb-3">
@@ -91,7 +91,7 @@
                                 <div class="card-footer">
                                     <div class="d-flex justify-content-end">
                                         <div class="skeleton button-skeleton label-loader me-3"></div>
-                                        <a href="javascript:void(0);" class="btn btn-light me-3 d-none real-label" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                                        <a href="{{ route('dashboard') }}" class="btn btn-light me-3 d-none real-label" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
                                         @if (hasPermission($permissions, 'website_settings', 'edit'))
 
                                         <div class="skeleton button-skeleton label-loader"></div>

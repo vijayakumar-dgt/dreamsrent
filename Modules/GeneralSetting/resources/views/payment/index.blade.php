@@ -26,7 +26,7 @@
             <div class="col-xl-9">
                 <div class="card">
                     <div class="card-header">
-                        <h5>{{ __('admin.general_settings.system_settings') }}</h5>
+                        <h5>{{ __('admin.general_settings.finance_settings') }}</h5>
                     </div>
                     <div class="card-body pb-0">
                         <div class="payment-section">

@@ -218,7 +218,7 @@
                                     <div class="card-footer">
                                         <div class="d-flex align-items-center justify-content-end">
                                             <div class="skeleton button-skeleton label-loader me-2"></div>
-                                            <a href="javascript:void(0);" class="btn btn-light me-2 d-none real-label">{{ __('admin.general_settings.cancel') }}</a>
+                                            <a href="{{ route('dashboard') }}" class="btn btn-light me-2 d-none real-label">{{ __('admin.general_settings.cancel') }}</a>
                                             @if (hasPermission($permissions, 'website_settings', 'edit'))
                                             <div class="skeleton button-skeleton label-loader"></div>
                                             <button type="submit" class="btn btn-primary companysave d-none real-label">{{ __('admin.general_settings.save_changes') }}s</button>

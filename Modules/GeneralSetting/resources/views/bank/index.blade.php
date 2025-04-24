@@ -26,11 +26,11 @@
             <div class="col-xl-9">
                 <div class="card">
                     <div class="card-header">
-                        <h5>{{ __('admin.general_settings.system_settings') }}</h5>
+                        <h5>{{ __('admin.general_settings.finance_settings') }}</h5>
                     </div>
                     <div class="card-body">
                         <div class="payment-section">
-                            <h6 class="mb-3">{{ __('admin.general_settings.bank_account') }}</h6>
+                            <h6 class="mb-3">{{ __('admin.general_settings.bank_accounts') }}</h6>
                             <!-- Table Header -->
                             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">

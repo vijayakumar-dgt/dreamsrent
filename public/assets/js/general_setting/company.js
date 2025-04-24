@@ -262,7 +262,7 @@ function company_list() {
             if (resp.code === 200) {
                 const data = resp.data;
 
-                // Populate basic fields
+          
                 $("#organization_name").val(data.organization_name);
                 $("#owner_name").val(data.owner_name);
                 $("#company_email").val(data.company_email);
@@ -271,7 +271,7 @@ function company_list() {
                 $("#company_address_line").val(data.company_address_line);
                 $("#company_postal_code").val(data.company_postal_code);
 
-                // Address loading
+           
                 fetchCountryAjax(data.country)
                     .then(() => fetchStateAjax(data.country, data.state))
                     .then(() => fetchCityAjax(data.state, data.city))
@@ -279,12 +279,12 @@ function company_list() {
                         console.log(error);
                     });
 
-                // Phone number with country code
+            
                 if (window.iti && data.company_phone) {
-                    window.iti.setNumber(data.company_phone); // Set with full intl number like +93987654345111
+                    window.iti.setNumber(data.company_phone); 
                 }
 
-                // Company profile image
+              
                 if (data.company_profile_photo) {
                     $("#profile_photo_preview").attr("src", '/storage/' + data.company_profile_photo);
                 } else {
@@ -382,7 +382,7 @@ function fetchStatesByCountry(country_id){
                 $.each(data, function(key, value){
                     $("#state").append('<option value="'+value.id+'">'+value.name+'</option>');
                 });
-                // empty cities
+             
                 $("#city").empty();
                 $("#city").append('<option value="">Select City</option>');
             }

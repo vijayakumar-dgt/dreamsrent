@@ -148,9 +148,9 @@
             }
         });
 
-        //customRequired
+     
         jQuery.validator.addMethod("customRequired", function(value, element) {
-            console.log('custom required');
+            
             let content = $(element).summernote('isEmpty') ? '' : $(element).summernote('code');
             return content.trim().length > 0; // Ensure it's not empty
         }, "Please enter description");
@@ -172,9 +172,9 @@
                 },
                 order:[['1','desc']],
                 ordering: false,
-                searching: false, // Hides the search box
-                pageLength: 10, // default page length
-                lengthChange: false, // Hides the length menu
+                searching: false, 
+                pageLength: 10, 
+                lengthChange: false,
                 responsive:false,
                 autoWidth:false,
                 aoColumns:[
@@ -226,14 +226,14 @@
                 ],
                 "drawCallback": function() {
                      $(".dataTables_info").addClass('d-none');
-                     // Only hide pagination inside the table (within the .dataTables_wrapper)
+                    
                      $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
-                     // Move the info and pagination to the card-footer
+                    
                      var tableWrapper = $(this).closest('.dataTables_wrapper');
                      var info = tableWrapper.find('.dataTables_info');
                      var pagination = tableWrapper.find('.dataTables_paginate');
 
-                     // Clear the card-footer and append info and pagination
+                   
                      $('.table-footer').empty()
                          .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
                              .append($('<div class="datatable-info"></div>').append(info.clone(true)))
@@ -331,20 +331,20 @@
                   type:"GET",
                   url:"/admin/settings/get_email_template/"+id,
                   success:function(response){
-                   // Highlight the placeholders (e.g., {name})
+                 
                     let description = response.data.description;
                     let regex = /{([^}]*)}/g;
 
-                    // Replace all placeholders at once
+                   
                     description = description.replace(regex, (match, placeholder) => {
                         return `<span class="text-info var_placeholder" data-placeholder="${placeholder}">${match}</span>`;
                     });
 
-                    // Update preview
+                   
                     $("#view_template_title").text(response.data.title);
                     $("#preview_box").html(description);
 
-                    // $("#preview_box").html(response.data.description);
+                   
                   }
               });
               $("#view_template").modal('show');

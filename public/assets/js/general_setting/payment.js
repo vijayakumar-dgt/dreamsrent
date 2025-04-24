@@ -1413,17 +1413,17 @@ function initList() {
         success: function (response) {
             if (response.code === 200 && response.data) {
                 response.data.forEach(function (item) {
-                    let element = $("#" + item.key); // Select input by ID
+                    let element = $("#" + item.key); 
 
                     if (element.length) {
                         if (element.attr("type") === "checkbox") {
                             let isChecked = item.value == "1";
-                            element.prop("checked", isChecked); // Set checkbox status
+                            element.prop("checked", isChecked);
 
-                            // Update status text and color dynamically
+                           
                             let statusSpan = $(
                                 "." + item.key.replace("_status", "In")
-                            ); // Find status span
+                            );
                             if (statusSpan.length) {
                                 if (isChecked) {
                                     statusSpan.html(
@@ -1436,7 +1436,7 @@ function initList() {
                                 }
                             }
                         } else {
-                            element.val(item.value); // Set text input values
+                            element.val(item.value); 
                         }
                     }
                 });

@@ -4,7 +4,7 @@
     $(document).ready(function() {
         $(document).ready(function() {
             $('.summernote').summernote({
-                height: 150, // Set the height of the editor
+                height: 150, 
                 placeholder: 'Type your content here...',
                 toolbar: [
                     ['style', ['bold', 'italic', 'underline', 'clear']],
