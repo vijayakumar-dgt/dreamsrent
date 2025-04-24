@@ -1,0 +1,320 @@
+/*-----------------
+	General
+-----------------------*/
+
+@font-face {
+	font-family: 'CircularStd';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Circular Std Book'), url('../fonts/CircularStd-Book.woff') format('woff');
+}
+@font-face {
+	font-family: 'CircularStd';
+	font-style: italic;
+	font-weight: 400;
+	src: local('Circular Std Book Italic'), url('../fonts/CircularStd-BookItalic.woff') format('woff');
+}
+@font-face {
+	font-family: 'CircularStd';
+	font-style: normal;
+	font-weight: 500;
+	src: local('Circular Std Medium'), url('../fonts/CircularStd-Medium.woff') format('woff');
+}
+@font-face {
+	font-family: 'CircularStd';
+	font-style: italic;
+	font-weight: 500;
+	src: local('Circular Std Medium Italic'), url('../fonts/CircularStd-MediumItalic.woff') format('woff');
+}
+@font-face {
+	font-family: 'CircularStd';
+	font-style: normal;
+	font-weight: 600;
+	src: local('Circular Std Bold'), url('../fonts/CircularStd-Bold.woff') format('woff');
+}
+@font-face {
+	font-family: 'CircularStd';
+	font-style: italic;
+	font-weight: 600;
+	src: local('Circular Std Bold Italic'), url('../fonts/CircularStd-BoldItalic.woff') format('woff');
+}
+@font-face {
+	font-family: 'CircularStd';
+	font-style: normal;
+	font-weight: 800;
+	src: local('Circular Std Black'), url('../fonts/CircularStd-Black.woff') format('woff');
+}
+@font-face {
+	font-family: 'CircularStd';
+	font-style: italic;
+	font-weight: 800;
+	src: local('Circular Std Black Italic'), url('../fonts/CircularStd-BlackItalic.woff') format('woff');
+}
+
+html {
+	height: 100%;
+}
+body {
+	background-color: #f7f8f9;
+	color: #455560;
+	font-family: 'CircularStd', sans-serif;
+	font-size: 0.9375rem;
+	height: 100%;
+	line-height: 1.5;
+	overflow-x: hidden;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: 'CircularStd', sans-serif;
+	margin-top: 0;
+	color: #2c3038;
+}
+a {
+	text-decoration: none;
+}
+a:hover,
+a:active,
+a:focus {
+	outline: none;
+	text-decoration: none;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+	-webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+.form-control {
+	border: 1px solid #dee2e6;
+	box-shadow: none;
+	color: #333;
+	padding: .54688rem .875rem;
+	font-size: .875rem;
+	height: calc(1.6em + 1.21875rem);
+	line-height: 1.6;
+	font-weight: 400;
+	color: #1e2022;
+}
+textarea.form-control {
+	height: auto;
+}
+.form-control:focus {
+	box-shadow: 0 0 10px rgba(136, 136, 136, 0.125); 
+	outline: 0 none;
+	border-color: #c1c9d0;;
+}
+.form-control-sm {
+    height: calc(1.5em + 1rem);
+    padding: .4375rem .65625rem;
+    font-size: .8125rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+}
+.form-control-lg {
+    height: calc(1.5em + 1.875rem);
+    padding: .875rem 1.09375rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .3125rem;
+}
+a {
+	color: #377dff;
+}
+a:hover {
+    color: #0052ea;
+    text-decoration: none;
+}
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+p:last-child { 
+    margin-bottom: 0;
+}
+dl, ol, ul {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+input,
+button,
+a {
+	transition: all 0.4s ease;
+	-moz-transition: all 0.4s ease;
+	-o-transition: all 0.4s ease;
+	-transition: all 0.4s ease;
+	-webkit-transition: all 0.4s ease;
+}
+input,
+input:focus,
+button,
+button:focus {
+	outline: none;
+}
+input[type="file"] {
+	height: auto;
+	min-height: calc(1.5em + .75rem + 2px);
+}
+input[type=text],
+input[type=password] {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+textarea.form-control {
+	resize: vertical;
+}
+.navbar-nav > li {
+	float: left;
+}
+.form-group {
+	margin-bottom: 1.25rem;
+} 
+.form-group img {
+	width:100%;
+}
+.input-group .form-control {
+	height: 40px;
+}
+.nav .open > a,
+.nav .open > a:focus,
+.nav .open > a:hover {
+	background-color: rgba(0, 0, 0, 0.1);
+	border-color: rgba(0, 0, 0, 0.1);
+}
+
+/*-----------------
+	Bootstrap Classes
+-----------------------*/
+
+.btn.focus,
+.btn:focus {
+	box-shadow: unset;
+}
+.bg-primary,
+.badge-primary {
+	background-color: #ff0080 !important;
+}
+a.bg-primary:focus,
+a.bg-primary:hover,
+button.bg-primary:focus,
+button.bg-primary:hover {
+	background-color: #0d6efd !important;
+}
+.text-primary,
+.dropdown-menu > li > a.text-primary {
+	color: #ff0080 !important;
+}
+.text-muted {
+	color: #757575 !important;
+}
+.btn-primary {
+	background-color: #ffa633;
+	border: 1px solid #ffa633;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary.active,
+.btn-primary:active,
+.open > .dropdown-toggle.btn-primary {
+	background-color: #e58f25;
+	border: 1px solid #e58f25;
+}
+.btn-primary.active.focus,
+.btn-primary.active:focus,
+.btn-primary.active:hover,
+.btn-primary.focus:active,
+.btn-primary:active:focus,
+.btn-primary:active:hover,
+.open > .dropdown-toggle.btn-primary.focus,
+.open > .dropdown-toggle.btn-primary:focus,
+.open > .dropdown-toggle.btn-primary:hover {
+	background-color: #e58f25;
+	border: 1px solid #e58f25;
+}
+.btn-primary.active:not(:disabled):not(.disabled),
+.btn-primary:active:not(:disabled):not(.disabled),
+.show > .btn-primary.dropdown-toggle {
+	background-color: #0d6efd;
+	border-color: #0d6efd;
+	color: #fff;
+}
+.btn-primary.active:focus:not(:disabled):not(.disabled),
+.btn-primary:active:focus:not(:disabled):not(.disabled),
+.show > .btn-primary.dropdown-toggle:focus {
+	box-shadow: unset;
+}
+.btn-primary.disabled,
+.btn-primary:disabled {
+	background-color: #ff0080;
+	border-color: #ff0080;
+	color: #fff;
+}
+
+/*-----------------
+	Content
+-----------------------*/
+
+.main-wrapper {
+	width: 100%;
+	height: 100vh;
+	min-height: 100vh;
+}
+.landing-wrapper .container {
+	height: 100%;
+}
+.landing-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 20px 0;
+}
+p.lead {
+	font-size: 18px;
+}
+.credential-widget .card {
+	box-shadow: 0px 7px 10px #e6e6e6;
+    border: 1px solid #EEF1FE;
+    border-radius: 5px;
+    background-color: #fcfcfc;
+}
+.pro-thumbnail img {
+	width: 50px;
+}
+
+/*-----------------
+	Responsive
+-----------------------*/
+
+@media (max-width: 767.98px) {
+	body {
+		font-size: 0.9375rem;
+	}
+	h1,
+	.h1 {
+		font-size: 2rem;
+	}
+	h2,
+	.h2 {
+		font-size: 1.75rem;
+	}
+	h3,
+	.h3 {
+		font-size: 1.5rem;
+	}
+	h4,
+	.h4 {
+		font-size: 1.125rem;
+	}
+	h5,
+	.h5 {
+		font-size: 1rem;
+	}
+	h6,
+	.h6 {
+		font-size: 0.875rem;
+	}
+}
