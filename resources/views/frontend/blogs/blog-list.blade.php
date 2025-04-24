@@ -41,21 +41,30 @@
                     <div class="card">
                         <h4><img src="assets/img/icons/category-icon.svg" alt="details-icon"> {{__('web.blog.categories')}}</h4>
                         <ul class="blogcategories-list">
-                        @foreach($categories as $category)
+                            @if(count($categories) != 0)
+                            @foreach($categories as $category)
                             <li><a href="javascript:void(0)" class="category-filter" data-category="{{ $category->name }}">{{ $category->name }}</a></li>
                             @endforeach
+                            @else
+                            <p class="no-datas mt-3">{{__('web.blog.no_data_found')}}</p>
+                            @endif
                         </ul>
                     </div>
                     <div class="card tags-widget">
                         <h4><i class="feather-tag"></i> {{__('web.blog.tags')}}</h4>
                         <ul class="tags">
+                            @if(count($tags) != 0)
                             @foreach($tags as $tag)
                             <li>{{$tag->name}} </li>
                             @endforeach
+                            @else
+                            <p class="no-datas mt-3">{{__('web.blog.no_data_found')}}</p>
+                            @endif
                         </ul>
                     </div>
                     <div class="card mb-0">
                         <h4><i class="feather-tag"></i>{{__('web.blog.top_article')}}</h4>
+                        @if(count($latestblogs) != 0)
                         @foreach($latestblogs as $latest)
                         <div class="article">
                             <div class="article-blog">
@@ -77,6 +86,9 @@
                             </div>
                         </div>
                         @endforeach
+                        @else
+                        <p class="no-datas mt-3">{{__('web.blog.no_data_found')}}</p>
+                        @endif
                     </div>
                 </div>
             </div>

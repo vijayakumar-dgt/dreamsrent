@@ -247,7 +247,7 @@ inputAdd.addEventListener("change", function (event) {
 });
 
 $(document).ready(function () {
-const input = document.getElementById("featured_image");
+const input = document.getElementById("imageInput");
 const fileNameDisplay = document.getElementById("selectedFileName");
 const previewContainer = document.querySelector(".preview-image");
 

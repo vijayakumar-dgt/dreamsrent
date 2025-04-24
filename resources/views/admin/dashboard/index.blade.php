@@ -141,7 +141,6 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                             <h5>{{ __('admin.dashboard.newly_added_cars') }}</h5>
-                            <a href="/admin/vehiclelist" class="text-decoration-underline fw-medium">{{ __('admin.dashboard.view_all') }}</a>
                         </div>
                         @if(count($carTypes) != 0)
                         <div class="mb-2">
@@ -178,7 +177,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="/admin/vehiclelist" class="btn btn-white d-flex align-items-center justify-content-center">{{ __('admin.dashboard.view_details') }}<i class="ti ti-chevron-right ms-1"></i></a>
+                        <a href="/admin/vehiclelist" class="btn btn-white d-flex align-items-center justify-content-center">{{ __('admin.dashboard.view_all') }}<i class="ti ti-chevron-right ms-1"></i></a>
                         @else
                         <div class="d-flex justify-content-center align-items-center">
                             <span class="text-muted no-datas">{{ __('admin.blog.no_data_found') }}</span>
