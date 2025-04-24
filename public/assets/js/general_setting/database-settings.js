@@ -7,12 +7,12 @@
 function DbBackUpTable() {
     $(document).ready(function() {
         $.ajax({
-            url: '/admin/settings/database',
+            url: '/admin/settings/dbbackups',
             method: 'GET',
             dataType: 'json',
             success: function(response) {
                 let tableBody = $("#backup-list");
-                tableBody.empty(); // Clear existing rows
+                tableBody.empty();
 
                 response.data.forEach(backup => {
                     let row = `
