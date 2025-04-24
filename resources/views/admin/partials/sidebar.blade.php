@@ -431,10 +431,10 @@
                                 <li>
                                     <a href="{{ route('admin.maintenance-settings') }}" class="{{ request()->routeIs('admin.maintenance-settings') ? 'active' : '' }}">{{ __('admin.general_settings.maintenance_mode') }}</a>
                                 </li>
-                                <li>
+                                <li class="d-none">
                                     <a href="{{ route('admin.ai-configuration') }}" class="{{ request()->routeIs('admin.ai-configuration') ? 'active' : '' }}">{{ __('admin.general_settings.ai_configuration') }}</a>
                                 </li>
-                                <li>
+                                <li class="d-none">
                                     <a href="{{ route('admin.addonIndex-settings') }}" class="{{ request()->routeIs('admin.addonIndex-settings') ? 'active' : '' }}">{{ __('admin.general_settings.plugin_managers') }}</a>
                                 </li>
                                 <li>

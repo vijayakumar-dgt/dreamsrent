@@ -65,12 +65,12 @@
                                 <i class="ti ti-color-filter me-2"></i><span>{{ __('admin.general_settings.maintenance_mode') }}</span>
                             </a>
                         </li>
-                        <li class="{{ request()->routeIs('admin.ai-configuration') ? 'active' : '' }}">
+                        <li class="{{ request()->routeIs('admin.ai-configuration') ? 'active' : '' }} d-none">
                             <a href="{{ route('admin.ai-configuration') }}">
                                 <i class="ti ti-grain me-2"></i><span>{{ __('admin.general_settings.ai_configuration') }}</span>
                             </a>
                         </li>
-                        <li class="{{ request()->routeIs('admin.addonIndex-settings') ? 'active' : '' }}">
+                        <li class="{{ request()->routeIs('admin.addonIndex-settings') ? 'active' : '' }} d-none">
                             <a href="{{ route('admin.addonIndex-settings') }}">
                                 <i class="ti ti-car-crash me-2"></i><span>{{ __('admin.general_settings.plugin_managers') }}</span>
                             </a>
