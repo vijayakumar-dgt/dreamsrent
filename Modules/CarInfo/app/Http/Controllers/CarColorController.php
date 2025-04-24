@@ -18,7 +18,7 @@ class CarColorController extends Controller
     {
         $authUser = current_user();
         $languageId = $authUser->language_id ?? 1;
-    
+
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'value' => 'required',
@@ -26,7 +26,7 @@ class CarColorController extends Controller
             'name.required' => __('admin.rentals.color_name_required'),
             'value.required' => __('admin.rentals.color_code_required'),
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
@@ -34,26 +34,26 @@ class CarColorController extends Controller
                 'errors' => $validator->errors()->toArray()
             ], 422);
         }
-        
+
         $id = $request->id ?? '';
         $successMsg = empty($id) ? __('admin.rentals.vehicle_color_create_success') : __('admin.rentals.vehicle_color_update_success');
         $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
-    
+
         try {
-    
+
             $data = [
                 'name' => $request->name,
                 'value' => $request->value,
                 'status' => $request->status ?? 1,
                 'language_id' => $languageId
             ];
-    
+
             if (empty($id)) {
                 CarColor::create($data);
             } else {
                 CarColor::where('id', $id)->update($data);
             }
-    
+
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
@@ -67,17 +67,31 @@ class CarColorController extends Controller
             ], 500);
         }
     }
-    
+
 
     public function list(Request $request)
     {
         $orderBy = $request->order_by ?? 'desc';
+        $search = $request->input('search');
+        $status = $request->input('status');
 
         try {
-            $authUser = current_user(); 
-            $language_id = $authUser->language_id;
+            $authUser = current_user();
+            $language_id = $authUser->language_id ?? 1;
 
-            $data = CarColor::orderBy('id', $orderBy)->where("language_id", $language_id)->get();
+            $query = CarColor::orderBy('id', $orderBy)
+                ->where('language_id', $language_id);
+
+            if (!empty($search)) {
+                $query->where('name', 'LIKE', "%{$search}%"); // Adjust 'name' if your color field is named differently
+            }
+
+            if ($status !== null && $status !== '') {
+                $query->where('status', $status); // Assumes 'status' column exists in categories table
+            }
+
+
+            $data = $query->get();
 
             return response()->json([
                 'code' => 200,
@@ -148,8 +162,8 @@ class CarColorController extends Controller
         try {
 
             $data = CarColor::when(function ($query) use ($search) {
-                    return $query->where('name', 'LIKE', "%{$search}%");
-                })
+                return $query->where('name', 'LIKE', "%{$search}%");
+            })
                 ->orderBy('id', $orderBy)
                 ->where('status', 1)
                 ->get([
@@ -170,5 +184,4 @@ class CarColorController extends Controller
             ], 500);
         }
     }
-
 }
