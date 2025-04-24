@@ -2040,7 +2040,7 @@ return [
     'phone_number' => 'رقم الهاتف',
     'drop_your_files_here_or' => 'اسحب ملفاتك هنا أو',
     'browse' => 'تصفح',
-    'maximum_size' => 'الحجم الأقصى 50 ميجابايت',
+    'maximum_size' => 'الحجم الأقصى 5 ميجابايت',
     'documents' => 'المستندات',
     'upload_image_size' => 'حجم الصورة المرفوعة 180*180، ضمن 2 ميجابايت',
     'upload_icon_size' => 'حجم الأيقونة المرفوعة بين 10*10 و 25*25',

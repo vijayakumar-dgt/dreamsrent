@@ -212,12 +212,14 @@ $(document).ready(function() {
                 $(element).next(".select2-container").addClass("is-invalid").removeClass('is-valid');
             }
             $(element).addClass("is-invalid").removeClass("is-valid");
+            $('#' + element.id).siblings('span').addClass('me-3');
         },
         unhighlight: function (element) {
             if ($(element).hasClass("select2-hidden-accessible")) {
                 $(element).next(".select2-container").removeClass("is-invalid").addClass('is-valid');
             }
             $(element).removeClass("is-invalid").addClass("is-valid");
+            $('#' + element.id).siblings('span').addClass('me-3');
             var errorId = element.id + "_error";
             $("#" + errorId).text("");
         },
@@ -406,12 +408,14 @@ $(document).ready(function() {
                 $(element).next(".select2-container").addClass("is-invalid").removeClass('is-valid');
             }
             $(element).addClass("is-invalid").removeClass("is-valid");
+            $('#' + element.id).siblings('span').addClass('me-3');
         },
         unhighlight: function (element) {
             if ($(element).hasClass("select2-hidden-accessible")) {
                 $(element).next(".select2-container").removeClass("is-invalid").addClass('is-valid');
             }
             $(element).removeClass("is-invalid").addClass("is-valid");
+            $('#' + element.id).siblings('span').addClass('me-3');
             var errorId = element.id + "_error";
             $("#" + errorId).text("");
         },

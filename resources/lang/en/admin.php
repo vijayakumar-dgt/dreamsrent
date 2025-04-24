@@ -2057,7 +2057,7 @@ return array(
     'phone_number' => 'Phone Number',
     'drop_your_files_here_or' => 'Drop your files here or',
     'browse' => 'Browse',
-    'maximum_size' => 'Maximum size 50 MB',
+    'maximum_size' => 'Maximum size 5 MB',
     'documents' => 'Documents',
     'upload_image_size' => 'Upload Image size 180*180, within 2 MB',
     'upload_icon_size' => 'Upload Icon size between 10*10 and 25*25',

@@ -28,8 +28,6 @@ class CustomerController extends Controller
             }])
             ->where('languages.status', 1)
             ->get();
-
-        // dd($languages);
         
         return view('admin.customers', compact('languages'));
     }
@@ -167,7 +165,7 @@ class CustomerController extends Controller
                         if ($file->isValid()) {
                         $document = uploadFile($file, 'documents');
                         UserDocument::create([
-                            'user_id' => $user->id,
+                            'user_id' => $user->user_id,
                             'document' => $document,
                         ]);
                         }
@@ -201,7 +199,6 @@ class CustomerController extends Controller
                 'message' => $successMsg
             ]);
         } catch (\Throwable $e) {
-            dd($e);
             DB::rollBack();
             return response()->json([
                 'status' => 'error',
