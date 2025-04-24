@@ -78,13 +78,26 @@ class CategoryController extends Controller
     public function list(Request $request)
     {
         $orderBy = $request->order_by ?? 'desc';
-
+        $search = $request->input('search');
+        $status = $request->input('status');
+    
         try {
-
             $authUser = current_user();
-            $language_id = $authUser->language_id;
-            $data = Category::orderBy('id', $orderBy)->where("language_id", $language_id)->get();
-
+            $language_id = $authUser->language_id ?? 1;
+    
+            $query = Category::orderBy('id', $orderBy)
+                ->where('language_id', $language_id);
+    
+            if (!empty($search)) {
+                $query->where('name', 'LIKE', "%{$search}%"); // Adjust column name if needed
+            }
+    
+            if ($status !== null && $status !== '') {
+                $query->where('status', $status); // Assumes 'status' column exists in categories table
+            }
+    
+            $data = $query->get();
+    
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.common.default_retrieve_success'),
