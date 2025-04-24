@@ -435,7 +435,7 @@ return [
         'add_booking' => 'Add Booking',
         'booking_id' => 'Booking ID',
         'vehicle_name' => 'Vehicle Name',
-        'pickup_del_location' => 'Pickup / Delivery Location',
+        'pickup_del_location' => 'Pickup Location',
         'drop_location' => 'Dropoff Location',
         'booked_on' => 'Booked On',
         'location' => 'Location',
