@@ -136,6 +136,7 @@ $(document).ready(function() {
         },
         submitHandler: function(form) {
             let companyData = new FormData(form);
+            companyData.set('company_phone', $('#international_phone_number').val());
 
             $.ajax({
                 type: "POST",

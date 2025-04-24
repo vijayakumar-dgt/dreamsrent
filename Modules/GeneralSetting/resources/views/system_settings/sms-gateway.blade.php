@@ -31,7 +31,7 @@
 							</div>
 							<div class="card-body pb-0">
 								<div class="sms-gateway">
-                                    <h6 class="mb-3">>{{ __('admin.general_settings.sms_gateway') }}</h6>
+                                    <h6 class="mb-3">{{ __('admin.general_settings.sms_gateway') }}</h6>
                                     <div class="row">
                                         <!-- Nexmo -->
                                         <div class="col-xxl-4 col-md-6 d-flex">

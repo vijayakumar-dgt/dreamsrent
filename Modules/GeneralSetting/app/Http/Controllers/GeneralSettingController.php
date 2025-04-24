@@ -481,7 +481,7 @@ class GeneralSettingController extends Controller
             'organization_name'    => 'required|string|max:100',
             'owner_name'           => 'required|string|max:100',
             'company_email'        => 'required|email|max:100',
-            'company_phone'        => 'required|digits_between:10,15',
+            'company_phone'        => 'required',
             'international_phone_number' => 'required',
             'industry'             => 'required|integer',
             'team_size'            => 'required|integer',
