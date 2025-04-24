@@ -21024,6 +21024,9 @@ span.flatpickr-weekday {
     font-weight: 500;
     color: #242B3A;
   }
+  .dash-height{
+  height: 200px !important;
+  }
 
   
 
