@@ -149,7 +149,7 @@
                             $defaultImage = asset('custom/img/default-profile.png');
                             @endphp
 
-                            <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="img" class="rounded w-100">
+                            <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="img" class="dash-height rounded w-100">
                         </div>
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                             <div>

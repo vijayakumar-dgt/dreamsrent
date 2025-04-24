@@ -110,10 +110,13 @@ $(document).ready(function () {
         ticketTable();
     });
 
-    // Apply filters when typing in the search input
-    $('input[name="search"]').on('keyup', _.debounce(function () {
-        ticketTable();
-    }, 300));
+    let searchTimeout;
+    $('input[name="search"]').on('keyup', function () {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            ticketTable();
+        }, 300);
+    });
 
     // Handle sorting based on dropdown selection
     $('.sort_by_list .dropdown-item').on('click', function () {

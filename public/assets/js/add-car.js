@@ -1489,12 +1489,6 @@
                 year: "numeric",
             });
 
-            // Validation
-            if (!damageImage) {
-                showToast("error", "Please upload a damage image.");
-                return;
-            }
-
             if (!damageName) {
                 showToast("error", "Please enter a damage name.");
                 return;

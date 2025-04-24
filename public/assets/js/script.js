@@ -676,15 +676,7 @@ Template Name: Dreams rent - Bootstrap Admin Template
 		$(this).parent().parent().parent().addClass("active");
 	});
 
-	// Quill Editor
-
-	if($('.editor').length > 0) {
-		document.querySelectorAll('.editor').forEach((editor) => {
-			new Quill(editor, {
-			  theme: 'snow'
-			});
-		});
-	}
+	
 
 	// Custom Country Code Selector
 

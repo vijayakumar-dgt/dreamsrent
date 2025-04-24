@@ -435,7 +435,7 @@ return [
     'add_booking' => 'إضافة حجز',
     'booking_id' => 'معرّف الحجز',
     'vehicle_name' => 'اسم المركبة',
-    'pickup_del_location' => 'موقع الاستلام / التسليم',
+    'pickup_del_location' => 'موقع التسليم',
     'drop_location' => 'موقع التسليم',
     'booked_on' => 'تم الحجز في',
     'location' => 'الموقع',
