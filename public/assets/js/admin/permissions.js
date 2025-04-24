@@ -11,7 +11,7 @@
         formData = new FormData();
 
         const roleId = $('#role_id').val();
-        const processedModules = new Set(); // To track processed module_ids
+        const processedModules = new Set();
         let index = 0;
 
         formData.append('role_id', roleId);
