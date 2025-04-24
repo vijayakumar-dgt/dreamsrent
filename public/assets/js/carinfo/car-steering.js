@@ -98,10 +98,35 @@
         });
     });
     
-    function initTable() {
+    
+    let currentStatus = "";
+
+    $("#search").on("input", function () {
+        let searchQuery = $(this).val().trim();
+        initTable(searchQuery, currentStatus);
+    });
+
+    // Trigger on clicking status filter
+    $(".statusfilter").on("click", function () {
+        $(".statusfilter").removeClass("active"); // Reset
+        $(this).addClass("active"); // Set current active
+        currentStatus = $(this).data("status"); // Get selected status
+        $("#status_text").text($(this).text()); // Update dropdown label
+        let searchQuery = $("#search").val().trim();
+        initTable(searchQuery, currentStatus);
+    });
+
+    function initTable(search = "", status = "") {
+        $(".table-loader").show();
+        $(".input-loader").show();
+        $(".real-table, .real-data").addClass("d-none");
         $.ajax({
             url: "/admin/steering-type/datatable",
             type: "GET",
+            data: {
+                search: search,
+                status: status,
+            },
             beforeSend: function () {
                 $(".table-loader").show();
                 $(".real-table, .table-footer").addClass("d-none");

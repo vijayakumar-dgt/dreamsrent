@@ -72,10 +72,21 @@ class CarSteeringController extends Controller
     public function list(Request $request)
     {
         $orderBy = $request->order_by ?? 'desc';
+        $search = $request->input('search');
+        $status = $request->input('status');
 
         try {
+            $query = CarSteering::orderBy('id', $orderBy);
 
-            $data = CarSteering::orderBy('id', $orderBy)->get();
+            if (!empty($search)) {
+                $query->where('steering_type', 'LIKE', "%{$search}%"); // Adjust field name as needed
+            }
+
+            if ($status !== null && $status !== '') {
+                $query->where('status', $status); // Assumes 'status' column exists in categories table
+            }
+            
+            $data = $query->get();
 
             return response()->json([
                 'code' => 200,
