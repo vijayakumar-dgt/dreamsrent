@@ -441,18 +441,18 @@
         let imageUrl = damage.image;
         let newDamage = `
             <div id="${uniqueID}" class="bg-white p-20 br-5 border mb-2">
-                <input type="" name="damage_id[]" value="${uniqueID}">
-                <input type="" name="damage_image[]" value="${imageUrl}">
+                <input type="hidden" name="damage_id[]" value="${uniqueID}">
+                <input type="hidden" name="damage_image[]" value="${imageUrl}">
                 <div class="row align-items-center row-gap-3">
                     <div class="col-xxl-8 col-md-7">
                         <div class="d-flex align-items-center gap-2 mb-1">
                             <h6 class="fs-14 fw-medium">${damage.damage_type}</h6>
-                            <input type="" name="damage_loaction[]" value="${damage.damage_type}">
+                            <input type="hidden" name="damage_loaction[]" value="${damage.damage_type}">
                             <span class="badge bg-pink-transparent badge-sm">${damage.damage_loaction}</span>
-                            <input type="" name="damage_location[]" value="${damage.damage_loaction}">
+                            <input type="hidden" name="damage_location[]" value="${damage.damage_loaction}">
                         </div>
                         <p class="fs-13">${damage.description}</p>
-                        <input type="" name="damage_description[]" value="${damage.description}">
+                        <input type="hidden" name="damage_description[]" value="${damage.description}">
                     </div>
                     <div class="col-xxl-4 col-md-5">
                         <div class="d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
@@ -2135,18 +2135,18 @@
 
                     let newDamage = `
                 <div id="${uniqueId}" class="bg-white p-20 br-5 border mb-2">
-                 <input type="" name="damage_id[]" value="${uniqueId}">
-                        <input type="" name="damage_image[]" value="${imageUrl}">
+                 <input type="hidden" name="damage_id[]" value="${uniqueId}">
+                        <input type="hidden" name="damage_image[]" value="${imageUrl}">
                     <div class="row align-items-center row-gap-3">
                         <div class="col-xxl-8 col-md-7">
                             <div class="d-flex align-items-center gap-2 mb-1">
                                 <h6 class="fs-14 fw-medium">${damageType}</h6>
-                                <input type="" name="damage_name[]" value="${damageType}">
+                                <input type="hidden" name="damage_name[]" value="${damageType}">
                                 <span class="badge bg-pink-transparent badge-sm">${damageName}</span>
-                                <input type="" name="damage_location[]" value="${damageName}">
+                                <input type="hidden" name="damage_location[]" value="${damageName}">
                             </div>
                             <p class="fs-13">${damageDesc}</p>
-                            <input type="" name="damage_description[]" value="${damageDesc}">
+                            <input type="hidden" name="damage_description[]" value="${damageDesc}">
                         </div>
                         <div class="col-xxl-4 col-md-5">
                             <div class="d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
