@@ -186,9 +186,9 @@
                                         <th>{{ __('admin.general_settings.default') }}</th>
                                         @endif
                                         <th>{{ __('admin.general_settings.total') }}</th>
-                                        <th>{{ __('admin.general_settings.done') }}</th>
-                                        {{ __('admin.general_settings.progress') }}                                        <th>STATUS</th>
-                                        <th></th>
+                                        <th>{{ __('admin.general_settings.done') }}</th>    
+                                        <th>{{ __('admin.general_settings.progress') }}</th>
+                                        <th>STATUS</th>
                                         @if (hasPermission($permissions, 'website_settings', 'delete'))
                                         <th>{{ __('admin.common.action') }}</th>
                                         @endif
