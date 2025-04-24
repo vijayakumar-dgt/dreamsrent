@@ -206,6 +206,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
         Route::get('get-tarrif-info', [CarInfoController::class, 'tarrifInfo'])->name('tarrifInfo');
         Route::get('get-documents-info', [CarInfoController::class, 'documents'])->name('documents');
         Route::get('get-faq-info', [CarInfoController::class, 'faq'])->name('faq');
+        Route::get('get-damage-info', [CarInfoController::class, 'damage'])->name('damage');
         Route::get('get-insurance-info', [CarInfoController::class, 'insurance'])->name('insurance');
         Route::get('get-model', [CarInfoController::class, 'getModel']);
         Route::post('vehicle/image/delete', [CarInfoController::class, 'deleteVehicleImage']);

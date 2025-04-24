@@ -1588,6 +1588,23 @@ class CarInfoController extends Controller
         return response()->json(['success' => true, 'data' => $vehicleFaqs], 200);
     }
 
+    public function damage(Request $request)
+    {
+        $vehicleId = $request->vehicle_id;
+
+        if (!$vehicleId) {
+            return response()->json(['success' => false, 'message' => 'Vehicle ID is required'], 400);
+        }
+
+        $vehicleDamages = VehicleDamage::where("vehicle_id", $vehicleId)->get();
+
+        if ($vehicleDamages->isEmpty()) {
+            return response()->json(['success' => false, 'message' => 'No vehicle damages info found'], 404);
+        }
+
+        return response()->json(['success' => true, 'data' => $vehicleDamages], 200);
+    }
+
     public function insurance(Request $request)
     {
         $vehicleId = $request->vehicle_id;

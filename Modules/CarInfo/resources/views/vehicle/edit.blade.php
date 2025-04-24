@@ -796,29 +796,7 @@
                                         <div class="card border-0 bg-light mb-0">
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-                                                    <h6>T{{ __('admin.rentals.total_damages') }} : <span id="damage_count">00</span></h6>
-                                                    <div class="dropdown flag-dropdown">
-                                                        <a class="dropdown-toggle btn btn-white d-flex align-items-center justify-content-between" data-bs-toggle="dropdown" href="javascript:void(0);">
-                                                            {{ __('admin.rentals.damages_filter_all') }}
-                                                        </a>
-                                                        <ul class="dropdown-menu p-2">
-                                                            <li>
-                                                                <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">
-                                                                    {{ __('admin.rentals.damages_filter_all') }}
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">
-                                                                    {{ __('admin.rentals.damages_filter_interior') }}
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center">
-                                                                    {{ __('admin.rentals.damages_filter_exterior') }}
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
+                                                    <h6>{{ __('admin.rentals.total_damages') }} : <span id="damage_count">00</span></h6>
                                                 </div>
                                                 <div id="car_damage_append">
                                                 </div>

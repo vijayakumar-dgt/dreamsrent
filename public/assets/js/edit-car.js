@@ -6,6 +6,7 @@
         getTrraifInfo();
         getDocumentsInfo();
         getFaqInfo();
+        getDamageInfo();
         getInsuranceInfo();
 
         $(".summernote").summernote({
@@ -44,7 +45,6 @@
             type: "GET",
             data: { vehicle_id: vehicleId },
             success: function (response) {
-                console.log(response);
                 if (response.success) {
                     $("#insurance_car_append").html(""); // Clear previous entries
                     response.data.forEach((insurances) => {
@@ -133,7 +133,6 @@
             type: "GET",
             data: { vehicle_id: vehicleId },
             success: function (response) {
-                console.log(response);
                 if (response.success) {
                     $("#seasonal_append").html("");
                     response.data.forEach((season) => {
@@ -245,7 +244,6 @@
             type: "GET",
             data: { vehicle_id: vehicleId },
             success: function (response) {
-                console.log(response);
                 if (response.success) {
                     $("#tariff_append").html("");
                     response.data.forEach((tarrif) => {
@@ -346,7 +344,6 @@
             type: "GET",
             data: { vehicle_id: vehicleId },
             success: function (response) {
-                console.log(response);
                 if (response.success) {
                     $(".car_faq_append").html("");
                     response.data.forEach((faq) => {
@@ -365,7 +362,6 @@
     let faqCounter = 0; // Global counter to ensure unique IDs
 
     function addFaq(faq) {
-        console.log(faq);
 
         let uniqueID = "faq_" + faqCounter++; // Increment counter for each FAQ
 
@@ -405,6 +401,85 @@
         updateFaqCount();
     }
 
+    function getDamageInfo() {
+        let vehicleId = $("#vehicle_id").val();
+
+        $.ajax({
+            url: "/admin/get-damage-info",
+            type: "GET",
+            data: { vehicle_id: vehicleId },
+            success: function (response) {
+                if (response.success && response.data.length > 0) {
+                    $("#car_damage_append").html("");
+                    response.data.forEach((damage) => {
+                        adddamage(damage);
+                    });
+                } else {
+                    showToast("error", "No damage data found.");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching damage data:", error);
+            },
+        });
+    }
+
+    let DamageCounter = 0; // Ensure global unique IDs
+
+    function adddamage(damage) {
+        console.log(damage);
+        let uniqueID = "damage_" + DamageCounter++;
+
+        let currentDate = new Date(
+            damage.created_at || Date.now()
+        ).toLocaleDateString("en-US", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        });
+
+        let imageUrl = damage.image;
+        let newDamage = `
+            <div id="${uniqueID}" class="bg-white p-20 br-5 border mb-2">
+                <input type="" name="damage_id[]" value="${uniqueID}">
+                <input type="" name="damage_image[]" value="${imageUrl}">
+                <div class="row align-items-center row-gap-3">
+                    <div class="col-xxl-8 col-md-7">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <h6 class="fs-14 fw-medium">${damage.damage_type}</h6>
+                            <input type="" name="damage_loaction[]" value="${damage.damage_type}">
+                            <span class="badge bg-pink-transparent badge-sm">${damage.damage_loaction}</span>
+                            <input type="" name="damage_location[]" value="${damage.damage_loaction}">
+                        </div>
+                        <p class="fs-13">${damage.description}</p>
+                        <input type="" name="damage_description[]" value="${damage.description}">
+                    </div>
+                    <div class="col-xxl-4 col-md-5">
+                        <div class="d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
+                            <p class="mb-0">Added on : ${currentDate}</p>
+                            <div class="icon-list d-flex align-items-center">
+                                <a href="#" class="edit-damage me-2" data-id="${uniqueID}" data-bs-toggle="modal" data-bs-target="#add-damage">
+                                    <i class="ti ti-edit"></i>
+                                </a>
+                                <a href="#" class="trash-damage" data-id="${uniqueID}" data-bs-toggle="modal" data-bs-target="#delete_damage">
+                                    <i class="ti ti-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>                                                            
+            </div>
+        `;
+
+        $("#car_damage_append").append(newDamage);
+        updateDamageCount();
+    }
+
+    function updateDamageCount() {
+        let totalDamages = $("#car_damage_append > div").length;
+        $("#damage_count").text(totalDamages.toString().padStart(2, "0"));
+    }
+
     function getDocumentsInfo() {
         let vehicleId = $("#vehicle_id").val(); // Get vehicle ID from input field
 
@@ -413,7 +488,6 @@
             type: "GET",
             data: { vehicle_id: vehicleId },
             success: function (response) {
-                console.log(response); // Log response for debugging
 
                 if (response.success) {
                     // Clear existing content before appending new data
@@ -542,7 +616,6 @@
     }
 
     function addVehicleImage(imagePath) {
-        console.log(imagePath);
         let fileListContainer = $("#car_images_append");
 
         let imageItem = $(`
@@ -843,7 +916,6 @@
                 $(".real-label, .real-input, .real-data").removeClass("d-none");
             },
             error: function (error) {
-                console.log("error");
             },
         });
     }
@@ -1965,7 +2037,6 @@
                     formDataCollection[item.name] = item.value;
                 });
 
-                console.log(formDataCollection);
 
                 $("#fifth-field").hide();
                 $("#sixth-field").show();
@@ -2064,18 +2135,18 @@
 
                     let newDamage = `
                 <div id="${uniqueId}" class="bg-white p-20 br-5 border mb-2">
-                 <input type="hidden" name="damage_id[]" value="${uniqueId}">
-                        <input type="hidden" name="damage_image[]" value="${imageUrl}">
+                 <input type="" name="damage_id[]" value="${uniqueId}">
+                        <input type="" name="damage_image[]" value="${imageUrl}">
                     <div class="row align-items-center row-gap-3">
                         <div class="col-xxl-8 col-md-7">
                             <div class="d-flex align-items-center gap-2 mb-1">
                                 <h6 class="fs-14 fw-medium">${damageType}</h6>
-                                <input type="hidden" name="damage_name[]" value="${damageType}">
+                                <input type="" name="damage_name[]" value="${damageType}">
                                 <span class="badge bg-pink-transparent badge-sm">${damageName}</span>
-                                <input type="hidden" name="damage_location[]" value="${damageName}">
+                                <input type="" name="damage_location[]" value="${damageName}">
                             </div>
                             <p class="fs-13">${damageDesc}</p>
-                            <input type="hidden" name="damage_description[]" value="${damageDesc}">
+                            <input type="" name="damage_description[]" value="${damageDesc}">
                         </div>
                         <div class="col-xxl-4 col-md-5">
                             <div class="d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
