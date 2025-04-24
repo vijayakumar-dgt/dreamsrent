@@ -1,6 +1,5 @@
 @extends('admin.admin')
 @section('content')
-<!-- Page Wrapper -->
 <div class="page-wrapper">
     <div class="content me-4 pb-0">
         <div class="mb-3">
@@ -58,7 +57,6 @@
                             <input type="hidden" name="parent_id" id="parent_id" value="{{ $query->parent_id }}">
                             <div class="filterbox p-20 mb-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
                                 <h4 class="d-flex align-items-center"><i class="ti ti-info-circle text-secondary me-2"></i>{{ __('admin.rentals.basic_info') }}</h4>
-                                <!-- Flag Dropdown -->
                                 @php
                                 $currentLang = $allLanguages->firstWhere('code', app()->getLocale());
                                 @endphp
@@ -82,7 +80,6 @@
                                 </div>
                                 @endif
 
-                                <!-- /Flag Dropdown -->
                             </div>
                             <div class="border-bottom mb-4 pb-4">
                                 <div class="row row-gap-4">
@@ -549,7 +546,6 @@
 
                                         <div class="card bg-light mb-3">
                                             <div class="card-body pb-3" id="tariff_append">
-                                                <!-- <p class="fw-medium">No Data Added</p> -->
                                             </div>
                                         </div>
                                     </div>
@@ -569,7 +565,6 @@
                                         </div>
                                         <div class="card bg-light mb-3">
                                             <div class="card-body pb-3" id="seasonal_append">
-                                                <!-- <p class="fw-medium">No Data Added</p> -->
                                             </div>
                                         </div>
                                     </div>
@@ -826,7 +821,6 @@
                                                     </div>
                                                 </div>
                                                 <div id="car_damage_append">
-                                                    <!-- <p class="fw-medium">No Data Added</p> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -856,7 +850,6 @@
                                             <div class="card-body">
                                                 <h6 class="mb-3">{{ __('admin.rentals.total_faq') }} : <span id="faq_count">00</span></h6>
                                                 <div class="faq-accordion car_faq_append" id="faqaccordion">
-                                                    <!-- <p class="fw-medium">No Data Added</p> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -907,9 +900,7 @@
         </div>
     </div>
 </div>
-<!-- /Page Wrapper -->
 
-<!-- Create Seasonal Pricing -->
 <div class="modal fade addmodal" id="add_price">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
@@ -984,9 +975,7 @@
         </div>
     </div>
 </div>
-<!-- /Create Seasonal Pricing -->
 
-<!-- Delete Pricing -->
 <div class="modal fade deletemodal" id="delete_price">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
@@ -1006,9 +995,7 @@
         </div>
     </div>
 </div>
-<!-- /Delete Pricing -->
 
-<!-- Add New Tarrif -->
 <div class="modal fade addmodal" id="add-tarrif">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
@@ -1077,9 +1064,7 @@
         </div>
     </div>
 </div>
-<!-- /Add New Tarrif -->
 
-<!-- Delete Tarrif -->
 <div class="modal fade deletemodal" id="delete_tarrif">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
@@ -1099,9 +1084,7 @@
         </div>
     </div>
 </div>
-<!-- /Delete Damage -->
 
-<!-- Edit Pricing -->
 <div class="modal fade addmodal" id="edit_price">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
@@ -1159,9 +1142,7 @@
         </div>
     </div>
 </div>
-<!-- /Edit Pricing -->
 
-<!-- Create FAQ -->
 <div class="modal fade addmodal" id="add-faq">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
@@ -1190,9 +1171,7 @@
         </div>
     </div>
 </div>
-<!-- /Create FAQ -->
 
-<!-- Select Seasonal Pricing -->
 <div class="modal fade addmodal" id="select_insurance">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
@@ -1248,10 +1227,7 @@
         </div>
     </div>
 </div>
-<!-- /Select Seasonal Pricing -->
 
-
-<!-- Edit Insurance -->
 <div class="modal fade" id="edit_insurance">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -1299,10 +1275,7 @@
         </div>
     </div>
 </div>
-<!-- /Edit  Insurance -->
 
-
-<!-- Delete faq -->
 <div class="modal fade deletemodal" id="delete_faq">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
@@ -1320,9 +1293,7 @@
         </div>
     </div>
 </div>
-<!-- /Delete faq -->
 
-<!-- Add New Damage -->
 <div class="modal fade" id="add-damage">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
@@ -1371,9 +1342,7 @@
         </div>
     </div>
 </div>
-<!-- /Add New Damage -->
 
-<!-- Delete Damage -->
 <div class="modal fade deletemodal" id="delete_damage">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
@@ -1391,9 +1360,6 @@
         </div>
     </div>
 </div>
-<!-- /Delete Damage -->
-
-
 
 @endsection
 

@@ -1,11 +1,9 @@
 @extends('admin.admin')
 @section('content')
 
-<!-- Page Wrapper -->
 <div class="page-wrapper">
     <div class="content me-4">
 
-        <!-- Breadcrumb -->
         <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
             <div class="my-auto mb-2">
                 <div class="skeleton label-skeleton label-loader"></div>
@@ -29,9 +27,7 @@
                 </div>
             </div>
         </div>
-        <!-- /Breadcrumb -->
 
-        <!-- Table Header -->
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
             <div class="d-flex align-items-center flex-wrap row-gap-3">
                 <div class="skeleton label-skeleton label-loader me-2"></div>
@@ -106,7 +102,6 @@
                 </div>
             </div>
         </div>
-        <!-- /Table Header -->
 
         <div class="collapse" id="filtercollapse">
             <div class="filterbox mb-3 d-flex align-items-center">
@@ -201,7 +196,6 @@
             </div>
         </div>
 
-        <!-- Custom Data Table -->
         <div class="custom-datatable-filter table-responsive brandstable">
             <table class="table datatable  d-none real-data" id="vehicleListIndex">
                 <thead class="thead-light">
@@ -230,7 +224,6 @@
                 </tbody>
             </table>
 
-            <!-- loader Datatable Start-->
             <table id="loader-table" class="table table-striped table-bordered">
                 <thead class="table-dark">
                     <tr>
@@ -363,17 +356,13 @@
                     </tr>
                 </tbody>
             </table>
-            <!-- loader Datatable End -->
         </div>
-        <!-- Custom Data Table -->
         <div class="table-footer  d-none real-label"></div>
     </div>
     @include('admin.partials.footer')
 
 </div>
-<!-- /Page Wrapper -->
 
-<!-- Delete Modal Start-->
 <div class="modal fade deletemodal" id="delete-modal">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
@@ -395,7 +384,6 @@
         </div>
     </div>
 </div>
-<!-- Delete Modal End -->
 @endsection
 @push('scripts')
 <script src="{{ asset('assets/js/add-car.js') }}"></script>

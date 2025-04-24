@@ -1489,8 +1489,20 @@
                 year: "numeric",
             });
 
-            if (!damageName || !damageType) {
-                showToast("error", "Please fill in all required fields.");
+            // Validation
+            if (!damageImage) {
+                showToast("error", "Please upload a damage image.");
+                return;
+            }
+
+            if (!damageName) {
+                showToast("error", "Please enter a damage name.");
+                return;
+            }
+
+            if (!damageType || damageType === "Select Type") {
+                // adjust placeholder text if different
+                showToast("error", "Please select a damage type.");
                 return;
             }
 
