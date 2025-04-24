@@ -278,7 +278,7 @@
             </div>
         </div>
         <div class="print-btn text-center">
-            <a href="javascript:void(0);" class="btn btn-secondary">{{ __('web.home.print_order') }}</a>
+            <a href="{{ route('user.bookings') }}" class="btn btn-secondary">{{ __('web.user.view_all_bookings') }}</a>
         </div>
     </div>
 
