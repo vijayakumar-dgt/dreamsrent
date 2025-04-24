@@ -495,7 +495,7 @@ function checkAndFetchVehicles() {
             $('#end_date, #end_time').addClass('is-invalid').removeClass('is-valid');
             $('#end_date_error').text(_l('admin.bookings.duration_must_be_atleast_one_hour'));
             $('.summary_rental_period').text('-');
-            $('#vehicle_list_main_container').hide();
+            $('#vehicle_list_main_container').addClass('d-none');
             return;
         } else {
             $('#end_date, #end_time').removeClass('is-invalid');
@@ -551,7 +551,7 @@ function checkAndFetchVehicles() {
         $('.summary_rental_period').text('-');
     }
     if (startDate && startTime && endDate && endTime && pickup_location_val && return_location_val) {
-        $('#vehicle_list_main_container').show();
+        $('#vehicle_list_main_container').removeClass('d-none');
         lastPage = false;
         currentPage = 1;
         getVehicles();
@@ -595,7 +595,7 @@ $(document).on('change', '#tariff', function() {
         $('#driving_type').val('').trigger('change');
         $('.error-text').text('');
         $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-        $('#vehicle_list_main_container').hide();
+        $('#vehicle_list_main_container').addClass('d-none');
         return;
     } else {
         startDate = todayDateTime.format("DD-MM-YYYY");

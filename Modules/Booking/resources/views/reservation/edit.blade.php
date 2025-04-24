@@ -213,7 +213,7 @@
                                                 <label for="return_same_location">{{ __('admin.bookings.return_same_location') }}</label>
                                             </div>
                                         </div>
-                                        <div id="vehicle_list_main_container" style="display: none">
+                                        <div id="vehicle_list_main_container" class="d-none">
                                             <div class="row align-items-center">
                                                 <div class="col-lg-4">
                                                     <div class="mb-3">
