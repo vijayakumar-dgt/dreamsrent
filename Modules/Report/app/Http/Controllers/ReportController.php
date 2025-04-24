@@ -21,7 +21,13 @@ class ReportController extends Controller
     {
         $bookings = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
             ->get();
-        $totalIncome = $bookings->sum('final_price');
+        $totalIncome = $bookings->filter(function ($booking) {
+                if ($booking->booking_by === 'admin') {
+                    return is_null($booking->payment_status) || $booking->payment_status == 2;
+                } else {
+                    return $booking->payment_status == 2;
+                }
+            })->sum('final_price');
         $topEarningCar = $bookings
             ->groupBy('vehicle_id')
             ->map(fn($group) => $group->sum('final_price'))
