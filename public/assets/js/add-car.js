@@ -2507,11 +2507,9 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $("#delImg").on("click", function () {
-        // Clear the file input field
         $("#vehicle_image").val("");
 
-        // Remove the selected image (hide or reset to a default)
-        $(".frames img").attr("src", "").hide(); // Hides the image after removal
+        $(".frames img").attr("src", "").hide();
     });
 });
 
