@@ -33,9 +33,9 @@ $(document).ready(function() {
             fetchStatesByCountry(id);
         }else{
             $("#state").empty();
-            $("#state").append('<option value="">Select State</option>');
+            $("#state").append(`<option value="">${_l('admin.common.select')}</option>`);
             $("#city").empty();
-            $("#city").append('<option value="">Select City</option>');
+            $("#city").append(`<option value="">${_l('admin.common.select')}</option>`);
         }
     });
 
@@ -45,7 +45,7 @@ $(document).ready(function() {
             fetchCitiesByState(id);
         }else{
             $("#city").empty();
-            $("#city").append('<option value="">Select City</option>');
+            $("#city").append(`<option value="">${_l('admin.common.select')}</option>`);
         }
     });
 
@@ -86,11 +86,11 @@ $(document).ready(function() {
         },
         messages: {
             organization_name: {
-                required: _l('admin.general_settings.organisation_name')
+                required: _l('admin.general_settings.organization_name_required')
 
             },
             owner_name: {
-                required:  _l('admin.general_settings.owner_name')
+                required:  _l('admin.general_settings.owner_name_required')
             },
             company_email: {
                 required:  _l('admin.general_settings.enter_company_email'),

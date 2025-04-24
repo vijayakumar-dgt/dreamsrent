@@ -95,13 +95,13 @@ class PaymentController extends Controller
 
             return response()->json([
                 'code' => 200,
-                'message' => __('Payment retrieved successfully.'),
+                'message' => __('admin.common.default_retrieve_success'),
                 'data' => $data,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
-                'message' => __('An error occurred while retrieving.'),
+                'message' => __('admin.common.default_retrieve_error'),
                 'error' => $e->getMessage(),
             ], 500);
         }

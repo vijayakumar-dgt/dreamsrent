@@ -40,7 +40,7 @@
                                             <span class="input-icon">
                                                 <i class="ti ti-search"></i>
                                             </span>
-                                            <input type="text" class="form-control" name="search" id="search" placeholder="Search">
+                                            <input type="text" class="form-control" name="search" id="search" placeholder="{{ __('admin.common.search') }}">
                                         </div>
                                     </div>
                                 </div>
@@ -217,27 +217,27 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.general_settings.bank_name') }} <span class="text-danger">*</span></label>
-                        <input type="text" name="bank_name" id="bank_name" placeholder="Enter Bank Name" class="form-control">
+                        <input type="text" name="bank_name" id="bank_name" class="form-control">
                         <span class="invalid-feedback" id="bank_name_error"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.general_settings.account_number') }} <span class="text-danger">*</span></label>
-                        <input type="text" name="account_number" id="account_number" placeholder="Enter Account Number" class="form-control NumOnly">
+                        <input type="text" name="account_number" id="account_number" class="form-control NumOnly">
                         <span class="invalid-feedback" id="account_number_error"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.general_settings.account_holder_name') }} <span class="text-danger">*</span></label>
-                        <input type="text" name="holder_name" id="holder_name" placeholder="Enter Account Holder Name" class="form-control">
+                        <input type="text" name="holder_name" id="holder_name" class="form-control">
                         <span class="invalid-feedback" id="holder_name_error"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.general_settings.branch') }} <span class="text-danger">*</span></label>
-                        <input type="text" name="branch" id="branch" placeholder="Enter Branch Name" class="form-control">
+                        <input type="text" name="branch" id="branch" class="form-control">
                         <span class="invalid-feedback" id="branch_error"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.general_settings.ifsc') }} <span class="text-danger">*</span></label>
-                        <input type="text" name="ifsc" id="ifsc" placeholder="Enter IFSC" class="form-control">
+                        <input type="text" name="ifsc" id="ifsc" class="form-control">
                         <span class="invalid-feedback" id="ifsc_error"></span>
                     </div>
                     <div>

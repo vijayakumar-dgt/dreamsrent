@@ -120,35 +120,35 @@
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="aws_access_key" class="form-label">{{ __('admin.general_settings.aws_access_key') }} <span class="text-danger">*</span></label>
-                                        <input type="text" id="aws_access_key" name="aws_access_key" class="form-control" placeholder="Enter AWS Access Key">
+                                        <input type="text" id="aws_access_key" name="aws_access_key" class="form-control">
                                         <span id="aws_access_key_error" class="text-danger error-text"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="aws_secret_key" class="form-label">{{ __('admin.general_settings.secret_key') }}  <span class="text-danger">*</span></label>
-                                        <input type="text" id="aws_secret_key" name="aws_secret_key" class="form-control" placeholder="Enter AWS Secret Key">
+                                        <input type="text" id="aws_secret_key" name="aws_secret_key" class="form-control">
                                         <span id="aws_secret_key_error" class="text-danger error-text"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="aws_bucket_name" class="form-label">{{ __('admin.general_settings.bucket_name') }} <span class="text-danger">*</span></label>
-                                        <input type="text" id="aws_bucket_name" name="aws_bucket_name" class="form-control" placeholder="Enter Bucket Name">
+                                        <input type="text" id="aws_bucket_name" name="aws_bucket_name" class="form-control">
                                         <span id="aws_bucket_name_error" class="text-danger error-text"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="aws_region" class="form-label">{{ __('admin.general_settings.region') }} <span class="text-danger">*</span></label>
-                                        <input type="text" id="aws_region" name="aws_region" class="form-control" placeholder="Enter AWS Region">
+                                        <input type="text" id="aws_region" name="aws_region" class="form-control">
                                         <span id="aws_region_error" class="text-danger error-text"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label for="aws_base_url" class="form-label">{{ __('admin.general_settings.base_url') }} <span class="text-danger">*</span></label>
-                                        <input type="text" id="aws_base_url" name="aws_base_url" class="form-control" placeholder="Enter Base URL">
+                                        <input type="text" id="aws_base_url" name="aws_base_url" class="form-control">
                                         <span id="aws_base_url_error" class="text-danger error-text"></span>
                                     </div>
                                 </div>

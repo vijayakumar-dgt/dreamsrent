@@ -36,7 +36,7 @@
                                             <span class="input-icon">
                                                 <i class="ti ti-search"></i>
                                             </span>
-                                            <input type="text" class="form-control" placeholder="Search" name="keyword" id="keyword">
+                                            <input type="text" class="form-control" placeholder="{{ __('admin.common.search') }}" name="keyword" id="keyword">
                                         </div>
                                     </div>   
                                     <div>
@@ -136,29 +136,7 @@
                                                 @endif
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                            
-                                                <td>
-                                                    <p class="text-gray-9 fw-semibold fs-14">https://localhost/dreamsrent</p>
-                                                </td>
-                                                <td>
-                                                    <p class="text-gray-9">sitemap18725604.xml</p>
-                                                </td>
-                                                <td>
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="ti ti-dots-vertical"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                            <li>
-                                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_sitemap"><i class="ti ti-trash me-1"></i>{{ __('admin.general_settings.delete') }}</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                                
-                                            </tr>                                                                                                  																	                                                                                              																	
+                                        <tbody>                                                                                                 																	                                                                                              																	
                                         </tbody>
                                     </table>
                                 </div>
@@ -188,7 +166,7 @@
                 <div class="modal-body">
                     <div class="mb-0">
                         <label class="form-label">{{ __('admin.general_settings.sitemap_url') }} <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="url" id="url" placeholder="Enter Sitemap URL">
+                        <input type="text" class="form-control" name="url" id="url">
                         <span id="url_error" class="text-danger error-text"></span>
                     </div>                                   
                 </div>

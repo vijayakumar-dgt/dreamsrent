@@ -69,7 +69,7 @@
                         `);
                     },
                     complete: function () {
-                        $('.submitbtn').attr('disabled', false).html($("#id").val() ? _l('admin.common.save_changes') : _l('admin.common.create_new'));
+                        $('.submitbtn').attr('disabled', false).html(_l('admin.common.save_changes'));
                     },
                     success: function (resp) {
                         if (resp.code === 200) {

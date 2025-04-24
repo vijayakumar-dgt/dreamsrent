@@ -179,7 +179,7 @@ function previewImage(event, previewId, requiredWidth, requiredHeight) {
                     preview.attr("src", e.target.result).show();
                     preview.closest(".frames").removeClass("d-none");
                 } else {
-                    showToast('error', `Image dimensions must be ${requiredWidth}x${requiredHeight} pixels.`);
+                    showToast('error', `${_l('admin.general_settings.image_dimension_must_be')} ${requiredWidth}x${requiredHeight} ${_l('admin.general_settings.pixels')}.`);
                     $(event.target).val("");
                 }
             };

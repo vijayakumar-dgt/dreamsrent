@@ -71,7 +71,7 @@
                     required: _l('admin.general_settings.select_notification_type'),
                 },
                 subject: {
-                    required: _l('admin.general_settings.enter_subject'),
+                    required: _l('admin.general_settings.subject_required'),
                     minlength:_l('admin.general_settings.enter_atleast_3character'),
                     maxlength:  _l('admin.general_settings.enter_atleast_255character'),
                 },

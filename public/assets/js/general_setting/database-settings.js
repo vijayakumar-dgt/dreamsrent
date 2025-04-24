@@ -43,7 +43,7 @@ function DbBackUpTable() {
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                         ${ hasPermission(permissions, 'other_settings', 'edit') ? 
-                                            `<li>
+                                            `<li class="d-none">
                                                 <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="restoreBackup('${backup.name}')">
                                                     <i class="ti ti-restore me-1"></i>${_l('admin.general_settings.restore')}
                                                 </a>

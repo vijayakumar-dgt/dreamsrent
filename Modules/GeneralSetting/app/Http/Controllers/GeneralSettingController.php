@@ -1288,7 +1288,7 @@ class GeneralSettingController extends Controller
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
-                'message' => __('admin.s.prefix_settings_update_success')
+                'message' => __('admin.general_settings.prefix_settings_update_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -1316,7 +1316,7 @@ class GeneralSettingController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'code'    => 422,
-                'message' =>  __('admin.s.validation_error'),
+                'message' =>  __('admin.general_settings.validation_error'),
                 'errors'  => $validator->errors()
             ], 422);
         }
@@ -1339,7 +1339,7 @@ class GeneralSettingController extends Controller
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
-                'message' => __('admin.s.ai_configuration_update_success')
+                'message' => __('admin.general_settings.ai_configuration_update_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -1391,12 +1391,12 @@ class GeneralSettingController extends Controller
 
             return response()->json([
                 'code' => 200,
-                'message' => __('admin.s.payment_updated_successfull'),
+                'message' => __('admin.general_settings.payment_updated_successfull'),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
-                'message' => __('admin.s.global_settings_error') . $e->getMessage()
+                'message' => __('admin.general_settings.global_settings_error') . $e->getMessage()
             ], 500);
         }
     }

@@ -786,6 +786,15 @@ return [
     'valid_email' => 'أدخل بريدًا إلكترونيًا صالحًا',
     'current_email_incorrect' => 'البريد الإلكتروني الحالي غير صحيح',
     'not_changed' => 'لم يتغير',
+    'last_changed' => 'اخر تغيير',
+    'current_email_required' => 'البريد الإلكتروني الحالي مطلوب',
+    'new_email_required' => 'البريد الإلكتروني الجديد مطلوب',
+    'postal_code_required' => 'الرمز البريدي مطلوب',
+    'image_dimension_must_be' => 'الابعاد للصورة يجب ان تكون',
+    'pixels' => 'بكسلات',
+    'subject_required' => 'الموضوع مطلوب',
+    'type_your_content_here' => 'اكتب محتوىك هنا',
+    'edit_bank_account' => 'تحرير حساب بنكي',
 
   ],
   'main' =>

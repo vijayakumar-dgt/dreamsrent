@@ -11,9 +11,9 @@
             fetchStatesByCountry(id);
         }else{
             $("#state").empty();
-            $("#state").append('<option value="">Select State</option>');
+            $("#state").append(`<option value="">${_l('admin.common.select')}</option>`);
             $("#city").empty();
-            $("#city").append('<option value="">Select City</option>');
+            $("#city").append(`<option value="">${_l('admin.common.select')}</option>`);
         }
     });
 
@@ -23,7 +23,7 @@
             fetchCitiesByState(id);
         }else{
             $("#city").empty();
-            $("#city").append('<option value="">Select City</option>');
+            $("#city").append(`<option value="">${_l('admin.common.select')}</option>`);
         }
     });
 
@@ -184,7 +184,7 @@ $(document).ready(function() {
                 maxlength:  _l('admin.general_settings.address_max'),
             },
             postal_code: {
-                required:  _l('admin.general_settings.enter_postal_code'),
+                required:  _l('admin.general_settings.postal_code_required'),
                 pattern:_l('admin.general_settings.postal_invalid')
             },
             new_password: {
@@ -416,7 +416,7 @@ function fetchCountries(){
             if(response.code === 200){
                 let data = response.data;
                 $("#country").empty();
-                $("#country").append('<option value="">Select Country</option>');
+                $("#country").append(`<option value="">${_l('admin.common.select')}</option>`);
                 $.each(data, function(key, value){
                     $("#country").append('<option value="'+value.id+'">'+value.name+'</option>');
                 });
@@ -438,7 +438,7 @@ function fetchStatesByCountry(country_id){
             if(response.code === 200){
                 let data = response.data;
                 $("#state").empty();
-                $("#state").append('<option value="">Select State</option>');
+                $("#state").append(`<option value="">${_l('admin.common.select')}</option>`);
                 $.each(data, function(key, value){
                     $("#state").append('<option value="'+value.id+'">'+value.name+'</option>');
                 });
@@ -463,7 +463,7 @@ function fetchCitiesByState(state_id){
             if(response.code === 200){
                 let data = response.data;
                 $("#city").empty();
-                $("#city").append('<option value="">Select City</option>');
+                $("#city").append(`<option value="">${_l('admin.common.select')}</option>`);
                 $.each(data, function(key, value){
                     $("#city").append('<option value="'+value.id+'">'+value.name+'</option>');
                 });
@@ -483,7 +483,7 @@ function fetchCountryAjax(id){
                if(response.code === 200){
                    let data = response.data;
                    $("#country").empty();
-                   $("#country").append('<option value="">Select Country</option>');
+                   $("#country").append(`<option value="">${_l('admin.common.select')}</option>`);
                    $.each(data, function(key, value){
                        if(value.id === id){
                            $("#country").append('<option value="'+value.id+'" selected>'+value.name+'</option>');
@@ -519,7 +519,7 @@ function fetchStateAjax(country_id,id){
                if(response.code === 200){
                    let data = response.data;
                    $("#state").empty();
-                   $("#state").append('<option value="">Select State</option>');
+                   $("#state").append(`<option value="">${_l('admin.common.select')}</option>`);
                    $.each(data, function(key, value){
                        if(value.id === id){
                            $("#state").append('<option value="'+value.id+'" selected>'+value.name+'</option>');
@@ -554,7 +554,7 @@ function fetchCityAjax(state_id,id){
                if(response.code === 200){
                    let data = response.data;
                    $("#city").empty();
-                   $("#city").append('<option value="">Select City</option>');
+                   $("#city").append(`<option value="">${_l('admin.common.select')}</option>`);
                    $.each(data, function(key, value){
                        if(value.id === id){
                            $("#city").append('<option value="'+value.id+'" selected>'+value.name+'</option>');

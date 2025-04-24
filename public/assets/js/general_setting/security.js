@@ -284,18 +284,18 @@
             },
             messages:{
                 current_phonenumber: {
-                    required: _l('admin.common.enter_phone_number'),
-                    minlength: _l('admin.common.phone_number_character'),
-                    maxlength: _l('admin.common.phone_number_max_character'),
+                    required: _l('admin.general_settings.enter_phone_number'),
+                    minlength: _l('admin.general_settings.phone_number_character'),
+                    maxlength: _l('admin.general_settings.phone_number_max_character'),
                 },
                 new_phonenumber: {
-                    required:  _l('admin.common.phone_number_max_character'),
-                    minlength:  _l('admin.common.new_phone_number_min_character'),
-                    maxlength:  _l('admin.common.new_phone_number_max_character'),
+                    required:  _l('admin.general_settings.phone_number_max_character'),
+                    minlength:  _l('admin.general_settings.new_phone_number_min_character'),
+                    maxlength:  _l('admin.general_settings.new_phone_number_max_character'),
                 },
                 phone_current_password: {
-                    required:  _l('admin.common.enter_current_password'),
-                    minlength:_l('admin.common.password_character'),
+                    required:  _l('admin.general_settings.enter_current_password'),
+                    minlength:_l('admin.general_settings.password_character'),
                 },
             },
             errorPlacement: function (error, element) {
@@ -382,11 +382,11 @@
             },
             messages:{
                 current_email: {
-                    required: _l('admin.general_settings.current_email'),
+                    required: _l('admin.general_settings.current_email_required'),
                     email: _l('admin.general_settings.enter_valid_email'),
                 },
                 new_email: {
-                    required:_l('admin.general_settings.new_email_address'),
+                    required:_l('admin.general_settings.new_email_required'),
                     email: _l('admin.general_settings.enter_valid_email')
                 },
                 email_current_password: {

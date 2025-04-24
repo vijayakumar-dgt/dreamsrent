@@ -2,18 +2,16 @@
     await loadTranslationFile('admin', 'general_settings,common');
 
     $(document).ready(function() {
-        $(document).ready(function() {
-            $('.summernote').summernote({
-                height: 150, 
-                placeholder: 'Type your content here...',
-                toolbar: [
-                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                    ['font', ['strikethrough', 'superscript', 'subscript']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen', 'codeview', 'help']]
-                ]
-            });
+        $('.summernote').summernote({
+            height: 150, 
+            placeholder: `${_l('admin.general_settings.type_your_content_here')}`,
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
         });
     
         $("#cookiesSettingForm").validate({

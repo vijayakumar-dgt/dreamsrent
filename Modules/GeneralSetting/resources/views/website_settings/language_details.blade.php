@@ -39,12 +39,12 @@
                                         <span class="input-icon">
                                             <i class="ti ti-search"></i>
                                         </span>
-                                        <input type="text" class="form-control" placeholder="Search" id="search">
+                                        <input type="text" class="form-control" placeholder="{{ __('admin.common.search') }}" id="search">
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center">
-                                <a href="{{ route('admin.languages') }}" class="btn btn-dark me-2"><i class="ti ti-arrow-left me-1"></i>Back to Translations</a>
+                                <a href="{{ route('admin.languages') }}" class="btn btn-dark me-2"><i class="ti ti-arrow-left me-1"></i>{{ __('admin.general_settings.back_to_translation') }}</a>
                                 <a href="javascript:void(0);" class="btn btn-white" id="language" data-id="{{ $language->transLang->code ?? "" }}" data-tab="{{ $tab }}">
                                     <img src="{{ $flag }}" alt="img" class="avatar avatar-sm rounded-circle me-1">
                                     {{ $language->transLang->name ?? "" }}

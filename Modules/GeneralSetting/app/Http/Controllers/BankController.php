@@ -44,8 +44,8 @@ class BankController extends Controller
             ], 422);
         }
 
-        $successMsg = "__('admin.general_settings.bank_added_successfully')";
-        $errorMsg = "__('admin.general_settings.retrive_error')";
+        $successMsg = __('admin.general_settings.bank_added_successfully');
+        $errorMsg = __('admin.general_settings.retrive_error');
 
         try {
             $default = $request->has('default') && $request->default === "on" ? 1 : 0;
@@ -63,8 +63,8 @@ class BankController extends Controller
                 Bank::create($data);
             } else {
                 Bank::where('id', $id)->update($data);
-                $successMsg = "__('admin.general_settings.bank_added_successfully')";
-                $errorMsg = "__('admin.general_settings.retrive_error')";
+                $successMsg = __('admin.general_settings.bank_update_success');
+                $errorMsg = __('admin.general_settings.retrive_error');
             }
 
             return response()->json([

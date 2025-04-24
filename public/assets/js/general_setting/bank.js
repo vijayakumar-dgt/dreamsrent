@@ -292,7 +292,7 @@ function editBank(id) {
                 $("#flexCheckChecked").prop("checked", data.default == 1);
                 $("#id").val(data.id);
 
-                $("#add_bank .modal-title").text(_l('admin.general_setting.edit_seat_type'));
+                $("#add_bank .modal-title").text(_l('admin.general_settings.edit_bank_account'));
                 $(".submitbtn").text(_l('admin.general_settings.save_changes'));
                 $("#add_bank").modal("show");
             }

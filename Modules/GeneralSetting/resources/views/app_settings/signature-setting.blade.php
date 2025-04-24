@@ -38,7 +38,7 @@
                                             <span class="input-icon">
                                                 <i class="ti ti-search"></i>
                                             </span>
-                                            <input type="text" class="form-control" id="signatureSearch" placeholder="Search">
+                                            <input type="text" class="form-control" id="signatureSearch" placeholder="{{ __('admin.common.search') }}">
                                         </div>
                                     </div>
                                     <div class="skeleton label-skeleton label-loader me-2"></div>
