@@ -937,37 +937,37 @@ function handlePriceChange() {
 
 function renderDescription(vehicle) {
     const descriptionSection = $(".description_section");
+    descriptionSection.empty().hide();
 
     if (vehicle.description && vehicle.description.trim() !== "") {
         const maxLength = 500;
         const description = vehicle.description.trim();
-        let html = `<div class="review-header">
-                        <h4>${_l("web.home.desc_of_listing")}</h4>
-                    </div>
-                    <div class="description-list">`;
+        let html = `
+            <div class="review-header">
+                <h4>${_l("web.home.desc_of_listing")}</h4>
+            </div>
+            <div class="description-list">`;
 
         if (description.length > maxLength) {
             const visibleText = description.substring(0, maxLength);
             const hiddenText = description.substring(maxLength);
 
-            html += `<div>${visibleText}</div>
-                     <div class="read-more">
-                        <div class="more-text" style="display: none;">
-                            <div>${hiddenText}</div>
-                        </div>
-                        <a href="javascript:void(0);" class="more-link">${_l(
-                            "web.home.show_more"
-                        )}</a>
-                     </div>`;
+            html += `
+                <div class="visible-text">${visibleText}</div>
+                <div class="read-more">
+                    <div class="more-text" style="display: none;">${hiddenText}</div>
+                    <a href="javascript:void(0);" class="more-link">${_l("web.home.show_more")}</a>
+                </div>`;
         } else {
-            html += `<div>${description}</div>`;
+            html += `<div class="visible-text">${description}</div>`;
         }
 
-        html += `</div>`;
+        html += `</div>`; 
+
         descriptionSection.html(html).show();
 
-        descriptionSection.find(".more-link").on("click", function () {
-            const moreText = $(this).prev(".more-text");
+        descriptionSection.find(".more-link").off("click").on("click", function () {
+            const moreText = $(this).siblings(".more-text");
             if (moreText.is(":visible")) {
                 moreText.slideUp();
                 $(this).text(_l("web.home.show_more"));
@@ -976,8 +976,6 @@ function renderDescription(vehicle) {
                 $(this).text(_l("web.home.show_less"));
             }
         });
-    } else {
-        descriptionSection.hide();
     }
 }
 
