@@ -12,8 +12,16 @@ function DbBackUpTable() {
             dataType: 'json',
             success: function(response) {
                 let tableBody = $("#system-backup-list");
-                tableBody.empty(); // Clear existing rows
-
+                tableBody.empty(); 
+                if(response.data.length === 0){
+                    tableBody.append(`
+                        <tr>
+                            <td colspan="3">
+                                <p class="text-gray-9 text-center">${_l('admin.common.empty_table')}</p>
+                            </td>
+                        </tr>
+                    `);
+                }
                 response.data.forEach(backup => {
                     let row = `
                         <tr>

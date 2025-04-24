@@ -49,29 +49,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="system-backup-list">
-                                    <tr>
-                                        <td>
-                                            <h6 class="fw-semibold fs-14"><a href="javascript:void(0);">Full_Database_Backup_2024-12-11.sql</a></h6>
-                                        </td>
-                                        <td>
-                                            <p class="text-gray-9">24 Jan 2025</p>
-                                        </td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="ti ti-dots-vertical"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                    <li>
-                                                        <a class="dropdown-item rounded-1" href="javascript:void(0);"><i class="ti ti-restore me-1"></i>{{ __('admin.general_settings.restore') }}</a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_backup"><i class="ti ti-trash me-1"></i>{{ __('admin.general_settings.delete') }}</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    
                                 </tbody>
                             </table>
                         </div>
@@ -137,6 +115,6 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/general_setting/system-settings.js') }}"></script>
+    <script src="{{ asset('assets/js/general_setting/system-settings.js?v=1') }}"></script>
 @endpush
 
