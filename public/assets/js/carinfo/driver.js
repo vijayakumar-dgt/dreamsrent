@@ -414,8 +414,8 @@ $('#image').on('change', function (event) {
     }
     let reader = new FileReader();
     reader.onload = function (e) {
-        $('#imagePreview').attr('src', e.target.result).show();
-        $('.upload_icon').hide();
+        $('#imagePreview').attr('src', e.target.result).removeClass('d-none');
+        $('.upload_icon').addClass('d-none');
     };
     reader.readAsDataURL(event.target.files[0]);
     var file = this.files[0];
@@ -440,8 +440,8 @@ $('#edit_image').on('change', function (event) {
     }
     let reader = new FileReader();
     reader.onload = function (e) {
-        $('#editImagePreview').attr('src', e.target.result).show();
-        $('.upload_icon').hide();
+        $('#editImagePreview').attr('src', e.target.result).removeClass('d-none');
+        $('.upload_icon').addClass('d-none');
     };
     reader.readAsDataURL(event.target.files[0]);
     var file = this.files[0];
@@ -645,7 +645,7 @@ $("#add_driver").on('click', function() {
     $(".form-control, .select2-container").removeClass("is-invalid is-valid");
     $('#assigned_cars').val('').trigger('change');
     $(".upload_icon").show();
-    $('#imagePreview').hide();
+    $('#imagePreview').addClass('d-none');
     $('.submitbtn').text(_l('admin.common.create_new'));
 });
 
@@ -791,11 +791,11 @@ function editDriver(id){
                     $("#edit_assigned_cars").val(assignedCars).trigger('change');
                 }
                 if (data.image) {
-                    $('#editImagePreview').attr('src', data.image).show();
-                    $(".upload_icon").hide();
+                    $('#editImagePreview').attr('src', data.image).removeClass('d-none');
+                    $(".upload_icon").addClass('d-none');
                 } else {
-                    $(".upload_icon").show();
-                    $('#editImagePreview').hide()
+                    $(".upload_icon").removeClass('d-none');
+                    $('#editImagePreview').addClass('d-none');
                 }
                 $('.document-preview-container').empty();
                 if (data.documents && data.documents.length > 0) {

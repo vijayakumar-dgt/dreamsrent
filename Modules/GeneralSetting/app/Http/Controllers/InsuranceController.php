@@ -24,7 +24,7 @@ class InsuranceController extends Controller
     public function store(Request $request): JsonResponse
     {
         $id = $request->id ?? '';
-        $authUser = current_user(); // Assumes your helper returns the authenticated user
+        $authUser = current_user();
     
         $validator = Validator::make($request->all(), [
             'insurance_name' => [
@@ -50,8 +50,8 @@ class InsuranceController extends Controller
             ], 422);
         }
     
-        $successMsg = empty($id) ? " __('admin.general_settings.insurance_added_sucessfully')" :  __('admin.general_settings.insurance_updated_sucessfully');
-        $errorMsg = empty($id) ? "__('admin.general_settings.retrive_error')" :__('admin.general_settings.retrive_data');
+        $successMsg = empty($id) ?  __('admin.general_settings.insurance_create_success') :  __('admin.general_settings.insurance_update_success');
+        $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
     
         try {
             $data = [
@@ -158,7 +158,7 @@ class InsuranceController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
-                'message' =>  __('admin.general_settings.retrive_error'),
+                'message' =>  __('admin.common.default_retrieve_error'),
                 'error' => $e->getMessage(),
             ], 500);
         }
@@ -188,13 +188,13 @@ class InsuranceController extends Controller
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
-                'message' => __('admin.general_settings.insurance_deleted_successfully'),
+                'message' => __('admin.general_settings.insurance_delete_success.'),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
-                'message' => __('admin.general_settings.retrive_error'),
+                'message' => __('admin.common.default_delete_error.'),
             ],500);
         }
     }
@@ -222,14 +222,14 @@ class InsuranceController extends Controller
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
-                'message' => __('admin.general_settings.insurance_retrived_successfully'),
+                'message' => __('admin.common.default_retrieve_success'),
                 'data' => $data
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
-                'message' => _('admin.general_settings.retrive_error'),
+                'message' => _('admin.common.default_retrieve_error'),
             ],500);
         }
     }

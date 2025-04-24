@@ -83,7 +83,7 @@
                         }else{
                             toastr.error(resp.message);
                         }
-                        $("#currencyForm .submitbtn").text(_l('admin.general_setting.create_new'));
+                        $("#currencyForm .submitbtn").text(_l('admin.common.create_new'));
                         $("#currencyForm .submitbtn").prop('disabled', false);
                         table.ajax.reload();
                     },
@@ -98,7 +98,7 @@
                         } else {
                                showToast('error', error.responseJSON.message);
                         }
-                        $("#currencyForm .submitbtn").text(_l('admin.general_setting.create_new'));
+                        $("#currencyForm .submitbtn").text(_l('admin.common.create_new'));
                         $("#currencyForm .submitbtn").prop('disabled', false);
                     }
                 });
@@ -118,9 +118,9 @@
                 },
                 order:[['1','desc']],
                 ordering: false,
-                searching: false, // Hides the search box
-                pageLength: 10, // default page length
-                lengthChange: false, // Hides the length menu
+                searching: false,
+                pageLength: 10,
+                lengthChange: false,
                 aoColumns:[
                      {
                          data: "currency_name",
@@ -181,14 +181,10 @@
                 ],
                 "drawCallback": function() {
                      $(".dataTables_info").addClass('d-none');
-                     // Only hide pagination inside the table (within the .dataTables_wrapper)
                      $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
-                     // Move the info and pagination to the card-footer
                      var tableWrapper = $(this).closest('.dataTables_wrapper');
                      var info = tableWrapper.find('.dataTables_info');
                      var pagination = tableWrapper.find('.dataTables_paginate');
-    
-                     // Clear the card-footer and append info and pagination
                      $('.table-footer').empty()
                          .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
                              .append($('<div class="datatable-info"></div>').append(info.clone(true)))
