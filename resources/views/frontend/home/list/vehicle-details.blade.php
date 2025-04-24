@@ -1131,28 +1131,28 @@
                     </div>
                     <div class="modal-form-group">
                         <label>{{ __('web.home.name') }} <em class="text-danger">*</em></label>
-                        <input type="text" class="form-control" name="enquiry_name" id="enquiry_name" placeholder="Enter Name" value="{{ Auth::guard('web')->user()->name ?? '' }}">
+                        <input type="text" class="form-control" name="enquiry_name" id="enquiry_name" placeholder="{{__('web.blog.full_name')}}" value="{{ Auth::guard('web')->user()->name ?? '' }}">
                         <span class="error-text text-danger" id="enquiry_name_error"></span>
                     </div>
                     <div class="modal-form-group">
                         <label>{{ __('web.home.email') }} <em class="text-danger">*</em></label>
-                        <input type="email" class="form-control" name="enquiry_email" id="enquiry_email" placeholder="Enter Email Address" value="{{ Auth::guard('web')->user()->email ?? '' }}">
+                        <input type="email" class="form-control" name="enquiry_email" id="enquiry_email" placeholder="{{__('web.user.enter_email')}}" value="{{ Auth::guard('web')->user()->email ?? '' }}">
                         <span class="error-text text-danger" id="enquiry_email_error"></span>
                     </div>
                     <div class="modal-form-group">
                         <label>{{ __('web.home.phone_number') }} <em class="text-danger">*</em></label>
-                        <input type="text" class="form-control" name="enquiry_phone" id="enquiry_phone" placeholder="Enter Email Address" value="{{ Auth::guard('web')->user()->phone ?? '' }}">
+                        <input type="text" class="form-control" name="enquiry_phone" id="enquiry_phone" placeholder="{{__('web.home.enter_phone_number')}}" value="{{ Auth::guard('web')->user()->phone ?? '' }}">
                         <input type="hidden" name="international_phone_number" id="international_phone_number" class="international_phone_number">
                         <span class="error-text text-danger" id="enquiry_phone_error"></span>
                     </div>
                     <div class="modal-form-group">
                         <label>{{ __('web.home.message') }} <em class="text-danger">*</em></label>
-                        <textarea class="form-control" rows="4" required id="enquiry_message" name="enquiry_message" placeholder="Enter Message"></textarea>
+                        <textarea class="form-control" rows="4" required id="enquiry_message" name="enquiry_message" placeholder="{{__('web.home.message')}}"></textarea>
                         <span class="error-text text-danger" id="enquiry_message_error"></span>
                     </div>
                     <label class="custom_check w-100">
                         <input type="checkbox" name="terms" id="terms" value="1">
-                        <span class="checkmark"></span> {{ __('web.home.enquire_aggree_with') }} <a href="javascript:void(0);">{{ __('web.home.terms_of_service') }}</a> & <a href="javascript:void(0);">{{ __('web.home.privacy_policy') }}</a>
+                        <span class="checkmark"></span> {{ __('web.home.enquire_aggree_with') }} <a href="/pages/terms-conditions">{{ __('web.home.terms_of_service') }}</a> & <a href="javascript:void(0);">{{ __('web.home.privacy_policy') }}</a>
                     </label>
                     <span class="error-text text-danger" id="terms_error"></span>
                     <div class="modal-btn modal-btn-sm">
