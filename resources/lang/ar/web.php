@@ -72,7 +72,7 @@ return [
     'email' => 'البريد الإلكتروني',
     'phone_number' => 'رقم الهاتف',
     'message' => 'رسالة',
-    'enquire_agree_with' => 'أوافق على',
+    'enquire_aggree_with' => 'أوافق على',
     'terms_of_service' => 'شروط الخدمة',
     'privacy_policy' => 'سياسة الخصوصية',
     'name_required' => 'الاسم مطلوب.',

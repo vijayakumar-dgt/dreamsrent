@@ -15,10 +15,11 @@
                                 <img src="{{ $vehicle['vehicle_image'] }}" class="img-fluid" alt="Audi">
                             </a>
                             <div class="fav-item justify-content-end">
+                                @if(Auth::guard('web')->check())
                                 <a href="javascript:void(0)" class="fav-icon wishlist-icon {{ $vehicle['wishlist'] == 1 ? 'selected' : '' }}" data-id="{{ $vehicle['id'] }}">
                                     <i class="feather-heart"></i>
                                 </a>
-                                
+                                @endif
                             </div>
                             <span class="featured-text">{{ $vehicle['brand'] }}</span>
                         </div>
