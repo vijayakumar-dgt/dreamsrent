@@ -57,9 +57,10 @@ document.addEventListener("DOMContentLoaded", function () {
     bindPaginationLinks();
 });
 
-document
-    .getElementById("blogReviewForm")
-    .addEventListener("submit", function (e) {
+document.addEventListener("DOMContentLoaded", function () {
+    const reviewForm = document.getElementById("blogReviewForm");
+    if (reviewForm) {
+        reviewForm.addEventListener("submit", function (e) {
         e.preventDefault();
 
         const form = this;
@@ -97,3 +98,5 @@ document
             },
         });
     });
+}
+});
