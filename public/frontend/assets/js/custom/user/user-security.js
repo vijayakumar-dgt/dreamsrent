@@ -212,7 +212,6 @@
                         }
     
                         $(".last_changed").html(lastPasswordChanged);
-                        $(".google_auth").html(google_authText);
                         if(response.data.user.google_auth_enabled){
                             $("#google_auth").prop("checked",true);
                         }else{
