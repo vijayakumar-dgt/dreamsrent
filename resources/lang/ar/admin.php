@@ -1563,6 +1563,7 @@ return [
     'review_delete_success' => 'تم حذف المراجعة بنجاح.',
     'delete_review' => 'حذف المراجعة',
     'delete_review_confirmation' => 'هل تريد حذف المراجعة؟',
+    'brand_icon_dimension' => 'الايقونة يجب ان تكون بالاقل 10x10 والاكبر 25x25 بكسل.',
   ],
   'user_management' =>
   [

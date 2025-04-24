@@ -70,7 +70,7 @@ $(document).on('click', '.default_theme, .theme-img', function () {
         },
         success: function(resp) {
             if (resp.code === 200) {
-                showToast(_l('admin.general_settings.success'), resp.message);
+                showToast('success', resp.message);
             }
         },
         error: function(error) {
@@ -83,7 +83,7 @@ $(document).on('click', '.default_theme, .theme-img', function () {
                     $("#" + key + "_error").text(val[0]);
                 });
             } else {
-                showToast(_l('admin.general_settings.retrive_error'), error.responseJSON.message);
+                showToast('error', error.responseJSON.message);
 
             }
         }

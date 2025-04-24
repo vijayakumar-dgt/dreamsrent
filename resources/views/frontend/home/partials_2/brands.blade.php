@@ -8,7 +8,7 @@
             @if(isset($section['section_content']) && count($section['section_content']) > 0)
             @foreach($section['section_content'] as $content)
             <div class="brand-wrap">
-                <img src="{{ $content->brand_image }}" alt="img">
+                <img src="{{ $content->brand_image }}" alt="img" height="100" width="100">
                 <p>{{ $content->brand_name ?? "" }}</p>
             </div>
             @endforeach

@@ -1588,6 +1588,7 @@ return array(
     'review_delete_success' => 'Review deleted successfully.',
     'delete_review' => 'Delete Review',
     'delete_review_confirmation' => 'Are you sure you want to delete review?',
+    'brand_icon_dimension' => 'Icon dimensions must be between 10x10 and 25x25 pixels (inclusive).',
   ),
   'user_management' =>
   array(

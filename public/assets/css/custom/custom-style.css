@@ -868,3 +868,12 @@
     width: 900px !important;
     height: 310px !important;
   }
+
+.theme2-popularcar .popular-vehicle-img{
+  height: 215px !important;
+  object-fit: cover !important;
+}
+.home-blogimg{
+  max-height: 380px !important;
+  object-fit: cover !important;
+}
