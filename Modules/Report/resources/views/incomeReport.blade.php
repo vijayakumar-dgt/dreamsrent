@@ -315,7 +315,11 @@
                                     <td>
                                         <span class="badge badge-soft-{{ $booking->payment_status || $booking->booking_by === 'admin' ? 'success' : 'danger' }} d-inline-flex align-items-center badge-sm payment-status">
                                             <i class="ti ti-point-filled me-1 text-{{ $booking->payment_status || $booking->booking_by === 'admin' ? 'success' : 'danger' }}"></i>
-                                            {{ $booking->payment_status || $booking->booking_by === 'admin' ? __('admin.reports.paid') : __('admin.reports.pending') }}
+                                           {{
+                                                ($booking->booking_by === 'admin' && ($booking->payment_status === null || $booking->payment_status == 2)) || 
+                                                ($booking->booking_by !== 'admin' && $booking->payment_status == 2) 
+                                                ? __('admin.reports.paid') : __('admin.reports.pending') 
+                                            }}
                                         </span>
                                     </td>
 
