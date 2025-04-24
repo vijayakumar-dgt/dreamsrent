@@ -128,6 +128,7 @@
                 $(element).valid();
             },
             submitHandler: function (form) {
+                
                 let locationFormData = new FormData(form);
                 $("#add_location .submitbtn").html(`<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}...`);
                 $("#add_location .submitbtn").prop("disabled", true);
@@ -163,7 +164,7 @@
                 });
             },
         }); 
-    });
+    
 
     function initTable(search = "", status = "") {
         $(".table-loader").show();
@@ -243,13 +244,13 @@
                                             `<li>
                                                 <a class="dropdown-item rounded-1" href="javascript:void(${
                                                     value.id
-                                                });" onclick="editLocation(${value.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                                });" id="edit-location-btn" data-id="${value.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                                             </li>`:''}
                                             ${ hasPermission(permissions, 'locations', 'delete') ? 
                                             `<li>
                                                 <a class="dropdown-item rounded-1" href="javascript:void(${
                                                     value.id
-                                                });" onclick="deleteLocation(${value.id});" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                                });" id="delete-location-btn" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
                                             </li>`:''}
                                         </ul>
                                     </div>
@@ -333,6 +334,417 @@
         });
     }
 
+    $("#pincode").on("input", function () {
+        $(this).val(
+            $(this)
+                .val()
+                .replace(/[^0-6]/g, "")
+        );
+    });
+    
+    
+    
+    let currentStatus = "";  
+    let currentNameType = "";
+    
+    $("#search").on("input", function () {
+        let searchQuery = $(this).val().trim();
+        initTable(searchQuery, currentStatus);
+    });
+    
+     
+     $(".dropdown-item").on("click", function () {
+        let statuslabel = _l('admin.common.status');
+        $(".dropdown-item").removeClass("active");
+        $(this).addClass("active"); 
+        statuslabel = $(this).text().trim();
+        $(".statuslabel").text(statuslabel);
+        let selectedStatus = $(this).text().trim().toLowerCase() === "active" ? 1 : 0; 
+    
+        currentStatus = selectedStatus; 
+    
+        initTable($("#search").val().trim(), currentStatus);
+    
+    });
+    
+    
+    
+    $("#add_new_location").click(function () {
+        $("#add_location .modal-title").text(_l('admin.manage.add_location'));
+        $("#add_location .submitbtn").text(_l('admin.common.create_new'));
+        $("#status_div").hide();
+        $("#locationForm")[0].reset();
+        $("#locationForm #id").val("");
+        $(".error-text").text("");
+        $(".form-control").removeClass("is-invalid is-valid");
+    });
+    
+    $(document).on('click','#edit-location-btn', function(){
+        $("#locationForm")[0].reset();
+        $("#locationForm #id").val("");
+        let id = $(this).data('id');
+        $.ajax({
+            type: "GET",
+            url: "/admin/get_location/" + id,
+            success: function (response) {
+                if (response.code === 200) {
+                    let data = response.data;
+                    $("#add_location #name").val(data.name);
+                    $("#add_location #id").val(data.id);
+                    $("#add_location #language_id").val(data.language_id);
+                    if (data.status === 1) {
+                        $("#add_location #status").prop("checked", true);
+                    } else {
+                        $("#add_location #status").prop("checked", false);
+                    }
+                    if(data.image){
+                        $("#image_preview").attr("src", data.image);
+                        $("#image_preview").show();
+                        $(".image_placeholder").hide();
+                    }else{
+                        $("#image_preview").hide();
+                        $(".image_placeholder").show();
+                    }
+                    $("#email").val(data.email);
+                    $("#phone").val(data.phone);
+                    $("#address").val(data.address);
+                    $("#pincode").val(data.pincode);
+                    fetchCountryAjax(data.country)
+                        .then(() => fetchStateAjax(data.country, data.state))
+                        .then(() => fetchCityAjax(data.state, data.city))
+                        .then(() => {
+                            if (data.working_days && data.working_days.length > 0) {
+                                $.each(data.working_days, function (index, value) {
+                                    $("#" + value.day).prop("checked", true);
+                                    $("#" + value.day + "_start").val(
+                                        value.start_time
+                                    );
+                                    $("#" + value.day + "_end").val(value.end_time);
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+    
+                    $("#add_location .modal-title").text(_l('admin.manage.edit_location'));
+                    $("#add_location .submitbtn").text(_l('admin.common.save_changes'));
+                    $("#status_div").show();
+                    $("#add_location").modal("show");
+                    $(".error-text").text("");
+                    $(".form-control").removeClass("is-invalid is-valid");
+                }
+            },
+        });
+    });
+   
+    function fetchCountryAjax(id) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: "GET",
+                url: "/api/countries",
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                success: function (response) {
+                    if (response.code === 200) {
+                        let data = response.data;
+                        $("#country").empty();
+                        $("#country").append(
+                            `<option value="">${_l('admin.common.select_country')}</option>`
+                        );
+                        $.each(data, function (key, value) {
+                            if (value.id === id) {
+                                $("#country").append(
+                                    '<option value="' +
+                                        value.id +
+                                        '" selected>' +
+                                        value.name +
+                                        "</option>"
+                                );
+                            } else {
+                                $("#country").append(
+                                    '<option value="' +
+                                        value.id +
+                                        '">' +
+                                        value.name +
+                                        "</option>"
+                                );
+                            }
+                        });
+                        resolve();
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                    reject({
+                        message: _l('admin.common.something_went_wrong'),
+                    });
+                },
+            });
+        });
+    }
+    
+    function fetchStateAjax(country_id, id) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: "POST",
+                url: "/api/states",
+                data: { country_id: country_id },
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                    accept: "application/json",
+                },
+                success: function (response) {
+                    if (response.code === 200) {
+                        let data = response.data;
+                        $("#state").empty();
+                        $("#state").append(
+                            `<option value="">${_l('admin.common.select_state')}</option>`
+                        );
+                        $.each(data, function (key, value) {
+                            if (value.id === id) {
+                                $("#state").append(
+                                    '<option value="' +
+                                        value.id +
+                                        '" selected>' +
+                                        value.name +
+                                        "</option>"
+                                );
+                            } else {
+                                $("#state").append(
+                                    '<option value="' +
+                                        value.id +
+                                        '">' +
+                                        value.name +
+                                        "</option>"
+                                );
+                            }
+                        });
+                        resolve();
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                    reject({
+                        message: _l('admin.common.something_went_wrong'),
+                    });
+                },
+            });
+        });
+    }
+    
+    function fetchCityAjax(state_id, id) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: "POST",
+                url: "/api/cities",
+                data: { state_id: state_id },
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                    accept: "application/json",
+                },
+                success: function (response) {
+                    if (response.code === 200) {
+                        let data = response.data;
+                        $("#city").empty();
+                        $("#city").append(`<option value="">${_l('admin.common.select_city')}</option>`);
+                        $.each(data, function (key, value) {
+                            if (value.id === id) {
+                                $("#city").append(
+                                    '<option value="' +
+                                        value.id +
+                                        '" selected>' +
+                                        value.name +
+                                        "</option>"
+                                );
+                            } else {
+                                $("#city").append(
+                                    '<option value="' +
+                                        value.id +
+                                        '">' +
+                                        value.name +
+                                        "</option>"
+                                );
+                            }
+                        });
+                        resolve();
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                    reject({
+                        message: _l('admin.common.something_went_wrong'),
+                    });
+                },
+            });
+        });
+    }   
+    $(document).on('click','#delete-location-btn', function(){
+        let id = $(this).data('id');
+        $("#delete_id").val(id);
+    });
+    
+    $("#deleteLocation").on("submit", function (e) {
+        e.preventDefault();
+        $("#deleteLocation .submitbtn").html(`<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..`);
+        $("#deleteLocation .submitbtn").prop("disabled", true);
+        $.ajax({
+            type: "POST",
+            url: "/admin/delete_location",
+            data: $("#deleteLocation").serialize(),
+            success: function (response) {
+                if (response.code === 200) {
+                    showToast("success", response.message);
+                    $("#delete-modal").modal("hide");
+                    initTable();
+                } else {
+                    showToast("error", response.message);
+                    $("#delete-modal").modal("hide");
+                }
+                $("#deleteLocation .submitbtn").text(_l('admin.common.yes_delete'));
+                $("#deleteLocation .submitbtn").prop("disabled", false);
+            },
+            error: function (error) {
+                showToast("error", error.responseJSON.message);
+                $("#delete-modal").modal("hide");
+                $("#deleteLocation .submitbtn").text(_l('admin.common.yes_delete'));
+                $("#deleteLocation .submitbtn").prop("disabled", false);
+            },
+        });
+    });
+    
+    $(".working-day-checkbox").on("change", function () {
+        var day = $(this).attr("id");
+        toggleTimeRequired(day);
+    });
+    
+    function toggleTimeRequired(day) {
+        var checkbox = $("#" + day);
+        var startInput = $("#" + day + "_start");
+        var endInput = $("#" + day + "_end");
+    
+        if (checkbox.prop("checked")) {
+            startInput.prop("required", true);
+            endInput.prop("required", true);
+        } else {
+            startInput.prop("required", false);
+            endInput.prop("required", false);
+        }
+    }
+    
+    $("#country").on("change", function () {
+        let id = $(this).val();
+        if (id) {
+            fetchStatesByCountry(id);
+        } else {
+            $("#state").empty();
+            $("#state").append(`<option value="">${_l('admin.common.select_state')}</option>`);
+            $("#city").empty();
+            $("#city").append(`<option value="">${_l('admin.common.select_city')}</option>`);
+        }
+    });
+    
+    $("#state").on("change", function () {
+        let id = $(this).val();
+        if (id) {
+            fetchCitiesByState(id);
+        } else {
+            $("#city").empty();
+            $("#city").append(`<option value="">${_l('admin.common.select_city')}</option>`);
+        }
+    });
+    function fetchCountries() {
+        $.ajax({
+            type: "GET",
+            url: "/api/countries",
+            headers: {
+                accept: "application/json",
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    let data = response.data;
+                    $("#country").empty();
+                    $("#country").append(
+                        `<option value="">${_l('admin.common.select_country')}</option>`
+                    );
+                    $.each(data, function (key, value) {
+                        $("#country").append(
+                            '<option value="' +
+                                value.id +
+                                '">' +
+                                value.name +
+                                "</option>"
+                        );
+                    });
+                }
+            },
+        });
+    }
+    
+    function fetchStatesByCountry(country_id) {
+        $.ajax({
+            type: "POST",
+            url: "/api/states",
+            data: { country_id: country_id },
+            headers: {
+                accept: "application/json",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    let data = response.data;
+                    $("#state").empty();
+                    $("#state").append(`<option value="">${_l('admin.common.select_state')}</option>`);
+                    $.each(data, function (key, value) {
+                        $("#state").append(
+                            '<option value="' +
+                                value.id +
+                                '">' +
+                                value.name +
+                                "</option>"
+                        );
+                    });
+                    $("#city").empty();
+                    $("#city").append(`<option value="">${_l('admin.common.select_city')}</option>`);
+                }
+            },
+        });
+    }
+    
+    function fetchCitiesByState(state_id) {
+        $.ajax({
+            type: "POST",
+            url: "/api/cities",
+            data: { state_id: state_id },
+            headers: {
+                accept: "application/json",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    let data = response.data;
+                    $("#city").empty();
+                    $("#city").append(`<option value="">${_l('admin.common.select_city')}</option>`);
+                    $.each(data, function (key, value) {
+                        $("#city").append(
+                            '<option value="' +
+                                value.id +
+                                '">' +
+                                value.name +
+                                "</option>"
+                        );
+                    });
+                }
+            },
+        });
+    }
+    
+    
+        $(".Number").on("input", function () {
+            this.value = this.value.replace(/[^0-9]/g, "");
+        });
+    });
 })();
 $.validator.addMethod("filesize", function (value, element, param) {
     if (element.files.length === 0) return true;
@@ -387,412 +799,3 @@ $.validator.addMethod(
     "End time must be greater than start time."
 );
 
-$("#pincode").on("input", function () {
-    $(this).val(
-        $(this)
-            .val()
-            .replace(/[^0-6]/g, "")
-    );
-});
-
-
-
-let currentStatus = "";  
-let currentNameType = "";
-
-$("#search").on("input", function () {
-    let searchQuery = $(this).val().trim();
-    initTable(searchQuery, currentStatus);
-});
-
- 
- $(".dropdown-item").on("click", function () {
-    let statuslabel = _l('admin.common.status');
-    $(".dropdown-item").removeClass("active");
-    $(this).addClass("active"); 
-    statuslabel = $(this).text().trim();
-    $(".statuslabel").text(statuslabel);
-    let selectedStatus = $(this).text().trim().toLowerCase() === "active" ? 1 : 0; 
-
-    currentStatus = selectedStatus; 
-
-    initTable($("#search").val().trim(), currentStatus);
-
-});
-
-
-
-$("#add_new_location").click(function () {
-    $("#add_location .modal-title").text(_l('admin.manage.add_location'));
-    $("#add_location .submitbtn").text(_l('admin.common.create_new'));
-    $("#status_div").hide();
-    $("#locationForm")[0].reset();
-    $("#locationForm #id").val("");
-    $(".error-text").text("");
-    $(".form-control").removeClass("is-invalid is-valid");
-});
-
-function editLocation(id) {
-    $("#locationForm")[0].reset();
-    $("#locationForm #id").val("");
-    $.ajax({
-        type: "GET",
-        url: "/admin/get_location/" + id,
-        success: function (response) {
-            if (response.code === 200) {
-                let data = response.data;
-                $("#add_location #name").val(data.name);
-                $("#add_location #id").val(data.id);
-                $("#add_location #language_id").val(data.language_id);
-                if (data.status === 1) {
-                    $("#add_location #status").prop("checked", true);
-                } else {
-                    $("#add_location #status").prop("checked", false);
-                }
-                if(data.image){
-                    $("#image_preview").attr("src", data.image);
-                    $("#image_preview").show();
-                    $(".image_placeholder").hide();
-                }else{
-                    $("#image_preview").hide();
-                    $(".image_placeholder").show();
-                }
-                $("#email").val(data.email);
-                $("#phone").val(data.phone);
-                $("#address").val(data.address);
-                $("#pincode").val(data.pincode);
-                fetchCountryAjax(data.country)
-                    .then(() => fetchStateAjax(data.country, data.state))
-                    .then(() => fetchCityAjax(data.state, data.city))
-                    .then(() => {
-                        if (data.working_days && data.working_days.length > 0) {
-                            $.each(data.working_days, function (index, value) {
-                                $("#" + value.day).prop("checked", true);
-                                $("#" + value.day + "_start").val(
-                                    value.start_time
-                                );
-                                $("#" + value.day + "_end").val(value.end_time);
-                            });
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-
-                $("#add_location .modal-title").text(_l('admin.manage.edit_location'));
-                $("#add_location .submitbtn").text(_l('admin.common.save_changes'));
-                $("#status_div").show();
-                $("#add_location").modal("show");
-                $(".error-text").text("");
-                $(".form-control").removeClass("is-invalid is-valid");
-            }
-        },
-    });
-}
-function fetchCountryAjax(id) {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            type: "GET",
-            url: "/api/countries",
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            success: function (response) {
-                if (response.code === 200) {
-                    let data = response.data;
-                    $("#country").empty();
-                    $("#country").append(
-                        `<option value="">${_l('admin.common.select_country')}</option>`
-                    );
-                    $.each(data, function (key, value) {
-                        if (value.id === id) {
-                            $("#country").append(
-                                '<option value="' +
-                                    value.id +
-                                    '" selected>' +
-                                    value.name +
-                                    "</option>"
-                            );
-                        } else {
-                            $("#country").append(
-                                '<option value="' +
-                                    value.id +
-                                    '">' +
-                                    value.name +
-                                    "</option>"
-                            );
-                        }
-                    });
-                    resolve();
-                }
-            },
-            error: function (error) {
-                console.log(error);
-                reject({
-                    message: _l('admin.common.something_went_wrong'),
-                });
-            },
-        });
-    });
-}
-
-function fetchStateAjax(country_id, id) {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            type: "POST",
-            url: "/api/states",
-            data: { country_id: country_id },
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                accept: "application/json",
-            },
-            success: function (response) {
-                if (response.code === 200) {
-                    let data = response.data;
-                    $("#state").empty();
-                    $("#state").append(
-                        `<option value="">${_l('admin.common.select_state')}</option>`
-                    );
-                    $.each(data, function (key, value) {
-                        if (value.id === id) {
-                            $("#state").append(
-                                '<option value="' +
-                                    value.id +
-                                    '" selected>' +
-                                    value.name +
-                                    "</option>"
-                            );
-                        } else {
-                            $("#state").append(
-                                '<option value="' +
-                                    value.id +
-                                    '">' +
-                                    value.name +
-                                    "</option>"
-                            );
-                        }
-                    });
-                    resolve();
-                }
-            },
-            error: function (error) {
-                console.log(error);
-                reject({
-                    message: _l('admin.common.something_went_wrong'),
-                });
-            },
-        });
-    });
-}
-
-function fetchCityAjax(state_id, id) {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            type: "POST",
-            url: "/api/cities",
-            data: { state_id: state_id },
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                accept: "application/json",
-            },
-            success: function (response) {
-                if (response.code === 200) {
-                    let data = response.data;
-                    $("#city").empty();
-                    $("#city").append(`<option value="">${_l('admin.common.select_city')}</option>`);
-                    $.each(data, function (key, value) {
-                        if (value.id === id) {
-                            $("#city").append(
-                                '<option value="' +
-                                    value.id +
-                                    '" selected>' +
-                                    value.name +
-                                    "</option>"
-                            );
-                        } else {
-                            $("#city").append(
-                                '<option value="' +
-                                    value.id +
-                                    '">' +
-                                    value.name +
-                                    "</option>"
-                            );
-                        }
-                    });
-                    resolve();
-                }
-            },
-            error: function (error) {
-                console.log(error);
-                reject({
-                    message: _l('admin.common.something_went_wrong'),
-                });
-            },
-        });
-    });
-}
-function deleteLocation(id) {
-    $("#delete_id").val(id);
-}
-
-$("#deleteLocation").on("submit", function (e) {
-    e.preventDefault();
-    $("#deleteLocation .submitbtn").html(`<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..`);
-    $("#deleteLocation .submitbtn").prop("disabled", true);
-    $.ajax({
-        type: "POST",
-        url: "/admin/delete_location",
-        data: $("#deleteLocation").serialize(),
-        success: function (response) {
-            if (response.code === 200) {
-                showToast("success", response.message);
-                $("#delete-modal").modal("hide");
-                initTable();
-            } else {
-                showToast("error", response.message);
-                $("#delete-modal").modal("hide");
-            }
-            $("#deleteLocation .submitbtn").text(_l('admin.common.yes_delete'));
-            $("#deleteLocation .submitbtn").prop("disabled", false);
-        },
-        error: function (error) {
-            showToast("error", error.responseJSON.message);
-            $("#delete-modal").modal("hide");
-            $("#deleteLocation .submitbtn").text(_l('admin.common.yes_delete'));
-            $("#deleteLocation .submitbtn").prop("disabled", false);
-        },
-    });
-});
-
-$(".working-day-checkbox").on("change", function () {
-    var day = $(this).attr("id");
-    toggleTimeRequired(day);
-});
-
-function toggleTimeRequired(day) {
-    var checkbox = $("#" + day);
-    var startInput = $("#" + day + "_start");
-    var endInput = $("#" + day + "_end");
-
-    if (checkbox.prop("checked")) {
-        startInput.prop("required", true);
-        endInput.prop("required", true);
-    } else {
-        startInput.prop("required", false);
-        endInput.prop("required", false);
-    }
-}
-
-$("#country").on("change", function () {
-    let id = $(this).val();
-    if (id) {
-        fetchStatesByCountry(id);
-    } else {
-        $("#state").empty();
-        $("#state").append(`<option value="">${_l('admin.common.select_state')}</option>`);
-        $("#city").empty();
-        $("#city").append(`<option value="">${_l('admin.common.select_city')}</option>`);
-    }
-});
-
-$("#state").on("change", function () {
-    let id = $(this).val();
-    if (id) {
-        fetchCitiesByState(id);
-    } else {
-        $("#city").empty();
-        $("#city").append(`<option value="">${_l('admin.common.select_city')}</option>`);
-    }
-});
-function fetchCountries() {
-    $.ajax({
-        type: "GET",
-        url: "/api/countries",
-        headers: {
-            accept: "application/json",
-        },
-        success: function (response) {
-            if (response.code === 200) {
-                let data = response.data;
-                $("#country").empty();
-                $("#country").append(
-                    `<option value="">${_l('admin.common.select_country')}</option>`
-                );
-                $.each(data, function (key, value) {
-                    $("#country").append(
-                        '<option value="' +
-                            value.id +
-                            '">' +
-                            value.name +
-                            "</option>"
-                    );
-                });
-            }
-        },
-    });
-}
-
-function fetchStatesByCountry(country_id) {
-    $.ajax({
-        type: "POST",
-        url: "/api/states",
-        data: { country_id: country_id },
-        headers: {
-            accept: "application/json",
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        success: function (response) {
-            if (response.code === 200) {
-                let data = response.data;
-                $("#state").empty();
-                $("#state").append(`<option value="">${_l('admin.common.select_state')}</option>`);
-                $.each(data, function (key, value) {
-                    $("#state").append(
-                        '<option value="' +
-                            value.id +
-                            '">' +
-                            value.name +
-                            "</option>"
-                    );
-                });
-                $("#city").empty();
-                $("#city").append(`<option value="">${_l('admin.common.select_city')}</option>`);
-            }
-        },
-    });
-}
-
-function fetchCitiesByState(state_id) {
-    $.ajax({
-        type: "POST",
-        url: "/api/cities",
-        data: { state_id: state_id },
-        headers: {
-            accept: "application/json",
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        success: function (response) {
-            if (response.code === 200) {
-                let data = response.data;
-                $("#city").empty();
-                $("#city").append(`<option value="">${_l('admin.common.select_city')}</option>`);
-                $.each(data, function (key, value) {
-                    $("#city").append(
-                        '<option value="' +
-                            value.id +
-                            '">' +
-                            value.name +
-                            "</option>"
-                    );
-                });
-            }
-        },
-    });
-}
-
-
-$(document).ready(function () {
-    $(".Number").on("input", function () {
-        this.value = this.value.replace(/[^0-9]/g, "");
-    });
-});

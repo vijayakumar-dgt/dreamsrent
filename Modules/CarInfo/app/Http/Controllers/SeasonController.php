@@ -85,9 +85,16 @@ class SeasonController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getSeasons()
+    public function getSeasons(Request $request)
     {
-        $seasons = Season::orderBy('id', 'desc')->get();
+        $seasons = Season::orderBy('id', 'desc');
+        if($request->has('keyword') && $request->keyword != ""){
+            $seasons = $seasons->where('name', 'like', '%'.$request->keyword.'%');
+        }
+        if($request->has('status') && $request->status != ""){
+            $seasons = $seasons->where('status', $request->status);
+        }
+        $seasons = $seasons->get();
         return response()->json([
             'status' => 'success',
             'code'   => 200,
