@@ -196,17 +196,29 @@ function updateChartData(filter) {
 
 
     // Update the total income display
-    document.querySelector(".income-summary p").textContent = `Income ${filter}`;
-    document.querySelector(".income-summary h5").innerHTML = `
-        $${totalIncome.toLocaleString()} 
-        <span class="${percentageChange >= 0 ? 'text-success' : 'text-danger'} fs-13 fw-semibold">
-            ${percentageChange.toFixed(2)}%
-        </span>
-    `;
+    const incomeText = document.querySelector(".income-summary p");
+    const incomeAmount = document.querySelector(".income-summary h5");
+    
+    if (incomeText) {
+        incomeText.textContent = `Income ${filter}`;
+    }
+    
+    if (incomeAmount) {
+        incomeAmount.innerHTML = `
+            $${totalIncome.toLocaleString()} 
+            <span class="${percentageChange >= 0 ? 'text-success' : 'text-danger'} fs-13 fw-semibold">
+                ${percentageChange.toFixed(2)}%
+            </span>
+        `;
+    }
+    
     
     // Update the dropdown button text
-    document.querySelector(".dropdown-toggle-chat").innerHTML = `<i class="ti ti-calendar me-1"></i> ${filter ?? ''}`;
-}
+    const dropdownToggleChat = document.querySelector(".dropdown-toggle-chat");
+    if (dropdownToggleChat) {
+        dropdownToggleChat.innerHTML = `<i class="ti ti-calendar me-1"></i> ${filter ?? ''}`;
+    }
+    }
 
 
 document.addEventListener("DOMContentLoaded", function () {
