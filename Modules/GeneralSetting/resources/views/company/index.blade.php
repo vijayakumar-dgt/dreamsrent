@@ -151,7 +151,7 @@
                                         </div>
 
                                         <!-- Address Information Section -->
-                                        <div class="localization-content mb-3">
+                                        <div class="">
                                             <div class="skeleton section-title-skeleton label-loader"></div>
                                             <h6 class="fw-bold mb-3 d-none real-label">{{ __('admin.general_settings.address_information') }}</h6>
 
@@ -223,39 +223,6 @@
                                             <div class="skeleton button-skeleton label-loader"></div>
                                             <button type="submit" class="btn btn-primary companysave d-none real-label">{{ __('admin.general_settings.save_changes') }}s</button>
                                             @endif
-                                        </div>
-                                    </div>
-                                </form>
-                                <form id="ownerSettingForm" enctype="multipart/form-data">
-                                    <div class="mb-3" style="padding: 1.25rem;">
-                                        <h6 class="mb-1">{{ __('admin.general_settings.transfer_ownership') }}</h6>
-                                        <p class="mb-2">{{ __('admin.general_settings.transfer_ownership_description') }}</p>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="d-flex align-items-end justify-content-between">
-                                                    <div class="w-100 me-3">
-                                                        <label class="form-label">{{ __('admin.general_settings.owner') }}</label>
-                                                        <select class="select form-control" name="owner_id">
-                                                            <option value="">{{ __('admin.general_settings.select_owner') }}</option>
-                                                            @if($users->isNotEmpty())
-                                                                @foreach($users as $user)
-                                                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                                                @endforeach
-                                                            @else
-                                                                <option disabled>No data found</option>
-                                                            @endif
-                                                        </select>
-                                                        <span id="owner_id_error" class="text-danger error-text"></span>
-                                                    </div>
-
-                                                    <button type="submit" class="btn btn-primary ownershipChange mb-1">{{ __('admin.common.update') }}</button>
-                                            
-                                                </div>
-                                            </div>
-                                            <div>
-                                        </div>
-
-
                                         </div>
                                     </div>
                                 </form>

@@ -12,12 +12,11 @@ $(document).ready(function () {
     });
 });
 
-//custom menu
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".add-custom-menu").addEventListener("click", function () {
         let urlInput = document.querySelector("#customUrl");
         let labelInput = document.querySelector("#customLabel");
-        let menuContainer = document.getElementById("simple-list"); // Get the container
+        let menuContainer = document.getElementById("simple-list");
 
         let url = urlInput.value.trim();
         let label = labelInput.value.trim();
@@ -31,8 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
             showToast('error', "Enter a valid URL.");
             return;
         }
-
-        // Check if the menu item already exists
         if (isMenuItemExists(label, url)) {
             showToast('error', "This menu item already exists.");
             return;
@@ -41,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let uniqueId = `menu-${Date.now()}`;
 
         let newItem = `
-        <li class="list-group-item" data-title="${label}" data-link="${url}"> <!-- Added data-title and data-link -->
+        <li class="list-group-item" data-title="${label}" data-link="${url}">
             <div class="accordion" id="accordionExample">
                 <div class="accordion-item">
                     <h2 class="accordion-header">
@@ -52,24 +49,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     </h2>
                     <div id="collapse-${uniqueId}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
-                            <!-- Menu Name Field -->
                             <div class="mb-3">
                                 <label for="menu_name_${uniqueId}" class="form-label">Menu <span class="text-danger">*</span></label>
                                 <input type="text" id="menu_name" name="menu_name" class="form-control" value="${label}" required>
                                 <span class="error-message text-danger d-none">Menu name is required.</span>
                             </div>
-
-                            <!-- Permalink Field -->
                             <div class="mb-2">
                                 <label for="menu_link_${uniqueId}" class="form-label">Permalink</label>
                                 <input type="text" id="menu_link" name="menu_link" class="form-control" value="${url}">
                                 <span class="error-message text-danger d-none">Please enter a valid link.</span>
                             </div>
-
-                            <!-- Preview Link -->
                             <p>Preview : <a href="${url}" target="_blank" class="text-info">${url}</a></p>
 
-                            <!-- Status Toggle -->
                             <div class="form-check form-check-md form-switch me-2">
                                 <input class="form-check-input" type="checkbox" role="switch" id="menu_status" name="menu_status" checked>
                                 <label for="menu_status_${uniqueId}" class="form-check-label form-label mt-0 mb-0">
@@ -84,10 +75,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         menuContainer.insertAdjacentHTML("beforeend", newItem);
 
-        // Show success message
         showToast('success', "Custom menu added successfully.");
 
-        // Reset fields
         urlInput.value = "http://";
         labelInput.value = "";
     });
@@ -116,7 +105,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-//select menu
 document.addEventListener("DOMContentLoaded", function () {
     const selectAllCheckbox = document.getElementById("select-all");
     const checkboxes = document.querySelectorAll(".page-checkbox");
@@ -148,11 +136,9 @@ document.addEventListener("DOMContentLoaded", function () {
         checkboxes.forEach(checkbox => {
             if (checkbox.checked) {
                 const title = checkbox.dataset.title.trim();
-                console.log(title);
                 let link = checkbox.dataset.link.trim();
                 link = `${BASE_URL}/${link.replace(/^\/+/, '')}`;
 
-                // Validate title and link
                 if (!title) {
                     showToast('error', "Menu title is required.");
                     return;
@@ -162,8 +148,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     showToast('error', `Invalid URL: ${link}`);
                     return;
                 }
-                console.log(isMenuItemExists(title, link));
-                // Check if this item already exists in the menu
                 if (isMenuItemExists(title, link) === true) {
                     showToast('error', `The menu item "${title}" is already added.`);
                     return;
@@ -171,7 +155,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const uniqueId = `menu-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-                // Create new menu item
                 const newItem = `
                     <li class="list-group-item" data-title="${title}" data-link="${link}">
                         <div class="accordion" id="accordionExample">
@@ -216,7 +199,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         </div>
                     </li>`;
 
-                // Append the new item to the menu container
                 menuContainer.insertAdjacentHTML("beforeend", newItem);
                 added = true;
             }
@@ -225,11 +207,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (added) {
             showToast('success', "Selected pages added to the menu.");
         }
-        //  else {
-        //     showToast('error', "No pages selected or all items were already added.");
-        // }
-
-        // Uncheck all checkboxes after adding to menu
         checkboxes.forEach(checkbox => {
             checkbox.checked = false;
         });
@@ -237,7 +214,6 @@ document.addEventListener("DOMContentLoaded", function () {
         selectAllCheckbox.checked = false;
     });
 
-    // Function to check if a menu item already exists
     function isMenuItemExists(title, link) {
         const existingItems = menuContainer.querySelectorAll("li.list-group-item");
 
@@ -255,7 +231,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return false;
     }
 
-    // Function to validate URLs
     function isValidUrl(string) {
         try {
             new URL(string);
@@ -266,8 +241,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-
-//update
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("#menuManagement").addEventListener("submit", function (event) {
         event.preventDefault();
@@ -300,7 +273,6 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         let jsonData = JSON.stringify(requestData, null, 2);
-        console.log(jsonData);
 
         fetch("/admin/menu-management/update", {
             method: "POST",
@@ -323,7 +295,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         })
         .catch(error => {
-            console.error("Error:", error);
             showToast('error', "Failed to update menu. Please try again.");
         });
 
@@ -331,7 +302,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-//list
 menuTable();
 function menuTable() {
     let menuId = localStorage.getItem('menu_id');
@@ -347,7 +317,6 @@ function menuTable() {
                 if (response.code === 200 && response.data) {
                     let menu = response.data;
 
-                    // Check if menu.menus is null or empty
                     if (!menu.menus || menu.menus.trim() === "") {
                         menuList.html(`<li class="list-group-item text-center text-muted">No data found</li>`);
                         return;
@@ -401,10 +370,9 @@ function menuTable() {
                                     </div>
                                 </li>`;
 
-                            menuList.append(newItem); // Append the item to the list
+                            menuList.append(newItem);
                         });
                     } catch (error) {
-                        console.error("Error parsing menu JSON:", error);
                         menuList.html(`<li class="list-group-item text-center text-danger">Error loading menu data</li>`);
                     }
                 } else {
@@ -412,7 +380,6 @@ function menuTable() {
                 }
             },
             error: function (error) {
-                console.error("Error fetching menus:", error);
                 $("#simple-list").html(`<li class="list-group-item text-center text-danger">Failed to load menus</li>`);
             },
             complete: function() {
@@ -421,7 +388,6 @@ function menuTable() {
             },
         });
     } else {
-        console.log("No menu_id found in localStorage");
         $("#simple-list").html(`<li class="list-group-item text-center text-muted">No menu selected</li>`);
     }
 }

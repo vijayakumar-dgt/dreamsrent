@@ -105,9 +105,6 @@ function fetchNotifications() {
 				$(".has-notification").addClass("d-none");
 			}
 		},
-		error: function (error) {
-			console.error(error);
-		}
 	});
 }
 
@@ -126,9 +123,6 @@ $(document).on("click", "#markAllAsRead", function () {
 			}else{
 			  showToast(response.status, response.message);
 			}
-		},
-		error: function (error) {
-			console.error(error);
 		}
 	});
 }); 

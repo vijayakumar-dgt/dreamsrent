@@ -196,7 +196,7 @@
 
 						<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">                                                
 							<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
-								<img id="imagePreview" src="" class="img-fluid" style="display: none">
+								<img id="imagePreview" src="" class="img-fluid d-none">
 								<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
 							</div>                                              
 							<div class="profile-upload">
@@ -219,7 +219,7 @@
 						<label class="form-label">{{ __('admin.rentals.brand_icon') }}<span class="text-danger"> *</span></label>							
 						<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">                                                
 							<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
-								<img id="iconPreview" src="" class="img-fluid" style="display: none">
+								<img id="iconPreview" src="" class="img-fluid d-none">
 								<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon_2"></i>
 							</div>                                              
 							<div class="profile-upload">
@@ -250,7 +250,7 @@
 				</div>
 				<div class="modal-footer">
 					<div class="d-flex justify-content-between align-items-center w-100">
-						<div class="form-check form-check-md form-switch me-2" id="statusDiv" style="display: none;">
+						<div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
 							<label for="status" class="form-check-label form-label mt-0 mb-0">
 							<input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked>
 								{{ __('admin.common.status') }}

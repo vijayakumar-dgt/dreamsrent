@@ -200,11 +200,11 @@ $('#brand_image').on('change', function (event) {
             $('#imagePreview').attr('src', e.target.result);
         }
         reader.readAsDataURL(this.files[0]);
-        $("#imagePreview").show();
-        $('.upload_icon').hide();
+        $("#imagePreview").removeClass('d-none');
+        $('.upload_icon').addClass('d-none');
     }else{
-        $("#imagePreview").hide();
-        $(".upload_icon").show();
+        $("#imagePreview").addClass('d-none');
+        $(".upload_icon").removeClass('d-none');
     }
 });
 
@@ -216,12 +216,12 @@ $('#brand_icon').on('change', function (event) {
             $('#iconPreview').attr('src', e.target.result);
         }
         reader.readAsDataURL(this.files[0]);
-        $("#iconPreview").show();
-        $(".upload_icon_2").hide();
+        $("#iconPreview").removeClass('d-none');
+        $(".upload_icon_2").addClass('d-none');
 
     }else{
-        $("#iconPreview").hide();
-        $(".upload_icon_2").show();
+        $("#iconPreview").addClass('d-none');
+        $(".upload_icon_2").removeClass('d-none');
     }
 });
 
@@ -362,11 +362,11 @@ $("#add_brand").on('click', function() {
     $("#id").val('');
     $(".error-text").text("");
     $(".form-control").removeClass("is-invalid is-valid");
-    $('#statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
-    $(".upload_icon").show();
-    $(".upload_icon_2").show();
-    $('#imagePreview').hide();
-    $('#iconPreview').hide();
+    $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
+    $(".upload_icon").removeClass('d-none');
+    $(".upload_icon_2").removeClass('d-none');
+    $('#imagePreview').addClass('d-none');
+    $('#iconPreview').addClass('d-none');
 });
 
 $("#total_cars").on("input", function () {
@@ -426,21 +426,21 @@ function editBrand(id){
 
                 $("#brand_modal .modal-title").text(_l('admin.rentals.edit_brand'));
                 $(".submitbtn").text(_l('admin.common.save_changes'));
-                $('#statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+                $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
                 if (data.brand_image) {
-                    $('#imagePreview').attr('src', data.brand_image).show();
-                    $(".upload_icon").hide();
+                    $('#imagePreview').attr('src', data.brand_image).removeClass('d-none');
+                    $(".upload_icon").addClass('d-none');
                 } else {
-                    $(".upload_icon").show();
-                    $('#imagePreview').hide()
+                    $(".upload_icon").removeClass('d-none');
+                    $('#imagePreview').addClass('d-none');
                 }
 
                 if (data.brand_icon) {
-                    $('#iconPreview').attr('src', data.brand_icon).show();
-                    $(".upload_icon_2").hide();
+                    $('#iconPreview').attr('src', data.brand_icon).removeClass('d-none');
+                    $(".upload_icon_2").addClass('d-none');
                 } else {
-                    $(".upload_icon_2").show();
-                    $('#iconPreview').hide()
+                    $(".upload_icon_2").removeClass('d-none');
+                    $('#iconPreview').addClass('d-none');
                 }
 
                 $("#brand_modal").modal('show');

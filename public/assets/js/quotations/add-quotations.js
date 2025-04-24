@@ -373,7 +373,7 @@
                     _l("admin.bookings.duration_must_be_atleast_one_hour")
                 );
                 $(".summary_rental_period").text("-");
-                $("#vehicle_list_main_container").hide();
+                $("#vehicle_list_main_container").addClass('d-none');
                 return;
             } else {
                 $("#end_date, #end_time").removeClass("is-invalid");
@@ -439,7 +439,7 @@
             pickup_location_val &&
             return_location_val
         ) {
-            $("#vehicle_list_main_container").show();
+            $("#vehicle_list_main_container").removeClass('d-none');
             lastPage = false;
             currentPage = 1;
             getVehicles();
@@ -509,7 +509,7 @@
             $(".form-control, .select2-container").removeClass(
                 "is-invalid is-valid"
             );
-            $("#vehicle_list_main_container").hide();
+            $("#vehicle_list_main_container").addClass('d-none');
             return;
         } else {
             startDate = todayDateTime.format("DD-MM-YYYY");

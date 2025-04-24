@@ -224,7 +224,7 @@
                             <label for="icon" class="form-label">{{ __('admin.common.icon') }} <span class="text-danger icon_asterisk">*</span></label>
                             <div class="col-md-4">
                                  <div class="d-flex align-items-center justify-content-center avatar avatar-xxxl border border-dashed me-2 flex-shrink-0 text-dark frames">
-                                     <img src="" alt="" id="icon_preview" style="display: none;" width="80px" height="80px">
+                                     <img src="" alt="" id="icon_preview" class="img-fluid rounded d-none">
                                      <i class="ti ti-photo-plus icon_placeholder"></i>
                                  </div>
                             </div>
@@ -247,7 +247,7 @@
                     </div>
 					<div class="modal-footer">
                         <div class="d-flex justify-content-between align-items-center w-100" id="submit_div">
-                            <div class="form-check form-check-md form-switch me-2" style="display: none;" id="status_div">
+                            <div class="form-check form-check-md form-switch me-2 d-none" id="status_div">
                                 <label class="form-check-label form-label mt-0 mb-0">
                                 <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status" id="status">
                                     {{ __('admin.common.status') }}

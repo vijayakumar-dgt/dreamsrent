@@ -41,12 +41,6 @@
         </div>
         <!-- /Breadcrumb -->
 
-        <div class="d-flex align-items-center mb-4">
-            <div class="skeleton label-skeleton label-loader"></div>
-            <a href="{{ route('admin.customers') }}" class="btn bg-secondary-transparent me-3 d-none real-label"><i class="ti ti-user me-1"></i>{{ __('admin.common.customers') }}</a>
-            <a href="javascript:void(0);" class="btn btn-white d-none"><i class="ti ti-building me-1"></i>{{ __('admin.common.companies') }}</a>
-        </div>
-
         <!-- Table Header -->
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
             <div class="d-flex align-items-center flex-wrap row-gap-3">

@@ -258,7 +258,7 @@ $("#add_car_model").on('click', function() {
     $('#brand_id').val('').trigger('change');
     $(".error-text").text("");
     $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-    $('#statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
+    $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
 });
 
 $("#total_cars").on("input", function () {
@@ -314,7 +314,7 @@ function editCarModel(id){
 
                 $("#car_model_modal .modal-title").text(_l('admin.rentals.edit_vehicle_model'));
                 $(".submitbtn").text(_l('admin.common.save_changes'));
-                $('#statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+                $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
                 $("#car_model_modal").modal('show');
             }
        }

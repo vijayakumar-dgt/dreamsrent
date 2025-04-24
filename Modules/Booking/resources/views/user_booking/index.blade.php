@@ -73,15 +73,6 @@
                                 </div>
                                 <div class="booking-info-body">
                                     <ul class="booking-radio-btns">
-                                        {{-- <li style="cursor: not-allowed;">
-                                            <label class="booking_custom_check">
-                                                <input type="radio" name="rent_type" id="location_delivery"
-                                                    {{ request('rent_value') == 'delivery' ? 'checked' : '' }} value="delivery">
-                                                <span class="booking_checkmark">
-                                                    <span class="checked-title"> {{ __('web.user.delivery') }}</span>
-                                                </span>
-                                            </label>
-                                        </li> --}}
                                         <li style="cursor: not-allowed;">
                                             <label class="booking_custom_check">
                                                 <input type="radio" name="rent_type" id="location_pickup"

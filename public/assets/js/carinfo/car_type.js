@@ -156,12 +156,12 @@ $(document).ready(function() {
                 $('#icon_preview').attr('src', e.target.result);
             }
             reader.readAsDataURL(this.files[0]);
-            $("#icon_preview").show();
-            $(".icon_placeholder").hide();
+            $("#icon_preview").removeClass('d-none');
+            $(".icon_placeholder").addClass('d-none');
     
         }else{
-            $("#icon_preview").hide();
-            $(".icon_placeholder").show();
+            $("#icon_preview").addClass('d-none');
+            $(".icon_placeholder").removeClass('d-none');
         }
     });
 
@@ -340,16 +340,15 @@ function editType(id){
                 $("#add_type #status").prop('checked', false);
             }
             if(data.icon && data.icon != null){
-                $("#icon_preview").attr('src', data.icon).show();
-                $(".icon_placeholder").hide();
+                $("#icon_preview").attr('src', data.icon).removeClass('d-none');
+                $(".icon_placeholder").addClass('d-none');
             }else{
-                $("#icon_preview").hide();
-                $(".icon_placeholder").show();
+                $("#icon_preview").addClass('d-none');
+                $(".icon_placeholder").removeClass('d-none');
             }
-            //change modal title 
             $("#add_type .modal-title").text(_l('admin.rentals.edit_type'));
             $("#add_type .submitbtn").text(_l('admin.common.save_changes'));
-            $("#status_div").show();
+            $("#status_div").removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
             if($("#submit_div").hasClass("justify-content-end")){
                 $("#submit_div").removeClass("justify-content-end").addClass("justify-content-between");
             }
@@ -368,13 +367,12 @@ function editType(id){
 }
 
 $("#add_new_type").click(function(){
-    //change modal title 
     $("#add_type .modal-title").text(_l('admin.rentals.create_type'));
     $("#add_type .submitbtn").text(_l('admin.common.create_new'));
-    $("#status_div").hide();
+    $("#status_div").addClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
     $("#typeForm")[0].reset();
-    $("#icon_preview").hide();
-    $(".icon_placeholder").show();
+    $("#icon_preview").addClass('d-none');
+    $(".icon_placeholder").removeClass('d-none');
     $("#typeForm #id").val('');
     $(".error-text").text("");
     $(".form-control").removeClass("is-invalid is-valid");

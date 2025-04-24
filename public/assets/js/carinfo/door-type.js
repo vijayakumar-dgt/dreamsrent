@@ -255,7 +255,7 @@
         $("#id").val('');
         $(".error-text").text("");
         $(".form-control").removeClass("is-invalid is-valid");
-        $('#statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
+        $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
     });
 
     $("#deleteDoorType").on('submit', function (e) {
@@ -305,7 +305,7 @@ function editDoorType(id) {
 
                 $("#door_type_modal .modal-title").text(_l('admin.rentals.edit_door_type'));
                 $(".submitbtn").text(_l('admin.common.save_changes'));
-                $('#statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+                $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
                 $("#door_type_modal").modal('show');
             }
         }
