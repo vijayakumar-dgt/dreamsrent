@@ -77,12 +77,25 @@ class CarFuelController extends Controller
     public function list(Request $request)
     {
         $orderBy = $request->order_by ?? 'desc';
+        $search = $request->input('search');
+        $status = $request->input('status');
 
         try {
-
-            $authUser = current_user(); // Assuming this returns the authenticated user
+            $authUser = current_user();
             $languageId = $authUser->language_id ?? 1;
-            $data = CarFuel::orderBy('id', $orderBy)->where("language_id", $languageId)->get();
+
+            $query = CarFuel::orderBy('id', $orderBy)
+                ->where('language_id', $languageId);
+
+            if (!empty($search)) {
+                $query->where('fuel_type', 'LIKE', "%{$search}%");
+            }
+
+            if ($status !== null && $status !== '') {
+                $query->where('status', $status); // Assumes 'status' column exists in categories table
+            }
+
+            $data = $query->get();
 
             return response()->json([
                 'code' => 200,
