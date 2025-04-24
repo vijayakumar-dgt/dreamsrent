@@ -36,7 +36,7 @@
 </div>
 @endforeach
 @else
- <h4 class="no-blog">No Blogs Found</h4>
+ <h4 class="no-blog">{{__('web.blog.no_blog_found')}}</h4>
 @endif
 
 <!--Pagination-->

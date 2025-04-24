@@ -680,5 +680,7 @@ return [
         'comments' => 'Comments',
         'submit_review' => 'Submit Review',
         'blogs_title' => 'Blogs | Dreams Rent',
+        'no_blog_found' => 'No Blog Found',
+        'no_data_found' => 'No Data Found',
     ]
 ];
