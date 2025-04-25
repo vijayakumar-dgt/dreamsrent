@@ -100,7 +100,7 @@
                 <input type="hidden" name="section_id" id="section_id">
 
                 <div class="modal-body">
-                    <div id="section_id_1" style="display: none;">
+                    <div id="section_id_1" class="d-none">
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
@@ -108,7 +108,7 @@
                                     <input type="file" name="thumbnail_image_one" id="thumbnail_image_one" class="form-control" accept="image/*" onchange="previewThumbnailOne(this)">
                                     <div class="invalid-feedback" id="thumbnail_image_one_error"></div>
                                 </div>
-                                <img id="thumbnail_preview_one" src="" alt="Preview" class="mt-2" style="max-height: 120px; display: none;">
+                                <img id="thumbnail_preview_one" src="" alt="Preview" class="mt-2 img-preview-thumb">
                             </div>
 
                             <div class="form-group col-md-12">
@@ -146,7 +146,7 @@
                         </div>
                     </div>
 
-                    <div id="section_id_2" style="display: none;">
+                    <div id="section_id_2" class="d-none">
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
@@ -154,7 +154,7 @@
                                     <input type="file" name="thumbnail_image_two" id="thumbnail_image_two" class="form-control" accept="image/*" onchange="previewThumbnailTwo(this)">
                                     <div class="invalid-feedback" id="thumbnail_image_two_error"></div>
                                 </div>
-                                <img id="thumbnail_preview_two" src="" alt="Preview" class="mt-2" style="max-height: 120px; display: none;">
+                                <img id="thumbnail_preview_two" src="" alt="Preview" class="mt-2 img-preview-thumb">
                             </div>
 
                             <div class="form-group col-md-12">
@@ -174,7 +174,8 @@
                             </div>
                         </div>
                     </div>
-                    <div id="section_id_3" style="display: none;">
+
+                    <div id="section_id_3" class="d-none">
                         <div class="row">
 
                             <div class="form-group col-md-12">

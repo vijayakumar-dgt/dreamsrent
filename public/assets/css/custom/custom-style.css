@@ -911,3 +911,7 @@
     height: 24px;
     object-fit: cover;
   }
+
+  .img-preview-thumb {
+    max-height: 120px;
+}

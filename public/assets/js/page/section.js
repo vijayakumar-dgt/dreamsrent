@@ -164,41 +164,41 @@ $(document).on("click", ".section_data", function (e) {
 
     var ID = $(this).data("id");
 
-    $("#section_id_1, #section_id_2, #section_id_3").hide();
+    $("#section_id_1, #section_id_2, #section_id_3").addClass("d-none");
 
     if (ID == 1) {
-        $("#section_id_1").show();
-        $("#section_id").val($(this).data("id"));
+        $("#section_id_1").removeClass("d-none");
+        $("#section_id").val(ID);
         $("#description_one").val($(this).data("description_one"));
         $("#label_one").val($(this).data("label_one"));
         $("#line_two").val($(this).data("line_two"));
         $("#line_one").val($(this).data("line_one"));
-        let thumbnailImageUrl = $(this).data("thumbnail_image_one"); // Already a full URL
-
-        // No need to set input value for a file, but you can store image name if needed in hidden input
+        
+        let thumbnailImageUrl = $(this).data("thumbnail_image_one");
 
         if (thumbnailImageUrl) {
-            $("#thumbnail_preview_one").attr("src", thumbnailImageUrl).show();
+            $("#thumbnail_preview_one").attr("src", thumbnailImageUrl).removeClass("d-none");
         } else {
-            $("#thumbnail_preview_one").hide();
+            $("#thumbnail_preview_one").addClass("d-none");
         }
+
     } else if (ID == 29) {
-        $("#section_id_2").show();
-        $("#section_id").val($(this).data("id"));
+        $("#section_id_2").removeClass("d-none");
+        $("#section_id").val(ID);
         $("#description_two").val($(this).data("description_two"));
         $("#label_two").val($(this).data("label_two"));
-        let thumbnailImageUrl = $(this).data("thumbnail_image_two"); // Already a full URL
-
-        // No need to set input value for a file, but you can store image name if needed in hidden input
+        
+        let thumbnailImageUrl = $(this).data("thumbnail_image_two");
 
         if (thumbnailImageUrl) {
-            $("#thumbnail_preview_two").attr("src", thumbnailImageUrl).show();
+            $("#thumbnail_preview_two").attr("src", thumbnailImageUrl).removeClass("d-none");
         } else {
-            $("#thumbnail_preview_two").hide();
+            $("#thumbnail_preview_two").addClass("d-none");
         }
+
     } else if (ID == 42) {
-        $("#section_id_3").show();
-        $("#section_id").val($(this).data("id"));
+        $("#section_id_3").removeClass("d-none");
+        $("#section_id").val(ID);
     }
 });
 
