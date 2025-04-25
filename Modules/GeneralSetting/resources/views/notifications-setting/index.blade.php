@@ -178,7 +178,7 @@
 
                                 <div class="card-footer">
                                     <div class="d-flex justify-content-end">
-                                        <a href="{{ route('dashboard') }}" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
+                                        <a href="{{ route('dashboard') }}" class="btn btn-light me-3" >{{ __('admin.general_settings.cancel') }}</a>
                                         <button type="submit" class="btn btn-primary">{{ __('admin.general_settings.save_changes') }}</button>
                                     </div>
                                 </div>

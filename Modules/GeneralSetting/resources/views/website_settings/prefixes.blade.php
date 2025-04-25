@@ -112,7 +112,7 @@
                                 <div class="card-footer">
                                     <div class="d-flex justify-content-end">
                                         <div class="skeleton label-skeleton label-loader me-2"></div>
-                                        <a href="{{ route('dashboard') }}" class="btn btn-light me-3 d-none real-label" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                                        <a href="{{ route('dashboard') }}" class="btn btn-light me-3 d-none real-label" >{{ __('admin.common.cancel') }}</a>
                                         @if (hasPermission($permissions, 'website_settings', 'edit'))
 
                                         <div class="skeleton label-skeleton label-loader"></div>
