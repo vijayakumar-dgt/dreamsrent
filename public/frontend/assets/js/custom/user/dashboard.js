@@ -89,7 +89,7 @@ function createBookingCard(booking){
                 </td>
                 <td>
                     <h6>${_l('web.common.price')}</h6>
-                    <h5 class="text-danger">${booking.currency} ${booking.total_amount}</h5>
+                    <h5 class="text-danger">${booking.currency}${booking.total_amount}</h5>
                 </td>
                 <td>
                     ${statusLabel}
