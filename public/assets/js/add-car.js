@@ -226,7 +226,6 @@
                                 }
                             }
                         } catch (e) {
-                            console.error("Invalid vehicle_price JSON", e);
                         }
 
                         tableBody += `<tr>
@@ -2174,7 +2173,6 @@ function editVechileList(vehicleSlug) {
             }
         },
         error: function (xhr, status, error) {
-            console.error("An error occurred:", error);
         },
     });
 }

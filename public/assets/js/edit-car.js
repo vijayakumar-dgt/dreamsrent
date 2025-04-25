@@ -54,7 +54,6 @@
                 }
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching damage data:", error);
             },
         });
     }
@@ -62,7 +61,6 @@
     let DamageCounter = 0; // Ensure global unique IDs
 
     function adddamage(damage) {
-        console.log(damage);
         let uniqueID = "damage_" + DamageCounter++;
 
         let currentDate = new Date(
@@ -133,7 +131,6 @@
                 }
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching insurance data:", error);
             },
         });
     }
@@ -220,7 +217,6 @@
                 }
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching seasonal data:", error);
             },
         });
     }
@@ -331,7 +327,6 @@
                 }
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching tarrif data:", error);
             },
         });
     }
@@ -431,7 +426,6 @@
                 }
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching faq data:", error);
             },
         });
     }
@@ -508,7 +502,6 @@
                 }
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching document data:", error);
             },
         });
     }
@@ -2514,7 +2507,6 @@ function editVechileList(vehicleSlug) {
             }
         },
         error: function (xhr, status, error) {
-            console.error("An error occurred:", error);
         },
     });
 }
