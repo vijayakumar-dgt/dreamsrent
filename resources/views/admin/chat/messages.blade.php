@@ -116,7 +116,7 @@
                             <button type="button" class="btn-file btn" id="openFile">
                                 <i class="fa fa-paperclip"></i>
                             </button>
-                            <input type="file" id="fileupload" style="display: none;">
+                            <input type="file" id="fileupload" class="d-none">
                             <input type="text" class="form-control me-3" id="messageinput" placeholder="{{ __('admin.others.type_your_message') }}">
                             <button class="btn btn-primary" type="button" id="sendmsg" data-senderid="{{ $sender->id }}">
                                 <i class="ti ti-send"></i>
