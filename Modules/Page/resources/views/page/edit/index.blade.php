@@ -95,7 +95,7 @@
                                         <div class="mb-3">
                                             <div class="skeleton label-skeleton label-loader me-2"></div>
                                             <label class="form-label d-none real-label">{{ __('admin.page.meta_description') }}</label>
-                                            <div class="skeleton input-skeleton input-loader me-2" style="height: 10rem;"></div>
+                                            <div class="skeleton input-skeleton input-loader me-2"></div>
                                             <textarea rows="4" name="meta_description" id="meta_description" placeholder="{{ __('admin.page.meta_description_placeholder') }}" class="form-control d-none real-input">{{ $query->seo_description }}</textarea>
                                             <span class="invalid-feedback" id="meta_description_error"></span>
                                         </div>
@@ -122,7 +122,7 @@
                                         <div class="mb-3">
                                             <div class="skeleton label-skeleton label-loader me-2"></div>
                                             <label class="form-label d-none real-label">{{ __('admin.page.og_description') }}</label>
-                                            <div class="skeleton input-skeleton input-loader me-2" style="height: 10rem;"></div>
+                                            <div class="skeleton input-skeleton input-loader me-2"></div>
                                             <textarea rows="4" name="og_description" id="og_description" placeholder="{{ __('admin.page.og_description_placeholder') }}" class="form-control d-none real-input">{{ $query->og_description }}</textarea>
                                             <span class="invalid-feedback" id="og_description_error"></span>
                                         </div>
