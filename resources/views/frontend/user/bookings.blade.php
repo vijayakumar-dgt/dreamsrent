@@ -383,57 +383,57 @@
                             <div class="col-lg-4 col-md-6">								
                                 <div class="booking-view">
                                     <h6>{{__('web.user.booking')}} {{__('web.user.type')}}</h6>
-                                    <p class="bk-type">Delivery</p>
+                                    <p class="bk-type"></p>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">								
                                 <div class="booking-view">
                                     <h6>{{__('web.common.rental_type')}}</h6>
-                                    <p class="bk-rental">Days (3 Days)</p>
+                                    <p class="bk-rental"></p>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">								
                                 <div class="booking-view">
                                     <h6>{{__('web.user.extra_services')}}</h6>
-                                    <p class="bk-extra-service">Mobile Charging</p>
+                                    <p class="bk-extra-service"></p>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">								
                                 <div class="booking-view">
                                     <h6>{{__('web.user.delivery')}}</h6>
-                                    <p class="bk-pickup-location">45, Avenue ,Mark Street, USA</p>
-                                    <p class="bk-start-date">11 Jan 2023, 03:30 PM</p>
+                                    <p class="bk-pickup-location"></p>
+                                    <p class="bk-start-date"></p>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">								
                                 <div class="booking-view">
                                     <h6>{{__('web.user.dropoff')}}</h6>
-                                    <p class="bk-drop-location">78, 10th street Laplace,USA</p>
-                                    <p class="bk-end-date">11 Jan 2023, 03:30 PM</p>
+                                    <p class="bk-drop-location"></p>
+                                    <p class="bk-end-date"></p>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">								
                                 <div class="booking-view">
                                     <h6>{{__('web.common.status')}}</h6>
-                                    <div class="bk-status"><span class="badge badge-light-secondary">Upcoming</span></div>
+                                    <div class="bk-status"><span class="badge badge-light-secondary"></span></div>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">								
                                 <div class="booking-view">
                                     <h6>{{__('web.user.booked_on')}}</h6>
-                                    <p class="bk-booked-on">15 Sep 2023, 09:30 AM</p>
+                                    <p class="bk-booked-on"></p>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">								
                                 <div class="booking-view">
                                     <h6>{{__('web.common.start_date')}}</h6>
-                                    <p>18 Sep 2023, 09:30 AM</p>
+                                    <p class="bk-start-date"></p>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">								
                                 <div class="booking-view">
                                     <h6>{{__('web.common.end_date')}}</h6>
-                                    <p>20 Sep 2023, 09:30 AM</p>
+                                    <p class="bk-end-date"></p>
                                 </div>
                             </div>
                         </div>
@@ -454,7 +454,7 @@
                             <div class="col-lg-4 col-md-6">								
                                 <div class="booking-view">
                                     <h6>{{__('web.user.address')}}</h6>
-                                    <p class="user-address">78, 10th street</p>
+                                    <p class="user-address"></p>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-6">								

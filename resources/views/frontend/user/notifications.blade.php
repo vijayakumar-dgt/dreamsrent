@@ -58,8 +58,6 @@
 
     </div>
 </div>
-@endsection
-
 <div class="modal fade" id="delete_notification" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -116,6 +114,7 @@
         </div>
     </div>
 </div>
+@endsection
 @push('scripts')
 <script src="{{ asset('frontend/assets/js/custom/user/notifications.js') }}"></script>
 @endpush

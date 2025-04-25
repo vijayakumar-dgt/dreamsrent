@@ -300,7 +300,7 @@ function bookingList(sort_by_date = '') {
             visible: hasPermission(permissions, 'reservations', 'edit') || hasPermission(permissions, 'reservations', 'view') || hasPermission(permissions, 'reservations', 'delete')
         }
         ],
-        order: [[0, 'asc']],
+        order: [[0, 'desc']],
         ordering: true,
         searching: false,
         pageLength: 10,

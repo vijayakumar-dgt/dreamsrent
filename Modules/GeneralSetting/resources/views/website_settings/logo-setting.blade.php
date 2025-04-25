@@ -43,13 +43,13 @@
 
                                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                             <div class="skeleton image-skeleton image-loader"></div>
-                                            <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames d-none real-label">
-                                                <img id="logo_photo_preview" src="/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
-                                                <a href="javascript:void(0);" class="uploadimgtrash btn btn-sm rounded-circle" onclick="removeImage('logo_photo_preview', 'logo_image')">
-                                                    <i class="ti ti-trash fs-12"></i>
-                                                </a>
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-xxl logo-large-size border rounded d-flex align-items-center justify-content-center p-2 me-2 d-none real-label">
+                                                        <img src="" alt="Logo" id="logo_photo_preview" class="real-input">
+                                                    </span>
+                                                </div>
                                             </div>
-
                                             <div class="profile-upload">
                                                 <div class="skeleton button-skeleton label-loader"></div>
                                                 <div class="profile-uploader d-flex align-items-center d-none real-label">
@@ -74,13 +74,13 @@
 
                                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                             <div class="skeleton image-skeleton image-loader"></div>
-                                            <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames d-none real-label">
-                                                <img id="favicon_photo_preview" src="/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
-                                                <a href="javascript:void(0);" class="uploadimgtrash btn btn-sm rounded-circle" onclick="removeImage('favicon_photo_preview', 'favicon_image')">
-                                                    <i class="ti ti-trash fs-12"></i>
-                                                </a>
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-xxl logo-large-size border rounded d-flex align-items-center justify-content-center p-2 me-2 d-none real-label">
+                                                        <img src="" alt="Logo" id="favicon_photo_preview" class="real-input">
+                                                    </span>
+                                                </div>
                                             </div>
-
                                             <div class="profile-upload">
                                                 <div class="skeleton button-skeleton label-loader"></div>
                                                 <div class="profile-uploader d-flex align-items-center d-none real-label">
@@ -88,7 +88,6 @@
                                                         <i class="ti ti-photo-up fs-14"></i>
                                                         {{ __('admin.general_settings.upload') }}
                                                         <input type="file" id="favicon_image" name="favicon_image" accept="image/*" onchange="previewImage(event, 'favicon_photo_preview', 128, 128)">
-
                                                     </div>
                                                 </div>
                                                 <div class="skeleton text-skeleton label-loader"></div>
@@ -105,13 +104,13 @@
 
                                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                             <div class="skeleton image-skeleton image-loader"></div>
-                                            <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames d-none real-label">
-                                                <img id="small_icon_photo_preview" src="/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
-                                                <a href="javascript:void(0);" class="uploadimgtrash btn btn-sm rounded-circle" onclick="removeImage('small_icon_photo_preview', 'small_image')">
-                                                    <i class="ti ti-trash fs-12"></i>
-                                                </a>
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-xxl logo-large-size border rounded d-flex align-items-center justify-content-center p-2 me-2 d-none real-label">
+                                                        <img src="" alt="Logo" id="small_icon_photo_preview" class="real-input">
+                                                    </span>
+                                                </div>
                                             </div>
-
                                             <div class="profile-upload">
                                                 <div class="skeleton button-skeleton label-loader"></div>
                                                 <div class="profile-uploader d-flex align-items-center d-none real-label">
@@ -135,13 +134,13 @@
 
                                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                             <div class="skeleton image-skeleton image-loader"></div>
-                                            <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames d-none real-label">
-                                                <img id="dark_logo_preview" src="/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
-                                                <a href="javascript:void(0);" class="uploadimgtrash btn btn-sm rounded-circle" onclick="removeImage('dark_logo_preview', 'dark_logo')">
-                                                    <i class="ti ti-trash fs-12"></i>
-                                                </a>
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <span class="avatar avatar-xxl logo-large-size border rounded d-flex align-items-center justify-content-center p-2 me-2 d-none real-label">
+                                                        <img src="" alt="Logo" id="dark_logo_preview" class="real-input">
+                                                    </span>
+                                                </div>
                                             </div>
-
                                             <div class="profile-upload">
                                                 <div class="skeleton button-skeleton label-loader"></div>
                                                 <div class="profile-uploader d-flex align-items-center d-none real-label">

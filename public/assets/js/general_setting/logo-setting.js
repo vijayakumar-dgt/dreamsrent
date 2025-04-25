@@ -14,16 +14,16 @@
         $("#logoSettingForm").validate({
             rules: {
                 logo_image: {
-                    extension: _l('admin.general_settings.logo_image_extension')
+                    extension: "jpeg|jpg|png|svg"
                 },
                 favicon_image: {
-                    extension:  _l('admin.general_settings.favicon_image_extension')
+                    extension: "jpeg|jpg|png|svg"
                 },
                 small_image: {
-                    extension:  _l('admin.general_settings.small_image_extension')
+                    extension: "jpeg|jpg|png|svg"
                 },
                 dark_logo: {
-                    extension:  _l('admin.general_settings.dark_logo_extension')
+                    extension: "jpeg|jpg|png|svg"
                 }
             },
             messages: {
@@ -125,16 +125,16 @@ function loadLogoSettings() {
 
                     switch (setting.key) {
                         case 'logo_image':
-                            $('#logo_photo_preview').attr('src', '/' + setting.value).show();
+                            $('#logo_photo_preview').attr('src', setting.value).show();
                             break;
                         case 'favicon_image':
-                            $('#favicon_photo_preview').attr('src', '/' + setting.value).show();
+                            $('#favicon_photo_preview').attr('src', setting.value).show();
                             break;
                         case 'small_image':
-                            $('#small_icon_photo_preview').attr('src', '/' + setting.value).show();
+                            $('#small_icon_photo_preview').attr('src', setting.value).show();
                             break;
                         case 'dark_logo':
-                            $('#dark_logo_preview').attr('src', '/' + setting.value).show();
+                            $('#dark_logo_preview').attr('src', setting.value).show();
                             break;
                         default:
                             if (element.length) {
@@ -190,7 +190,6 @@ function previewImage(event, previewId, requiredWidth, requiredHeight) {
 }
 
 function removeImage(previewId, inputId) {
-    $("#" + previewId).attr("src", "/assets/img/settings/company-logo-01.jpg");
+    $("#" + previewId).attr("src", "/custom/img/default-image-02.jpg");
     $("#" + inputId).val("");
-    $("#" + previewId).closest(".frames").addClass("d-none");
 }

@@ -18,7 +18,6 @@
                 ["view", ["fullscreen", "codeview", "help"]],
             ],
         });
-
     });
 
     function getDamageInfo() {
@@ -38,8 +37,7 @@
                     // showToast("error", "No damage data found.");
                 }
             },
-            error: function (xhr, status, error) {
-            },
+            error: function (xhr, status, error) {},
         });
     }
 
@@ -76,7 +74,7 @@
                         <div class="d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
                             <p class="mb-0">Added on : ${currentDate}</p>
                             <div class="icon-list d-flex align-items-center">
-                                <a href="#" class="edit-damage me-2" data-id="${uniqueID}" data-bs-toggle="modal" data-bs-target="#add-damage">
+                                <a href="#" class="edit-damage me-2" data-id="${damage.id}" data-bs-toggle="modal" data-bs-target="#add-damage">
                                     <i class="ti ti-edit"></i>
                                 </a>
                                 <a href="#" class="trash-damage" data-id="${uniqueID}" data-bs-toggle="modal" data-bs-target="#delete_damage">
@@ -115,8 +113,7 @@
                     showToast("error", "No insurance data found.");
                 }
             },
-            error: function (xhr, status, error) {
-            },
+            error: function (xhr, status, error) {},
         });
     }
 
@@ -201,8 +198,7 @@
                 } else {
                 }
             },
-            error: function (xhr, status, error) {
-            },
+            error: function (xhr, status, error) {},
         });
     }
 
@@ -311,8 +307,7 @@
                     showToast("error", "No tarrif data found.");
                 }
             },
-            error: function (xhr, status, error) {
-            },
+            error: function (xhr, status, error) {},
         });
     }
 
@@ -410,8 +405,7 @@
                     showToast("error", "No faq data found.");
                 }
             },
-            error: function (xhr, status, error) {
-            },
+            error: function (xhr, status, error) {},
         });
     }
 
@@ -460,7 +454,6 @@
         const count = $(".car_faq_append .accordion-item").length;
         $("#faq_count_display").text(count); // Assuming you have an element with this ID
     }
-    
 
     function getDocumentsInfo() {
         let vehicleId = $("#vehicle_id").val(); // Get vehicle ID from input field
@@ -492,8 +485,7 @@
                     showToast("error", "No documents found.");
                 }
             },
-            error: function (xhr, status, error) {
-            },
+            error: function (xhr, status, error) {},
         });
     }
 
@@ -1738,7 +1730,6 @@
         // Image Preview on File Selection
         $("#dam_image").on("change", function (event) {
             let file = event.target.files[0];
-
             if (file) {
                 let imageUrl = URL.createObjectURL(file);
                 $("#image_preview").attr("src", imageUrl).removeClass("d-none");
@@ -1782,7 +1773,6 @@
                     };
                     reader.readAsDataURL(damageImage);
                 } else {
-                    // If no new image selected, keep the previous image
                     editElement
                         .find("input[name='damage_image[]']")
                         .val(prevImageSrc);
@@ -1813,37 +1803,36 @@
 
                 reader.onload = function (e) {
                     let imageUrl = e.target.result;
-
                     let newDamage = `
-                <div id="${uniqueId}" class="bg-white p-20 br-5 border mb-2">
-                 <input type="hidden" name="damage_id[]" value="${uniqueId}">
-                        <input type="hidden" name="damage_image[]" value="${imageUrl}">
-                    <div class="row align-items-center row-gap-3">
-                        <div class="col-xxl-8 col-md-7">
-                            <div class="d-flex align-items-center gap-2 mb-1">
-                                <h6 class="fs-14 fw-medium">${damageType}</h6>
-                                <input type="hidden" name="damage_name[]" value="${damageType}">
-                                <span class="badge bg-pink-transparent badge-sm">${damageName}</span>
-                                <input type="hidden" name="damage_location[]" value="${damageName}">
-                            </div>
-                            <p class="fs-13">${damageDesc}</p>
-                            <input type="hidden" name="damage_description[]" value="${damageDesc}">
-                        </div>
-                        <div class="col-xxl-4 col-md-5">
-                            <div class="d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
-                                <p class="mb-0">Added on : ${currentDate}</p>
-                                <div class="icon-list d-flex align-items-center">
-                                    <a href="#" class="edit-damage me-2" data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#add-damage">
-                                        <i class="ti ti-edit"></i>
-                                    </a>
-                                    <a href="#" class="trash-damage" data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#delete_damage">
-                                        <i class="ti ti-trash"></i>
-                                    </a>
+                        <div id="${uniqueId}" class="bg-white p-20 br-5 border mb-2">
+                            <input type="hidden" name="damage_id[]" value="${uniqueId}">
+                            <input type="hidden" name="damage_image[]" value="${imageUrl}">
+                            <div class="row align-items-center row-gap-3">
+                                <div class="col-xxl-8 col-md-7">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <h6 class="fs-14 fw-medium">${damageType}</h6>
+                                        <input type="hidden" name="damage_name[]" value="${damageType}">
+                                        <span class="badge bg-pink-transparent badge-sm">${damageName}</span>
+                                        <input type="hidden" name="damage_location[]" value="${damageName}">
+                                    </div>
+                                    <p class="fs-13">${damageDesc}</p>
+                                    <input type="hidden" name="damage_description[]" value="${damageDesc}">
                                 </div>
-                            </div>
-                        </div>
-                    </div>                                                            
-                </div>`;
+                                <div class="col-xxl-4 col-md-5">
+                                    <div class="d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
+                                        <p class="mb-0">Added on : ${currentDate}</p>
+                                        <div class="icon-list d-flex align-items-center">
+                                            <a href="#" class="edit-damage me-2" data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#add-damage">
+                                                <i class="ti ti-edit"></i>
+                                            </a>
+                                            <a href="#" class="trash-damage" data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#delete_damage">
+                                                <i class="ti ti-trash"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                                                 
+                        </div>`;
 
                     $("#car_damage_append").append(newDamage);
                     updateDamageCount();
@@ -1852,60 +1841,99 @@
                 reader.readAsDataURL(damageImage);
             }
 
+            // Reset modal fields and hide modal
             $("#add-damage").modal("hide");
             showToast("success", "Damage added successfully!");
         });
 
+        // Update Damage Count
         function updateDamageCount() {
             let totalDamages = $("#car_damage_append > div").length;
             $("#damage_count").text(totalDamages.toString().padStart(2, "0"));
         }
 
+        // Open Add Damage Modal and Reset Fields
         $(document).on("click", "#damage_car", function (e) {
             e.preventDefault();
             $("#damage_title").text("Add Damage");
             $("#damage_btn").text("Create New");
 
+            // Clear fields
             $("#add-damage input, #add-damage textarea").val("");
-
             $("#add-damage select").prop("selectedIndex", 0).trigger("change");
             $("#image_preview").attr("src", "").addClass("d-none");
         });
 
         // Edit Damage
         $(document).on("click", ".edit-damage", function () {
-            editingDamageId = $(this).data("id");
-            let editElement = $("#" + editingDamageId);
+            let damageId = $(this).data("id"); // Get the damage ID
 
-            // Get values from hidden inputs
-            let damageId = editElement.find("input[name='damage_id[]']").val();
-            let damageName = editElement
-                .find("input[name='damage_name[]']")
-                .val();
-            let damageLocation = editElement
-                .find("input[name='damage_location[]']")
-                .val();
-            let damageDesc = editElement
-                .find("input[name='damage_description[]']")
-                .val();
-            let imgSrc = editElement.find("input[name='damage_image[]']").val();
+            // Make AJAX request to fetch damage details using the damage ID
+            $.ajax({
+                url: "/admin/get-damage-details", // Adjust this URL according to your route
+                type: "GET",
+                data: { id: damageId }, // Send the damage ID as part of the payload
+                success: function (response) {
+                    if (response.success) {
+                        let damage = response.data;
 
-            // Populate form fields
-            $("#dam_name").val(damageLocation);
-            $("#dam_dis").val(damageDesc);
+                        // If the data was returned from the server, populate the modal fields
+                        populateDamageForm(damage);
+                    } else {
+                        // If no data found, fallback to using the existing hidden input values
+                        let editElement = $("#" + damageId);
+
+                        let damageName = editElement
+                            .find("input[name='damage_location[]']")
+                            .val();
+                        let damageDesc = editElement
+                            .find("input[name='damage_description[]']")
+                            .val();
+                        let imgSrc = editElement
+                            .find("input[name='damage_image[]']")
+                            .val();
+
+                        // Populate the modal fields with the values from the hidden inputs
+                        populateDamageForm({
+                            damage_location: damageName,
+                            description: damageDesc,
+                            image: imgSrc,
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showToast(
+                        "error",
+                        "Something went wrong while fetching damage details."
+                    );
+                },
+            });
+        });
+
+        function populateDamageForm(damage) {
+            $("#dam_dis").val(damage.description || ""); // Description field
             $("#damage_title").text("Edit Damage");
             $("#damage_btn").text("Update");
 
-            // Handle Image Preview
-            if (imgSrc) {
-                $("#image_preview").attr("src", imgSrc).removeClass("d-none");
+            $("#dam_name")
+                .val(damage.damage_loaction || "")
+                .trigger("change");
+
+            $("#dam_type")
+                .val(damage.damage_type || "")
+                .trigger("change");
+
+            if (damage.image) {
+                $("#image_preview")
+                    .attr("src", "/" + damage.image)
+                    .removeClass("d-none");
             } else {
                 $("#image_preview").attr("src", "").addClass("d-none");
             }
 
             // Reset file input so user can select a new image
             $("#dam_image").val("");
-        });
+        }
 
         // Delete Damage
         $(document).on("click", ".trash-damage", function () {
@@ -2358,22 +2386,36 @@
                 );
 
                 let damagePayload = [];
-                
+
                 $("input[name='damage_image[]']").each(function (index) {
                     let image = $(this).val()?.trim() || "";
-                
+
                     let nameField = $("input[name='damage_name[]']").eq(index);
-                    let name = nameField.length ? nameField.val()?.trim() || "" : "";
-                
-                    let locationField = $("input[name='damage_location[]']").eq(index);
-                    let location = locationField.length ? locationField.val()?.trim() || "" : "";
-                
-                    let descriptionField = $("input[name='damage_description[]']").eq(index);
-                    let description = descriptionField.length ? descriptionField.val()?.trim() || "" : "";
-                
-                    let damageIdField = $("input[name='damage_id[]']").eq(index);
-                    let damageId = damageIdField.length ? damageIdField.val()?.trim() || "" : "";
-                
+                    let name = nameField.length
+                        ? nameField.val()?.trim() || ""
+                        : "";
+
+                    let locationField = $("input[name='damage_location[]']").eq(
+                        index
+                    );
+                    let location = locationField.length
+                        ? locationField.val()?.trim() || ""
+                        : "";
+
+                    let descriptionField = $(
+                        "input[name='damage_description[]']"
+                    ).eq(index);
+                    let description = descriptionField.length
+                        ? descriptionField.val()?.trim() || ""
+                        : "";
+
+                    let damageIdField = $("input[name='damage_id[]']").eq(
+                        index
+                    );
+                    let damageId = damageIdField.length
+                        ? damageIdField.val()?.trim() || ""
+                        : "";
+
                     if (image && name && location && description) {
                         damagePayload.push({
                             image: image,
@@ -2383,7 +2425,7 @@
                         });
                     }
                 });
-                
+
                 finalFormData.append(
                     "vehicle_damage",
                     JSON.stringify(damagePayload)
@@ -2497,8 +2539,7 @@ function editVechileList(vehicleSlug) {
                 showToast("error", "Vehicle not found.");
             }
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
     });
 }
 

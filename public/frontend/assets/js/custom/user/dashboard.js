@@ -89,7 +89,7 @@ function createBookingCard(booking){
                 </td>
                 <td>
                     <h6>${_l('web.common.price')}</h6>
-                    <h5 class="text-danger">${booking.currency} ${booking.total_amount}</h5>
+                    <h5 class="text-danger">${booking.currency}${booking.total_amount}</h5>
                 </td>
                 <td>
                     ${statusLabel}
@@ -162,7 +162,7 @@ function createTransactionCard(booking){
                     </div>
                 </td>
                 <td class="border-0 text-end">
-                    <span class="badge badge-light-secondary">${bookingStatus}</span>
+                    ${bookingStatus}
                 </td>
             </tr>
             <tr>

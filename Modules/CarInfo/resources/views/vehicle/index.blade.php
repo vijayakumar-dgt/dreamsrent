@@ -87,7 +87,9 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end p-2">
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1">{{ __('admin.rentals.delete') }}</a>
+                            <a href="javascript:void(0);" class="dropdown-item rounded-1" id="deleteSelectedVehicles">
+                                {{ __('admin.rentals.delete') }}
+                            </a>
                         </li>
                     </ul>
                 </div>

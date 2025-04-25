@@ -141,9 +141,10 @@
 													<select name="vehicle_type_id" class="form-control select" id="vehicle_type_id">
 														<option value="">{{ __('admin.rentals.select') }}</option>
 														@foreach($carTypes as $carTypesValues)
-														<option value="{{ $carTypesValues->id }}">{{ $carTypesValues->name }}</option>
+															<option value="{{ $carTypesValues->id }}">{{ ucwords(strtolower($carTypesValues->name)) }}</option>
 														@endforeach
 													</select>
+													
 													<span class="invalid-feedback" id="vehicle_type_id_error"></span>
 												</div>
 											</div>
@@ -155,8 +156,8 @@
 													<select name="vehicle_brand_id" class="form-control select" id="vehicle_brand_id">
 														<option value="">{{ __('admin.rentals.select') }}</option>
 														@foreach($Brands as $BrandValues)
-														<option value="{{ $BrandValues->id }}">{{ $BrandValues->brand_name }}</option>
-														@endforeach
+														<option value="{{ $BrandValues->id }}">{{ ucwords(strtolower($BrandValues->brand_name )) }}</option>
+														@endforeach 
 													</select>
 													<span class="invalid-feedback" id="vehicle_brand_id_error"></span>
 												</div>
@@ -178,8 +179,8 @@
 													<select name="vehicle_category_id" class="form-control select" id="vehicle_category_id">
 														<option value="">{{ __('admin.rentals.select') }}</option>
 														@foreach($Category as $CategoryValues)
-														<option value="{{ $CategoryValues->id }}">{{ $CategoryValues->name }}</option>
-														@endforeach
+														<option value="{{ $CategoryValues->id }}">{{ ucwords(strtolower($CategoryValues->name)) }}</option>
+														@endforeach 
 													</select>
 													<span class="invalid-feedback" id="vehicle_category_id_error"></span>
 												</div>
@@ -204,8 +205,8 @@
 													<select name="main_location_id" class="form-control select" id="main_location_id">
 														<option value="">{{ __('admin.rentals.select') }}</option>
 														@foreach($Location as $LocationValues)
-														<option value="{{ $LocationValues->id }}">{{ $LocationValues->name }}</option>
-														@endforeach
+														<option value="{{ $LocationValues->id }}">{{ ucwords(strtolower($LocationValues->name )) }}</option>
+														@endforeach 
 													</select>
 													<span class="invalid-feedback" id="main_location_id_error"></span>
 												</div>
@@ -248,8 +249,8 @@
 														<option value="">{{ __('admin.rentals.select') }}</option>
 														@foreach($CarColor as $CarColorValues)
 														<option value="{{ $CarColorValues->id }}" data-color="{{ $CarColorValues->value }}">
-															{{ $CarColorValues->name }}
-														</option>
+															{{ ucwords(strtolower($CarColorValues->name)) }}
+														</option> 
 														@endforeach
 													</select>
 													<span class="invalid-feedback" id="vehicle_color_id_error"></span>
@@ -273,8 +274,8 @@
 													<select name="vehicle_transmission_id" class="form-control select" id="vehicle_transmission_id">
 														<option value="">{{ __('admin.rentals.select') }}</option>
 														@foreach($Transmission as $TransmissionValues)
-														<option value="{{ $TransmissionValues->id }}">{{ $TransmissionValues->name }}</option>
-														@endforeach
+														<option value="{{ $TransmissionValues->id }}">{{ ucwords(strtolower($TransmissionValues->name )) }}</option>
+														@endforeach 
 													</select>
 												</div>
 											</div>
