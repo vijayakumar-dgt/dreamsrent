@@ -429,7 +429,7 @@
                                             <li>
                                                 <div class="driver-profile-info">
                                                     <span class="driver-profile" id="driver_profile">
-                                                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRJ0tCOel3GeTItNxpqvhsILtxfV8yrbD5yA&s" alt="Img">
+                                                        <img src="/assets/img/drivers/driver_img.png" alt="Img">
                                                     </span>
                                                     <div class="driver-name">
                                                         <h5>{{ $driverInfo->driver_name }}</h5>
@@ -849,7 +849,7 @@
                                                         @if(!empty($driverInfo->driver_name))
                                                         <div class="acting-driver-info">
                                                             <span class="driver-profile">
-                                                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRJ0tCOel3GeTItNxpqvhsILtxfV8yrbD5yA&s" alt="Img">
+                                                                <img src="/assets/img/drivers/driver_img.png" alt="Img">
                                                             </span>
                                                             <div class="driver-name">
                                                                 <h5 id="driver_name_display">{{ $driverInfo->driver_name }}</h5>
