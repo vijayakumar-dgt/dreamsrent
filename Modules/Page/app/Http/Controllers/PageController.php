@@ -1149,7 +1149,6 @@ class PageController extends Controller
 
         $vehicleBrand = Brand::select("id", "brand_name", "brand_image", "brand_icon")->where("language_id", $language_id)->where("status", 1)->get();
         $content_sections = collect((array) $data['content_sections']);
-        dd($content_sections);
         if (request()->has('is_mobile') && request()->get('is_mobile') === "yes") {
             return response()->json(['code' => "200", 'message' => __('Page details retrieved successfully.'), 'data' => $data], 200);
         } {
