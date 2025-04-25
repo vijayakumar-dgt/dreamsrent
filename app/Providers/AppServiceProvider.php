@@ -113,9 +113,9 @@ class AppServiceProvider extends ServiceProvider
             $theme = $defaultTheme ? $defaultTheme->value : 1;
 
             $logoSetting = GeneralSetting::where('group_id',16)->pluck('value','key')->toArray();
-            $logo = uploadedAsset($logoSetting['logo_image'], 'default_logo');
-            $favicon = uploadedAsset($logoSetting['favicon_image'], 'default_favicon');
-            $smallLogo = uploadedAsset($logoSetting['small_image'], 'default_small_logo');
+            $logo = uploadedAsset(($logoSetting['logo_image'] ?? null), 'default_logo');
+            $favicon = uploadedAsset(($logoSetting['favicon_image'] ?? null), 'default_favicon');
+            $smallLogo = uploadedAsset(($logoSetting['small_image'] ?? null), 'default_small_logo');
             $view->with([
                 'theme' => $theme,
                 'layout' => "theme_{$theme}.app",

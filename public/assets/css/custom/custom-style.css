@@ -928,3 +928,8 @@
     height: 200px !important;
     object-fit: cover;
   }
+
+.logo-large-size {
+  width: 9.5rem !important;
+  height: 5.5rem !important;
+}
