@@ -135,7 +135,7 @@
                                                         @foreach($carTypes as $carTypesValues)
                                                         <option value="{{ $carTypesValues->id }}"
                                                             {{ $query->type_id == $carTypesValues->id ? 'selected' : '' }}>
-                                                            {{ $carTypesValues->name }}
+                                                            {{ ucwords(strtolower($carTypesValues->name)) }}
                                                         </option>
                                                         @endforeach
                                                     </select>
@@ -152,7 +152,7 @@
                                                         @foreach($Brands as $BrandValues)
                                                         <option value="{{ $BrandValues->id }}"
                                                             {{ $query->brand_id == $BrandValues->id ? 'selected' : '' }}>
-                                                            {{ $BrandValues->brand_name }}
+                                                            {{ ucwords(strtolower($BrandValues->brand_name )) }}
                                                         </option>
                                                         @endforeach
                                                     </select>
@@ -184,7 +184,7 @@
                                                         @foreach($Category as $CategoryValues)
                                                         <option value="{{ $CategoryValues->id }}"
                                                             {{ $query->category_id == $CategoryValues->id ? 'selected' : '' }}>
-                                                            {{ $CategoryValues->name }}
+                                                            {{ ucwords(strtolower($CategoryValues->name)) }}
                                                         </option>
                                                         @endforeach
                                                     </select>
@@ -213,7 +213,7 @@
                                                         @foreach($Location as $LocationValues)
                                                         <option value="{{ $LocationValues->id }}"
                                                             {{ $query->main_location_id == $LocationValues->id ? 'selected' : '' }}>
-                                                            {{ $LocationValues->name }}
+                                                            {{ ucwords(strtolower($LocationValues->name )) }}
                                                         </option>
                                                         @endforeach
                                                     </select>
@@ -270,7 +270,7 @@
                                                         @foreach($CarColor as $CarColorValues)
                                                         <option value="{{ $CarColorValues->id }}"
                                                             {{ $query->color_id == $CarColorValues->id ? 'selected' : '' }}>
-                                                            {{ $CarColorValues->name }}
+                                                            {{ ucwords(strtolower($CarColorValues->name)) }}
                                                         </option>
                                                         @endforeach
                                                     </select>
@@ -297,7 +297,7 @@
                                                         @foreach($Transmission as $TransmissionValues)
                                                         <option value="{{ $TransmissionValues->id }}"
                                                             {{ $query->transmission_id == $TransmissionValues->id ? 'selected' : '' }}>
-                                                            {{ $TransmissionValues->name }}
+                                                            {{ ucwords(strtolower($TransmissionValues->name )) }}
                                                         </option>
                                                         @endforeach
                                                     </select>
