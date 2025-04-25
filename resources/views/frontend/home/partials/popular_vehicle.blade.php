@@ -106,10 +106,6 @@
                                         </li>
                                     </ul>
                                     <ul>
-                                        <!-- <li>
-                                            <span><img src="{{ asset('frontend/assets/img/icons/car-parts-04.svg') }}" alt="Power"></span>
-                                            <p>Power</p>
-                                        </li> -->
                                         <li>
                                             <span><img src="{{ asset('frontend/assets/img/icons/car-parts-05.svg') }}" alt="{{ $vehicle['year'] ?? '' }}"></span>
                                             <p>{{ $vehicle['year'] ?? "" }}</p>

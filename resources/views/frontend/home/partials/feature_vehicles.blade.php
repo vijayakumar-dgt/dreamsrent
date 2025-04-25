@@ -73,10 +73,7 @@
                                         </li>
                                     </ul>
                                     <ul>
-                                        <!-- <li>
-                                            <span><img src="{{ asset('frontend/assets/img/icons/car-parts-04.svg') }}" alt=""></span>
-                                            <p>Power</p>
-                                        </li> -->
+                                       
                                         <li>
                                             <span><img src="{{ asset('frontend/assets/img/icons/car-parts-07.svg') }}" alt="{{ $vehicle['year'] ?? '' }}"></span>
                                             <p>{{ $vehicle['year']}}</p>

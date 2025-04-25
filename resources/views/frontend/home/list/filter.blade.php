@@ -399,46 +399,7 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="accordion" id="accordionMain11">
-            <div class="card-header-new" id="headingSix">
-                <h6 class="filter-title">
-                    <a href="javascript:void(0);" class="w-100 collapsed"  data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
-                        {{ __('web.home.customer_recomendation') }}
-                        <span class="float-end"><i class="fa-solid fa-chevron-down"></i></span>
-                    </a>
-                </h6>
-            </div>
-            <div id="collapseSix" class="collapse" aria-labelledby="headingSix"  data-bs-parent="#accordionExample6">
-                <div class="card-body-chat">
-                    <div id="checkBoxes5">
-                        <div class="selectBox-cont">
-                            <label class="custom_check w-100">
-                                <input type="checkbox" name="category">
-                                <span class="checkmark"></span> 70% & up
-                            </label>
-                            <label class="custom_check w-100">
-                                <input type="checkbox" name="category">
-                                <span class="checkmark"></span> 60% & up
-                            </label>
-                            <label class="custom_check w-100">
-                                <input type="checkbox" name="category">
-                                <span class="checkmark"></span> 50% & up
-                            </label>
-                            <label class="custom_check w-100">
-                                <input type="checkbox" name="category">
-                                <span class="checkmark"></span> 40% & up
-                            </label>
-                            <div class="viewall-Two">
-                                <label class="custom_check w-100">
-                                    <input type="checkbox" name="username">
-                                    <span class="checkmark"></span>30% & up
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+    
     </div>
       <button type="submit" id="filter" class="d-inline-flex align-items-center justify-content-center btn w-100 btn-primary filter-btn">
         <span><i class="feather-filter me-2"></i></span>{{ __('web.common.filter_results') }}
