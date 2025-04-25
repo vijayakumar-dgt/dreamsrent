@@ -190,7 +190,7 @@
                                             <div class="skeleton data-skeleton data-loader"></div>
                                         </td>
                                     </tr>
-                                    <!-- Add more skeleton rows as necessary -->
+
                                 </tbody>
                             </table>
                         </div>
@@ -355,7 +355,7 @@
                                     </div>
                                     <div class="d-flex justify-content-between flex-wrap">
                                         <p class="mt-2">{{ __('web.user.max_60_words') }}</p>
-                                        <div class="">
+                                        <div class="mb-2">
                                             <a href="javascript:void(0);" class="btn btn-dark me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
                                             <button type="submit" class="btn btn-primary">{{ __('admin.common.update') }}</button>
                                         </div>
