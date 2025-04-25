@@ -64,7 +64,7 @@ function createBookingCard(booking){
             statusLabel = `<span class="badge badge-light-danger">${_l('web.common.cancelled')}</span>`;
             break;
         default:
-            statusLabel = `<span class="badge badge-light-danger">NA</span>`;
+            statusLabel = `<span class="badge badge-light-dark">-</span>`;
             break;
     }
     return ` <tr>
@@ -146,7 +146,7 @@ function createTransactionCard(booking){
             bookingStatus = `<span class="badge badge-light-danger">${_l('web.common.failed')}</span>`;
             break;
         default:
-            bookingStatus = `<span class="badge badge-light-danger">NA</span>`;
+            bookingStatus = `<span class="badge badge-dark">-</span>`;
             break;
     }
     return `<tr>
