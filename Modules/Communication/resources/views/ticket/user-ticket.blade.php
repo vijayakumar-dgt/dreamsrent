@@ -70,7 +70,7 @@
                                         <th>{{ strtoupper(__('web.user.priority')) }}</th>
                                         <th>{{ strtoupper(__('web.user.assignee')) }}</th>
                                         <th>{{ strtoupper(__('web.common.status')) }}</th>
-                                        <th></th>
+                                        <th>{{ strtoupper(__('web.common.view_reply')) }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
