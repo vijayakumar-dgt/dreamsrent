@@ -25,7 +25,6 @@
                             </div>
                             <div class="view-all d-flex align-items-center gap-3">
                                 <a href="/vehicles" class="btn btn-primary d-inline-flex align-items-center">{{ __('web.home.rent_now') }}<i class="bx bx-right-arrow-alt ms-1"></i></a>
-                                <!-- <a href="add-listing.html" class="btn btn-secondary d-inline-flex align-items-center"><i class="bx bxs-plus-circle me-1"></i>Add Your Car</a> -->
                             </div>
                         </div>
                     </div>
@@ -58,7 +57,7 @@
                            <div class="group-img position-relative">
                                 <input type="text" name="pickuplocation" id="pickup-location-input" autocomplete="off" class="form-control" placeholder="{{ __('web.home.location_place_holder') }}">
                                 <span><i class="feather-map-pin"></i></span>
-                                <ul class="suggestions-list" id="pickup-suggestions" style="display: none;"></ul>
+                                <ul class="suggestions-list" id="pickup-suggestions"></ul>
                             </div>
                        </div>
                    </div>
@@ -68,7 +67,7 @@
                            <div class="group-img position-relative">
                             <input type="text" name="droplocation" id="drop-location-input" autocomplete="off" class="form-control" placeholder="{{ __('web.home.location_place_holder') }}">
                             <span><i class="feather-map-pin"></i></span>
-                            <ul class="suggestions-list" id="drop-suggestions" style="display: none;"></ul>
+                            <ul class="suggestions-list" id="drop-suggestions"></ul>
                         </div>
                        </div>
                    </div>

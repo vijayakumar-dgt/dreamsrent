@@ -57,12 +57,10 @@
                                     <div class="profile-info-img position-relative">
                                         <img id="profile_photo_preview" src="{{ $user->userDetail ? uploadedAsset($user->userDetail->profile_image, 'profile') : ''  }}" alt="Profile" id="profile-preview">
                                         <div class="profile-edit-info">
-                                            <!-- Edit Icon: Triggers file input -->
                                             <a href="javascript:void(0)" onclick="document.getElementById('profile_photo').click();">
-                                                <input type="file" class="form-control image-sign" id="profile_photo" name="profile_photo" style="display: none;">
+                                                <input type="file" class="form-control image-sign d-none" id="profile_photo" name="profile_photo">
                                                 <i class="feather-edit"></i>
                                             </a>
-                                            <!-- Remove Image Icon -->
                                             <a href="javascript:void(0)" onclick="removeImage()">
                                                 <i class="feather-trash-2"></i>
                                             </a>

@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     );
                                     $("#customer_section").removeClass(
                                         "d-none"
-                                    ); // assuming it's hidden by default
+                                    );
                                 } else {
                                     $("#customer_section").addClass("d-none");
                                 }
@@ -121,11 +121,9 @@ document.addEventListener("DOMContentLoaded", function () {
                                 
                                 const bookingStatus = booking.booking_status;
                                 const statusInfo = statusMap[bookingStatus] || { text: "Unknown", class: "badge-soft-dark" };
-                                
-                                // Update text
+
                                 $("#book_status").text(statusInfo.text);
-                                
-                                // Update badge class (remove all old status classes first)
+
                                 $("#book_status")
                                     .removeClass("badge-soft-success badge-soft-warning badge-soft-primary badge-soft-danger badge-soft-info badge-soft-secondary badge-soft-dark")
                                     .addClass(statusInfo.class);                                
@@ -199,10 +197,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Load calendar initially (all bookings)
     loadCalendar();
 
-    // Handle status filter (tab clicks)
     document
         .querySelectorAll("#bookingStatusFilter .nav-link")
         .forEach((tab) => {
@@ -226,14 +222,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         selectedStatus = "6";
                         break;
                     default:
-                        selectedStatus = ""; // All bookings
+                        selectedStatus = "";
                 }
 
-                loadCalendar(); // Reload with selected status
+                loadCalendar();
             });
         });
 
-    // Handle "Apply Filter" click
     document
         .getElementById("applyFilter")
         .addEventListener("click", function () {
@@ -255,10 +250,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 .querySelectorAll("#selectedCartype:checked")
                 .forEach((el) => selectedCartypes.push(el.value));
 
-            loadCalendar(); // Reload with selected filters
+            loadCalendar();
         });
 
-    // Handle "Clear All" click
     document
         .getElementById("clearFilter")
         .addEventListener("click", function () {
@@ -266,27 +260,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 el.checked = false;
             });
 
-            selectedStatus = ""; // Reset status filter
+            selectedStatus = "";
             selectedVehicles = [];
             selectedCustomers = [];
             selectedDrivers = [];
             selectedCartypes = [];
 
-            loadCalendar(); // Reload calendar without filters
+            loadCalendar();
         });
 });
-
-// ------------------------------------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------------------------------------------------------------------
 (async function () {
     await loadTranslationFile("admin", "common, bookings");
 
@@ -662,7 +644,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     _l("admin.bookings.duration_must_be_atleast_one_hour")
                 );
                 $(".summary_rental_period").text("-");
-                $("#vehicle_list_main_container").hide();
+                $("#vehicle_list_main_container").addClass('d-none');
                 return;
             } else {
                 $("#end_date, #end_time").removeClass("is-invalid");
@@ -728,7 +710,7 @@ document.addEventListener("DOMContentLoaded", function () {
             pickup_location_val &&
             return_location_val
         ) {
-            $("#vehicle_list_main_container").show();
+            $("#vehicle_list_main_container").removeClass('d-none');
             lastPage = false;
             currentPage = 1;
             getVehicles();
@@ -798,7 +780,7 @@ document.addEventListener("DOMContentLoaded", function () {
             $(".form-control, .select2-container").removeClass(
                 "is-invalid is-valid"
             );
-            $("#vehicle_list_main_container").hide();
+            $("#vehicle_list_main_container").addClass('d-none');
             return;
         } else {
             startDate = todayDateTime.format("DD-MM-YYYY");

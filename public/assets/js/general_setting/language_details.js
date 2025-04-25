@@ -74,7 +74,7 @@ $(document).ready(function() {
                         });
                     }else{
                         html += `<tr>
-                                    <td colspan="6" class="text-center">No Data Found</td>
+                                    <td colspan="6" class="text-center">${_l('admin.common.no_data_found')}</td>
                                 </tr>`;
                     }
                     $("#languageDetailsTable tbody").html(html);

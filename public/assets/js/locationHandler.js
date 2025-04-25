@@ -1,9 +1,3 @@
-//-------------------------------
-//Country Script
-//-------------------------------
-
-
-
 (async () => {
     await loadTranslationFile('admin', 'cms,common');
     const permissions = await loadUserPermissions();
@@ -241,7 +235,7 @@ function editCountry(id) {
 
                 $("#country_modal .modal-title").text(_l('admin.cms.edit_country'));
                 $(".submitbtn").text(_l('admin.common.save_changes'));
-                $('#statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+                $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
                 $("#country_modal").modal("show");
             }
         },
@@ -288,10 +282,9 @@ $("#add_country").on("click", function () {
     $("#id").val("");
     $(".error-text").text("");
     $(".form-control").removeClass("is-invalid is-valid");
-    $('#statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
+    $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
 });
 
-//Bulk Delete
 $(document).ready(function () {
     $("#select-all").on("change", function () {
         $('.form-check-input[type="checkbox"]').prop(

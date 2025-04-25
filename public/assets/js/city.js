@@ -1,8 +1,3 @@
-
-
-//-------------------------------
-//City Script
-//-------------------------------
 (async () => {
     await loadTranslationFile('admin', 'cms,common');
     const permissions = await loadUserPermissions();
@@ -259,7 +254,7 @@
             $("#id").val("");
             $(".error-text").text("");
             $(".form-control").removeClass("is-invalid is-valid");
-            $('#statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
+            $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
             $('#state_id').val("").trigger("change");
         }); 
     
@@ -283,7 +278,7 @@ function editCity(id) {
 
                 $("#city_modal .modal-title").text(_l('admin.cms.edit_city'));
                 $(".submitbtn").text(_l('admin.common.save_changes'));
-                $('#statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+                $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
                 $("#city_modal").modal("show");
             }
         },
