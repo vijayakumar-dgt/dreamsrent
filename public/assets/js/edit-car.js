@@ -2641,32 +2641,23 @@
                 );
 
                 let damagePayload = [];
-
+                
                 $("input[name='damage_image[]']").each(function (index) {
-                    let image = $(this).val().trim();
-                    let name = $("input[name='damage_name[]']")
-                        .eq(index)
-                        .val()
-                        .trim();
-                    let location = $("input[name='damage_location[]']")
-                        .eq(index)
-                        .val()
-                        .trim();
-                    let description = $("input[name='damage_description[]']")
-                        .eq(index)
-                        .val()
-                        .trim();
-                    let damageId = $("input[name='damage_id[]']")
-                        .eq(index)
-                        .val()
-                        .trim(); // Get Damage ID
-
-                    if (
-                        image !== "" &&
-                        name !== "" &&
-                        location !== "" &&
-                        description !== ""
-                    ) {
+                    let image = $(this).val()?.trim() || "";
+                
+                    let nameField = $("input[name='damage_name[]']").eq(index);
+                    let name = nameField.length ? nameField.val()?.trim() || "" : "";
+                
+                    let locationField = $("input[name='damage_location[]']").eq(index);
+                    let location = locationField.length ? locationField.val()?.trim() || "" : "";
+                
+                    let descriptionField = $("input[name='damage_description[]']").eq(index);
+                    let description = descriptionField.length ? descriptionField.val()?.trim() || "" : "";
+                
+                    let damageIdField = $("input[name='damage_id[]']").eq(index);
+                    let damageId = damageIdField.length ? damageIdField.val()?.trim() || "" : "";
+                
+                    if (image && name && location && description) {
                         damagePayload.push({
                             image: image,
                             name: name,
@@ -2675,7 +2666,7 @@
                         });
                     }
                 });
-
+                
                 finalFormData.append(
                     "vehicle_damage",
                     JSON.stringify(damagePayload)
