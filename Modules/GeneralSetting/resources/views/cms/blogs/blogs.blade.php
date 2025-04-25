@@ -156,7 +156,7 @@
 
         </div>
         <div class="d-flex align-items-center justify-content-center mt-3">
-            @if(count($blogPosts) != 0 && count($blogPosts) > 6)
+            @if(count($blogPosts) != 0)
             <a href="javascript:void(0);" class="load-btn btn btn-primary mt-3">
                 <i class="ti ti-loader me-1"></i> {{__('admin.blog.load_more')}}
             </a>
