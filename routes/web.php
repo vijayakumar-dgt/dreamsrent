@@ -30,7 +30,9 @@ use Modules\CarInfo\Http\Controllers\CarInfoController;
 use Modules\CarInfo\Http\Controllers\MaintenanceController;
 use Modules\GeneralSetting\Http\Controllers\LanguageController;
 
-
+Route::get('/documentation', function () {
+    return response()->file(public_path('documentation/index.html'));
+});
 Route::get('/storage-link', function () {
     Artisan::call('storage:link');
     return redirect()->route('home');
