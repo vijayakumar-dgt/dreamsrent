@@ -293,13 +293,9 @@
                                                        "delete"
                                                    )
                                                        ? `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(${
-                                                value.id
-                                            });" onclick="deleteVechileList(${
-                                                             value.id
-                                                         });" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l(
-                                                             "admin.common.delete"
-                                                         )}</a>
+                                           <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteVehicleList(${value.id});" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                                                <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                            </a>
                                         </li>`
                                                        : ""
                                                }
@@ -369,6 +365,44 @@
             error: function (error) {},
         });
     }
+
+
+    
+    $("#deleteVehicle").on("submit", function (e) {
+        e.preventDefault();
+    
+        var vehicleId = $("#delete_id").val();
+        var $submitBtn = $(".submitbtn"); // Button for submission
+
+        $submitBtn.prop('disabled', true); // Disable the button
+        $submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...'); // Show loading spinner
+        
+        $.ajax({
+            url: '/admin/vehicle/delete',
+            method: 'POST',
+            data: {
+                delete_id: vehicleId
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.success) {
+                    $('#delete-modal').modal('hide');
+                    initTable();
+                } else {
+                    alert("Failed to delete vehicle.");
+                }
+            },
+            error: function (error) {
+                alert("An error occurred while deleting the vehicle.");
+            },
+            complete: function() {
+                $submitBtn.prop('disabled', false); // Re-enable the button
+                $submitBtn.html('Yes, Delete'); // Reset the button text
+            }
+        });
+    });
 
     $(document).ready(function () {
         $("#carBasicInfoForm").validate({
@@ -2495,3 +2529,7 @@ $(document).on("click", ".change-language", function () {
         },
     });
 });
+
+function deleteVehicleList(vehicleId) {
+    $("#delete_id").val(vehicleId);
+}

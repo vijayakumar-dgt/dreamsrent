@@ -212,6 +212,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
         Route::post('vehicle/image/delete', [CarInfoController::class, 'deleteVehicleImage']);
         Route::post('vehicle/policy/delete', [CarInfoController::class, 'deleteVehiclePolicy']);
         Route::post('vehicle-list', [CarInfoController::class, 'vehicleListApi']);
+        Route::post('vehicle/delete', [CarInfoController::class, 'delete'])->name('vehicle.delete');
     });
 
     Route::post('/get-brands', [BrandController::class, 'getBrands']);
