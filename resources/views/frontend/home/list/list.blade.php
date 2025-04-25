@@ -108,11 +108,9 @@
                                         <span class="sortbytitle">{{__('web.home.show')}} : </span>
                                         <div class="sorting-select select-one">
                                             <select class="form-control select" id="pageLength">
-                                                <option value="6">6</option>
-                                                <option value="9">9</option>
                                                 <option value="12">12</option>
-                                                <option value="15">15</option>
                                                 <option value="18">18</option>
+                                                <option value="24">24</option>
                                             </select>
                                         </div>
                                     </li>
@@ -404,7 +402,7 @@
 </section>
 @endsection
 @push('scripts')
-<script src="{{ asset('frontend/assets/js/custom/home/list.js') }}"></script>
+<script src="{{ asset('frontend/assets/js/custom/home/list.js?v=1.1') }}"></script>
 
 <!-- Rangeslider JS -->
 <script src="{{ asset('frontend/assets/plugins/ion-rangeslider/js/ion.rangeSlider.min.js') }}"></script>
