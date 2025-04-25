@@ -16,21 +16,6 @@
             ],
         });
 
-        function formatColor(option) {
-            if (!option.id) return option.text;
-
-            var colorCode = $(option.element).data("color");
-            return $(`<div style="display: flex; align-items: center;">
-                    <span style="display: inline-block; width: 15px; height: 15px; background-color: ${colorCode}; border: 1px solid #ccc; margin-right: 8px;"></span>
-                    ${option.text}
-                  </div>`);
-        }
-
-        $("#color_id").select2({
-            templateResult: formatColor,
-            templateSelection: formatColor,
-            width: "100%",
-        });
     });
 
     $(document).ready(function () {
