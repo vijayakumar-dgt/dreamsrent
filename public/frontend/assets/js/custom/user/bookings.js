@@ -95,8 +95,8 @@ function initializeCalendar() {
         if (response.status === 'success') {
             const events = (response.data || []).map(booking => ({
                 id: booking.id,
-                title: booking.vehicle_name.length > 15 
-                    ? booking.vehicle_name.substring(0, 15) + '...' 
+                title: booking.vehicle_name.length > 15
+                    ? booking.vehicle_name.substring(0, 15) + '...'
                     : booking.vehicle_name,
                 start: booking.start_datetime,
                 end: booking.end_datetime,
@@ -105,7 +105,7 @@ function initializeCalendar() {
                     image: booking.vehicle_image
                 }
             }));
-        
+
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 editable: false,
@@ -133,7 +133,7 @@ function initializeCalendar() {
                         <div class="view_booking" data-id="${info.event.id}" style="display: flex; align-items: center; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative; padding: 2px;">
                             <img src="${info.event.extendedProps.image}" width="15" height="15" style="border-radius:3px; margin-right:5px;">
                             <span>${info.event.title}</span>
-                        </div>` 
+                        </div>`
                     };
                 },
                 eventDidMount: function(info) {
@@ -142,19 +142,19 @@ function initializeCalendar() {
                     eventEl.style.left = "0";
                     eventEl.style.right = "0";
                     eventEl.style.width = "100%";
-                    eventEl.style.overflow = "hidden"; 
-                    eventEl.style.display = "flex"; 
+                    eventEl.style.overflow = "hidden";
+                    eventEl.style.display = "flex";
                     eventEl.style.alignItems = "center";
-                    eventEl.style.justifyContent = "flex-start"; 
+                    eventEl.style.justifyContent = "flex-start";
                 }
             });
-        
+
             calendar.render();
             calendarEl.fullCalendarInstance = calendar;
         }
-        
+
     });
-       
+
 }
 
 function getStatusClass(status) {
@@ -203,7 +203,7 @@ function createBookingCard(booking){
                 <td><a href="javascript:void(${booking.id});" class="view_booking" data-id="${booking.id}">#${booking.reservation_id}</a></td>
                  <td>
                     <div class="table-avatar">
-                        <a href="${booking.vehicle_page_url}" target="_blank" class="avatar avatar-lg flex-shrink-0">
+                        <a href="${booking.vehicle_page_url}" target="_blank" class="avatar flex-shrink-0">
                             <img class="avatar-img" src="${booking.vehicle_image}" alt="${booking.vehicle_name ?? ""}">
                         </a>
                         <div class="table-head-name flex-grow-1">

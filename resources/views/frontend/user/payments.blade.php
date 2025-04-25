@@ -16,7 +16,7 @@
                         <li class="breadcrumb-item"><a href="/">{{__('web.home.home')}}</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{__('web.user.user_payments')}}</li>
                     </ol>
-                </nav>							
+                </nav>
             </div>
         </div>
     </div>
@@ -34,13 +34,14 @@
 
         <!-- Sort By -->
         <div class="row">
-            <div class="col-lg-12">
-                <div class="sorting-info">
-                    <div class="row d-flex align-items-center">
-                        <div class="col-xl-7 col-lg-8 col-sm-12 col-12">
-                            
-                        </div>
-                        <div class="col-xl-5 col-lg-4 col-sm-12 col-12">
+            <div class="col-lg-12 d-flex">
+                <div class="card book-card flex-fill mb-0">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-md-5">
+                                <h4>{{__('web.user.all_payments')}} </h4>
+                            </div>
+                            <div class="col-md-7 text-md-end">
                             <div class="filter-group">
                                 <div class="sort-week sort">
                                     <div class="dropdown dropdown-action">
@@ -86,30 +87,30 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Sort By -->	
+        <!-- Sort By -->
 
         <!-- Payments Table -->
         <div class="row">
             <div class="col-lg-12 d-flex">
                 <div class="card book-card flex-fill mb-0">
-                    <div class="card-header">	
+                    <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-md-5">
-                                <h4>{{__('web.user.all_payments')}} </h4>	
+                                <h4>{{__('web.user.all_payments')}} </h4>
                             </div>
                             <div class="col-md-7 text-md-end">
                                 <div class="table-search">
-                                    <div id="tablefilter" class="me-0"></div>										
+                                    <div id="tablefilter" class="me-0"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">	
+                    <div class="card-body">
                         <div class="custom-datatable-filter table-responsive table-loader">
                             <table class="table table-bordered">
                                 <thead class="thead-light">
@@ -269,10 +270,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+
                                 </tbody>
                             </table>
-                        </div>	
+                        </div>
 
                         <div class="table-footer">
                             <div class="row">

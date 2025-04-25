@@ -36,7 +36,7 @@
 
 			<div class="login-wrapper">
 				<div class="loginbox">
-                    <form action="" class="p-4" id="resetpasswordForm">
+                    <form action="" class="" id="resetpasswordForm">
                         @csrf
                         <div class="login-auth">
                             <div class="login-auth-wrap">

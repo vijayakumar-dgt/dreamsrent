@@ -41,10 +41,10 @@ function fetchReviews(sort_by = '') {
             },
         },
         columns: [
-            { data: "vehicle_name",  
+            { data: "vehicle_name",
                 render: function(data, type, row) {
                     return `<div class="table-avatar">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#add_review"  class="avatar avatar-lg flex-shrink-0">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#add_review"  class="avatar  flex-shrink-0">
                                     <img class="avatar-img" src="${row.vehicle_image}" alt="Booking">
                                 </a>
                                 <div class="table-head-name flex-grow-1">
@@ -65,7 +65,7 @@ function fetchReviews(sort_by = '') {
                 render: function(data, type, row) {
                     const rating = parseFloat(row.average_ratings);
                     let starsHtml = '<div class="review-rating">';
-            
+
                     for (let i = 1; i <= 5; i++) {
                         if (rating >= i) {
                             starsHtml += '<i class="fas fa-star filled"></i>';
@@ -75,11 +75,11 @@ function fetchReviews(sort_by = '') {
                             starsHtml += '<i class="far fa-star"></i>';
                         }
                     }
-            
+
                     starsHtml += `<span>(${row.average_ratings})</span></div>`;
                     return starsHtml;
                 }
-            },            
+            },
             { data: "id", orderable: false, searchable: false, render: function(data, type, row) {
                 return `
                     <div class="dropdown dropdown-action">

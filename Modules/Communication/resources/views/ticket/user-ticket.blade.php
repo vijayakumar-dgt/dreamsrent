@@ -178,7 +178,7 @@
                 </button>
             </div>
             <form id="addTicket">
-                <div class="modal-body pb-1">
+                <div class="modal-body addticket-model-body">
                     <div class="row">
                         <!-- Category -->
                         <div class="col-md-6">
@@ -232,14 +232,12 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- Modal Footer -->
-                <div class="modal-footer">
-                    <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.common.cancel')}}</a>
+                    <div class="d-flex justify-content-end">
+                        <a href="javascript:void(0);" class="btn btn-dark me-3" data-bs-dismiss="modal">{{__('admin.common.cancel')}}</a>
                         <button type="submit" class="btn btn-primary">{{__('admin.common.create')}}</button>
                     </div>
                 </div>
+
             </form>
         </div>
     </div>
@@ -279,18 +277,18 @@
                             <div class="mb-3">
                                 <label class="form-label" for="reply">{{__('web.home.reply')}} <span class="text-danger">*</span></label>
                                 <textarea id="reply" name="reply" class="form-control summernote"></textarea>
-                                <p class="mt-2">{{__('web.user.max_60_words')}}</p>
                                 <span class="text-danger error-message" id="replyError"></span>
+                            </div>
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <p class="mt-2">{{__('web.user.max_60_words')}}</p>
+                                <div>
+                                    <a href="javascript:void(0);" class="btn btn-dark me-3" data-bs-dismiss="modal">{{__('admin.common.cancel')}}</a>
+                                    <button type="submit" class="btn btn-primary">{{__('admin.common.update')}}</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.common.cancel')}}</a>
-                        <button type="submit" class="btn btn-primary">{{__('admin.common.update')}}</button>
-                    </div>
                 </div>
             </form>
             <h5 class="p-3">{{__('web.user.ticket_history')}}</h5>

@@ -22,29 +22,7 @@
 <div class="content dashboard-content">
     <div class="container">
         <!-- Status List -->
-        <!-- <ul class="status-lists">
-            <li class="approve-item">
-                <div class="status-info">
-                    <span><i class="fa-solid fa-calendar-days"></i></span>
-                    <p>Your Booking has been Approved by admin</p>
-                </div>
-                <a href="javascript:void(0);" class="view-detail">View Details</a>
-            </li>
-            <li>
-                <div class="status-info">
-                    <span><i class="fa-solid fa-money-bill"></i></span>
-                    <p>Your Refund request has been approved by admin & your payment will be updated in 3 days.</p>
-                </div>
-                <a href="javascript:void(0);" class="close-link"><i class="feather-x"></i></a>
-            </li>
-            <li class="bg-danger-light">
-                <div class="status-info">
-                    <span><i class="fa-solid fa-money-bill"></i></span>
-                    <p>Your Refund request has been rejected by admin <a href="javascript:void(0);">View Reason</a></p>
-                </div>
-                <a href="javascript:void(0);" class="close-link"><i class="feather-x"></i></a>
-            </li>
-        </ul> -->
+
         <!-- /Status List -->
         <!-- Content Header -->
         <div class="content-header">
@@ -276,11 +254,11 @@
             <div class="col-lg-4 d-flex">
                 <div class="card user-card flex-fill">
                     <div class="card-header">
-                        <div class="row align-items-center">
-                            <div class="col-sm-6">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-auto">
                                 <h5>{{__('web.user.recent_transactions')}}</h5>
                             </div>
-                            <div class="col-sm-6 text-sm-end">
+                            <div class="col-auto text-sm-end">
                                 <div class="booking-select">
                                     <select class="form-control select" id="sort" name="sort">
                                         <option value="last_30_days">{{__('web.user.last_30_days')}}</option>

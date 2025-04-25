@@ -89,7 +89,7 @@
 								</div>
 								<!-- /Social Login -->
 								<div class="text-center dont-have">Don't have an account yet? <a href="{{ route('user-register') }}">Register</a></div>
-                                <div class="mb-3">
+                                <div class="">
                                     <h6 class="fs-16 mb-1">{{ __('User Login Info') }}:</h6>
                                     <div class="p-3 border d-flex flex-wrap align-items-center justify-content-between">
                                         <div>

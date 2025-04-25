@@ -70,7 +70,7 @@ function createBookingCard(booking){
     return ` <tr>
                 <td>
                     <div class="table-avatar">
-                        <a href="${booking.vehicle_page_url}" target="_blank" class="avatar avatar-lg flex-shrink-0">
+                        <a href="${booking.vehicle_page_url}" target="_blank" class="avatar  flex-shrink-0">
                             <img class="avatar-img" src="${booking['vehicle_image']}" alt="${booking['vehicle_name'] ?? ""}">
                         </a>
                         <div class="table-head-name flex-grow-1">

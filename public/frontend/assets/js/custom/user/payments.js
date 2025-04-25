@@ -28,7 +28,7 @@ function fetchUserTransactions(){
             $(".real-table").addClass("d-none");
         },
         success: function (response) {
-            
+
 
             if (!$.fn.DataTable.isDataTable('#bookingTable')) {
                 $('#bookingTable').DataTable({
@@ -82,7 +82,7 @@ function createBookingCard(booking){
                 <td><a href="javascript:void(${booking.id});" class="view_booking" data-id="${booking.id}">#${booking.reservation_id}</a></td>
                  <td>
                     <div class="table-avatar">
-                        <a href="${booking.vehicle_page_url}" target="_blank" class="avatar avatar-lg flex-shrink-0">
+                        <a href="${booking.vehicle_page_url}" target="_blank" class="avatar flex-shrink-0">
                             <img class="avatar-img" src="${booking.vehicle_image}" alt="${booking.vehicle_name ?? ""}">
                         </a>
                         <div class="table-head-name flex-grow-1">

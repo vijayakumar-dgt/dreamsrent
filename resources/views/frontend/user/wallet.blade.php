@@ -74,9 +74,9 @@
                         </div>
                         <div class="form-group wallet-form-group">
                             <label>{{ __('web.user.add_wallet_credits') }} ($)</label>
-                            <input type="number" class="form-control" id="wallet_amount" name="wallet_amount" placeholder="{{ __('web.user.enter_amount') }}" min="0" max="99999" oninput="if(this.value.length > 5) this.value = this.value.slice(0, 5);">
                         </div>
-                        <div class="wallet-btn">
+                        <div class="wallet-btn d-flex align-items-center wallet-inpts">
+                            <input type="number" class="form-control" id="wallet_amount" name="wallet_amount" placeholder="{{ __('web.user.enter_amount') }}" min="0" max="99999" oninput="if(this.value.length > 5) this.value = this.value.slice(0, 5);">
                             <a href="javascript:void(0);" class="btn" data-bs-toggle="modal" data-bs-target="#add_payment">{{ __('web.user.add_payment') }}</a>
                         </div>
                     </div>
