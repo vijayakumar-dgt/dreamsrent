@@ -67,7 +67,7 @@
 										</li>
 									</ul>
 								</div>
-								<div class="notification-status">
+								<div class="notification-status d-none">
 									<div class="notification-status-content">
 										<h5>{{__('web.user.mobile_push_notifications')}}</h5>
 										<p>{{__('web.user.receive_push')}}</p>
