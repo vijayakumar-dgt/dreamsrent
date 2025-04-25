@@ -14,7 +14,7 @@
                     <ul class="nav listing-buttons gap-3" data-bs-tabs="tabs">
                         @foreach($vehicleBrand as $brand)
                         <li>
-                            <a class="@if($loop->first) active @endif" @if($loop->first) aria-current="true" @endif data-bs-toggle="tab" href="#tab_{{ $brand->brand_name ?? "" }}">
+                            <a class="@if($loop->first) active @endif" @if($loop->first) aria-current="true" @endif data-bs-toggle="tab" href="#tab_{{ $brand->id ?? "" }}">
                                 <span>
                                     <img src="{{ uploadedAsset($brand->brand_icon) }}" alt="{{ $brand->brand_name ?? '' }}">
                                 </span>
@@ -29,12 +29,13 @@
 
         <div class="tab-content">
             @foreach($vehicleBrand as $brand)
-            <div class="tab-pane @if($loop->first) active show @endif" id="tab_{{ $brand->brand_name ?? '' }}">
+            <div class="tab-pane @if($loop->first) active show @endif" id="tab_{{ $brand->id ?? '' }}">
                 <div class="row">
                     @php
                        $vehicles = collect($section['section_content'])->where('brand_id', $brand->id)->take(6);
                     @endphp
-                    @forelse($vehicles as $vehicle)
+                    @if(!empty($vehicles) && count($vehicles) > 0)
+                    @foreach($vehicles as $vehicle)
                     <!-- col -->
                     <div class="col-lg-4 col-md-6 col-12" data-aos="fade-down">
                         <div class="listing-item">
@@ -142,12 +143,13 @@
                             </div>
                         </div>
                     </div>
+                    @endforeach
                     <!-- /col -->
-                     @empty
+                     @else
                         <div class="col-12">
                             <p class="text-center">{{ __('web.home.no_vehicles_found_for') }} {{ $brand->brand_name }}</p>
                         </div>
-                    @endforelse
+                    @endif
                 </div>
             </div>
             @endforeach
