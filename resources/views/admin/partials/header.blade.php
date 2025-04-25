@@ -41,14 +41,14 @@
                     <div class="nav-item dropdown has-arrow flag-nav nav-item-box">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
                             role="button">
-                            <img src="{{ asset('/custom/flags/'. app()->getLocale() .'.png') }}" alt="Language" class="img-fluid">
+                            <img src="{{ asset('/custom/flags/'. app()->getLocale() .'.svg') }}" alt="Language" class="img-fluid">
                         </a>
                         <ul class="dropdown-menu p-2">
                             @if ($allLanguages)
                                 @foreach ($allLanguages as $language)
                                     <li>
                                         <a href="javascript:void(0);" class="dropdown-item change-language" data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
-                                            <img src="{{ asset('/custom/flags/'. $language->code.'.png') }}" alt="" height="16">
+                                            <img src="{{ asset('/custom/flags/'. $language->code.'.svg') }}" alt="" height="16">
                                             {{ $language->name }}
                                         </a>
                                     </li>
