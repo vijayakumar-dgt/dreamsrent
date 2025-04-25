@@ -216,7 +216,7 @@ $("#saveBlogBtn").click(function () {
 $(document).ready(function () {
 const inputAdd = document.getElementById("featured_image_add");
 const fileNameDisplayAdd = document.getElementById("selectedFileNameAdd");
-const preview = document.querySelector(".preview-image-add");
+const preview = document.querySelector(".preview-image-add") ?? '';
 
 if (inputAdd) {
     inputAdd.addEventListener("change", function (event) {
