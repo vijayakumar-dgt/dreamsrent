@@ -123,36 +123,38 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table text-center" >
-                    <thead class="table-light">
-                        <tr >
-                            <th>{{ __('admin.general_settings.select') }}</th>
-                            <th>{{ __('admin.general_settings.image') }}</th>
-                            <th>{{ __('admin.rentals.name') }}</th>
-                            <th>{{ __('admin.general_settings.version') }}</th>
-                            <th>{{ __('admin.general_settings.price') }}</th>
-                            <th>{{ __('admin.general_settings.purchase_link') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($modules as $module)
-                        <tr >
-                            <td class="link">
-                                <input type="radio" name="selected_plugin" value="{{ $module['git_link'] }}">
-                            </td>
-                            <td>
-                                <img src="{{ $module['module_image'] }}" alt="{{ $module['module_name'] }}" width="50">
-                            </td>
-                            <td class="name">{{ $module['module_name'] }}</td>
-                            <td class="version">{{ $module['module_version'] }}</td>
-                            <td class="price">${{ number_format($module['module_price'], 2) }}</td>
-                            <td>
-                                <a href="{{ $module['purchase_link'] }}" target="_blank" class="btn btn-sm btn-primary">{{ __('admin.general_settings.buy_now') }}</a>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="custom-datatable-filter table-responsive brandstable country-table">
+                    <table class="table" id="currencyTable">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>{{ __('admin.general_settings.select') }}</th>
+                                <th>{{ __('admin.general_settings.image') }}</th>
+                                <th>{{ __('admin.rentals.name') }}</th>
+                                <th>{{ __('admin.general_settings.version') }}</th>
+                                <th>{{ __('admin.general_settings.price') }}</th>
+                                <th>{{ __('admin.general_settings.purchase_link') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($modules as $module)
+                            <tr>
+                                <td class="link">
+                                    <input type="radio" name="selected_plugin" value="{{ $module['git_link'] }}">
+                                </td>
+                                <td>
+                                    <img src="{{ $module['module_image'] }}" alt="{{ $module['module_name'] }}" width="50">
+                                </td>
+                                <td class="name">{{ $module['module_name'] }}</td>
+                                <td class="version">{{ $module['module_version'] }}</td>
+                                <td class="price">${{ number_format($module['module_price'], 2) }}</td>
+                                <td>
+                                    <a href="{{ $module['purchase_link'] }}" target="_blank" class="btn btn-sm btn-primary">{{ __('admin.general_settings.buy_now') }}</a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="modal-footer">
                 <div class="d-flex justify-content-center">

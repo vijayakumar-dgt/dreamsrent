@@ -11,7 +11,7 @@
              $("#currencyForm #id").val("");
              $("#currencyForm .submitbtn").text('Create New');
              $("#currencyForm .submitbtn").prop('disabled', false);
-             $("#status_div").hide();
+             $("#status_div").addClass('d-none');
              if($("#modalfootdiv").hasClass("justify-content-between")){
                 $("#modalfootdiv").removeClass("justify-content-between");
                 $("#modalfootdiv").addClass("justify-content-end");
@@ -230,7 +230,7 @@ $(document).on('click','#editcurrency', function(){
                $("#currencyForm #id").val(response.data.id);
                $("#currencyForm .submitbtn").text(_l('admin.general_settings.save_changes'));
                $("#currencyForm .submitbtn").prop('disabled', false);
-               $("#status_div").show();
+               $("#status_div").removeClass('d-none');
                $("#add_currency").modal("show");
                if($("#modalfootdiv").hasClass("justify-content-end")){
                    $("#modalfootdiv").addClass("justify-content-between");
