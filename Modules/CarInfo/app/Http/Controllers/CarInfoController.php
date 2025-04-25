@@ -1496,7 +1496,15 @@ class CarInfoController extends Controller
         $vehicleSeasons = VehicleSeason::where("vehicle_id", $vehicleId)->get();
 
         if ($vehicleSeasons->isEmpty()) {
-            return response()->json(['success' => false, 'message' => 'No seasonal info found'], 404);
+            return response()->json(['success' => true, 'message' => 'No info found', 'data' => [],], 200);
+        }
+
+        if ($vehicleSeasons->isEmpty()) {
+            return response()->json([
+                'success' => true,
+                'data' => [],
+                'message' => 'No seasonal data found.'
+            ], 200);
         }
 
         return response()->json(['success' => true, 'data' => $vehicleSeasons], 200);
@@ -1513,7 +1521,7 @@ class CarInfoController extends Controller
         $vehicleTrraifs = VehicleTarrif::where("vehicle_id", $vehicleId)->get();
 
         if ($vehicleTrraifs->isEmpty()) {
-            return response()->json(['success' => false, 'message' => 'No trraif info found'], 404);
+            return response()->json(['success' => true, 'message' => 'No info found', 'data' => [],], 200);
         }
 
         return response()->json(['success' => true, 'data' => $vehicleTrraifs], 200);
@@ -1530,7 +1538,7 @@ class CarInfoController extends Controller
         $documents = VehicleMeta::where("vehicle_id", $vehicleId)->get();
 
         if ($documents->isEmpty()) {
-            return response()->json(['success' => false, 'message' => 'No documents info found'], 404);
+            return response()->json(['success' => true, 'message' => 'No info found', 'data' => [],], 200);
         }
 
         // Initialize response structure
@@ -1582,7 +1590,7 @@ class CarInfoController extends Controller
         $vehicleFaqs = VehicleFaq::where("vehicle_id", $vehicleId)->get();
 
         if ($vehicleFaqs->isEmpty()) {
-            return response()->json(['success' => false, 'message' => 'No faq info found'], 404);
+            return response()->json(['success' => true, 'message' => 'No info found', 'data' => [],], 200);
         }
 
         return response()->json(['success' => true, 'data' => $vehicleFaqs], 200);
@@ -1599,7 +1607,7 @@ class CarInfoController extends Controller
         $vehicleDamages = VehicleDamage::where("vehicle_id", $vehicleId)->get();
 
         if ($vehicleDamages->isEmpty()) {
-            return response()->json(['success' => false, 'message' => 'No vehicle damages info found'], 404);
+            return response()->json(['success' => true, 'message' => 'No info found', 'data' => [],], 200);
         }
 
         return response()->json(['success' => true, 'data' => $vehicleDamages], 200);
@@ -1618,7 +1626,7 @@ class CarInfoController extends Controller
             ->get();
 
         if ($vehicleInsurance->isEmpty()) {
-            return response()->json(['success' => false, 'message' => 'No insurance data found'], 404);
+            return response()->json(['success' => true, 'message' => 'No info found', 'data' => [],], 200);
         }
 
         // Format response data
