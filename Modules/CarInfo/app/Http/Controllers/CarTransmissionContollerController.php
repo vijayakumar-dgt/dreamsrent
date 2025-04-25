@@ -75,13 +75,25 @@ class CarTransmissionContollerController extends Controller
     public function list(Request $request)
     {
         $orderBy = $request->order_by ?? 'desc';
+        $search = $request->input('search');
+        $status = $request->input('status');
 
         try {
-
-            $authUser = current_user(); // Assuming this returns the authenticated user
+            $authUser = current_user();
             $languageId = $authUser->language_id ?? 1;
 
-            $data = Transmission::orderBy('id', $orderBy)->where("language_id", $languageId)->get();
+            $query = Transmission::orderBy('id', $orderBy)
+                ->where('language_id', $languageId);
+
+            if (!empty($search)) {
+                $query->where('name', 'LIKE', "%{$search}%"); // Adjust 'name' if your field differs
+            }
+
+            if ($status !== null && $status !== '') {
+                $query->where('status', $status); // Assumes 'status' column exists in categories table
+            }
+
+            $data = $query->get();
 
             return response()->json([
                 'code' => 200,
