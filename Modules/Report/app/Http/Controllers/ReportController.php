@@ -21,6 +21,8 @@ class ReportController extends Controller
     {
         $bookings = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
             ->get();
+        $bookingsCount = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
+            ->paginate(10);
         $totalIncome = $bookings->filter(function ($booking) {
                 if ($booking->booking_by === 'admin') {
                     return is_null($booking->payment_status) || $booking->payment_status == 2;
@@ -75,13 +77,15 @@ class ReportController extends Controller
             })
             ->values(); // Convert collection to array
 
-        return view('report::incomeReport', compact("totalIncome", "topEarningCar", "vehicle", "percentageChange", "sign", "symbol", "bookings", "vehicleInfo"));
+        return view('report::incomeReport', compact("totalIncome", "topEarningCar", "vehicle", "percentageChange", "sign", "symbol", "bookings", "vehicleInfo", "bookingsCount"));
     }
 
     public function earningReport()
     {
 
         $bookings = Booking::Join('users', 'bookings.customer_id', '=', 'users.id')->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image')->get();
+
+        $bookingCount = Booking::Join('users', 'bookings.customer_id', '=', 'users.id')->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image')->paginate(10);
 
         $totalIncome = $bookings->sum('final_price');
 
@@ -207,7 +211,7 @@ class ReportController extends Controller
         $symbol = $currency->symbol;
 
 
-        return view('report::earningReport', compact("symbol", "bookings", "totalIncome", "percentageChangeFormatted", "sign", "vehicle", "topEarningCarTotal", "percentageCarChangeFormatted", "signCar", "grandTotal", "percentageBreakChangeFormatted", "signbreak"));
+        return view('report::earningReport', compact("symbol", "bookings", "totalIncome", "percentageChangeFormatted", "sign", "vehicle", "topEarningCarTotal", "percentageCarChangeFormatted", "signCar", "grandTotal", "percentageBreakChangeFormatted", "signbreak", "bookingCount"));
     }
 
     public function getMonthlyEarnings(Request $request)
