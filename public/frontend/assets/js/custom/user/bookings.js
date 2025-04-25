@@ -336,11 +336,6 @@ function renderButtons(data){
 							${_l('web.user.complete_ride')}
                     </a>`;
             break;
-        // case 6:
-        //     html = `<a href="javascript:void(0);" data-bs-target="#view_status" data-bs-toggle="modal"  data-bs-dismiss="modal" class="btn btn-primary">
-		// 					${_l('web.common.view')} ${_l('web.common.status')}
-        //             </a>`;
-        //     break;
         case 5:
             html = `<button class="btn btn-light" data-bs-dismiss="modal">${_l('web.common.close')}</button>`;
             break;

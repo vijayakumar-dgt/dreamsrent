@@ -928,3 +928,39 @@
     height: 200px !important;
     object-fit: cover;
   }
+.theme-2-header {
+  background: transparent;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  box-shadow: unset !important;
+}
+.theme-2-header.scrolled {
+  background-color: #000 !important;
+}
+.theme-2-header .header-nav .main-nav > li > a {
+  color: #fff !important;
+}
+.theme-2-header .header-navbar-rht .nav-item .header-login{
+  background-color: #383838 !important;
+}
+.banner-section-four {
+  padding: 180px 0 40px !important;
+}
+
+.banner-search .form-control::placeholder{
+  color:#fff !important;
+}
+.banner-search .group-img span{
+  position: absolute;
+  right: 0px;
+  top:0px;
+  color: #fff;
+}
+.banner-section-four .banner-search label {
+  font-size: 14px;
+  font-weight: 400;
+  margin-bottom: 6px;
+}
