@@ -973,3 +973,8 @@
     height: 285px;
     overflow-y: auto;
 }
+
+.paymentFailImg {
+  width: 10rem;
+  height: 10rem;
+}
