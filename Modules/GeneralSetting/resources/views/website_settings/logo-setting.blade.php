@@ -44,7 +44,7 @@
                                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                             <div class="skeleton image-skeleton image-loader"></div>
                                             <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames d-none real-label">
-                                                <img id="logo_photo_preview" src="/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
+                                                <img id="logo_photo_preview" src="" class="img-fluid" alt="Profile Photo">
                                                 <a href="javascript:void(0);" class="uploadimgtrash btn btn-sm rounded-circle" onclick="removeImage('logo_photo_preview', 'logo_image')">
                                                     <i class="ti ti-trash fs-12"></i>
                                                 </a>

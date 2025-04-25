@@ -215,10 +215,7 @@ class GeneralSettingController extends Controller
             foreach ($logoFields as $field => $prefix) {
                 if ($request->hasFile($field)) {
                     $file = $request->file($field);
-                    $filename = $prefix . '_' . time() . '.' . $file->getClientOriginalExtension();
-                    $path = $file->storeAs('logos', $filename, 'public');
-
-                    $fullPath = 'storage/' . $path;
+                    $fullPath = uploadFile($file, 'logos');
 
                     updateOrCreateLogoSetting($field, $fullPath, $groupId);
 
@@ -955,7 +952,14 @@ class GeneralSettingController extends Controller
         }
 
         try {
-            $settings = GeneralSetting::where('group_id', $request->group_id)->get();
+            $settings = GeneralSetting::where('group_id', $request->group_id)->get()->map(function ($setting) {
+
+                if ($setting->key == 'logo_image' || $setting->key == 'favicon_image' || $setting->key == 'small_image' || $setting->key == 'dark_logo') {
+                    $setting->value = uploadedAsset($setting->value, 'default');
+                }
+
+                return $setting;
+            });
 
             return response()->json([
                 'status'  => 'success',
