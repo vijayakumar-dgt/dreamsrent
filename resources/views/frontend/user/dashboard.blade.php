@@ -385,5 +385,5 @@
 <!-- /Page Content -->
 @endsection
 @push('scripts')
-<script src="{{ asset('frontend/assets/js/custom/user/dashboard.js') }}"></script>
+<script src="{{ asset('frontend/assets/js/custom/user/dashboard.js?v=1.1') }}"></script>
 @endpush
