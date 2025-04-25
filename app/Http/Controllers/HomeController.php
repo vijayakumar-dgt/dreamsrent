@@ -93,7 +93,9 @@ class HomeController extends Controller
         $slug = $request->slug;
 
         $vehicle = VehicleInfo::select('id', 'main_location_id', "other_location_id", 'views')->where('slug', $slug)->first();
-
+        if(!$vehicle){
+            abort(404);
+        }
         $mainLocation = Location::select('id', 'name', 'address')->where('id', $vehicle->main_location_id)->first();
         $allLocation = collect();
 
