@@ -239,13 +239,13 @@
                             </td>
                             <td>
                             <div class="d-flex align-items-start">
-								<a href="car-details.html" class="avatar me-2 flex-shrink-0">
+								<p class="avatar me-2 flex-shrink-0">
 									<img src="${value.vehicle_image}" class="rounded-3" alt="">
-								</a>
+								</p>
 								<div class="text-start">
-									<h6><a href="car-details.html" class="fs-14 fw-semibold">${ucfirst(
+									<h6><p class="fs-14 fw-semibold">${ucfirst(
                                         value.name
-                                    )}</a></h6>
+                                    )}</p></h6>
 									<p>${value.car_type ? value.car_type.name : ""}</p>
 								</div>
 							</div>
