@@ -167,7 +167,7 @@ class LanguageController extends Controller
                 'status'        => $language->status,
                 'total_keys' => $totalKeys,
                 'translated_keys' => $translatedCount,
-                'progress' => round($progress)
+                'progress' => $progress
             ];
         }
 
@@ -353,7 +353,7 @@ class LanguageController extends Controller
             $translatedCount = isset($translatedTranslations[$module]) ? $countKeys($translatedTranslations[$module], true) : 0;
 
             // Calculate progress
-            $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100) : 0;
+            $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100, 2) : 0;
 
             // Add module progress to response array
             $responseArray[] = [
@@ -439,7 +439,7 @@ class LanguageController extends Controller
         }
 
         // Calculate progress
-        $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100) : 0;
+        $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100, 2) : 0;
         //color
         switch(true){
             case $progress >= 100:
@@ -533,7 +533,7 @@ class LanguageController extends Controller
         }
 
         // Calculate progress
-        $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100) : 0;
+        $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100, 2) : 0;
          //color
          switch(true){
             case $progress >= 100:
