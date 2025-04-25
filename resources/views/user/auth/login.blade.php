@@ -62,7 +62,7 @@
                                 <div class="input-block d-flex justify-content-between">
                                     <a class="forgot-link" href="{{ route('user-forgot-password') }}">Forgot Password?</a>
                                     <a class="form-check-label text-decoration-underline" id="login_otp"
-                                        href="javascript:void(0);" style="cursor: pointer;">
+                                        href="javascript:void(0);">
                                         {{ __('Sign in with OTP') }}
                                     </a>
 

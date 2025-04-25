@@ -13,11 +13,11 @@ $(document).ready(function () {
 
         let selectedRow = selectedPlugin.closest("tr");
 
-    
+
         let moduleName = selectedRow.find(".name").text().trim();
         let moduleVersion = selectedRow.find(".version").text().trim();
         let modulePrice = selectedRow.find(".price").text().trim().replace("$", "");
-        let gitLink = selectedPlugin.val(); 
+        let gitLink = selectedPlugin.val();
 
         $("#module_name").val(moduleName);
         $("#module_version").val(moduleVersion);
@@ -66,7 +66,7 @@ function listAddonModules() {
                                 <td>
                                     <img src="${
                                         addon.module_image
-                                    }" alt="Image" style="width: 80px; height: 50px; object-fit: cover; border-radius: 5px;">
+                                    }" alt="Image">
                                 </td>
                                 <td>$${addon.price}</td>
                                 ${
@@ -140,7 +140,7 @@ function listNewAddonModules() {
             Accept: "application/json",
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
-        
+
         success: function (response) {
             if (response.code === 200) {
             }

@@ -123,9 +123,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table text-center" style="border-collapse: collapse;">
+                <table class="table text-center" >
                     <thead class="table-light">
-                        <tr style="border-bottom: 2px solid #ddd;">
+                        <tr >
                             <th>{{ __('admin.general_settings.select') }}</th>
                             <th>{{ __('admin.general_settings.image') }}</th>
                             <th>{{ __('admin.rentals.name') }}</th>
@@ -136,7 +136,7 @@
                     </thead>
                     <tbody>
                         @foreach($modules as $module)
-                        <tr style="border-bottom: 1px solid #ddd;">
+                        <tr >
                             <td class="link">
                                 <input type="radio" name="selected_plugin" value="{{ $module['git_link'] }}">
                             </td>

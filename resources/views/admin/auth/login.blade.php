@@ -36,7 +36,7 @@
                                 <div class="input-group">
                                     <input type="password" class="pass-input form-control @error('password') is-invalid @enderror" id="password" name="password">
                                     <span class="input-group-text border-start-0">
-                                        <i class="ti ti-eye-off togglse-password" style="cursor: pointer" id="toggle-password"></i>
+                                        <i class="ti ti-eye-off togglse-password"  id="toggle-password"></i>
                                     </span>
                                 </div>
                                 <span id="password_error" class="text-danger error-text"></span>
