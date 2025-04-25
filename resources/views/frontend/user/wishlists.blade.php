@@ -57,8 +57,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="d-flex align-items-center">
                                         <span class="list_view-author-img-skeleton list_view-skeleton"></span>
-                                        <span class="list_view-location-skeleton list_view-skeleton"
-                                            style="margin-left: 10px;"></span>
+                                        <span class="list_view-location-skeleton list_view-skeleton ml-2"></span>
                                     </div>
                                     <span class="list_view-btn-skeleton list_view-skeleton"></span>
                                 </div>
@@ -91,8 +90,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="d-flex align-items-center">
                                         <span class="list_view-author-img-skeleton list_view-skeleton"></span>
-                                        <span class="list_view-location-skeleton list_view-skeleton"
-                                            style="margin-left: 10px;"></span>
+                                        <span class="list_view-location-skeleton list_view-skeleton ml-2"></span>
                                     </div>
                                     <span class="list_view-btn-skeleton list_view-skeleton"></span>
                                 </div>
@@ -125,8 +123,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="d-flex align-items-center">
                                         <span class="list_view-author-img-skeleton list_view-skeleton"></span>
-                                        <span class="list_view-location-skeleton list_view-skeleton"
-                                            style="margin-left: 10px;"></span>
+                                        <span class="list_view-location-skeleton list_view-skeleton ml-2"></span>
                                     </div>
                                     <span class="list_view-btn-skeleton list_view-skeleton"></span>
                                 </div>

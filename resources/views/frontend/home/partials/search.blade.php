@@ -10,7 +10,7 @@
                             <div class="group-img position-relative">
                                 <input type="text" name="pickuplocation" id="pickup-location-input" autocomplete="off" class="form-control" placeholder="{{ __('web.home.location_place_holder') }}">
                                 <span><i class="feather-map-pin"></i></span>
-                                <ul class="suggestions-list" id="pickup-suggestions" style="display: none;"></ul>
+                                <ul class="suggestions-list" id="pickup-suggestions"></ul>
                             </div>
                         </div>
                     </li>

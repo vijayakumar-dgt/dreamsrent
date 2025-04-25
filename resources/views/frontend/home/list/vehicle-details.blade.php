@@ -512,35 +512,35 @@
                             <div class="progress-info">
                                 <h6>{{__('web.home.service')}}</h6>
                                 <div class="progress" role="progressbar">
-                                    <div class="progress-bar bg-primary" id="service_progress" style="width: 0%"></div>
+                                    <div class="progress-bar bg-primary" id="service_progress"></div>
                                 </div>
                                 <div class="progress-percent" id="avg_service_ratings">0.0</div>
                             </div>
                             <div class="progress-info">
                                 <h6>{{ __('web.user.location') }}</h6>
                                 <div class="progress" role="progressbar">
-                                    <div class="progress-bar bg-primary" id="location_progress" style="width: 0%"></div>
+                                    <div class="progress-bar bg-primary" id="location_progress"></div>
                                 </div>
                                 <div class="progress-percent" id="avg_location_ratings">0.0</div>
                             </div>
                             <div class="progress-info">
                                 <h6>{{__('web.home.value_for_money')}}</h6>
                                 <div class="progress" role="progressbar">
-                                    <div class="progress-bar bg-primary" id="value_for_money_progress" style="width: 0%"></div>
+                                    <div class="progress-bar bg-primary" id="value_for_money_progress"></div>
                                 </div>
                                 <div class="progress-percent" id="avg_value_for_money_ratings">0.0</div>
                             </div>
                             <div class="progress-info">
                                 <h6>{{ __('web.home.facilities') }}</h6>
                                 <div class="progress" role="progressbar">
-                                    <div class="progress-bar bg-primary" id="facility_progress" style="width: 0%"></div>
+                                    <div class="progress-bar bg-primary" id="facility_progress"></div>
                                 </div>
                                 <div class="progress-percent" id="avg_facility_ratings">0.0</div>
                             </div>
                             <div class="progress-info">
                                 <h6>{{ __('web.home.cleanliness') }}</h6>
                                 <div class="progress" role="progressbar">
-                                    <div class="progress-bar bg-primary" id="cleanliness_progress" style="width: 0%"></div>
+                                    <div class="progress-bar bg-primary" id="cleanliness_progress"></div>
                                 </div>
                                 <div class="progress-percent" id="avg_cleanliness_ratings">0.0</div>
                             </div>
@@ -868,20 +868,18 @@
                                                 <div class="search-btn">
                                                     @auth
                                                     <a type="submit"
-                                                        class="btn btn-primary check-available w-100"
-                                                        style="{{ $allowBooking != 1 ? 'pointer-events: none; opacity: 0.5;' : '' }}"
+                                                        class="btn btn-primary check-available w-100 {{ $allowBooking != 1 ? 'btn-disabled' : '' }}"
                                                         id="validate_btn">
                                                         {{ __('web.home.book') }}
                                                     </a>
                                                     @else
                                                     <a type="submit"
-                                                        class="btn btn-primary check-available w-100"
-                                                        style="{{ $allowBooking != 1 ? 'pointer-events: none; opacity: 0.5;' : '' }}"
+                                                        class="btn btn-primary check-available w-100 {{ $allowBooking != 1 ? 'btn-disabled' : '' }}"
                                                         id="validate_btn">
                                                         {{ __('web.home.book') }}
                                                     </a>
                                                     @endauth
-                                                    <a href="javascript:void(0);" id="enquire_us" data-bs-toggle="modal" data-bs-target="#enquiry" class="btn btn-theme" style="{{ $allowEnquiries != 1 ? 'pointer-events: none;opacity: 0.5;' : '' }}">{{__('web.home.enquire_us')}}</a>
+                                                    <a href="javascript:void(0);" id="enquire_us" data-bs-toggle="modal" data-bs-target="#enquiry" class="btn btn-theme {{ $allowEnquiries != 1 ? 'btn-disabled' : '' }}">{{__('web.home.enquire_us')}}</a>
                                                 </div>
                                             </div>
                                         </li>
