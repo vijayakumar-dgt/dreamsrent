@@ -997,9 +997,7 @@ class UserBookingController extends Controller
             return [
                 'id'             => $transaction->id,
                 'vehicle_name'   => $transaction->vehicle->name ?? 'N/A',
-                'vehicle_image'  => $transaction->vehicle->vehicle_image
-                    ? url('/storage/' . $transaction->vehicle->vehicle_image)
-                    : 'N/A',
+                'vehicle_image'  => $transaction->vehicle ? uploadedAsset($transaction->vehicle->vehicle_image) : uploadedAsset('default.png'),
                 'rent_type' => ucfirst($transaction->rental_type),
                 'status'         => $transaction->payment_status,
                 'updated_at'     => $transaction->updated_at->format('d M Y, h:i A'),
