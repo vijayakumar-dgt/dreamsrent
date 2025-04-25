@@ -174,7 +174,8 @@
 
         let totalExtraServicePrice = 0;
         let totalInsurancePrice = 0;
-        let basePrice = parseFloat($("#total_price").val()) || 0;
+        let basePrice = $("#total_price").val().replace(/,/g, '');
+
 
         let $extraChargesList = $(".extra-charges-list"); // Extra services list
         let $insuranceChargesList = $(".insurance-charges-list"); // Insurance list
@@ -217,38 +218,29 @@
             updateTotalPrice();
         }
 
-        // Get currency symbol on initial load
         let currencySymbol = $("#currency").val() || "$";
 
-        // Debug output (optional)
-        console.log("Currency Symbol:", currencySymbol);
-
-        // Update Total Price
         function updateTotalPrice() {
-            let finalTotal =
-                basePrice +
-                totalExtraServicePrice +
-                totalInsurancePrice +
-                totalDriverPrice;
-
-            $totalPriceDriver.val(totalDriverPrice.toFixed(2));
-            $totalPriceExtra.val(totalExtraServicePrice.toFixed(2));
-            $totalPriceInsurance.val(totalInsurancePrice.toFixed(2));
+            const base = parseFloat(basePrice) || 0;
+            const extra = parseFloat(totalExtraServicePrice) || 0;
+            const insurance = parseFloat(totalInsurancePrice) || 0;
+            const driver = parseFloat(totalDriverPrice) || 0;
+        
+            const finalTotal = base + extra + insurance + driver;
+                
+            $totalPriceDriver.val(driver.toFixed(2));
+            $totalPriceExtra.val(extra.toFixed(2));
+            $totalPriceInsurance.val(insurance.toFixed(2));
             $totalPriceElement.val(finalTotal.toFixed(2));
-
+        
             $totalPriceSpan.text(`${currencySymbol}${finalTotal.toFixed(2)}`);
             $submitButton.text(
-                `${_l("web.home.pay")} ${currencySymbol}${finalTotal.toFixed(
-                    2
-                )} & ${_l("web.home.place_reservation")}`
+                `${_l("web.home.pay")} ${currencySymbol}${finalTotal.toFixed(2)} & ${_l("web.home.place_reservation")}`
             );
-            $extraChargesTotal.text(
-                `${currencySymbol}${totalExtraServicePrice.toFixed(2)}`
-            );
-            $insuranceChargesTotal.text(
-                `${currencySymbol}${totalInsurancePrice.toFixed(2)}`
-            );
+            $extraChargesTotal.text(`${currencySymbol}${extra.toFixed(2)}`);
+            $insuranceChargesTotal.text(`${currencySymbol}${insurance.toFixed(2)}`);
         }
+        
 
         // Check if extra services or insurance lists are empty
         function checkEmptyCart() {

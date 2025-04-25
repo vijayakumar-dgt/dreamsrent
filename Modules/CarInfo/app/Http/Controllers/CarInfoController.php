@@ -2051,4 +2051,25 @@ class CarInfoController extends Controller
 
         return response()->json(['success' => false, 'message' => 'Vehicle not found']);
     }
+
+    public function getDamageDetails(Request $request)
+    {
+        // Retrieve the damage ID from the request
+        $damageId = $request->get('id');
+
+        // Fetch the damage details from the database
+        $damage = VehicleDamage::find($damageId);
+
+        if ($damage) {
+            return response()->json([
+                'success' => true,
+                'data' => $damage
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Damage not found.'
+        ]);
+    }
 }

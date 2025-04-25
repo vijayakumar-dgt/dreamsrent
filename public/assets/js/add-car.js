@@ -444,7 +444,7 @@
                     required: false,
                 },
                 vehicle_fuel_id: {
-                    required: true,
+                    required: false,
                 },
                 odometer: {
                     required: false,
