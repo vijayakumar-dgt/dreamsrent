@@ -269,7 +269,7 @@
                                                 '${value.status}',
                                                 ${JSON.stringify(value.reply_description)}
                                             ); showTicketHistory(${value.id});">
-                                                <i class="feather-edit me-1"></i>${_l('web.user.reply')}
+                                                <i class="feather-edit me-1"></i>${_l('web.common.view_reply')}
                                             </a>
                                             <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_ticket" onclick="deleteTicket(${value.id});">
                                                 <i class="feather-trash-2"></i> ${_l('web.common.delete')}

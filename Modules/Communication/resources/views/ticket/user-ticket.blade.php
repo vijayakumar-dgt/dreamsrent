@@ -70,7 +70,7 @@
                                         <th>{{ strtoupper(__('web.user.priority')) }}</th>
                                         <th>{{ strtoupper(__('web.user.assignee')) }}</th>
                                         <th>{{ strtoupper(__('web.common.status')) }}</th>
-                                        <th>{{ strtoupper(__('web.common.view_reply')) }}</th>
+                                        <th>{{ strtoupper(__('web.common.action')) }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -94,6 +94,32 @@
                                         <td>
                                             <div class="skeleton data-skeleton data-loader"></div>
                                         </td>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -114,8 +140,37 @@
                                         <td>
                                             <div class="skeleton data-skeleton data-loader"></div>
                                         </td>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
                                     </tr>
                                     <tr>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                        </td>
                                         <td>
                                             <div class="skeleton data-skeleton data-loader"></div>
                                         </td>
@@ -247,55 +302,82 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="mb-0">{{__('web.user.update_ticket')}}</h5>
+                <h5 class="mb-0">{{ __('web.user.update_ticket') }}</h5>
                 <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <i class="ti ti-x fs-16"></i>
                 </button>
             </div>
-            <form id="editTicketstatus">
-                <div class="modal-body pb-1">
-                    <div class="row">
-                        <input type="hidden" name="ticketid" id="ticketid">
 
-                        <!-- Update Status -->
-                        <div class="col-md-6 d-none">
-                            <div class="mb-3">
-                                <label class="form-label" for="status">{{__('web.user.update_status')}} <span class="text-danger">*</span></label>
-                                <select class="select form-control" id="status" name="status">
-                                    <option value="">{{__('web.common.select')}}</option>
-                                    <option value="1">{{__('web.user.ticket_open')}}</option>
-                                    <option value="2">{{__('web.user.ticket_assigned')}}</option>
-                                    <option value="3">{{__('web.user.ticket_in_progress')}}</option>
-                                    <option value="4">{{__('web.user.ticket_closed')}}</option>
-                                </select>
-                                <span class="text-danger error-message" id="statusError"></span>
-                            </div>
-                        </div>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs m-2" id="ticketTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="update-tab" data-bs-toggle="tab" data-bs-target="#updateTabPane" type="button" role="tab" aria-controls="updateTabPane" aria-selected="true">
+                        {{ __('web.user.update_ticket') }}
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#historyTabPane" type="button" role="tab" aria-controls="historyTabPane" aria-selected="false">
+                        {{ __('web.user.ticket_history') }}
+                    </button>
+                </li>
+            </ul>
 
-                        <!-- Reply -->
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label class="form-label" for="reply">{{__('web.home.reply')}} <span class="text-danger">*</span></label>
-                                <textarea id="reply" name="reply" class="form-control summernote"></textarea>
-                                <span class="text-danger error-message" id="replyError"></span>
-                            </div>
-                            <div class="d-flex justify-content-between flex-wrap">
-                                <p class="mt-2">{{__('web.user.max_60_words')}}</p>
-                                <div>
-                                    <a href="javascript:void(0);" class="btn btn-dark me-3" data-bs-dismiss="modal">{{__('admin.common.cancel')}}</a>
-                                    <button type="submit" class="btn btn-primary">{{__('admin.common.update')}}</button>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Update Ticket Tab -->
+                <div class="tab-pane fade show active" id="updateTabPane" role="tabpanel" aria-labelledby="update-tab">
+                    <form id="editTicketstatus">
+                        <div class="modal-body pb-1">
+                            <div class="row">
+                                <input type="hidden" name="ticketid" id="ticketid">
+
+                                <!-- Hidden Status Field -->
+                                <div class="col-md-6 d-none">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="status">{{ __('web.user.update_status') }} <span class="text-danger">*</span></label>
+                                        <select class="select form-control" id="status" name="status">
+                                            <option value="">{{ __('web.common.select') }}</option>
+                                            <option value="1">{{ __('web.user.ticket_open') }}</option>
+                                            <option value="2">{{ __('web.user.ticket_assigned') }}</option>
+                                            <option value="3">{{ __('web.user.ticket_in_progress') }}</option>
+                                            <option value="4">{{ __('web.user.ticket_closed') }}</option>
+                                        </select>
+                                        <span class="text-danger error-message" id="statusError"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Reply Field -->
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="reply">{{ __('web.home.reply') }} <span class="text-danger">*</span></label>
+                                        <textarea id="reply" name="reply" class="form-control summernote"></textarea>
+                                        <span class="text-danger error-message" id="replyError"></span>
+                                    </div>
+                                    <div class="d-flex justify-content-between flex-wrap">
+                                        <p class="mt-2">{{ __('web.user.max_60_words') }}</p>
+                                        <div class="">
+                                            <a href="javascript:void(0);" class="btn btn-dark me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                                            <button type="submit" class="btn btn-primary">{{ __('admin.common.update') }}</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
+                    </form>
                 </div>
-            </form>
-            <h5 class="p-3">{{__('web.user.ticket_history')}}</h5>
-            <div class="ticket_histroy p-3"></div>
+
+                <!-- Ticket History Tab -->
+                <div class="tab-pane fade" id="historyTabPane" role="tabpanel" aria-labelledby="history-tab">
+                    <div class="p-3 ticket_histroy">
+                        <!-- Ticket history content will be injected here -->
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="histroy_ticket">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
