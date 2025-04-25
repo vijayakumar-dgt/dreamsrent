@@ -315,6 +315,14 @@ class UserBookingController extends Controller
         return view("booking::user_booking.success_page", compact("transaction_id", "booking", "vehicleId", "vehicle", "vehicleImageUrl", "dLocation", "rLocation", "mainLocation", "vehicleExtraServicesWithPrice", "vehicleInsurance", "driverInfo", "driverInfo_ride", "driverInfo_price", "bookingInfo", "currencySymbol"));
     }
 
+    
+    public function paymentFail($transaction_id)
+    {
+        $booking = Booking::where('transaction_id', $transaction_id)->first();
+
+        return view("booking::user_booking.fail_page", compact("transaction_id", "booking"));
+    }
+
 
     public function userPayments(Request $request)
     {
@@ -502,7 +510,7 @@ class UserBookingController extends Controller
 
             $order['application_context'] = [
                 'return_url' => url('paypal-payment-success'),
-                'cancel_url' => url('payment-failed')
+                'cancel_url' => url('paypal-payment-failed')
             ];
 
             $response = $this->provider->createOrder($order);
@@ -911,6 +919,32 @@ class UserBookingController extends Controller
                 ], 400);
             }
         } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function paypalPaymentFailed(Request $request)
+    {
+        try {
+            $response = $this->provider->capturePaymentOrder($request->get('token'));
+
+            Booking::where('transaction_id', $request->token)
+                ->update([
+                    'payment_status' => 3,
+                    'booking_status' => 3,  // Set the booking status to 3 (Failed)
+                ]);
+            return redirect()->route('payment.success.fail', ['transaction_id' => $request->token]);
+        } catch (\Exception $e) {
+            Booking::where('transaction_id', $request->get('token'))
+                ->update([
+                    'payment_status' => 3,
+                    'booking_status' => 3,  // Set the booking status to 3 (Failed)
+                ]);
+
+
             return response()->json([
                 'code' => 500,
                 'message' => 'An error occurred: ' . $e->getMessage(),

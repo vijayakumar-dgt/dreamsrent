@@ -964,3 +964,12 @@
   font-weight: 400;
   margin-bottom: 6px;
 }
+
+.logo-large-size {
+  width: 9.5rem !important;
+  height: 5.5rem !important;
+}
+.ticket_no_data {
+    height: 285px;
+    overflow-y: auto;
+}

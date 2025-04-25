@@ -171,8 +171,8 @@ class GeneralSettingController extends Controller
     {
         $rules = [
             'logo_image' => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
-            'favicon_image' => 'nullable|image|mimes:jpg,jpeg,png,svg,ico|max:5120',
-            'small_image' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:5120',
+            'favicon_image' => 'nullable|mimes:jpg,jpeg,png,svg,ico|max:5120',
+            'small_image' => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
             'dark_logo' => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
         ];
 
@@ -955,7 +955,7 @@ class GeneralSettingController extends Controller
             $settings = GeneralSetting::where('group_id', $request->group_id)->get()->map(function ($setting) {
 
                 if ($setting->key == 'logo_image' || $setting->key == 'favicon_image' || $setting->key == 'small_image' || $setting->key == 'dark_logo') {
-                    $setting->value = uploadedAsset($setting->value, 'default');
+                    $setting->value = uploadedAsset($setting->value, 'default2');
                 }
 
                 return $setting;

@@ -338,7 +338,7 @@ function showTicketHistory(ticketId) {
     let ticket = ticketData.find(t => t.id === ticketId); // Use global ticketData
 
     if (!ticket || !ticket.ticket_histories.length) {
-        $(".ticket_histroy").html('<p class="text-center">No history available for this ticket.</p>');
+        $(".ticket_histroy").html('<p class="text-center ticket_no_data">No history available for this ticket.</p>');
         return;
     }
 

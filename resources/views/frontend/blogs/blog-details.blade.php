@@ -3,8 +3,8 @@
 <!-- Breadscrumb Section -->
 <div class="blogbanner">
     <div class="blogbanner-content">
-        <span class="blog-hint">{{$blogPosts->category}}</span>
-        <h1>{{$blogPosts->title}}</h1>
+        <span class="blog-hint">{{ucfirst($blogPosts->category)}}</span>
+        <h1>{{ucfirst($blogPosts->title)}}</h1>
         <ul class="entry-meta meta-item justify-content-center">
             <li>
                 <div class="post-author">
@@ -54,7 +54,7 @@
                             @endphp
 
                             @foreach($tagNames as $tagName)
-                            <li>{{ $tagName }}</li>
+                            <li>{{ ucfirst($tagName) }}</li>
                             @endforeach
                         </ul>
                     </div>
@@ -67,13 +67,13 @@
                 <li>
                     <a href="/blog-details/{{$otherBlogs[0]->slug ?? ''}}" class="prev-link"><i class="fas fa-regular fa-arrow-left"></i> {{__('web.blog.previous_post')}}</a>
                     <a href="/blog-details/{{$otherBlogs[0]->slug ?? ''}}">
-                        <h3>{{$otherBlogs[0]->title ?? ''}}</h3>
+                        <h3>{{ucfirst($otherBlogs[0]->title) ?? ''}}</h3>
                     </a>
                 </li>
                 <li>
                     <a href="/blog-details/{{$otherBlogs[1]->slug ?? ''}}" class="next-link">{{__('web.blog.next_post')}} <i class="fas fa-regular fa-arrow-right"></i> </a>
                     <a href="/blog-details/{{$otherBlogs[1]->slug ?? ''}}">
-                        <h3>{{$otherBlogs[1]->title ?? ''}}</h3>
+                        <h3>{{ucfirst($otherBlogs[1]->title) ?? ''}}</h3>
                     </a>
                 </li>
             </ul>

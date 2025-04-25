@@ -14,16 +14,16 @@
         $("#logoSettingForm").validate({
             rules: {
                 logo_image: {
-                    extension: _l('admin.general_settings.logo_image_extension')
+                    extension: "jpeg|jpg|png|svg"
                 },
                 favicon_image: {
-                    extension:  _l('admin.general_settings.favicon_image_extension')
+                    extension: "jpeg|jpg|png|svg"
                 },
                 small_image: {
-                    extension:  _l('admin.general_settings.small_image_extension')
+                    extension: "jpeg|jpg|png|svg"
                 },
                 dark_logo: {
-                    extension:  _l('admin.general_settings.dark_logo_extension')
+                    extension: "jpeg|jpg|png|svg"
                 }
             },
             messages: {

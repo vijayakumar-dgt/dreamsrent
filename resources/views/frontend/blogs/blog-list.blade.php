@@ -43,7 +43,7 @@
                         <ul class="blogcategories-list">
                             @if(count($categories) != 0)
                             @foreach($categories as $category)
-                            <li><a href="javascript:void(0)" class="category-filter" data-category="{{ $category->name }}">{{ $category->name }}</a></li>
+                            <li><a href="javascript:void(0)" class="category-filter" data-category="{{ $category->name }}">{{ ucfirst($category->name) }}</a></li>
                             @endforeach
                             @else
                             <p class="no-datas mt-3">{{__('web.blog.no_data_found')}}</p>
@@ -55,7 +55,7 @@
                         <ul class="tags">
                             @if(count($tags) != 0)
                             @foreach($tags as $tag)
-                            <li>{{$tag->name}} </li>
+                            <li>{{ucfirst($tag->name)}} </li>
                             @endforeach
                             @else
                             <p class="no-datas mt-3">{{__('web.blog.no_data_found')}}</p>
@@ -78,7 +78,7 @@
                                 </a>
                             </div>
                             <div class="article-content">
-                                <h5><a href="/blog-details/{{$latest->slug}}">{{$latest->title}}</a></h5>
+                                <h5><a href="/blog-details/{{$latest->slug}}">{{ucfirst($latest->title)}}</a></h5>
                                 <div class="article-date">
                                     <i class="fa-solid fa-calendar-day"></i>
                                     <span>{{ \Carbon\Carbon::parse($latest->created_at)->format('d M Y') }}</span>
