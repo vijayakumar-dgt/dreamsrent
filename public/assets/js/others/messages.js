@@ -100,20 +100,15 @@ function listenMqttForNewMessagesFromAllCustomers(){
     });
     const topic  = 'dreamsrent/customer_to_admin/#';
     client.on('connect', function () {
-        console.log('Admin connected to MQTT broker');
         client.subscribe(topic, { qos: 1 }, (err) => {
-            if (err) {
-                console.error('Subscription error:', err);
-            } else {
-                console.log('Admin subscribed to topic:', topic);
-            }
+
         });
     });
 
     client.on('message', function (receivedTopic, message) {
         let topicParts = receivedTopic.split("/");
         let user_id = topicParts[topicParts.length - 1];
-        console.log('Received message from', receivedTopic, ':', message.toString());
+        
         let activeUser = $("#chat_avatar").attr('data-userid');
         if(activeUser != user_id){
             let user = $(".chat-list .userprofile[data-userid='" + user_id + "']");
@@ -124,11 +119,11 @@ function listenMqttForNewMessagesFromAllCustomers(){
     });
 
     client.on('error', function (err) {
-        console.error('MQTT error:', err);
+        
     });
 
     client.on('close', function () {
-        console.log('MQTT connection closed');
+        
     });
 }
 
