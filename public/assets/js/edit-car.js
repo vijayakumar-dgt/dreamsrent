@@ -50,7 +50,7 @@
                         adddamage(damage);
                     });
                 } else {
-                    showToast("error", "No damage data found.");
+                    // showToast("error", "No damage data found.");
                 }
             },
             error: function (xhr, status, error) {
@@ -470,6 +470,12 @@
         $(".car_faq_append").append(faqItem);
         updateFaqCount();
     }
+
+    function updateFaqCount() {
+        const count = $(".car_faq_append .accordion-item").length;
+        $("#faq_count_display").text(count); // Assuming you have an element with this ID
+    }
+    
 
     function getDocumentsInfo() {
         let vehicleId = $("#vehicle_id").val(); // Get vehicle ID from input field
