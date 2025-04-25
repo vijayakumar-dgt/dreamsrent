@@ -245,7 +245,7 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
-                                            <h6 class="fs-14 fw-semibold">{{$symbol}}{{ json_decode($reservation->vehicle_price)[0]->daily }}<span class="fw-normal text-default">/{{ __('admin.dashboard.day') }}</span></h6>
+                                            <h6 class="fs-14 fw-semibold">{{$symbol}}{{ json_decode($reservation->vehicle_price)[0]->daily ?? 0 }}<span class="fw-normal text-default">/{{ __('admin.dashboard.day') }}</span></h6>
                                             <a href="javascript:void(0);" class="avatar avatar-sm">
                                                 @php
                                                 $imagePath = 'storage/' . $reservation->profile_image;
