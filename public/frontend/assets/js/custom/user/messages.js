@@ -104,32 +104,27 @@ function listenMqttForNewMessages(customerId) {
       
 
     client.on('connect', function () {
-        console.log('Connected to MQTT broker');
+       
         client.subscribe(topic, { qos: 1 }, (err) => {
-            if (err) {
-                console.error('Subscription error:', err);
-            } else {
-                console.log('Subscribed to topic:', topic);
-            }
+            
         });
     });
 
     client.on('message', function (receivedTopic, message) {
         const msgString = message.toString();
-        console.log('Received message on topic', receivedTopic, ':', msgString);
         offset = "";
         fetchMessages(true, true);
     });
 
     client.on('error', function (err) {
-        console.error('MQTT error:', err);
+       
     });
 
     client.on('close', function () {
-        console.log('MQTT connection closed');
+       
     });
 }
-//if enter key pressed send message
+
 $(document).on('keydown', '#messageinput', function (e) {
     if (e.keyCode === 13) {
         $("#sendmsg").trigger('click');
