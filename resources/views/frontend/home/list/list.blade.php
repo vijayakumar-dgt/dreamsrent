@@ -5,7 +5,7 @@
 @endpush
 @section('content')
 <!-- Breadscrumb Section -->
-<div class="breadcrumb-bar" style="padding-bottom: 100px;">
+<div class="breadcrumb-bar vehiclelist-brudgrumb">
     <div class="container">
         <div class="row align-items-center text-center">
             <div class="col-md-12 col-12" id="general-settings" data-allow_booking="{{ $allowBooking }}" data-allow_enquiry="{{ $allowEnquiries }}">
@@ -33,7 +33,7 @@
                         <div class="group-img">
                             <input type="text" class="form-control" autocomplete="off" value="{{ $pickuplocation }}" id="pickuplocation" placeholder="{{ __('web.home.location_place_holder') }}">
                             <span><i class="feather-map-pin"></i></span>
-                            <ul class="suggestions-list" id="pickup-suggestions" style="display: none;"></ul>
+                            <ul class="suggestions-list" id="pickup-suggestions"></ul>
                         </div>
                     </div>
                     <input type="hidden" id="initialPickupId" value="{{ $initialPickupLocation->id ?? '' }}">
@@ -323,7 +323,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center">
                             <span class="list_view-author-img-skeleton list_view-skeleton"></span>
-                            <span class="list_view-location-skeleton list_view-skeleton" style="margin-left: 10px;"></span>
+                            <span class="list_view-location-skeleton list_view-skeleton ml-2"></span>
                             </div>
                             <span class="list_view-btn-skeleton list_view-skeleton"></span>
                         </div>
@@ -354,7 +354,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center">
                             <span class="list_view-author-img-skeleton list_view-skeleton"></span>
-                            <span class="list_view-location-skeleton list_view-skeleton" style="margin-left: 10px;"></span>
+                            <span class="list_view-location-skeleton list_view-skeleton ml-2"></span>
                             </div>
                             <span class="list_view-btn-skeleton list_view-skeleton"></span>
                         </div>
@@ -385,7 +385,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex align-items-center">
                             <span class="list_view-author-img-skeleton list_view-skeleton"></span>
-                            <span class="list_view-location-skeleton list_view-skeleton" style="margin-left: 10px;"></span>
+                            <span class="list_view-location-skeleton list_view-skeleton ml-2"></span>
                             </div>
                             <span class="list_view-btn-skeleton list_view-skeleton"></span>
                         </div>
