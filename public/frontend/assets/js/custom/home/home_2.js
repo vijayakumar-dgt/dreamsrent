@@ -141,4 +141,13 @@
             }
         });
     }); 
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('.theme-2-header');
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+      
 })();
