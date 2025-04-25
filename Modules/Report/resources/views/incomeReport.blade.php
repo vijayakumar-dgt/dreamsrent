@@ -285,13 +285,13 @@
                                 </tr>
                             </thead>
                             <tbody id="incomeTableBody">
-                                @foreach($bookings as $booking)
+                                @foreach($bookingsCount as $booking)
                                 <tr data-date="{{ \Carbon\Carbon::parse($booking->booking_date)->format('Y-m-d') }}" data-total="{{ $booking->final_price }}">
                                     <td>
                                         <input type="hidden" class="car-name" value="{{ $booking->name }}">
                                         <div class="d-flex align-items-center">
                                             <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
-                                            @php
+                                                @php
                                                 $imagePath = 'storage/' . $booking->vehicle_image;
                                                 $defaultImage = asset('custom/img/default-profile.png');
                                                 @endphp
@@ -313,20 +313,26 @@
                                     </td>
                                     <td>{{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</td>
                                     <td>
-                                        <span class="badge badge-soft-{{ $booking->payment_status || $booking->booking_by === 'admin' ? 'success' : 'danger' }} d-inline-flex align-items-center badge-sm payment-status">
-                                            <i class="ti ti-point-filled me-1 text-{{ $booking->payment_status || $booking->booking_by === 'admin' ? 'success' : 'danger' }}"></i>
-                                           {{
-                                                ($booking->booking_by === 'admin' && ($booking->payment_status === null || $booking->payment_status == 2)) || 
-                                                ($booking->booking_by !== 'admin' && $booking->payment_status == 2) 
-                                                ? __('admin.reports.paid') : __('admin.reports.pending') 
-                                            }}
+                                        @php
+                                        $isPaid =
+                                        ($booking->booking_by === 'admin' && ($booking->payment_status === null || $booking->payment_status == 2)) ||
+                                        ($booking->booking_by !== 'admin' && $booking->payment_status == 2);
+                                        @endphp
+
+                                        <span class="badge badge-soft-{{ $isPaid ? 'success' : 'danger' }} d-inline-flex align-items-center badge-sm payment-status">
+                                            <i class="ti ti-point-filled me-1 text-{{ $isPaid ? 'success' : 'danger' }}"></i>
+                                            {{ $isPaid ? __('admin.reports.paid') : __('admin.reports.pending') }}
                                         </span>
+
                                     </td>
 
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="mt-3">
+                            {{ $bookingsCount->links('vendor.pagination.bootstrap-5') }}
+                        </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="expense" role="tabpanel">
@@ -524,6 +530,7 @@
         </div>
 
     </div>
+    <div id="booking-data" data-bookings='@json($bookings)'></div>
     @include('admin.partials.footer')
 </div>
 
@@ -531,9 +538,6 @@
 @endsection
 
 @push('scripts')
-<script>
-    var bookingData = @json($bookings);
-</script>
 <script src="{{ asset('assets/js/report/income.js') }}"></script>
 
 

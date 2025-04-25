@@ -1,4 +1,6 @@
-// Ensure bookingData exists before proceeding
+const bookingDataElement = document.getElementById('booking-data');
+const bookingData = JSON.parse(bookingDataElement.dataset.bookings);
+
 if (typeof bookingData === "undefined" || !Array.isArray(bookingData)) {
     console.error("Error: bookingData is not defined or is not an array.");
 }
@@ -90,47 +92,55 @@ function updateChartData(filter) {
     let thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     let previousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
 
+    // Helper function to apply your logic
+    function isValidBooking(booking) {
+        if (booking.booking_by === 'admin') {
+            return booking.payment_status === null || booking.payment_status === 2;
+        } else {
+            return booking.payment_status === 2;
+        }
+    }
+
     let filteredData = bookingData.filter((booking) => {
         let bookingDate = new Date(booking.booking_date);
 
-        if (filter === "This Week") return bookingDate >= lastWeek;
-        if (filter === "Last Week")
-            return bookingDate < lastWeek && bookingDate >= previousWeek;
-        if (filter === "This Month") return bookingDate >= thisMonth;
+        let inPeriod = false;
+        if (filter === "This Week") inPeriod = bookingDate >= lastWeek;
+        else if (filter === "Last Week") inPeriod = bookingDate < lastWeek && bookingDate >= previousWeek;
+        else if (filter === "This Month") inPeriod = bookingDate >= thisMonth;
 
-        return true; // Default case (if no filter matches)
+        return inPeriod && isValidBooking(booking);
     });
 
     let previousPeriodData = bookingData.filter((booking) => {
         let bookingDate = new Date(booking.booking_date);
 
-        if (filter === "This Week") return bookingDate < lastWeek && bookingDate >= previousWeek;
-        if (filter === "Last Week") return bookingDate < previousWeek && bookingDate >= new Date(previousWeek.setDate(previousWeek.getDate() - 7));
-        if (filter === "This Month") return bookingDate < thisMonth && bookingDate >= previousMonth;
+        let inPreviousPeriod = false;
+        if (filter === "This Week") inPreviousPeriod = bookingDate < lastWeek && bookingDate >= previousWeek;
+        else if (filter === "Last Week") {
+            let weekBeforePrevious = new Date(previousWeek);
+            weekBeforePrevious.setDate(previousWeek.getDate() - 7);
+            inPreviousPeriod = bookingDate < previousWeek && bookingDate >= weekBeforePrevious;
+        } else if (filter === "This Month") inPreviousPeriod = bookingDate < thisMonth && bookingDate >= previousMonth;
 
-        return false;
+        return inPreviousPeriod && isValidBooking(booking);
     });
 
     if (filteredData.length === 0) {
         console.warn("No data available for the selected filter:", filter);
     }
 
-    let incomeData = filteredData.map(b => b.vehicle_total_price || 0); // Avoid undefined values
+    let incomeData = filteredData.map(b => b.vehicle_total_price || 0);
     let categories = filteredData.map(b => new Date(b.booking_date).toLocaleDateString() || "N/A");
 
-    // Calculate total income
     let totalIncome = incomeData.reduce((sum, income) => sum + income, 0);
-
-    // Calculate previous period's total income
     let previousTotalIncome = previousPeriodData.map(b => b.vehicle_total_price || 0).reduce((sum, income) => sum + income, 0);
 
-    // Calculate percentage change
     let percentageChange = 0;
     if (previousTotalIncome > 0) {
         percentageChange = ((totalIncome - previousTotalIncome) / previousTotalIncome) * 100;
     }
 
-    // Ensure chart is defined before updating
     if (chart) {
         chart.updateOptions({
             series: [{ name: "Income", data: incomeData }],
@@ -140,15 +150,13 @@ function updateChartData(filter) {
         console.error("Chart is not initialized.");
     }
 
-    // Update the dropdown button text
     document.querySelector(".dropdown-toggle-chat").innerHTML = `<i class="ti ti-calendar me-1"></i> ${filter}`;
 
-    // Update the total income display
     document.querySelector(".income-summary p").textContent = `Income ${filter}`;
     document.querySelector(".income-summary h5").innerHTML = `
         $${totalIncome.toLocaleString()} 
         <span class="${percentageChange >= 0 ? 'text-success' : 'text-danger'} fs-13 fw-semibold">
-            ${percentageChange.toFixed(2)}%
+            ${percentageChange >= 0 ? '+' : '-'}${Math.abs(percentageChange).toFixed(2)}%
         </span>
     `;
 }

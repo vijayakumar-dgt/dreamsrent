@@ -1,3 +1,12 @@
+const chartDataElement = document.getElementById('chart-data');
+
+// Parse all JSON data
+const times = JSON.parse(chartDataElement.dataset.times);
+const bookingDate = JSON.parse(chartDataElement.dataset.bookingDate);
+const series = JSON.parse(chartDataElement.dataset.series);
+const dates = JSON.parse(chartDataElement.dataset.dates);
+const bookingData = JSON.parse(chartDataElement.dataset.bookings);
+
 document.addEventListener('DOMContentLoaded', function() {
     var options = {
         chart: {

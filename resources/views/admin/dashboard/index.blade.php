@@ -44,7 +44,7 @@
                                     <a href="/admin/reservations" class="btn btn-primary d-flex align-items-center"><i class="ti ti-eye me-1"></i>{{ __('admin.dashboard.reservations') }}</a>
                                     @endif
                                     @if (hasPermission($permissions, 'vehicles', 'create'))
-                                    <a href="/admin/add-vehicle" class="btn btn-dark d-flex align-items-center"><i class="ti ti-plus me-1"></i>{{ __('admin.dashboard.add_new_car') }}</a>
+                                    <a href="/admin/vehicleadd" class="btn btn-dark d-flex align-items-center"><i class="ti ti-plus me-1"></i>{{ __('admin.dashboard.add_new_car') }}</a>
                                     @endif
                                 </div>
                             </div>
@@ -155,7 +155,7 @@
                             <div>
                                 <h6 class="fs-14 fw-semibold">{{$carTypes[0]->name ?? ""}}</h6>
                             </div>
-                            <h6 class="fs-14 fw-semibold">{{$symbol}}{{ json_decode(($carTypes[0]->vehicle_price)[0]->daily ?? " ") }} <span class="fw-normal text-gray-5">/{{ __('admin.dashboard.from_last_week') }}day</span></h6>
+                            <h6 class="fs-14 fw-semibold">{{$symbol}}{{ json_decode($carTypes[0]->vehicle_price, true)[0]['daily'] ?? '0' }} <span class="fw-normal text-gray-5">/{{ __('admin.dashboard.from_last_week') }}day</span></h6>
                         </div>
                         <div class="row g-2 justify-content-center mb-3">
                             <div class="col-sm-4 col-6 d-flex">
@@ -585,6 +585,14 @@
             @endif
 
         </div>
+        <div id="chart-data"
+            data-times='@json($times)'
+            data-booking-date='@json($times)' {{-- You used this twice --}}
+            data-series='@json($series)'
+            data-dates='@json($dates)'
+            data-categories='@json($formattedDates)'
+            data-bookings='@json($chartbooking)'>
+        </div>
 
     </div>
 
@@ -595,14 +603,6 @@
 @endsection
 
 @push('scripts')
-<script>
-    var times = @json($times);
-    var bookingDate = @json($times);
-    var series = @json($series);
-    var dates = @json($dates);
-    var categories = @json($formattedDates);
-    var bookingData = @json($chartbooking);
-</script>
 <script src="{{ asset('assets/js/admin/dashboard.js') }}"></script>
 
 
