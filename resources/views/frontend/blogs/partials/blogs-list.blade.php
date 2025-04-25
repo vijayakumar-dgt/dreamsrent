@@ -25,10 +25,10 @@
                     <li class="date-icon ms-3"><i class="fa-solid fa-calendar-days custom-calendar"></i> <span>{{ \Carbon\Carbon::parse($blogPost->created_at)->format('d M Y') }}</span></li>
                 </ul>
                 <p class="blog-category mb-0">
-                    <a href="javascript:void(0)"><span>{{$blogPost->category}}</span></a>
+                    <a href="javascript:void(0)"><span>{{ucfirst($blogPost->category)}}</span></a>
                 </p>
             </div>
-            <h3 id="blog-title"><a href="/blog-details/{{$blogPost->slug}}">{{$blogPost->title}}</a></h3>
+            <h3 id="blog-title"><a href="/blog-details/{{$blogPost->slug}}">{{ucfirst($blogPost->title)}}</a></h3>
             <p id="blog-description">{{ Str::limit(strip_tags($blogPost->description), 250, '...') }}</p>
             <a href="/blog-details/{{$blogPost->slug}}" class="viewlink btn btn-primary justify-content-center">{{__('web.blog.read_more')}} <i class="feather-arrow-right ms-2"></i></a>
         </div>
