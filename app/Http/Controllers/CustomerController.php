@@ -452,9 +452,9 @@ class CustomerController extends Controller
 
             $customer->documents = $customer->documents->map(function ($document) {
                 $fileDetails = uploadedAsset($document->document, '', true);
-                $document->file_name = $fileDetails['file_name'];
+                $document->file_name = $fileDetails['file_name'] ?? null;
                 $document->size = $fileDetails['size'];
-                $document->extension = $fileDetails['extension'];
+                $document->extension = $fileDetails['extension'] ?? '';
                 $document->document_url = uploadedAsset($document->document, '');
                 $document->icon = url('custom/img/file-icon.svg');
                 return $document;

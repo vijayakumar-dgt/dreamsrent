@@ -96,7 +96,7 @@
                                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                                         <h6>{{ __('admin.common.documents') }}</h6>
                                     </div>
-                                    @if ($customer->documents->isNotEmpty())
+                                    @if ($customer->documents->isNotEmpty() && $customer->documents->count() > 0)
                                         <div class="d-flex align-items-center flex-wrap gap-4">
                                             @foreach ($customer->documents as $document)
                                                 <div class="d-flex align-items-center">
@@ -104,8 +104,8 @@
                                                         <img src="{{ $document->icon }}" alt="img">
                                                     </span>
                                                     <div>
-                                                        <h6 class="fs-14 fw-medium">{{ $document->file_name }}</h6>
-                                                        <p class="fs-13">{{ $document->size }}</p>
+                                                        <a href="{{ $document->document_url }}" class="fs-14 fw-medium">{{ $document->file_name ?? 'default-image-02.jpg'}}</a>
+                                                        <p class="fs-13">{{ $document->size == '0' || $document->size == '' ? '100 KB' : $document->size}}</p>
                                                     </div>
                                                 </div>
                                             @endforeach
