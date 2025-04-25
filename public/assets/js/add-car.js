@@ -15,7 +15,6 @@
                 ["view", ["fullscreen", "codeview", "help"]],
             ],
         });
-
     });
 
     $(document).ready(function () {
@@ -210,8 +209,7 @@
                                     break;
                                 }
                             }
-                        } catch (e) {
-                        }
+                        } catch (e) {}
 
                         tableBody += `<tr>
                             <td>
@@ -227,9 +225,7 @@
 									<img src="${value.vehicle_image}" class="rounded-3" alt="">
 								</p>
 								<div class="text-start">
-									<h6><p class="fs-14 fw-semibold">${ucfirst(
-                                        value.name
-                                    )}</p></h6>
+									<h6><p class="fs-14 fw-semibold">${ucfirst(value.name)}</p></h6>
 									<p>${value.car_type ? value.car_type.name : ""}</p>
 								</div>
 							</div>
@@ -293,8 +289,12 @@
                                                        "delete"
                                                    )
                                                        ? `<li>
-                                           <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteVehicleList(${value.id});" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                                                <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                           <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteVehicleList(${
+                                               value.id
+                                           });" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                                                <i class="ti ti-trash me-1"></i>${_l(
+                                                    "admin.common.delete"
+                                                )}
                                             </a>
                                         </li>`
                                                        : ""
@@ -366,29 +366,29 @@
         });
     }
 
-
-    
     $("#deleteVehicle").on("submit", function (e) {
         e.preventDefault();
-    
+
         var vehicleId = $("#delete_id").val();
         var $submitBtn = $(".submitbtn"); // Button for submission
 
-        $submitBtn.prop('disabled', true); // Disable the button
-        $submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...'); // Show loading spinner
-        
+        $submitBtn.prop("disabled", true); // Disable the button
+        $submitBtn.html(
+            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...'
+        ); // Show loading spinner
+
         $.ajax({
-            url: '/admin/vehicle/delete',
-            method: 'POST',
+            url: "/admin/vehicle/delete",
+            method: "POST",
             data: {
-                delete_id: vehicleId
+                delete_id: vehicleId,
             },
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             success: function (response) {
                 if (response.success) {
-                    $('#delete-modal').modal('hide');
+                    $("#delete-modal").modal("hide");
                     initTable();
                 } else {
                     alert("Failed to delete vehicle.");
@@ -397,32 +397,31 @@
             error: function (error) {
                 alert("An error occurred while deleting the vehicle.");
             },
-            complete: function() {
-                $submitBtn.prop('disabled', false); // Re-enable the button
-                $submitBtn.html('Yes, Delete'); // Reset the button text
-            }
+            complete: function () {
+                $submitBtn.prop("disabled", false); // Re-enable the button
+                $submitBtn.html("Yes, Delete"); // Reset the button text
+            },
         });
     });
 
     $(document).on("click", "#deleteSelectedVehicles", function () {
         const vehicleIds = [];
-    
+
         $(".form-check-input:checked").each(function () {
             const id = $(this).closest(".form-check").data("id");
             if (id) {
                 vehicleIds.push(id);
             }
         });
-    
+
         if (vehicleIds.length === 0) {
             showToast("error", "No vehicles selected.");
             return;
         }
-    
 
         $.ajax({
-            url: '/admin/vehicle/multiple/delete',
-            method: 'POST',
+            url: "/admin/vehicle/multiple/delete",
+            method: "POST",
             data: {
                 delete_id: vehicleIds,
             },
@@ -432,17 +431,19 @@
             success: function (response) {
                 if (response.success) {
                     initTable();
-                    showToast("success", "Selected Vehicles delated successfully.");
+                    showToast(
+                        "success",
+                        "Selected Vehicles delated successfully."
+                    );
                 } else {
                     alert("Failed to delete vehicle(s).");
                 }
             },
             error: function () {
                 alert("An error occurred while deleting the vehicles.");
-            }
+            },
         });
     });
-    
 
     $(document).ready(function () {
         $("#carBasicInfoForm").validate({
@@ -590,7 +591,7 @@
                     }
                 };
             }
-        });        
+        });
 
         $("#featAmenNext").on("click", function (event) {
             event.preventDefault();
@@ -1340,18 +1341,18 @@
 
         let selectedImages = new Map();
         const allowedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
-        
+
         $("#car_images").on("change", function (event) {
             let files = event.target.files;
             let maxFileSize = 50 * 1024 * 1024;
             let imageListContainer = $("#car_images_append");
             let validFiles = [];
             let pending = files.length;
-        
+
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
                 let ext = file.name.split(".").pop().toLowerCase();
-        
+
                 if (
                     !allowedImageExtensions.includes(ext) ||
                     file.size > maxFileSize ||
@@ -1360,16 +1361,16 @@
                     pending--;
                     continue;
                 }
-        
+
                 let imageUrl = URL.createObjectURL(file);
                 let img = new Image();
                 img.src = imageUrl;
-        
+
                 img.onload = function () {
                     if (this.width === 690 && this.height === 420) {
                         selectedImages.set(file.name, file);
                         validFiles.push(file);
-        
+
                         imageListContainer.append(`
                             <div class="uploaded-img" data-file="${file.name}">
                                 <img src="${imageUrl}" alt="img">
@@ -1379,11 +1380,11 @@
                     } else {
                         URL.revokeObjectURL(imageUrl);
                     }
-        
+
                     pending--;
                     if (pending === 0) updateImageInput(validFiles);
                 };
-        
+
                 img.onerror = function () {
                     URL.revokeObjectURL(imageUrl);
                     pending--;
@@ -1391,24 +1392,23 @@
                 };
             }
         });
-        
+
         function updateImageInput(validFiles) {
             let dt = new DataTransfer();
-            validFiles.forEach(file => dt.items.add(file));
+            validFiles.forEach((file) => dt.items.add(file));
             $("#car_images")[0].files = dt.files;
         }
-        
+
         $(document).on("click", ".delete-image", function () {
             let item = $(this).closest(".uploaded-img");
             let fileName = item.data("file");
-        
+
             selectedImages.delete(fileName);
             item.remove();
-        
+
             let updatedFiles = Array.from(selectedImages.values());
             updateImageInput(updatedFiles);
         });
-        
 
         $("#car_video").on("input", function () {
             let videoUrl = $(this).val().trim();
@@ -2231,50 +2231,45 @@ function editVechileList(vehicleSlug) {
                 showToast("error", "Vehicle not found.");
             }
         },
-        error: function (xhr, status, error) {
-        },
+        error: function (xhr, status, error) {},
     });
 }
 
-document
-    .getElementById("service_save_btn")
-    .addEventListener("click", function () {
-        // Get all table rows from the modal
-        let tableRows = document.querySelectorAll(".custom-table1 tbody tr");
 
-        tableRows.forEach((row) => {
-            let serviceName = row.querySelector("#extra_name").innerText.trim();
-            let extraValue = row.querySelector("#extra_value").value;
-            let extraPrice = row.querySelector("#extra_price").value;
+document.addEventListener("DOMContentLoaded", function () {
+    const saveBtn = document.getElementById("service_save_btn");
+    if (saveBtn) {
+        saveBtn.addEventListener("click", function () {
+            let tableRows = document.querySelectorAll(".custom-table1 tbody tr");
 
-            // Find the matching service card in the main list
-            let serviceCards = document.querySelectorAll(".extra-service-card");
+            tableRows.forEach((row) => {
+                let serviceName = row.querySelector("#extra_name").innerText.trim();
+                let extraValue = row.querySelector("#extra_value").value;
+                let extraPrice = row.querySelector("#extra_price").value;
 
-            serviceCards.forEach((card) => {
-                let cardName = card
-                    .querySelector("#service_name")
-                    .innerText.trim();
+                let serviceCards = document.querySelectorAll(".extra-service-card");
 
-                if (cardName === serviceName) {
-                    // Update the selected value
-                    card.querySelector("#set_value").innerText =
-                        extraValue === "per_day"
-                            ? _l("admin.rentals.per_day")
-                            : _l("admin.rentals.one_time");
-                    card.querySelector("#service_value").value = extraValue;
+                serviceCards.forEach((card) => {
+                    let cardName = card.querySelector("#service_name").innerText.trim();
 
-                    // Update the price
-                    card.querySelector(
-                        "#set_price"
-                    ).innerText = `$${extraPrice}`;
-                    card.querySelector("#service_price").value = extraPrice;
-                }
+                    if (cardName === serviceName) {
+                        card.querySelector("#set_value").innerText =
+                            extraValue === "per_day"
+                                ? _l("admin.rentals.per_day")
+                                : _l("admin.rentals.one_time");
+                        card.querySelector("#service_value").value = extraValue;
+
+                        card.querySelector("#set_price").innerText = `$${extraPrice}`;
+                        card.querySelector("#service_price").value = extraPrice;
+                    }
+                });
             });
-        });
 
-        // Close the modal
-        $("#edit_price").modal("hide");
-    });
+            $("#edit_price").modal("hide");
+        });
+    }
+});
+
 
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".delivery-add").forEach(function (container) {
@@ -2294,66 +2289,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 plusIcon.style.display = "none";
             }
         });
-    });
-
-    document.getElementById("in_btn").addEventListener("click", function () {
-        const selectedInsurances = document.querySelectorAll(
-            "#set_value .delivery-add input[type='checkbox']:checked"
-        );
-        const appendContainer = document.getElementById("insurance_car_append");
-
-        // Clear previously appended elements
-        appendContainer.innerHTML = "";
-
-        selectedInsurances.forEach((checkbox) => {
-            const container = checkbox.closest("#inCont");
-            const insuranceId = container.querySelector("#insurance_id").value;
-            const insuranceName =
-                container.querySelector("#insurance_name").value;
-            const insurancePrice =
-                container.querySelector("#insurance_price").value;
-            const insuranceCount =
-                container.querySelector("#insurance_count").value;
-            const insurancePriceType = container.querySelector(
-                "#insurance_price_type"
-            ).value;
-
-            // Generate a unique ID for this insurance entry
-            const uniqueId = `insurance_${Date.now()}_${Math.floor(
-                Math.random() * 1000
-            )}`;
-
-            const newInsuranceDiv = document.createElement("div");
-            newInsuranceDiv.className =
-                "d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3";
-            newInsuranceDiv.setAttribute("data-id", uniqueId);
-            newInsuranceDiv.innerHTML = `
-                <div>
-                    <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">${insuranceName}</h6>
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <p class="fs-13 fw-medium border-end pe-2 mb-0">${_l(
-                            "admin.rentals.insurance_price"
-                        )} : <span class="text-gray-9 priceIn" data-id="${uniqueId}">$${insurancePrice}</span></p>
-                        <input type="hidden" name="insurance_id_one[]" id="insurance_id_one_${uniqueId}" value="${insuranceId}">
-                        <input type="hidden" name="insurance_price_one[]" id="insurance_price_one_${uniqueId}" value="${insurancePrice}">
-                        <p class="fs-13 fw-medium mb-0">${_l(
-                            "admin.rentals.insurance_benefits"
-                        )} : <span class="text-gray-9">${insuranceCount}</span></p>
-                        <p class="fs-13 fw-medium mb-0">${_l(
-                            "admin.rentals.insurance_price_type"
-                        )} : <span class="text-gray-9 priceTypeIn" data-id="${uniqueId}">${insurancePriceType}</span></p>
-                        <input type="hidden" name="insurance_price_type_one[]" id="insurance_price_type_one_${uniqueId}" value="${insurancePriceType}">
-                    </div>
-                </div>
-                <div class="d-flex align-items-center icon-list">
-                    <a href="#" class="edit-icon me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance" 
-                    data-id="${uniqueId}" data-price="${insurancePrice}" data-price-type="${insurancePriceType}"><i class="ti ti-edit"></i></a>
-                    <a href="#" class="trash-icon" data-bs-toggle="modal" data-bs-target="#delete_insurance"><i class="ti ti-trash"></i></a>
-                </div>
-            `;
-            appendContainer.appendChild(newInsuranceDiv);
-        });
-        $("#select_insurance").modal("hide");
     });
 
     document.addEventListener("click", function (event) {
@@ -2380,36 +2315,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    document
-        .getElementById("save_update")
-        .addEventListener("click", function () {
-            const updatedPrice = document.getElementById("price").value;
-            const updatedPriceType = document
-                .querySelector("input[name='Radio']:checked")
-                .nextElementSibling.innerText.trim();
-
-            // Get the unique ID from the modal
-            const uniqueId = document
-                .getElementById("edit_insurance")
-                .getAttribute("data-id");
-
-            // Update only the selected entry
-            document.querySelector(
-                `.priceIn[data-id='${uniqueId}']`
-            ).innerText = `$${updatedPrice}`;
-            document.getElementById(`insurance_price_one_${uniqueId}`).value =
-                updatedPrice;
-
-            document.querySelector(
-                `.priceTypeIn[data-id='${uniqueId}']`
-            ).innerText = updatedPriceType;
-            document.getElementById(
-                `insurance_price_type_one_${uniqueId}`
-            ).value = updatedPriceType;
-
-            // Close the modal
-            $("#edit_insurance").modal("hide");
-        });
 });
 
 document.addEventListener("click", function (event) {
@@ -2510,47 +2415,54 @@ $(document).ready(function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
+    // Handle price checkboxes
     const checkboxes = document.querySelectorAll(".price-checkbox");
-
     checkboxes.forEach((checkbox) => {
         checkbox.addEventListener("change", function () {
             let priceInput = document.getElementById(this.name + "_price");
 
-            if (this.checked) {
-                priceInput.removeAttribute("disabled"); // Enable the input
-            } else {
-                priceInput.setAttribute("disabled", "false"); // Disable the input
-                priceInput.value = ""; // Clear the input value
+            if (priceInput) {
+                if (this.checked) {
+                    priceInput.removeAttribute("disabled"); // Enable the input
+                } else {
+                    priceInput.setAttribute("disabled", "true"); // Disable the input
+                    priceInput.value = ""; // Clear the input value
+                }
             }
         });
     });
 
+    // Limit input to numbers only for priceLimit fields
     document.querySelectorAll(".priceLimit").forEach((input) => {
         input.addEventListener("input", function () {
             this.value = this.value.replace(/\D/g, "").slice(0, 5);
         });
     });
 
+    // Handle title and permalink generation
     const titleInput = document.getElementById("title");
     const permalinkInput = document.getElementById("perma_link");
     const previewLink = document.querySelector(".link-info");
 
-    titleInput.addEventListener("input", function () {
-        let slug = titleInput.value
-            .toLowerCase()
-            .trim()
-            .replace(/[^a-z0-9\s-]/g, "") // Remove special characters
-            .replace(/\s+/g, "-") // Replace spaces with dashes
-            .replace(/-+/g, "-"); // Remove multiple dashes
+    if (titleInput && permalinkInput && previewLink) {
+        titleInput.addEventListener("input", function () {
+            let slug = titleInput.value
+                .toLowerCase()
+                .trim()
+                .replace(/[^a-z0-9\s-]/g, "") // Remove special characters
+                .replace(/\s+/g, "-") // Replace spaces with dashes
+                .replace(/-+/g, "-"); // Remove multiple dashes
 
-        let baseUrl = "https://www.example.com/cars/";
-        let fullUrl = baseUrl + slug;
+            let baseUrl = "https://www.example.com/cars/";
+            let fullUrl = baseUrl + slug;
 
-        permalinkInput.value = fullUrl;
-        previewLink.href = fullUrl;
-        previewLink.textContent = fullUrl;
-    });
+            permalinkInput.value = fullUrl;
+            previewLink.href = fullUrl;
+            previewLink.textContent = fullUrl;
+        });
+    }
 });
+
 
 $(document).on("click", ".change-language", function () {
     var languageCode = $(this).data("language_code");
@@ -2573,3 +2485,101 @@ $(document).on("click", ".change-language", function () {
 function deleteVehicleList(vehicleId) {
     $("#delete_id").val(vehicleId);
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const inBtn = document.getElementById("in_btn");
+    
+    // Check if the element exists before adding the event listener
+    if (inBtn) {
+        inBtn.addEventListener("click", function () {
+            const selectedInsurances = document.querySelectorAll(
+                "#set_value .delivery-add input[type='checkbox']:checked"
+            );
+            const appendContainer = document.getElementById("insurance_car_append");
+
+            // Clear previously appended elements
+            appendContainer.innerHTML = "";
+
+            selectedInsurances.forEach((checkbox) => {
+                const container = checkbox.closest("#inCont");
+                const insuranceId = container.querySelector("#insurance_id").value;
+                const insuranceName = container.querySelector("#insurance_name").value;
+                const insurancePrice = container.querySelector("#insurance_price").value;
+                const insuranceCount = container.querySelector("#insurance_count").value;
+                const insurancePriceType = container.querySelector("#insurance_price_type").value;
+
+                // Generate a unique ID for this insurance entry
+                const uniqueId = `insurance_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+
+                const newInsuranceDiv = document.createElement("div");
+                newInsuranceDiv.className =
+                    "d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3";
+                newInsuranceDiv.setAttribute("data-id", uniqueId);
+                newInsuranceDiv.innerHTML = `
+                    <div>
+                        <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">${insuranceName}</h6>
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <p class="fs-13 fw-medium border-end pe-2 mb-0">${_l(
+                                "admin.rentals.insurance_price"
+                            )} : <span class="text-gray-9 priceIn" data-id="${uniqueId}">$${insurancePrice}</span></p>
+                            <input type="hidden" name="insurance_id_one[]" id="insurance_id_one_${uniqueId}" value="${insuranceId}">
+                            <input type="hidden" name="insurance_price_one[]" id="insurance_price_one_${uniqueId}" value="${insurancePrice}">
+                            <p class="fs-13 fw-medium mb-0">${_l(
+                                "admin.rentals.insurance_benefits"
+                            )} : <span class="text-gray-9">${insuranceCount}</span></p>
+                            <p class="fs-13 fw-medium mb-0">${_l(
+                                "admin.rentals.insurance_price_type"
+                            )} : <span class="text-gray-9 priceTypeIn" data-id="${uniqueId}">${insurancePriceType}</span></p>
+                            <input type="hidden" name="insurance_price_type_one[]" id="insurance_price_type_one_${uniqueId}" value="${insurancePriceType}">
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center icon-list">
+                        <a href="#" class="edit-icon me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance" 
+                        data-id="${uniqueId}" data-price="${insurancePrice}" data-price-type="${insurancePriceType}"><i class="ti ti-edit"></i></a>
+                        <a href="#" class="trash-icon" data-bs-toggle="modal" data-bs-target="#delete_insurance"><i class="ti ti-trash"></i></a>
+                    </div>
+                `;
+                appendContainer.appendChild(newInsuranceDiv);
+            });
+            $("#select_insurance").modal("hide");
+        });
+    } else {
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const saveUpdateBtn = document.getElementById("save_update");
+
+    if (saveUpdateBtn) {
+        saveUpdateBtn.addEventListener("click", function () {
+            const updatedPrice = document.getElementById("price").value;
+            const updatedPriceType = document
+                .querySelector("input[name='Radio']:checked")
+                .nextElementSibling.innerText.trim();
+
+            // Get the unique ID from the modal
+            const uniqueId = document
+                .getElementById("edit_insurance")
+                .getAttribute("data-id");
+
+            // Update only the selected entry
+            document.querySelector(
+                `.priceIn[data-id='${uniqueId}']`
+            ).innerText = `$${updatedPrice}`;
+            document.getElementById(`insurance_price_one_${uniqueId}`).value =
+                updatedPrice;
+
+            document.querySelector(
+                `.priceTypeIn[data-id='${uniqueId}']`
+            ).innerText = updatedPriceType;
+            document.getElementById(
+                `insurance_price_type_one_${uniqueId}`
+            ).value = updatedPriceType;
+
+            // Close the modal
+            $("#edit_insurance").modal("hide");
+        });
+    } else {
+    }
+});
