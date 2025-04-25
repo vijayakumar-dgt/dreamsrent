@@ -2072,4 +2072,20 @@ class CarInfoController extends Controller
             'message' => 'Damage not found.'
         ]);
     }
+
+    public function deleteMultiple(Request $request)
+    {
+        $ids = $request->input('delete_id', []);
+
+        if (!is_array($ids) || empty($ids)) {
+            return response()->json(['success' => false, 'message' => 'No IDs provided.']);
+        }
+
+        try {
+            VehicleInfo::whereIn('id', $ids)->delete();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error deleting vehicles.']);
+        }
+    }
 }

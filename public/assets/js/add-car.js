@@ -404,6 +404,46 @@
         });
     });
 
+    $(document).on("click", "#deleteSelectedVehicles", function () {
+        const vehicleIds = [];
+    
+        $(".form-check-input:checked").each(function () {
+            const id = $(this).closest(".form-check").data("id");
+            if (id) {
+                vehicleIds.push(id);
+            }
+        });
+    
+        if (vehicleIds.length === 0) {
+            showToast("error", "No vehicles selected.");
+            return;
+        }
+    
+
+        $.ajax({
+            url: '/admin/vehicle/multiple/delete',
+            method: 'POST',
+            data: {
+                delete_id: vehicleIds,
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.success) {
+                    initTable();
+                    showToast("success", "Selected Vehicles delated successfully.");
+                } else {
+                    alert("Failed to delete vehicle(s).");
+                }
+            },
+            error: function () {
+                alert("An error occurred while deleting the vehicles.");
+            }
+        });
+    });
+    
+
     $(document).ready(function () {
         $("#carBasicInfoForm").validate({
             rules: {
