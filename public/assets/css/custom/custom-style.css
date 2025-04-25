@@ -906,3 +906,8 @@
     padding: 20px !important;
   }
   
+  .lang-flag {
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+  }

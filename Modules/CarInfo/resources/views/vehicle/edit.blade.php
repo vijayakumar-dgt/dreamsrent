@@ -65,8 +65,7 @@
                                 <div class="d-flex align-items-center gap-2">
                                     <img src="{{ asset('assets/img/flags/' . app()->getLocale() . '.png') }}"
                                         alt="Language"
-                                        class="img-fluid rounded-circle"
-                                        style="width: 24px; height: 24px; object-fit: cover;">
+                                        class="img-fluid rounded-circle lang-flag">
 
                                     <select id="languageSelector" class="form-select w-auto">
                                         @foreach ($allLanguages as $language)

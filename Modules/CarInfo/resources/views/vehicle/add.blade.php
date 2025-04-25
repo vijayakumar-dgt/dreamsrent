@@ -63,11 +63,10 @@
 								@endphp
 
 								<div class="dropdown flag-dropdown">
-									<a class="dropdown-toggle btn btn-white d-flex align-items-center justify-content-between p-1" data-bs-toggle="dropdown" href="javascript:void(0);">
+									<a class="dropdown-toggle btn btn-white d-flex align-items-center justify-content-between py-1 px-2" data-bs-toggle="dropdown" href="javascript:void(0);">
 										<img src="{{ asset('assets/img/flags/' . app()->getLocale() . '.png') }}"
 											alt="Language"
-											class="img-fluid rounded-circle me-2"
-											style="width: 24px; height: 24px; object-fit: cover;">
+											class="img-fluid rounded-circle me-2 lang-flag">
 										<span>{{ $currentLang->name ?? 'Language' }}</span>
 									</a>
 									<ul class="dropdown-menu p-2">
@@ -80,8 +79,7 @@
 												data-language_code="{{ $language->code }}">
 												<img src="{{ asset('assets/img/flags/' . $language->code . '.png') }}"
 													alt="{{ $language->name }}"
-													class="me-2 rounded-circle"
-													style="width: 20px; height: 20px; object-fit: cover;">
+													class="rounded-circle me-2 lang-flag">
 												{{ $language->name }}
 											</a>
 										</li>
