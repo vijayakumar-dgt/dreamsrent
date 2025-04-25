@@ -198,6 +198,8 @@ $(document).on('click', '.status_filter', function () {
 });
 
 function createBookingCard(booking){
+    let driving_type = booking.driving_type ?? "";
+    driving_type = driving_type.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
     let statusLabel = formatStatusLabel(booking.status);
     return `<tr>
                 <td><a href="javascript:void(${booking.id});" class="view_booking" data-id="${booking.id}">#${booking.reservation_id}</a></td>
@@ -208,7 +210,7 @@ function createBookingCard(booking){
                         </a>
                         <div class="table-head-name flex-grow-1">
                             <a href="${booking.vehicle_page_url}" target="_blank">${booking.vehicle_name ?? ""}</a>
-                            <p>${booking.driving_type ?? ""}</p>
+                            <p>${driving_type ?? ""}</p>
                         </div>
                     </div>
                 </td>
