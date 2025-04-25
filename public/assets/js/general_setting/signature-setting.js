@@ -16,7 +16,7 @@
                     minlength: 3
                 },
                 is_default: {
-                    required: false 
+                    required: false
                 }
             },
             messages: {
@@ -49,7 +49,7 @@
             },
             submitHandler: function (form) {
                 let signatureData = new FormData(form);
-             
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/settings/signatures/store",
@@ -71,16 +71,16 @@
                     success: function (resp) {
                         if (resp.code === 200) {
                             showToast('success', resp.message);
-                            $('#addSignatureForm')[0].reset(); 
-                         
+                            $('#addSignatureForm')[0].reset();
+
                             $('#add_signatures').modal('hide');
-                            signatureTable(); 
+                            signatureTable();
                         }
                     },
                     error: function (error) {
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
-    
+
                         if (error.responseJSON.code === 422) {
                             $.each(error.responseJSON.errors, function (key, val) {
                                 $("#" + key).addClass("is-invalid");
@@ -89,13 +89,13 @@
                         } else {
                             showToast('error', error.responseJSON.message);
                         }
-    
-                       
+
+
                     }
                 });
             }
         });
-    
+
         $("#editSignatureForm").validate({
             rules: {
                 signature_image: {
@@ -141,7 +141,7 @@
             },
             submitHandler: function (form) {
                 let editData = new FormData(form);
-              
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/settings/signatures/update",
@@ -171,7 +171,7 @@
                     error: function (error) {
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
-    
+
                         if (error.responseJSON.code === 422) {
                             $.each(error.responseJSON.errors, function (key, val) {
                                 $("#" + key).addClass("is-invalid");
@@ -180,28 +180,28 @@
                         } else {
                             showToast('error', error.responseJSON.message);
                         }
-    
+
                     }
                 });
             }
         });
-    
+
     });
-    
+
     function signatureTable(){
         $.ajax({
             url: "/admin/settings/signatures/list",
             type: "GET",
             success: function(response) {
                 let tableBody = "";
-    
+
                 if ($.fn.DataTable.isDataTable("#signatureTable")) {
                     $("#signatureTable").DataTable().destroy();
                 }
-    
+
                 if (response.data.length > 0) {
                     let data = response.data;
-    
+
                     $.each(data, function(index, value) {
                         tableBody += `
                         <tr>
@@ -212,7 +212,7 @@
                                 </h6>
                             </td>
                             <td>
-                                <img src="${value.signature_image}" alt="Signature" style="width:50px; height:50px;">
+                                <img src="${value.signature_image}" alt="Signature">
                             </td>
                             <td>
                                <span class="badge badge-${value.status === 1 ? 'success' : 'danger'}-transparent d-inline-flex align-items-center badge-sm">
@@ -222,23 +222,23 @@
 
                             </td>
                              ${hasPermission(permissions, 'app_settings', 'edit') || hasPermission(permissions, 'app_settings', 'delete') ?
-    
+
                             `<td>
                                 <div class="dropdown">
                                     <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="ti ti-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
-                                 ${ hasPermission(permissions, 'app_settings', 'edit') ? 
-    
+                                 ${ hasPermission(permissions, 'app_settings', 'edit') ?
+
                                         `<li>
                                             <a class="dropdown-item rounded-1" href="javascript:void(0);"
                                             onclick="editSignature(${value.id}, '${value.signature_name}', '${value.signature_image}', ${value.status}, ${value.is_default})">
                                                 <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
                                             </a>
                                         </li>`:''}
-                                          ${ hasPermission(permissions, 'app_settings', 'delete') ? 
-    
+                                          ${ hasPermission(permissions, 'app_settings', 'delete') ?
+
                                         `<li>
                                             <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal" onclick="deleteSignature(${value.id})" data-bs-target="#delete_signature">
                                                 <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
@@ -256,9 +256,9 @@
                     </tr>`;
                     $('.table-footer').empty();
                 }
-    
+
                 $("#signatureTable tbody").html(tableBody);
-    
+
                 if (response.data.length > 0) {
                     $('#signatureTable').DataTable({
                         ordering: true,
@@ -268,11 +268,11 @@
                         drawCallback: function() {
                             $(".dataTables_info").addClass('d-none');
                             $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
-    
+
                             var tableWrapper = $(this).closest('.dataTables_wrapper');
                             var info = tableWrapper.find('.dataTables_info');
                             var pagination = tableWrapper.find('.dataTables_paginate');
-    
+
                             $('.table-footer').empty()
                                 .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
                                     .append($('<div class="datatable-info"></div>').append(info.clone(true)))
@@ -293,24 +293,24 @@
             complete: function() {
                 $(".table-loader, .input-loader, .label-loader").hide();
                 $('.real-table, .real-label, .real-input').removeClass('d-none');
-              
+
             },
         });
-    
+
     }
-    
+
 })();
 
 
 function editSignature(id, name, image, status, isDefault) {
-   
+
     $('#edit_signature_id').val(id);
     $('#edit_signature_name').val(name);
     $('#edit_signature_preview').attr('src', `${image}`);
     $('#edit_signature_status').prop('checked', status === 1);
     $('#edit_signature_default').prop('checked', isDefault === 1);
 
-   
+
     $('#edit_signature').modal('show');
 }
 
@@ -378,5 +378,5 @@ function removeImage() {
     const fileInput = document.getElementById('profile_photo');
 
     preview.src = '/assets/img/settings/company-logo-01.jpg';
-    fileInput.value = ''; 
+    fileInput.value = '';
 }

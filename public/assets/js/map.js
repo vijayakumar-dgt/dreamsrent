@@ -17,7 +17,7 @@ var locations =[{
 	"icons":"default",
 	"profile_link":"car-details.html",
 	"image":'assets/img/car/car-01.jpg'
-	}, {		
+	}, {
 	"id":"02",
 	"car_name":"Ferrari 458 MM",
 	"speciality":"Speed : 25/Kms",
@@ -126,9 +126,9 @@ function initialize() {
 		center: new google.maps.LatLng(53.470692, -2.220328),
         scrollwheel: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
-		
+
     };
-  
+
      map = new google.maps.Map(document.getElementById('map'), mapOptions);
     map.slide = true;
 
@@ -143,8 +143,8 @@ function initialize() {
 }
 
 function setInfo(marker) {
-  var content = 
-'<div class="card border-0 mb-0" style="width: 100%; display: inline-block;">'+
+  var content =
+'<div class="card border-0 mb-0" >'+
 	'<div class="card-body pt-0 p-2 d-flex align-items-center justify-content-between gap-3">'+
 		'<div class="d-flex align-items-center">'+
 			'<a href="' + marker.profile_link + '" class="avatar flex-shrink-0 me-2avatar-rounded" tabindex="0" target="_blank">'+
