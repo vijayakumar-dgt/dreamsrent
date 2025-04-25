@@ -30,7 +30,7 @@
 		<div class="main-wrapper login-body">
 			<!-- Header -->
 			<header class="log-header">
-				<a href="{{ route('home') }}"><img class="img-fluid logo-dark" src="assets/img/logo.svg" alt="Logo"></a>
+				<a href="{{ route('home') }}"><img class="img-fluid logo-dark" src="{{ $logo ?? 'assets/img/logo.svg' }}" alt="Logo"></a>
 			</header>
 			<!-- /Header -->
 

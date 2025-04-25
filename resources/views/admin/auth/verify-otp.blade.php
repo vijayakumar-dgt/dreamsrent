@@ -26,7 +26,7 @@
             <div class="col-lg-5 mx-auto">
                 <form action="" class="digit-group p-4" id="resetpasswordForm">
                     <div class="mx-auto mb-5 text-center">
-                        <img src="{{ asset('assets/img/logo.svg') }}" class="img-fluid" alt="Logo">
+                        <img src="{{ $logo ?? asset('assets/img/logo.svg') }}" class="img-fluid" alt="Logo">
                     </div>
                     <div class="card authentication-card mb-0">
                         <div class="card-body">
