@@ -5,7 +5,7 @@
     let dl;
     let viewType = "grid";
     let page = 1;
-    let pageLength = 6;
+    let pageLength = 12;
     let keyword = '';
     let availability = 1;
     let vehicle_brand_id = [];
