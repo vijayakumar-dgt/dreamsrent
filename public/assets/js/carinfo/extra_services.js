@@ -9,11 +9,11 @@
                 $('#icon_preview').attr('src', e.target.result);
             }
             reader.readAsDataURL(this.files[0]);
-            $("#icon_preview").show();
+            $("#icon_preview").removeClass('d-none');
             $(".icon_placeholder").hide();
     
         }else{
-            $("#icon_preview").hide();
+            $("#icon_preview").addClass('d-none');
             $(".icon_placeholder").show();
         }
     });
@@ -25,10 +25,10 @@
                 $('#image_preview').attr('src', e.target.result);
             }
             reader.readAsDataURL(this.files[0]);
-            $("#image_preview").show();
+            $("#image_preview").removeClass('d-none');
             $(".image_placeholder").hide();
         }else{
-            $("#image_preview").hide();
+            $("#image_preview").addClass('d-none');
             $(".image_placeholder").show();
         }
     });
@@ -337,9 +337,9 @@
         $(".error-text").text("");
         $(".form-control").removeClass("is-invalid is-valid");
         $(".icon_asterisk").show();
-        $("#icon_preview").hide();
+        $("#icon_preview").addClass('d-none');
         $(".icon_placeholder").show();
-        $("#image_preview").hide();
+        $("#image_preview").addClass('d-none');
         $(".image_placeholder").show();
         $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
     });
@@ -359,17 +359,17 @@ function editExtraService(id){
              $("#add_extra_service #id").val(data.id);
              $("#add_extra_service #language_id").val(data.language_id);
              if(data.icon && data.icon != null){
-                 $("#icon_preview").attr('src', data.icon).show();
+                 $("#icon_preview").attr('src', data.icon).removeClass('d-none');
                  $(".icon_placeholder").hide();
              }else{
-                 $("#icon_preview").hide();
+                 $("#icon_preview").addClass('d-none');
                  $(".icon_placeholder").show();
              }
              if(data.image && data.image != null){
-                 $("#image_preview").attr('src', data.image).show();
+                 $("#image_preview").attr('src', data.image).removeClass('d-none');
                  $(".image_placeholder").hide();
              }else{
-                 $("#image_preview").hide();
+                 $("#image_preview").addClass('d-none');
                  $(".image_placeholder").show();
              }
              $("#add_extra_service #description").val(data.description);

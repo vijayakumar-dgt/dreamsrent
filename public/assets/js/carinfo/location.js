@@ -23,10 +23,10 @@
                     $("#image_preview").attr("src", e.target.result);
                 };
                 reader.readAsDataURL(this.files[0]);
-                $("#image_preview").show();
+                $("#image_preview").removeClass('d-none');
                 $(".image_placeholder").hide();
             } else {
-                $("#image_preview").hide();
+                $("#image_preview").addClass('d-none');
                 $(".image_placeholder").show();
             }
         });
@@ -399,10 +399,10 @@
                     }
                     if(data.image){
                         $("#image_preview").attr("src", data.image);
-                        $("#image_preview").show();
+                        $("#image_preview").removeClass('d-none');
                         $(".image_placeholder").hide();
                     }else{
-                        $("#image_preview").hide();
+                        $("#image_preview").addClass('d-none');
                         $(".image_placeholder").show();
                     }
                     $("#email").val(data.email);

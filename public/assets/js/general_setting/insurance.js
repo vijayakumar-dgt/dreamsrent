@@ -273,7 +273,7 @@ $("#add_insurance").on('click', function() {
     $(".form-control, .form-check-input").removeClass("is-invalid is-valid");
     $(".add-insurance-benefit").children("div").not(":first").remove();
     $('#benefit').attr('name', 'benefit[]');
-    $('#statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
+    $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
     let form = $("#insuranceForm");
     let validator = form.validate();
     let newInput = $('#benefit');
@@ -364,7 +364,7 @@ function editInsurance(id){
 
                 $("#insurance_modal .modal-title").text(_l('admin.general_settings.edit_insurance'));
                 $(".submitBtn").text(_l('admin.general_settings.save_changes'));
-                $('#statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+                $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
                 $('.add-insurance-benefit').children("div").not(":first").remove();
 
                 if (data.insurance_benefits) {

@@ -109,7 +109,7 @@
             },
             submitHandler: function (form) {
                 let _formData = new FormData(form);
-                $("#mailTemplateForm .submitbtn").html('<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> Saving..');
+                $("#mailTemplateForm .submitbtn").html(`<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..`);
                 $("#mailTemplateForm .submitbtn").attr("disabled", true);
                 $.ajax({
                     type: "POST",
@@ -126,7 +126,7 @@
                         }
                         $("#mailTemplateForm")[0].reset();
                         $("#mailTemplateForm #id").val('');
-                        $("#mailTemplateForm .submitbtn").text( _l('admin.general_settings.create_new'),);
+                        $("#mailTemplateForm .submitbtn").text( $('#id').val() != '' ? _l('admin.common.save_changes') : _l('admin.common.create_new'));
                         $("#mailTemplateForm .submitbtn").prop('disabled', false);
                         table.ajax.reload();
                     },
@@ -141,7 +141,7 @@
                         } else {
                             showToast('error', error.responseJSON.message);
                         }
-                        $("#mailTemplateForm .submitbtn").text( _l('admin.general_settings.create_new'),);
+                        $("#mailTemplateForm .submitbtn").text( $('#id').val() ? _l('admin.common.save_changes') : _l('admin.common.create_new'));
                         $("#mailTemplateForm .submitbtn").prop('disabled', false);
                     }
                 });
@@ -152,7 +152,7 @@
         jQuery.validator.addMethod("customRequired", function(value, element) {
             
             let content = $(element).summernote('isEmpty') ? '' : $(element).summernote('code');
-            return content.trim().length > 0; // Ensure it's not empty
+            return content.trim().length > 0;
         }, "Please enter description");
 
         function initTable(){
@@ -278,8 +278,11 @@
                   $("#add_email input#id").val(response.data.id);
                   $("#modalfootdiv").removeClass('justify-content-end');
                   $("#modalfootdiv").addClass("justify-content-between");
-                  $("#status_div").show();
+                  $("#status_div").removeClass('d-none');
                   $("#description_error").text('');
+                  $('.modal_title').text(_l('admin.general_settings.edit_template'));
+                  $('#notification_content').val(response.data.notification_content);
+                  $('.savebtn').text(_l('admin.common.save_changes'));
                   $("#add_email").modal('show');
                }
             });
@@ -289,10 +292,12 @@
             $("#mailTemplateForm")[0].reset();
             $("#modalfootdiv").removeClass('justify-content-between');
             $("#modalfootdiv").addClass('justify-content-end');
-            $("#status_div").hide();
+            $("#status_div").addClass('d-none');
             $("#description_error").text('');
             $("#description").summernote('code','');
             $("#notification_type").val('').trigger('change');
+            $('.modal_title').text(_l('admin.general_settings.create_template'));
+            $('.savebtn').text(_l('admin.common.create_new'));
         });
 
         $(document).on('click','#deleteTemplate', function(){

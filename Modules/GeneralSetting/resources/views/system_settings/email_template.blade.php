@@ -199,7 +199,7 @@
                         @csrf
                         <input type="hidden" name="id" id="id">
                     <div class="modal-header">
-                        <h4 class="mb-0">{{ __('admin.general_settings.create_template') }}</h4>
+                        <h4 class="mb-0 modal_title">{{ __('admin.general_settings.create_template') }}</h4>
                         <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
                             <i class="ti ti-x fs-16"></i>
                         </button>
@@ -295,7 +295,7 @@
                             </div>
                             <div class="d-flex justify-content-center">
                                 <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }} </a>
-                                <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.general_settings.create_new') }}</button>
+                                <button type="submit" class="btn btn-primary submitbtn savebtn">{{ __('admin.general_settings.create_new') }}</button>
                             </div>
                         </div>
                     </div>
@@ -338,7 +338,7 @@
                         <p class="mb-3">{{ __('admin.general_settings.delete_email_confirmation') }}</p>
                         <div class="d-flex justify-content-center">
                             <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
-                            <button type="submit" data-bs-dismiss="modal" class="btn btn-primary submitbtn">{{ __('admin.general_settings.yes_delete') }}</button>
+                            <button type="submit" data-bs-dismiss="modal" class="btn btn-primary">{{ __('admin.general_settings.yes_delete') }}</button>
                         </div>
                     </form>
                 </div>

@@ -221,7 +221,7 @@
                         <label for="image" class="form-label">{{ __('admin.common.image') }}</label>
                         <div class="d-flex">
                             <div class="d-flex align-items-center justify-content-center avatar avatar-xxxl border border-dashed me-2 flex-shrink-0 text-dark frames">
-                                <img src="" alt="" id="image_preview" style="display: none;" width="80px" height="80px">
+                                <img src="" alt="" id="image_preview" class="img-fluid d-none">
                                 <i class="ti ti-photo-plus image_placeholder"></i>
                             </div>
                             <div class="d-flex align-items-center">

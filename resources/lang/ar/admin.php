@@ -795,6 +795,7 @@ return [
     'subject_required' => 'الموضوع مطلوب',
     'type_your_content_here' => 'اكتب محتوىك هنا',
     'edit_bank_account' => 'تحرير حساب بنكي',
+    'edit_template' => 'تحرير قالب',
 
   ],
   'main' =>

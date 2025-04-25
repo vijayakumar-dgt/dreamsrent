@@ -202,8 +202,8 @@
                         <div class="progress-percent">
                             <span class="text-gray-9 fs-10">{{ __('admin.general_settings.progress') }}</span>
                             <div class="d-flex align-items-center">
-                                <div class="progress progress-xs" style="width: 120px;">
-                                    <div class="" role="progressbar" id="modalProgressBar" style="width: 60%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress progress-xs">
+                                    <div class="w-60" role="progressbar" id="modalProgressBar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <span class="d-inline-flex fs-12 ms-2 modalProgress">80%</span>
                             </div>

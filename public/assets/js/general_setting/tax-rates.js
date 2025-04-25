@@ -462,7 +462,7 @@ $("#add_tax_rate").on('click', function() {
     $("#id").val('');
     $(".error-text").text("");
     $(".form-control, .form-check-input").removeClass("is-invalid is-valid");
-    $('#tax_rate_form .statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
+    $('#tax_rate_form .statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
 });
 
 $("#tax_rate").on("input", function () {
@@ -511,7 +511,7 @@ $("#add_tax_group").on('click', function() {
     $('#sub_tax').val('').trigger('change');
     $(".error-text").text("");
     $(".form-control, .form-check-input, .select2-container").removeClass("is-invalid is-valid");
-    $('#tax_group_form .statusDiv').hide().parent().removeClass('justify-content-between').addClass('justify-content-end');
+    $('#tax_group_form .statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
 });
 
 $("#delete_tax_group_form").on('submit', function(e){
@@ -561,7 +561,7 @@ function editTaxRate(id){
 
                 $("#tax_rate_modal .modal-title").text(_l('admin.general_settings.edit_tax_rate'));
                 $(".submitBtn").text(_l('admin.common.save_changes'));
-                $('#tax_rate_form .statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+                $('#tax_rate_form .statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
             }
         },
         error:function(error){
@@ -595,7 +595,7 @@ function editTaxGroup(id){
                 $('#sub_tax').val(selectedIds).trigger('change');
                 $("#tax_group_modal .modal-title").text(_l('admin.general_settings.edit_tax_group'));
                 $(".submitBtn").text(_l('admin.common.save_changes'));
-                $('#tax_group_form .statusDiv').show().parent().removeClass('justify-content-end').addClass('justify-content-between');
+                $('#tax_group_form .statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
                 $("#tax_group_modal").modal('show');
             }
         },

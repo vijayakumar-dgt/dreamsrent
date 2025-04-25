@@ -797,6 +797,7 @@ return array(
   'subject_required' => 'Subject is required',
   'type_your_content_here' => 'Type your content here',
   'edit_bank_account' => 'Edit Bank Account',
+  'edit_template' => 'Edit Template',
 
   ),
   'main' =>
