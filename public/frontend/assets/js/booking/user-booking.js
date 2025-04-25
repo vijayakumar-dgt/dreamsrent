@@ -833,13 +833,14 @@
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    let $stateDropdown = $("#state_id");
+    let $cityDropdown = $("#city_id");
     $(document).ready(function () {
         function loadStates(
             countryId,
             selectedStateId = null,
             selectedCityId = null
         ) {
-            let $stateDropdown = $("#state_id");
             $stateDropdown
                 .prop("disabled", true)
                 .html("<option>Loading...</option>");
@@ -881,7 +882,6 @@
         }
 
         function loadCities(stateId, selectedCityId = null) {
-            let $cityDropdown = $("#city_id");
             $cityDropdown
                 .prop("disabled", true)
                 .html("<option>Loading...</option>");

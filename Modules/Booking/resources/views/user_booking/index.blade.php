@@ -708,7 +708,7 @@
                 </div>
 
 
-                <div class="col-lg-4 theiaStickySidebar">
+                <div class="col-lg-4">
                     <div class="booking-sidebar">
                         <div class="booking-sidebar-card">
                             <div class="accordion-item border-0 mb-4">
