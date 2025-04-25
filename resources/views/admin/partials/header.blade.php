@@ -41,14 +41,14 @@
                     <div class="nav-item dropdown has-arrow flag-nav nav-item-box">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
                             role="button">
-                            <img src="{{ asset('assets/img/flags/'. app()->getLocale() .'.png') }}" alt="Language" class="img-fluid">
+                            <img src="{{ asset('/custom/flags/'. app()->getLocale() .'.png') }}" alt="Language" class="img-fluid">
                         </a>
                         <ul class="dropdown-menu p-2">
                             @if ($allLanguages)
                                 @foreach ($allLanguages as $language)
                                     <li>
                                         <a href="javascript:void(0);" class="dropdown-item change-language" data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
-                                            <img src="{{ asset('/assets/img/flags/'. $language->code.'.png') }}" alt="" height="16">
+                                            <img src="{{ asset('/custom/flags/'. $language->code.'.png') }}" alt="" height="16">
                                             {{ $language->name }}
                                         </a>
                                     </li>
@@ -76,7 +76,7 @@
                                 <h5 class="notification-title">{{ __('web.user.notifications') }}</h5>
                             </div>
                             <div class="noti-content">
-                                
+
                             </div>
                             <div class="d-flex align-items-center justify-content-between topnav-dropdown-footer">
                                 <div class="d-flex align-items-center">
@@ -86,7 +86,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div>
                         <a href="/admin/messages" class="btn btn-menubar position-relative">
                             <i class="ti ti-message"></i>
@@ -97,7 +97,7 @@
                             <i class="ti ti-chart-bar"></i>
                         </a>
                     </div>
-                    
+
                     <div class="dropdown profile-dropdown">
                         <a href="javascript:void(0);" class="d-flex align-items-center" data-bs-toggle="dropdown"  data-bs-auto-close="outside">
                             <span class="avatar avatar-sm">
@@ -123,7 +123,7 @@
                             <a class="dropdown-item d-flex align-items-center" href="/admin/notifications">
                                 <i class="ti ti-bell"></i>{{ __('web.user.notifications') }}
                             </a>
-                          
+
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('admin.security-settings') }}">
                                 <i class="ti ti-exchange"></i>Change Password
                             </a>

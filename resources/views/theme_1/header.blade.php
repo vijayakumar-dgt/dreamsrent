@@ -35,7 +35,7 @@
                                         $path = parse_url($menuLink, PHP_URL_PATH);
                                         $segments = explode('/', trim($path, '/'));
                                         $lastSlug = end($segments);
-                                        if ($currentPath === $menuLink || 
+                                        if ($currentPath === $menuLink ||
                                             (Str::contains($currentPath, 'vehicle-details') && $lastSlug == 'vehicles')) {
                                             $active = 'active';
                                         }
@@ -67,14 +67,14 @@
                     <div class="nav-item dropdown has-arrow flag-nav flag-nav1 nav-item-box">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
                             role="button">
-                            <img src="{{ asset('assets/img/flags/'. app()->getLocale() .'.png') }}" alt="Language" class="img-fluid">
+                            <img src="{{ asset('/custom/flags/'. app()->getLocale() .'.svg') }}" alt="Language" class="img-fluid">
                         </a>
                         <ul class="dropdown-menu flag-menu p-2">
                             @if ($allLanguages)
                                 @foreach ($allLanguages as $language)
                                     <li>
                                         <a href="javascript:void(0);" class="dropdown-item change-user-language" data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
-                                            <img src="{{ asset('/assets/img/flags/'. $language->code.'.png') }}" alt="" height="16">
+                                            <img src="{{ asset('/custom/flags/'. $language->code.'.svg') }}" alt="" height="16">
                                             {{ $language->name }}
                                         </a>
                                     </li>
@@ -98,7 +98,7 @@
                             </div>
                             <div class="noti-content">
                                 <ul class="notification-list">
-                                    
+
                                     <!-- Add more notifications as needed -->
                                 </ul>
                             </div>
