@@ -255,6 +255,8 @@ Route::middleware('maintenance')->group(function () {
     Route::get('/paypal-payment-success', [UserBookingController::class, 'paypalPaymentSuccess'])->name('paypal.payment.success');
     Route::get('/booking/payment-success/{transaction_id}', [UserBookingController::class, 'paymentSuccess'])->name('payment.success.page');
     Route::get('/strip-payment-success', [UserBookingController::class, 'stripPaymentSuccess'])->name('strip.payment.success');
+    Route::get('/paypal-payment-failed', [UserBookingController::class, 'paypalPaymentFailed'])->name('paypal.payment.fail');
+    Route::get('/booking/payment-fail/{transaction_id}', [UserBookingController::class, 'paymentFail'])->name('payment.success.fail');
 });
 Route::middleware('maintenance')->prefix('user')->controller(ReviewController::class)->group(function () {
     Route::post('add-review', 'addReview')->name('user.add-review');
