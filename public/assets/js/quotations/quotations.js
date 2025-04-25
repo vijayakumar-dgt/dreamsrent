@@ -191,9 +191,6 @@ function bookingList(sort_by_date = '') {
             },
         },
         columns: [
-            { data: 'id', orderable: false, searchable: false, render: function(data, type, row) {
-                return `<input type="checkbox" class="form-check-input reservation_checkbox" value="${row.id}">`;
-            }},
             { data: 'reservation_id', render: function(data, type, row) {
                 return `<div class="d-flex align-items-center">
                         <a href="#" class="avatar me-2 flex-shrink-0"><img src="${row.vehicle_image}" alt=""></a>

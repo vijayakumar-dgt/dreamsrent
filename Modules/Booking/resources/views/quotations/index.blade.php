@@ -295,11 +295,6 @@
             <table class="table" id="reservationTable">
                 <thead class="thead-light">
                     <tr>
-                        <th class="no-sort">
-                            <div class="form-check form-check-md">
-                                <input class="form-check-input" type="checkbox" id="select-all">
-                            </div>
-                        </th>
                         <th>{{ strtoupper(__('admin.common.vehicle')) }}</th>
                         <th>{{ strtoupper(__('admin.common.customer')) }}</th>
                         <th>{{ strtoupper(__('admin.bookings.pickup_details')) }}</th>
