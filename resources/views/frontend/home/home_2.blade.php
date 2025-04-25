@@ -1,7 +1,7 @@
 @extends('theme_2.app')
 @section('content')
 @php
-// dd($content_sections);
+
 @endphp
 @foreach($content_sections as $key => $section)
     @switch($section['section_type'] ?? "")

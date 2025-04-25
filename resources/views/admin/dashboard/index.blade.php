@@ -221,7 +221,6 @@
                                             $start = \Carbon\Carbon::parse($reservation->start_datetime);
                                             $end = \Carbon\Carbon::parse($reservation->end_datetime);
 
-                                            // +1 if you want to include both start and end date as full days
                                             $reservation->day_count = $start->diffInDays($end) + 1;
                                             ?>
                                             <div class="flex-grow-1 ms-2">

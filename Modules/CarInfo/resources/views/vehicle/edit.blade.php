@@ -608,16 +608,14 @@
                                 <div class="row">
                                     @foreach ($ExtraServices as $service)
                                     @php
-                                    // Find matching extra service info for the current service
                                     $serviceInfo = $ExtraServiceInfo->firstWhere('extra_service_id', $service->id);
                                     $serviceValue = $serviceInfo->value ?? 'one_time';
                                     $servicePrice = $serviceInfo->price ?? '00.00';
 
-                                    // Format service value for display
                                     $formattedServiceValue = match ($serviceValue) {
                                     'per_day' => __('admin.rentals.per_day'),
                                     'one_time' => __('admin.rentals.one_time'),
-                                    default => ucfirst(str_replace('_', ' ', $serviceValue)), // Handles other potential cases
+                                    default => ucfirst(str_replace('_', ' ', $serviceValue)),
                                     };
                                     @endphp
 
@@ -1082,10 +1080,9 @@
                     <tbody>
                         @foreach ($ExtraServices as $service)
                         @php
-                        // Find matching extra service info for the current service
                         $serviceInfo = $ExtraServiceInfo->firstWhere('extra_service_id', $service->id);
-                        $selectedValue = $serviceInfo->value ?? 'per_day'; // Default to "per_day"
-                        $selectedPrice = $serviceInfo->price ?? '00.00'; // Default to "00.00"
+                        $selectedValue = $serviceInfo->value ?? 'per_day';
+                        $selectedPrice = $serviceInfo->price ?? '00.00';
                         @endphp
 
                         <tr>

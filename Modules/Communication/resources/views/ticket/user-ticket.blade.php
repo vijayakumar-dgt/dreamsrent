@@ -74,7 +74,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Skeleton loader rows -->
+
                                     <tr>
                                         <td>
                                             <div class="skeleton data-skeleton data-loader"></div>
@@ -155,12 +155,12 @@
         </div>
         <!-- /Wallet Table -->
 
-        <!-- Real Wallet Table (Initially Hidden) -->
+
         <div class="table-responsive dashboard-table dashboard-table-info d-none real-table">
             <table class="table" id="userTickerTable">
 
                 <tbody>
-                    <!-- Real data rows will go here -->
+
                 </tbody>
             </table>
         </div>
