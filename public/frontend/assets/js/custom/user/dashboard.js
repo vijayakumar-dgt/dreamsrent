@@ -162,7 +162,7 @@ function createTransactionCard(booking){
                     </div>
                 </td>
                 <td class="border-0 text-end">
-                    <span class="badge badge-light-secondary">${bookingStatus}</span>
+                    ${bookingStatus}
                 </td>
             </tr>
             <tr>

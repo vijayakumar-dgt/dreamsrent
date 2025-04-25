@@ -986,7 +986,7 @@ class UserBookingController extends Controller
             ->where('created_at', '>=', $startDate)
             ->with('vehicle')
             ->latest()
-            ->limit(5)
+            ->limit(3)
             ->get();
 
         if ($transactions->isEmpty()) {
