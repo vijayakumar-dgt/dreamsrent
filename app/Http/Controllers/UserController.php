@@ -63,9 +63,7 @@ class UserController extends Controller
     {
         $bookings = Booking::where('customer_id', Auth::guard('web')->user()->id);
 
-        if ($request->has('limit')) {
-            $bookings->take($request->limit);
-        }
+        
 
         if ($request->has('duration') && $request->duration != "") {
             $customFrom = $request->custom_from_date ?? "";
@@ -103,7 +101,7 @@ class UserController extends Controller
             }
         }
 
-        $bookings = $bookings->get();
+        $bookings = $bookings->orderBy('id', 'desc')->take(5)->get();
         return UserBookings::collection($bookings)->additional([
             'status' => 'success',
         ]);

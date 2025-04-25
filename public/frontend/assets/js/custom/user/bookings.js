@@ -270,7 +270,7 @@ function formatStatusLabel(status) {
             statusLabel = `<span class="badge badge-light-danger">${_l('web.common.cancelled')}</span>`;
             break;
         default:
-            statusLabel = `<span class="badge badge-light-danger">NA</span>`;
+            statusLabel = `<span class="badge badge-dark">-</span>`;
             break;
     }
     return statusLabel
