@@ -316,6 +316,7 @@ return [
         'reply_not_allowed' => 'You can only leave a reply after completing a booking for this vehicle.',
     ],
     'common' => [
+        'view_reply'  => 'View & Reply',
         'search' => 'Search',
         'minlength_3' => 'Should be at least 3 characters.',
         'maxlength_30' => 'Should be at most 30 characters.',
@@ -408,7 +409,6 @@ return [
         'learn_more' => 'Learn More',
     ],
     'user' => [
-        'view_reply'  => 'View & Reply',
         'user_dashboard' => 'User Dashboard',
         'dashboard'  => 'Dashboard',
         'choose_your_payment_method'  => 'Choose your Payment Method',
