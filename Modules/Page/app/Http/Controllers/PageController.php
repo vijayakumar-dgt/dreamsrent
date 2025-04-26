@@ -1076,7 +1076,7 @@ class PageController extends Controller
                 ) {
                     preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
 
-                    $limit = $matches[1] ?? 10;
+                    $limit = $matches[1] ?? 12;
                     $viewAll = $matches[2] ?? 'no';
                     $order = $matches[3] ?? 'asc';
 
