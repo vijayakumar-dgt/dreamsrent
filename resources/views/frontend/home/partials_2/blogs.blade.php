@@ -9,7 +9,7 @@
             @foreach($section['section_content'] as $k => $content)
             <!-- Blog Item -->
             <div class="col-lg-4 col-md-6 d-flex">
-                <div class="blog-item flex-fill">
+                <div class="blog-item flex-fill theme2-blog">
                     <div class="blog-img theme2-blog-img">
                         <img src="{{ $content['image'] ?? '' }}" class="img-fluid home-blogimg" alt="img">
                     </div>
