@@ -588,14 +588,7 @@ $(document).on("click", "#markAllAsRead", function () {
     });
 }); 
 
-window.addEventListener('scroll', () => {
-    const header = document.querySelector('.theme-2-header');
-    if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-    } else {
-        header.classList.remove('scrolled');
-    }
-});
+
 function ucfirst(str) {
     if (!str) return '';
     return str.charAt(0).toUpperCase() + str.slice(1);

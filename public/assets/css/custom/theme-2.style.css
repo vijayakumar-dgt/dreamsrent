@@ -1,0 +1,18 @@
+.theme-2-header {
+    background: transparent;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+    box-shadow: unset !important;
+  }
+  .theme-2-header.scrolled {
+    background-color: #000 !important;
+  }
+  .theme-2-header .header-nav .main-nav > li > a {
+    color: #fff !important;
+  }
+  .theme-2-header .header-navbar-rht .nav-item .header-login{
+    background-color: #383838 !important;
+  }
