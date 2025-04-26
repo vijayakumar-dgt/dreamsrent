@@ -21,6 +21,7 @@ use Modules\CarInfo\Models\Cartype;
 use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Models\VehicleInfo;
 use Modules\CarInfo\Models\VehicleMeta;
+use Modules\GeneralSetting\Models\BlogCategory;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
@@ -984,16 +985,17 @@ class PageController extends Controller
                         $blogs = [];
 
                         foreach ($blogss as $blog) {
+                            $category = BlogCategory::where('id', $blog->category)->first();
                             $blogs[] = [
                                 'id' => $blog->id,
                                 'title' => $blog->title,
                                 'slug' => $blog->slug ?? Str::slug($blog->title),
                                 'image' => uploadedAsset($blog->image),
-                                'category' => $blog->category,
+                                'category' => $category ? $category->name : '',
                                 'description' => $blog->description,
                                 'updated_at' => \Carbon\Carbon::parse($blog->updated_at)->format('F j, Y'),
                                 'author' => [
-                                    'name' => 'Michael Brown',
+                                    'name' => 'Admin',
                                     'avatar' => 'https://www.w3schools.com/howto/img_avatar.png',
                                 ],
                             ];
