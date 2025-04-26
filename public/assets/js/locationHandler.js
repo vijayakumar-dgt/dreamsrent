@@ -60,7 +60,7 @@
             submitHandler: function (form) {
                 let formData = new FormData(form);
                 formData.append("status", $("#status").is(":checked") ? 1 : 0);
-    
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/country/store",
@@ -115,14 +115,14 @@
                 if ($.fn.DataTable.isDataTable("#countryTable")) {
                     $("#countryTable").DataTable().destroy();
                 }
-    
+
                 if (response.code === 200 && response.data.length > 0) {
                     let data = response.data;
-    
+
                     $.each(data, function (index, value) {
                         let countryCode = value.code.toLowerCase();
-                        let flagImage = `<img src="/assets/img/flags/${countryCode}.png" 
-                        alt="${value.name} Flag" width="20" 
+                        let flagImage = `<img src="/assets/img/flags/${countryCode}.svg"
+                        alt="${value.name} Flag" width="20"
                         onerror="this.style.display='none'; this.parentNode.innerHTML='${value.name}';">`;
                         tableBody += `<tr>
                                 <td>${flagImage} ${value.name}</td>
@@ -140,12 +140,12 @@
                                             <i class="ti ti-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end p-2">
-                                           ${ hasPermission(permissions, 'cms_locations', 'edit') ? 
+                                           ${ hasPermission(permissions, 'cms_locations', 'edit') ?
 
                                             `<li>
                                                 <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editCountry(${value.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                                             </li>`:''}
-                                              ${ hasPermission(permissions, 'cms_locations', 'delete') ? 
+                                              ${ hasPermission(permissions, 'cms_locations', 'delete') ?
                                             `<li>
                                                 <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="delateCountry(${value.id});" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
                                             </li>`:''}
@@ -161,7 +161,7 @@
                             </tr>`;
                     $('.table-footer').empty();
                 }
-    
+
                 $("#countryTable tbody").html(tableBody);
                 if (response.data.length > 0){
                     $("#countryTable").DataTable({
@@ -172,11 +172,11 @@
                         "drawCallback": function() {
                             $(".dataTables_info").addClass('d-none');
                             $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
-    
+
                             var tableWrapper = $(this).closest('.dataTables_wrapper');
                             var info = tableWrapper.find('.dataTables_info');
                             var pagination = tableWrapper.find('.dataTables_paginate');
-    
+
                             $('.table-footer').empty()
                                 .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
                                     .append($('<div class="datatable-info"></div>').append(info.clone(true)))
@@ -211,7 +211,7 @@
             },
         });
     }
-    
+
 })();
 
 
@@ -339,19 +339,19 @@ $(document).ready(function () {
 
     $('#bulkPdfBtn').on('click', function () {
         var selectedIds = [];
-    
+
         $('.form-check-input[type="checkbox"]:checked').each(function () {
-            var id = $(this).closest('.form-check').data('id'); 
+            var id = $(this).closest('.form-check').data('id');
             if (id) {
                 selectedIds.push(id);
             }
         });
-    
+
         if (selectedIds.length === 0) {
             showToast('error', 'Please select at least one item to export.');
             return;
         }
-    
+
         $.ajax({
             url: '/admin/seat-type/pdf-bulk',
             type: 'POST',
@@ -381,19 +381,19 @@ $(document).ready(function () {
 
     $('#bulkExcelBtn').on('click', function () {
         var selectedIds = [];
-    
+
         $('.form-check-input[type="checkbox"]:checked').each(function () {
-            var id = $(this).closest('.form-check').data('id'); 
+            var id = $(this).closest('.form-check').data('id');
             if (id) {
                 selectedIds.push(id);
             }
         });
-    
+
         if (selectedIds.length === 0) {
             showToast('error', 'Please select at least one item to export.');
             return;
         }
-    
+
         $.ajax({
             url: '/admin/country/excel-bulk',
             type: 'POST',
@@ -412,9 +412,9 @@ $(document).ready(function () {
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-    
+
                 showToast('success', 'Excel downloaded successfully.');
-    
+
                 // **Uncheck all selected checkboxes after success**
                 $('.form-check-input[type="checkbox"]').prop('checked', false);
             },
@@ -423,6 +423,6 @@ $(document).ready(function () {
             }
         });
     });
-         
+
 });
 

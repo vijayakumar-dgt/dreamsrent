@@ -500,13 +500,13 @@ class PageController extends Controller
                             $relativePath = 'storage/' . ($decodedData['thumbnail_image_one'] ?? '');
                             $defaultImage = asset('assets/img/car/car-right.png');
                             $thumbnailKey = 'thumbnail_image_one';
-                            
+
                             $banner->thumbnail_image = (
                                 isset($decodedData[$thumbnailKey]) &&
                                 !empty($decodedData[$thumbnailKey]) &&
                                 file_exists(public_path($relativePath))
                             ) ? asset($relativePath) : $defaultImage;
-                            
+
 
                             unset($banner->datas);
                         }
@@ -549,13 +549,13 @@ class PageController extends Controller
                             $relativePath = 'storage/' . ($decodedData['thumbnail_image_two'] ?? '');
                             $defaultImage = asset('assets/img/car/car-right.png');
                             $thumbnailKey = 'thumbnail_image_one';
-                            
+
                             $banner->thumbnail_image = (
                                 isset($decodedData[$thumbnailKey]) &&
                                 !empty($decodedData[$thumbnailKey]) &&
                                 file_exists(public_path($relativePath))
                             ) ? asset($relativePath) : $defaultImage;
-                            
+
 
                             $banner->customer_count = $userCount;
 
@@ -674,7 +674,7 @@ class PageController extends Controller
                 if ($section['status'] == 1) {
                     if (isset($section['section_content']) && strpos($section['section_content'], '[category ') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-                        $limit = $matches[1] ?? 10;
+                        $limit = $matches[1] ?? 6;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
@@ -816,11 +816,11 @@ class PageController extends Controller
 
                             $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
                             $currency = null;
-                
+
                             if ($currencySetting && $currencySetting->value) {
                                 $currency = Currency::find($currencySetting->value);
                             }
-                
+
                             $currencySymbol = $currency->symbol ?? "$";
 
                             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;

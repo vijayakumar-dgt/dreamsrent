@@ -64,7 +64,7 @@
 
 								<div class="dropdown flag-dropdown">
 									<a class="dropdown-toggle btn btn-white d-flex align-items-center justify-content-between py-1 px-2" data-bs-toggle="dropdown" href="javascript:void(0);">
-										<img src="{{ asset('assets/img/flags/' . app()->getLocale() . '.png') }}"
+										<img src="{{ asset('assets/img/flags/' . app()->getLocale() . '.svg') }}"
 											alt="Language"
 											class="img-fluid rounded-circle me-2 lang-flag">
 										<span>{{ $currentLang->name ?? 'Language' }}</span>
@@ -77,7 +77,7 @@
 												class="dropdown-item d-flex align-items-center change-language"
 												data-id="{{ $language->id }}"
 												data-language_code="{{ $language->code }}">
-												<img src="{{ asset('assets/img/flags/' . $language->code . '.png') }}"
+												<img src="{{ asset('assets/img/flags/' . $language->code . '.svg') }}"
 													alt="{{ $language->name }}"
 													class="rounded-circle me-2 lang-flag">
 												{{ $language->name }}
@@ -144,7 +144,7 @@
 															<option value="{{ $carTypesValues->id }}">{{ ucwords(strtolower($carTypesValues->name)) }}</option>
 														@endforeach
 													</select>
-													
+
 													<span class="invalid-feedback" id="vehicle_type_id_error"></span>
 												</div>
 											</div>
@@ -157,7 +157,7 @@
 														<option value="">{{ __('admin.rentals.select') }}</option>
 														@foreach($Brands as $BrandValues)
 														<option value="{{ $BrandValues->id }}">{{ ucwords(strtolower($BrandValues->brand_name )) }}</option>
-														@endforeach 
+														@endforeach
 													</select>
 													<span class="invalid-feedback" id="vehicle_brand_id_error"></span>
 												</div>
@@ -180,7 +180,7 @@
 														<option value="">{{ __('admin.rentals.select') }}</option>
 														@foreach($Category as $CategoryValues)
 														<option value="{{ $CategoryValues->id }}">{{ ucwords(strtolower($CategoryValues->name)) }}</option>
-														@endforeach 
+														@endforeach
 													</select>
 													<span class="invalid-feedback" id="vehicle_category_id_error"></span>
 												</div>
@@ -206,7 +206,7 @@
 														<option value="">{{ __('admin.rentals.select') }}</option>
 														@foreach($Location as $LocationValues)
 														<option value="{{ $LocationValues->id }}">{{ ucwords(strtolower($LocationValues->name )) }}</option>
-														@endforeach 
+														@endforeach
 													</select>
 													<span class="invalid-feedback" id="main_location_id_error"></span>
 												</div>
@@ -250,7 +250,7 @@
 														@foreach($CarColor as $CarColorValues)
 														<option value="{{ $CarColorValues->id }}" data-color="{{ $CarColorValues->value }}">
 															{{ ucwords(strtolower($CarColorValues->name)) }}
-														</option> 
+														</option>
 														@endforeach
 													</select>
 													<span class="invalid-feedback" id="vehicle_color_id_error"></span>
@@ -275,7 +275,7 @@
 														<option value="">{{ __('admin.rentals.select') }}</option>
 														@foreach($Transmission as $TransmissionValues)
 														<option value="{{ $TransmissionValues->id }}">{{ ucwords(strtolower($TransmissionValues->name )) }}</option>
-														@endforeach 
+														@endforeach
 													</select>
 												</div>
 											</div>
