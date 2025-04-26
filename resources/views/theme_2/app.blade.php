@@ -57,7 +57,7 @@
     @else
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
     @endif
-	<link rel="stylesheet" href="{{ asset('assets/css/custom/custom-style.css?v=1.3') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/custom/custom-style.css?v=1.4') }}">
 
 </head>
 <body data-theme={{ $theme ?? 1}} data-dir="{{ $isRTL ? 'rtl' : 'ltr' }}">
@@ -127,7 +127,7 @@
 	@else
 	<script src="{{ asset('frontend/assets/js/script.js') }}"></script>
     @endif
-	<script src="{{ asset('frontend/assets/js/custom/custom-script.js') }}"></script>
+	<script src="{{ asset('frontend/assets/js/custom/custom-script.js?v=1.0.3') }}"></script>
 
 </body>
 </html>
