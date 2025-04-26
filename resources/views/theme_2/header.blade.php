@@ -1,4 +1,4 @@
-<header class="header theme-2-header scrolled">
+<header class="header theme-2-header ">
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg header-nav">
             <div class="navbar-header">
