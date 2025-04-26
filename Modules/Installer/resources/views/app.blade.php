@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/fontawesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}">
-    <link rel="stylesheet" href="{{ asset('global/toastr/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/global/toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 
 </head>
@@ -53,8 +53,8 @@
 
     </main>
 </body>
-<script src="{{ asset('global/js/jquery-3.7.1.min.js') }}"></script>
-<script src="{{ asset('global/toastr/toastr.min.js') }}"></script>
+<script src="{{ asset('frontend/global/js/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('frontend/global/toastr/toastr.min.js') }}"></script>
 <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
 <script>
     $.ajaxSetup({
