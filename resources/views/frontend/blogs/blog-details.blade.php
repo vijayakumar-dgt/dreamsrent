@@ -73,7 +73,7 @@
                 <li>
                     <a href="/blog-details/{{$otherBlogs[1]->slug ?? ''}}" class="next-link">{{__('web.blog.next_post')}} <i class="fas fa-regular fa-arrow-right"></i> </a>
                     <a href="/blog-details/{{$otherBlogs[1]->slug ?? ''}}">
-                        <h3>{{ucfirst($otherBlogs[1]->title) ?? ''}}</h3>
+                        <h3>{{($otherBlogs[1]->title) ?? ''}}</h3>
                     </a>
                 </li>
             </ul>
