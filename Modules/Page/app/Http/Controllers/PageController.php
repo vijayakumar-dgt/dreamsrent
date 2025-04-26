@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use App\Models\Review;
 use App\Models\User;
+use App\Models\UserDetail;
 use App\Models\Wishlist;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -575,8 +576,7 @@ class PageController extends Controller
                     }
                 }
 
-
-                // bestVehicle
+                // BestVehicle
                 if ($section['status'] == 1) {
                     if (isset($section['section_content']) && strpos($section['section_content'], '[bestVehicle') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
@@ -651,7 +651,7 @@ class PageController extends Controller
                         $order = $matches[3] ?? 'asc';
 
                         $brands = DB::table('brands')
-                            ->select('id', 'brand_image','brand_icon', 'brand_name', 'status')
+                            ->select('id', 'brand_image', 'brand_icon', 'brand_name', 'status')
                             ->where('language_id', $lang_id)
                             ->where('status', 1)
                             ->whereNull('deleted_at')
@@ -825,6 +825,14 @@ class PageController extends Controller
 
                             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
 
+                            $user = User::where('id', $vehicle->created_by)
+                                ->first();
+
+                            $userDetail = UserDetail::where("user_id", $user->id)->first();
+                            $userProfileImg = $userDetail && $userDetail->profile_image
+                                ? url('/storage/' . $userDetail->profile_image)
+                                : null;
+
                             return [
                                 'id' => $vehicle->id,
                                 'name' => $vehicle->name,
@@ -832,7 +840,7 @@ class PageController extends Controller
                                 'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
                                 'multiple_vehicle_images' => $multipleImages,
                                 'has_multiple_image' => count($multipleImages) > 1,
-                                'avatar_image' => 'https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-2-512.png',
+                                'avatar_image' => $userProfileImg,
                                 'brand_id' => $vehicle->brand_id ?? null,
                                 'brand' => $vehicle->brand->brand_name ?? null,
                                 'car_type' => $vehicle->carType->name ?? null,
