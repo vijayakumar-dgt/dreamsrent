@@ -4,6 +4,8 @@ namespace Modules\CarInfo\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Review;
+use App\Models\User;
+use App\Models\UserDetail;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -1401,6 +1403,13 @@ class CarInfoController extends Controller
 
             $currencySymbol = $currency->symbol ?? "$";
 
+            $user = User::where('id', $vehicle->created_by)
+                ->first();
+
+            $userDetail = UserDetail::where("user_id", $user->id)->first();
+            $userProfileImg = $userDetail && $userDetail->profile_image
+                ? url('/storage/' . $userDetail->profile_image)
+                : null;
 
             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
             $review_count = Review::where("vehicle_id", $vehicle->id)->count();
@@ -1411,7 +1420,7 @@ class CarInfoController extends Controller
                 'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
                 'multiple_vehicle_images' => $multipleImages,
                 'has_multiple_image' => count($multipleImages) > 1,
-                'avatar_image' => 'https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-2-512.png',
+                'avatar_image' => $userProfileImg ?? null,
                 'brand' => $vehicle->brand->brand_name ?? null,
                 'car_type' => $vehicle->carType->name ?? null,
                 'category' => $vehicle->category->name ?? null,
@@ -1768,7 +1777,6 @@ class CarInfoController extends Controller
                 'multiple_vehicle_policy' => array_map(fn($policy) => url('storage/vehiclePolicy/' . basename($policy)), $multiplePolicy),
                 'multiple_vehicle_images' => $multipleImages,
                 'has_multiple_image' => count($multipleImages) > 1,
-                'avatar_image' => 'https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-2-512.png',
                 'brand' => $vehicle->brand->brand_name ?? null,
                 'car_type' => $vehicle->carType->name ?? null,
                 'category' => $vehicle->category->name ?? null,
@@ -1991,12 +1999,20 @@ class CarInfoController extends Controller
             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
             $review_count = Review::where("vehicle_id", $vehicle->id)->count();
 
+            $user = User::where('id', $vehicle->created_by)
+                ->first();
+
+            $userDetail = UserDetail::where("user_id", $user->id)->first();
+            $userProfileImg = $userDetail && $userDetail->profile_image
+                ? url('/storage/' . $userDetail->profile_image)
+                : null;
+
             return [
                 'id' => $vehicle->id,
                 'name' => $vehicle->name,
                 'slug' => $vehicle->slug,
                 'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
-                'avatar_image' => 'https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-2-512.png',
+                'avatar_image' => $userProfileImg ?? null,
                 'brand' => $vehicle->brand->brand_name ?? null,
                 'car_type' => $vehicle->carType->name ?? null,
                 'category' => $vehicle->category->name ?? null,

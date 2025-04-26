@@ -840,7 +840,7 @@ class PageController extends Controller
                                 'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
                                 'multiple_vehicle_images' => $multipleImages,
                                 'has_multiple_image' => count($multipleImages) > 1,
-                                'avatar_image' => $userProfileImg,
+                                'avatar_image' => $userProfileImg ?? null,
                                 'brand_id' => $vehicle->brand_id ?? null,
                                 'brand' => $vehicle->brand->brand_name ?? null,
                                 'car_type' => $vehicle->carType->name ?? null,
