@@ -981,3 +981,10 @@
 .move-cal{
   width: 220px !important;
 }
+.theme2-blog-img{
+  height: 100% !important;
+}
+.theme2-blog-img img{
+  height: 100% !important;
+  object-fit: cover !important;
+}

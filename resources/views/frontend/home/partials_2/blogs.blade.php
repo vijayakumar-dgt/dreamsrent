@@ -10,7 +10,7 @@
             <!-- Blog Item -->
             <div class="col-lg-4 col-md-6 d-flex">
                 <div class="blog-item flex-fill">
-                    <div class="blog-img">
+                    <div class="blog-img theme2-blog-img">
                         <img src="{{ $content['image'] ?? '' }}" class="img-fluid home-blogimg" alt="img">
                     </div>
                     <div class="blog-content">
