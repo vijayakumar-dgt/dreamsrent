@@ -22,7 +22,7 @@
                         $cleanDesc = strip_tags($blog['description']);
                         $blogDesc = strlen($cleanDesc) > 120 ? substr($cleanDesc, 0, 120) . '...' : $cleanDesc;
                         @endphp
-                        <h3 class="blog-title"><a href="/blog-details/{{ $blog['id'] }}">{{ ucfirst($blog['title'] ?? "") }}</a></h3>
+                        <h3 class="blog-title"><a href="/blog-details/{{ $blog['slug'] }}">{{ ucfirst($blog['title'] ?? "") }}</a></h3>
                         <p class="blog-description">{!! $blogDesc !!}</p>
                         <ul class="meta-item mb-0">
                             <li>

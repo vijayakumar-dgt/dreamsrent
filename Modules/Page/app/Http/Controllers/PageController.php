@@ -673,7 +673,7 @@ class PageController extends Controller
                 if ($section['status'] == 1) {
                     if (isset($section['section_content']) && strpos($section['section_content'], '[category ') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-                        $limit = $matches[1] ?? 12;
+                        $limit = $matches[1] ?? 10;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
@@ -1066,7 +1066,7 @@ class PageController extends Controller
                 ) {
                     preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
 
-                    $limit = $matches[1] ?? 12;
+                    $limit = $matches[1] ?? 10;
                     $viewAll = $matches[2] ?? 'no';
                     $order = $matches[3] ?? 'asc';
 
