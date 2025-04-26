@@ -7,7 +7,7 @@
         </div>
         <div class="blog-content">
             <div class="blog-list-date">
-                <ul class="meta-item-list">
+                <ul class="meta-item-list move-cal">
                     <li>
                         <div class="post-author">
                             <div class="post-author-img">
@@ -29,7 +29,7 @@
                 </p>
             </div>
             <h3 id="blog-title"><a href="/blog-details/{{$blogPost->slug}}">{{ucfirst($blogPost->title)}}</a></h3>
-            <p id="blog-description">{{ Str::limit(strip_tags($blogPost->description), 250, '...') }}</p>
+            <p id="blog-description" class="mt-3">{{ Str::limit(strip_tags($blogPost->description), 250, '...') }}</p>
             <a href="/blog-details/{{$blogPost->slug}}" class="viewlink btn btn-primary justify-content-center">{{__('web.blog.read_more')}} <i class="feather-arrow-right ms-2"></i></a>
         </div>
     </div>
