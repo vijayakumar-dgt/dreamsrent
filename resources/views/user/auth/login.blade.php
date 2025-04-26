@@ -89,21 +89,7 @@
 								</div>
 								<!-- /Social Login -->
 								<div class="text-center dont-have">Don't have an account yet? <a href="{{ route('user-register') }}">Register</a></div>
-                                <div class="">
-                                    <h6 class="fs-16 mb-1">{{ __('User Login Info') }}:</h6>
-                                    <div class="p-3 border d-flex flex-wrap align-items-center justify-content-between">
-                                        <div>
-                                            <span class="d-block"><strong>{{ __('Email') }} </strong>: demouser@example.com</span>
-                                            <span class="d-block"><strong>{{ __('Password') }} </strong>: 12345678</span>
-                                        </div>
-                                        <div>
-                                            <a class="btn btn-primary copy-login-details" data-email="demouser@example.com"
-                                                data-password="12345678">
-                                                <i class="far fa-copy"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                             
                             </form>
 
 						</div>
