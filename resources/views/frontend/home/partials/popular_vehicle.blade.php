@@ -16,9 +16,9 @@
                         <li>
                             <a class="@if($loop->first) active @endif" @if($loop->first) aria-current="true" @endif data-bs-toggle="tab" href="#tab_{{ $brand->id ?? "" }}">
                                 <span>
-                                    <img src="{{ uploadedAsset($brand->brand_icon) }}" alt="{{ $brand->brand_name ?? '' }}">
+                                    <img src="{{ uploadedAsset($brand->brand_icon) }}" alt="{{ ucfirst($brand->brand_name ?? '') }}">
                                 </span>
-                                {{ $brand->brand_name }}
+                                {{ ucfirst($brand->brand_name) }}
                             </a>
                         </li>
                         @endforeach
@@ -44,7 +44,7 @@
                                     @foreach($vehicle['multiple_vehicle_images'] as $image)
                                     <div class="slide-images">
                                         <a href="/vehicle-details/{{ $vehicle['slug'] }}">
-                                            <img src="{{ $image }}" class="img-fluid" alt="{{ $vehicle['name'] ?? '' }}">
+                                            <img src="{{ $image }}" class="img-fluid" alt="{{ ucfirst($vehicle['name'] ?? '') }}">
                                         </a>
                                     </div>
                                     @endforeach
@@ -57,7 +57,7 @@
                                     </a>
                                     @endif
                                 </div>
-                                <span class="featured-text">{{ $vehicle['brand'] ?? "" }}</span>
+                                <span class="featured-text">{{ ucfirst($vehicle['brand'] ?? "") }}</span>
                             </div>
                             <div class="listing-content">
                                 <div class="listing-features d-flex align-items-end justify-content-between">
@@ -66,7 +66,7 @@
                                             <img src="{{ $vehicle['avatar_image'] ?? '' }}" alt="author">
                                         </a>
                                         <h3 class="listing-title">
-                                            <a href="/vehicle-details/{{ $vehicle['slug'] }}">{{ $vehicle['name'] ?? "" }}</a>
+                                            <a href="/vehicle-details/{{ $vehicle['slug'] }}">{{ ucfirst($vehicle['name'] ?? "") }}</a>
                                         </h3>
                                         <div class="list-rating">
                                             @php

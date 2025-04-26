@@ -17,20 +17,20 @@
             @endphp
             <div class="car-item">
                 <h6>{{ $content['brand'] ? strtoupper($content['brand']) : "" }}</h6>
-                <h2 class="display-1">{{ $content['name'] }}</h2>
+                <h2 class="display-1">{{ ucfirst($content['name']) }}</h2>
                 <div class="car-img">
                     <img src="{{ $content['vehicle_image'] }}" alt="img" class="img-fluid">
                     <div class="amount-icon">
                         <span class="day-amt">
                             <p>{{__('web.home.starts_from')}}</p>
-                            <h6>{{ getDefaultCurrencySymbol() }}{{ $priceValue }} <span> /{{ $priceType }}</span></h6>
+                            <h6>{{ getDefaultCurrencySymbol() }}{{ $priceValue }} <span> /{{ ucfirst($priceType) }}</span></h6>
                         </span>
                     </div>
                 </div>
                 <div class="spec-list">
-                    <span><img src="/frontend/assets/img/icons/spec-01.svg" alt="img">{{ $content['transmission'] }}</span>
-                    <span><img src="/frontend/assets/img/icons/spec-03.svg" alt="img">30 K</span>
-                    <span><img src="/frontend/assets/img/icons/spec-05.svg" alt="img">{{ $content['fuel_type'] }}</span>
+                    <span><img src="/frontend/assets/img/icons/spec-01.svg" alt="img">{{ ucfirst($content['transmission']) }}</span>
+                    <span><img src="/frontend/assets/img/icons/spec-03.svg" alt="img">{{ round($content['mileage']) }}</span>
+                    <span><img src="/frontend/assets/img/icons/spec-05.svg" alt="img">{{ ucfirst($content['fuel_type']) }}</span>
                     <span><img src="/frontend/assets/img/icons/spec-05.svg" alt="img">{{ $content['passenger_capacity'] }} {{ __('web.home.persons') }}</span>
                 </div>
                 <a href="/vehicle-details/{{ $content['slug'] }}" class="btn btn-primary">{{ __('web.home.rent_now') }}</a>

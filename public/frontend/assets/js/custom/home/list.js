@@ -252,7 +252,7 @@
         const vehicleImages = vehicle.multiple_vehicle_images.map(img =>
               `<div class="slide-images">
                     <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}">
-                        <img src="${img}" class="img-fluid" alt="${vehicle.name}">
+                        <img src="${img}" class="img-fluid" alt="${ucfirst(vehicle.name ?? "")}">
                     </a>
                 </div>`
         ).join('');
@@ -271,7 +271,7 @@
                 </div>`
               : `<div class="blog-img">
                     <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}">
-                        <img src="${vehicle.multiple_vehicle_images[0]}" class="img-fluid" alt="${vehicle.name}">
+                        <img src="${vehicle.multiple_vehicle_images[0]}" class="img-fluid" alt="${ucfirst(vehicle.name ?? "")}">
                     </a>
                     <div class="fav-item justify-content-end">
                       ${vehicle.authenticated ? `<a href="javascript:void(0)" class="fav-icon wishlist-icon ${vehicle.wishlist ? 'selected' : ''}" data-id="${vehicle.id}">
@@ -282,16 +282,16 @@
 
         const featureList = `<ul>
                                 <li>
-                                    <span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${vehicle.transmission ?? ''}"></span>
-                                    <p>${vehicle.transmission ?? ''}</p>
+                                    <span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${ucfirst(vehicle.transmission ?? '')}"></span>
+                                    <p>${ucfirst(vehicle.transmission ?? '')}</p>
                                 </li>
                                 <li>
                                     <span><img src="/frontend/assets/img/icons/car-parts-02.svg" alt="${vehicle.mileage ? Math.ceil(vehicle.mileage) : 0} KM"></span>
                                     <p>${vehicle.mileage ? Math.ceil(vehicle.mileage) : 0} KM</p>
                                 </li>
                                 <li>
-                                    <span><img src="/frontend/assets/img/icons/car-parts-03.svg" alt="${vehicle.fuel_type ?? ''}"></span>
-                                    <p>${vehicle.fuel_type ?? ''}</p>
+                                    <span><img src="/frontend/assets/img/icons/car-parts-03.svg" alt="${ucfirst(vehicle.fuel_type ?? '')}"></span>
+                                    <p>${ucfirst(vehicle.fuel_type ?? '')}</p>
                                 </li>
                                 <li>
                                     <span><img src="/frontend/assets/img/icons/car-parts-04.svg" alt="Power"></span>
@@ -306,19 +306,18 @@
                                     <p>${vehicle.year ?? ""}</p>
                                 </li>
                             </ul>`;
-
+        const vehicleRating = vehicle.rating ?? 0;
         const listingContent = `<div class="bloglist-content w-100">
                                     <div class="card-body">
                                         <div class="blog-list-head d-flex">
                                             <div class="blog-list-title">
-                                                <h3><a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}">${vehicle.name}</a></h3>
-                                                <h6>${_l('web.common.category')} : <span>${vehicle.brand ?? ""}</span></h6>
+                                                <h3><a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}">${ucfirst(vehicle.name)}</a></h3>
+                                                <h6>${_l('web.common.category')} : <span>${ucfirst(vehicle.brand ?? "")}</span></h6>
                                             </div>
                                             <div class="blog-list-rate">
-                                            ${vehicle.rating ? `
                                                 <div class="list-rating">
                                                     ${(() => {
-                                                        const filledStars = Math.floor(vehicle.rating);
+                                                        const filledStars = Math.floor(vehicleRating);
                                                         const totalStars = 5;
                                                         let starsHtml = '';
 
@@ -328,11 +327,10 @@
 
                                                         return starsHtml;
                                                     })()}
-                                                    <span>(${vehicle.rating.toFixed(1)}) ${vehicle.review_count || 0} ${_l('web.home.reviews')}</span>
+                                                    <span>(${vehicleRating.toFixed(1)}) ${vehicle.review_count || 0} ${_l('web.home.reviews')}</span>
                                                 </div>
-                                            ` : ''}
 
-                                                <h6>${currency}${price_value} <span>/ ${price_type}</span></h6>
+                                                <h6>${currency}${price_value} <span>/ ${ucfirst(price_type ?? "")}</span></h6>
                                             </div>
                                         </div>
                                         <div class="listing-details-group">
@@ -345,7 +343,7 @@
                                                         <img src="${vehicle.avatar_image ?? '/frontend/assets/img/profiles/avatar-03.jpg'}" alt="user">
                                                     </div>
                                                     <div class="address-info">
-                                                        <h6><i class="feather-map-pin"></i>${vehicle.location ?? ''}</h6>
+                                                        <h6><i class="feather-map-pin"></i>${ucfirst(vehicle.location ?? '')}</h6>
                                                     </div>
                                                     <div class="list-km d-none">
                                                         <span class="km-count"><img src="/frontend/assets/img/icons/map-pin.svg" alt="author">3.7m</span>
@@ -385,6 +383,8 @@
         let price_type;
         let price_value;
         let allowBooking = $("#general-settings").attr('data-allow_booking');
+        let vehicleName = vehicle.name;
+        vehicleName = ucfirst(vehicleName);
         const currency = vehicle.currency;
         if (vehicle.price.length > 0) {
             let firstPrice = vehicle.price[0];
@@ -394,7 +394,7 @@
         const vehicleImages = vehicle.multiple_vehicle_images.map(img =>
             `<div class="slide-images">
                 <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}">
-                    <img src="${img}" class="img-fluid" alt="${vehicle.name}">
+                    <img src="${img}" class="img-fluid" alt="${vehicleName}">
                 </a>
             </div>`
         ).join('');
@@ -410,26 +410,26 @@
                 </div>`
             : `<div class="listing-img">
                     <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}">
-                        <img src="${vehicle.multiple_vehicle_images[0]}" class="img-fluid" alt="${vehicle.name}">
+                        <img src="${vehicle.multiple_vehicle_images[0]}" class="img-fluid" alt="${vehicleName}">
                     </a>
                     <div class="fav-item justify-content-end">
                       ${vehicle.authenticated ? `<a href="javascript:void(0)" class="fav-icon wishlist-icon ${vehicle.wishlist ? 'selected' : ''}" data-id="${vehicle.id}"><i class="feather-heart"></i></a>` : ''}
                     </div>
-                    <span class="featured-text">${vehicle.brand ?? ""}</span>
+                    <span class="featured-text">${ucfirst(vehicle.brand ?? "")}</span>
                 </div>`;
 
         const featureList = `
             <ul>
-                <li><span><img src="/frontend/assets/img/icons/car-parts-01.svg" alt="${vehicle.transmission ?? ""}"></span><p>${vehicle.transmission ?? ""}</p></li>
+                <li><span><img src="/frontend/assets/img/icons/car-parts-01.svg" alt="${ucfirst(vehicle.transmission ?? "")}"></span><p>${ucfirst(vehicle.transmission ?? "")}</p></li>
                 <li><span><img src="/frontend/assets/img/icons/car-parts-02.svg" alt="${vehicle.mileage ? Math.ceil(vehicle.mileage) : 0} miles"></span><p>${vehicle.mileage ? Math.ceil(vehicle.mileage) : 0} miles</p></li>
-                <li><span><img src="/frontend/assets/img/icons/car-parts-03.svg" alt="${vehicle.fuel_type ?? ""}"></span><p>${vehicle.fuel_type ?? ""}</p></li>
+                <li><span><img src="/frontend/assets/img/icons/car-parts-03.svg" alt="${ucfirst(vehicle.fuel_type ?? "")}"></span><p>${ucfirst(vehicle.fuel_type ?? "")}</p></li>
             </ul>
             <ul>
                 <li><span><img src="/frontend/assets/img/icons/car-parts-04.svg" alt="Power"></span><p>Power</p></li>
                 <li><span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${vehicle.year ?? ""}"></span><p>${vehicle.year ?? ""}</p></li>
                 <li><span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="Persons"></span><p>${vehicle.passenger_capacity ?? 0} Persons</p></li>
             </ul>`;
-
+        const vehicleRating = vehicle.rating ?? 0;
         const listingContent = `
             <div class="listing-content">
                 <div class="listing-features d-flex align-items-end justify-content-between">
@@ -437,11 +437,10 @@
                  <a href="javascript:void(0)" class="author-img">
                     <img src="${vehicle.avatar_image ?? '/frontend/assets/img/profiles/avatar-03.jpg'}" alt="author">
                 </a>
-                <h3 class="listing-title"><a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}">${vehicle.name}</a></h3>
-                ${vehicle.rating ? `
+                <h3 class="listing-title"><a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}">${vehicleName}</a></h3>
                     <div class="list-rating">
                         ${(() => {
-                            const filledStars = Math.floor(vehicle.rating);
+                            const filledStars = Math.floor(vehicleRating);
                             const totalStars = 5;
                             let starsHtml = '';
 
@@ -451,9 +450,8 @@
 
                             return starsHtml;
                         })()}
-                        <span>(${vehicle.rating.toFixed(1)}) ${vehicle.review_count || 0} ${_l('web.home.reviews')}</span>
+                        <span>(${vehicleRating.toFixed(1)}) ${vehicle.review_count || 0} ${_l('web.home.reviews')}</span>
                     </div>
-                ` : ''}
                 </div>
                     <div class="list-km d-none">
                         <span class="km-count"><img src="/frontend/assets/img/icons/map-pin.svg" alt="author">3.5m</span>
@@ -461,8 +459,8 @@
                 </div>
                 <div class="listing-details-group">${featureList}</div>
                 <div class="listing-location-details">
-                    <div class="listing-price"><span><i class="feather-map-pin"></i></span>${vehicle.location ?? ''}</div>
-                    <div class="listing-price"><h6>${currency}${price_value} <span> / ${price_type}</span></h6></div>
+                    <div class="listing-price"><span><i class="feather-map-pin"></i></span>${ucfirst(vehicle.location ?? '')}</div>
+                    <div class="listing-price"><h6>${currency}${price_value} <span> / ${ucfirst(price_type)}</span></h6></div>
                 </div>
                 <div class="listing-button">
                     <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}" class="btn btn-order ${allowBooking != 1 ? 'disabled' : ''}">
@@ -579,11 +577,9 @@ $(document).ready(function () {
     let initialPickupId = $("#initialPickupId").val();
     let initialPickupName = $("#initialPickupName").val();
 
-    // If prefilled location exists, show it as selected
     if (initialPickupId && initialPickupName) {
         $input.val(initialPickupName);
 
-        // Manually inject a fake suggestion and mark it selected
         $suggestions.html(`<li data-id="${initialPickupId}" class="selected">${initialPickupName}</li>`);
     }
     $input.on("keyup", function () {

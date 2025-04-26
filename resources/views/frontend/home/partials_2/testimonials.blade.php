@@ -39,8 +39,8 @@
                     </div>
 
                     <div class="user-info">
-                        <h6>{{ $content->customer_name ?? "" }}</h6>
-                        <p>{{ $content->location ?? "" }}</p>
+                        <h6>{{ ucfirst($content->customer_name ?? "") }}</h6>
+                        <p>{{ ucfirst($content->location ?? "") }}</p>
                     </div>
                 </div>
             </div>

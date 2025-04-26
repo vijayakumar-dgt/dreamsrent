@@ -5,8 +5,8 @@
 
                 <div class="feature-img">
                     <div class="section-heading heading-four text-start" data-aos="fade-down">
-                        <h2>{{ $section['section_title'] ?? "" }}</h2>
-                        <p>{{ $section['section_label'] ?? "" }}</p>
+                        <h2>{{ ucfirst($section['section_title'] ?? "" )}}</h2>
+                        <p>{{ ucfirst($section['section_label'] ?? "") }}</p>
                     </div>
                     <img src="{{ $section['section_content'][0]->vehicle_image_url ?? asset('frontend/assets/img/cars/car.png') }}" alt="img" class="img-fluid">
                 </div>
@@ -23,8 +23,8 @@
                                 <i class="bx bxs-info-circle"></i>
                             </span>
                             <div>
-                                <h6 class="mb-1">{{ $section['section_content'][0]->label_1 ?? "" }}</h6>
-                                <p>{{ $section['section_content'][0]->dis_1 ?? "" }}</p>
+                                <h6 class="mb-1">{{ ucfirst($section['section_content'][0]->label_1 ?? "") }}</h6>
+                                <p>{{ ucfirst($section['section_content'][0]->dis_1 ?? "") }}</p>
                             </div>
                         </div>
                     </div>
@@ -37,8 +37,8 @@
                                 <i class="bx bx-exclude"></i>
                             </span>
                             <div>
-                                <h6 class="mb-1">{{ $section['section_content'][0]->label_2 ?? "" }}</h6>
-                                <p>{{ $section['section_content'][0]->dis_2 ?? "" }}</p>
+                                <h6 class="mb-1">{{ ucfirst($section['section_content'][0]->label_2 ?? "") }}</h6>
+                                <p>{{ ucfirst($section['section_content'][0]->dis_2 ?? "") }}</p>
                             </div>
                         </div>
                     </div>
@@ -51,8 +51,8 @@
                                 <i class="bx bx-money"></i>
                             </span>
                             <div>
-                                <h6 class="mb-1">{{ $section['section_content'][0]->label_3 ?? "" }}</h6>
-                                <p>{{ $section['section_content'][0]->dis_3 ?? "" }}</p>
+                                <h6 class="mb-1">{{ ucfirst($section['section_content'][0]->label_3 ?? "") }}</h6>
+                                <p>{{ ucfirst($section['section_content'][0]->dis_3 ?? "") }}</p>
                             </div>
                         </div>
                     </div>
@@ -66,8 +66,8 @@
                                 <i class="bx bxs-car-mechanic"></i>
                             </span>
                             <div>
-                                <h6 class="mb-1">{{ $section['section_content'][0]->label_4 ?? "" }}</h6>
-                                <p>{{ $section['section_content'][0]->dis_4 ?? "" }}</p>
+                                <h6 class="mb-1">{{ ucfirst($section['section_content'][0]->label_4 ?? "") }}</h6>
+                                <p>{{ ucfirst($section['section_content'][0]->dis_4 ?? "") }}</p>
                             </div>
                         </div>
                     </div>
@@ -80,8 +80,8 @@
                                 <i class="bx bx-support"></i>
                             </span>
                             <div>
-                                <h6 class="mb-1">{{ $section['section_content'][0]->label_5 ?? "" }}</h6>
-                                <p>{{ $section['section_content'][0]->dis_5 ?? "" }}</p>
+                                <h6 class="mb-1">{{ ucfirst($section['section_content'][0]->label_5 ?? "") }}</h6>
+                                <p>{{ ucfirst($section['section_content'][0]->dis_5 ?? "") }}</p>
                             </div>
                         </div>
                     </div>
@@ -94,8 +94,8 @@
                                 <i class="bx bxs-coin"></i>
                             </span>
                             <div>
-                                <h6 class="mb-1">{{ $section['section_content'][0]->label_6 ?? "" }}</h6>
-                                <p>{{ $section['section_content'][0]->dis_6 ?? "" }}</p>
+                                <h6 class="mb-1">{{ ucfirst($section['section_content'][0]->label_6 ?? "") }}</h6>
+                                <p>{{ ucfirst($section['section_content'][0]->dis_6 ?? "") }}</p>
                             </div>
                         </div>
                     </div>

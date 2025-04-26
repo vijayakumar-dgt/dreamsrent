@@ -4,7 +4,7 @@
             @if(!empty($section['section_content']) && count($section['section_content']) > 0)
             @foreach($section['section_content'] as $content)
             <div class="support-item">
-                <h2>{{ $content['text'] ?? "" }}</h2>
+                <h2>{{ ucfirst($content['text'] ?? "") }}</h2>
             </div>
             @endforeach
             @endif

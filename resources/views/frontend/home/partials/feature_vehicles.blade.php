@@ -15,7 +15,7 @@
                         <div class="listing-item mb-0">
                             <div class="listing-img">
                                 <a href="/vehicle-details/{{ $vehicle['slug'] }}">
-                                    <img src="{{ $vehicle['vehicle_image'] }}" class="img-fluid" alt="{{ $vehicle['name'] }}">
+                                    <img src="{{ $vehicle['vehicle_image'] }}" class="img-fluid" alt="{{ ucfirst($vehicle['name']) }}">
                                 </a>
                                 <div class="fav-item justify-content-end">
                                     @if(Auth::guard('web')->check())
@@ -54,14 +54,14 @@
                                         <span>({{ number_format($rating, 1) }}) {{ $vehicle['review_count'] ?? 0 }} {{ __('web.common.reviews') }}</span>
                                     </div>
                                     <h3 class="listing-title">
-                                        <a href="/vehicle-details/{{ $vehicle['slug'] }}">{{ $vehicle['name'] }}</a>
+                                        <a href="/vehicle-details/{{ $vehicle['slug'] }}">{{ ucfirst($vehicle['name']) }}</a>
                                     </h3>
                                 </div>
                                 <div class="listing-details-group">
                                     <ul>
                                         <li>
-                                            <span><img src="{{ asset('frontend/assets/img/icons/car-parts-01.svg') }}" alt="{{ $vehicle['transmission'] ?? '' }}"></span>
-                                            <p>{{ $vehicle['transmission'] ?? ""}}</p>
+                                            <span><img src="{{ asset('frontend/assets/img/icons/car-parts-01.svg') }}" alt="{{ ucfirst($vehicle['transmission'] ?? '') }}"></span>
+                                            <p>{{ ucfirst($vehicle['transmission'] ?? "")}}</p>
                                         </li>
                                         <li>
                                             <span><img src="{{ asset('frontend/assets/img/icons/car-parts-02.svg') }}" alt="{{ $vehicle['mileage'] ? round($vehicle['mileage']) : '' }} KM"></span>

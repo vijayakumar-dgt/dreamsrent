@@ -24,7 +24,7 @@
                         </div>
                         <div class="fav-item">
                             <div class="d-flex align-items-center gap-2">
-                                <span class="featured-text">{{ $content['brand'] ?? "" }}</span>
+                                <span class="featured-text">{{ ucfirst($content['brand'] ?? "") }}</span>
                             </div>
                             @if(current_user() != null)
                             <a href="javascript:void(0)" class="fav-icon wishlist-icon {{ $content['wishlist'] ? 'selected' : '' }}" data-id="{{ $content['id'] }}">
@@ -32,13 +32,13 @@
                             </a>
                             @endif
                         </div>
-                        <span class="location"><i class="bx bx-map me-1"></i>{{ $content['location'] ?? "" }}</span>
+                        <span class="location"><i class="bx bx-map me-1"></i>{{ ucfirst($content['location'] ?? "") }}</span>
                     </div>
                     <div class="listing-content">
                         <div class="listing-features d-flex align-items-center justify-content-between">
                             <div class="list-rating">
                                 <h3 class="listing-title">
-                                    <a href="{{ route('vehicleDetails',$content['slug']) }}">{{ $content['name'] ?? "" }}</a>
+                                    <a href="{{ route('vehicleDetails',$content['slug']) }}">{{ ucfirst($content['name'] ?? "") }}</a>
                                 </h3>
                                 <div class="list-rating">
                                     @php
@@ -65,7 +65,7 @@
                                     $priceType = array_key_first($firstPrice);
                                     $priceValue = $firstPrice[$priceType] ?? '';
                                 @endphp
-                                <h4 class="price">{{ getDefaultCurrencySymbol() }}{{ $priceValue }} <span>/ {{ $priceType }}</span></h4>
+                                <h4 class="price">{{ getDefaultCurrencySymbol() }}{{ $priceValue }} <span>/ {{ ucfirst($priceType) }}</span></h4>
                             </div>
                         </div>
                         <div class="listing-details-group">
@@ -80,7 +80,7 @@
                                 </li>
                                 <li>
                                     <img src="/frontend/assets/img/icons/car-parts-03.svg" alt="">
-                                    <p>{{ $content['fuel_type'] ?? "" }}</p>
+                                    <p>{{ ucfirst($content['fuel_type'] ?? "") }}</p>
                                 </li>
                                 <li>
                                     <img src="/frontend/assets/img/icons/car-parts-05.svg" alt="{{ $content['year'] ?? '' }}">

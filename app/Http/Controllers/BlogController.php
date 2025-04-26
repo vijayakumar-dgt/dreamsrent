@@ -138,7 +138,7 @@ class BlogController extends Controller
             ->where('blog_posts.slug', $id)
             ->where('blog_posts.status', 1)
             ->first();
-
+        
         $blogReviews = BlogReviews::where('blog_id', $blogPosts->id)->latest()->limit(5)->get();
         $countReview = count($blogReviews);
 
