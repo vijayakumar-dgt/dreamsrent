@@ -48,5 +48,5 @@
 @endforeach
 @endsection
 @push('scripts')
-<script src="{{ asset('frontend/assets/js/custom/home/home_2.js') }}"></script>
+<script src="{{ asset('frontend/assets/js/custom/home/home_2.js?v=1.1') }}"></script>
 @endpush
