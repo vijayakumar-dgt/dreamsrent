@@ -57,7 +57,7 @@
     @else
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
     @endif
-	<link rel="stylesheet" href="{{ asset('assets/css/custom/custom-style.css?v=1.0.2') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/custom/custom-style.css?v=1.0.3') }}">
 
 </head>
 
@@ -129,7 +129,7 @@
 	@else
 	<script src="{{ asset('frontend/assets/js/script.js') }}"></script>
     @endif
-	<script src="{{ asset('frontend/assets/js/custom/custom-script.js?v=1.0.2') }}"></script>
+	<script src="{{ asset('frontend/assets/js/custom/custom-script.js?v=1.0.3') }}"></script>
  
 </body>
 
