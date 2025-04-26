@@ -12,7 +12,7 @@
             <div class="col-lg-4 col-md-6 d-lg-flex">
                 <div class="blog grid-blog">
                     <div class="blog-image">
-                        <a href="/blog-details/{{ $blog['slug'] }}"><img class="img-fluid" src="{{ $blog['image'] }}" alt="Post Image"></a>
+                        <a href="/blog-details/{{ $blog['slug'] }}" class="theme1-blog"><img class="img-fluid" src="{{ $blog['image'] }}" alt="Post Image"></a>
                     </div>
                     <div class="blog-content">
                          <p class="blog-category">
