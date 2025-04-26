@@ -57,7 +57,7 @@
     @else
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
     @endif
-	<link rel="stylesheet" href="{{ asset('assets/css/custom/custom-style.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/custom/custom-style.css?v=1.2') }}">
 
 </head>
 <body data-theme={{ $theme ?? 1}} data-dir="{{ $isRTL ? 'rtl' : 'ltr' }}">
