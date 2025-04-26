@@ -1,8 +1,8 @@
 <section class="blog-section-four">
     <div class="container">
         <div class="section-heading heading-four" data-aos="fade-down">
-            <h2>{{ $section['section_title'] ?? "" }}</h2>
-            <p>{{ $section['section_label'] ?? "" }}</p>
+            <h2>{{ ucfirst($section['section_title'] ?? "") }}</h2>
+            <p>{{ ucfirst($section['section_label'] ?? "") }}</p>
         </div>
         <div class="row row-gap-3 justify-content-center">
             @if(!empty($section['section_content'] && count($section['section_content']) > 0))
@@ -15,7 +15,7 @@
                     </div>
                     <div class="blog-content">
                         <div class="d-flex align-center justify-content-between blog-category">
-                            <a href="javascript:void(0);" class="category">{{ $content['category'] ?? "" }}</a>
+                            <a href="javascript:void(0);" class="category">{{ ucfirst($content['category'] ?? "") }}</a>
                             <p class="date d-inline-flex align-center"><i class="bx bx-calendar me-1"></i>{{ $content['updated_at'] ?? "" }}</p>
                         </div>
                     @php
@@ -24,7 +24,7 @@
                         $blogTitle = substr($blogTitle, 0, 30)."...";
                     }
                     @endphp
-                        <h5 class="title"><a href="/blog-details/{{ $content['id'] ?? "" }}">{{ $blogTitle }}</a></h5>
+                        <h5 class="title"><a href="/blog-details/{{ $content['slug'] ?? "" }}">{{ ucfirst($blogTitle) }}</a></h5>
                     </div>
                 </div>
             </div>

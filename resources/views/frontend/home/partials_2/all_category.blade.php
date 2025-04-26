@@ -10,8 +10,8 @@
                 <div id="faqOne" class="accordion-collapse collapse show" data-bs-parent="#faqAcordion">
                     <div class="accordion-body">
                         <div class="row row-gap-3">
-                            @foreach($section['section_content']->chunk(6) as $chunk)
-                                <div class="col-lg-2 col-md-4 col-sm-6">
+                            @foreach($section['section_content']->chunk(3) as $chunk)
+                                <div class="col-lg-3 col-md-4 col-sm-6">
                                     <ul class="category-list">
                                         @foreach($chunk as $item)
                                             <li><a href="{{ route('list', ['category' => $item['id'] ?? '' ]) }}">{{ $item['name'] ?? '' }}</a></li>

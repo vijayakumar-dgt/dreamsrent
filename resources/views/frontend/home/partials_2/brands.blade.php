@@ -1,7 +1,7 @@
 <section class="brand-section">
     <div class="container">	
         <div class="section-heading heading-four" data-aos="fade-down">
-            <h2 class="text-white">{{ $section['section_title'] ?? "" }}</h2>
+            <h2 class="text-white">{{ ucfirst($section['section_title'] ?? "") }}</h2>
             <p>{{ $section['section_label'] ?? "" }}</p>
         </div>
         <div class="brands-slider owl-carousel">
@@ -9,7 +9,7 @@
             @foreach($section['section_content'] as $content)
             <div class="brand-wrap">
                 <img src="{{ $content->brand_image }}" alt="img" height="100" width="100">
-                <p>{{ $content->brand_name ?? "" }}</p>
+                <p>{{ ucfirst($content->brand_name ?? "") }}</p>
             </div>
             @endforeach
             @endif

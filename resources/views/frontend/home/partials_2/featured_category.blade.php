@@ -17,7 +17,7 @@
                         <div class="category-item flex-fill">
                             <div class="category-info d-flex align-items-center justify-content-between">
                                 <div>
-                                    <h6 class="title"><a href="{{ route('list', ['category' => $content->id ?? '' ]) }}">{{ $content->name ?? "" }}</a></h6>
+                                    <h6 class="title"><a href="{{ route('list', ['category' => $content->id ?? '' ]) }}">{{ ucfirst($content->name ?? "") }}</a></h6>
                                     <p>{{ $content->car_count ?? "" }} {{ __('web.common.vehicles')  }}</p>
                                 </div>
                                 <a href="{{ route('list', ['category' => $content->id ?? '' ]) }}" class="link-icon"><i class="bx bx-right-arrow-alt"></i></a>
