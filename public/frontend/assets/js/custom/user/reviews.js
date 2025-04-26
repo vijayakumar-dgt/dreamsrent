@@ -43,13 +43,15 @@ function fetchReviews(sort_by = '') {
         columns: [
             { data: "vehicle_name",
                 render: function(data, type, row) {
+                    let delivery_type = row.delivery_type ?? "";
+                    delivery_type = delivery_type.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
                     return `<div class="table-avatar">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#add_review"  class="avatar  flex-shrink-0">
                                     <img class="avatar-img" src="${row.vehicle_image}" alt="Booking">
                                 </a>
                                 <div class="table-head-name flex-grow-1">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#add_review" >${row.vehicle_name}</a>
-                                    ${row.delivery_type ? `<p>${row.delivery_type}</p>` : ""}
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#add_review" >${ucfirst(row.vehicle_name)}</a>
+                                    ${delivery_type ? `<p>${delivery_type}</p>` : ""}
                                 </div>
                             </div>`;
                 }
