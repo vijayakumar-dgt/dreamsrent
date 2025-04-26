@@ -1,7 +1,4 @@
 @extends('theme_1.app')
-@push('styles')
-<link rel="stylesheet" href="{{ asset('assets/css/custom/theme-2.css') }}.css">
-@endpush
 @section('content')
 
 @foreach($content_sections as $key => $section)
