@@ -9,7 +9,7 @@
 
     $('#permissionForm').submit(function(e) {
         e.preventDefault();
-        formData = new FormData();
+        let formData = new FormData();
 
         const roleId = $('#role_id').val();
         const processedModules = new Set();
