@@ -70,7 +70,7 @@
 <div class="modal-dialog modal-dialog-centered modal-sm">
     <div class="modal-content">
         <div class="modal-body text-center">
-            <form action="system-backup.html">
+            <form action="">
                 <span class="avatar avatar-lg bg-primary-transparent rounded-circle text-primary mb-3">
                     <i class="ti ti-folders fs-26"></i>
                 </span>
@@ -78,7 +78,7 @@
                 <p class="mb-3">{{ __('admin.general_settings.confirmation_generate_backup') }}</p>
                 <div class="d-flex justify-content-center">
                     <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
-                 
+
 
                         <a href="{{ route('backup') }}" class="btn btn-primary">{{ __('admin.general_settings.generate_backup') }}</a>
 

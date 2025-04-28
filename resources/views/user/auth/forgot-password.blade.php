@@ -45,7 +45,7 @@
                                 </div>
                                 <h1>Forgot Password</h1>
                                 <p class="account-subtitle">Enter your email and we will send you a link to reset your password.</p>
-                                <form action="index.html">
+                                <form action="">
                                     <div class="input-block">
                                         <label class="form-label">Email Address <span class="text-danger">*</span></label>
                                         <input type="email" name="email" id="email" class="form-control"  placeholder="">

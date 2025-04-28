@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 (async () => {
-    "use strict";
+   
     await loadTranslationFile('admin', 'general_settings,common');
     "use strict";
 $(document).ready(function() {

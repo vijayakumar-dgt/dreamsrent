@@ -1086,7 +1086,7 @@
 					<i class="ti ti-x fs-16"></i>
 				</button>
 			</div>
-			<form action="add-car.html">
+			<form action="">
 				<div class="modal-body pb-1">
 					<div class="mb-3">
 						<label class="form-label">{{ __('admin.rentals.damage_image_label') }} <span class="text-danger">*</span></label>

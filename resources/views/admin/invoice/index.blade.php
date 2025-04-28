@@ -135,10 +135,10 @@
                 <tbody>
                     @foreach($invoices as $invoice)
                     <tr>
-                        <td><a href="invoice-details.html" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
+                        <td><a href="#" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
                         <td>
                             <div class="d-flex align-items-center">
-                                <a href="customer-details.html" class="avatar avatar-rounded me-2 flex-shrink-0">
+                                <a href="#" class="avatar avatar-rounded me-2 flex-shrink-0">
                                     @php
                                     $imagePath = 'storage/' . $invoice->profile_image;
                                     $defaultImage = asset('assets/img/default-profile.png');
@@ -186,7 +186,7 @@
                             </span>
                             @endif
                         </td>
-                        
+
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -199,7 +199,7 @@
                                         <a class="dropdown-item rounded-1 edit-invoice-btn" href="edit-invoice/{{$invoice->id}}" data-id="{{$invoice->id}}">
                                             <i class="ti ti-edit me-1"></i>{{ __('admin.common.edit') }}
                                         </a>
-                                    </li> 
+                                    </li>
                                     @endif
                                     @if (hasPermission($permissions, 'invoices', 'delete'))
 

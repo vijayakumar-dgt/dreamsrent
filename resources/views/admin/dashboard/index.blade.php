@@ -527,10 +527,10 @@
                                     @if(count($invoices) != 0)
                                     @foreach($invoices as $invoice)
                                     <tr>
-                                        <td><a href="invoice-details.html" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
+                                        <td><a href="#" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="customer-details.html" class="avatar avatar-rounded me-2 flex-shrink-0">
+                                                <a href="#" class="avatar avatar-rounded me-2 flex-shrink-0">
                                                     @php
                                                     $imagePath = 'storage/' . $invoice->profile_image;
                                                     $defaultImage = asset('assets/img/default-profile.png');

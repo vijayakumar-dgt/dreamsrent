@@ -54,10 +54,10 @@
                         </li>
                     @else
                         <li class="login-link">
-                            <a href="register.html">Sign Up</a>
+                            <a href="#">Sign Up</a>
                         </li>
                         <li class="login-link">
-                            <a href="login.html">Sign In</a>
+                            <a href="#">Sign In</a>
                         </li>
                     @endif
                 </ul>

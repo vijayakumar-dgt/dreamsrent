@@ -160,7 +160,7 @@
                 <p class="mb-3">{{__('admin.blog.are_you_sure_you_want_to_delete_page')}}?</p>
                 <div class="d-flex justify-content-center">
                     <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</a>
-                    <a href="pages.html" class="btn btn-primary">{{__('admin.blog.yes_delete')}}</a>
+                    <a href="#" class="btn btn-primary">{{__('admin.blog.yes_delete')}}</a>
                 </div>
             </div>
         </div>

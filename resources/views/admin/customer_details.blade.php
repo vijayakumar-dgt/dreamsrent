@@ -133,7 +133,7 @@
                                                                             <img src="{{ $booking->vehicle_image }}" alt="">
                                                                         </span>
                                                                         <div>
-                                                                            <a href="car-details.html" class="text-info">{{ $booking->reservation_id }}</a>
+                                                                            <a href="#" class="text-info">{{ $booking->reservation_id }}</a>
                                                                             <h6 class="fs-14">{{ $booking->vehicle_name }}</h6>
                                                                         </div>
                                                                     </div>
@@ -154,7 +154,7 @@
                                                         </div>
                                                         <div class="col-lg-3 d-none">
                                                             <div class="d-flex align-items-center icon-list justify-content-end">
-                                                                <a href="invoice-details.html" class="edit-icon me-2"><i class="ti ti-eye"></i></a>
+                                                                <a href="#" class="edit-icon me-2"><i class="ti ti-eye"></i></a>
                                                                 <a href="#" class="edit-icon"><i class="ti ti-download"></i></a>
                                                             </div>
                                                         </div>
@@ -170,7 +170,7 @@
                             <!-- /Recent Rents -->
 
                             <!-- History -->
-                            <div class="tab-pane fade" id="car-service">  
+                            <div class="tab-pane fade" id="car-service">
                                 @if ($bookingHistories->isNotEmpty())
                                     @foreach ($bookingHistories as $history)
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-2 pb-2 border-bottom">
