@@ -19,14 +19,6 @@
 </div>
 <!-- /Breadscrumb Section -->
 <div class="section privacy-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="">
-                    {!! $sectionContent !!}
-                </div>
-            </div>
-        </div>			
-    </div>	
+    {!! $sectionContent !!}	
 </div>	
 @endsection
