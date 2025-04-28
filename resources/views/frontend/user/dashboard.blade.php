@@ -33,10 +33,10 @@
         <div class="row">
             <!-- Widget Item -->
             <div class="col-lg-3 col-md-6 d-flex">
-                <div class="widget-box flex-fill">
+                <div class="card widget-box flex-fill">
                     <div class="widget-header">
                         <div class="widget-content">
-                            <h6>{{ __('web.user.my_bookings') }}</h6>
+                            <p class="mb-1">{{ __('web.user.my_bookings') }}</p>
                             <h3>{{ $totalBookingCount }}</h3>
                         </div>
                         <div class="widget-icon">
@@ -51,10 +51,10 @@
             <!-- /Widget Item -->
             <!-- Widget Item -->
             <div class="col-lg-3 col-md-6 d-flex">
-                <div class="widget-box flex-fill">
+                <div class="card widget-box flex-fill">
                     <div class="widget-header">
                         <div class="widget-content">
-                            <h6>{{__('web.user.wallet_balance')}}</h6>
+                            <p class="mb-1">{{__('web.user.wallet_balance')}}</p>
                             <h3>{{$currency}}{{$totalBalance }}</h3>
                         </div>
                         <div class="widget-icon">
@@ -69,10 +69,10 @@
             <!-- /Widget Item -->
             <!-- Widget Item -->
             <div class="col-lg-3 col-md-6 d-flex">
-                <div class="widget-box flex-fill">
+                <div class="card widget-box flex-fill">
                     <div class="widget-header">
                         <div class="widget-content">
-                            <h6>{{__('web.user.total_transactions')}}</h6>
+                            <p class="mb-1">{{__('web.user.total_transactions')}}</p>
                             <h3>{{ $currency }}{{$totalTransaction }}</h3>
                         </div>
                         <div class="widget-icon">
@@ -88,10 +88,10 @@
 
             <!-- Widget Item -->
             <div class="col-lg-3 col-md-6 d-flex">
-                <div class="widget-box flex-fill">
+                <div class="card widget-box flex-fill">
                     <div class="widget-header">
                         <div class="widget-content">
-                            <h6>{{__('web.user.wishlist')}} {{__('web.common.vehicles')}}</h6>
+                            <p class="mb-1">{{__('web.user.wishlist')}} {{__('web.common.vehicles')}}</p>
                             <h3>{{$totalWishlistCount}}</h3>
                         </div>
                         <div class="widget-icon">

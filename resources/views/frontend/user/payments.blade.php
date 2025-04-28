@@ -32,14 +32,14 @@
         </div>
         <!-- /Content Header -->
 
-        <!-- Sort By -->
+        <!-- Payments Table -->
         <div class="row">
             <div class="col-lg-12 d-flex">
-                <div class="card book-card flex-fill mb-0">
+                <div class="card flex-fill mb-0">
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-md-5">
-                                <h4>{{__('web.user.all_payments')}} </h4>
+                                <h5>{{__('web.user.all_payments')}} </h5>
                             </div>
                             <div class="col-md-7 text-md-end">
                             <div class="filter-group">
@@ -86,24 +86,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Sort By -->
-
-        <!-- Payments Table -->
-        <div class="row">
-            <div class="col-lg-12 d-flex">
-                <div class="card book-card flex-fill mb-0">
-                    <div class="card-header">
-                        <div class="row align-items-center">
-                            <div class="col-md-5">
-                                <h4>{{__('web.user.all_payments')}} </h4>
-                            </div>
-                            <div class="col-md-7 text-md-end">
                                 <div class="table-search">
                                     <div id="tablefilter" class="me-0"></div>
                                 </div>

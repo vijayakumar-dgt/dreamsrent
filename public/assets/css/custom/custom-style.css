@@ -641,6 +641,7 @@
   background: #fff;
   border: 1px solid #ccc;
   border-top: none;
+  border-bottom: 0;
   width: 100%; /* Ensure same width as input */
   max-height: 200px;
   overflow-y: auto;
@@ -653,7 +654,7 @@
 .suggestions-list li {
   padding: 10px;
   cursor: pointer;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #ccc;
   display: block; /* Ensures each suggestion is in a new line */
   white-space: nowrap; /* Prevents text wrapping */
   width: 100%; /* Ensures full width */

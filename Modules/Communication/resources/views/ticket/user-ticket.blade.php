@@ -44,11 +44,11 @@
          <!-- Ticket Table -->
          <div class="row">
             <div class="col-lg-12 d-flex">
-                <div class="card book-card flex-fill mb-0">
+                <div class="card flex-fill mb-0">
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-md-5">
-                                <h4>{{ __('web.user.tickets') }}</h4>
+                                <h5>{{ __('web.user.tickets') }}</h5>
                             </div>
                             <div class="col-md-7 d-flex justify-content-end align-items-center">
                                 <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center me-3"

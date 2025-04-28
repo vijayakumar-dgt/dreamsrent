@@ -56,7 +56,7 @@
                                 <button type="submit" class="btn btn-dark w-100 submitbtn" disabled>Login</button>
                             </div>
                           </form>
-                          <div class="mb-3">
+                          <div class="mb-0">
                             <h6 class="fs-16 mb-1">{{ __('Login Info') }}:</h6>
                             <div class="p-3 border d-flex flex-wrap align-items-center justify-content-between">
                                 <div>
