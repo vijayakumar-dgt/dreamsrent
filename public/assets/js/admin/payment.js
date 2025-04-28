@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'common, finance_accounts');
 
 $(document).ready(function () {
@@ -101,7 +102,7 @@ function initTable() {
                             <td>${value.payment_type}</td>
                             <td>${value.created_at}</td>
                             <td>
-    <span class="badge 
+    <span class="badge
         ${
             value.payment_status == 1
                 ? "badge-info-transparent"
@@ -110,7 +111,7 @@ function initTable() {
                 : value.payment_status == 3
                 ? "badge-warning-transparent"
                 : "badge-danger-transparent"
-        } 
+        }
         d-inline-flex align-items-center badge-sm">
         <i class="ti ti-point-filled me-1"></i>
         ${

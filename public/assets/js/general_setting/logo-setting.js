@@ -1,16 +1,17 @@
 
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
- 
+
     $(document).ready(function () {
         loadLogoSettings();
-    
-    
-    
+
+
+
         $('input[type="file"]').on('change', function () {
             $(this).valid();
         });
-    
+
         $("#logoSettingForm").validate({
             rules: {
                 logo_image: {
@@ -55,7 +56,7 @@
             submitHandler: function (form) {
                 const formData = new FormData(form);
                 $(".btn-primary").text( _l('admin.general_settings.please_wait')).prop('disabled', true);
-    
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/settings/logo/store",
@@ -75,7 +76,7 @@
                         $('.btn-primary').attr('disabled', false).html(_l('admin.common.save_changes'));
                     },
                     success: function (resp) {
-                       
+
                         if (resp.code === 200) {
                             loadLogoSettings();
                             showToast('success', resp.message);
@@ -86,7 +87,7 @@
                     error: function (error) {
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
-    
+
                         if (error.responseJSON?.code === 422) {
                             $.each(error.responseJSON.errors, function (key, val) {
                                 $("#" + key).addClass("is-invalid");
@@ -95,13 +96,13 @@
                         } else {
                             showToast('error', error.responseJSON?.message || _l('admin.common.default_retrieve_error'));
                         }
-    
+
                         ;
                     }
                 });
             }
         });
-    
+
     });
 
 })();
@@ -145,7 +146,7 @@ function loadLogoSettings() {
 
                 $('.real-label').removeClass('d-none');
                 $('.label-loader, .input-loader, .image-loader').addClass('d-none');
-             
+
             }
         },
         error: function(xhr) {

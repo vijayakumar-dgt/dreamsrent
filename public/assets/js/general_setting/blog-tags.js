@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'blog, common');
 
     $('#blogTagTable').DataTable({
@@ -48,18 +49,18 @@
     });
 
 $(document).ready(function () {
-    
+
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
     });
 
-  
+
     $("#create_tag_btn").click(function () {
         const title = $("#add_tag_name").val().trim();
 
-       
+
         if (!title) {
             showToast("error", _l('admin.blog.please_enter_the_name'));
             return;
@@ -73,7 +74,7 @@ $(document).ready(function () {
             },
             success: function (response) {
                 showToast("success", _l('admin.blog.blog_tag_created!'));
-                location.reload(); 
+                location.reload();
                 $("#add_Tag").modal("hide");
             },
             error: function (xhr) {
@@ -82,7 +83,7 @@ $(document).ready(function () {
         });
     });
 
-    
+
     $(document).on("click", ".open-edit-modal", function () {
         let id = $(this).data("id");
         let name = $(this).data("name");
@@ -94,11 +95,11 @@ $(document).ready(function () {
         $("#edit_Tag").modal("show");
     });
 
-  
+
     $("#update_tag_btn").click(function () {
         const title = $("#edit_tag_name").val().trim();
 
-       
+
         if (!title) {
             showToast("error", _l('admin.blog.please_enter_the_name'));
             return;
@@ -108,10 +109,10 @@ $(document).ready(function () {
 
         $.ajax({
             url: "/admin/content/tags/" + id,
-            type: "POST", 
+            type: "POST",
             data: {
                 _token: $('meta[name="csrf-token"]').attr("content"), // csrf
-                _method: "PUT", 
+                _method: "PUT",
                 name: $("#edit_tag_name").val(),
                 status: $("#edit_tag_status").is(":checked") ? 1 : 0,
             },
@@ -126,14 +127,14 @@ $(document).ready(function () {
         });
     });
 
-  
+
     $(document).on("click", ".open-delete-modal", function () {
         let id = $(this).data("id");
         $("#delete_tag_id").val(id);
         $("#delete_Tag").modal("show");
     });
 
-   
+
     $("#delete_tag_btn").click(function () {
         let id = $("#delete_tag_id").val();
         $.ajax({
@@ -164,11 +165,11 @@ document.querySelectorAll(".sort-option-tag").forEach(function (item) {
             .querySelector("span");
         dropdownLabel.textContent = this.textContent.trim();
 
-      
+
         tbody.innerHTML = "";
         originalRows.forEach((row) => tbody.appendChild(row.cloneNode(true)));
 
-        
+
         const rows = Array.from(tbody.querySelectorAll("tr"));
         let resultRows = [...rows];
 
@@ -201,7 +202,7 @@ document.querySelectorAll(".sort-option-tag").forEach(function (item) {
             });
         }
 
-       
+
         tbody.innerHTML = "";
         resultRows.forEach((row) => tbody.appendChild(row));
     });
@@ -216,7 +217,7 @@ const searchInput = document.getElementById('searchInputTag');
         tableRows.forEach(row => {
             const rowText = row.textContent.toLowerCase();
 
-          
+
             if (rowText.includes(query)) {
                 row.style.display = '';
             } else {

@@ -1,6 +1,6 @@
 (async () => {
     await loadTranslationFile('admin', 'blog, common');
-
+    "use strict";
     if ($('.blogCategoryTable').length > 0) {
         $('.blogCategoryTable').DataTable({
             ordering: true,
@@ -10,11 +10,11 @@
             "drawCallback": function () {
                 $(".dataTables_info").addClass('d-none');
                 $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
-    
+
                 var tableWrapper = $(this).closest('.dataTables_wrapper');
                 var info = tableWrapper.find('.dataTables_info');
                 var pagination = tableWrapper.find('.dataTables_paginate');
-    
+
                 $('.table-footer').empty()
                     .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
                         .append($('<div class="datatable-info"></div>').append(info.clone(true)))
@@ -48,19 +48,19 @@
             }
         });
     }
-    
+
 
 $(document).ready(function () {
- 
+
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
     });
 
- 
+
     $("#create_category_btn").click(function () {
-        
+
     const title = $("#add_category_name").val().trim();
 
 
@@ -112,7 +112,7 @@ $(document).ready(function () {
 
         $.ajax({
             url: "/admin/content/categories/" + id,
-            type: "POST", 
+            type: "POST",
             data: {
                 _token: $('meta[name="csrf-token"]').attr("content"), // csrf
                 _method: "PUT",
@@ -130,7 +130,7 @@ $(document).ready(function () {
         });
     });
 
- 
+
     $(document).on("click", ".open-delete-modal", function () {
         let id = $(this).data("id");
         $("#delete_category_id").val(id);
@@ -164,7 +164,7 @@ const searchInput = document.getElementById('searchInputCategory');
         tableRows.forEach(row => {
             const rowText = row.textContent.toLowerCase();
 
-       
+
             if (rowText.includes(query)) {
                 row.style.display = '';
             } else {
@@ -177,7 +177,7 @@ const searchInput = document.getElementById('searchInputCategory');
         document.querySelectorAll(".blogCategoryTable tbody tr")
     );
     const tbody = document.querySelector(".blogCategoryTable tbody");
-    
+
     document.querySelectorAll(".sort-option-category").forEach(function (item) {
         item.addEventListener("click", function () {
             const sortType = this.getAttribute("data-sort");
@@ -185,15 +185,15 @@ const searchInput = document.getElementById('searchInputCategory');
                 .getElementById("selectedFilterTextCategory")
                 .querySelector("span");
             dropdownLabel.textContent = this.textContent.trim();
-    
-      
+
+
             tbody.innerHTML = "";
             originalRows.forEach((row) => tbody.appendChild(row.cloneNode(true)));
-    
-    
+
+
             const rows = Array.from(tbody.querySelectorAll("tr"));
             let resultRows = [...rows];
-    
+
             if (sortType === "asc") {
                 resultRows.sort((a, b) =>
                     a.dataset.name.localeCompare(b.dataset.name)
@@ -222,8 +222,8 @@ const searchInput = document.getElementById('searchInputCategory');
                     return created >= start && created <= end;
                 });
             }
-    
-          
+
+
             tbody.innerHTML = "";
             resultRows.forEach((row) => tbody.appendChild(row));
         });

@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
 
 $(document).ready(function() {
@@ -14,7 +15,7 @@ function loadThemeSettings() {
             'Accept': 'application/json',
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        
+
         success: function(response) {
             if (response.code === 200) {
                 const settings = response.data;

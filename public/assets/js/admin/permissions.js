@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'common, user_management');
 
     $(document).on('click', '.select_all_permission', function() {
@@ -64,7 +65,7 @@
                 $(".error-text").text("");
                 $(".form-control, .select2-container").removeClass("is-invalid is-valid");
                 $(".submitbtn").removeAttr("disabled").html(_l('admin.common.submit'));
-            
+
                 if (error.responseJSON.code === 422) {
                     $.each(error.responseJSON.errors, function(key, val) {
                         $("#" + key).addClass("is-invalid");

@@ -1,9 +1,10 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
 
     $(document).ready(function() {
         $('.summernote').summernote({
-            height: 150, 
+            height: 150,
             placeholder: `${_l('admin.general_settings.type_your_content_here')}`,
             toolbar: [
                 ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -13,7 +14,7 @@
                 ['view', ['fullscreen', 'codeview', 'help']]
             ]
         });
-    
+
         $("#cookiesSettingForm").validate({
             rules: {
                 cookiesContentText: {
@@ -80,7 +81,7 @@
             },
             submitHandler: function(form) {
                 let cookiesData = new FormData(form);
-    
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/settings/cookies/store",
@@ -108,7 +109,7 @@
                     error: function(error) {
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
-    
+
                         if (error.responseJSON.code === 422) {
                             $.each(error.responseJSON.errors, function(key, val) {
                                 $("#" + key).addClass("is-invalid");
@@ -121,12 +122,12 @@
                 });
             }
         });
-    
+
         loadCookiesSettings();
-    
-    
+
+
     });
-    
+
 })();
 
 

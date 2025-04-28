@@ -1,11 +1,12 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
 
     $(document).ready(function () {
-   
+
         getSecuritySettings();
-      
-    
+
+
         $(document).on('click','.changePasswordBtn', function(){
             resetPasswordForm();
         });
@@ -70,9 +71,9 @@
                    resolve(false);
                }
             });
-    
+
         }
-    
+
         $("#changePasswordForm").validate({
             rules: {
                 current_password: {
@@ -118,7 +119,7 @@
             },
             submitHandler: function(form) {
                let _formData = new FormData(form);
-                
+
                 $.ajax({
                     type:"POST",
                     url:"/admin/settings/update-password",
@@ -128,7 +129,7 @@
                     beforeSend: function () {
                         $('#changePasswordForm .submitbtn').attr('disabled', true).html(`
                             <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.general_settings.please_wait')}..
-                        `); 
+                        `);
                     },
                     success:function(resp){
                         if (resp.code === 200) {
@@ -160,38 +161,38 @@
                 });
             }
         });
-    
-    
+
+
         if ($('#passwordInput').length > 0) {
             "use strict";
-    
+
             let $passwordInput = $('#passwordInput input[type="password"]');
             let $passwordStrength = $('#passwordStrength');
             let $poor = $('#poor');
             let $weak = $('#weak');
             let $strong = $('#strong');
             let $heavy = $('#heavy');
-    
-          
-            let lowerCaseRegExp = /[a-zA-Z]/;  
-            let numberRegExp = /[0-9]/;      
+
+
+            let lowerCaseRegExp = /[a-zA-Z]/;
+            let numberRegExp = /[0-9]/;
             let specialCharRegExp = /[#?!@$%^&*()_+\-=<>:{}[\]\\|~`]/;
-            let whitespaceRegExp = /\s/;    
-    
-    
-        
+            let whitespaceRegExp = /\s/;
+
+
+
             $passwordInput.on('keyup', function () {
                 let passwordValue = $(this).val();
                 let passwordLength = passwordValue.length;
-    
+
                 let hasLetter = lowerCaseRegExp.test(passwordValue);
                 let hasNumber = numberRegExp.test(passwordValue);
                 let hasSpecialChar = specialCharRegExp.test(passwordValue);
                 let hasWhitespace = whitespaceRegExp.test(passwordValue);
-    
+
                 let passwordStrength = 0;
-    
-               
+
+
                 if (hasWhitespace) {
                     passwordStrength = 0;
                 } else {
@@ -199,19 +200,19 @@
                     if (hasNumber) passwordStrength++;
                     if (hasSpecialChar) passwordStrength++;
                     if (passwordLength >= 8) passwordStrength++;
-    
-                 
+
+
                     if (passwordLength < 8) {
                         passwordStrength = 1;
                     }
                 }
                 updateStrength(passwordStrength);
             });
-    
+
             function updateStrength(passwordStrength){
-               
+
                 $passwordStrength.find('span').removeClass('active');
-    
+
                 $passwordStrength.removeClass('poor-active avg-active strong-active heavy-active');
                 if($passwordStrength === 0) {
                     $poor.addClass('active');
@@ -236,12 +237,12 @@
                     $passwordStrength.addClass('heavy-active');
                 }
             }
-    
+
         }
-    
-    
-    
-      
+
+
+
+
         function checkCurrentPhoneNumber(){
             return new Promise((resolve, reject) => {
                 let currentPhoneNumber = $('#current_phonenumber').val();
@@ -264,7 +265,7 @@
                 });
             });
         }
-    
+
         $("#changePhoneNumberForm").validate({
             rules: {
                 current_phonenumber: {
@@ -321,14 +322,14 @@
                $("#changePhoneNumberForm .submitbtn").text(_l('admin.common.please_wait'));
                $("#changePhoneNumberForm .submitbtn").attr("disabled", true);
                $("#current_phonenumber_error").text("");
-                           
+
                 $.ajax({
                     type:"POST",
                     url:"/admin/settings/update-phone-number",
                     data:_formData,
                     processData: false,
                     contentType: false,
-                    
+
                     success:function(resp){
                         if (resp.status === 'success') {
                             showToast('success', resp.message);
@@ -353,7 +354,7 @@
                 });
             }
         });
-      
+
         function checkCurrentEmail(){
             return new Promise((resolve, reject) => {
                 let currentemail = $('#current_email').val();
@@ -418,7 +419,7 @@
                $("#changeEmailForm .submitbtn").attr("disabled", true);
                $("#current_email_error").text("");
                $("#email_current_password_error").text("");
-                            
+
                 $.ajax({
                     type:"POST",
                     url:"/admin/settings/update-email",
@@ -449,8 +450,8 @@
                 });
             }
         });
-       
-    
+
+
         function getSecuritySettings() {
             $.ajax({
                 type:"GET",
@@ -518,7 +519,7 @@
                 }
             });
         }
-    
+
         $(document).on('click', '.logoutDevice', function(e){
             e.preventDefault();
             logoutDevice($(this).data('id'));
@@ -535,17 +536,17 @@
                         setTimeout(function () {
                             if(isAll){
                                 location.reload();
-                            } 
+                            }
                         }, 3000);
                     }
                 }
             });
         }
-    
+
         $(document).on('click','.signoutall', function(){
             logoutDevice(0,true);
         });
-    
+
         $(document).on('click','#google_auth', function(){
             let googleAuthEnabled = false;
             if($(this).is(":checked")){
@@ -571,7 +572,7 @@
             });
         });
     });
-    
+
 })();
 
 

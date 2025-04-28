@@ -1,8 +1,9 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
 $(document).ready(function(){
     getLocalizationSettings();
-    
+
     $('#timezone').select2({
         minimumInputLength: 3,
         ajax: {
@@ -112,7 +113,7 @@ $(document).ready(function(){
         },
         submitHandler: function(form) {
             let _formData = new FormData(form);
-      
+
             $("#localizationForm .submitbtn").attr("disabled", true);
             $.ajax({
                 type:"POST",
@@ -138,7 +139,7 @@ $(document).ready(function(){
                         toastr.error(resp.message);
                     }
                     getLocalizationSettings();
-                   
+
                 },
                 error:function(error){
                     $(".error-text").text("");
@@ -151,7 +152,7 @@ $(document).ready(function(){
                     } else {
                             showToast('error', error.responseJSON.message);
                     }
-                  
+
                     getLocalizationSettings();
                 }
             });
@@ -269,9 +270,9 @@ $(document).ready(function(){
              });
        });
     }
-    
-    
+
+
     });
-    
+
 })();
 

@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
     const permissions = await loadUserPermissions();
 
@@ -10,7 +11,7 @@
               $(this).addClass('selected');
               $("#langText").text(lang_title);
         });
-   
+
         $(document).on('click','#addNewLanguage', function(){
             let lang_id = $("#langDropdownMenu li .selected").data('lang');
             let lang_title = $("#langDropdownMenu li .selected").data('lang_title');
@@ -42,9 +43,9 @@
                showToast('error',  _l('admin.general_settings.select_language'));
             }
         });
-   
+
         $(document).on('keyup','#search', function(){
-           loadLanguages(); 
+           loadLanguages();
         });
         function loadLanguages(){
            $(".table-loader").show();
@@ -95,7 +96,7 @@
                                                            <span class="progress-right">
                                                                <span class="progress-bar border-warning"></span>
                                                            </span>
-                                                           
+
                                                        </div>
                                                        <div class="progress-value ms-2">${language.progress}%</div>
                                                    </div>
@@ -112,15 +113,15 @@
                                                        <a href="/admin/settings/language?code=${language.lang_code}&type=admin" class="btn btn-white">Admin</a>
                                                    </div>
                                                </td>
-                                               ${ hasPermission(permissions, 'website_settings', 'delete') ? 
+                                               ${ hasPermission(permissions, 'website_settings', 'delete') ?
                                                `<td>
                                                    <div class="dropdown">
                                                        <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                            <i class="ti ti-dots-vertical"></i>
                                                        </button>
                                                        <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                       ${ hasPermission(permissions, 'website_settings', 'delete') ? 
-   
+                                                       ${ hasPermission(permissions, 'website_settings', 'delete') ?
+
                                                            `<li>
                                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete-modal" id="deleteLanguage" data-id="${language.id}"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
                                                            </li>`:''}
@@ -143,7 +144,7 @@
                }
            })
         }
-   
+
         $(document).on('change','.form-check-input',function(){
             if($(this).is(':checked')){
                 updateLanguageSettings($(this).data('id'),$(this).data('field'),1);
@@ -172,12 +173,12 @@
                  }
              });
         }
-   
+
         $(document).on('click','#deleteLanguage', function(){
            let id = $(this).data('id');
            $("#deleteForm #delete_id").val(id);
         });
-   
+
         $("#deleteForm").on("submit", function(e){
            e.preventDefault();
            $("#deleteForm .submitbtn").prop('disabled',true);
@@ -203,5 +204,5 @@
                }
            });
        });
-   });  
+   });
 })();

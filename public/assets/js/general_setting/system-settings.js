@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
     const permissions = await loadUserPermissions();
 
@@ -12,7 +13,7 @@ function DbBackUpTable() {
             dataType: 'json',
             success: function(response) {
                 let tableBody = $("#system-backup-list");
-                tableBody.empty(); 
+                tableBody.empty();
                 if(response.data.length === 0){
                     tableBody.append(`
                         <tr>
@@ -39,14 +40,14 @@ function DbBackUpTable() {
                                         <i class="ti ti-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
-                                    ${ hasPermission(permissions, 'other_settings', 'edit') ? 
+                                    ${ hasPermission(permissions, 'other_settings', 'edit') ?
 
                                         `<li>
                                             <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="restoreBackup('${backup.name}')">
                                                 <i class="ti ti-restore me-1"></i>${_l('admin.general_settings.restore')}
                                             </a>
                                         </li>`:''}
-                                        ${ hasPermission(permissions, 'other_settings', 'delete') ? 
+                                        ${ hasPermission(permissions, 'other_settings', 'delete') ?
 
                                         `<li>
                                             <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_backup" onclick="deleteSystemBackup(${backup.id})">
@@ -68,7 +69,7 @@ function DbBackUpTable() {
     });
 
 }
-    
+
 })();
 
 
@@ -106,7 +107,7 @@ $("#deleteSystemDbBackup").on('submit', function(e){
                 showToast('error', _l('admin.general_settings.retrive_error'));
             }
         }
-        
+
     });
 });
 

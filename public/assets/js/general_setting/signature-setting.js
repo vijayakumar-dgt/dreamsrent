@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
     const permissions = await loadUserPermissions();
 

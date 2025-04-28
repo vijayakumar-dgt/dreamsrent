@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
 $(document).ready(function(){
     let table;
@@ -41,7 +42,7 @@ $(document).ready(function(){
         submitHandler: function(form) {
            let _formData = new FormData(form);
            $("#sitemapForm .submitbtn").html('<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> Saving..');
-     
+
            $.ajax({
                 type:"POST",
                 url:"/admin/settings/save-sitemap-url",
@@ -65,7 +66,7 @@ $(document).ready(function(){
                     }
                     $("#sitemapForm")[0].reset();
                     $("#sitemapForm .submitbtn").text(_l('admin.general_settings.create_new'),);
-                   
+
                     table.ajax.reload();
                 },
                 error:function(error){
@@ -80,7 +81,7 @@ $(document).ready(function(){
                             showToast('error', error.responseJSON.message);
                     }
                     $("#sitemapForm .submitbtn").text(_l('admin.general_settings.create_new'),);
-                  
+
                 }
             });
         }
@@ -104,8 +105,8 @@ $(document).ready(function(){
             },
             order:[['1','desc']],
             ordering: false,
-            searching: false, 
-            pageLength: 10, 
+            searching: false,
+            pageLength: 10,
             lengthChange: false,
             responsive:false,
             autoWidth:false,
@@ -146,8 +147,8 @@ $(document).ready(function(){
                  var tableWrapper = $(this).closest('.dataTables_wrapper');
                  var info = tableWrapper.find('.dataTables_info');
                  var pagination = tableWrapper.find('.dataTables_paginate');
-                 
-                 
+
+
                  $('.table-footer').empty()
                      .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
                          .append($('<div class="datatable-info"></div>').append(info.clone(true)))
@@ -155,7 +156,7 @@ $(document).ready(function(){
                  );
                  $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
                  if(table.rows().count() == 0){
-                  
+
                      $(".table-footer").addClass('d-none');
                  }
              },
@@ -174,7 +175,7 @@ $(document).ready(function(){
                     previous: _l("admin.common.previous"),
                 },
             },
-             
+
          });
     }
 

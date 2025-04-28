@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'common, general_settings');
        const permissions = await loadUserPermissions();
 
@@ -17,7 +18,7 @@ $(document).ready(function() {
             price: {
                 required: true,
             },
-            "benefit[]": { 
+            "benefit[]": {
                 required: true },
         },
         messages:{
@@ -46,7 +47,7 @@ $(document).ready(function() {
                 var errorId = element.attr("id") + "_error";
                 $("#" + errorId).text(error.text());
             }
-        },    
+        },
         highlight: function (element) {
             if ($(element).hasClass("select2-hidden-accessible")) {
                 $(element).next(".select2-container").addClass("is-invalid").removeClass('is-valid');
@@ -182,14 +183,14 @@ function initTable(){
                             <i class="ti ti-dots-vertical"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2">
-                        ${ hasPermission(permissions, 'rental_settings', 'edit') ? 
+                        ${ hasPermission(permissions, 'rental_settings', 'edit') ?
 
                             `<li>
                                 <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editInsurance(${data})">
                                     <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
                                 </a>
                             </li>`:''}
-                         ${ hasPermission(permissions, 'rental_settings', 'delete') ? 
+                         ${ hasPermission(permissions, 'rental_settings', 'delete') ?
 
                             `<li>
                                 <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteInsurance(${data})"
@@ -279,9 +280,9 @@ $("#add_insurance").on('click', function() {
     let newInput = $('#benefit');
     validator.settings.ignore = "";
     newInput.rules("remove");
-    newInput.rules("add", { 
-        required: true, 
-        messages: { 
+    newInput.rules("add", {
+        required: true,
+        messages: {
             required: _l('admin.general_settings.benefit_required')
         }
     });
@@ -337,7 +338,7 @@ $("#deleteInsurance").on('submit', function(e){
 function getBenefits(benefits) {
     $('#benefitsList').empty();
     let benefitsArray = typeof benefits === "string" ? JSON.parse(benefits) : benefits;
-    
+
     $.each(benefitsArray, function (index, value) {
         $('#benefitsList').append(`
             <p class="d-flex align-items-center mb-2"><i class="ti ti-checks text-success me-1"></i>${value.benefit}</p>
@@ -369,7 +370,7 @@ function editInsurance(id){
 
                 if (data.insurance_benefits) {
                     let form = $("#insuranceForm");
-                    let validator = form.validate(); 
+                    let validator = form.validate();
 
                     $.each(data.insurance_benefits, function(index, value) {
                         if (index == 0) {
@@ -388,9 +389,9 @@ function editInsurance(id){
                         let newInput = $('#benefit');
                         validator.settings.ignore = "";
                         newInput.rules("remove");
-                        newInput.rules("add", { 
-                            required: true, 
-                            messages: { 
+                        newInput.rules("add", {
+                            required: true,
+                            messages: {
                                 required: _l('admin.general_settings.benefit_required')
                             }
                         });

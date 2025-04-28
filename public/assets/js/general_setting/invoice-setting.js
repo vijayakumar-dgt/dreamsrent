@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
 
     $(document).ready(function() {
@@ -62,7 +63,7 @@
             },
             submitHandler: function(form) {
                 let invoiceData = new FormData(form);
-               
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/settings/invoice-settings/store",
@@ -81,18 +82,18 @@
                     complete: function () {
                         $('.btn-primary').attr('disabled', false).html(_l('admin.common.save_changes'));
                     },
-    
+
                     success: function(resp) {
                         if (resp.code === 200) {
                             loadInvoiceSettings();
                             showToast('success', resp.message);
-                           
+
                         }
                     },
                     error: function(error) {
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
-    
+
                         if (error.responseJSON.code === 422) {
                             $.each(error.responseJSON.errors, function(key, val) {
                                 $("#" + key).addClass("is-invalid");
@@ -101,15 +102,15 @@
                         } else {
                             showToast('error', error.responseJSON.message);
                         }
-    
-                        
+
+
                     }
                 });
             }
         });
-    
+
         loadInvoiceSettings();
-    
+
         function loadInvoiceSettings() {
             $.ajax({
                 url: '/admin/settings/company/list',
@@ -119,27 +120,27 @@
                     'Accept': 'application/json',
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-    
+
                 success: function(response) {
                     if (response.code === 200) {
                         const settings = response.data;
-    
+
                         settings.forEach(setting => {
                             const element = $('#' + setting.key);
-    
+
                             if (setting.key === 'invoice_logo' && setting.value) {
                                 const imageUrl = `/storage/${setting.value}`;
                                 $('#profile_photo_preview').attr('src', imageUrl).show();
                             }
-    
+
                             else if (setting.key === 'invoice_terms') {
                                 $('#invoice_terms').val(setting.value);
                             }
-    
+
                             else if (setting.key === 'show_company_details' || setting.key === 'round_off_enabled') {
                                 element.prop('checked', setting.value == 1);
                             }
-    
+
                             else if (element.length) {
                                 element.val(setting.value);
                             }
@@ -156,7 +157,7 @@
             });
         }
     });
-    
+
 })();
 
 

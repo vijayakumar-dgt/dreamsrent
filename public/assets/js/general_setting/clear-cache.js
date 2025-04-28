@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
 
     $('#clear-cache').on('click', function () {
@@ -23,6 +24,6 @@
         });
 
 });
-    
+
 })();
 

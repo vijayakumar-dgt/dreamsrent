@@ -1,6 +1,6 @@
 (async () => {
   await loadTranslationFile('admin', 'common, general_settings');
-
+  "use strict";
   $(document).ready(function() {
 
     profile_list();
@@ -100,7 +100,7 @@
             var btnId = '#change_password';
             var data = new FormData(form);
             data.append('id', $('#id').val());
-           
+
 
         }
     });
@@ -265,7 +265,7 @@ $(document).ready(function() {
     });
 });
 
-    
+
 })();
 
 let iti;
@@ -293,7 +293,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             if ($("#adminProfileForm").valid()) {
-              
+
             }
         });
     }
@@ -402,8 +402,8 @@ function removeImage() {
     const preview = document.getElementById('profile_photo_preview');
     const fileInput = document.getElementById('profile_photo');
 
-    preview.src = '/assets/img/customer/customer-01.jpg'; 
-    fileInput.value = ''; 
+    preview.src = '/assets/img/customer/customer-01.jpg';
+    fileInput.value = '';
 }
 function fetchCountries(){
     $.ajax({
@@ -442,7 +442,7 @@ function fetchStatesByCountry(country_id){
                 $.each(data, function(key, value){
                     $("#state").append('<option value="'+value.id+'">'+value.name+'</option>');
                 });
-              
+
                 $("#city").empty();
                 $("#city").append('<option value="">Select City</option>');
             }
@@ -495,7 +495,7 @@ function fetchCountryAjax(id){
                }
            },
            error:function(error){
-           
+
                reject({
                    message: 'Something went wrong'
                });
@@ -531,7 +531,7 @@ function fetchStateAjax(country_id,id){
                }
            },
            error:function(error){
-              
+
                reject({
                    message: _l('admin.general_settings.retrive_error'),
                });
@@ -566,7 +566,7 @@ function fetchCityAjax(state_id,id){
                }
            },
            error:function(error){
-             
+
                reject({
                    message: _l('admin.general_settings.retrive_error'),
                });

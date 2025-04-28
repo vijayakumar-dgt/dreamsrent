@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
     const permissions = await loadUserPermissions();
 
@@ -13,7 +14,7 @@ function DbBackUpTable() {
             success: function(response) {
                 let tableBody = $("#backup-list");
                 tableBody.empty();
-    
+
                 if (response.data.length === 0) {
                     tableBody.append(`
                         <tr>
@@ -24,7 +25,7 @@ function DbBackUpTable() {
                     `);
                     return;
                 }
-    
+
                 response.data.forEach(backup => {
                     let row = `
                         <tr>
@@ -42,14 +43,14 @@ function DbBackUpTable() {
                                         <i class="ti ti-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
-                                        ${ hasPermission(permissions, 'other_settings', 'edit') ? 
+                                        ${ hasPermission(permissions, 'other_settings', 'edit') ?
                                             `<li class="d-none">
                                                 <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="restoreBackup('${backup.name}')">
                                                     <i class="ti ti-restore me-1"></i>${_l('admin.general_settings.restore')}
                                                 </a>
                                             </li>` : ''
                                         }
-                                        ${ hasPermission(permissions, 'other_settings', 'delete') ? 
+                                        ${ hasPermission(permissions, 'other_settings', 'delete') ?
                                             `<li>
                                                 <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_backup" onclick="deleteBackup(${backup.id})">
                                                     <i class="ti ti-trash me-1"></i>${_l('admin.general_settings.delete')}
@@ -69,10 +70,10 @@ function DbBackUpTable() {
             }
         });
     });
-    
+
 
 }
-    
+
 })();
 
 

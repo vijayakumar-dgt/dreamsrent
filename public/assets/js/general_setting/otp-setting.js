@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
 
     $(".label-loader, .input-loader").hide();
@@ -20,7 +21,7 @@ $(document).ready(function () {
                 required: false
             },
             register: {
-                required: false 
+                required: false
             }
         },
         messages: {
@@ -56,11 +57,11 @@ $(document).ready(function () {
         submitHandler: function (form) {
             let otpData = new FormData(form);
 
-         
+
             otpData.set("login", $("#login").is(":checked") ? "1" : "0");
             otpData.set("register", $("#register").is(":checked") ? "1" : "0");
 
-          
+
 
             $.ajax({
                 type: "POST",
@@ -85,7 +86,7 @@ $(document).ready(function () {
                     if (resp.code === 200) {
                         loadOtpSettings();
                         showToast("success", resp.message);
-                       
+
                     }
                 },
                 error: function (error) {
@@ -101,7 +102,7 @@ $(document).ready(function () {
                         showToast("error", error.responseJSON.message);
                     }
 
-                   
+
                 }
             });
         }
@@ -127,20 +128,20 @@ $(document).ready(function () {
 
                         if (element.length) {
                             if (element.is(":checkbox")) {
-                               
+
                                 element.prop("checked", setting.value == 1);
                             } else if (element.is("select")) {
-                               
+
                                 const optionExists = element.find(`option[value="${setting.value}"]`).length > 0;
 
                                 if (!optionExists) {
                                     element.append(`<option value="${setting.value}">${setting.value}</option>`);
                                 }
 
-                               
+
                                 element.val(setting.value).trigger('change');
                             } else {
-                               
+
                                 element.val(setting.value);
                             }
                         }
@@ -158,7 +159,7 @@ $(document).ready(function () {
         });
     }
 });
-    
+
 })();
 
 

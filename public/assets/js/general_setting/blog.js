@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'blog, common');
 
     $(document).ready(function () {
@@ -22,11 +23,11 @@
             "drawCallback": function () {
                 $(".dataTables_info").addClass('d-none');
                 $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
-    
+
                 var tableWrapper = $(this).closest('.dataTables_wrapper');
                 var info = tableWrapper.find('.dataTables_info');
                 var pagination = tableWrapper.find('.dataTables_paginate');
-    
+
                 $('.table-footer').empty()
                     .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
                         .append($('<div class="datatable-info"></div>').append(info.clone(true)))
@@ -60,7 +61,7 @@
             }
         });
     }
-    
+
 
 
 $("#create_blog_btn").click(function () {
@@ -147,9 +148,9 @@ $(document).ready(function () {
             },
             success: function (response) {
                 showToast("success", _l('admin.blog.blog_deleted!'));
-                location.reload(); 
+                location.reload();
                 $("#delete_blogs").modal("hide");
-                
+
                 $('a[data-id="' + blogId + '"]')
                     .closest(".blog-img")
                     .remove();
@@ -229,7 +230,7 @@ if (inputAdd) {
             const img = new Image();
             img.onload = function () {
                 if (img.width === 735 && img.height === 310) {
-                   
+
                     fileNameDisplayAdd.textContent = file.name;
                     if (preview) {
                         preview.src = e.target.result;
@@ -266,13 +267,13 @@ if (input) {
             const img = new Image();
             img.onload = function () {
                 if (img.width === 735 && img.height === 310) {
-                   
+
                     fileNameDisplay.textContent = file.name;
 
-                    
+
                     previewContainer.innerHTML = "";
 
-                   
+
                     const newImage = document.createElement("img");
                     newImage.src = e.target.result;
                     newImage.classList.add("rounded-2", "img-fluid");
@@ -316,7 +317,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loadMoreBtn.style.display = "none";
     }
 
-   
+
     blogItems.forEach(item => item.style.display = "none");
     showItems();
 

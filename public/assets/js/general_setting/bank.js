@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'common, general_settings');
     const permissions = await loadUserPermissions();
 
@@ -92,10 +93,10 @@
                 $(".table-loader").show();
                 $(".input-loader").show();
                 $(".real-table, .real-data").addClass("d-none");
-    
+
                 let formData = new FormData(form);
                 formData.append("status", $("#status").is(":checked") ? 1 : 0);
-    
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/settings/bank-store",
@@ -127,17 +128,17 @@
             },
         });
     });
-    
+
     $("#search").on("input", function () {
         let searchQuery = $(this).val().trim();
         initTable(searchQuery);
     });
-    
+
     function initTable(search = "") {
         $(".table-loader").show();
         $(".input-loader").show();
         $(".real-table, .real-data").addClass("d-none");
-    
+
         $.ajax({
             url: "/admin/settings/bank/datatable",
             type: "GET",
@@ -147,10 +148,10 @@
                 if ($.fn.DataTable.isDataTable("#bankTable")) {
                     $("#bankTable").DataTable().destroy();
                 }
-    
+
                 if (response.code === 200 && response.data.length > 0) {
                     let data = response.data;
-    
+
                     $.each(data, function (index, value) {
                         tableBody += `<tr>
                                 <td>${
@@ -208,7 +209,7 @@
                             </tr>`;
                     $(".table-footer").empty();
                 }
-    
+
                 $("#bankTable tbody").html(tableBody);
                 if (response.data.length > 0) {
                     $("#bankTable").DataTable({
@@ -221,7 +222,7 @@
                             $(".dataTables_wrapper .dataTables_paginate").addClass(
                                 "d-none"
                             );
-    
+
                             var tableWrapper = $(this).closest(
                                 ".dataTables_wrapper"
                             );
@@ -229,7 +230,7 @@
                             var pagination = tableWrapper.find(
                                 ".dataTables_paginate"
                             );
-    
+
                             $(".table-footer")
                                 .empty()
                                 .append(
@@ -253,7 +254,7 @@
                         },
                     });
                 }
-    
+
                 $(".table-loader").hide();
                 $(".label-loader, .input-loader").hide();
                 $(".real-label, .real-table, .real-data").removeClass("d-none");
@@ -267,8 +268,8 @@
             },
         });
     }
-    
-    
+
+
 })();
 
 $(document).on("click", ".dataTables_paginate a", function () {

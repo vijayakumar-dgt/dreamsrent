@@ -1,12 +1,13 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'cms,common');
     const permissions = await loadUserPermissions();
 
     $(document).ready(function () {
         $('#add_FAQ').on('show.bs.modal', function () {
-            $('#addFaq')[0].reset(); 
-            $('.text-danger').text(''); 
-            $('.form-control').removeClass('is-invalid'); 
+            $('#addFaq')[0].reset();
+            $('.text-danger').text('');
+            $('.form-control').removeClass('is-invalid');
         });
 
         $("#addFaq").validate({
@@ -212,7 +213,7 @@
                 let tableBody = "";
 
                 if ($.fn.DataTable.isDataTable("#faqTable")) {
-                    $("#faqTable").DataTable().clear().destroy(); 
+                    $("#faqTable").DataTable().clear().destroy();
                 }
 
                 if (response.data && response.data.length > 0) {
@@ -270,7 +271,7 @@
 
                 $("#faqTable tbody").html(tableBody);
 
-               
+
                 if (response.data.length > 0) {
                     $('#faqTable').DataTable({
                         ordering: true,
@@ -321,7 +322,7 @@
     }
 
     $(document).ready(function() {
-       
+
         $('.sort-option').on('click', function() {
             $('.sort-option').removeClass('active');
             $(this).addClass('active');
@@ -329,7 +330,7 @@
             faqTable({ sort_by: sortBy });
         });
 
-      
+
         $('.filter-option').on('click', function() {
             $('.filter-option').removeClass('active');
             $(this).addClass('active');
@@ -337,17 +338,17 @@
             faqTable({ status: status });
         });
 
-      
+
         $('#applyFilters').on('click', function() {
             let selectedStatus = $('.filter-option.active').data('status') ?? ''; // Get active status filter
             let selectedSort = $('.sort-option.active').data('sort') ?? 'desc'; // Get active sorting option
             faqTable({ status: selectedStatus, sort_by: selectedSort });
         });
 
-       
+
         $('#clearFilters').on('click', function() {
             $('.filter-option, .sort-option').removeClass('active');
-            faqTable({}); 
+            faqTable({});
         });
 
         $('#language_id').on('change', function () {
@@ -355,11 +356,11 @@
         });
 
 
-     
+
         faqTable();
     });
 
-    
+
     $("#deleteFaq").on('submit', function(e){
         e.preventDefault();
         $.ajax({
