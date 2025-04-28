@@ -42,10 +42,7 @@
                                     <tr>
                                         <th>{{ __('admin.general_settings.file_name') }}</th>
                                         <th>{{ __('admin.general_settings.created_on') }}</th>
-                                        @if (hasPermission($permissions, 'other_settings', 'edit') || hasPermission($permissions, 'other_settings', 'delete'))
-
                                         <th>{{ __('admin.common.action') }}</th>
-                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody id="backup-list">
