@@ -38,7 +38,7 @@
                                 <div class="card d-none d-none real-card">
                                     <div class="card-body p-2">
                                         <a href="javascript:void(0);">
-                                            <img src="/custom/img/theme-01.svg" alt="theme" class="theme-img" data-id="theme_01">
+                                            <img src="/assets/img/theme-01.svg" alt="theme" class="theme-img" data-id="theme_01">
                                         </a>
                                         <div class="d-flex justify-content-between align-items-center mt-2">
                                             <label class="form-check-label" for="theme_01" data-id="theme_01">
@@ -58,7 +58,7 @@
                                 <div class="card d-none real-card">
                                     <div class="card-body p-2">
                                         <a href="javascript:void(0);">
-                                            <img src="/custom/img/theme-02.svg" alt="theme" class="theme-img" data-id="theme_02">
+                                            <img src="/assets/img/theme-02.svg" alt="theme" class="theme-img" data-id="theme_02">
                                         </a>
                                         <div class="d-flex justify-content-between align-items-center mt-2">
                                             <label class="form-check-label" for="theme_02" data-id="theme_02">

@@ -215,7 +215,7 @@
                         let createdDate = new Date(value.created_at).toLocaleDateString();
                         let assigneeImage = value.assignee?.user_detail?.profile_image
                         ? "/storage/" + value.assignee.user_detail.profile_image
-                        : "/custom/img/default-profile.png";
+                        : "/assets/img/default-profile.png";
 
                         // Priority badge
                         let priorityBadge = `<span class="badge badge-secondary bg-secondary-transparent ticket-badge">${_l('web.user.unknown')}</span>`;

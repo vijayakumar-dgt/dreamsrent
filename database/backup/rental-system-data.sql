@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 28, 2025 at 01:08 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: dgt-dreams-db-server.mysql.database.azure.com
+-- Generation Time: Apr 28, 2025 at 10:28 AM
+-- Server version: 5.7.44-azure-log
+-- PHP Version: 8.1.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `dreamsrent-installer`
+-- Database: `laravel-dreamsrent`
 --
 
 -- --------------------------------------------------------
@@ -29,15 +29,22 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `addons` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
-  `version` varchar(255) NOT NULL,
-  `price` varchar(255) NOT NULL,
-  `status` varchar(255) NOT NULL DEFAULT '1',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `version` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `addons`
+--
+
+INSERT INTO `addons` (`id`, `name`, `slug`, `version`, `price`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Advertisement', 'advertisements', 'V.1', '20.00', '1', '2025-03-14 12:03:12', '2025-03-14 12:03:12', NULL);
 
 -- --------------------------------------------------------
 
@@ -47,11 +54,11 @@ CREATE TABLE `addons` (
 
 CREATE TABLE `announcements` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `announcement_title` varchar(255) NOT NULL,
+  `announcement_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `announcement_type` bigint(20) UNSIGNED NOT NULL,
-  `user_type` enum('user','admin') NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `description` text NOT NULL,
+  `user_type` enum('user','admin') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -65,8 +72,8 @@ CREATE TABLE `announcements` (
 
 CREATE TABLE `announcement_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -80,16 +87,23 @@ CREATE TABLE `announcement_types` (
 
 CREATE TABLE `banks` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `bank_name` varchar(255) NOT NULL,
-  `account_number` varchar(255) NOT NULL,
-  `account_holder_name` varchar(255) NOT NULL,
-  `branch` varchar(255) NOT NULL,
-  `ifsc` varchar(255) NOT NULL,
-  `default` varchar(255) DEFAULT NULL,
+  `bank_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `account_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `account_holder_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `branch` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ifsc` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `default` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `banks`
+--
+
+INSERT INTO `banks` (`id`, `bank_name`, `account_number`, `account_holder_name`, `branch`, `ifsc`, `default`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'hdfc', '334476777', 'user john', 'chennai', 'brp22333', '1', '2025-04-24 17:36:50', '2025-04-24 17:36:50', NULL);
 
 -- --------------------------------------------------------
 
@@ -99,15 +113,23 @@ CREATE TABLE `banks` (
 
 CREATE TABLE `blog_categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `parent_id` int(11) NOT NULL DEFAULT 0,
-  `language_id` int(11) NOT NULL DEFAULT 1,
-  `name` varchar(255) NOT NULL,
-  `slug` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `parent_id` int(11) NOT NULL DEFAULT '0',
+  `language_id` int(11) NOT NULL DEFAULT '1',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `blog_categories`
+--
+
+INSERT INTO `blog_categories` (`id`, `parent_id`, `language_id`, `name`, `slug`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 0, 1, 'car review', NULL, 1, '2025-04-24 16:39:02', '2025-04-24 16:39:02', NULL),
+(2, 0, 1, 'car maintenance', NULL, 1, '2025-04-24 16:39:16', '2025-04-24 16:39:16', NULL);
 
 -- --------------------------------------------------------
 
@@ -118,10 +140,10 @@ CREATE TABLE `blog_categories` (
 CREATE TABLE `blog_comments` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `post_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `comment` text NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `comment` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `comment_date` datetime NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -136,23 +158,31 @@ CREATE TABLE `blog_comments` (
 
 CREATE TABLE `blog_posts` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `slug` varchar(255) DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `category` bigint(20) UNSIGNED NOT NULL,
-  `description` longtext NOT NULL,
-  `popular` tinyint(1) NOT NULL DEFAULT 1,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `tags` varchar(255) DEFAULT NULL,
-  `seo_title` varchar(255) DEFAULT NULL,
-  `seo_description` text DEFAULT NULL,
-  `language_id` int(11) NOT NULL DEFAULT 1,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `popular` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `tags` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `seo_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `seo_description` text COLLATE utf8mb4_unicode_ci,
+  `language_id` int(11) NOT NULL DEFAULT '1',
   `created_by` int(11) NOT NULL,
   `updated_by` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `blog_posts`
+--
+
+INSERT INTO `blog_posts` (`id`, `title`, `image`, `slug`, `category`, `description`, `popular`, `status`, `tags`, `seo_title`, `seo_description`, `language_id`, `created_by`, `updated_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Car maintenance', 'blog_images/Y5V9D6kRkc9tIEyLwvypOZjOhTVHBl4SOxLKufdP.jpg', 'car-maintenance', 2, '<pre class=\"tn\" style=\"box-sizing: inherit; margin-bottom: 0px; text-wrap-mode: wrap; color: rgba(0, 0, 0, 0.8);\"><div class=\"zp l\" style=\"box-sizing: inherit; padding: 5px 0px;\"><div class=\"bf b bg z bk\" style=\"box-sizing: inherit; line-height: 20px; font-family: sohne, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(36, 36, 36);\"><div class=\"im\" style=\"box-sizing: inherit; line-height: 24px;\">This blog is a fantastic resource for anyone looking to start or enhance their auto repair blog. The variety of ideas, from DIY maintenance tips to detailed repair guides, provides a solid foundation for engaging and valuable content. Auto repair blogging is such a niche yet highly impactful way to connect with car enthusiasts and those looking for practical advice.</div></div></div><div class=\"zp l\" style=\"box-sizing: inherit; padding: 5px 0px;\"><div class=\"bf b bg z bk\" style=\"box-sizing: inherit; line-height: 20px; font-family: sohne, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(36, 36, 36);\"><div class=\"im\" style=\"box-sizing: inherit; line-height: 24px;\">One suggestion I’d add is to incorporate posts about specific car models and their maintenance needs. For instance, writing about the upkeep of classic cars like the **Porsche 944 for sale** could resonate with collectors and enthusiasts. Sharing tips on maintaining such iconic vehicles or highlighting where to find them can draw a targeted audience. For those interested, you can check out listings for the Porsche 944 in Greater Manchester [here]</div></div></div><div class=\"zp l\" style=\"box-sizing: inherit; padding: 5px 0px;\"><div class=\"bf b bg z bk\" style=\"box-sizing: inherit; line-height: 20px; font-family: sohne, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 14px; color: rgb(36, 36, 36);\"><div class=\"im\" style=\"box-sizing: inherit; line-height: 24px;\">Additionally, including real-life success stories from readers or guest contributors could further enrich the blog. People love hearing personal experiences, especially when it comes to cars and repairs. Overall, this blog lays out a strong framework for creating an engaging auto repair blog while leaving room for creative, niche-specific ideas to shine. A must-read for aspiring auto bloggers!</div></div></div></pre>', 1, 1, '[\"2\"]', NULL, NULL, 1, 1, 1, '2025-04-24 16:44:45', '2025-04-25 17:30:15', NULL),
+(2, 'car review on repair', 'blog_images/VcX7cOQJ9LgdQKes2kWSWiShE11EjhvMfZBxzI67.png', 'car-review-on-repair', 1, '<p style=\"box-sizing: inherit; margin-bottom: 32px; color: rgb(45, 55, 72); font-family: Montserrat, sans-serif; font-size: 17px;\">Have you ever wondered what would happen if your brakes failed at the wrong moment?</p><p style=\"box-sizing: inherit; margin-bottom: 32px; color: rgb(45, 55, 72); font-family: Montserrat, sans-serif; font-size: 17px;\">Imagine driving down a busy road, and you hit the pedal, but nothing happens.</p><p style=\"box-sizing: inherit; margin-bottom: 32px; color: rgb(45, 55, 72); font-family: Montserrat, sans-serif; font-size: 17px;\">Sounds terrifying, right?</p><p style=\"box-sizing: inherit; margin-bottom: 32px; color: rgb(45, 55, 72); font-family: Montserrat, sans-serif; font-size: 17px;\">That’s exactly why regular brake service isn’t just a recommendation—it’s a life-saving necessity.</p><p style=\"box-sizing: inherit; margin-bottom: 32px; color: rgb(45, 55, 72); font-family: Montserrat, sans-serif; font-size: 17px;\">Let’s talk about something most drivers ignore until it’s too late</p><h2 class=\"wp-block-heading\" style=\"box-sizing: inherit; padding: 0px; margin: 1.5em 0px 0.5em; font-family: Montserrat, sans-serif; line-height: 1.5; color: rgb(26, 32, 44);\"><strong style=\"box-sizing: inherit;\">Understanding Brake Service: What’s Involved?</strong></h2><p style=\"box-sizing: inherit; margin-bottom: 32px; color: rgb(45, 55, 72); font-family: Montserrat, sans-serif; font-size: 17px;\">Brake service is more than just swapping out old pads. A complete inspection and maintenance routine includes several critical checks.</p><ol class=\"wp-block-list\" style=\"margin-right: 0px; margin-bottom: 32px; margin-left: 0px; padding-left: 2em; list-style-type: decimal; color: rgb(45, 55, 72); font-family: Montserrat, sans-serif; font-size: 17px;\"><li style=\"box-sizing: inherit;\"><strong style=\"box-sizing: inherit;\">Brake Pads Replacement Explained</strong></li></ol><p style=\"box-sizing: inherit; margin-bottom: 32px; color: rgb(45, 55, 72); font-family: Montserrat, sans-serif; font-size: 17px;\">Over time, brake pads wear down due to friction. Driving with worn-out pads not only reduces your stopping power but also damages the rotors. Pads should generally be replaced every 25,000 to 70,000 Km, depending on your vehicle and driving habits.</p><ol start=\"2\" class=\"wp-block-list\" style=\"margin-right: 0px; margin-bottom: 32px; margin-left: 0px; padding-left: 2em; list-style-type: decimal; color: rgb(45, 55, 72); font-family: Montserrat, sans-serif; font-size: 17px;\"><li style=\"box-sizing: inherit;\"><strong style=\"box-sizing: inherit;\">Rotor Inspection and Servicing</strong></li></ol><p style=\"box-sizing: inherit; margin-bottom: 32px; color: rgb(45, 55, 72); font-family: Montserrat, sans-serif; font-size: 17px;\">Rotors can warp or develop grooves, especially when pads are neglected. A technician will measure rotor thickness, check for hot spots, and either resurface or replace them as needed.</p><ol start=\"3\" class=\"wp-block-list\" style=\"margin-right: 0px; margin-bottom: 32px; margin-left: 0px; padding-left: 2em; list-style-type: decimal; color: rgb(45, 55, 72); font-family: Montserrat, sans-serif; font-size: 17px;\"><li style=\"box-sizing: inherit;\"><strong style=\"box-sizing: inherit;\">Fluid Check and Top-Up</strong></li></ol><p style=\"box-sizing: inherit; margin-bottom: 32px; color: rgb(45, 55, 72); font-family: Montserrat, sans-serif; font-size: 17px;\">Brake fluid absorbs moisture over time, reducing braking efficiency. If your fluid is dark or low, it might be time for a flush and refill.</p>', 1, 1, '[\"3\"]', NULL, NULL, 1, 1, 1, '2025-04-24 17:02:26', '2025-04-26 11:11:36', NULL);
 
 -- --------------------------------------------------------
 
@@ -166,11 +196,11 @@ CREATE TABLE `blog_reviews` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `comments` varchar(1000) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL,
   `blog_id` varchar(255) NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -180,14 +210,23 @@ CREATE TABLE `blog_reviews` (
 
 CREATE TABLE `blog_tags` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `parent_id` int(11) NOT NULL DEFAULT 0,
-  `language_id` int(11) NOT NULL DEFAULT 1,
-  `name` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `parent_id` int(11) NOT NULL DEFAULT '0',
+  `language_id` int(11) NOT NULL DEFAULT '1',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `blog_tags`
+--
+
+INSERT INTO `blog_tags` (`id`, `parent_id`, `language_id`, `name`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 0, 1, 'cars', 1, '2025-04-24 16:40:01', '2025-04-24 16:40:01', NULL),
+(2, 0, 1, 'automative', 1, '2025-04-24 16:40:08', '2025-04-24 16:40:08', NULL),
+(3, 0, 1, 'vehicle', 1, '2025-04-24 16:40:15', '2025-04-24 16:40:15', NULL);
 
 -- --------------------------------------------------------
 
@@ -220,8 +259,8 @@ CREATE TABLE `bookings` (
   `driver_price` double(10,2) DEFAULT NULL,
   `vehicle_price` double(10,2) DEFAULT NULL,
   `vehicle_total_price` double(10,2) DEFAULT NULL,
-  `insurance` text DEFAULT NULL,
-  `extra_service` text DEFAULT NULL,
+  `insurance` text,
+  `extra_service` text,
   `payment_type` enum('cod','paypal','stripe','wallet') DEFAULT NULL,
   `payment_status` int(11) DEFAULT NULL,
   `transaction_id` varchar(225) DEFAULT NULL,
@@ -239,10 +278,37 @@ CREATE TABLE `bookings` (
   `delivery_price` int(11) DEFAULT NULL,
   `tax_type` varchar(225) DEFAULT NULL,
   `tax_val` int(11) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bookings`
+--
+
+INSERT INTO `bookings` (`id`, `booking_by`, `reservation_id`, `vehicle_id`, `booking_status`, `booking_date`, `start_datetime`, `end_datetime`, `pickup_location`, `return_location`, `delivery_location`, `delivery_return_location`, `delivery_type`, `rental_type`, `security_deposit`, `booking_tariff`, `no_of_days`, `driving_type`, `no_of_passengers`, `customer_id`, `driver_id`, `driver_price`, `vehicle_price`, `vehicle_total_price`, `insurance`, `extra_service`, `payment_type`, `payment_status`, `transaction_id`, `total_insurance_price`, `total_extra_service_price`, `final_price`, `cancel_date`, `cancel_by`, `cancel_reason`, `created_by`, `updated_by`, `base_km`, `km_extra_price`, `expenses`, `delivery_price`, `tax_type`, `tax_val`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'user', 'RES-0001', 2, 6, '2025-04-24 12:53:25', '2025-04-24 12:49:00', '2025-04-25 22:00:00', 3, 3, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 2, NULL, '6', 4, 0, 0.00, 200.00, 400.00, '[]', '[]', 'cod', 1, 'COD7753', 0.00, 0.00, 400.00, '2025-04-25 16:49:32', 3, 'Vehicle is under maintenance.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-24 12:53:25', '2025-04-25 16:56:04', '2025-04-25 16:56:04'),
+(2, 'quotation', 'RES-0002', 2, 5, '2025-04-24 15:11:42', '2025-04-26 15:10:00', '2025-04-27 17:10:00', 3, 3, NULL, NULL, NULL, 'daily', NULL, NULL, 2, NULL, NULL, 4, NULL, 0.00, 200.00, 400.00, '[]', '[{\"id\":1,\"price\":5,\"type\":\"per_day\"}]', NULL, NULL, NULL, 0.00, 10.00, 410.00, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, 'percentage', 6, '2025-04-24 15:11:42', '2025-04-25 16:55:43', '2025-04-25 16:55:43'),
+(3, 'quotation', 'RES-0003', 1, 1, '2025-04-24 15:14:23', '2025-04-24 15:13:00', '2025-04-27 15:13:00', 1, 1, NULL, NULL, NULL, 'daily', NULL, NULL, 3, NULL, NULL, 4, 3, 20.00, 100.00, 300.00, '[]', '[{\"id\":1,\"price\":20,\"type\":\"per_day\"}]', NULL, NULL, NULL, 0.00, 60.00, 380.00, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, 'percentage', 4, '2025-04-24 15:14:23', '2025-04-24 15:14:23', NULL),
+(4, 'admin', 'RES-0004', 1, 4, '2025-04-25 10:40:01', '2025-05-08 10:39:00', '2025-05-09 13:39:00', 1, 1, NULL, NULL, NULL, 'daily', NULL, NULL, 2, NULL, NULL, 4, NULL, 0.00, 100.00, 200.00, '[]', '[{\"id\":1,\"price\":20,\"type\":\"per_day\"}]', NULL, NULL, NULL, 0.00, 40.00, 240.00, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-25 10:40:01', '2025-04-25 10:40:01', NULL),
+(5, 'user', 'RES-0005', 44, 4, '2025-04-25 16:09:01', '2025-04-25 16:07:00', '2025-05-02 16:07:00', 1, 1, NULL, NULL, 'self_pickup', 'weekly', NULL, NULL, 8, NULL, '4', 4, 0, 0.00, 7000.00, 7.00, '[]', '[{\"id\":1,\"price\":5,\"value\":\"per_day\"}]', 'cod', 1, 'COD3100', 0.00, 5.00, 12.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 16:09:01', '2025-04-25 16:09:01', NULL),
+(6, 'user', 'RES-0006', 19, 4, '2025-04-25 16:10:59', '2025-04-25 16:10:00', '2025-04-26 16:10:00', 2, 2, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 2, NULL, '8', 4, 0, 0.00, 2000.00, 2.00, '[]', '[]', 'wallet', 1, 'wallet5027', 0.00, 0.00, 2000.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 16:10:59', '2025-04-25 16:10:59', NULL),
+(7, 'user', 'RES-0007', 43, 6, '2025-04-25 16:11:32', '2025-04-25 16:10:00', '2025-04-26 17:15:00', 3, 3, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 2, NULL, '6', 4, 0, 0.00, 600.00, 1.00, '[]', '[]', 'wallet', 1, 'wallet7293', 0.00, 0.00, 1200.00, '2025-04-25 16:47:36', 4, 'Not interested', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 16:11:32', '2025-04-25 16:47:36', NULL),
+(8, 'user', 'RES-0008', 42, 5, '2025-04-25 16:36:40', '2025-04-25 16:34:00', '2025-04-26 16:34:00', 2, 2, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 2, NULL, '6', 4, 0, 0.00, 800.00, 800.00, '[]', '[]', 'cod', 1, 'COD6325', 0.00, 0.00, 800.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 16:36:40', '2025-04-25 16:46:39', NULL),
+(9, 'user', 'RES-0009', 41, 6, '2025-04-25 16:51:17', '2025-04-25 16:49:00', '2025-04-26 16:49:00', 2, 2, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 2, NULL, '5', 4, 0, 0.00, 500.00, 500.00, '[]', '[]', 'stripe', 2, 'cs_test_a142ledeURArudKwqctbM4TNIPsWwEGhJXST49mYfsZ5c91ntIRO68buhR', 0.00, 0.00, 500.00, '2025-04-25 16:53:42', 3, 'ffddddddddddddddd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 16:51:17', '2025-04-25 16:53:42', NULL),
+(10, 'user', 'RES-0010', 41, 4, '2025-04-25 16:56:29', '2025-04-30 17:00:00', '2025-04-30 19:15:00', 2, 2, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 1, NULL, '5', 4, 0, 0.00, 500.00, 500.00, '[]', '[]', 'cod', 1, 'COD4617', 0.00, 0.00, 500.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 16:56:29', '2025-04-25 16:56:29', NULL),
+(11, 'user', 'RES-0011', 41, 4, '2025-04-25 17:02:51', '2025-05-02 17:15:00', '2025-05-04 18:15:00', 1, 1, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 3, NULL, '5', 4, 0, 0.00, 500.00, 1.00, '[]', '[]', 'cod', 1, 'COD6043', 0.00, 0.00, 1500.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 17:02:51', '2025-04-25 17:02:51', NULL),
+(12, 'user', 'RES-0012', 20, 4, '2025-04-25 17:10:39', '2025-05-03 17:15:00', '2025-05-10 17:15:00', 3, 3, NULL, NULL, 'self_pickup', 'weekly', NULL, NULL, 8, NULL, '4', 4, 0, 0.00, 3500.00, 3.00, '[]', '[]', 'cod', 1, 'COD9056', 0.00, 0.00, 3500.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 17:10:39', '2025-04-25 17:10:39', NULL),
+(13, 'user', 'RES-0013', 38, 4, '2025-04-25 17:28:08', '2025-04-25 17:27:00', '2025-04-26 17:27:00', 2, 2, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 2, NULL, '4', 4, 0, 0.00, 300.00, 300.00, '[]', '[]', 'cod', 1, 'COD9394', 0.00, 0.00, 300.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 17:28:08', '2025-04-25 17:28:08', NULL),
+(14, 'user', 'RES-0014', 19, 4, '2025-04-25 17:44:21', '2025-04-26 17:45:00', '2025-04-26 20:45:00', 3, 3, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 1, NULL, '8', 4, 0, 0.00, 2000.00, 2.00, '[]', '[]', 'paypal', 1, '1M0801388N914822N', 0.00, 0.00, 2000.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 17:44:22', '2025-04-25 17:44:22', NULL),
+(15, 'user', 'RES-0015', 1, 5, '2025-04-25 17:47:10', '2025-04-27 18:00:00', '2025-04-27 20:45:00', 1, 1, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 1, NULL, '4', 4, 1, 0.00, 100.00, 100.00, '[]', '[]', 'paypal', 1, '5HX21511E9855504R', 0.00, 0.00, 100.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 17:47:12', '2025-04-25 17:48:48', NULL),
+(16, 'user', 'RES-0016', 19, 4, '2025-04-25 17:55:10', '2025-12-01 18:00:00', '2025-12-02 17:54:00', 3, 3, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 2, NULL, '8', 4, 0, 0.00, 2000.00, 2.00, '[]', '[{\"id\":1,\"price\":0,\"value\":\"one_time\"}]', 'paypal', 2, '26815781918539511', 0.00, 0.00, 2000.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 17:55:11', '2025-04-25 17:55:28', NULL),
+(17, 'user', 'RES-0017', 42, 4, '2025-04-25 17:59:45', '2025-05-02 18:00:00', '2025-05-03 17:57:00', 1, 1, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 2, NULL, '6', 4, 0, 0.00, 800.00, 800.00, '[]', '[]', 'cod', 1, 'COD2256', 0.00, 0.00, 800.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 17:59:45', '2025-04-25 17:59:45', NULL),
+(18, 'quotation', 'RES-0018', 43, 1, '2025-04-25 18:08:15', '2025-05-02 18:07:00', '2025-05-03 18:07:00', 3, 3, NULL, NULL, NULL, 'daily', NULL, NULL, 1, NULL, NULL, 4, NULL, 0.00, 600.00, 600.00, '[]', '[]', NULL, NULL, NULL, 0.00, 0.00, 600.00, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, 'percentage', 6, '2025-04-25 18:08:15', '2025-04-25 18:08:15', NULL),
+(19, 'user', 'RES-0019', 19, 4, '2025-04-25 18:54:46', '2025-12-01 18:00:00', '2025-12-02 17:54:00', 3, 3, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 2, NULL, '8', 4, 0, 0.00, 2000.00, 2.00, '[]', '[{\"id\":1,\"price\":0,\"value\":\"one_time\"}]', 'paypal', 1, '7U612644YK775445S', 0.00, 0.00, 2000.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 18:54:48', '2025-04-25 18:54:48', NULL),
+(20, 'user', 'RES-0020', 19, 3, '2025-04-25 18:58:26', '2025-12-01 18:00:00', '2025-12-02 17:54:00', 3, 3, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 2, NULL, '8', 4, 0, 0.00, 2000.00, 2.00, '[]', '[]', 'paypal', 3, '1C0995587G520924M', 0.00, 0.00, 2000.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 18:58:27', '2025-04-25 18:58:37', NULL),
+(21, 'user', 'RES-0021', 1, 4, '2025-04-25 19:03:08', '2025-08-13 19:15:00', '2025-08-27 19:02:00', 1, 1, NULL, NULL, 'self_pickup', 'daily', NULL, NULL, 15, NULL, '4', 4, 1, 0.00, 100.00, 1.00, '[]', '[]', 'cod', 1, 'COD7254', 0.00, 0.00, 1400.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, '2025-04-25 19:03:08', '2025-04-25 19:03:08', NULL);
 
 -- --------------------------------------------------------
 
@@ -271,10 +337,20 @@ CREATE TABLE `booking_details` (
   `seasonal_weekly_rate` double(10,2) DEFAULT NULL,
   `seasonal_monthly_rate` double(10,2) DEFAULT NULL,
   `seasonal_late_fee` double(10,2) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `booking_details`
+--
+
+INSERT INTO `booking_details` (`id`, `booking_id`, `has_tariff`, `has_season`, `vehicle_tariff_id`, `vehicle_season_id`, `vehicle_price_type`, `tariff_title`, `tariff_price`, `tariff_from_days`, `tariff_to_days`, `tariff_base_km`, `tariff_extra_price`, `seasonal_title`, `seasonal_start_date`, `seasonal_end_date`, `seasonal_daily_rate`, `seasonal_weekly_rate`, `seasonal_monthly_rate`, `seasonal_late_fee`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 2, NULL, NULL, NULL, NULL, 'daily', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-24 15:11:42', '2025-04-24 15:11:42', NULL),
+(2, 3, NULL, NULL, NULL, NULL, 'daily', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-24 15:14:23', '2025-04-24 15:14:23', NULL),
+(3, 4, NULL, NULL, NULL, NULL, 'daily', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-25 10:40:01', '2025-04-25 10:40:01', NULL),
+(4, 18, NULL, NULL, NULL, NULL, 'daily', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-25 18:08:15', '2025-04-25 18:08:15', NULL);
 
 -- --------------------------------------------------------
 
@@ -285,13 +361,48 @@ CREATE TABLE `booking_details` (
 CREATE TABLE `booking_histories` (
   `id` bigint(20) NOT NULL,
   `booking_id` bigint(20) NOT NULL,
-  `data` longtext DEFAULT NULL,
+  `data` longtext,
   `action` varchar(255) DEFAULT NULL,
-  `message` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `message` text,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `booking_histories`
+--
+
+INSERT INTO `booking_histories` (`id`, `booking_id`, `data`, `action`, `message`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, '{\"bookings\":{\"vehicle_id\":\"2\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-24 12:53:25\",\"start_datetime\":\"2025-04-24 12:49:00\",\"end_datetime\":\"2025-04-25 22:00:00\",\"pickup_location\":\"3\",\"return_location\":\"3\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"6\",\"no_of_days\":2.3826388888888888,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"200\",\"vehicle_total_price\":\"400\",\"final_price\":\"400\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"COD7753\",\"payment_status\":1,\"payment_type\":\"cod\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-24T07:23:25.000000Z\",\"created_at\":\"2025-04-24T07:23:25.000000Z\",\"id\":1,\"encrypted_id\":\"VEViYXdveTFucHlTUVByNnNXcXYvQT09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-24 12:53:25', '2025-04-24 12:53:25', NULL),
+(2, 2, '{\"bookings\":{\"vehicle_id\":\"2\",\"customer_id\":\"4\",\"booking_by\":\"quotation\",\"driver_id\":null,\"driver_price\":\"0\",\"vehicle_price\":\"200.00\",\"total_insurance_price\":\"0.00\",\"total_extra_service_price\":\"10.00\",\"final_price\":\"410.00\",\"extra_service\":\"[{\\\"id\\\":1,\\\"price\\\":5,\\\"type\\\":\\\"per_day\\\"}]\",\"insurance\":\"[]\",\"security_deposit\":null,\"start_datetime\":\"2025-04-26 15:10:00\",\"end_datetime\":\"2025-04-27 17:10:00\",\"pickup_location\":\"3\",\"return_location\":\"3\",\"booking_status\":1,\"booking_tariff\":null,\"driving_type\":null,\"rental_type\":\"daily\",\"no_of_passengers\":null,\"no_of_days\":\"2\",\"vehicle_total_price\":\"400.00\",\"base_km\":null,\"km_extra_price\":null,\"expenses\":null,\"delivery_price\":null,\"tax_val\":\"6\",\"tax_type\":\"percentage\",\"booking_date\":\"2025-04-24T09:41:42.405002Z\",\"created_by\":1,\"updated_at\":\"2025-04-24T09:41:42.000000Z\",\"created_at\":\"2025-04-24T09:41:42.000000Z\",\"id\":2,\"reservation_id\":\"RES-0002\",\"encrypted_id\":\"SDllSlgwVFM1MUkyV2dDeHREVlZ4dz09\"},\"booking_details\":{\"vehicle_price_type\":\"daily\",\"vehicle_season_id\":null,\"vehicle_tariff_id\":null,\"booking_id\":2,\"updated_at\":\"2025-04-24T09:41:42.000000Z\",\"created_at\":\"2025-04-24T09:41:42.000000Z\",\"id\":1}}', 'create', 'Quotations created', '2025-04-24 15:11:42', '2025-04-24 15:11:42', NULL),
+(3, 3, '{\"bookings\":{\"vehicle_id\":\"1\",\"customer_id\":\"4\",\"booking_by\":\"quotation\",\"driver_id\":\"3\",\"driver_price\":\"020\",\"vehicle_price\":\"100.00\",\"total_insurance_price\":\"0.00\",\"total_extra_service_price\":\"60.00\",\"final_price\":\"380.00\",\"extra_service\":\"[{\\\"id\\\":1,\\\"price\\\":20,\\\"type\\\":\\\"per_day\\\"}]\",\"insurance\":\"[]\",\"security_deposit\":null,\"start_datetime\":\"2025-04-24 15:13:00\",\"end_datetime\":\"2025-04-27 15:13:00\",\"pickup_location\":\"1\",\"return_location\":\"1\",\"booking_status\":1,\"booking_tariff\":null,\"driving_type\":null,\"rental_type\":\"daily\",\"no_of_passengers\":null,\"no_of_days\":\"3\",\"vehicle_total_price\":\"300.00\",\"base_km\":null,\"km_extra_price\":null,\"expenses\":null,\"delivery_price\":null,\"tax_val\":\"4\",\"tax_type\":\"percentage\",\"booking_date\":\"2025-04-24T09:44:23.046379Z\",\"created_by\":1,\"updated_at\":\"2025-04-24T09:44:23.000000Z\",\"created_at\":\"2025-04-24T09:44:23.000000Z\",\"id\":3,\"reservation_id\":\"RES-0003\",\"encrypted_id\":\"cUdibUN3N3piSUdWU2l4RHhNeU9MQT09\"},\"booking_details\":{\"vehicle_price_type\":\"daily\",\"vehicle_season_id\":null,\"vehicle_tariff_id\":null,\"booking_id\":3,\"updated_at\":\"2025-04-24T09:44:23.000000Z\",\"created_at\":\"2025-04-24T09:44:23.000000Z\",\"id\":2}}', 'create', 'Quotations created', '2025-04-24 15:14:23', '2025-04-24 15:14:23', NULL),
+(4, 2, '{\"booking\":{\"id\":2,\"booking_by\":\"quotation\",\"reservation_id\":\"RES-0002\",\"vehicle_id\":2,\"booking_status\":1,\"booking_date\":\"2025-04-24 15:11:42\",\"start_datetime\":\"2025-04-26 15:10:00\",\"end_datetime\":\"2025-04-27 17:10:00\",\"pickup_location\":3,\"return_location\":3,\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":null,\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"no_of_days\":2,\"driving_type\":null,\"no_of_passengers\":null,\"customer_id\":4,\"driver_id\":null,\"driver_price\":0,\"vehicle_price\":200,\"vehicle_total_price\":400,\"insurance\":\"[]\",\"extra_service\":\"[{\\\"id\\\":1,\\\"price\\\":5,\\\"type\\\":\\\"per_day\\\"}]\",\"payment_type\":null,\"payment_status\":null,\"transaction_id\":null,\"total_insurance_price\":0,\"total_extra_service_price\":10,\"final_price\":410,\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":1,\"updated_by\":null,\"base_km\":null,\"km_extra_price\":null,\"expenses\":null,\"delivery_price\":null,\"tax_type\":\"percentage\",\"tax_val\":6,\"created_at\":\"2025-04-24T09:41:42.000000Z\",\"updated_at\":\"2025-04-24T09:41:42.000000Z\",\"deleted_at\":null,\"encrypted_id\":\"SDllSlgwVFM1MUkyV2dDeHREVlZ4dz09\"},\"booking_detail\":{\"id\":1,\"booking_id\":2,\"has_tariff\":null,\"has_season\":null,\"vehicle_tariff_id\":null,\"vehicle_season_id\":null,\"vehicle_price_type\":\"daily\",\"tariff_title\":null,\"tariff_price\":null,\"tariff_from_days\":null,\"tariff_to_days\":null,\"tariff_base_km\":null,\"tariff_extra_price\":null,\"seasonal_title\":null,\"seasonal_start_date\":null,\"seasonal_end_date\":null,\"seasonal_daily_rate\":null,\"seasonal_weekly_rate\":null,\"seasonal_monthly_rate\":null,\"seasonal_late_fee\":null,\"created_at\":\"2025-04-24T09:41:42.000000Z\",\"updated_at\":\"2025-04-24T09:41:42.000000Z\",\"deleted_at\":null}}', 'completed', 'Ride Completed Successfully', '2025-04-24 15:17:32', '2025-04-24 15:17:32', NULL),
+(5, 4, '{\"bookings\":{\"vehicle_id\":\"1\",\"customer_id\":\"4\",\"booking_by\":\"admin\",\"driver_id\":null,\"driver_price\":\"0\",\"vehicle_price\":\"100.00\",\"total_insurance_price\":\"0.00\",\"total_extra_service_price\":\"40.00\",\"final_price\":\"240.00\",\"extra_service\":\"[{\\\"id\\\":1,\\\"price\\\":20,\\\"type\\\":\\\"per_day\\\"}]\",\"insurance\":\"[]\",\"security_deposit\":null,\"start_datetime\":\"2025-05-08 10:39:00\",\"end_datetime\":\"2025-05-09 13:39:00\",\"pickup_location\":\"1\",\"return_location\":\"1\",\"booking_status\":4,\"booking_tariff\":null,\"driving_type\":null,\"rental_type\":\"daily\",\"no_of_passengers\":null,\"no_of_days\":\"2\",\"vehicle_total_price\":\"200.00\",\"booking_date\":\"2025-04-25T05:10:01.741680Z\",\"created_by\":1,\"updated_at\":\"2025-04-25T05:10:01.000000Z\",\"created_at\":\"2025-04-25T05:10:01.000000Z\",\"id\":4,\"reservation_id\":\"RES-0004\",\"encrypted_id\":\"SmUvR0RGanQ0em80ZDg0azJIRHQydz09\"},\"booking_details\":{\"vehicle_price_type\":\"daily\",\"vehicle_season_id\":null,\"vehicle_tariff_id\":null,\"booking_id\":4,\"updated_at\":\"2025-04-25T05:10:01.000000Z\",\"created_at\":\"2025-04-25T05:10:01.000000Z\",\"id\":3}}', 'create', 'Reservation created', '2025-04-25 10:40:01', '2025-04-25 10:40:01', NULL),
+(6, 5, '{\"bookings\":{\"vehicle_id\":\"44\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 16:09:01\",\"start_datetime\":\"2025-04-25 16:07:00\",\"end_datetime\":\"2025-05-02 16:07:00\",\"pickup_location\":\"1\",\"return_location\":\"1\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"weekly\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"4\",\"no_of_days\":8,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[{\\\"id\\\":1,\\\"price\\\":5,\\\"value\\\":\\\"per_day\\\"}]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"5\",\"vehicle_price\":\"7000\",\"vehicle_total_price\":\"7\",\"final_price\":\"12\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"COD3100\",\"payment_status\":1,\"payment_type\":\"cod\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T10:39:01.000000Z\",\"created_at\":\"2025-04-25T10:39:01.000000Z\",\"id\":5,\"encrypted_id\":\"TGYxc0o2Z1NXU09KcHJuMXBta2JjZz09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 16:09:01', '2025-04-25 16:09:01', NULL),
+(7, 6, '{\"bookings\":{\"vehicle_id\":\"19\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 16:10:59\",\"start_datetime\":\"2025-04-25 16:10:00\",\"end_datetime\":\"2025-04-26 16:10:00\",\"pickup_location\":\"2\",\"return_location\":\"2\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"8\",\"no_of_days\":2,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"2000\",\"vehicle_total_price\":\"2\",\"final_price\":\"2000\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"wallet5027\",\"payment_status\":1,\"payment_type\":\"wallet\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T10:40:59.000000Z\",\"created_at\":\"2025-04-25T10:40:59.000000Z\",\"id\":6,\"encrypted_id\":\"bWtsamdGQlYwZm1za3BmempwL3VaZz09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 16:10:59', '2025-04-25 16:10:59', NULL),
+(8, 7, '{\"bookings\":{\"vehicle_id\":\"43\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 16:11:32\",\"start_datetime\":\"2025-04-25 16:10:00\",\"end_datetime\":\"2025-04-26 17:15:00\",\"pickup_location\":\"3\",\"return_location\":\"3\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"6\",\"no_of_days\":2.045138888888889,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"600\",\"vehicle_total_price\":\"1\",\"final_price\":\"1200\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"wallet7293\",\"payment_status\":1,\"payment_type\":\"wallet\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T10:41:32.000000Z\",\"created_at\":\"2025-04-25T10:41:32.000000Z\",\"id\":7,\"encrypted_id\":\"SDRZOFJEYWQvN01GeGQrVkJEYUVBdz09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 16:11:32', '2025-04-25 16:11:32', NULL),
+(9, 8, '{\"bookings\":{\"vehicle_id\":\"42\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 16:36:40\",\"start_datetime\":\"2025-04-25 16:34:00\",\"end_datetime\":\"2025-04-26 16:34:00\",\"pickup_location\":\"2\",\"return_location\":\"2\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"6\",\"no_of_days\":2,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"800\",\"vehicle_total_price\":\"800\",\"final_price\":\"800\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"COD6325\",\"payment_status\":1,\"payment_type\":\"cod\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T11:06:40.000000Z\",\"created_at\":\"2025-04-25T11:06:40.000000Z\",\"id\":8,\"encrypted_id\":\"bUtUMTFLUXVjVXgrQWNQYlIreElhQT09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 16:36:40', '2025-04-25 16:36:40', NULL),
+(10, 8, '{\"booking\":{\"id\":8,\"booking_by\":\"user\",\"reservation_id\":\"RES-0008\",\"vehicle_id\":42,\"booking_status\":4,\"booking_date\":\"2025-04-25 16:36:40\",\"start_datetime\":\"2025-04-25 16:34:00\",\"end_datetime\":\"2025-04-26 16:34:00\",\"pickup_location\":2,\"return_location\":2,\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"no_of_days\":2,\"driving_type\":null,\"no_of_passengers\":\"6\",\"customer_id\":4,\"driver_id\":0,\"driver_price\":0,\"vehicle_price\":800,\"vehicle_total_price\":800,\"insurance\":\"[]\",\"extra_service\":\"[]\",\"payment_type\":\"cod\",\"payment_status\":1,\"transaction_id\":\"COD6325\",\"total_insurance_price\":0,\"total_extra_service_price\":0,\"final_price\":800,\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"base_km\":null,\"km_extra_price\":null,\"expenses\":null,\"delivery_price\":null,\"tax_type\":null,\"tax_val\":0,\"created_at\":\"2025-04-25T11:06:40.000000Z\",\"updated_at\":\"2025-04-25T11:06:40.000000Z\",\"deleted_at\":null,\"encrypted_id\":\"bUtUMTFLUXVjVXgrQWNQYlIreElhQT09\"},\"booking_detail\":[]}', 'started', 'Ride Started Successfully', '2025-04-25 16:46:11', '2025-04-25 16:46:11', NULL),
+(11, 8, '{\"booking\":{\"id\":8,\"booking_by\":\"user\",\"reservation_id\":\"RES-0008\",\"vehicle_id\":42,\"booking_status\":1,\"booking_date\":\"2025-04-25 16:36:40\",\"start_datetime\":\"2025-04-25 16:34:00\",\"end_datetime\":\"2025-04-26 16:34:00\",\"pickup_location\":2,\"return_location\":2,\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"no_of_days\":2,\"driving_type\":null,\"no_of_passengers\":\"6\",\"customer_id\":4,\"driver_id\":0,\"driver_price\":0,\"vehicle_price\":800,\"vehicle_total_price\":800,\"insurance\":\"[]\",\"extra_service\":\"[]\",\"payment_type\":\"cod\",\"payment_status\":1,\"transaction_id\":\"COD6325\",\"total_insurance_price\":0,\"total_extra_service_price\":0,\"final_price\":800,\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"base_km\":null,\"km_extra_price\":null,\"expenses\":null,\"delivery_price\":null,\"tax_type\":null,\"tax_val\":0,\"created_at\":\"2025-04-25T11:06:40.000000Z\",\"updated_at\":\"2025-04-25T11:16:11.000000Z\",\"deleted_at\":null,\"encrypted_id\":\"bUtUMTFLUXVjVXgrQWNQYlIreElhQT09\"},\"booking_detail\":[]}', 'completed', 'Ride Completed Successfully', '2025-04-25 16:46:39', '2025-04-25 16:46:39', NULL),
+(12, 7, '{\"booking\":{\"id\":7,\"booking_by\":\"user\",\"reservation_id\":\"RES-0007\",\"vehicle_id\":43,\"booking_status\":4,\"booking_date\":\"2025-04-25 16:11:32\",\"start_datetime\":\"2025-04-25 16:10:00\",\"end_datetime\":\"2025-04-26 17:15:00\",\"pickup_location\":3,\"return_location\":3,\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"no_of_days\":2,\"driving_type\":null,\"no_of_passengers\":\"6\",\"customer_id\":4,\"driver_id\":0,\"driver_price\":0,\"vehicle_price\":600,\"vehicle_total_price\":1,\"insurance\":\"[]\",\"extra_service\":\"[]\",\"payment_type\":\"wallet\",\"payment_status\":1,\"transaction_id\":\"wallet7293\",\"total_insurance_price\":0,\"total_extra_service_price\":0,\"final_price\":1200,\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"base_km\":null,\"km_extra_price\":null,\"expenses\":null,\"delivery_price\":null,\"tax_type\":null,\"tax_val\":0,\"created_at\":\"2025-04-25T10:41:32.000000Z\",\"updated_at\":\"2025-04-25T10:41:32.000000Z\",\"deleted_at\":null,\"encrypted_id\":\"SDRZOFJEYWQvN01GeGQrVkJEYUVBdz09\"},\"booking_detail\":[]}', 'cancel', 'Reservation Cancelled', '2025-04-25 16:47:36', '2025-04-25 16:47:36', NULL),
+(13, 1, '{\"bookings\":{\"id\":1,\"booking_by\":\"user\",\"reservation_id\":\"RES-0001\",\"vehicle_id\":2,\"booking_status\":6,\"booking_date\":\"2025-04-24 12:53:25\",\"start_datetime\":\"2025-04-24 12:49:00\",\"end_datetime\":\"2025-04-25 22:00:00\",\"pickup_location\":3,\"return_location\":3,\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"no_of_days\":2,\"driving_type\":null,\"no_of_passengers\":\"6\",\"customer_id\":4,\"driver_id\":0,\"driver_price\":0,\"vehicle_price\":200,\"vehicle_total_price\":400,\"insurance\":\"[]\",\"extra_service\":\"[]\",\"payment_type\":\"cod\",\"payment_status\":1,\"transaction_id\":\"COD7753\",\"total_insurance_price\":0,\"total_extra_service_price\":0,\"final_price\":400,\"cancel_date\":\"2025-04-25T11:19:32.042632Z\",\"cancel_by\":3,\"cancel_reason\":\"Vehicle is under maintenance.\",\"created_by\":null,\"updated_by\":null,\"base_km\":null,\"km_extra_price\":null,\"expenses\":null,\"delivery_price\":null,\"tax_type\":null,\"tax_val\":0,\"created_at\":\"2025-04-24T07:23:25.000000Z\",\"updated_at\":\"2025-04-25T11:19:32.000000Z\",\"deleted_at\":null,\"encrypted_id\":\"VEViYXdveTFucHlTUVByNnNXcXYvQT09\"},\"booking_details\":[]}', 'cancel', 'Booking cancelled', '2025-04-25 16:49:32', '2025-04-25 16:49:32', NULL),
+(14, 9, '{\"bookings\":{\"vehicle_id\":\"41\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 16:51:17\",\"start_datetime\":\"2025-04-25 16:49:00\",\"end_datetime\":\"2025-04-26 16:49:00\",\"pickup_location\":\"2\",\"return_location\":\"2\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"5\",\"no_of_days\":2,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"500\",\"vehicle_total_price\":\"500\",\"final_price\":\"500\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"cs_test_a142ledeURArudKwqctbM4TNIPsWwEGhJXST49mYfsZ5c91ntIRO68buhR\",\"payment_status\":1,\"payment_type\":\"stripe\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T11:21:17.000000Z\",\"created_at\":\"2025-04-25T11:21:17.000000Z\",\"id\":9,\"reservation_id\":\"RES-0009\",\"encrypted_id\":\"MU43SlNDWVZBY2ZZZXJKNnloOXZ5UT09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 16:51:18', '2025-04-25 16:51:18', NULL),
+(15, 9, '{\"bookings\":{\"id\":9,\"booking_by\":\"user\",\"reservation_id\":\"RES-0009\",\"vehicle_id\":41,\"booking_status\":6,\"booking_date\":\"2025-04-25 16:51:17\",\"start_datetime\":\"2025-04-25 16:49:00\",\"end_datetime\":\"2025-04-26 16:49:00\",\"pickup_location\":2,\"return_location\":2,\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"no_of_days\":2,\"driving_type\":null,\"no_of_passengers\":\"5\",\"customer_id\":4,\"driver_id\":0,\"driver_price\":0,\"vehicle_price\":500,\"vehicle_total_price\":500,\"insurance\":\"[]\",\"extra_service\":\"[]\",\"payment_type\":\"stripe\",\"payment_status\":2,\"transaction_id\":\"cs_test_a142ledeURArudKwqctbM4TNIPsWwEGhJXST49mYfsZ5c91ntIRO68buhR\",\"total_insurance_price\":0,\"total_extra_service_price\":0,\"final_price\":500,\"cancel_date\":\"2025-04-25T11:23:42.583829Z\",\"cancel_by\":3,\"cancel_reason\":\"ffddddddddddddddd\",\"created_by\":null,\"updated_by\":null,\"base_km\":null,\"km_extra_price\":null,\"expenses\":null,\"delivery_price\":null,\"tax_type\":null,\"tax_val\":0,\"created_at\":\"2025-04-25T11:21:17.000000Z\",\"updated_at\":\"2025-04-25T11:23:42.000000Z\",\"deleted_at\":null,\"encrypted_id\":\"MU43SlNDWVZBY2ZZZXJKNnloOXZ5UT09\"},\"booking_details\":[]}', 'cancel', 'Booking cancelled', '2025-04-25 16:53:42', '2025-04-25 16:53:42', NULL),
+(16, 10, '{\"bookings\":{\"vehicle_id\":\"41\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 16:56:29\",\"start_datetime\":\"2025-04-30 17:00:00\",\"end_datetime\":\"2025-04-30 19:15:00\",\"pickup_location\":\"2\",\"return_location\":\"2\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"5\",\"no_of_days\":1.09375,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"500\",\"vehicle_total_price\":\"500\",\"final_price\":\"500\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"COD4617\",\"payment_status\":1,\"payment_type\":\"cod\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T11:26:29.000000Z\",\"created_at\":\"2025-04-25T11:26:29.000000Z\",\"id\":10,\"encrypted_id\":\"Tm1TTDRzNFJ6cDU1T1Z1Z2drUmFDdz09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 16:56:29', '2025-04-25 16:56:29', NULL),
+(17, 11, '{\"bookings\":{\"vehicle_id\":\"41\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 17:02:51\",\"start_datetime\":\"2025-05-02 17:15:00\",\"end_datetime\":\"2025-05-04 18:15:00\",\"pickup_location\":\"1\",\"return_location\":\"1\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"5\",\"no_of_days\":3.0416666666666665,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"500\",\"vehicle_total_price\":\"1\",\"final_price\":\"1500\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"COD6043\",\"payment_status\":1,\"payment_type\":\"cod\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T11:32:51.000000Z\",\"created_at\":\"2025-04-25T11:32:51.000000Z\",\"id\":11,\"encrypted_id\":\"aTdZZUtPb0lHdFFnNktZVlVYM1FCQT09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 17:02:51', '2025-04-25 17:02:51', NULL),
+(18, 12, '{\"bookings\":{\"vehicle_id\":\"20\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 17:10:39\",\"start_datetime\":\"2025-05-03 17:15:00\",\"end_datetime\":\"2025-05-10 17:15:00\",\"pickup_location\":\"3\",\"return_location\":\"3\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"weekly\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"4\",\"no_of_days\":8,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"3500\",\"vehicle_total_price\":\"3\",\"final_price\":\"3500\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"COD9056\",\"payment_status\":1,\"payment_type\":\"cod\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T11:40:39.000000Z\",\"created_at\":\"2025-04-25T11:40:39.000000Z\",\"id\":12,\"encrypted_id\":\"ZmNkZE1KcmkrTXB5eVBBclpSUVBLZz09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 17:10:39', '2025-04-25 17:10:39', NULL),
+(19, 13, '{\"bookings\":{\"vehicle_id\":\"38\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 17:28:08\",\"start_datetime\":\"2025-04-25 17:27:00\",\"end_datetime\":\"2025-04-26 17:27:00\",\"pickup_location\":\"2\",\"return_location\":\"2\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"4\",\"no_of_days\":2,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"300\",\"vehicle_total_price\":\"300\",\"final_price\":\"300\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"COD9394\",\"payment_status\":1,\"payment_type\":\"cod\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T11:58:08.000000Z\",\"created_at\":\"2025-04-25T11:58:08.000000Z\",\"id\":13,\"encrypted_id\":\"WjZuekJGakdnSU9YQzRkU1JtMkFvdz09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 17:28:08', '2025-04-25 17:28:08', NULL),
+(20, 14, '{\"bookings\":{\"vehicle_id\":\"19\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 17:44:21\",\"start_datetime\":\"2025-04-26 17:45:00\",\"end_datetime\":\"2025-04-26 20:45:00\",\"pickup_location\":\"3\",\"return_location\":\"3\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"8\",\"no_of_days\":1.125,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"2000\",\"vehicle_total_price\":\"2\",\"final_price\":\"2000\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"1M0801388N914822N\",\"payment_status\":1,\"payment_type\":\"paypal\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T12:14:22.000000Z\",\"created_at\":\"2025-04-25T12:14:22.000000Z\",\"id\":14,\"reservation_id\":\"RES-0014\",\"encrypted_id\":\"WHZsT1NRZytvakp6QWFGbXBXaXg2Zz09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 17:44:22', '2025-04-25 17:44:22', NULL),
+(21, 15, '{\"bookings\":{\"vehicle_id\":\"1\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 17:47:10\",\"start_datetime\":\"2025-04-27 18:00:00\",\"end_datetime\":\"2025-04-27 20:45:00\",\"pickup_location\":\"1\",\"return_location\":\"1\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"4\",\"no_of_days\":1.1145833333333333,\"customer_id\":4,\"driver_id\":\"1\",\"driver_price\":\"0\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"100\",\"vehicle_total_price\":\"100\",\"final_price\":\"100\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"5HX21511E9855504R\",\"payment_status\":1,\"payment_type\":\"paypal\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T12:17:12.000000Z\",\"created_at\":\"2025-04-25T12:17:12.000000Z\",\"id\":15,\"reservation_id\":\"RES-0015\",\"encrypted_id\":\"WTNybmw5UkFPcU5POHFZU0pCd3Z4QT09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 17:47:12', '2025-04-25 17:47:12', NULL),
+(22, 15, '{\"booking\":{\"id\":15,\"booking_by\":\"user\",\"reservation_id\":\"RES-0015\",\"vehicle_id\":1,\"booking_status\":4,\"booking_date\":\"2025-04-25 17:47:10\",\"start_datetime\":\"2025-04-27 18:00:00\",\"end_datetime\":\"2025-04-27 20:45:00\",\"pickup_location\":1,\"return_location\":1,\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"no_of_days\":1,\"driving_type\":null,\"no_of_passengers\":\"4\",\"customer_id\":4,\"driver_id\":1,\"driver_price\":0,\"vehicle_price\":100,\"vehicle_total_price\":100,\"insurance\":\"[]\",\"extra_service\":\"[]\",\"payment_type\":\"paypal\",\"payment_status\":1,\"transaction_id\":\"5HX21511E9855504R\",\"total_insurance_price\":0,\"total_extra_service_price\":0,\"final_price\":100,\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"base_km\":null,\"km_extra_price\":null,\"expenses\":null,\"delivery_price\":null,\"tax_type\":null,\"tax_val\":0,\"created_at\":\"2025-04-25T12:17:12.000000Z\",\"updated_at\":\"2025-04-25T12:17:12.000000Z\",\"deleted_at\":null,\"encrypted_id\":\"WTNybmw5UkFPcU5POHFZU0pCd3Z4QT09\"},\"booking_detail\":[]}', 'started', 'Ride Started Successfully', '2025-04-25 17:48:31', '2025-04-25 17:48:31', NULL),
+(23, 15, '{\"booking\":{\"id\":15,\"booking_by\":\"user\",\"reservation_id\":\"RES-0015\",\"vehicle_id\":1,\"booking_status\":1,\"booking_date\":\"2025-04-25 17:47:10\",\"start_datetime\":\"2025-04-27 18:00:00\",\"end_datetime\":\"2025-04-27 20:45:00\",\"pickup_location\":1,\"return_location\":1,\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"no_of_days\":1,\"driving_type\":null,\"no_of_passengers\":\"4\",\"customer_id\":4,\"driver_id\":1,\"driver_price\":0,\"vehicle_price\":100,\"vehicle_total_price\":100,\"insurance\":\"[]\",\"extra_service\":\"[]\",\"payment_type\":\"paypal\",\"payment_status\":1,\"transaction_id\":\"5HX21511E9855504R\",\"total_insurance_price\":0,\"total_extra_service_price\":0,\"final_price\":100,\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"base_km\":null,\"km_extra_price\":null,\"expenses\":null,\"delivery_price\":null,\"tax_type\":null,\"tax_val\":0,\"created_at\":\"2025-04-25T12:17:12.000000Z\",\"updated_at\":\"2025-04-25T12:18:31.000000Z\",\"deleted_at\":null,\"encrypted_id\":\"WTNybmw5UkFPcU5POHFZU0pCd3Z4QT09\"},\"booking_detail\":[]}', 'completed', 'Ride Completed Successfully', '2025-04-25 17:48:48', '2025-04-25 17:48:48', NULL),
+(24, 16, '{\"bookings\":{\"vehicle_id\":\"19\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 17:55:10\",\"start_datetime\":\"2025-12-01 18:00:00\",\"end_datetime\":\"2025-12-02 17:54:00\",\"pickup_location\":\"3\",\"return_location\":\"3\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"8\",\"no_of_days\":1.9958333333333333,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[{\\\"id\\\":1,\\\"price\\\":0,\\\"value\\\":\\\"one_time\\\"}]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"2000\",\"vehicle_total_price\":\"2\",\"final_price\":\"2000\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"26815781918539511\",\"payment_status\":1,\"payment_type\":\"paypal\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T12:25:11.000000Z\",\"created_at\":\"2025-04-25T12:25:11.000000Z\",\"id\":16,\"reservation_id\":\"RES-0016\",\"encrypted_id\":\"ZUtQU01iMzlKenRoWTd2cEM2VGlSZz09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 17:55:11', '2025-04-25 17:55:11', NULL),
+(25, 17, '{\"bookings\":{\"vehicle_id\":\"42\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 17:59:45\",\"start_datetime\":\"2025-05-02 18:00:00\",\"end_datetime\":\"2025-05-03 17:57:00\",\"pickup_location\":\"1\",\"return_location\":\"1\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"6\",\"no_of_days\":1.9979166666666668,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"800\",\"vehicle_total_price\":\"800\",\"final_price\":\"800\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"COD2256\",\"payment_status\":1,\"payment_type\":\"cod\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T12:29:45.000000Z\",\"created_at\":\"2025-04-25T12:29:45.000000Z\",\"id\":17,\"encrypted_id\":\"dGNVOXdNa0todGdmQnoxYzVlYXFHdz09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 17:59:45', '2025-04-25 17:59:45', NULL),
+(26, 18, '{\"bookings\":{\"vehicle_id\":\"43\",\"customer_id\":\"4\",\"booking_by\":\"quotation\",\"driver_id\":null,\"driver_price\":\"0\",\"vehicle_price\":\"600.00\",\"total_insurance_price\":\"0.00\",\"total_extra_service_price\":\"0.00\",\"final_price\":\"600.00\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"security_deposit\":null,\"start_datetime\":\"2025-05-02 18:07:00\",\"end_datetime\":\"2025-05-03 18:07:00\",\"pickup_location\":\"3\",\"return_location\":\"3\",\"booking_status\":1,\"booking_tariff\":null,\"driving_type\":null,\"rental_type\":\"daily\",\"no_of_passengers\":null,\"no_of_days\":\"1\",\"vehicle_total_price\":\"600.00\",\"base_km\":null,\"km_extra_price\":null,\"expenses\":null,\"delivery_price\":null,\"tax_val\":\"6\",\"tax_type\":\"percentage\",\"booking_date\":\"2025-04-25T12:38:15.685209Z\",\"created_by\":1,\"updated_at\":\"2025-04-25T12:38:15.000000Z\",\"created_at\":\"2025-04-25T12:38:15.000000Z\",\"id\":18,\"reservation_id\":\"RES-0018\",\"encrypted_id\":\"eTRGeURtQkcrVTEzTmZiREo0cGJOUT09\"},\"booking_details\":{\"vehicle_price_type\":\"daily\",\"vehicle_season_id\":null,\"vehicle_tariff_id\":null,\"booking_id\":18,\"updated_at\":\"2025-04-25T12:38:15.000000Z\",\"created_at\":\"2025-04-25T12:38:15.000000Z\",\"id\":4}}', 'create', 'Quotations created', '2025-04-25 18:08:15', '2025-04-25 18:08:15', NULL),
+(27, 19, '{\"bookings\":{\"vehicle_id\":\"19\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 18:54:46\",\"start_datetime\":\"2025-12-01 18:00:00\",\"end_datetime\":\"2025-12-02 17:54:00\",\"pickup_location\":\"3\",\"return_location\":\"3\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"8\",\"no_of_days\":1.9958333333333333,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[{\\\"id\\\":1,\\\"price\\\":0,\\\"value\\\":\\\"one_time\\\"}]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"2000\",\"vehicle_total_price\":\"2\",\"final_price\":\"2000\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"7U612644YK775445S\",\"payment_status\":1,\"payment_type\":\"paypal\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T13:24:48.000000Z\",\"created_at\":\"2025-04-25T13:24:48.000000Z\",\"id\":19,\"reservation_id\":\"RES-0019\",\"encrypted_id\":\"V0tWcnhVRE9WVG93aGhSc0FkNlRuZz09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 18:54:48', '2025-04-25 18:54:48', NULL),
+(28, 20, '{\"bookings\":{\"vehicle_id\":\"19\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 18:58:26\",\"start_datetime\":\"2025-12-01 18:00:00\",\"end_datetime\":\"2025-12-02 17:54:00\",\"pickup_location\":\"3\",\"return_location\":\"3\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"8\",\"no_of_days\":1.9958333333333333,\"customer_id\":4,\"driver_id\":0,\"driver_price\":\"0\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"2000\",\"vehicle_total_price\":\"2\",\"final_price\":\"2000\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"1C0995587G520924M\",\"payment_status\":1,\"payment_type\":\"paypal\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T13:28:27.000000Z\",\"created_at\":\"2025-04-25T13:28:27.000000Z\",\"id\":20,\"reservation_id\":\"RES-0020\",\"encrypted_id\":\"NmF6UjdRd2I5RW5HVUYrZVhHcFV5Zz09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 18:58:27', '2025-04-25 18:58:27', NULL),
+(29, 21, '{\"bookings\":{\"vehicle_id\":\"1\",\"booking_status\":4,\"booking_by\":\"user\",\"booking_date\":\"2025-04-25 19:03:08\",\"start_datetime\":\"2025-08-13 19:15:00\",\"end_datetime\":\"2025-08-27 19:02:00\",\"pickup_location\":\"1\",\"return_location\":\"1\",\"delivery_location\":null,\"delivery_return_location\":null,\"delivery_type\":\"self_pickup\",\"rental_type\":\"daily\",\"security_deposit\":null,\"booking_tariff\":null,\"driving_type\":null,\"no_of_passengers\":\"4\",\"no_of_days\":14.990972222222222,\"customer_id\":4,\"driver_id\":\"1\",\"driver_price\":\"0\",\"extra_service\":\"[]\",\"insurance\":\"[]\",\"total_insurance_price\":\"0\",\"total_extra_service_price\":\"0\",\"vehicle_price\":\"100\",\"vehicle_total_price\":\"1\",\"final_price\":\"1400\",\"cancel_date\":null,\"cancel_by\":null,\"cancel_reason\":null,\"created_by\":null,\"updated_by\":null,\"transaction_id\":\"COD7254\",\"payment_status\":1,\"payment_type\":\"cod\",\"tax_val\":\"0\",\"updated_at\":\"2025-04-25T13:33:08.000000Z\",\"created_at\":\"2025-04-25T13:33:08.000000Z\",\"id\":21,\"encrypted_id\":\"ZCtkVUJza1VtcjNBWS80RjVMVllwUT09\"},\"booking_details\":[]}', 'create', 'Booking Created', '2025-04-25 19:03:08', '2025-04-25 19:03:08', NULL);
 
 -- --------------------------------------------------------
 
@@ -302,29 +413,52 @@ CREATE TABLE `booking_histories` (
 CREATE TABLE `booking_user_infos` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `booking_id` bigint(20) UNSIGNED NOT NULL,
-  `driver_first_name` varchar(255) DEFAULT NULL,
-  `driver_last_name` varchar(255) DEFAULT NULL,
+  `driver_first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `driver_last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `driver_age` int(11) DEFAULT NULL,
-  `driver_mobile_number` varchar(255) DEFAULT NULL,
-  `driver_licence` varchar(255) DEFAULT NULL,
-  `driver_check` tinyint(1) NOT NULL DEFAULT 0,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
-  `no_person` varchar(255) NOT NULL,
-  `company` varchar(255) DEFAULT NULL,
-  `address` text NOT NULL,
+  `driver_mobile_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `driver_licence` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `driver_check` tinyint(1) NOT NULL DEFAULT '0',
+  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `no_person` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `company` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `country_id` bigint(20) UNSIGNED NOT NULL,
   `state_id` bigint(20) UNSIGNED NOT NULL,
   `city_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `pincode` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `phone_number` varchar(255) NOT NULL,
-  `add_info` text DEFAULT NULL,
-  `terms_check` tinyint(1) NOT NULL DEFAULT 0,
+  `pincode` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `add_info` text COLLATE utf8mb4_unicode_ci,
+  `terms_check` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `booking_user_infos`
+--
+
+INSERT INTO `booking_user_infos` (`id`, `booking_id`, `driver_first_name`, `driver_last_name`, `driver_age`, `driver_mobile_number`, `driver_licence`, `driver_check`, `first_name`, `last_name`, `no_person`, `company`, `address`, `country_id`, `state_id`, `city_id`, `pincode`, `email`, `phone_number`, `add_info`, `terms_check`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'Demouser', 'one', 28, '+1333343432323', 'g55566', 1, 'Demouser', 'one', '6', NULL, 'river sd', 231, 3956, 48019, '12345', 'av@yopmail.com', '13333343232', NULL, 0, '2025-04-24 12:53:25', '2025-04-24 12:53:25', NULL),
+(2, 5, 'Demouser', 'one', 22, '+1333343432323', '2222222', 1, 'Demouser', 'one', '4', NULL, 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '13333434323', NULL, 0, '2025-04-25 16:09:01', '2025-04-25 16:09:01', NULL),
+(3, 6, 'Demouser', 'one', 21, '+1333343432323', '21321321312321312321', 1, 'Demouser', 'one', '8', NULL, 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '13333434323', NULL, 0, '2025-04-25 16:10:59', '2025-04-25 16:10:59', NULL),
+(4, 7, 'Demouser', 'one', 30, '+1333343432323', '88778888888', 1, 'Demouser', 'one', '6', NULL, 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '13334343232', NULL, 0, '2025-04-25 16:11:32', '2025-04-25 16:11:32', NULL),
+(5, 8, 'Demouser', 'one', 22, '+1333343432323', '22222222222222222222', 1, 'Demouser', 'one', '6', NULL, 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '133343432323', NULL, 0, '2025-04-25 16:36:40', '2025-04-25 16:36:40', NULL),
+(6, 9, 'Demouser', 'one', 22, '133334343232', '111111111111111', 1, 'Demouser', 'one', '5', NULL, 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '133334343323', NULL, 0, '2025-04-25 16:51:17', '2025-04-25 16:51:17', NULL),
+(7, 10, 'Demouser', 'one', 23, '+1333343432323', 'LC21212', 1, 'Demouser', 'one', '5', NULL, 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '1333343432', NULL, 0, '2025-04-25 16:56:29', '2025-04-25 16:56:29', NULL),
+(8, 11, 'Demouser', 'one', 26, '+1333343432323', 'LIC12121', 1, 'Demouser', 'one', '5', NULL, 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '13333434', NULL, 0, '2025-04-25 17:02:51', '2025-04-25 17:02:51', NULL),
+(9, 12, 'Demouser', 'one', 35, '+1333343432323', 'LIC1245454', 1, 'Demouser', 'one', '4', NULL, 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '13333434', NULL, 0, '2025-04-25 17:10:39', '2025-04-25 17:10:39', NULL),
+(10, 13, 'Demouser', 'one', 26, '121212121211', 'LIC3242323', 1, 'Demouser', 'one', '4', NULL, 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '133334343', NULL, 0, '2025-04-25 17:28:08', '2025-04-25 17:28:08', NULL),
+(11, 14, 'Demouser', 'one', 25, '+1333343432323', '5566544556', 1, 'Demouser', 'one', '8', NULL, 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '13333443232', NULL, 0, '2025-04-25 17:44:22', '2025-04-25 17:44:22', NULL),
+(12, 15, 'Demouser', 'one', NULL, '+1333343432323', NULL, 0, 'Demouser', 'one', '4', NULL, 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '133334332323', NULL, 0, '2025-04-25 17:47:12', '2025-04-25 17:47:12', NULL),
+(13, 16, 'Demouser', 'one', 21, '+1333343432323', '21321321312321312321', 1, 'Demouser', 'one', '8', 'iu9i', 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '133334343', NULL, 0, '2025-04-25 17:55:11', '2025-04-25 17:55:11', NULL),
+(14, 17, 'Demouser', 'one', 45, '+1333343432323', 'LIC1245', 1, 'Demouser', 'one', '6', NULL, 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '1333343432', NULL, 0, '2025-04-25 17:59:45', '2025-04-25 17:59:45', NULL),
+(15, 19, 'Demouser', 'one', 21, '+1333343432323', '21321321312321312321', 1, 'Demouser', 'one', '8', 'iu9i', 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '133334343232', 'ad', 0, '2025-04-25 18:54:48', '2025-04-25 18:54:48', NULL),
+(16, 20, 'Demouser', 'one', 21, '+1333343432323', '21321321312321312321', 1, 'Demouser', 'one', '8', 'asdasd', 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '133334343', NULL, 0, '2025-04-25 18:58:27', '2025-04-25 18:58:27', NULL),
+(17, 21, 'Demouser', 'one', NULL, '+1333343432323', NULL, 0, 'Demouser', 'one', '4', NULL, 'river sd', 231, 3956, 48019, '12345', 'demouser@example.com', '13333434323', NULL, 0, '2025-04-25 19:03:08', '2025-04-25 19:03:08', NULL);
 
 -- --------------------------------------------------------
 
@@ -334,16 +468,28 @@ CREATE TABLE `booking_user_infos` (
 
 CREATE TABLE `brands` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT 1,
-  `brand_image` varchar(255) DEFAULT NULL,
-  `brand_icon` varchar(255) DEFAULT NULL,
-  `brand_name` varchar(255) DEFAULT NULL,
-  `total_cars` double DEFAULT 0,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `language_id` int(11) DEFAULT '1',
+  `brand_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brand_icon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brand_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `total_cars` double DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `brands`
+--
+
+INSERT INTO `brands` (`id`, `language_id`, `brand_image`, `brand_icon`, `brand_name`, `total_cars`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'brands/ba918cad-fd6a-4954-84ab-e3e94315906c_1745333180.jpg', 'brands/38d5227d-36de-476a-b25c-71fc60ae6e17_1745333180.png', 'Audi', NULL, 1, '2025-04-22 20:16:20', '2025-04-22 20:16:56', NULL),
+(2, 1, 'brands/9eb1bdf7-cd9c-4305-bfd4-9ce4b6d51490_1745476703.png', 'brands/8ec12369-60bc-4926-a3d8-7097cadb55cd_1745476703.png', 'BMW', NULL, 1, '2025-04-22 20:21:16', '2025-04-24 12:08:23', NULL),
+(3, 1, 'brands/dad4448e-a8eb-4639-a8d9-571ecd9f382a_1745476748.png', 'brands/d5ab8791-6935-4dd4-bee1-4f1421f26bd6_1745476748.png', 'Mercedes Benz', NULL, 1, '2025-04-22 20:24:25', '2025-04-24 12:09:08', NULL),
+(4, 1, 'brands/4bbbd8f9-d3ac-42c6-b496-eb04cf87478a_1745476724.png', 'brands/2a2ad12b-6d27-49d9-a96b-0b755c70eb5f_1745476724.png', 'Ford', NULL, 1, '2025-04-22 20:26:36', '2025-04-24 12:08:44', NULL),
+(5, 1, 'brands/808086bc-be3e-4f7a-9b14-af2ca9dc293f_1745476675.png', 'brands/f56c0a54-87c5-4633-96e8-9ee8455e2abf_1745476675.png', 'Hyundai', NULL, 1, '2025-04-22 20:40:05', '2025-04-24 12:07:55', NULL),
+(6, 1, 'brands/7ccde8b5-d6fe-4c88-801e-108f0471583b_1745476773.png', 'brands/961a7cc8-11d9-4fb5-a3a2-9492aafaf17e_1745476773.png', 'Toyota', NULL, 1, '2025-04-22 20:44:35', '2025-04-24 12:09:33', NULL);
 
 -- --------------------------------------------------------
 
@@ -352,8 +498,8 @@ CREATE TABLE `brands` (
 --
 
 CREATE TABLE `cache` (
-  `key` varchar(255) NOT NULL,
-  `value` mediumtext NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -364,8 +510,8 @@ CREATE TABLE `cache` (
 --
 
 CREATE TABLE `cache_locks` (
-  `key` varchar(255) NOT NULL,
-  `owner` varchar(255) NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -377,14 +523,32 @@ CREATE TABLE `cache_locks` (
 
 CREATE TABLE `cartypes` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT 1,
-  `name` varchar(255) DEFAULT NULL,
-  `icon` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `language_id` int(11) DEFAULT '1',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `icon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `cartypes`
+--
+
+INSERT INTO `cartypes` (`id`, `language_id`, `name`, `icon`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'Coupes', 'vehicle_types/1d98d21f-9126-4647-9665-48949b2d17de_1745321972.svg', 1, '2025-04-22 17:09:32', '2025-04-22 17:09:32', NULL),
+(2, 1, 'Crossover', 'vehicle_types/5ac1cd77-4720-4ad8-9258-ea6d4ab50c3d_1745332277.svg', 1, '2025-04-22 20:01:17', '2025-04-22 20:01:17', NULL),
+(3, 1, 'Hatchback', 'vehicle_types/bc3b4ec2-5c00-456b-8ede-b58392e8e5be_1745332294.svg', 1, '2025-04-22 20:01:34', '2025-04-22 20:01:34', NULL),
+(4, 1, 'Sedan', 'vehicle_types/02a91c5e-f434-405f-b626-56737f60e295_1745332310.svg', 1, '2025-04-22 20:01:50', '2025-04-22 20:01:50', NULL),
+(5, 1, 'SUV', 'vehicle_types/2544ee43-ab68-4c83-bf52-8a17a8a59c25_1745332329.svg', 1, '2025-04-22 20:02:09', '2025-04-22 20:02:09', NULL),
+(6, 1, 'Trucks', 'vehicle_types/fa03ce2b-b822-445c-ad2f-7a4aa051cd37_1745662823.svg', 1, '2025-04-25 18:09:35', '2025-04-26 15:50:23', NULL),
+(7, 1, 'Sports Car', 'vehicle_types/e19616cd-9605-49b9-aa1f-52a2f59246dc_1745648241.jpg', 1, '2025-04-26 10:18:25', '2025-04-26 11:47:21', NULL),
+(8, 1, 'Minivan', 'vehicle_types/9957b40d-79c8-448b-aa30-bd7ff5dd0deb_1745648375.jpg', 1, '2025-04-26 10:26:26', '2025-04-26 11:49:35', NULL),
+(9, 1, 'Wagon', 'vehicle_types/ce1c1697-169a-4f05-974a-f160e4ce129a_1745648133.jpg', 1, '2025-04-26 10:29:11', '2025-04-26 12:09:34', NULL),
+(10, 1, 'Luxury', 'vehicle_types/17acc089-201c-482a-8421-c39878c52cf3_1745648478.jpg', 1, '2025-04-26 10:32:00', '2025-04-26 11:51:18', NULL),
+(11, 1, 'Convertible', 'vehicle_types/b59be413-af08-44d6-841e-6c7950a6587a_1745648578.jpg', 1, '2025-04-26 10:36:26', '2025-04-26 12:09:46', NULL),
+(12, 1, 'Hybrid', 'vehicle_types/7824e517-74e4-4fa0-a0bb-72ad148c0eae_1745650218.png', 1, '2025-04-26 11:07:49', '2025-04-26 12:20:18', NULL);
 
 -- --------------------------------------------------------
 
@@ -394,14 +558,25 @@ CREATE TABLE `cartypes` (
 
 CREATE TABLE `car_colors` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT 1,
-  `name` varchar(255) DEFAULT NULL,
-  `value` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `language_id` int(11) DEFAULT '1',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `value` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `car_colors`
+--
+
+INSERT INTO `car_colors` (`id`, `language_id`, `name`, `value`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'White', '#ffffff', 1, '2025-04-22 20:51:48', '2025-04-22 20:55:39', NULL),
+(2, 1, 'Black', '#000000', 1, '2025-04-22 20:52:42', '2025-04-22 20:52:42', NULL),
+(3, 1, 'Silver', '#c0c0c0', 1, '2025-04-22 20:53:13', '2025-04-22 20:54:25', NULL),
+(4, 1, 'Gray', '#808080', 1, '2025-04-22 20:54:50', '2025-04-22 20:54:50', NULL),
+(5, 1, 'Red', '#ff0000', 1, '2025-04-22 20:55:14', '2025-04-22 20:55:14', NULL);
 
 -- --------------------------------------------------------
 
@@ -411,13 +586,24 @@ CREATE TABLE `car_colors` (
 
 CREATE TABLE `car_fuels` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT 1,
-  `fuel_type` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `language_id` int(11) DEFAULT '1',
+  `fuel_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `car_fuels`
+--
+
+INSERT INTO `car_fuels` (`id`, `language_id`, `fuel_type`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'Petrol', 1, '2025-04-22 20:58:10', '2025-04-22 20:58:10', NULL),
+(2, 1, 'Diesel', 1, '2025-04-22 20:58:16', '2025-04-22 20:58:16', NULL),
+(3, 1, 'Electric', 1, '2025-04-22 20:58:23', '2025-04-22 20:58:23', NULL),
+(4, 1, 'Hybrid', 1, '2025-04-22 20:58:38', '2025-04-26 08:09:01', NULL),
+(5, 1, 'CNG', 1, '2025-04-22 20:58:47', '2025-04-25 15:37:40', NULL);
 
 -- --------------------------------------------------------
 
@@ -427,15 +613,33 @@ CREATE TABLE `car_fuels` (
 
 CREATE TABLE `car_models` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT 1,
-  `model_name` varchar(255) DEFAULT NULL,
+  `language_id` int(11) DEFAULT '1',
+  `model_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `brand_id` int(11) DEFAULT NULL,
   `total_cars` double DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `car_models`
+--
+
+INSERT INTO `car_models` (`id`, `language_id`, `model_name`, `brand_id`, `total_cars`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'BMW i6', 2, NULL, 1, '2025-04-22 20:46:11', '2025-04-22 20:46:11', NULL),
+(2, 1, 'BMW i7', 2, NULL, 1, '2025-04-22 20:46:21', '2025-04-22 20:46:21', NULL),
+(3, 1, 'Audi A7', 1, NULL, 1, '2025-04-22 20:46:58', '2025-04-22 20:46:58', NULL),
+(4, 1, 'Audi A8', 1, NULL, 1, '2025-04-22 20:47:08', '2025-04-22 20:47:08', NULL),
+(5, 1, 'Toyota Corolla', 6, NULL, 1, '2025-04-22 20:47:34', '2025-04-22 20:47:34', NULL),
+(6, 1, 'Toyota Prius', 6, NULL, 1, '2025-04-22 20:47:51', '2025-04-22 20:47:51', NULL),
+(7, 1, 'Ford Fiesta', 4, NULL, 1, '2025-04-22 20:48:14', '2025-04-22 20:48:14', NULL),
+(8, 1, 'Ford Taurus', 4, NULL, 1, '2025-04-22 20:48:32', '2025-04-22 20:48:32', NULL),
+(9, 1, 'E-Class', 3, NULL, 1, '2025-04-22 20:49:12', '2025-04-22 20:49:12', NULL),
+(10, 1, 'S-Class', 3, NULL, 1, '2025-04-22 20:49:19', '2025-04-22 20:49:19', NULL),
+(11, 1, 'Hyundai Accent', 5, NULL, 1, '2025-04-22 20:49:41', '2025-04-22 20:49:41', NULL),
+(12, 1, 'Hyundai Aura', 5, NULL, 1, '2025-04-22 20:50:02', '2025-04-22 20:50:02', NULL);
 
 -- --------------------------------------------------------
 
@@ -445,12 +649,21 @@ CREATE TABLE `car_models` (
 
 CREATE TABLE `car_steerings` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `steering_type` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `steering_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `car_steerings`
+--
+
+INSERT INTO `car_steerings` (`id`, `steering_type`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Manual', 1, '2025-04-22 20:59:16', '2025-04-22 20:59:16', NULL),
+(2, 'Power', 1, '2025-04-22 20:59:31', '2025-04-22 20:59:31', NULL),
+(3, 'Electro-Hydraulic', 1, '2025-04-22 20:59:44', '2025-04-22 20:59:44', NULL);
 
 -- --------------------------------------------------------
 
@@ -460,13 +673,23 @@ CREATE TABLE `car_steerings` (
 
 CREATE TABLE `categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT 1,
-  `name` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `language_id` int(11) DEFAULT '1',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `language_id`, `name`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'Car', 1, '2025-04-22 21:00:28', '2025-04-22 21:00:28', NULL),
+(2, 1, 'Truck', 1, '2025-04-22 21:00:36', '2025-04-22 21:00:36', NULL),
+(3, 1, 'Motorcycle', 1, '2025-04-22 21:00:45', '2025-04-22 21:00:45', NULL),
+(4, 1, 'heavy duty', 1, '2025-04-25 18:05:35', '2025-04-25 18:07:05', NULL);
 
 -- --------------------------------------------------------
 
@@ -476,9 +699,9 @@ CREATE TABLE `categories` (
 
 CREATE TABLE `checklists` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `description` longtext DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -494,10 +717,10 @@ CREATE TABLE `cities` (
   `id` bigint(20) NOT NULL,
   `state_id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `cities`
@@ -48939,9 +49162,9 @@ INSERT INTO `cities` (`id`, `state_id`, `name`, `status`, `created_at`, `updated
 
 CREATE TABLE `communication_settings` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `type` varchar(255) NOT NULL,
-  `key` varchar(255) NOT NULL,
-  `value` text DEFAULT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` text COLLATE utf8mb4_unicode_ci,
   `settings_type` int(11) DEFAULT NULL COMMENT '1 = Email and 2 = SMS and 3 = Pushnotification	',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -48967,13 +49190,13 @@ INSERT INTO `communication_settings` (`id`, `type`, `key`, `value`, `settings_ty
 (10, 'twilio', 'twilio_api_key', NULL, 2, '2025-03-13 06:39:13', '2025-03-13 06:39:13', NULL, NULL, NULL),
 (11, 'twilio', 'twilio_secret_key', NULL, 2, '2025-03-13 06:39:13', '2025-03-13 06:39:13', NULL, NULL, NULL),
 (12, 'twilio', 'twilio_sender_id', NULL, 2, '2025-03-13 06:39:14', '2025-03-13 06:39:14', NULL, NULL, NULL),
-(13, 'smtp', 'smtp_status', '0', 1, '2025-03-26 08:11:59', '2025-04-02 10:46:41', NULL, NULL, NULL),
-(14, 'smtp', 'smtp_from_email', NULL, 1, '2025-03-26 08:12:21', '2025-04-09 10:38:27', NULL, NULL, NULL),
-(15, 'smtp', 'smtp_password', NULL, 1, '2025-03-26 08:12:21', '2025-04-09 10:38:27', NULL, NULL, NULL),
-(16, 'smtp', 'smtp_from_name', NULL, 1, '2025-03-26 08:12:21', '2025-04-09 10:38:27', NULL, NULL, NULL),
+(13, 'smtp', 'smtp_status', '1', 1, '2025-03-26 08:11:59', '2025-04-25 16:57:44', NULL, NULL, NULL),
+(14, 'smtp', 'smtp_from_email', 'dtnotification@dreamstechnologies.com', 1, '2025-03-26 08:12:21', '2025-04-25 17:00:50', NULL, NULL, NULL),
+(15, 'smtp', 'smtp_password', 'Dreams123456', 1, '2025-03-26 08:12:21', '2025-04-25 17:00:50', NULL, NULL, NULL),
+(16, 'smtp', 'smtp_from_name', 'dtnotification@dreamstechnologies.com', 1, '2025-03-26 08:12:21', '2025-04-25 17:00:50', NULL, NULL, NULL),
 (17, 'smtp', 'smtp_port', '587', 1, '2025-03-26 08:12:21', '2025-04-02 10:39:53', NULL, NULL, NULL),
 (18, 'smtp', 'smtp_host', 'smtp.googlemail.com', 1, '2025-03-26 08:12:21', '2025-03-26 08:12:21', NULL, NULL, NULL),
-(19, 'sendgrid', 'sendgrid_status', '0', 1, '2025-04-02 10:46:35', '2025-04-02 10:46:41', NULL, NULL, NULL);
+(19, 'sendgrid', 'sendgrid_status', '0', 1, '2025-04-02 10:46:35', '2025-04-25 16:57:44', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -48987,7 +49210,7 @@ CREATE TABLE `configurations` (
   `value` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `configurations`
@@ -49005,15 +49228,22 @@ INSERT INTO `configurations` (`id`, `config`, `value`, `created_at`, `updated_at
 
 CREATE TABLE `contacts` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `phone_number` varchar(255) NOT NULL,
-  `message` text NOT NULL,
-  `image` varchar(255) DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `contacts`
+--
+
+INSERT INTO `contacts` (`id`, `name`, `email`, `phone_number`, `message`, `image`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'deva', 'av@yopmail.com', '+18899878988', 'ca we connect for the enquiry', NULL, '2025-04-24 16:11:48', '2025-04-24 16:11:48', NULL);
 
 -- --------------------------------------------------------
 
@@ -49026,10 +49256,10 @@ CREATE TABLE `countries` (
   `name` varchar(255) NOT NULL,
   `code` varchar(255) DEFAULT NULL,
   `phonecode` varchar(255) DEFAULT NULL,
-  `status` int(11) NOT NULL DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `status` int(11) NOT NULL DEFAULT '1',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `countries`
@@ -49294,12 +49524,12 @@ CREATE TABLE `currencies` (
   `currency_name` varchar(100) DEFAULT NULL,
   `code` varchar(100) DEFAULT NULL,
   `symbol` varchar(100) DEFAULT NULL,
-  `exchange_rate` double(15,2) NOT NULL DEFAULT 0.00,
-  `status` tinyint(1) NOT NULL DEFAULT 0,
+  `exchange_rate` double(15,2) NOT NULL DEFAULT '0.00',
+  `status` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `currencies`
@@ -49317,12 +49547,23 @@ INSERT INTO `currencies` (`id`, `currency_name`, `code`, `symbol`, `exchange_rat
 
 CREATE TABLE `cylinders` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `cylinder_type` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `cylinder_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `cylinders`
+--
+
+INSERT INTO `cylinders` (`id`, `cylinder_type`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Inline 3', 1, '2025-04-22 21:02:54', '2025-04-22 21:02:54', NULL),
+(2, 'Inline 4', 1, '2025-04-22 21:03:01', '2025-04-22 21:03:01', NULL),
+(3, 'Inline 5', 1, '2025-04-22 21:03:08', '2025-04-22 21:03:08', NULL),
+(4, 'Inline 6', 1, '2025-04-22 21:03:14', '2025-04-22 21:03:14', NULL),
+(5, 'V-Type', 1, '2025-04-22 21:03:25', '2025-04-22 21:03:25', NULL);
 
 -- --------------------------------------------------------
 
@@ -49332,13 +49573,22 @@ CREATE TABLE `cylinders` (
 
 CREATE TABLE `damage_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT 1,
-  `damage_type` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `language_id` int(11) DEFAULT '1',
+  `damage_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `damage_types`
+--
+
+INSERT INTO `damage_types` (`id`, `language_id`, `damage_type`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'Dent', 1, '2025-04-22 20:04:04', '2025-04-22 20:04:04', NULL),
+(2, 1, 'Rust / Corrosion', 1, '2025-04-22 20:04:43', '2025-04-22 20:04:43', NULL),
+(3, 1, 'Scratch', 1, '2025-04-22 20:05:02', '2025-04-22 20:05:02', NULL);
 
 -- --------------------------------------------------------
 
@@ -49349,9 +49599,9 @@ CREATE TABLE `damage_types` (
 CREATE TABLE `date_formats` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `date_formats`
@@ -49382,12 +49632,20 @@ INSERT INTO `date_formats` (`id`, `name`, `created_at`, `updated_at`) VALUES
 
 CREATE TABLE `dbbackups` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `type` int(11) NOT NULL DEFAULT 1,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` int(11) NOT NULL DEFAULT '1',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `dbbackups`
+--
+
+INSERT INTO `dbbackups` (`id`, `name`, `type`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 'database_backup_2025_04_24_165108.sql', 1, NULL, '2025-04-24 16:51:09', '2025-04-24 16:51:09'),
+(2, 'database_backup_2025_04_24_170537.sql', 1, NULL, '2025-04-24 17:05:39', '2025-04-24 17:05:39');
 
 -- --------------------------------------------------------
 
@@ -49397,12 +49655,21 @@ CREATE TABLE `dbbackups` (
 
 CREATE TABLE `door_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `door_type` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `door_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `door_types`
+--
+
+INSERT INTO `door_types` (`id`, `door_type`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, '2', 1, '2025-04-22 20:02:21', '2025-04-22 20:02:21', NULL),
+(2, '4', 1, '2025-04-22 20:02:28', '2025-04-22 20:02:28', NULL),
+(3, '6', 0, '2025-04-24 11:12:06', '2025-04-24 11:12:17', NULL);
 
 -- --------------------------------------------------------
 
@@ -49412,21 +49679,31 @@ CREATE TABLE `door_types` (
 
 CREATE TABLE `drivers` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `driver_name` varchar(255) DEFAULT NULL,
-  `gender` varchar(255) DEFAULT NULL,
-  `phone_number` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL,
-  `assigned_cars` text DEFAULT NULL,
-  `card_number` varchar(255) DEFAULT NULL,
-  `date_of_issue` varchar(255) DEFAULT NULL,
-  `valid_date` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `driver_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gender` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `assigned_cars` text COLLATE utf8mb4_unicode_ci,
+  `card_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `date_of_issue` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `valid_date` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `drivers`
+--
+
+INSERT INTO `drivers` (`id`, `image`, `driver_name`, `gender`, `phone_number`, `email`, `address`, `assigned_cars`, `card_number`, `date_of_issue`, `valid_date`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'drivers/d1d4dfef-5f1e-479c-8ba5-b4c709713457_1745471337.jpg', 'ken', 'male', '+188778888899', 'kk@yopmail.com', 'no 12, west street', '1', '44333444455343', '08-04-2025', '07-05-2025', 1, '2025-04-24 10:38:57', '2025-04-24 10:57:01', NULL),
+(2, 'drivers/770e241f-84ea-47fb-8ed6-724e8b9037e7_1745472155.jpg', 'john', 'male', '+188776767755', 'jk@yopmail.com', 'no 12, west street', '1', '887776667777', '10-04-2025', '02-05-2025', 1, '2025-04-24 10:52:35', '2025-04-24 10:57:01', NULL),
+(3, 'drivers/2624af5b-584b-45ea-9062-11af969a8a73_1745472380.jpg', 'koel', 'male', '+18899898788', 'kk@yopmail.com', 'no 12, west street', '1', '7766878788999', '23-04-2025', '20-06-2025', 1, '2025-04-24 10:56:20', '2025-04-24 10:57:01', NULL),
+(4, 'drivers/8e6392ea-cdd2-4776-b7cc-7287ad16b4f8_1745472524.jpg', 'david', 'other', '+18877878799', 'dv@yopmail.com', 'no 12, west street', '1', '8877878988999', '21-04-2025', '10-07-2025', 1, '2025-04-24 10:58:44', '2025-04-24 10:58:44', NULL);
 
 -- --------------------------------------------------------
 
@@ -49437,10 +49714,21 @@ CREATE TABLE `drivers` (
 CREATE TABLE `driver_documents` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `driver_id` bigint(20) UNSIGNED NOT NULL,
-  `document` varchar(255) DEFAULT NULL,
+  `document` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `driver_documents`
+--
+
+INSERT INTO `driver_documents` (`id`, `driver_id`, `document`, `created_at`, `updated_at`) VALUES
+(1, 1, 'drivers/32074f9b-ba9c-4a84-abd8-9474b76a9ea0_1745471337.jpg', '2025-04-24 10:38:57', '2025-04-24 10:38:57'),
+(2, 2, 'drivers/0421ba9d-251b-4ca5-84b5-792f71a0c6f1_1745472155.jpg', '2025-04-24 10:52:35', '2025-04-24 10:52:35'),
+(3, 1, 'drivers/b5be93cd-d671-4c35-809f-481c6e264b1c_1745472194.pdf', '2025-04-24 10:53:14', '2025-04-24 10:53:14'),
+(4, 3, 'drivers/dd307fb3-e727-4ea0-8576-afa1d6e3d1a2_1745472380.pdf', '2025-04-24 10:56:20', '2025-04-24 10:56:20'),
+(5, 4, 'drivers/d9cfaf42-6231-4959-b307-ece2f1c17612_1745472524.pdf', '2025-04-24 10:58:44', '2025-04-24 10:58:44');
 
 -- --------------------------------------------------------
 
@@ -49451,18 +49739,10 @@ CREATE TABLE `driver_documents` (
 CREATE TABLE `driving_types` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `driving_types`
---
-
-INSERT INTO `driving_types` (`id`, `name`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Self Pickup', '2025-03-06 06:09:16', '2025-03-25 05:11:16', NULL),
-(2, 'chauffeur-driven', '2025-03-06 06:09:16', '2025-03-06 06:09:16', NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -49474,15 +49754,15 @@ CREATE TABLE `email_templates` (
   `id` int(11) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
   `notification_type` int(11) NOT NULL,
-  `description` longtext DEFAULT NULL,
-  `subject` text DEFAULT NULL,
-  `sms_content` text DEFAULT NULL,
-  `notification_content` text DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `description` longtext,
+  `subject` text,
+  `sms_content` text,
+  `notification_content` text,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `email_templates`
@@ -49491,11 +49771,12 @@ CREATE TABLE `email_templates` (
 INSERT INTO `email_templates` (`id`, `title`, `notification_type`, `description`, `subject`, `sms_content`, `notification_content`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (2, 'Welcome Email', 1, '<p>{company_name} test<br></p>', 'Exciting News: Your Service Request Has Been Completed!', 'text sms', NULL, 1, '2025-04-08 01:40:06', '2025-04-08 01:40:29', '2025-04-07 07:11:26'),
 (3, 'Email Welcome', 1, '<p>Hi&nbsp;<span style=\"color: rgb(0, 128, 255);\">{user_name}</span>,<br>Welcome to {company_name}!</p><p>We’re thrilled to have you as part of our community and are excited to support you in finding the perfect car rental solution. Thank you for choosing us – we truly appreciate your trust and confidence.</p><p>At&nbsp;{company_name}<span class=\"text-info\"></span>, our mission is to make your experience as smooth and efficient as possible. Whether you’re looking for the perfect vehicle or need assistance with booking, we’re here to help you every step of the way. If you have any questions or need help, our dedicated support team is always ready to assist you. Feel free to reach out at any time – we’re committed to ensuring you have the best experience possible</p><p>Thank you again for choosing {company_name}. We’re excited to be part of your journey and look forward to supporting you throughout your rental experience.</p><p>Best<br>The&nbsp;{company_name}&nbsp;<span class=\"text-info\"></span>Team</p>', 'Welcome aboard – Let’s get started!', 'Welcome aboard – Let’s get started!', NULL, 1, '2025-04-08 01:41:36', '2025-04-09 15:26:04', NULL),
+(4, 'Booking  confirmation User', 2, '<p>Hi&nbsp;<span style=\"color: rgb(0, 128, 255);\">{user_name}</span>,<br>Welcome to {company_name}!</p><p>We’re thrilled to have you as part of our community and are excited to support you in finding the perfect car rental solution. Thank you for choosing us – we truly appreciate your trust and confidence.</p><p>At&nbsp;{company_name}<span class=\"text-info\"></span>, our mission is to make your experience as smooth and efficient as possible. Whether you’re looking for the perfect vehicle or need assistance with booking, we’re here to help you every step of the way. If you have any questions or need help, our dedicated support team is always ready to assist you. Feel free to reach out at any time – we’re committed to ensuring you have the best experience possible</p><p>Thank you again for choosing {company_name}. We’re excited to be part of your journey and look forward to supporting you throughout your rental experience.</p><p>Best<br>The&nbsp;{company_name}&nbsp;<span class=\"text-info\"></span>Team</p>', 'Notice: Your Service Request Has Been Completed!', 'Booking  confirmation', 'Booking  confirmation', 1, '2025-04-09 15:47:34', '2025-04-25 17:19:25', NULL),
 (5, 'Newsletter', 3, 'You have successfully subscribed to our newsletter.', 'Reg - Newsletter', 'You have successfully subscribed to our newsletter.', 'notification_content', 1, '2025-04-10 12:29:41', '2025-04-10 12:29:41', NULL),
-(7, 'Booking Confirmation to user', 2, '<p>Hello&nbsp;{user_name} vehicle ({vehicle_name}) has been booked successfully.</p>', 'Vehicle Booking Confirmation', 'Hello {user_name} vehicle ({vehicle_name}) has been booked successfully.', 'Hello {user_name} vehicle ({vehicle_name}) has been booked successfully.', 1, '2025-04-10 07:23:17', '2025-04-10 10:17:47', NULL),
+(7, 'Booking Confirmation to user', 10, '<p>Hello {user_name} vehicle ({vehicle_name}) has been booked successfully.</p>', 'Vehicle Booking Confirmation', 'Hello {user_name} vehicle ({vehicle_name}) has been booked successfully.', 'Hello {user_name} vehicle ({vehicle_name}) has been booked successfully.', 1, '2025-04-10 07:23:17', '2025-04-25 17:19:09', '2025-04-25 17:19:09'),
 (8, 'Booking Confirmation to admin', 4, '<p>{user_name} has booked vehicle<br></p>', 'New Vehicle Booking', '{user_name} has booked vehicle', '{user_name} has booked vehicle', 1, '2025-04-10 10:22:15', '2025-04-10 10:22:15', NULL),
-(9, 'Booking Cancelled to user', 6, '<p>Hello&nbsp;{user_name}, your reservation #{reservation_id} has been cancelled successfully.</p>', 'Booking cancelled', 'Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.', 'Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.', 1, '2025-04-10 11:06:04', '2025-04-10 11:06:04', NULL),
-(10, 'Booking cancelled to admin', 5, '<p>Hello Admin, #{reservation_id} reservation has been cancelled.</p>', 'Booking cancelled', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 1, '2025-04-10 11:07:18', '2025-04-10 11:07:18', NULL);
+(9, 'Booking Cancelled to user', 5, '<p>Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.</p>', 'Booking cancelled', 'Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.', 'Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.', 1, '2025-04-10 11:06:04', '2025-04-10 11:06:04', NULL),
+(10, 'Booking cancelled to admin', 6, '<p>Hello Admin, #{reservation_id} reservation has been cancelled.</p>', 'Booking cancelled', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 1, '2025-04-10 11:07:18', '2025-04-10 11:07:18', NULL);
 
 -- --------------------------------------------------------
 
@@ -49506,17 +49787,25 @@ INSERT INTO `email_templates` (`id`, `title`, `notification_type`, `description`
 CREATE TABLE `enquiries` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `car_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `customer_name` varchar(255) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `phone` varchar(255) DEFAULT NULL,
+  `customer_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `enquiry_date` date NOT NULL,
-  `enquiry_details` text DEFAULT NULL,
-  `status` enum('1','2','3') NOT NULL DEFAULT '1',
-  `comment` text DEFAULT NULL,
+  `enquiry_details` text COLLATE utf8mb4_unicode_ci,
+  `status` enum('1','2','3') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1',
+  `comment` text COLLATE utf8mb4_unicode_ci,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `enquiries`
+--
+
+INSERT INTO `enquiries` (`id`, `car_id`, `customer_name`, `email`, `phone`, `enquiry_date`, `enquiry_details`, `status`, `comment`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 2, 'DemoUser', 'demouser@example.com', '+19988787899', '2025-04-24', 'is your service available on weekend?', '2', 'yes it is available', NULL, '2025-04-24 15:22:03', '2025-04-25 15:13:15'),
+(2, 19, 'DemoUser', 'demouser@yopmail.com', '+18877878788', '2025-04-25', 'can we check with the availabilities for driver', '1', NULL, NULL, '2025-04-25 17:41:53', '2025-04-25 17:41:53');
 
 -- --------------------------------------------------------
 
@@ -49526,16 +49815,24 @@ CREATE TABLE `enquiries` (
 
 CREATE TABLE `extra_services` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT 1,
-  `name` varchar(255) DEFAULT NULL,
-  `icon` varchar(255) DEFAULT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `description` longtext DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `language_id` int(11) DEFAULT '1',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `icon` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `extra_services`
+--
+
+INSERT INTO `extra_services` (`id`, `language_id`, `name`, `icon`, `image`, `description`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'GPS Navigation System', 'extra_services/287065e2-1c21-437d-a7f5-ef1fe129ba63_1745336633.png', 'extra_services/12da888a-647a-4ab5-a5ec-a66e7a1dd530_1745336633.jpg', 'Provides real-time navigation and route planning.', 1, '2025-04-22 21:13:53', '2025-04-22 21:13:53', NULL),
+(2, 1, 'Child Seats/Booster Seats', 'extra_services/bd367ab8-bfae-4c85-9279-c9781cf94f8a_1745393541.jpg', 'extra_services/3d3d5c25-e80c-4159-a4b0-e0d0bc519bdf_1745393541.jpg', 'Provides child safety seats suitable for infants, toddlers, and older children', 0, '2025-04-23 06:19:15', '2025-04-23 13:02:21', NULL);
 
 -- --------------------------------------------------------
 
@@ -49545,12 +49842,12 @@ CREATE TABLE `extra_services` (
 
 CREATE TABLE `failed_jobs` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` varchar(255) NOT NULL,
-  `connection` text NOT NULL,
-  `queue` text NOT NULL,
-  `payload` longtext NOT NULL,
-  `exception` longtext NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -49561,16 +49858,24 @@ CREATE TABLE `failed_jobs` (
 
 CREATE TABLE `faqs` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `order_by` int(11) NOT NULL DEFAULT 0,
-  `question` varchar(255) NOT NULL,
-  `answer` text NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `language_id` bigint(20) UNSIGNED NOT NULL DEFAULT 1,
+  `order_by` int(11) NOT NULL DEFAULT '0',
+  `question` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `answer` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `language_id` bigint(20) UNSIGNED NOT NULL DEFAULT '1',
   `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `faqs`
+--
+
+INSERT INTO `faqs` (`id`, `order_by`, `question`, `answer`, `status`, `language_id`, `parent_id`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'whether need a driver or self pick up', 'you can opt for both the options', 1, 1, NULL, NULL, '2025-04-24 13:00:18', '2025-04-24 13:01:22'),
+(2, 2, 'is cars are maintained properly', 'yes it is maintained in a periodic manner', 1, 1, NULL, NULL, '2025-04-24 13:01:04', '2025-04-24 13:01:04');
 
 -- --------------------------------------------------------
 
@@ -49580,8 +49885,8 @@ CREATE TABLE `faqs` (
 
 CREATE TABLE `features` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -49595,8 +49900,8 @@ CREATE TABLE `features` (
 
 CREATE TABLE `general_settings` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `key` varchar(255) NOT NULL,
-  `value` text DEFAULT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` text COLLATE utf8mb4_unicode_ci,
   `group_id` bigint(20) UNSIGNED DEFAULT NULL,
   `language_id` bigint(20) UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -49612,7 +49917,7 @@ INSERT INTO `general_settings` (`id`, `key`, `value`, `group_id`, `language_id`,
 (9, 'country', '101', 1, NULL, NULL, '2025-02-28 04:46:37', '2025-04-01 13:12:54'),
 (10, 'state', '35', 1, NULL, NULL, '2025-02-28 04:46:37', '2025-04-02 10:32:16'),
 (11, 'city', '3683', 1, NULL, NULL, '2025-02-28 04:46:37', '2025-04-02 10:32:16'),
-(13, 'group_id', '1', 1, NULL, NULL, '2025-03-07 06:48:42', '2025-04-12 21:53:46'),
+(13, 'group_id', '2', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-04-25 16:46:02'),
 (14, 'notificationPreference', 'mentions', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-03-07 07:26:45'),
 (15, 'desktopNotifications', '0', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-03-07 07:10:42'),
 (16, 'unreadBadge', '1', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-03-07 06:48:42'),
@@ -49663,7 +49968,7 @@ INSERT INTO `general_settings` (`id`, `key`, `value`, `group_id`, `language_id`,
 (61, 'how_it_works_1', '<section class=\"section services\">\r\n    <div class=\"service-right\">\r\n        <img src=\"https://rental-system.dreamstechnologies.com/frontend/assets/img/bg/service-right.svg\" class=\"img-fluid\" alt=\"services right\">\r\n    </div>		\r\n    <div class=\"container\">	\r\n        <!-- Heading title-->\r\n        <div class=\"section-heading aos-init aos-animate\" data-aos=\"fade-down\">\r\n            <h2>How It Works</h2>\r\n            <p>Booking a car rental is a straightforward process that typically involves the following steps</p>\r\n        </div>\r\n        <!-- /Heading title -->\r\n        <div class=\"services-work\">\r\n            <div class=\"row\">\r\n                <div class=\"col-lg-4 col-md-4 col-12 d-flex aos-init aos-animate\" data-aos=\"fade-down\">\r\n                    <div class=\"services-group service-date flex-fill\">\r\n                        <div class=\"services-icon border-secondary\">\r\n                            <img class=\"icon-img bg-secondary\" src=\"https://rental-system.dreamstechnologies.com/frontend/assets/img/icons/services-icon-01.svg    \" alt=\"Choose Locations\">\r\n                        </div>\r\n                        <div class=\"services-content\">\r\n                            <h3>1. Choose Date &amp;  Locations</h3>\r\n                            <p>Determine the date &amp; location for your car rental. Consider factors such as your travel itinerary, pickup/drop-off locations (e.g., airport, city center), and duration of rental.</p>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n                <div class=\"col-lg-4 col-md-4 col-12 d-flex aos-init aos-animate\" data-aos=\"fade-down\">\r\n                    <div class=\"services-group service-loc flex-fill\">\r\n                        <div class=\"services-icon border-warning\">\r\n                            <img class=\"icon-img bg-warning\" src=\"https://rental-system.dreamstechnologies.com/frontend/assets/img/icons/services-icon-02.svg\" alt=\"Choose Locations\">\r\n                        </div>\r\n                        <div class=\"services-content\">\r\n                            <h3>2. Pick-Up Locations</h3>\r\n                            <p>Check the availability of your desired vehicle type for your chosen dates and location. Ensure that the rental rates, taxes, fees, and any additional charges.</p>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n                <div class=\"col-lg-4 col-md-4 col-12 d-flex aos-init aos-animate\" data-aos=\"fade-down\">\r\n                    <div class=\"services-group service-book flex-fill\">\r\n                        <div class=\"services-icon border-dark\">\r\n                            <img class=\"icon-img bg-dark\" src=\"https://rental-system.dreamstechnologies.com/frontend/assets/img/icons/services-icon-03.svg\" alt=\"Choose Locations\">\r\n                        </div>\r\n                        <div class=\"services-content\">\r\n                            <h3>3. Book your Car</h3>\r\n                            <p>Once you\'ve found car rental option, proceed to make a reservation. Provide the required information, including your details, driver\'s license, contact info, and payment details.</p>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</section>', 10, 1, NULL, NULL, '2025-03-24 09:57:20'),
 (63, 'play_store_link', 'https://play.google.com/store/apps/details?id=notion.id&hl=en_IN&pli=1', 15, 1, NULL, NULL, NULL),
 (64, 'apple_store_link', 'https://apps.apple.com/us/app/notion-notes-tasks-ai/id1232780281', 15, 1, NULL, NULL, NULL),
-(65, 'default_theme', '1', 16, NULL, NULL, '2025-03-24 07:20:45', '2025-04-24 16:13:17'),
+(65, 'default_theme', '2', 16, NULL, NULL, '2025-03-24 07:20:45', '2025-04-26 13:36:50'),
 (66, 'otp_type', 'email', 15, NULL, NULL, NULL, NULL),
 (67, 'otp_digit_limit', '4', 15, NULL, NULL, NULL, NULL),
 (68, 'otp_expire_time', '2 mins', 15, NULL, NULL, NULL, NULL),
@@ -49705,10 +50010,10 @@ INSERT INTO `general_settings` (`id`, `key`, `value`, `group_id`, `language_id`,
 (104, 'cookiesPageLink', 'https://rental-system.dreamstechnologies.com/', 7, NULL, NULL, '2025-04-02 12:32:45', '2025-04-02 12:32:45'),
 (105, 'how_it_works_2', '<section class=\"section services\">\r\n    <div class=\"container\" style=\"--bs-gutter-y: 0; width: 1320px; padding-right: 12px; padding-left: 12px;\"><div class=\"section-heading aos-init aos-animate\" data-aos=\"fade-down\"><h1 style=\"margin-right: 0px; margin-bottom: 10px; margin-left: 0px; color: rgb(17, 17, 17); font-size: 62px; padding: 0px; border: 0px; letter-spacing: -0.02em; font-family: &quot;Fira Sans&quot;, sans-serif; background-color: rgb(252, 251, 251);\"><span style=\"margin: 0px; padding: 0px; border: 0px; color: rgb(255, 166, 51);\">ابحث عن أفضل ما لديك</span></h1><p>إن حجز تأجير سيارة هي عملية مباشرة تتضمن عادةً الخطوات التالية</p></div><div class=\"services-work\"><div class=\"row\" style=\"--bs-gutter-y: 0; margin-top: 0px; margin-right: -12px; margin-left: -12px;\"><div class=\"col-lg-4 col-md-4 col-12 d-flex aos-init aos-animate\" data-aos=\"fade-down\" style=\"width: 440px; padding-right: 12px; padding-left: 12px; margin-top: 0px;\"><div class=\"services-group service-date flex-fill\"><div class=\"services-icon border-secondary\"><img class=\"icon-img bg-secondary\" src=\"https://rental-system.dreamstechnologies.com/frontend/assets/img/icons/services-icon-01.svg\" alt=\"Choose Locations\" style=\"color: rgb(255, 255, 255);\"></div><div class=\"services-content\"><h3 style=\"color: rgb(17, 24, 39);\">1. اختر التاريخ والمواقع</h3><p>حدد تاريخ ومكان استئجار سيارتك. ضع في اعتبارك عوامل مثل مسار رحلتك، ومواقع الاستلام والتسليم (مثل المطار، أو مركز المدينة)، ومدة الاستئجار.</p></div></div></div><div class=\"col-lg-4 col-md-4 col-12 d-flex aos-init aos-animate\" data-aos=\"fade-down\" style=\"width: 440px; padding-right: 12px; padding-left: 12px; margin-top: 0px;\"><div class=\"services-group service-loc flex-fill\"><div class=\"services-icon border-warning\"><img class=\"icon-img bg-warning\" src=\"https://rental-system.dreamstechnologies.com/frontend/assets/img/icons/services-icon-02.svg\" alt=\"Choose Locations\" style=\"color: rgb(255, 255, 255);\"></div><div class=\"services-content\"><h3 style=\"color: rgb(17, 24, 39);\">2. مواقع الاستلام</h3><p>تأكد من توفر نوع السيارة التي ترغب بها في التاريخ والمكان الذي اخترته. تأكد من أسعار الإيجار والضرائب والرسوم وأي تكاليف إضافية.</p></div></div></div><div class=\"col-lg-4 col-md-4 col-12 d-flex aos-init aos-animate\" data-aos=\"fade-down\" style=\"width: 440px; padding-right: 12px; padding-left: 12px; margin-top: 0px;\"><div class=\"services-group service-book flex-fill\"><div class=\"services-icon border-dark\" style=\"border-color: rgb(33, 37, 41) !important;\"><img class=\"icon-img bg-dark\" src=\"https://rental-system.dreamstechnologies.com/frontend/assets/img/icons/services-icon-03.svg\" alt=\"Choose Locations\" style=\"background-color: rgb(33, 37, 41) !important;\"></div><div class=\"services-content\"><h3 style=\"color: rgb(17, 24, 39);\">3.احجز سيارتك</h3><p>بعد العثور على خيار تأجير سيارة، احجزه. قدّم المعلومات المطلوبة، بما في ذلك بياناتك، ورخصة القيادة، ومعلومات الاتصال، وتفاصيل الدفع</p><p><br></p></div></div></div></div></div></div><div class=\"container\"><div class=\"services-work\"><div class=\"row\"><div class=\"col-lg-4 col-md-4 col-12 d-flex aos-init aos-animate\" data-aos=\"fade-down\"><div class=\"services-group service-book flex-fill\"><div class=\"services-content\">\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</section>', 10, 2, NULL, '2025-04-07 16:59:10', '2025-04-12 12:42:06'),
 (106, 'payment_status', '1', 13, NULL, NULL, '2025-04-09 17:16:22', '2025-04-09 17:16:22'),
-(107, 'logo_image', NULL, 16, NULL, NULL, '2025-04-10 12:09:14', '2025-04-23 12:38:47'),
-(108, 'favicon_image', NULL, 16, NULL, NULL, '2025-04-10 12:09:14', '2025-04-10 12:09:14'),
-(109, 'small_image', NULL, 16, NULL, NULL, '2025-04-10 12:09:14', '2025-04-10 12:09:14'),
-(110, 'dark_logo', NULL, 16, NULL, NULL, '2025-04-10 12:09:14', '2025-04-10 12:09:14'),
+(107, 'logo_image', 'logos/07262e06-c814-4863-83ca-d3da9053ea0d_1745586653.svg', 16, NULL, NULL, '2025-04-10 12:09:14', '2025-04-25 18:40:53'),
+(108, 'favicon_image', 'logos/62dedbec-18fc-4c87-ad7a-57d938d8a08e_1745586653.svg', 16, NULL, NULL, '2025-04-10 12:09:14', '2025-04-25 18:40:53'),
+(109, 'small_image', 'logos/1e04472a-9693-46ea-abe6-32f64f921e81_1745586653.svg', 16, NULL, NULL, '2025-04-10 12:09:14', '2025-04-25 18:40:53'),
+(110, 'dark_logo', 'logos/14ad60b9-6b47-44f4-80e8-9ad1d02777b6_1745586653.svg', 16, NULL, NULL, '2025-04-10 12:09:14', '2025-04-25 18:40:53'),
 (111, 'ogmetaTitle', 'Rental System', 6, NULL, NULL, '2025-04-10 12:17:39', '2025-04-10 12:17:39'),
 (112, 'ogsiteDescription', 'Rental system description', 6, NULL, NULL, '2025-04-10 12:17:39', '2025-04-10 12:17:39'),
 (113, 'ogkeywords', 'Test', 6, NULL, NULL, '2025-04-10 12:17:39', '2025-04-10 12:17:39'),
@@ -49741,11 +50046,20 @@ INSERT INTO `general_settings` (`id`, `key`, `value`, `group_id`, `language_id`,
 
 CREATE TABLE `industry_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `industry_types`
+--
+
+INSERT INTO `industry_types` (`id`, `name`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 'Peer-to-Peer Car Rental', NULL, NULL, NULL),
+(2, 'Electric and Hybrid Vehicle', NULL, NULL, NULL),
+(3, 'Subscription Services', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -49758,16 +50072,24 @@ CREATE TABLE `inspections` (
   `vehicle_info_id` bigint(20) UNSIGNED NOT NULL,
   `inspection_date` date DEFAULT NULL,
   `inspector_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `odometer` double DEFAULT 0,
-  `fuel` double DEFAULT 0,
-  `check_list` text DEFAULT NULL,
-  `notes` longtext DEFAULT NULL,
-  `inspection_status` varchar(255) DEFAULT NULL,
-  `repair_status` varchar(255) DEFAULT NULL,
+  `odometer` double DEFAULT '0',
+  `fuel` double DEFAULT '0',
+  `check_list` text COLLATE utf8mb4_unicode_ci,
+  `notes` longtext COLLATE utf8mb4_unicode_ci,
+  `inspection_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `repair_status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `inspections`
+--
+
+INSERT INTO `inspections` (`id`, `vehicle_info_id`, `inspection_date`, `inspector_id`, `odometer`, `fuel`, `check_list`, `notes`, `inspection_status`, `repair_status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 2, '2025-05-02', 1, 2, 20, NULL, NULL, 'inprogress', 'onhold', '2025-04-24 12:31:55', '2025-04-24 12:32:27', NULL),
+(2, 1, '2025-04-26', 3, 2, 2, NULL, NULL, 'onhold', 'inprogress', '2025-04-24 12:33:52', '2025-04-24 12:33:52', NULL);
 
 -- --------------------------------------------------------
 
@@ -49777,15 +50099,22 @@ CREATE TABLE `inspections` (
 
 CREATE TABLE `insurances` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT 1,
+  `language_id` int(11) DEFAULT '1',
   `price_type_id` int(11) DEFAULT NULL,
-  `insurance_name` varchar(255) DEFAULT NULL,
-  `price` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `insurance_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `insurances`
+--
+
+INSERT INTO `insurances` (`id`, `language_id`, `price_type_id`, `insurance_name`, `price`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 5, 'test', '100', 1, '2025-04-24 17:54:57', '2025-04-24 17:55:18', '2025-04-24 17:55:18');
 
 -- --------------------------------------------------------
 
@@ -49796,7 +50125,7 @@ CREATE TABLE `insurances` (
 CREATE TABLE `insurance_benefits` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `insurance_id` bigint(20) UNSIGNED NOT NULL,
-  `benefit` varchar(255) DEFAULT NULL,
+  `benefit` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -49821,13 +50150,20 @@ CREATE TABLE `invoices` (
   `subtotal` double NOT NULL,
   `tax` double DEFAULT NULL,
   `grand_total` double NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `from_date` datetime NOT NULL,
   `to_date` datetime NOT NULL,
   `discount` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `invoices`
+--
+
+INSERT INTO `invoices` (`id`, `invoice_number`, `car_id`, `currency_id`, `status`, `biller`, `customer_id`, `payment_method`, `terms`, `notes`, `subtotal`, `tax`, `grand_total`, `created_at`, `updated_at`, `deleted_at`, `from_date`, `to_date`, `discount`) VALUES
+(1, 'INV-1745497543', 2, 1, 'Pending', 'Admin', 4, 'stripe', 'need to be taken care', 'need to be taken care', 40, 0, 40, '2025-04-24 17:56:55', '2025-04-24 17:56:55', NULL, '2025-04-15 00:00:00', '2025-04-30 00:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -49838,14 +50174,21 @@ CREATE TABLE `invoices` (
 CREATE TABLE `invoice_items` (
   `id` int(11) NOT NULL,
   `invoice_id` bigint(11) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   `qty` int(255) DEFAULT NULL,
   `price` double DEFAULT NULL,
   `tax` double DEFAULT NULL,
   `total_price` double DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `invoice_items`
+--
+
+INSERT INTO `invoice_items` (`id`, `invoice_id`, `description`, `qty`, `price`, `tax`, `total_price`, `created_at`, `updated_at`) VALUES
+(1, 1, 'two days trip', 2, 20, 0, 40, '2025-04-24 17:56:55', '2025-04-24 17:56:55');
 
 -- --------------------------------------------------------
 
@@ -49855,8 +50198,8 @@ CREATE TABLE `invoice_items` (
 
 CREATE TABLE `jobs` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `queue` varchar(255) NOT NULL,
-  `payload` longtext NOT NULL,
+  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `attempts` tinyint(3) UNSIGNED NOT NULL,
   `reserved_at` int(10) UNSIGNED DEFAULT NULL,
   `available_at` int(10) UNSIGNED NOT NULL,
@@ -49870,13 +50213,13 @@ CREATE TABLE `jobs` (
 --
 
 CREATE TABLE `job_batches` (
-  `id` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `total_jobs` int(11) NOT NULL,
   `pending_jobs` int(11) NOT NULL,
   `failed_jobs` int(11) NOT NULL,
-  `failed_job_ids` longtext NOT NULL,
-  `options` mediumtext DEFAULT NULL,
+  `failed_job_ids` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` mediumtext COLLATE utf8mb4_unicode_ci,
   `cancelled_at` int(11) DEFAULT NULL,
   `created_at` int(11) NOT NULL,
   `finished_at` int(11) DEFAULT NULL
@@ -49891,9 +50234,9 @@ CREATE TABLE `job_batches` (
 CREATE TABLE `languages` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `language_id` bigint(20) UNSIGNED NOT NULL,
-  `rtl` tinyint(1) NOT NULL DEFAULT 0,
-  `default` tinyint(1) NOT NULL DEFAULT 0,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `rtl` tinyint(1) NOT NULL DEFAULT '0',
+  `default` tinyint(1) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -49915,11 +50258,11 @@ INSERT INTO `languages` (`id`, `language_id`, `rtl`, `default`, `status`, `creat
 
 CREATE TABLE `language_code` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `code` varchar(255) NOT NULL,
-  `direction` varchar(255) NOT NULL DEFAULT 'ltr',
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `is_default` tinyint(1) NOT NULL DEFAULT 0,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `direction` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'ltr',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `is_default` tinyint(1) NOT NULL DEFAULT '0',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -49941,22 +50284,32 @@ INSERT INTO `language_code` (`id`, `name`, `code`, `direction`, `status`, `is_de
 
 CREATE TABLE `locations` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT 1,
-  `name` varchar(255) DEFAULT NULL,
-  `location` varchar(255) DEFAULT NULL,
-  `image` longtext DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `phone` varchar(255) DEFAULT NULL,
-  `address` longtext DEFAULT NULL,
+  `language_id` int(11) DEFAULT '1',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `location` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` longtext COLLATE utf8mb4_unicode_ci,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` longtext COLLATE utf8mb4_unicode_ci,
   `country` bigint(20) UNSIGNED DEFAULT NULL,
   `state` bigint(20) UNSIGNED DEFAULT NULL,
   `city` bigint(20) UNSIGNED DEFAULT NULL,
-  `pincode` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `pincode` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `locations`
+--
+
+INSERT INTO `locations` (`id`, `language_id`, `name`, `location`, `image`, `email`, `phone`, `address`, `country`, `state`, `city`, `pincode`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'NY 10004, UK', NULL, NULL, 'alabama@yopmail.com', '2332233232', '1st', 231, 3919, 42604, '12345', 1, '2025-04-23 06:22:45', '2025-04-23 06:22:45', NULL),
+(2, 1, 'New York, USA', NULL, NULL, 'newyork@yopmail.com', '22323233232', 'river', 231, 3956, 48019, '12345', 1, '2025-04-23 06:25:40', '2025-04-23 06:25:40', NULL),
+(3, 1, 'Roma RM, Italy', NULL, 'location/9a5ccb4d-0165-43e8-bed8-df981e59fb55_1745471910.jpg', 'cbe@yopmail.com', '8877677677', 'no 12, west street', 101, 35, 3554, '665554', 1, '2025-04-24 10:48:30', '2025-04-24 10:48:30', NULL),
+(4, 1, 'Blvd, Las Vegas', NULL, 'location/d232f356-c875-4d99-91ae-91127ffc49e2_1745472944.jpg', 'rj@yopmail.com', '9988789877', 'no 11, cross road', 101, 38, 4536, '665554', 1, '2025-04-24 11:05:22', '2025-04-24 11:05:44', NULL);
 
 -- --------------------------------------------------------
 
@@ -49967,13 +50320,39 @@ CREATE TABLE `locations` (
 CREATE TABLE `location_working_days` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `location_id` bigint(20) UNSIGNED NOT NULL,
-  `day` varchar(255) DEFAULT NULL,
+  `day` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `start_time` time DEFAULT NULL,
   `end_time` time DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `location_working_days`
+--
+
+INSERT INTO `location_working_days` (`id`, `location_id`, `day`, `start_time`, `end_time`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 'monday', '09:00:00', '21:00:00', 1, '2025-04-23 06:22:45', '2025-04-23 06:22:45'),
+(2, 1, 'tuesday', '09:00:00', '21:00:00', 1, '2025-04-23 06:22:45', '2025-04-23 06:22:45'),
+(3, 1, 'wednesday', '09:00:00', '21:00:00', 1, '2025-04-23 06:22:45', '2025-04-23 06:22:45'),
+(4, 1, 'thursday', '09:00:00', '21:00:00', 1, '2025-04-23 06:22:45', '2025-04-23 06:22:45'),
+(5, 1, 'friday', '09:00:00', '21:00:00', 1, '2025-04-23 06:22:45', '2025-04-23 06:22:45'),
+(6, 2, 'monday', '09:00:00', '21:00:00', 1, '2025-04-23 06:25:40', '2025-04-23 06:25:40'),
+(7, 2, 'tuesday', '09:00:00', '21:00:00', 1, '2025-04-23 06:25:40', '2025-04-23 06:25:40'),
+(8, 2, 'wednesday', '09:00:00', '21:00:00', 1, '2025-04-23 06:25:40', '2025-04-23 06:25:40'),
+(9, 2, 'thursday', '09:00:00', '21:00:00', 1, '2025-04-23 06:25:40', '2025-04-23 06:25:40'),
+(10, 2, 'friday', '09:00:00', '21:00:00', 1, '2025-04-23 06:25:40', '2025-04-23 06:25:40'),
+(11, 3, 'monday', '09:37:00', '16:47:00', 1, '2025-04-24 10:48:30', '2025-04-24 10:48:30'),
+(12, 3, 'tuesday', '09:48:00', '19:48:00', 1, '2025-04-24 10:48:30', '2025-04-24 10:48:30'),
+(13, 3, 'thursday', '10:47:00', '18:47:00', 1, '2025-04-24 10:48:30', '2025-04-24 10:48:30'),
+(14, 3, 'friday', '08:47:00', '19:47:00', 1, '2025-04-24 10:48:30', '2025-04-24 10:48:30'),
+(15, 3, 'saturday', '09:48:00', '21:48:00', 1, '2025-04-24 10:48:30', '2025-04-24 10:48:30'),
+(16, 4, 'monday', '09:04:00', '20:04:00', 1, '2025-04-24 11:05:22', '2025-04-24 11:05:22'),
+(17, 4, 'tuesday', '09:04:00', '20:04:00', 1, '2025-04-24 11:05:22', '2025-04-24 11:05:22'),
+(18, 4, 'thursday', '08:04:00', '20:04:00', 1, '2025-04-24 11:05:22', '2025-04-24 11:05:22'),
+(19, 4, 'friday', '09:04:00', '19:05:00', 1, '2025-04-24 11:05:22', '2025-04-24 11:05:22'),
+(20, 4, 'saturday', '09:05:00', '21:05:00', 1, '2025-04-24 11:05:22', '2025-04-24 11:05:22');
 
 -- --------------------------------------------------------
 
@@ -49984,15 +50363,23 @@ CREATE TABLE `location_working_days` (
 CREATE TABLE `maintenances` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
-  `odometer` varchar(255) DEFAULT NULL,
-  `start_date` varchar(255) NOT NULL,
-  `end_date` varchar(255) NOT NULL,
-  `details` text NOT NULL,
-  `status` varchar(255) NOT NULL DEFAULT '1' COMMENT 'planned => 1, inprogress => 2, completed => 3',
+  `odometer` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `start_date` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `end_date` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `details` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1' COMMENT 'planned => 1, inprogress => 2, completed => 3',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `maintenances`
+--
+
+INSERT INTO `maintenances` (`id`, `vehicle_id`, `odometer`, `start_date`, `end_date`, `details`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 2, '2', '2025-05-10', '2025-05-10', 'need maintenance', '1', '2025-04-24 12:34:44', '2025-04-24 12:34:44', NULL),
+(2, 1, '3', '2025-06-02', '2025-06-02', 'need maintenance', '2', '2025-04-24 12:35:21', '2025-04-24 12:35:21', NULL);
 
 -- --------------------------------------------------------
 
@@ -50002,12 +50389,12 @@ CREATE TABLE `maintenances` (
 
 CREATE TABLE `menus` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `menu_type` varchar(255) NOT NULL DEFAULT 'footer',
-  `permenantlink` varchar(255) NOT NULL,
-  `menus` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `language_id` bigint(20) UNSIGNED DEFAULT 1,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `menu_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'footer',
+  `permenantlink` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `menus` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+  `language_id` bigint(20) UNSIGNED DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -50037,14 +50424,22 @@ CREATE TABLE `messages` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `sender_id` bigint(20) UNSIGNED NOT NULL,
   `receiver_id` bigint(20) UNSIGNED NOT NULL,
-  `message` longtext NOT NULL,
-  `type` enum('text','file') NOT NULL DEFAULT 'text',
-  `file` varchar(255) DEFAULT NULL,
-  `mime_type` varchar(255) DEFAULT NULL,
-  `size` varchar(255) DEFAULT NULL,
+  `message` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` enum('text','file') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'text',
+  `file` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mime_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `size` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`id`, `sender_id`, `receiver_id`, `message`, `type`, `file`, `mime_type`, `size`, `created_at`, `updated_at`) VALUES
+(1, 4, 1, 'hi', 'text', NULL, NULL, NULL, '2025-04-24 16:10:42', '2025-04-24 16:10:42'),
+(2, 1, 4, 'hello', 'text', NULL, NULL, NULL, '2025-04-24 17:53:55', '2025-04-24 17:53:55');
 
 -- --------------------------------------------------------
 
@@ -50054,9 +50449,54 @@ CREATE TABLE `messages` (
 
 CREATE TABLE `migrations` (
   `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(255) NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `migrations`
+--
+
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(1, '0001_01_01_000000_create_users_table', 1),
+(2, '0001_01_01_000001_create_cache_table', 1),
+(3, '0001_01_01_000002_create_jobs_table', 1),
+(4, '2025_02_18_064305_create_cartypes_table', 1),
+(5, '2025_02_18_065041_create_brands_table', 1),
+(6, '2025_02_18_065523_create_car_models_table', 1),
+(7, '2025_02_18_065847_create_car_colors_table', 1),
+(8, '2025_02_18_070119_create_transmissions_table', 1),
+(9, '2025_02_18_070446_create_seat_types_table', 1),
+(10, '2025_02_18_070616_create_door_types_table', 1),
+(11, '2025_02_18_070852_create_features_table', 1),
+(12, '2025_02_19_064746_create_locations_table', 1),
+(13, '2025_02_19_074431_create_damage_types_table', 1),
+(14, '2025_02_19_094507_create_tags_table', 1),
+(15, '2025_02_20_050952_create_cylinders_table', 1),
+(16, '2025_02_20_073006_create_car_fuels_table', 1),
+(17, '2025_02_20_075933_create_extra_services_table', 1),
+(18, '2025_02_20_111708_create_car_steerings_table', 1),
+(19, '2025_02_20_130015_create_safety_features_table', 1),
+(20, '2025_02_20_130357_create_insurances_table', 1),
+(21, '2025_02_21_044029_create_categories_table', 1),
+(22, '2025_02_21_044322_create_seasons_table', 1),
+(23, '2025_02_21_112013_create_pricing_types_table', 1),
+(24, '2025_02_24_124322_create_inspections_table', 2),
+(26, '2025_02_25_124904_create_checklists_table', 3),
+(27, '2025_02_24_174510_create_drivers_table', 4),
+(28, '2025_02_25_182755_create_driver_documents_table', 4),
+(29, '2025_02_26_074644_create_locations_table', 4),
+(30, '2025_02_26_080827_create_location_working_days_table', 5),
+(31, '2025_02_26_074547_add_location_to_locations_table', 6),
+(32, '2025_02_26_083133_create_enquiries_table', 7),
+(33, '2025_02_26_092125_create_maintenances_table', 7),
+(34, '2025_02_27_095300_create_announcement_types_table', 8),
+(35, '2025_02_27_102456_create_announcements_table', 8),
+(36, '2025_02_28_073503_GeneralSetting', 8),
+(37, '2025_03_10_053755_create_industry_types_table', 8),
+(38, '2025_03_10_054613_create_team_sizes_table', 8),
+(39, '2025_03_11_073009_create_insurances_table', 8),
+(40, '2025_03_11_073610_create_insurance_benefits_table', 8);
 
 -- --------------------------------------------------------
 
@@ -50066,8 +50506,8 @@ CREATE TABLE `migrations` (
 
 CREATE TABLE `modules` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `module_name` varchar(255) NOT NULL,
-  `module_slug` varchar(255) NOT NULL,
+  `module_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `module_slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `parent_id` int(11) DEFAULT NULL,
   `user_type` int(11) NOT NULL COMMENT 'Admin => 1',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -50141,7 +50581,7 @@ INSERT INTO `modules` (`id`, `module_name`, `module_slug`, `parent_id`, `user_ty
 
 CREATE TABLE `newsletter_subscribers` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -50156,14 +50596,67 @@ CREATE TABLE `newsletter_subscribers` (
 CREATE TABLE `notifications` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `subject` text DEFAULT NULL,
-  `content` longtext DEFAULT NULL,
-  `readed` int(11) NOT NULL DEFAULT 0,
+  `subject` text,
+  `content` longtext,
+  `readed` int(11) NOT NULL DEFAULT '0',
   `read_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `user_id`, `subject`, `content`, `readed`, `read_at`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(4, 2, 'Booking  confirmation', 'Booking  confirmation', 0, NULL, '2025-04-11 07:45:36', '2025-04-11 07:45:36', NULL),
+(5, 7, 'Booking  confirmation', 'Booking  confirmation', 0, NULL, '2025-04-12 15:24:51', '2025-04-12 15:24:51', NULL),
+(6, 19, 'Booking  confirmation', 'Booking  confirmation', 0, NULL, '2025-04-14 17:55:53', '2025-04-14 17:55:53', NULL),
+(7, 7, 'Booking  confirmation', 'Booking  confirmation', 0, NULL, '2025-04-15 16:37:03', '2025-04-15 16:37:03', NULL),
+(8, 7, 'Booking  confirmation', 'Booking  confirmation', 0, NULL, '2025-04-15 17:29:04', '2025-04-15 17:29:04', NULL),
+(9, 19, 'Booking  confirmation', 'Booking  confirmation', 0, NULL, '2025-04-16 06:03:36', '2025-04-16 06:03:36', NULL),
+(10, 7, 'Booking  confirmation', 'Booking  confirmation', 0, NULL, '2025-04-16 11:04:34', '2025-04-16 11:04:34', NULL),
+(11, 7, 'Booking  confirmation', 'Booking  confirmation', 0, NULL, '2025-04-16 11:28:07', '2025-04-16 11:28:07', NULL),
+(12, 7, 'Booking  confirmation', 'Booking  confirmation', 0, NULL, '2025-04-16 12:22:45', '2025-04-16 12:22:45', NULL),
+(13, 19, 'Booking  confirmation', 'Booking  confirmation', 0, NULL, '2025-04-16 16:16:46', '2025-04-16 16:16:46', NULL),
+(14, 19, 'Booking  confirmation', 'Booking  confirmation', 0, NULL, '2025-04-16 17:01:25', '2025-04-16 17:01:25', NULL),
+(15, 2, 'Booking  confirmation', 'Booking  confirmation', 0, NULL, '2025-04-16 17:05:41', '2025-04-16 17:05:41', NULL),
+(16, 5, 'Booking  confirmation', 'Booking  confirmation', 0, NULL, '2025-04-16 17:45:25', '2025-04-16 17:45:25', NULL),
+(17, 7, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 0, NULL, '2025-04-17 11:35:10', '2025-04-17 11:35:10', NULL),
+(18, 7, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 0, NULL, '2025-04-17 13:37:36', '2025-04-17 13:37:36', NULL),
+(19, 7, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 0, NULL, '2025-04-17 16:00:19', '2025-04-17 16:00:19', NULL),
+(20, 7, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 0, NULL, '2025-04-17 17:17:03', '2025-04-17 17:17:03', NULL),
+(21, 7, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 0, NULL, '2025-04-17 17:24:33', '2025-04-17 17:24:33', NULL),
+(22, 7, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 0, NULL, '2025-04-18 10:50:33', '2025-04-18 10:50:33', NULL),
+(23, 8, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 0, NULL, '2025-04-18 12:03:45', '2025-04-18 12:03:45', NULL),
+(24, 8, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 0, NULL, '2025-04-18 12:46:00', '2025-04-18 12:46:00', NULL),
+(25, 7, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 0, NULL, '2025-04-18 15:18:46', '2025-04-18 15:18:46', NULL),
+(26, 7, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 0, NULL, '2025-04-18 15:21:36', '2025-04-18 15:21:36', NULL),
+(27, 7, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 0, NULL, '2025-04-18 17:22:44', '2025-04-18 17:22:44', NULL),
+(28, 4, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 1, NULL, '2025-04-24 12:53:26', '2025-04-25 17:39:57', NULL),
+(29, 4, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 1, NULL, '2025-04-24 15:11:42', '2025-04-25 17:39:57', NULL),
+(30, 4, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 1, NULL, '2025-04-24 15:14:23', '2025-04-25 17:39:57', NULL),
+(31, 4, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 1, NULL, '2025-04-25 10:40:02', '2025-04-25 17:39:57', NULL),
+(32, 4, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 1, NULL, '2025-04-25 16:09:01', '2025-04-25 17:39:57', NULL),
+(33, 4, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 1, NULL, '2025-04-25 16:10:59', '2025-04-25 17:39:57', NULL),
+(34, 4, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 1, NULL, '2025-04-25 16:11:32', '2025-04-25 17:39:57', NULL),
+(35, 4, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 1, NULL, '2025-04-25 16:36:40', '2025-04-25 17:39:57', NULL),
+(36, 4, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 1, NULL, '2025-04-25 16:52:40', '2025-04-25 17:39:57', NULL),
+(37, 4, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 1, NULL, '2025-04-25 16:56:29', '2025-04-25 17:39:57', NULL),
+(38, 4, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 1, NULL, '2025-04-25 17:02:52', '2025-04-25 17:39:57', NULL),
+(39, 1, 'New Vehicle Booking', 'DemoUser has booked vehicle', 0, NULL, '2025-04-25 17:10:40', '2025-04-25 17:10:40', NULL),
+(40, 4, 'Exciting News: Your Service Request Has Been Completed!', 'Booking  confirmation', 1, NULL, '2025-04-25 17:10:41', '2025-04-25 17:39:57', NULL),
+(41, 1, 'New Vehicle Booking', 'DemoUser has booked vehicle', 0, NULL, '2025-04-25 17:28:09', '2025-04-25 17:28:09', NULL),
+(42, 4, 'Notice: Your Service Request Has Been Completed!', 'Booking  confirmation', 1, NULL, '2025-04-25 17:28:10', '2025-04-25 17:39:57', NULL),
+(43, 1, 'New Vehicle Booking', 'DemoUser has booked vehicle', 0, NULL, '2025-04-25 17:55:29', '2025-04-25 17:55:29', NULL),
+(44, 4, 'Notice: Your Service Request Has Been Completed!', 'Booking  confirmation', 1, NULL, '2025-04-25 17:55:30', '2025-04-25 18:01:31', NULL),
+(45, 1, 'New Vehicle Booking', 'DemoUser has booked vehicle', 0, NULL, '2025-04-25 17:59:46', '2025-04-25 17:59:46', NULL),
+(46, 4, 'Notice: Your Service Request Has Been Completed!', 'Booking  confirmation', 0, NULL, '2025-04-25 17:59:47', '2025-04-25 17:59:47', NULL),
+(47, 1, 'New Vehicle Booking', 'DemoUser has booked vehicle', 0, NULL, '2025-04-25 18:08:16', '2025-04-25 18:08:16', NULL),
+(48, 4, 'Notice: Your Service Request Has Been Completed!', 'Booking  confirmation', 0, NULL, '2025-04-25 18:08:17', '2025-04-25 18:08:17', NULL),
+(49, 1, 'New Vehicle Booking', 'DemoUser has booked vehicle', 0, NULL, '2025-04-25 19:03:09', '2025-04-25 19:03:09', NULL),
+(50, 4, 'Notice: Your Service Request Has Been Completed!', 'Booking  confirmation', 0, NULL, '2025-04-25 19:03:09', '2025-04-25 19:03:09', NULL);
 
 -- --------------------------------------------------------
 
@@ -50174,10 +50667,10 @@ CREATE TABLE `notifications` (
 CREATE TABLE `notification_tags` (
   `id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `notification_tags`
@@ -50199,11 +50692,11 @@ CREATE TABLE `notification_types` (
   `id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `slug` varchar(255) DEFAULT NULL,
-  `tags` longtext DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `tags` longtext,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `notification_types`
@@ -50228,8 +50721,8 @@ CREATE TABLE `otp_settings` (
   `id` bigint(20) NOT NULL,
   `email` varchar(225) NOT NULL,
   `otp` varchar(225) NOT NULL,
-  `expires_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `expires_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -50239,21 +50732,21 @@ CREATE TABLE `otp_settings` (
 
 CREATE TABLE `pages` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `theme_id` int(11) NOT NULL DEFAULT 1,
+  `theme_id` int(11) NOT NULL DEFAULT '1',
   `parent_id` int(11) DEFAULT NULL,
-  `language_id` int(11) DEFAULT 1,
-  `read` enum('static','dynamic') DEFAULT 'dynamic',
-  `page_title` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
-  `page_content` longtext DEFAULT NULL,
-  `seo_tag` varchar(255) DEFAULT NULL,
-  `seo_title` varchar(255) DEFAULT NULL,
-  `seo_description` text DEFAULT NULL,
-  `canonical_url` varchar(225) DEFAULT NULL,
-  `og_title` varchar(225) DEFAULT NULL,
-  `og_description` longtext DEFAULT NULL,
-  `keywords` longtext DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `language_id` int(11) DEFAULT '1',
+  `read` enum('static','dynamic') COLLATE utf8mb4_unicode_ci DEFAULT 'dynamic',
+  `page_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `page_content` longtext COLLATE utf8mb4_unicode_ci,
+  `seo_tag` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `seo_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `seo_description` text COLLATE utf8mb4_unicode_ci,
+  `canonical_url` varchar(225) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `og_title` varchar(225) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `og_description` longtext COLLATE utf8mb4_unicode_ci,
+  `keywords` longtext COLLATE utf8mb4_unicode_ci,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -50265,18 +50758,20 @@ CREATE TABLE `pages` (
 
 INSERT INTO `pages` (`id`, `theme_id`, `parent_id`, `language_id`, `read`, `page_title`, `slug`, `page_content`, `seo_tag`, `seo_title`, `seo_description`, `canonical_url`, `og_title`, `og_description`, `keywords`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (44, 1, NULL, 1, 'static', 'Home Page One', 'screen-one', '[{\"section_title\":\"Banner One\",\"section_label\":\"Banner One\",\"section_content\":\"<p>[banner_one]<br><\\/p>\",\"status\":1},{\"section_title\":\"Vehilce Search Card\",\"section_label\":\"Vehilce Search Card\",\"section_content\":\"<p>[search viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"How It Works\",\"section_label\":\"Booking a car rental is a straightforward process that typically involves the following steps\",\"section_content\":\"<p>[how_it_work limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Explore Most Popular Cars\",\"section_label\":\"Here\'s a list of some of the most popular cars globally, based on sales and customer preferences\",\"section_content\":\"<p>[vehicle type=popular limit=10 viewall=no]<br><\\/p>\",\"status\":1},{\"section_title\":\"Most Popular Cartypes\",\"section_label\":\"Most popular worldwide Car Category due to their reliability, affordability, and features.\",\"section_content\":\"<p>[car_type type=all limit=10 viewall=yes]<\\/p>\",\"status\":1},{\"section_title\":\"Facts By The Numbers\",\"section_label\":\"Here are some dreamsrent interesting facts presented by the numbers\",\"section_content\":\"<p>[facts type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Recommended Car Rental deals\",\"section_label\":\"Here are some versatile options that cater to different needs\",\"section_content\":\"<p>[vehicle type=featured limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Why Choose Us\",\"section_label\":\"We are innovative and passionate about the work we do.\",\"section_content\":\"<p>[why_us type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"What People say about us?\",\"section_label\":\"Discover what our customers have think about us\",\"section_content\":\"<p>[testimonial limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Booking a car rental is a straightforward process that typically involves the following steps\",\"section_label\":\"Find answers to your questions from our previous answers\",\"section_content\":\"<p>[faq limit=10 viewall=yes order=asc]<br><\\/p>\",\"status\":1},{\"section_title\":\"Dreamsrental User Friendly App Available\",\"section_label\":\"Appropriately monetize one-to-one interfaces rather than cutting-edge Competently disinte rmediate backward.\",\"section_content\":\"<p>[ad_card type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"News & Insights For You\",\"section_label\":\"This blog post provides valuable insights into the benefits\",\"section_content\":\"<p>[blogs type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1}]', 'Home Page One', 'Rental System - Home', 'Home Page One', 'https://www.vox.com/', 'Home Page One', 'Home Page One', 'Keywords', 0, '2025-03-21 01:57:35', '2025-04-12 11:59:15', NULL),
-(47, 2, NULL, 1, 'static', 'Home Page Two', 'screen-two', '[{\"section_title\":\"Explore our Verified & Professional Cars\",\"section_label\":\"Modern design sports cruisers for those who crave adventure & grandeur Cars for relaxing with your loved ones.\",\"section_content\":\"<p>[banner_two]<br><\\/p>\",\"status\":1},{\"section_title\":\"search\",\"section_label\":\"search\",\"section_content\":\"<p>[search viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Featured Categories\",\"section_label\":\"Know what you\\u2019re looking for? Browse our extensive selection of cars\",\"section_content\":\"<p>[category type=all limit=5 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Best Platform for Car Rental\",\"section_label\":\"Why do we choose relax rent bikes generally if we travel in a un known cities with a bike in our hand we feel which is like a home town\",\"section_content\":\"<p>[bestVehicle type=best_vehicle limit=10 viewall=no]<br><\\/p>\",\"status\":1},{\"section_title\":\"Explore Most Popular Cars\",\"section_label\":\"Here\'s a list of some of the most popular cars globally\",\"section_content\":\"<p>[vehicle type=popular limit=10 viewall=no]<br><\\/p>\",\"status\":1},{\"section_title\":\"Rent by Brands\",\"section_label\":\"Here\'s a list of some of the most popular cars globally\",\"section_content\":\"<p>[brand type=all limit=5 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0641\\u064a\\u0645\\u0627 \\u064a\\u0644\\u064a \\u0642\\u0627\\u0626\\u0645\\u0629 \\u0628\\u0628\\u0639\\u0636 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0623\\u0643\\u062b\\u0631 \\u0634\\u0639\\u0628\\u064a\\u0629 \\u0639\\u0644\\u0649 \\u0645\\u0633\\u062a\\u0648\\u0649 \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645\",\"section_label\":\"\\u0641\\u064a\\u0645\\u0627 \\u064a\\u0644\\u064a \\u0642\\u0627\\u0626\\u0645\\u0629 \\u0628\\u0628\\u0639\\u0636 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0623\\u0643\\u062b\\u0631 \\u0634\\u0639\\u0628\\u064a\\u0629 \\u0639\\u0644\\u0649 \\u0645\\u0633\\u062a\\u0648\\u0649 \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645\",\"section_content\":\"<p>[facts type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Popular Cars On Recommendations\",\"section_label\":\"Here are some versatile options that cater to different needs\",\"section_content\":\"<p>[vehicle type=featured limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Our Clients Feedback\",\"section_label\":\"Provided by customers about their experience with a product or service.\",\"section_content\":\"<p>[testimonial limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"marquee\",\"section_label\":\"marquee\",\"section_content\":\"<p>[marquee type=all limit=5 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Insights and Innovations\",\"section_label\":\"Dive into our articles to stay ahead in the fast-paced world of technology.\",\"section_content\":\"<p>[blogs type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Subscribe To Get User Friendly Mobile & Web App\",\"section_label\":\"Appropriately monetize one-to-one interfaces rather than cutting-edge. Competently disintermediate backward.\",\"section_content\":\"<p>[ad_card type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Frequently asked questions\",\"section_label\":\"Explore to learn more about how can empower your business\",\"section_content\":\"<p>[faq limit=10 viewall=yes order=asc]<br><\\/p>\",\"status\":1},{\"section_title\":\"View All Cars & Categories\",\"section_label\":\"View All Cars & Categories\",\"section_content\":\"<p>[all_category type=all limit=5 viewall=yes]<br><\\/p>\",\"status\":1}]', 'Meta Key', 'Meta Title', 'Meta Disscription', 'https://www.vox.com/', 'OG Title', 'Meta DisMeta DisMeta DisMeta Dis', 'Best Rate Guarateed, Trusted Proof, Free Cancellation', 0, '2025-04-03 00:33:48', '2025-04-12 13:16:26', NULL),
+(47, 2, NULL, 1, 'static', 'Home Page Two', 'screen-two', '[{\"section_title\":\"Explore our Verified & Professional Cars\",\"section_label\":\"Modern design sports cruisers for those who crave adventure & grandeur Cars for relaxing with your loved ones.\",\"section_content\":\"<p>[banner_two]<br><\\/p>\",\"status\":1},{\"section_title\":\"search\",\"section_label\":\"search\",\"section_content\":\"<p>[search viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Featured Categories\",\"section_label\":\"Know what you\\u2019re looking for? Browse our extensive selection of cars\",\"section_content\":\"<p>[category type=all limit=5 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Best Platform for Car Rental\",\"section_label\":\"Why do we choose relax rent bikes generally if we travel in a un known cities with a bike in our hand we feel which is like a home town\",\"section_content\":\"<p>[bestVehicle type=best_vehicle limit=10 viewall=no]<br><\\/p>\",\"status\":1},{\"section_title\":\"Explore Most Popular Cars\",\"section_label\":\"Here\'s a list of some of the most popular cars globally\",\"section_content\":\"<p>[vehicle type=popular limit=10 viewall=no]<br><\\/p>\",\"status\":1},{\"section_title\":\"Rent by Brands\",\"section_label\":\"Here\'s a list of some of the most popular cars globally\",\"section_content\":\"<p>[brand type=all limit=5 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Facts\",\"section_label\":\"Facts\",\"section_content\":\"<p>[facts type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Popular Cars On Recommendations\",\"section_label\":\"Here are some versatile options that cater to different needs\",\"section_content\":\"<p>[vehicle type=featured limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Our Clients Feedback\",\"section_label\":\"Provided by customers about their experience with a product or service.\",\"section_content\":\"<p>[testimonial limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"marquee\",\"section_label\":\"marquee\",\"section_content\":\"<p>[marquee type=all limit=5 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Insights and Innovations\",\"section_label\":\"Dive into our articles to stay ahead in the fast-paced world of technology.\",\"section_content\":\"<p>[blogs type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Subscribe To Get User Friendly Mobile & Web App\",\"section_label\":\"Appropriately monetize one-to-one interfaces rather than cutting-edge. Competently disintermediate backward.\",\"section_content\":\"<p>[ad_card type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"Frequently asked questions\",\"section_label\":\"Explore to learn more about how can empower your business\",\"section_content\":\"<p>[faq limit=10 viewall=yes order=asc]<br><\\/p>\",\"status\":1},{\"section_title\":\"View All Cars & Categories\",\"section_label\":\"View All Cars & Categories\",\"section_content\":\"<p>[all_category type=all limit=5 viewall=yes]<br><\\/p>\",\"status\":1}]', 'Meta Key', 'Meta Title', 'Meta Disscription', 'https://www.vox.com/', 'OG Title', 'Meta DisMeta DisMeta DisMeta Dis', 'Best Rate Guarateed, Trusted Proof, Free Cancellation', 0, '2025-04-03 00:33:48', '2025-04-26 13:10:06', NULL),
 (48, 1, 44, 2, 'static', 'عنوان الصفحة', 'aanoan-alsfh', '[{\"section_title\":\"\\u0631\\u0627\\u064a\\u0629 \\u0648\\u0627\\u062d\\u062f\\u0629\",\"section_label\":\"\\u0631\\u0627\\u064a\\u0629 \\u0648\\u0627\\u062d\\u062f\\u0629\",\"section_content\":\"<p>[banner_one]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0628\\u0637\\u0627\\u0642\\u0629 \\u0627\\u0644\\u0628\\u062d\\u062b \\u0639\\u0646 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0627\\u062a\",\"section_label\":\"\\u0628\\u0637\\u0627\\u0642\\u0629 \\u0627\\u0644\\u0628\\u062d\\u062b \\u0639\\u0646 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0627\\u062a\",\"section_content\":\"<p>[search viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0643\\u064a\\u0641 \\u064a\\u0639\\u0645\\u0644\",\"section_label\":\"\\u0625\\u0646 \\u062d\\u062c\\u0632 \\u062a\\u0623\\u062c\\u064a\\u0631 \\u0633\\u064a\\u0627\\u0631\\u0629 \\u0647\\u064a \\u0639\\u0645\\u0644\\u064a\\u0629 \\u0645\\u0628\\u0627\\u0634\\u0631\\u0629 \\u062a\\u062a\\u0636\\u0645\\u0646 \\u0639\\u0627\\u062f\\u0629\\u064b \\u0627\\u0644\\u062e\\u0637\\u0648\\u0627\\u062a \\u0627\\u0644\\u062a\\u0627\\u0644\\u064a\\u0629\",\"section_content\":\"<p>[how_it_work limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0627\\u0633\\u062a\\u0643\\u0634\\u0627\\u0641 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0623\\u0643\\u062b\\u0631 \\u0634\\u0639\\u0628\\u064a\\u0629\",\"section_label\":\"\\u0641\\u064a\\u0645\\u0627 \\u064a\\u0644\\u064a \\u0642\\u0627\\u0626\\u0645\\u0629 \\u0628\\u0628\\u0639\\u0636 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0623\\u0643\\u062b\\u0631 \\u0634\\u0639\\u0628\\u064a\\u0629 \\u0639\\u0644\\u0649 \\u0645\\u0633\\u062a\\u0648\\u0649 \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645\\u060c \\u0628\\u0646\\u0627\\u0621\\u064b \\u0639\\u0644\\u0649 \\u0627\\u0644\\u0645\\u0628\\u064a\\u0639\\u0627\\u062a \\u0648\\u062a\\u0641\\u0636\\u064a\\u0644\\u0627\\u062a \\u0627\\u0644\\u0639\\u0645\\u0644\\u0627\\u0621\",\"section_content\":\"<p>[vehicle type=popular limit=10 viewall=no]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0623\\u0646\\u0648\\u0627\\u0639 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0623\\u0643\\u062b\\u0631 \\u0634\\u0639\\u0628\\u064a\\u0629\",\"section_label\":\"\\u0641\\u0626\\u0629 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0623\\u0643\\u062b\\u0631 \\u0634\\u0639\\u0628\\u064a\\u0629 \\u0641\\u064a \\u062c\\u0645\\u064a\\u0639 \\u0623\\u0646\\u062d\\u0627\\u0621 \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645 \\u0628\\u0633\\u0628\\u0628 \\u0645\\u0648\\u062b\\u0648\\u0642\\u064a\\u062a\\u0647\\u0627 \\u0648\\u0628\\u0623\\u0633\\u0639\\u0627\\u0631 \\u0645\\u0639\\u0642\\u0648\\u0644\\u0629 \\u0648\\u0645\\u064a\\u0632\\u0627\\u062a\\u0647\\u0627.\",\"section_content\":\"<p>[car_type type=all limit=10 viewall=yes]<\\/p>\",\"status\":1},{\"section_title\":\"\\u062d\\u0642\\u0627\\u0626\\u0642 \\u0628\\u0627\\u0644\\u0623\\u0631\\u0642\\u0627\\u0645\",\"section_label\":\"\\u0625\\u0644\\u064a\\u0643\\u0645 \\u0628\\u0639\\u0636 \\u0627\\u0644\\u062d\\u0642\\u0627\\u0626\\u0642 \\u0627\\u0644\\u0645\\u062b\\u064a\\u0631\\u0629 \\u0644\\u0644\\u0627\\u0647\\u062a\\u0645\\u0627\\u0645 \\u062d\\u0648\\u0644 \\u062f\\u0631\\u064a\\u0645\\u0632\\u0631\\u064a\\u0646\\u062a \\u0648\\u0627\\u0644\\u062a\\u064a \\u062a\\u0642\\u062f\\u0645\\u0647\\u0627 \\u0627\\u0644\\u0623\\u0631\\u0642\\u0627\\u0645\",\"section_content\":\"<p>[facts type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0639\\u0631\\u0648\\u0636 \\u062a\\u0623\\u062c\\u064a\\u0631 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u0648\\u0635\\u0649 \\u0628\\u0647\\u0627\",\"section_label\":\"\\u0641\\u064a\\u0645\\u0627 \\u064a\\u0644\\u064a \\u0628\\u0639\\u0636 \\u0627\\u0644\\u062e\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u062a\\u0646\\u0648\\u0639\\u0629 \\u0627\\u0644\\u062a\\u064a \\u062a\\u0644\\u0628\\u064a \\u0627\\u062d\\u062a\\u064a\\u0627\\u062c\\u0627\\u062a \\u0645\\u062e\\u062a\\u0644\\u0641\\u0629\",\"section_content\":\"<p>[vehicle type=featured limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0644\\u0645\\u0627\\u0630\\u0627 \\u062a\\u062e\\u062a\\u0627\\u0631\\u0646\\u0627\\u061f\",\"section_label\":\"\\u0646\\u062d\\u0646 \\u0645\\u0628\\u062a\\u0643\\u0631\\u0648\\u0646 \\u0648 \\u0634\\u063a\\u0648\\u0641\\u0648\\u0646 \\u0628\\u0627\\u0644\\u0639\\u0645\\u0644 \\u0627\\u0644\\u0630\\u064a \\u0646\\u0642\\u0648\\u0645 \\u0628\\u0647.\",\"section_content\":\"<p>[why_us type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0645\\u0627\\u0630\\u0627 \\u064a\\u0642\\u0648\\u0644 \\u0627\\u0644\\u0646\\u0627\\u0633 \\u0639\\u0646\\u0627\",\"section_label\":\"\\u0645\\u0627\\u0630\\u0627 \\u064a\\u0642\\u0648\\u0644 \\u0627\\u0644\\u0646\\u0627\\u0633 \\u0639\\u0646\\u0627\\u061f\",\"section_content\":\"<p>[testimonial limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0625\\u0646 \\u062d\\u062c\\u0632 \\u062a\\u0623\\u062c\\u064a\\u0631 \\u0633\\u064a\\u0627\\u0631\\u0629 \\u0647\\u064a \\u0639\\u0645\\u0644\\u064a\\u0629 \\u0645\\u0628\\u0627\\u0634\\u0631\\u0629 \\u062a\\u062a\\u0636\\u0645\\u0646 \\u0639\\u0627\\u062f\\u0629\\u064b \\u0627\\u0644\\u062e\\u0637\\u0648\\u0627\\u062a \\u0627\\u0644\\u062a\\u0627\\u0644\\u064a\\u0629\",\"section_label\":\"\\u0627\\u0628\\u062d\\u062b \\u0639\\u0646 \\u0625\\u062c\\u0627\\u0628\\u0627\\u062a \\u0644\\u0623\\u0633\\u0626\\u0644\\u062a\\u0643 \\u0645\\u0646 \\u0625\\u062c\\u0627\\u0628\\u0627\\u062a\\u0646\\u0627 \\u0627\\u0644\\u0633\\u0627\\u0628\\u0642\\u0629\",\"section_content\":\"<p>[faq limit=10 viewall=yes order=asc]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u062a\\u0648\\u0641\\u0631 \\u0647\\u0630\\u0647 \\u0627\\u0644\\u062a\\u062f\\u0648\\u064a\\u0646\\u0629 \\u0631\\u0624\\u0649 \\u0627\\u0644\\u0642\\u064a\\u0645\\u0629 \\u062d\\u0648\\u0644 \\u0627\\u0644\\u0641\\u0648\\u0627\\u0626\\u062f\",\"section_label\":\"\\u062a\\u062d\\u0642\\u064a\\u0642 \\u0627\\u0644\\u0631\\u0628\\u062d \\u0627\\u0644\\u0645\\u0646\\u0627\\u0633\\u0628 \\u0645\\u0646 \\u0627\\u0644\\u0648\\u0627\\u062c\\u0647\\u0627\\u062a \\u0627\\u0644\\u0641\\u0631\\u062f\\u064a\\u0629 \\u0628\\u062f\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0648\\u0627\\u062c\\u0647\\u0627\\u062a \\u0627\\u0644\\u0645\\u062a\\u0637\\u0648\\u0631\\u0629.\",\"section_content\":\"<p>[ad_card type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0623\\u062e\\u0628\\u0627\\u0631 \\u0648\\u0631\\u0624\\u0649 \\u0644\\u0643\",\"section_label\":\"\\u062a\\u0648\\u0641\\u0631 \\u0647\\u0630\\u0647 \\u0627\\u0644\\u062a\\u062f\\u0648\\u064a\\u0646\\u0629 \\u0631\\u0624\\u0649 \\u0642\\u064a\\u0645\\u0629 \\u062d\\u0648\\u0644 \\u0627\\u0644\\u0641\\u0648\\u0627\\u0626\\u062f\",\"section_content\":\"<p>[blogs type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1}]', 'الرابط الكلمات المفتاحية', 'الرابط الكلمات المفتاحية', 'الرابط\r\nالكلمات المفتاحية', 'https://www.vox.com/', 'الرابط الكلمات المفتاحية', 'الرابط\r\nالكلمات المفتاحية', 'الرابط الكلمات المفتاحية', 0, '2025-04-09 12:41:30', '2025-04-12 12:48:29', NULL),
 (49, 2, 47, 2, 'static', 'الشاشة الرئيسية الثانية', 'alshash-alryysy-althany', '[{\"section_title\":\"\\u0627\\u0633\\u062a\\u0643\\u0634\\u0641 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a\\u0646\\u0627 \\u0627\\u0644\\u0645\\u0639\\u062a\\u0645\\u062f\\u0629 \\u0648\\u0627\\u0644\\u0627\\u062d\\u062a\\u0631\\u0627\\u0641\\u064a\\u0629\",\"section_label\":\"\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0631\\u064a\\u0627\\u0636\\u064a\\u0629 \\u0628\\u062a\\u0635\\u0645\\u064a\\u0645 \\u0639\\u0635\\u0631\\u064a \\u0644\\u0623\\u0648\\u0644\\u0626\\u0643 \\u0627\\u0644\\u0630\\u064a\\u0646 \\u064a\\u062a\\u0648\\u0642\\u0648\\u0646 \\u0625\\u0644\\u0649 \\u0627\\u0644\\u0645\\u063a\\u0627\\u0645\\u0631\\u0629 \\u0648\\u0627\\u0644\\u0639\\u0638\\u0645\\u0629 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0644\\u0644\\u0627\\u0633\\u062a\\u0631\\u062e\\u0627\\u0621 \\u0645\\u0639 \\u0623\\u062d\\u0628\\u0627\\u0626\\u0643.\",\"section_content\":\"<p>[banner_two]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0627\\u0644\\u0641\\u0626\\u0627\\u062a \\u0627\\u0644\\u0645\\u0645\\u064a\\u0632\\u0629\",\"section_label\":\"\\u0647\\u0644 \\u062a\\u0639\\u0631\\u0641 \\u0645\\u0627 \\u062a\\u0628\\u062d\\u062b \\u0639\\u0646\\u0647\\u061f \\u062a\\u0635\\u0641\\u062d \\u0645\\u062c\\u0645\\u0648\\u0639\\u062a\\u0646\\u0627 \\u0627\\u0644\\u0648\\u0627\\u0633\\u0639\\u0629 \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a\",\"section_content\":\"<p>[category type=all limit=5 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0623\\u0641\\u0636\\u0644 \\u0645\\u0646\\u0635\\u0629 \\u0644\\u062a\\u0623\\u062c\\u064a\\u0631 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a\",\"section_label\":\"\\u0644\\u0645\\u0627\\u0630\\u0627 \\u0646\\u062e\\u062a\\u0627\\u0631 \\u0627\\u0633\\u062a\\u0626\\u062c\\u0627\\u0631 \\u0627\\u0644\\u062f\\u0631\\u0627\\u062c\\u0627\\u062a \\u0627\\u0644\\u0647\\u0648\\u0627\\u0626\\u064a\\u0629 \\u0628\\u0634\\u0643\\u0644 \\u0639\\u0627\\u0645 \\u0625\\u0630\\u0627 \\u0643\\u0646\\u0627 \\u0646\\u0633\\u0627\\u0641\\u0631 \\u0641\\u064a \\u0645\\u062f\\u0646 \\u063a\\u064a\\u0631 \\u0645\\u0639\\u0631\\u0648\\u0641\\u0629 \\u0648\\u0645\\u0639\\u0646\\u0627 \\u062f\\u0631\\u0627\\u062c\\u0629 \\u0641\\u064a \\u0623\\u064a\\u062f\\u064a\\u0646\\u0627 \\u0646\\u0634\\u0639\\u0631 \\u0648\\u0643\\u0623\\u0646\\u0647\\u0627 \\u0645\\u062f\\u064a\\u0646\\u0629 \\u0627\\u0644\\u0648\\u0637\\u0646\",\"section_content\":\"<p>[bestVehicle type=best_vehicle limit=10 viewall=no]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0627\\u0633\\u062a\\u0643\\u0634\\u0627\\u0641 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0623\\u0643\\u062b\\u0631 \\u0634\\u0639\\u0628\\u064a\\u0629\",\"section_label\":\"\\u0641\\u064a\\u0645\\u0627 \\u064a\\u0644\\u064a \\u0642\\u0627\\u0626\\u0645\\u0629 \\u0628\\u0628\\u0639\\u0636 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0623\\u0643\\u062b\\u0631 \\u0634\\u0639\\u0628\\u064a\\u0629 \\u0639\\u0644\\u0649 \\u0645\\u0633\\u062a\\u0648\\u0649 \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645\",\"section_content\":\"<p>[vehicle type=popular limit=10 viewall=no]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0627\\u0644\\u0625\\u064a\\u062c\\u0627\\u0631 \\u062d\\u0633\\u0628 \\u0627\\u0644\\u0639\\u0644\\u0627\\u0645\\u0627\\u062a \\u0627\\u0644\\u062a\\u062c\\u0627\\u0631\\u064a\\u0629\",\"section_label\":\"\\u0641\\u064a\\u0645\\u0627 \\u064a\\u0644\\u064a \\u0642\\u0627\\u0626\\u0645\\u0629 \\u0628\\u0628\\u0639\\u0636 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0623\\u0643\\u062b\\u0631 \\u0634\\u0639\\u0628\\u064a\\u0629 \\u0639\\u0644\\u0649 \\u0645\\u0633\\u062a\\u0648\\u0649 \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645\",\"section_content\":\"<p>[brand type=all limit=5 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0641\\u064a\\u0645\\u0627 \\u064a\\u0644\\u064a \\u0642\\u0627\\u0626\\u0645\\u0629 \\u0628\\u0628\\u0639\\u0636 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0623\\u0643\\u062b\\u0631 \\u0634\\u0639\\u0628\\u064a\\u0629 \\u0639\\u0644\\u0649 \\u0645\\u0633\\u062a\\u0648\\u0649 \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645\",\"section_label\":\"\\u0641\\u064a\\u0645\\u0627 \\u064a\\u0644\\u064a \\u0642\\u0627\\u0626\\u0645\\u0629 \\u0628\\u0628\\u0639\\u0636 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0623\\u0643\\u062b\\u0631 \\u0634\\u0639\\u0628\\u064a\\u0629 \\u0639\\u0644\\u0649 \\u0645\\u0633\\u062a\\u0648\\u0649 \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645\",\"section_content\":\"<p>[facts type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0634\\u0639\\u0628\\u064a\\u0629 \\u062d\\u0633\\u0628 \\u0627\\u0644\\u062a\\u0648\\u0635\\u064a\\u0627\\u062a\",\"section_label\":\"\\u0641\\u064a\\u0645\\u0627 \\u064a\\u0644\\u064a \\u0628\\u0639\\u0636 \\u0627\\u0644\\u062e\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u062a\\u0646\\u0648\\u0639\\u0629 \\u0627\\u0644\\u062a\\u064a \\u062a\\u0644\\u0628\\u064a \\u0627\\u062d\\u062a\\u064a\\u0627\\u062c\\u0627\\u062a \\u0645\\u062e\\u062a\\u0644\\u0641\\u0629\",\"section_content\":\"<p>[vehicle type=featured limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0645\\u0644\\u0627\\u062d\\u0638\\u0627\\u062a \\u0639\\u0645\\u0644\\u0627\\u0626\\u0646\\u0627\",\"section_label\":\"\\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u064a\\u0642\\u062f\\u0645\\u0647\\u0627 \\u0627\\u0644\\u0639\\u0645\\u0644\\u0627\\u0621 \\u062d\\u0648\\u0644 \\u062a\\u062c\\u0631\\u0628\\u062a\\u0647\\u0645 \\u0645\\u0639 \\u0645\\u0646\\u062a\\u062c \\u0623\\u0648 \\u062e\\u062f\\u0645\\u0629.\",\"section_content\":\"<p>[testimonial limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u064a\\u0642\\u062f\\u0645\\u0647\\u0627 \\u0627\\u0644\\u0639\\u0645\\u0644\\u0627\\u0621 \\u062d\\u0648\\u0644 \\u062a\\u062c\\u0631\\u0628\\u062a\\u0647\\u0645 \\u0645\\u0639 \\u0645\\u0646\\u062a\\u062c \\u0623\\u0648 \\u062e\\u062f\\u0645\\u0629.\",\"section_label\":\"\\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u064a\\u0642\\u062f\\u0645\\u0647\\u0627 \\u0627\\u0644\\u0639\\u0645\\u0644\\u0627\\u0621 \\u062d\\u0648\\u0644 \\u062a\\u062c\\u0631\\u0628\\u062a\\u0647\\u0645 \\u0645\\u0639 \\u0645\\u0646\\u062a\\u062c \\u0623\\u0648 \\u062e\\u062f\\u0645\\u0629.\",\"section_content\":\"<p>[marquee type=all limit=5 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0627\\u0644\\u0631\\u0624\\u0649 \\u0648\\u0627\\u0644\\u0627\\u0628\\u062a\\u0643\\u0627\\u0631\\u0627\\u062a\",\"section_label\":\"\\u0627\\u0646\\u063a\\u0645\\u0633 \\u0641\\u064a \\u0645\\u0642\\u0627\\u0644\\u0627\\u062a\\u0646\\u0627 \\u0644\\u062a\\u0628\\u0642\\u0649 \\u0645\\u062a\\u0642\\u062f\\u0645\\u064b\\u0627 \\u0641\\u064a \\u0639\\u0627\\u0644\\u0645 \\u0627\\u0644\\u062a\\u0643\\u0646\\u0648\\u0644\\u0648\\u062c\\u064a\\u0627 \\u0633\\u0631\\u064a\\u0639 \\u0627\\u0644\\u062e\\u0637\\u0649.\",\"section_content\":\"<p>[blogs type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0627\\u0634\\u062a\\u0631\\u0643 \\u0644\\u0644\\u062d\\u0635\\u0648\\u0644 \\u0639\\u0644\\u0649 \\u062a\\u0637\\u0628\\u064a\\u0642 \\u062c\\u0648\\u0627\\u0644 \\u0648\\u0648\\u064a\\u0628 \\u0633\\u0647\\u0644 \\u0627\\u0644\\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645\",\"section_label\":\"\\u0627\\u0633\\u062a\\u062b\\u0645\\u0631 \\u0628\\u0634\\u0643\\u0644 \\u0645\\u0646\\u0627\\u0633\\u0628 \\u0641\\u064a \\u0627\\u0644\\u0648\\u0627\\u062c\\u0647\\u0627\\u062a \\u0627\\u0644\\u0641\\u0631\\u062f\\u064a\\u0629 \\u0628\\u062f\\u0644\\u064b\\u0627 \\u0645\\u0646 \\u0627\\u0644\\u0648\\u0627\\u062c\\u0647\\u0627\\u062a \\u0627\\u0644\\u0645\\u062a\\u0637\\u0648\\u0631\\u0629. \\u062a\\u062e\\u0644\\u0635 \\u0645\\u0646 \\u0627\\u0644\\u0648\\u0633\\u0637\\u0627\\u0621 \\u0628\\u0643\\u0641\\u0627\\u0621\\u0629.\",\"section_content\":\"<p>[ad_card type=all limit=10 viewall=yes]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0627\\u0644\\u0623\\u0633\\u0626\\u0644\\u0629 \\u0627\\u0644\\u0634\\u0627\\u0626\\u0639\\u0629\",\"section_label\":\"\\u0627\\u0633\\u062a\\u0643\\u0634\\u0641 \\u0644\\u0645\\u0639\\u0631\\u0641\\u0629 \\u0627\\u0644\\u0645\\u0632\\u064a\\u062f \\u062d\\u0648\\u0644 \\u0643\\u064a\\u0641\\u064a\\u0629 \\u062a\\u0645\\u0643\\u064a\\u0646 \\u0639\\u0645\\u0644\\u0643\",\"section_content\":\"<p>[faq limit=10 viewall=yes order=asc]<br><\\/p>\",\"status\":1},{\"section_title\":\"\\u0627\\u0633\\u062a\\u0643\\u0634\\u0641 \\u0644\\u0645\\u0639\\u0631\\u0641\\u0629 \\u0627\\u0644\\u0645\\u0632\\u064a\\u062f \\u062d\\u0648\\u0644 \\u0643\\u064a\\u0641\\u064a\\u0629 \\u062a\\u0645\\u0643\\u064a\\u0646 \\u0639\\u0645\\u0644\\u0643\",\"section_label\":\"\\u0627\\u0633\\u062a\\u0643\\u0634\\u0641 \\u0644\\u0645\\u0639\\u0631\\u0641\\u0629 \\u0627\\u0644\\u0645\\u0632\\u064a\\u062f \\u062d\\u0648\\u0644 \\u0643\\u064a\\u0641\\u064a\\u0629 \\u062a\\u0645\\u0643\\u064a\\u0646 \\u0639\\u0645\\u0644\\u0643\",\"section_content\":\"<p>[all_category type=all limit=5 viewall=yes]<br><\\/p>\",\"status\":1}]', 'استكشف لمعرفة المزيد حول كيفية تمكين عملك', 'استكشف لمعرفة المزيد حول كيفية تمكين عملك', 'استكشف لمعرفة المزيد حول كيفية تمكين عملكاستكشف لمعرفة المزيد حول كيفية تمكين عملكاستكشف لمعرفة المزيد حول كيفية تمكين عملكاستكشف لمعرفة المزيد حول كيفية تمكين عملكاستكشف لمعرفة المزيد حول كيفية تمكين عملكاستكشف لمعرفة المزيد حول كيفية تمكين عملكاستكشف لمعرفة المزيد حول كيفية تمكين عملك', 'https://www.vox.com/', 'استكشف لمعرفة المزيد حول كيفية تمكين عملك', 'استكشف لمعرفة المزيد حول كيفية تمكين عملك', 'أفضل سعر مضمون، دليل موثوق، إلغاء مجاني', 0, '2025-04-10 04:45:21', '2025-04-12 12:52:11', NULL),
 (50, 1, NULL, 1, 'static', 'About Us', 'about-us', '[{\"section_title\":\"ABOUT OUR COMPANY\",\"section_label\":\"Best Solution For Cleaning Services\",\"section_content\":\"<section class=\\\"py-5 bg-light\\\">\\r\\n  <div class=\\\"container\\\">\\r\\n    <div class=\\\"text-center mb-5\\\">\\r\\n      <h2 class=\\\"display-5 fw-bold\\\">Who We Are<\\/h2>\\r\\n      <p class=\\\"fs-5\\\">Driving change in how the world rents vehicles\\u2014smarter, easier, and more accessible mobility.<\\/p>\\r\\n    <\\/div>\\r\\n\\r\\n    <div class=\\\"row align-items-center mb-5\\\">\\r\\n      <div class=\\\"col-lg-6\\\">\\r\\n        <h4 class=\\\"fw-semibold\\\">Our Vision<\\/h4>\\r\\n        <p>\\r\\n          Dreams Rent is more than just a rental service \\u2014 it\'s a commitment to making transportation effortless.\\r\\n          We offer a streamlined rental experience backed by technology, trust, and customer satisfaction.\\r\\n        <\\/p>\\r\\n        <p>\\r\\n          From quick trips to long-term rentals, we ensure every journey is smooth, reliable, and affordable.\\r\\n        <\\/p>\\r\\n      <\\/div>\\r\\n      <div class=\\\"col-lg-6\\\">\\r\\n        <div class=\\\"bg-white p-4 shadow rounded\\\">\\r\\n          <h5 class=\\\"fw-bold mb-3\\\">Why Choose Us?<\\/h5>\\r\\n          <ul class=\\\"list-unstyled mb-0\\\">\\r\\n            <li class=\\\"mb-2\\\">\\u2714 Instant and secure online bookings<\\/li>\\r\\n            <li class=\\\"mb-2\\\">\\u2714 Verified vehicles across categories<\\/li>\\r\\n            <li class=\\\"mb-2\\\">\\u2714 Clear, upfront pricing\\u2014no surprises<\\/li>\\r\\n            <li class=\\\"mb-2\\\">\\u2714 Active support and reliable service<\\/li>\\r\\n          <\\/ul>\\r\\n        <\\/div>\\r\\n      <\\/div>\\r\\n    <\\/div>\\r\\n\\r\\n    <div class=\\\"mb-5\\\">\\r\\n      <h4 class=\\\"fw-semibold text-center mb-4\\\">Our Core Values<\\/h4>\\r\\n      <div class=\\\"row text-center\\\">\\r\\n        <div class=\\\"col-md-3\\\">\\r\\n          <div class=\\\"p-3 bg-white shadow-sm rounded h-100\\\">\\r\\n            <h6 class=\\\"fw-bold\\\">Simplicity<\\/h6>\\r\\n            <p class=\\\"small mb-0\\\">Easy to book, easy to drive, easy to return.<\\/p>\\r\\n          <\\/div>\\r\\n        <\\/div>\\r\\n        <div class=\\\"col-md-3\\\">\\r\\n          <div class=\\\"p-3 bg-white shadow-sm rounded h-100\\\">\\r\\n            <h6 class=\\\"fw-bold\\\">Integrity<\\/h6>\\r\\n            <p class=\\\"small mb-0\\\">Fair pricing and honest service at every step.<\\/p>\\r\\n          <\\/div>\\r\\n        <\\/div>\\r\\n        <div class=\\\"col-md-3\\\">\\r\\n          <div class=\\\"p-3 bg-white shadow-sm rounded h-100\\\">\\r\\n            <h6 class=\\\"fw-bold\\\">Innovation<\\/h6>\\r\\n            <p class=\\\"small mb-0\\\">We evolve our platform to serve you better.<\\/p>\\r\\n          <\\/div>\\r\\n        <\\/div>\\r\\n        <div class=\\\"col-md-3\\\">\\r\\n          <div class=\\\"p-3 bg-white shadow-sm rounded h-100\\\">\\r\\n            <h6 class=\\\"fw-bold\\\">Support<\\/h6>\\r\\n            <p class=\\\"small mb-0\\\">We\'re here for you\\u2014before, during, and after your trip.<\\/p>\\r\\n          <\\/div>\\r\\n        <\\/div>\\r\\n      <\\/div>\\r\\n    <\\/div>\\r\\n\\r\\n    <div class=\\\"row align-items-center mb-5\\\">\\r\\n      <div class=\\\"col-md-6 order-md-2\\\">\\r\\n        <h4 class=\\\"fw-semibold\\\">For Partners &amp; Fleet Owners<\\/h4>\\r\\n        <p>\\r\\n          Have vehicles to rent out? With Dreams Rent, you get the tools and reach to maximize your fleet\\u2019s earning potential.\\r\\n          Join our trusted partner network and get real-time bookings, dashboard control, and guaranteed payouts.\\r\\n        <\\/p>\\r\\n      <\\/div>\\r\\n      <div class=\\\"col-md-6 order-md-1\\\">\\r\\n        <div class=\\\"bg-white p-4 rounded shadow\\\">\\r\\n          <h6 class=\\\"fw-bold mb-3\\\">Partner Benefits<\\/h6>\\r\\n          <ul class=\\\"list-unstyled mb-0\\\">\\r\\n            <li class=\\\"mb-2\\\">\\u2714 Easy vehicle listing process<\\/li>\\r\\n            <li class=\\\"mb-2\\\">\\u2714 Automated booking management<\\/li>\\r\\n            <li class=\\\"mb-2\\\">\\u2714 Fast payouts &amp; earnings tracking<\\/li>\\r\\n            <li class=\\\"mb-2\\\">\\u2714 Visibility to thousands of renters<\\/li>\\r\\n          <\\/ul>\\r\\n        <\\/div>\\r\\n      <\\/div>\\r\\n    <\\/div>\\r\\n\\r\\n    <div class=\\\"text-center mt-5\\\">\\r\\n      <h5 class=\\\"fw-semibold mb-3\\\">Let\'s build a smarter way to move\\u2014together.<\\/h5>\\r\\n      <a href=\\\"\\/contact-us\\\" class=\\\"btn btn-primary px-4 py-2\\\">Contact Us<\\/a>\\r\\n    <\\/div>\\r\\n  <\\/div>\\r\\n<\\/section>\",\"status\":1}]', 'Best Solution For Cleaning Services', 'About Us', 'Best Solution For Cleaning Services', 'https://www.vox.com/', 'About Us', 'Best Solution For Cleaning Services', 'About Us', 0, '2025-04-10 16:10:03', '2025-04-24 18:43:33', NULL);
 INSERT INTO `pages` (`id`, `theme_id`, `parent_id`, `language_id`, `read`, `page_title`, `slug`, `page_content`, `seo_tag`, `seo_title`, `seo_description`, `canonical_url`, `og_title`, `og_description`, `keywords`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (51, 1, NULL, 1, 'static', 'Contact us', 'contact-us', '[{\"section_title\":\"Contact Us\",\"section_label\":\"Get in touch!\",\"section_content\":\"<h1 class=\\\"title\\\" style=\\\"outline-style: initial; outline-width: 0px; font-family: &quot;Nunito Sans&quot;, sans-serif; zoom: 1; font-size: 54px; margin: 30px 0px 5rem; color: rgb(0, 0, 0); line-height: 1em; text-align: center; background-color: rgb(237, 237, 237);\\\">Contact Us<\\/h1><div class=\\\"row\\\" style=\\\"outline-style: initial; outline-width: 0px; font-family: &quot;Nunito Sans&quot;, sans-serif; zoom: 1; flex-direction: row; color: rgb(96, 96, 96); font-size: 12px; text-align: center; background-color: rgb(237, 237, 237);\\\"><div id=\\\"needhelp\\\" class=\\\"col\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1; width: 473.994px; margin-bottom: 1rem;\\\"><div class=\\\"icon\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1; margin: 0px auto; background: url(&quot;data:image\\/svg+xml,%3Csvg xmlns=\'http:\\/\\/www.w3.org\\/2000\\/svg\' width=\'95.693\' height=\'85.03\'%3E%3Cdefs%3E%3Cstyle%3E.a%7Bfill:none;stroke-miterlimit:10;%7D.b,.d%7Bfill:%23ff8236;%7D.c,.d%7Bstroke:none;%7D%3C\\/style%3E%3C\\/defs%3E%3Cg transform=\'translate(0)\'%3E%3Cg class=\'a\' transform=\'translate(-1183.774 -1604.228)\'%3E%3Cpath class=\'c\' d=\'M1277.516,1654.242c3.135-9.061.146-21.97-8.007-26.949-5.318-3.248-11.523-2.481-13.048-2.295a23.079,23.079,0,0,0-11.171,4.6,12.71,12.71,0,0,0-6.138-1.55c-9.694.194-19.628,13.1-18.208,24.732.151,1.238,1,8.229,6.265,12.571,3.3,2.722,7.158,3.434,6.99,4.823-.183,1.512-6.809,1.558-10.343,5.122-.637.642,8.058,11.627,11.3,13.512,4.122,2.394,8.489-5.353,9.147-9.766,1.127-7.555-8.308-10.671-9.432-20.162-.661-5.582,1.842-10.521,4.125-13.881a20.053,20.053,0,0,0,12,2,19.1,19.1,0,0,0,6-2,20.017,20.017,0,0,1,6.737,6.094,14.5,14.5,0,0,1,2.212,4.46c.8,2.857.888,6.7-.554,9.265a16.2,16.2,0,0,1-7.736,2.4,5.512,5.512,0,1,0,.059,4,23.176,23.176,0,0,0,5.9-1.161c-4.112,3.791-4.865,9.6-2.263,13.4,3.006,4.392,9.167,3.756,9.64,3.7,1.071-.126,8.476-14.317,8.476-14.317-2.1-3.74-6.332-2.271-7.468-4.836C1270.3,1664.151,1275.283,1660.7,1277.516,1654.242Z\'\\/%3E%3Cpath class=\'d\' d=\'M 1259.718139648438 1628.78564453125 C 1258.444946289063 1628.78564453125 1257.47705078125 1628.903686523438 1256.95703125 1628.967163085938 L 1256.9462890625 1628.968505859375 C 1252.761962890625 1629.47998046875 1249.62060546875 1631.320556640625 1247.722290039063 1632.774536132813 L 1245.694702148438 1634.327514648438 L 1243.432739257813 1633.141723632813 C 1242.046875 1632.415161132813 1240.680908203125 1632.046752929688 1239.372680664063 1632.046752929688 C 1239.325805664063 1632.046752929688 1239.278930664063 1632.047241210938 1239.232055664063 1632.048095703125 C 1237.79443359375 1632.076904296875 1236.273071289063 1632.535888671875 1234.710205078125 1633.412353515625 C 1233.091552734375 1634.320068359375 1231.489990234375 1635.65966796875 1230.07861328125 1637.286254882813 C 1226.295288085938 1641.646728515625 1224.316528320313 1647.398193359375 1224.91455078125 1652.296752929688 C 1224.981567382813 1652.846313476563 1225.185546875 1654.518798828125 1225.919067382813 1656.534790039063 C 1226.8046875 1658.968505859375 1228.095336914063 1660.897216796875 1229.754638671875 1662.2666015625 C 1230.451049804688 1662.841186523438 1231.211181640625 1663.31591796875 1231.963500976563 1663.733520507813 C 1231.4677734375 1662.4072265625 1231.0927734375 1660.95556640625 1230.902709960938 1659.351318359375 C 1230.263671875 1653.9541015625 1231.874755859375 1648.369262695313 1235.69140625 1642.751953125 L 1237.665161132813 1639.84716796875 L 1240.801025390625 1641.428466796875 C 1242.423217773438 1642.246459960938 1245.0107421875 1643.221557617188 1248.125122070313 1643.221557617188 C 1248.880981445313 1643.221557617188 1249.641845703125 1643.162963867188 1250.387329101563 1643.047241210938 C 1252.027221679688 1642.79296875 1253.623291015625 1642.260131835938 1255.131225585938 1641.46337890625 L 1257.06103515625 1640.443603515625 L 1258.962890625 1641.514770507813 C 1262.271240234375 1643.378051757813 1264.988037109375 1645.840698242188 1267.038330078125 1648.835327148438 C 1267.787719726563 1649.930541992188 1269.0419921875 1651.763793945313 1269.801147460938 1654.4765625 C 1270.171264648438 1655.799926757813 1270.438232421875 1657.359252929688 1270.504760742188 1658.994262695313 C 1270.579467773438 1658.87646484375 1270.653930664063 1658.759399414063 1270.728149414063 1658.642700195313 C 1271.841064453125 1656.893432617188 1272.991943359375 1655.08447265625 1273.73583984375 1652.93408203125 C 1274.360961914063 1651.12744140625 1274.706176757813 1649.026000976563 1274.734375 1646.856811523438 C 1274.7626953125 1644.673706054688 1274.470581054688 1642.406494140625 1273.889526367188 1640.300537109375 C 1273.295043945313 1638.145629882813 1272.430419921875 1636.214233398438 1271.319580078125 1634.559814453125 C 1270.206298828125 1632.901733398438 1268.895751953125 1631.605346679688 1267.424194335938 1630.706665039063 C 1264.824462890625 1629.118896484375 1261.798706054688 1628.78564453125 1259.718139648438 1628.78564453125 M 1252.56103515625 1667.791015625 C 1251.7294921875 1667.791015625 1251.052978515625 1668.467529296875 1251.052978515625 1669.298950195313 C 1251.052978515625 1670.128784179688 1251.7294921875 1670.803955078125 1252.56103515625 1670.803955078125 C 1253.2802734375 1670.803955078125 1253.786987304688 1670.308471679688 1253.970092773438 1669.817504882813 L 1254.176025390625 1669.265014648438 L 1253.959228515625 1668.737182617188 C 1253.77978515625 1668.30078125 1253.306030273438 1667.791015625 1252.56103515625 1667.791015625 M 1268.89599609375 1670.625732421875 L 1266.326293945313 1672.994750976563 C 1265.027954101563 1674.19189453125 1264.17236328125 1675.745483398438 1263.917358398438 1677.36962890625 C 1263.69091796875 1678.811401367188 1263.952270507813 1680.169677734375 1264.652954101563 1681.19384765625 C 1265.150634765625 1681.9208984375 1265.886108398438 1682.44189453125 1266.901489257813 1682.78662109375 C 1267.66796875 1683.046875 1268.448120117188 1683.156372070313 1269.09130859375 1683.1962890625 C 1270.15380859375 1681.545043945313 1272.095703125 1678.1708984375 1274.401733398438 1673.862060546875 C 1274.256469726563 1673.819091796875 1274.096801757813 1673.7734375 1273.920532226563 1673.723876953125 C 1272.5185546875 1673.329345703125 1270.29248046875 1672.703125 1268.89599609375 1670.625732421875 M 1237.557006835938 1672.490234375 C 1236.457763671875 1674.307739257813 1234.174682617188 1674.983764648438 1232.257446289063 1675.551513671875 C 1231.29345703125 1675.8369140625 1230.21044921875 1676.157470703125 1229.208862304688 1676.57275390625 C 1229.919921875 1677.530395507813 1230.85009765625 1678.717407226563 1231.978271484375 1680.054809570313 C 1234.33544921875 1682.84912109375 1236.029174804688 1684.484741210938 1236.83203125 1685.112915039063 C 1237.216430664063 1684.822875976563 1237.890991210938 1684.15185546875 1238.65380859375 1682.86279296875 C 1239.498046875 1681.435791015625 1240.1640625 1679.704833984375 1240.350830078125 1678.452880859375 C 1240.489624023438 1677.522338867188 1240.338500976563 1676.711669921875 1239.845581054688 1675.7421875 C 1239.331176757813 1674.73046875 1238.484985351563 1673.640014648438 1237.557006835938 1672.490234375 M 1259.718139648438 1624.78564453125 C 1262.385864257813 1624.78564453125 1266.126831054688 1625.227294921875 1269.509033203125 1627.29296875 C 1277.661987304688 1632.27197265625 1280.651000976563 1645.181030273438 1277.515991210938 1654.241943359375 C 1275.282958984375 1660.697021484375 1270.296020507813 1664.151000976563 1272 1668 C 1273.135986328125 1670.56494140625 1277.363037109375 1669.095947265625 1279.468017578125 1672.836059570313 C 1279.468017578125 1672.836059570313 1272.06298828125 1687.026977539063 1270.991943359375 1687.152954101563 C 1270.875 1687.166748046875 1270.410400390625 1687.216064453125 1269.731689453125 1687.216064453125 C 1267.665283203125 1687.216064453125 1263.61474609375 1686.759033203125 1261.35205078125 1683.453002929688 C 1258.75 1679.650024414063 1259.503051757813 1673.844970703125 1263.614990234375 1670.053955078125 C 1261.828979492188 1670.666015625 1259.869995117188 1671.06201171875 1257.718017578125 1671.214965820313 C 1256.93798828125 1673.307006835938 1254.922973632813 1674.803955078125 1252.56103515625 1674.803955078125 C 1249.525024414063 1674.803955078125 1247.052978515625 1672.333984375 1247.052978515625 1669.298950195313 C 1247.052978515625 1666.261962890625 1249.525024414063 1663.791015625 1252.56103515625 1663.791015625 C 1254.863037109375 1663.791015625 1256.833984375 1665.208984375 1257.659057617188 1667.217041015625 C 1260.743041992188 1666.97900390625 1263.300048828125 1666.182006835938 1265.39501953125 1664.818969726563 C 1266.837036132813 1662.254028320313 1266.748046875 1658.411010742188 1265.948974609375 1655.553955078125 C 1265.368041992188 1653.47802734375 1264.385009765625 1652.041015625 1263.737060546875 1651.093994140625 C 1261.663940429688 1648.066040039063 1259.06494140625 1646.162963867188 1257 1645 C 1255.557983398438 1645.761962890625 1253.529052734375 1646.608032226563 1251 1647 C 1250.00341796875 1647.154663085938 1249.04248046875 1647.221557617188 1248.125122070313 1647.221557617188 C 1243.854614257813 1647.221557617188 1240.532836914063 1645.77294921875 1239 1645 C 1236.717041015625 1648.359985351563 1234.213989257813 1653.298950195313 1234.875 1658.880981445313 C 1235.9990234375 1668.371948242188 1245.433959960938 1671.488037109375 1244.307006835938 1679.04296875 C 1243.734008789063 1682.886352539063 1240.347900390625 1689.258056640625 1236.760375976563 1689.258056640625 C 1236.228637695313 1689.258056640625 1235.692138671875 1689.118041992188 1235.160034179688 1688.808959960938 C 1231.913940429688 1686.923950195313 1223.218994140625 1675.93896484375 1223.85595703125 1675.296997070313 C 1227.390014648438 1671.733032226563 1234.015991210938 1671.68701171875 1234.198974609375 1670.175048828125 C 1234.366943359375 1668.786010742188 1230.508056640625 1668.073974609375 1227.208984375 1665.35205078125 C 1221.947998046875 1661.010009765625 1221.094970703125 1654.01904296875 1220.943969726563 1652.781005859375 C 1219.524047851563 1641.150024414063 1229.4580078125 1628.243041992188 1239.151977539063 1628.048950195313 C 1239.22607421875 1628.047485351563 1239.29931640625 1628.046752929688 1239.372680664063 1628.046752929688 C 1241.835571289063 1628.046752929688 1243.889770507813 1628.864868164063 1245.2900390625 1629.598999023438 C 1247.032958984375 1628.264038085938 1250.906005859375 1625.677001953125 1256.461059570313 1624.998046875 C 1257.01611328125 1624.930297851563 1258.191284179688 1624.78564453125 1259.718139648438 1624.78564453125 Z\'\\/%3E%3C\\/g%3E%3Cg class=\'a\' transform=\'translate(-1183.774 -1604.228)\'%3E%3Cpath class=\'c\' d=\'M1236.43,1625.1A19.436,19.436,0,0,0,1234,1614c-3.868-6.725-10.772-8.793-12.925-9.318a19.832,19.832,0,0,0-2.6-.454,7.832,7.832,0,0,1-1,5c-2.96,4.621-10.03,1.815-18,5-7.486,2.991-13.194,10.234-15,17.558a34.176,34.176,0,0,0,6.482,26.213c3.554,4.048,8.01,6.558,8.433,6.076.369-.421-3.522-2.937-5.915-7.847-2.078-4.265-4.083-12.5-.47-16.228,4.293-4.431,14.341-.248,23.47-2.772A16.656,16.656,0,0,0,1224,1633a14.282,14.282,0,0,0,1.461-1.758C1228.6,1627.845,1232.5,1625.447,1236.43,1625.1Z\'\\/%3E%3Cpath class=\'d\' d=\'M 1221.927978515625 1609.111450195313 C 1221.65673828125 1609.916259765625 1221.293334960938 1610.675048828125 1220.838256835938 1611.385620117188 C 1218.0869140625 1615.6806640625 1213.456298828125 1616.040893554688 1209.37060546875 1616.358764648438 C 1206.651977539063 1616.570190429688 1203.8408203125 1616.788818359375 1200.9541015625 1617.942504882813 C 1197.978393554688 1619.131469726563 1195.197021484375 1621.207397460938 1192.910400390625 1623.94580078125 C 1190.725708007813 1626.562377929688 1189.107421875 1629.686767578125 1188.353759765625 1632.743041992188 C 1187.768310546875 1635.119262695313 1187.62646484375 1637.636840820313 1187.932495117188 1640.225952148438 C 1187.946655273438 1640.345703125 1187.961547851563 1640.464599609375 1187.977294921875 1640.582397460938 C 1188.492797851563 1639.290649414063 1189.21142578125 1638.16162109375 1190.127197265625 1637.216674804688 C 1193.029296875 1634.22119140625 1197.165771484375 1633.837036132813 1200.445190429688 1633.8369140625 C 1201.773193359375 1633.8369140625 1203.116455078125 1633.901000976563 1204.53857421875 1633.96875 C 1205.96630859375 1634.036865234375 1207.442749023438 1634.107299804688 1208.902954101563 1634.107299804688 C 1211.525512695313 1634.107299804688 1213.59130859375 1633.873901367188 1215.403686523438 1633.372802734375 C 1218.673461914063 1632.468383789063 1220.501953125 1630.857788085938 1221.138671875 1630.204833984375 C 1221.520629882813 1629.813842773438 1221.874267578125 1629.38818359375 1222.190063476563 1628.939697265625 L 1222.343505859375 1628.721557617188 L 1222.524536132813 1628.52587890625 C 1225.510864257813 1625.297241210938 1228.92333984375 1623.01611328125 1232.403198242188 1621.87890625 C 1232.219116210938 1620.082397460938 1231.70166015625 1618.026489257813 1230.532592773438 1615.994384765625 C 1228.225463867188 1611.983154296875 1224.478881835938 1610.025146484375 1221.927978515625 1609.111450195313 M 1218.469970703125 1604.22802734375 C 1219.10205078125 1604.295043945313 1220.009033203125 1604.421997070313 1221.074951171875 1604.682006835938 C 1223.22802734375 1605.20703125 1230.131958007813 1607.275024414063 1234 1614 C 1236.618041992188 1618.551025390625 1236.583984375 1623.0419921875 1236.430053710938 1625.097045898438 C 1232.501953125 1625.447021484375 1228.60302734375 1627.844970703125 1225.461059570313 1631.241943359375 C 1225.159057617188 1631.671020507813 1224.676025390625 1632.307983398438 1224 1633 C 1223.409057617188 1633.60595703125 1220.985961914063 1635.97900390625 1216.469970703125 1637.22802734375 C 1213.970458984375 1637.919067382813 1211.4033203125 1638.107299804688 1208.902954101563 1638.107299804688 C 1205.907592773438 1638.107299804688 1203.009643554688 1637.8369140625 1200.4453125 1637.8369140625 C 1197.332275390625 1637.837036132813 1194.70947265625 1638.235595703125 1193 1640 C 1189.386962890625 1643.72802734375 1191.391967773438 1651.963012695313 1193.469970703125 1656.22802734375 C 1195.863037109375 1661.137939453125 1199.754028320313 1663.654052734375 1199.385009765625 1664.074951171875 C 1199.350219726563 1664.114624023438 1199.288208007813 1664.134033203125 1199.20166015625 1664.134033203125 C 1198.235473632813 1664.134033203125 1194.213745117188 1661.714233398438 1190.952026367188 1657.9990234375 C 1187.2099609375 1653.735961914063 1186.1259765625 1649.193969726563 1185.469970703125 1647.22802734375 C 1184.370971679688 1643.927978515625 1182.8759765625 1638.255004882813 1184.469970703125 1631.786010742188 C 1186.276000976563 1624.462036132813 1191.984008789063 1617.218994140625 1199.469970703125 1614.22802734375 C 1207.43994140625 1611.04296875 1214.510009765625 1613.848999023438 1217.469970703125 1609.22802734375 C 1218.577026367188 1607.5 1218.597045898438 1605.532958984375 1218.469970703125 1604.22802734375 Z\'\\/%3E%3C\\/g%3E%3Cg class=\'a\' transform=\'translate(-1182.373 -1603.228)\'%3E%3Cpath class=\'c\' d=\'M1198.47,1660.228c.461.187.959.366,1.492.528a17.651,17.651,0,0,0,3.894.714,5.061,5.061,0,1,1-.055,3.672,21.625,21.625,0,0,1-4.907-.9s-.486-.208-.961-.469c-3.6-1.98-9.095-11.151-8.463-11.545.3-.184,1.365,1.891,5,5A39.386,39.386,0,0,0,1198.47,1660.228Z\'\\/%3E%3Cpath class=\'d\' d=\'M 1208.538940429688 1662.322387695313 C 1208.015869140625 1662.322387695313 1207.682373046875 1662.682373046875 1207.555541992188 1662.99072265625 L 1207.404663085938 1663.35791015625 L 1207.548583984375 1663.743408203125 C 1207.677612304688 1664.089111328125 1208.033813476563 1664.43798828125 1208.538940429688 1664.43798828125 C 1208.993896484375 1664.43798828125 1209.2685546875 1664.159057617188 1209.365478515625 1664.0390625 C 1209.576293945313 1663.778198242188 1209.644409179688 1663.465454101563 1209.568359375 1663.110595703125 C 1209.4912109375 1662.752075195313 1209.163208007813 1662.425537109375 1208.80615234375 1662.351196289063 C 1208.714111328125 1662.33203125 1208.624267578125 1662.322387695313 1208.538940429688 1662.322387695313 M 1189.510498046875 1652.216674804688 C 1189.857543945313 1652.216674804688 1190.984741210938 1654.2470703125 1194.469970703125 1657.22802734375 C 1196.02001953125 1658.552978515625 1197.425048828125 1659.54296875 1198.469970703125 1660.22802734375 C 1198.931030273438 1660.4150390625 1199.428955078125 1660.593994140625 1199.962036132813 1660.755981445313 C 1201.400024414063 1661.192016601563 1202.72705078125 1661.390991210938 1203.85595703125 1661.469970703125 C 1204.6142578125 1659.625244140625 1206.424560546875 1658.322387695313 1208.538940429688 1658.322387695313 C 1208.892333984375 1658.322387695313 1209.254150390625 1658.358764648438 1209.620971679688 1658.43505859375 C 1211.526977539063 1658.83203125 1213.069946289063 1660.366943359375 1213.47900390625 1662.27001953125 C 1214.181030273438 1665.541015625 1211.691040039063 1668.43798828125 1208.538940429688 1668.43798828125 C 1206.369018554688 1668.43798828125 1204.517944335938 1667.06298828125 1203.801025390625 1665.141967773438 C 1202.026977539063 1665.015014648438 1200.39599609375 1664.7099609375 1198.89404296875 1664.241943359375 C 1198.892944335938 1664.241943359375 1198.407958984375 1664.034057617188 1197.932983398438 1663.77294921875 C 1194.329956054688 1661.79296875 1188.838012695313 1652.621948242188 1189.469970703125 1652.22802734375 C 1189.482177734375 1652.220458984375 1189.49560546875 1652.216674804688 1189.510498046875 1652.216674804688 Z\'\\/%3E%3C\\/g%3E%3Ccircle class=\'b\' cx=\'2.5\' cy=\'2.5\' r=\'2.5\' transform=\'translate(66.226 63)\'\\/%3E%3Ccircle class=\'b\' cx=\'2\' cy=\'2\' r=\'2\' transform=\'translate(24.226 58)\'\\/%3E%3C\\/g%3E%3C\\/svg%3E&quot;) center center \\/ contain no-repeat; width: 95.69px; height: 85.03px;\\\"><\\/div><h2 class=\\\"subtitle\\\" style=\\\"outline-style: initial; outline-width: 0px; font-family: &quot;Nunito Sans&quot;, sans-serif; zoom: 1; font-size: 20px; margin: 40px auto 1rem; color: rgb(0, 0, 0); line-height: 1.5em; text-transform: uppercase; letter-spacing: 0.2em; max-width: 275px;\\\">By Phone<\\/h2><p class=\\\"desc\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1; margin: 1em auto 1rem; color: rgba(0, 0, 0, 0.6); font-size: 20px; font-weight: 700; letter-spacing: 0.025em; line-height: 1.5em; max-width: 275px;\\\">Get telephone support by signing into your account.<\\/p><div class=\\\"button\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1;\\\"><a href=\\\"https:\\/\\/www.website.com\\/\\/r?D=PH\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1; color: rgb(0, 0, 0); display: inline-block; text-transform: uppercase; padding: 1.19rem 1.37rem; min-width: 270px; letter-spacing: 0.1em; font-size: 15px; font-weight: 700; border: 1px solid rgb(217, 217, 217); background: rgb(255, 255, 255); transition: background 0.2s, border 0.2s; margin-top: 1rem;\\\">Log In<\\/a><\\/div><p style=\\\"outline-style: initial; outline-width: 0px; zoom: 1; margin: 1em auto 1rem; color: rgba(0, 0, 0, 0.6); font-size: 20px; font-weight: 700; letter-spacing: 0.025em; line-height: 1.5em; max-width: 275px;\\\"><\\/p><\\/div><div id=\\\"start-case\\\" class=\\\"col\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1; width: 473.994px; margin-bottom: 1rem;\\\"><div class=\\\"icon newcase\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1; margin: 0px auto; background: url(&quot;data:image\\/svg+xml,%3Csvg xmlns=\'http:\\/\\/www.w3.org\\/2000\\/svg\' width=\'96.502\' height=\'70.021\'%3E%3Cdefs%3E%3Cstyle%3E.a%7Bfill:none;stroke-miterlimit:10;%7D.b,.d%7Bfill:%23ff8236;%7D.c,.d%7Bstroke:none;%7D%3C\\/style%3E%3C\\/defs%3E%3Cg transform=\'translate(0)\'%3E%3Cg class=\'a\' transform=\'translate(-1329 -1621.002)\'%3E%3Cpath class=\'c\' d=\'M1425.146,1639.532A1.5,1.5,0,0,0,1424,1639h-9.992a1.008,1.008,0,0,0-1.008,1.008V1683c0,4-2.389,4-4,4v-50.712a5.289,5.289,0,0,0-5.288-5.288h-38.75a1.962,1.962,0,0,1-1.962-1.962V1626a4.994,4.994,0,0,0-4.995-5c-6.449,0-17.606.01-24.041.018A4.97,4.97,0,0,0,1329,1626v60a5.008,5.008,0,0,0,5.008,5.008H1413v.023l2.027-.023a1.5,1.5,0,0,0,1.456-1.249l9-49A1.5,1.5,0,0,0,1425.146,1639.532Z\'\\/%3E%3Cpath class=\'d\' d=\'M 1358.006713867188 1625.001953125 L 1358.006958007813 1625.001953125 C 1352.257690429688 1625.004638671875 1340.725219726563 1625.011596679688 1333.96826171875 1625.02001953125 C 1333.434326171875 1625.020629882813 1333 1625.458374023438 1333 1625.995971679688 L 1333 1685.991943359375 C 1333 1686.547729492188 1333.4521484375 1687 1334.008056640625 1687 L 1395 1687 L 1405 1687 L 1405 1683 L 1405 1636.287963867188 C 1405 1635.577758789063 1404.422241210938 1635 1403.712036132813 1635 L 1364.962036132813 1635 C 1361.674560546875 1635 1359 1632.325439453125 1359 1629.037963867188 L 1359 1626 C 1359 1625.44970703125 1358.554443359375 1625.001953125 1358.006713867188 1625.001953125 M 1417 1643 L 1417 1664.788818359375 L 1421.001098632813 1643 L 1417 1643 M 1358.0068359375 1621.001953125 C 1360.766845703125 1621.001953125 1363 1623.239624023438 1363 1626 L 1363 1629.037963867188 C 1363 1630.121948242188 1363.878051757813 1631 1364.962036132813 1631 L 1403.712036132813 1631 C 1406.631958007813 1631 1409 1633.368041992188 1409 1636.287963867188 L 1409 1683 L 1409 1687 C 1410.610961914063 1687 1413 1687 1413 1683 L 1413 1642 L 1413 1640.008056640625 C 1413 1639.451049804688 1413.451049804688 1639 1414.008056640625 1639 L 1424 1639 C 1424.441040039063 1639 1424.860961914063 1639.193969726563 1425.14599609375 1639.531982421875 C 1425.431030273438 1639.869995117188 1425.556030273438 1640.31494140625 1425.48095703125 1640.7509765625 L 1416.483032226563 1689.7509765625 C 1416.362060546875 1690.465942382813 1415.751953125 1690.990966796875 1415.026977539063 1691 L 1413 1691.02294921875 L 1413 1691 L 1412.97998046875 1691 L 1409.968017578125 1691 L 1395 1691 L 1334.008056640625 1691 C 1331.241943359375 1691 1329 1688.758056640625 1329 1685.991943359375 L 1329 1625.995971679688 C 1329 1623.25 1331.218017578125 1621.02294921875 1333.963989257813 1621.02001953125 C 1340.399047851563 1621.011962890625 1351.556030273438 1621.005004882813 1358.005004882813 1621.001953125 C 1358.005737304688 1621.001953125 1358.006103515625 1621.001953125 1358.0068359375 1621.001953125 Z\'\\/%3E%3C\\/g%3E%3Cg transform=\'translate(16 32.998)\'%3E%3Cpath class=\'b\' d=\'M1345,1654h3l6,6.871V1654h4v13h-2.771l-6.229-7.131V1667h-4Z\' transform=\'translate(-1345 -1654)\'\\/%3E%3Cpath class=\'b\' d=\'M1362,1654h11v3h-7v2h6v3h-6v2h7v3h-11Z\' transform=\'translate(-1345 -1654)\'\\/%3E%3Cpath class=\'b\' d=\'M1375.458,1654h4.043l2.155,7.788,2.385-6.859h2.951l2.385,6.859,2.155-7.788h3.972l-4.316,13h-3.116l-2.6-7.431L1382.89,1667h-3.116Z\' transform=\'translate(-1345 -1654)\'\\/%3E%3C\\/g%3E%3Cpath class=\'b\' d=\'M1415,1642l8-1-6,26-3-4Z\' transform=\'translate(-1329 -1621.002)\'\\/%3E%3Cpath class=\'b\' d=\'M0,0S28.083-4.583,28.167,2a9.586,9.586,0,0,0,5.644,8.766H-1Z\' transform=\'translate(3 3.226)\'\\/%3E%3C\\/g%3E%3C\\/svg%3E&quot;) center center \\/ contain no-repeat; width: 96.5px; height: 85.03px;\\\"><\\/div><h2 class=\\\"subtitle\\\" style=\\\"outline-style: initial; outline-width: 0px; font-family: &quot;Nunito Sans&quot;, sans-serif; zoom: 1; font-size: 20px; margin: 40px auto 1rem; color: rgb(0, 0, 0); line-height: 1.5em; text-transform: uppercase; letter-spacing: 0.2em; max-width: 275px;\\\">Start a new case<\\/h2><p class=\\\"desc\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1; margin: 1em auto 1rem; color: rgba(0, 0, 0, 0.6); font-size: 20px; font-weight: 700; letter-spacing: 0.025em; line-height: 1.5em; max-width: 275px;\\\">Just send us your questions or concerns by starting a new case and we will give you the help you need.<\\/p><div class=\\\"button\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1;\\\"><a href=\\\"https:\\/\\/www.website.com\\/case-tracker\\/new-case\\/\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1; color: rgb(0, 0, 0); display: inline-block; text-transform: uppercase; padding: 1.19rem 1.37rem; min-width: 270px; letter-spacing: 0.1em; font-size: 15px; font-weight: 700; border: 1px solid rgb(217, 217, 217); background: rgb(255, 255, 255); transition: background 0.2s, border 0.2s; margin-top: 1rem;\\\">Start Here<\\/a><\\/div><p style=\\\"outline-style: initial; outline-width: 0px; zoom: 1; margin: 1em auto 1rem; color: rgba(0, 0, 0, 0.6); font-size: 20px; font-weight: 700; letter-spacing: 0.025em; line-height: 1.5em; max-width: 275px;\\\"><\\/p><\\/div><div id=\\\"livechat\\\" class=\\\"col\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1; width: 473.994px; margin-bottom: 1rem;\\\"><div class=\\\"icon\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1; margin: 0px auto; background: url(&quot;data:image\\/svg+xml,%3C%3Fxml version=\'1.0\' encoding=\'utf-8\'%3F%3E%3Csvg version=\'1.1\' id=\'Layer_1\' xmlns=\'http:\\/\\/www.w3.org\\/2000\\/svg\' xmlns:xlink=\'http:\\/\\/www.w3.org\\/1999\\/xlink\' x=\'0px\' y=\'0px\' viewBox=\'0 0 36.5 32\' style=\'enable-background:new 0 0 36.5 32;\' xml:space=\'preserve\'%3E%3Cstyle type=\'text\\/css\'%3E .st0%7Bfill:%23FF8236;%7D%0A%3C\\/style%3E%3Cpath class=\'st0\' d=\'M26.6,4.5C26.6,4.5,26.6,4.5,26.6,4.5c-0.4,0-0.8,0-1.2,0.1l-0.8,0.1L25,5.3c3.6,5.9,2.4,13.5-2.7,18.1L22,23.8 l5.4,5.4v-4.9c2.5-0.2,4.7-1.3,6.4-3.1c1.8-1.9,2.8-4.4,2.7-7.1C36.4,8.8,31.9,4.5,26.6,4.5z\'\\/%3E%3Cpath class=\'st0\' d=\'M22.7,4.3C20.2,1.6,16.7,0,13,0h0C5.8,0.1,0,6,0,13.2c0,7,5.6,12.8,12.6,13V32l9.1-9.1 C27.1,18,27.5,9.7,22.7,4.3z M20.4,21.4L20.4,21.4L20.4,21.4l-5.7,5.8v-0.9v-1.9l-1.9-0.1c-2.9-0.1-5.6-1.3-7.6-3.4 C3.1,18.8,2,16,2,13.1c0-3,1.1-5.8,3.2-7.9C7.3,3.2,10.1,2,13,2c2.9,0,5.7,1.2,7.8,3.2c2.1,2.1,3.2,4.9,3.2,7.9 C24,16.3,22.7,19.3,20.4,21.4z\'\\/%3E%3Cg%3E%3Ccircle class=\'st0\' cx=\'19.3\' cy=\'13.1\' r=\'1.6\'\\/%3E%3C\\/g%3E%3Cg%3E%3Ccircle class=\'st0\' cx=\'7\' cy=\'13.1\' r=\'1.6\'\\/%3E%3C\\/g%3E%3Cg%3E%3Ccircle class=\'st0\' cx=\'13.1\' cy=\'13.1\' r=\'1.6\'\\/%3E%3C\\/g%3E%3C\\/svg%3E%0A&quot;) center center \\/ contain no-repeat; width: 94.29px; height: 85.03px;\\\"><\\/div><h2 class=\\\"subtitle\\\" style=\\\"outline-style: initial; outline-width: 0px; font-family: &quot;Nunito Sans&quot;, sans-serif; zoom: 1; font-size: 20px; margin: 40px auto 1rem; color: rgb(0, 0, 0); line-height: 1.5em; text-transform: uppercase; letter-spacing: 0.2em; max-width: 275px;\\\">Live Chat<\\/h2><p class=\\\"desc\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1; margin: 1em auto 1rem; color: rgba(0, 0, 0, 0.6); font-size: 20px; font-weight: 700; letter-spacing: 0.025em; line-height: 1.5em; max-width: 275px;\\\">Chat with a member of our in-house team.<\\/p><div class=\\\"button\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1;\\\"><a href=\\\"javscript:void(0)\\\" class=\\\"liveChatApp\\\" title=\\\"Start Chat\\\" style=\\\"outline-style: initial; outline-width: 0px; zoom: 1; color: rgb(0, 0, 0); display: inline-block; text-transform: uppercase; padding: 1.19rem 1.37rem; min-width: 270px; letter-spacing: 0.1em; font-size: 15px; font-weight: 700; border: 1px solid rgb(217, 217, 217); background: rgb(255, 255, 255); transition: background 0.2s, border 0.2s; margin-top: 1rem;\\\">Start Chat<\\/a><\\/div><\\/div><\\/div>\",\"status\":1}]', 'contact us', 'contact us', 'Get in touch!', 'https://www.vox.com/', 'Get in touch!', 'Get in touch!', 'contact us', 1, '2025-04-10 16:18:57', '2025-04-10 16:19:20', NULL),
-(52, 1, NULL, 1, 'static', 'Privacy Policy', 'privacy-policy', '[{\"section_title\":\"Privacy Policy\",\"section_label\":\"Privacy Policy\",\"section_content\":\"<div class=\\\"container py-4\\\">\\r\\n  <div class=\\\"card border-0 shadow-sm\\\">\\r\\n    <div class=\\\"card-body\\\">\\r\\n      <h2 class=\\\"card-title mb-3\\\">Privacy Policy<\\/h2>\\r\\n      <p class=\\\"text-dark mb-1\\\"><strong>Effective Date:<\\/strong> 01-05-5025<\\/p>\\r\\n      <p class=\\\"text-dark\\\"><strong>Last Updated:<\\/strong> 23-04-2025<\\/p>\\r\\n\\r\\n      <p>Thank you for choosing <strong>Dreams Rent<\\/strong>. Your privacy is important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our vehicle rental software platform.<\\/p>\\r\\n\\r\\n      <p>By accessing or using our Service, you agree to the terms of this Privacy Policy.<\\/p>\\r\\n\\r\\n      <hr>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">1. Information We Collect<\\/h4>\\r\\n      <p>We collect personal and transactional information when you use our platform to rent vehicles or make payments.<\\/p>\\r\\n\\r\\n      <div class=\\\"mb-3\\\">\\r\\n        <h5>Personal Information<\\/h5>\\r\\n        <ul class=\\\"list-group list-group-flush\\\">\\r\\n          <li class=\\\"list-group-item\\\">Full name<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">Email address<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">Phone number<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">Billing address<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">Driver\\u2019s license details<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">Government-issued identification (where required)<\\/li>\\r\\n        <\\/ul>\\r\\n      <\\/div>\\r\\n\\r\\n      <div class=\\\"mb-3\\\">\\r\\n        <h5>Vehicle Rental Details<\\/h5>\\r\\n        <ul class=\\\"list-group list-group-flush\\\">\\r\\n          <li class=\\\"list-group-item\\\">Rental history<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">Vehicle preferences<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">Pickup\\/drop-off locations and times<\\/li>\\r\\n        <\\/ul>\\r\\n      <\\/div>\\r\\n\\r\\n      <div class=\\\"mb-3\\\">\\r\\n        <h5>Payment Information<\\/h5>\\r\\n        <ul class=\\\"list-group list-group-flush\\\">\\r\\n          <li class=\\\"list-group-item\\\">Credit\\/debit card information (processed via secure third-party gateway)<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">Transaction records and invoices<\\/li>\\r\\n        <\\/ul>\\r\\n      <\\/div>\\r\\n\\r\\n      <div class=\\\"mb-3\\\">\\r\\n        <h5>Device &amp; Usage Data<\\/h5>\\r\\n        <ul class=\\\"list-group list-group-flush\\\">\\r\\n          <li class=\\\"list-group-item\\\">IP address<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">Browser type and version<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">Operating system<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">Usage logs and interaction history with our platform<\\/li>\\r\\n        <\\/ul>\\r\\n      <\\/div>\\r\\n\\r\\n      <hr>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">2. How We Use Your Information<\\/h4>\\r\\n      <ul class=\\\"list-group list-group-flush mb-3\\\">\\r\\n        <li class=\\\"list-group-item\\\">To process vehicle bookings and payments<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">To verify identity and prevent fraud<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">To personalize user experience<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">To send booking confirmations, reminders, and important notices<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">To comply with legal obligations<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">To improve our platform and services<\\/li>\\r\\n      <\\/ul>\\r\\n\\r\\n      <hr>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">3. Sharing Your Information<\\/h4>\\r\\n      <p>We do not sell your personal information. We may share your data only with:<\\/p>\\r\\n      <ul class=\\\"list-group list-group-flush mb-3\\\">\\r\\n        <li class=\\\"list-group-item\\\">Trusted third-party service providers (e.g., payment gateways, identity verification)<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">Law enforcement or government authorities (when legally required)<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">Our subsidiaries, affiliates, or business partners (only as needed for providing services)<\\/li>\\r\\n      <\\/ul>\\r\\n\\r\\n      <hr>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">4. Data Security<\\/h4>\\r\\n      <p>We implement industry-standard security measures to protect your personal data. Sensitive payment details are processed through secure, PCI-compliant third-party gateways and are not stored on our servers.<\\/p>\\r\\n\\r\\n      <hr>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">5. Your Rights<\\/h4>\\r\\n      <p>Depending on your location, you may have the right to:<\\/p>\\r\\n      <ul class=\\\"list-group list-group-flush mb-3\\\">\\r\\n        <li class=\\\"list-group-item\\\">Access the personal data we hold about you<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">Request correction or deletion of your data<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">Withdraw consent for marketing communications<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">Request data portability or restriction of processing<\\/li>\\r\\n      <\\/ul>\\r\\n\\r\\n      <p>To exercise these rights, please contact us at <a href=\\\"mailto:contact@dreamsrent.com\\\">contact@dreamsrent.com<\\/a><\\/p>\\r\\n    <\\/div>\\r\\n  <\\/div>\\r\\n<\\/div>\",\"status\":1}]', 'Privacy Policy', 'Privacy Policy', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehende', 'https://www.vox.com/', 'Privacy Policy', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehende', 'Privacy Policy', 0, '2025-04-10 16:21:04', '2025-04-24 17:47:33', NULL),
-(53, 1, NULL, 1, 'static', 'Terms & Conditions', 'terms-conditions', '[{\"section_title\":\"null\",\"section_label\":\"null\",\"section_content\":\"<div class=\\\"container py-4\\\">\\r\\n  <div class=\\\"card border-0 shadow-sm\\\">\\r\\n    <div class=\\\"card-body\\\">\\r\\n      <h2 class=\\\"card-title mb-3\\\">Terms and Conditions<\\/h2>\\r\\n      <p class=\\\"text-dark mb-1\\\"><strong>Effective Date:<\\/strong> 01-05-2025<\\/p>\\r\\n      <p class=\\\"text-dark\\\"><strong>Last Updated:<\\/strong> 23-04-2025<\\/p>\\r\\n\\r\\n      <p>Welcome to <strong>Dreams Rent<\\/strong>. By accessing or using our vehicle rental platform, you agree to be bound by the following terms and conditions. Please read them carefully.<\\/p>\\r\\n\\r\\n      <hr>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">1. Eligibility<\\/h4>\\r\\n      <p>You must be at least 21 years old and possess a valid driver\\u2019s license to rent a vehicle through our platform. Additional age restrictions may apply depending on the vehicle type.<\\/p>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">2. Booking and Payments<\\/h4>\\r\\n      <ul class=\\\"list-group list-group-flush mb-3\\\">\\r\\n        <li class=\\\"list-group-item\\\">All bookings are subject to availability and confirmation.<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">Full payment must be made before the vehicle is released.<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">Payments are processed securely via trusted third-party gateways.<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">You may be charged additional fees for late returns, damages, or cleaning.<\\/li>\\r\\n      <\\/ul>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">3. Vehicle Usage<\\/h4>\\r\\n      <ul class=\\\"list-group list-group-flush mb-3\\\">\\r\\n        <li class=\\\"list-group-item\\\">The vehicle must be used in accordance with traffic laws and regulations.<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">You are responsible for the fuel used during your rental period.<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">No smoking, pets, or illegal activity is permitted in the vehicle.<\\/li>\\r\\n      <\\/ul>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">4. Cancellations and Refunds<\\/h4>\\r\\n      <p>Cancellations must be made at least 24 hours before the rental start time to receive a full refund. Late cancellations may result in partial or no refund depending on the timing.<\\/p>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">5. Liability and Insurance<\\/h4>\\r\\n      <p>We provide basic insurance coverage as required by law. However, you are responsible for any damages, traffic violations, or theft that occur during your rental period.<\\/p>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">6. Account Responsibility<\\/h4>\\r\\n      <p>You are responsible for maintaining the confidentiality of your account information and for all activities that occur under your account.<\\/p>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">7. Modifications<\\/h4>\\r\\n      <p>We reserve the right to modify these Terms at any time. Changes will be effective once posted. Continued use of the platform constitutes acceptance of the revised Terms.<\\/p>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">8. Contact Us<\\/h4>\\r\\n      <p>If you have any questions or concerns about these Terms, please contact us at <a href=\\\"mailto:contact@dreamsrent.com\\\">contact@dreamsrent.com<\\/a>.<\\/p>\\r\\n    <\\/div>\\r\\n  <\\/div>\\r\\n<\\/div>\",\"status\":1}]', 'Terms & Conditions', 'Terms & Conditions', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'https://www.vox.com/', 'Terms & Conditions', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'Terms & Conditions', 0, '2025-04-10 16:22:23', '2025-04-24 18:54:31', NULL),
+(52, 1, NULL, 1, 'static', 'Privacy Policy', 'privacy-policy', '[{\"section_title\":\"Privacy Policy\",\"section_label\":\"Privacy Policy\",\"section_content\":\"<div class=\\\"container py-4 privacy-section terms-policy\\\">\\r\\n  <div class=\\\"card border-0 shadow-sm\\\">\\r\\n    <div class=\\\"card-body\\\">\\r\\n      <p>\\r\\n        At Dreams Rent, we value your privacy and are committed to protecting the personal data you share with us. Whether you\\u2019re browsing, booking, or managing your rentals, your information is handled with confidentiality and care. Our privacy practices ensure compliance with data protection laws and maintain transparency in every interaction.\\r\\n      <\\/p>\\r\\n\\r\\n      <p>\\r\\n        We only collect essential data necessary for account creation, booking management, and platform improvements. This includes name, contact information, location, and vehicle preferences. Your data is never sold to third parties, and we implement industry-standard security measures to prevent unauthorized access or misuse.\\r\\n      <\\/p>\\r\\n\\r\\n      <ul class=\\\"list-unstyled mt-4\\\">\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> Your personal data is encrypted and stored securely.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> We do not share your contact information without consent.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> You can request data deletion or update your profile anytime.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> Cookies are used only to enhance user experience.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> All activity logs are retained only for safety and support purposes.<\\/li>\\r\\n      <\\/ul>\\r\\n\\r\\n      <p class=\\\"mt-4\\\">\\r\\n        If you have any questions regarding your privacy or how your data is used, our support team is always ready to assist. We aim to provide a safe and respectful experience to all users. Staying informed about our practices is your right and our responsibility.\\r\\n      <\\/p>\\r\\n\\r\\n      <p>\\r\\n        By continuing to use Dreams Rent, you acknowledge and agree to this privacy policy. We may update this content periodically, and we recommend reviewing it regularly. Transparency, security, and user trust are the foundation of our operations.\\r\\n      <\\/p>\\r\\n    <\\/div>\\r\\n  <\\/div>\\r\\n<\\/div>\",\"status\":1}]', 'Privacy Policy', 'Privacy Policy', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehende', 'https://www.vox.com/', 'Privacy Policy', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehende', 'Privacy Policy', 0, '2025-04-10 16:21:04', '2025-04-26 11:49:52', NULL),
+(53, 1, NULL, 1, 'static', 'Terms & Conditions', 'terms-conditions', '[{\"section_title\":\"null\",\"section_label\":\"null\",\"section_content\":\"<div class=\\\"container py-4 privacy-section terms-policy\\\">\\r\\n  <div class=\\\"card border-0 shadow-sm\\\">\\r\\n    <div class=\\\"card-body\\\">\\r\\n      <p>\\r\\n        Dreams Rent provides a convenient and reliable platform for renting vehicles across various locations. By accessing our services, you agree to use them responsibly and in compliance with our terms. We are committed to protecting user interests while fostering a trusted rental ecosystem. Every transaction on our platform reflects transparency and mutual respect between renters and providers.\\r\\n      <\\/p>\\r\\n\\r\\n      <p>\\r\\n        We require that all users maintain accurate profile information and follow booking procedures as outlined. Once a rental is confirmed, both parties are expected to uphold the agreement. Any attempt to mislead, delay, or misuse the rental system may result in penalties or account suspension. We strive to ensure every rental experience is smooth, secure, and dependable.\\r\\n      <\\/p>\\r\\n\\r\\n      <p>\\r\\n        Vehicle owners are responsible for listing genuine, well-maintained vehicles with updated documents. Similarly, renters must ensure they return the vehicle in the same condition received. Fuel policies, cleaning requirements, and mileage limits will be communicated at the time of booking. Failure to comply may lead to deductions from the security deposit or additional fees.\\r\\n      <\\/p>\\r\\n\\r\\n      <ul class=\\\"list-unstyled mt-4\\\">\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> Always inspect the vehicle before starting your trip.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> Use the vehicle only for legal and personal travel purposes.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> Keep emergency contact and support information handy during rental.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> Report any accidents or damages to the platform immediately.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> Avoid sharing your rental vehicle with unauthorized drivers.<\\/li>\\r\\n      <\\/ul>\\r\\n\\r\\n      <p class=\\\"mt-4\\\">\\r\\n        If you experience issues during your rental period, our support team is available to assist with dispute resolution or emergencies. Whether it\'s a technical concern, an owner not responding, or a billing issue, we aim to resolve matters fairly and promptly. Your safety and satisfaction remain our highest priority, and we take all reports seriously.\\r\\n      <\\/p>\\r\\n\\r\\n      <p>\\r\\n        By continuing to use Dreams Rent, you accept these terms as part of our user agreement. We reserve the right to update or modify the terms at any time, and it is your responsibility to remain informed. Continued use of the platform after changes implies acceptance. If you have questions, feel free to reach out through our support channels.\\r\\n      <\\/p>\\r\\n\\r\\n    <\\/div>\\r\\n  <\\/div>\\r\\n<\\/div>\",\"status\":1}]', 'Terms & Conditions', 'Terms & Conditions', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'https://www.vox.com/', 'Terms & Conditions', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'Terms & Conditions', 0, '2025-04-10 16:22:23', '2025-04-26 11:30:40', NULL),
 (54, 1, 50, 2, 'static', 'نبذة عن شركتنا', 'nbth-aan-shrktna', '[{\"section_title\":\"\\u0646\\u0628\\u0630\\u0629 \\u0639\\u0646 \\u0634\\u0631\\u0643\\u062a\\u0646\\u0627\",\"section_label\":\"\\u0623\\u0646 \\u0627\\u0644\\u0645\\u0643\\u062a\\u0628 \\u064a\\u062d\\u0631\\u0645 \\u0645\\u0646 \\u0623\\u0646 \\u064a\\u0643\\u0648\\u0646 \\u0647\\u0648\\u064a\\u062a\\u0647 \\u0639\\u0645\\u0644\\u064b\\u0627.\",\"section_content\":\"<section class=\\\"py-5 bg-light\\\">\\r\\n  <div class=\\\"container\\\">\\r\\n    <div class=\\\"text-center mb-5\\\">\\r\\n      <h2 class=\\\"display-5 fw-bold\\\">\\u0645\\u0646 \\u0646\\u062d\\u0646<\\/h2>\\r\\n      <p class=\\\"fs-5\\\">\\u0646\\u064f\\u062d\\u062f\\u062b \\u062a\\u063a\\u064a\\u064a\\u0631\\u064b\\u0627 \\u0641\\u064a \\u0643\\u064a\\u0641\\u064a\\u0629 \\u0627\\u0633\\u062a\\u0626\\u062c\\u0627\\u0631 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0627\\u062a \\u062d\\u0648\\u0644 \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645 \\u2014 \\u0628\\u0634\\u0643\\u0644 \\u0623\\u0630\\u0643\\u0649\\u060c \\u0623\\u0633\\u0647\\u0644\\u060c \\u0648\\u0623\\u0643\\u062b\\u0631 \\u0625\\u062a\\u0627\\u062d\\u0629 \\u0644\\u0644\\u062c\\u0645\\u064a\\u0639.<\\/p>\\r\\n    <\\/div>\\r\\n\\r\\n    <div class=\\\"row align-items-center mb-5\\\">\\r\\n      <div class=\\\"col-lg-6\\\">\\r\\n        <h4 class=\\\"fw-semibold\\\">\\u0631\\u0624\\u064a\\u062a\\u0646\\u0627<\\/h4>\\r\\n        <p>\\r\\n          \\\"\\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a\\\" \\u0644\\u064a\\u0633\\u062a \\u0645\\u062c\\u0631\\u062f \\u062e\\u062f\\u0645\\u0629 \\u062a\\u0623\\u062c\\u064a\\u0631 \\u2014 \\u0625\\u0646\\u0647\\u0627 \\u0627\\u0644\\u062a\\u0632\\u0627\\u0645 \\u0628\\u062c\\u0639\\u0644 \\u0627\\u0644\\u062a\\u0646\\u0642\\u0644 \\u0623\\u0643\\u062b\\u0631 \\u0633\\u0647\\u0648\\u0644\\u0629.\\r\\n          \\u0646\\u062d\\u0646 \\u0646\\u0642\\u062f\\u0645 \\u062a\\u062c\\u0631\\u0628\\u0629 \\u062a\\u0623\\u062c\\u064a\\u0631 \\u0633\\u0644\\u0633\\u0629 \\u0645\\u062f\\u0639\\u0648\\u0645\\u0629 \\u0628\\u0627\\u0644\\u062a\\u0643\\u0646\\u0648\\u0644\\u0648\\u062c\\u064a\\u0627 \\u0648\\u0627\\u0644\\u062b\\u0642\\u0629 \\u0648\\u0631\\u0636\\u0627 \\u0627\\u0644\\u0639\\u0645\\u0644\\u0627\\u0621.\\r\\n        <\\/p>\\r\\n        <p>\\r\\n          \\u0645\\u0646 \\u0627\\u0644\\u0631\\u062d\\u0644\\u0627\\u062a \\u0627\\u0644\\u0633\\u0631\\u064a\\u0639\\u0629 \\u0625\\u0644\\u0649 \\u0627\\u0644\\u0625\\u064a\\u062c\\u0627\\u0631\\u0627\\u062a \\u0637\\u0648\\u064a\\u0644\\u0629 \\u0627\\u0644\\u0645\\u062f\\u0649\\u060c \\u0646\\u0636\\u0645\\u0646 \\u0623\\u0646 \\u062a\\u0643\\u0648\\u0646 \\u0643\\u0644 \\u0631\\u062d\\u0644\\u0629 \\u0645\\u0648\\u062b\\u0648\\u0642\\u0629 \\u0648\\u0628\\u0623\\u0633\\u0639\\u0627\\u0631 \\u0645\\u0646\\u0627\\u0633\\u0628\\u0629.\\r\\n        <\\/p>\\r\\n      <\\/div>\\r\\n      <div class=\\\"col-lg-6\\\">\\r\\n        <div class=\\\"bg-white p-4 shadow rounded\\\">\\r\\n          <h5 class=\\\"fw-bold mb-3\\\">\\u0644\\u0645\\u0627\\u0630\\u0627 \\u062a\\u062e\\u062a\\u0627\\u0631\\u0646\\u0627\\u061f<\\/h5>\\r\\n          <ul class=\\\"list-unstyled mb-0\\\">\\r\\n            <li class=\\\"mb-2\\\">\\u2714 \\u062d\\u062c\\u0648\\u0632\\u0627\\u062a \\u0641\\u0648\\u0631\\u064a\\u0629 \\u0648\\u0622\\u0645\\u0646\\u0629 \\u0639\\u0628\\u0631 \\u0627\\u0644\\u0625\\u0646\\u062a\\u0631\\u0646\\u062a<\\/li>\\r\\n            <li class=\\\"mb-2\\\">\\u2714 \\u0645\\u0631\\u0643\\u0628\\u0627\\u062a \\u0645\\u0648\\u062b\\u0642\\u0629 \\u0648\\u0645\\u0635\\u0646\\u0641\\u0629<\\/li>\\r\\n            <li class=\\\"mb-2\\\">\\u2714 \\u062a\\u0633\\u0639\\u064a\\u0631 \\u0648\\u0627\\u0636\\u062d \\u0648\\u0634\\u0641\\u0627\\u0641 \\u2014 \\u062f\\u0648\\u0646 \\u0645\\u0641\\u0627\\u062c\\u0622\\u062a<\\/li>\\r\\n            <li class=\\\"mb-2\\\">\\u2714 \\u062f\\u0639\\u0645 \\u0646\\u0634\\u0637 \\u0648\\u062e\\u062f\\u0645\\u0629 \\u0645\\u0648\\u062b\\u0648\\u0642\\u0629<\\/li>\\r\\n          <\\/ul>\\r\\n        <\\/div>\\r\\n      <\\/div>\\r\\n    <\\/div>\\r\\n\\r\\n    <div class=\\\"mb-5\\\">\\r\\n      <h4 class=\\\"fw-semibold text-center mb-4\\\">\\u0642\\u064a\\u0645\\u0646\\u0627 \\u0627\\u0644\\u0623\\u0633\\u0627\\u0633\\u064a\\u0629<\\/h4>\\r\\n      <div class=\\\"row text-center\\\">\\r\\n        <div class=\\\"col-md-3\\\">\\r\\n          <div class=\\\"p-3 bg-white shadow-sm rounded h-100\\\">\\r\\n            <h6 class=\\\"fw-bold\\\">\\u0627\\u0644\\u0628\\u0633\\u0627\\u0637\\u0629<\\/h6>\\r\\n            <p class=\\\"small mb-0\\\">\\u0633\\u0647\\u0648\\u0644\\u0629 \\u0627\\u0644\\u062d\\u062c\\u0632\\u060c \\u0648\\u0633\\u0647\\u0648\\u0644\\u0629 \\u0627\\u0644\\u0642\\u064a\\u0627\\u062f\\u0629\\u060c \\u0648\\u0633\\u0647\\u0648\\u0644\\u0629 \\u0627\\u0644\\u0625\\u0631\\u062c\\u0627\\u0639.<\\/p>\\r\\n          <\\/div>\\r\\n        <\\/div>\\r\\n        <div class=\\\"col-md-3\\\">\\r\\n          <div class=\\\"p-3 bg-white shadow-sm rounded h-100\\\">\\r\\n            <h6 class=\\\"fw-bold\\\">\\u0627\\u0644\\u0646\\u0632\\u0627\\u0647\\u0629<\\/h6>\\r\\n            <p class=\\\"small mb-0\\\">\\u0623\\u0633\\u0639\\u0627\\u0631 \\u0639\\u0627\\u062f\\u0644\\u0629 \\u0648\\u062e\\u062f\\u0645\\u0629 \\u0635\\u0627\\u062f\\u0642\\u0629 \\u0641\\u064a \\u0643\\u0644 \\u0645\\u0631\\u062d\\u0644\\u0629.<\\/p>\\r\\n          <\\/div>\\r\\n        <\\/div>\\r\\n        <div class=\\\"col-md-3\\\">\\r\\n          <div class=\\\"p-3 bg-white shadow-sm rounded h-100\\\">\\r\\n            <h6 class=\\\"fw-bold\\\">\\u0627\\u0644\\u0627\\u0628\\u062a\\u0643\\u0627\\u0631<\\/h6>\\r\\n            <p class=\\\"small mb-0\\\">\\u0646\\u0637\\u0648\\u0631 \\u0645\\u0646\\u0635\\u062a\\u0646\\u0627 \\u0628\\u0627\\u0633\\u062a\\u0645\\u0631\\u0627\\u0631 \\u0644\\u062a\\u0644\\u0628\\u064a\\u0629 \\u0627\\u062d\\u062a\\u064a\\u0627\\u062c\\u0627\\u062a\\u0643.<\\/p>\\r\\n          <\\/div>\\r\\n        <\\/div>\\r\\n        <div class=\\\"col-md-3\\\">\\r\\n          <div class=\\\"p-3 bg-white shadow-sm rounded h-100\\\">\\r\\n            <h6 class=\\\"fw-bold\\\">\\u0627\\u0644\\u062f\\u0639\\u0645<\\/h6>\\r\\n            <p class=\\\"small mb-0\\\">\\u0646\\u062d\\u0646 \\u0647\\u0646\\u0627 \\u0645\\u0646 \\u0623\\u062c\\u0644\\u0643 \\u2014 \\u0642\\u0628\\u0644 \\u0648\\u0623\\u062b\\u0646\\u0627\\u0621 \\u0648\\u0628\\u0639\\u062f \\u0627\\u0644\\u0631\\u062d\\u0644\\u0629.<\\/p>\\r\\n          <\\/div>\\r\\n        <\\/div>\\r\\n      <\\/div>\\r\\n    <\\/div>\\r\\n\\r\\n    <div class=\\\"row align-items-center mb-5\\\">\\r\\n      <div class=\\\"col-md-6 order-md-2\\\">\\r\\n        <h4 class=\\\"fw-semibold\\\">\\u0644\\u0634\\u0631\\u0643\\u0627\\u0621 \\u0627\\u0644\\u062a\\u0623\\u062c\\u064a\\u0631 \\u0648\\u0645\\u0644\\u0627\\u0643 \\u0627\\u0644\\u0623\\u0633\\u0637\\u0648\\u0644<\\/h4>\\r\\n        <p>\\r\\n          \\u0647\\u0644 \\u062a\\u0645\\u062a\\u0644\\u0643 \\u0645\\u0631\\u0643\\u0628\\u0627\\u062a \\u0644\\u0644\\u062a\\u0623\\u062c\\u064a\\u0631\\u061f \\u0645\\u0646 \\u062e\\u0644\\u0627\\u0644 \\\"\\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a\\\"\\u060c \\u064a\\u0645\\u0643\\u0646\\u0643 \\u0627\\u0644\\u0648\\u0635\\u0648\\u0644 \\u0625\\u0644\\u0649 \\u0623\\u062f\\u0648\\u0627\\u062a \\u062d\\u062f\\u064a\\u062b\\u0629 \\u062a\\u0633\\u0627\\u0639\\u062f\\u0643 \\u0639\\u0644\\u0649 \\u062a\\u0639\\u0638\\u064a\\u0645 \\u0623\\u0631\\u0628\\u0627\\u062d\\u0643.\\r\\n          \\u0627\\u0646\\u0636\\u0645 \\u0625\\u0644\\u0649 \\u0634\\u0628\\u0643\\u062a\\u0646\\u0627 \\u0645\\u0646 \\u0627\\u0644\\u0634\\u0631\\u0643\\u0627\\u0621 \\u0627\\u0644\\u0645\\u0648\\u062b\\u0648\\u0642\\u064a\\u0646 \\u0648\\u0627\\u0633\\u062a\\u0645\\u062a\\u0639 \\u0628\\u0627\\u0644\\u062d\\u062c\\u0648\\u0632\\u0627\\u062a \\u0627\\u0644\\u0641\\u0648\\u0631\\u064a\\u0629\\u060c \\u0648\\u0644\\u0648\\u062d\\u0629 \\u0627\\u0644\\u062a\\u062d\\u0643\\u0645\\u060c \\u0648\\u0627\\u0644\\u062f\\u0641\\u0639 \\u0627\\u0644\\u0645\\u0636\\u0645\\u0648\\u0646.\\r\\n        <\\/p>\\r\\n      <\\/div>\\r\\n      <div class=\\\"col-md-6 order-md-1\\\">\\r\\n        <div class=\\\"bg-white p-4 rounded shadow\\\">\\r\\n          <h6 class=\\\"fw-bold mb-3\\\">\\u0645\\u0632\\u0627\\u064a\\u0627 \\u0627\\u0644\\u0634\\u0631\\u0643\\u0627\\u0621<\\/h6>\\r\\n          <ul class=\\\"list-unstyled mb-0\\\">\\r\\n            <li class=\\\"mb-2\\\">\\u2714 \\u0639\\u0645\\u0644\\u064a\\u0629 \\u062a\\u0633\\u062c\\u064a\\u0644 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0627\\u062a \\u0633\\u0647\\u0644\\u0629<\\/li>\\r\\n            <li class=\\\"mb-2\\\">\\u2714 \\u0625\\u062f\\u0627\\u0631\\u0629 \\u0627\\u0644\\u062d\\u062c\\u0648\\u0632\\u0627\\u062a \\u0628\\u0634\\u0643\\u0644 \\u0622\\u0644\\u064a<\\/li>\\r\\n            <li class=\\\"mb-2\\\">\\u2714 \\u0645\\u062f\\u0641\\u0648\\u0639\\u0627\\u062a \\u0633\\u0631\\u064a\\u0639\\u0629 \\u0648\\u062a\\u0642\\u0627\\u0631\\u064a\\u0631 \\u0623\\u0631\\u0628\\u0627\\u062d \\u062f\\u0642\\u064a\\u0642\\u0629<\\/li>\\r\\n            <li class=\\\"mb-2\\\">\\u2714 \\u0627\\u0644\\u0638\\u0647\\u0648\\u0631 \\u0623\\u0645\\u0627\\u0645 \\u0622\\u0644\\u0627\\u0641 \\u0627\\u0644\\u0639\\u0645\\u0644\\u0627\\u0621 \\u0627\\u0644\\u0645\\u062d\\u062a\\u0645\\u0644\\u064a\\u0646<\\/li>\\r\\n          <\\/ul>\\r\\n        <\\/div>\\r\\n      <\\/div>\\r\\n    <\\/div>\\r\\n\\r\\n    <div class=\\\"text-center mt-5\\\">\\r\\n      <h5 class=\\\"fw-semibold mb-3\\\">\\u0644\\u0646\\u0628\\u0646\\u064a \\u0645\\u0639\\u064b\\u0627 \\u0623\\u0633\\u0644\\u0648\\u0628 \\u062a\\u0646\\u0642\\u0644 \\u0623\\u0643\\u062b\\u0631 \\u0630\\u0643\\u0627\\u0621\\u064b.<\\/h5>\\r\\n      <a href=\\\"\\/contact-us\\\" class=\\\"btn btn-primary px-4 py-2\\\">\\u062a\\u0648\\u0627\\u0635\\u0644 \\u0645\\u0639\\u0646\\u0627<\\/a>\\r\\n    <\\/div>\\r\\n  <\\/div>\\r\\n<\\/section>\",\"status\":1}]', 'about-us', 'نبذة عن شركتنا', 'أن المكتب يحرم من أن يكون هويته عملًا.', 'https://www.vox.com/', 'أن المكتب يحرم من أن يكون هويته عملًا.', 'أن المكتب يحرم من أن يكون هويته عملًا.', 'نبذة عن شركتنا', 0, '2025-04-10 16:10:03', '2025-04-24 18:45:02', NULL);
 INSERT INTO `pages` (`id`, `theme_id`, `parent_id`, `language_id`, `read`, `page_title`, `slug`, `page_content`, `seo_tag`, `seo_title`, `seo_description`, `canonical_url`, `og_title`, `og_description`, `keywords`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(55, 1, 52, 2, 'dynamic', 'سياسة الخصوصية', 'syas-alkhsosy', '[{\"section_title\":\"\\u0633\\u064a\\u0627\\u0633\\u0629 \\u0627\\u0644\\u062e\\u0635\\u0648\\u0635\\u064a\\u0629\",\"section_label\":\"\\u0633\\u064a\\u0627\\u0633\\u0629 \\u0627\\u0644\\u062e\\u0635\\u0648\\u0635\\u064a\\u0629\",\"section_content\":\"<div class=\\\"container py-4\\\">\\r\\n  <div class=\\\"card border-0 shadow-sm\\\">\\r\\n    <div class=\\\"card-body\\\">\\r\\n      <h2 class=\\\"card-title mb-3\\\">\\u0633\\u064a\\u0627\\u0633\\u0629 \\u0627\\u0644\\u062e\\u0635\\u0648\\u0635\\u064a\\u0629<\\/h2>\\r\\n      <p class=\\\"text-dark mb-1\\\"><strong>\\u062a\\u0627\\u0631\\u064a\\u062e \\u0627\\u0644\\u0646\\u0641\\u0627\\u0630:<\\/strong> 01-05-5025<\\/p>\\r\\n      <p class=\\\"text-dark\\\"><strong>\\u0622\\u062e\\u0631 \\u062a\\u062d\\u062f\\u064a\\u062b:<\\/strong> 23-04-2025<\\/p>\\r\\n\\r\\n      <p>\\u0634\\u0643\\u0631\\u064b\\u0627 \\u0644\\u0627\\u062e\\u062a\\u064a\\u0627\\u0631\\u0643 <strong>\\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a<\\/strong>. \\u0646\\u062d\\u0646 \\u0646\\u062d\\u062a\\u0631\\u0645 \\u062e\\u0635\\u0648\\u0635\\u064a\\u062a\\u0643. \\u062a\\u0648\\u0636\\u062d \\u0647\\u0630\\u0647 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0633\\u0629 \\u0643\\u064a\\u0641\\u064a\\u0629 \\u062c\\u0645\\u0639 \\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a\\u0643 \\u0648\\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645\\u0647\\u0627 \\u0648\\u0627\\u0644\\u0643\\u0634\\u0641 \\u0639\\u0646\\u0647\\u0627 \\u0648\\u062d\\u0645\\u0627\\u064a\\u062a\\u0647\\u0627 \\u0639\\u0646\\u062f \\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645\\u0643 \\u0644\\u0645\\u0646\\u0635\\u0629 \\u062a\\u0623\\u062c\\u064a\\u0631 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0627\\u062a \\u0627\\u0644\\u062e\\u0627\\u0635\\u0629 \\u0628\\u0646\\u0627.<\\/p>\\r\\n\\r\\n      <p>\\u0645\\u0646 \\u062e\\u0644\\u0627\\u0644 \\u0627\\u0644\\u0648\\u0635\\u0648\\u0644 \\u0625\\u0644\\u0649 \\u062e\\u062f\\u0645\\u0627\\u062a\\u0646\\u0627 \\u0623\\u0648 \\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645\\u0647\\u0627\\u060c \\u0641\\u0625\\u0646\\u0643 \\u062a\\u0648\\u0627\\u0641\\u0642 \\u0639\\u0644\\u0649 \\u0634\\u0631\\u0648\\u0637 \\u0633\\u064a\\u0627\\u0633\\u0629 \\u0627\\u0644\\u062e\\u0635\\u0648\\u0635\\u064a\\u0629 \\u0647\\u0630\\u0647.<\\/p>\\r\\n\\r\\n      <hr>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">1. \\u0627\\u0644\\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u0627\\u0644\\u062a\\u064a \\u0646\\u0642\\u0648\\u0645 \\u0628\\u062c\\u0645\\u0639\\u0647\\u0627<\\/h4>\\r\\n      <p>\\u0646\\u062c\\u0645\\u0639 \\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u0634\\u062e\\u0635\\u064a\\u0629 \\u0648\\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u0645\\u062a\\u0639\\u0644\\u0642\\u0629 \\u0628\\u0627\\u0644\\u0645\\u0639\\u0627\\u0645\\u0644\\u0627\\u062a \\u0639\\u0646\\u062f \\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645\\u0643 \\u0644\\u0645\\u0646\\u0635\\u062a\\u0646\\u0627 \\u0644\\u0627\\u0633\\u062a\\u0626\\u062c\\u0627\\u0631 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0627\\u062a \\u0623\\u0648 \\u0625\\u062c\\u0631\\u0627\\u0621 \\u0627\\u0644\\u062f\\u0641\\u0639\\u0627\\u062a.<\\/p>\\r\\n\\r\\n      <div class=\\\"mb-3\\\">\\r\\n        <h5>\\u0627\\u0644\\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u0627\\u0644\\u0634\\u062e\\u0635\\u064a\\u0629<\\/h5>\\r\\n        <ul class=\\\"list-group list-group-flush\\\">\\r\\n          <li class=\\\"list-group-item\\\">\\u0627\\u0644\\u0627\\u0633\\u0645 \\u0627\\u0644\\u0643\\u0627\\u0645\\u0644<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">\\u0639\\u0646\\u0648\\u0627\\u0646 \\u0627\\u0644\\u0628\\u0631\\u064a\\u062f \\u0627\\u0644\\u0625\\u0644\\u0643\\u062a\\u0631\\u0648\\u0646\\u064a<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">\\u0631\\u0642\\u0645 \\u0627\\u0644\\u0647\\u0627\\u062a\\u0641<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">\\u0639\\u0646\\u0648\\u0627\\u0646 \\u0627\\u0644\\u0641\\u0648\\u062a\\u0631\\u0629<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">\\u062a\\u0641\\u0627\\u0635\\u064a\\u0644 \\u0631\\u062e\\u0635\\u0629 \\u0627\\u0644\\u0642\\u064a\\u0627\\u062f\\u0629<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">\\u0648\\u062b\\u064a\\u0642\\u0629 \\u0647\\u0648\\u064a\\u0629 \\u062d\\u0643\\u0648\\u0645\\u064a\\u0629 (\\u0639\\u0646\\u062f \\u0627\\u0644\\u0637\\u0644\\u0628)<\\/li>\\r\\n        <\\/ul>\\r\\n      <\\/div>\\r\\n\\r\\n      <div class=\\\"mb-3\\\">\\r\\n        <h5>\\u062a\\u0641\\u0627\\u0635\\u064a\\u0644 \\u062a\\u0623\\u062c\\u064a\\u0631 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0627\\u062a<\\/h5>\\r\\n        <ul class=\\\"list-group list-group-flush\\\">\\r\\n          <li class=\\\"list-group-item\\\">\\u0633\\u062c\\u0644 \\u0627\\u0644\\u062a\\u0623\\u062c\\u064a\\u0631<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">\\u062a\\u0641\\u0636\\u064a\\u0644\\u0627\\u062a \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0629<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">\\u0645\\u0648\\u0627\\u0642\\u0639 \\u0648\\u0623\\u0648\\u0642\\u0627\\u062a \\u0627\\u0644\\u0627\\u0633\\u062a\\u0644\\u0627\\u0645 \\u0648\\u0627\\u0644\\u062a\\u0633\\u0644\\u064a\\u0645<\\/li>\\r\\n        <\\/ul>\\r\\n      <\\/div>\\r\\n\\r\\n      <div class=\\\"mb-3\\\">\\r\\n        <h5>\\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u0627\\u0644\\u062f\\u0641\\u0639<\\/h5>\\r\\n        <ul class=\\\"list-group list-group-flush\\\">\\r\\n          <li class=\\\"list-group-item\\\">\\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u0627\\u0644\\u0628\\u0637\\u0627\\u0642\\u0629 \\u0627\\u0644\\u0627\\u0626\\u062a\\u0645\\u0627\\u0646\\u064a\\u0629\\/\\u0627\\u0644\\u062e\\u0635\\u0645 (\\u064a\\u062a\\u0645 \\u0645\\u0639\\u0627\\u0644\\u062c\\u062a\\u0647\\u0627 \\u0645\\u0646 \\u062e\\u0644\\u0627\\u0644 \\u0628\\u0648\\u0627\\u0628\\u0629 \\u0622\\u0645\\u0646\\u0629 \\u0644\\u0637\\u0631\\u0641 \\u062b\\u0627\\u0644\\u062b)<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">\\u0633\\u062c\\u0644\\u0627\\u062a \\u0627\\u0644\\u0645\\u0639\\u0627\\u0645\\u0644\\u0627\\u062a \\u0648\\u0627\\u0644\\u0641\\u0648\\u0627\\u062a\\u064a\\u0631<\\/li>\\r\\n        <\\/ul>\\r\\n      <\\/div>\\r\\n\\r\\n      <div class=\\\"mb-3\\\">\\r\\n        <h5>\\u0628\\u064a\\u0627\\u0646\\u0627\\u062a \\u0627\\u0644\\u062c\\u0647\\u0627\\u0632 \\u0648\\u0627\\u0644\\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645<\\/h5>\\r\\n        <ul class=\\\"list-group list-group-flush\\\">\\r\\n          <li class=\\\"list-group-item\\\">\\u0639\\u0646\\u0648\\u0627\\u0646 IP<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">\\u0646\\u0648\\u0639 \\u0627\\u0644\\u0645\\u062a\\u0635\\u0641\\u062d \\u0648\\u0625\\u0635\\u062f\\u0627\\u0631\\u0647<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">\\u0646\\u0638\\u0627\\u0645 \\u0627\\u0644\\u062a\\u0634\\u063a\\u064a\\u0644<\\/li>\\r\\n          <li class=\\\"list-group-item\\\">\\u0633\\u062c\\u0644\\u0627\\u062a \\u0627\\u0644\\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645 \\u0648\\u0633\\u062c\\u0644 \\u0627\\u0644\\u062a\\u0641\\u0627\\u0639\\u0644 \\u0645\\u0639 \\u0627\\u0644\\u0645\\u0646\\u0635\\u0629<\\/li>\\r\\n        <\\/ul>\\r\\n      <\\/div>\\r\\n\\r\\n      <hr>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">2. \\u0643\\u064a\\u0641\\u064a\\u0629 \\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645 \\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a\\u0643<\\/h4>\\r\\n      <ul class=\\\"list-group list-group-flush mb-3\\\">\\r\\n        <li class=\\\"list-group-item\\\">\\u0645\\u0639\\u0627\\u0644\\u062c\\u0629 \\u062d\\u062c\\u0648\\u0632\\u0627\\u062a \\u0648\\u062a\\u0623\\u062c\\u064a\\u0631 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0627\\u062a \\u0648\\u0627\\u0644\\u062f\\u0641\\u0639<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u0627\\u0644\\u062a\\u062d\\u0642\\u0642 \\u0645\\u0646 \\u0627\\u0644\\u0647\\u0648\\u064a\\u0629 \\u0648\\u0645\\u0646\\u0639 \\u0627\\u0644\\u0627\\u062d\\u062a\\u064a\\u0627\\u0644<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u062a\\u062e\\u0635\\u064a\\u0635 \\u062a\\u062c\\u0631\\u0628\\u0629 \\u0627\\u0644\\u0645\\u0633\\u062a\\u062e\\u062f\\u0645<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u0625\\u0631\\u0633\\u0627\\u0644 \\u062a\\u0623\\u0643\\u064a\\u062f\\u0627\\u062a \\u0627\\u0644\\u062d\\u062c\\u0632 \\u0648\\u0627\\u0644\\u062a\\u0646\\u0628\\u064a\\u0647\\u0627\\u062a \\u0648\\u0627\\u0644\\u0625\\u0634\\u0639\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u0647\\u0645\\u0629<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u0627\\u0644\\u0627\\u0645\\u062a\\u062b\\u0627\\u0644 \\u0644\\u0644\\u0627\\u0644\\u062a\\u0632\\u0627\\u0645\\u0627\\u062a \\u0627\\u0644\\u0642\\u0627\\u0646\\u0648\\u0646\\u064a\\u0629<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u062a\\u062d\\u0633\\u064a\\u0646 \\u062e\\u062f\\u0645\\u0627\\u062a\\u0646\\u0627 \\u0648\\u0645\\u0646\\u0635\\u062a\\u0646\\u0627<\\/li>\\r\\n      <\\/ul>\\r\\n\\r\\n      <hr>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">3. \\u0645\\u0634\\u0627\\u0631\\u0643\\u0629 \\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a\\u0643<\\/h4>\\r\\n      <p>\\u0646\\u062d\\u0646 \\u0644\\u0627 \\u0646\\u0628\\u064a\\u0639 \\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a\\u0643 \\u0627\\u0644\\u0634\\u062e\\u0635\\u064a\\u0629. \\u0642\\u062f \\u0646\\u0634\\u0627\\u0631\\u0643 \\u0628\\u064a\\u0627\\u0646\\u0627\\u062a\\u0643 \\u0641\\u0642\\u0637 \\u0645\\u0639:<\\/p>\\r\\n      <ul class=\\\"list-group list-group-flush mb-3\\\">\\r\\n        <li class=\\\"list-group-item\\\">\\u0645\\u0632\\u0648\\u062f\\u064a \\u0627\\u0644\\u062e\\u062f\\u0645\\u0627\\u062a \\u0627\\u0644\\u0645\\u0648\\u062b\\u0648\\u0642\\u064a\\u0646 (\\u0645\\u062b\\u0644 \\u0628\\u0648\\u0627\\u0628\\u0627\\u062a \\u0627\\u0644\\u062f\\u0641\\u0639 \\u0623\\u0648 \\u062e\\u062f\\u0645\\u0627\\u062a \\u0627\\u0644\\u062a\\u062d\\u0642\\u0642 \\u0645\\u0646 \\u0627\\u0644\\u0647\\u0648\\u064a\\u0629)<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u0627\\u0644\\u0633\\u0644\\u0637\\u0627\\u062a \\u0627\\u0644\\u0642\\u0627\\u0646\\u0648\\u0646\\u064a\\u0629 \\u0623\\u0648 \\u0627\\u0644\\u062d\\u0643\\u0648\\u0645\\u064a\\u0629 (\\u0639\\u0646\\u062f \\u0627\\u0644\\u0637\\u0644\\u0628 \\u0627\\u0644\\u0642\\u0627\\u0646\\u0648\\u0646\\u064a)<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u0627\\u0644\\u0634\\u0631\\u0643\\u0627\\u062a \\u0627\\u0644\\u062a\\u0627\\u0628\\u0639\\u0629 \\u0623\\u0648 \\u0627\\u0644\\u0634\\u0631\\u0643\\u0627\\u0621 \\u0627\\u0644\\u062a\\u062c\\u0627\\u0631\\u064a\\u064a\\u0646 (\\u0639\\u0646\\u062f \\u0627\\u0644\\u062d\\u0627\\u062c\\u0629 \\u0644\\u062a\\u0642\\u062f\\u064a\\u0645 \\u0627\\u0644\\u062e\\u062f\\u0645\\u0629)<\\/li>\\r\\n      <\\/ul>\\r\\n\\r\\n      <hr>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">4. \\u0623\\u0645\\u0627\\u0646 \\u0627\\u0644\\u0628\\u064a\\u0627\\u0646\\u0627\\u062a<\\/h4>\\r\\n      <p>\\u0646\\u0637\\u0628\\u0642 \\u0625\\u062c\\u0631\\u0627\\u0621\\u0627\\u062a \\u0623\\u0645\\u0627\\u0646 \\u0642\\u064a\\u0627\\u0633\\u064a\\u0629 \\u0641\\u064a \\u0627\\u0644\\u0645\\u062c\\u0627\\u0644 \\u0644\\u062d\\u0645\\u0627\\u064a\\u0629 \\u0628\\u064a\\u0627\\u0646\\u0627\\u062a\\u0643 \\u0627\\u0644\\u0634\\u062e\\u0635\\u064a\\u0629. \\u062a\\u062a\\u0645 \\u0645\\u0639\\u0627\\u0644\\u062c\\u0629 \\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u0627\\u0644\\u062f\\u0641\\u0639 \\u0627\\u0644\\u062d\\u0633\\u0627\\u0633\\u0629 \\u0639\\u0628\\u0631 \\u0628\\u0648\\u0627\\u0628\\u0627\\u062a \\u0622\\u0645\\u0646\\u0629 \\u0648\\u0645\\u062a\\u0648\\u0627\\u0641\\u0642\\u0629 \\u0645\\u0639 PCI\\u060c \\u0648\\u0644\\u0627 \\u0646\\u0642\\u0648\\u0645 \\u0628\\u062a\\u062e\\u0632\\u064a\\u0646\\u0647\\u0627 \\u0639\\u0644\\u0649 \\u062e\\u0648\\u0627\\u062f\\u0645\\u0646\\u0627.<\\/p>\\r\\n\\r\\n      <hr>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">5. \\u062d\\u0642\\u0648\\u0642\\u0643<\\/h4>\\r\\n      <p>\\u0627\\u0639\\u062a\\u0645\\u0627\\u062f\\u064b\\u0627 \\u0639\\u0644\\u0649 \\u0645\\u0648\\u0642\\u0639\\u0643\\u060c \\u0642\\u062f \\u062a\\u062a\\u0645\\u062a\\u0639 \\u0628\\u0627\\u0644\\u062d\\u0642\\u0648\\u0642 \\u0627\\u0644\\u062a\\u0627\\u0644\\u064a\\u0629:<\\/p>\\r\\n      <ul class=\\\"list-group list-group-flush mb-3\\\">\\r\\n        <li class=\\\"list-group-item\\\">\\u0627\\u0644\\u0648\\u0635\\u0648\\u0644 \\u0625\\u0644\\u0649 \\u0628\\u064a\\u0627\\u0646\\u0627\\u062a\\u0643 \\u0627\\u0644\\u0634\\u062e\\u0635\\u064a\\u0629 \\u0627\\u0644\\u062a\\u064a \\u0646\\u062d\\u062a\\u0641\\u0638 \\u0628\\u0647\\u0627<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u0637\\u0644\\u0628 \\u062a\\u0635\\u062d\\u064a\\u062d \\u0623\\u0648 \\u062d\\u0630\\u0641 \\u0628\\u064a\\u0627\\u0646\\u0627\\u062a\\u0643<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u0633\\u062d\\u0628 \\u0627\\u0644\\u0645\\u0648\\u0627\\u0641\\u0642\\u0629 \\u0639\\u0644\\u0649 \\u0627\\u0644\\u0627\\u062a\\u0635\\u0627\\u0644\\u0627\\u062a \\u0627\\u0644\\u062a\\u0633\\u0648\\u064a\\u0642\\u064a\\u0629<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u0637\\u0644\\u0628 \\u0646\\u0642\\u0644 \\u0627\\u0644\\u0628\\u064a\\u0627\\u0646\\u0627\\u062a \\u0623\\u0648 \\u062a\\u0642\\u064a\\u064a\\u062f \\u0645\\u0639\\u0627\\u0644\\u062c\\u062a\\u0647\\u0627<\\/li>\\r\\n      <\\/ul>\\r\\n\\r\\n      <p>\\u0644\\u0645\\u0645\\u0627\\u0631\\u0633\\u0629 \\u0647\\u0630\\u0647 \\u0627\\u0644\\u062d\\u0642\\u0648\\u0642\\u060c \\u064a\\u0631\\u062c\\u0649 \\u0627\\u0644\\u062a\\u0648\\u0627\\u0635\\u0644 \\u0645\\u0639\\u0646\\u0627 \\u0639\\u0644\\u0649 <a href=\\\"mailto:contact@dreamsrent.com\\\">contact@dreamsrent.com<\\/a><\\/p>\\r\\n    <\\/div>\\r\\n  <\\/div>\\r\\n<\\/div>\",\"status\":1}]', 'سياسة الخصوصية', 'سياسة الخصوصية', 'سياسة الخصوصية', 'https://dreamsrent-laravel.dreamstechnologies.com/pages/privacy-policy', 'سياسة الخصوصية', 'سياسة الخصوصية', 'سياسة الخصوصية', 0, '2025-04-23 15:05:43', '2025-04-24 18:47:50', NULL),
-(56, 1, 53, 2, 'dynamic', 'الشروط والأحكام', 'alshrot-oalahkam', '[{\"section_title\":\"\\u0627\\u0644\\u0634\\u0631\\u0648\\u0637 \\u0648\\u0627\\u0644\\u0623\\u062d\\u0643\\u0627\\u0645\",\"section_label\":\"\\u0627\\u0644\\u0634\\u0631\\u0648\\u0637 \\u0648\\u0627\\u0644\\u0623\\u062d\\u0643\\u0627\\u0645\",\"section_content\":\"<div class=\\\"container py-4\\\" dir=\\\"rtl\\\">\\r\\n  <div class=\\\"card border-0 shadow-sm\\\">\\r\\n    <div class=\\\"card-body\\\">\\r\\n      <h2 class=\\\"card-title mb-3\\\">\\u0634\\u0631\\u0648\\u0637 \\u0627\\u0644\\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645<\\/h2>\\r\\n      <p class=\\\"text-dark mb-1\\\"><strong>\\u062a\\u0627\\u0631\\u064a\\u062e \\u0627\\u0644\\u0633\\u0631\\u064a\\u0627\\u0646:<\\/strong> 01-05-2025<\\/p>\\r\\n      <p class=\\\"text-dark\\\"><strong>\\u0622\\u062e\\u0631 \\u062a\\u062d\\u062f\\u064a\\u062b:<\\/strong> 23-04-2025<\\/p>\\r\\n\\r\\n      <p>\\u0645\\u0631\\u062d\\u0628\\u064b\\u0627 \\u0628\\u0643 \\u0641\\u064a <strong>Dreams Rent<\\/strong>. \\u0645\\u0646 \\u062e\\u0644\\u0627\\u0644 \\u0627\\u0644\\u0648\\u0635\\u0648\\u0644 \\u0625\\u0644\\u0649 \\u0645\\u0646\\u0635\\u062a\\u0646\\u0627 \\u0644\\u062a\\u0623\\u062c\\u064a\\u0631 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0627\\u062a \\u0623\\u0648 \\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645\\u0647\\u0627\\u060c \\u0641\\u0625\\u0646\\u0643 \\u062a\\u0648\\u0627\\u0641\\u0642 \\u0639\\u0644\\u0649 \\u0627\\u0644\\u0627\\u0644\\u062a\\u0632\\u0627\\u0645 \\u0628\\u0627\\u0644\\u0634\\u0631\\u0648\\u0637 \\u0648\\u0627\\u0644\\u0623\\u062d\\u0643\\u0627\\u0645 \\u0627\\u0644\\u062a\\u0627\\u0644\\u064a\\u0629. \\u064a\\u0631\\u062c\\u0649 \\u0642\\u0631\\u0627\\u0621\\u062a\\u0647\\u0627 \\u0628\\u0639\\u0646\\u0627\\u064a\\u0629.<\\/p>\\r\\n\\r\\n      <hr>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">1. \\u0627\\u0644\\u0623\\u0647\\u0644\\u064a\\u0629<\\/h4>\\r\\n      <p>\\u064a\\u062c\\u0628 \\u0623\\u0646 \\u064a\\u0643\\u0648\\u0646 \\u0639\\u0645\\u0631\\u0643 21 \\u0639\\u0627\\u0645\\u064b\\u0627 \\u0639\\u0644\\u0649 \\u0627\\u0644\\u0623\\u0642\\u0644 \\u0648\\u062a\\u0645\\u062a\\u0644\\u0643 \\u0631\\u062e\\u0635\\u0629 \\u0642\\u064a\\u0627\\u062f\\u0629 \\u0633\\u0627\\u0631\\u064a\\u0629 \\u0644\\u062a\\u0623\\u062c\\u064a\\u0631 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0627\\u062a \\u0645\\u0646 \\u062e\\u0644\\u0627\\u0644 \\u0645\\u0646\\u0635\\u062a\\u0646\\u0627. \\u0642\\u062f \\u062a\\u0646\\u0637\\u0628\\u0642 \\u0642\\u064a\\u0648\\u062f \\u0639\\u0645\\u0631\\u064a\\u0629 \\u0625\\u0636\\u0627\\u0641\\u064a\\u0629 \\u062d\\u0633\\u0628 \\u0646\\u0648\\u0639 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0629.<\\/p>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">2. \\u0627\\u0644\\u062d\\u062c\\u0632 \\u0648\\u0627\\u0644\\u062f\\u0641\\u0639<\\/h4>\\r\\n      <ul class=\\\"list-group list-group-flush mb-3\\\">\\r\\n        <li class=\\\"list-group-item\\\">\\u062c\\u0645\\u064a\\u0639 \\u0627\\u0644\\u062d\\u062c\\u0648\\u0632\\u0627\\u062a \\u062a\\u0639\\u062a\\u0645\\u062f \\u0639\\u0644\\u0649 \\u0627\\u0644\\u062a\\u0648\\u0627\\u0641\\u0631 \\u0648\\u0627\\u0644\\u062a\\u0623\\u0643\\u064a\\u062f.<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u064a\\u062c\\u0628 \\u062f\\u0641\\u0639 \\u0627\\u0644\\u0645\\u0628\\u0644\\u063a \\u0627\\u0644\\u0643\\u0627\\u0645\\u0644 \\u0642\\u0628\\u0644 \\u062a\\u0633\\u0644\\u064a\\u0645 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0629.<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u062a\\u064f\\u0639\\u0627\\u0644\\u062c \\u0627\\u0644\\u0645\\u062f\\u0641\\u0648\\u0639\\u0627\\u062a \\u0628\\u0634\\u0643\\u0644 \\u0622\\u0645\\u0646 \\u0639\\u0628\\u0631 \\u0628\\u0648\\u0627\\u0628\\u0627\\u062a \\u062f\\u0641\\u0639 \\u0645\\u0648\\u062b\\u0648\\u0642\\u0629.<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u0642\\u062f \\u062a\\u064f\\u0641\\u0631\\u0636 \\u0631\\u0633\\u0648\\u0645 \\u0625\\u0636\\u0627\\u0641\\u064a\\u0629 \\u0641\\u064a \\u062d\\u0627\\u0644 \\u0627\\u0644\\u062a\\u0623\\u062e\\u064a\\u0631 \\u0623\\u0648 \\u0648\\u062c\\u0648\\u062f \\u0623\\u0636\\u0631\\u0627\\u0631 \\u0623\\u0648 \\u0627\\u0644\\u062d\\u0627\\u062c\\u0629 \\u0625\\u0644\\u0649 \\u062a\\u0646\\u0638\\u064a\\u0641.<\\/li>\\r\\n      <\\/ul>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">3. \\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0629<\\/h4>\\r\\n      <ul class=\\\"list-group list-group-flush mb-3\\\">\\r\\n        <li class=\\\"list-group-item\\\">\\u064a\\u062c\\u0628 \\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0629 \\u0648\\u0641\\u0642\\u064b\\u0627 \\u0644\\u0642\\u0648\\u0627\\u0646\\u064a\\u0646 \\u0648\\u0623\\u0646\\u0638\\u0645\\u0629 \\u0627\\u0644\\u0645\\u0631\\u0648\\u0631.<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u0623\\u0646\\u062a \\u0645\\u0633\\u0624\\u0648\\u0644 \\u0639\\u0646 \\u0627\\u0633\\u062a\\u0647\\u0644\\u0627\\u0643 \\u0627\\u0644\\u0648\\u0642\\u0648\\u062f \\u062e\\u0644\\u0627\\u0644 \\u0641\\u062a\\u0631\\u0629 \\u0627\\u0644\\u062a\\u0623\\u062c\\u064a\\u0631.<\\/li>\\r\\n        <li class=\\\"list-group-item\\\">\\u064a\\u064f\\u0645\\u0646\\u0639 \\u0627\\u0644\\u062a\\u062f\\u062e\\u064a\\u0646\\u060c \\u0627\\u0635\\u0637\\u062d\\u0627\\u0628 \\u0627\\u0644\\u062d\\u064a\\u0648\\u0627\\u0646\\u0627\\u062a\\u060c \\u0623\\u0648 \\u0623\\u064a \\u0646\\u0634\\u0627\\u0637 \\u063a\\u064a\\u0631 \\u0642\\u0627\\u0646\\u0648\\u0646\\u064a \\u062f\\u0627\\u062e\\u0644 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0629.<\\/li>\\r\\n      <\\/ul>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">4. \\u0627\\u0644\\u0625\\u0644\\u063a\\u0627\\u0621 \\u0648\\u0627\\u0633\\u062a\\u0631\\u062f\\u0627\\u062f \\u0627\\u0644\\u0645\\u0628\\u0644\\u063a<\\/h4>\\r\\n      <p>\\u064a\\u062c\\u0628 \\u062a\\u0642\\u062f\\u064a\\u0645 \\u0637\\u0644\\u0628 \\u0627\\u0644\\u0625\\u0644\\u063a\\u0627\\u0621 \\u0642\\u0628\\u0644 24 \\u0633\\u0627\\u0639\\u0629 \\u0639\\u0644\\u0649 \\u0627\\u0644\\u0623\\u0642\\u0644 \\u0645\\u0646 \\u0648\\u0642\\u062a \\u0628\\u062f\\u0621 \\u0627\\u0644\\u0625\\u064a\\u062c\\u0627\\u0631 \\u0644\\u0644\\u062d\\u0635\\u0648\\u0644 \\u0639\\u0644\\u0649 \\u0627\\u0633\\u062a\\u0631\\u062f\\u0627\\u062f \\u0643\\u0627\\u0645\\u0644. \\u0642\\u062f \\u064a\\u0624\\u062f\\u064a \\u0627\\u0644\\u0625\\u0644\\u063a\\u0627\\u0621 \\u0627\\u0644\\u0645\\u062a\\u0623\\u062e\\u0631 \\u0625\\u0644\\u0649 \\u0627\\u0633\\u062a\\u0631\\u062f\\u0627\\u062f \\u062c\\u0632\\u0626\\u064a \\u0623\\u0648 \\u0639\\u062f\\u0645 \\u0627\\u0633\\u062a\\u0631\\u062f\\u0627\\u062f \\u062d\\u0633\\u0628 \\u0627\\u0644\\u062a\\u0648\\u0642\\u064a\\u062a.<\\/p>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">5. \\u0627\\u0644\\u0645\\u0633\\u0624\\u0648\\u0644\\u064a\\u0629 \\u0648\\u0627\\u0644\\u062a\\u0623\\u0645\\u064a\\u0646<\\/h4>\\r\\n      <p>\\u0646\\u0648\\u0641\\u0631 \\u062a\\u063a\\u0637\\u064a\\u0629 \\u062a\\u0623\\u0645\\u064a\\u0646\\u064a\\u0629 \\u0623\\u0633\\u0627\\u0633\\u064a\\u0629 \\u062d\\u0633\\u0628 \\u0627\\u0644\\u0645\\u062a\\u0637\\u0644\\u0628\\u0627\\u062a \\u0627\\u0644\\u0642\\u0627\\u0646\\u0648\\u0646\\u064a\\u0629. \\u0648\\u0645\\u0639 \\u0630\\u0644\\u0643\\u060c \\u0641\\u0623\\u0646\\u062a \\u0645\\u0633\\u0624\\u0648\\u0644 \\u0639\\u0646 \\u0623\\u064a \\u0623\\u0636\\u0631\\u0627\\u0631\\u060c \\u0623\\u0648 \\u0645\\u062e\\u0627\\u0644\\u0641\\u0627\\u062a \\u0645\\u0631\\u0648\\u0631\\u064a\\u0629\\u060c \\u0623\\u0648 \\u0633\\u0631\\u0642\\u0629 \\u062a\\u062d\\u062f\\u062b \\u062e\\u0644\\u0627\\u0644 \\u0641\\u062a\\u0631\\u0629 \\u0627\\u0644\\u062a\\u0623\\u062c\\u064a\\u0631.<\\/p>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">6. \\u0645\\u0633\\u0624\\u0648\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062d\\u0633\\u0627\\u0628<\\/h4>\\r\\n      <p>\\u0623\\u0646\\u062a \\u0645\\u0633\\u0624\\u0648\\u0644 \\u0639\\u0646 \\u0627\\u0644\\u062d\\u0641\\u0627\\u0638 \\u0639\\u0644\\u0649 \\u0633\\u0631\\u064a\\u0629 \\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u062d\\u0633\\u0627\\u0628\\u0643 \\u0648\\u062c\\u0645\\u064a\\u0639 \\u0627\\u0644\\u0623\\u0646\\u0634\\u0637\\u0629 \\u0627\\u0644\\u062a\\u064a \\u062a\\u062a\\u0645 \\u0628\\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645\\u0647.<\\/p>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">7. \\u0627\\u0644\\u062a\\u0639\\u062f\\u064a\\u0644\\u0627\\u062a<\\/h4>\\r\\n      <p>\\u0646\\u062d\\u062a\\u0641\\u0638 \\u0628\\u062d\\u0642 \\u062a\\u0639\\u062f\\u064a\\u0644 \\u0647\\u0630\\u0647 \\u0627\\u0644\\u0634\\u0631\\u0648\\u0637 \\u0641\\u064a \\u0623\\u064a \\u0648\\u0642\\u062a. \\u062a\\u0635\\u0628\\u062d \\u0627\\u0644\\u062a\\u0639\\u062f\\u064a\\u0644\\u0627\\u062a \\u0633\\u0627\\u0631\\u064a\\u0629 \\u0628\\u0645\\u062c\\u0631\\u062f \\u0646\\u0634\\u0631\\u0647\\u0627. \\u0627\\u0633\\u062a\\u0645\\u0631\\u0627\\u0631\\u0643 \\u0641\\u064a \\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645 \\u0627\\u0644\\u0645\\u0646\\u0635\\u0629 \\u064a\\u0639\\u0646\\u064a \\u0645\\u0648\\u0627\\u0641\\u0642\\u062a\\u0643 \\u0639\\u0644\\u0649 \\u0627\\u0644\\u0634\\u0631\\u0648\\u0637 \\u0627\\u0644\\u0645\\u0639\\u062f\\u0644\\u0629.<\\/p>\\r\\n\\r\\n      <h4 class=\\\"mt-4\\\">8. \\u0627\\u0644\\u062a\\u0648\\u0627\\u0635\\u0644 \\u0645\\u0639\\u0646\\u0627<\\/h4>\\r\\n      <p>\\u0625\\u0630\\u0627 \\u0643\\u0627\\u0646 \\u0644\\u062f\\u064a\\u0643 \\u0623\\u064a \\u0627\\u0633\\u062a\\u0641\\u0633\\u0627\\u0631\\u0627\\u062a \\u0623\\u0648 \\u0645\\u062e\\u0627\\u0648\\u0641 \\u0628\\u062e\\u0635\\u0648\\u0635 \\u0647\\u0630\\u0647 \\u0627\\u0644\\u0634\\u0631\\u0648\\u0637\\u060c \\u064a\\u0631\\u062c\\u0649 \\u0627\\u0644\\u062a\\u0648\\u0627\\u0635\\u0644 \\u0645\\u0639\\u0646\\u0627 \\u0639\\u0628\\u0631 \\u0627\\u0644\\u0628\\u0631\\u064a\\u062f \\u0627\\u0644\\u0625\\u0644\\u0643\\u062a\\u0631\\u0648\\u0646\\u064a <a href=\\\"mailto:contact@dreamsrent.com\\\">contact@dreamsrent.com<\\/a>.<\\/p>\\r\\n    <\\/div>\\r\\n  <\\/div>\\r\\n<\\/div>\",\"status\":1}]', 'الشروط والأحكام', 'الشروط والأحكام', 'الشروط والأحكام', 'https://www.vox.com/', 'الشروط والأحكام', 'الشروط والأحكام', 'الشروط والأحكام', 0, '2025-04-23 15:11:56', '2025-04-24 18:59:25', NULL);
+(55, 1, 52, 2, 'dynamic', 'سياسة الخصوصية', 'syas-alkhsosy', '[{\"section_title\":\"\\u0633\\u064a\\u0627\\u0633\\u0629 \\u0627\\u0644\\u062e\\u0635\\u0648\\u0635\\u064a\\u0629\",\"section_label\":\"\\u0633\\u064a\\u0627\\u0633\\u0629 \\u0627\\u0644\\u062e\\u0635\\u0648\\u0635\\u064a\\u0629\",\"section_content\":\"<div class=\\\"container py-4 privacy-section terms-policy\\\">\\r\\n  <div class=\\\"card border-0 shadow-sm\\\">\\r\\n    <div class=\\\"card-body\\\" dir=\\\"rtl\\\" style=\\\"text-align: right;\\\">\\r\\n      <p>\\r\\n        \\u0641\\u064a Dreams Rent\\u060c \\u0646\\u0648\\u0644\\u064a \\u062e\\u0635\\u0648\\u0635\\u064a\\u062a\\u0643 \\u0623\\u0647\\u0645\\u064a\\u0629 \\u0643\\u0628\\u064a\\u0631\\u0629 \\u0648\\u0646\\u0644\\u062a\\u0632\\u0645 \\u0628\\u062d\\u0645\\u0627\\u064a\\u0629 \\u0627\\u0644\\u0628\\u064a\\u0627\\u0646\\u0627\\u062a \\u0627\\u0644\\u0634\\u062e\\u0635\\u064a\\u0629 \\u0627\\u0644\\u062a\\u064a \\u062a\\u0634\\u0627\\u0631\\u0643\\u0647\\u0627 \\u0645\\u0639\\u0646\\u0627. \\u0633\\u0648\\u0627\\u0621 \\u0643\\u0646\\u062a \\u062a\\u062a\\u0635\\u0641\\u062d \\u0623\\u0648 \\u062a\\u062d\\u062c\\u0632 \\u0623\\u0648 \\u062a\\u062f\\u064a\\u0631 \\u0625\\u064a\\u062c\\u0627\\u0631\\u0627\\u062a\\u0643\\u060c \\u064a\\u062a\\u0645 \\u0627\\u0644\\u062a\\u0639\\u0627\\u0645\\u0644 \\u0645\\u0639 \\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a\\u0643 \\u0628\\u0633\\u0631\\u064a\\u0629 \\u0648\\u0639\\u0646\\u0627\\u064a\\u0629. \\u062a\\u0636\\u0645\\u0646 \\u0645\\u0645\\u0627\\u0631\\u0633\\u0627\\u062a \\u0627\\u0644\\u062e\\u0635\\u0648\\u0635\\u064a\\u0629 \\u0644\\u062f\\u064a\\u0646\\u0627 \\u0627\\u0644\\u0627\\u0644\\u062a\\u0632\\u0627\\u0645 \\u0628\\u0627\\u0644\\u0642\\u0648\\u0627\\u0646\\u064a\\u0646 \\u0648\\u062d\\u0645\\u0627\\u064a\\u0629 \\u0627\\u0644\\u0645\\u0633\\u062a\\u062e\\u062f\\u0645\\u064a\\u0646 \\u0641\\u064a \\u0643\\u0644 \\u062a\\u0641\\u0627\\u0639\\u0644.\\r\\n      <\\/p>\\r\\n\\r\\n      <p>\\r\\n        \\u0646\\u0642\\u0648\\u0645 \\u0628\\u062c\\u0645\\u0639 \\u0627\\u0644\\u0628\\u064a\\u0627\\u0646\\u0627\\u062a \\u0627\\u0644\\u0623\\u0633\\u0627\\u0633\\u064a\\u0629 \\u0641\\u0642\\u0637 \\u0627\\u0644\\u0644\\u0627\\u0632\\u0645\\u0629 \\u0644\\u0625\\u0646\\u0634\\u0627\\u0621 \\u0627\\u0644\\u062d\\u0633\\u0627\\u0628\\u0627\\u062a\\u060c \\u0648\\u0625\\u062f\\u0627\\u0631\\u0629 \\u0627\\u0644\\u062d\\u062c\\u0648\\u0632\\u0627\\u062a\\u060c \\u0648\\u062a\\u062d\\u0633\\u064a\\u0646 \\u0627\\u0644\\u0645\\u0646\\u0635\\u0629. \\u0648\\u064a\\u0634\\u0645\\u0644 \\u0630\\u0644\\u0643 \\u0627\\u0644\\u0627\\u0633\\u0645\\u060c \\u0648\\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u0627\\u0644\\u0627\\u062a\\u0635\\u0627\\u0644\\u060c \\u0648\\u0627\\u0644\\u0645\\u0648\\u0642\\u0639\\u060c \\u0648\\u062a\\u0641\\u0636\\u064a\\u0644\\u0627\\u062a \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0629. \\u0644\\u0627 \\u064a\\u062a\\u0645 \\u0628\\u064a\\u0639 \\u0628\\u064a\\u0627\\u0646\\u0627\\u062a\\u0643 \\u0644\\u0623\\u064a \\u0637\\u0631\\u0641 \\u062b\\u0627\\u0644\\u062b\\u060c \\u0648\\u0646\\u062d\\u0646 \\u0646\\u0639\\u062a\\u0645\\u062f \\u062a\\u062f\\u0627\\u0628\\u064a\\u0631 \\u0623\\u0645\\u0627\\u0646 \\u0642\\u0648\\u064a\\u0629 \\u0644\\u0645\\u0646\\u0639 \\u0627\\u0644\\u0648\\u0635\\u0648\\u0644 \\u063a\\u064a\\u0631 \\u0627\\u0644\\u0645\\u0635\\u0631\\u062d \\u0628\\u0647.\\r\\n      <\\/p>\\r\\n\\r\\n      <ul class=\\\"list-unstyled mt-4\\\">\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> \\u064a\\u062a\\u0645 \\u062a\\u0634\\u0641\\u064a\\u0631 \\u0628\\u064a\\u0627\\u0646\\u0627\\u062a\\u0643 \\u0627\\u0644\\u0634\\u062e\\u0635\\u064a\\u0629 \\u0648\\u062a\\u062e\\u0632\\u064a\\u0646\\u0647\\u0627 \\u0628\\u0623\\u0645\\u0627\\u0646.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> \\u0644\\u0627 \\u0646\\u0634\\u0627\\u0631\\u0643 \\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u0627\\u0644\\u0627\\u062a\\u0635\\u0627\\u0644 \\u0627\\u0644\\u062e\\u0627\\u0635\\u0629 \\u0628\\u0643 \\u062f\\u0648\\u0646 \\u0645\\u0648\\u0627\\u0641\\u0642\\u062a\\u0643.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> \\u064a\\u0645\\u0643\\u0646\\u0643 \\u0637\\u0644\\u0628 \\u062d\\u0630\\u0641 \\u0627\\u0644\\u0628\\u064a\\u0627\\u0646\\u0627\\u062a \\u0623\\u0648 \\u062a\\u062d\\u062f\\u064a\\u062b \\u0627\\u0644\\u0645\\u0644\\u0641 \\u0627\\u0644\\u0634\\u062e\\u0635\\u064a \\u0641\\u064a \\u0623\\u064a \\u0648\\u0642\\u062a.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> \\u062a\\u064f\\u0633\\u062a\\u062e\\u062f\\u0645 \\u0645\\u0644\\u0641\\u0627\\u062a \\u062a\\u0639\\u0631\\u064a\\u0641 \\u0627\\u0644\\u0627\\u0631\\u062a\\u0628\\u0627\\u0637 \\u0644\\u062a\\u062d\\u0633\\u064a\\u0646 \\u062a\\u062c\\u0631\\u0628\\u0629 \\u0627\\u0644\\u0645\\u0633\\u062a\\u062e\\u062f\\u0645 \\u0641\\u0642\\u0637.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> \\u064a\\u062a\\u0645 \\u0627\\u0644\\u0627\\u062d\\u062a\\u0641\\u0627\\u0638 \\u0628\\u0633\\u062c\\u0644\\u0627\\u062a \\u0627\\u0644\\u0646\\u0634\\u0627\\u0637 \\u0644\\u0623\\u063a\\u0631\\u0627\\u0636 \\u0627\\u0644\\u0623\\u0645\\u0627\\u0646 \\u0648\\u0627\\u0644\\u062f\\u0639\\u0645 \\u0641\\u0642\\u0637.<\\/li>\\r\\n      <\\/ul>\\r\\n\\r\\n      <p class=\\\"mt-4\\\">\\r\\n        \\u0625\\u0630\\u0627 \\u0643\\u0627\\u0646 \\u0644\\u062f\\u064a\\u0643 \\u0623\\u064a \\u0627\\u0633\\u062a\\u0641\\u0633\\u0627\\u0631 \\u0628\\u062e\\u0635\\u0648\\u0635 \\u0627\\u0644\\u062e\\u0635\\u0648\\u0635\\u064a\\u0629 \\u0623\\u0648 \\u0643\\u064a\\u0641\\u064a\\u0629 \\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645 \\u0628\\u064a\\u0627\\u0646\\u0627\\u062a\\u0643\\u060c \\u0641\\u0625\\u0646 \\u0641\\u0631\\u064a\\u0642 \\u0627\\u0644\\u062f\\u0639\\u0645 \\u0644\\u062f\\u064a\\u0646\\u0627 \\u062c\\u0627\\u0647\\u0632 \\u062f\\u0627\\u0626\\u0645\\u064b\\u0627 \\u0644\\u0644\\u0645\\u0633\\u0627\\u0639\\u062f\\u0629. \\u0647\\u062f\\u0641\\u0646\\u0627 \\u062a\\u0642\\u062f\\u064a\\u0645 \\u062a\\u062c\\u0631\\u0628\\u0629 \\u0622\\u0645\\u0646\\u0629 \\u0648\\u0645\\u062d\\u062a\\u0631\\u0645\\u0629 \\u0644\\u062c\\u0645\\u064a\\u0639 \\u0627\\u0644\\u0645\\u0633\\u062a\\u062e\\u062f\\u0645\\u064a\\u0646. \\u0645\\u0646 \\u062d\\u0642\\u0643 \\u0623\\u0646 \\u062a\\u0643\\u0648\\u0646 \\u0639\\u0644\\u0649 \\u062f\\u0631\\u0627\\u064a\\u0629 \\u0628\\u0645\\u0645\\u0627\\u0631\\u0633\\u0627\\u062a\\u0646\\u0627\\u060c \\u0648\\u0645\\u0646 \\u0648\\u0627\\u062c\\u0628\\u0646\\u0627 \\u0623\\u0646 \\u0646\\u0643\\u0648\\u0646 \\u0634\\u0641\\u0627\\u0641\\u064a\\u0646.\\r\\n      <\\/p>\\r\\n\\r\\n      <p>\\r\\n        \\u0628\\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645\\u0643 \\u0627\\u0644\\u0645\\u0633\\u062a\\u0645\\u0631 \\u0644\\u0640 Dreams Rent\\u060c \\u0641\\u0625\\u0646\\u0643 \\u062a\\u0642\\u0631 \\u0648\\u062a\\u0648\\u0627\\u0641\\u0642 \\u0639\\u0644\\u0649 \\u0633\\u064a\\u0627\\u0633\\u0629 \\u0627\\u0644\\u062e\\u0635\\u0648\\u0635\\u064a\\u0629 \\u0647\\u0630\\u0647. \\u0642\\u062f \\u0646\\u0642\\u0648\\u0645 \\u0628\\u062a\\u062d\\u062f\\u064a\\u062b \\u0647\\u0630\\u0627 \\u0627\\u0644\\u0645\\u062d\\u062a\\u0648\\u0649 \\u0645\\u0646 \\u062d\\u064a\\u0646 \\u0644\\u0622\\u062e\\u0631\\u060c \\u0648\\u0646\\u0646\\u0635\\u062d \\u0628\\u0645\\u0631\\u0627\\u062c\\u0639\\u062a\\u0647 \\u0628\\u0627\\u0646\\u062a\\u0638\\u0627\\u0645. \\u0627\\u0644\\u0634\\u0641\\u0627\\u0641\\u064a\\u0629 \\u0648\\u0627\\u0644\\u0623\\u0645\\u0627\\u0646 \\u0648\\u062b\\u0642\\u0629 \\u0627\\u0644\\u0645\\u0633\\u062a\\u062e\\u062f\\u0645 \\u0647\\u064a \\u0623\\u0633\\u0627\\u0633 \\u062e\\u062f\\u0645\\u0627\\u062a\\u0646\\u0627.\\r\\n      <\\/p>\\r\\n    <\\/div>\\r\\n  <\\/div>\\r\\n<\\/div>\",\"status\":1}]', 'سياسة الخصوصية', 'سياسة الخصوصية', 'سياسة الخصوصية', 'https://dreamsrent-laravel.dreamstechnologies.com/pages/privacy-policy', 'سياسة الخصوصية', 'سياسة الخصوصية', 'سياسة الخصوصية', 0, '2025-04-23 15:05:43', '2025-04-26 11:50:38', NULL),
+(56, 1, 53, 2, 'dynamic', 'الشروط والأحكام', 'alshrot-oalahkam', '[{\"section_title\":\"\\u0627\\u0644\\u0634\\u0631\\u0648\\u0637 \\u0648\\u0627\\u0644\\u0623\\u062d\\u0643\\u0627\\u0645\",\"section_label\":\"\\u0627\\u0644\\u0634\\u0631\\u0648\\u0637 \\u0648\\u0627\\u0644\\u0623\\u062d\\u0643\\u0627\\u0645\",\"section_content\":\"<div class=\\\"container py-4 privacy-section terms-policy\\\">\\r\\n  <div class=\\\"card border-0 shadow-sm\\\">\\r\\n    <div class=\\\"card-body\\\" dir=\\\"rtl\\\" style=\\\"text-align: right;\\\">\\r\\n      <p>\\r\\n        \\u062a\\u0642\\u062f\\u0645 Dreams Rent \\u0645\\u0646\\u0635\\u0629 \\u0645\\u0648\\u062b\\u0648\\u0642\\u0629 \\u0648\\u0645\\u0631\\u064a\\u062d\\u0629 \\u0644\\u062a\\u0623\\u062c\\u064a\\u0631 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0627\\u062a \\u0641\\u064a \\u0645\\u0648\\u0627\\u0642\\u0639 \\u0645\\u062a\\u0639\\u062f\\u062f\\u0629. \\u0628\\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645\\u0643 \\u0644\\u062e\\u062f\\u0645\\u0627\\u062a\\u0646\\u0627\\u060c \\u0641\\u0625\\u0646\\u0643 \\u062a\\u0648\\u0627\\u0641\\u0642 \\u0639\\u0644\\u0649 \\u0627\\u0644\\u0627\\u0644\\u062a\\u0632\\u0627\\u0645 \\u0628\\u0627\\u0644\\u0634\\u0631\\u0648\\u0637 \\u0648\\u0627\\u0644\\u0623\\u062d\\u0643\\u0627\\u0645. \\u0646\\u062d\\u0646 \\u0645\\u0644\\u062a\\u0632\\u0645\\u0648\\u0646 \\u0628\\u062d\\u0645\\u0627\\u064a\\u0629 \\u0645\\u0635\\u0627\\u0644\\u062d \\u0627\\u0644\\u0645\\u0633\\u062a\\u062e\\u062f\\u0645\\u064a\\u0646 \\u0648\\u062a\\u0639\\u0632\\u064a\\u0632 \\u0628\\u064a\\u0626\\u0629 \\u0625\\u064a\\u062c\\u0627\\u0631\\u064a\\u0629 \\u0642\\u0627\\u0626\\u0645\\u0629 \\u0639\\u0644\\u0649 \\u0627\\u0644\\u062b\\u0642\\u0629. \\u062a\\u0639\\u0643\\u0633 \\u0643\\u0644 \\u0645\\u0639\\u0627\\u0645\\u0644\\u0629 \\u0639\\u0644\\u0649 \\u0645\\u0646\\u0635\\u062a\\u0646\\u0627 \\u0627\\u0644\\u0634\\u0641\\u0627\\u0641\\u064a\\u0629 \\u0648\\u0627\\u0644\\u0627\\u062d\\u062a\\u0631\\u0627\\u0645 \\u0627\\u0644\\u0645\\u062a\\u0628\\u0627\\u062f\\u0644 \\u0628\\u064a\\u0646 \\u0627\\u0644\\u0645\\u0633\\u062a\\u0623\\u062c\\u0631\\u064a\\u0646 \\u0648\\u0627\\u0644\\u0645\\u064f\\u0644\\u0627\\u0643.\\r\\n      <\\/p>\\r\\n\\r\\n      <p>\\r\\n        \\u064a\\u062c\\u0628 \\u0639\\u0644\\u0649 \\u062c\\u0645\\u064a\\u0639 \\u0627\\u0644\\u0645\\u0633\\u062a\\u062e\\u062f\\u0645\\u064a\\u0646 \\u0627\\u0644\\u062d\\u0641\\u0627\\u0638 \\u0639\\u0644\\u0649 \\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u062d\\u0633\\u0627\\u0628 \\u062f\\u0642\\u064a\\u0642\\u0629 \\u0648\\u0627\\u062a\\u0628\\u0627\\u0639 \\u0625\\u062c\\u0631\\u0627\\u0621\\u0627\\u062a \\u0627\\u0644\\u062d\\u062c\\u0632 \\u0627\\u0644\\u0645\\u062d\\u062f\\u062f\\u0629. \\u0628\\u0639\\u062f \\u062a\\u0623\\u0643\\u064a\\u062f \\u0627\\u0644\\u062d\\u062c\\u0632\\u060c \\u064a\\u064f\\u062a\\u0648\\u0642\\u0639 \\u0645\\u0646 \\u0627\\u0644\\u0637\\u0631\\u0641\\u064a\\u0646 \\u0627\\u0644\\u0627\\u0644\\u062a\\u0632\\u0627\\u0645 \\u0628\\u0627\\u0644\\u0627\\u062a\\u0641\\u0627\\u0642. \\u0623\\u064a \\u0645\\u062d\\u0627\\u0648\\u0644\\u0629 \\u0644\\u0644\\u062a\\u0644\\u0627\\u0639\\u0628 \\u0623\\u0648 \\u0627\\u0644\\u062a\\u0623\\u062e\\u064a\\u0631 \\u0623\\u0648 \\u0625\\u0633\\u0627\\u0621\\u0629 \\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645 \\u0627\\u0644\\u0646\\u0638\\u0627\\u0645 \\u0642\\u062f \\u062a\\u0624\\u062f\\u064a \\u0625\\u0644\\u0649 \\u0625\\u064a\\u0642\\u0627\\u0641 \\u0627\\u0644\\u062d\\u0633\\u0627\\u0628 \\u0623\\u0648 \\u0641\\u0631\\u0636 \\u0639\\u0642\\u0648\\u0628\\u0627\\u062a. \\u0646\\u0633\\u0639\\u0649 \\u0644\\u0636\\u0645\\u0627\\u0646 \\u062a\\u062c\\u0631\\u0628\\u0629 \\u0625\\u064a\\u062c\\u0627\\u0631 \\u0622\\u0645\\u0646\\u0629 \\u0648\\u0633\\u0644\\u0633\\u0629 \\u0644\\u0643\\u0644 \\u0645\\u0633\\u062a\\u062e\\u062f\\u0645.\\r\\n      <\\/p>\\r\\n\\r\\n      <p>\\r\\n        \\u064a\\u062a\\u062d\\u0645\\u0644 \\u0645\\u0627\\u0644\\u0643\\u0648 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0627\\u062a \\u0645\\u0633\\u0624\\u0648\\u0644\\u064a\\u0629 \\u0639\\u0631\\u0636 \\u0645\\u0631\\u0643\\u0628\\u0627\\u062a \\u062d\\u0642\\u064a\\u0642\\u064a\\u0629 \\u0648\\u0645\\u064f\\u0635\\u0627\\u0646\\u0629 \\u062c\\u064a\\u062f\\u064b\\u0627 \\u0645\\u0639 \\u0645\\u0633\\u062a\\u0646\\u062f\\u0627\\u062a \\u0645\\u062d\\u062f\\u062b\\u0629. \\u0643\\u0645\\u0627 \\u064a\\u062c\\u0628 \\u0639\\u0644\\u0649 \\u0627\\u0644\\u0645\\u0633\\u062a\\u0623\\u062c\\u0631\\u064a\\u0646 \\u0625\\u0639\\u0627\\u062f\\u0629 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0629 \\u0628\\u0646\\u0641\\u0633 \\u0627\\u0644\\u062d\\u0627\\u0644\\u0629 \\u0627\\u0644\\u062a\\u064a \\u0627\\u0633\\u062a\\u064f\\u0644\\u0645\\u062a \\u0628\\u0647\\u0627. \\u0633\\u064a\\u062a\\u0645 \\u062a\\u0648\\u0636\\u064a\\u062d \\u0633\\u064a\\u0627\\u0633\\u0627\\u062a \\u0627\\u0644\\u0648\\u0642\\u0648\\u062f \\u0648\\u0627\\u0644\\u062a\\u0646\\u0638\\u064a\\u0641 \\u0648\\u062d\\u062f\\u0648\\u062f \\u0627\\u0644\\u0645\\u0633\\u0627\\u0641\\u0629 \\u0639\\u0646\\u062f \\u0627\\u0644\\u062d\\u062c\\u0632. \\u0639\\u062f\\u0645 \\u0627\\u0644\\u0627\\u0644\\u062a\\u0632\\u0627\\u0645 \\u0628\\u0647\\u0630\\u0647 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0633\\u0627\\u062a \\u0642\\u062f \\u064a\\u0624\\u062f\\u064a \\u0625\\u0644\\u0649 \\u062e\\u0635\\u0645 \\u0645\\u0646 \\u0627\\u0644\\u062a\\u0623\\u0645\\u064a\\u0646 \\u0623\\u0648 \\u0641\\u0631\\u0636 \\u0631\\u0633\\u0648\\u0645 \\u0625\\u0636\\u0627\\u0641\\u064a\\u0629.\\r\\n      <\\/p>\\r\\n\\r\\n      <ul class=\\\"list-unstyled mt-4\\\">\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> \\u062a\\u0623\\u0643\\u062f \\u0645\\u0646 \\u0641\\u062d\\u0635 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0629 \\u0642\\u0628\\u0644 \\u0628\\u062f\\u0621 \\u0631\\u062d\\u0644\\u062a\\u0643.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> \\u0627\\u0633\\u062a\\u062e\\u062f\\u0645 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0629 \\u0641\\u0642\\u0637 \\u0644\\u0623\\u063a\\u0631\\u0627\\u0636 \\u0642\\u0627\\u0646\\u0648\\u0646\\u064a\\u0629 \\u0648\\u0634\\u062e\\u0635\\u064a\\u0629.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> \\u0627\\u062d\\u062a\\u0641\\u0638 \\u0628\\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a \\u0627\\u0644\\u0637\\u0648\\u0627\\u0631\\u0626 \\u0648\\u0627\\u0644\\u062f\\u0639\\u0645 \\u0623\\u062b\\u0646\\u0627\\u0621 \\u0627\\u0644\\u0625\\u064a\\u062c\\u0627\\u0631.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> \\u0623\\u0628\\u0644\\u063a \\u0639\\u0646 \\u0623\\u064a \\u062d\\u0627\\u062f\\u062b \\u0623\\u0648 \\u0636\\u0631\\u0631 \\u0641\\u0648\\u0631\\u064b\\u0627 \\u0639\\u0628\\u0631 \\u0627\\u0644\\u0645\\u0646\\u0635\\u0629.<\\/li>\\r\\n        <li><span><i class=\\\"fa-solid fa-circle-check\\\"><\\/i><\\/span> \\u0644\\u0627 \\u062a\\u0633\\u0645\\u062d \\u0628\\u0642\\u064a\\u0627\\u062f\\u0629 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0629 \\u0644\\u0623\\u064a \\u0634\\u062e\\u0635 \\u063a\\u064a\\u0631 \\u0645\\u0635\\u0631\\u062d \\u0644\\u0647.<\\/li>\\r\\n      <\\/ul>\\r\\n\\r\\n      <p class=\\\"mt-4\\\">\\r\\n        \\u0641\\u064a \\u062d\\u0627\\u0644 \\u0648\\u0627\\u062c\\u0647\\u062a \\u0623\\u064a \\u0645\\u0634\\u0643\\u0644\\u0627\\u062a \\u062e\\u0644\\u0627\\u0644 \\u0641\\u062a\\u0631\\u0629 \\u0627\\u0644\\u0625\\u064a\\u062c\\u0627\\u0631\\u060c \\u0641\\u0625\\u0646 \\u0641\\u0631\\u064a\\u0642 \\u0627\\u0644\\u062f\\u0639\\u0645 \\u0644\\u062f\\u064a\\u0646\\u0627 \\u0645\\u062a\\u0627\\u062d \\u0644\\u0645\\u0633\\u0627\\u0639\\u062f\\u062a\\u0643 \\u0641\\u064a \\u062d\\u0644 \\u0627\\u0644\\u0646\\u0632\\u0627\\u0639\\u0627\\u062a \\u0623\\u0648 \\u062d\\u0627\\u0644\\u0627\\u062a \\u0627\\u0644\\u0637\\u0648\\u0627\\u0631\\u0626. \\u0633\\u0648\\u0627\\u0621 \\u0643\\u0627\\u0646\\u062a \\u0645\\u0634\\u0643\\u0644\\u0629 \\u062a\\u0642\\u0646\\u064a\\u0629\\u060c \\u0623\\u0648 \\u0639\\u062f\\u0645 \\u0627\\u0633\\u062a\\u062c\\u0627\\u0628\\u0629 \\u0645\\u0646 \\u0627\\u0644\\u0645\\u0627\\u0644\\u0643\\u060c \\u0623\\u0648 \\u0642\\u0636\\u064a\\u0629 \\u0641\\u064a \\u0627\\u0644\\u062f\\u0641\\u0639\\u060c \\u0641\\u0625\\u0646\\u0646\\u0627 \\u0646\\u0639\\u0645\\u0644 \\u0639\\u0644\\u0649 \\u062d\\u0644 \\u0627\\u0644\\u0645\\u0634\\u0643\\u0644\\u0629 \\u0628\\u0633\\u0631\\u0639\\u0629 \\u0648\\u0639\\u062f\\u0644. \\u0633\\u0644\\u0627\\u0645\\u062a\\u0643 \\u0648\\u0631\\u0636\\u0627\\u0643 \\u0647\\u0645\\u0627 \\u0623\\u0648\\u0644\\u0648\\u064a\\u062a\\u0646\\u0627 \\u0627\\u0644\\u0642\\u0635\\u0648\\u0649.\\r\\n      <\\/p>\\r\\n\\r\\n      <p>\\r\\n        \\u0628\\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645\\u0643 \\u0627\\u0644\\u0645\\u0633\\u062a\\u0645\\u0631 \\u0644\\u062e\\u062f\\u0645\\u0629 Dreams Rent\\u060c \\u0641\\u0625\\u0646\\u0643 \\u062a\\u0648\\u0627\\u0641\\u0642 \\u0639\\u0644\\u0649 \\u0647\\u0630\\u0647 \\u0627\\u0644\\u0634\\u0631\\u0648\\u0637 \\u0643\\u062c\\u0632\\u0621 \\u0645\\u0646 \\u0627\\u062a\\u0641\\u0627\\u0642\\u064a\\u0629 \\u0627\\u0644\\u0645\\u0633\\u062a\\u062e\\u062f\\u0645. \\u0646\\u062d\\u062a\\u0641\\u0638 \\u0628\\u062d\\u0642 \\u062a\\u0639\\u062f\\u064a\\u0644 \\u0627\\u0644\\u0634\\u0631\\u0648\\u0637 \\u0641\\u064a \\u0623\\u064a \\u0648\\u0642\\u062a\\u060c \\u0648\\u064a\\u062c\\u0628 \\u0639\\u0644\\u064a\\u0643 \\u0645\\u0631\\u0627\\u062c\\u0639\\u0629 \\u0627\\u0644\\u062a\\u062d\\u062f\\u064a\\u062b\\u0627\\u062a \\u0628\\u0627\\u0646\\u062a\\u0638\\u0627\\u0645. \\u0627\\u0633\\u062a\\u0645\\u0631\\u0627\\u0631\\u0643 \\u0641\\u064a \\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645 \\u0627\\u0644\\u0645\\u0646\\u0635\\u0629 \\u0628\\u0639\\u062f \\u0627\\u0644\\u062a\\u0639\\u062f\\u064a\\u0644\\u0627\\u062a \\u064a\\u0639\\u0646\\u064a \\u0642\\u0628\\u0648\\u0644\\u0643 \\u0644\\u0644\\u0634\\u0631\\u0648\\u0637 \\u0627\\u0644\\u062c\\u062f\\u064a\\u062f\\u0629. \\u0644\\u0627 \\u062a\\u062a\\u0631\\u062f\\u062f \\u0641\\u064a \\u0627\\u0644\\u062a\\u0648\\u0627\\u0635\\u0644 \\u0645\\u0639\\u0646\\u0627 \\u0625\\u0630\\u0627 \\u0643\\u0627\\u0646\\u062a \\u0644\\u062f\\u064a\\u0643 \\u0623\\u064a \\u0627\\u0633\\u062a\\u0641\\u0633\\u0627\\u0631\\u0627\\u062a.\\r\\n      <\\/p>\\r\\n\\r\\n    <\\/div>\\r\\n  <\\/div>\\r\\n<\\/div>\",\"status\":1}]', 'الشروط والأحكام', 'الشروط والأحكام', 'الشروط والأحكام', 'https://www.vox.com/', 'الشروط والأحكام', 'الشروط والأحكام', 'الشروط والأحكام', 0, '2025-04-23 15:11:56', '2025-04-26 11:31:46', NULL),
+(57, 1, NULL, 1, 'static', 'Refund Policy', 'refund', '[{\"section_title\":\"Refund Policy\",\"section_label\":\"Refund Policy\",\"section_content\":\"<h1 data-start=\\\"150\\\" data-end=\\\"165\\\" class=\\\"\\\">Refund Policy<\\/h1><p><br><\\/p><p data-start=\\\"167\\\" data-end=\\\"200\\\" class=\\\"\\\"><strong data-start=\\\"167\\\" data-end=\\\"186\\\">Effective Date:<\\/strong> [Insert Date]<\\/p><p data-start=\\\"202\\\" data-end=\\\"404\\\" class=\\\"\\\">At [Your Company Name], we stand behind the quality of our products\\/services. If you are not entirely satisfied with your purchase, we\'re here to help \\u2014 but we also ask that customers respect our terms.<\\/p><h2 data-start=\\\"406\\\" data-end=\\\"419\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">1. Returns<\\/span><\\/h2><p data-start=\\\"420\\\" data-end=\\\"652\\\" class=\\\"\\\">We accept returns within <strong data-start=\\\"445\\\" data-end=\\\"457\\\">[X] days<\\/strong> of purchase. To be eligible for a return, your item must be unused, in the same condition that you received it, and in its original packaging. Proof of purchase (receipt or invoice) is required.<\\/p><p data-start=\\\"654\\\" data-end=\\\"679\\\" class=\\\"\\\"><strong data-start=\\\"654\\\" data-end=\\\"679\\\">Non-returnable items:<\\/strong><\\/p><ul data-start=\\\"680\\\" data-end=\\\"774\\\">\\r\\n<li data-start=\\\"680\\\" data-end=\\\"692\\\" class=\\\"\\\">\\r\\n<p data-start=\\\"682\\\" data-end=\\\"692\\\" class=\\\"\\\">Gift cards<\\/p>\\r\\n<\\/li>\\r\\n<li data-start=\\\"693\\\" data-end=\\\"725\\\" class=\\\"\\\">\\r\\n<p data-start=\\\"695\\\" data-end=\\\"725\\\" class=\\\"\\\">Downloadable software products<\\/p>\\r\\n<\\/li>\\r\\n<li data-start=\\\"726\\\" data-end=\\\"774\\\" class=\\\"\\\">\\r\\n<p data-start=\\\"728\\\" data-end=\\\"774\\\" class=\\\"\\\">Some personal care items (for hygiene reasons)<\\/p><p data-start=\\\"728\\\" data-end=\\\"774\\\" class=\\\"\\\"><br><\\/p>\\r\\n<\\/li>\\r\\n<\\/ul><h2 data-start=\\\"776\\\" data-end=\\\"789\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">2. Refunds<\\/span><\\/h2><p data-start=\\\"790\\\" data-end=\\\"897\\\" class=\\\"\\\">Once your return is received and inspected, we will notify you of the approval or rejection of your refund.<\\/p><p data-start=\\\"899\\\" data-end=\\\"1049\\\" class=\\\"\\\">If approved, your refund will be processed within <strong data-start=\\\"949\\\" data-end=\\\"970\\\">[X] business days<\\/strong> and a credit will automatically be applied to your original method of payment.<\\/p><p data-start=\\\"1051\\\" data-end=\\\"1069\\\" class=\\\"\\\"><strong data-start=\\\"1051\\\" data-end=\\\"1067\\\">Please note:<\\/strong><\\/p><ul data-start=\\\"1070\\\" data-end=\\\"1205\\\">\\r\\n<li data-start=\\\"1070\\\" data-end=\\\"1108\\\" class=\\\"\\\">\\r\\n<p data-start=\\\"1072\\\" data-end=\\\"1108\\\" class=\\\"\\\">Shipping costs are non-refundable.<\\/p>\\r\\n<\\/li>\\r\\n<li data-start=\\\"1109\\\" data-end=\\\"1205\\\" class=\\\"\\\">\\r\\n<p data-start=\\\"1111\\\" data-end=\\\"1205\\\" class=\\\"\\\">If you receive a refund, the cost of return shipping will be deducted unless otherwise agreed.<\\/p><p data-start=\\\"1111\\\" data-end=\\\"1205\\\" class=\\\"\\\"><br><\\/p>\\r\\n<\\/li>\\r\\n<\\/ul><h2 data-start=\\\"1207\\\" data-end=\\\"1236\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">3. Late or Missing Refunds<\\/span><\\/h2><p data-start=\\\"1237\\\" data-end=\\\"1274\\\" class=\\\"\\\">If you haven\\u2019t received a refund yet:<\\/p><ul data-start=\\\"1275\\\" data-end=\\\"1503\\\">\\r\\n<li data-start=\\\"1275\\\" data-end=\\\"1314\\\" class=\\\"\\\">\\r\\n<p data-start=\\\"1277\\\" data-end=\\\"1314\\\" class=\\\"\\\">First, check your bank account again.<\\/p>\\r\\n<\\/li>\\r\\n<li data-start=\\\"1315\\\" data-end=\\\"1418\\\" class=\\\"\\\">\\r\\n<p data-start=\\\"1317\\\" data-end=\\\"1418\\\" class=\\\"\\\">Then contact your credit card company; it may take some time before your refund is officially posted.<\\/p>\\r\\n<\\/li>\\r\\n<li data-start=\\\"1419\\\" data-end=\\\"1503\\\" class=\\\"\\\">\\r\\n<p data-start=\\\"1421\\\" data-end=\\\"1503\\\" class=\\\"\\\">Next, contact your bank. There is often processing time before a refund is posted.<\\/p>\\r\\n<\\/li>\\r\\n<\\/ul><p data-start=\\\"1505\\\" data-end=\\\"1615\\\" class=\\\"\\\">If you\\u2019ve done all of this and still have not received your refund, please contact us at [your support email].<\\/p><h2 data-start=\\\"1617\\\" data-end=\\\"1633\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">4. Sale Items<\\/span><\\/h2><p data-start=\\\"1634\\\" data-end=\\\"1745\\\" class=\\\"\\\">Only regular-priced items may be refunded. Unfortunately, sale items are <strong data-start=\\\"1707\\\" data-end=\\\"1721\\\">final sale<\\/strong> and cannot be refunded.<\\/p><p data-start=\\\"2090\\\" data-end=\\\"2329\\\" class=\\\"\\\">You will be responsible for paying for your own shipping costs for returning your item. We strongly recommend using a trackable shipping service or purchasing shipping insurance. We cannot guarantee that we will receive your returned item.<\\/p><hr data-start=\\\"2331\\\" data-end=\\\"2334\\\" class=\\\"\\\"><p>\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n\\r\\n<\\/p><p data-start=\\\"2336\\\" data-end=\\\"2509\\\" class=\\\"\\\"><strong data-start=\\\"2336\\\" data-end=\\\"2345\\\">Note:<\\/strong><br data-start=\\\"2345\\\" data-end=\\\"2348\\\">\\r\\nAlways post policies like this <em data-start=\\\"2379\\\" data-end=\\\"2388\\\">clearly<\\/em> on your site \\u2014 not hidden in fine print. It\\u2019s old-school business: you\\u2019re fair, but you expect fair treatment in return.<\\/p>\",\"status\":1}]', 'refund', 'refund', 'refund Policy', 'https://www.vox.com/', 'refund Policy', 'refund Policy', 'refund Policy', 0, '2025-04-23 15:11:56', '2025-04-28 09:48:34', NULL),
+(58, 1, 57, 2, 'static', 'سياسة استرداد الأموال', 'سياسة استرداد الأموال', '[{\"section_title\":\"Refund Policy\",\"section_label\":\"Refund Policy\",\"section_content\":\"<h1 data-start=\\\"302\\\" data-end=\\\"319\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">\\u0633\\u064a\\u0627\\u0633\\u0629 \\u0627\\u0644\\u0627\\u0633\\u062a\\u0631\\u062c\\u0627\\u0639<\\/span><\\/h1><h1 data-start=\\\"150\\\" data-end=\\\"165\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"321\\\" data-end=\\\"354\\\" class=\\\"\\\"><span style=\\\"font-weight: normal;\\\"><span data-start=\\\"321\\\" data-end=\\\"339\\\" style=\\\"font-size: 18px;\\\">\\u062a\\u0627\\u0631\\u064a\\u062e \\u0627\\u0644\\u0633\\u0631\\u064a\\u0627\\u0646:<\\/span><span style=\\\"font-size: 18px;\\\"> [\\u0623\\u062f\\u062e\\u0644 \\u0627\\u0644\\u062a\\u0627\\u0631\\u064a\\u062e]<\\/span><\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"356\\\" data-end=\\\"510\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">\\u0641\\u064a [\\u0627\\u0633\\u0645 \\u0634\\u0631\\u0643\\u062a\\u0643]\\u060c \\u0646\\u062d\\u0646 \\u0646\\u0624\\u0645\\u0646 \\u0628\\u062c\\u0648\\u062f\\u0629 \\u0645\\u0646\\u062a\\u062c\\u0627\\u062a\\u0646\\u0627\\/\\u062e\\u062f\\u0645\\u0627\\u062a\\u0646\\u0627. \\u0625\\u0630\\u0627 \\u0644\\u0645 \\u062a\\u0643\\u0646 \\u0631\\u0627\\u0636\\u064a\\u064b\\u0627 \\u062a\\u0645\\u0627\\u0645\\u064b\\u0627 \\u0639\\u0646 \\u0639\\u0645\\u0644\\u064a\\u0629 \\u0627\\u0644\\u0634\\u0631\\u0627\\u0621\\u060c \\u0646\\u062d\\u0646 \\u0647\\u0646\\u0627 \\u0644\\u0645\\u0633\\u0627\\u0639\\u062f\\u062a\\u0643 \\u2014 \\u0648\\u0644\\u0643\\u0646\\u0646\\u0627 \\u0646\\u062a\\u0648\\u0642\\u0639 \\u0623\\u064a\\u0636\\u064b\\u0627 \\u0645\\u0646 \\u0627\\u0644\\u0639\\u0645\\u0644\\u0627\\u0621 \\u0627\\u062d\\u062a\\u0631\\u0627\\u0645 \\u0634\\u0631\\u0648\\u0637\\u0646\\u0627.<\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/h1><h2 data-start=\\\"512\\\" data-end=\\\"525\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">1. \\u0627\\u0644\\u0625\\u0631\\u062c\\u0627\\u0639<\\/span><\\/h2><h1 data-start=\\\"150\\\" data-end=\\\"165\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"526\\\" data-end=\\\"728\\\" class=\\\"\\\"><span style=\\\"font-weight: normal;\\\"><span style=\\\"font-size: 18px;\\\">\\u0646\\u0642\\u0628\\u0644 \\u0627\\u0644\\u0625\\u0631\\u062c\\u0627\\u0639 \\u062e\\u0644\\u0627\\u0644 <\\/span><span data-start=\\\"544\\\" data-end=\\\"557\\\" style=\\\"font-size: 18px;\\\">[X] \\u064a\\u0648\\u0645\\u064b\\u0627<\\/span><span style=\\\"font-size: 18px;\\\"> \\u0645\\u0646 \\u062a\\u0627\\u0631\\u064a\\u062e \\u0627\\u0644\\u0634\\u0631\\u0627\\u0621. \\u0644\\u0643\\u064a \\u062a\\u0643\\u0648\\u0646 \\u0645\\u0624\\u0647\\u0644\\u0627\\u064b \\u0644\\u0644\\u0625\\u0631\\u062c\\u0627\\u0639\\u060c \\u064a\\u062c\\u0628 \\u0623\\u0646 \\u064a\\u0643\\u0648\\u0646 \\u0627\\u0644\\u0645\\u0646\\u062a\\u062c \\u063a\\u064a\\u0631 \\u0645\\u0633\\u062a\\u062e\\u062f\\u0645\\u060c \\u0648\\u0641\\u064a \\u0646\\u0641\\u0633 \\u0627\\u0644\\u062d\\u0627\\u0644\\u0629 \\u0627\\u0644\\u062a\\u064a \\u0627\\u0633\\u062a\\u0644\\u0645\\u062a\\u0647 \\u0628\\u0647\\u0627\\u060c \\u0648\\u0641\\u064a \\u0639\\u0628\\u0648\\u062a\\u0647 \\u0627\\u0644\\u0623\\u0635\\u0644\\u064a\\u0629. \\u064a\\u062c\\u0628 \\u062a\\u0642\\u062f\\u064a\\u0645 \\u0625\\u062b\\u0628\\u0627\\u062a \\u0627\\u0644\\u0634\\u0631\\u0627\\u0621 (\\u0627\\u0644\\u0625\\u064a\\u0635\\u0627\\u0644 \\u0623\\u0648 \\u0627\\u0644\\u0641\\u0627\\u062a\\u0648\\u0631\\u0629).<\\/span><\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"730\\\" data-end=\\\"762\\\" class=\\\"\\\"><span data-start=\\\"730\\\" data-end=\\\"762\\\" style=\\\"font-weight: normal; font-size: 18px;\\\">\\u0627\\u0644\\u0639\\u0646\\u0627\\u0635\\u0631 \\u063a\\u064a\\u0631 \\u0627\\u0644\\u0642\\u0627\\u0628\\u0644\\u0629 \\u0644\\u0644\\u0625\\u0631\\u062c\\u0627\\u0639:<\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><ul data-start=\\\"763\\\" data-end=\\\"848\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><li data-start=\\\"763\\\" data-end=\\\"779\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"765\\\" data-end=\\\"779\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">\\u0628\\u0637\\u0627\\u0642\\u0627\\u062a \\u0627\\u0644\\u0647\\u062f\\u0627\\u064a\\u0627<\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/li><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><li data-start=\\\"780\\\" data-end=\\\"805\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"782\\\" data-end=\\\"805\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">\\u0627\\u0644\\u0628\\u0631\\u0627\\u0645\\u062c \\u0627\\u0644\\u0642\\u0627\\u0628\\u0644\\u0629 \\u0644\\u0644\\u062a\\u0646\\u0632\\u064a\\u0644<\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/li><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><li data-start=\\\"806\\\" data-end=\\\"848\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"808\\\" data-end=\\\"848\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">\\u0628\\u0639\\u0636 \\u0645\\u0646\\u062a\\u062c\\u0627\\u062a \\u0627\\u0644\\u0639\\u0646\\u0627\\u064a\\u0629 \\u0627\\u0644\\u0634\\u062e\\u0635\\u064a\\u0629 (\\u0644\\u0623\\u0633\\u0628\\u0627\\u0628 \\u0635\\u062d\\u064a\\u0629)<\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/li><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/ul><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/h1><h2 data-start=\\\"850\\\" data-end=\\\"865\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">2. \\u0627\\u0644\\u0627\\u0633\\u062a\\u0631\\u062f\\u0627\\u062f<\\/span><\\/h2><h1 data-start=\\\"150\\\" data-end=\\\"165\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"866\\\" data-end=\\\"944\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">\\u0628\\u0645\\u062c\\u0631\\u062f \\u0627\\u0633\\u062a\\u0644\\u0627\\u0645\\u0646\\u0627 \\u0644\\u0644\\u0645\\u0646\\u062a\\u062c \\u0627\\u0644\\u0645\\u0631\\u062a\\u062c\\u0639 \\u0648\\u0641\\u062d\\u0635\\u0647\\u060c \\u0633\\u0646\\u0642\\u0648\\u0645 \\u0628\\u0625\\u0639\\u0644\\u0627\\u0645\\u0643 \\u0628\\u0642\\u0628\\u0648\\u0644 \\u0623\\u0648 \\u0631\\u0641\\u0636 \\u0637\\u0644\\u0628 \\u0627\\u0644\\u0627\\u0633\\u062a\\u0631\\u062f\\u0627\\u062f.<\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"946\\\" data-end=\\\"1065\\\" class=\\\"\\\"><span style=\\\"font-weight: normal;\\\"><span style=\\\"font-size: 18px;\\\">\\u0625\\u0630\\u0627 \\u062a\\u0645 \\u0642\\u0628\\u0648\\u0644 \\u0637\\u0644\\u0628\\u0643\\u060c \\u0633\\u064a\\u062a\\u0645 \\u0645\\u0639\\u0627\\u0644\\u062c\\u0629 \\u0627\\u0644\\u0645\\u0628\\u0644\\u063a \\u0627\\u0644\\u0645\\u0633\\u062a\\u0631\\u062f \\u062e\\u0644\\u0627\\u0644 <\\/span><span data-start=\\\"996\\\" data-end=\\\"1011\\\" style=\\\"font-size: 18px;\\\">[X] \\u064a\\u0648\\u0645 \\u0639\\u0645\\u0644<\\/span><span style=\\\"font-size: 18px;\\\">\\u060c \\u0648\\u0633\\u064a\\u062a\\u0645 \\u062a\\u062d\\u0648\\u064a\\u0644 \\u0627\\u0644\\u0631\\u0635\\u064a\\u062f \\u062a\\u0644\\u0642\\u0627\\u0626\\u064a\\u064b\\u0627 \\u0625\\u0644\\u0649 \\u0637\\u0631\\u064a\\u0642\\u0629 \\u0627\\u0644\\u062f\\u0641\\u0639 \\u0627\\u0644\\u0623\\u0635\\u0644\\u064a\\u0629.<\\/span><\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"1067\\\" data-end=\\\"1083\\\" class=\\\"\\\"><span data-start=\\\"1067\\\" data-end=\\\"1083\\\" style=\\\"font-weight: normal; font-size: 18px;\\\">\\u064a\\u0631\\u062c\\u0649 \\u0645\\u0644\\u0627\\u062d\\u0638\\u0629:<\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><ul data-start=\\\"1084\\\" data-end=\\\"1205\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><li data-start=\\\"1084\\\" data-end=\\\"1119\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"1086\\\" data-end=\\\"1119\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">\\u062a\\u0643\\u0627\\u0644\\u064a\\u0641 \\u0627\\u0644\\u0634\\u062d\\u0646 \\u063a\\u064a\\u0631 \\u0642\\u0627\\u0628\\u0644\\u0629 \\u0644\\u0644\\u0627\\u0633\\u062a\\u0631\\u062f\\u0627\\u062f.<\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/li><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><li data-start=\\\"1120\\\" data-end=\\\"1205\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"1122\\\" data-end=\\\"1205\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">\\u0625\\u0630\\u0627 \\u062a\\u0645 \\u0627\\u0633\\u062a\\u0631\\u062f\\u0627\\u062f \\u0627\\u0644\\u0645\\u0628\\u0644\\u063a\\u060c \\u0641\\u0633\\u064a\\u062a\\u0645 \\u062e\\u0635\\u0645 \\u062a\\u0643\\u0644\\u0641\\u0629 \\u0627\\u0644\\u0634\\u062d\\u0646 \\u0627\\u0644\\u0645\\u0631\\u062a\\u062c\\u0639 \\u0645\\u0627 \\u0644\\u0645 \\u064a\\u062a\\u0645 \\u0627\\u0644\\u0627\\u062a\\u0641\\u0627\\u0642 \\u0639\\u0644\\u0649 \\u063a\\u064a\\u0631 \\u0630\\u0644\\u0643.<\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/li><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/ul><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/h1><h2 data-start=\\\"1207\\\" data-end=\\\"1243\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">3. \\u0627\\u0644\\u062a\\u0623\\u062e\\u0631 \\u0623\\u0648 \\u0639\\u062f\\u0645 \\u0627\\u0633\\u062a\\u0644\\u0627\\u0645 \\u0627\\u0644\\u0627\\u0633\\u062a\\u0631\\u062f\\u0627\\u062f<\\/span><\\/h2><h1 data-start=\\\"150\\\" data-end=\\\"165\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"1244\\\" data-end=\\\"1276\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">\\u0625\\u0630\\u0627 \\u0644\\u0645 \\u062a\\u0633\\u062a\\u0644\\u0645 \\u0627\\u0644\\u0645\\u0628\\u0644\\u063a \\u0627\\u0644\\u0645\\u0633\\u062a\\u0631\\u062f \\u0628\\u0639\\u062f:<\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><ul data-start=\\\"1277\\\" data-end=\\\"1490\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><li data-start=\\\"1277\\\" data-end=\\\"1316\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"1279\\\" data-end=\\\"1316\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">\\u062a\\u062d\\u0642\\u0642 \\u0623\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u062d\\u0633\\u0627\\u0628\\u0643 \\u0627\\u0644\\u0645\\u0635\\u0631\\u0641\\u064a \\u0645\\u0631\\u0629 \\u0623\\u062e\\u0631\\u0649.<\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/li><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><li data-start=\\\"1317\\\" data-end=\\\"1409\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"1319\\\" data-end=\\\"1409\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">\\u062b\\u0645 \\u0627\\u062a\\u0635\\u0644 \\u0628\\u0634\\u0631\\u0643\\u0629 \\u0628\\u0637\\u0627\\u0642\\u0629 \\u0627\\u0644\\u0627\\u0626\\u062a\\u0645\\u0627\\u0646 \\u0627\\u0644\\u062e\\u0627\\u0635\\u0629 \\u0628\\u0643\\u061b \\u0642\\u062f \\u064a\\u0633\\u062a\\u063a\\u0631\\u0642 \\u0627\\u0644\\u0623\\u0645\\u0631 \\u0628\\u0639\\u0636 \\u0627\\u0644\\u0648\\u0642\\u062a \\u0642\\u0628\\u0644 \\u062a\\u0633\\u062c\\u064a\\u0644 \\u0627\\u0644\\u0645\\u0628\\u0644\\u063a \\u0631\\u0633\\u0645\\u064a\\u064b\\u0627.<\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/li><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><li data-start=\\\"1410\\\" data-end=\\\"1490\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"1412\\\" data-end=\\\"1490\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">\\u0628\\u0639\\u062f \\u0630\\u0644\\u0643\\u060c \\u0627\\u062a\\u0635\\u0644 \\u0628\\u0627\\u0644\\u0628\\u0646\\u0643 \\u0627\\u0644\\u062e\\u0627\\u0635 \\u0628\\u0643. \\u063a\\u0627\\u0644\\u0628\\u064b\\u0627 \\u0645\\u0627 \\u062a\\u0648\\u062c\\u062f \\u0641\\u062a\\u0631\\u0629 \\u0645\\u0639\\u0627\\u0644\\u062c\\u0629 \\u0642\\u0628\\u0644 \\u062a\\u0633\\u062c\\u064a\\u0644 \\u0627\\u0644\\u0627\\u0633\\u062a\\u0631\\u062f\\u0627\\u062f.<\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/li><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/ul><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"1492\\\" data-end=\\\"1599\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">\\u0625\\u0630\\u0627 \\u0642\\u0645\\u062a \\u0628\\u0643\\u0644 \\u0630\\u0644\\u0643 \\u0648\\u0645\\u0627 \\u0632\\u0644\\u062a \\u0644\\u0645 \\u062a\\u0633\\u062a\\u0644\\u0645 \\u0627\\u0644\\u0645\\u0628\\u0644\\u063a\\u060c \\u064a\\u0631\\u062c\\u0649 \\u0627\\u0644\\u062a\\u0648\\u0627\\u0635\\u0644 \\u0645\\u0639\\u0646\\u0627 \\u0639\\u0628\\u0631 \\u0627\\u0644\\u0628\\u0631\\u064a\\u062f \\u0627\\u0644\\u0625\\u0644\\u0643\\u062a\\u0631\\u0648\\u0646\\u064a: [\\u0628\\u0631\\u064a\\u062f\\u0643 \\u0627\\u0644\\u0625\\u0644\\u0643\\u062a\\u0631\\u0648\\u0646\\u064a \\u0644\\u0644\\u062f\\u0639\\u0645].<\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/h1><h2 data-start=\\\"1601\\\" data-end=\\\"1623\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">4. \\u0627\\u0644\\u0645\\u0646\\u062a\\u062c\\u0627\\u062a \\u0627\\u0644\\u0645\\u062e\\u0641\\u0636\\u0629<\\/span><\\/h2><h1 data-start=\\\"150\\\" data-end=\\\"165\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"1624\\\" data-end=\\\"1741\\\" class=\\\"\\\"><span style=\\\"font-weight: normal;\\\"><span style=\\\"font-size: 18px;\\\">\\u064a\\u062a\\u0645 \\u0627\\u0633\\u062a\\u0631\\u062f\\u0627\\u062f \\u0627\\u0644\\u0645\\u0628\\u0627\\u0644\\u063a \\u0644\\u0644\\u0645\\u0646\\u062a\\u062c\\u0627\\u062a \\u0628\\u0633\\u0639\\u0631\\u0647\\u0627 \\u0627\\u0644\\u0643\\u0627\\u0645\\u0644 \\u0641\\u0642\\u0637.<\\/span><br data-start=\\\"1671\\\" data-end=\\\"1674\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n\\u0627\\u0644\\u0645\\u0646\\u062a\\u062c\\u0627\\u062a \\u0627\\u0644\\u0645\\u0628\\u0627\\u0639\\u0629 \\u0628\\u062a\\u062e\\u0641\\u064a\\u0636 \\u062a\\u0639\\u062a\\u0628\\u0631 <\\/span><span data-start=\\\"1704\\\" data-end=\\\"1721\\\" style=\\\"font-size: 18px;\\\">\\u0645\\u0628\\u0627\\u0639\\u0629 \\u0646\\u0647\\u0627\\u0626\\u064a\\u064b\\u0627<\\/span><span style=\\\"font-size: 18px;\\\"> \\u0648\\u0644\\u0627 \\u064a\\u0645\\u0643\\u0646 \\u0627\\u0633\\u062a\\u0631\\u062f\\u0627\\u062f\\u0647\\u0627.<\\/span><\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><\\/h1><h2 data-start=\\\"1743\\\" data-end=\\\"1760\\\" class=\\\"\\\"><span style=\\\"font-weight: normal; font-size: 18px;\\\">5. \\u0634\\u062d\\u0646 \\u0627\\u0644\\u0625\\u0631\\u062c\\u0627\\u0639<\\/span><\\/h2><h1 data-start=\\\"150\\\" data-end=\\\"165\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"1761\\\" data-end=\\\"1921\\\" class=\\\"\\\"><span style=\\\"font-weight: normal;\\\"><span style=\\\"font-size: 18px;\\\">\\u0633\\u062a\\u0643\\u0648\\u0646 \\u0645\\u0633\\u0624\\u0648\\u0644\\u0627\\u064b \\u0639\\u0646 \\u062f\\u0641\\u0639 \\u062a\\u0643\\u0627\\u0644\\u064a\\u0641 \\u0627\\u0644\\u0634\\u062d\\u0646 \\u0627\\u0644\\u062e\\u0627\\u0635\\u0629 \\u0628\\u0625\\u0631\\u062c\\u0627\\u0639 \\u0627\\u0644\\u0645\\u0646\\u062a\\u062c.<\\/span><br data-start=\\\"1816\\\" data-end=\\\"1819\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n\\u0646\\u0648\\u0635\\u064a \\u0628\\u0634\\u062f\\u0629 \\u0628\\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645 \\u062e\\u062f\\u0645\\u0629 \\u0634\\u062d\\u0646 \\u0642\\u0627\\u0628\\u0644\\u0629 \\u0644\\u0644\\u062a\\u062a\\u0628\\u0639 \\u0623\\u0648 \\u0634\\u0631\\u0627\\u0621 \\u062a\\u0623\\u0645\\u064a\\u0646 \\u0639\\u0644\\u0649 \\u0627\\u0644\\u0634\\u062d\\u0646. \\u0646\\u062d\\u0646 \\u0644\\u0627 \\u0646\\u0636\\u0645\\u0646 \\u0627\\u0633\\u062a\\u0644\\u0627\\u0645\\u0646\\u0627 \\u0644\\u0644\\u0645\\u0646\\u062a\\u062c \\u0627\\u0644\\u0645\\u0631\\u062a\\u062c\\u0639.<\\/span><\\/span><\\/p><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><hr data-start=\\\"1923\\\" data-end=\\\"1926\\\" class=\\\"\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n<\\/span><p data-start=\\\"1928\\\" data-end=\\\"2074\\\" class=\\\"\\\"><span style=\\\"font-weight: normal;\\\"><span data-start=\\\"1928\\\" data-end=\\\"1939\\\" style=\\\"font-size: 18px;\\\">\\u0645\\u0644\\u0627\\u062d\\u0638\\u0629:<\\/span><br data-start=\\\"1939\\\" data-end=\\\"1942\\\"><span style=\\\"font-size: 18px;\\\">\\r\\n\\u064a\\u062c\\u0628 \\u0639\\u0631\\u0636 \\u0647\\u0630\\u0647 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0633\\u0629 \\u0628\\u0648\\u0636\\u0648\\u062d \\u0639\\u0644\\u0649 \\u0645\\u0648\\u0642\\u0639\\u0643 \\u2014 \\u0644\\u0627 \\u062a\\u0636\\u0639\\u0647\\u0627 \\u0636\\u0645\\u0646 \\u0646\\u0635\\u0648\\u0635 \\u0645\\u062e\\u0641\\u064a\\u0629 \\u0623\\u0648 \\u063a\\u064a\\u0631 \\u0638\\u0627\\u0647\\u0631\\u0629. \\u0647\\u0630\\u0627 \\u0623\\u0633\\u0644\\u0648\\u0628 \\u0639\\u0645\\u0644 \\u0623\\u0635\\u064a\\u0644: \\u062a\\u0643\\u0648\\u0646 \\u0639\\u0627\\u062f\\u0644\\u0627\\u064b\\u060c \\u0648\\u062a\\u062a\\u0648\\u0642\\u0639 \\u0627\\u0644\\u0645\\u0639\\u0627\\u0645\\u0644\\u0629 \\u0628\\u0627\\u0644\\u0645\\u062b\\u0644.<\\/span><\\/span><\\/p><\\/h1>\",\"status\":1}]', 'سياسة استرداد الأموال', 'سياسة استرداد الأموال', 'سياسة استرداد الأموال', 'https://www.vox.com/', 'سياسة استرداد الأموال', 'سياسة استرداد الأموال', 'سياسة استرداد الأموال', 0, '2025-04-23 15:11:56', '2025-04-28 09:51:49', NULL);
 
 -- --------------------------------------------------------
 
@@ -50285,8 +50780,8 @@ INSERT INTO `pages` (`id`, `theme_id`, `parent_id`, `language_id`, `read`, `page
 --
 
 CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) NOT NULL,
-  `token` varchar(255) NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -50300,15 +50795,62 @@ CREATE TABLE `permissions` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `role_id` bigint(20) UNSIGNED NOT NULL,
   `module_id` bigint(20) DEFAULT NULL,
-  `create` tinyint(1) NOT NULL DEFAULT 0,
-  `edit` tinyint(1) NOT NULL DEFAULT 0,
-  `delete` tinyint(1) NOT NULL DEFAULT 0,
-  `view` tinyint(1) NOT NULL DEFAULT 0,
-  `allow_all` tinyint(1) NOT NULL DEFAULT 0,
+  `create` tinyint(1) NOT NULL DEFAULT '0',
+  `edit` tinyint(1) NOT NULL DEFAULT '0',
+  `delete` tinyint(1) NOT NULL DEFAULT '0',
+  `view` tinyint(1) NOT NULL DEFAULT '0',
+  `allow_all` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `permissions`
+--
+
+INSERT INTO `permissions` (`id`, `role_id`, `module_id`, `create`, `edit`, `delete`, `view`, `allow_all`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 12, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:19', NULL),
+(2, 1, 13, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:19', NULL),
+(3, 1, 14, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:19', NULL),
+(4, 1, 15, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:19', NULL),
+(5, 1, 16, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:19', NULL),
+(6, 1, 17, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-23 09:38:29', NULL),
+(7, 1, 18, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:19', NULL),
+(8, 1, 19, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:19', NULL),
+(9, 1, 20, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(10, 1, 21, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(11, 1, 22, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(12, 1, 23, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(13, 1, 24, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(14, 1, 25, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(15, 1, 26, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(16, 1, 27, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(17, 1, 28, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(18, 1, 29, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(19, 1, 30, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(20, 1, 31, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(21, 1, 32, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(22, 1, 33, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(23, 1, 34, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(24, 1, 35, 0, 0, 0, 1, 0, '2025-04-07 16:48:40', '2025-04-22 17:29:20', NULL),
+(25, 1, 36, 0, 0, 0, 1, 0, '2025-04-07 16:48:41', '2025-04-22 17:29:20', NULL),
+(26, 1, 37, 0, 0, 0, 1, 0, '2025-04-07 16:48:41', '2025-04-22 17:29:20', NULL),
+(27, 1, 38, 0, 0, 0, 1, 0, '2025-04-07 16:48:41', '2025-04-22 17:29:20', NULL),
+(28, 1, 39, 0, 0, 0, 1, 0, '2025-04-07 16:48:41', '2025-04-22 17:29:20', NULL),
+(29, 1, 40, 0, 0, 0, 1, 0, '2025-04-07 16:48:41', '2025-04-22 17:29:20', NULL),
+(30, 1, 41, 0, 0, 0, 1, 0, '2025-04-07 16:48:41', '2025-04-22 17:29:20', NULL),
+(31, 1, 42, 0, 0, 0, 1, 0, '2025-04-07 16:48:41', '2025-04-22 17:29:20', NULL),
+(32, 1, 43, 0, 0, 0, 1, 0, '2025-04-07 16:48:41', '2025-04-22 17:29:20', NULL),
+(33, 1, 44, 0, 0, 0, 1, 0, '2025-04-07 16:48:41', '2025-04-22 17:29:20', NULL),
+(34, 1, 45, 0, 0, 0, 1, 0, '2025-04-07 16:48:41', '2025-04-22 17:29:20', NULL),
+(35, 1, 46, 0, 0, 0, 1, 0, '2025-04-07 16:48:41', '2025-04-22 17:29:20', NULL),
+(36, 1, 47, 0, 0, 0, 1, 0, '2025-04-07 16:48:41', '2025-04-22 17:29:20', NULL),
+(37, 1, 48, 0, 0, 0, 1, 0, '2025-04-07 16:48:41', '2025-04-22 17:29:20', NULL),
+(38, 1, 52, 0, 0, 0, 1, 0, '2025-04-22 17:29:20', '2025-04-22 17:29:20', NULL),
+(39, 1, 49, 0, 0, 0, 1, 0, '2025-04-22 17:29:20', '2025-04-22 17:29:20', NULL),
+(40, 1, 50, 0, 0, 0, 1, 0, '2025-04-22 17:29:20', '2025-04-22 17:29:20', NULL),
+(41, 1, 51, 0, 0, 0, 1, 0, '2025-04-22 17:29:20', '2025-04-22 17:29:20', NULL);
 
 -- --------------------------------------------------------
 
@@ -50318,9 +50860,9 @@ CREATE TABLE `permissions` (
 
 CREATE TABLE `pricing_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `pricing_type` varchar(255) DEFAULT NULL,
+  `pricing_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `type` int(11) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -50354,11 +50896,18 @@ CREATE TABLE `reviews` (
   `facility_ratings` int(11) NOT NULL,
   `value_for_money_ratings` int(11) NOT NULL,
   `cleanliness_ratings` int(11) NOT NULL,
-  `average_ratings` double(3,1) DEFAULT 0.0,
+  `average_ratings` double(3,1) DEFAULT '0.0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `reviews`
+--
+
+INSERT INTO `reviews` (`id`, `vehicle_id`, `user_id`, `service_ratings`, `location_ratings`, `facility_ratings`, `value_for_money_ratings`, `cleanliness_ratings`, `average_ratings`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 4, 3, 5, 3, 5, 3, 3.8, '2025-04-25 17:59:50', '2025-04-25 17:59:50', NULL);
 
 -- --------------------------------------------------------
 
@@ -50370,14 +50919,21 @@ CREATE TABLE `review_messages` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `review_id` bigint(20) UNSIGNED DEFAULT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
-  `comments` text DEFAULT NULL,
-  `likes` int(11) NOT NULL DEFAULT 0,
-  `dislikes` int(11) NOT NULL DEFAULT 0,
+  `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
+  `comments` text COLLATE utf8mb4_unicode_ci,
+  `likes` int(11) NOT NULL DEFAULT '0',
+  `dislikes` int(11) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `review_messages`
+--
+
+INSERT INTO `review_messages` (`id`, `review_id`, `user_id`, `parent_id`, `comments`, `likes`, `dislikes`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 4, 0, 'Good experience, will have a ride in future too', 0, 0, '2025-04-25 17:59:50', '2025-04-25 17:59:50', NULL);
 
 -- --------------------------------------------------------
 
@@ -50389,8 +50945,8 @@ CREATE TABLE `review_reactions` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `review_id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `is_like` tinyint(4) NOT NULL DEFAULT 0,
-  `is_dislike` tinyint(4) NOT NULL DEFAULT 0,
+  `is_like` tinyint(4) NOT NULL DEFAULT '0',
+  `is_dislike` tinyint(4) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -50403,13 +50959,20 @@ CREATE TABLE `review_reactions` (
 
 CREATE TABLE `roles` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `role_name` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `created_by` varchar(255) DEFAULT NULL,
+  `role_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `created_by` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO `roles` (`id`, `role_name`, `status`, `created_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Manager', 1, '1', '2025-04-07 16:47:52', '2025-04-07 16:47:52', NULL);
 
 -- --------------------------------------------------------
 
@@ -50419,13 +50982,23 @@ CREATE TABLE `roles` (
 
 CREATE TABLE `safety_features` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT 1,
-  `feature` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `language_id` int(11) DEFAULT '1',
+  `feature` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `safety_features`
+--
+
+INSERT INTO `safety_features` (`id`, `language_id`, `feature`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'Airbags', 1, '2025-04-22 21:04:00', '2025-04-22 21:04:00', NULL),
+(2, 1, 'Anti-lock Braking System', 1, '2025-04-22 21:04:08', '2025-04-22 21:04:08', NULL),
+(3, 1, 'Electronic Stability Control', 1, '2025-04-22 21:04:16', '2025-04-22 21:04:16', NULL),
+(4, 1, 'Traction Control System', 1, '2025-04-22 21:04:24', '2025-04-22 21:04:24', NULL);
 
 -- --------------------------------------------------------
 
@@ -50435,12 +51008,20 @@ CREATE TABLE `safety_features` (
 
 CREATE TABLE `seasons` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `seasons`
+--
+
+INSERT INTO `seasons` (`id`, `name`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'summer', 1, '2025-04-24 11:37:44', '2025-04-24 11:37:44', NULL),
+(2, 'winter', 1, '2025-04-24 11:37:52', '2025-04-24 11:37:52', NULL);
 
 -- --------------------------------------------------------
 
@@ -50450,12 +51031,22 @@ CREATE TABLE `seasons` (
 
 CREATE TABLE `seat_types` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `seat_type` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `seat_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `seat_types`
+--
+
+INSERT INTO `seat_types` (`id`, `seat_type`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Bench Seat', 0, '2025-04-22 20:50:33', '2025-04-24 11:30:41', NULL),
+(2, 'Power Seats', 1, '2025-04-22 20:50:42', '2025-04-22 20:50:42', NULL),
+(3, 'Booster Seat', 1, '2025-04-22 20:50:52', '2025-04-22 20:50:52', NULL),
+(4, 'Split-Folding Seats', 1, '2025-04-22 20:51:00', '2025-04-22 20:51:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -50467,10 +51058,10 @@ CREATE TABLE `sections` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `theme_id` int(11) NOT NULL,
   `order_by` int(11) DEFAULT NULL,
-  `name` varchar(255) NOT NULL,
-  `datas` longtext NOT NULL,
-  `content` longtext DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `datas` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` longtext COLLATE utf8mb4_unicode_ci,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -50518,12 +51109,12 @@ INSERT INTO `sections` (`id`, `theme_id`, `order_by`, `name`, `datas`, `content`
 
 CREATE TABLE `section_datas` (
   `id` bigint(20) NOT NULL,
-  `language_id` int(11) DEFAULT 1,
+  `language_id` int(11) DEFAULT '1',
   `section_id` int(11) DEFAULT NULL,
-  `datas` longtext DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
-  `update_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `datas` longtext,
+  `created_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `update_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `section_datas`
@@ -50531,12 +51122,12 @@ CREATE TABLE `section_datas` (
 
 INSERT INTO `section_datas` (`id`, `language_id`, `section_id`, `datas`, `created_at`, `update_at`) VALUES
 (1, 1, 1, '{\"label_one\":\"100% Trusted car rental platform in the World\",\"line_one\":\"Find Your Best\",\"line_two\":\"Dream Car for Rental\",\"description_one\":\"Experience the ultimate in comfort, performance, and sophistication with our luxury car rentals. From sleek sedans and stylish coupes to spacious SUVs and elegant convertibles, we offer a range of premium vehicles to suit your preferences and lifestyle.\"}', '2025-04-23 07:31:48', '2025-04-23 07:31:48'),
-(2, 2, 1, '{\"label_one\":\"\\u0645\\u0646\\u0635\\u0629 \\u062a\\u0623\\u062c\\u064a\\u0631 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u0648\\u062b\\u0648\\u0642\\u0629 \\u0628\\u0646\\u0633\\u0628\\u0629 100% \\u0641\\u064a \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645\",\"line_one\":\"\\u0627\\u0628\\u062d\\u062b \\u0639\\u0646 \\u0623\\u0641\\u0636\\u0644 \\u0645\\u0627 \\u0644\\u062f\\u064a\\u0643\",\"line_two\":\"\\u062f\\u0631\\u064a\\u0645 \\u0643\\u0627\\u0631 \\u0644\\u0644\\u062a\\u0623\\u062c\\u064a\\u0631\",\"description_one\":\"\\u0627\\u0633\\u062a\\u0645\\u062a\\u0639 \\u0628\\u0623\\u0642\\u0635\\u0649 \\u062f\\u0631\\u062c\\u0627\\u062a \\u0627\\u0644\\u0631\\u0627\\u062d\\u0629 \\u0648\\u0627\\u0644\\u0623\\u062f\\u0627\\u0621 \\u0648\\u0627\\u0644\\u0631\\u0642\\u064a \\u0645\\u0639 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a\\u0646\\u0627 \\u0627\\u0644\\u0641\\u0627\\u062e\\u0631\\u0629 \\u0644\\u0644\\u0625\\u064a\\u062c\\u0627\\u0631. \\u0645\\u0646 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0633\\u064a\\u062f\\u0627\\u0646 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629 \\u0648\\u0627\\u0644\\u0643\\u0648\\u0628\\u064a\\u0647 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629 \\u0625\\u0644\\u0649 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u062f\\u0641\\u0639 \\u0627\\u0644\\u0631\\u0628\\u0627\\u0639\\u064a \\u0627\\u0644\\u0641\\u0633\\u064a\\u062d\\u0629 \\u0648\\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u0643\\u0634\\u0648\\u0641\\u0629 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629\\u060c \\u0646\\u0642\\u062f\\u0645 \\u0644\\u0643 \\u0645\\u062c\\u0645\\u0648\\u0639\\u0629 \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0641\\u0627\\u062e\\u0631\\u0629 \\u0627\\u0644\\u062a\\u064a \\u062a\\u0646\\u0627\\u0633\\u0628 \\u062a\\u0641\\u0636\\u064a\\u0644\\u0627\\u062a\\u0643 \\u0648\\u0623\\u0633\\u0644\\u0648\\u0628 \\u062d\\u064a\\u0627\\u062a\\u0643.\",\"\"}', '2025-04-25 10:21:16', '2025-04-25 10:21:16'),
+(2, 2, 1, '{\"label_one\":\"\\u0645\\u0646\\u0635\\u0629 \\u062a\\u0623\\u062c\\u064a\\u0631 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u0648\\u062b\\u0648\\u0642\\u0629 \\u0628\\u0646\\u0633\\u0628\\u0629 100% \\u0641\\u064a \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645\",\"line_one\":\"\\u0627\\u0628\\u062d\\u062b \\u0639\\u0646 \\u0623\\u0641\\u0636\\u0644 \\u0645\\u0627 \\u0644\\u062f\\u064a\\u0643\",\"line_two\":\"\\u062f\\u0631\\u064a\\u0645 \\u0643\\u0627\\u0631 \\u0644\\u0644\\u062a\\u0623\\u062c\\u064a\\u0631\",\"description_one\":\"\\u0627\\u0633\\u062a\\u0645\\u062a\\u0639 \\u0628\\u0623\\u0642\\u0635\\u0649 \\u062f\\u0631\\u062c\\u0627\\u062a \\u0627\\u0644\\u0631\\u0627\\u062d\\u0629 \\u0648\\u0627\\u0644\\u0623\\u062f\\u0627\\u0621 \\u0648\\u0627\\u0644\\u0631\\u0642\\u064a \\u0645\\u0639 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a\\u0646\\u0627 \\u0627\\u0644\\u0641\\u0627\\u062e\\u0631\\u0629 \\u0644\\u0644\\u0625\\u064a\\u062c\\u0627\\u0631. \\u0645\\u0646 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0633\\u064a\\u062f\\u0627\\u0646 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629 \\u0648\\u0627\\u0644\\u0643\\u0648\\u0628\\u064a\\u0647 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629 \\u0625\\u0644\\u0649 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u062f\\u0641\\u0639 \\u0627\\u0644\\u0631\\u0628\\u0627\\u0639\\u064a \\u0627\\u0644\\u0641\\u0633\\u064a\\u062d\\u0629 \\u0648\\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u0643\\u0634\\u0648\\u0641\\u0629 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629\\u060c \\u0646\\u0642\\u062f\\u0645 \\u0644\\u0643 \\u0645\\u062c\\u0645\\u0648\\u0639\\u0629 \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0641\\u0627\\u062e\\u0631\\u0629 \\u0627\\u0644\\u062a\\u064a \\u062a\\u0646\\u0627\\u0633\\u0628 \\u062a\\u0641\\u0636\\u064a\\u0644\\u0627\\u062a\\u0643 \\u0648\\u0623\\u0633\\u0644\\u0648\\u0628 \\u062d\\u064a\\u0627\\u062a\\u0643.\",\"thumbnail_image_one\":\"thumbnail_image_banner_one\\/c4ac357d-ba7f-42e4-9e3e-6e7f784c78ec_1744436030.png\"}', '2025-04-12 06:55:37', '2025-04-12 06:55:37'),
 (3, 1, 42, '{\"vehicle_id\":\"54\",\"label_1\":\"Best Deal\",\"dis_1\":\"Dreams Rent offers a fleet of high-quality\",\"label_2\":\"Doorstep Delivery\",\"dis_2\":\"Dreams Rent offers a fleet of high-quality\",\"label_3\":\"Low Security Deposit\",\"dis_3\":\"Dreams Rent offers a fleet of high-quality\",\"label_4\":\"Latest Cars\",\"dis_4\":\"Dreams Rent offers a fleet of high-quality\",\"label_5\":\"Customer Support\",\"dis_5\":\"Dreams Rent offers a fleet of high-quality\",\"label_6\":\"No Hidden Charges\",\"dis_6\":\"Dreams Rent offers a fleet of high-quality\"}', '2025-04-12 07:49:52', '2025-04-12 07:49:52'),
-(4, 1, 29, '{\"label_two\":\"qewuoueoueoiuqoieuoiwqueoiuoiuoiUOIUOU\",\"description_two\":\"OUOIUWOIUWOIEUWQOIEUQOIEUOIWQUEOIQUEOWQE\",\"thumbnail_image_two\":\"thumbnail_image_banner_two\\/c13dfb85-7194-47ee-a11c-2e211ab144b0_1744436159.png\"}', '2025-04-12 05:35:59', '2025-04-12 05:35:59'),
+(4, 1, 29, '{\"label_two\":\"Explore our Verified & Professional Cars\",\"description_two\":\"Modern design sports cruisers for those who crave adventure & grandeur Cars for relaxing with your loved ones.\",\"thumbnail_image_two\":\"thumbnail_image_banner_two\\/c13dfb85-7194-47ee-a11c-2e211ab144b0_1744436159.png\"}', '2025-04-26 09:36:44', '2025-04-26 09:36:44'),
 (5, 2, 29, '{\"label_two\":\"\\u0627\\u0633\\u062a\\u0643\\u0634\\u0641 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a\\u0646\\u0627 \\u0627\\u0644\\u0645\\u0639\\u062a\\u0645\\u062f\\u0629 \\u0648\\u0627\\u0644\\u0627\\u062d\\u062a\\u0631\\u0627\\u0641\\u064a\\u0629\",\"description_two\":\"\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0631\\u064a\\u0627\\u0636\\u064a\\u0629 \\u0628\\u062a\\u0635\\u0645\\u064a\\u0645 \\u0639\\u0635\\u0631\\u064a \\u0644\\u0623\\u0648\\u0644\\u0626\\u0643 \\u0627\\u0644\\u0630\\u064a\\u0646 \\u064a\\u062a\\u0648\\u0642\\u0648\\u0646 \\u0625\\u0644\\u0649 \\u0627\\u0644\\u0645\\u063a\\u0627\\u0645\\u0631\\u0629 \\u0648\\u0627\\u0644\\u0639\\u0638\\u0645\\u0629 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0644\\u0644\\u0627\\u0633\\u062a\\u0631\\u062e\\u0627\\u0621 \\u0645\\u0639 \\u0623\\u062d\\u0628\\u0627\\u0626\\u0643.\",\"thumbnail_image_two\":\"thumbnail_image_banner_two\\/93fb4577-7c9d-4918-81af-306f6422be94_1744436137.png\"}', '2025-04-12 06:56:46', '2025-04-12 06:56:46'),
 (6, 2, 42, '{\"vehicle_id\":\"61\",\"label_1\":\"\\u0623\\u0641\\u0636\\u0644 \\u0635\\u0641\\u0642\\u0629\",\"dis_1\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_2\":\"\\u0644\\u0627 \\u062a\\u0648\\u062c\\u062f \\u0631\\u0633\\u0648\\u0645 \\u062e\\u0641\\u064a\\u0629\",\"dis_2\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_3\":\"\\u0623\\u0641\\u0636\\u0644 \\u0635\\u0641\\u0642\\u0629\",\"dis_3\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_4\":\"\\u0644\\u0627 \\u062a\\u0648\\u062c\\u062f \\u0631\\u0633\\u0648\\u0645 \\u062e\\u0641\\u064a\\u0629\",\"dis_4\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_5\":\"\\u0644\\u0627 \\u062a\\u0648\\u062c\\u062f \\u0631\\u0633\\u0648\\u0645 \\u062e\\u0641\\u064a\\u0629\",\"dis_5\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_6\":\"\\u0623\\u0641\\u0636\\u0644 \\u0635\\u0641\\u0642\\u0629\",\"dis_6\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\"}', '2025-04-12 06:58:51', '2025-04-12 06:58:51'),
-(7, 1, 1, '{\"label_one\":\"100% Trusted car rental platform in the World\",\"line_one\":\"Find Your Best\",\"line_two\":\"Dream Car for Rental\",\"description_one\":\"Experience the ultimate in comfort, performance, and sophistication with our luxury car rentals. From sleek sedans and stylish coupes to spacious SUVs and elegant convertibles, we offer a range of premium vehicles to suit your preferences and lifestyle.\",\"thumbnail_image_one\":\"\"}', '2025-04-25 10:21:52', '2025-04-25 10:21:52');
+(7, 1, 1, '{\"label_one\":\"100% Trusted car rental platform in the World\",\"line_one\":\"Find Your Best\",\"line_two\":\"Dream Car for Rental\",\"description_one\":\"Experience the ultimate in comfort, performance, and sophistication with our luxury car rentals. From sleek sedans and stylish coupes to spacious SUVs and elegant convertibles, we offer a range of premium vehicles to suit your preferences and lifestyle.\",\"thumbnail_image_one\":\"thumbnail_image_banner_one\\/7790e98c-3139-45bf-be12-3be24676febd_1744435889.png\"}', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -50545,13 +51136,39 @@ INSERT INTO `section_datas` (`id`, `language_id`, `section_id`, `datas`, `create
 --
 
 CREATE TABLE `sessions` (
-  `id` varchar(255) NOT NULL,
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `ip_address` varchar(45) DEFAULT NULL,
-  `user_agent` text DEFAULT NULL,
-  `payload` longtext NOT NULL,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text COLLATE utf8mb4_unicode_ci,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_activity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('04D8Bj3xoeJyrrymzjh1aGggaWn8TvM4wIXTfZH2', NULL, '162.158.55.28', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiaVN5TDlaa0ZEQmo0TkVvVmQzeVF0TEI4YTNyV1phdHBLWjA2WGxYRSI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjQ6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20vcGFnZXMvYWJvdXQtdXMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1745834262),
+('BC9u95jqlFtRrLkUAKAJnyaCW2ytyqh8392xfx7n', NULL, '172.69.221.51', 'Mozilla/5.0 (Linux; Android 7.0; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4590.2 Mobile Safari/537.36 Chrome-Lighthouse', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoibW1JRGRPQmg3NDZrSWg1WEJ3clRFbmhtRnRTZ291S2NkOU5ENkJ3eCI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1745818452),
+('BjTjFEvr6FHR4iVceLCtrs7E5wS0vDDESwQlpJfk', NULL, '172.69.129.190', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiTXltdEJQUFFrdUV0QmhkUXpla0FtMG1zVHZCN05aNEVTbWQwRTc3RyI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NzY6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20vdXNlci90cmFuc2xhdGlvbnMvd2ViL2hvbWUiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1745832337),
+('CWL88G6lTuCdZN3bTkUSB7IvyhkiTKNhuP92nPnZ', NULL, '172.69.221.52', 'Mozilla/5.0 (Linux; Android 7.0; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4590.2 Mobile Safari/537.36 Chrome-Lighthouse', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiRXBVemlaS3lvd3NXUmp6cFM5VTBSWXl1WDUzR1ZPR0JTMzc4ZWtiMSI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1745818478),
+('H5lZ4lUFhOke8OSV2U19hzrVzN6AkDRMqw5ZTis1', NULL, '172.69.221.51', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4590.2 Safari/537.36 Chrome-Lighthouse', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoibUZ2bDFGdzk3bWJMS1hYQVZ0dVNsSnhZZm41ckpCRG1NamJBVldJVyI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1745818474),
+('IdmDllvhEncCg1yeG6qoQVzy0RweezYdqyawNKyQ', NULL, '172.69.129.156', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiVjhJVzFmU3hBYUhPTTYxRXlSUWdvSVdrUEZQWEd4bnZzcVMybUlVVCI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6ODM6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20vdXNlci90cmFuc2xhdGlvbnMvd2ViL2hvbWUsY29tbW9uIjt9fQ==', 1745815547),
+('JIt3MLH08FhPbKVwL58hRRIV9dsD3gONHJf8D3IQ', NULL, '172.69.123.163', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiWWltY1Zya3RxS0VUSGZQNEhxT08zRHY3N215NU5iVkVoT1dOUUdhZSI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6ODM6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20vdXNlci90cmFuc2xhdGlvbnMvd2ViL2hvbWUsY29tbW9uIjt9fQ==', 1745819195),
+('JuxTbSqZG1Jo1ECzi3X1WkAvlJcDQImzRBA7DbPQ', NULL, '198.41.227.91', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36 Google-PageRenderer Google (+https://developers.google.com/+/web/snippet/)', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiSjJYN3FQNzhXcDRSY0h3OVVpdEVvczVidnZOSXNNajJBc29OS1p5dSI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1745818400),
+('KdFnPLlAa5TbAIJr3KU86mHXUTgZgEcYXw1uayof', NULL, '172.69.122.152', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiOTdpaHJ3TFVTQW9Fd2NPZ0p2VkJGTWpiaDUxd3dhdUtwMUN2MjJiYyI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1745835170),
+('Kn3z0x1JQ9on4lF6Y8dObC6xpUgKFDF5EHQ7aXec', NULL, '172.69.6.110', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36 Google-PageRenderer Google (+https://developers.google.com/+/web/snippet/)', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiU1liRlRGcUZrMFY2Qkp0OGhFVlQyUUt5OXpuc3BJOGs0M0tEdzRHMCI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1745818404),
+('lXdJioUVuTsHifRfHyhdiPqcgq9pTfCHJiwPpMY5', NULL, '172.69.129.155', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiUjdQRVVNRTJweFRQUExoVEZ1ZmZCQ2M0cHp1NTJPNjJZcnU0ZGx1cyI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NzY6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20vdXNlci90cmFuc2xhdGlvbnMvd2ViL2hvbWUiO31zOjE1OiJhcHBfbG9jYWxlX3VzZXIiO3M6MjoiZW4iO30=', 1745823021),
+('pZ3W8ZdWSOqtaZsiEC8a7kle4axjqVyybvxu5X9w', NULL, '172.69.131.206', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiSUV2a083WjA5MktXVUhCYXFhTHBnS2hRQzZWeUlDeUV6aVlWNnVoZSI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NzY6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20vdXNlci90cmFuc2xhdGlvbnMvd2ViL2hvbWUiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjE1OiJhcHBfbG9jYWxlX3VzZXIiO3M6MjoiZW4iO30=', 1745818593),
+('qyzgSIqPqH4JlzE6RQoAu0XFMUxVGf5kZ5ci68Aw', NULL, '172.69.221.51', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4590.2 Safari/537.36 Chrome-Lighthouse', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiUHFmbnNKNjVlMUJzejRjb2JBaElwRG43V05Nb2IxeTE5czBVaHNvaCI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1745818453),
+('rzVzAUJz6TV7kpXjN3MRmYvN4ThEhrE6QSh0XV5h', NULL, '198.41.227.90', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36 Google-PageRenderer Google (+https://developers.google.com/+/web/snippet/)', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiUjkxM1Vndkl4V0UwZkg2UEswQWZJd3hWOEM5RWw4SnlzaVhyVGJNcSI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1745818400),
+('sgMaC0L3QZtZY5AJWDVUji9iwUSspKNSDYRGMzQZ', NULL, '172.69.122.152', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo4OntzOjY6Il90b2tlbiI7czo0MDoiSDA4RXVyaUVkQUdpaXh0aHZxWGVlcE5EV1ZUbGdLYlZ1dVVwcEFsViI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTU6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20vbG9naW4iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUyOiJsb2dpbl9hZG1pbl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7czoxNToiYXBwX2xvY2FsZV91c2VyIjtzOjI6ImVuIjtzOjEyOiJpbnRlbmRlZF91cmwiO3M6NzE6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20vYm9va2luZy1jaGVja291dC9mb3JkIjtzOjE2OiJpbnRlbmRlZF9ib29raW5nIjthOjI6e3M6NDoic2x1ZyI7czo0OiJmb3JkIjtzOjQ6ImRhdGEiO2E6MTk6e3M6MTI6InZlaGljbGVfc2x1ZyI7czo0OiJmb3JkIjtzOjEwOiJ2ZWhpY2xlX2lkIjtzOjI6IjIwIjtzOjEwOiJwcmljZV90eXBlIjtzOjY6IndlZWtseSI7czoxMDoicmVudF92YWx1ZSI7czoxMToic2VsZl9waWNrdXAiO3M6MTY6ImZpbmFsX3ByaWNlX3JhdGUiO3M6NzoiMzUwMC4wMCI7czoxMjoiYXV0aF91c2VyX2lkIjtOO3M6MTA6InByaWNlX3JhdGUiO3M6NDoiMzUwMCI7czo5OiJyZW50X3R5cGUiO3M6Mjoib24iO3M6MTc6ImRlbGl2ZXJ5X2xvY2F0aW9uIjtOO3M6MjQ6ImRlbGl2ZXJ5X3JldHVybl9sb2NhdGlvbiI7TjtzOjE4OiJwaWNrdXBfbG9jYXRpb25faWQiO3M6MToiMyI7czoxNToicGlja3VwX2xvY2F0aW9uIjtzOjE6IjMiO3M6MTQ6InBpY2t1cF9yZW1lYmVyIjtzOjI6Im9uIjtzOjI1OiJwaWNrdXBfcmV0dXJuX2xvY2F0aW9uX2lkIjtzOjE6IjMiO3M6MjI6InBpY2t1cF9yZXR1cm5fbG9jYXRpb24iO3M6MToiMyI7czoxMToicGlja3VwX2RhdGUiO3M6MTA6IjI1LTA5LTIwMjUiO3M6MTE6InBpY2t1cF90aW1lIjtzOjU6IjExOjE1IjtzOjExOiJyZXR1cm5fZGF0ZSI7czoxMDoiMDItMTAtMjAyNSI7czoxMToicmV0dXJuX3RpbWUiO3M6NToiMTE6MTUiO319fQ==', 1745820544),
+('tYIAXvWtmagcuhkKjgm4WHsxDRYSgA9yF66bZbSQ', NULL, '172.69.129.155', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoianhEOE5NTE9FWWJLWjhFZUFhcUZndWtsNFFuQW5obm5VUGlRa3BPYiI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NzY6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20vdXNlci90cmFuc2xhdGlvbnMvd2ViL2hvbWUiO319', 1745819217),
+('x1PAgLhqY5m3ZwD5wSz9udcBvbJe9ElCH8xy1H7J', NULL, '172.69.6.110', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36 Google-PageRenderer Google (+https://developers.google.com/+/web/snippet/)', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiaDh5V09SMEpTZWFZRnJZd2JWeGVsZlBTVUJkUTJ3WmNxbzhMR3puUSI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1745818401),
+('yso7kYRBRAbu8FIufXEvfITgqNV96uLjIJOePURs', NULL, '172.69.123.162', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoieWxEODg5bjdtYktWaGRpRlkyMUJOOUVrTXNUMTROUHdCd1dHMHJUWCI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NzY6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20vdXNlci90cmFuc2xhdGlvbnMvd2ViL2hvbWUiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1745833735),
+('ysY2AcefVNSItnyo35gpbfcUEznVj6YgrCuHV5ZH', NULL, '198.41.227.90', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36 Google-PageRenderer Google (+https://developers.google.com/+/web/snippet/)', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiSlFLRlJFUzJBeDR5OENqb2JWUFJScGJFRFBOSjNXVjhkbFhTdG5wSSI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1745818403),
+('yT9mohNBSzv0dDaZzwDMAix1bYsypIDnEj2UzH5m', NULL, '198.41.227.91', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36 Google-PageRenderer Google (+https://developers.google.com/+/web/snippet/)', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiVUthMjd4Q3FyU2N0T0J3MlZESzdRM1p5ckJBcWVvQUdOUXZ5Q2l3SSI7czoxMDoiYXBwX2xvY2FsZSI7czoyOiJlbiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDk6Imh0dHBzOi8vZHJlYW1zcmVudC1sYXJhdmVsLmRyZWFtc3RlY2hub2xvZ2llcy5jb20iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1745818402);
 
 -- --------------------------------------------------------
 
@@ -50561,10 +51178,10 @@ CREATE TABLE `sessions` (
 
 CREATE TABLE `signature_settings` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `signature_name` varchar(255) NOT NULL,
-  `signature_image` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `is_default` tinyint(1) NOT NULL DEFAULT 0,
+  `signature_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `signature_image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `is_default` tinyint(1) NOT NULL DEFAULT '0',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -50578,11 +51195,11 @@ CREATE TABLE `signature_settings` (
 
 CREATE TABLE `sitemap_urls` (
   `id` int(11) NOT NULL,
-  `url` text DEFAULT NULL,
-  `sitemap_path` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `url` text,
+  `sitemap_path` text,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -50594,10 +51211,10 @@ CREATE TABLE `states` (
   `id` bigint(20) NOT NULL,
   `country_id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `status` int(11) NOT NULL DEFAULT 1,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `status` int(11) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `states`
@@ -54740,12 +55357,21 @@ CREATE TABLE `sub_taxes` (
 
 CREATE TABLE `tags` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `tag` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `tag` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tags`
+--
+
+INSERT INTO `tags` (`id`, `tag`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'CarLife', 1, '2025-04-22 20:07:27', '2025-04-22 20:07:27', NULL),
+(2, 'CarLovers', 1, '2025-04-22 20:07:41', '2025-04-22 20:07:41', NULL),
+(3, 'CarEnthusiast', 1, '2025-04-22 20:07:55', '2025-04-22 20:07:55', NULL);
 
 -- --------------------------------------------------------
 
@@ -54755,8 +55381,8 @@ CREATE TABLE `tags` (
 
 CREATE TABLE `tax_groups` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `tax_name` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `tax_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -54770,9 +55396,9 @@ CREATE TABLE `tax_groups` (
 
 CREATE TABLE `tax_rates` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `tax_name` varchar(255) NOT NULL,
+  `tax_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tax_rate` decimal(10,2) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -54786,7 +55412,7 @@ CREATE TABLE `tax_rates` (
 
 CREATE TABLE `team_sizes` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -54810,18 +55436,26 @@ INSERT INTO `team_sizes` (`id`, `name`, `deleted_at`, `created_at`, `updated_at`
 
 CREATE TABLE `testimonials` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT 1,
-  `customer_name` varchar(255) NOT NULL,
-  `review` text NOT NULL,
-  `image` varchar(255) DEFAULT NULL,
+  `language_id` int(11) DEFAULT '1',
+  `customer_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `review` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ratings` int(11) DEFAULT NULL,
-  `location` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `location` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `order_by` int(11) DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `testimonials`
+--
+
+INSERT INTO `testimonials` (`id`, `language_id`, `customer_name`, `review`, `image`, `ratings`, `location`, `status`, `order_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'john', 'good service, pickup and drop was on time', 'testimonials/7XKGrfGK3H1xDlZVgtm55xYid9YNzaICBDtcsaI9.jpg', 4, NULL, 1, NULL, NULL, '2025-04-24 12:57:29', '2025-04-24 12:57:29'),
+(2, 1, 'david', 'can be even more better in reaching out the user', 'testimonials/e4gTEAN4Z1zBhVsMtaM6fJD3qpRwtLuq55LF5Fec.jpg', 3, NULL, 1, NULL, NULL, '2025-04-24 12:58:19', '2025-04-24 12:58:19');
 
 -- --------------------------------------------------------
 
@@ -54831,15 +55465,15 @@ CREATE TABLE `testimonials` (
 
 CREATE TABLE `tickets` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `ticket_id` varchar(255) NOT NULL,
-  `priority` varchar(200) NOT NULL,
+  `ticket_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `priority` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `subject` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `user_type` varchar(200) NOT NULL,
-  `status` int(11) NOT NULL DEFAULT 1,
-  `reply_description` text DEFAULT NULL,
-  `attachment` text DEFAULT NULL,
+  `subject` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `user_type` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` int(11) NOT NULL DEFAULT '1',
+  `reply_description` text COLLATE utf8mb4_unicode_ci,
+  `attachment` text COLLATE utf8mb4_unicode_ci,
   `assignee_id` bigint(20) UNSIGNED DEFAULT NULL,
   `created_by` bigint(20) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -54847,6 +55481,13 @@ CREATE TABLE `tickets` (
   `updated_by` bigint(20) UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tickets`
+--
+
+INSERT INTO `tickets` (`id`, `ticket_id`, `priority`, `user_id`, `subject`, `description`, `user_type`, `status`, `reply_description`, `attachment`, `assignee_id`, `created_by`, `created_at`, `updated_at`, `updated_by`, `deleted_at`) VALUES
+(1, 'TICKET-000001', 'Low', 4, '3', '<p>i need refund for car diverted in between</p>', '3', 2, NULL, NULL, 3, 4, '2025-04-24 15:26:11', '2025-04-25 11:09:20', 4, NULL);
 
 -- --------------------------------------------------------
 
@@ -54856,7 +55497,7 @@ CREATE TABLE `tickets` (
 
 CREATE TABLE `ticket_categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -54881,11 +55522,11 @@ CREATE TABLE `ticket_histories` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `ticket_id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `description` longtext NOT NULL,
+  `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_by` bigint(20) UNSIGNED DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_by` bigint(20) UNSIGNED DEFAULT NULL,
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -54897,10 +55538,10 @@ CREATE TABLE `ticket_histories` (
 
 CREATE TABLE `timezones` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `utc_offset` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `utc_offset` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -55288,9 +55929,9 @@ INSERT INTO `timezones` (`id`, `name`, `utc_offset`, `created_at`, `updated_at`)
 CREATE TABLE `time_formats` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `time_formats`
@@ -55316,9 +55957,9 @@ INSERT INTO `time_formats` (`id`, `name`, `created_at`, `updated_at`) VALUES
 
 CREATE TABLE `translation_languages` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `code` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -55344,9 +55985,9 @@ INSERT INTO `translation_languages` (`id`, `name`, `code`, `status`, `created_at
 
 CREATE TABLE `transmissions` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `language_id` int(11) DEFAULT 1,
-  `name` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `language_id` int(11) DEFAULT '1',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -55359,8 +56000,8 @@ CREATE TABLE `transmissions` (
 INSERT INTO `transmissions` (`id`, `language_id`, `name`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, 'Manual', 1, '2025-04-22 20:56:20', '2025-04-22 20:56:20', NULL),
 (2, 1, 'Automatic', 1, '2025-04-22 20:56:27', '2025-04-22 20:56:27', NULL),
-(3, 1, 'Automated Manual', 1, '2025-04-22 20:56:49', '2025-04-22 20:56:49', NULL),
-(4, 1, 'Electric Vehicle', 1, '2025-04-22 20:56:58', '2025-04-22 20:56:58', NULL);
+(3, 1, 'Automated', 1, '2025-04-22 20:56:49', '2025-04-25 15:36:55', NULL),
+(4, 1, 'Electric', 1, '2025-04-22 20:56:58', '2025-04-25 15:37:02', NULL);
 
 -- --------------------------------------------------------
 
@@ -55370,23 +56011,37 @@ INSERT INTO `transmissions` (`id`, `language_id`, `name`, `status`, `created_at`
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_type` int(11) DEFAULT NULL,
-  `email` varchar(255) NOT NULL,
-  `phone_number` varchar(20) DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone_number` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `region_id` int(11) DEFAULT NULL,
-  `language_id` int(11) NOT NULL DEFAULT 1,
+  `language_id` int(11) NOT NULL DEFAULT '1',
   `role_id` int(11) DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_password_changed_at` timestamp NULL DEFAULT NULL,
-  `google_auth_enabled` tinyint(1) NOT NULL DEFAULT 0,
-  `remember_token` varchar(100) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `google_auth_enabled` tinyint(1) NOT NULL DEFAULT '0',
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `user_type`, `email`, `phone_number`, `region_id`, `language_id`, `role_id`, `email_verified_at`, `password`, `last_password_changed_at`, `google_auth_enabled`, `remember_token`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Admin', 1, 'admindgt@yopmail.com', '+19823874672364', NULL, 1, 1, NULL, '$2y$12$uAojJzOrvUljRhBPH1xVTO5djaF9vewExDRJLaFWcH1QrOoP5N1l6', NULL, 0, 'Rr3GTvMzqJeHMaNEpPely8ZxuO3XLGd7V9TIUtJGAyyxJdAW0P0Z9fCq2dk3', 1, '2025-04-21 06:53:09', '2025-04-25 15:04:31', NULL),
+(2, 'vrone', 3, 'vrone@yopmail.com', '+1989898989898', NULL, 1, NULL, NULL, '$2y$12$lH80zWTMZhFZUQW7wZvxseCbv4vUUjybbSl2wDt/tuaaDbsOMwUj6', NULL, 0, NULL, 1, '2025-04-22 16:13:00', '2025-04-26 15:04:49', NULL),
+(3, 'DemoAdmin', 2, 'demoadmin@example.com', '+198765432456', NULL, 1, 1, NULL, '$2y$12$ZvubWextHaU8/MvcaU4FH.ioAjgcp.AHvbjtfF/5jrcX4zYzwY7OG', NULL, 0, 'UucNLcXjX67v5qw74rY4MDt6tBISrNwep8J5RGMb5KBEL42tfWprTozWS6nq', 1, '2025-04-22 17:24:14', '2025-04-24 16:50:43', NULL),
+(4, 'DemoUser', 3, 'demouser@example.com', '+1333343432323', 2, 1, NULL, NULL, '$2y$12$DTmO9H4kXvA9YG116vjFPOtnnT1tviSzJAC.zZ.WYsNH3juOe1vRq', NULL, 0, NULL, 1, '2025-04-22 17:34:08', '2025-04-25 11:08:42', NULL),
+(5, 'andrew', 3, 'andrew@emaple.com', '+1873278642364', NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 1, '2025-04-24 13:50:40', '2025-04-26 13:51:54', NULL),
+(6, 'ken john', 2, 'kj@yopmail.com', '+18877878789', NULL, 1, 1, NULL, '$2y$12$zR5s20I.bZCCqYrIXlDDBelNI..4OCg9wwPhzuWICn1D0y0DYICq2', NULL, 0, NULL, 1, '2025-04-24 15:29:50', '2025-04-24 15:29:50', NULL),
+(7, 'mathew', 3, 'mathew@example.com', '+14477878788', NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 1, '2025-04-25 09:16:50', '2025-04-26 13:52:31', NULL),
+(8, 'John', 3, 'john@exaplme.com', '+18877878788', NULL, 1, NULL, NULL, '$2y$12$nhETr21.9zikTM/Xz/.dI.9QiSHErON1FcxzgNSDfvbfCuGZmY8tW', NULL, 0, NULL, 1, '2025-04-25 13:41:02', '2025-04-26 15:03:36', NULL);
 
 -- --------------------------------------------------------
 
@@ -55397,28 +56052,42 @@ CREATE TABLE `users` (
 CREATE TABLE `user_details` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `parent_id` int(11) NOT NULL DEFAULT 0,
-  `profile_image` varchar(255) DEFAULT NULL,
-  `first_name` varchar(255) DEFAULT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
-  `mobile_number` varchar(20) DEFAULT NULL,
-  `gender` enum('male','female','other') DEFAULT NULL,
+  `parent_id` int(11) NOT NULL DEFAULT '0',
+  `profile_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `mobile_number` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gender` enum('male','female','other') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `dob` date DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL,
-  `card_number` varchar(255) DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `card_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date_of_issue` date DEFAULT NULL,
   `valid_date` date DEFAULT NULL,
   `country_id` int(11) DEFAULT NULL,
   `state_id` int(11) DEFAULT NULL,
   `city_id` int(11) DEFAULT NULL,
-  `postal_code` varchar(20) DEFAULT NULL,
-  `currency_code` varchar(10) DEFAULT NULL,
+  `postal_code` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `currency_code` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `latitude` decimal(10,8) DEFAULT NULL,
   `longitude` decimal(11,8) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_details`
+--
+
+INSERT INTO `user_details` (`id`, `user_id`, `parent_id`, `profile_image`, `first_name`, `last_name`, `mobile_number`, `gender`, `dob`, `address`, `card_number`, `date_of_issue`, `valid_date`, `country_id`, `state_id`, `city_id`, `postal_code`, `currency_code`, `latitude`, `longitude`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 0, 'profile_photos/1Qof6SKUQTNDUIYM8fFQkmkoNxS07fzveMkrErID.jpg', 'Admin', 'User', '+19823874672364', NULL, NULL, '150,', NULL, NULL, NULL, 101, 4, 319, '328787', NULL, NULL, NULL, '2025-04-21 06:53:09', '2025-04-25 15:05:58', NULL),
+(2, 2, 0, NULL, 'Wiliam', 'R', NULL, 'male', '2025-04-26', 'New Usa', '12131313123213213', '2025-04-26', '2025-04-26', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-22 16:13:00', '2025-04-26 15:04:49', NULL),
+(3, 3, 0, 'profile/804e7681-e4e9-4460-ab9b-70968680ea40_1745322854.jpg', 'Demo', 'Admin', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-22 17:24:14', '2025-04-22 17:24:14', NULL),
+(4, 4, 0, 'profile/234a0172-de11-40ba-8214-e5047b5b1191_1745497906.jpg', 'Demouser', 'one', '+1333343432323', NULL, NULL, 'river sd', NULL, NULL, NULL, 231, 3956, 48019, '12345', NULL, NULL, NULL, '2025-04-22 17:34:08', '2025-04-24 18:01:46', NULL),
+(5, 5, 0, 'profile/004ab287-a555-40c6-9631-e78be6995126_1745482840.jpg', 'Andrew', 'K', NULL, 'male', '2024-12-10', '150, Test', '892377823KIUIU', '2025-04-23', '2025-09-02', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-24 13:50:40', '2025-04-26 13:51:54', NULL),
+(6, 6, 1, 'profile/9d2d6ec0-741e-4f5d-b2bc-88de1e7d07b0_1745488790.jpg', 'ken', 'john', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-24 15:29:50', '2025-04-24 15:29:50', NULL),
+(7, 7, 0, 'profile/98f7bc85-0976-41ee-a2f9-f2ebdd6a3d58_1745552810.jpg', 'mathew', 'john', NULL, 'other', '2025-04-09', 'no 12, west street', '338898989999', '2025-03-30', '2025-05-10', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-25 09:16:50', '2025-04-26 13:52:31', NULL),
+(8, 8, 0, 'profile/35222b43-4f5a-45bd-b409-710d49ac9627_1745582441.jpg', 'john', 'kevin', NULL, 'other', '2025-04-25', 'no 12, greev road', '1122323433344', '2025-04-25', '2025-04-25', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-25 13:41:02', '2025-04-26 15:03:36', NULL);
 
 -- --------------------------------------------------------
 
@@ -55436,7 +56105,80 @@ CREATE TABLE `user_devices` (
   `location` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `user_devices`
+--
+
+INSERT INTO `user_devices` (`id`, `user_id`, `device_type`, `browser`, `os`, `ip_address`, `location`, `created_at`, `updated_at`) VALUES
+(12, 4, 'WebKit', 'Chrome', 'Windows', '172.69.131.142', 'India / Chennai', '2025-04-22 17:36:08', '2025-04-22 17:36:08'),
+(28, 4, '0', 'Firefox', 'Windows', '172.69.129.190', 'India / Chennai', '2025-04-23 10:07:13', '2025-04-23 10:07:13'),
+(45, 4, 'WebKit', 'Chrome', 'Windows', '172.68.127.222', 'India / Kolkata', '2025-04-24 07:05:12', '2025-04-24 07:05:12'),
+(50, 4, 'WebKit', 'Chrome', 'Windows', '172.68.146.204', 'India / Chennai', '2025-04-24 12:39:14', '2025-04-24 12:39:14'),
+(52, 4, 'WebKit', 'Chrome', 'Windows', '172.69.129.156', 'India / Chennai', '2025-04-24 13:38:19', '2025-04-24 13:38:19'),
+(58, 4, 'WebKit', 'Chrome', 'Windows', '172.69.131.141', 'India / Chennai', '2025-04-24 15:16:45', '2025-04-24 15:16:45'),
+(59, 4, 'WebKit', 'Chrome', 'Windows', '172.69.122.152', 'India / Chennai', '2025-04-24 15:20:12', '2025-04-24 15:20:12'),
+(63, 3, 'WebKit', 'Chrome', 'Windows', '162.158.54.102', 'India / Chennai', '2025-04-24 16:57:17', '2025-04-24 16:57:17'),
+(64, 3, '0', 'Firefox', 'Windows', '172.69.123.162', 'India / Chennai', '2025-04-24 17:15:21', '2025-04-24 17:15:21'),
+(65, 3, 'WebKit', 'Chrome', 'Windows', '172.69.123.162', 'India / Chennai', '2025-04-24 17:19:19', '2025-04-24 17:19:19'),
+(66, 3, 'WebKit', 'Chrome', 'Windows', '172.69.129.189', 'India / Chennai', '2025-04-24 17:22:51', '2025-04-24 17:22:51'),
+(67, 1, 'WebKit', 'Chrome', 'Windows', '172.69.129.155', 'India / Chennai', '2025-04-24 17:50:25', '2025-04-24 17:50:25'),
+(68, 3, 'WebKit', 'Chrome', 'Windows', '172.69.123.162', 'India / Chennai', '2025-04-24 18:13:01', '2025-04-24 18:13:01'),
+(69, 3, 'WebKit', 'Chrome', 'Windows', '172.68.127.224', 'India / Kolkata', '2025-04-24 18:31:45', '2025-04-24 18:31:45'),
+(70, 4, '0', 'Firefox', 'Windows', '172.69.131.206', 'India / Chennai', '2025-04-24 18:43:43', '2025-04-24 18:43:43'),
+(71, 4, 'WebKit', 'Chrome', 'Windows', '172.69.122.153', 'India / Chennai', '2025-04-24 18:47:08', '2025-04-24 18:47:08'),
+(72, 4, '0', 'Firefox', 'Windows', '172.69.131.205', 'India / Chennai', '2025-04-24 18:48:28', '2025-04-24 18:48:28'),
+(73, 4, 'WebKit', 'Chrome', 'Windows', '172.69.131.142', 'India / Chennai', '2025-04-24 19:07:36', '2025-04-24 19:07:36'),
+(74, 4, 'WebKit', 'Chrome', 'Windows', '172.69.131.142', 'India / Chennai', '2025-04-24 19:07:56', '2025-04-24 19:07:56'),
+(75, 3, 'WebKit', 'Chrome', 'Windows', '162.158.55.27', 'India / Chennai', '2025-04-24 19:23:06', '2025-04-24 19:23:06'),
+(76, 1, 'WebKit', 'Chrome', 'Windows', '172.69.178.63', 'India / Mumbai', '2025-04-24 22:42:22', '2025-04-24 22:42:22'),
+(77, 1, 'WebKit', 'Chrome', 'Windows', '172.70.219.96', 'India / Mumbai', '2025-04-24 23:50:47', '2025-04-24 23:50:47'),
+(78, 1, 'WebKit', 'Chrome', 'Windows', '172.69.95.198', 'India / Mumbai', '2025-04-24 23:52:40', '2025-04-24 23:52:40'),
+(79, 1, 'WebKit', 'Chrome', 'Windows', '172.68.147.197', 'India / Chennai', '2025-04-25 08:54:09', '2025-04-25 08:54:09'),
+(80, 1, 'WebKit', 'Chrome', 'Windows', '172.69.129.189', 'India / Chennai', '2025-04-25 09:12:53', '2025-04-25 09:12:53'),
+(81, 1, 'WebKit', 'Chrome', 'Windows', '172.69.129.156', 'India / Chennai', '2025-04-25 09:18:18', '2025-04-25 09:18:18'),
+(82, 4, 'WebKit', 'Chrome', 'Windows', '162.158.54.79', 'India / Chennai', '2025-04-25 09:31:14', '2025-04-25 09:31:14'),
+(83, 4, 'WebKit', 'Chrome', 'Windows', '172.69.131.206', 'India / Chennai', '2025-04-25 09:32:05', '2025-04-25 09:32:05'),
+(84, 3, 'WebKit', 'Chrome', 'Windows', '172.69.129.155', 'India / Chennai', '2025-04-25 09:53:08', '2025-04-25 09:53:08'),
+(85, 1, 'WebKit', 'Chrome', 'Windows', '172.68.146.204', 'India / Chennai', '2025-04-25 09:57:02', '2025-04-25 09:57:02'),
+(86, 3, 'WebKit', 'Chrome', 'Windows', '162.158.55.44', 'India / Chennai', '2025-04-25 10:10:50', '2025-04-25 10:10:50'),
+(87, 3, 'WebKit', 'Chrome', 'Windows', '172.68.239.135', 'India / Bangalore', '2025-04-25 10:29:06', '2025-04-25 10:29:06'),
+(88, 1, 'WebKit', 'Chrome', 'Windows', '172.69.131.205', 'India / Chennai', '2025-04-25 10:59:33', '2025-04-25 10:59:33'),
+(89, 1, 'WebKit', 'Chrome', 'Windows', '172.69.129.155', 'India / Chennai', '2025-04-25 12:38:42', '2025-04-25 12:38:42'),
+(90, 4, 'WebKit', 'Chrome', 'Windows', '172.69.131.205', 'India / Chennai', '2025-04-25 13:34:23', '2025-04-25 13:34:23'),
+(91, 4, '0', 'Firefox', 'Windows', '172.69.131.142', 'India / Chennai', '2025-04-25 13:35:44', '2025-04-25 13:35:44'),
+(92, 4, 'WebKit', 'Chrome', 'Windows', '172.68.147.196', 'India / Chennai', '2025-04-25 13:38:34', '2025-04-25 13:38:34'),
+(93, 1, 'WebKit', 'Chrome', 'Windows', '172.68.155.207', 'India / Hyderabad', '2025-04-25 14:01:10', '2025-04-25 14:01:10'),
+(94, 1, 'WebKit', 'Chrome', 'Windows', '172.69.129.155', 'India / Chennai', '2025-04-25 14:14:23', '2025-04-25 14:14:23'),
+(95, 1, 'WebKit', 'Chrome', 'Windows', '172.69.131.205', 'India / Chennai', '2025-04-25 15:25:36', '2025-04-25 15:25:36'),
+(96, 1, 'WebKit', 'Chrome', 'Windows', '172.69.94.35', 'India / Mumbai', '2025-04-25 15:27:44', '2025-04-25 15:27:44'),
+(97, 1, 'WebKit', 'Chrome', 'Windows', '162.158.54.102', 'India / Chennai', '2025-04-25 15:36:38', '2025-04-25 15:36:38'),
+(98, 3, '0', 'Firefox', 'Windows', '172.69.122.152', 'India / Chennai', '2025-04-25 16:03:17', '2025-04-25 16:03:17'),
+(99, 1, 'WebKit', 'Chrome', 'Windows', '172.68.147.197', 'India / Chennai', '2025-04-25 16:05:34', '2025-04-25 16:05:34'),
+(100, 4, '0', 'Firefox', 'Windows', '172.69.129.156', 'India / Chennai', '2025-04-25 16:06:18', '2025-04-25 16:06:18'),
+(101, 4, 'WebKit', 'Chrome', 'Windows', '162.158.54.103', 'India / Chennai', '2025-04-25 16:09:13', '2025-04-25 16:09:13'),
+(102, 4, 'WebKit', 'Chrome', 'Windows', '172.69.131.205', 'India / Chennai', '2025-04-25 16:09:21', '2025-04-25 16:09:21'),
+(103, 1, 'WebKit', 'Chrome', 'Windows', '172.69.131.142', 'India / Chennai', '2025-04-25 16:18:25', '2025-04-25 16:18:25'),
+(104, 3, '0', 'Firefox', 'Windows', '172.69.123.162', 'India / Chennai', '2025-04-25 16:19:42', '2025-04-25 16:19:42'),
+(105, 1, 'WebKit', 'Chrome', 'Windows', '172.69.123.163', 'India / Chennai', '2025-04-25 16:40:36', '2025-04-25 16:40:36'),
+(106, 1, 'WebKit', 'Chrome', 'Windows', '172.69.131.206', 'India / Chennai', '2025-04-25 16:43:16', '2025-04-25 16:43:16'),
+(107, 1, 'WebKit', 'Chrome', 'Windows', '162.158.54.102', 'India / Chennai', '2025-04-25 16:50:14', '2025-04-25 16:50:14'),
+(108, 3, 'WebKit', 'Chrome', 'Windows', '162.158.55.27', 'India / Chennai', '2025-04-25 16:51:39', '2025-04-25 16:51:39'),
+(109, 3, 'WebKit', 'Edge', 'Windows', '172.69.123.162', 'India / Chennai', '2025-04-25 16:53:44', '2025-04-25 16:53:44'),
+(110, 1, 'WebKit', 'Chrome', 'Windows', '172.69.129.189', 'India / Chennai', '2025-04-25 16:54:26', '2025-04-25 16:54:26'),
+(111, 1, 'WebKit', 'Chrome', 'Windows', '172.69.122.153', 'India / Chennai', '2025-04-25 16:57:31', '2025-04-25 16:57:31'),
+(112, 3, '0', 'Firefox', 'Windows', '172.69.131.205', 'India / Chennai', '2025-04-25 16:59:19', '2025-04-25 16:59:19'),
+(113, 4, 'WebKit', 'Chrome', 'Windows', '162.158.54.78', 'India / Chennai', '2025-04-25 17:26:15', '2025-04-25 17:26:15'),
+(114, 3, 'WebKit', 'Chrome', 'Windows', '172.69.129.156', 'India / Chennai', '2025-04-25 17:51:18', '2025-04-25 17:51:18'),
+(115, 1, 'WebKit', 'Chrome', 'Windows', '172.69.123.163', 'India / Chennai', '2025-04-26 08:07:57', '2025-04-26 08:07:57'),
+(116, 1, 'WebKit', 'Chrome', 'Windows', '172.68.146.204', 'India / Chennai', '2025-04-26 08:35:03', '2025-04-26 08:35:03'),
+(117, 1, 'WebKit', 'Chrome', 'Windows', '172.68.147.196', 'India / Chennai', '2025-04-26 09:09:07', '2025-04-26 09:09:07'),
+(118, 1, 'WebKit', 'Chrome', 'Windows', '172.69.131.142', 'India / Chennai', '2025-04-26 09:15:41', '2025-04-26 09:15:41'),
+(119, 1, 'WebKit', 'Chrome', 'Windows', '172.69.123.162', 'India / Chennai', '2025-04-26 10:01:05', '2025-04-26 10:01:05'),
+(120, 1, 'WebKit', 'Chrome', 'Windows', '172.69.131.206', 'India / Chennai', '2025-04-26 12:41:55', '2025-04-26 12:41:55'),
+(121, 1, 'WebKit', 'Chrome', 'Windows', '172.68.147.196', 'India / Chennai', '2025-04-26 13:04:29', '2025-04-26 13:04:29'),
+(122, 1, 'WebKit', 'Chrome', 'Windows', '172.69.94.147', 'India / Mumbai', '2025-04-28 09:42:03', '2025-04-28 09:42:03');
 
 -- --------------------------------------------------------
 
@@ -55447,10 +56189,20 @@ CREATE TABLE `user_devices` (
 CREATE TABLE `user_documents` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
-  `document` varchar(255) DEFAULT NULL,
+  `document` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_documents`
+--
+
+INSERT INTO `user_documents` (`id`, `user_id`, `document`, `created_at`, `updated_at`) VALUES
+(1, 5, 'documents/27772447-32db-4f8e-91e3-7a7bf7c0ea0c_1745482840.jpg', '2025-04-24 13:50:40', '2025-04-24 13:50:40'),
+(2, 5, 'documents/8f34c39b-f51c-4826-91ef-d5b3c7808539_1745483006.pdf', '2025-04-24 13:53:26', '2025-04-24 13:53:26'),
+(4, 7, 'documents/59cf2d7c-d301-45d9-899a-00ac8c8da7b5_1745552810.pdf', '2025-04-25 09:16:50', '2025-04-25 09:16:50'),
+(5, 8, 'documents/38864dcb-5977-4e79-b0e8-f8e27bc4b8e8_1745582441.pdf', '2025-04-25 17:30:41', '2025-04-25 17:30:41');
 
 -- --------------------------------------------------------
 
@@ -55461,13 +56213,20 @@ CREATE TABLE `user_documents` (
 CREATE TABLE `vehicle_damages` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
-  `image` varchar(255) NOT NULL,
-  `damage_loaction` varchar(255) NOT NULL,
-  `damage_type` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `damage_loaction` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `damage_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `vehicle_damages`
+--
+
+INSERT INTO `vehicle_damages` (`id`, `vehicle_id`, `image`, `damage_loaction`, `damage_type`, `description`, `created_at`, `updated_at`) VALUES
+(1, 2, 'VehicleDamage/6809e154dcb1f.png', 'Interior', 'Scratch', 'scratch is present', '2025-04-24 12:29:32', '2025-04-24 12:29:32');
 
 -- --------------------------------------------------------
 
@@ -55479,7 +56238,7 @@ CREATE TABLE `vehicle_extra_services` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
   `extra_service_id` bigint(20) UNSIGNED NOT NULL,
-  `value` varchar(255) NOT NULL,
+  `value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -55490,12 +56249,19 @@ CREATE TABLE `vehicle_extra_services` (
 --
 
 INSERT INTO `vehicle_extra_services` (`id`, `vehicle_id`, `extra_service_id`, `value`, `price`, `created_at`, `updated_at`) VALUES
-(12, 2, 1, 'per_day', 5.00, '2025-04-25 10:02:46', '2025-04-25 10:02:46'),
-(14, 3, 1, 'per_day', 4.00, '2025-04-25 11:06:20', '2025-04-25 11:06:20'),
-(16, 5, 1, 'per_day', 500.00, '2025-04-25 11:12:11', '2025-04-25 11:12:11'),
-(17, 6, 1, 'per_day', 4.00, '2025-04-25 11:36:04', '2025-04-25 11:36:04'),
-(18, 4, 1, 'per_day', 180.00, '2025-04-25 11:41:07', '2025-04-25 11:41:07'),
-(19, 1, 1, 'per_day', 20.00, '2025-04-25 12:11:44', '2025-04-25 12:11:44');
+(12, 2, 1, 'per_day', '5.00', '2025-04-25 10:02:46', '2025-04-25 10:02:46'),
+(16, 5, 1, 'per_day', '500.00', '2025-04-25 11:12:11', '2025-04-25 11:12:11'),
+(18, 4, 1, 'per_day', '180.00', '2025-04-25 11:41:07', '2025-04-25 11:41:07'),
+(34, 1, 1, 'per_day', '20.00', '2025-04-25 16:02:31', '2025-04-25 16:02:31'),
+(36, 38, 1, 'one_time', '0.00', '2025-04-25 16:14:26', '2025-04-25 16:14:26'),
+(37, 19, 1, 'one_time', '0.00', '2025-04-25 16:15:03', '2025-04-25 16:15:03'),
+(38, 3, 1, 'per_day', '4.00', '2025-04-25 16:15:47', '2025-04-25 16:15:47'),
+(39, 43, 1, 'one_time', '0.00', '2025-04-25 16:16:15', '2025-04-25 16:16:15'),
+(40, 20, 1, 'one_time', '0.00', '2025-04-25 16:16:43', '2025-04-25 16:16:43'),
+(41, 6, 1, 'per_day', '4.00', '2025-04-25 16:17:10', '2025-04-25 16:17:10'),
+(42, 44, 1, 'per_day', '5.00', '2025-04-25 17:58:28', '2025-04-25 17:58:28'),
+(43, 41, 1, 'one_time', '0.00', '2025-04-26 08:14:33', '2025-04-26 08:14:33'),
+(44, 42, 1, 'one_time', '0.00', '2025-04-26 08:15:32', '2025-04-26 08:15:32');
 
 -- --------------------------------------------------------
 
@@ -55506,12 +56272,19 @@ INSERT INTO `vehicle_extra_services` (`id`, `vehicle_id`, `extra_service_id`, `v
 CREATE TABLE `vehicle_faqs` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
-  `question` varchar(255) NOT NULL,
-  `answer` text NOT NULL,
+  `question` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `answer` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `vehicle_faqs`
+--
+
+INSERT INTO `vehicle_faqs` (`id`, `vehicle_id`, `question`, `answer`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(6, 2, 'how is the car i.e automatic or manual?', 'automatic', '2025-04-25 10:02:46', '2025-04-25 10:02:46', NULL);
 
 -- --------------------------------------------------------
 
@@ -55552,18 +56325,38 @@ CREATE TABLE `vehicle_info` (
   `vehicle_metatitle` varchar(100) NOT NULL,
   `vehicle_metadesc` varchar(255) DEFAULT NULL,
   `vehicle_metakeywords` varchar(255) DEFAULT NULL,
-  `description` longtext DEFAULT NULL,
+  `description` longtext,
   `features` varchar(225) DEFAULT NULL,
-  `popular` int(11) DEFAULT 1,
-  `recommended` int(11) DEFAULT 1,
-  `feature` int(11) DEFAULT 1,
+  `popular` int(11) DEFAULT '1',
+  `recommended` int(11) DEFAULT '1',
+  `feature` int(11) DEFAULT '1',
   `views` int(11) DEFAULT NULL,
-  `status` int(11) NOT NULL DEFAULT 1,
+  `status` int(11) NOT NULL DEFAULT '1',
   `created_by` int(11) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `vehicle_info`
+--
+
+INSERT INTO `vehicle_info` (`id`, `parent_id`, `language_id`, `name`, `vehicle_image`, `perma_link`, `slug`, `category_id`, `type_id`, `brand_id`, `model_id`, `plate_number`, `vin`, `main_location_id`, `other_location_id`, `fuel_type_id`, `odometer`, `color_id`, `year`, `transmission_id`, `mileage`, `passenger_capacity`, `num_seats`, `num_doors`, `num_airbags`, `vehicle_price`, `vehicle_basekm`, `vehicle_extrakmprice`, `vehicle_video`, `vehicle_metatitle`, `vehicle_metadesc`, `vehicle_metakeywords`, `description`, `features`, `popular`, `recommended`, `feature`, `views`, `status`, `created_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 0, 1, 'Audi A7', 'vehicles/ba32dbf8-e9bc-47f1-9292-e8feb0d3a825_1745563304.jpg', 'https://www.example.com/cars/audi-a7', 'audi-a7', 1, 5, 1, 3, 'IN A7030E', 'A1212', 2, '[\"2\",\"1\"]', 1, 1000, 4, 2025, 1, '5.00', 4, 4, 4, 6, '[{\"daily\":\"100\",\"weekly\":\"600\"}]', NULL, NULL, NULL, 'Audi A7', 'Audi A7', 'Audi A7', '<p><span style=\"color: rgb(28, 32, 41); font-family: poppins, Arial, sans-serif; font-size: 17px;\">The new Audi wagon also has wide wheel arches that add a sporty aesthetic. Retractable door handles improve the car\'s aerodynamics. The current A6 Avant is about 16 feet long, and the new one likely has roughly the same footprint.<br></span></p><p style=\"--tw-border-spacing-x: 0; --tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; --tw-shadow: 0 0 transparent; --tw-shadow-colored: 0 0 transparent; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; border: 0px; margin-right: 0px; margin-bottom: 28px; margin-left: 0px; font-size: 17px; outline-style: initial; outline-width: 0px; padding: 0px; vertical-align: baseline; color: rgb(28, 32, 41); font-family: poppins, Arial, sans-serif;\">Unfortunately, we have no details about the A7\'s interior. To compete against the BMW 5 Series and Mercedes-Benz E-Class, it must offer impressive tech like big screens and cutting-edge driving assistance features.</p><p style=\"--tw-border-spacing-x: 0; --tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgba(59,130,246,.5); --tw-ring-offset-shadow: 0 0 transparent; --tw-ring-shadow: 0 0 transparent; --tw-shadow: 0 0 transparent; --tw-shadow-colored: 0 0 transparent; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; border: 0px; margin-right: 0px; margin-bottom: 28px; margin-left: 0px; font-size: 17px; outline-style: initial; outline-width: 0px; padding: 0px; vertical-align: baseline; color: rgb(28, 32, 41); font-family: poppins, Arial, sans-serif;\">Look for Audi to introduce the A7 sedan first and follow up with the Avant. The two should share cabin setups other than the wagon\'s ability to haul more in the back.</p>', '[1,2,3,4]', 1, 1, 1, 13, 1, 1, '2025-04-23 14:44:48', '2025-04-26 11:45:26', NULL),
+(2, 0, 1, 'Sonnet kia', 'vehicles/e6448699-4f5a-4202-b71b-a6c29f334f3d_1745477972.jpg', 'https://www.example.com/cars/sonnet-kia', 'sonnet-kia', 1, 5, 5, 12, 'BE 112u7', '44335', 3, '[\"4\",\"3\",\"1\"]', 1, NULL, 4, 2020, NULL, NULL, 6, 6, 4, 2, '[{\"daily\":\"200\",\"weekly\":\"2000\",\"yearly\":\"90000\"}]', '10.00', '100.00', NULL, 'kia', 'kia sonnet', 'kia sonnet', '<div class=\"WaaZC\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\"><div class=\"RJPOee EIJn2\" style=\"animation: auto ease 0s 1 normal none running none !important;\"><div class=\"rPeykc\" data-hveid=\"CAkQAQ\" data-ved=\"2ahUKEwjYko7FhfCMAxU5ZWwGHTcLNeMQo_EKegQICRAB\" style=\"margin: 0px 0px 20px; hyphens: auto;\"><span style=\"color: rgb(71, 71, 71); font-size: 16px;\">Kia Corporation was founded in May 1944 and is korea\'s oldest manufacturer of motor vehicles</span><span style=\"color: rgb(71, 71, 71); font-size: 16px;\">. From humble origins making bicycles and motorcycles, Kia has grown – as part of the dynamic, global Hyundai-Kia Automotive Group – to become the world\'s fifth largest vehicle manufacturer.&nbsp;</span></div></div></div>', '[1,2,3,4]', 1, 1, 1, 32, 1, 1, '2025-04-24 12:29:32', '2025-04-26 07:31:56', '2025-04-25 12:38:57'),
+(3, 0, 1, 'Bolero', 'vehicles/8ed3e9af-68c5-4406-b00f-8e03f0c6a1b9_1745559380.jpg', 'https://www.example.com/cars/bolero', 'bolero', 1, 5, 5, 12, 'A2211', 'frr44444', 3, '[\"4\",\"3\",\"2\",\"1\"]', 3, 2000, 3, 2020, 4, '10.00', 8, 7, 4, 2, '[{\"daily\":\"5000\",\"weekly\":\"50000\"}]', NULL, NULL, NULL, 'bolero', 'bolero', 'bolero', '<p><span data-huuid=\"14321316059817583756\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">The Mahindra Bolero is a rugged and durable SUV known for its reliability and affordability, making it a popular choice in rural and off-road settings.&nbsp;</span><span data-huuid=\"14321316059817583469\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">It\'s a 7-seater with a focus on practicality and basic features, prioritizing toughness and low maintenance over luxury.&nbsp;</span></p>', '[1,2,3,4]', 1, 1, 1, 13, 1, 1, '2025-04-24 15:59:10', '2025-04-26 07:31:52', NULL),
+(4, 0, 1, 'Thar', 'vehicles/0cf46f40-207e-4b41-b8cb-6a8d168b3bab_1745561467.jpg', 'https://www.example.com/cars/thar', 'thar', 1, 2, 5, 12, NULL, NULL, 4, '[\"3\",\"2\"]', 3, NULL, 2, 2021, 3, NULL, 6, 7, 4, 3, '[{\"daily\":\"5000\",\"weekly\":\"50000\"}]', NULL, NULL, NULL, 'thar', 'thar', 'thar', '<p><span data-huuid=\"8432008288970154208\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">The Mahindra Thar is a&nbsp;<mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px;\">rugged, off-road capable SUV known for its distinctive design, robust construction, and off-road prowess</mark>.&nbsp;</span><span data-huuid=\"8432008288970156257\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">It\'s a lifestyle off-roader, combining a strong road presence with punchy engines and a smooth transmission.&nbsp;</span></p>', '[1,2,3,4]', 1, 1, 1, 3, 1, 1, '2025-04-24 16:17:40', '2025-04-28 09:52:02', NULL),
+(5, 0, 1, 'Audi', 'vehicles/bb8710f9-f342-44bb-8aa8-65fefc92c0df_1745559701.jpg', 'https://www.example.com/cars/audi', 'audi', 1, 3, 1, 3, NULL, NULL, 3, '[\"4\",\"1\"]', 2, NULL, 5, 2010, 4, NULL, 6, 6, 4, NULL, '[{\"daily\":\"600\",\"weekly\":\"7000\",\"yearly\":\"99999\"}]', NULL, NULL, NULL, 'audi', 'audi', 'audi', '<p><span style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Audi is&nbsp;</span><mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px; font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">a German luxury automotive manufacturer, known for its sporty vehicles, high-quality engineering, and progressive design, often described as embodying the principle of \"Vorsprung durch Technik,\" which translates to \"Progress through Technology\"</mark></p>', '[1,2,3,4]', 1, 1, 1, 6, 1, 1, '2025-04-24 16:21:10', '2025-04-26 07:32:05', '2025-04-25 11:53:06'),
+(6, 0, 1, 'kia', 'vehicles/66525f53-19a2-474b-bf8f-b12aa7a16d5c_1745561164.jpg', 'https://www.example.com/cars/kia', 'kia', 1, 4, 6, 6, '334455r', 'E444322', 4, '[\"3\",\"1\"]', 4, 1400, 1, 2020, 3, NULL, 6, 6, 4, NULL, '[{\"daily\":\"500\"}]', NULL, NULL, NULL, 'kia', 'kia', 'kia', '<p><span data-huuid=\"16668689062515580493\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Kia is&nbsp;<mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px;\">a global mobility brand founded in 1944, offering a wide range of vehicles and mobility solutions</mark>.&nbsp;</span><span data-huuid=\"16668689062515577438\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">It\'s the world\'s fifth-largest vehicle manufacturer, operating in over 190 markets and producing around three million vehicles annually.&nbsp;</span></p><p><span data-huuid=\"16668689062515577438\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\"><br></span></p>', '[1,2,3,4]', 1, 1, 1, 1, 1, 1, '2025-04-25 11:36:04', '2025-04-25 16:17:10', NULL),
+(7, 0, 1, 'Benz', 'vehicles/93133928-4500-488d-838d-f404257de6e0_1745564243.jpg', 'https://www.example.com/cars/benz', 'benz', 1, 1, 3, 9, NULL, NULL, 4, NULL, 5, 1500, 2, 2021, 4, NULL, 6, 6, 4, NULL, '[{\"daily\":\"5000\"}]', NULL, NULL, NULL, 'benz', 'benz', 'benz', '<p><span data-huuid=\"5263709591680840097\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Mercedes-Benz, often shortened to Mercedes or Benz, is&nbsp;<mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px;\">a German luxury automotive brand, a subsidiary of Mercedes-Benz Group AG</mark>.&nbsp;</span><span data-huuid=\"5263709591680841480\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">They produce a range of luxury vehicles and light commercial vehicles.&nbsp;</span><span data-huuid=\"5263709591680842863\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">The company is known for its engineering, innovation, and premium quality.&nbsp;</span><span data-huuid=\"5263709591680840150\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Mercedes-Benz is a global player</span></p>', '[1,2,3,4]', 1, 1, 1, 2, 1, 1, '2025-04-25 12:27:23', '2025-04-26 07:32:11', NULL),
+(19, 0, 1, 'BMW AMG', 'vehicles/d4b8ea13-e491-4b38-8395-f7c977993d87_1745566788.jpg', 'https://www.example.com/cars/bmw', 'bmw-amg', 1, 2, 2, 1, NULL, NULL, 3, '[\"2\",\"1\"]', 5, 2000, 3, 2021, 4, NULL, 8, 8, 6, NULL, '[{\"daily\":\"2000\"}]', NULL, NULL, NULL, 'bmw', 'bmw', 'bmw', '<p><span data-huuid=\"5546190469078410934\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">BMW (Bayerische Motoren Werke) is&nbsp;<mark class=\"QVRyCf\" style=\"background: none 0% 0% / auto repeat scroll padding-box border-box rgb(211, 227, 253); border-radius: 4px; padding: 0px 2px;\">a German multinational manufacturer of luxury automobiles, motorcycles, and engines</mark>, with a global footprint spanning over 30 production sites.&nbsp;</span><span data-huuid=\"5546190469078410837\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">The company also offers financial and mobility services, and is known for its BMW, MINI, Rolls-Royce etc</span></p>', '[1,2,3,4]', 1, 1, 1, 8, 1, 1, '2025-04-25 13:09:48', '2025-04-26 11:47:27', NULL),
+(20, 0, 1, 'Ford', 'vehicles/c6c325c0-b342-4a63-8713-835d046cc14e_1745568070.jpg', 'https://www.example.com/cars/ford', 'ford', 1, 5, 4, 7, NULL, NULL, 3, '[\"2\",\"1\"]', 5, 1300, 3, 2020, 3, NULL, 4, 4, 4, 2, '[{\"weekly\":\"3500\"}]', NULL, NULL, NULL, 'ford', 'ford', 'ford', '<p><span data-huuid=\"9391290848987236172\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">It produces a wide range of vehicles, including trucks, SUVs, electric vehicles, and commercial and luxury cars, operating under the Ford and Lincoln brands.&nbsp;</span><span data-huuid=\"9391290848987235629\" style=\"color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 18px;\">Ford\'s legacy includes revolutionizing the automotive industry with mass production and the moving assembly line.</span></p>', '[1,2,3,4]', 1, 1, 1, 3, 1, 1, '2025-04-25 13:31:10', '2025-04-28 11:04:51', NULL),
+(38, 0, 1, 'BMW', 'vehicles/c0f04508-5651-45a7-b009-cfba844987a6_1745573596.jpg', 'https://www.example.com/cars/bmw', 'bmw', 1, 4, 2, 1, NULL, NULL, 2, '[\"3\",\"1\"]', 2, 1000, 1, 2020, 3, NULL, 4, 4, 2, NULL, '[{\"daily\":\"300\"}]', NULL, NULL, NULL, 'BMW', 'BMW', 'BMW', '<div class=\"Gur8Ad\" style=\"font-size: 16px; line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1); color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif;\"><span data-huuid=\"4707926916653413804\"><strong>Luxury and Performance:</strong></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); font-size: 16px; letter-spacing: 0.1px; line-height: 22px; font-family: &quot;Google Sans&quot;, Arial, sans-serif;\"><span data-huuid=\"4707926916653415015\">BMW vehicles are known for their luxurious interiors, advanced technology, and strong performance, particularly in their high-end model.</span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); font-size: 16px; letter-spacing: 0.1px; line-height: 22px; font-family: &quot;Google Sans&quot;, Arial, sans-serif;\"><span data-huuid=\"4707926916653415015\"><ul jscontroller=\"M2ABbc\" jsaction=\"jZtoLb:SaHfyb\" data-hveid=\"CCsQAQ\" data-ved=\"2ahUKEwjLkvmq6PKMAxUl-TgGHa4SDasQm_YKegQIKxAB\" style=\"margin: 10px 0px 20px; padding-left: 24px; line-height: 22px; color: rgb(0, 29, 53); letter-spacing: normal;\"><li class=\"K3KsMc\" style=\"margin-top: 0px; margin-bottom: 8px; margin-left: 0px; padding: 0px 0px 0px 4px; list-style-position: inherit; list-style-image: inherit; list-style-type: none;\"><div class=\"zMgcWd dSKvsb\" data-il=\"\" style=\"padding-bottom: 0px; padding-top: 8px; border-bottom: none; margin-left: -28px;\"><div data-crb-p=\"\"><div class=\"xFTqob\" style=\"flex: 1 1 0%; min-width: 0px;\"><div class=\"Gur8Ad\" style=\"line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);\"><span data-huuid=\"4707926916653413341\"><strong>Engineering and Innovation:</strong></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"4707926916653414552\">The brand has a long history of innovation and engineering, pushing the boundaries of automotive technology.<span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d411b0b0-41fc-4dbd-ba1e-56b8378bd2ed\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></div></div></div></div></li></ul></span></div>', '[1,2,3,4]', 1, 1, 1, 3, 1, 1, '2025-04-25 15:03:16', '2025-04-28 11:04:43', NULL),
+(41, 0, 1, 'Benz AG', 'vehicles/e6ac007d-0dcb-4b51-9608-423fb335c476_1745574147.jpg', 'https://www.example.com/cars/benz-ag', 'benz-ag', 1, 3, 3, 10, NULL, NULL, 2, '[\"4\",\"1\"]', 4, 1000, 3, 2021, 3, '5.00', 4, 4, 4, NULL, '[{\"daily\":\"500\",\"weekly\":\"6000\"}]', NULL, NULL, NULL, 'benz', 'benz', 'benz', '<p><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Mercedes-Benz vehicles are known for their luxurious interiors, advanced technology, and strong performance, particularly in their high-end models.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"bb05f580-3f87-46ba-b94f-1aeeca99cf82\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></p><p><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"bb05f580-3f87-46ba-b94f-1aeeca99cf82\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\">The brand has a long history of innovation and engineering, pushing the boundaries of automotive technology.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d411b0b0-41fc-4dbd-ba1e-56b8378bd2ed\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></span></p><p><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"bb05f580-3f87-46ba-b94f-1aeeca99cf82\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d411b0b0-41fc-4dbd-ba1e-56b8378bd2ed\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\">Mercedes-Benz operates globally, with production facilities in various countries and a wide range of models sold worldwide.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"eff23b8d-6445-4473-99c9-43b074833af5\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></span></span></span></p>', '[1,2,3,4]', 1, 1, 1, 3, 1, 1, '2025-04-25 15:12:27', '2025-04-26 08:14:33', NULL),
+(42, 0, 1, 'Toyota', 'vehicles/8c629099-63d2-4a20-b684-3cf1d5c60977_1745574497.jpg', 'https://www.example.com/cars/toyota', 'toyota', 1, 5, 6, 5, NULL, NULL, 2, '[\"4\",\"1\"]', 2, NULL, 1, 2015, 1, '5.00', 6, 6, NULL, NULL, '[{\"daily\":\"800\"}]', NULL, NULL, NULL, 'toyota', 'toyota', 'toyota', '<p><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Toyota\'s primary focus is designing, manufacturing, and selling a wide range of vehicles, including passenger cars, trucks, SUVs, and commercial vehicles.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d3a0b44d-40df-46a7-991e-2d5096bf9e27\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></p><p><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d3a0b44d-40df-46a7-991e-2d5096bf9e27\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\">Toyota operates in over 170 countries and territories, with manufacturing plants and distribution networks worldwide.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"91a551cf-4656-4d6e-976b-ae1efbd37377\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></span></p><p><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"d3a0b44d-40df-46a7-991e-2d5096bf9e27\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"91a551cf-4656-4d6e-976b-ae1efbd37377\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><span style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\">Toyota is known for its efficient production system, \"Just-in-Time,\" which emphasizes producing only what is needed, when it is needed, and in the amount needed.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"cd2ca514-b9c5-4274-88fd-67ae17211f91\" jsaction=\"rcuQ6b:npT2md\" style=\"letter-spacing: 0.1px; text-wrap-mode: wrap;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></span></span></span></p>', '[1,2,3,4]', 1, 1, 1, 3, 1, 1, '2025-04-25 15:18:17', '2025-04-26 07:32:22', NULL),
+(43, 0, 1, 'Fiesta', 'vehicles/11c754e6-539c-4d64-bf25-c70130b65362_1745576290.jpg', 'https://www.example.com/cars/fiesta', 'fiesta', 1, 4, 4, 7, NULL, NULL, 1, '[\"3\",\"2\"]', 4, 1200, 2, 2020, 3, NULL, 6, 4, 4, NULL, '[{\"daily\":\"600\",\"weekly\":\"6900\"}]', NULL, NULL, NULL, 'ford', 'ford', 'ford', '<p><span style=\"color: inherit;\"><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Ford utility vehicles are designed for capability and versatility, with features like elevated driver\'s seats and cargo areas.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"9e7dedfe-7166-4861-a5f0-8bf766149cab\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></p><p><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Ford offers a variety of trucks, including the F-Series, known for their strength and durability.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"6babb89c-615d-444e-a0ed-0dea7f27d853\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span><span style=\"color: inherit;\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"9e7dedfe-7166-4861-a5f0-8bf766149cab\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><br></span></span></p><p><span style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\">Ford is also expanding its electric vehicle portfolio, including the Mustang Mach-E, which offers a blend of performance and sustainability.</span><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"0b3da06f-f626-41af-ac45-c5be1ca0e51f\" jsaction=\"rcuQ6b:npT2md\" style=\"color: rgb(84, 93, 126); font-family: &quot;Google Sans&quot;, Arial, sans-serif; font-size: 16px; letter-spacing: 0.1px;\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></p>', '[1,2,3,4]', 1, 1, 1, 7, 1, 1, '2025-04-25 15:48:10', '2025-04-28 09:43:43', NULL),
+(44, 0, 1, 'Audi A8', 'vehicles/2f67855a-3a04-40b3-935e-f8aa6aa32598_1745576691.jpg', 'https://www.example.com/cars/audi-a8', 'audi-a8', 1, 1, 1, 4, NULL, NULL, 1, '[\"4\",\"2\"]', 2, 1000, 4, 2016, 1, NULL, 4, 4, 4, NULL, '[{\"weekly\":\"7000\"}]', NULL, NULL, NULL, 'audi', 'audi', 'audi', '<ul jscontroller=\"M2ABbc\" jsaction=\"jZtoLb:SaHfyb\" data-hveid=\"CCsQAQ\" data-ved=\"2ahUKEwjczaSz-_KMAxVoRmwGHd8wNboQm_YKegQIKxAB\" style=\"margin: 10px 0px 20px; padding-left: 24px; font-size: 16px; line-height: 22px; color: rgb(0, 29, 53); font-family: &quot;Google Sans&quot;, Arial, sans-serif;\"><li class=\"K3KsMc\" style=\"margin-top: 0px; margin-bottom: 8px; margin-left: 0px; padding: 0px 0px 0px 4px; list-style-position: inherit; list-style-image: inherit; list-style-type: none;\"><div class=\"zMgcWd dSKvsb\" data-il=\"\" style=\"padding-bottom: 0px; padding-top: 0px; border-bottom: none; margin-left: -28px;\"><div data-crb-p=\"\"><div class=\"xFTqob\" style=\"flex: 1 1 0%; min-width: 0px;\"><div class=\"Gur8Ad\" style=\"line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);\"><span data-huuid=\"3025610098028757191\"><strong>Design:</strong></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028760962\">Audi cars are known for their sleek and modern exterior and interior designs, emphasizing luxury and comfort.<span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"5f925f61-984f-4e2c-9689-1a139948850e\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028760962\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"5f925f61-984f-4e2c-9689-1a139948850e\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><ul jscontroller=\"M2ABbc\" jsaction=\"jZtoLb:SaHfyb\" data-hveid=\"CCsQAQ\" data-ved=\"2ahUKEwjczaSz-_KMAxVoRmwGHd8wNboQm_YKegQIKxAB\" style=\"margin: 10px 0px 20px; padding-left: 24px; line-height: 22px; color: rgb(0, 29, 53); letter-spacing: normal; text-wrap-mode: wrap;\"><li class=\"K3KsMc\" style=\"margin-top: 0px; margin-bottom: 8px; margin-left: 0px; padding: 0px 0px 0px 4px; list-style-position: inherit; list-style-image: inherit; list-style-type: none;\"><div class=\"zMgcWd dSKvsb\" data-il=\"\" style=\"padding-bottom: 0px; padding-top: 8px; border-bottom: none; margin-left: -28px;\"><div data-crb-p=\"\"><div class=\"xFTqob\" style=\"flex: 1 1 0%; min-width: 0px;\"><div class=\"Gur8Ad\" style=\"line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);\"><span data-huuid=\"3025610098028759337\"><strong>Performance:</strong></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028759012\">Audi offers a variety of engines, from sporty to high-performance, known for their power and efficiency.<span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"2583ff77-a993-45d1-a7a2-a8bc9fa147ff\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\">&nbsp;</span></span></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028759012\"><span jscontroller=\"JHnpme\" class=\"pjBG2e\" data-cid=\"2583ff77-a993-45d1-a7a2-a8bc9fa147ff\" jsaction=\"rcuQ6b:npT2md\"><span class=\"UV3uM\" style=\"text-wrap-mode: nowrap;\"><ul jscontroller=\"M2ABbc\" jsaction=\"jZtoLb:SaHfyb\" data-hveid=\"CCsQAQ\" data-ved=\"2ahUKEwjczaSz-_KMAxVoRmwGHd8wNboQm_YKegQIKxAB\" style=\"padding-left: 24px; margin: 10px 0px 20px; text-wrap-mode: wrap; line-height: 22px; color: rgb(0, 29, 53); letter-spacing: normal;\"><li class=\"K3KsMc\" style=\"margin-top: 0px; margin-bottom: 8px; margin-left: 0px; list-style-position: inherit; padding: 0px 0px 0px 4px; list-style-image: inherit; list-style-type: none;\"><div class=\"zMgcWd dSKvsb\" data-il=\"\" style=\"padding-bottom: 0px; padding-top: 8px; border-bottom: none; margin-left: -28px;\"><div data-crb-p=\"\"><div class=\"xFTqob\" style=\"flex: 1 1 0%; min-width: 0px;\"><div class=\"Gur8Ad\" style=\"line-height: 22px; overflow: hidden; padding-bottom: 4px; transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);\"><span data-huuid=\"3025610098028760312\"><span style=\"font-weight: 700;\">Technology:</span></span></div><div class=\"vM0jzc\" style=\"color: rgb(84, 93, 126); letter-spacing: 0.1px; line-height: 22px;\"><span data-huuid=\"3025610098028759987\">They incorporate advanced technology, including innovative drive systems like the Quattro all-wheel drive, and a range of driver-assistance</span></div></div></div></div></li></ul></span></span></span></div></div></div></div></li></ul></span></span></span></div></div></div></div></li></ul>', '[1,2,3,4]', 1, 1, 1, 13, 1, 1, '2025-04-25 15:54:51', '2025-04-26 13:38:11', NULL);
 
 -- --------------------------------------------------------
 
@@ -55575,7 +56368,7 @@ CREATE TABLE `vehicle_insurances` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
   `insurances_id` bigint(20) UNSIGNED NOT NULL,
-  `value` varchar(255) NOT NULL,
+  `value` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -55591,12 +56384,60 @@ CREATE TABLE `vehicle_insurances` (
 CREATE TABLE `vehicle_metas` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
-  `key` varchar(225) NOT NULL,
-  `value` longtext DEFAULT NULL,
+  `key` varchar(225) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` longtext COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `vehicle_metas`
+--
+
+INSERT INTO `vehicle_metas` (`id`, `vehicle_id`, `key`, `value`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'vehicle_image', '[\"vehicles\\/fab9fe34-0876-46ae-b6db-5a9dc6287dcb_1745575939.jpg\"]', '2025-04-23 14:44:48', '2025-04-25 15:42:19', NULL),
+(2, 1, 'vehicle_doc', '[\"vehicleDoc\\/0fe6e95b-9f87-4fa3-bcd3-096f5566a8c3_1745399688.pdf\"]', '2025-04-23 14:44:48', '2025-04-23 14:44:48', NULL),
+(3, 1, 'vehicle_policy', '[\"vehiclePolicy\\/e4f20205-c8a3-49be-863e-ff88a81394b7_1745399688.pdf\"]', '2025-04-23 14:44:48', '2025-04-23 14:44:48', NULL),
+(4, 2, 'vehicle_image', '[]', '2025-04-24 12:29:32', '2025-04-25 11:23:48', NULL),
+(5, 2, 'vehicle_doc', '[\"vehicleDoc\\/44b10136-2cca-41a5-bd44-573375488925_1745477972.pdf\"]', '2025-04-24 12:29:32', '2025-04-24 12:29:32', NULL),
+(6, 2, 'vehicle_policy', '[\"vehiclePolicy\\/66df9d90-854e-4e9e-aad4-b0001b31bf93_1745477972.pdf\"]', '2025-04-24 12:29:32', '2025-04-24 12:29:32', NULL),
+(7, 3, 'vehicle_image', '[]', '2025-04-24 15:59:10', '2025-04-25 11:05:46', NULL),
+(8, 3, 'vehicle_doc', '[\"vehicleDoc\\/d32e5948-daed-422f-ab4f-7f91c697cb76_1745490550.pdf\"]', '2025-04-24 15:59:10', '2025-04-24 15:59:10', NULL),
+(9, 3, 'vehicle_policy', '[\"vehiclePolicy\\/f0126e30-44a7-4f41-b19a-22238905bb0d_1745490550.pdf\"]', '2025-04-24 15:59:10', '2025-04-24 15:59:10', NULL),
+(10, 4, 'vehicle_image', '[]', '2025-04-24 16:17:40', '2025-04-25 11:40:32', NULL),
+(11, 4, 'vehicle_doc', '[\"vehicleDoc\\/ecaf4a88-a702-4545-8851-803fbcff8c4d_1745491660.pdf\"]', '2025-04-24 16:17:40', '2025-04-24 16:17:40', NULL),
+(12, 4, 'vehicle_policy', '[\"vehiclePolicy\\/37e453eb-376d-4718-a18d-24edfa64b090_1745491660.pdf\"]', '2025-04-24 16:17:40', '2025-04-24 16:17:40', NULL),
+(13, 5, 'vehicle_image', '[]', '2025-04-24 16:21:10', '2025-04-25 11:10:18', NULL),
+(14, 5, 'vehicle_doc', '[\"vehicleDoc\\/39692eb9-f2c5-49e9-a565-a86575e417b4_1745491870.pdf\"]', '2025-04-24 16:21:10', '2025-04-24 16:21:10', NULL),
+(15, 5, 'vehicle_policy', '[\"vehiclePolicy\\/e17c1aa0-9b73-4732-85e6-e53f88206772_1745491870.pdf\"]', '2025-04-24 16:21:10', '2025-04-24 16:21:10', NULL),
+(16, 6, 'vehicle_image', '[\"vehicles\\/1a77ca75-ddbd-48f4-9ead-b2046e0bcbb7_1745561164.jpg\"]', '2025-04-25 11:36:04', '2025-04-25 11:36:04', NULL),
+(17, 6, 'vehicle_doc', '[\"vehicleDoc\\/682f41d7-e01e-48d4-b481-2ffd56f285c3_1745561164.pdf\"]', '2025-04-25 11:36:04', '2025-04-25 11:36:04', NULL),
+(18, 6, 'vehicle_policy', '[\"vehiclePolicy\\/b8d71fc4-9337-4465-a1d4-b6f6683abb43_1745561164.pdf\"]', '2025-04-25 11:36:04', '2025-04-25 11:36:04', NULL),
+(19, 7, 'vehicle_image', '[\"vehicles\\/bf1c3e13-4b72-4d2f-adda-395bb05e3439_1745564243.jpg\"]', '2025-04-25 12:27:23', '2025-04-25 12:27:23', NULL),
+(20, 7, 'vehicle_doc', '[\"vehicleDoc\\/8cf9fef2-abdc-4398-9cf7-cb8dd7274bec_1745564243.pdf\"]', '2025-04-25 12:27:23', '2025-04-25 12:27:23', NULL),
+(21, 7, 'vehicle_policy', '[\"vehiclePolicy\\/bedb31a1-3422-4597-a63d-215e4ce3e422_1745564243.pdf\"]', '2025-04-25 12:27:23', '2025-04-25 12:27:23', NULL),
+(22, 19, 'vehicle_image', '[\"vehicles\\/721ec378-8050-4204-b3e0-5885ae74a513_1745566788.jpg\"]', '2025-04-25 13:09:48', '2025-04-25 13:09:48', NULL),
+(23, 19, 'vehicle_doc', '[\"vehicleDoc\\/f45cc726-7227-4196-97e2-0bf356bc5fc5_1745566788.pdf\"]', '2025-04-25 13:09:48', '2025-04-25 13:09:48', NULL),
+(24, 19, 'vehicle_policy', '[\"vehiclePolicy\\/ac7d4a01-1804-46f0-85f2-410a458e61c3_1745566788.pdf\"]', '2025-04-25 13:09:48', '2025-04-25 13:09:48', NULL),
+(25, 20, 'vehicle_image', '[\"vehicles\\/eafcb146-1303-4d94-af1e-9fca1c2c5e80_1745568070.jpg\"]', '2025-04-25 13:31:10', '2025-04-25 13:31:10', NULL),
+(26, 20, 'vehicle_doc', '[\"vehicleDoc\\/70d4c2e5-b208-4a8d-8f95-2497869d766b_1745568070.pdf\"]', '2025-04-25 13:31:10', '2025-04-25 13:31:10', NULL),
+(27, 20, 'vehicle_policy', '[\"vehiclePolicy\\/9eaf86c7-0c01-4cdc-876b-9443b4ced4c3_1745568070.pdf\"]', '2025-04-25 13:31:10', '2025-04-25 13:31:10', NULL),
+(28, 38, 'vehicle_image', '[\"vehicles\\/e241c7c1-db26-4c71-baf4-24e990fd3c22_1745573596.jpg\"]', '2025-04-25 15:03:16', '2025-04-25 15:03:16', NULL),
+(29, 38, 'vehicle_doc', '[\"vehicleDoc\\/8d4a689f-494c-478c-8bb2-4c095e0e3cf2_1745573596.pdf\"]', '2025-04-25 15:03:16', '2025-04-25 15:03:16', NULL),
+(30, 38, 'vehicle_policy', '[\"vehiclePolicy\\/a4f95780-ebb2-435c-947e-503379455fbd_1745573596.pdf\"]', '2025-04-25 15:03:16', '2025-04-25 15:03:16', NULL),
+(31, 41, 'vehicle_image', '[\"vehicles\\/7c3273b2-34f6-482a-8dab-34a81791d26f_1745574148.jpg\"]', '2025-04-25 15:12:28', '2025-04-25 15:12:28', NULL),
+(32, 41, 'vehicle_doc', '[\"vehicleDoc\\/9f3d7335-0ef6-4d76-8aaf-ffcd471fb378_1745574148.pdf\"]', '2025-04-25 15:12:28', '2025-04-25 15:12:28', NULL),
+(33, 41, 'vehicle_policy', '[\"vehiclePolicy\\/a29868f4-982c-4ad5-b2fc-d23203bca4e3_1745574148.pdf\"]', '2025-04-25 15:12:28', '2025-04-25 15:12:28', NULL),
+(34, 42, 'vehicle_image', '[\"vehicles\\/01a6f5b7-9be3-4a0c-9a4d-f0faebc7a72e_1745574497.jpg\"]', '2025-04-25 15:18:17', '2025-04-25 15:18:17', NULL),
+(35, 42, 'vehicle_doc', '[\"vehicleDoc\\/4ac56b8d-f3ed-4e36-afd9-3148ebcf5e40_1745574497.pdf\"]', '2025-04-25 15:18:17', '2025-04-25 15:18:17', NULL),
+(36, 42, 'vehicle_policy', '[\"vehiclePolicy\\/8d1dc631-92f8-461b-a10b-46a6df02af7d_1745574497.pdf\"]', '2025-04-25 15:18:17', '2025-04-25 15:18:17', NULL),
+(37, 43, 'vehicle_image', '[\"vehicles\\/d1624aae-a58f-4461-844a-c136aa60d23d_1745576290.jpg\"]', '2025-04-25 15:48:10', '2025-04-25 15:48:10', NULL),
+(38, 43, 'vehicle_doc', '[\"vehicleDoc\\/f4ece499-1e8e-46e6-91c4-b2c3a6af5a02_1745576290.pdf\"]', '2025-04-25 15:48:10', '2025-04-25 15:48:10', NULL),
+(39, 43, 'vehicle_policy', '[\"vehiclePolicy\\/a9f0dbe0-b0ef-4295-a6d5-cb3b3b26d1a1_1745576290.pdf\"]', '2025-04-25 15:48:10', '2025-04-25 15:48:10', NULL),
+(40, 44, 'vehicle_image', '[\"vehicles\\/62095a3c-5ece-4814-998f-1db9f62484e5_1745576691.jpg\"]', '2025-04-25 15:54:51', '2025-04-25 15:54:51', NULL),
+(41, 44, 'vehicle_doc', '[\"vehicleDoc\\/3085b361-c4ef-40bc-a2bc-bd8850ffe45a_1745576691.pdf\"]', '2025-04-25 15:54:51', '2025-04-25 15:54:51', NULL),
+(42, 44, 'vehicle_policy', '[\"vehiclePolicy\\/003d248e-8980-4fc6-a4a5-deac7096d709_1745576691.pdf\"]', '2025-04-25 15:54:51', '2025-04-25 15:54:51', NULL);
 
 -- --------------------------------------------------------
 
@@ -55607,9 +56448,9 @@ CREATE TABLE `vehicle_metas` (
 CREATE TABLE `vehicle_seasons` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
-  `seasonal_title` varchar(255) NOT NULL,
-  `seasonal_start_date` varchar(225) NOT NULL,
-  `seasonal_end_date` varchar(225) NOT NULL,
+  `seasonal_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seasonal_start_date` varchar(225) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seasonal_end_date` varchar(225) COLLATE utf8mb4_unicode_ci NOT NULL,
   `seasonal_daily_rate` decimal(10,2) NOT NULL,
   `seasonal_weekly_rate` decimal(10,2) NOT NULL,
   `seasonal_monthly_rate` decimal(10,2) NOT NULL,
@@ -55628,12 +56469,12 @@ CREATE TABLE `vehicle_seasons` (
 CREATE TABLE `vehicle_tarrifs` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
-  `tariff_title` varchar(255) NOT NULL,
-  `tariff_daily_price` varchar(10) NOT NULL,
-  `tariff_from_days` varchar(255) NOT NULL,
-  `tariff_to_days` varchar(255) NOT NULL,
-  `tariff_base_km` varchar(255) NOT NULL,
-  `tariff_extra_price` varchar(255) NOT NULL,
+  `tariff_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tariff_daily_price` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tariff_from_days` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tariff_to_days` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tariff_base_km` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tariff_extra_price` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -55649,16 +56490,26 @@ CREATE TABLE `wallet_history` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `amount` decimal(10,2) DEFAULT NULL,
-  `payment_type` enum('paypal','bank_transfer','others','stripe') DEFAULT NULL,
-  `status` enum('Completed','Pending','Failed','Refunded') NOT NULL DEFAULT 'Pending',
+  `payment_type` enum('paypal','bank_transfer','others','stripe') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('Completed','Pending','Failed','Refunded') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Pending',
   `reference_id` int(11) DEFAULT NULL,
-  `type` tinyint(4) NOT NULL DEFAULT 1 COMMENT '1 -> Add Amount, 2 -> Booking, 3 -> Leads',
-  `transaction_id` varchar(255) DEFAULT NULL,
+  `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1 -> Add Amount, 2 -> Booking, 3 -> Leads',
+  `transaction_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `transaction_date` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `wallet_history`
+--
+
+INSERT INTO `wallet_history` (`id`, `user_id`, `amount`, `payment_type`, `status`, `reference_id`, `type`, `transaction_id`, `transaction_date`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 4, '5000.00', 'stripe', 'Completed', NULL, 1, 'cs_test_a1NGeH44WaSbm4WUgeU3UhWpKIgb8XCY4BBTWxatnoOZav8f6xc7g3mVfH', '2025-04-25 16:08:37', '2025-04-25 16:08:37', '2025-04-25 16:09:41', NULL),
+(2, 4, '2000.00', 'others', 'Completed', 6, 2, 'wallet5027', '2025-04-25 16:10:59', '2025-04-25 16:10:59', '2025-04-25 16:10:59', NULL),
+(3, 4, '1200.00', 'others', 'Completed', 7, 2, 'wallet7293', '2025-04-25 16:11:32', '2025-04-25 16:11:32', '2025-04-25 16:11:32', NULL),
+(4, 4, '500.00', 'paypal', 'Completed', NULL, 1, '60B81320YY765974M', '2025-04-25 16:13:03', '2025-04-25 16:13:03', '2025-04-25 16:14:03', NULL);
 
 -- --------------------------------------------------------
 
@@ -55668,11 +56519,19 @@ CREATE TABLE `wallet_history` (
 
 CREATE TABLE `wishlists` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `service_id` int(11) DEFAULT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `vehicle_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `wishlists`
+--
+
+INSERT INTO `wishlists` (`id`, `service_id`, `user_id`, `vehicle_id`, `created_at`, `updated_at`) VALUES
+(3, NULL, 4, 19, '2025-04-25 17:40:33', '2025-04-25 17:40:33');
 
 --
 -- Indexes for dumped tables
@@ -56377,7 +57236,7 @@ ALTER TABLE `wishlists`
 -- AUTO_INCREMENT for table `addons`
 --
 ALTER TABLE `addons`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `announcements`
@@ -56395,13 +57254,13 @@ ALTER TABLE `announcement_types`
 -- AUTO_INCREMENT for table `banks`
 --
 ALTER TABLE `banks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `blog_categories`
 --
 ALTER TABLE `blog_categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `blog_comments`
@@ -56413,7 +57272,7 @@ ALTER TABLE `blog_comments`
 -- AUTO_INCREMENT for table `blog_posts`
 --
 ALTER TABLE `blog_posts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `blog_reviews`
@@ -56425,73 +57284,73 @@ ALTER TABLE `blog_reviews`
 -- AUTO_INCREMENT for table `blog_tags`
 --
 ALTER TABLE `blog_tags`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `booking_details`
 --
 ALTER TABLE `booking_details`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `booking_histories`
 --
 ALTER TABLE `booking_histories`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `booking_user_infos`
 --
 ALTER TABLE `booking_user_infos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `brands`
 --
 ALTER TABLE `brands`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `cartypes`
 --
 ALTER TABLE `cartypes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `car_colors`
 --
 ALTER TABLE `car_colors`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `car_fuels`
 --
 ALTER TABLE `car_fuels`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `car_models`
 --
 ALTER TABLE `car_models`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `car_steerings`
 --
 ALTER TABLE `car_steerings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `checklists`
@@ -56521,7 +57380,7 @@ ALTER TABLE `configurations`
 -- AUTO_INCREMENT for table `contacts`
 --
 ALTER TABLE `contacts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `countries`
@@ -56539,13 +57398,13 @@ ALTER TABLE `currencies`
 -- AUTO_INCREMENT for table `cylinders`
 --
 ALTER TABLE `cylinders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `damage_types`
 --
 ALTER TABLE `damage_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `date_formats`
@@ -56557,31 +57416,31 @@ ALTER TABLE `date_formats`
 -- AUTO_INCREMENT for table `dbbackups`
 --
 ALTER TABLE `dbbackups`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `door_types`
 --
 ALTER TABLE `door_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `drivers`
 --
 ALTER TABLE `drivers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `driver_documents`
 --
 ALTER TABLE `driver_documents`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `driving_types`
 --
 ALTER TABLE `driving_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `email_templates`
@@ -56593,13 +57452,13 @@ ALTER TABLE `email_templates`
 -- AUTO_INCREMENT for table `enquiries`
 --
 ALTER TABLE `enquiries`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `extra_services`
 --
 ALTER TABLE `extra_services`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -56611,7 +57470,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `faqs`
 --
 ALTER TABLE `faqs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `features`
@@ -56629,37 +57488,37 @@ ALTER TABLE `general_settings`
 -- AUTO_INCREMENT for table `industry_types`
 --
 ALTER TABLE `industry_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `inspections`
 --
 ALTER TABLE `inspections`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `insurances`
 --
 ALTER TABLE `insurances`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `insurance_benefits`
 --
 ALTER TABLE `insurance_benefits`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `invoice_items`
 --
 ALTER TABLE `invoice_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -56683,19 +57542,19 @@ ALTER TABLE `language_code`
 -- AUTO_INCREMENT for table `locations`
 --
 ALTER TABLE `locations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `location_working_days`
 --
 ALTER TABLE `location_working_days`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `maintenances`
 --
 ALTER TABLE `maintenances`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `menus`
@@ -56707,13 +57566,13 @@ ALTER TABLE `menus`
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `modules`
@@ -56731,7 +57590,7 @@ ALTER TABLE `newsletter_subscribers`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `notification_tags`
@@ -56755,13 +57614,13 @@ ALTER TABLE `otp_settings`
 -- AUTO_INCREMENT for table `pages`
 --
 ALTER TABLE `pages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `pricing_types`
@@ -56773,13 +57632,13 @@ ALTER TABLE `pricing_types`
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `review_messages`
 --
 ALTER TABLE `review_messages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `review_reactions`
@@ -56791,25 +57650,25 @@ ALTER TABLE `review_reactions`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `safety_features`
 --
 ALTER TABLE `safety_features`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `seasons`
 --
 ALTER TABLE `seasons`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `seat_types`
 --
 ALTER TABLE `seat_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `sections`
@@ -56851,7 +57710,7 @@ ALTER TABLE `sub_taxes`
 -- AUTO_INCREMENT for table `tags`
 --
 ALTER TABLE `tags`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tax_groups`
@@ -56875,13 +57734,13 @@ ALTER TABLE `team_sizes`
 -- AUTO_INCREMENT for table `testimonials`
 --
 ALTER TABLE `testimonials`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `ticket_categories`
@@ -56923,49 +57782,49 @@ ALTER TABLE `transmissions`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `user_details`
 --
 ALTER TABLE `user_details`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `user_devices`
 --
 ALTER TABLE `user_devices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
 
 --
 -- AUTO_INCREMENT for table `user_documents`
 --
 ALTER TABLE `user_documents`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `vehicle_damages`
 --
 ALTER TABLE `vehicle_damages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `vehicle_extra_services`
 --
 ALTER TABLE `vehicle_extra_services`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `vehicle_faqs`
 --
 ALTER TABLE `vehicle_faqs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `vehicle_info`
 --
 ALTER TABLE `vehicle_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `vehicle_insurances`
@@ -56977,7 +57836,7 @@ ALTER TABLE `vehicle_insurances`
 -- AUTO_INCREMENT for table `vehicle_metas`
 --
 ALTER TABLE `vehicle_metas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `vehicle_seasons`
@@ -56995,13 +57854,13 @@ ALTER TABLE `vehicle_tarrifs`
 -- AUTO_INCREMENT for table `wallet_history`
 --
 ALTER TABLE `wallet_history`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `wishlists`
 --
 ALTER TABLE `wishlists`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

@@ -273,7 +273,7 @@
                                         <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
                                             @php
                                             $imagePath = 'storage/' . $booking->vehicle_image;
-                                            $defaultImage = asset('custom/img/default-profile.png');
+                                            $defaultImage = asset('assets/img/default-profile.png');
                                             @endphp
 
                                             <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="profile image">
@@ -287,7 +287,7 @@
                                     <div class="d-flex align-items-center">
                                         <a href="javascript:void(0);" class="avatar avatar-rounded me-2 flex-shrink-0"> @php
                                             $imagePath = 'storage/' . $booking->profile_image;
-                                            $defaultImage = asset('custom/img/default-profile.png');
+                                            $defaultImage = asset('assets/img/default-profile.png');
                                             @endphp
 
                                             <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="profile image"></a>

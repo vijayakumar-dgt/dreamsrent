@@ -141,7 +141,7 @@
                                 <a href="customer-details.html" class="avatar avatar-rounded me-2 flex-shrink-0">
                                     @php
                                     $imagePath = 'storage/' . $invoice->profile_image;
-                                    $defaultImage = asset('custom/img/default-profile.png');
+                                    $defaultImage = asset('assets/img/default-profile.png');
                                     @endphp
 
                                     <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="profile image">

@@ -56,6 +56,7 @@
                                     <div class="edit-menu-list">
                                         <div class="skeleton list-skeleton input-loader"></div>
                                         <ol class="list-group sortable-list list-group-numbered d-none real-label" id="simple-list">
+                                            
                                         </ol>
                                     </div>
                                 </div>

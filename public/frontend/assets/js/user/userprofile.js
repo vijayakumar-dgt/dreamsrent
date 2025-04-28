@@ -245,7 +245,7 @@ function removeImage() {
     const preview = document.getElementById('profile_photo_preview');
     const fileInput = document.getElementById('profile_photo');
 
-    preview.src = '/custom/img/default-profile.png';
+    preview.src = '/assets/img/default-profile.png';
     fileInput.value = '';
     $('#profile_photo_error').text('');
 }
