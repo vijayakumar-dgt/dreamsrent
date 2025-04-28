@@ -1,5 +1,4 @@
-(function($) {
-    "use strict";
+
 document.addEventListener("DOMContentLoaded", function () {
     const userPhoneInput = document.querySelector(".user_phone");
     const intlPhoneInput = document.querySelector("#international_phone_number");
@@ -27,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 (async () => {
+    "use strict";
     await loadTranslationFile('web', 'user,common');
 
     $(document).ready(function () {
@@ -467,4 +467,4 @@ function confirmDelete() {
         }
     });
 }
-})(jQuery);
+

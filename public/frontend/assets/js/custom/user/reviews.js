@@ -1,6 +1,6 @@
-(function($) {
-    "use strict";
+
 (async () => {
+    "use strict";
     await loadTranslationFile('web', 'user,common');
 
     fetchReviews();
@@ -194,4 +194,4 @@ $(document).on('click','.sort-filter', function(){
     $(".sortfilter_text").text($(this).text().trim());
     fetchReviews($(".sort-filter.active").data('id'));
  });
-})(jQuery);
+

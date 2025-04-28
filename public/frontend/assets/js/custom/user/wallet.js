@@ -1,6 +1,7 @@
-(function($) {
-    "use strict";
+
 (async () => {
+    "use strict";
+
     await loadTranslationFile('web', 'user,common');
     document.getElementById('wallet_amount').addEventListener('input', function () {
         if (this.value.length > 5) {
@@ -148,4 +149,3 @@
         });
     }
 })();
-})(jQuery);

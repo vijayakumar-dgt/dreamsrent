@@ -1,6 +1,6 @@
-(function($) {
-    "use strict";
+
 (async () => {
+    "use strict";
     await loadTranslationFile('web', 'user,common');
     $(document).ready(function() {
         TicketTable();
@@ -421,5 +421,5 @@ $("#delete_ticket_form").on('submit', function(e){
         }
     });
 });
-})(jQuery);
+
 

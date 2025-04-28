@@ -1,6 +1,6 @@
-(function($) {
-    "use strict";
+
 (async () => {
+    "use strict";
     await loadTranslationFile('web', 'user,common');
     $(document).ready(function () {
         getSecuritySettings();
@@ -281,4 +281,3 @@ function confirmDelete() {
         }
     });
 }
-})(jQuery);

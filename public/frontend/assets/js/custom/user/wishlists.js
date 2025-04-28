@@ -1,6 +1,6 @@
-(function($) {
-    "use strict";
+
 (async () => {
+    "use strict";
     await loadTranslationFile('web', 'user,common');
     fetchWishlists();
 })();
@@ -132,5 +132,5 @@ $(document).on('click','.wishlist-icon', function(){
        }
     });
 });
-})(jQuery);
+
 
