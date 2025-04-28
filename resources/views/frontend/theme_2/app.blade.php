@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
@@ -16,7 +15,7 @@
 	<meta name="keywords" content="{{ isset($meta_keywords) ? $meta_keywords : '' }}">
 	<!-- Favicon -->
 	<link rel="shortcut icon" href="{{ isset($favicon) ? asset($favicon) : asset('frontend/assets/img/favicon.png') }}">
-    @php
+	@php
 		$isRTL = isRTL(app()->getLocale());
 	@endphp
 	@if($isRTL)
@@ -28,11 +27,11 @@
 	<!-- Fontawesome CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/all.min.css') }}">
-    
+
 	<!-- Select2 CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/select2/css/select2.min.css') }}">
 
-	<!-- Flatpickr CSS -->
+    <!-- Flatpickr CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/flatpickr/flatpickr.min.css') }}">
 
 	<!-- Datepicker CSS -->
@@ -41,47 +40,47 @@
 	<!-- Aos CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/aos/aos.css') }}">
 
-	<!-- Fearther CSS -->
+    <!-- Fearther CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/feather.css') }}">
 
 	<!-- Owl carousel CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/owl.carousel.min.css') }}">
-
-	<!-- Boxicons CSS -->
-	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/boxicons/css/boxicons.min.css') }}">
+	
+   	<!-- Boxicons CSS -->
+   	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/boxicons/css/boxicons.min.css') }}">
 
 	@stack('styles')
-    @if($isRTL)
+
+	@if($isRTL)
  	<!-- Main CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/style-rtl.css') }}">
     @else
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
     @endif
-	<link rel="stylesheet" href="{{ asset('assets/css/custom/custom-style.css?v=1.0.3') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/custom/custom-style.css?v=1.4') }}">
 
 </head>
-
 <body data-theme={{ $theme ?? 1}} data-dir="{{ $isRTL ? 'rtl' : 'ltr' }}">
 
-	<div class="main-wrapper">
+	<div class="main-wrapper home-three">
 		<!-- Header -->
-		@include('theme_1.header')
+		@include('frontend.theme_2.header')
 		<!-- /Header -->
-		@yield('content')
+        @yield('content')
 		<!-- Footer -->
-		@include('theme_1.footer')
+		@include('frontend.theme_2.footer')
 		<!-- /Footer -->
-		@include('frontend.toast')
 		<!-- Cookie Consent -->
 		@if(request()->routeIs('home'))
 		@include('frontend.home.cookie.consent')
 		@endif
+		@include('frontend.toast')
 	</div>
 
 	<!-- scrollToTop start -->
 	<div class="progress-wrap active-progress">
 		<svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
-			<path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" ></path>
+		<path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"></path>
 		</svg>
 	</div>
 	<!-- scrollToTop end -->
@@ -96,7 +95,7 @@
 
 	<!-- Bootstrap Core JS -->
 	<script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>
-	
+
 	<!-- counterup JS -->
 	<script src="{{ asset('frontend/assets/js/jquery.waypoints.js') }}"></script>
 	<script src="{{ asset('frontend/assets/js/jquery.counterup.min.js') }}"></script>
@@ -123,14 +122,12 @@
 
 	<script src="{{ asset('frontend/assets/js/custom/lang_script.js') }}"></script>
 	@stack('scripts')
-	<!-- Custom JS -->
 	@if($isRTL)
 	<script src="{{ asset('frontend/assets/js/script-rtl.js') }}"></script>
 	@else
 	<script src="{{ asset('frontend/assets/js/script.js') }}"></script>
     @endif
 	<script src="{{ asset('frontend/assets/js/custom/custom-script.js?v=1.0.3') }}"></script>
- 
-</body>
 
+</body>
 </html>
