@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <span class="error-message text-danger d-none">Menu name is required.</span>
                             </div>
                             <div class="mb-2">
-                                <label for="menu_link_${uniqueId}" class="form-label">Permalink</label>
+                                <label for="menu_link_${uniqueId}" class="form-label">Slug</label>
                                 <input type="text" id="menu_link" name="menu_link" class="form-control" value="${url}">
                                 <span class="error-message text-danger d-none">Please enter a valid link.</span>
                             </div>
