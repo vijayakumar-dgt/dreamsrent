@@ -1,6 +1,7 @@
 (async () => {
     "use strict";
     await loadTranslationFile('admin', 'common, user_management');
+    const permissions = await loadUserPermissions();
 
 $(document).ready(function() {
     initTable();
@@ -163,18 +164,21 @@ function initTable() {
                                     <i class="ti ti-dots-vertical"></i>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end p-2">
-                                    <li>
-                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editRole(${row.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                ${ hasPermission(permissions, 'roles_permissions', 'edit') ?
+                                    `<li>
+                                        <a class="dropdown-item rounded-1 editRole" href="javascript:void(0);" data-id="${row.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item rounded-1" href="/admin/permissions/${row.encrypted_role_id}"><i class="ti ti-shield me-1"></i>${_l('admin.user_management.permissions')}</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteRole(${row.id});" data-bs-toggle="modal" data-bs-target="#delete_role"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
-                                    </li>
+                                    </li>` : '' }
+                                ${ hasPermission(permissions, 'roles_permissions', 'delete') ?
+                                    `<li>
+                                        <a class="dropdown-item rounded-1 deleteRole" href="javascript:void(0);" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_role"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                    </li>` : '' }
                                 </ul>
                             </div>`;
-                }
+                },
+                visible: hasPermission(permissions, 'roles_permissions', 'edit') || hasPermission(permissions, 'roles_permissions', 'delete'),
             }
         ],
         ordering: true,

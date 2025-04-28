@@ -30,13 +30,14 @@ class RolesPermissionController extends Controller
     public function store(Request $request): JsonResponse
     {
         $id = $request->id ?? '';
+        $authId = $this->authUser->id ?? $request->user_id;
 
         $validator = Validator::make($request->all(), [
             'role' => [
                 'required',
                 'max:30',
                 'min:3',
-                Rule::unique('roles', 'role_name')->ignore($id)->whereNull('deleted_at')
+                Rule::unique('roles', 'role_name')->ignore($id)->whereNull('deleted_at')->where('created_by', $authId)
             ],
         ], [
             'role.required' => __('admin.user_management.role_required'),
