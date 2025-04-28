@@ -1,4 +1,4 @@
-@extends('theme_2.app')
+@extends('frontend.theme_2.app')
 @push('styles')
 <link rel="stylesheet" href="{{ asset('assets/css/custom/theme-2-style.css') }}">
 @endpush

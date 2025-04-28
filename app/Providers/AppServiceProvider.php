@@ -131,7 +131,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function shareHeader()
     {
-        view()->composer(["theme_1.header", "theme_2.header"], function ($view) {
+        view()->composer(["frontend.theme_1.header", "frontend.theme_2.header"], function ($view) {
             $appLanguage = App::getLocale();
             $languageId = getLanguageId($appLanguage);
 
@@ -153,7 +153,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function shareFooter()
     {
-        view()->composer(["theme_1.footer", "theme_2.footer"], function ($view) {
+        view()->composer(["frontend.theme_1.footer", "frontend.theme_2.footer"], function ($view) {
             $appLanguage = App::getLocale();
             $languageId    = getLanguageId($appLanguage);
 
