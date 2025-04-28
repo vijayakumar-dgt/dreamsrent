@@ -257,31 +257,34 @@ $("#roleDeleteForm").on('submit', function(e){
     });
 });
 
-}) ();
-
-function deleteRole(id){
+$(document).on('click', '.deleteRole', function() {
+    let id = $(this).data('id');
     $("#delete_id").val(id);
-}
+});
 
-function editRole(id){
+$(document).on('click', '.editRole', function() {
+    let id = $(this).data('id');
+
     $.ajax({
-       type:"GET",
-       url:"/admin/role/edit/"+id,
-       success: function(response) {
-            $(".error-text").text("");
-            $(".form-control").removeClass("is-invalid is-valid");
-            $("#roleForm")[0].reset();
-            if(response.code === 200){
-                let data = response.data;
-                $("#role").val(data.role_name);
-                $("#status").prop('checked', data.status == 1);
-                $("#id").val(data.id);
-
-                $("#role_modal .modal-title").text(_l('admin.user_management.edit_role'));
-                $(".submitbtn").text(_l('admin.common.save_changes'));
-                $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
-                $("#role_modal").modal('show');
-            }
-       }
+        type:"GET",
+        url:"/admin/role/edit/"+id,
+        success: function(response) {
+             $(".error-text").text("");
+             $(".form-control").removeClass("is-invalid is-valid");
+             $("#roleForm")[0].reset();
+             if(response.code === 200){
+                 let data = response.data;
+                 $("#role").val(data.role_name);
+                 $("#status").prop('checked', data.status == 1);
+                 $("#id").val(data.id);
+ 
+                 $("#role_modal .modal-title").text(_l('admin.user_management.edit_role'));
+                 $(".submitbtn").text(_l('admin.common.save_changes'));
+                 $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
+                 $("#role_modal").modal('show');
+             }
+        }
     });
-}
+});
+
+}) ();
