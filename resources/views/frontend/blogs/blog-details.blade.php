@@ -11,7 +11,7 @@
                     <div class="post-author-img">
                         @php
                         $imagePath = 'storage/' . $blogPosts->profile_image;
-                        $defaultImage = asset('custom/img/default-profile.png');
+                        $defaultImage = asset('assets/img/default-profile.png');
                         @endphp
 
                         <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Post Image">
@@ -87,7 +87,7 @@
                 <div class="review-header-group">
                     <div class="review-widget-header">
                         <span class="review-widget-img">
-                            <img class="img-fluid" src="{{ asset('custom/img/default-profile.png')}}" alt="Post Image">
+                            <img class="img-fluid" src="{{ asset('assets/img/default-profile.png')}}" alt="Post Image">
                         </span>
                         <div class="review-design">
                             <h6>{{$review->name}}</h6>

@@ -13,7 +13,7 @@
                             <div class="post-author-img">
                                 @php
                                 $imagePath = 'storage/' . $blogPost->profile_image;
-                                $defaultImage = asset('custom/img/default-profile.png');
+                                $defaultImage = asset('assets/img/default-profile.png');
                                 @endphp
 
                                 <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Post Image">

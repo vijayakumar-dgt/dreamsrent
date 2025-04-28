@@ -293,7 +293,7 @@
                                             <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
                                                 @php
                                                 $imagePath = 'storage/' . $booking->vehicle_image;
-                                                $defaultImage = asset('custom/img/default-profile.png');
+                                                $defaultImage = asset('assets/img/default-profile.png');
                                                 @endphp
 
                                                 <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="img" class="rounded-3"></a>

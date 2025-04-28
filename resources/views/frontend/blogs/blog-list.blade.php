@@ -71,7 +71,7 @@
                                 <a href="/blog-details/{{$latest->slug}}">
                                     @php
                                     $imagePath = 'storage/' . $latest->image;
-                                    $defaultImage = asset('custom/img/default-profile.png');
+                                    $defaultImage = asset('assets/img/default-profile.png');
                                     @endphp
 
                                     <img class="img-fluid" src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Post Image">

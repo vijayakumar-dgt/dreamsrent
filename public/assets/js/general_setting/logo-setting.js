@@ -190,6 +190,6 @@ function previewImage(event, previewId, requiredWidth, requiredHeight) {
 }
 
 function removeImage(previewId, inputId) {
-    $("#" + previewId).attr("src", "/custom/img/default-image-02.jpg");
+    $("#" + previewId).attr("src", "/assets/img/default-image-02.jpg");
     $("#" + inputId).val("");
 }
