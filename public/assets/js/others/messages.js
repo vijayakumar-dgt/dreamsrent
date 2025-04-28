@@ -1,3 +1,4 @@
+"use strict";
 let offset = "";
 let isLoading = false;
 let last_offset = "";

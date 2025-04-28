@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'common, finance_accounts');
 
     $('#invoicesTable').DataTable({
@@ -156,23 +157,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 $(document).ready(function() {
 
-    // Delete invoice
+    
     $(document).on('click', '#delete-invoice-btn', function() {
         const invoiceId = $(this).data('id');
-        $('#delete_modal').data('id', invoiceId); // Store invoice ID in modal
+        $('#delete_modal').data('id', invoiceId);
     });
 
-    // Confirm delete
-    $('#delete_modal .btn-primary').click(function() {
+    
+    $(document).on('click', '#delete_modal .btn-primary', function() {
         const invoiceId = $('#delete_modal').data('id');
-        // AJAX delete request
         $.ajax({
             url: '/admin/delete-invoices/' + invoiceId,
             type: 'GET',
             success: function(response) {
                 if (response.success) {
                     showToast("success", response.message);
-                    location.reload(); // Reload the page to update the table
+                    location.reload(); 
                 } else {
                     showToast(response.message);
                 }

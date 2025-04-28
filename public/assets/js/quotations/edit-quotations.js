@@ -1,4 +1,4 @@
-
+"use strict";
 (async () => {
     await loadTranslationFile('admin', 'common, bookings');
 

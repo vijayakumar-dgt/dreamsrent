@@ -1,8 +1,9 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'rentals,common');
     const permissions = await loadUserPermissions();
 
-    $("#icon").change(function(){
+    $(document).on("change", "#icon", function () {
         if (this.files && this.files[0]) {
             let reader = new FileReader();
             reader.onload = function (e) {
@@ -18,7 +19,7 @@
         }
     });
     
-    $("#image").change(function(){
+    $(document).on("change", "#image", function () {
         if(this.files && this.files[0]){
             let reader = new FileReader();
             reader.onload = function (e) {
@@ -327,7 +328,7 @@
         });
     }
     
-    $("#add_new_extra_service").click(function(){
+    $(document).on('click', '#add_new_extra_service', function () {
         $("#add_extra_service .modal-title").text(_l('admin.rentals.create_extra_service'));
         $("#add_extra_service .submitbtn").text(_l('admin.common.create_new'));
         $("#extraServiceForm")[0].reset();

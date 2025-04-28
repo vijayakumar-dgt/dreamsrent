@@ -1,3 +1,4 @@
+"use strict";
 function showToast(toastType, message) {
 	let toastId = '';
 	if (toastType == 'success') {

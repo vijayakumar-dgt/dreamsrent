@@ -56,11 +56,8 @@ $(document).ready(function () {
         },
     });
 
-
-    $("#create_tag_btn").click(function () {
+    $(document).on("click", "#create_tag_btn", function () {
         const title = $("#add_tag_name").val().trim();
-
-
         if (!title) {
             showToast("error", _l('admin.blog.please_enter_the_name'));
             return;
@@ -83,7 +80,6 @@ $(document).ready(function () {
         });
     });
 
-
     $(document).on("click", ".open-edit-modal", function () {
         let id = $(this).data("id");
         let name = $(this).data("name");
@@ -94,25 +90,20 @@ $(document).ready(function () {
         $("#edit_tag_status").prop("checked", status == 1);
         $("#edit_Tag").modal("show");
     });
-
-
-    $("#update_tag_btn").click(function () {
+  
+    $(document).on("click", "#update_tag_btn", function(){
         const title = $("#edit_tag_name").val().trim();
-
-
         if (!title) {
             showToast("error", _l('admin.blog.please_enter_the_name'));
             return;
         }
-
         let id = $("#edit_tag_id").val();
-
         $.ajax({
             url: "/admin/content/tags/" + id,
             type: "POST",
             data: {
-                _token: $('meta[name="csrf-token"]').attr("content"), // csrf
-                _method: "PUT",
+                _token: $('meta[name="csrf-token"]').attr("content"),
+                _method: "PUT", 
                 name: $("#edit_tag_name").val(),
                 status: $("#edit_tag_status").is(":checked") ? 1 : 0,
             },
@@ -126,16 +117,14 @@ $(document).ready(function () {
             },
         });
     });
-
-
+  
     $(document).on("click", ".open-delete-modal", function () {
         let id = $(this).data("id");
         $("#delete_tag_id").val(id);
         $("#delete_Tag").modal("show");
     });
 
-
-    $("#delete_tag_btn").click(function () {
+    $(document).on("click", "#delete_tag_btn", function(){
         let id = $("#delete_tag_id").val();
         $.ajax({
             url: "/admin/content/tags/" + id,

@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('web', 'home,common');
     let rtl = $('body').data('dir');
     let pl;

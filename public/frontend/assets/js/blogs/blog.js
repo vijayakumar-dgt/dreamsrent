@@ -1,3 +1,4 @@
+"use strict";
 document.addEventListener("DOMContentLoaded", function () {
     const blogContainer = document.getElementById("blogListContainer");
     let activeFilters = {};

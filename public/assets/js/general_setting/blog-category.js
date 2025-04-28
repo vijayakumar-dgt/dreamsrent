@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'blog, common');
     "use strict";
     if ($('.blogCategoryTable').length > 0) {
@@ -58,16 +59,12 @@ $(document).ready(function () {
         },
     });
 
-
-    $("#create_category_btn").click(function () {
-
-    const title = $("#add_category_name").val().trim();
-
-
-    if (!title) {
-        showToast("error", _l('admin.blog.please_enter_the_name'));
-        return;
-    }
+    $(document).on("click","#create_category_btn", function(){
+        const title = $("#add_category_name").val().trim();
+        if (!title) {
+            showToast("error", _l('admin.blog.please_enter_the_name'));
+            return;
+        }
         $.ajax({
             url: "/admin/content/categories",
             type: "POST",
@@ -77,7 +74,7 @@ $(document).ready(function () {
             },
             success: function (response) {
                 showToast("success",  _l('admin.blog.blog_category_created!'));
-                location.reload(); // Or update list dynamically
+                location.reload();
                 $("#add_Category").modal("hide");
             },
             error: function (xhr) {
@@ -85,8 +82,7 @@ $(document).ready(function () {
             },
         });
     });
-
-
+    
     $(document).on("click", ".open-edit-modal", function () {
         let id = $(this).data("id");
         let name = $(this).data("name");
@@ -98,23 +94,18 @@ $(document).ready(function () {
         $("#edit_Category").modal("show");
     });
 
-
-    $("#update_category_btn").click(function () {
+    $(document).on("click", "#update_category_btn", function(){
         const title = $("#edit_category_name").val().trim();
-
-
         if (!title) {
             showToast("error", _l('admin.blog.please_enter_the_name'));
             return;
         }
-
         let id = $("#edit_category_id").val();
-
         $.ajax({
             url: "/admin/content/categories/" + id,
             type: "POST",
             data: {
-                _token: $('meta[name="csrf-token"]').attr("content"), // csrf
+                _token: $('meta[name="csrf-token"]').attr("content"),
                 _method: "PUT",
                 name: $("#edit_category_name").val(),
                 status: $("#edit_category_status").is(":checked") ? 1 : 0,
@@ -130,14 +121,13 @@ $(document).ready(function () {
         });
     });
 
-
     $(document).on("click", ".open-delete-modal", function () {
         let id = $(this).data("id");
         $("#delete_category_id").val(id);
         $("#delete_Category").modal("show");
     });
 
-    $("#delete_category_btn").click(function () {
+    $(document).on("click", "#delete_category_btn", function(){
         let id = $("#delete_category_id").val();
         $.ajax({
             url: "/admin/content/categories/" + id,
@@ -155,7 +145,7 @@ $(document).ready(function () {
 });
 
 
-const searchInput = document.getElementById('searchInputCategory');
+    const searchInput = document.getElementById('searchInputCategory');
     const tableRows = document.querySelectorAll('.blogCategoryTable tbody tr');
 
     searchInput.addEventListener('input', function () {

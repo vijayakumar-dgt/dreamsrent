@@ -1,3 +1,4 @@
+"use strict";
 document.addEventListener("DOMContentLoaded", function () {
     const userPhoneInput = document.querySelector(".customer_phone_number");
     const intlPhoneInput = document.querySelector("#international_phone_number");

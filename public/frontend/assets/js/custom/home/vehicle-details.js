@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile("web", "user,common,home");
     fetchVehicleDetails();
     fetchRecommendedVehicles();

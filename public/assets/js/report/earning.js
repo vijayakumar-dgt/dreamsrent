@@ -1,3 +1,4 @@
+"use strict";
 document.addEventListener("DOMContentLoaded", function() {
     fetch('/admin/earnings/monthly')
         .then(response => response.text()) // Use text() instead of json() to debug
