@@ -118,7 +118,7 @@ class AppServiceProvider extends ServiceProvider
             $smallLogo = uploadedAsset(($logoSetting['small_image'] ?? null), 'default_small_logo');
             $view->with([
                 'theme' => $theme,
-                'layout' => "theme_{$theme}.app",
+                'layout' => "frontend.theme_{$theme}.app",
                 'companyPhoneNumber' => $companyPhoneNumber,
                 'companyEmail' => $companyEmail,
                 'companyName' => $companyName,
