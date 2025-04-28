@@ -381,7 +381,7 @@
 
             @if (haspermission($permissions, 'maintenance', 'view'))
             <!-- Maintenance -->
-            <div class="col-xl-4 d-flex">
+            <div class="col-xl-6 d-flex">
                 <div class="card flex-fill">
                     <div class="card-body pb-1">
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
@@ -430,7 +430,7 @@
 
             @if (haspermission($permissions, 'reservations', 'view') && isAccessMenu('reservation'))
             <!-- Reservation Statistics -->
-            <div class="col-xl-4 d-flex">
+            <div class="col-xl-4 d-none">
                 <div class="card flex-fill">
                     <div class="card-body pb-0">
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-1 mb-3">
@@ -446,7 +446,7 @@
 
             @if (haspermission($permissions, 'drivers', 'view'))
             <!-- Drivers -->
-            <div class="col-xl-4 d-flex">
+            <div class="col-xl-6 d-flex">
                 <div class="card flex-fill">
                     <div class="card-body pb-1">
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
