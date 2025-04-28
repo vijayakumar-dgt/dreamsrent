@@ -1,4 +1,5 @@
-
+(function($) {
+    "use strict";
 (async () => {
     await loadTranslationFile('web', 'user,common');
     document.getElementById('wallet_amount').addEventListener('input', function () {
@@ -147,6 +148,4 @@
         });
     }
 })();
-
-
-
+})(jQuery);

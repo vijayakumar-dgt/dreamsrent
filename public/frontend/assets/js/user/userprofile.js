@@ -1,8 +1,10 @@
+(function($) {
+    "use strict";
 document.addEventListener("DOMContentLoaded", function () {
     const userPhoneInput = document.querySelector(".user_phone");
     const intlPhoneInput = document.querySelector("#international_phone_number");
     const userProfileForm = document.querySelector("#userProfileForm");
-    
+
     if (userPhoneInput && userProfileForm) {
         const iti = intlTelInput(userPhoneInput, {
             utilsScript: `${window.location.origin}/frontend/assets/plugins/intltelinput/js/utils.js`,
@@ -45,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 $("#city").append('<option value="">Select</option>');
             }
         });
-    
+
         $("#state").on('change', function () {
             let id = $(this).val();
             if (id) {
@@ -55,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 $("#city").append('<option value="">Select</option>');
             }
         });
-    
+
         $("#userProfileForm").validate({
             rules: {
                 profile_photo: {
@@ -155,12 +157,12 @@ document.addEventListener("DOMContentLoaded", function () {
             submitHandler: function (form) {
                 let adminProfileData = new FormData(form);
                 adminProfileData.set('user_phone', $('#international_phone_number').val());
-    
+
                 // CSRF Token
                 adminProfileData.append("_token", $('meta[name="csrf-token"]').attr('content'));
-    
+
                 $(".btn-primary").text('Please Wait...').prop('disabled', true);
-    
+
                 $.ajax({
                     type: "POST",
                     url: "/userprofile",
@@ -188,14 +190,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
         });
-    
+
         $.validator.addMethod("filesize", function (value, element, param) {
             if (element.files.length === 0) return true;
             return element.files[0].size <= param * 1024;
-        }, "File size must be less than {0} KB.");    
-    
+        }, "File size must be less than {0} KB.");
+
     });
-    
+
 })();
 
 
@@ -465,6 +467,4 @@ function confirmDelete() {
         }
     });
 }
-
-
-
+})(jQuery);

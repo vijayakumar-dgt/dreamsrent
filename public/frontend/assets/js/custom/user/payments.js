@@ -1,3 +1,5 @@
+(function($) {
+    "use strict";
 (async () => {
     await loadTranslationFile('web', 'user,common');
     fetchUserTransactions();
@@ -185,3 +187,5 @@ $(document).on('click','.sort-filter', function(){
    fetchUserTransactions();
    $(".sortfilter_text").text($(this).text().trim());
 });
+})(jQuery);
+

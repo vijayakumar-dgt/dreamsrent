@@ -1,3 +1,5 @@
+(function($) {
+    "use strict";
 (async () => {
     await loadTranslationFile('web', 'user,common');
     fetchUserBookings();
@@ -173,3 +175,4 @@ function createTransactionCard(booking){
                 </td>
             </tr>`;
 }
+})(jQuery);

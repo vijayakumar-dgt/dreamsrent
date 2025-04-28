@@ -1,4 +1,5 @@
-
+(function($) {
+    "use strict";
 (async () => {
     await loadTranslationFile('web', 'user,common');
     loadNotifications();
@@ -9,7 +10,7 @@
             success: function (response) {
                 if(response.count > 0){
                     $('#notification-list').html(response.html);
-                    $('#pagination-container').html(renderPagination(response)); 
+                    $('#pagination-container').html(renderPagination(response));
                     $("#notification_action").removeClass("d-none");
                 }else{
                     $('#notification-list').html(`<p class="text-center">${_l('web.user.no_notifications_found')}</p>`);
@@ -19,7 +20,7 @@
             }
         });
     }
-    
+
     $(document).on('click', '.pagination .page-link', function (e) {
         e.preventDefault();
         let page = $(this).data('page');
@@ -27,7 +28,7 @@
             loadNotifications(page);
         }
     });
-    
+
     function renderPagination(data) {
         let html = `
             <nav class="custom-pagination">
@@ -37,7 +38,7 @@
                             <i class="fas fa-arrow-left me-1"></i> ${_l('web.user.prev')}
                         </a>
                     </li>`;
-    
+
         for (let i = 1; i <= data.last_page; i++) {
             html += `
                 <li class="page-item ${i === data.current_page ? 'active' : ''}">
@@ -46,7 +47,7 @@
                     </a>
                 </li>`;
         }
-    
+
         html += `
                     <li class="page-item ${data.next_page_url ? '' : 'disabled'}">
                         <a class="page-link" href="#" data-page="${data.current_page + 1}">
@@ -55,10 +56,10 @@
                     </li>
                 </ul>
             </nav>`;
-    
+
         return html;
     }
-    
+
     $(document).on('click','#markAllAsRead', function(){
         $.ajax({
             type:"POST",
@@ -105,7 +106,7 @@
             }
         });
     });
-    
+
     $(document).on("click", ".del_notification", function () {
         let id = $(this).data('id');
         $("#delete_notification .deletebtn").data('id', id);
@@ -131,7 +132,7 @@
                     }else{
                         showToast('error', response.message);
                     }
-                    
+
                 },
                 error: function (response) {
                     showToast('error', response.message);
@@ -141,7 +142,7 @@
     });
 
     $(document).on('click','#deleteAll', function(){
-        $("#deleteAllNotifications").modal('show'); 
+        $("#deleteAllNotifications").modal('show');
     });
 
     $(document).on('click','.deleteAllNotifications', function(){
@@ -164,6 +165,7 @@
             error : function(response) {
                 showToast('error', response.message);
             }
-        }) 
+        })
     });
 })();
+})(jQuery);

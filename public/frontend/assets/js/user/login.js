@@ -1,5 +1,6 @@
 
-
+(function($) {
+    "use strict";
 $(document).ready(function () {
     $("#userLoginForm").validate({
         rules: {
@@ -328,6 +329,4 @@ $(document).ready(function () {
         });
     });
 });
-
-
-
+})(jQuery);

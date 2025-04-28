@@ -1,3 +1,5 @@
+(function($) {
+    "use strict";
 (async () => {
     await loadTranslationFile('web', 'user,common');
     $(document).ready(function () {
@@ -5,7 +7,7 @@
         $("#current_password").on('blur', function () {
             checkCurrentPassword("#current_password");
         });
-    
+
         $(document).on('click','.changePasswordBtn', function(){
             resetPasswordForm();
         });
@@ -60,9 +62,9 @@
                    resolve(false);
                }
             });
-    
+
         }
-    
+
         $("#changePasswordForm").validate({
             rules: {
                 current_password: {
@@ -204,13 +206,13 @@
                         }
                         let devices = response.data.devices;
                         let lastDeviceManagement = devices.length > 0 ? devices[0].date : null;
-    
+
                         if (lastDeviceManagement && lastDeviceManagement !== "null") {
                             $('.device_management_time').text(`${_l('web.user.last_changed')} ${lastDeviceManagement}`);
                         } else {
                             $('.device_management_time').text(_l('web.user.last_changed') + ': ' + _l('web.user.not_available'));
                         }
-    
+
                         $(".last_changed").html(lastPasswordChanged);
                         if(response.data.user.google_auth_enabled){
                             $("#google_auth").prop("checked",true);
@@ -227,7 +229,7 @@
                 }
             });
         }
-    
+
         $(document).on('click', '.logoutDevice', function(e){
             e.preventDefault();
             logoutDevice($(this).data('id'));
@@ -245,11 +247,11 @@
                 }
             });
         }
-    
+
         $(document).on('click','.signoutall', function(){
             logoutDevice(0,true);
         });
-    
+
     });
 })();
 
@@ -279,4 +281,4 @@ function confirmDelete() {
         }
     });
 }
-
+})(jQuery);

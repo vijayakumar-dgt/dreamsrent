@@ -1,4 +1,5 @@
-
+(function($) {
+    "use strict";
 (async () => {
     await loadTranslationFile('web', 'user,common');
     $(document).ready(function() {
@@ -420,3 +421,5 @@ $("#delete_ticket_form").on('submit', function(e){
         }
     });
 });
+})(jQuery);
+

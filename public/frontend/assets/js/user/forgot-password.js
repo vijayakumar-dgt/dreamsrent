@@ -1,3 +1,5 @@
+(function($) {
+    "use strict";
 $(document).ready(function () {
     $(document).on("click", "#forgot_otp, .resendEmailOtpForgot", function (event) {
         event.preventDefault(); // Prevent default anchor behavior
@@ -234,3 +236,4 @@ function sendEmail(email, emailData, userName, otp) {
         });
     });
 }
+})(jQuery);
