@@ -20,8 +20,10 @@
             </div>
             <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
                 <div class="mb-2">
+                    @if (hasPermission($permissions, 'roles_permissions', 'create'))
                     <div class="skeleton label-skeleton label-loader"></div>
                     <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center d-none real-label" id="add_role" data-bs-toggle="modal" data-bs-target="#role_modal"><i class="ti ti-plus me-2"></i>{{ __('admin.user_management.add_new_role') }}</a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -144,7 +146,9 @@
                         <th>{{ strtoupper(__('admin.user_management.role')) }}</th>
                         <th>{{ strtoupper(__('admin.user_management.created_date')) }}</th>
                         <th>{{ strtoupper(__('admin.common.status')) }}</th>
+                        @if (hasPermission($permissions, 'roles_permissions', 'edit') || hasPermission($permissions, 'roles_permissions', 'delete'))
                         <th>{{ strtoupper(__('admin.common.action')) }}</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>

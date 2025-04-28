@@ -304,14 +304,14 @@ class AdminUserController extends Controller
     {
         try {
             $id = $request->id;
-            
+
             User::where('id', $id)->delete();
             UserDetail::where('user_id', $id)->delete();
 
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
-                'message' => __('admin.user_management.user_delete_success.')
+                'message' => __('admin.user_management.user_delete_success')
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
