@@ -1,3 +1,4 @@
+"use strict";
 async function loadUserPermissions(userId) {
     try {
         const response = await fetch(`/admin/get-user-permissions`);

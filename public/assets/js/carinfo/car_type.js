@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'common, rentals');
     const permissions = await loadUserPermissions();
     
@@ -365,8 +366,7 @@ function editType(id){
        }
     });
 }
-
-$("#add_new_type").click(function(){
+$(document).on("click", "#add_new_type", function(){
     $("#add_type .modal-title").text(_l('admin.rentals.create_type'));
     $("#add_type .submitbtn").text(_l('admin.common.create_new'));
     $("#status_div").addClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');

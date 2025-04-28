@@ -1,5 +1,6 @@
 
 (async () => {
+    "use strict";
     await loadTranslationFile('web', 'user,common');
     loadNotifications();
     function loadNotifications(page = 1) {

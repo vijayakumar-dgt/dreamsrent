@@ -52,7 +52,7 @@
                                                             <div class="drag-upload-btn btn btn-md btn-dark">
                                                                 <i class="ti ti-photo-up fs-14"></i>
                                                                 {{ __('admin.common.change') }}
-                                                                <input type="file" class="form-control image-sign" id="company_profile_photo" name="company_profile_photo" accept="image/*" onchange="previewImage(event)">
+                                                                <input type="file" class="form-control image-sign" id="company_profile_photo" name="company_profile_photo" accept="image/*">
                                                             </div>
                                                         </div>
                                                         <div class="skeleton text-skeleton label-loader"></div>

@@ -1,3 +1,4 @@
+"use strict";
 const chartDataElement = document.getElementById('chart-data');
 
 // Parse all JSON data

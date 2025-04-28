@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'common, manage');
     const permissions = await loadUserPermissions();
 
@@ -16,7 +17,7 @@
             },
         });
 
-        $("#image").change(function () {
+        $(document).on("change", "#image", function () {
             if (this.files && this.files[0]) {
                 let reader = new FileReader();
                 reader.onload = function (e) {
@@ -28,7 +29,7 @@
             } else {
                 $("#image_preview").addClass('d-none');
                 $(".image_placeholder").show();
-            }
+            } 
         });
 
         $.extend($.validator.messages, {
@@ -368,8 +369,7 @@
     });
     
     
-    
-    $("#add_new_location").click(function () {
+    $(document).on("click", "#add_new_location", function () {
         $("#add_location .modal-title").text(_l('admin.manage.add_location'));
         $("#add_location .submitbtn").text(_l('admin.common.create_new'));
         $("#status_div").addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');

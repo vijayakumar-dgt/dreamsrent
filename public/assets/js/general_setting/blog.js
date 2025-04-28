@@ -63,71 +63,68 @@
     }
 
 
+   $(document).on("click", "#create_blog_btn", function(){
+        const image = document.getElementById("featured_image_add").files[0];
+        const title = $("#blog_title").val().trim();
+        const language = $("#blog_language").val().trim();
+        const category = $("#blog_category").val();
+        const tag = $("#blog_tags").val();
+        const description = $("#editor").val().trim();
 
-$("#create_blog_btn").click(function () {
-    // Get form values
-    const image = document.getElementById("featured_image_add").files[0];
-    const title = $("#blog_title").val().trim();
-    const language = $("#blog_language").val().trim();
-    const category = $("#blog_category").val();
-    const tag = $("#blog_tags").val();
-    const description = $("#editor").val().trim();
-
-    // Validate
-    if (!image) {
-        showToast("error", _l('admin.blog.please_upload_an_image'));
-        return;
-    }
-    if (!title) {
-        showToast("error", _l('admin.blog.please_enter_a_blog_title'));
-        return;
-    }
-    if (!language) {
-        showToast("error", _l('admin.blog.please_select_a_language'));
-        return;
-    }
-    if (!category) {
-        showToast("error", _l('admin.blog.please_select_a_category'));
-        return;
-    }
-    if (!tag || tag.length === 0) {
-        showToast("error", _l('admin.blog.please_select_at_least_one_tag'));
-        return;
-    }
-    if (!description) {
-        showToast("error", _l('admin.blog.please_enter_a_description'));
-        return;
-    }
+        if (!image) {
+            showToast("error", _l('admin.blog.please_upload_an_image'));
+            return;
+        }
+        if (!title) {
+            showToast("error", _l('admin.blog.please_enter_a_blog_title'));
+            return;
+        }
+        if (!language) {
+            showToast("error", _l('admin.blog.please_select_a_language'));
+            return;
+        }
+        if (!category) {
+            showToast("error", _l('admin.blog.please_select_a_category'));
+            return;
+        }
+        if (!tag || tag.length === 0) {
+            showToast("error", _l('admin.blog.please_select_at_least_one_tag'));
+            return;
+        }
+        if (!description) {
+            showToast("error", _l('admin.blog.please_enter_a_description'));
+            return;
+        }
 
 
-    const formData = new FormData();
-    formData.append("image", image);
-    formData.append("title", title);
-    formData.append("language", language);
-    formData.append("category_id", category);
-    tag.forEach(tagId => {
-        formData.append("tag_id[]", tagId);
-    });
-    formData.append("description", description);
+        const formData = new FormData();
+        formData.append("image", image);
+        formData.append("title", title);
+        formData.append("language", language);
+        formData.append("category_id", category);
+        tag.forEach(tagId => {
+            formData.append("tag_id[]", tagId);
+        });
+        formData.append("description", description);
 
-    $.ajax({
-        url: "/admin/content/blog-store",
-        method: "POST",
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            showToast("success", _l('admin.blog.blog_post_created!'));
-            window.location.href = "/admin/content/blogs";
-        },
-        error: function (xhr) {
-            showToast("error", xhr.responseJSON.message);
-        },
-    });
-});
+        $.ajax({
+            url: "/admin/content/blog-store",
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                showToast("success", _l('admin.blog.blog_post_created!'));
+                window.location.href = "/admin/content/blogs";
+            },
+            error: function (xhr) {
+                showToast("error", xhr.responseJSON.message);
+            },
+        });
+   });
 
 $(document).ready(function () {
 
@@ -186,33 +183,33 @@ $(document).ready(function () {
     }
 });
 
-$(document).on("click", "#blog-edit", function () {
-    let blogId = $(this).data("id");
-    window.location.href = "/admin/content/blogs/" + blogId;
-});
-
-$("#saveBlogBtn").click(function () {
-    let formData = new FormData($("#editBlogForm")[0]);
-    let blogId = $('input[name="blog_id"]').val();
-
-    $.ajax({
-        url: `/admin/content/blog/${blogId}`,
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
-        headers: {
-            "X-CSRF-TOKEN": $('input[name="_token"]').val(),
-        },
-        success: function (response) {
-            showToast("success", _l('admin.blog.blog_post_updated!'));
-            window.location.href = "/admin/content/blogs";
-        },
-        error: function (xhr) {
-            showToast("error", xhr.responseJSON.message);
-        },
+    $(document).on("click", "#blog-edit", function () {
+        let blogId = $(this).data("id");
+        window.location.href = "/admin/content/blogs/" + blogId;
     });
-});
+     
+    $(document).on("click", "#saveBlogBtn", function(){
+        let formData = new FormData($("#editBlogForm")[0]);
+        let blogId = $('input[name="blog_id"]').val();
+    
+        $.ajax({
+            url: `/admin/content/blog/${blogId}`,
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                "X-CSRF-TOKEN": $('input[name="_token"]').val(),
+            },
+            success: function (response) {
+                showToast("success", _l('admin.blog.blog_post_updated!'));
+                window.location.href = "/admin/content/blogs";
+            },
+            error: function (xhr) {
+                showToast("error", xhr.responseJSON.message);
+            },
+        });
+    });
 
 $(document).ready(function () {
 const inputAdd = document.getElementById("featured_image_add");

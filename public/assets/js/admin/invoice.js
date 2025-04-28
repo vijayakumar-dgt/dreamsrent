@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'common, finance_accounts');
 
     $('#linkReservationTable').DataTable({

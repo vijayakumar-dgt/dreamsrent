@@ -1,7 +1,6 @@
 $(document).ready(function() {
-    // initTable();
+    "use strict";
     var table;
-    // initTableServerSide();
     $("#typeForm").validate({
         rules: {
             name: {
@@ -318,9 +317,7 @@ function editType(id){
        }
     });
 }
-
-$("#add_new_type").click(function(){
-    //change modal title 
+$(document).on("click", "#add_new_type", function(){
     $("#add_type .modal-title").text('Create Type');
     $("#add_type .submitbtn").text('Create New');
     $("#status_div").hide();

@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile("admin", "common, page");
 
     $(document).ready(function () {
@@ -207,8 +208,7 @@
         fetchSection(); // Make sure this uses the updated themeId
     }
 
-    // Attach click handler
-    $(".setSection button").click(function () {
+    $(document).on("click", ".setSection button", function () {
         updateThemeSelection(this);
     });
 

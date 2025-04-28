@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile("admin", "rentals, common");
     const permissions = await loadUserPermissions();
 
@@ -107,11 +108,11 @@
             fetchFilteredData();
         });
 
-        $("#applyFilter").click(function () {
+        $(document).on("#applyFilter", "click", function () {
             fetchFilteredData(true);
         });
-
-        $("#clearFilter").click(function () {
+        
+        $(document).on("#clearFilter", "click", function () {
             $("input[type='checkbox']").prop("checked", false);
             $(".dropdown-menu-md .dropdown-item").removeClass("active");
             $("#name").val("");
@@ -121,8 +122,8 @@
             $("#sortLabel").text("{{ __('admin.page.latest') }}");
             fetchFilteredData();
         });
-
-        $(".statusFilter .dropdown-item").click(function () {
+        
+        $(document).on(".statusFilter .dropdown-item", "click", function(){
             $(".statusFilter .dropdown-item").removeClass("active");
             $(this).addClass("active");
 
@@ -134,6 +135,7 @@
                     ? 0
                     : null;
         });
+       
 
         window.filterSort = function (element, sortType) {
             $("#sortFilter a").removeClass("active");
@@ -2393,7 +2395,7 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    $("#Baseunlimited").change(function () {
+    $(document).on("change", "#Baseunlimited", function(){
         if ($(this).is(":checked")) {
             $("#basic_kilometer").prop("disabled", true).val("");
             $("#extra_kilometer").prop("disabled", true).val("");

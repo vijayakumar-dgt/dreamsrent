@@ -1,3 +1,4 @@
+"use strict";
 const bookingDataElement = document.getElementById('booking-data');
 const bookingData = JSON.parse(bookingDataElement.dataset.bookings);
 

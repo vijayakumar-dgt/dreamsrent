@@ -1,3 +1,4 @@
+"use strict";
 async function loadTranslationFile(file, modules) {
     try {
         const response = await fetch(`/admin/translations/${file}/${modules}`);

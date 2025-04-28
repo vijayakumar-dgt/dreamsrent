@@ -1,3 +1,4 @@
+"use strict";
 document.addEventListener("DOMContentLoaded", function () {
     const userPhoneInput = document.querySelector(".driver_phone_number");
     const intlPhoneInput = document.querySelector("#international_phone_number");
@@ -28,6 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'common, bookings');
     const permissions = await loadUserPermissions();
 
@@ -260,16 +262,14 @@ $(document).ready(function() {
         initTable();
     });
 
-    // Handle sort dropdown selection
-    $('.sort_by_list .dropdown-item').click(function() {
+    $(document).on("click", ".sort_by_list .dropdown-item", function(){
         $('.sort_by_list .dropdown-item').removeClass('active');
         $(this).addClass('active');
         $('#current_sort').text($(this).text());
         initTable();
     });
-
-    // Handle status dropdown selection
-    $('.dropdown-menu .active-status').click(function() {
+    
+    $(document).on("click", ".dropdown-menu .active-status", function(){
         $('.dropdown-menu .active-status').removeClass('active');
         $(this).addClass('active');
         $('#current_status').text($(this).text());

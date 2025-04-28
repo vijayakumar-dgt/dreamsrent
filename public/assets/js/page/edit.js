@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile("admin", "common, page");
     $(document).ready(function () {
         $("#editPageForm").validate({
@@ -339,8 +340,7 @@
 
         fetchSection(); // Fetch data with updated theme_id
     }
-
-    $(".setSection button").click(function () {
+    $(document).on('click', '.setSection button', function () {
         let selectedText = $(this).text().trim();
         let newThemeId = selectedText === "Screen One" ? 1 : 2;
         updateThemeSelection(this, newThemeId);
