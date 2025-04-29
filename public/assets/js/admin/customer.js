@@ -1,4 +1,5 @@
 "use strict";
+let international_phone_number = '';
 document.addEventListener("DOMContentLoaded", function () {
     const userPhoneInput = document.querySelector(".customer_phone_number");
     const intlPhoneInput = document.querySelector("#international_phone_number");
@@ -18,10 +19,10 @@ document.addEventListener("DOMContentLoaded", function () {
             const intlNumber = iti.getNumber();
             if (intlNumber) {
                 intlPhoneInput.value = intlNumber;
-                userPhoneInput.value = intlNumber;
+                international_phone_number = intlNumber;
             } else {
                 intlPhoneInput.value = userPhoneInput.value.trim();
-                userPhoneInput.value = intlPhoneInput.value;
+                international_phone_number = intlPhoneInput.value;
             }
         });
     }
@@ -232,6 +233,7 @@ $(document).ready(function() {
         },
         submitHandler: function(form) {
             let formData = new FormData(form);
+            formData.set('phone_number', international_phone_number);
 
             $.ajax({
                 type:"POST",
@@ -686,11 +688,11 @@ function initTable(sortByDate = '') {
                                 </li>
                                 ${ hasPermission(permissions, 'customers', 'edit') ? 
                                 `<li>
-                                    <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editCustomer(${row.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                    <a class="dropdown-item rounded-1 edit-customer" href="javascript:void(0);" data-id="${row.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                                 </li>`:''}
                                 ${ hasPermission(permissions, 'customers', 'delete') ? 
                                 `<li>
-                                    <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteCustomer(${row.id});" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                    <a class="dropdown-item rounded-1 delete-customer" href="javascript:void(0);" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
                                 </li>`:''}
                             </ul>
                         </div>`;
@@ -854,92 +856,96 @@ $('#bulk_delete').on('click', function () {
     });
 });
 
-}) ();
-
 let initialPhoneNumber = null;
-function editCustomer(id){
+
+$(document).on('click', '.edit-customer', function() {
+    let id = $(this).data('id');
     $('#editCustomerForm').trigger('reset');
     $('.submitbtn').text(_l('admin.common.save_changes'));
 
     removedDocuments = [];
     $.ajax({
-       type:"GET",
-       url:"/admin/customer/edit/"+id,
-       success: function(response) {
-            $(".error-text").text("");
-            $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-            if(response.code === 200){
-                let data = response.data;
+        type:"GET",
+        url:"/admin/customer/edit/"+id,
+        success: function(response) {
+             $(".error-text").text("");
+             $(".form-control, .select2-container").removeClass("is-invalid is-valid");
+             if(response.code === 200){
+                 let data = response.data;
+ 
+                 $("#id").val(data.id);
+                 $('#edit_username').val(data.username);
+                 $('#edit_dob').val(data.dob);
+                 $('#edit_language').val(data.language_id).trigger('change');
+                 $("#edit_first_name").val(data.first_name);
+                 $("#edit_last_name").val(data.last_name);
+                 $("#edit_gender").val(data.gender).trigger('change');
+                 $("#edit_email").val(data.email);
+                 $("#edit_address").val(data.address);
+                 $("#edit_date_of_issue").val(data.date_of_issue);
+                 $("#edit_valid_date").val(data.valid_date);
+                 $("#edit_card_number").val(data.card_number);
+ 
+                 if (data.profile_image) {
+                     $('#editImagePreview').attr('src', data.profile_image).removeClass('d-none');
+                     $(".upload_icon").addClass('d-none');
+                 } else {
+                     $(".upload_icon").removeClass('d-none');
+                     $('#editImagePreview').addClass('d-none');
+                 }
+                 $('.document-preview-container').empty();
+                 if (data.documents && data.documents.length > 0) {
+                     $.each(response.data.documents, function(index, value) {
+                         $('.document-preview-container').append(
+                             `<div class="document-preview me-2">
+                                 <a href="${value.document}" target="_blank" class="btn btn-sm btn-light me-0" ><i class="ti ti-file-text fs-40"></i></a>
+                                 <button type="button" class="btn btn-sm btn-light remove-document" data-id="${value.id}"><i class="ti ti-trash"></i></button>
+                             </div>`
+                         );
+                     });
+                 }
+ 
+                 const phoneNumber = data.phone_number ? data.phone_number.trim() : data.phone_number;
+                 const phoneInput = document.querySelector(".edit_customer_phone_number");
+                 const hiddenInput = document.querySelector("#edit_international_phone_number");
+                 
+                 if ($(phoneInput).data('itiInstance')) {
+                     $(phoneInput).data('itiInstance').destroy();
+                 }
+                 const iti = intlTelInput(phoneInput, {
+                     utilsScript: window.location.origin + "/assets/plugins/intltelinput/js/utils.js",
+                     separateDialCode: true,
+                 });
+                 $(phoneInput).data('itiInstance', iti);
+         
+                 if (phoneNumber) {
+                     iti.setNumber(phoneNumber);
+                     hiddenInput.value = iti.getNumber();
+                     initialPhoneNumber = phoneNumber;
+                 }
+                 const updateHiddenPhoneNumber = () => {
+                     const currentPhoneNumber = iti.getNumber();
+                     if (currentPhoneNumber !== initialPhoneNumber) {
+                         hiddenInput.value = currentPhoneNumber.trim();
+                     }
+                 };
+ 
+                 phoneInput.addEventListener("input", updateHiddenPhoneNumber);
+                 phoneInput.addEventListener("countrychange", updateHiddenPhoneNumber);
+         
+                 if (!hiddenInput.value) {
+                     hiddenInput.value = initialPhoneNumber;
+                 }
+                 $("#edit_customer_modal").modal('show');
+             }
+        }
+     });
+});
 
-                $("#id").val(data.id);
-                $('#edit_username').val(data.username);
-                $('#edit_dob').val(data.dob);
-                $('#edit_language').val(data.language_id).trigger('change');
-                $("#edit_first_name").val(data.first_name);
-                $("#edit_last_name").val(data.last_name);
-                $("#edit_gender").val(data.gender).trigger('change');
-                $("#edit_email").val(data.email);
-                $("#edit_address").val(data.address);
-                $("#edit_date_of_issue").val(data.date_of_issue);
-                $("#edit_valid_date").val(data.valid_date);
-                $("#edit_card_number").val(data.card_number);
-
-                if (data.profile_image) {
-                    $('#editImagePreview').attr('src', data.profile_image).removeClass('d-none');
-                    $(".upload_icon").addClass('d-none');
-                } else {
-                    $(".upload_icon").removeClass('d-none');
-                    $('#editImagePreview').addClass('d-none');
-                }
-                $('.document-preview-container').empty();
-                if (data.documents && data.documents.length > 0) {
-                    $.each(response.data.documents, function(index, value) {
-                        $('.document-preview-container').append(
-                            `<div class="document-preview me-2">
-                                <a href="${value.document}" target="_blank" class="btn btn-sm btn-light me-0" ><i class="ti ti-file-text fs-40"></i></a>
-                                <button type="button" class="btn btn-sm btn-light remove-document" data-id="${value.id}"><i class="ti ti-trash"></i></button>
-                            </div>`
-                        );
-                    });
-                }
-
-                const phoneNumber = data.phone_number ? data.phone_number.trim() : data.phone_number;
-                const phoneInput = document.querySelector(".edit_customer_phone_number");
-                const hiddenInput = document.querySelector("#edit_international_phone_number");
-                
-                if ($(phoneInput).data('itiInstance')) {
-                    $(phoneInput).data('itiInstance').destroy();
-                }
-                const iti = intlTelInput(phoneInput, {
-                    utilsScript: window.location.origin + "/assets/plugins/intltelinput/js/utils.js",
-                    separateDialCode: true,
-                });
-                $(phoneInput).data('itiInstance', iti);
-        
-                if (phoneNumber) {
-                    iti.setNumber(phoneNumber);
-                    hiddenInput.value = iti.getNumber();
-                    initialPhoneNumber = phoneNumber;
-                }
-                const updateHiddenPhoneNumber = () => {
-                    const currentPhoneNumber = iti.getNumber();
-                    if (currentPhoneNumber !== initialPhoneNumber) {
-                        hiddenInput.value = currentPhoneNumber.trim();
-                    }
-                };
-
-                phoneInput.addEventListener("input", updateHiddenPhoneNumber);
-                phoneInput.addEventListener("countrychange", updateHiddenPhoneNumber);
-        
-                if (!hiddenInput.value) {
-                    hiddenInput.value = initialPhoneNumber;
-                }
-                $("#edit_customer_modal").modal('show');
-            }
-       }
-    });
-}
-
-function deleteCustomer(id){
+$(document).on('click', '.delete-customer', function() {
+    let id = $(this).data('id');
     $("#delete_id").val(id);
-}
+});
+
+
+}) ();
