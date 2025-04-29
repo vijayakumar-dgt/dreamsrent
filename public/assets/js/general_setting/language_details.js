@@ -131,7 +131,7 @@ $(document).ready(function() {
                                     </tr>`;
                         });
                     } else {
-                        html = `<tr><td colspan="2" class="text-center">No Data Found</td></tr>`;
+                        html = `<tr><td colspan="2" class="text-center">${_l('admin.common.no_data_found')}</td></tr>`;
                     }
 
 
@@ -223,7 +223,6 @@ $(document).ready(function() {
                 }
             },
             complete: function() {
-
                 loadLanguageModules();
             }
         });

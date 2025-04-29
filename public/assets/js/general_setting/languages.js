@@ -32,7 +32,7 @@
                         }
                     },
                     complete: function() {
-                        $("#addNewLanguage").html('<i class="ti ti-plus me-1"></i> Add New Language');
+                        $("#addNewLanguage").html(`<i class="ti ti-plus me-1"></i> ${_l('admin.general_settings.add_new_language')}`);
                         $("#addNewLanguage").attr('disabled', false);
                         $("#langDropdownMenu li .selected").removeClass('selected');
                         $("#langText").text('Language');
@@ -132,10 +132,10 @@
                            });
                            $("#languageTable tbody").html(html);
                       }else{
-                           $("#languageTable tbody").html('<tr><td colspan="10" class="text-center">No data found</td></tr>');
+                           $("#languageTable tbody").html(`<tr><td colspan="10" class="text-center">${_l('admin.common.no_data_found')}</td></tr>`);
                       }
                   }else{
-                      $("#languageTable tbody").html('<tr><td colspan="10" class="text-center">No data found</td></tr>');
+                      $("#languageTable tbody").html(`<tr><td colspan="10" class="text-center">${_l('admin.common.no_data_found')}</td></tr>`);
                   }
                },
                complete: function() {
@@ -181,22 +181,16 @@
 
         $("#deleteForm").on("submit", function(e){
            e.preventDefault();
-           $("#deleteForm .submitbtn").prop('disabled',true);
-           $("#deleteForm .submitbtn").html('<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> Deleting..');
            $.ajax({
                type:"POST",
                url:"/admin/settings/delete-language",
                data:$("#deleteForm").serialize(),
                success:function(response){
-                   $("#deleteForm .submitbtn").prop('disabled',false);
-                   $("#deleteForm .submitbtn").text(_l('admin.general_setting.yes_delete'));
                    $("#delete-modal").modal("hide");
                    showToast('success',response.message);
                },
                error:function(error){
                    showToast('error',error.responseJSON.message);
-                   $("#deleteForm .submitbtn").prop('disabled',false);
-                   $("#deleteForm .submitbtn").text(_l('admin.general_setting.yes_delete'));
                    $("#delete-modal").modal("hide");
                },
                complete: function() {

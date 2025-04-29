@@ -25,7 +25,7 @@ $(document).ready(function() {
 
             },
             error: function(err) {
-                console.log(`Error updating ${gateway} status:`, err);
+                showToast('error', _l('admin.common.default_update_error'));
             }
         });
     });

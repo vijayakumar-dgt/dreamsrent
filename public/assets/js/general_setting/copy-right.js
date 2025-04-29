@@ -136,7 +136,7 @@
                 }
             },
             error: function(xhr) {
-                console.log('Error loading settings:', xhr.responseText);
+                showToast('error', _l('admin.common.default_retrieve_error'));
             },
             complete: function() {
                 $(".label-loader, .input-loader").hide();

@@ -150,7 +150,7 @@ function loadLogoSettings() {
             }
         },
         error: function(xhr) {
-            console.log('Error loading Logo settings:', xhr.responseText);
+            showToast('error', xhr.responseJSON.message);
         },
         complete: function() {
             $(".label-loader, .input-loader").hide();

@@ -1,7 +1,6 @@
 (async () => {
     "use strict";
   await loadTranslationFile('admin', 'common, general_settings');
-  "use strict";
   $(document).ready(function() {
 
     profile_list();

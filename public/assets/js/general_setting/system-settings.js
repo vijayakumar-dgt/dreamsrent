@@ -65,7 +65,7 @@ function DbBackUpTable() {
             $(".real-label, .real-table, .real-data, .table-footer").removeClass("d-none");
         },
         error: function(error) {
-            console.error("Error fetching backups:", error);
+            showToast('error', _l('admin.general_settings.retrive_error'));
         }
     });
 }
