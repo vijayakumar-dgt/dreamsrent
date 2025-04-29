@@ -2,7 +2,7 @@
 @foreach($blogPosts as $blogPost)
 <div class="col-lg-12 col-md-12 d-lg-flex" id="blogs-filter-item" data-category="{{ $blogPost->category }}">
     <div class="blog grid-blog">
-        <div class="blog-image-list">
+        <div class="blog-image-list custom-blog-list-img">
             <a href="/blog-details/{{$blogPost->slug}}"><img class="img-fluid" src="{{asset('storage/' . $blogPost->image)}}" alt="Post Image"></a>
         </div>
         <div class="blog-content">

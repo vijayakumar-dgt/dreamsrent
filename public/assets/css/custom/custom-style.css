@@ -985,3 +985,11 @@
   height: 100% !important;
   object-fit: cover !important;
 }
+.custom-blog-list-img a{
+  width:100%;
+  display:block;
+}
+.custom-blog-list-img img{
+  width:100%;
+  object-fit:cover;
+}
