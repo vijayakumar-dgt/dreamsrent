@@ -46,7 +46,7 @@
                                         </div>
                                         <div class="col-xl-4">
                                             <div class="d-flex justify-content-end">
-                                                <a href="javascript:void(0);" class="btn btn-dark changePasswordBtn" data-bs-toggle="modal" data-bs-target="#change_password">{{ __('admin.rentals.change') }}</a>
+                                                <a href="javascript:void(0);" class="btn btn-dark changePasswordBtn" data-bs-toggle="modal" data-bs-target="#change_password">{{ __('admin.common.change') }}</a>
                                             </div>
                                         </div>
                                     </div>
@@ -92,7 +92,7 @@
                                         </div>
                                         <div class="col-xl-4">
                                             <div class="d-flex justify-content-end">
-                                                <a href="javascript:void(0);" class="btn btn-dark changePhoneNumberBtn" data-bs-toggle="modal" data-bs-target="#change_phonenumber">{{ __('admin.rentals.change') }}</a>
+                                                <a href="javascript:void(0);" class="btn btn-dark changePhoneNumberBtn" data-bs-toggle="modal" data-bs-target="#change_phonenumber">{{ __('admin.common.change') }}</a>
                                             </div>
                                         </div>
                                     </div>
@@ -114,7 +114,7 @@
                                         </div>
                                         <div class="col-xl-4">
                                             <div class="d-flex justify-content-end">
-                                                <a href="javascript:void(0);" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#change_email">{{ __('admin.rentals.change') }}</a>
+                                                <a href="javascript:void(0);" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#change_email">{{ __('admin.common.change') }}</a>
                                             </div>
                                         </div>
                                     </div>
