@@ -102,9 +102,11 @@
                                             <div class="mb-3">
                                                 <div class="skeleton label-skeleton label-loader"></div>
                                                 <label class="form-label d-none real-label">{{ __('admin.common.phone_number') }}<span class="text-danger ms-1">*</span></label>
-                                                <input type="text" class="form-control d-none real-label admin_phone" id="admin_phone" name="phone" maxlength="15">
-                                                <input type="hidden" id="international_phone_number" name="international_phone_number">
                                                 <div class="skeleton input-skeleton input-loader"></div>
+                                                <div class="d-none real-label">
+                                                    <input type="text" class="form-control admin_phone" id="admin_phone" name="phone" maxlength="15">
+                                                    <input type="hidden" id="international_phone_number" name="international_phone_number">
+                                                </div>
                                                 <span id="admin_phone_error" class="text-danger error-text"></span>
                                             </div>
                                         </div>
@@ -127,8 +129,10 @@
                                             <div class="mb-3">
                                                 <div class="skeleton label-skeleton label-loader"></div>
                                                 <label class="form-label d-none real-label">{{ __('admin.common.country') }}<span class="text-danger">*</span></label>
-                                                <select name="country" class="form-control select2 d-none real-label" id="country"></select>
                                                 <div class="skeleton input-skeleton input-loader"></div>
+                                                <div class="d-none real-label">
+                                                    <select name="country" class="form-control select2" id="country"></select>
+                                                </div>
                                                 <span id="country_error" class="text-danger error-text"></span>
                                             </div>
                                         </div>
@@ -137,8 +141,10 @@
                                             <div class="mb-3">
                                                 <div class="skeleton label-skeleton label-loader"></div>
                                                 <label class="form-label d-none real-label">{{ __('admin.common.state') }} <span class="text-danger">*</span></label>
-                                                <select name="state" class="form-control select2 d-none real-label" id="state"></select>
                                                 <div class="skeleton input-skeleton input-loader"></div>
+                                                <div class="d-none real-label">
+                                                    <select name="state" class="form-control select2" id="state"></select>
+                                                </div>
                                                 <span id="state_error" class="text-danger error-text"></span>
                                             </div>
                                         </div>
@@ -147,8 +153,10 @@
                                             <div class="">
                                                 <div class="skeleton label-skeleton label-loader"></div>
                                                 <label class="form-label d-none real-label">{{ __('admin.common.city') }} <span class="text-danger">*</span></label>
-                                                <select name="city" id="city" class="form-control select2 d-none real-label"></select>
                                                 <div class="skeleton input-skeleton input-loader"></div>
+                                                <div class="d-none real-label">
+                                                    <select name="city" id="city" class="form-control select2"></select>
+                                                </div>
                                                 <span id="city_error" class="text-danger error-text"></span>
                                             </div>
                                         </div>

@@ -110,8 +110,10 @@
                                                         <div class="skeleton label-skeleton label-loader"></div>
                                                         <label class="form-label d-none real-label">{{ __('admin.common.phone_number') }} <span class="text-danger">*</span></label>
                                                         <div class="skeleton input-skeleton input-loader"></div>
-                                                        <input type="text" class="form-control d-none real-label company_phone" id="company_phone" name="company_phone">
-                                                        <input type="hidden" id="international_phone_number" name="international_phone_number">
+                                                        <div class="d-none real-label">
+                                                            <input type="text" class="form-control company_phone" id="company_phone" name="company_phone">
+                                                            <input type="hidden" id="international_phone_number" name="international_phone_number">
+                                                        </div>
                                                         <span id="company_phone_error" class="text-danger error-text"></span>
                                                     </div>
                                                 </div>
@@ -122,12 +124,14 @@
                                                         <div class="skeleton label-skeleton label-loader"></div>
                                                         <label class="form-label d-none real-label">{{ __('admin.general_settings.industry') }} <span class="text-danger">*</span></label>
                                                         <div class="skeleton select-skeleton input-loader"></div>
-                                                        <select class="form-control select d-none real-label" id="industry" name="industry">
-                                                            <option value="">{{ __('admin.common.select') }}</option>
-                                                            @foreach($industries as $industry)
-                                                                <option value="{{ $industry->id }}">{{ $industry->name }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                        <div class="d-none real-label">
+                                                            <select class="form-control select" id="industry" name="industry">
+                                                                <option value="">{{ __('admin.common.select') }}</option>
+                                                                @foreach($industries as $industry)
+                                                                    <option value="{{ $industry->id }}">{{ $industry->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                         <span id="industry_error" class="text-danger error-text"></span>
                                                     </div>
                                                 </div>
@@ -138,12 +142,14 @@
                                                         <div class="skeleton label-skeleton label-loader"></div>
                                                         <label class="form-label d-none real-label">{{ __('admin.general_settings.team_size') }} <span class="text-danger">*</span></label>
                                                         <div class="skeleton select-skeleton input-loader"></div>
-                                                        <select class="form-control select d-none real-label" id="team_size" name="team_size">
-                                                            <option value="">{{ __('admin.common.select') }}</option>
-                                                            @foreach($teamSizes as $teamSize)
-                                                                <option value="{{ $teamSize->id }}">{{ $teamSize->name }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                        <div class="d-none real-label">
+                                                            <select class="form-control select" id="team_size" name="team_size">
+                                                                <option value="">{{ __('admin.common.select') }}</option>
+                                                                @foreach($teamSizes as $teamSize)
+                                                                    <option value="{{ $teamSize->id }}">{{ $teamSize->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                         <span id="team_size_error" class="text-danger error-text"></span>
                                                     </div>
                                                 </div>
@@ -173,7 +179,9 @@
                                                         <div class="skeleton label-skeleton label-loader"></div>
                                                         <label class="form-label d-none real-label">{{ __('admin.common.country') }} <span class="text-danger">*</span></label>
                                                         <div class="skeleton select-skeleton input-loader"></div>
-                                                        <select name="country" class="form-control select2 d-none real-label" id="country"></select>
+                                                        <div class="d-none real-label">
+                                                            <select name="country" class="form-control select2" id="country"></select>
+                                                        </div>
                                                         <span id="country_error" class="text-danger error-text"></span>
                                                     </div>
                                                 </div>
@@ -184,7 +192,9 @@
                                                         <div class="skeleton label-skeleton label-loader"></div>
                                                         <label class="form-label d-none real-label">{{ __('admin.common.state') }} <span class="text-danger">*</span></label>
                                                         <div class="skeleton select-skeleton input-loader"></div>
-                                                        <select name="state" class="form-control select2 d-none real-label" id="state"></select>
+                                                        <div class="d-none real-label">
+                                                            <select name="state" class="form-control select2" id="state"></select>
+                                                        </div>
                                                         <span id="state_error" class="text-danger error-text"></span>
                                                     </div>
                                                 </div>
@@ -195,7 +205,9 @@
                                                         <div class="skeleton label-skeleton label-loader"></div>
                                                         <label class="form-label d-none real-label">{{ __('admin.common.city') }} <span class="text-danger">*</span></label>
                                                         <div class="skeleton select-skeleton input-loader"></div>
-                                                        <select name="city" id="city" class="form-control select2 d-none real-label"></select>
+                                                        <div class="d-none real-label">
+                                                            <select name="city" id="city" class="form-control select2"></select>
+                                                        </div>
                                                         <span id="city_error" class="text-danger error-text"></span>
                                                     </div>
                                                 </div>

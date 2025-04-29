@@ -42,14 +42,15 @@
                                             </div>
                                             <div class="col-xl-8">
                                                 <div class="skeleton input-skeleton input-loader"></div>
-                                                <div class="skeleton select-skeleton input-loader"></div>
-                                                <select class="form-select d-none real-label" id="language" name="language" onchange="loadCookiesSettings(this.value)">
+                                                <div class="d-none real-label">
+                                                <select class="form-select" id="language" name="language" onchange="loadCookiesSettings(this.value)">
                                                     @foreach($languages as $language)
                                                         <option value="{{ $language->language_id }}">
                                                             {{ $language->transLang->name ?? 'N/A' }}
                                                         </option>
                                                     @endforeach
                                                 </select>
+                                                </div>
                                                 <span id="cookiesContentText_error" class="text-danger error-text"></span>
                                             </div>
                                         </div>
@@ -62,8 +63,10 @@
                                             </div>
                                             <div class="col-xl-8">
                                                 <div class="skeleton input-skeleton input-loader"></div>
-                                                <textarea id="cookiesContentText" name="cookiesContentText" class="form-control summernote d-none real-label"></textarea>
+                                                <div class="d-none real-label">
+                                                <textarea id="cookiesContentText" name="cookiesContentText" class="form-control summernote"></textarea>
                                                 <p class="mt-2 d-none real-label">{{ __('admin.general_settings.maximum_60_words') }}</p>
+                                                </div>
                                                 <span id="cookiesContentText_error" class="text-danger error-text"></span>
                                             </div>
                                         </div>
@@ -76,11 +79,13 @@
                                             </div>
                                             <div class="col-xl-6">
                                                 <div class="skeleton input-skeleton input-loader"></div>
-                                                <select id="cookiesPosition" name="cookiesPosition" class="form-control select d-none real-label">
-                                                    <option value="">{{ __('admin.general_settings.select') }}</option>
-                                                    <option value="right">{{ __('admin.general_settings.right') }}</option>
-                                                    <option value="left">{{ __('admin.general_settings.left') }}</option>
-                                                </select>
+                                                <div class="d-none real-label">
+                                                    <select id="cookiesPosition" name="cookiesPosition" class="form-control select">
+                                                        <option value="">{{ __('admin.general_settings.select') }}</option>
+                                                        <option value="right">{{ __('admin.general_settings.right') }}</option>
+                                                        <option value="left">{{ __('admin.general_settings.left') }}</option>
+                                                    </select>
+                                                </div>
                                                 <span id="cookiesPosition_error" class="text-danger error-text"></span>
                                             </div>
                                         </div>

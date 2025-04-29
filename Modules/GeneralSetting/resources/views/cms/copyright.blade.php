@@ -67,8 +67,10 @@
                                         <label for="copy_right_description" class="form-label d-none real-label">{{__('admin.general_settings.description')}}</label>
 
                                         <!-- Skeleton Loader for Textarea -->
-                                        <div class="skeleton textarea-skeleton input-loader"></div>
-                                        <textarea id="copy_right_description" name="copy_right_description" class="form-control summernote d-none real-label"></textarea>
+                                        <div class="skeleton input-skeleton input-loader"></div>
+                                        <div class="d-none real-label">
+                                            <textarea id="copy_right_description" name="copy_right_description" class="form-control summernote"></textarea>
+                                        </div>
                                         <span id="copy_right_description_error" class="text-danger error-text"></span>
                                     </div>
                                 </div>
