@@ -81,7 +81,7 @@ class MenuManagementController extends Controller
             $validator = Validator::make($request->all(), [
                 'menu_name' => 'required|string|max:255',
                 'menu_type' => 'required',
-                'menu_permalink' => 'required|url|unique:menus,permenantlink',
+                'menu_permalink' => 'required|url',
                 'language' => 'required|integer',
             ]);
 

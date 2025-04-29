@@ -1,4 +1,5 @@
 "use strict";
+let international_phone_number = '';
 document.addEventListener("DOMContentLoaded", function () {
     const userPhoneInput = document.querySelector(".driver_phone_number");
     const intlPhoneInput = document.querySelector("#international_phone_number");
@@ -18,10 +19,10 @@ document.addEventListener("DOMContentLoaded", function () {
             const intlNumber = iti.getNumber();
             if (intlNumber) {
                 intlPhoneInput.value = intlNumber;
-                userPhoneInput.value = intlNumber;
+                international_phone_number = intlNumber;
             } else {
                 intlPhoneInput.value = userPhoneInput.value.trim();
-                userPhoneInput.value = intlPhoneInput.value;
+                international_phone_number = intlPhoneInput.value;
             }
         });
     }
@@ -185,6 +186,7 @@ $(document).ready(function() {
         },
         submitHandler: function(form) {
             let formData = new FormData(form);
+            formData.set('phone_number', international_phone_number);
 
             $.ajax({
                 type:"POST",
@@ -549,11 +551,11 @@ function initTable(sortByDate = '') {
                             <ul class="dropdown-menu dropdown-menu-end p-2">
                               ${ hasPermission(permissions, 'drivers', 'edit') ? 
                                 `<li>
-                                    <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editDriver(${row.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                    <a class="dropdown-item rounded-1 edit-driver" href="javascript:void(0);" data-id="${row.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                                 </li>`:''}
                                  ${ hasPermission(permissions, 'drivers', 'delete') ?
                                 `<li>
-                                    <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteDriver(${row.id});" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                    <a class="dropdown-item rounded-1 delete-driver" href="javascript:void(0);" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
                                 </li>`:''}
                             </ul>
                         </div>`;
@@ -645,7 +647,7 @@ $("#add_driver").on('click', function() {
     $(".error-text").text("");
     $(".form-control, .select2-container").removeClass("is-invalid is-valid");
     $('#assigned_cars').val('').trigger('change');
-    $(".upload_icon").show();
+    $(".upload_icon").removeClass('d-none');
     $('#imagePreview').addClass('d-none');
     $('.submitbtn').text(_l('admin.common.create_new'));
 });
@@ -758,12 +760,10 @@ $('.bulk_status_change').on('click', function () {
     });
 });
 
-
-})();
-
-
 let initialPhoneNumber = null;
-function editDriver(id){
+
+$(document).on('click', '.edit-driver', function() {
+    let id = $(this).data('id');
     $('#editDriverForm').trigger('reset');
     $('.submitbtn').text(_l('admin.common.save_changes'));
 
@@ -847,8 +847,11 @@ function editDriver(id){
             }
        }
     });
-}
+});
 
-function deleteDriver(id){
+$(document).on('click', '.delete-driver', function() {
+    let id = $(this).data('id');
     $("#delete_id").val(id);
-}
+});
+
+})();

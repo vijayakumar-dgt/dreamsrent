@@ -238,7 +238,7 @@
                         </div>
                         <div class="d-flex align-items-center mb-3">
                             <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                <img id="customer_img" src="/assets/img/default-avatar.jpg" alt="">
+                                <img id="customer_img" src="/assets/img/default-profile.png" alt="">
                             </span>
                             <div>
                                 <h6 class="fs-14 fw-medium mb-1" id="customer_name"></h6>

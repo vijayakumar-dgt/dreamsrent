@@ -240,9 +240,9 @@ function hasPermission($permissions, $moduleSlug, $action) {
 
     foreach ($moduleSlugs as $moduleSlug) {
         $permission = $permissions->firstWhere(function ($perm) use ($moduleSlug) {
-            return $perm->module->module_slug == $moduleSlug;
+            return $perm->module && $perm->module->module_slug == $moduleSlug;
         });
-        if ($permission && $permission->$action == 1) {
+        if ($permission && isset($permission->$action) && $permission->$action == 1) {
             return true;
         }
     }

@@ -12,7 +12,7 @@
   background-color: #000 !important;
 }
 
-.theme-2-header .header-nav .main-nav>li>a {
+.theme-2-header .header-nav .main-nav>li:not(.active)>a {
   color: #fff !important;
 }
 

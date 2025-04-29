@@ -4,10 +4,10 @@
 
         <div class="header-left">
             <a href="#" class="logo">
-                <img src="{{ asset('assets/img/logo.svg') }}" alt="Logo">
+                <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" alt="Logo">
             </a>
             <a href="#" class="dark-logo">
-                <img src="{{ asset('assets/img/logo-white.svg') }}" alt="Logo">
+                <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" alt="Logo">
             </a>
         </div>
 

@@ -477,7 +477,34 @@
         });
     }
 
-
+    $("#deleteTestimonial").on('submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            url:"/admin/testimonials/delete",
+            type:"POST",
+            data: {
+                id: $('#delete_id').val()
+            },
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if(response.code === 200){
+                    showToast('success', response.message);
+                    $("#delete_testimonials").modal('hide');
+                    loadTestimonialsSettings();
+                }
+            },
+            error: function(res) {
+                if(res.responseJSON.code === 500){
+                    showToast('error', res.responseJSON.message);
+                } else {
+                    showToast('error', _l('admin.common.default_delete_error'));
+                }
+            }
+        });
+    });
 
 })();
 
@@ -504,34 +531,7 @@ function deleteTestimonial(id){
 }
 
 
-$("#deleteTestimonial").on('submit', function(e){
-    e.preventDefault();
-    $.ajax({
-        url:"/admin/testimonials/delete",
-        type:"POST",
-        data: {
-            id: $('#delete_id').val()
-        },
-        headers: {
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(response) {
-            if(response.code === 200){
-                showToast('success', response.message);
-                $("#delete_testimonials").modal('hide');
-                loadTestimonialsSettings();
-            }
-        },
-        error: function(res) {
-            if(res.responseJSON.code === 500){
-                showToast('error', res.responseJSON.message);
-            } else {
-                showToast('error', _l('admin.common.default_delete_error'));
-            }
-        }
-    });
-});
+
 
 
 $.validator.addMethod("filesize", function (value, element, param) {

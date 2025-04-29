@@ -188,13 +188,13 @@ class InsuranceController extends Controller
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
-                'message' => __('admin.general_settings.insurance_delete_success.'),
+                'message' => __('admin.general_settings.insurance_delete_success'),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
-                'message' => __('admin.common.default_delete_error.'),
+                'message' => __('admin.common.default_delete_error'),
             ],500);
         }
     }

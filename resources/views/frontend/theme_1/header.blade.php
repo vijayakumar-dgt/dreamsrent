@@ -29,19 +29,22 @@
                             @if ($header->menus)
                                 @foreach ($header->menus as $menu)
                                     @php
+                                        $rawLink = trim($menu['link']);
+                                        $isFullUrl = filter_var($rawLink, FILTER_VALIDATE_URL);
+                                        $menuLink = $isFullUrl ? rtrim($rawLink, '/') : rtrim(url($rawLink), '/');
+
+                                        $currentUrl = rtrim(Request::url(), '/');
                                         $active = '';
-                                        $currentPath = trim(url()->current(), '/');
-                                        $menuLink = trim(url($menu['link']), '/');
-                                        $path = parse_url($menuLink, PHP_URL_PATH);
-                                        $segments = explode('/', trim($path, '/'));
-                                        $lastSlug = end($segments);
-                                        if ($currentPath === $menuLink ||
-                                            (Str::contains($currentPath, 'vehicle-details') && $lastSlug == 'vehicles')) {
+
+                                        if (
+                                            $currentUrl == $menuLink ||
+                                            (Str::contains($menuLink, 'vehicles') && Str::contains($currentUrl, 'vehicle-details') || (Str::contains($menuLink, 'blogs') && Str::contains($currentUrl, 'blog-details')))
+                                        ) {
                                             $active = 'active';
                                         }
                                     @endphp
                                     <li class="{{ $active }}">
-                                        <a href="{{ $menu['link'] }}">{{ $menu['label'] }}</a>
+                                        <a href="{{ $menuLink }}">{{ $menu['label'] }}</a>
                                     </li>
                                 @endforeach
                             @endif

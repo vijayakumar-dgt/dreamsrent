@@ -49,8 +49,15 @@
                                 <ul>
                                     @if ($footer->menus)
                                     @foreach ($footer->menus as $menu)
+                                        @php
+                                            $rawLink = trim($menu['link']);
+                                            $isFullUrl = filter_var($rawLink, FILTER_VALIDATE_URL);
+                                            $menuLink = $isFullUrl ? rtrim($rawLink, '/') : rtrim(url($rawLink), '/');
+
+                                            $currentUrl = rtrim(Request::url(), '/');
+                                        @endphp
                                         <li>
-                                            <a href="{{ $menu['link'] }}">{{ $menu['label'] }}</a>
+                                            <a href="{{ $menuLink }}">{{ $menu['label'] }}</a>
                                         </li>
                                     @endforeach
                                 @endif							

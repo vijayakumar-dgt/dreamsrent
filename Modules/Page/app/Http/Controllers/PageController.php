@@ -1173,7 +1173,15 @@ class PageController extends Controller
     {
         $defaultLang = 'en';
         $language    = TranslationLanguage::where('code', $defaultLang)->first();
-        $page        = Page::where('slug', $slug)->where('language_id', $language->id)->first();
+        $page = Page::where('slug', $slug)
+            ->where('language_id', $language->id)
+            ->first();
+        if (!$page) {
+            $fallbackSlug = 'pages/' . ltrim($slug, '/');
+            $page = Page::where('slug', $fallbackSlug)
+                ->where('language_id', $language->id)
+                ->first();
+        }
         $userLanguageCode = App::getLocale();
         $userLanguage = TranslationLanguage::where('code', $userLanguageCode)->first();
 

@@ -1,6 +1,7 @@
 (function($) {
     "use strict";
 
+let international_phone_number = '';
 document.addEventListener("DOMContentLoaded", function () {
     const userPhoneInput = document.querySelector(".user_phone_number");
     const intlPhoneInput = document.querySelector("#international_phone_number");
@@ -20,10 +21,10 @@ document.addEventListener("DOMContentLoaded", function () {
             const intlNumber = iti.getNumber();
             if (intlNumber) {
                 intlPhoneInput.value = intlNumber;
-                userPhoneInput.value = intlNumber;
+                international_phone_number = intlNumber;
             } else {
                 intlPhoneInput.value = userPhoneInput.value.trim();
-                userPhoneInput.value = intlPhoneInput.value;
+                international_phone_number = intlPhoneInput.value;
             }
         });
     }
@@ -163,6 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             submitHandler: function(form) {
                 let formData = new FormData(form);
+                formData.set('phone_number', international_phone_number);
     
                 $.ajax({
                     type:"POST",

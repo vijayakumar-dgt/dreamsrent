@@ -295,8 +295,6 @@ $(".price_type").on("change", function () {
     } else {
         $("#price").data("maxlen", 5);
     }
-
-    $("#price").data("maxlen", maxLen);
 });
 
 $("#price").on("input", function () {
