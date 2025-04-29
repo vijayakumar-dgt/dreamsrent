@@ -59,6 +59,11 @@ function DbBackUpTable() {
                 tableBody.append(row);
             });
         },
+        complete: function () {
+            $(".table-loader").hide();
+            $(".label-loader, .input-loader").hide();
+            $(".real-label, .real-table, .real-data, .table-footer").removeClass("d-none");
+        },
         error: function(error) {
             console.error("Error fetching backups:", error);
         }

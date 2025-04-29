@@ -43,19 +43,59 @@
                                     </div>
                                 </div>
                                 <!-- /Table Header -->
+
+                                <div class="custom-datatable-filter table-responsive table-loader">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th><div class="skeleton th-skeleton th-loader"></div></th>
+                                                <th><div class="skeleton th-skeleton th-loader"></div></th>
+                                                <th><div class="skeleton th-skeleton th-loader"></div></th>
+                                                <th><div class="skeleton th-skeleton th-loader"></div></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                            </tr>
+                                            <tr>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
                                 <!-- Custom Data Table -->
-                                <div class="custom-datatable-filter table-responsive brandstable country-table">
+                                <div class="custom-datatable-filter table-responsive brandstable country-table d-none real-table">
                                     <table class="table" id="currencyTable">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th>{{ __('admin.general_settings.currency') }}</th>
-                                                <th>{{ __('admin.general_settings.code') }}</th>
-                                                <th>{{ __('admin.general_settings.symbol') }}</th>
-                                                <th>{{ __('admin.general_settings.exchange_rate') }}</th>
-                                                <th>{{ __('admin.general_settings.status') }}</th>
+                                                <th>{{ strtoupper(__('admin.general_settings.currency')) }}</th>
+                                                <th>{{ strtoupper(__('admin.general_settings.code')) }}</th>
+                                                <th>{{ strtoupper(__('admin.general_settings.symbol')) }}</th>
+                                                <th>{{ strtoupper(__('admin.general_settings.exchange_rate')) }}</th>
+                                                <th>{{ strtoupper(__('admin.general_settings.status')) }}</th>
                                                 @if (hasPermission($permissions, 'finance_settings', 'edit') || hasPermission($permissions, 'finance_settings', 'delete'))
 
-                                                <th>{{ __('admin.common.action') }}</th>
+                                                <th>{{ strtoupper(__('admin.common.action')) }}</th>
                                                 @endif
                                             </tr>
                                         </thead>
@@ -65,7 +105,7 @@
                                     </table>
                                 </div>
                                 <!-- Custome Data Tabel -->
-                                <div class="table-footer"></div>
+                                <div class="table-footer d-none"></div>
                         </div>
                     </div>
                 </div>

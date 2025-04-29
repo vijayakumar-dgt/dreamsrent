@@ -433,7 +433,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function initTable() {
         $("#userTable").DataTable({
-            processing: true,
             serverSide: true,
             destroy: true,
             processing: false,

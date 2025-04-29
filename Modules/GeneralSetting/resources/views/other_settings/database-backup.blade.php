@@ -32,17 +32,52 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h6 class="mb-3">{{ __('admin.general_settings.database_backup') }}</h6>
                             @if (hasPermission($permissions, 'other_settings', 'create'))
-
-                            <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#generate">{{ __('admin.general_settings.generate_backup') }}</a>
+                            <div class="skeleton label-skeleton label-loader"></div>
+                            <a href="javascript:void(0);" class="btn btn-primary d-none real-label" data-bs-toggle="modal" data-bs-target="#generate">{{ __('admin.general_settings.generate_backup') }}</a>
                         @endif
                         </div>
-                        <div class="custom-datatable-filter table-responsive">
+
+                        <div class="custom-datatable-filter table-responsive table-loader">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th><div class="skeleton th-skeleton th-loader"></div></th>
+                                        <th><div class="skeleton th-skeleton th-loader"></div></th>
+                                        <th><div class="skeleton th-skeleton th-loader"></div></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                    </tr>
+                                    <tr>
+                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="custom-datatable-filter table-responsive d-none real-table">
                             <table class="table">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th>{{ __('admin.general_settings.file_name') }}</th>
-                                        <th>{{ __('admin.general_settings.created_on') }}</th>
-                                        <th>{{ __('admin.common.action') }}</th>
+                                        <th>{{ strtoupper(__('admin.general_settings.file_name')) }}</th>
+                                        <th>{{ strtoupper(__('admin.general_settings.created_on')) }}</th>
+                                        <th>{{ strtoupper(__('admin.common.action')) }}</th>
                                     </tr>
                                 </thead>
                                 <tbody id="backup-list">
