@@ -918,7 +918,7 @@ class GeneralSettingController extends Controller
                 'state'                => $settings['state'] ?? null,
                 'city'                 => $settings['city'] ?? null,
                 'company_postal_code'  => $settings['company_postal_code'] ?? null,
-                'company_profile_photo' => $settings['company_profile_photo'] ?? null // Add profile photo here
+                'company_profile_photo' => uploadedAsset($settings['company_profile_photo'] ?? null, 'default') // Add profile photo here
             ];
 
             return response()->json([
