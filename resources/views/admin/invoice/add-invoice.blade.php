@@ -266,7 +266,7 @@
                                 data-tax="{{ $booking->tax ?? 0 }}">
 
                                 <td>
-                                    <a href="admin/reservations" class="text-info d-block mb-1">#{{$booking->reservation_id}}</a>
+                                    <a href="javascript:;" class="text-info d-block mb-1">#{{$booking->reservation_id}}</a>
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center">
