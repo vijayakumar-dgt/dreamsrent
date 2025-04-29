@@ -1,6 +1,9 @@
 
 (function($) {
     "use strict";
+(async () => {
+    await loadTranslationFile('web', 'auth, common');
+
 $(document).ready(function () {
     $("#userLoginForm").validate({
         rules: {
@@ -15,12 +18,12 @@ $(document).ready(function () {
         },
         messages: {
             email: {
-                required: "Please enter your email",
-                email: "Please enter a valid email address"
+                required: _l("web.auth.email_required"),
+                email: _l("web.auth.valid_email")
             },
             password: {
-                required: "Please enter your password",
-                minlength: "Password must be at least 6 characters long"
+                required: _l("web.auth.password_required"),
+                minlength: _l("web.auth.password_minlength")
             }
         },
         errorPlacement: function (error, element) {
@@ -39,7 +42,7 @@ $(document).ready(function () {
             let formData = new FormData(form);
             formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
 
-            $(".btn-outline-light").text('Please Wait...').prop('disabled', true);
+            $(".btn-outline-light").text(`${_l('web.auth.please_wait')}...`).prop('disabled', true);
 
             $.ajax({
                 type: "POST",
@@ -61,11 +64,11 @@ $(document).ready(function () {
                         }
 
                     }
-                    $(".btn-outline-light").text('Sign In').prop('disabled', false);
+                    $(".btn-outline-light").text(`${_l('web.auth.sign_in')}`).prop('disabled', false);
                 },
                 error: function (error) {
                     setTimeout(function () {
-                        $(".btn-outline-light").text('Sign In').prop('disabled', false);
+                        $(".btn-outline-light").text(`${_l('web.auth.sign_in')}`).prop('disabled', false);
                     }, 500);
                     $(".error-text").text("");
                     $(".form-control").removeClass("is-invalid is-valid");
@@ -251,23 +254,23 @@ $(document).ready(function () {
                     sendEmail(username, emailData, "email", userName, otp)
                         .then(() => {
                             // Show OTP Modal only after successful email send
-                            $("#otp-email-message").text(`OTP sent to your Email Address ${username}`);
+                            $("#otp-email-message").text(`${_l("web.auth.otp_sent_to_email")} ${username}`);
                             $("#otp-email-modal").modal("show");
                             startTimer(otpExpireTime);
                         })
                         .catch(() => {
-                            showToast("error", "Failed to send email OTP. Please try again.");
+                            showToast("error", _l("web.auth.failed_to_send_otp"));
                         });
                 } else {
                     // Show OTP Modal immediately if not using email
-                    $("#otp-email-message").text(`OTP sent to your Email Address ${username}`);
+                    $("#otp-email-message").text(`${_l("web.auth.otp_sent_to_email")} ${username}`);
                     $("#otp-email-modal").modal("show");
                     startTimer(otpExpireTime);
                 }
             },
             error: function (xhr) {
                 // hideLoader();
-                const errorMessage = xhr.responseJSON?.error || "Failed to fetch OTP settings. Please try again.";
+                const errorMessage = xhr.responseJSON?.error || _l("web.auth.failed_to_send_otp");
                 showToast("error", errorMessage);
             }
         });
@@ -320,13 +323,17 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                const errorMessage = xhr.responseJSON?.error || "OTP Required";
+                const errorMessage = xhr.responseJSON?.error || _l("web.auth.otp_required");
                 showToast("error", errorMessage);
             },
             complete: function () {
-                $(".verify-email-otp-btn").attr("disabled", false).html("Verify OTP");
+                $(".verify-email-otp-btn").attr("disabled", false).html(_l("web.auth.verify_otp"));
             },
         });
     });
 });
+
+})();
+
+
 })(jQuery);

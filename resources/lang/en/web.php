@@ -26,6 +26,23 @@ return [
     'new_password' => 'New Password',
     'confirm_password' => 'Confirm Password',
     'save_changes' => 'Save Changes',
+    'email_required' => 'Email is required.',
+    'valid_email' => 'Please enter a valid email address.',
+    'password_required' => 'Password is required.',
+    'password_minlength' => 'Password must be at least 6 characters long.',
+    'please_wait' => 'Please Wait',
+    'verify_otp' => 'Verify OTP',
+    'otp_required' => 'OTP is required.',
+    'otp_sent_to_email' => 'OTP sent to your Email Address',
+    'failed_to_send_otp' => 'Failed to send email OTP. Please try again.',
+    'no_account_found' => 'No account found with this email.',
+    'admin_access_not_allowed' => 'Admin access is not allowed.',
+    'didnt_get_otp' => 'Didn\'t get OTP?',
+    'resend_otp' => 'Resend OTP',
+    'verify_proceed' => 'Verify & Proceed',
+    'login_success' => 'Login Successfull!',
+    'invalid_credentials' => 'Invalid email or password.',
+
 ],
 
     'home' => [

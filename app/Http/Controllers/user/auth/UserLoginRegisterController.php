@@ -488,11 +488,11 @@ class UserLoginRegisterController extends Controller
             'email' => 'required|email|exists:users,email',
             'password' => 'required|min:6',
         ], [
-            'email.required' => 'Email is required',
-            'email.email' => 'Email is invalid',
-            'email.exists' => 'No account found with this email',
-            'password.required' => 'Password is required',
-            'password.min' => 'Password must be at least 6 characters long',
+            'email.required' => __('web.auth.email_required'),
+            'email.email' => __('web.auth.valid_email'),
+            'email.exists' => __('web.auth.no_account_found'),
+            'password.required' => __('web.auth.password_required'),
+            'password.min' => __('web.auth.password_minlength'),
         ]);
 
         if ($validator->fails()) {
@@ -506,11 +506,11 @@ class UserLoginRegisterController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if ($user && $user->user_type == 1) {
+        if ($user && $user->user_type == 1 || $user->user_type == 2) {
             return response()->json([
                 'status' => false,
                 'code'   => 422,
-                'message' => 'Admin access is not allowed here',
+                'message' => __('web.auth.admin_access_not_allowed'),
             ], 422);
         }
 
@@ -544,14 +544,14 @@ class UserLoginRegisterController extends Controller
                 'status' => true,
                 'code'   => 200,
                 'redirect_url' => $redirectTo,
-                'message' => 'Login successful',
+                'message' => __('web.auth.login_success'),
             ]);
         }
 
         return response()->json([
             'status' => false,
             'code'   => 401,
-            'message' => 'Invalid email or password',
+            'message' => __('web.auth.invalid_credentials'),
         ], 401);
     }
 
