@@ -35,70 +35,94 @@
 			<!-- /Header -->
 
 			<div class="login-wrapper">
-				<div class="loginbox">
-					<div class="login-auth">
-						<div class="login-auth-wrap">
-							<div class="sign-group d-none">
-								<a href="{{ route('home') }}" class="btn sign-up"><span><i class="fe feather-corner-down-left" aria-hidden="true"></i></span> Back To Home</a>
-							</div>
-							<h1>Sign In</h1>
-							<p class="account-subtitle">We'll send a confirmation code to your email.</p>
-							<form id="userLoginForm">
+                <div class="loginbox">
+                    <div class="login-auth">
+                        <div class="login-auth-wrap">
+                            <div class="sign-group d-none">
+                                <a href="{{ route('home') }}" class="btn sign-up">
+                                    <span><i class="fe feather-corner-down-left" aria-hidden="true"></i></span>
+                                    {{ __('web.common.back_to_home') }}
+                                </a>
+                            </div>
+                            <h1>{{ __('web.auth.sign_in') }}</h1>
+                            <p class="account-subtitle">{{ __('web.auth.email_confirmation_subtitle') }}</p>
+
+                            <form id="userLoginForm">
                                 <div class="input-block">
-                                    <label class="form-label">Email <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="">
+                                    <label class="form-label">
+                                        {{ __('web.auth.email') }} <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="email" class="form-control" id="email" name="email" />
                                     <span class="error-text text-danger" id="email_error"></span>
                                 </div>
 
                                 <div class="input-block">
-                                    <label class="form-label">Password <span class="text-danger">*</span></label>
+                                    <label class="form-label">
+                                        {{ __('web.auth.password') }} <span class="text-danger">*</span>
+                                    </label>
                                     <div class="pass-group">
-                                        <input type="password" class="form-control pass-input" id="password" name="password" placeholder="">
+                                        <input type="password" class="form-control pass-input" id="password" name="password" />
                                         <span class="fas fa-eye-slash toggle-password"></span>
                                     </div>
                                     <span class="error-text text-danger" id="password_error"></span>
                                 </div>
 
                                 <div class="input-block d-flex justify-content-between">
-                                    <a class="forgot-link" href="{{ route('user-forgot-password') }}">Forgot Password?</a>
-                                    <a class="form-check-label text-decoration-underline" id="login_otp"
-                                        href="javascript:void(0);">
-                                        {{ __('Sign in with OTP') }}
+                                    <a class="forgot-link" href="{{ route('user-forgot-password') }}">{{ __('web.auth.forgot_password') }}</a>
+                                    <a class="form-check-label text-decoration-underline" id="login_otp" href="javascript:void(0);">
+                                        {{ __('web.auth.sign_in_with_otp') }}
                                     </a>
-
                                 </div>
 
                                 <div class="input-block m-0">
-                                    <label class="custom_check d-inline-flex"><span>Remember me</span>
+                                    <label class="custom_check d-inline-flex">
+                                        <span>{{ __('web.auth.remember_me') }}</span>
                                         <input type="checkbox" name="remember">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
 
-                                <button type="submit" class="btn btn-outline-light w-100 btn-size mt-1">Sign In</button>
+                                <button type="submit" class="btn btn-outline-light w-100 btn-size mt-1">
+                                    {{ __('web.auth.sign_in') }}
+                                </button>
+
                                 <div class="login-or d-none">
-									<span class="or-line"></span>
-									<span class="span-or-log">Or, log in with your email</span>
-								</div>
-								<!-- Social Login -->
-								<div class="social-login d-none">
-									<a href="#" class="d-flex align-items-center justify-content-center input-block btn google-login w-100"><span><img src="frontend/assets/img/icons/google.svg" class="img-fluid" alt="Google"></span>Log in with Google</a>
-								</div>
-								<div class="social-login d-none">
-									<a href="#" class="d-flex align-items-center justify-content-center input-block btn google-login w-100"><span><img src="frontend/assets/img/icons/facebook.svg" class="img-fluid" alt="Facebook"></span>Log in with Facebook</a>
-								</div>
-								<!-- /Social Login -->
-								<div class="text-center dont-have">Don't have an account yet? <a href="{{ route('user-register') }}">Register</a></div>
-                                <div class="">
-                                    <h6 class="fs-16 mb-1">{{ __('User Login Info') }}:</h6>
+                                    <span class="or-line"></span>
+                                    <span class="span-or-log">{{ __('web.auth.or_login_with_email') }}</span>
+                                </div>
+
+                                <!-- Social Login -->
+                                <div class="social-login d-none">
+                                    <a href="#" class="d-flex align-items-center justify-content-center input-block btn google-login w-100">
+                                        <span><img src="{{ asset('frontend/assets/img/icons/google.svg') }}" class="img-fluid" alt="Google"></span>
+                                        {{ __('web.auth.login_with_google') }}
+                                    </a>
+                                </div>
+
+                                <div class="social-login d-none">
+                                    <a href="#" class="d-flex align-items-center justify-content-center input-block btn google-login w-100">
+                                        <span><img src="{{ asset('frontend/assets/img/icons/facebook.svg') }}" class="img-fluid" alt="Facebook"></span>
+                                        {{ __('web.auth.login_with_facebook') }}
+                                    </a>
+                                </div>
+                                <!-- /Social Login -->
+
+                                <div class="text-center dont-have">
+                                    {{ __('web.auth.dont_have_account') }}
+                                    <a href="{{ route('user-register') }}">{{ __('web.auth.register') }}</a>
+                                </div>
+
+                                <div class="mt-3">
+                                    <h6 class="fs-16 mb-1">{{ __('web.auth.demo_user_info') }}:</h6>
                                     <div class="p-3 border d-flex flex-wrap align-items-center justify-content-between">
                                         <div>
-                                            <span class="d-block"><strong>{{ __('Email') }} </strong>: demouser@example.com</span>
-                                            <span class="d-block"><strong>{{ __('Password') }} </strong>: 12345678</span>
+                                            <span class="d-block"><strong>{{ __('web.auth.email') }}:</strong> demouser@example.com</span>
+                                            <span class="d-block"><strong>{{ __('web.auth.password') }}:</strong> 12345678</span>
                                         </div>
                                         <div>
-                                            <a class="btn btn-primary copy-login-details" data-email="demouser@example.com"
-                                                data-password="12345678">
+                                            <a class="btn btn-primary copy-login-details"
+                                               data-email="demouser@example.com"
+                                               data-password="12345678">
                                                 <i class="far fa-copy"></i>
                                             </a>
                                         </div>
@@ -106,10 +130,11 @@
                                 </div>
                             </form>
 
-						</div>
-					</div>
-				</div>
-			</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="modal fade" id="otp-email-modal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">

@@ -1,5 +1,26 @@
 <?php
 return [
+    'auth' => [
+        'sign_in' => 'تسجيل الدخول',
+        'email_confirmation_subtitle' => 'سنرسل رمز تأكيد إلى بريدك الإلكتروني.',
+        'email' => 'البريد الإلكتروني',
+        'password' => 'كلمة المرور',
+        'forgot_password' => 'هل نسيت كلمة المرور؟',
+        'sign_in_with_otp' => 'تسجيل الدخول باستخدام رمز التحقق',
+        'remember_me' => 'تذكرني',
+        'or_login_with_email' => 'أو، قم بتسجيل الدخول باستخدام بريدك الإلكتروني',
+        'login_with_google' => 'تسجيل الدخول باستخدام جوجل',
+        'login_with_facebook' => 'تسجيل الدخول باستخدام فيسبوك',
+        'dont_have_account' => 'لا تملك حساباً؟',
+        'register' => 'إنشاء حساب',
+        'sign_up' => 'تسجيل',
+        'username' => 'اسم المستخدم',
+        'or_create_with_email' => 'أو، أنشئ حساباً باستخدام بريدك الإلكتروني',
+        'already_have_account' => 'هل لديك حساب بالفعل؟',
+        'demo_user_info' => 'معلومات تسجيل دخول المستخدم التجريبي',
+    ],
+
+
   'home' => [
     'signin' => 'تسجيل الدخول',
     'signup' => 'إنشاء حساب',

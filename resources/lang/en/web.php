@@ -1,5 +1,25 @@
 <?php
 return [
+'auth' => [
+    'sign_in' => 'Sign In',
+    'email_confirmation_subtitle' => "We'll send a confirmation code to your email.",
+    'email' => 'Email',
+    'password' => 'Password',
+    'forgot_password' => 'Forgot Password?',
+    'sign_in_with_otp' => 'Sign in with OTP',
+    'remember_me' => 'Remember me',
+    'or_login_with_email' => 'Or, log in with your email',
+    'login_with_google' => 'Log in with Google',
+    'login_with_facebook' => 'Log in with Facebook',
+    'dont_have_account' => "Don't have an account yet?",
+    'register' => 'Register',
+    'sign_up' => 'Sign Up',
+    'username' => 'Username',
+    'or_create_with_email' => 'Or, Create an account with your email',
+    'already_have_account' => 'Already have an Account?',
+    'demo_user_info' => 'User Login Info',
+],
+
     'home' => [
         'signin' => 'Sign In',
         'signup' => 'Sign Up',
@@ -322,6 +342,7 @@ return [
         'poor' => 'Poor',
     ],
     'common' => [
+        'back_to_home' => 'Back to Home',
         'view_reply'  => 'View & Reply',
         'search' => 'Search',
         'minlength_3' => 'Should be at least 3 characters.',
