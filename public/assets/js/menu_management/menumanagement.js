@@ -331,7 +331,8 @@ function menuTable() {
                         menuItems.forEach(item => {
                             let uniqueId = `menu-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-                            let slug = item.link.replace(/^\/+/, '');
+                            let slug = item.link === '/' ? '/' : item.link.replace(/^\/+/, '');
+
                             let previewLink = `${BASE_URL}/${slug}`;
 
                             let newItem = `
