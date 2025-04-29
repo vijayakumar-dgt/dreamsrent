@@ -6,7 +6,7 @@
     $(document).ready(function () {
         initTable();
     });
-    
+
     function initTable() {
         $.ajax({
             url: "/admin/section-list",
@@ -29,10 +29,10 @@
                 if ($.fn.DataTable.isDataTable("#sectionTable")) {
                     $("#sectionTable").DataTable().destroy();
                 }
-    
+
                 if (response.code === 200 && response.data.length > 0) {
                     let data = response.data;
-    
+
                     $.each(data, function (index, value) {
                         tableBody += `<tr>
                                 <td>${value.name}</td>
@@ -51,7 +51,7 @@
                                     </span>
                                 </td>
                  ${hasPermission(permissions, 'section', 'edit')  ?
-       
+
                                 `<td>
                                 <div class="dropdown">
                                     <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -59,11 +59,11 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                             ${hasPermission(permissions, 'section', 'edit') ?
-    
+
                                         `<li>
-                                            <a class="dropdown-item rounded-1 section_data" 
-                                                href="#" 
-                                                data-bs-toggle="modal" 
+                                            <a class="dropdown-item rounded-1 section_data"
+                                                href="#"
+                                                data-bs-toggle="modal"
                                                 data-bs-target="#add_banner_sec"
                                                 data-id="${value.id}"
                                                 data-name="${value.name}"
@@ -106,7 +106,7 @@
                             </tr>`;
                     $(".table-footer").empty();
                 }
-    
+
                 $("#sectionTable tbody").html(tableBody);
                 if (response.data.length > 0) {
                     $("#sectionTable").DataTable({
@@ -156,7 +156,60 @@
             },
         });
     }
-    
+    $(document).ready(function () {
+        $("#addBannerOneForm").submit(function (event) {
+            event.preventDefault();
+
+            var formData = new FormData(this);
+            $.ajax({
+                url: "/admin/section-store",
+                method: "POST",
+                data: formData,
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                cache: false,
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                beforeSend: function () {
+                    $('.banner_one').attr('disabled', true).html(`
+                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..
+                    `);
+                },
+                complete: function () {
+                    $('.banner_one').attr('disabled', false).html(_l('admin.common.save_changes'));
+                },
+            })
+                .done((response, statusText, xhr) => {
+                    $(".error-text").text("");
+                    $(".form-control").removeClass("is-invalid");
+                    if (response.code === 200) {
+                        showToast("success", response.message);
+
+                        $("#add_banner_sec").modal("hide");
+                        initTable();
+                    } else {
+                        showToast("success", response.message);
+
+                    }
+                })
+                .fail((error) => {
+                    $(".error-text").text("");
+                    $(".form-control").removeClass("is-invalid");
+
+                    if (error.status == 422) {
+                        $.each(error.responseJSON, function (key, val) {
+                            $("#" + key).addClass("is-invalid");
+                            $("#" + key + "_error").text(val[0]);
+                        });
+                    } else {
+                        showToast("error", error.responseJSON.message);
+                    }
+                });
+        });
+    });
 })();
 
 
@@ -174,7 +227,7 @@ $(document).on("click", ".section_data", function (e) {
         $("#label_one").val($(this).data("label_one"));
         $("#line_two").val($(this).data("line_two"));
         $("#line_one").val($(this).data("line_one"));
-        
+
         let thumbnailImageUrl = $(this).data("thumbnail_image_one");
 
         if (thumbnailImageUrl) {
@@ -188,7 +241,7 @@ $(document).on("click", ".section_data", function (e) {
         $("#section_id").val(ID);
         $("#description_two").val($(this).data("description_two"));
         $("#label_two").val($(this).data("label_two"));
-        
+
         let thumbnailImageUrl = $(this).data("thumbnail_image_two");
 
         if (thumbnailImageUrl) {
@@ -203,60 +256,7 @@ $(document).on("click", ".section_data", function (e) {
     }
 });
 
-$(document).ready(function () {
-    $("#addBannerOneForm").submit(function (event) {
-        event.preventDefault();
 
-        var formData = new FormData(this);
-        $.ajax({
-            url: "/admin/section-store",
-            method: "POST",
-            data: formData,
-            dataType: "json",
-            contentType: false,
-            processData: false,
-            cache: false,
-            headers: {
-                Accept: "application/json",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            beforeSend: function () {
-                $('.banner_one').attr('disabled', true).html(`
-                    <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..
-                `);
-            },
-            complete: function () {
-                $('.banner_one').attr('disabled', false).html(_l('admin.common.save_changes'));
-            },
-        })
-            .done((response, statusText, xhr) => {
-                $(".error-text").text("");
-                $(".form-control").removeClass("is-invalid");
-                if (response.code === 200) {
-                    showToast("success", response.message);
-
-                    $("#add_banner_sec").modal("hide");
-                    initTable();
-                } else {
-                    showToast("success", response.message);
-
-                }
-            })
-            .fail((error) => {
-                $(".error-text").text("");
-                $(".form-control").removeClass("is-invalid");
-
-                if (error.status == 422) {
-                    $.each(error.responseJSON, function (key, val) {
-                        $("#" + key).addClass("is-invalid");
-                        $("#" + key + "_error").text(val[0]);
-                    });
-                } else {
-                    showToast("error", error.responseJSON.message);
-                }
-            });
-    });
-});
 
 function previewThumbnailOne(input) {
     if (input.files && input.files[0]) {
