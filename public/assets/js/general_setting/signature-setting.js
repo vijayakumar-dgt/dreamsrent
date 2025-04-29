@@ -300,6 +300,35 @@
 
     }
 
+    $("#deleteSignature").on('submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            url:"/admin/settings/signatures/delete",
+            type:"POST",
+            data: {
+                id: $('#delete_id').val()
+            },
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if(response.code === 200){
+                    showToast('success', response.message);
+                    $("#delete-modal").modal('hide');
+                    signatureTable();
+                }
+            },
+            error: function(res) {
+                if(res.responseJSON.code === 500){
+                    showToast('error', res.responseJSON.message);
+                } else {
+                    showToast('error', _l('admin.general_settings.retrive_error'));
+                }
+            }
+        });
+    });
+
 })();
 
 
@@ -319,34 +348,6 @@ function deleteSignature(id){
     $("#delete_id").val(id);
 }
 
-$("#deleteSignature").on('submit', function(e){
-    e.preventDefault();
-    $.ajax({
-        url:"/admin/settings/signatures/delete",
-        type:"POST",
-        data: {
-            id: $('#delete_id').val()
-        },
-        headers: {
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(response) {
-            if(response.code === 200){
-                showToast('success', response.message);
-                $("#delete-modal").modal('hide');
-                signatureTable();
-            }
-        },
-        error: function(res) {
-            if(res.responseJSON.code === 500){
-                showToast('error', res.responseJSON.message);
-            } else {
-                showToast('error', _l('admin.general_settings.retrive_error'));
-            }
-        }
-    });
-});
 
 function editpreviewImage(event) {
     const reader = new FileReader();
