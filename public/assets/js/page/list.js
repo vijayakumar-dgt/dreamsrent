@@ -1,3 +1,6 @@
+let currentStatus = ""; // Stores selected status
+let currentSortType = ""; // Stores selected sorting type
+let currentLang = ""; // Add this at the top
 (async () => {
     "use strict";
     await loadTranslationFile("admin", "common, page");
@@ -7,12 +10,8 @@
         initTable();
     });
 
-    function initTable(
-        search = "",
-        status = "",
-        sortType = "",
-        selectedLanguageId = ""
-    ) {
+    window.initTable = function (search = "", status = "", sortType = "", selectedLanguageId = "") {
+
         $(".table-loader").show();
         $(".input-loader").show();
         $(".real-table, .real-data").addClass("d-none");
@@ -166,9 +165,7 @@
             },
         });
     }
-    let currentStatus = ""; // Stores selected status
-    let currentSortType = ""; // Stores selected sorting type
-    let currentLang = ""; // Add this at the top
+
 
     $("#search").on("input", function () {
         let searchQuery = $(this).val().trim();
@@ -178,40 +175,44 @@
     $(document).on('click', '.dataTables_paginate a', function () {
         $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
     });
-
-    function filterPages(element, status) {
-        $("#statusFilter a").removeClass("active");
-        $(element).addClass("active");
-
-        currentStatus = status; // Store selected status
-
-        initTable($("#search").val().trim(), currentStatus, currentSortType); // Keep search & sorting
-    }
-
-    function filterSort(element, sortType) {
-        $("#sortFilter a").removeClass("active");
-        $(element).addClass("active");
-
-        currentSortType = sortType; // Store selected sort type
-
-        initTable($("#search").val().trim(), currentStatus, currentSortType); // Keep search & status
-    }
-
-    function filterlang() {
-        const selectedLanguageId = $("#language_id").val();
-        currentLang = selectedLanguageId;
-
-        initTable(
-            $("#search").val().trim(),
-            currentStatus,
-            currentSortType,
-            currentLang
-        ); // Keep search, status & sort
-    }
     
 })();
 
+function filterlang() {
+    const selectedLanguageId = $("#language_id").val();
+    currentLang = selectedLanguageId;
+
+    initTable(
+        $("#search").val().trim(),
+        currentStatus,
+        currentSortType,
+        currentLang
+    ); 
+}
+
+function filterPages(element, status) {
+    $("#statusFilter a").removeClass("active");
+    $(element).addClass("active");
+
+    currentStatus = status; // Store selected status
+
+    initTable($("#search").val().trim(), currentStatus, currentSortType); // Keep search & sorting
+}
+
+function filterSort(element, sortType) {
+    $("#sortFilter a").removeClass("active");
+    $(element).addClass("active");
+
+    currentSortType = sortType; // Store selected sort type
+
+    initTable($("#search").val().trim(), currentStatus, currentSortType); // Keep search & status
+}
+
 function editPageSeaction(pageSlug) {
+    if (pageSlug.startsWith("pages/")) {
+        pageSlug = pageSlug.replace("pages/", "");
+    }
+
     $.ajax({
         url: "/edit/check-vehicle",
         type: "GET",
@@ -228,3 +229,4 @@ function editPageSeaction(pageSlug) {
         },
     });
 }
+

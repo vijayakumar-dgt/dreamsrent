@@ -51,7 +51,6 @@ class PageController extends Controller
         $languageId = $request->query('language_id');
         $language = TranslationLanguage::find($languageId);
 
-        // Try to fetch the page with slug + language
         $query = Page::select(
             'id',
             'theme_id',
@@ -69,13 +68,41 @@ class PageController extends Controller
             'og_title',
             'og_description',
             'language_id',
-            'status',
+            'status'
         )
-            ->where('slug', $slug)
+        ->where('slug', $slug)
+        ->when($languageId, function ($q) use ($languageId) {
+            $q->where('language_id', $languageId);
+        })
+        ->first();
+        
+        if (!$query) {
+            $fallbackSlug = 'pages/' . ltrim($slug, '/');
+            $query = Page::select(
+                'id',
+                'theme_id',
+                'parent_id',
+                'language_id',
+                'read',
+                'page_title',
+                'slug',
+                'page_content',
+                'seo_tag',
+                'seo_title',
+                'seo_description',
+                'keywords',
+                'canonical_url',
+                'og_title',
+                'og_description',
+                'language_id',
+                'status'
+            )
+            ->where('slug', $fallbackSlug)
             ->when($languageId, function ($q) use ($languageId) {
                 $q->where('language_id', $languageId);
             })
             ->first();
+        }        
 
         if (!$query && $languageId) {
             $basePage = Page::where('slug', $slug)->whereNull('parent_id')->first();
@@ -131,8 +158,13 @@ class PageController extends Controller
         try {
             $pageSlug = $request->get('page_slug');
 
-            // Find vehicle directly instead of checking twice
             $page = Page::where('slug', $pageSlug)->first();
+
+            if (!$page) {
+                $fallbackSlug = 'pages/' . ltrim($pageSlug, '/');
+                $page = Page::where('slug', $fallbackSlug)
+                    ->first();
+            }
 
             if (!$page) {
                 return response()->json(['exists' => 'no'], 404);
@@ -305,7 +337,7 @@ class PageController extends Controller
             'canonical_url' => $request->canonical_url,
             'og_title' => $request->og_title,
             'og_description' => $request->og_description,
-            'status' => $request->status ?? 1,
+            'status' => 1,
         ];
 
         if ($request->read !== 'static') {
@@ -436,11 +468,11 @@ class PageController extends Controller
 
         if ($themeId === "1") {
             if ($slug == null || $slug == '/') {
-                $slug = 'screen-one';
+                $slug = 'home-screen-one';
             }
         } else {
             if ($slug == null || $slug == '/') {
-                $slug = 'screen-two';
+                $slug = 'home-screen-two';
             }
         }
 
