@@ -1417,6 +1417,7 @@
 
         function docGetFileTypeIcon(fileName) {
             let fileExtension = fileName.split(".").pop().toLowerCase();
+            let iconPath = ''; // 🛠️ Declare it here first
             if (fileExtension === "doc" || fileExtension === "docx") {
                 iconPath = "/assets/img/icons/pdf-icon.svg";
             } else if (fileExtension === "pdf") {
@@ -1524,6 +1525,7 @@
 
         function policyGetFileTypeIcon(fileName) {
             let fileExtension = fileName.split(".").pop().toLowerCase();
+            let iconPath = ''; // 🛠️ Declare it here first
             if (fileExtension === "doc" || fileExtension === "docx") {
                 iconPath = "/assets/img/icons/pdf-icon.svg";
             } else if (fileExtension === "pdf") {

@@ -432,8 +432,8 @@ class CarInfoController extends Controller
             $carDocPaths = [];
 
             foreach ($carDocs as $doc) {
-                $fileName = uploadMutipleFile($doc, 'vehicleDoc');
-                $carDocPaths[] = 'vehicleDoc/' . $fileName;
+                $fileName = uploadMutipleFile($doc, 'vehicle_doc');
+                $carDocPaths[] = 'vehicle_doc/' . $fileName;
             }
 
             if (!empty($carDocPaths)) {
@@ -451,8 +451,8 @@ class CarInfoController extends Controller
             $policyDocPaths = [];
 
             foreach ($policyDocs as $doc) {
-                $fileName = uploadMutipleFile($doc, 'vehiclePolicy');
-                $policyDocPaths[] = 'vehiclePolicy/' . $fileName;
+                $fileName = uploadMutipleFile($doc, 'vehicle_policy');
+                $policyDocPaths[] = 'vehicle_policy/' . $fileName;
             }
 
             if (!empty($policyDocPaths)) {
@@ -617,11 +617,11 @@ class CarInfoController extends Controller
 
                     if ($imageFile) {
                         // Store image in storage/app/public/VehicleDamage
-                        $uploadedImage = $imageFile->store('VehicleDamage', 'public');
+                        $uploadedImage = $imageFile->store('vehicle_damage', 'public');
                     } elseif (!empty($uploadedImage) && strpos($uploadedImage, 'data:image') === 0) {
                         // Convert base64 to an image file and store
                         $imageData = explode(',', $uploadedImage)[1]; // Remove metadata
-                        $imageName = 'VehicleDamage/' . uniqid() . '.png';
+                        $imageName = 'vehicle_damage/' . uniqid() . '.png';
                         Storage::disk('public')->put($imageName, base64_decode($imageData));
                         $uploadedImage = $imageName;
                     }
@@ -801,8 +801,8 @@ class CarInfoController extends Controller
             $policyDocPaths = [];
 
             foreach ($policyDocs as $doc) {
-                $fileName = uploadMutipleFile($doc, 'vehiclePolicy');
-                $policyDocPaths[] = 'vehiclePolicy/' . $fileName;
+                $fileName = uploadMutipleFile($doc, 'vehicle_policy');
+                $policyDocPaths[] = 'vehicle_policy/' . $fileName;
             }
 
             // Retrieve existing policy documents
@@ -963,11 +963,11 @@ class CarInfoController extends Controller
 
                     if ($imageFile) {
                         // Store image in storage/app/public/VehicleDamage
-                        $uploadedImage = $imageFile->store('VehicleDamage', 'public');
+                        $uploadedImage = $imageFile->store('vehicle_damage', 'public');
                     } elseif (!empty($uploadedImage) && strpos($uploadedImage, 'data:image') === 0) {
                         // Convert base64 to an image file and store
                         $imageData = explode(',', $uploadedImage)[1]; // Remove metadata
-                        $imageName = 'VehicleDamage/' . uniqid() . '.png';
+                        $imageName = 'vehicle_damage/' . uniqid() . '.png';
                         Storage::disk('public')->put($imageName, base64_decode($imageData));
                         $uploadedImage = $imageName;
                     }

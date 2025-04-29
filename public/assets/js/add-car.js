@@ -111,7 +111,7 @@
         $(document).on("#applyFilter", "click", function () {
             fetchFilteredData(true);
         });
-        
+
         $(document).on("#clearFilter", "click", function () {
             $("input[type='checkbox']").prop("checked", false);
             $(".dropdown-menu-md .dropdown-item").removeClass("active");
@@ -122,8 +122,8 @@
             $("#sortLabel").text("{{ __('admin.page.latest') }}");
             fetchFilteredData();
         });
-        
-        $(document).on(".statusFilter .dropdown-item", "click", function(){
+
+        $(document).on(".statusFilter .dropdown-item", "click", function () {
             $(".statusFilter .dropdown-item").removeClass("active");
             $(this).addClass("active");
 
@@ -135,7 +135,6 @@
                     ? 0
                     : null;
         });
-       
 
         window.filterSort = function (element, sortType) {
             $("#sortFilter a").removeClass("active");
@@ -1217,6 +1216,7 @@
 
         function docGetFileTypeIcon(fileName) {
             let fileExtension = fileName.split(".").pop().toLowerCase();
+            let iconPath = ''; // 🛠️ Declare it here first
             if (fileExtension === "doc" || fileExtension === "docx") {
                 iconPath = "/assets/img/icons/pdf-icon.svg";
             } else if (fileExtension === "pdf") {
@@ -1239,7 +1239,7 @@
         let policySelectedFiles = new Map();
         const policyAllowedExtensions = ["pdf", "doc", "docx", "txt"];
 
-        $("#policy_document").on("change", function (event) {
+        $(document).on("change", "#policy_document", function (event) {
             let files = event.target.files;
             let maxFileSize = 50 * 1024 * 1024;
             let fileListContainer = $("#car_policy_append");
@@ -1322,14 +1322,20 @@
 
         function policyGetFileTypeIcon(fileName) {
             let fileExtension = fileName.split(".").pop().toLowerCase();
+            let iconPath = ''; // 🛠️ Declare it here first
+        
+        
             if (fileExtension === "doc" || fileExtension === "docx") {
-                iconPath = "/assets/img/icons/pdf-icon.svg";
+                iconPath = "/assets/img/icons/pdf-icon.svg"; // 📝 maybe a Word icon instead?
             } else if (fileExtension === "pdf") {
                 iconPath = "/assets/img/icons/pdf-icon.svg";
+            } else {
+                iconPath = "/assets/img/icons/default-file-icon.svg"; // ⚙️ default for unknown files
             }
-
+        
             return iconPath;
         }
+        
 
         $(document).on("click", ".policy-delete-file", function () {
             let fileItem = $(this).closest(".file-item");
@@ -2237,22 +2243,29 @@ function editVechileList(vehicleSlug) {
     });
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
     const saveBtn = document.getElementById("service_save_btn");
     if (saveBtn) {
         saveBtn.addEventListener("click", function () {
-            let tableRows = document.querySelectorAll(".custom-table1 tbody tr");
+            let tableRows = document.querySelectorAll(
+                ".custom-table1 tbody tr"
+            );
 
             tableRows.forEach((row) => {
-                let serviceName = row.querySelector("#extra_name").innerText.trim();
+                let serviceName = row
+                    .querySelector("#extra_name")
+                    .innerText.trim();
                 let extraValue = row.querySelector("#extra_value").value;
                 let extraPrice = row.querySelector("#extra_price").value;
 
-                let serviceCards = document.querySelectorAll(".extra-service-card");
+                let serviceCards = document.querySelectorAll(
+                    ".extra-service-card"
+                );
 
                 serviceCards.forEach((card) => {
-                    let cardName = card.querySelector("#service_name").innerText.trim();
+                    let cardName = card
+                        .querySelector("#service_name")
+                        .innerText.trim();
 
                     if (cardName === serviceName) {
                         card.querySelector("#set_value").innerText =
@@ -2261,7 +2274,9 @@ document.addEventListener("DOMContentLoaded", function () {
                                 : _l("admin.rentals.one_time");
                         card.querySelector("#service_value").value = extraValue;
 
-                        card.querySelector("#set_price").innerText = `$${extraPrice}`;
+                        card.querySelector(
+                            "#set_price"
+                        ).innerText = `$${extraPrice}`;
                         card.querySelector("#service_price").value = extraPrice;
                     }
                 });
@@ -2271,7 +2286,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
-
 
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".delivery-add").forEach(function (container) {
@@ -2316,7 +2330,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         }
     });
-
 });
 
 document.addEventListener("click", function (event) {
@@ -2395,7 +2408,7 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    $(document).on("change", "#Baseunlimited", function(){
+    $(document).on("change", "#Baseunlimited", function () {
         if ($(this).is(":checked")) {
             $("#basic_kilometer").prop("disabled", true).val("");
             $("#extra_kilometer").prop("disabled", true).val("");
@@ -2465,7 +2478,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-
 $(document).on("click", ".change-language", function () {
     var languageCode = $(this).data("language_code");
 
@@ -2490,28 +2502,38 @@ function deleteVehicleList(vehicleId) {
 
 document.addEventListener("DOMContentLoaded", function () {
     const inBtn = document.getElementById("in_btn");
-    
+
     // Check if the element exists before adding the event listener
     if (inBtn) {
         inBtn.addEventListener("click", function () {
             const selectedInsurances = document.querySelectorAll(
                 "#set_value .delivery-add input[type='checkbox']:checked"
             );
-            const appendContainer = document.getElementById("insurance_car_append");
+            const appendContainer = document.getElementById(
+                "insurance_car_append"
+            );
 
             // Clear previously appended elements
             appendContainer.innerHTML = "";
 
             selectedInsurances.forEach((checkbox) => {
                 const container = checkbox.closest("#inCont");
-                const insuranceId = container.querySelector("#insurance_id").value;
-                const insuranceName = container.querySelector("#insurance_name").value;
-                const insurancePrice = container.querySelector("#insurance_price").value;
-                const insuranceCount = container.querySelector("#insurance_count").value;
-                const insurancePriceType = container.querySelector("#insurance_price_type").value;
+                const insuranceId =
+                    container.querySelector("#insurance_id").value;
+                const insuranceName =
+                    container.querySelector("#insurance_name").value;
+                const insurancePrice =
+                    container.querySelector("#insurance_price").value;
+                const insuranceCount =
+                    container.querySelector("#insurance_count").value;
+                const insurancePriceType = container.querySelector(
+                    "#insurance_price_type"
+                ).value;
 
                 // Generate a unique ID for this insurance entry
-                const uniqueId = `insurance_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+                const uniqueId = `insurance_${Date.now()}_${Math.floor(
+                    Math.random() * 1000
+                )}`;
 
                 const newInsuranceDiv = document.createElement("div");
                 newInsuranceDiv.className =
@@ -2548,7 +2570,6 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
     }
 });
-
 
 document.addEventListener("DOMContentLoaded", function () {
     const saveUpdateBtn = document.getElementById("save_update");
