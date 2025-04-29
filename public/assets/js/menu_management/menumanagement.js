@@ -292,9 +292,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 showToast('success', data.message || "Menu updated successfully");
                 menuTable();
             } else {
-                showToast('success', data.message || "Something went wrong");
+                showToast('error', data.message || "Something went wrong");
                 menuTable();
-
             }
         })
         .catch(error => {
@@ -332,8 +331,9 @@ function menuTable() {
                         menuItems.forEach(item => {
                             let uniqueId = `menu-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-                            let slug = item.link.replace(/^\/+/, ''); // Remove any leading slash
-                            let previewLink = `${BASE_URL}/${slug}`; // Correct preview link
+                            let slug = item.link === '/' ? '/' : item.link.replace(/^\/+/, '');
+
+                            let previewLink = `${BASE_URL}/${slug}`;
 
                             let newItem = `
                                 <li class="list-group-item" data-title="${item.label}" data-link="${slug}">
