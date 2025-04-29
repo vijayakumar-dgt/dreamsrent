@@ -26,7 +26,7 @@
                 },
                 signature_name: {
                     required: _l('admin.general_settings.enter_signature'),
-                    minlength:_l('admin.general_settings.enter_signature_characters')
+                    minlength:_l('admin.general_settings.signature_characters')
                 }
             },
             errorPlacement: function (error, element) {
