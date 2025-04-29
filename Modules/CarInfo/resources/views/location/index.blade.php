@@ -254,8 +254,9 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">{{ __('admin.common.phone')}} <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control Number" name="phone" id="phone" maxlength="12">
-                            <span id="phone_error" class="text-danger error-text"></span>
+                            <input type="text" class="form-control Number" name="mobile" id="mobile">
+                            <input type="hidden" name="international_phone_number" id="international_phone_number">
+                            <span id="mobile_error" class="text-danger error-text"></span>
                         </div>
                     </div>
                     <div class="row mb-3">

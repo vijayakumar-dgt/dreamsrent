@@ -2,7 +2,23 @@
     "use strict";
     await loadTranslationFile('admin', 'common, manage');
     const permissions = await loadUserPermissions();
-
+    const $userPhoneInput = $("#mobile");
+    const $intlPhoneInput = $("#international_phone_number");
+    const $userProfileForm = $("#locationForm");
+    const iti = window.intlTelInput($userPhoneInput[0], {
+        utilsScript: `${window.location.origin}/frontend/assets/plugins/intltelinput/js/utils.js`,
+        separateDialCode: true,
+    });
+    if ($userPhoneInput.length && $userProfileForm.length) {
+        $userPhoneInput.addClass("iti");
+        $userPhoneInput.parent().addClass("intl-tel-input");
+        $userPhoneInput.on("keyup", function () {
+            $intlPhoneInput.val(iti.getNumber());
+        });  
+        $userPhoneInput.on("countrychange", function () {
+            $intlPhoneInput.val(iti.getNumber());
+        });
+    }
     $(document).ready(function () {
         initTable();
         fetchCountries();
@@ -53,9 +69,11 @@
                     required: true,
                     email: true,
                 },
-                phone: {
+                mobile: {
                     required: true,
-                    pattern: /^\+?[1-9][0-9]{7,14}$/,
+                    digits: true, 
+                    minlength: 10, 
+                    maxlength: 15,
                 },
                 address: {
                     required: true,
@@ -90,7 +108,7 @@
                     required:_l('admin.common.email_required'),
                     email: _l('admin.common.email_valid'),
                 },
-                phone: {
+                mobile: {
                     required: _l('admin.common.phone_number_required'),
                     pattern: _l('admin.manage.valid_phone_number'),
                 },
@@ -406,7 +424,12 @@
                         $(".image_placeholder").show();
                     }
                     $("#email").val(data.email);
-                    $("#phone").val(data.phone);
+                    if(data.phone && data.phone.length > 0){
+                        iti.setNumber(data.phone);
+                    }else{
+                        iti.setNumber("");
+                        iti.setCountry("in");
+                    }
                     $("#address").val(data.address);
                     $("#pincode").val(data.pincode);
                     fetchCountryAjax(data.country)
@@ -799,3 +822,4 @@ $.validator.addMethod(
     "End time must be greater than start time."
 );
 
+    
