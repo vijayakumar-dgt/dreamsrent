@@ -233,7 +233,7 @@
                             </div>
                             <div class="d-flex justify-content-center">
                                 <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-                                <button type="submit" class="btn btn-primary">{{ __('admin.common.save_changes') }}</button>
+                                <button type="submit" class="btn btn-primary">{{ __('admin.common.delete') }}</button>
                             </div>
                         </div>
                     </div>
