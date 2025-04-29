@@ -196,40 +196,16 @@
             "webkitURL.home.no_insurance_available"
         )}</li>`;
 
-        function toggleDriverInfo() {
-            let driverPrice = parseFloat($("#driver_price").val()) || 0;
-
-            if ($("#self_driver").is(":checked")) {
-                $(".self-driver-info").show();
-                $(".acting-driver-info").hide();
-                totalDriverPrice = 0;
-                $("#driver_id").prop("disabled", true);
-            } else if ($("#acting_driver").is(":checked")) {
-                $(".self-driver-info").hide();
-                $(".acting-driver-info").show();
-                totalDriverPrice = driverPrice;
-                $("#driver_id").prop("disabled", false);
-            } else {
-                $(".self-driver-info").hide();
-                $(".acting-driver-info").hide();
-                totalDriverPrice = 0;
-                $("#driver_id").prop("disabled", true);
-            }
-
-            updateTotalPrice();
-        }
-
+       
         let currencySymbol = $("#currency").val() || "$";
 
         function updateTotalPrice() {
             const base = parseFloat(basePrice) || 0;
             const extra = parseFloat(totalExtraServicePrice) || 0;
             const insurance = parseFloat(totalInsurancePrice) || 0;
-            const driver = parseFloat(totalDriverPrice) || 0;
         
-            const finalTotal = base + extra + insurance + driver;
+            const finalTotal = base + extra + insurance;
                 
-            $totalPriceDriver.val(driver.toFixed(2));
             $totalPriceExtra.val(extra.toFixed(2));
             $totalPriceInsurance.val(insurance.toFixed(2));
             $totalPriceElement.val(finalTotal.toFixed(2));
@@ -353,10 +329,10 @@
             updateTotalPrice();
         });
 
-        $("input[name='driver_type']").on("change", toggleDriverInfo);
+        // $("input[name='driver_type']").on("change", toggleDriverInfo);
 
         // Initial call
-        toggleDriverInfo();
+        // toggleDriverInfo();
 
         // Initial checks
         checkEmptyCart();
