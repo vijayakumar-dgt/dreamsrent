@@ -336,7 +336,7 @@
             </div>
             <div class="modal-footer">
                 <div class="d-flex justify-content-center">
-                    <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                    <a href="/admin/invoices" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
                     <a href="javascript:void(0);" class="btn btn-primary">{{ __('admin.common.create_new') }}</a>
                 </div>
             </div>
