@@ -127,7 +127,7 @@
                             <form action="#" class="digit-group">
                                 <div class="text-center mb-3">
                                 <h3 class="mb-2">{{ __('Email OTP Verification') }}</h3>
-                                <p id="otp-email-message" class="fs-14">{{ __('OTP sent to your Email Address') }}</p>
+                                <p id="otp-email-message" class="fs-14">{{ __('web.auth.otp_sent_to_email') }}</p>
                                 </div>
                                 <div class="text-center otp-input">
                                     <div class="inputcontainerreg">
@@ -139,10 +139,10 @@
                                             <p class="d-flex align-items-center "><i class="ti ti-clock me-1"></i><span id="otp-reg-timer">00:00</span></p>
                                         </div>
                                         <div class="mb-3 d-flex justify-content-center">
-                                            <p>{{ __('Didn t get the OTP?') }} <a href="javascript:void(0);" class="resendRegEmailOtp text-primary">{{ __('Resend OTP') }}</a></p>
+                                            <p>{{ __('web.auth.didnt_get_otp') }} <a href="javascript:void(0);" class="resendRegEmailOtp text-primary">{{ __('web.auth.resend_otp') }}</a></p>
                                         </div>
                                         <div>
-                                            <button type="button" id="verify-email-red-otp-btn" class="verify-email-reg-otp-btn btn btn-lg btn-linear-primary w-100">{{ __('Verify & Proceed') }}</button>
+                                            <button type="button" id="verify-email-red-otp-btn" class="verify-email-reg-otp-btn btn btn-lg btn-linear-primary w-100">{{ __('web.auth.verify_proceed') }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -164,7 +164,7 @@
                             <form action="#" class="digit-group">
                                 <div class="text-center mb-3">
                                 <h3 class="mb-2">{{ __('Email OTP Verification') }}</h3>
-                                <p id="otp-email-message" class="fs-14">{{ __('OTP sent to your Email Address') }}</p>
+                                <p id="otp-email-message" class="fs-14">{{ __('web.auth.otp_sent_to_email') }}</p>
                                 </div>
                                 <div class="text-center otp-input">
                                     <div class="inputcontainerreg">
@@ -176,10 +176,10 @@
                                             <p class="d-flex align-items-center "><i class="ti ti-clock me-1"></i><span id="otp-reg-timer">00:00</span></p>
                                         </div>
                                         <div class="mb-3 d-flex justify-content-center">
-                                            <p>{{ __('Didn t get the OTP?') }} <a href="javascript:void(0);" class="resendRegEmailOtp text-primary">{{ __('Resend OTP') }}</a></p>
+                                            <p>{{ __('web.auth.didnt_get_otp') }} <a href="javascript:void(0);" class="resendRegEmailOtp text-primary">{{ __('web.auth.resend_otp') }}</a></p>
                                         </div>
                                         <div>
-                                            <button type="button" id="verify-email-red-otp-btn" class="verify-email-reg-otp-btn btn btn-lg btn-linear-primary w-100">{{ __('Verify & Proceed') }}</button>
+                                            <button type="button" id="verify-email-red-otp-btn" class="verify-email-reg-otp-btn btn btn-lg btn-linear-primary w-100">{{ __('web.auth.verify_proceed') }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -219,9 +219,10 @@
 		<!-- Bootstrap Core JS -->
 		<script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>
 
-        <script src="{{ asset('frontend/assets/js/user/register.js') }}"></script>
-
+        <script src="{{ asset('frontend/assets/js/custom/lang_script.js') }}"></script>
         <script src="{{ asset('frontend/assets/js/custom/custom-script.js') }}"></script>
+
+        <script src="{{ asset('frontend/assets/js/user/register.js') }}"></script>
 
 		<!-- Custom JS -->
 		<script src="{{ asset('frontend/assets/js/script.js') }}"></script>

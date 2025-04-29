@@ -349,15 +349,15 @@ class UserLoginRegisterController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
         ], [
-            'username.required' => 'Username is required',
-            'username.regex' => 'Username must only contain alphabets (A-Z, a-z)',
-            'username.min' => 'Username must be at least 3 characters long',
-            'username.max' => 'Username must not exceed 50 characters',
-            'email.required' => 'Email is required',
-            'email.email' => 'Email is invalid',
-            'email.unique' => 'Email already exists',
-            'password.required' => 'Password is required',
-            'password.min' => 'Password must be at least 6 characters long',
+            'username.required' => __('web.auth.username_required'),
+            'username.regex' => __('web.auth.username_alphabets'),
+            'username.min' => __('web.auth.username_minlength'),
+            'username.max' => __('web.auth.username_maxlength'),
+            'email.required' => __('web.auth.email_required'),
+            'email.email' => __('web.auth.valid_email'),
+            'email.unique' => __('web.auth.email_exists'),
+            'password.required' => __('web.auth.password_required'),
+            'password.min' => __('web.auth.password_minlength'),
         ]);
 
         if ($validator->fails()) {
@@ -409,7 +409,7 @@ class UserLoginRegisterController extends Controller
                 'email_content' => $content,
                 'redirect_url' => route('home'),
                 'email' => $request->email,
-                'message' => 'Registration successful',
+                'message' => __('web.auth.registration_success'),
             ]);
         }
 
@@ -468,7 +468,7 @@ class UserLoginRegisterController extends Controller
             'status' => true,
             'code' => 200,
             'register_status' => $regStatus,
-            'message' => 'OTP sent successfully',
+            'message' => __('web.auth.otp_sent_success'),
             'otp_type' => $settings['otp_type'],
             'otp' => $otp,
             'expires_at' => $expiresAt,

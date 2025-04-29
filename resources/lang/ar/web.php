@@ -49,6 +49,15 @@ return [
         'verify_proceed' => 'تحقق والمتابعة',
         'login_success' => 'تسجيل الدخول بنجاح!',
         'invalid_credentials' => 'بيانات تسجيل الدخول غير صحيحة.',
+        'username_required' => 'اسم المستخدم مطلوب.',
+        'username_minlength' => 'اسم المستخدم يجب ان لا يقل عن 3 حروف.',
+        'username_maxlength' => 'اسم المستخدم يجب ان لا يزيد عن 50 حرف.',
+        'email_exists' => 'هذا البريد الالكتروني مسجل بالفعل. يرجى استخدام بريد اخر.',
+        'email_validate_error' => 'حدث خطأ اثناء التحقق من صحة البريد الالكتروني.',
+        'username_alphabets' => 'اسم المستخدم يمكن ان يحتوي على حروف فقط',
+        'failed_to_send_welcome_email' => 'فشل في ارسال بريد الترحيب. يرجى المحاولة مرة اخرى.',
+        'registration_success' => 'تسجيل الدخول بنجاح!',
+        'otp_sent_success' => 'تم ارسال OTP بنجاح.',
     ],
 
 

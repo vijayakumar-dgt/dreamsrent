@@ -49,6 +49,15 @@ return [
         'verify_proceed' => 'Verify & Proceed',
         'login_success' => 'Login Successfull!',
         'invalid_credentials' => 'Invalid email or password.',
+        'username_required' => 'Username is required.',
+        'username_minlength' => 'Username must be at least 3 characters long.',
+        'username_maxlength' => 'Username must be at most 50 characters long.',
+        'email_exists' => 'This email is already registered. Please use another email.',
+        'email_validate_error' => 'An error occurred while validating the email.',
+        'username_alphabets' => 'Username can only contain alphabets',
+        'failed_to_send_welcome_email' => 'Failed to send welcome email. Please try again.',
+        'registration_success' => 'Registration Successfull!',
+        'otp_sent_success' => 'OTP sent successfully.',
     ],
 
 

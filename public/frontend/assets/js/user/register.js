@@ -1,5 +1,7 @@
 (function($) {
     "use strict";
+(async () => {
+    await loadTranslationFile('web', 'auth, common');
 $(document).ready(function () {
     let emailExists = false;
 
@@ -11,7 +13,7 @@ $(document).ready(function () {
         emailError.text("");
 
         if (email.length > 0 && !validateEmail(email)) {
-            emailError.text("Please enter a valid email address.");
+            emailError.text(_l("web.auth.valid_email"));
             emailExists = true;
             return;
         }
@@ -26,7 +28,7 @@ $(document).ready(function () {
                 },
                 success: function (resp) {
                     if (resp.exists) {
-                        emailError.text("This email is already registered. Please use another email.");
+                        emailError.text(_l("web.auth.email_exists"));
                         emailExists = true;
                     } else {
                         emailError.text("");
@@ -34,7 +36,7 @@ $(document).ready(function () {
                     }
                 },
                 error: function () {
-                    emailError.text("An error occurred while validating the email.");
+                    emailError.text(_l("web.auth.email_exists"));
                     emailExists = true;
                 },
             });
@@ -163,17 +165,17 @@ $(document).ready(function () {
         },
         messages: {
             username: {
-                required: "Please enter your username",
-                minlength: "Username must be at least 3 characters long",
-                pattern: "Username can only contain alphabets"
+                required: _l("web.auth.username_required"),
+                minlength: _l("web.auth.username_minlength"),
+                pattern: _l("web.auth.username_alphabets")
             },
             email: {
-                required: "Please enter your email",
-                email: "Please enter a valid email address"
+                required: _l("web.auth.email_required"),
+                email: _l("web.auth.valid_email")
             },
             password: {
-                required: "Please enter your password",
-                minlength: "Password must be at least 6 characters long"
+                required: _l("web.auth.password_required"),
+                minlength: _l("web.auth.password_minlength")
             }
         },
         errorPlacement: function (error, element) {
@@ -190,14 +192,14 @@ $(document).ready(function () {
         },
         submitHandler: function (form) {
             if (emailExists) {
-                $("#email_error").text("This email is already registered. Please use another email.");
+                $("#email_error").text(_l("web.auth.email_exists"));
                 return false;
             }
 
             let formData = new FormData(form);
             formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
 
-            $(".btn-outline-light").text('Please Wait...').prop('disabled', true);
+            $(".btn-outline-light").text(`${_l('web.auth.please_wait')}...`).prop('disabled', true);
 
             $.ajax({
                 type: "POST",
@@ -222,7 +224,6 @@ $(document).ready(function () {
 
                         sendEmail(userName, emailData)
                             .then(() => {
-                                console.log('Welcome email sent successfully');
                                 showToast('success', response.message);
 
                                 if (response.redirect_url) {
@@ -230,9 +231,7 @@ $(document).ready(function () {
                                 }
                             })
                             .catch((error) => {
-
-                                console.error('Failed to send welcome email:', error);
-                                showToast('error', 'Failed to send welcome email');
+                                showToast('error', _l('web.auth.failed_to_send_welcome_email'));
                             });
                     } else if (response.register_status === "1") {
                         $("#register-modal").modal("hide");
@@ -310,7 +309,7 @@ $(document).ready(function () {
                                 .then(() => {
                                     const otpEmailMessage = document.getElementById("otp-email-message");
                                     if (otpEmailMessage) {
-                                        otpEmailMessage.textContent = `OTP sent to your Email Address ${userName}`;
+                                        otpEmailMessage.textContent = `${_l('web.auth.otp_sent_to_email')} ${userName}`;
                                     }
 
                                     $("#otp-email-reg-modal").modal("show");
@@ -325,11 +324,11 @@ $(document).ready(function () {
                     }
 
 
-                    $(".btn-outline-light").text('Sign Up').prop('disabled', false);
+                    $(".btn-outline-light").text(_l('web.auth.sign_in')).prop('disabled', false);
                 },
                 error: function (error) {
                     setTimeout(function () {
-                        $(".btn-outline-light").text('Sign Up').prop('disabled', false);
+                        $(".btn-outline-light").text(_l('web.auth.sign_up')).prop('disabled', false);
                     }, 500);
                     $(".error-text").text("");
                     $(".form-control").removeClass("is-invalid is-valid");
@@ -351,4 +350,7 @@ $(document).ready(function () {
         }
     });
 });
+
+}) ();
+
 })(jQuery);
