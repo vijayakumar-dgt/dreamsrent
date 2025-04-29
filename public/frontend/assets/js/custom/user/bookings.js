@@ -1,3 +1,5 @@
+(function($) {
+    "use strict";
 (async () => {
     await loadTranslationFile('web', 'user,common');
     fetchUserBookings();
@@ -97,7 +99,7 @@ function initializeCalendar() {
                 id: booking.id,
                 title: booking.vehicle_name.length > 15
                     ? booking.vehicle_name.substring(0, 15) + '...'
-                    : booking.vehicle_name,
+                    : ucfirst(booking.vehicle_name),
                 start: booking.start_datetime,
                 end: booking.end_datetime,
                 classNames: getStatusClass(booking.status),
@@ -198,28 +200,30 @@ $(document).on('click', '.status_filter', function () {
 });
 
 function createBookingCard(booking){
+    let driving_type = booking.driving_type ?? "";
+    driving_type = driving_type.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
     let statusLabel = formatStatusLabel(booking.status);
     return `<tr>
                 <td><a href="javascript:void(${booking.id});" class="view_booking" data-id="${booking.id}">#${booking.reservation_id}</a></td>
                  <td>
                     <div class="table-avatar">
                         <a href="${booking.vehicle_page_url}" target="_blank" class="avatar flex-shrink-0">
-                            <img class="avatar-img" src="${booking.vehicle_image}" alt="${booking.vehicle_name ?? ""}">
+                            <img class="avatar-img" src="${booking.vehicle_image}" alt="${ucfirst(booking.vehicle_name ?? "")}">
                         </a>
                         <div class="table-head-name flex-grow-1">
-                            <a href="${booking.vehicle_page_url}" target="_blank">${booking.vehicle_name ?? ""}</a>
-                            <p>${booking.driving_type ?? ""}</p>
+                            <a href="${booking.vehicle_page_url}" target="_blank">${ucfirst(booking.vehicle_name ?? "")}</a>
+                            <p>${driving_type ?? ""}</p>
                         </div>
                     </div>
                 </td>
                 <td>
-                    <p>${booking.rental_type ?? ""}</p>
+                    <p>${ucfirst(booking.rental_type ?? "")}</p>
                 </td>
                 <td>
-                    <p>${booking.pickup_location ?? ""}<span class="d-block">${booking.formated_start_datetime ?? ""}</span></p>
+                    <p>${ucfirst(booking.pickup_location ?? "")}<span class="d-block">${booking.formated_start_datetime ?? ""}</span></p>
                 </td>
                 <td>
-                    <p>${booking.return_location ?? ""}<span class="d-block">${booking.formated_end_datetime ?? ""}</span></p>
+                    <p>${ucfirst(booking.return_location ?? "")}<span class="d-block">${booking.formated_end_datetime ?? ""}</span></p>
                 </td>
                 <td>
                     <p>${booking.formated_booked_on ?? ""}</p>
@@ -282,14 +286,16 @@ $(document).on('click','.view_booking', function(){
          success: function (response) {
             if(response.status == 'success'){
                 let data = response.data;
-                $("#booking_details").find(".bk-name").html(data.vehicle_name ?? "");
+                let driving_type = data.driving_type ?? "";
+                driving_type = driving_type.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+                $("#booking_details").find(".bk-name").html(ucfirst(data.vehicle_name ?? ""));
                 $("#booking_details").find(".bk-img").attr("src", data.vehicle_image ?? "");
-                $("#booking_details").find(".bk-location").html(data.main_location ?? "");
+                $("#booking_details").find(".bk-location").html(ucfirst(data.main_location ?? ""));
                 $("#booking_details").find(".bk-amount").html(data.currency + data.total_amount ?? "");
-                $("#booking_details").find(".bk-type").html(data.driving_type ?? "");
-                $("#booking_details").find(".bk-rental").html(data.rental_type ?? "");
-                $("#booking_details").find(".bk-pickup-location").html(data.pickup_location ?? "");
-                $("#booking_details").find(".bk-drop-location").html(data.return_location ?? "");
+                $("#booking_details").find(".bk-type").html(driving_type);
+                $("#booking_details").find(".bk-rental").html(ucfirst(data.rental_type ?? ""));
+                $("#booking_details").find(".bk-pickup-location").html(ucfirst(data.pickup_location ?? ""));
+                $("#booking_details").find(".bk-drop-location").html(ucfirst(data.return_location ?? ""));
                 $("#booking_details").find(".bk-start-date").html(data.formated_start_datetime ?? "");
                 $("#booking_details").find(".bk-end-date").html(data.formated_end_datetime ?? "");
                 $("#booking_details").find(".bk-booked-on").html(data.formated_booked_on ?? "");
@@ -336,11 +342,6 @@ function renderButtons(data){
 							${_l('web.user.complete_ride')}
                     </a>`;
             break;
-        // case 6:
-        //     html = `<a href="javascript:void(0);" data-bs-target="#view_status" data-bs-toggle="modal"  data-bs-dismiss="modal" class="btn btn-primary">
-		// 					${_l('web.common.view')} ${_l('web.common.status')}
-        //             </a>`;
-        //     break;
         case 5:
             html = `<button class="btn btn-light" data-bs-dismiss="modal">${_l('web.common.close')}</button>`;
             break;
@@ -556,3 +557,5 @@ $(document).on('click','.sort-filter', function(){
    }
    $(".sortfilter_text").text($(this).text().trim());
 });
+})(jQuery);
+

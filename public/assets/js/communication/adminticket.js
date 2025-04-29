@@ -1,5 +1,5 @@
 let ticketData = [];
-
+"use strict";
 (async () => {
     await loadTranslationFile('admin', 'common, support');
     const permissions = await loadUserPermissions();
@@ -193,11 +193,11 @@ function ticketTable() {
                 $.each(tickets, function (index, ticket) {
                     let userImage = ticket.user?.user_detail?.profile_image
                     ? "/storage/" + ticket.user.user_detail.profile_image
-                    : "/custom/img/default-profile.png";
+                    : "/assets/img/default-profile.png";
 
                 let assigneeImage = ticket.assignee?.user_detail?.profile_image
                     ? "/storage/" + ticket.assignee.user_detail.profile_image
-                    : "/custom/img/default-profile.png";
+                    : "/assets/img/default-profile.png";
 
 
                     let priorityClass = "";
@@ -358,7 +358,7 @@ function showTicketHistory(ticketId) {
     ticket.ticket_histories.forEach(history => {
         let userImage = history.user && history.user.profile_image
             ? history.user.profile_image
-            : "/custom/img/default-profile.png";
+            : "/assets/img/default-profile.png";
 
         let userName = history.user ? history.user.name : "Unknown User";
         let createdAt = new Date(history.created_at).toLocaleString();

@@ -92,12 +92,12 @@
 
             <!-- Reviews -->
             <div class="col-lg-12 d-flex">
-                <div class="card book-card flex-fill mb-0">
+                <div class="card flex-fill mb-0">
                     <div class="card-header">	
                         <div class="row align-items-center">
                             <div class="col-md-5">
                                 <div class="skeleton label-skeleton label-loader"></div>
-                                <h4 class="d-none real-label">{{__('web.user.all_reviews')}} <span id="totalReviewsCount">0</span></h4>	
+                                <h5 class="d-none real-label">{{__('web.user.all_reviews')}} <span id="totalReviewsCount" class="badge bg-success">0</span></h5>	
                             </div>
                             <div class="col-md-7 text-md-end">
                                 <div class="table-search">

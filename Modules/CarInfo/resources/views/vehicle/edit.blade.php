@@ -63,7 +63,7 @@
 
                                 @if ($allLanguages)
                                 <div class="d-flex align-items-center gap-2">
-                                    <img src="{{ asset('assets/img/flags/' . app()->getLocale() . '.png') }}"
+                                    <img src="{{ asset('assets/img/flags/' . app()->getLocale() . '.svg') }}"
                                         alt="Language"
                                         class="img-fluid rounded-circle lang-flag">
 
@@ -955,7 +955,7 @@
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="modal-body text-center">
-                <form action="add-car.html">
+                <form action="">
                     <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
                         <i class="ti ti-trash-x fs-26"></i>
                     </span>
@@ -980,7 +980,7 @@
                     <i class="ti ti-x fs-16"></i>
                 </button>
             </div>
-            <form action="add-car.html">
+            <form action="">
                 <div class="modal-body pb-1">
                     <div class="row">
                         <div class="col-md-6">
@@ -1044,7 +1044,7 @@
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
             <div class="modal-body text-center">
-                <form action="add-car.html">
+                <form action="">
                     <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
                         <i class="ti ti-trash-x fs-26"></i>
                     </span>
@@ -1277,7 +1277,7 @@
                     <i class="ti ti-x fs-16"></i>
                 </button>
             </div>
-            <form action="add-car.html">
+            <form action="">
                 <div class="modal-body pb-1">
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.rentals.damage_image_label') }} <span class="text-danger">*</span></label>

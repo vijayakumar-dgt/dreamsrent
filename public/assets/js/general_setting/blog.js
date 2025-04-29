@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'blog, common');
 
     $(document).ready(function () {
@@ -22,11 +23,11 @@
             "drawCallback": function () {
                 $(".dataTables_info").addClass('d-none');
                 $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
-    
+
                 var tableWrapper = $(this).closest('.dataTables_wrapper');
                 var info = tableWrapper.find('.dataTables_info');
                 var pagination = tableWrapper.find('.dataTables_paginate');
-    
+
                 $('.table-footer').empty()
                     .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
                         .append($('<div class="datatable-info"></div>').append(info.clone(true)))
@@ -60,73 +61,70 @@
             }
         });
     }
-    
 
 
-$("#create_blog_btn").click(function () {
-    // Get form values
-    const image = document.getElementById("featured_image_add").files[0];
-    const title = $("#blog_title").val().trim();
-    const language = $("#blog_language").val().trim();
-    const category = $("#blog_category").val();
-    const tag = $("#blog_tags").val();
-    const description = $("#editor").val().trim();
+   $(document).on("click", "#create_blog_btn", function(){
+        const image = document.getElementById("featured_image_add").files[0];
+        const title = $("#blog_title").val().trim();
+        const language = $("#blog_language").val().trim();
+        const category = $("#blog_category").val();
+        const tag = $("#blog_tags").val();
+        const description = $("#editor").val().trim();
 
-    // Validate
-    if (!image) {
-        showToast("error", _l('admin.blog.please_upload_an_image'));
-        return;
-    }
-    if (!title) {
-        showToast("error", _l('admin.blog.please_enter_a_blog_title'));
-        return;
-    }
-    if (!language) {
-        showToast("error", _l('admin.blog.please_select_a_language'));
-        return;
-    }
-    if (!category) {
-        showToast("error", _l('admin.blog.please_select_a_category'));
-        return;
-    }
-    if (!tag || tag.length === 0) {
-        showToast("error", _l('admin.blog.please_select_at_least_one_tag'));
-        return;
-    }
-    if (!description) {
-        showToast("error", _l('admin.blog.please_enter_a_description'));
-        return;
-    }
+        if (!image) {
+            showToast("error", _l('admin.blog.please_upload_an_image'));
+            return;
+        }
+        if (!title) {
+            showToast("error", _l('admin.blog.please_enter_a_blog_title'));
+            return;
+        }
+        if (!language) {
+            showToast("error", _l('admin.blog.please_select_a_language'));
+            return;
+        }
+        if (!category) {
+            showToast("error", _l('admin.blog.please_select_a_category'));
+            return;
+        }
+        if (!tag || tag.length === 0) {
+            showToast("error", _l('admin.blog.please_select_at_least_one_tag'));
+            return;
+        }
+        if (!description) {
+            showToast("error", _l('admin.blog.please_enter_a_description'));
+            return;
+        }
 
 
-    const formData = new FormData();
-    formData.append("image", image);
-    formData.append("title", title);
-    formData.append("language", language);
-    formData.append("category_id", category);
-    tag.forEach(tagId => {
-        formData.append("tag_id[]", tagId);
-    });
-    formData.append("description", description);
+        const formData = new FormData();
+        formData.append("image", image);
+        formData.append("title", title);
+        formData.append("language", language);
+        formData.append("category_id", category);
+        tag.forEach(tagId => {
+            formData.append("tag_id[]", tagId);
+        });
+        formData.append("description", description);
 
-    $.ajax({
-        url: "/admin/content/blog-store",
-        method: "POST",
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            showToast("success", _l('admin.blog.blog_post_created!'));
-            window.location.href = "/admin/content/blogs";
-        },
-        error: function (xhr) {
-            showToast("error", xhr.responseJSON.message);
-        },
-    });
-});
+        $.ajax({
+            url: "/admin/content/blog-store",
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                showToast("success", _l('admin.blog.blog_post_created!'));
+                window.location.href = "/admin/content/blogs";
+            },
+            error: function (xhr) {
+                showToast("error", xhr.responseJSON.message);
+            },
+        });
+   });
 
 $(document).ready(function () {
 
@@ -147,9 +145,9 @@ $(document).ready(function () {
             },
             success: function (response) {
                 showToast("success", _l('admin.blog.blog_deleted!'));
-                location.reload(); 
+                location.reload();
                 $("#delete_blogs").modal("hide");
-                
+
                 $('a[data-id="' + blogId + '"]')
                     .closest(".blog-img")
                     .remove();
@@ -185,33 +183,33 @@ $(document).ready(function () {
     }
 });
 
-$(document).on("click", "#blog-edit", function () {
-    let blogId = $(this).data("id");
-    window.location.href = "/admin/content/blogs/" + blogId;
-});
-
-$("#saveBlogBtn").click(function () {
-    let formData = new FormData($("#editBlogForm")[0]);
-    let blogId = $('input[name="blog_id"]').val();
-
-    $.ajax({
-        url: `/admin/content/blog/${blogId}`,
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
-        headers: {
-            "X-CSRF-TOKEN": $('input[name="_token"]').val(),
-        },
-        success: function (response) {
-            showToast("success", _l('admin.blog.blog_post_updated!'));
-            window.location.href = "/admin/content/blogs";
-        },
-        error: function (xhr) {
-            showToast("error", xhr.responseJSON.message);
-        },
+    $(document).on("click", "#blog-edit", function () {
+        let blogId = $(this).data("id");
+        window.location.href = "/admin/content/blogs/" + blogId;
     });
-});
+     
+    $(document).on("click", "#saveBlogBtn", function(){
+        let formData = new FormData($("#editBlogForm")[0]);
+        let blogId = $('input[name="blog_id"]').val();
+    
+        $.ajax({
+            url: `/admin/content/blog/${blogId}`,
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                "X-CSRF-TOKEN": $('input[name="_token"]').val(),
+            },
+            success: function (response) {
+                showToast("success", _l('admin.blog.blog_post_updated!'));
+                window.location.href = "/admin/content/blogs";
+            },
+            error: function (xhr) {
+                showToast("error", xhr.responseJSON.message);
+            },
+        });
+    });
 
 $(document).ready(function () {
 const inputAdd = document.getElementById("featured_image_add");
@@ -229,7 +227,7 @@ if (inputAdd) {
             const img = new Image();
             img.onload = function () {
                 if (img.width === 735 && img.height === 310) {
-                   
+
                     fileNameDisplayAdd.textContent = file.name;
                     if (preview) {
                         preview.src = e.target.result;
@@ -266,13 +264,13 @@ if (input) {
             const img = new Image();
             img.onload = function () {
                 if (img.width === 735 && img.height === 310) {
-                   
+
                     fileNameDisplay.textContent = file.name;
 
-                    
+
                     previewContainer.innerHTML = "";
 
-                   
+
                     const newImage = document.createElement("img");
                     newImage.src = e.target.result;
                     newImage.classList.add("rounded-2", "img-fluid");
@@ -316,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function () {
         loadMoreBtn.style.display = "none";
     }
 
-   
+
     blogItems.forEach(item => item.style.display = "none");
     showItems();
 

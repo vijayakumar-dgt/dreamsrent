@@ -1,3 +1,5 @@
+(function($) {
+    "use strict";
 
 (async () => {
     await loadTranslationFile('admin', 'common, bookings');
@@ -95,3 +97,5 @@ $(document).ready(function () {
 });
 
 }) ();
+
+})(jQuery);

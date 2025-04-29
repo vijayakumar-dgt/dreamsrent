@@ -146,7 +146,7 @@
                         <div class="mb-2">
                             @php
                             $imagePath = 'storage/' . ($carTypes[0]->vehicle_image ?? " ");
-                            $defaultImage = asset('custom/img/default-profile.png');
+                            $defaultImage = asset('assets/img/default-profile.png');
                             @endphp
 
                             <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="img" class="dash-height rounded w-100">
@@ -212,7 +212,7 @@
                                             <a href="javascript:;" class="avatar flex-shrink-0">
                                                 @php
                                                 $imagePath = 'storage/' . $reservation->vehicle_image;
-                                                $defaultImage = asset('custom/img/default-profile.png');
+                                                $defaultImage = asset('assets/img/default-profile.png');
                                                 @endphp
 
                                                 <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="img">
@@ -249,7 +249,7 @@
                                             <a href="javascript:void(0);" class="avatar avatar-sm">
                                                 @php
                                                 $imagePath = 'storage/' . $reservation->profile_image;
-                                                $defaultImage = asset('custom/img/default-profile.png');
+                                                $defaultImage = asset('assets/img/default-profile.png');
                                                 @endphp
 
                                                 <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="img" class="rounded-circle">
@@ -293,7 +293,7 @@
                                             <a href="javascript:void(0);" class="avatar flex-shrink-0">
                                                 @php
                                                 $imagePath = 'storage/' . $user->profile_image;
-                                                $defaultImage = asset('custom/img/default-profile.png');
+                                                $defaultImage = asset('assets/img/default-profile.png');
                                                 @endphp
 
                                                 <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="img" class="rounded-circle">
@@ -381,7 +381,7 @@
 
             @if (haspermission($permissions, 'maintenance', 'view'))
             <!-- Maintenance -->
-            <div class="col-xl-4 d-flex">
+            <div class="col-xl-6 d-flex">
                 <div class="card flex-fill">
                     <div class="card-body pb-1">
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
@@ -398,7 +398,7 @@
                                             <a href="javascript:void(0);" class="avatar flex-shrink-0">
                                                 @php
                                                 $imagePath = 'storage/' . $maintenance->vehicle_image;
-                                                $defaultImage = asset('custom/img/default-profile.png');
+                                                $defaultImage = asset('assets/img/default-profile.png');
                                                 @endphp
 
                                                 <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="img">
@@ -430,7 +430,7 @@
 
             @if (haspermission($permissions, 'reservations', 'view') && isAccessMenu('reservation'))
             <!-- Reservation Statistics -->
-            <div class="col-xl-4 d-flex">
+            <div class="col-xl-4 d-none">
                 <div class="card flex-fill">
                     <div class="card-body pb-0">
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-1 mb-3">
@@ -446,7 +446,7 @@
 
             @if (haspermission($permissions, 'drivers', 'view'))
             <!-- Drivers -->
-            <div class="col-xl-4 d-flex">
+            <div class="col-xl-6 d-flex">
                 <div class="card flex-fill">
                     <div class="card-body pb-1">
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
@@ -463,7 +463,7 @@
                                             <a href="javascript:void(0);" class="avatar flex-shrink-0">
                                                 @php
                                                 $imagePath = 'storage/' . $driver->image;
-                                                $defaultImage = asset('custom/img/default-profile.png');
+                                                $defaultImage = asset('assets/img/default-profile.png');
                                                 @endphp
 
                                                 <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="img" class="rounded-circle">
@@ -527,13 +527,13 @@
                                     @if(count($invoices) != 0)
                                     @foreach($invoices as $invoice)
                                     <tr>
-                                        <td><a href="invoice-details.html" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
+                                        <td><a href="javascript:;" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="customer-details.html" class="avatar avatar-rounded me-2 flex-shrink-0">
+                                                <a href="javascript:;" class="avatar avatar-rounded me-2 flex-shrink-0">
                                                     @php
                                                     $imagePath = 'storage/' . $invoice->profile_image;
-                                                    $defaultImage = asset('custom/img/default-profile.png');
+                                                    $defaultImage = asset('assets/img/default-profile.png');
                                                     @endphp
 
                                                     <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="profile image">

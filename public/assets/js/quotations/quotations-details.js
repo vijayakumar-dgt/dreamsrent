@@ -1,5 +1,6 @@
 
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'common, bookings');
 
 $(document).ready(function () {

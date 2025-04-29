@@ -1,3 +1,5 @@
+(function($) {
+    "use strict";
 var email = localStorage.getItem("email");
 if (email) {
     $('#email').val(email);
@@ -81,3 +83,4 @@ $("#changePasswordForm").validate({
         });
     }
 });
+})(jQuery);

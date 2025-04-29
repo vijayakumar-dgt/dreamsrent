@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
 
 $(document).ready(function() {
@@ -27,7 +28,7 @@ $(document).ready(function() {
                     if(response.data && Object.keys(response.data).length > 0){
                         let data = response.data;
                         let barColor = "success";
-                        
+
                         $.each(data, function(index, module){
                             switch (true) {
                                 case module.progress >= 100:
@@ -83,16 +84,16 @@ $(document).ready(function() {
             complete: function() {
                 $(".table-loader").hide();
                 $(".real-table").removeClass('d-none');
-            } 
+            }
         });
     }
 
     $(document).on('keyup', '#search', function (e) {
         if($(this).val().length >= 3 || $(this).val().length == 0){
-            loadLanguageModules();            
+            loadLanguageModules();
         }
     });
-    
+
     function editModuleLanguage(code, tab, module, _keyword) {
         $.ajax({
             type: "POST",
@@ -106,15 +107,15 @@ $(document).ready(function() {
             },
             success: function (response) {
                 if (response.code === 200) {
-                   
+
                     $("#lngicon").attr('src', response.icon);
                     $(".lngTitile").text(response.language.trans_lang.name);
                     $("#modalProgressBar").css('width', response.progress + "%")
                         .removeClass().addClass('progress-bar rounded ' + response.color);
                     $(".modalProgress").text(response.progress + "%");
                     $(".langTitle").text(response.uppercaseName);
-    
-                  
+
+
                     let html = "";
                     if (response.data && Object.keys(response.data).length > 0) {
                         let data = response.data;
@@ -122,9 +123,9 @@ $(document).ready(function() {
                             html += `<tr>
                                         <td>${language.default}</td>
                                         <td>
-                                            <input type="text" dir="${code === 'ar' ? 'rtl' : 'ltr'}" 
-                                                   data-tab="${tab}" data-code="${code}" data-module="${module}" 
-                                                   class="form-control text-end translate" data-key="${language.key}" 
+                                            <input type="text" dir="${code === 'ar' ? 'rtl' : 'ltr'}"
+                                                   data-tab="${tab}" data-code="${code}" data-module="${module}"
+                                                   class="form-control text-end translate" data-key="${language.key}"
                                                    value="${language.value}">
                                         </td>
                                     </tr>`;
@@ -132,8 +133,8 @@ $(document).ready(function() {
                     } else {
                         html = `<tr><td colspan="2" class="text-center">No Data Found</td></tr>`;
                     }
-    
-                   
+
+
                     const $table = $("#languageSetupTable");
                     if ($.fn.DataTable.isDataTable($table)) {
                         $table.DataTable().clear().destroy();
@@ -148,8 +149,8 @@ $(document).ready(function() {
                         "bPaginate": true,
                         "pageLength": 10
                     });
-    
-                   
+
+
                     $("#language_setup").modal('show');
                 } else {
                     showToast('error', response.message);
@@ -164,7 +165,7 @@ $(document).ready(function() {
             }
         });
     }
-    
+
     $(document).on('click', '#editModuleLanguage', function () {
         let code = $(this).data('code');
         let tab = $(this).data('tab');
@@ -183,7 +184,7 @@ $(document).ready(function() {
         let module = $(this).data('module');
         let keyword = $(this).val();
         if(keyword.length >= 3 || keyword.length == 0){
-            editModuleLanguage(code, tab, module,keyword);            
+            editModuleLanguage(code, tab, module,keyword);
         }
     });
     $(document).on('blur', '.translate', function () {
@@ -222,7 +223,7 @@ $(document).ready(function() {
                 }
             },
             complete: function() {
-              
+
                 loadLanguageModules();
             }
         });

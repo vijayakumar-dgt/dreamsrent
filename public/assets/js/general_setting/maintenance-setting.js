@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
 
     $(document).ready(function() {
@@ -13,7 +14,7 @@
                     minlength: 10
                 },
                 maintenance_status: {
-                    required: false 
+                    required: false
                 }
             },
             messages: {
@@ -46,12 +47,12 @@
             },
             submitHandler: function (form) {
                 let maintenanceData = new FormData(form);
-    
+
                 let maintenanceStatus = $("#maintenance_status").prop("checked") ? 1 : 0;
                 maintenanceData.set("maintenance_status", maintenanceStatus);
-    
-              
-    
+
+
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/settings/maintenance/update",
@@ -74,13 +75,13 @@
                         if (resp.code === 200) {
                             loadMaintenanceSettings();
                             showToast('success', resp.message);
-                          
+
                         }
                     },
                     error: function (error) {
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
-    
+
                         if (error.responseJSON.code === 422) {
                             $.each(error.responseJSON.errors, function (key, val) {
                                 $("#" + key).addClass("is-invalid");
@@ -89,15 +90,15 @@
                         } else {
                             showToast('error', error.responseJSON.message);
                         }
-    
-                       
+
+
                     }
                 });
             }
         });
-    
+
         loadMaintenanceSettings();
-    
+
         function loadMaintenanceSettings() {
             $.ajax({
                 url: '/admin/settings/company/list',
@@ -110,23 +111,23 @@
                 success: function(response) {
                     if (response.code === 200) {
                         const settings = response.data;
-    
+
                         settings.forEach(setting => {
                             const element = $('#' + setting.key);
-    
+
                             if (setting.key === 'maintenance_image' && setting.value) {
                                 const imageUrl = `/storage/${setting.value}`;
                                 $('#profile_photo_preview').attr('src', imageUrl).show();
                             }
-    
+
                             else if (setting.key === 'maintenance_description') {
                                 $('#maintenance_description').summernote('code', setting.value);
                             }
-    
+
                             else if (setting.key === 'maintenance_status') {
                                 element.prop('checked', setting.value == 1);
                             }
-    
+
                             else if (element.length) {
                                 element.val(setting.value);
                             }
@@ -144,7 +145,7 @@
         }
     });
 
-    
+
 })();
 
 
@@ -165,6 +166,6 @@ function removeImage() {
     const preview = document.getElementById('profile_photo_preview');
     const fileInput = document.getElementById('profile_photo');
 
-    preview.src = '/assets/img/settings/company-logo-01.jpg'; 
-    fileInput.value = ''; 
+    preview.src = '/assets/img/settings/company-logo-01.jpg';
+    fileInput.value = '';
 }

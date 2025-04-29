@@ -239,7 +239,7 @@ $(document).ready(function() {
 
 })();
 
-$("#add_new_cylinder").click(function(){
+$(document).on("click", "#add_new_cylinder", function () {
     $("#add_cylinder .modal-title").text(_l('admin.rentals.create_cylinder_type'));
     $("#add_cylinder .submitbtn").text(_l('admin.common.create_new'));
     $("#cylinderForm")[0].reset();

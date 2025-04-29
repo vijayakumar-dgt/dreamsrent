@@ -3,8 +3,8 @@
         <div class="row">
             <div class="col-lg-8 mx-auto">
                 <div class="section-heading heading-four" data-aos="fade-down">
-                    <h2>{{ $section['section_title'] ?? ""}}</h2>
-                    <p>{{ $section['section_label'] ?? "" }}</p>
+                    <h2>{{ ucfirst($section['section_title'] ?? "")}}</h2>
+                    <p>{{ ucfirst($section['section_label'] ?? "") }}</p>
                 </div>
                 <div class="accordion faq-accordion" id="faqAccordion">
                     @if (!empty($section['section_content']) && count($section['section_content']) > 0)
@@ -24,7 +24,7 @@
                                     aria-expanded="{{ $isFirst ? 'true' : 'false' }}"
                                     aria-controls="{{ $collapseId }}"
                                 >
-                                    {{ $content->question ?? '' }}
+                                    {{ ucfirst($content->question ?? '') }}
                                 </button>
                             </h2>
                             <div
@@ -33,7 +33,7 @@
                                 data-bs-parent="#faqAccordion"
                             >
                                 <div class="accordion-body">
-                                    <p>{{ $content->answer ?? '' }}</p>
+                                    <p>{{ ucfirst($content->answer ?? '') }}</p>
                                 </div>
                             </div>
                         </div>

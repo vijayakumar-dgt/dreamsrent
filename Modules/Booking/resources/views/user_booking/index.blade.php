@@ -609,7 +609,7 @@
                                         <div class="col-md-4">
                                             <div class="input-block">
                                                 <label class="form-label">{{__('web.home.phone_number')}} <span class="text-danger"> *</span></label>
-                                                <input type="text" name="phone_number" id="phone_number" value="{{ $user->phone_number ? $user->phone_number : '' }}" class="form-control Number" maxlength="12" placeholder="{{__('web.home.phone_number_placeholder')}}">
+                                                <input type="text" name="phone_number" id="phone_number" value="{{ $user->phone_number ? $user->phone_number : '' }}" class="form-control Number" maxlength="20" placeholder="{{__('web.home.phone_number_placeholder')}}">
                                                 <span class="invalid-feedback" id="phone_number_error"></span>
                                             </div>
                                         </div>

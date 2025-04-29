@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'blog, common');
 
     $('#blogCommentTable').DataTable({
@@ -66,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     sortTable(1, true);
                     break;
                 case 'Desending':
-                    sortTable(1, false); 
+                    sortTable(1, false);
                     break;
                 case 'Last Month':
                     filterByDateRange(30);

@@ -35,7 +35,7 @@ class CalanderController extends Controller
             ->where(['users.user_type' => 3, 'users.status' => 1])
             ->get();
 
-        return view('admin.calander.index', compact("Vehicles", "customerss", "drivers", "cartypes", 'locations', 'priceTypes', 'drivingTypes', 'customers'));
+        return view('admin.calender.index', compact("Vehicles", "customerss", "drivers", "cartypes", 'locations', 'priceTypes', 'drivingTypes', 'customers'));
     }
 
     public function getCalenderBooking(Request $request)

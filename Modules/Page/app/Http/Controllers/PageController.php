@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use App\Models\Review;
 use App\Models\User;
+use App\Models\UserDetail;
 use App\Models\Wishlist;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,6 +22,7 @@ use Modules\CarInfo\Models\Cartype;
 use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Models\VehicleInfo;
 use Modules\CarInfo\Models\VehicleMeta;
+use Modules\GeneralSetting\Models\BlogCategory;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
@@ -499,13 +501,13 @@ class PageController extends Controller
                             $relativePath = 'storage/' . ($decodedData['thumbnail_image_one'] ?? '');
                             $defaultImage = asset('assets/img/car/car-right.png');
                             $thumbnailKey = 'thumbnail_image_one';
-                            
+
                             $banner->thumbnail_image = (
                                 isset($decodedData[$thumbnailKey]) &&
                                 !empty($decodedData[$thumbnailKey]) &&
                                 file_exists(public_path($relativePath))
                             ) ? asset($relativePath) : $defaultImage;
-                            
+
 
                             unset($banner->datas);
                         }
@@ -548,13 +550,13 @@ class PageController extends Controller
                             $relativePath = 'storage/' . ($decodedData['thumbnail_image_two'] ?? '');
                             $defaultImage = asset('assets/img/car/car-right.png');
                             $thumbnailKey = 'thumbnail_image_one';
-                            
+
                             $banner->thumbnail_image = (
                                 isset($decodedData[$thumbnailKey]) &&
                                 !empty($decodedData[$thumbnailKey]) &&
                                 file_exists(public_path($relativePath))
                             ) ? asset($relativePath) : $defaultImage;
-                            
+
 
                             $banner->customer_count = $userCount;
 
@@ -574,8 +576,7 @@ class PageController extends Controller
                     }
                 }
 
-
-                // bestVehicle
+                // BestVehicle
                 if ($section['status'] == 1) {
                     if (isset($section['section_content']) && strpos($section['section_content'], '[bestVehicle') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
@@ -650,7 +651,7 @@ class PageController extends Controller
                         $order = $matches[3] ?? 'asc';
 
                         $brands = DB::table('brands')
-                            ->select('id', 'brand_image','brand_icon', 'brand_name', 'status')
+                            ->select('id', 'brand_image', 'brand_icon', 'brand_name', 'status')
                             ->where('language_id', $lang_id)
                             ->where('status', 1)
                             ->whereNull('deleted_at')
@@ -673,7 +674,7 @@ class PageController extends Controller
                 if ($section['status'] == 1) {
                     if (isset($section['section_content']) && strpos($section['section_content'], '[category ') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-                        $limit = $matches[1] ?? 10;
+                        $limit = $matches[1] ?? 6;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
@@ -815,14 +816,22 @@ class PageController extends Controller
 
                             $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
                             $currency = null;
-                
+
                             if ($currencySetting && $currencySetting->value) {
                                 $currency = Currency::find($currencySetting->value);
                             }
-                
+
                             $currencySymbol = $currency->symbol ?? "$";
 
                             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
+
+                            $user = User::where('id', $vehicle->created_by)
+                                ->first();
+
+                            $userDetail = UserDetail::where("user_id", $user->id)->first();
+                            $userProfileImg = $userDetail && $userDetail->profile_image
+                                ? url('/storage/' . $userDetail->profile_image)
+                                : null;
 
                             return [
                                 'id' => $vehicle->id,
@@ -831,7 +840,7 @@ class PageController extends Controller
                                 'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
                                 'multiple_vehicle_images' => $multipleImages,
                                 'has_multiple_image' => count($multipleImages) > 1,
-                                'avatar_image' => 'https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-2-512.png',
+                                'avatar_image' => $userProfileImg ?? null,
                                 'brand_id' => $vehicle->brand_id ?? null,
                                 'brand' => $vehicle->brand->brand_name ?? null,
                                 'car_type' => $vehicle->carType->name ?? null,
@@ -984,16 +993,17 @@ class PageController extends Controller
                         $blogs = [];
 
                         foreach ($blogss as $blog) {
+                            $category = BlogCategory::where('id', $blog->category)->first();
                             $blogs[] = [
                                 'id' => $blog->id,
                                 'title' => $blog->title,
                                 'slug' => $blog->slug ?? Str::slug($blog->title),
                                 'image' => uploadedAsset($blog->image),
-                                'category' => $blog->category,
+                                'category' => $category ? $category->name : '',
                                 'description' => $blog->description,
                                 'updated_at' => \Carbon\Carbon::parse($blog->updated_at)->format('F j, Y'),
                                 'author' => [
-                                    'name' => 'Michael Brown',
+                                    'name' => 'Admin',
                                     'avatar' => 'https://www.w3schools.com/howto/img_avatar.png',
                                 ],
                             ];
@@ -1066,7 +1076,7 @@ class PageController extends Controller
                 ) {
                     preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
 
-                    $limit = $matches[1] ?? 10;
+                    $limit = $matches[1] ?? 12;
                     $viewAll = $matches[2] ?? 'no';
                     $order = $matches[3] ?? 'asc';
 

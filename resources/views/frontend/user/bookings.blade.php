@@ -113,16 +113,16 @@
 
             <!-- All Bookings -->
             <div class="col-lg-12 d-flex" id="booking_list">
-                <div class="card book-card flex-fill mb-0">
+                <div class="card flex-fill mb-0">
                     <div class="card-header">	
                         <div class="row align-items-center">
                             <div class="col-md-5">
-                                <h4>{{__('web.user.all_bookings')}} <span id="totalBookingCount">{{ $totalBookingCount }}</span></h4>	
+                                <h5>{{__('web.user.all_bookings')}} <span id="totalBookingCount" class="badge bg-success">{{ $totalBookingCount }}</span></h5>	
                             </div>
                             <div class="col-md-7 text-md-end">
                                 <div class="table-search">
                                     <div id="tablefilter"></div>										
-                                    <a href="/vehicles" class="btn btn-add"><i class="feather-plus-circle"></i>{{__('web.user.add_booking')}}</a>	
+                                    <a href="/vehicles" class="btn btn-add mb-0"><i class="feather-plus-circle"></i>{{__('web.user.add_booking')}}</a>	
                                 </div>
                             </div>
                         </div>

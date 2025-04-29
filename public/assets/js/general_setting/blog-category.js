@@ -1,6 +1,7 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'blog, common');
-
+    "use strict";
     if ($('.blogCategoryTable').length > 0) {
         $('.blogCategoryTable').DataTable({
             ordering: true,
@@ -10,11 +11,11 @@
             "drawCallback": function () {
                 $(".dataTables_info").addClass('d-none');
                 $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
-    
+
                 var tableWrapper = $(this).closest('.dataTables_wrapper');
                 var info = tableWrapper.find('.dataTables_info');
                 var pagination = tableWrapper.find('.dataTables_paginate');
-    
+
                 $('.table-footer').empty()
                     .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
                         .append($('<div class="datatable-info"></div>').append(info.clone(true)))
@@ -48,26 +49,22 @@
             }
         });
     }
-    
+
 
 $(document).ready(function () {
- 
+
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
     });
 
- 
-    $("#create_category_btn").click(function () {
-        
-    const title = $("#add_category_name").val().trim();
-
-
-    if (!title) {
-        showToast("error", _l('admin.blog.please_enter_the_name'));
-        return;
-    }
+    $(document).on("click","#create_category_btn", function(){
+        const title = $("#add_category_name").val().trim();
+        if (!title) {
+            showToast("error", _l('admin.blog.please_enter_the_name'));
+            return;
+        }
         $.ajax({
             url: "/admin/content/categories",
             type: "POST",
@@ -77,7 +74,7 @@ $(document).ready(function () {
             },
             success: function (response) {
                 showToast("success",  _l('admin.blog.blog_category_created!'));
-                location.reload(); // Or update list dynamically
+                location.reload();
                 $("#add_Category").modal("hide");
             },
             error: function (xhr) {
@@ -85,8 +82,7 @@ $(document).ready(function () {
             },
         });
     });
-
-
+    
     $(document).on("click", ".open-edit-modal", function () {
         let id = $(this).data("id");
         let name = $(this).data("name");
@@ -98,23 +94,18 @@ $(document).ready(function () {
         $("#edit_Category").modal("show");
     });
 
-
-    $("#update_category_btn").click(function () {
+    $(document).on("click", "#update_category_btn", function(){
         const title = $("#edit_category_name").val().trim();
-
-
         if (!title) {
             showToast("error", _l('admin.blog.please_enter_the_name'));
             return;
         }
-
         let id = $("#edit_category_id").val();
-
         $.ajax({
             url: "/admin/content/categories/" + id,
-            type: "POST", 
+            type: "POST",
             data: {
-                _token: $('meta[name="csrf-token"]').attr("content"), // csrf
+                _token: $('meta[name="csrf-token"]').attr("content"),
                 _method: "PUT",
                 name: $("#edit_category_name").val(),
                 status: $("#edit_category_status").is(":checked") ? 1 : 0,
@@ -130,14 +121,13 @@ $(document).ready(function () {
         });
     });
 
- 
     $(document).on("click", ".open-delete-modal", function () {
         let id = $(this).data("id");
         $("#delete_category_id").val(id);
         $("#delete_Category").modal("show");
     });
 
-    $("#delete_category_btn").click(function () {
+    $(document).on("click", "#delete_category_btn", function(){
         let id = $("#delete_category_id").val();
         $.ajax({
             url: "/admin/content/categories/" + id,
@@ -155,7 +145,7 @@ $(document).ready(function () {
 });
 
 
-const searchInput = document.getElementById('searchInputCategory');
+    const searchInput = document.getElementById('searchInputCategory');
     const tableRows = document.querySelectorAll('.blogCategoryTable tbody tr');
 
     searchInput.addEventListener('input', function () {
@@ -164,7 +154,7 @@ const searchInput = document.getElementById('searchInputCategory');
         tableRows.forEach(row => {
             const rowText = row.textContent.toLowerCase();
 
-       
+
             if (rowText.includes(query)) {
                 row.style.display = '';
             } else {
@@ -177,7 +167,7 @@ const searchInput = document.getElementById('searchInputCategory');
         document.querySelectorAll(".blogCategoryTable tbody tr")
     );
     const tbody = document.querySelector(".blogCategoryTable tbody");
-    
+
     document.querySelectorAll(".sort-option-category").forEach(function (item) {
         item.addEventListener("click", function () {
             const sortType = this.getAttribute("data-sort");
@@ -185,15 +175,15 @@ const searchInput = document.getElementById('searchInputCategory');
                 .getElementById("selectedFilterTextCategory")
                 .querySelector("span");
             dropdownLabel.textContent = this.textContent.trim();
-    
-      
+
+
             tbody.innerHTML = "";
             originalRows.forEach((row) => tbody.appendChild(row.cloneNode(true)));
-    
-    
+
+
             const rows = Array.from(tbody.querySelectorAll("tr"));
             let resultRows = [...rows];
-    
+
             if (sortType === "asc") {
                 resultRows.sort((a, b) =>
                     a.dataset.name.localeCompare(b.dataset.name)
@@ -222,8 +212,8 @@ const searchInput = document.getElementById('searchInputCategory');
                     return created >= start && created <= end;
                 });
             }
-    
-          
+
+
             tbody.innerHTML = "";
             resultRows.forEach((row) => tbody.appendChild(row));
         });

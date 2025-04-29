@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 25, 2025 at 01:51 PM
+-- Generation Time: Apr 28, 2025 at 01:08 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49301,6 +49301,14 @@ CREATE TABLE `currencies` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `currencies`
+--
+
+INSERT INTO `currencies` (`id`, `currency_name`, `code`, `symbol`, `exchange_rate`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Dollar', 'en', '$', 94.00, 1, '2025-04-01 11:22:48', '2025-04-01 11:24:59', NULL),
+(2, 'Euro', 'GBP', '#', 80.00, 1, '2025-04-07 17:56:36', '2025-04-07 17:56:47', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -56525,7 +56533,7 @@ ALTER TABLE `countries`
 -- AUTO_INCREMENT for table `currencies`
 --
 ALTER TABLE `currencies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `cylinders`

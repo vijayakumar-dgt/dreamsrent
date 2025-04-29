@@ -1,5 +1,7 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'common, user_management');
+    const permissions = await loadUserPermissions();
 
 $(document).ready(function() {
     initTable();
@@ -162,18 +164,21 @@ function initTable() {
                                     <i class="ti ti-dots-vertical"></i>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end p-2">
-                                    <li>
-                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editRole(${row.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                ${ hasPermission(permissions, 'roles_permissions', 'edit') ?
+                                    `<li>
+                                        <a class="dropdown-item rounded-1 editRole" href="javascript:void(0);" data-id="${row.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item rounded-1" href="/admin/permissions/${row.encrypted_role_id}"><i class="ti ti-shield me-1"></i>${_l('admin.user_management.permissions')}</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteRole(${row.id});" data-bs-toggle="modal" data-bs-target="#delete_role"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
-                                    </li>
+                                    </li>` : '' }
+                                ${ hasPermission(permissions, 'roles_permissions', 'delete') ?
+                                    `<li>
+                                        <a class="dropdown-item rounded-1 deleteRole" href="javascript:void(0);" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_role"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                    </li>` : '' }
                                 </ul>
                             </div>`;
-                }
+                },
+                visible: hasPermission(permissions, 'roles_permissions', 'edit') || hasPermission(permissions, 'roles_permissions', 'delete'),
             }
         ],
         ordering: true,
@@ -252,31 +257,34 @@ $("#roleDeleteForm").on('submit', function(e){
     });
 });
 
-}) ();
-
-function deleteRole(id){
+$(document).on('click', '.deleteRole', function() {
+    let id = $(this).data('id');
     $("#delete_id").val(id);
-}
+});
 
-function editRole(id){
+$(document).on('click', '.editRole', function() {
+    let id = $(this).data('id');
+
     $.ajax({
-       type:"GET",
-       url:"/admin/role/edit/"+id,
-       success: function(response) {
-            $(".error-text").text("");
-            $(".form-control").removeClass("is-invalid is-valid");
-            $("#roleForm")[0].reset();
-            if(response.code === 200){
-                let data = response.data;
-                $("#role").val(data.role_name);
-                $("#status").prop('checked', data.status == 1);
-                $("#id").val(data.id);
-
-                $("#role_modal .modal-title").text(_l('admin.user_management.edit_role'));
-                $(".submitbtn").text(_l('admin.common.save_changes'));
-                $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
-                $("#role_modal").modal('show');
-            }
-       }
+        type:"GET",
+        url:"/admin/role/edit/"+id,
+        success: function(response) {
+             $(".error-text").text("");
+             $(".form-control").removeClass("is-invalid is-valid");
+             $("#roleForm")[0].reset();
+             if(response.code === 200){
+                 let data = response.data;
+                 $("#role").val(data.role_name);
+                 $("#status").prop('checked', data.status == 1);
+                 $("#id").val(data.id);
+ 
+                 $("#role_modal .modal-title").text(_l('admin.user_management.edit_role'));
+                 $(".submitbtn").text(_l('admin.common.save_changes'));
+                 $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
+                 $("#role_modal").modal('show');
+             }
+        }
     });
-}
+});
+
+}) ();

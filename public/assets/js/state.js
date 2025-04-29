@@ -7,7 +7,7 @@
             dropdownParent: $("#state_modal"),
             placeholder: _l('admin.common.select')
         });
-    
+
         initTable();
         $("#stateForm").validate({
             rules: {
@@ -64,7 +64,7 @@
             submitHandler: function (form) {
                 let formData = new FormData(form);
                 formData.append("status", $("#status").is(":checked") ? 1 : 0);
-    
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/state/store",
@@ -95,7 +95,7 @@
                 });
             },
         });
-    
+
         function initTable() {
             $.ajax({
                 url: "/admin/state/datatable",
@@ -118,14 +118,14 @@
                     if ($.fn.DataTable.isDataTable("#stateTable")) {
                         $("#stateTable").DataTable().destroy();
                     }
-    
+
                     if (response.code === 200 && response.data.length > 0) {
                         let data = response.data;
-    
+
                         $.each(data, function (index, value) {
                             let countryCode = value.country.code.toLowerCase();
-                            let flagImage = `<img src="/assets/img/flags/${countryCode}.png" 
-                            alt="${value.country.name} Flag" width="20" 
+                            let flagImage = `<img src="/assets/img/flags/${countryCode}.svg"
+                            alt="${value.country.name} Flag" width="20"
                             onerror="this.style.display='none'; this.parentNode.innerHTML='${value.country.name}';">`;
                             tableBody += `<tr>
                                     <td>${value.name}</td>
@@ -146,22 +146,22 @@
                                         </span>
                                     </td>
                                     ${hasPermission(permissions, 'cms_locations', 'edit') || hasPermission(permissions, 'cms_locations', 'delete') ?
-    
+
                                     `<td>
                                         <div class="dropdown">
                                             <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="ti ti-dots-vertical"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                ${ hasPermission(permissions, 'cms_locations', 'edit') ? 
-    
+                                                ${ hasPermission(permissions, 'cms_locations', 'edit') ?
+
                                                 `<li>
                                                     <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editState(${
                                                         value.id
                                                     });"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                                                 </li>`:''}
-                                                ${ hasPermission(permissions, 'cms_locations', 'delete') ? 
-    
+                                                ${ hasPermission(permissions, 'cms_locations', 'delete') ?
+
                                                 `<li>
                                                     <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="delateState(${
                                                         value.id
@@ -179,7 +179,7 @@
                                 </tr>`;
                         $(".table-footer").empty();
                     }
-    
+
                     $("#stateTable tbody").html(tableBody);
                     if (response.data.length > 0) {
                         $("#stateTable").DataTable({
@@ -190,11 +190,11 @@
                             "drawCallback": function() {
                                 $(".dataTables_info").addClass('d-none');
                                 $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
-        
+
                                 var tableWrapper = $(this).closest('.dataTables_wrapper');
                                 var info = tableWrapper.find('.dataTables_info');
                                 var pagination = tableWrapper.find('.dataTables_paginate');
-        
+
                                 $('.table-footer').empty()
                                     .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
                                         .append($('<div class="datatable-info"></div>').append(info.clone(true)))
@@ -224,18 +224,18 @@
                     if (error.responseJSON.code === 500) {
                         showToast('error', error.responseJSON.message);
                     } else {
-                        showToast('error', 
+                        showToast('error',
                             _l('admin.common.default_retrieve_error')
                         );
                     }
                 },
             });
         }
-    
+
         $(document).on("click", ".dataTables_paginate a", function () {
             $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
         });
-    
+
         $("#delateState").on("submit", function (e) {
             e.preventDefault();
             $.ajax({
@@ -264,7 +264,7 @@
                 },
             });
         });
-    
+
         $("#add_state").on("click", function () {
             $(".modal-title").text(_l('admin.cms.create_state'));
             $(".submitbtn").text(_l('admin.common.create_new'));
@@ -280,7 +280,7 @@
             $("#country_id").val("").trigger("change");
         });
     });
-    
+
 })();
 
 

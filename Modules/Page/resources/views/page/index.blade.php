@@ -265,7 +265,7 @@
                 <p class="mb-3">Are you sure you want to delete page?</p>
                 <div class="d-flex justify-content-center">
                     <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
-                    <a href="pages.html" class="btn btn-primary">Yes, Delete</a>
+                    <a href="#" class="btn btn-primary">Yes, Delete</a>
                 </div>
             </div>
         </div>

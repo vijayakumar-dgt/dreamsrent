@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     const permissions = await loadUserPermissions();
 
     $(document).ready(function () {

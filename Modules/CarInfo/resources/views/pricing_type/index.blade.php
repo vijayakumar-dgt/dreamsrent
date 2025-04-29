@@ -4,7 +4,7 @@
 <!-- Page Wrapper -->
 <div class="page-wrapper">
 	<div class="content me-4">
-		
+
 		<!-- Breadcrumb -->
 		<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 			<div class="my-auto mb-2">
@@ -12,7 +12,7 @@
 				<nav>
 					<ol class="breadcrumb mb-0">
 						<li class="breadcrumb-item">
-							<a href="index.html">Home</a>
+							<a href="{{ route('dashboard') }}">Home</a>
 						</li>
 						<li class="breadcrumb-item active" aria-current="page">Pricing Types</li>
 					</ol>
@@ -28,7 +28,7 @@
 
 		<!-- Table Header -->
 		<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
-			<div class="d-flex align-items-center flex-wrap row-gap-3"> 
+			<div class="d-flex align-items-center flex-wrap row-gap-3">
 				<div class="top-search">
 					<div class="top-search-group">
 						<span class="input-icon">
@@ -38,7 +38,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">               
+			<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 				<div class="dropdown">
 					<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 						<i class="ti ti-badge me-1"></i> Status
@@ -71,16 +71,16 @@
 						<th>ACTION</th>
 					</tr>
 				</thead>
-				<tbody>			
+				<tbody>
 
 				</tbody>
 			</table>
 		</div>
 		<!-- Custom Data Table -->
 
-		<div class="table-footer"></div>			
+		<div class="table-footer"></div>
 
-	</div>	
+	</div>
 </div>
 <!-- /Page Wrapper -->
 
@@ -98,7 +98,7 @@
 			<form id="pricingTypeForm">
 				@csrf
 				<input type="hidden" name="id" id="id">
-				<div class="modal-body">                    
+				<div class="modal-body">
 					<div class="mb-3">
 						<label class="form-label">Pricing Type<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control" name="pricing_type" id="pricing_type">

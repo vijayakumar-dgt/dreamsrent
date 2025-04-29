@@ -118,7 +118,7 @@ class AppServiceProvider extends ServiceProvider
             $smallLogo = uploadedAsset(($logoSetting['small_image'] ?? null), 'default_small_logo');
             $view->with([
                 'theme' => $theme,
-                'layout' => "theme_{$theme}.app",
+                'layout' => "frontend.theme_{$theme}.app",
                 'companyPhoneNumber' => $companyPhoneNumber,
                 'companyEmail' => $companyEmail,
                 'companyName' => $companyName,
@@ -131,7 +131,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function shareHeader()
     {
-        view()->composer(["theme_1.header", "theme_2.header"], function ($view) {
+        view()->composer(["frontend.theme_1.header", "frontend.theme_2.header"], function ($view) {
             $appLanguage = App::getLocale();
             $languageId = getLanguageId($appLanguage);
 
@@ -153,7 +153,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function shareFooter()
     {
-        view()->composer(["theme_1.footer", "theme_2.footer"], function ($view) {
+        view()->composer(["frontend.theme_1.footer", "frontend.theme_2.footer"], function ($view) {
             $appLanguage = App::getLocale();
             $languageId    = getLanguageId($appLanguage);
 

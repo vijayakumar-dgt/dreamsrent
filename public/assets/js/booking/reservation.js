@@ -1,3 +1,6 @@
+(function($) {
+    "use strict";
+
 (async function () {
     await loadTranslationFile('admin', 'common, bookings');
     const permissions = await loadUserPermissions();
@@ -291,7 +294,7 @@ function bookingList(sort_by_date = '') {
 
                               ${hasPermission(permissions, 'reservations', 'delete') ?
                             `<li>
-                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteReservation(${row.id});" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                <a class="dropdown-item rounded-1 deleteReservation" href="javascript:void(0);" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
                             </li>`:''}
                         </ul>
                     </div>
@@ -373,8 +376,13 @@ $("#reservation_delete_form").on('submit', function(e){
     });
 });
 
+$(document).on('click', '.deleteReservation', function() {
+    let id = $(this).data('id');
+    $("#delete_id").val(id);
+});
+
+
 })();
 
-function deleteReservation(id){
-    $("#delete_id").val(id);
-}
+
+})(jQuery);

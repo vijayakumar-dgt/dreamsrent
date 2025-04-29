@@ -1,5 +1,6 @@
 
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
     const permissions = await loadUserPermissions();
 
@@ -17,7 +18,7 @@
                 $("#modalfootdiv").addClass("justify-content-end");
              }
         });
-    
+
         $("#currencyForm").validate({
             rules: {
                 currency_name: {
@@ -104,7 +105,7 @@
                 });
             }
         });
-    
+
         function initTable(){
             table =  $("#currencyTable").DataTable({
                 processing: false,
@@ -162,13 +163,13 @@
                                                 <i class="ti ti-dots-vertical"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end p-2">
-                                            ${ hasPermission(permissions, 'finance_settings', 'edit') ? 
-    
+                                            ${ hasPermission(permissions, 'finance_settings', 'edit') ?
+
                                                 `<li>
                                                     <a class="dropdown-item rounded-1" href="javascript:void(${row.id});" id="editcurrency" data-id="${row.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                                                 </li>`:''}
-                                            ${ hasPermission(permissions, 'finance_settings', 'delete') ? 
-    
+                                            ${ hasPermission(permissions, 'finance_settings', 'delete') ?
+
                                                 `<li>
                                                     <a class="dropdown-item rounded-1" href="javascript:void(${row.id});" id="deleteCurrency" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
                                                 </li>`:''}
@@ -176,7 +177,7 @@
                                         </div>`;
                          },
                          visible: hasPermission(permissions, 'finance_settings', 'edit') || hasPermission(permissions, 'finance_settings', 'delete')
-    
+
                      }
                 ],
                 "drawCallback": function() {
@@ -209,8 +210,8 @@
                 },
              });
         }
-    
-       
+
+
     });
 
 

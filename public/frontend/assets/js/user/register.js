@@ -1,3 +1,5 @@
+(function($) {
+    "use strict";
 $(document).ready(function () {
     let emailExists = false;
 
@@ -228,7 +230,7 @@ $(document).ready(function () {
                                 }
                             })
                             .catch((error) => {
-                                
+
                                 console.error('Failed to send welcome email:', error);
                                 showToast('error', 'Failed to send welcome email');
                             });
@@ -349,4 +351,4 @@ $(document).ready(function () {
         }
     });
 });
-
+})(jQuery);

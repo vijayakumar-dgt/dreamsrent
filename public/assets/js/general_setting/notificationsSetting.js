@@ -1,6 +1,7 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
-  
+
 $(document).ready(function() {
     $("#notificationsSettingForm").validate({
         rules: {
@@ -73,8 +74,8 @@ $(document).ready(function() {
                     'Accept': 'application/json',
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                
-                
+
+
                 success: function (resp) {
                     $(".error-text").text("");
                     $(".form-control, .form-check-input").removeClass("is-invalid is-valid");

@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'common, general_settings');
     const permissions = await loadUserPermissions();
 
@@ -37,7 +38,7 @@ $(document).ready(function() {
                 var errorId = element.attr("id") + "_error";
                 $("#" + errorId).text(error.text());
             }
-        },    
+        },
         highlight: function (element) {
             if ($(element).hasClass("select2-hidden-accessible")) {
                 $(element).next(".select2-container").addClass("is-invalid").removeClass('is-valid');
@@ -136,7 +137,7 @@ $(document).ready(function() {
                 var errorId = element.attr("id") + "_error";
                 $("#" + errorId).text(error.text());
             }
-        },    
+        },
         highlight: function (element) {
             if ($(element).hasClass("select2-hidden-accessible")) {
                 $(element).next(".select2-container").addClass("is-invalid").removeClass('is-valid');
@@ -220,10 +221,10 @@ function loadTaxRates(){
 
             if (response.code === 200 && response.data.length > 0) {
                 let data = response.data;
-                
+
                 $.each(data, function(index, value) {
                     tableBody += `
-                    <tr>         
+                    <tr>
                         <td>
                             <p class="text-gray-9 fw-semibold fs-14">${value.tax_name}</p>
                         </td>
@@ -314,7 +315,7 @@ function loadTaxRates(){
             $('.first-table').find(".table-loader, .input-loader, .label-loader, .button-loader").hide();
             $('.first-table').find('.real-table, .table-footer, .real-label, .real-input, .real-button').removeClass('d-none');
         }
-        
+
     });
 }
 
@@ -330,10 +331,10 @@ function loadTaxGroups(){
 
             if (response.code === 200 && response.data.length > 0) {
                 let data = response.data;
-                
+
                 $.each(data, function(index, value) {
                     tableBody += `
-                    <tr>         
+                    <tr>
                         <td>
                             <p class="text-gray-9 fw-semibold fs-14">${value.tax_name}</p>
                         </td>
@@ -423,7 +424,7 @@ function loadTaxGroups(){
             $('.second-table').find(".table-loader, .input-loader, .label-loader, .button-loader").hide();
             $('.second-table').find('.real-table, .table-footer, .real-label, .real-input, .real-button').removeClass('d-none');
         }
-        
+
     });
 }
 
@@ -580,7 +581,7 @@ function deleteTaxRate(id){
 }
 
 function editTaxGroup(id){
-    
+
     $.ajax({
         url:"/admin/settings/tax-group/edit/"+id,
         type:"GET",

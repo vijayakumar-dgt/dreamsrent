@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
     const permissions = await loadUserPermissions();
 
@@ -148,9 +149,9 @@
             }
         });
 
-     
+
         jQuery.validator.addMethod("customRequired", function(value, element) {
-            
+
             let content = $(element).summernote('isEmpty') ? '' : $(element).summernote('code');
             return content.trim().length > 0;
         }, "Please enter description");
@@ -172,8 +173,8 @@
                 },
                 order:[['1','desc']],
                 ordering: false,
-                searching: false, 
-                pageLength: 10, 
+                searching: false,
+                pageLength: 10,
                 lengthChange: false,
                 responsive:false,
                 autoWidth:false,
@@ -226,14 +227,14 @@
                 ],
                 "drawCallback": function() {
                      $(".dataTables_info").addClass('d-none');
-                    
+
                      $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
-                    
+
                      var tableWrapper = $(this).closest('.dataTables_wrapper');
                      var info = tableWrapper.find('.dataTables_info');
                      var pagination = tableWrapper.find('.dataTables_paginate');
 
-                   
+
                      $('.table-footer').empty()
                          .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
                              .append($('<div class="datatable-info"></div>').append(info.clone(true)))
@@ -336,20 +337,20 @@
                   type:"GET",
                   url:"/admin/settings/get_email_template/"+id,
                   success:function(response){
-                 
+
                     let description = response.data.description;
                     let regex = /{([^}]*)}/g;
 
-                   
+
                     description = description.replace(regex, (match, placeholder) => {
                         return `<span class="text-info var_placeholder" data-placeholder="${placeholder}">${match}</span>`;
                     });
 
-                   
+
                     $("#view_template_title").text(response.data.title);
                     $("#preview_box").html(description);
 
-                   
+
                   }
               });
               $("#view_template").modal('show');

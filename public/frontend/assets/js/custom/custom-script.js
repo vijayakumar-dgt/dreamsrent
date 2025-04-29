@@ -1,3 +1,4 @@
+"use strict";
 function showToast(toastType, message) {
 	let toastId = '';
 	if (toastType == 'success') {
@@ -587,3 +588,10 @@ $(document).on("click", "#markAllAsRead", function () {
         }
     });
 }); 
+
+
+function ucfirst(str) {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+  

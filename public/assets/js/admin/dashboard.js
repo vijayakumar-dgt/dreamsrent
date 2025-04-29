@@ -1,6 +1,7 @@
+"use strict";
 const chartDataElement = document.getElementById('chart-data');
 
-// Parse all JSON data
+
 const times = JSON.parse(chartDataElement.dataset.times);
 const bookingDate = JSON.parse(chartDataElement.dataset.bookingDate);
 const series = JSON.parse(chartDataElement.dataset.series);
@@ -14,10 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
     height: 400,
     events: {
       mounted: function(ctx, config) {
-        // Apply circular shape to all heatmap cells after render
         const heatmapCells = document.querySelectorAll('.apexcharts-heatmap-rect');
         heatmapCells.forEach(cell => {
-          cell.setAttribute('rx', '50%'); // Circular shape
+          cell.setAttribute('rx', '50%');
           cell.setAttribute('ry', '50%');
         });
       }
@@ -57,41 +57,33 @@ document.addEventListener('DOMContentLoaded', function() {
     chart.render();
   });
 
-
-  //income chart
-
-
-  // Ensure bookingData exists before proceeding
 if (typeof bookingData === "undefined" || !Array.isArray(bookingData)) {
     console.error("Error: bookingData is not defined or is not an array.");
 }
 
-// Initialize arrays for chart data
 var incomeData = [];
 var categories = [];
 
-// Populate incomeData and categories if bookingData exists
 if (Array.isArray(bookingData) && bookingData.length > 0) {
     bookingData.forEach((booking) => {
         if (booking.booking_date && booking.vehicle_total_price !== undefined) {
             categories.push(
                 new Date(booking.booking_date).toLocaleDateString()
-            ); // Corrected date field
-            incomeData.push(booking.vehicle_total_price || 0); // Corrected income field
+            ); 
+            incomeData.push(booking.vehicle_total_price || 0); 
         }
     });
 } else {
     console.warn("No booking data available.");
 }
 
-// Initialize the chart
 var optionsIncome = {
     series: [{ name: "Income", data: incomeData }],
     chart: { type: "bar", height: 350 },
     plotOptions: {
         bar: { columnWidth: "50%", borderRadius: 5 },
     },
-    colors: ["#FFA500"], // Orange for income
+    colors: ["#FFA500"], 
     xaxis: { categories: categories },
     yaxis: {
         labels: {
@@ -102,7 +94,6 @@ var optionsIncome = {
     grid: { borderColor: "#f1f1f1" },
 };
 
-// Ensure ApexCharts is loaded before initializing
 if (typeof ApexCharts !== "undefined") {
     var chart = new ApexCharts(
         document.querySelector("#income_expense_chart"),
@@ -113,13 +104,11 @@ if (typeof ApexCharts !== "undefined") {
     console.error("ApexCharts is not loaded.");
 }
 
-// Event listener for dropdown filter selection
 document.querySelectorAll(".dropdown-item-chat").forEach((item) => {
     item.addEventListener("click", function () {
         let selected = this.textContent.trim();
        
 
-        // Update the dropdown button text
         document.querySelector(
             ".dropdown-filter"
         ).innerHTML = `<i class="ti ti-calendar me-1"></i> ${selected}`;
@@ -129,11 +118,11 @@ document.querySelectorAll(".dropdown-item-chat").forEach((item) => {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Load "This Week" data on page load
+   
     updateChartData("This Week");
 });
 
-// Event listener for dropdown filter selection
+
 document.querySelectorAll(".dropdown-item-chat").forEach(item => {
     item.addEventListener("click", function () {
         let selected = this.textContent.trim();
@@ -142,7 +131,7 @@ document.querySelectorAll(".dropdown-item-chat").forEach(item => {
     });
 });
 
-// Function to update chart data based on the selected filter
+
 function updateChartData(filter) {
     let today = new Date();
     let lastWeek = new Date();
@@ -161,7 +150,7 @@ function updateChartData(filter) {
             return bookingDate < lastWeek && bookingDate >= previousWeek;
         if (filter === "This Month") return bookingDate >= thisMonth;
 
-        return true; // Default case (if no filter matches)
+        return true; 
     });
 
     let previousPeriodData = bookingData.filter((booking) => {
@@ -178,22 +167,19 @@ function updateChartData(filter) {
         console.warn("No data available for the selected filter:", filter);
     }
 
-    let incomeData = filteredData.map(b => b.vehicle_total_price || 0); // Avoid undefined values
+    let incomeData = filteredData.map(b => b.vehicle_total_price || 0); 
     let categories = filteredData.map(b => new Date(b.booking_date).toLocaleDateString() || "N/A");
 
-    // Calculate total income
+    
     let totalIncome = incomeData.reduce((sum, income) => sum + income, 0);
 
-    // Calculate previous period's total income
     let previousTotalIncome = previousPeriodData.map(b => b.vehicle_total_price || 0).reduce((sum, income) => sum + income, 0);
 
-    // Calculate percentage change
     let percentageChange = 0;
     if (previousTotalIncome > 0) {
         percentageChange = ((totalIncome - previousTotalIncome) / previousTotalIncome) * 100;
     }
 
-    // Ensure chart is defined before updating
     if (chart) {
         chart.updateOptions({
             series: [{ name: "Income", data: incomeData }],
@@ -204,7 +190,6 @@ function updateChartData(filter) {
     }
 
 
-    // Update the total income display
     const incomeText = document.querySelector(".income-summary p");
     const incomeAmount = document.querySelector(".income-summary h5");
     
@@ -222,7 +207,6 @@ function updateChartData(filter) {
     }
     
     
-    // Update the dropdown button text
     const dropdownToggleChat = document.querySelector(".dropdown-toggle-chat");
     if (dropdownToggleChat) {
         dropdownToggleChat.innerHTML = `<i class="ti ti-calendar me-1"></i> ${filter ?? ''}`;
@@ -231,6 +215,5 @@ function updateChartData(filter) {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Load "This Week" data on page load
     updateChartData("This Week");
 });

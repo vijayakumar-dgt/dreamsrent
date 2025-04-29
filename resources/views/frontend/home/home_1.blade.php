@@ -1,4 +1,4 @@
-@extends('theme_1.app')
+@extends('frontend.theme_1.app')
 @section('content')
 
 @foreach($content_sections as $key => $section)

@@ -1,3 +1,5 @@
+(function($) {
+    "use strict";
 (async () => {
     await loadTranslationFile('web', 'user,common');
     fetchUserBookings();
@@ -71,11 +73,11 @@ function createBookingCard(booking){
                 <td>
                     <div class="table-avatar">
                         <a href="${booking.vehicle_page_url}" target="_blank" class="avatar  flex-shrink-0">
-                            <img class="avatar-img" src="${booking['vehicle_image']}" alt="${booking['vehicle_name'] ?? ""}">
+                            <img class="avatar-img" src="${booking['vehicle_image']}" alt="${ucfirst(booking['vehicle_name'] ?? "")}">
                         </a>
                         <div class="table-head-name flex-grow-1">
-                            <a href="${booking.vehicle_page_url}" target="_blank"> ${booking['vehicle_name'] ?? ""}</a>
-                            <p>${_l('web.common.rental_type')} : ${booking['rental_type'] ?? ""}</p>
+                            <a href="${booking.vehicle_page_url}" target="_blank"> ${ucfirst(booking['vehicle_name'] ?? "")}</a>
+                            <p>${_l('web.common.rental_type')} : ${ucfirst(booking['rental_type'] ?? "")}</p>
                         </div>
                     </div>
                 </td>
@@ -156,8 +158,8 @@ function createTransactionCard(booking){
                             <img class="avatar-img" src="${booking.vehicle_image}" alt="Booking">
                         </a>
                         <div class="table-head-name flex-grow-1">
-                            <a href="/user/bookings">${booking.vehicle_name ?? ""}</a>
-                            <p>${_l('web.user.rent_type')} : ${booking.rent_type ?? ""}</p>
+                            <a href="/user/bookings">${ucfirst(booking.vehicle_name ?? "")}</a>
+                            <p>${_l('web.user.rent_type')} : ${ucfirst(booking.rent_type ?? "")}</p>
                         </div>
                     </div>
                 </td>
@@ -173,3 +175,4 @@ function createTransactionCard(booking){
                 </td>
             </tr>`;
 }
+})(jQuery);

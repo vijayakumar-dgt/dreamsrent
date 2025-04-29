@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile("admin", "rentals, common");
     $(document).ready(function () {
         getSeasonalInfo();

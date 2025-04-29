@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'common, rentals');
     const permissions = await loadUserPermissions();
 
@@ -232,8 +233,7 @@
     
 })();
 
-
-$("#add_new_damage_type").click(function(){
+$(document).on('click', '#add_new_damage_type', function () {
     $("#add_damage_type .modal-title").text(_l('admin.rentals.create_damage_type'));
     $("#add_damage_type .submitbtn").text(_l('admin.common.create_new'));
     $("#status_div").addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');;

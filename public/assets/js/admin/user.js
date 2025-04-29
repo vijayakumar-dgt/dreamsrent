@@ -1,3 +1,6 @@
+(function($) {
+    "use strict";
+
 document.addEventListener("DOMContentLoaded", function () {
     const userPhoneInput = document.querySelector(".user_phone_number");
     const intlPhoneInput = document.querySelector("#international_phone_number");
@@ -501,11 +504,11 @@ document.addEventListener("DOMContentLoaded", function () {
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                         ${ hasPermission(permissions, 'users', 'edit') ?
                                         `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editUser(${row.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                            <a class="dropdown-item rounded-1 editUser" href="javascript:void(0);" data-id="${row.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                                         </li>` : ''}
                                         ${ hasPermission(permissions, 'users', 'delete') ?
                                         `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteUser(${row.id});" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                            <a class="dropdown-item rounded-1 deleteUser" href="javascript:void(0);" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
                                         </li>` : ''}
                                     </ul>
                             </div>`;
@@ -614,11 +617,12 @@ document.addEventListener("DOMContentLoaded", function () {
 }) ();
 
 let initialPhoneNumber = null;
-function editUser(id){
+
+$(document).on('click', '.editUser', function() {
+    let id = $(this).data('id');
     $('#editUserForm').trigger('reset');
     $('.submitbtn').text(_l('admin.common.save_changes'));
 
-    removedDocuments = [];
     $.ajax({
        type:"GET",
        url:"/admin/user/edit/"+id,
@@ -679,8 +683,11 @@ function editUser(id){
             }
        }
     });
-}
+});
 
-function deleteUser(id){
+$(document).on('click', '.deleteUser', function() {
+    let id = $(this).data('id');
     $("#delete_id").val(id);
-}
+});
+
+})(jQuery);

@@ -641,6 +641,7 @@
   background: #fff;
   border: 1px solid #ccc;
   border-top: none;
+  border-bottom: 0;
   width: 100%; /* Ensure same width as input */
   max-height: 200px;
   overflow-y: auto;
@@ -653,7 +654,7 @@
 .suggestions-list li {
   padding: 10px;
   cursor: pointer;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #ccc;
   display: block; /* Ensures each suggestion is in a new line */
   white-space: nowrap; /* Prevents text wrapping */
   width: 100%; /* Ensures full width */
@@ -929,10 +930,58 @@
     object-fit: cover;
   }
 
+.banner-section-four {
+  padding: 180px 0 40px !important;
+}
+
+.banner-search .form-control::placeholder{
+  color:#fff !important;
+}
+.banner-search .group-img span{
+  position: absolute;
+  right: 0px;
+  top:0px;
+  color: #fff;
+}
+.banner-section-four .banner-search label {
+  font-size: 14px;
+  font-weight: 400;
+  margin-bottom: 6px;
+}
+
 .logo-large-size {
   width: 9.5rem !important;
   height: 5.5rem !important;
 }
 .move-cal{
   width: 220px !important;
+}
+.ticket_no_data {
+    height: 285px;
+    overflow-y: auto;
+}
+
+.paymentFailImg {
+  width: 10rem;
+  height: 10rem;
+}
+.move-cal{
+  width: 220px !important;
+}
+.theme2-blog-img{
+  height: 100% !important;
+}
+.theme2-blog-img img{
+  height: 100% !important;
+  object-fit: cover !important;
+}
+.theme2-blog {
+  height: 310px;
+}
+.theme1-blog{
+   height: 310px !important;
+}
+.theme1-blog img{
+  height: 100% !important;
+  object-fit: cover !important;
 }

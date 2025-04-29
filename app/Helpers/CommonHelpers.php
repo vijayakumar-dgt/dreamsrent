@@ -115,9 +115,9 @@ if (!function_exists('uploadedAsset')) {
 
         // Default response structure
         $defaultImages = [
-            'profile' => $baseUrl . '/custom/img/default-profile.png',
-            'default2' => $baseUrl . '/custom/img/default-placeholder-image.png',
-            'default' => $baseUrl . '/custom/img/default-image-02.jpg',
+            'profile' => $baseUrl . '/assets/img/default-profile.png',
+            'default2' => $baseUrl . '/assets/img/default-placeholder-image.png',
+            'default' => $baseUrl . '/assets/img/default-image-02.jpg',
             'default_logo' => $baseUrl . '/assets/img/logo.svg',
             'default_small_logo' => $baseUrl . '/assets/img/logo-small.svg',
             'default_favicon' => $baseUrl . '/assets/img/favicon.png',

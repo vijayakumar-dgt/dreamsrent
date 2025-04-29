@@ -1,4 +1,5 @@
-
+(function($) {
+    "use strict";
 (async () => {
     await loadTranslationFile('web', 'user,common');
     let adminId = $("#messageinput").data('receiverid');
@@ -59,7 +60,7 @@ async function fetchMessages(initial = true,reset = false) {
                         messageContainer.scrollTop(newScrollHeight - oldScrollHeight);
                     }, 50);
                 }
-                
+
                 offset = response.next_offset;
                 last_offset = response.last_offset;
             }
@@ -100,13 +101,13 @@ function listenMqttForNewMessages(customerId) {
         reconnectPeriod: 1000,
         connectTimeout: 5000,
       });
-      
-      
+
+
 
     client.on('connect', function () {
-       
+
         client.subscribe(topic, { qos: 1 }, (err) => {
-            
+
         });
     });
 
@@ -117,11 +118,11 @@ function listenMqttForNewMessages(customerId) {
     });
 
     client.on('error', function (err) {
-       
+
     });
 
     client.on('close', function () {
-       
+
     });
 }
 
@@ -220,9 +221,9 @@ function createMessageCard(message) {
                     </div>
                 </li>`;
     }
-    
+
     return html;
-    
+
 }
 
 $(document).on('change','#fileupload', function(){
@@ -239,3 +240,4 @@ $(document).on('change','#fileupload', function(){
     $(".selected_file").removeClass('d-none');
     $(".selected_file").text(fileName);
 })
+})(jQuery);

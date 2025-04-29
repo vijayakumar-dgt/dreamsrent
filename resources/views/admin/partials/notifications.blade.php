@@ -8,7 +8,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-12 d-flex">
-                    <div class="card book-card flex-fill mb-5">
+                    <div class="card ">
                       <div class="card-body">
                         <div class="col-xl-12">
                             <div class="d-flex justify-content-end align-items-center mb-3">
@@ -33,7 +33,7 @@
                 </div>
             </div>
             <!-- /Payments Table -->
-    
+            </div>
         </div>
     </div>
 </div>

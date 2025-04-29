@@ -28,7 +28,7 @@ class CustomerController extends Controller
             }])
             ->where('languages.status', 1)
             ->get();
-        
+
         return view('admin.customers', compact('languages'));
     }
 
@@ -54,7 +54,7 @@ class CustomerController extends Controller
             'gender' => ['required'],
             'phone_number' => ['required'],
             'email' => [
-                'required', 
+                'required',
                 'email',
                 Rule::unique('users', 'email')->ignore($id)->whereNull('deleted_at'),
             ],
@@ -147,7 +147,7 @@ class CustomerController extends Controller
                         ]);
                     }
                 }
-            } 
+            }
             else {
                 $user = UserDetail::where('user_id', $id)->first();
                 $oldImage = '';
@@ -186,7 +186,7 @@ class CustomerController extends Controller
                 }
                 user::where('id', $id)->update($userData);
                 UserDetail::updateOrCreate(
-                    ['user_id' => $id], 
+                    ['user_id' => $id],
                     $userDetailsData
                 );
             }
@@ -222,7 +222,7 @@ class CustomerController extends Controller
             $query = User::with(['documents:id,user_id,document'])
                 ->select(
                     'users.id',
-                    'users.name as username', 
+                    'users.name as username',
                     DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
                     'users.email',
                     'users.phone_number',
@@ -258,7 +258,7 @@ class CustomerController extends Controller
                 $status = $request->sort_by_status;
                 $query->where('users.status', $status);
             }
-            
+
             if ($request->has('sort_by_date') && !empty($request->sort_by_date)) {
                 $dates = explode(' - ', $request->sort_by_date);
                 if (count($dates) === 2) {
@@ -299,7 +299,7 @@ class CustomerController extends Controller
                 $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) {$orderDir}");
             } else {
                 $query->orderBy($columnName, $orderDir);
-            }            
+            }
 
             $totalRecords = User::where(['users.user_type' => 3])->count();
             $filteredRecords = $query->count();
@@ -311,7 +311,7 @@ class CustomerController extends Controller
                 $user->valid_date = formatDateTime($user->valid_date, false);
                 $user->date_of_issue = formatDateTime($user->date_of_issue, false);
                 $user->profile_image = uploadedAsset($user->profile_image, 'profile');
-                $user->language_flag = url('/assets/img/flags/'.$user->language_code.'.png');
+                $user->language_flag = url('/assets/img/flags/'.$user->language_code.'.svg');
                 $user->encrypted_id = customEncrypt($user->id, User::$userSecretKey);
                 $user->documents = $user->documents->map(function ($document) {
                     $document->document = uploadedAsset($document->document, 'documents');
@@ -348,7 +348,7 @@ class CustomerController extends Controller
         $data = User::with(['documents:id,user_id,document'])
             ->select(
                 'users.id',
-                'users.name as username', 
+                'users.name as username',
                 'users.email',
                 'users.phone_number',
                 'users.status',
@@ -380,7 +380,7 @@ class CustomerController extends Controller
                 return $document;
             });
         }
-        
+
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -394,7 +394,7 @@ class CustomerController extends Controller
         $customer = User::with(['documents:id,user_id,document'])
             ->select(
                 'users.id',
-                'users.name as username', 
+                'users.name as username',
                 'users.email',
                 'users.phone_number',
                 'users.status',
@@ -442,7 +442,7 @@ class CustomerController extends Controller
             ->join('booking_histories', 'booking_histories.booking_id', '=', 'bookings.id')
             ->where('bookings.customer_id', $id)
             ->get();
-            
+
         $defaultCurrency = getDefaultCurrencySymbol();
         if ($customer) {
             $customer->profile_image = uploadedAsset($customer->profile_image, "profile");
@@ -456,7 +456,7 @@ class CustomerController extends Controller
                 $document->size = $fileDetails['size'];
                 $document->extension = $fileDetails['extension'] ?? '';
                 $document->document_url = uploadedAsset($document->document, '');
-                $document->icon = url('custom/img/file-icon.svg');
+                $document->icon = url('assets/img/file-icon.svg');
                 return $document;
             });
         }
@@ -469,7 +469,7 @@ class CustomerController extends Controller
         try {
             $id = $request->id;
             $ids = $request->ids ?? [];
-            
+
             if ($request->has('ids') && !empty($ids)) {
                 User::whereIn('id', $ids)->delete();
                 UserDetail::whereIn('user_id', $ids)->delete();

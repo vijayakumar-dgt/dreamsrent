@@ -1,6 +1,7 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
-    
+
 $(document).ready(function() {
     loadSMSSetting();
     $('.gateway-switch').on('change', function() {
@@ -19,7 +20,7 @@ $(document).ready(function() {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
-               
+
                 loadSMSSetting();
 
             },

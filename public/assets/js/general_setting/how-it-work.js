@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'cms,common');
 
     $(document).ready(function () {
@@ -12,7 +13,7 @@
                 ['view', ['fullscreen', 'codeview', 'help']]
             ]
         });
-    
+
         $("#howItWorkForm").validate({
             rules: {
                 maintenance_description: {
@@ -46,7 +47,7 @@
             },
             submitHandler: function (form) {
                 let howItWorksData = new FormData(form);
-    
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/how-it-works/update",
@@ -74,7 +75,7 @@
                     error: function (error) {
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
-    
+
                         if (error.responseJSON.code === 422) {
                             $.each(error.responseJSON.errors, function (key, val) {
                                 $("#" + key).addClass("is-invalid");
@@ -88,12 +89,12 @@
             }
         });
         loadHowItWorksSettings();
-    
+
     });
-    
+
     function loadHowItWorksSettings(languageId = null) {
         const selectedLanguageId = languageId || $('#language').val();
-    
+
         $.ajax({
             url: '/admin/how-it-works/list',
             type: 'POST',
@@ -107,18 +108,18 @@
             },
             success: function(response) {
                 const setting = response.data;
-    
+
                 if (setting === null) {
                     $('#howitwork_description').summernote('code', '');
                     $('#profile_photo_preview').attr('src', '').hide();
                     return;
                 }
-    
+
                 if (setting.key === 'maintenance_image' && setting.value) {
                     const imageUrl = `/storage/${setting.value}`;
                     $('#profile_photo_preview').attr('src', imageUrl).show();
                 }
-    
+
                 if (setting.key === `how_it_works_${setting.language_id}`) {
                     $('#howitwork_description').summernote('code', setting.value);
                 } else {

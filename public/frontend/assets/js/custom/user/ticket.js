@@ -1,5 +1,6 @@
 
 (async () => {
+    "use strict";
     await loadTranslationFile('web', 'user,common');
     $(document).ready(function() {
         TicketTable();
@@ -215,7 +216,7 @@
                         let createdDate = new Date(value.created_at).toLocaleDateString();
                         let assigneeImage = value.assignee?.user_detail?.profile_image
                         ? "/storage/" + value.assignee.user_detail.profile_image
-                        : "/custom/img/default-profile.png";
+                        : "/assets/img/default-profile.png";
 
                         // Priority badge
                         let priorityBadge = `<span class="badge badge-secondary bg-secondary-transparent ticket-badge">${_l('web.user.unknown')}</span>`;
@@ -338,7 +339,7 @@ function showTicketHistory(ticketId) {
     let ticket = ticketData.find(t => t.id === ticketId); // Use global ticketData
 
     if (!ticket || !ticket.ticket_histories.length) {
-        $(".ticket_histroy").html('<p class="text-center">No history available for this ticket.</p>');
+        $(".ticket_histroy").html(`<p class="text-center ticket_no_data">${_l('web.user.no_ticket_history_found')}</p>`);
         return;
     }
 
@@ -420,3 +421,5 @@ $("#delete_ticket_form").on('submit', function(e){
         }
     });
 });
+
+

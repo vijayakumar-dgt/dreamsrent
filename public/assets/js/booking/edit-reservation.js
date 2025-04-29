@@ -1,3 +1,5 @@
+(function($) {
+    "use strict";
 
 (async () => {
     await loadTranslationFile('admin', 'common, bookings');
@@ -1887,3 +1889,5 @@ $(document).on('click', '#reservation_complete_btn', function (event) {
 });
 
 }) ();
+
+})(jQuery);

@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
 
     $(document).ready(function() {
@@ -79,7 +80,7 @@
             },
             submitHandler: function(form) {
                 let seoData = new FormData(form);
-               
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/settings/seosetup/store",
@@ -102,13 +103,13 @@
                         if (resp.code === 200) {
                             loadSeoSettings();
                             showToast('success', resp.message);
-                          
+
                         }
                     },
                     error: function(error) {
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
-    
+
                         if (error.responseJSON.code === 422) {
                             $.each(error.responseJSON.errors, function(key, val) {
                                 $("#" + key).addClass("is-invalid");
@@ -117,15 +118,15 @@
                         } else {
                             showToast('error', error.responseJSON.message);
                         }
-    
-                       
+
+
                     }
                 });
             }
         });
-    
+
         loadSeoSettings();
-    
+
         function loadSeoSettings() {
             $.ajax({
                 url: '/admin/settings/company/list',
@@ -138,17 +139,17 @@
                 success: function(response) {
                     if (response.code === 200) {
                         const settings = response.data;
-    
+
                         settings.forEach(setting => {
                             const element = $('#' + setting.key);
-    
-                          
+
+
                             if (setting.key === 'metaImage' && setting.value) {
                                 const imageUrl = `/storage/${setting.value}`;
                                 $('#profile_photo_preview').attr('src', imageUrl).show();
                             }
-    
-                          
+
+
                             else if (setting.key === 'siteDescription') {
                                 $('#siteDescription').val(setting.value);
                             }
@@ -159,8 +160,8 @@
                                     $('#keywords').tagsinput('add', keyword.trim());
                                 });
                             }
-    
-                           
+
+
                             else if (setting.key === 'OGmetaTitle') {
                                 $('#ogmetaTitle').val(setting.value);
                             }
@@ -174,12 +175,12 @@
                                     $('#ogkeywords').tagsinput('add', keyword.trim());
                                 });
                             }
-    
+
                             else if (element.length) {
                                 element.val(setting.value);
                             }
                         });
-    
+
                         $('.real-label').removeClass('d-none');
                         $('.label-loader, .input-loader, .image-loader').addClass('d-none');
                     }
@@ -194,7 +195,7 @@
             });
         }
     });
-    
+
 })();
 
 
@@ -235,6 +236,6 @@ function removeImage() {
     const preview = document.getElementById('profile_photo_preview');
     const fileInput = document.getElementById('profile_photo');
 
-    preview.src = '/assets/img/settings/company-logo-01.jpg'; 
+    preview.src = '/assets/img/settings/company-logo-01.jpg';
     fileInput.value = '';
 }

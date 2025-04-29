@@ -1,5 +1,5 @@
 (async () => {
-
+    "use strict";
     await loadTranslationFile('admin', 'common, general_settings');
 
 $(document).ready(function () {
@@ -1413,14 +1413,14 @@ function initList() {
         success: function (response) {
             if (response.code === 200 && response.data) {
                 response.data.forEach(function (item) {
-                    let element = $("#" + item.key); 
+                    let element = $("#" + item.key);
 
                     if (element.length) {
                         if (element.attr("type") === "checkbox") {
                             let isChecked = item.value == "1";
                             element.prop("checked", isChecked);
 
-                           
+
                             let statusSpan = $(
                                 "." + item.key.replace("_status", "In")
                             );
@@ -1436,7 +1436,7 @@ function initList() {
                                 }
                             }
                         } else {
-                            element.val(item.value); 
+                            element.val(item.value);
                         }
                     }
                 });

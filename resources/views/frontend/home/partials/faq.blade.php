@@ -11,11 +11,11 @@
                 <div class="faq-card bg-white" data-aos="fade-down">
                     <h4 class="faq-title">
                         <a class="@if($loop->first == false) collapsed @endif" data-bs-toggle="collapse" href="#faq-{{ $faq->id ?? $loop->index }}" aria-expanded="@if($loop->first) true @else false @endif">
-                            {{ $faq->question ?? "" }}
+                            {{ ucfirst($faq->question ?? "") }}
                         </a>
                     </h4>
                     <div id="faq-{{ $faq->id ?? $loop->index }}" class="card-collapse collapse @if($loop->first) show @endif">
-                        <p>{{ $faq->answer ?? "" }}</p>
+                        <p>{{ ucfirst($faq->answer ?? "") }}</p>
                     </div>
                 </div>	
             @endforeach									

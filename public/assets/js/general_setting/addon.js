@@ -1,5 +1,5 @@
 (async () => {
-
+"use strict";
 $(document).ready(function () {
     listAddonModules();
 

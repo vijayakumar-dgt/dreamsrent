@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-               
+
                 loadStorageSettings();
 
             } else {
@@ -158,7 +159,7 @@ loadStorageSettings();
                 if (response.code === 200) {
                     const settings = response.data;
 
-                   
+
                     settings.forEach(setting => {
                         const element = $('#' + setting.key);
                         if (element.length && element.attr('type') === 'checkbox') {
@@ -166,7 +167,7 @@ loadStorageSettings();
                         }
                     });
 
-                
+
                     const awsSettings = {
                         aws_access_key: '',
                         aws_secret_key: '',
@@ -175,14 +176,14 @@ loadStorageSettings();
                         aws_base_url: ''
                     };
 
-                   
+
                     settings.forEach(setting => {
                         if (awsSettings.hasOwnProperty(setting.key)) {
                             awsSettings[setting.key] = setting.value;
                         }
                     });
 
-          
+
                     $('#aws_access_key').val(awsSettings.aws_access_key);
                     $('#aws_secret_key').val(awsSettings.aws_secret_key);
                     $('#aws_bucket_name').val(awsSettings.aws_bucket_name);

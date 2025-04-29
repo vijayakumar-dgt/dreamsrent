@@ -1,3 +1,4 @@
+"use strict";
 $(document).ready(function () {
     var menuId = localStorage.getItem("menu_id");
 
@@ -55,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <span class="error-message text-danger d-none">Menu name is required.</span>
                             </div>
                             <div class="mb-2">
-                                <label for="menu_link_${uniqueId}" class="form-label">Permalink</label>
+                                <label for="menu_link_${uniqueId}" class="form-label">Slug</label>
                                 <input type="text" id="menu_link" name="menu_link" class="form-control" value="${url}">
                                 <span class="error-message text-danger d-none">Please enter a valid link.</span>
                             </div>
@@ -136,8 +137,10 @@ document.addEventListener("DOMContentLoaded", function () {
         checkboxes.forEach(checkbox => {
             if (checkbox.checked) {
                 const title = checkbox.dataset.title.trim();
-                let link = checkbox.dataset.link.trim();
-                link = `${BASE_URL}/${link.replace(/^\/+/, '')}`;
+                let slug = checkbox.dataset.link.trim(); // keep only the slug here
+                slug = slug.replace(/^\/+/, ''); // Remove leading slashes
+
+                const link = `${BASE_URL}/${slug}`; // Full URL for preview
 
                 if (!title) {
                     showToast('error', "Menu title is required.");
@@ -156,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const uniqueId = `menu-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
                 const newItem = `
-                    <li class="list-group-item" data-title="${title}" data-link="${link}">
+                    <li class="list-group-item" data-title="${title}" data-link="${slug}">
                         <div class="accordion" id="accordionExample">
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
@@ -170,17 +173,17 @@ document.addEventListener("DOMContentLoaded", function () {
                                         <!-- Menu Name Field -->
                                         <div class="mb-3">
                                             <input type="hidden" name="debug_title" value="${title}">
-                                            <input type="hidden" name="debug_link" value="${link}">
+                                            <input type="hidden" name="debug_link" value="${slug}">
                                             <label for="menu_name_${uniqueId}" class="form-label">Menu <span class="text-danger">*</span></label>
                                             <input type="text" id="menu_name_${uniqueId}" name="menu_name" class="form-control" value="${title}" required>
                                             <span class="error-message text-danger d-none">Menu name is required.</span>
                                         </div>
 
-                                        <!-- Permalink Field -->
+                                        <!-- Slug Field -->
                                         <div class="mb-2">
-                                            <label for="menu_link_${uniqueId}" class="form-label">Permalink</label>
-                                            <input type="text" id="menu_link_${uniqueId}" name="menu_link" class="form-control" value="${link}">
-                                            <span class="error-message text-danger d-none">Please enter a valid link.</span>
+                                            <label for="menu_link_${uniqueId}" class="form-label">Slug</label>
+                                            <input type="text" id="menu_link_${uniqueId}" name="menu_link" class="form-control" value="${slug}">
+                                            <span class="error-message text-danger d-none">Please enter a valid slug.</span>
                                         </div>
 
                                         <!-- Preview Link -->
@@ -305,6 +308,7 @@ document.addEventListener("DOMContentLoaded", function () {
 menuTable();
 function menuTable() {
     let menuId = localStorage.getItem('menu_id');
+    const BASE_URL = window.location.origin; // Add this at the top
 
     if (menuId) {
         $.ajax({
@@ -328,8 +332,11 @@ function menuTable() {
                         menuItems.forEach(item => {
                             let uniqueId = `menu-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
+                            let slug = item.link.replace(/^\/+/, ''); // Remove any leading slash
+                            let previewLink = `${BASE_URL}/${slug}`; // Correct preview link
+
                             let newItem = `
-                                <li class="list-group-item" data-title="${item.label}" data-link="${item.link}">
+                                <li class="list-group-item" data-title="${item.label}" data-link="${slug}">
                                     <div class="accordion" id="accordionExample">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
@@ -347,19 +354,19 @@ function menuTable() {
                                                         <span class="error-message text-danger d-none">Menu name is required.</span>
                                                     </div>
 
-                                                    <!-- Permalink Field -->
+                                                    <!-- Slug Field -->
                                                     <div class="mb-2">
-                                                        <label for="menu_link_${uniqueId}" class="form-label">Permalink</label>
-                                                        <input type="text" id="menu_link" name="menu_link" class="form-control" value="${item.link}">
-                                                        <span class="error-message text-danger d-none">Please enter a valid link.</span>
+                                                        <label for="menu_link_${uniqueId}" class="form-label">Slug</label>
+                                                        <input type="text" id="menu_link_${uniqueId}" name="menu_link" class="form-control" value="${slug}">
+                                                        <span class="error-message text-danger d-none">Please enter a valid slug.</span>
                                                     </div>
 
                                                     <!-- Preview Link -->
-                                                    <p>Preview : <a href="${item.link}" target="_blank" class="text-info">${item.link}</a></p>
+                                                    <p>Preview : <a href="${previewLink}" target="_blank" class="text-info">${previewLink}</a></p>
 
                                                     <!-- Status Toggle -->
                                                     <div class="form-check form-check-md form-switch me-2">
-                                                        <input class="form-check-input" type="checkbox" role="switch" id="menu_status" name="menu_status" ${item.status ? 'checked' : ''}>
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="menu_status_${uniqueId}" name="menu_status" ${item.status ? 'checked' : ''}>
                                                         <label for="menu_status_${uniqueId}" class="form-check-label form-label mt-0 mb-0">
                                                             Status
                                                         </label>

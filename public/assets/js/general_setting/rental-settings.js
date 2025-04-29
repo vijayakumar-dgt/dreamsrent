@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
 
     $(document).ready(function () {
@@ -27,14 +28,14 @@
             },
             submitHandler: function (form) {
                 let rentalData = new FormData(form);
-    
-              
+
+
                 $("#rentalSettingForm input[type='checkbox']").each(function () {
                     rentalData.set($(this).attr("name"), $(this).is(":checked") ? "1" : "0");
                 });
-    
-              
-    
+
+
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/settings/rental/update",
@@ -57,13 +58,13 @@
                         if (resp.code === 200) {
                             loadRentalSettings();
                             showToast("success", resp.message);
-                           
+
                         }
                     },
                     error: function (error) {
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
-    
+
                         if (error.responseJSON.code === 422) {
                             $.each(error.responseJSON.errors, function (key, val) {
                                 $("#" + key).addClass("is-invalid");
@@ -72,15 +73,15 @@
                         } else {
                             showToast("error", error.responseJSON.message);
                         }
-    
-                       
+
+
                     }
                 });
             }
         });
-    
+
         loadRentalSettings();
-    
+
         function loadRentalSettings() {
             $.ajax({
                 url: '/admin/settings/company/list',
@@ -93,20 +94,20 @@
                 success: function (response) {
                     if (response.code === 200) {
                         const settings = response.data;
-    
+
                         settings.forEach(setting => {
                             const element = $("#" + setting.key);
-    
+
                             if (element.length) {
                                 if (element.is(":checkbox")) {
                                     element.prop("checked", setting.value == 1);
                                 } else if (element.is("select")) {
                                     const optionExists = element.find(`option[value="${setting.value}"]`).length > 0;
-    
+
                                     if (!optionExists) {
                                         element.append(`<option value="${setting.value}">${setting.value}</option>`);
                                     }
-    
+
                                     element.val(setting.value).trigger("change");
                                 } else {
                                     element.val(setting.value);
@@ -126,7 +127,7 @@
         }
     });
 
-    
+
 })();
 
 

@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'cms,common');
     const permissions = await loadUserPermissions();
 
@@ -8,7 +9,7 @@
             dropdownParent: $("#city_modal"),
             placeholder: _l('admin.common.select'),
         });
-            
+
         initTable();
         $("#cityForm").validate({
             rules: {
@@ -65,7 +66,7 @@
             submitHandler: function (form) {
                 let formData = new FormData(form);
                 formData.append("status", $("#status").is(":checked") ? 1 : 0);
-    
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/city/store",
@@ -96,7 +97,7 @@
                 });
             },
         });
-        
+
         function initTable() {
             $("#cityTable").DataTable({
                 serverSide: true,
@@ -132,7 +133,7 @@
                         render: function (data, type, row) {
                             if (row.state && row.state.country) {
                                 let countryCode = row.state.country.code.toLowerCase();
-                                return `<img src="/assets/img/flags/${countryCode}.png" alt="${row.state.country.name} Flag" width="20"
+                                return `<img src="/assets/img/flags/${countryCode}.svg" alt="${row.state.country.name} Flag" width="20"
                                 onerror="this.style.display='none'; this.parentNode.innerHTML='${row.state.country.name}';"> ${row.state.country.name}`;
                             } else {
                                 return 'N/A';
@@ -161,7 +162,7 @@
                             if (hasPermission(permissions, 'cms_locations', 'delete')) {
                                 actions += `<li><a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="delateCity(${row.id});" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a></li>`;
                             }
-            
+
                             if (actions !== '') {
                                 return `<div class="dropdown">
                                     <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -211,13 +212,13 @@
                         previous: _l("admin.common.previous"),
                     },
                 }
-            }); 
+            });
         }
 
         $(document).on('click', '.dataTables_paginate a', function() {
             $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
         });
-        
+
         $("#delateCity").on("submit", function (e) {
             e.preventDefault();
             $.ajax({
@@ -246,7 +247,7 @@
                 },
             });
         });
-        
+
         $("#add_city").on("click", function () {
             $(".modal-title").text(_l('admin.cms.create_city'));
             $(".submitbtn").text(_l('admin.common.create_new'));
@@ -256,10 +257,10 @@
             $(".form-control").removeClass("is-invalid is-valid");
             $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
             $('#state_id').val("").trigger("change");
-        }); 
-    
+        });
+
     });
-    
+
 })();
 
 function editCity(id) {

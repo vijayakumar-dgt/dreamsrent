@@ -139,7 +139,7 @@
                             <span class="badge-km d-none"><i class="fa-solid fa-person-walking"></i>4.2 Km Away</span>
                             <a href="javascript:void(0);" class="fav-icon"><i class="fa-regular fa-heart"></i></a>
                         </div>
-                       
+
                     </div>
                     <div class="slider detail-bigimg">
                         <div class="product-img">
@@ -305,7 +305,7 @@
                                         <h6 class="vehicle_mileage">16 Km</h6>
                                     </div>
                                 </div>
-                              
+
                                 <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                     <div class="feature-img">
                                         <img src="/frontend/assets/img/specification/specification-icon-7.svg" alt="Icon">
@@ -315,7 +315,7 @@
                                         <h6 class="vehicle_year"> 2018</h6>
                                     </div>
                                 </div>
-                               
+
                                 <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                     <div class="feature-img">
                                         <img src="/frontend/assets/img/specification/specification-icon-9.svg" alt="Icon">
@@ -334,7 +334,7 @@
                                         <h6 class="vehicle_doors"> 4 Doors</h6>
                                     </div>
                                 </div>
-                             
+
                             </div>
                         </div>
                     </div>
@@ -986,7 +986,7 @@
                                         <li class="column-group-last">
                                             <div class="input-block mb-0">
                                                 <div class="search-btn">
-                                                    <a href="booking-checkout.html" class="btn btn-primary check-available w-100">Book</a>
+                                                    <a href="#" class="btn btn-primary check-available w-100">Book</a>
                                                     <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#enquiry" class="btn btn-theme">Enquire Us</a>
                                                 </div>
                                             </div>
@@ -1023,9 +1023,9 @@
                             <span>{{ $data['author_location'] ?? "" }}</span>
                         </li>
                     </ul>
-                  
+
                 </div>
-               
+
             </div>
         </div>
         <div id="recommended-vehicle">

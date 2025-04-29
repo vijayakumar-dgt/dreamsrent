@@ -1,3 +1,5 @@
+(function($) {
+    "use strict";
 (async () => {
     await loadTranslationFile("web", "home, common");
 
@@ -11,7 +13,7 @@
     $(document).on('change', '#language_id', function () {
         if (isInitialLoad) return;
         let formData = {
-            language_id: $(this).val()  
+            language_id: $(this).val()
         };
         updatePreference(formData);
     });
@@ -19,7 +21,7 @@
     $(document).on('change', '#region_id', function () {
         if (isInitialLoad) return;
         let formData = {
-            region_id: $(this).val()  
+            region_id: $(this).val()
         };
         updatePreference(formData);
     });
@@ -40,7 +42,7 @@
                     isInitialLoad = false;
                 }
             }
-        }); 
+        });
     }
 
     function updatePreference(formData = '') {
@@ -72,7 +74,8 @@
                     showToast('error', error.responseJSON.message);
                 }
             }
-        }); 
+        });
     }
 
 }) ();
+})(jQuery);

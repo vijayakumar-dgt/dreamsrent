@@ -510,7 +510,7 @@ class UserBookingController extends Controller
 
             $order['application_context'] = [
                 'return_url' => url('paypal-payment-success'),
-                'cancel_url' => url('payment-failed')
+                'cancel_url' => url('paypal-payment-failed')
             ];
 
             $response = $this->provider->createOrder($order);

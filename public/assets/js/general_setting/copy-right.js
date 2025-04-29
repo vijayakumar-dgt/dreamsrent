@@ -1,4 +1,5 @@
 (async () => {
+    "use strict";
     await loadTranslationFile('admin', 'cms,common');
 
     $(document).ready(function () {
@@ -12,7 +13,7 @@
                 ['view', ['fullscreen', 'codeview', 'help']]
             ]
         });
-    
+
         $("#copyRightForm").validate({
             rules: {
                 copy_right_description: {
@@ -52,7 +53,7 @@
             },
             submitHandler: function (form) {
                 let copyRightData = new FormData(form);
-    
+
                 $.ajax({
                     type: "POST",
                     url: "/admin/copyright/update",
@@ -80,7 +81,7 @@
                     error: function (error) {
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
-    
+
                         if (error.responseJSON.code === 422) {
                             $.each(error.responseJSON.errors, function (key, val) {
                                 $("#" + key).addClass("is-invalid");
@@ -93,11 +94,11 @@
                 });
             }
         });
-    
+
         loadCopyRightSettings();
-    
+
     });
-    
+
     function loadCopyRightSettings(languageId = null) {
         const selectedLanguageId = languageId || $('#language').val();
         $.ajax({
@@ -113,18 +114,18 @@
             },
             success: function(response) {
                 const setting = response.data;
-    
+
                 if (setting === null) {
                     $('#copy_right_description').summernote('code', '');
                     $('#profile_photo_preview').attr('src', '').hide();
                     return;
                 }
-    
+
                 if (setting.key === 'maintenance_image' && setting.value) {
                     const imageUrl = `/storage/${setting.value}`;
                     $('#profile_photo_preview').attr('src', imageUrl).show();
                 }
-    
+
                 if (setting.key === `copy_right_${setting.language_id}`) {
                     $('#copy_right_description').summernote('code', setting.value);
                 } else {

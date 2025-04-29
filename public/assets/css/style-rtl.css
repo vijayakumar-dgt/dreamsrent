@@ -20893,6 +20893,160 @@ span.flatpickr-weekday {
   z-index: 1;
 }
 
-/* /circle progress*/
 
-/*# sourceMappingURL=style.css.map */
+
+/* Target ApexCharts heatmap cells */
+.apexcharts-heatmap-rect {
+  border-radius: 50% !important; /* Makes cells circular */
+  stroke-width: 2px; /* Optional: Adds a border */
+  stroke: #fff; /* Optional: Border color */
+  height: 40px ;
+}
+
+/* Adjust hover effects (optional) */
+.apexcharts-heatmap-rect:hover {
+  filter: brightness(1.1);
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+ /* Default (grid) uses Bootstrap columns */
+ .blogs-cover.grid-view .blog-item {
+  display: block;
+}
+
+/* List view styling */
+.blogs-cover.list-view .blog-item {
+  width: 100%;
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.blogs-cover.list-view .blog-item .card {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.blogs-cover.list-view .blog-img img {
+  width: 200px;
+  height: auto;
+  object-fit: cover;
+}
+
+.blogs-cover.list-view .blog-img {
+  flex-shrink: 0;
+}
+
+.blogs-cover.list-view .blog-content {
+  flex-grow: 1;
+  padding: 1rem;
+}
+.load-btn {
+  display: inline-block !important;
+}
+.progressbar {
+    counter-reset: step;
+  }
+
+  .progressbar li {
+    list-style-type: none;
+    float: left;
+    width: 14.2857142857%;
+    position: relative;
+    text-align: center;
+  }
+
+  .progressbar li:before {
+    content: counter(step);
+    counter-increment: step;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid #dcdcdc;
+    display: block;
+    text-align: center;
+    margin: 0 auto 10px auto;
+    border-radius: 50%;
+    background-color: #fff;
+  }
+
+  .progressbar li:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: #dcdcdc;
+    top: 15px;
+    left: -50%;
+    z-index: -1;
+  }
+
+  .progressbar li:first-child:after {
+    content: none;
+  }
+
+  .progressbar li.active {
+    color: #fe9308;
+  }
+
+  .progressbar li.active:before {
+    border-color: #fe9308;
+    background: #fe9308;
+    color: #fff;
+  }
+  .installer-main .card-header {
+    color: #111111;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .installer-main .btn-success{
+    margin-top: 20px;
+  }
+  .installer-main .form-control {
+    background-color: #efefef99;
+    transition: all 0.6s;
+  }
+  .installer-main .form-control:focus{
+    border: 1px solid #fe9308;
+    transition: all 0.6s;
+  }
+  .progressbar li.active+li:after {
+    background-color: #FF008A;
+  }
+
+  @media screen and (max-width: 767px) {
+    .progressbar li span {
+        display: none;
+    }
+  }
+
+  /*****  Installer Part*****/
+  .installer-progress-bar {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .installer-main{
+    box-shadow: 0px 4px 24px rgb(225 225 225 / 59%);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .installer-main .card .card-header {
+    align-items: center;
+  }
+  .installer-main .card .card-header p {
+    margin-bottom: 0;
+  }
+  .installer-main label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #242B3A;
+  }
+  .dash-height{
+  height: 200px !important;
+  }
+
+  
+
