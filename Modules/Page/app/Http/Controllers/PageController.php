@@ -413,8 +413,6 @@ class PageController extends Controller
 
     public function pageBuilderApi(Request $request)
     {
-        dd($request);
-
         $defaultThemeValue = GeneralSetting::where('key', 'default_theme')->first();
 
         $themeId = $defaultThemeValue ? $defaultThemeValue->value : 1;
