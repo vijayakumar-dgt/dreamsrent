@@ -295,8 +295,8 @@
                                     <p>${ucfirst(vehicle.fuel_type ?? '')}</p>
                                 </li>
                                 <li>
-                                    <span><img src="/frontend/assets/img/icons/car-parts-04.svg" alt="Power"></span>
-                                    <p>Normal</p>
+                                    <span><img src="/frontend/assets/img/icons/door-icon.svg" alt="${vehicle.num_airbags ?? 0}"></span>
+                                    <p>${vehicle.num_airbags ?? 0}</p>
                                 </li>
                                 <li>
                                     <span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="Persons"></span>
@@ -426,7 +426,7 @@
                 <li><span><img src="/frontend/assets/img/icons/car-parts-03.svg" alt="${ucfirst(vehicle.fuel_type ?? "")}"></span><p>${ucfirst(vehicle.fuel_type ?? "")}</p></li>
             </ul>
             <ul>
-                <li><span><img src="/frontend/assets/img/icons/car-parts-04.svg" alt="Power"></span><p>Power</p></li>
+                <li><span><img src="/frontend/assets/img/icons/door-icon.svg" alt="Power"></span><p>${vehicle.num_airbags ?? 0}</p></li>
                 <li><span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${vehicle.year ?? ""}"></span><p>${vehicle.year ?? ""}</p></li>
                 <li><span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="Persons"></span><p>${vehicle.passenger_capacity ?? 0} Persons</p></li>
             </ul>`;

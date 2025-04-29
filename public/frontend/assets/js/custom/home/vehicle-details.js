@@ -1148,7 +1148,7 @@ function createExtraService(vehicle) {
             </div>`
             )
             .join("");
-        html += `<div class="review-sec pb-0 extra-service">
+        html += `<div class="pb-0 extra-service">
                     <div class="review-header">
                         <h4>Extra Service</h4>
                     </div>

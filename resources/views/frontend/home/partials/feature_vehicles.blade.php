@@ -73,9 +73,12 @@
                                         </li>
                                     </ul>
                                     <ul>
-                                       
                                         <li>
-                                            <span><img src="{{ asset('frontend/assets/img/icons/car-parts-07.svg') }}" alt="{{ $vehicle['year'] ?? '' }}"></span>
+                                            <span><img src="{{ asset('frontend/assets/img/icons/door-icon.svg') }}" alt="Power"></span>
+                                            <p>{{ $vehicle['num_airbags'] ?? ""}}</p>
+                                        </li>
+                                        <li>
+                                            <span><img src="{{ asset('frontend/assets/img/icons/car-parts-05.svg') }}" alt="{{ $vehicle['year'] ?? '' }}"></span>
                                             <p>{{ $vehicle['year']}}</p>
                                         </li>
                                         <li>
