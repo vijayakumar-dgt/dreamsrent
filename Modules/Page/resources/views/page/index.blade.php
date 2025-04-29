@@ -247,6 +247,7 @@
                 </tbody>
             </table>
         </div>
+        <div class="table-footer d-none"></div>
 
     </div>
     @include('admin.partials.footer')
