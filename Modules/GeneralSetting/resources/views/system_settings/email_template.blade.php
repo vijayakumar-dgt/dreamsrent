@@ -132,7 +132,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="custom-datatable-filter d-none real-table">
+                        <div class="custom-datatable-filter table-responsive d-none real-table">
                             <table class="table" id="emailTemplateTable">
                                 <thead class="thead-light">
                                     <tr>

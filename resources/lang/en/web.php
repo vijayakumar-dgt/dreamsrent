@@ -314,6 +314,12 @@ return [
         'featured' => 'Featured',
         'review_not_allowed' => 'You can only leave a review after completing a booking for this vehicle.',
         'reply_not_allowed' => 'You can only leave a reply after completing a booking for this vehicle.',
+        'excellent' => 'Excellent',
+        'very_good' => 'Very Good',
+        'good' => 'Good',
+        'average' => 'Average',
+        'below_average' => 'Below Average',
+        'poor' => 'Poor',
     ],
     'common' => [
         'view_reply'  => 'View & Reply',

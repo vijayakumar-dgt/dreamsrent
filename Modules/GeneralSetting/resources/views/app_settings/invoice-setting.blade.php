@@ -66,11 +66,13 @@
                                 <!-- Invoice Prefix -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
-                                        <label for="invoice_prefix" class="form-label">{{ __('admin.general_settings.invoice_prefix') }} <span class="text-danger">*</span></label>
+                                        <div class="skeleton label-skeleton label-loader"></div>
+                                        <label for="invoice_prefix" class="form-label d-none real-label">{{ __('admin.general_settings.invoice_prefix') }} <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
                                         <div class="mb-3">
-                                            <input type="text" class="form-control" id="invoice_prefix" name="invoice_prefix" placeholder="INV-">
+                                            <div class="skeleton input-skeleton input-loader"></div>
+                                            <input type="text" class="form-control d-none real-label" id="invoice_prefix" name="invoice_prefix" placeholder="INV-">
                                             <span class="text-danger" id="invoice_prefix_error"></span>
                                         </div>
                                     </div>
@@ -79,16 +81,20 @@
                                 <!-- Invoice Due -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
-                                        <label for="invoice_due" class="form-label">{{ __('admin.general_settings.invoice_due') }} <span class="text-danger">*</span></label>
+                                        <div class="skeleton label-skeleton label-loader"></div>
+                                        <label for="invoice_due" class="form-label d-none real-label">{{ __('admin.general_settings.invoice_due') }} <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
-                                        <div class="mb-3 d-flex align-items-center">
-                                            <select class="form-select" id="invoice_due" name="invoice_due">
-                                                <option value="">{{ __('admin.common.select') }}</option>
-                                                <option value="5">5</option>
-                                                <option value="10">10</option>
-                                            </select>
-                                            <span class="ms-3 text-dark">Days</span>
+                                        <div class="skeleton input-skeleton input-loader mb-3"></div>
+                                        <div class="d-none real-label">
+                                            <div class="mb-3 d-flex align-items-center">
+                                                <select class="form-select" id="invoice_due" name="invoice_due">
+                                                    <option value="">{{ __('admin.common.select') }}</option>
+                                                    <option value="5">5</option>
+                                                    <option value="10">10</option>
+                                                </select>
+                                                <span class="ms-3 text-dark">Days</span>
+                                            </div>
                                         </div>
                                         <span class="text-danger" id="invoice_due_error"></span>
                                     </div>
@@ -97,18 +103,22 @@
                                 <!-- Invoice Round Off -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
-                                        <label for="invoice_round_off" class="form-label">{{ __('admin.general_settings.invoice_round_off') }} <span class="text-danger">*</span></label>
+                                        <div class="skeleton label-skeleton label-loader"></div>
+                                        <label for="invoice_round_off" class="form-label d-none real-label">{{ __('admin.general_settings.invoice_round_off') }} <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
-                                        <div class="mb-3 d-flex align-items-center">
-                                            <select class="form-select" id="invoice_round_off" name="invoice_round_off">
-                                                <option value="">{{ __('admin.common.select') }}</option>
-                                                <option value="5">5</option>
-                                                <option value="10">10</option>
-                                            </select>
-                                            <div class="ms-3">
-                                                <div class="form-check form-check-md form-switch">
-                                                    <input class="form-check-input" type="checkbox" id="round_off_enabled" name="round_off_enabled" role="switch" checked>
+                                        <div class="skeleton input-skeleton input-loader mb-3"></div>
+                                        <div class="d-none real-label">
+                                            <div class="mb-3 d-flex align-items-center">
+                                                <select class="form-select" id="invoice_round_off" name="invoice_round_off">
+                                                    <option value="">{{ __('admin.common.select') }}</option>
+                                                    <option value="5">5</option>
+                                                    <option value="10">10</option>
+                                                </select>
+                                                <div class="ms-3">
+                                                    <div class="form-check form-check-md form-switch">
+                                                        <input class="form-check-input" type="checkbox" id="round_off_enabled" name="round_off_enabled" role="switch" checked>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -119,11 +129,15 @@
                                 <!-- Show Company Details -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
-                                        <label for="show_company_details" class="form-label">{{ __('admin.general_settings.show_company_details') }} <span class="text-danger">*</span></label>
+                                        <div class="skeleton label-skeleton label-loader"></div>
+                                        <label for="show_company_details" class="form-label d-none real-label">{{ __('admin.general_settings.show_company_details') }} <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
-                                        <div class="form-check form-check-md form-switch">
-                                            <input class="form-check-input" type="checkbox" id="show_company_details" name="show_company_details" role="switch" checked>
+                                        <div class="skeleton input-skeleton input-loader mb-3"></div>
+                                        <div class="d-none real-label">
+                                            <div class="form-check form-check-md form-switch">
+                                                <input class="form-check-input" type="checkbox" id="show_company_details" name="show_company_details" role="switch" checked>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -131,11 +145,17 @@
                                 <!-- Invoice Terms -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
-                                        <label for="invoice_terms" class="form-label">{{ __('admin.general_settings.invoice_terms') }} <span class="text-danger">*</span></label>
+                                        <div class="skeleton label-skeleton label-loader"></div>
+                                        <label for="invoice_terms" class="form-label d-none real-label">{{ __('admin.general_settings.invoice_terms') }} <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-8 col-sm-12">
-                                        <textarea class="form-control" id="invoice_terms" name="invoice_terms" rows="3" placeholder="Enter invoice terms here..."></textarea>
-                                        <p>Maximum 60 words</p>
+                                        <div class="skeleton input-skeleton input-loader"></div>
+                                        <div class="d-none real-label">
+                                            <div class="mt-3">
+                                            <textarea class="form-control" id="invoice_terms" name="invoice_terms" rows="3" placeholder="Enter invoice terms here..."></textarea>
+                                            <p>Maximum 60 words</p>
+                                            </div>
+                                        </div>
                                         <span class="text-danger" id="invoice_terms_error"></span>
                                     </div>
                                 </div>
@@ -143,9 +163,11 @@
                             <!-- Form Footer -->
                             <div class="card-footer">
                                 <div class="d-flex justify-content-end">
-                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3" >{{ __('admin.general_settings.cancel') }}</a>
+                                    <div class="skeleton label-skeleton label-loader me-3"></div>
+                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3 d-none real-label" >{{ __('admin.general_settings.cancel') }}</a>
                                     @if (hasPermission($permissions, 'app_settings', 'edit'))
-                                    <button type="submit" class="btn btn-primary">{{ __('admin.general_settings.save_changes') }}</button>
+                                    <div class="skeleton label-skeleton label-loader"></div>
+                                    <button type="submit" class="btn btn-primary d-none real-label">{{ __('admin.general_settings.save_changes') }}</button>
                                     @endif
                                 </div>
                             </div>

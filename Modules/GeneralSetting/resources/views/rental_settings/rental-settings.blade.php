@@ -72,12 +72,14 @@
                                         <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.minimum_advance_reservation_time') }}</p>
                                         <div>
                                             <div class="skeleton input-skeleton input-loader"></div>
-                                            <select id="minAdvanceReservation" name="minAdvanceReservation" class="select d-none real-input">
-                                                <option value="">{{ __('admin.general_settings.select') }}</option>
-                                                <option value="1 Day">{{ __('admin.general_settings.1_day') }}</option>
-                                                <option value="1 Week">{{ __('admin.general_settings.1_week') }}</option>
-                                                <option value="1 Month">{{ __('admin.general_settings.1_month') }}</option>
-                                            </select>
+                                            <div class="d-none real-label">
+                                                <select id="minAdvanceReservation" name="minAdvanceReservation" class="select">
+                                                    <option value="">{{ __('admin.general_settings.select') }}</option>
+                                                    <option value="1 Day">{{ __('admin.general_settings.1_day') }}</option>
+                                                    <option value="1 Week">{{ __('admin.general_settings.1_week') }}</option>
+                                                    <option value="1 Month">{{ __('admin.general_settings.1_month') }}</option>
+                                                </select>
+                                            </div>
                                             <span class="text-danger d-none" id="minAdvanceReservationError">{{ __('admin.general_settings.please_select_option') }}</span>
                                         </div>
                                     </div>
@@ -86,12 +88,14 @@
                                         <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.maximum_advance_reservation_time') }}</p>
                                         <div>
                                             <div class="skeleton input-skeleton input-loader"></div>
-                                            <select id="maxAdvanceReservation" name="maxAdvanceReservation" class="select d-none real-input">
-                                                <option value="">{{ __('admin.general_settings.select') }}</option>
-                                                <option value="1 Day">{{ __('admin.general_settings.1_day') }}</option>
-                                                <option value="1 Week">{{ __('admin.general_settings.1_week') }}</option>
-                                                <option value="1 Month">{{ __('admin.general_settings.1_month') }}</option>
-                                            </select>
+                                            <div class="d-none real-label">
+                                                <select id="maxAdvanceReservation" name="maxAdvanceReservation" class="select">
+                                                    <option value="">{{ __('admin.general_settings.select') }}</option>
+                                                    <option value="1 Day">{{ __('admin.general_settings.1_day') }}</option>
+                                                    <option value="1 Week">{{ __('admin.general_settings.1_week') }}</option>
+                                                    <option value="1 Month">{{ __('admin.general_settings.1_month') }}</option>
+                                                </select>
+                                            </div>
                                             <span class="text-danger d-none" id="maxAdvanceReservationError">{{ __('admin.general_settings.please_select_option') }}</span>
                                         </div>
                                     </div>
@@ -100,12 +104,14 @@
                                         <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.cancellation_buffer_time') }}</p>
                                         <div>
                                             <div class="skeleton input-skeleton input-loader"></div>
-                                            <select id="cancellationBuffer" name="cancellationBuffer" class="select d-none real-input">
-                                                <option value="">{{ __('admin.general_settings.select') }}</option>
-                                                <option value="1 Day">{{ __('admin.general_settings.2_day') }}</option>
-                                                <option value="1 Week">{{ __('admin.general_settings.3_day') }}</option>
-                                                <option value="1 Month">{{ __('admin.general_settings.4_day') }}</option>
-                                            </select>
+                                            <div class="d-none real-label">
+                                                <select id="cancellationBuffer" name="cancellationBuffer" class="select">
+                                                    <option value="">{{ __('admin.general_settings.select') }}</option>
+                                                    <option value="1 Day">{{ __('admin.general_settings.2_day') }}</option>
+                                                    <option value="1 Week">{{ __('admin.general_settings.3_day') }}</option>
+                                                    <option value="1 Month">{{ __('admin.general_settings.4_day') }}</option>
+                                                </select>
+                                            </div>
                                             <span class="text-danger d-none" id="cancellationBufferError">{{ __('admin.general_settings.please_select_option') }}</span>
                                         </div>
                                     </div>
@@ -114,12 +120,14 @@
                                         <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.reshedule_buffer_time') }}</p>
                                         <div>
                                             <div class="skeleton input-skeleton input-loader"></div>
-                                            <select id="rescheduleBuffer" name="rescheduleBuffer" class="select d-none real-input">
-                                                <option value="">Select</option>
-                                                <option value="1 Day">{{ __('admin.general_settings.2_day') }}</option>
-                                                <option value="1 Week">{{ __('admin.general_settings.3_day') }}</option>
-                                                <option value="1 Month">{{ __('admin.general_settings.4_day') }}</option>
-                                            </select>
+                                            <div class="d-none real-label">
+                                                <select id="rescheduleBuffer" name="rescheduleBuffer" class="select">
+                                                    <option value="">Select</option>
+                                                    <option value="1 Day">{{ __('admin.general_settings.2_day') }}</option>
+                                                    <option value="1 Week">{{ __('admin.general_settings.3_day') }}</option>
+                                                    <option value="1 Month">{{ __('admin.general_settings.4_day') }}</option>
+                                                </select>
+                                            </div>
                                             <span class="text-danger d-none" id="rescheduleBufferError">{{ __('admin.general_settings.please_select_option') }}</span>
                                         </div>
                                     </div>
@@ -192,7 +200,6 @@
                                 <div class="skeleton label-skeleton label-loader me-2"></div>
                                 <a href="{{ route('dashboard') }}" class="btn btn-light me-3 d-none real-label" >{{ __('admin.general_settings.cancel') }}</a>
                                 @if (hasPermission($permissions, 'rental_settings', 'edit'))
-
                                 <div class="skeleton label-skeleton label-loader"></div>
                                 <button type="submit" class="btn btn-primary submitBtn d-none real-label">{{ __('admin.general_settings.save_changes') }}</button>
                                 @endif

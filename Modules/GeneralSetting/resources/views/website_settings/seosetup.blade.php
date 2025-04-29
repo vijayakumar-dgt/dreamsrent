@@ -13,7 +13,7 @@
 						<nav>
 							<ol class="breadcrumb mb-0">
 								<li class="breadcrumb-item">
-									<a href="{{ route('dashboard') }}">Home</a>
+									<a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
 								</li>
 								<li class="breadcrumb-item active" aria-current="page">{{ __('admin.general_settings.settings') }}</li>
 							</ol>
@@ -62,7 +62,9 @@
                                         <div class="skeleton label-skeleton label-loader"></div>
                                         <label class="form-label d-none real-label" for="keywords">{{ __('admin.general_settings.keywords') }}<span class="text-danger ms-1">*</span></label>
                                         <div class="skeleton input-skeleton input-loader"></div>
-                                        <input class="input-tags form-control d-none real-label" id="keywords" type="text" data-role="tagsinput" name="keywords" value="Test">
+                                        <div class="d-none real-label">
+                                            <input class="input-tags form-control" id="keywords" type="text" data-role="tagsinput" name="keywords" value="">
+                                        </div>
                                         <span id="keywords_error" class="text-danger error-text"></span>
                                     </div>
 
@@ -121,7 +123,9 @@
                                         <div class="skeleton label-skeleton label-loader"></div>
                                         <label class="form-label d-none real-label" for="keywords">{{ __('admin.general_settings.keywords') }}<span class="text-danger ms-1">*</span></label>
                                         <div class="skeleton input-skeleton input-loader"></div>
-                                        <input class="input-tags form-control d-none real-label" id="ogkeywords" type="text" data-role="tagsinput" name="ogkeywords" value="Test">
+                                        <div class="d-none real-label">
+                                            <input class="input-tags form-control" id="ogkeywords" type="text" data-role="tagsinput" name="ogkeywords" value="">
+                                        </div>
                                         <span id="ogkeywords_error" class="text-danger error-text"></span>
                                     </div>
 

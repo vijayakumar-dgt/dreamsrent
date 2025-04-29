@@ -287,9 +287,7 @@ function company_list() {
 
 
                 if (data.company_profile_photo) {
-                    $("#profile_photo_preview").attr("src", '/storage/' + data.company_profile_photo);
-                } else {
-                    $("#profile_photo_preview").attr("src", '/assets/img/settings/default-logo.jpg');
+                    $("#profile_photo_preview").attr("src", data.company_profile_photo);
                 }
             }
         },

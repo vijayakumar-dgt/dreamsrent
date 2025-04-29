@@ -229,7 +229,7 @@ class ReviewController extends Controller
                     'cleanliness_ratings_percentage' => $cleanlinessPercentage . '%',
                     'overall_avg_ratings' => number_format($overallRatings, 1),
                     'overall_ratings_percentage' => round(($overallRatings / 5) * 100, 1) . '%',
-                    'rating_description' => $this->getRatingDescription($overallRatings),
+                    'rating_description' => $totalReviews > 0 ? $this->getRatingDescription($overallRatings) : '',
                     'total_reviews' => $totalReviews,
                 ],
                 'reviews' => $reviewsData
@@ -278,17 +278,17 @@ class ReviewController extends Controller
     function getRatingDescription($rating)
     {
         if ($rating >= 4.5) {
-            return 'Excellent';
+            return __('web.home.excellent');
         } elseif ($rating >= 4.0) {
-            return 'Very Good';
+            return __('web.home.very_good');
         } elseif ($rating >= 3.5) {
-            return 'Good';
+            return __('web.home.good');
         } elseif ($rating >= 3.0) {
-            return 'Average';
+            return __('web.home.average');
         } elseif ($rating >= 2.0) {
-            return 'Below Average';
+            return __('web.home.below_average');
         } else {
-            return 'Poor';
+            return __('web.home.poor');
         }
     }
 

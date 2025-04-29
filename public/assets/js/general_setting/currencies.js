@@ -108,20 +108,37 @@
 
         function initTable(){
             table =  $("#currencyTable").DataTable({
-                processing: false,
                 serverSide: true,
+                destroy: true,
+                processing: false,
                 ajax:{
                     url:"/admin/settings/get_currencies",
                     type:"POST",
                     data:function(d){
                         d._token = $('meta[name="csrf-token"]').attr('content');
-                    }
+                    },
+                    beforeSend: function () {
+                        $(".table-loader").show();
+                        $(".real-table, .table-footer").addClass("d-none");
+                    },
+                    complete: function () {
+                        $(".table-loader, .input-loader, .label-loader").hide();
+                        $(".real-table, .real-label, .real-input").removeClass("d-none");
+        
+                        if ($("#currencyTable").DataTable().rows().count() === 0) {
+                            $(".table-footer").addClass("d-none");
+                        } else {
+                            $(".table-footer").removeClass("d-none");
+                        }
+                    },
                 },
                 order:[['1','desc']],
-                ordering: false,
+                ordering: true,
                 searching: false,
                 pageLength: 10,
                 lengthChange: false,
+                responsive: false,
+                autoWidth: false,
                 aoColumns:[
                      {
                          data: "currency_name",

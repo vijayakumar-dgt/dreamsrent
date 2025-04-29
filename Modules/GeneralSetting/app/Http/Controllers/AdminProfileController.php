@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminProfileController extends Controller
 {
@@ -54,7 +55,7 @@ class AdminProfileController extends Controller
             // Handle profile photo upload
             $profilePhoto = null;
             if ($request->hasFile('profile_photo')) {
-                $profilePhoto = $request->file('profile_photo')->store('profile_photos', 'public');
+                $profilePhoto = uploadFile($request->file('profile_photo'), 'profile');
 
                 // Optional: Delete old photo if exists
                 if ($user->userDetail && $user->userDetail->profile_image) {
@@ -68,7 +69,6 @@ class AdminProfileController extends Controller
                 [
                     'first_name'    => $request->first_name,
                     'last_name'     => $request->last_name,
-                    'mobile_number' => $request->phone,
                     'address'       => $request->address_line,
                     'country_id'    => $request->country,
                     'state_id'      => $request->state,
@@ -118,9 +118,7 @@ class AdminProfileController extends Controller
                 'state'         => $user->userDetail->state_id ?? null,
                 'city'          => $user->userDetail->city_id ?? null,
                 'postal_code'   => $user->userDetail->postal_code ?? null,
-                'profile_photo' => $user->userDetail->profile_image
-                                    ? asset('storage/' . $user->userDetail->profile_image)
-                                    : null,
+                'profile_photo' => uploadedAsset($user->userDetail->profile_image ?? null, 'profile')
             ];
 
             return response()->json([

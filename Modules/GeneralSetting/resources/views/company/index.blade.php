@@ -41,10 +41,7 @@
                                                 <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                                     <div class="skeleton image-skeleton image-loader"></div>
                                                     <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames d-none real-label">
-                                                        <img id="profile_photo_preview" src="/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
-                                                        <a href="javascript:void(0);" class="uploadimgtrash btn btn-sm rounded-circle" onclick="removeImage()">
-                                                            <i class="ti ti-trash fs-12"></i>
-                                                        </a>
+                                                        <img id="profile_photo_preview" src="" class="img-fluid" alt="Profile Photo">
                                                     </div>
                                                     <div class="profile-upload">
                                                         <div class="skeleton button-skeleton label-loader"></div>
@@ -110,8 +107,10 @@
                                                         <div class="skeleton label-skeleton label-loader"></div>
                                                         <label class="form-label d-none real-label">{{ __('admin.common.phone_number') }} <span class="text-danger">*</span></label>
                                                         <div class="skeleton input-skeleton input-loader"></div>
-                                                        <input type="text" class="form-control d-none real-label company_phone" id="company_phone" name="company_phone">
-                                                        <input type="hidden" id="international_phone_number" name="international_phone_number">
+                                                        <div class="d-none real-label">
+                                                            <input type="text" class="form-control company_phone" id="company_phone" name="company_phone">
+                                                            <input type="hidden" id="international_phone_number" name="international_phone_number">
+                                                        </div>
                                                         <span id="company_phone_error" class="text-danger error-text"></span>
                                                     </div>
                                                 </div>
@@ -122,12 +121,14 @@
                                                         <div class="skeleton label-skeleton label-loader"></div>
                                                         <label class="form-label d-none real-label">{{ __('admin.general_settings.industry') }} <span class="text-danger">*</span></label>
                                                         <div class="skeleton select-skeleton input-loader"></div>
-                                                        <select class="form-control select d-none real-label" id="industry" name="industry">
-                                                            <option value="">{{ __('admin.common.select') }}</option>
-                                                            @foreach($industries as $industry)
-                                                                <option value="{{ $industry->id }}">{{ $industry->name }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                        <div class="d-none real-label">
+                                                            <select class="form-control select" id="industry" name="industry">
+                                                                <option value="">{{ __('admin.common.select') }}</option>
+                                                                @foreach($industries as $industry)
+                                                                    <option value="{{ $industry->id }}">{{ $industry->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                         <span id="industry_error" class="text-danger error-text"></span>
                                                     </div>
                                                 </div>
@@ -138,12 +139,14 @@
                                                         <div class="skeleton label-skeleton label-loader"></div>
                                                         <label class="form-label d-none real-label">{{ __('admin.general_settings.team_size') }} <span class="text-danger">*</span></label>
                                                         <div class="skeleton select-skeleton input-loader"></div>
-                                                        <select class="form-control select d-none real-label" id="team_size" name="team_size">
-                                                            <option value="">{{ __('admin.common.select') }}</option>
-                                                            @foreach($teamSizes as $teamSize)
-                                                                <option value="{{ $teamSize->id }}">{{ $teamSize->name }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                        <div class="d-none real-label">
+                                                            <select class="form-control select" id="team_size" name="team_size">
+                                                                <option value="">{{ __('admin.common.select') }}</option>
+                                                                @foreach($teamSizes as $teamSize)
+                                                                    <option value="{{ $teamSize->id }}">{{ $teamSize->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                         <span id="team_size_error" class="text-danger error-text"></span>
                                                     </div>
                                                 </div>
@@ -173,7 +176,9 @@
                                                         <div class="skeleton label-skeleton label-loader"></div>
                                                         <label class="form-label d-none real-label">{{ __('admin.common.country') }} <span class="text-danger">*</span></label>
                                                         <div class="skeleton select-skeleton input-loader"></div>
-                                                        <select name="country" class="form-control select2 d-none real-label" id="country"></select>
+                                                        <div class="d-none real-label">
+                                                            <select name="country" class="form-control select2" id="country"></select>
+                                                        </div>
                                                         <span id="country_error" class="text-danger error-text"></span>
                                                     </div>
                                                 </div>
@@ -184,7 +189,9 @@
                                                         <div class="skeleton label-skeleton label-loader"></div>
                                                         <label class="form-label d-none real-label">{{ __('admin.common.state') }} <span class="text-danger">*</span></label>
                                                         <div class="skeleton select-skeleton input-loader"></div>
-                                                        <select name="state" class="form-control select2 d-none real-label" id="state"></select>
+                                                        <div class="d-none real-label">
+                                                            <select name="state" class="form-control select2" id="state"></select>
+                                                        </div>
                                                         <span id="state_error" class="text-danger error-text"></span>
                                                     </div>
                                                 </div>
@@ -195,7 +202,9 @@
                                                         <div class="skeleton label-skeleton label-loader"></div>
                                                         <label class="form-label d-none real-label">{{ __('admin.common.city') }} <span class="text-danger">*</span></label>
                                                         <div class="skeleton select-skeleton input-loader"></div>
-                                                        <select name="city" id="city" class="form-control select2 d-none real-label"></select>
+                                                        <div class="d-none real-label">
+                                                            <select name="city" id="city" class="form-control select2"></select>
+                                                        </div>
                                                         <span id="city_error" class="text-danger error-text"></span>
                                                     </div>
                                                 </div>
