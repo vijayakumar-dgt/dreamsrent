@@ -40,14 +40,27 @@ class MenuManagementController extends Controller
     {
         $request->validate([
             'menu_id' => 'required|exists:menus,id',
-            'menu_items' => 'required|min:1',
+            'menu_items' => 'required|array|min:1',
         ]);
 
-        // Find the existing menu record
+        foreach ($request->menu_items as $item) {
+            if (empty($item['link'])) {
+                return response()->json([
+                    'code' => 422,
+                    'success' => false,
+                    'message' => 'The link field is required for all menu items.',
+                ], 422);
+            }
+        }
+
         $menu = Menu::find($request->menu_id);
 
         if (!$menu) {
-            return response()->json(['message' => 'Menu not found'], 404);
+            return response()->json([
+                'code' => 404,
+                'success' => false,
+                'message' => 'Menu not found'
+            ], 404);
         }
 
         $menu->update([
@@ -55,6 +68,8 @@ class MenuManagementController extends Controller
         ]);
 
         return response()->json([
+            'code' => 200,
+            'success' => true,
             'message' => __('admin.cms.menu_update_success'),
             'menu' => $menu
         ], 200);
