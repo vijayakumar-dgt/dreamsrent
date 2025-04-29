@@ -266,7 +266,7 @@
                                 data-tax="{{ $booking->tax ?? 0 }}">
 
                                 <td>
-                                    <a href="admin/reservations" class="text-info d-block mb-1">#{{$booking->reservation_id}}</a>
+                                    <a href="javascript:;" class="text-info d-block mb-1">#{{$booking->reservation_id}}</a>
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center">
@@ -336,7 +336,7 @@
             </div>
             <div class="modal-footer">
                 <div class="d-flex justify-content-center">
-                    <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                    <a href="/admin/invoices" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
                     <a href="javascript:void(0);" class="btn btn-primary">{{ __('admin.common.create_new') }}</a>
                 </div>
             </div>
