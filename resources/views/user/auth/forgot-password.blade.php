@@ -134,7 +134,7 @@
 
         <!-- Toastr JS -->
 	    <script src="{{ asset('assets/plugins/toastr/toastr.min.js') }}"></script>
-
+        <script src="{{ asset('frontend/assets/js/custom/lang_script.js') }}"></script>
 		<!-- Bootstrap Core JS -->
 		<script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>
 
