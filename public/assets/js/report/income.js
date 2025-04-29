@@ -6,32 +6,29 @@ if (typeof bookingData === "undefined" || !Array.isArray(bookingData)) {
     console.error("Error: bookingData is not defined or is not an array.");
 }
 
-// Initialize arrays for chart data
 var incomeData = [];
 var categories = [];
 
-// Populate incomeData and categories if bookingData exists
 if (Array.isArray(bookingData) && bookingData.length > 0) {
     bookingData.forEach((booking) => {
         if (booking.booking_date && booking.vehicle_total_price !== undefined) {
             categories.push(
                 new Date(booking.booking_date).toLocaleDateString()
-            ); // Corrected date field
-            incomeData.push(booking.vehicle_total_price || 0); // Corrected income field
+            ); 
+            incomeData.push(booking.vehicle_total_price || 0); 
         }
     });
 } else {
     console.warn("No booking data available.");
 }
 
-// Initialize the chart
 var options = {
     series: [{ name: "Income", data: incomeData }],
     chart: { type: "bar", height: 350 },
     plotOptions: {
         bar: { columnWidth: "50%", borderRadius: 5 },
     },
-    colors: ["#FFA500"], // Orange for income
+    colors: ["#FFA500"], 
     xaxis: { categories: categories },
     yaxis: {
         labels: {
@@ -42,7 +39,6 @@ var options = {
     grid: { borderColor: "#f1f1f1" },
 };
 
-// Ensure ApexCharts is loaded before initializing
 if (typeof ApexCharts !== "undefined") {
     var chart = new ApexCharts(
         document.querySelector("#income_expense_chart"),
@@ -53,13 +49,11 @@ if (typeof ApexCharts !== "undefined") {
     console.error("ApexCharts is not loaded.");
 }
 
-// Event listener for dropdown filter selection
 document.querySelectorAll(".dropdown-item-chat").forEach((item) => {
     item.addEventListener("click", function () {
         let selected = this.textContent.trim();
        
 
-        // Update the dropdown button text
         document.querySelector(
             ".dropdown-filter"
         ).innerHTML = `<i class="ti ti-calendar me-1"></i> ${selected}`;
@@ -69,11 +63,9 @@ document.querySelectorAll(".dropdown-item-chat").forEach((item) => {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Load "This Week" data on page load
     updateChartData("This Week");
 });
 
-// Event listener for dropdown filter selection
 document.querySelectorAll(".dropdown-item-chat").forEach(item => {
     item.addEventListener("click", function () {
         let selected = this.textContent.trim();
@@ -82,7 +74,6 @@ document.querySelectorAll(".dropdown-item-chat").forEach(item => {
     });
 });
 
-// Function to update chart data based on the selected filter
 function updateChartData(filter) {
     let today = new Date();
     let lastWeek = new Date();
@@ -93,7 +84,6 @@ function updateChartData(filter) {
     let thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     let previousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
 
-    // Helper function to apply your logic
     function isValidBooking(booking) {
         if (booking.booking_by === 'admin') {
             return booking.payment_status === null || booking.payment_status === 2;
@@ -164,7 +154,6 @@ function updateChartData(filter) {
 
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Load "This Week" data on page load
     updateChartData("This Week");
 });
 
@@ -174,10 +163,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectedFilter = document.getElementById("selectedFilter");
     const dateRangeInput = document.getElementById("dateRangeFilter");
 
-    let activeSortFilter = "latest"; // Default sorting filter
-    let dateRange = null; // Stores selected date range
+    let activeSortFilter = "latest"; 
+    let dateRange = null; 
 
-    // Store original table data (used for reset)
     const originalTableData = Array.from(tableBody.getElementsByTagName("tr"));
 
     function resetTableData() {
@@ -187,26 +175,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
     dropdownItems.forEach(item => {
         item.addEventListener("click", function () {
-            // Remove active class from previous filter options
             dropdownItems.forEach(el => el.classList.remove("active"));
             this.classList.add("active");
 
             activeSortFilter = this.getAttribute("data-filter");
             selectedFilter.innerText = this.innerText;
 
-            resetTableData();  // 🔹 Reset table before applying a new filter
+            resetTableData();  
             applyFilters();
         });
     });
 
-    // Date Range Picker Initialization (Bootstrap Daterangepicker)
     $(dateRangeInput).daterangepicker({
         autoUpdateInput: false,
         locale: { cancelLabel: 'Clear' }
     });
 
     $(dateRangeInput).on('apply.daterangepicker', function(ev, picker) {
-        resetTableData();  // 🔹 Reset table before applying a new filter
+        resetTableData();  
 
         dateRange = {
             start: picker.startDate.format('YYYY-MM-DD'),
@@ -217,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     $(dateRangeInput).on('cancel.daterangepicker', function(ev, picker) {
-        resetTableData();  // 🔹 Reset table before applying a new filter
+        resetTableData();
 
         dateRange = null;
         $(this).val('');
@@ -227,7 +213,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function applyFilters() {
         let rows = Array.from(tableBody.getElementsByTagName("tr"));
     
-        // Apply sorting filter
         if (activeSortFilter === "asc") {
             rows.sort((a, b) => parseFloat(a.dataset.total) - parseFloat(b.dataset.total));
         } else if (activeSortFilter === "desc") {
@@ -250,7 +235,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     
-        // Apply date range filter if selected
         if (dateRange) {
             rows = rows.filter(row => {
                 const rowDate = new Date(row.dataset.date);
@@ -258,7 +242,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     
-        // Update table
         tableBody.innerHTML = "";
         rows.forEach(row => tableBody.appendChild(row));
     }
@@ -276,7 +259,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let dateRange = null;
     let selectedStatuses = new Set();
 
-    // Store original table data for resetting
     const originalTableData = Array.from(tableBody.getElementsByTagName("tr")).map(row => row.cloneNode(true));
 
     function resetTableData() {
@@ -285,11 +267,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function applyFilters() {
-        resetTableData(); // Reset the table before applying new filters
+        resetTableData();
 
         let rows = Array.from(tableBody.getElementsByTagName("tr"));
 
-        // 🔹 Car Filter
         if (selectedCars.size > 0) {
             rows = rows.filter(row => {
                 let carNameInput = row.querySelector(".car-name");
@@ -298,15 +279,13 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        // 🔹 Date Range Filter
         if (dateRange) {
             rows = rows.filter(row => {
-                let rowDate = new Date(row.dataset.date); // Ensure `data-date` is set in `YYYY-MM-DD` format in HTML
+                let rowDate = new Date(row.dataset.date); 
                 return rowDate >= new Date(dateRange.start) && rowDate <= new Date(dateRange.end);
             });
         }
 
-        // 🔹 Payment Status Filter
         if (selectedStatuses.size > 0) {
             rows = rows.filter(row => {
                 let statusElement = row.querySelector(".payment-status");
@@ -315,12 +294,10 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
 
-        // Update table
         tableBody.innerHTML = "";
         rows.forEach(row => tableBody.appendChild(row));
     }
 
-    // 🔹 Car Selection Event
     carCheckboxes.forEach(checkbox => {
         checkbox.addEventListener("change", function () {
             if (this.checked) {
@@ -332,7 +309,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // 🔹 Status Selection Event
     statusCheckboxes.forEach(checkbox => {
         checkbox.addEventListener("change", function () {
             if (this.checked) {
@@ -344,7 +320,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // 🔹 Date Range Picker Initialization
     $(dateRangeInput).daterangepicker({
         autoUpdateInput: false,
         locale: { cancelLabel: 'Clear' }
@@ -394,7 +369,6 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     const tableBody = document.getElementById("incomeTable").querySelector("tbody");
 
-    // Print Functionality
     document.getElementById("printButton").addEventListener("click", function () {
         let printWindow = window.open("", "", "width=900,height=700");
         printWindow.document.write("<html><head><title>Print Table</title>");
@@ -407,7 +381,6 @@ document.addEventListener("DOMContentLoaded", function () {
         printWindow.print();
     });
 
-    // Export Functionality (CSV)
     document.getElementById("exportButton").addEventListener("click", function () {
         let rows = Array.from(tableBody.getElementsByTagName("tr"));
         let csvContent = "data:text/csv;charset=utf-8,";
