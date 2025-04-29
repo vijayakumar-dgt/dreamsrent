@@ -314,6 +314,12 @@ return [
     'featured' => 'مميزة',
     'review_not_allowed' => 'يمكن لك تقييم المركبة فقط بعد استكمال حجز المركبة.',
     'reply_not_allowed' => 'يمكن لك الرد فقط بعد استكمال حجز المركبة.',
+    'excellent' => 'ممتاز',
+    'very_good' => 'جيد جداً',
+    'good' => 'جيد',
+    'average' => 'متوسط',
+    'below_average' => 'اقل من المتوسط',
+    'poor' => 'ضعيف',
   ],
   'common' => [
     'search' => 'بحث',
