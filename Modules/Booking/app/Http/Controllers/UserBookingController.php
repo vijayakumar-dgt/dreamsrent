@@ -7,7 +7,6 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\User;
-use App\Models\UserDetail;
 use App\Models\WalletHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -298,9 +297,10 @@ class UserBookingController extends Controller
             ->get();
 
         $driverInfo = Driver::select("id", "driver_name")->where("assigned_cars", $vehicleId)->first();
+        $driverInfo_ride = 35;
+        $driverInfo_price = 100;
 
         $bookingInfo = BookingUserInfo::where("booking_id", $booking->id)->first();
-        $userDetail = UserDetail::
 
         $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
         $currency = null;
@@ -433,33 +433,33 @@ class UserBookingController extends Controller
             $bookingInfo = BookingUserInfo::create($addData);
 
             //send notification to admin
-            // $authUser = Auth::guard('web')->user();
-            // $vehicle = VehicleInfo::where('id', $request->vehicle_id)->first();
-            // $driver  = Driver::find($booking->driver_id);
-            // $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
-            // $notifyData = [
-            //     'user_name' => $authUser->name ?? '',
-            //     'company_name' => $companyName,
-            //     'email'     => $authUser->email ?? '',
-            //     'phonenumber' => $authUser->phone_number ?? '',
-            //     'vehicle_name' => $vehicle->name ?? "",
-            //     'driver_name'  => $driver ? $driver->driver_name : "",
-            //     'reservation_id' => $booking->reservation_id ?? "",
-            //     'start_date'     => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
-            //     'end_date'       => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
-            //     'pickup_location' => $booking->pickupLocation ? $booking->pickupLocation->name : "",
-            //     'delivery_type'   => $booking->delivery_type ?? "",
-            //     'rental_type'     => $booking->rental_type ?? "",
-            //     'payment_type'    => $booking->payment_type ?? "",
-            //     'payment_status'  => $booking->payment_status ?? "",
-            //     'tototal_amount'  => $booking->final_price ?? ""
-            // ];
-            // if (rentalNotificationEnabled()) {
-            //     $appAdmin = User::where('user_type', 1)->first();
-            //     sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+            $authUser = Auth::guard('web')->user();
+            $vehicle = VehicleInfo::where('id', $request->vehicle_id)->first();
+            $driver  = Driver::find($booking->driver_id);
+            $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
+            $notifyData = [
+                'user_name' => $authUser->name ?? '',
+                'company_name' => $companyName,
+                'email'     => $authUser->email ?? '',
+                'phonenumber' => $authUser->phone_number ?? '',
+                'vehicle_name' => $vehicle->name ?? "",
+                'driver_name'  => $driver ? $driver->driver_name : "",
+                'reservation_id' => $booking->reservation_id ?? "",
+                'start_date'     => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
+                'end_date'       => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
+                'pickup_location' => $booking->pickupLocation ? $booking->pickupLocation->name : "",
+                'delivery_type'   => $booking->delivery_type ?? "",
+                'rental_type'     => $booking->rental_type ?? "",
+                'payment_type'    => $booking->payment_type ?? "",
+                'payment_status'  => $booking->payment_status ?? "",
+                'tototal_amount'  => $booking->final_price ?? ""
+            ];
+            if (rentalNotificationEnabled()) {
+                $appAdmin = User::where('user_type', 1)->first();
+                sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
 
-            //     sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
-            // }
+                sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
+            }
 
             if ($booking) {
                 return response()->json([

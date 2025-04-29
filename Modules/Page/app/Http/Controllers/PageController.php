@@ -50,70 +50,23 @@ class PageController extends Controller
     {
         $languageId = $request->query('language_id');
         $language = TranslationLanguage::find($languageId);
-
-        $query = Page::select(
-            'id',
-            'theme_id',
-            'parent_id',
-            'language_id',
-            'read',
-            'page_title',
-            'slug',
-            'page_content',
-            'seo_tag',
-            'seo_title',
-            'seo_description',
-            'keywords',
-            'canonical_url',
-            'og_title',
-            'og_description',
-            'language_id',
-            'status'
-        )
-        ->where('slug', $slug)
-        ->when($languageId, function ($q) use ($languageId) {
-            $q->where('language_id', $languageId);
-        })
-        ->first();
-        
-        if (!$query) {
-            $fallbackSlug = 'pages/' . ltrim($slug, '/');
-            $query = Page::select(
-                'id',
-                'theme_id',
-                'parent_id',
-                'language_id',
-                'read',
-                'page_title',
-                'slug',
-                'page_content',
-                'seo_tag',
-                'seo_title',
-                'seo_description',
-                'keywords',
-                'canonical_url',
-                'og_title',
-                'og_description',
-                'language_id',
-                'status'
-            )
-            ->where('slug', $fallbackSlug)
-            ->when($languageId, function ($q) use ($languageId) {
-                $q->where('language_id', $languageId);
-            })
+    
+        $slugsToTry = [$slug, Str::start($slug, 'pages/')];
+    
+        $query = Page::whereIn('slug', $slugsToTry)
+            ->when($languageId, fn($q) => $q->where('language_id', $languageId))
             ->first();
-        }        
-
+    
         if (!$query && $languageId) {
-            $basePage = Page::where('slug', $slug)->whereNull('parent_id')->first();
-
+            $basePage = Page::whereIn('slug', $slugsToTry)
+                ->whereNull('parent_id')
+                ->first();
+    
             if ($basePage) {
                 $query = Page::where('parent_id', $basePage->id)
                     ->where('language_id', $languageId)
                     ->first();
-
-
-                // If still not found, create an empty Page instance pre-filled with what we know
+    
                 if (!$query) {
                     $query = new Page([
                         'language_id' => $languageId,
@@ -123,33 +76,34 @@ class PageController extends Controller
                 }
             }
         }
-
-
-        // If no page and no basePage, create a fresh one
+    
         if (!$query) {
-            $basePage = Page::where('slug', $slug)->first();
-
+            $basePage = Page::whereIn('slug', $slugsToTry)->first();
+    
             if ($basePage) {
-                $query = Page::where('id', $basePage->parent_id)
+                $parentId = $basePage->parent_id ?? $basePage->id;
+    
+                $query = Page::where('parent_id', $parentId)
                     ->where('language_id', $languageId)
                     ->first();
-
+    
                 if (!$query) {
                     $query = new Page([
                         'language_id' => $languageId,
-                        'parent_id' => $query->parent_id,
+                        'parent_id' => $parentId,
                         'theme_id' => $basePage->theme_id,
                     ]);
                 }
             }
         }
-
+    
         if ($language) {
             app()->setLocale($language->code);
         }
-
+    
         return view('page::page.edit.index', compact('query', 'languageId'));
     }
+    
 
 
 
