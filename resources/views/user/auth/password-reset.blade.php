@@ -101,7 +101,8 @@
 		<script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>
 
         <script src="{{ asset('frontend/assets/js/user/login.js') }}"></script>
-
+        <script src="{{ asset('frontend/assets/js/custom/lang_script.js') }}"></script>
+        
         <script src="{{ asset('frontend/assets/js/custom/custom-script.js') }}"></script>
 
         <script src="{{ asset('frontend/assets/js/user/reset-password.js') }}"></script>

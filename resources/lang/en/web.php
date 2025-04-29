@@ -31,6 +31,10 @@ return [
         'failed_fetch_otp' => 'Failed to fetch OTP settings. Please try again.',
         'otp_required' => 'OTP Required',
         'verify_otp' => 'Verify OTP',
+        'current_password_required' => 'Please enter your new password',
+        'password_min_length' => 'Password must be at least 6 characters',
+        'confirm_password_required' => 'Please confirm your new password',
+        'passwords_do_not_match' => 'Passwords do not match',
     ],
 
 
