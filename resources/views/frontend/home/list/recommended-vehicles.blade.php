@@ -69,8 +69,8 @@
                                 </ul>
                                 <ul>
                                     <li>
-                                        <span><img src="/frontend/assets/img/icons/car-parts-04.svg" alt="Power"></span>
-                                        <p>{{ $vehicle['num_seats'] ? $vehicle['num_seats'] . ' Seats' : '-' }}</p>
+                                        <span><img src="/frontend/assets/img/icons/door-icon.svg" alt="Power"></span>
+                                        <p>{{ $vehicle['num_airbags'] ? $vehicle['num_airbags'] : ""}}</p>
 
                                     </li>
                                     <li>
