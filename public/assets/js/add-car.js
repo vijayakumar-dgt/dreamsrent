@@ -357,6 +357,21 @@
                                 .find(".dataTables_paginate")
                                 .removeClass("d-none");
                         },
+                        language: {
+                            emptyTable: _l("admin.common.no_matching_records"),
+                            info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
+                            infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
+                            infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
+                            lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
+                            search: _l("admin.common.search") + ":",
+                            zeroRecords: _l("admin.common.empty_table"),
+                            paginate: {
+                                first: _l("admin.common.first"),
+                                last: _l("admin.common.last"),
+                                next: _l("admin.common.next"),
+                                previous: _l("admin.common.previous"),
+                            },
+                        },
                     });
                 }
                 $("#loader-table").hide();
