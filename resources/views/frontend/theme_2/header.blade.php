@@ -28,8 +28,23 @@
                         @foreach ($headers as $header)
                             @if ($header->menus)
                                 @foreach ($header->menus as $menu)
-                                    <li class="{{ url()->current() == trim($menu['link'], '/') ? 'active' : '' }}">
-                                        <a href="{{ $menu['link'] }}">{{ $menu['label'] }}</a>
+                                    @php
+                                        $rawLink = trim($menu['link']);
+                                        $isFullUrl = filter_var($rawLink, FILTER_VALIDATE_URL);
+                                        $menuLink = $isFullUrl ? rtrim($rawLink, '/') : rtrim(url($rawLink), '/');
+
+                                        $currentUrl = rtrim(Request::url(), '/');
+                                        $active = '';
+
+                                        if (
+                                            $currentUrl === $menuLink ||
+                                            (Str::contains($menuLink, 'vehicles') && Str::contains($currentUrl, 'vehicle-details') || (Str::contains($menuLink, 'blogs') && Str::contains($currentUrl, 'blog-details')))
+                                        ) {
+                                            $active = 'active';
+                                        }
+                                    @endphp
+                                    <li class="{{ $active }}">
+                                        <a href="{{ $menuLink }}">{{ $menu['label'] }}</a>
                                     </li>
                                 @endforeach
                             @endif
