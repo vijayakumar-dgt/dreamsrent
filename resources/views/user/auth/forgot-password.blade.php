@@ -35,28 +35,36 @@
 			<!-- /Header -->
 
 			<div class="login-wrapper">
-				<div class="loginbox">
+                <div class="loginbox">
                     <form action="" class="" id="resetpasswordForm">
                         @csrf
                         <div class="login-auth">
                             <div class="login-auth-wrap">
                                 <div class="sign-group">
-                                    <a href="{{ route('home') }}" class="btn sign-up"><span><i class="fe feather-corner-down-left" aria-hidden="true"></i></span> Back To Home</a>
+                                    <a href="{{ route('home') }}" class="btn sign-up">
+                                        <span><i class="fe feather-corner-down-left" aria-hidden="true"></i></span>
+                                        {{ __('web.common.back_to_home') }}
+                                    </a>
                                 </div>
-                                <h1>Forgot Password</h1>
-                                <p class="account-subtitle">Enter your email and we will send you a link to reset your password.</p>
-                                <form action="">
-                                    <div class="input-block">
-                                        <label class="form-label">Email Address <span class="text-danger">*</span></label>
-                                        <input type="email" name="email" id="email" class="form-control"  placeholder="">
-                                    </div>
-                                    <button type="submit" id="forgot_otp" class="btn btn-outline-light w-100 btn-size">Save Changes</button>
-                                </form>
+                                <h1>{{ __('web.auth.forgot_password_title') }}</h1>
+                                <p class="account-subtitle">
+                                    {{ __('web.auth.forgot_password_description') }}
+                                </p>
+                                <div class="input-block">
+                                    <label class="form-label">
+                                        {{ __('web.auth.email_address') }} <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="email" name="email" id="email" class="form-control" placeholder="">
+                                </div>
+                                <button type="submit" id="forgot_otp" class="btn btn-outline-light w-100 btn-size">
+                                    {{ __('web.auth.save_changes') }}
+                                </button>
                             </div>
                         </div>
                     </form>
-				</div>
-			</div>
+                </div>
+            </div>
+
             <div class="modal fade" id="otp-email-modal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">

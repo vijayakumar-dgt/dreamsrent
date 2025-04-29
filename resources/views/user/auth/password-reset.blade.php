@@ -33,42 +33,41 @@
 				<a href="{{ route('home') }}"><img class="img-fluid logo-dark" src="{{ $logo ?? 'assets/img/logo.svg' }}" alt="Logo"></a>
 			</header>
 			<!-- /Header -->
-
-			<div class="login-wrapper">
-				<div class="loginbox">
-					<div class="login-auth">
-						<div class="login-auth-wrap">
-							<div class="sign-group">
-								<a href="{{ route('home') }}" class="btn sign-up"><span><i class="fe feather-corner-down-left" aria-hidden="true"></i></span> Back To Home</a>
-							</div>
-							<h1>Reset Password</h1>
-							<p class="account-subtitle">Your new password must be different from previous used passwords.</p>
+            <div class="login-wrapper">
+                <div class="loginbox">
+                    <div class="login-auth">
+                        <div class="login-auth-wrap">
+                            <div class="sign-group">
+                                <a href="{{ route('home') }}" class="btn sign-up"><span><i class="fe feather-corner-down-left" aria-hidden="true"></i></span> {{ __('web.common.back_to_home') }}</a>
+                            </div>
+                            <h1>{{ __('web.auth.reset_password_title') }}</h1>
+                            <p class="account-subtitle">{{ __('web.auth.reset_password_description') }}</p>
                             <form action="" id="changePasswordForm">
                                 @csrf
-								<div class="input-block">
+                                <div class="input-block">
                                     <input type="hidden" name="email" id="email">
-									<label class="form-label">New Password <span class="text-danger">*</span></label>
-									<div class="pass-group">
-										<input type="password" class="pass-inputs form-control" name="current_password" id="current_password">
+                                    <label class="form-label">{{ __('web.auth.new_password') }} <span class="text-danger">*</span></label>
+                                    <div class="pass-group">
+                                        <input type="password" class="pass-inputs form-control" name="current_password" id="current_password">
                                         <span class="ti toggle-passwords ti-eye-off"></span>
                                         <span class="current_password_error text-danger error-text" id="current_password_error"></span>
                                         <span class="password-success text-success" id="passwordSuccess"></span>
-									</div>
-								</div>
-								<div class="input-block">
-									<label class="form-label">Confirm Password <span class="text-danger">*</span></label>
-									<div class="pass-group">
+                                    </div>
+                                </div>
+                                <div class="input-block">
+                                    <label class="form-label">{{ __('web.auth.confirm_password') }} <span class="text-danger">*</span></label>
+                                    <div class="pass-group">
                                         <input type="password" class="pass-inputa form-control" name="confirm_password" id="confirm_password">
                                         <span class="ti toggle-passworda ti-eye-off"></span>
                                         <span class="confirm_password_error text-danger error-text" id="confirm_password_error"></span>
-									</div>
-								</div>
-								<button class="btn btn-outline-light w-100 btn-size">Save Changes</button>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline-light w-100 btn-size">{{ __('web.auth.save_changes') }}</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
             @include('frontend.toast')

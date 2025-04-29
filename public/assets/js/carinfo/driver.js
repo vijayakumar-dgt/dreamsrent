@@ -57,7 +57,7 @@ $(document).ready(function() {
     });
 
     $("#sort_by_date").val('');
-    
+
     $("#driverForm").validate({
         rules: {
             driver_name: {
@@ -390,7 +390,7 @@ $(document).ready(function() {
                     $(".error-text").text("");
                     $(".form-control, .select2-container").removeClass("is-invalid is-valid");
                     $(".submitbtn").removeAttr("disabled").html(_l('admin.common.save_changes'));
-                
+
                     if (error.responseJSON.code === 422) {
                         $.each(error.responseJSON.errors, function(key, val) {
                             $("#edit_" + key).addClass("is-invalid");
@@ -407,7 +407,7 @@ $(document).ready(function() {
     $.validator.addMethod("filesize", function (value, element, param) {
         if (element.files.length === 0) return true;
         return element.files[0].size <= param * 1024;
-    }, "File size must be less than {0} KB.");    
+    }, "File size must be less than {0} KB.");
 
 });
 
@@ -425,7 +425,7 @@ $('#image').on('change', function (event) {
     if (file) {
         var img = new Image();
         var objectURL = URL.createObjectURL(file);
-        
+
         img.onload = function () {
             if (this.width < 180 || this.height < 180) {
                 $("#image_error").text("Image must be at least 180x180 pixels.");
@@ -451,7 +451,7 @@ $('#edit_image').on('change', function (event) {
     if (file) {
         var img = new Image();
         var objectURL = URL.createObjectURL(file);
-        
+
         img.onload = function () {
             if (this.width < 180 || this.height < 180) {
                 $("#edit_image_error").text("Image must be at least 180x180 pixels.");
@@ -512,7 +512,7 @@ function initTable(sortByDate = '') {
                         <input class="form-check-input select-multiple" type="checkbox" value="${row.id}">
                     </div>`;
             }
-                
+
             },
             { data: "driver_name",
                 render: function (data, type, row) {
@@ -538,7 +538,7 @@ function initTable(sortByDate = '') {
                         </span>`;
                 },
             },
-            {   
+            {
                 data: "id",
                 orderable: false,
                 searchable: false,
@@ -549,7 +549,7 @@ function initTable(sortByDate = '') {
                                 <i class="ti ti-dots-vertical"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end p-2">
-                              ${ hasPermission(permissions, 'drivers', 'edit') ? 
+                              ${ hasPermission(permissions, 'drivers', 'edit') ?
                                 `<li>
                                     <a class="dropdown-item rounded-1 edit-driver" href="javascript:void(0);" data-id="${row.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                                 </li>`:''}
@@ -724,7 +724,7 @@ $('.bulk_status_change').on('click', function () {
     let status = $(this).data('status');
 
     $('.select-multiple:checked').each(function () {
-        var id = $(this).val(); 
+        var id = $(this).val();
         if (id) {
             selectedIds.push(id);
         }
@@ -736,10 +736,10 @@ $('.bulk_status_change').on('click', function () {
     }
 
     $.ajax({
-        url: '/admin/driver/status-change', 
+        url: '/admin/driver/status-change',
         type: 'POST',
         data: {
-            _token: $('meta[name="csrf-token"]').attr('content'), 
+            _token: $('meta[name="csrf-token"]').attr('content'),
             ids: selectedIds,
             status: status
         },
@@ -813,7 +813,7 @@ $(document).on('click', '.edit-driver', function() {
                 const phoneNumber = data.phone_number ? data.phone_number.trim() : data.phone_number;
                 const phoneInput = document.querySelector(".edit_driver_phone_number");
                 const hiddenInput = document.querySelector("#edit_international_phone_number");
-                
+
                 if ($(phoneInput).data('itiInstance')) {
                     $(phoneInput).data('itiInstance').destroy();
                 }
@@ -822,7 +822,7 @@ $(document).on('click', '.edit-driver', function() {
                     separateDialCode: true,
                 });
                 $(phoneInput).data('itiInstance', iti);
-        
+
                 if (phoneNumber) {
                     iti.setNumber(phoneNumber);
                     hiddenInput.value = iti.getNumber();
@@ -837,7 +837,7 @@ $(document).on('click', '.edit-driver', function() {
 
                 phoneInput.addEventListener("input", updateHiddenPhoneNumber);
                 phoneInput.addEventListener("countrychange", updateHiddenPhoneNumber);
-        
+
                 if (!hiddenInput.value) {
                     hiddenInput.value = initialPhoneNumber;
                 }

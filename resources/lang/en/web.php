@@ -18,6 +18,14 @@ return [
     'or_create_with_email' => 'Or, Create an account with your email',
     'already_have_account' => 'Already have an Account?',
     'demo_user_info' => 'User Login Info',
+    'forgot_password_title' => 'Forgot Password',
+    'forgot_password_description' => 'Enter your email and we will send you a link to reset your password.',
+    'email_address' => 'Email Address',
+    'reset_password_title' => 'Reset Password',
+    'reset_password_description' => 'Your new password must be different from previous used passwords.',
+    'new_password' => 'New Password',
+    'confirm_password' => 'Confirm Password',
+    'save_changes' => 'Save Changes',
 ],
 
     'home' => [
