@@ -30,7 +30,7 @@ class LocationController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:locations,name,' . $request->id . ',id,deleted_at,NULL',
             'email' => 'required|email|unique:locations,email,' . $request->id . ',id,deleted_at,NULL',
-            'phone' => 'required|numeric|unique:locations,phone,' . $request->id . ',id,deleted_at,NULL',
+            'international_phone_number' => 'required|numeric|unique:locations,phone,' . $request->id . ',id,deleted_at,NULL',
             'address' => 'required',
             'country' => 'required',
             'state' => 'required',
@@ -41,7 +41,7 @@ class LocationController extends Controller
             'name.unique' => __('admin.manage.name_unique'),
             'email.required' => __('admin.common.email_required'),
             'email.unique' => __('admin.common.email_unique'),
-            'phone.required' => __('admin.common.phone_number_required'),
+            'international_phone_number.required' => __('admin.common.phone_number_required'),
             'address.required' => __('admin.manage.address_required'),
             'country.required' => __('admin.manage.country_required'),
             'state.required' => __('admin.manage.state_required'),
@@ -74,7 +74,7 @@ class LocationController extends Controller
             }
             $location->name = $request->name;
             $location->email = $request->email;
-            $location->phone = $request->phone;
+            $location->phone = $request->international_phone_number;
             $location->address = $request->address;
             $location->country = $request->country;
             $location->state = $request->state;
