@@ -314,7 +314,6 @@ class ReviewController extends Controller
             ->join('review_messages', 'review_messages.review_id', '=', 'reviews.id')
             ->join('vehicle_info', 'reviews.vehicle_id', '=', 'vehicle_info.id')
             ->where('reviews.user_id', $userId)
-            ->where('bookings.customer_id', $userId)
             ->where('review_messages.parent_id', 0);
 
             if ($request->has('duration') && $request->duration != "") {
