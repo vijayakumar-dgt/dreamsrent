@@ -18,10 +18,16 @@ class Customer
     {
         if (!Auth::guard('web')->check()) {
             return to_route('user-login');
-        } elseif (Auth::guard('web')->check() && Auth::guard('web')->user()->user_type !== 3) {
-            abort(403);
+        } else {
+            $user = Auth::guard('web')->user();
+        
+            // Check if user is authenticated and has the user_type property
+            if ($user && $user->user_type !== 3) {
+                abort(403);  // Forbidden if user type is not 3
+            }
         }
         Auth::shouldUse('web');
         return $next($request);
+        
     }
 }

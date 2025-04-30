@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('facility_ratings');
             $table->integer('value_for_money_ratings');
             $table->integer('cleanliness_ratings');
-            $table->double('average_ratings', 3, 1);
+            $table->decimal('average_ratings', 4, 1);  // Use decimal instead of double
             $table->timestamps();
             $table->softDeletes();
         });
