@@ -146,7 +146,6 @@ class WalletController extends Controller
     }
 
     public function paypalPaymentSuccessWallet(Request $request)
-
     {
         try {
             $accessToken = $this->provider->getAccessToken();

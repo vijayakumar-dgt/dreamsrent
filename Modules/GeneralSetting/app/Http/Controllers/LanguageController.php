@@ -346,8 +346,8 @@ class LanguageController extends Controller
             }
 
             $totalKeys = $countKeys($keys);
-            $translatedCount = isset($translatedTranslations[$module]) 
-                ? $countKeys($translatedTranslations[$module], true) 
+            $translatedCount = isset($translatedTranslations[$module])
+                ? $countKeys($translatedTranslations[$module], true)
                 : 0;
 
             $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100, 2) : 0;

@@ -314,7 +314,7 @@ class CustomerController extends Controller
                 $user->language_flag = url('/assets/img/flags/' . $user->language_code . '.svg');
                 $user->encrypted_id = customEncrypt($user->id, User::$userSecretKey);
                 $user->documents->map(function ($document) {
-                    $document->document = is_string($document->document) || is_null($document->document) 
+                    $document->document = is_string($document->document) || is_null($document->document)
                         ? uploadedAsset($document->document, 'documents')
                         : uploadedAsset(null, 'documents');
                     return $document;
