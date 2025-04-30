@@ -201,7 +201,7 @@ Route::group(['middleware' => ['setLocaleUser', 'checkInstallerStatus']], functi
     });
 
 //user profile
-    Route::prefix('user')->middleware('customer', 'maintenance')->controller(UserController::class)->group(function () {
+    Route::prefix('user')->middleware(['customer', 'maintenance'])->controller(UserController::class)->group(function () {
         Route::get('dashboard', 'dashboard')->name('user.dashboard');
         Route::get('bookings', 'bookings')->name('user.bookings');
         Route::post('ajax-last-bookings', 'ajaxLastBookings')->name('user.ajaxLastBookings');
@@ -233,7 +233,7 @@ Route::group(['middleware' => ['setLocaleUser', 'checkInstallerStatus']], functi
     Route::post('user/reviews-list', [ReviewController::class, 'userReviewsList'])->name('user.reviews-list');
     Route::post('user/save-newsletter-subscriber', [NewsletterController::class, 'store'])->name('user.save-newsletter-subscriber');
 
-    Route::prefix('user')->middleware('customer', 'maintenance')->controller(WalletController::class)->group(function () {
+    Route::prefix('user')->middleware(['customer', 'maintenance'])->controller(WalletController::class)->group(function () {
         Route::get('wallet', 'wallet')->name('user.wallet');
         Route::post('addwallet', 'addWallet')->name('user.addwallet');
         Route::get('wallet-list', 'walletHistoryList')->name('user.walletHistoryList');
