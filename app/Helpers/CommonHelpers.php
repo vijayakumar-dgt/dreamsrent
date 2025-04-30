@@ -99,14 +99,6 @@ if (!function_exists('formatDateTime')) {
 }
 
 if (!function_exists('uploadedAsset')) {
-    /**
-     * Get the URL of an uploaded file or return full file details if requested.
-     *
-     * @param string|null $filePath The file path in storage.
-     * @param string $default Type of default image ('profile' or other).
-     * @param bool $fileFullDetails Whether to return full file details.
-     * @return array|string File URL or full file details.
-     */
     function uploadedAsset($filePath, $default = '', $fileFullDetails = false)
     {
         $disk = config('filesystems.default');

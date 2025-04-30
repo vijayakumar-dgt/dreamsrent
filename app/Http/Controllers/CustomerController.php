@@ -313,11 +313,11 @@ class CustomerController extends Controller
                     : uploadedAsset(null, 'profile');
                 $user->language_flag = url('/assets/img/flags/' . $user->language_code . '.svg');
                 $user->encrypted_id = customEncrypt($user->id, User::$userSecretKey);
-                $user->documents->map(function ($document) {
-                    $document->document = is_string($document->document) || is_null($document->document)
-                        ? uploadedAsset($document->document, 'documents')
-                        : uploadedAsset(null, 'documents');
-                    return $document;
+                $user->documents->map(function ($documents) {
+                    /** @var \App\Models\UserDocument $documents */
+                    $documents->document = uploadedAsset($documents->document, 'documents');
+
+                    return $documents;
                 });
 
                 if ($user->customer_full_name == ' ') {
@@ -372,11 +372,14 @@ class CustomerController extends Controller
             ->first();
 
         if ($data) {
-            $data->profile_image = uploadedAsset($data->profile_image, "profile");
+            $data->profile_image = is_string($data->profile_image) || is_null($data->profile_image)
+                ? uploadedAsset($data->profile_image, 'profile')
+                : uploadedAsset(null, 'profile');
             $data->valid_date = Carbon::parse($data->valid_date)->format('d-m-Y');
             $data->date_of_issue = Carbon::parse($data->date_of_issue)->format('d-m-Y');
             $data->dob = Carbon::parse($data->dob)->format('d-m-Y');
             $data->documents->map(function ($document) {
+                /** @var \App\Models\UserDocument $document */
                 $document->document = uploadedAsset($document->document, 'documents');
                 return $document;
             });
@@ -446,12 +449,15 @@ class CustomerController extends Controller
 
         $defaultCurrency = getDefaultCurrencySymbol();
         if ($customer) {
-            $customer->profile_image = uploadedAsset($customer->profile_image, "profile");
+            $customer->profile_image = is_string($customer->profile_image) || is_null($customer->profile_image)
+                ? uploadedAsset($customer->profile_image, 'profile')
+                : uploadedAsset(null, 'profile');
             $customer->valid_date = $customer->valid_date ? formatDateTime($customer->valid_date, false) : null;
             $customer->dob = $customer->dob ? formatDateTime($customer->dob, false) : null;
             $customer->added_on = formatDateTime($customer->created_at);
 
             $customer->documents->map(function ($document) {
+                /** @var \App\Models\UserDocument $document */
                 $fileDetails = uploadedAsset($document->document, '', true);
                 $document->file_name = $fileDetails['file_name'] ?? null;
                 $document->size = $fileDetails['size'];

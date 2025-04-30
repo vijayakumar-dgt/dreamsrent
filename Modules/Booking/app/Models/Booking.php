@@ -13,6 +13,11 @@ use Modules\CarInfo\Models\VehicleInfo;
 
 // use Modules\Booking\Database\Factories\BookingFactory;
 
+/**
+ * @property string|null $booking_date
+ * @property string|null $vehicle_image
+ */
+
 class Booking extends Model
 {
     use HasFactory;
