@@ -311,6 +311,7 @@ return array(
     'upload' => 'Upload',
     'logo_recommend_size' => 'Recommended size is 151px x 26px',
     'favicon_recommend_size' => 'Recommended size is 128px x 128px',
+    'small_logo_recommend_size' => 'Recommended size is 35px x 35px',
     'small_icon' => 'Small Icon',
     'dark_logo' => 'Dark Logo',
     'localization' => 'Localization',

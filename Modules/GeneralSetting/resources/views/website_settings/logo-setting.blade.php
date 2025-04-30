@@ -117,12 +117,12 @@
                                                     <div class="drag-upload-btn btn btn-md btn-dark">
                                                         <i class="ti ti-photo-up fs-14"></i>
                                                         {{ __('admin.general_settings.upload') }}
-                                                        <input type="file" id="small_image" name="small_image" accept="image/*" onchange="previewImage(event, 'small_icon_photo_preview', 128, 128)">
+                                                        <input type="file" id="small_image" name="small_image" accept="image/*" onchange="previewImage(event, 'small_icon_photo_preview', 35, 35)">
                                                     </div>
                                                 </div>
                                                 <div class="skeleton text-skeleton label-loader"></div>
                                                 <div class="mt-2 d-none real-label">
-                                                    <p class="fs-14">{{ __('admin.general_settings.favicon_recommend_size') }}</p>
+                                                    <p class="fs-14">{{ __('admin.general_settings.small_logo_recommend_size') }}</p>
                                                 </div>
                                             </div>
                                         </div>

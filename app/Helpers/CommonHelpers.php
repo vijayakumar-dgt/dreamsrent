@@ -120,7 +120,7 @@ if (!function_exists('uploadedAsset')) {
             'default2' => $baseUrl . '/assets/img/default-placeholder-image.png',
             'default' => $baseUrl . '/assets/img/default-image-02.jpg',
             'default_logo' => $baseUrl . '/assets/img/logo.svg',
-            'default_small_logo' => $baseUrl . '/assets/img/logo-small.svg',
+            'default_small_logo' => $baseUrl . '/frontend/assets/img/logo-small.png',
             'default_favicon' => $baseUrl . '/assets/img/favicon.png',
 
         ];
