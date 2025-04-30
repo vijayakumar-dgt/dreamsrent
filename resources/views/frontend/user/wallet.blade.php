@@ -82,134 +82,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-7 col-md-12 d-none">
-                <div class="card your-card flex-fill">
-                    <div class="card-body">
-                        <div class="wallet-header">
-                            <h4>Your Cards</h4>
-                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_card">
-                                <i class="feather-plus-circle"></i>
-                            </a>
-                        </div>
-                        <div class="wallet-table">
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <label class="custom_radio">
-                                                    <input type="radio" name="payment" value="wallet" checked="">
-                                                    <span class="checkmark"></span>
-                                                    <img src="/frontend/assets/img/icons/wallet-01.svg" alt="Icon">
-                                                </label>
-                                            </td>
-                                            <td>
-                                                <h6>3210 **** **** **12</h6>
-                                                <p>Card Number</p>
-                                            </td>
-                                            <td>
-                                                <h6>$3000</h6>
-                                                <p>Balance</p>
-                                            </td>
-                                            <td>
-                                                <h6>Active</h6>
-                                                <p>Status</p>
-                                            </td>
-                                            <td class="text-end">
-                                                <div class="dropdown dropdown-action">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-vertical"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="javascript:void(0);">
-                                                            <i class="feather-edit-3"></i> Edit
-                                                        </a>
-                                                        <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_modal">
-                                                            <i class="feather-trash-2"></i> Delete
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="custom_radio">
-                                                    <input type="radio" name="payment" value="wallet">
-                                                    <span class="checkmark"></span>
-                                                    <img src="/frontend/assets/img/icons/wallet-02.svg" alt="Icon">
-                                                </label>
-                                            </td>
-                                            <td>
-                                                <h6>7847 **** **** **78</h6>
-                                                <p>Card Number</p>
-                                            </td>
-                                            <td>
-                                                <h6>$2300</h6>
-                                                <p>Balance</p>
-                                            </td>
-                                            <td>
-                                                <h6>Active</h6>
-                                                <p>Status</p>
-                                            </td>
-                                            <td class="text-end">
-                                                <div class="dropdown dropdown-action">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-vertical"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="javascript:void(0);">
-                                                            <i class="feather-edit-3"></i> Edit
-                                                        </a>
-                                                        <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_modal">
-                                                            <i class="feather-trash-2"></i> Delete
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="custom_radio">
-                                                    <input type="radio" name="payment" value="wallet">
-                                                    <span class="checkmark"></span>
-                                                    <img src="/frontend/assets/img/icons/wallet-03.svg" alt="Icon">
-                                                </label>
-                                            </td>
-                                            <td>
-                                                <h6>4710 **** **** **64</h6>
-                                                <p>Card Number</p>
-                                            </td>
-                                            <td>
-                                                <h6>$1800</h6>
-                                                <p>Balance</p>
-                                            </td>
-                                            <td>
-                                                <h6>Active</h6>
-                                                <p>Status</p>
-                                            </td>
-                                            <td class="text-end">
-                                                <div class="dropdown dropdown-action">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="fas fa-ellipsis-vertical"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="javascript:void(0);">
-                                                            <i class="feather-edit-3"></i> Edit
-                                                        </a>
-                                                        <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_modal">
-                                                            <i class="feather-trash-2"></i> Delete
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
         <!-- /Wallet Info -->
 
@@ -242,59 +115,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Skeleton loader rows -->
+                                    @for ($i = 0; $i < 3; $i++)
                                     <tr>
+                                        @for ($j = 0; $j < 5; $j++)
                                         <td>
                                             <div class="skeleton data-skeleton data-loader"></div>
                                         </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
+                                        @endfor
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                    <!-- Add more skeleton rows as necessary -->
+                                    @endfor
                                 </tbody>
                             </table>
                         </div>
@@ -328,65 +157,6 @@
     </div>
 </div>
 <!-- /Page Content -->
-<!-- Add Card Modal -->
-<div class="modal new-modal fade" id="add_card" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Add New Card</h4>
-                <button type="button" class="close-btn" data-bs-dismiss="modal"><span>×</span></button>
-            </div>
-            <div class="modal-body">
-                <form action="#">
-                    <div class="modal-form-group">
-                        <label>Card Number <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="Enter Card Number">
-                    </div>
-                    <div class="modal-form-group">
-                        <label>Name on Card <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" placeholder="Enter Card Name">
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="modal-form-group">
-                                <label>CVV <span class="text-danger">*</span></label>
-                                <div class="form-icon">
-                                    <input type="text" class="form-control" placeholder="Enter CVV Number">
-                                    <span class="cus-icon">
-                                        <img src="/frontend/assets/img/icons/lock-icon.svg" alt="Icon">
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="modal-form-group">
-                                <label>Expiry Date <span class="text-danger">*</span></label>
-                                <div class="form-icon">
-                                    <input type="text" class="form-control" placeholder="DD/MM/YYYY">
-                                    <span class="cus-icon">
-                                        <img src="/frontend/assets/img/icons/calendar-icon.svg" alt="Icon">
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-form-group">
-                        <label class="custom_check">
-                            <input type="checkbox" name="rememberme" class="rememberme">
-                            <span class="checkmark"></span>
-                            Save this account for future transaction
-                        </label>
-                    </div>
-                    <div class="modal-btn">
-                        <button type="submit" class="btn btn-secondary w-100">Pay $4700</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /Add Card Modal -->
-
 <!-- Add Payment Modal -->
 <div class="modal new-modal multi-step fade" id="add_payment" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-md">
@@ -453,40 +223,6 @@
     </div>
 </div>
 <!-- /Add Payment Modal -->
-
-<!-- Delete Modal -->
-<div class="modal new-modal fade" id="delete_modal" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="delete-action">
-                    <div class="delete-header">
-                        <h4>Delete Wallet History</h4>
-                        <p>Are you sure want to delete?</p>
-                    </div>
-                    <div class="modal-btn">
-                        <div class="row">
-                            <div class="col-6">
-                                <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-secondary w-100">
-                                    Delete
-                                </a>
-                            </div>
-                            <div class="col-6">
-                                <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary w-100">
-                                    Cancel
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /Delete Modal -->
-
-
-
 @endsection
 @push('scripts')
 <!-- Datatable JS -->
