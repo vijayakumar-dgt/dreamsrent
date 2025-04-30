@@ -128,8 +128,8 @@
                         </div>
                     </div>
                     <div class="card-body">	
-                        <div class="custom-datatable-filter table-responsive table-loader">
-                            <table class="table table-bordered">
+                        <div class="custom-datatable-filter table-responsive table-loader d-none">
+                            <table class="table table-bordered" id="booking-loader-table">
                                 <thead class="thead-light">
                                     <tr>
                                         <th>
@@ -162,151 +162,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>

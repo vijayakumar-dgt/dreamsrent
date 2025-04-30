@@ -231,67 +231,93 @@ class UserController extends Controller
     {
         DB::beginTransaction();
         try {
-            $booking = Booking::where('id', $request->id)->first();
-            $bookingDetail = BookingDetail::where('booking_id', $request->id)->first();
+            $booking = Booking::find($request->id);
+            if (!$booking) {
+                return response()->json([
+                    'status' => 'error',
+                    'code'   => 404,
+                    'message' => __('web.user.booking_not_found')
+                ]);
+            }
+    
+            $bookingDetail = BookingDetail::where('booking_id', $booking->id)->first();
             $historyData = [
                 'booking' => $booking->toArray(),
-                'booking_detail' => $bookingDetail ? $bookingDetail->toArray() : []
+                'booking_detail' => $bookingDetail?->toArray() ?? []
             ];
+    
             BookingHistory::create([
                 'booking_id' => $booking->id,
                 'action'     => 'cancel',
                 'data'       => json_encode($historyData),
                 'message'    => 'Reservation Cancelled'
             ]);
+    
             $booking->update([
                 'booking_status' => 6,
-                'cancel_date' => date('Y-m-d H:i:s'),
-                'cancel_by'   => Auth::guard('web')->user()->id,
-                'cancel_reason' => $request->reason
+                'cancel_date'    => now(),
+                'cancel_by'      => Auth::id(),
+                'cancel_reason'  => $request->reason
             ]);
-            $authUser = Auth::guard('web')->user();
-            $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
-            $vehicle = VehicleInfo::where('id', $booking->vehicle_id)->first();
-            $driver  = Driver::find($booking->driver_id);
-
-            $notifyData = [
-                'user_name' => $authUser->name ?? '',
-                'company_name' => $companyName,
-                'email'     => $authUser->email ?? '',
-                'phonenumber' => $authUser->phone_number ?? '',
-                'vehicle_name' => $vehicle->name ?? "",
-                'driver_name'  => $driver ? $driver->driver_name : "",
-                'reservation_id' => $booking->reservation_id ?? "",
-                'start_date'     => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
-                'end_date'       => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
-                'pickup_location' => $booking->pickupLocation ? $booking->pickupLocation->name : "",
-                'delivery_type'   => $booking->delivery_type ?? "",
-                'rental_type'     => $booking->rental_type ?? "",
-                'payment_type'    => $booking->payment_type ?? "",
-                'payment_status'  => $booking->payment_status ?? "",
-                'tototal_amount'  => $booking->final_price ?? ""
-            ];
+    
+            DB::commit(); 
+    
             if (rentalNotificationEnabled()) {
-                $appAdmin = User::where('user_type', 1)->first();
-                sendNotification($appAdmin->email, 'booking-cancelled-to-admin', $notifyData);
-
-                sendNotification($authUser->email, 'booking-cancelled-to-user', $notifyData);
+                try {
+                    $authUser = Auth::user();
+                    $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
+                    $vehicle = VehicleInfo::find($booking->vehicle_id);
+                    $driver  = Driver::find($booking->driver_id);
+                    $appAdmin = User::where('user_type', 1)->first();
+    
+                    $notifyData = [
+                        'user_name'       => $authUser->name ?? '',
+                        'company_name'    => $companyName,
+                        'email'           => $authUser->email ?? '',
+                        'phonenumber'     => $authUser->phone_number ?? '',
+                        'vehicle_name'    => $vehicle->name ?? "",
+                        'driver_name'     => $driver?->driver_name ?? "",
+                        'reservation_id'  => $booking->reservation_id ?? "",
+                        'start_date'      => formatDateTime($booking->start_datetime),
+                        'end_date'        => formatDateTime($booking->end_datetime),
+                        'pickup_location' => $booking->pickupLocation?->name ?? "",
+                        'delivery_type'   => $booking->delivery_type ?? "",
+                        'rental_type'     => $booking->rental_type ?? "",
+                        'payment_type'    => $booking->payment_type ?? "",
+                        'payment_status'  => $booking->payment_status ?? "",
+                        'tototal_amount'  => $booking->final_price ?? ""
+                    ];
+    
+                    
+                    if ($appAdmin?->email) {
+                        sendNotification($appAdmin->email, 'booking-cancelled-to-admin', $notifyData);
+                    }
+    
+                    if (!empty($authUser->email)) {
+                        sendNotification($authUser->email, 'booking-cancelled-to-user', $notifyData);
+                    }
+    
+                } catch (\Throwable $ex) {
+                    
+                }
             }
-            DB::commit();
+    
             return response()->json([
-                'status' => 'success',
-                'code'   => 200,
+                'status'  => 'success',
+                'code'    => 200,
                 'message' => __('web.user.reservation_cancelled')
-            ], 200);
+            ]);
+    
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json([
-                'status' => 'error',
-                'code'   => 500,
+                'status'  => 'error',
+                'code'    => 500,
                 'message' => __('web.user.error_occured')
-            ], 200);
+            ]);
         }
     }
+    
 
     public function completeRide(Request $request)
     {

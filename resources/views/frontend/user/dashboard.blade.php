@@ -129,8 +129,8 @@
                         </div>
                     </div>
                     <div class="card-body p-0">
-                        <div class="custom-datatable-filter table-responsive table-loader">
-                            <table class="table table-bordered">
+                        <div class="custom-datatable-filter table-responsive table-loader d-none">
+                            <table class="table table-bordered" id="loader-table">
                                 <thead class="thead-light">
                                     <tr>
                                         <th>
@@ -151,91 +151,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
+                                    
                                 </tbody>
                             </table>
                         </div>
@@ -271,101 +187,9 @@
                     <div class="card-body p-0">
                         <div class="table-responsive dashboard-table dashboard-table-info">
                             <table class="table trans-table-loader">
-                                <tbody>
-                                    <tr class="user_trans-skeleton">
-                                        <td class="border-0">
-                                            <div class="user_trans-table-avatar skeleton">
-                                                <div class="user_trans-avatar avatar-md flex-shrink-0">
-                                                    <div class="user_trans-avatar-img skeleton"></div>
-                                                </div>
-                                                <div class="user_trans-table-head-name flex-grow-1">
-                                                    <div class="user_trans-skeleton-text skeleton"></div>
-                                                    <div class="user_trans-skeleton-text skeleton"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="border-0 text-end">
-                                            <div class="user_trans-skeleton-status skeleton"></div>
-                                        </td>
-                                    </tr>
-                                    <tr class="user_trans-skeleton">
-                                        <td colspan="2" class="pt-0 pb-0 border-0">
-                                            <div class="user_trans-status-box">
-                                                <p class="user_trans-skeleton-text skeleton"></p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="user_trans-skeleton">
-                                        <td class="border-0">
-                                            <div class="user_trans-table-avatar skeleton">
-                                                <div class="user_trans-avatar avatar-md flex-shrink-0">
-                                                    <div class="user_trans-avatar-img skeleton"></div>
-                                                </div>
-                                                <div class="user_trans-table-head-name flex-grow-1">
-                                                    <div class="user_trans-skeleton-text skeleton"></div>
-                                                    <div class="user_trans-skeleton-text skeleton"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="border-0 text-end">
-                                            <div class="user_trans-skeleton-status skeleton"></div>
-                                        </td>
-                                    </tr>
-                                    <tr class="user_trans-skeleton">
-                                        <td colspan="2" class="pt-0 pb-0 border-0">
-                                            <div class="user_trans-status-box">
-                                                <p class="user_trans-skeleton-text skeleton"></p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="user_trans-skeleton">
-                                        <td class="border-0">
-                                            <div class="user_trans-table-avatar skeleton">
-                                                <div class="user_trans-avatar avatar-md flex-shrink-0">
-                                                    <div class="user_trans-avatar-img skeleton"></div>
-                                                </div>
-                                                <div class="user_trans-table-head-name flex-grow-1">
-                                                    <div class="user_trans-skeleton-text skeleton"></div>
-                                                    <div class="user_trans-skeleton-text skeleton"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="border-0 text-end">
-                                            <div class="user_trans-skeleton-status skeleton"></div>
-                                        </td>
-                                    </tr>
-                                    <tr class="user_trans-skeleton">
-                                        <td colspan="2" class="pt-0 pb-0 border-0">
-                                            <div class="user_trans-status-box">
-                                                <p class="user_trans-skeleton-text skeleton"></p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="user_trans-skeleton">
-                                        <td class="border-0">
-                                            <div class="user_trans-table-avatar skeleton">
-                                                <div class="user_trans-avatar avatar-md flex-shrink-0">
-                                                    <div class="user_trans-avatar-img skeleton"></div>
-                                                </div>
-                                                <div class="user_trans-table-head-name flex-grow-1">
-                                                    <div class="user_trans-skeleton-text skeleton"></div>
-                                                    <div class="user_trans-skeleton-text skeleton"></div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="border-0 text-end">
-                                            <div class="user_trans-skeleton-status skeleton"></div>
-                                        </td>
-                                    </tr>
-                                    <tr class="user_trans-skeleton">
-                                        <td colspan="2" class="pt-0 pb-0 border-0">
-                                            <div class="user_trans-status-box">
-                                                <p class="user_trans-skeleton-text skeleton"></p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                <tbody id="transaction-skeleton-loader-body"></tbody>
                             </table>
+                            
                             <table class="table d-none trans-real-table" id="transactionTable">
                                 <tbody>
 
