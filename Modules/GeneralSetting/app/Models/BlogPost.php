@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property string|null $image
  * @property string $slug
- * @property string $category
+ * @property string $category 
+ * @property string $title
  * @property string $description
  * @property string $popular
  * @property string $tags

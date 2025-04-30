@@ -12,10 +12,12 @@ use Carbon\Carbon;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Illuminate\Support\Facades\App;
 use Modules\GeneralSetting\Models\BlogReviews;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class BlogController extends Controller
 {
-    public function BlogList(Request $request)
+    public function BlogList(Request $request):  View|Response
     {
         $authUser = current_user();
 
@@ -73,11 +75,10 @@ class BlogController extends Controller
 
         $seo_title  = __('web.blog.blogs_title');
 
-        // If request is AJAX, return only the blog list HTML
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('frontend.blogs.partials.blogs-list', compact('blogPosts'))->render()
-            ]);
+            ]);    
         }
 
         return view(
@@ -86,8 +87,7 @@ class BlogController extends Controller
         );
     }
 
-
-    public function BlogGrid()
+    public function BlogGrid(): View
     {
         $authUser = current_user();
 
@@ -138,7 +138,7 @@ class BlogController extends Controller
         ));
     }
 
-    public function BlogDetail($id)
+    public function BlogDetail(int $id): View
     {
         $authUser = current_user();
 
@@ -171,7 +171,7 @@ class BlogController extends Controller
             ->where('blog_posts.status', 1)
             ->first();
 
-        $blogReviews = BlogReviews::where('blog_id', $blogPosts->id)->latest()->limit(5)->get();
+        $blogReviews = BlogReviews::where('blog_id', $blogPosts?->id)->latest()->limit(5)->get();
         $countReview = count($blogReviews);
 
         $otherBlogs = BlogPost::where('slug', '!=', $id)
@@ -180,14 +180,14 @@ class BlogController extends Controller
             ->inRandomOrder()
             ->take(2)
             ->get();
-        $seo_title  = $blogPosts->title;
+        $seo_title  = $blogPosts->title ?? '';
         return view(
             'frontend.blogs.blog-details',
             compact('blogPosts', 'languages', 'blogReviews', 'countReview', 'otherBlogs', 'seo_title')
         );
     }
 
-    public function storeReview(Request $request)
+    public function storeReview(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'blog_id' => 'required',
