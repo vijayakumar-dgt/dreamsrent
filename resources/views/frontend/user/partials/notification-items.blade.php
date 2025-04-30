@@ -10,7 +10,7 @@
             @endif
         </div>
         <div>
-            <p class="mb-1 fw-bold">{{ $notification->subject ?? '' }}</p>
+            <p class="mb-1"><span class="fw-bold">{{ __('web.common.notice') }}: </span>{{ $notification->subject ?? '' }}</p>
             <small class="text-dark">{!! $notification->content ?? '' !!}</small>
         </div>
     </div>
