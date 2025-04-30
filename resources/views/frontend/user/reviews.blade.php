@@ -140,7 +140,6 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th>{{ __('web.user.vehicle_name') }}</th>
-                                        <th>{{ __('web.home.rental_type') }}</th>
                                         <th>{{ __('web.user.review') }}</th>
                                         <th>{{ __('web.user.ratings') }}</th>
                                         <th>{{ __('web.common.action') }}</th>

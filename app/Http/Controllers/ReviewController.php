@@ -307,15 +307,12 @@ class ReviewController extends Controller
                 'reviews.user_id',
                 'reviews.average_ratings',
                 'review_messages.comments',
-                'bookings.rental_type',
-                'bookings.delivery_type',
                 'vehicle_info.name as vehicle_name',
                 'vehicle_info.vehicle_image',
                 'reviews.created_at',
             )
             ->join('review_messages', 'review_messages.review_id', '=', 'reviews.id')
             ->join('vehicle_info', 'reviews.vehicle_id', '=', 'vehicle_info.id')
-            ->Join('bookings', 'bookings.vehicle_id', '=', 'reviews.vehicle_id')
             ->where('reviews.user_id', $userId)
             ->where('bookings.customer_id', $userId)
             ->where('review_messages.parent_id', 0);
@@ -356,7 +353,6 @@ class ReviewController extends Controller
             $query->offset($request->start)->limit($request->length);
 
             $reviews = $query->get()->map(function ($item) {
-                $item->rental_type = ucfirst($item->rental_type);
                 $item->vehicle_image = uploadedAsset($item->vehicle_image);
                 return $item;
             });

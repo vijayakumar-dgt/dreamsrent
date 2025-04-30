@@ -167,17 +167,19 @@ class CustomerController extends Controller
                         ]);
                     }
                 }
-                $removedDocuments = explode(',', $request->removed_documents);
+                $removedDocuments = array_filter(explode(',', $request->removed_documents));
                 if (!empty($removedDocuments)) {
                     foreach ($removedDocuments as $docId) {
-                        $removedDocument = UserDocument::where('id', $docId)->first();
+                        $removedDocument = UserDocument::find($docId);
                         if ($removedDocument) {
                             $doc = $removedDocument->document;
-                            if (Storage::disk('public')->exists('/' . $doc)) {
+
+                            if (!empty($doc) && Storage::disk('public')->exists($doc)) {
                                 Storage::disk('public')->delete($doc);
                             }
+
+                            $removedDocument->delete();
                         }
-                        UserDocument::where('id', $docId)->delete();
                     }
                 }
                 user::where('id', $id)->update($userData);
@@ -306,11 +308,11 @@ class CustomerController extends Controller
             $users->map(function ($user) {
                 $user->valid_date = formatDateTime($user->valid_date, false);
                 $user->date_of_issue = formatDateTime($user->date_of_issue, false);
-                $user->profile_image = uploadedAsset($user->profile_image, 'profile');
+                $user->profile_image = uploadedAsset((string) $user->profile_image, 'profile');
                 $user->language_flag = url('/assets/img/flags/' . $user->language_code . '.svg');
                 $user->encrypted_id = customEncrypt($user->id, User::$userSecretKey);
-                $user->documents = $user->documents->map(function ($document) {
-                    $document->document = uploadedAsset($document->document, 'documents');
+                $user->documents->map(function ($document) {
+                    $document->document = uploadedAsset((string) $document->document, 'documents');
                     return $document;
                 });
 

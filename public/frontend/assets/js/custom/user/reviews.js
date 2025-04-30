@@ -46,12 +46,10 @@ const fetchReviews = (sort_by = '') => {
                             </a>
                             <div class="table-head-name flex-grow-1">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#add_review">${ucfirst(row.vehicle_name)}</a>
-                                ${delivery_type ? `<p>${delivery_type}</p>` : ""}
                             </div>
                         </div>`;
                 }
             },
-            { data: "rental_type" },
             {
                 data: "comments",
                 render: (data, type, row) => `<p>${row.comments.length > 100 ? `${row.comments.substring(0, 100)}...` : row.comments}</p>`
