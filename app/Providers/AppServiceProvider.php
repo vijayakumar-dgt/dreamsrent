@@ -51,7 +51,12 @@ class AppServiceProvider extends ServiceProvider
 
     public function globalViews()
     {
-        $allLanguages = Language::select('languages.id', 'languages.rtl', 'translation_languages.code', 'translation_languages.name')
+        $allLanguages = Language::select(
+            'languages.id',
+            'languages.rtl',
+            'translation_languages.code',
+            'translation_languages.name'
+        )
             ->join('translation_languages', 'languages.language_id', '=', 'translation_languages.id')
             ->where('languages.status', 1)
             ->get();
@@ -88,7 +93,8 @@ class AppServiceProvider extends ServiceProvider
             $copyright   = null;
             if ($languageId) {
                 $key = 'copy_right_' . $languageId;
-                $copyright = GeneralSetting::where('key', $key)->where('language_id', $languageId)->pluck('value')->first();
+                $copyright = GeneralSetting::where('key', $key)
+                ->where('language_id', $languageId)->pluck('value')->first();
             }
             $view->with([
                 'allLanguages' => $allLanguages,

@@ -8,6 +8,7 @@ use App\Models\UserDocument;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -133,13 +134,11 @@ class CustomerController extends Controller
                 }
                 $user = User::create($userData);
 
-                if ($user) {
-                    $userDetailsData['user_id'] = $user->id;
-                    UserDetail::create($userDetailsData);
-                }
+                $userDetailsData['user_id'] = $user->id;
+                UserDetail::create($userDetailsData);
 
                 if ($request->hasFile('documents')) {
-                    foreach ($request->file('documents') as $file) {
+                    foreach ((array) $request->file('documents') as $file) {
                         $document = uploadFile($file, 'documents');
                         UserDocument::create([
                             'user_id' => $user->id,
@@ -160,14 +159,12 @@ class CustomerController extends Controller
                 }
 
                 if ($request->hasFile('documents')) {
-                    foreach ($request->file('documents') as $file) {
-                        if ($file->isValid()) {
-                            $document = uploadFile($file, 'documents');
-                            UserDocument::create([
-                            'user_id' => $user->user_id,
+                    foreach ((array) $request->file('documents') as $file) {
+                        $document = uploadFile($file, 'documents');
+                        UserDocument::create([
+                            'user_id' => $id,
                             'document' => $document,
-                            ]);
-                        }
+                        ]);
                     }
                 }
                 $removedDocuments = explode(',', $request->removed_documents);

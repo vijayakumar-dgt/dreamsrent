@@ -47,11 +47,20 @@ class InvoiceController extends Controller
         $bookings = Booking::Join('users', 'bookings.customer_id', '=', 'users.id')
         ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
         ->leftJoin('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
-        ->select('bookings.*', 'users.name as customer', 'user_details.profile_image', 'vehicle_info.vehicle_image', 'vehicle_info.name as vehicle')
+        ->select(
+            'bookings.*',
+            'users.name as customer',
+            'user_details.profile_image',
+            'vehicle_info.vehicle_image',
+            'vehicle_info.name as vehicle'
+        )
         ->whereDate('start_datetime', '>=', Carbon::today())
         ->orderBy('start_datetime', 'asc')->get();
 
-        return view("admin.invoice.add-invoice", compact('cars', 'currencies', 'users', 'currentUser', 'payments', 'symbol', 'bookings'));
+        return view(
+            "admin.invoice.add-invoice",
+            compact('cars', 'currencies', 'users', 'currentUser', 'payments', 'symbol', 'bookings')
+        );
     }
 
     public function store(Request $request)
@@ -133,10 +142,12 @@ class InvoiceController extends Controller
 
             DB::commit();
 
-            return response()->json(['success' => true, 'message' => __('admin.finance_accounts.invoice_create_success')]);
+            return response()->json(['success' => true,
+             'message' => __('admin.finance_accounts.invoice_create_success')]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['success' => false, 'message' => __('admin.common.default_create_error.'), 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false,
+             'message' => __('admin.common.default_create_error.'), 'error' => $e->getMessage()], 500);
         }
     }
 
@@ -157,12 +168,21 @@ class InvoiceController extends Controller
         $bookings = Booking::Join('users', 'bookings.customer_id', '=', 'users.id')
         ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
         ->leftJoin('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
-        ->select('bookings.*', 'users.name as customer', 'user_details.profile_image', 'vehicle_info.vehicle_image', 'vehicle_info.name as vehicle')
+        ->select(
+            'bookings.*',
+            'users.name as customer',
+            'user_details.profile_image',
+            'vehicle_info.vehicle_image',
+            'vehicle_info.name as vehicle'
+        )
         ->whereDate('start_datetime', '>=', Carbon::today())
         ->orderBy('start_datetime', 'asc')->get();
 
 
-        return view("admin.invoice.edit-invoice", compact('cars', 'currencies', 'users', 'currentUser', 'payments', 'symbol', 'invoice', 'bookings'));
+        return view(
+            "admin.invoice.edit-invoice",
+            compact('cars', 'currencies', 'users', 'currentUser', 'payments', 'symbol', 'invoice', 'bookings')
+        );
     }
 
     public function destroy($id)
@@ -177,9 +197,11 @@ class InvoiceController extends Controller
             // Delete the invoice itself
             $invoice->delete();
 
-            return response()->json(['success' => true, 'message' => __('admin.finance_accounts.invoice_delete_success')]);
+            return response()->json(['success' => true,
+             'message' => __('admin.finance_accounts.invoice_delete_success')]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => __('admin.common.default_delete_error.'), 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false,
+             'message' => __('admin.common.default_delete_error.'), 'error' => $e->getMessage()], 500);
         }
     }
 
@@ -232,7 +254,8 @@ class InvoiceController extends Controller
             }
 
             // Return success response
-            return redirect()->route('admin.invoice')->with('success', __('admin.finance_accounts.invoice_update_success'));
+            return redirect()->route('admin.invoice')
+            ->with('success', __('admin.finance_accounts.invoice_update_success'));
         } catch (\Exception $e) {
             // Return error response
             return back()->with('error', __('admin.common.default_update_error'));

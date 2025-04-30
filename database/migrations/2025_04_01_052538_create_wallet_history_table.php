@@ -9,7 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void // Specify return type as void
     {
         Schema::create('wallet_history', function (Blueprint $table) {
             $table->id(); // Primary Key
@@ -29,7 +29,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down(): void // Specify return type as void
     {
         Schema::dropIfExists('wallet_history');
     }

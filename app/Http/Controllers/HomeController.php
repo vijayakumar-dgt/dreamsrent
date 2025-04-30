@@ -32,7 +32,8 @@ class HomeController extends Controller
         $languageCode = app()->getLocale();
         $languageId = getLanguageId($languageCode);
         $brands = Brand::where('status', 1)->where("language_id", $languageId)->orderBy('brand_name', 'asc')->get();
-        $vehicleTypes = Cartype::where('language_id', $languageId)->where('status', 1)->orderBy('name', 'asc')->get()->map(function ($vehicleType) {
+        $vehicleTypes = Cartype::where('language_id', $languageId)
+        ->where('status', 1)->orderBy('name', 'asc')->get()->map(function ($vehicleType) {
             $vehicleCount = VehicleInfo::where('type_id', $vehicleType->id)->count();
             return [
                 'id' => $vehicleType->id,
@@ -40,13 +41,20 @@ class HomeController extends Controller
                 'vehicle_count' => $vehicleCount
             ];
         });
-        $years = VehicleInfo::where('language_id', $languageId)->select('year')->distinct()->orderBy('year', 'desc')->pluck('year')->toArray();
-        $fuelTypes = CarFuel::where('language_id', $languageId)->where('status', 1)->orderBy('fuel_type', 'asc')->get();
-        $transmissions = Transmission::where('language_id', $languageId)->where('status', 1)->orderBy('name', 'asc')->get();
-        $colors = CarColor::where('language_id', $languageId)->where('status', 1)->orderBy('name', 'asc')->get();
-        $features = SafetyFeature::where('language_id', $languageId)->where('status', 1)->orderBy('feature', 'asc')->get();
-        $allowBooking = GeneralSetting::where('group_id', 20)->where('key', 'booking')->pluck('value')->first() ?? 1;
-        $allowEnquiries = GeneralSetting::where('group_id', 20)->where('key', 'enquiries')->pluck('value')->first() ?? 1;
+        $years = VehicleInfo::where('language_id', $languageId)
+        ->select('year')->distinct()->orderBy('year', 'desc')->pluck('year')->toArray();
+        $fuelTypes = CarFuel::where('language_id', $languageId)
+        ->where('status', 1)->orderBy('fuel_type', 'asc')->get();
+        $transmissions = Transmission::where('language_id', $languageId)
+        ->where('status', 1)->orderBy('name', 'asc')->get();
+        $colors = CarColor::where('language_id', $languageId)
+        ->where('status', 1)->orderBy('name', 'asc')->get();
+        $features = SafetyFeature::where('language_id', $languageId)
+        ->where('status', 1)->orderBy('feature', 'asc')->get();
+        $allowBooking = GeneralSetting::where('group_id', 20)
+        ->where('key', 'booking')->pluck('value')->first() ?? 1;
+        $allowEnquiries = GeneralSetting::where('group_id', 20)
+        ->where('key', 'enquiries')->pluck('value')->first() ?? 1;
         $data = [
             'brands' => $brands,
             'vehicleTypes' => $vehicleTypes,
@@ -84,7 +92,8 @@ class HomeController extends Controller
         $data['returndate'] = $returndate;
         $data['returntime'] = $returntime;
         $data['seo_title']  = __('web.common.vehicles');
-        $data['initialPickupLocation'] = $pickuplocation ? Location::select('id', 'name')->where('status', 1)->where('language_id', $languageId)->where('name', 'like', '%' . $pickuplocation . '%')->first() : null;
+        $data['initialPickupLocation'] = $pickuplocation ?
+        Location::select('id', 'name')->where('status', 1)->where('language_id', $languageId)->where('name', 'like', '%' . $pickuplocation . '%')->first() : null;
         return view('frontend.home.list.list', $data);
     }
 
@@ -92,7 +101,8 @@ class HomeController extends Controller
     {
         $slug = $request->slug;
 
-        $vehicle = VehicleInfo::select('id', 'main_location_id', "other_location_id", 'views')->where('slug', $slug)->first();
+        $vehicle = VehicleInfo::select('id', 'main_location_id', "other_location_id", 'views')
+        ->where('slug', $slug)->first();
         if (!$vehicle) {
             abort(404);
         }
@@ -143,8 +153,10 @@ class HomeController extends Controller
 
         $lastUpdateFormatted = $lastUpdate ? \Carbon\Carbon::parse($lastUpdate)->format('d, M Y') : 'N/A';
 
-        $allowBooking = GeneralSetting::where('group_id', 20)->where('key', 'booking')->pluck('value')->first() ?? 1;
-        $allowEnquiries = GeneralSetting::where('group_id', 20)->where('key', 'enquiries')->pluck('value')->first() ?? 1;
+        $allowBooking = GeneralSetting::where('group_id', 20)
+        ->where('key', 'booking')->pluck('value')->first() ?? 1;
+        $allowEnquiries = GeneralSetting::where('group_id', 20)
+        ->where('key', 'enquiries')->pluck('value')->first() ?? 1;
         $vehicleDetail = VehicleInfo::where('id', $vehicle->id)->first();
         $vehicleDetail->name = ucfirst($vehicleDetail->name);
         $vehicleDetail->location_name = $vehicleDetail->mainLocation ? $vehicleDetail->mainLocation->name : '';
@@ -161,7 +173,10 @@ class HomeController extends Controller
         $data['author_name'] = $appAdmin->name ?? "";
         $data['author_email'] = $appAdmin->email ?? "";
         $data['author_phone'] = $appAdminDetails->mobile_number ?? "";
-        return view('frontend.home.list.vehicle-details', compact("data", "allowEnquiries", "allowBooking", "slug", "mainLocation", 'vehicle', "bookingCount", "vehicleCount", "lastUpdateFormatted", "vehicleDetail", "seo_title", "seo_description", "meta_keywords", "og_image", "allLocation"));
+        return view(
+            'frontend.home.list.vehicle-details',
+            compact("data", "allowEnquiries", "allowBooking", "slug", "mainLocation", 'vehicle', "bookingCount", "vehicleCount", "lastUpdateFormatted", "vehicleDetail", "seo_title", "seo_description", "meta_keywords", "og_image", "allLocation")
+        );
     }
 
     public function searchLocations(Request $request)
@@ -184,7 +199,8 @@ class HomeController extends Controller
     {
         $title = "Dreamsrent - Maintenance";
         $maintenance = GeneralSetting::where('group_id', 4)->pluck('value', 'key')->toArray();
-        $response['image'] = $maintenance['maintenance_image'] ? uploadedAsset($maintenance['maintenance_image']) : '';
+        $response['image'] = $maintenance['maintenance_image'] ?
+        uploadedAsset($maintenance['maintenance_image']) : '';
         $response['description'] = $maintenance['maintenance_description'] ?? "";
         return view('frontend.home.maintenance', compact("title", "response"));
     }
@@ -198,7 +214,10 @@ class HomeController extends Controller
         $companyPhoneNumber = $companyPhoneNumber ? $companyPhoneNumber->value : '';
         $companyEmail = $companyEmail ? $companyEmail->value : '';
         $companyAddress = $companyAddress ? $companyAddress->value : '';
-        return view('frontend.home.contact-us', compact("seo_title", "companyPhoneNumber", "companyEmail", "companyAddress"));
+        return view(
+            'frontend.home.contact-us',
+            compact("seo_title", "companyPhoneNumber", "companyEmail", "companyAddress")
+        );
     }
 
     public function test()

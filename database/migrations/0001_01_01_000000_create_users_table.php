@@ -9,7 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void  // Specify return type as void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -42,7 +42,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down(): void  // Specify return type as void
     {
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');

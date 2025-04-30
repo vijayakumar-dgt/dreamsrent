@@ -84,11 +84,13 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
     Route::post('forgot-password/resend-otp', [ForgotpasswordController::class, 'resendOtp'])->name('send-otp');
     Route::post('forgot-password/confirm-otp', [ForgotpasswordController::class, 'confirmOtp'])->name('confirm-otp');
     Route::get('reset-password', [ForgotpasswordController::class, 'resetPassword'])->name('reset-password');
-    Route::post('forgot-password/update-password', [ForgotpasswordController::class, 'updatePassword'])->name('update-password');
+    Route::post('forgot-password/update-password', [ForgotpasswordController::class, 'updatePassword'])
+    ->name('update-password');
 
     Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
 
-        Route::get('/translations/{file}/{module}', [TranslationController::class, 'getFileTranslations'])->name('admin.translations');
+        Route::get('/translations/{file}/{module}', [TranslationController::class, 'getFileTranslations'])
+        ->name('admin.translations');
 
         //Country
         Route::get('country', [CountryController::class, 'index'])->name('country.index')->middleware('permission');
@@ -201,7 +203,7 @@ Route::group(['middleware' => ['setLocaleUser', 'checkInstallerStatus']], functi
     });
 
 //user profile
-    Route::prefix('user')->middleware('customer', 'maintenance')->controller(UserController::class)->group(function () {
+    Route::prefix('user')->middleware(['customer', 'maintenance'])->controller(UserController::class)->group(function () {
         Route::get('dashboard', 'dashboard')->name('user.dashboard');
         Route::get('bookings', 'bookings')->name('user.bookings');
         Route::post('ajax-last-bookings', 'ajaxLastBookings')->name('user.ajaxLastBookings');
@@ -233,7 +235,7 @@ Route::group(['middleware' => ['setLocaleUser', 'checkInstallerStatus']], functi
     Route::post('user/reviews-list', [ReviewController::class, 'userReviewsList'])->name('user.reviews-list');
     Route::post('user/save-newsletter-subscriber', [NewsletterController::class, 'store'])->name('user.save-newsletter-subscriber');
 
-    Route::prefix('user')->middleware('customer', 'maintenance')->controller(WalletController::class)->group(function () {
+    Route::prefix('user')->middleware(['customer', 'maintenance'])->controller(WalletController::class)->group(function () {
         Route::get('wallet', 'wallet')->name('user.wallet');
         Route::post('addwallet', 'addWallet')->name('user.addwallet');
         Route::get('wallet-list', 'walletHistoryList')->name('user.walletHistoryList');
@@ -249,11 +251,16 @@ Route::group(['middleware' => ['setLocaleUser', 'checkInstallerStatus']], functi
         Route::get('/get-states/{country_id}', [UserBookingController::class, 'getStates']);
         Route::get('/get-cities/{state_id}', [UserBookingController::class, 'getCities']);
         Route::post('/create/payments', [UserBookingController::class, 'userPayments']);
-        Route::get('/paypal-payment-success', [UserBookingController::class, 'paypalPaymentSuccess'])->name('paypal.payment.success');
-        Route::get('/booking/payment-success/{transaction_id}', [UserBookingController::class, 'paymentSuccess'])->name('payment.success.page');
-        Route::get('/strip-payment-success', [UserBookingController::class, 'stripPaymentSuccess'])->name('strip.payment.success');
-        Route::get('/paypal-payment-failed', [UserBookingController::class, 'paypalPaymentFailed'])->name('paypal.payment.fail');
-        Route::get('/booking/payment-fail/{transaction_id}', [UserBookingController::class, 'paymentFail'])->name('payment.success.fail');
+        Route::get('/paypal-payment-success', [UserBookingController::class, 'paypalPaymentSuccess'])
+        ->name('paypal.payment.success');
+        Route::get('/booking/payment-success/{transaction_id}', [UserBookingController::class, 'paymentSuccess'])
+        ->name('payment.success.page');
+        Route::get('/strip-payment-success', [UserBookingController::class, 'stripPaymentSuccess'])
+        ->name('strip.payment.success');
+        Route::get('/paypal-payment-failed', [UserBookingController::class, 'paypalPaymentFailed'])
+        ->name('paypal.payment.fail');
+        Route::get('/booking/payment-fail/{transaction_id}', [UserBookingController::class, 'paymentFail'])
+        ->name('payment.success.fail');
     });
     Route::middleware('maintenance')->prefix('user')->controller(ReviewController::class)->group(function () {
         Route::post('add-review', 'addReview')->name('user.add-review');
@@ -262,15 +269,18 @@ Route::group(['middleware' => ['setLocaleUser', 'checkInstallerStatus']], functi
     Route::post('get-reviews', [ReviewController::class, 'reviewsList'])->middleware('maintenance')->name('reviews-list');
     Route::post('review/delete', [ReviewController::class, 'delete'])->name('review-delete');
 
-    Route::middleware(['maintenance', 'customer'])->prefix('user')->controller(MessageController::class)->group(function () {
+    Route::middleware(['maintenance', 'customer'])->prefix('user')
+    ->controller(MessageController::class)->group(function () {
         Route::get('messages', 'index')->name('user.messages');
     });
 
-    Route::post('user/send-message', [MessageController::class, 'sendMessage'])->middleware('customer')->name('user.send-message');
+    Route::post('user/send-message', [MessageController::class, 'sendMessage'])
+    ->middleware('customer')->name('user.send-message');
     Route::post('user/fetch-messages', [MessageController::class, 'fetchMessages'])->middleware('customer')->name('fetch-messages');
 
     Route::post('admin/send-message', [MessageController::class, 'sendMessage'])->middleware('admin')->name('user.send-message');
-    Route::post('admin/fetch-messages', [MessageController::class, 'fetchMessages'])->middleware('admin')->name('fetch-messages');
+    Route::post('admin/fetch-messages', [MessageController::class, 'fetchMessages'])->middleware('admin')
+    ->name('fetch-messages');
 
     Route::get('maintenance', [HomeController::class, 'maintenance'])->name('maintenance');
     Route::get('/pages/{slug}', [PageController::class, 'getPage'])->name('pages');
@@ -292,5 +302,6 @@ Route::group(['middleware' => ['setLocaleUser', 'checkInstallerStatus']], functi
     Route::get('recent-transation', [UserBookingController::class,'transaction'])->middleware('web');
     Route::get('vehicle-intrset-list', [CarInfoController::class,'vehicleIntrestLists'])->middleware('web');
 
-    Route::post('user/flag-change-language', [LanguageController::class,'userFlagChangeLanguage'])->name('user.flag-change-language');
+    Route::post('user/flag-change-language', [LanguageController::class,'userFlagChangeLanguage'])
+    ->name('user.flag-change-language');
 });

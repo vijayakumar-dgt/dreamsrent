@@ -4,20 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Models\State;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class CityController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $state_ids = State::select("id", "name")->get();
 
         return view('admin.city.index', compact("state_ids"));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $id = $request->id ?? null;
 
@@ -81,7 +83,7 @@ class CityController extends Controller
         }
     }
 
-    public function list(Request $request)
+    public function list(Request $request): JsonResponse
     {
         $orderBy = $request->order_by ?? 'asc';
 
@@ -127,7 +129,7 @@ class CityController extends Controller
         }
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
         $city = City::find($id);
@@ -139,7 +141,7 @@ class CityController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         try {
             $id = $request->id;
@@ -160,7 +162,7 @@ class CityController extends Controller
         }
     }
 
-    public function bulkDelete(Request $request)
+    public function bulkDelete(Request $request): JsonResponse
     {
         $ids = $request->ids;
 
