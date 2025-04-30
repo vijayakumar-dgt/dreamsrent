@@ -23,7 +23,12 @@ class DatabaseSeeder extends Seeder
         // ]);
     }
 
-    public function generateChecklist()
+    /**
+     * Generate the checklist entries.
+     *
+     * @return void
+     */
+    public function generateChecklist(): void
     {
         $checklistArr = [
             [
