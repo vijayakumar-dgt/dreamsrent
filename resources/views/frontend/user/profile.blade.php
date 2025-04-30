@@ -23,17 +23,13 @@
 <!-- Page Content -->
 <div class="content">
     <div class="container">
-
         <!-- Content Header -->
         <div class="content-header content-settings-header">
             <h4>Settings</h4>
         </div>
         <!-- /Content Header -->
-
         <div class="row">
-
             @include('frontend.user.user_sidebar')
-
             <!-- Settings Details -->
             <div class="col-lg-9">
                 <div class="settings-info">
@@ -41,7 +37,6 @@
                         <h4>Profile</h4>
                     </div>
                     <form action="#">
-
                         <!-- Basic Info -->
                         <div class="profile-info-grid">
                             <div class="profile-info-header">
@@ -53,12 +48,8 @@
                                     <div class="profile-info-img">
                                         <img src="assets/img/profiles/avatar-15.jpg" alt="Profile">
                                         <div class="profile-edit-info">
-                                            <a href="javascript:void(0)">
-                                                <i class="feather-edit"></i>
-                                            </a>
-                                            <a href="javascript:void(0)">
-                                                <i class="feather-trash-2"></i>
-                                            </a>
+                                            <a href="javascript:void(0)"><i class="feather-edit"></i></a>
+                                            <a href="javascript:void(0)"><i class="feather-trash-2"></i></a>
                                         </div>
                                     </div>
                                     <div class="profile-info-content">
@@ -101,7 +92,6 @@
                             </div>
                         </div>
                         <!-- /Basic Info -->
-
                         <!-- Address Info -->
                         <div class="profile-info-grid">
                             <div class="profile-info-header">
@@ -144,25 +134,18 @@
                             </div>
                         </div>
                         <!-- /Address Info -->
-
                         <!-- Profile Submit -->
                         <div class="profile-submit-btn">
                             <button type="submit" class="btn btn-secondary">Cancel</button>
                             <button type="submit" class="btn btn-primary">Save Changes</button>
                         </div>
                         <!-- /Profile Submit -->
-
                     </form>
                 </div>
             </div>
             <!-- /Settings Details -->
-
         </div>
-
     </div>
 </div>
 <!-- /Page Content -->
-
-
 @endsection
-
