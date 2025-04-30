@@ -28,10 +28,12 @@ use Modules\CarInfo\Models\Driver;
 use Modules\CarInfo\Models\Enquiry;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\TranslationLanguage;
+use Illuminate\Http\JsonResponse;
+
 
 class UserController extends Controller
 {
-    public function dashboard(Request $request)
+    public function dashboard(Request $request): View
     {
         $totalBookingCount = Booking::where('customer_id', Auth::guard('web')->user()->id)
         ->where('deleted_at', null)->count();
@@ -58,7 +60,7 @@ class UserController extends Controller
         );
     }
 
-    public function bookings(Request $request)
+    public function bookings(Request $request): View
     {
         $totalBookingCount = Booking::where('customer_id', Auth::guard('web')->user()->id)
         ->where('deleted_at', null)->count();
@@ -227,7 +229,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function cancelRide(Request $request)
+    public function cancelRide(Request $request): JsonResponse
     {
         DB::beginTransaction();
         try {
@@ -239,29 +241,29 @@ class UserController extends Controller
                     'message' => __('web.user.booking_not_found')
                 ]);
             }
-    
+
             $bookingDetail = BookingDetail::where('booking_id', $booking->id)->first();
             $historyData = [
                 'booking' => $booking->toArray(),
                 'booking_detail' => $bookingDetail?->toArray() ?? []
             ];
-    
+
             BookingHistory::create([
                 'booking_id' => $booking->id,
                 'action'     => 'cancel',
                 'data'       => json_encode($historyData),
                 'message'    => 'Reservation Cancelled'
             ]);
-    
+
             $booking->update([
                 'booking_status' => 6,
                 'cancel_date'    => now(),
                 'cancel_by'      => Auth::id(),
                 'cancel_reason'  => $request->reason
             ]);
-    
-            DB::commit(); 
-    
+
+            DB::commit();
+
             if (rentalNotificationEnabled()) {
                 try {
                     $authUser = Auth::user();
@@ -269,7 +271,7 @@ class UserController extends Controller
                     $vehicle = VehicleInfo::find($booking->vehicle_id);
                     $driver  = Driver::find($booking->driver_id);
                     $appAdmin = User::where('user_type', 1)->first();
-    
+
                     $notifyData = [
                         'user_name'       => $authUser->name ?? '',
                         'company_name'    => $companyName,
@@ -287,27 +289,27 @@ class UserController extends Controller
                         'payment_status'  => $booking->payment_status ?? "",
                         'tototal_amount'  => $booking->final_price ?? ""
                     ];
-    
-                    
+
+
                     if ($appAdmin?->email) {
                         sendNotification($appAdmin->email, 'booking-cancelled-to-admin', $notifyData);
                     }
-    
+
                     if (!empty($authUser->email)) {
                         sendNotification($authUser->email, 'booking-cancelled-to-user', $notifyData);
                     }
-    
+
                 } catch (\Throwable $ex) {
-                    
+
                 }
             }
-    
+
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
                 'message' => __('web.user.reservation_cancelled')
             ]);
-    
+
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json([
@@ -317,9 +319,9 @@ class UserController extends Controller
             ]);
         }
     }
-    
 
-    public function completeRide(Request $request)
+
+    public function completeRide(Request $request): JsonResponse
     {
         try {
             $booking = Booking::find($request->id);
@@ -354,7 +356,7 @@ class UserController extends Controller
         }
     }
 
-    public function startRide(Request $request)
+    public function startRide(Request $request): JsonResponse
     {
         try {
             $booking = Booking::find($request->id);
@@ -381,7 +383,7 @@ class UserController extends Controller
                 'message' => __('web.user.ride_started')
             ], 200);
         } catch (\Throwable $th) {
-            dd($th);
+
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
@@ -390,7 +392,7 @@ class UserController extends Controller
         }
     }
 
-    public function deleteRide(Request $request)
+    public function deleteRide(Request $request): JsonResponse
     {
         try {
             $booking = Booking::find($request->id);
@@ -409,13 +411,13 @@ class UserController extends Controller
         }
     }
 
-    public function wishlists(Request $request)
+    public function wishlists(Request $request): View
     {
         $seo_title = __('web.user.wishlist');
         return view('frontend.user.wishlists', compact('seo_title'));
     }
 
-    public function addToWishlist(Request $request)
+    public function addToWishlist(Request $request): JsonResponse
     {
         try {
             $vehicle = VehicleInfo::find($request->id);
@@ -459,7 +461,7 @@ class UserController extends Controller
     }
 
 
-    public function userprofilesettings()
+    public function userprofilesettings(): View
     {
         $user = Auth::guard('web')->user();
         $countries = Country::where('status', 1)->get();
@@ -467,7 +469,7 @@ class UserController extends Controller
         return view('frontend.user.usersettings', compact('seo_title', 'user', 'countries'));
     }
 
-    public function userprofile(Request $request)
+    public function userprofile(Request $request): JsonResponse
     {
         try {
             // Validation logic

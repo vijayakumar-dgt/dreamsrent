@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class WalletController extends Controller
 {
@@ -19,7 +21,7 @@ class WalletController extends Controller
         $this->provider->setApiCredentials(config('paypal'));
     }
 
-    public function wallet(Request $request)
+    public function wallet(Request $request): View
     {
         $seo_title = __('web.user.my_wallet');
         return view('frontend.user.wallet', compact('seo_title'));
@@ -27,7 +29,7 @@ class WalletController extends Controller
 
 
 
-    public function addWallet(Request $request)
+    public function addWallet(Request $request): JsonResponse
     {
         $request->validate([
             'wallet_amount' => 'required|numeric|min:1',
@@ -143,7 +145,8 @@ class WalletController extends Controller
         ]);
     }
 
-    public function paypalPaymentSuccessWallet(Request $request)
+    public function paypalPaymentSuccessWallet(Request $request): View | JsonResponse
+
     {
         try {
             $accessToken = $this->provider->getAccessToken();
@@ -176,7 +179,7 @@ class WalletController extends Controller
         }
     }
 
-    public function stripePaymentSuccessWallet(Request $request)
+    public function stripePaymentSuccessWallet(Request $request): View | JsonResponse
     {
         try {
             Stripe::setApiKey(config('stripe.test.sk'));
@@ -198,7 +201,7 @@ class WalletController extends Controller
         dd('Error in the payment');
     }
 
-    public function walletHistoryList(Request $request)
+    public function walletHistoryList(Request $request): JsonResponse
     {
         try {
             $user = Auth::guard('web')->user();

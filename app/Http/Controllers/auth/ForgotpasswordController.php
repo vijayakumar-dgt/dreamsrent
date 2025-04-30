@@ -11,15 +11,19 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
+
+
 
 class ForgotpasswordController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('admin.auth.forgot-password');
     }
 
-    public function sendOtp(Request $request)
+    public function sendOtp(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users',
@@ -67,7 +71,7 @@ class ForgotpasswordController extends Controller
         }
     }
 
-    public function verifyOtp(Request $request)
+    public function verifyOtp(Request $request): View
     {
         $token = $request->token;
         $email = Cache::get('forgotPasswordEmail_' . $token);
@@ -83,7 +87,7 @@ class ForgotpasswordController extends Controller
         }
     }
 
-    public function resendOtp(Request $request)
+    public function resendOtp(Request $request): JsonResponse
     {
         $token = $request->token;
         $email = Cache::get('forgotPasswordEmail_' . $token);
@@ -116,7 +120,7 @@ class ForgotpasswordController extends Controller
         }
     }
 
-    public function confirmOtp(Request $request)
+    public function confirmOtp(Request $request): JsonResponse
     {
         $token = $request->token;
         $email = Cache::get('forgotPasswordEmail_' . $token);
@@ -146,7 +150,7 @@ class ForgotpasswordController extends Controller
         }
     }
 
-    public function resetPassword(Request $request)
+    public function resetPassword(Request $request): View
     {
         $token = $request->token;
         $email = Cache::get('forgotPasswordEmail_' . $token);
@@ -161,7 +165,7 @@ class ForgotpasswordController extends Controller
         }
     }
 
-    public function updatePassword(Request $request)
+    public function updatePassword(Request $request): JsonResponse
     {
         $token = $request->token;
         $email = Cache::get('forgotPasswordEmail_' . $token);
