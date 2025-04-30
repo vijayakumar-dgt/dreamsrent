@@ -53,12 +53,6 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('user.notifications') }}" class="{{ request()->routeIs('user.notifications') ? 'active' : '' }}">
-                                <img src="/frontend/assets/img/icons/bxs-bell.svg" alt="Icon">
-                                <span>{{ __('web.user.notifications') }}</span>
-                            </a>
-                        </li>
-                        <li>
                             <a href="{{ route('user.usersettings') }}" class="{{ request()->routeIs(['user.usersettings', 'user.security', 'user.preference', 'user.notification', 'user.integration']) ? 'active' : '' }}">
                                 <img src="/frontend/assets/img/icons/settings-icon.svg" alt="Icon">
                                 <span>{{ __('web.common.settings') }}</span>

@@ -19,45 +19,69 @@
     @php
 		$isRTL = isRTL(app()->getLocale());
 	@endphp
-	@if($isRTL)
+@if($isRTL)
 	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.rtl.min.css') }}">
-	@else
-	<link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}">
-	@endif
+<link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.rtl.min.css') }}">
+@else
+<link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}">
+@endif
 	<!-- Fontawesome CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/all.min.css') }}">
     
+	
+	@if(request()->routeIs([
+		'list',
+		'vehicleDetails',
+		'booking.checkout',
+		'user.dashboard',
+		'user.ticket',
+		'user.usersettings',
+		'user.preference'
+	]))
 	<!-- Select2 CSS -->
-	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/assets/plugins/select2/css/select2.min.css') }}">
+	@endif
 
-	<!-- Flatpickr CSS -->
-	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/flatpickr/flatpickr.min.css') }}">
-
+	@if(request()->routeIs([
+		'home',
+		'list',
+		'vehicleDetails',
+		'booking.checkout',
+	]))
 	<!-- Datepicker CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap-datetimepicker.min.css') }}">
-
+    @endif
+	@if(request()->routeIs([
+		'home',
+		'pages',
+		'contact-us',
+	]))
 	<!-- Aos CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/aos/aos.css') }}">
-
+	@endif
 	<!-- Fearther CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/feather.css') }}">
 
-	<!-- Owl carousel CSS -->
+	@if(request()->routeIs([
+		'home',
+		'list',
+		'vehicleDetails',
+	]))
+		<!-- Owl carousel CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/owl.carousel.min.css') }}">
-
+    @endif
 	<!-- Boxicons CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/boxicons/css/boxicons.min.css') }}">
 
 	@stack('styles')
-    @if($isRTL)
+@if($isRTL)
  	<!-- Main CSS -->
-	<link rel="stylesheet" href="{{ asset('frontend/assets/css/style-rtl.css') }}">
-    @else
-	<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
-    @endif
-	<link rel="stylesheet" href="{{ asset('assets/css/custom/custom-style.css?v=1.0.3') }}">
+<link rel="stylesheet" href="{{ asset('frontend/assets/css/style-rtl.css') }}">
+@else
+<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
+@endif
+    <link rel="stylesheet" href="{{ asset('assets/css/custom/custom-style.css?v=1.0.3') }}">
 
 </head>
 
@@ -97,39 +121,63 @@
 	<!-- Bootstrap Core JS -->
 	<script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>
 	
+	@if(request()->routeIs(['home','pages']))
 	<!-- counterup JS -->
 	<script src="{{ asset('frontend/assets/js/jquery.waypoints.js') }}"></script>
 	<script src="{{ asset('frontend/assets/js/jquery.counterup.min.js') }}"></script>
-
+	@endif
+	@if(request()->routeIs([
+		'list',
+		'vehicleDetails',
+		'booking.checkout',
+		'user.dashboard',
+		'user.ticket',
+		'user.usersettings',
+		'user.preference'
+	]))
 	<!-- Select2 JS -->
 	<script src="{{ asset('frontend/assets/plugins/select2/js/select2.min.js') }}"></script>
-
+	@endif
+	@if(request()->routeIs([
+		'home',
+		'pages',
+		'contact-us',
+	]))
 	<!-- Aos -->
 	<script src="{{ asset('frontend/assets/plugins/aos/aos.js') }}"></script>
-
+    @endif
 	<!-- Top JS -->
 	<script src="{{ asset('frontend/assets/js/backToTop.js') }}"></script>
 
-	<!-- Flatpickr -->
-	<script src="{{ asset('frontend/assets/plugins/flatpickr/flatpickr.min.js') }}"></script>
-	<script src="{{ asset('frontend/assets/plugins/flatpickr/forms-pickers.js') }}"></script>
-
-	<!-- Datepicker Core JS -->
 	<script src="{{ asset('frontend/assets/plugins/moment/moment.min.js') }}"></script>
+	@if(request()->routeIs([
+		'home',
+		'list',
+		'vehicleDetails',
+		'booking.checkout',
+	]))
+	<!-- Datepicker Core JS -->
 	<script src="{{ asset('frontend/assets/js/bootstrap-datetimepicker.min.js') }}"></script>
-
-	<!-- Owl Carousel JS -->
+	@endif
+	<!-- Cookie Consent JS -->
+	@if(request()->routeIs([
+		'home',
+		'list',
+		'vehicleDetails',
+	]))
+		<!-- Owl Carousel JS -->
 	<script src="{{ asset('frontend/assets/js/owl.carousel.min.js') }}"></script>
+	@endif
 
 	<script src="{{ asset('frontend/assets/js/custom/lang_script.js') }}"></script>
 	@stack('scripts')
 	<!-- Custom JS -->
 	@if($isRTL)
-	<script src="{{ asset('frontend/assets/js/script-rtl.js') }}"></script>
+<script src="{{ asset('frontend/assets/js/script-rtl.js') }}"></script>
 	@else
-	<script src="{{ asset('frontend/assets/js/script.js') }}"></script>
+<script src="{{ asset('frontend/assets/js/script.js') }}"></script>
     @endif
-	<script src="{{ asset('frontend/assets/js/custom/custom-script.js?v=1.0.3') }}"></script>
+<script src="{{ asset('frontend/assets/js/custom/custom-script.js?v=1.0.3') }}"></script>
  
 </body>
 
