@@ -327,7 +327,7 @@ class AdminUserController extends Controller
     }
 
 
-    public function getNotifications(Request $request)
+    public function getNotifications(Request $request): JsonResponse
     {
         if (Auth::guard('admin')->check()) {
             $authUser = Auth::guard('admin')->user();
@@ -348,7 +348,7 @@ class AdminUserController extends Controller
         ]);
     }
 
-    public function markAllAsRead(Request $request)
+    public function markAllAsRead(Request $request): JsonResponse
     {
         if (Notification::where('user_id', Auth::guard('admin')->user()->id)->where('readed', 0)->count() > 0) {
             Notification::where('user_id', Auth::guard('admin')->user()->id)->update(['readed' => 1]);
@@ -366,7 +366,7 @@ class AdminUserController extends Controller
         }
     }
 
-    public function notifications(Request $request)
+    public function notifications(Request $request): View | JsonResponse
     {
         $notifications = Notification::where('user_id', Auth::guard('admin')->user()->id)
         ->orderBy('created_at', 'desc')->paginate(10);
@@ -387,7 +387,7 @@ class AdminUserController extends Controller
         return view('admin.partials.notifications', compact('notifications'));
     }
 
-    public function markNotificationAsRead(Request $request)
+    public function markNotificationAsRead(Request $request): JsonResponse
     {
         Notification::where('id', $request->id)->update(['readed' => 1]);
         return response()->json([
@@ -397,7 +397,7 @@ class AdminUserController extends Controller
         ], 200);
     }
 
-    public function deleteNotification(Request $request)
+    public function deleteNotification(Request $request): JsonResponse
     {
         Notification::where('id', $request->id)->delete();
         return response()->json([
@@ -407,7 +407,7 @@ class AdminUserController extends Controller
         ], 200);
     }
 
-    public function deleteAllNotification(Request $request)
+    public function deleteAllNotification(Request $request): JsonResponse
     {
         Notification::where('user_id', Auth::guard('admin')->user()->id)->delete();
         return response()->json([

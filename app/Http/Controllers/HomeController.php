@@ -16,10 +16,12 @@ use Modules\CarInfo\Models\SafetyFeature;
 use Modules\CarInfo\Models\Transmission;
 use Modules\CarInfo\Models\VehicleInfo;
 use Modules\GeneralSetting\Models\GeneralSetting;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $defaultTheme = GeneralSetting::where('key', 'default_theme')->first();
         $theme = $defaultTheme->value ?? 1;
@@ -27,7 +29,7 @@ class HomeController extends Controller
         return view('frontend.home.' . $viewFileName);
     }
 
-    public function list(Request $request)
+    public function list(Request $request): View | JsonResponse
     {
         $languageCode = app()->getLocale();
         $languageId = getLanguageId($languageCode);
@@ -97,7 +99,7 @@ class HomeController extends Controller
         return view('frontend.home.list.list', $data);
     }
 
-    public function vehicleDetails(Request $request)
+    public function vehicleDetails(Request $request): View | JsonResponse
     {
         $slug = $request->slug;
 
@@ -179,7 +181,7 @@ class HomeController extends Controller
         );
     }
 
-    public function searchLocations(Request $request)
+    public function searchLocations(Request $request): JsonResponse
     {
         $keyword = trim($request->input('query'));
 
@@ -195,7 +197,7 @@ class HomeController extends Controller
         ]);
     }
 
-    public function maintenance()
+    public function maintenance(): View
     {
         $title = "Dreamsrent - Maintenance";
         $maintenance = GeneralSetting::where('group_id', 4)->pluck('value', 'key')->toArray();
@@ -205,7 +207,7 @@ class HomeController extends Controller
         return view('frontend.home.maintenance', compact("title", "response"));
     }
 
-    public function contactUs(Request $request)
+    public function contactUs(Request $request): View
     {
         $seo_title = __('web.user.contact_us');
         $companyPhoneNumber = GeneralSetting::where('key', 'company_phone')->first();
