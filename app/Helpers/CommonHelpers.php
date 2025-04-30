@@ -23,7 +23,7 @@ use Modules\RolesPermission\Models\Permission;
 
 if (!function_exists('clearCache')) {
 
-    function clearCache()
+    function clearCache(): bool
     {
         Artisan::call('cache:clear');
         Artisan::call('route:clear');
@@ -35,11 +35,11 @@ if (!function_exists('clearCache')) {
 }
 
 if (!function_exists('uploadFile')) {
-    function uploadFile($file, $path = 'uploads', $oldFileName = '', $disk = 'public')
+    function uploadFile(UploadedFile $file, string $path = 'uploads', string $oldFileName = '', string $disk = 'public'): ?string
     {
         $disk = config('filesystems.default');
 
-        if ($file instanceof UploadedFile && $file->isValid()) {
+        if ($file->isValid()) {
             if (Storage::disk($disk)->exists($path . '/' . $oldFileName)) {
                 Storage::disk($disk)->delete($path . '/' . $oldFileName);
             }
@@ -52,11 +52,11 @@ if (!function_exists('uploadFile')) {
 }
 
 if (!function_exists('uploadMutipleFile')) {
-    function uploadMutipleFile($file, $path = 'uploads', $oldFileName = '', $disk = 'public')
+    function uploadMutipleFile(UploadedFile $file, string $path = 'uploads', string $oldFileName = '', string $disk = 'public'): ?string
     {
         $disk = config('filesystems.default');
 
-        if ($file instanceof \Illuminate\Http\UploadedFile && $file->isValid()) {
+        if ($file->isValid()) {
             if ($oldFileName && Storage::disk($disk)->exists("$path/$oldFileName")) {
                 Storage::disk($disk)->delete("$path/$oldFileName");
             }
@@ -71,29 +71,24 @@ if (!function_exists('uploadMutipleFile')) {
 }
 
 if (!function_exists('formatDateTime')) {
-    function formatDateTime($date, $includeTime = true, $timeOnly = false)
+    function formatDateTime(mixed $date, bool $includeTime = true, bool $timeOnly = false): string
     {
-        // Fetch settings once
         $generalSettings = GeneralSetting::where('group_id', 5)->pluck('value', 'key');
 
-        // Set default formats
         $dateFormat = 'Y-m-d';
         $timeFormat = 'H:i:s';
 
-        // Get custom formats if available
         if ($generalSettings->isNotEmpty()) {
-            $dateFormat = DateFormat::find($generalSettings->get('date_format'))?->name ?? $dateFormat;
-            $timeFormat = TimeFormat::find($generalSettings->get('time_format'))?->name ?? $timeFormat;
+            $dateFormat = optional(DateFormat::find($generalSettings->get('date_format')))->name ?? $dateFormat;
+            $timeFormat = optional(TimeFormat::find($generalSettings->get('time_format')))->name ?? $timeFormat;            
         }
 
-        // Determine the format based on flags
         $format = $timeOnly ? $timeFormat : ($includeTime ? "$dateFormat $timeFormat" : $dateFormat);
 
-        // Apply format
         try {
             return Carbon::parse($date)->format($format);
         } catch (\Throwable $th) {
-            return $date;
+            return (string) $date;
         }
     }
 }

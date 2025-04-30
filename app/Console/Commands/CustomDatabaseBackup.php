@@ -12,7 +12,7 @@ class CustomDatabaseBackup extends Command
     protected $signature = 'backup:database';
     protected $description = 'Backup the database as a raw SQL file';
 
-    public function handle()
+    public function handle(): int
     {
         $backupDir = storage_path('app/public/database');
 
@@ -52,5 +52,6 @@ class CustomDatabaseBackup extends Command
         } catch (\Exception $e) {
             $this->error("Database backup failed: " . $e->getMessage());
         }
+        return 0;
     }
 }
