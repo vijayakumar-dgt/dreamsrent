@@ -202,13 +202,12 @@
     }
 
     function updateLastChangedInfo(data) {
-        const lastPasswordChanged = data.last_password_changed_at || _l('web.user.not_available');
+        const lastPasswordChanged = data.last_password_changed_at || '';
         const lastDeletedAt = data.deleted_at || _l('web.user.not_available');
         const lastDeviceManagement = (data.devices?.[0]?.date) || _l('web.user.not_available');
 
-        $('.change_password_time').text(`${_l('web.user.last_changed')} ${lastPasswordChanged}`);
-        $('.delete_account_time').text(`${_l('web.user.last_changed')} ${lastDeletedAt}`);
-        $('.device_management_time').text(`${_l('web.user.last_changed')} ${lastDeviceManagement}`);
+        $('.change_password_time').text(`${_l('web.user.last_changed')} : ${lastPasswordChanged}`);
+        $('.device_management_time').text(`${_l('web.user.last_login_at')} : ${lastDeviceManagement}`);
     }
 
     function updateUserInfo(user) {
