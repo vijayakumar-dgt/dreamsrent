@@ -476,6 +476,7 @@ return [
         'saving' => 'Saving',
         'logout' => 'Logout',
         'learn_more' => 'Learn More',
+        'notice' => 'Notice',
     ],
     'user' => [
         'user_dashboard' => 'User Dashboard',

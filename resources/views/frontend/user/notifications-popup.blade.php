@@ -11,8 +11,8 @@
         <div class="media d-flex">
 
             <div class="media-body flex-grow-1">
-                <p class="noti-details"><span class="noti-title">{{ $notificationContent }}</span></p>
-                <p class="noti-time"><span class="notification-time">{{ $notification->created_at->diffForHumans() }}</span></p>
+                <p class="noti-details"><span class="noti-title"><span class="text-dark fw-bold">{{__('web.common.notice')}}:</span> {{ $notificationContent }}</span></p>
+                <p class="noti-time"><span class="notification-time text-dark">{{ $notification->created_at->diffForHumans() }}</span></p>
             </div>
         </div>
     </a>

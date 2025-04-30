@@ -832,21 +832,32 @@
 }
 .custom-pagination .page-link {
   color: #FFA633;
-  border-radius: 50px;
-  transition: all 0.2s ease;
+  border: 1px solid #FFA633;
+  border-radius: 4px;
+  padding: 6px 12px;
+  transition: all 0.3s ease;
 }
 
 .custom-pagination .page-link:hover {
   color: #fff;
   background-color: #FFA633;
   border-color: #FFA633;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .custom-pagination .page-item.active .page-link {
   background-color: #FFA633;
   border-color: #FFA633;
   color: #fff;
-  border-radius: 50px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
 }
 .cursor-pointer{
   cursor: pointer;
