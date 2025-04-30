@@ -3,6 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+/**
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserDocument> $documents
+ */
 
 class UserDocument extends Model
 {
@@ -11,7 +16,7 @@ class UserDocument extends Model
         'document'
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id');
     }

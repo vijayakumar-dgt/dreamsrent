@@ -5,20 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Country;
 use App\Models\State;
 use Dompdf\Css\Content\Counter;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class StateController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $country_ids = Country::select("id", "name")->get();
 
         return view('admin.state.index', compact("country_ids"));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $id = $request->id ?? null;
 
@@ -82,7 +84,7 @@ class StateController extends Controller
     }
 
 
-    public function list(Request $request)
+    public function list(Request $request): JsonResponse
     {
         $orderBy = $request->order_by ?? 'desc';
 
@@ -103,7 +105,7 @@ class StateController extends Controller
         }
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
         $state = State::find($id);
@@ -115,7 +117,7 @@ class StateController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         try {
             $id = $request->id;
@@ -136,7 +138,7 @@ class StateController extends Controller
         }
     }
 
-    public function bulkDelete(Request $request)
+    public function bulkDelete(Request $request): JsonResponse
     {
         $ids = $request->ids;
 
