@@ -16,7 +16,7 @@ class UserPermission
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $routeName = $request->route()->getName();
+        $routeName = $request->route()?->getName();
         $user = current_user();
         $userType = $user->user_type;
 
@@ -25,11 +25,9 @@ class UserPermission
 
             $routeModules = [
                 'dashboard' => ['module' => 'dashboard', 'action' => 'view'],
-                'admin.profile-settings' => ['module' => 'account_settings', 'action' => 'view'],
                 'doorType.index' => ['module' => 'vehicle_attributes', 'action' => 'view'],
                 'brand.index' => ['module' => 'vehicle_attributes', 'action' => 'view'],
                 'cartypes' => ['module' => 'vehicle_attributes', 'action' => 'view'],
-                'doorType.index' => ['module' => 'vehicle_attributes', 'action' => 'view'],
                 'damage-types' => ['module' => 'vehicle_attributes', 'action' => 'view'],
                 'tags' => ['module' => 'vehicle_attributes', 'action' => 'view'],
                 'carModel.index' => ['module' => 'vehicle_attributes', 'action' => 'view'],
@@ -54,7 +52,6 @@ class UserPermission
 
                 'country.index' => ['module' => 'cms_locations', 'action' => 'view'],
                 'state.index' => ['module' => 'cms_locations', 'action' => 'view'],
-                'city.index' => ['module' => 'cms_locations', 'action' => 'view'],
                 'city.index' => ['module' => 'cms_locations', 'action' => 'view'],
 
                 'admin.rental-settings' => ['module' => 'rental_settings', 'action' => 'view'],

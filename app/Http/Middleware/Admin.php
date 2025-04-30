@@ -16,14 +16,20 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        //check if user logged in and user_type is admin
         if (!Auth::guard('admin')->check()) {
             return to_route('admin-login');
-        } elseif (Auth::guard('admin')->check() && ((Auth::guard('admin')->user()->user_type !== 0) && (Auth::guard('admin')->user()->user_type !== 1) && (Auth::guard('admin')->user()->user_type !== 2))) {
+        }
+
+        /** @var \App\Models\User $user */
+        $user = Auth::guard('admin')->user();
+
+        if (!in_array($user->user_type, [1, 2], true)) {
             abort(403);
         }
+
         Auth::shouldUse('admin');
 
         return $next($request);
     }
+
 }

@@ -121,7 +121,7 @@
                                 $("#" + key + "_error").text(val[0]);
                             });
                         } else {
-                            toastr.error(error.responseJSON.message);
+                            showToast('error', error.responseJSON.message);
                         }
                     },
                 });
@@ -261,9 +261,9 @@
             },
             error: function (error) {
                 if (error.responseJSON.code === 500) {
-                    toastr.error(error.responseJSON.message);
+                    showToast('error', error.responseJSON.message);
                 } else {
-                    toastr.error(_l('admin.general_settings.retrive_error'));
+                    showToast('error', _l('admin.general_settings.retrive_error'));
                 }
             },
         });
@@ -326,9 +326,9 @@ $("#delateBank").on("submit", function (e) {
         },
         error: function (res) {
             if (res.responseJSON.code === 500) {
-                toastr.success(res.responseJSON.message);
+                showToast('error', res.responseJSON.message);
             } else {
-                toastr.error(_l('admin.general_settings.retrieve_error'));
+                showToast('error', _l('admin.general_settings.retrieve_error'));
             }
         },
     });
