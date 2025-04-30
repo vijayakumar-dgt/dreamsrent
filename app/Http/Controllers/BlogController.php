@@ -48,7 +48,7 @@ class BlogController extends Controller
             $query->where('blog_categories.name', $request->category);
         }
 
-        
+
         if ($request->has('search') && !empty($request->search)) {
             $query->where(function ($q) use ($request) {
                 $q->where('blog_posts.title', 'like', '%' . $request->search . '%')

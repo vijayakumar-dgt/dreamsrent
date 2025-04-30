@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Inspect the exhaust system for proper operation.'
             ]
         ];
-        
+
         foreach ($checklistArr as $checklist) {
             Checklist::create($checklist);
         }

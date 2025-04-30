@@ -14,7 +14,7 @@ class CheckInstallerStatus
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         $modulesStatusPath = base_path('modules_statuses.json');
 

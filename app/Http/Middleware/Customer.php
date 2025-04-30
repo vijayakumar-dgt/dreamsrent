@@ -18,10 +18,17 @@ class Customer
     {
         if (!Auth::guard('web')->check()) {
             return to_route('user-login');
-        } elseif (Auth::guard('web')->check() && Auth::guard('web')->user()->user_type !== 3) {
+        }
+
+        /** @var \App\Models\User $user */
+        $user = Auth::guard('web')->user();
+
+        if ($user->user_type !== 3) {
             abort(403);
         }
+
         Auth::shouldUse('web');
+
         return $next($request);
     }
 }
