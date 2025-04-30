@@ -311,6 +311,7 @@ return [
     'upload' => 'رفع',
     'logo_recommend_size' => 'الحجم الموصى به هو 151px × 26px',
     'favicon_recommend_size' => 'الحجم الموصى به هو 128px × 128px',
+    'small_logo_recommend_size' => 'الحجم الموصى به هو 35px × 35px',
     'small_icon' => 'أيقونة صغيرة',
     'dark_logo' => 'شعار داكن',
     'localization' => 'اللغة والإعدادات',

@@ -308,11 +308,15 @@ class CustomerController extends Controller
             $users->map(function ($user) {
                 $user->valid_date = formatDateTime($user->valid_date, false);
                 $user->date_of_issue = formatDateTime($user->date_of_issue, false);
-                $user->profile_image = uploadedAsset((string) $user->profile_image, 'profile');
+                $user->profile_image = is_string($user->profile_image) || is_null($user->profile_image)
+                    ? uploadedAsset($user->profile_image, 'profile')
+                    : uploadedAsset(null, 'profile');
                 $user->language_flag = url('/assets/img/flags/' . $user->language_code . '.svg');
                 $user->encrypted_id = customEncrypt($user->id, User::$userSecretKey);
                 $user->documents->map(function ($document) {
-                    $document->document = uploadedAsset((string) $document->document, 'documents');
+                    $document->document = is_string($document->document) || is_null($document->document) 
+                        ? uploadedAsset($document->document, 'documents')
+                        : uploadedAsset(null, 'documents');
                     return $document;
                 });
 
@@ -372,7 +376,7 @@ class CustomerController extends Controller
             $data->valid_date = Carbon::parse($data->valid_date)->format('d-m-Y');
             $data->date_of_issue = Carbon::parse($data->date_of_issue)->format('d-m-Y');
             $data->dob = Carbon::parse($data->dob)->format('d-m-Y');
-            $data->documents = $data->documents->map(function ($document) {
+            $data->documents->map(function ($document) {
                 $document->document = uploadedAsset($document->document, 'documents');
                 return $document;
             });
@@ -447,7 +451,7 @@ class CustomerController extends Controller
             $customer->dob = $customer->dob ? formatDateTime($customer->dob, false) : null;
             $customer->added_on = formatDateTime($customer->created_at);
 
-            $customer->documents = $customer->documents->map(function ($document) {
+            $customer->documents->map(function ($document) {
                 $fileDetails = uploadedAsset($document->document, '', true);
                 $document->file_name = $fileDetails['file_name'] ?? null;
                 $document->size = $fileDetails['size'];
