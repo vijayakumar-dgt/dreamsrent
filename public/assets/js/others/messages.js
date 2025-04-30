@@ -99,7 +99,7 @@ function listenMqttForNewMessagesFromAllCustomers(){
         reconnectPeriod: 1000,
         connectTimeout: 5000,
     });
-    const topic  = 'dreamsrent/customer_to_admin/#';
+    const topic  = 'dreamsrent/to_user/'+$("#sendmsg").data('senderid');
     client.on('connect', function () {
         client.subscribe(topic, { qos: 1 }, (err) => {
 
@@ -107,16 +107,18 @@ function listenMqttForNewMessagesFromAllCustomers(){
     });
 
     client.on('message', function (receivedTopic, message) {
-        let topicParts = receivedTopic.split("/");
-        let user_id = topicParts[topicParts.length - 1];
+        const payload = message.toString();
+        const messageData = JSON.parse(payload);
+        const sender_id = messageData.sender_id;
+        const receiver_id = messageData.receiver_id;
         
         let activeUser = $("#chat_avatar").attr('data-userid');
-        if(activeUser != user_id){
-            let user = $(".chat-list .userprofile[data-userid='" + user_id + "']");
+        if(activeUser != sender_id){
+            let user = $(".chat-list .userprofile[data-userid='" + sender_id + "']");
             user.trigger('click');
         }
         offset = "";
-        fetchMessages(user_id, true);
+        fetchMessages(sender_id, true);
     });
 
     client.on('error', function (err) {
@@ -158,7 +160,7 @@ $(document).on('click', '#sendmsg', function () {
     const senderId = $(this).data('senderid');
     const receiverId = $("#chat_avatar").attr('data-userid');
     const message = $("#messageinput").val().trim();
-    const topic = `dreamsrent/admin_to_customer/${receiverId}`;
+    const topic = `dreamsrent/to_user/${receiverId}`;
     const file = $("#fileupload")[0].files[0];
 
     if (!message && !file) {

@@ -55,8 +55,15 @@ class MessageController extends Controller
             $message->save();
         }
             $publishMessage = $request->messageType == 'file' ? $path : $request->message;
+            $payload = [
+                'sender_id' => $request->sender_id,
+                'receiver_id' => $request->receiver_id,
+                'message' => $publishMessage,
+                'type' => $request->messageType,
+            ];
+            $payload = json_encode($payload);
             $mqtt = new MqttService();
-            $mqtt->publish($request->topic, $publishMessage);
+            $mqtt->publish($request->topic, $payload);
             $response = [
                 'success' => true,
                 'message' => __('admin.others.message_send_success')
