@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Http\JsonResponse;
+
 
 class TranslationController extends Controller
 {
-    public function getFileTranslations($file, $modules)
+    public function getFileTranslations($file, $modules): JsonResponse
     {
         $locale = App::getLocale();
 
