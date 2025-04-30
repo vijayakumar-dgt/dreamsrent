@@ -135,7 +135,8 @@ class MessageController extends Controller
             ->first();
         $lastMessageResp = null;
         if ($lastMessage) {
-            $messageText = strlen($lastMessage->message) > 20 ? substr($lastMessage->message, 0, 20) . '...' : $lastMessage->message;
+            $messageText = strlen($lastMessage->message) > 20 ?
+            substr($lastMessage->message, 0, 20) . '...' : $lastMessage->message;
             $lastMessageResp = [
                 'id' => $lastMessage->id,
                 'message' => $lastMessage->type == 'text' ? $messageText : '<i class="fa fa-link"></i> ' . $messageText,

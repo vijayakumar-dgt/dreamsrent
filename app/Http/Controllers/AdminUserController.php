@@ -93,7 +93,8 @@ class AdminUserController extends Controller
             ], 422);
         }
 
-        $successMsg = empty($id) ? __('admin.user_management.user_create_success') : __('admin.user_management.user_update_success');
+        $successMsg = empty($id) ?
+         __('admin.user_management.user_create_success') : __('admin.user_management.user_update_success');
         $errorMsg = empty($id) ?  __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
@@ -204,7 +205,10 @@ class AdminUserController extends Controller
                 $query->whereIn('users.role_id', $request->role_ids);
             }
 
-            if ($request->has('sort_by_status') && !empty($request->sort_by_status) || $request->sort_by_status == '0') {
+            if (
+                $request->has('sort_by_status')
+                && !empty($request->sort_by_status) || $request->sort_by_status == '0'
+            ) {
                 $status = $request->sort_by_status;
                 $query->where('users.status', $status);
             }
@@ -234,7 +238,9 @@ class AdminUserController extends Controller
             }
 
             if ($columnName === 'full_name') {
-                $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) {$orderDir}");
+                $query
+                ->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name))
+                 {$orderDir}");
             } else {
                 $query->orderBy($columnName, $orderDir);
             }
@@ -325,7 +331,8 @@ class AdminUserController extends Controller
     {
         if (Auth::guard('admin')->check()) {
             $authUser = Auth::guard('admin')->user();
-            $notifications = Notification::where('user_id', $authUser->id)->where('readed', 0)->orderBy('created_at', 'desc')->limit(10)->get();
+            $notifications = Notification::
+                where('user_id', $authUser->id)->where('readed', 0)->orderBy('created_at', 'desc')->limit(10)->get();
             $notificationCount = Notification::where('user_id', $authUser->id)->where('readed', 0)->count();
         } else {
             $notifications = [];
@@ -361,7 +368,8 @@ class AdminUserController extends Controller
 
     public function notifications(Request $request)
     {
-        $notifications = Notification::where('user_id', Auth::guard('admin')->user()->id)->orderBy('created_at', 'desc')->paginate(10);
+        $notifications = Notification::where('user_id', Auth::guard('admin')->user()->id)
+        ->orderBy('created_at', 'desc')->paginate(10);
 
         if ($request->ajax()) {
             $view = view('admin.partials.notification-items', compact('notifications'))->render();

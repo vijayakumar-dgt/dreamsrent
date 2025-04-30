@@ -41,7 +41,13 @@ class BlogController extends Controller
             ->where('blog_posts.language_id', $lang_id)
             ->where('blog_posts.deleted_at', null)
             ->where('blog_posts.status', 1)
-            ->select('blog_posts.*', 'users.name as customer', 'user_details.profile_image', 'blog_categories.name as category', 'blog_tags.name as tag');
+            ->select(
+                'blog_posts.*',
+                'users.name as customer',
+                'user_details.profile_image',
+                'blog_categories.name as category',
+                'blog_tags.name as tag'
+            );
 
 
         if ($request->has('category') && $request->category !== 'all') {
@@ -58,10 +64,12 @@ class BlogController extends Controller
 
         $blogPosts = $query->latest()->paginate(3);
 
-        $categories = BlogCategory::where('deleted_at', null)->where('language_id', $lang_id)->where('status', 1)->get();
+        $categories = BlogCategory::where('deleted_at', null)
+        ->where('language_id', $lang_id)->where('status', 1)->get();
         $tags = BlogTag::where('deleted_at', null)->where('language_id', $lang_id)->where('status', 1)->get();
 
-        $latestblogs =  BlogPost::latest()->where('blog_posts.language_id', $lang_id)->where('blog_posts.status', 1)->limit(3)->get();
+        $latestblogs =  BlogPost::latest()->where('blog_posts.language_id', $lang_id)
+        ->where('blog_posts.status', 1)->limit(3)->get();
 
         $seo_title  = __('web.blog.blogs_title');
 
@@ -72,7 +80,10 @@ class BlogController extends Controller
             ]);
         }
 
-        return view('frontend.blogs.blog-list', compact('blogPosts', 'languages', 'categories', 'tags', 'latestblogs', 'seo_title'));
+        return view(
+            'frontend.blogs.blog-list',
+            compact('blogPosts', 'languages', 'categories', 'tags', 'latestblogs', 'seo_title')
+        );
     }
 
 
@@ -100,16 +111,31 @@ class BlogController extends Controller
             ->where('blog_posts.language_id', $lang_id)
             ->where('blog_posts.deleted_at', null)
             ->where('blog_posts.status', 1)
-            ->select('blog_posts.*', 'users.name as customer', 'user_details.profile_image', 'blog_categories.name as category', 'blog_tags.name as tag')
+            ->select(
+                'blog_posts.*',
+                'users.name as customer',
+                'user_details.profile_image',
+                'blog_categories.name as category',
+                'blog_tags.name as tag'
+            )
             ->paginate(4);
 
-        $categories = BlogCategory::where('deleted_at', null)->where('language_id', $lang_id)->where('status', 1)->get();
+        $categories = BlogCategory::where('deleted_at', null)
+        ->where('language_id', $lang_id)->where('status', 1)->get();
         $tags = BlogTag::where('deleted_at', null)->where('language_id', $lang_id)->where('status', 1)->get();
 
-        $latestblogs =  BlogPost::latest()->where('blog_posts.language_id', $lang_id)->where('blog_posts.status', 1)->limit(3)->get();
+        $latestblogs =  BlogPost::latest()
+        ->where('blog_posts.language_id', $lang_id)->where('blog_posts.status', 1)->limit(3)->get();
 
         $seo_title  = __('web.blog.blogs_title');
-        return view('frontend.blogs.blog-grid', compact('blogPosts', 'languages', 'categories', 'tags', 'latestblogs', 'seo_title'));
+        return view('frontend.blogs.blog-grid', compact(
+            'blogPosts',
+            'languages',
+            'categories',
+            'tags',
+            'latestblogs',
+            'seo_title'
+        ));
     }
 
     public function BlogDetail($id)
@@ -134,7 +160,13 @@ class BlogController extends Controller
             ->leftJoin('users', 'blog_posts.created_by', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->leftJoin('blog_tags', 'blog_posts.tags', '=', 'blog_tags.id')
-            ->select('blog_posts.*', 'blog_categories.name as category', 'blog_tags.name as tag', 'users.name as customer', 'user_details.profile_image')
+            ->select(
+                'blog_posts.*',
+                'blog_categories.name as category',
+                'blog_tags.name as tag',
+                'users.name as customer',
+                'user_details.profile_image'
+            )
             ->where('blog_posts.slug', $id)
             ->where('blog_posts.status', 1)
             ->first();
@@ -149,7 +181,10 @@ class BlogController extends Controller
             ->take(2)
             ->get();
         $seo_title  = $blogPosts->title;
-        return view('frontend.blogs.blog-details', compact('blogPosts', 'languages', 'blogReviews', 'countReview', 'otherBlogs', 'seo_title'));
+        return view(
+            'frontend.blogs.blog-details',
+            compact('blogPosts', 'languages', 'blogReviews', 'countReview', 'otherBlogs', 'seo_title')
+        );
     }
 
     public function storeReview(Request $request)

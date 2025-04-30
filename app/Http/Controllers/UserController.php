@@ -33,7 +33,8 @@ class UserController extends Controller
 {
     public function dashboard(Request $request)
     {
-        $totalBookingCount = Booking::where('customer_id', Auth::guard('web')->user()->id)->where('deleted_at', null)->count();
+        $totalBookingCount = Booking::where('customer_id', Auth::guard('web')->user()->id)
+        ->where('deleted_at', null)->count();
         $totalWishlistCount = Wishlist::where('user_id', Auth::guard('web')->user()->id)->count();
         $user = Auth::guard('web')->user();
         $totalCredit = WalletHistory::where('user_id', $user->id)
@@ -47,15 +48,20 @@ class UserController extends Controller
                 ->sum('amount');
 
         $totalBalance = $totalCredit - $totalDebit;
-        $totalTransaction = Booking::where('customer_id', Auth::guard('web')->user()->id)->where('deleted_at', null)->where('payment_status', 2)->sum('final_price');
+        $totalTransaction = Booking::where('customer_id', Auth::guard('web')->user()->id)
+        ->where('deleted_at', null)->where('payment_status', 2)->sum('final_price');
         $currency = getDefaultCurrencySymbol();
         $seo_title = __('web.user.dashboard');
-        return view('frontend.user.dashboard', compact('totalBookingCount', 'totalWishlistCount', 'totalBalance', 'totalTransaction', 'currency', 'seo_title'));
+        return view(
+            'frontend.user.dashboard',
+            compact('totalBookingCount', 'totalWishlistCount', 'totalBalance', 'totalTransaction', 'currency', 'seo_title')
+        );
     }
 
     public function bookings(Request $request)
     {
-        $totalBookingCount = Booking::where('customer_id', Auth::guard('web')->user()->id)->where('deleted_at', null)->count();
+        $totalBookingCount = Booking::where('customer_id', Auth::guard('web')->user()->id)
+        ->where('deleted_at', null)->count();
         $seo_title = __('web.user.my_bookings');
         return view('frontend.user.bookings', compact('totalBookingCount', 'seo_title'));
     }
@@ -387,7 +393,8 @@ class UserController extends Controller
     {
         try {
             $vehicle = VehicleInfo::find($request->id);
-            $wishlist = Wishlist::where('user_id', Auth::guard('web')->user()->id)->where('vehicle_id', $vehicle->id)->first();
+            $wishlist = Wishlist::where('user_id', Auth::guard('web')->user()->id)
+            ->where('vehicle_id', $vehicle->id)->first();
             if ($wishlist) {
                 $wishlist->delete();
                 return response()->json([
@@ -598,7 +605,8 @@ class UserController extends Controller
     }
     public function getSecuritySettings()
     {
-        $userDevices = UserDevice::where('user_id', Auth::guard('web')->user()->id)->orderBy('created_at', 'desc')->take(5)->get()->map(function ($device) {
+        $userDevices = UserDevice::where('user_id', Auth::guard('web')->user()->id)->orderBy('created_at', 'desc')
+        ->take(5)->get()->map(function ($device) {
             return [
                 'id' => $device->id,
                 'device_type' => $device->device_type,
@@ -611,7 +619,8 @@ class UserController extends Controller
         });
         $response    = [
             'user' => Auth::guard('web')->user(),
-            'last_password_changed_at' => Auth::guard('web')->user()->last_password_changed_at ? Carbon::parse(Auth::guard('web')->user()->last_password_changed_at)->format('d M Y, h:i A') : "null",
+            'last_password_changed_at' => Auth::guard('web')->user()->last_password_changed_at ? Carbon::parse(Auth::guard('web')
+            ->user()->last_password_changed_at)->format('d M Y, h:i A') : "null",
             'devices' => $userDevices
         ];
         return response()->json([
@@ -733,7 +742,8 @@ class UserController extends Controller
     {
         if (Auth::guard('web')->check()) {
             $authUser = Auth::guard('web')->user();
-            $notifications = Notification::where('user_id', $authUser->id)->where('readed', 0)->orderBy('created_at', 'desc')->limit(10)->get();
+            $notifications = Notification::where('user_id', $authUser->id)
+            ->where('readed', 0)->orderBy('created_at', 'desc')->limit(10)->get();
             $notificationCount = Notification::where('user_id', $authUser->id)->where('readed', 0)->count();
         } else {
             $notifications = [];
@@ -750,7 +760,10 @@ class UserController extends Controller
     public function markAllAsRead(Request $request)
     {
         //check any unread notification
-        if (Notification::where('user_id', Auth::guard('web')->user()->id)->where('readed', 0)->count() > 0) {
+        if (
+            Notification::where('user_id', Auth::guard('web')->user()->id)
+            ->where('readed', 0)->count() > 0
+        ) {
             Notification::where('user_id', Auth::guard('web')->user()->id)->update(['readed' => 1]);
             return response()->json([
                 'status' => 'success',
@@ -824,7 +837,8 @@ class UserController extends Controller
 
     public function notifications(Request $request)
     {
-        $notifications = Notification::where('user_id', Auth::guard('web')->user()->id)->orderBy('created_at', 'desc')->paginate(10);
+        $notifications = Notification::where('user_id', Auth::guard('web')->user()->id)
+        ->orderBy('created_at', 'desc')->paginate(10);
 
         if ($request->ajax()) {
             $view = view('frontend.user.partials.notification-items', compact('notifications'))->render();

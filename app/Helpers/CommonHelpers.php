@@ -220,7 +220,14 @@ if (!function_exists('getUserPermissions')) {
             ->whereHas('role', function ($query) {
                 $query->where('status', 1);
             })
-            ->select('permissions.module_id', 'permissions.create', 'permissions.edit', 'permissions.view', 'permissions.delete', 'permissions.allow_all')
+            ->select(
+                'permissions.module_id',
+                'permissions.create',
+                'permissions.edit',
+                'permissions.view',
+                'permissions.delete',
+                'permissions.allow_all'
+            )
             ->with(['module:id,module_slug'])
             ->get();
     }
