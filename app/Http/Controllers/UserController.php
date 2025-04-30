@@ -643,7 +643,7 @@ class UserController extends Controller
         $response    = [
             'user' => Auth::guard('web')->user(),
             'last_password_changed_at' => Auth::guard('web')->user()->last_password_changed_at ? Carbon::parse(Auth::guard('web')
-            ->user()->last_password_changed_at)->format('d M Y, h:i A') : "null",
+            ->user()->last_password_changed_at)->format('d M Y, h:i A') : "",
             'devices' => $userDevices
         ];
         return response()->json([

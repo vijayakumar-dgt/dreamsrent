@@ -71,7 +71,7 @@
                             <td>
                                 <div class="table-avatar">
                                     <div class="table-head-name flex-grow-1">
-                                        <a href="javascript:void(0);" class="mb-0">${value.payment_type}</a>
+                                        <a href="javascript:void(0);" class="mb-0">${ucfirst(value.payment_type)}</a>
                                     </div>
                                 </div>
                             </td>
@@ -97,18 +97,20 @@
                         searching: false,
                         pageLength: 10,
                         lengthChange: false,
-                        drawCallback: function () {
-                            const tableWrapper = $(this).closest('.dataTables_wrapper');
-                            const info = tableWrapper.find('.dataTables_info').addClass('d-none');
-                            const pagination = tableWrapper.find('.dataTables_paginate').addClass('d-none');
+                        drawCallback: function() {
+                            $(".dataTables_info").addClass('d-none');
+                            $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
 
-                            $('.table-footer').empty().append(`
-                                <div class="d-flex justify-content-between align-items-center w-100">
-                                    <div class="datatable-info">${info.clone(true).html()}</div>
-                                    <div class="datatable-pagination">${pagination.clone(true).html()}</div>
-                                </div>
-                            `);
-                            $(".table-footer .dataTables_paginate").removeClass("d-none");
+                            var tableWrapper = $(this).closest('.dataTables_wrapper');
+                            var info = tableWrapper.find('.dataTables_info');
+                            var pagination = tableWrapper.find('.dataTables_paginate');
+
+                            $('.table-footer').empty()
+                                .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
+                                    .append($('<div class="datatable-info"></div>').append(info.clone(true)))
+                                    .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
+                                );
+                            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
                         }
                     });
                 } else {
