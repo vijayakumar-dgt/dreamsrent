@@ -218,7 +218,8 @@ class UserLoginRegisterController extends Controller
                 $otp = $otpSetting->otp ?? "";
                 if ($otp != '') {
                     if ($otp !== $request->otp) {
-                        return response()->json(['error' => 'The OTP you entered is invalid. Please check and try again.'], 400);
+                        return response()
+                        ->json(['error' => 'The OTP you entered is invalid. Please check and try again.'], 400);
                     }
                 }
             }
@@ -273,7 +274,8 @@ class UserLoginRegisterController extends Controller
                 $otp = $otpSetting->otp ?? "";
                 if ($otp != '') {
                     if ($otp !== $request->otp) {
-                        return response()->json(['code' => 422, 'error' => 'The OTP you entered is invalid. Please check and try again.'], 400);
+                        return response()
+                        ->json(['code' => 422, 'error' => 'The OTP you entered is invalid. Please check and try again.'], 400);
                     }
                 }
             }
@@ -281,7 +283,8 @@ class UserLoginRegisterController extends Controller
 
             $data = "done";
 
-            return response()->json(['code' => 200, 'message' => 'OTP verified successfully', 'data' => $data, 'email' => $request->forgot_email]);
+            return response()
+            ->json(['code' => 200, 'message' => 'OTP verified successfully', 'data' => $data, 'email' => $request->forgot_email]);
         } else {
             $request->validate([
                 'email' => 'required|email',
@@ -306,7 +309,8 @@ class UserLoginRegisterController extends Controller
                 $otp = $otpSetting->otp ?? "";
                 if ($otp != '') {
                     if ($otp !== $request->otp) {
-                        return response()->json(['error' => 'The OTP you entered is invalid. Please check and try again.'], 400);
+                        return response()
+                        ->json(['error' => 'The OTP you entered is invalid. Please check and try again.'], 400);
                     }
                 }
             }
@@ -386,7 +390,8 @@ class UserLoginRegisterController extends Controller
                 ->first();
 
             if (!$template) {
-                return response()->json(['error' => ucfirst($settings['otp_type']) . 'Welcome Template is not Found'], 404);
+                return response()
+                ->json(['error' => ucfirst($settings['otp_type']) . 'Welcome Template is not Found'], 404);
             }
             $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
 

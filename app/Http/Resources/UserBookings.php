@@ -20,7 +20,8 @@ class UserBookings extends JsonResource
            'id' => $this->id,
            'reservation_id' => $this->reservation_id,
            'vehicle_name'   => $this->vehicle ? $this->vehicle->name : '',
-           'vehicle_image'  => $this->vehicle ? uploadedAsset($this->vehicle->vehicle_image) : uploadedAsset('default.png'),
+           'vehicle_image'  => $this->vehicle ? uploadedAsset($this->vehicle->vehicle_image)
+            : uploadedAsset('default.png'),
            'vehicle_page_url' => $this->vehicle ? route('vehicleDetails', $this->vehicle->slug) : '',
            'driving_type'   => $this->delivery_type ? ucfirst($this->delivery_type) : '',
            'rental_type'    => $this->rental_type ? ($this->rental_type) : '',

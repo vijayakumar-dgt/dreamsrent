@@ -35,7 +35,16 @@ class CalanderController extends Controller
             ->where(['users.user_type' => 3, 'users.status' => 1])
             ->get();
 
-        return view('admin.calender.index', compact("Vehicles", "customerss", "drivers", "cartypes", 'locations', 'priceTypes', 'drivingTypes', 'customers'));
+            return view('admin.calender.index', compact(
+                'Vehicles',
+                'customerss',
+                'drivers',
+                'cartypes',
+                'locations',
+                'priceTypes',
+                'drivingTypes',
+                'customers'
+            ));
     }
 
     public function getCalenderBooking(Request $request)
@@ -156,7 +165,14 @@ class CalanderController extends Controller
         $booking->driver_type_info = DrivingType::where('id', $booking->driving_type)->first();
 
         $booking->delivery_type = $booking->delivery_type ?? 'N/A';
-
-        return response()->json(['code' => 200, 'booking' => $booking, 'vehicleType' => $vehicleType, 'pickupLocation' => $pickupLocation, "returnLocation" => $returnLocation, "driverDetails" => $driverDetails, 'customerDetails' => $customerData]);
+        return response()->json([
+            'code' => 200,
+            'booking' => $booking,
+            'vehicleType' => $vehicleType,
+            'pickupLocation' => $pickupLocation,
+            'returnLocation' => $returnLocation,
+            'driverDetails' => $driverDetails,
+            'customerDetails' => $customerData,
+        ]);
     }
 }

@@ -12,7 +12,7 @@ class City extends Model
 
     protected $fillable = ['name', 'state_id', 'status'];
 
-    
+
     public function state(): BelongsTo
     {
         return $this->belongsTo(State::class);

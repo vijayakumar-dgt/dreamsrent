@@ -22,7 +22,7 @@ use Modules\Booking\Models\Booking;
  * @property string|null $date_of_issue
  * @property string|null $dob
  * @property string|null $added_on
- * 
+ *
  */
 
 class User extends Authenticatable

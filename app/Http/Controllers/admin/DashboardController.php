@@ -96,10 +96,12 @@ class DashboardController extends Controller
         $symbol = $currency->symbol;
 
         // Count cars created this week
-        $thisWeekCars = VehicleInfo::whereBetween('created_at', [$startOfThisWeek, $endOfThisWeek])->where('vehicle_info.language_id', $languageId)->count();
+        $thisWeekCars = VehicleInfo::whereBetween('created_at', [$startOfThisWeek, $endOfThisWeek])
+        ->where('vehicle_info.language_id', $languageId)->count();
 
         // Count cars created last week
-        $lastWeekCars = VehicleInfo::whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])->where('vehicle_info.language_id', $languageId)->count();
+        $lastWeekCars = VehicleInfo::whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])
+        ->where('vehicle_info.language_id', $languageId)->count();
 
         // Calculate percentage change
         if ($lastWeekCars > 0) {
@@ -115,11 +117,18 @@ class DashboardController extends Controller
 
         $upcomingCount = Booking::whereDate('start_datetime', '>', $today)->count();
 
-        $reservations = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')->LeftJoin('car_fuels', 'vehicle_info.fuel_type_id', '=', 'car_fuels.id')
+        $reservations = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
+        ->LeftJoin('car_fuels', 'vehicle_info.fuel_type_id', '=', 'car_fuels.id')
             ->LeftJoin('driving_types', 'vehicle_info.type_id', '=', 'driving_types.id')
             ->LeftJoin('users', 'bookings.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
-            ->select('bookings.*', 'vehicle_info.*', 'driving_types.name as driving_name', 'car_fuels.fuel_type', 'user_details.profile_image')
+            ->select(
+                'bookings.*',
+                'vehicle_info.*',
+                'driving_types.name as driving_name',
+                'car_fuels.fuel_type',
+                'user_details.profile_image'
+            )
             ->orderBy('bookings.id', 'desc')
             ->limit(5)
             ->get();
@@ -153,7 +162,8 @@ class DashboardController extends Controller
                 return [
                     'date' => $dayBookings->first()->booking_date,
                     'income' => $dayBookings->sum(function ($booking) {
-                        return ($booking->payment_status == 1 || $booking->booking_by == 'admin') ? $booking->final_price : 0;
+                        return ($booking->payment_status == 1 || $booking->booking_by == 'admin') ?
+                         $booking->final_price : 0;
                     }),
                     'expense' => 0 // Placeholder, modify if you have expenses
                 ];
@@ -174,8 +184,8 @@ class DashboardController extends Controller
                 'drivers.*',
                 DB::raw('(SELECT COUNT(*) FROM bookings WHERE bookings.driver_id = drivers.id) as total_bookings'),
                 DB::raw("(
-            SELECT COUNT(*) 
-            FROM bookings 
+            SELECT COUNT(*)
+            FROM bookings
             WHERE bookings.driver_id = drivers.id
             AND bookings.start_datetime <= '$now'
             AND bookings.end_datetime >= '$now'
@@ -187,7 +197,7 @@ class DashboardController extends Controller
 
 
             $bookingsRes = Booking::selectRaw(
-                'DATE(start_datetime) as date, 
+                'DATE(start_datetime) as date,
                  TIME_FORMAT(booking_date, "%H:00") as time,
                  COUNT(*) as count'
             )
@@ -223,6 +233,30 @@ class DashboardController extends Controller
             ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image')
             ->where('invoices.deleted_at', null)->limit(5)->get();
 
-        return view('admin.dashboard.index', compact('current_user', 'carTypes', 'bookingCount', 'upcomingCount', 'symbol', 'amount', 'booking', 'percentageChange', 'sign', 'amountPercentageChange', 'amountSymbol', 'carSymbol', 'carPercentageChange', 'reservations', 'users', 'chartbooking', 'maintenances', 'drivers', 'dates', 'times', 'series', 'formattedDates', 'invoices'));
+        return view('admin.dashboard.index', compact(
+            'current_user',
+            'carTypes',
+            'bookingCount',
+            'upcomingCount',
+            'symbol',
+            'amount',
+            'booking',
+            'percentageChange',
+            'sign',
+            'amountPercentageChange',
+            'amountSymbol',
+            'carSymbol',
+            'carPercentageChange',
+            'reservations',
+            'users',
+            'chartbooking',
+            'maintenances',
+            'drivers',
+            'dates',
+            'times',
+            'series',
+            'formattedDates',
+            'invoices'
+        ));
     }
 }

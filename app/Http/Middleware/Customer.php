@@ -30,6 +30,5 @@ class Customer
         Auth::shouldUse('web');
 
         return $next($request);
-        
     }
 }

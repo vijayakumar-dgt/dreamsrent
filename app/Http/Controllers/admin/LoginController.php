@@ -46,7 +46,10 @@ class LoginController extends Controller
         }
         $credentials = $request->only('email', 'password');
         $remember = $request->get('remember', false);
-        if (Auth::guard('admin')->attempt($credentials, $remember) && ((Auth::guard('admin')->user()->status == 1) || (Auth::guard('admin')->user()->user_type == 1) || (Auth::guard('admin')->user()->user_type == 2))) {
+        if (
+            Auth::guard('admin')
+            ->attempt($credentials, $remember) && ((Auth::guard('admin')->user()->status == 1) || (Auth::guard('admin')->user()->user_type == 1) || (Auth::guard('admin')->user()->user_type == 2))
+        ) {
             if (Auth::guard('admin')->user()->status == 0 && Auth::guard('admin')->user()->user_type == 2) {
                 return response()->json([
                     'status' => false,

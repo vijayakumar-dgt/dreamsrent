@@ -66,7 +66,8 @@ class ReviewController extends Controller
                 'value_for_money_ratings' => $request->value_for_money_ratings ?? 0,
                 'cleanliness_ratings' => $request->cleanliness_ratings ?? 0,
             ];
-            $totalRatings = $data['service_ratings'] + $data['location_ratings'] + $data['facility_ratings'] + $data['value_for_money_ratings'] + $data['cleanliness_ratings'];
+            $totalRatings = $data['service_ratings'] +
+             $data['location_ratings'] + $data['facility_ratings'] + $data['value_for_money_ratings'] + $data['cleanliness_ratings'];
             $data['average_ratings'] = $totalRatings / 5;
 
             $reviews = Review::create($data);
@@ -534,7 +535,8 @@ class ReviewController extends Controller
             if ($columnName === 'vehicle_name') {
                 $query->orderByRaw("LOWER(CONCAT_WS(' ', vehicle_info.name)) {$orderDir}");
             } elseif ($columnName === 'customer_full_name') {
-                $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) {$orderDir}");
+                $query
+                ->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) {$orderDir}");
             } elseif ($columnName === 'review_date') {
                 $query->orderBy('reviews.created_at', $orderDir);
             } else {
