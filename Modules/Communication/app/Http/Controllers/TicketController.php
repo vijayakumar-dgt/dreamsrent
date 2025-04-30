@@ -19,7 +19,7 @@ class TicketController extends Controller
     {
         $category = TicketCategory::all();
         $users = User::whereIn('user_type', [1, 2])->get();
-        return view('communication::ticket.index',compact('category', 'users'));
+        return view('communication::ticket.index', compact('category', 'users'));
     }
     public function ticketDetails()
     {
@@ -93,7 +93,6 @@ class TicketController extends Controller
                 'message' => 'Ticket created successfully',
                 'data' => $ticket
             ], 200);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
@@ -161,12 +160,12 @@ class TicketController extends Controller
 
             // Apply search filter
             if (!empty($searchTerm)) {
-                $query->where(function($q) use ($searchTerm) {
+                $query->where(function ($q) use ($searchTerm) {
                     $q->where('ticket_id', 'like', "%{$searchTerm}%")
-                      ->orWhereHas('user', function($q2) use ($searchTerm) {
+                      ->orWhereHas('user', function ($q2) use ($searchTerm) {
                           $q2->where('name', 'like', "%{$searchTerm}%");
                       })
-                      ->orWhereHas('category', function($q2) use ($searchTerm) {
+                      ->orWhereHas('category', function ($q2) use ($searchTerm) {
                           $q2->where('name', 'like', "%{$searchTerm}%");
                       });
                 });
@@ -198,7 +197,6 @@ class TicketController extends Controller
                 'message' => __('admin.common.default_retrieve_success'),
                 'data' => $tickets
             ], 200);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
@@ -266,7 +264,6 @@ class TicketController extends Controller
                 'message' => __('admin.support.ticket_update_success'),
                 'ticket' => $ticket
             ], 200);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
@@ -358,7 +355,6 @@ class TicketController extends Controller
                 'message' => __('admin.support.ticket_update_success'),
                 'ticket' => $ticket
             ], 200);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
@@ -389,7 +385,6 @@ class TicketController extends Controller
                 'success' => true,
                 'message' => __('admin.support.ticket_delete_success')
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code'    => 500,
@@ -399,5 +394,4 @@ class TicketController extends Controller
             ], 500);
         }
     }
-
 }

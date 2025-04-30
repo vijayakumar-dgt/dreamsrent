@@ -15,7 +15,7 @@ use Modules\GeneralSetting\Models\InsuranceBenefit;
 
 class InsuranceController extends Controller
 {
-    public function index() : View
+    public function index(): View
     {
         $priceTypes = PricingType::where('type', 2)->get();
         return view('generalsetting::rental_settings.insurance_list', compact('priceTypes'));
@@ -25,7 +25,7 @@ class InsuranceController extends Controller
     {
         $id = $request->id ?? '';
         $authUser = current_user();
-    
+
         $validator = Validator::make($request->all(), [
             'insurance_name' => [
                 'required',
@@ -41,7 +41,7 @@ class InsuranceController extends Controller
             'price.required' =>  __('admin.general_settings.price_required'),
             'benefit.*.required' => __('admin.general_settings.benefit_required'),
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
@@ -49,27 +49,27 @@ class InsuranceController extends Controller
                 'errors' => $validator->errors()->toArray()
             ], 422);
         }
-    
+
         $successMsg = empty($id) ?  __('admin.general_settings.insurance_create_success') :  __('admin.general_settings.insurance_update_success');
         $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
-    
+
         try {
             $data = [
                 'insurance_name' => $request->insurance_name,
                 'price_type_id' => $request->price_type_id,
                 'price' => $request->price,
             ];
-    
+
             // Set language_id conditionally
             $data['language_id'] = empty($id)
                 ? ($authUser->language_id ?? 1)
                 : ($request->language_id ?? 1);
-    
+
             $benefits = $request->benefit ?? [];
-    
+
             if (empty($id)) {
                 $insurance = Insurance::create($data);
-    
+
                 foreach ($benefits as $benefit) {
                     if (!empty($benefit)) {
                         InsuranceBenefit::create([
@@ -81,12 +81,12 @@ class InsuranceController extends Controller
             } else {
                 $data['status'] = $request->status ?? 1;
                 Insurance::where('id', $id)->update($data);
-    
+
                 // Handle benefit updates
                 InsuranceBenefit::where('insurance_id', $id)
                     ->whereNotIn('id', array_keys($benefits))
                     ->delete();
-    
+
                 foreach ($benefits as $key => $benefit) {
                     if ($key === 'new' && is_array($benefit)) {
                         foreach ($benefit as $newBenefit) {
@@ -104,7 +104,7 @@ class InsuranceController extends Controller
                     }
                 }
             }
-    
+
             return response()->json([
                 'status' => 'success',
                 'code' => 200,
@@ -119,9 +119,9 @@ class InsuranceController extends Controller
             ], 500);
         }
     }
-    
 
-    public function list(Request $request) : JsonResponse
+
+    public function list(Request $request): JsonResponse
     {
         try {
             $authId = current_user();
@@ -133,7 +133,7 @@ class InsuranceController extends Controller
                 $query->where('insurance_name', 'like', "%{$search}%");
                 $query->orWhere('price', 'like', "%{$search}%");
             }
-    
+
             $columnIndex = $request->order[0]['column'] ?? 0;
             $columnName = $request->columns[$columnIndex]['data'] ?? 'insurance_name';
             $orderDir = $request->order[0]['dir'] ?? 'desc';
@@ -143,18 +143,17 @@ class InsuranceController extends Controller
             // Pagination
             $start = $request->start ?? 0;
             $length = $request->length ?? 10;
-    
+
             $filtertotalRecords = $query->count();
             $totalRecords = Insurance::count();
             $data = $query->skip($start)->take($length)->get();
-    
+
             return response()->json([
                 'draw' => intval($request->draw),
                 'recordsTotal' => $totalRecords,
                 'recordsFiltered' => $filtertotalRecords,
                 'data' => $data,
             ], 200);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -164,11 +163,11 @@ class InsuranceController extends Controller
         }
     }
 
-    public function edit(Request $request) : JsonResponse
+    public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
         $data = Insurance::with('insuranceBenefits')->find($id);
-        
+
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -176,10 +175,9 @@ class InsuranceController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request) : JsonResponse
+    public function delete(Request $request): JsonResponse
     {
         try {
-
             $id = $request->id;
 
             Insurance::where('id', $id)->delete();
@@ -195,7 +193,7 @@ class InsuranceController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_delete_error'),
-            ],500);
+            ], 500);
         }
     }
 
@@ -205,11 +203,11 @@ class InsuranceController extends Controller
             $vehicleId = $request->vehicle_ids;
 
             $data = Insurance::with(['insuranceBenefits:id,insurance_id,benefit'])->select(
-                    'insurances.id', 
-                    'insurances.insurance_name',
-                    'vehicle_insurances.value as insurance_type',
-                    'vehicle_insurances.price'
-                )
+                'insurances.id',
+                'insurances.insurance_name',
+                'vehicle_insurances.value as insurance_type',
+                'vehicle_insurances.price'
+            )
                 ->withCount('insuranceBenefits')
                 ->join('vehicle_insurances', 'vehicle_insurances.insurances_id', '=', 'insurances.id')
                 ->whereIn('vehicle_insurances.vehicle_id', $vehicleId)
@@ -230,8 +228,7 @@ class InsuranceController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => _('admin.common.default_retrieve_error'),
-            ],500);
+            ], 500);
         }
     }
-
 }

@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Inspection extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +25,7 @@ class Inspection extends Model
     // }
     public function car()
     {
-        return $this->belongsTo(VehicleInfo::class,'vehicle_info_id','id');
+        return $this->belongsTo(VehicleInfo::class, 'vehicle_info_id', 'id');
     }
 
     public function inspector()

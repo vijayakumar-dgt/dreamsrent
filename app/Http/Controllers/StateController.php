@@ -39,8 +39,8 @@ class StateController extends Controller
         ], [
             'name.required' =>  __('admin.cms.state_required'),
             'name.unique' =>  __('admin.cms.state_exists'),
-            'country_id.required' =>__('admin.cms.country_required'),
-            'country_id.exists' =>__('admin.cms.country_exists'),
+            'country_id.required' => __('admin.cms.country_required'),
+            'country_id.exists' => __('admin.cms.country_exists'),
         ]);
 
         if ($validator->fails()) {
@@ -87,7 +87,6 @@ class StateController extends Controller
         $orderBy = $request->order_by ?? 'desc';
 
         try {
-
             $data = State::with('country')->orderBy('id', $orderBy)->get();
 
             return response()->json([
@@ -98,7 +97,7 @@ class StateController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
-                'message' =>__('admin.common.default_retrieve_error'),
+                'message' => __('admin.common.default_retrieve_error'),
                 'error' => $e->getMessage(),
             ], 500);
         }
@@ -119,7 +118,6 @@ class StateController extends Controller
     public function delete(Request $request)
     {
         try {
-
             $id = $request->id;
 
             State::where('id', $id)->delete();

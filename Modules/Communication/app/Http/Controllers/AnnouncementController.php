@@ -105,7 +105,6 @@ class AnnouncementController extends Controller
                 'message' => __('admin.common.default_retrieve_success'),
                 'data' => $announcements
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -137,7 +136,6 @@ class AnnouncementController extends Controller
                 'success' => true,
                 'message' => __('admin.support.announcement_delete_success')
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code'    => 500,
@@ -147,5 +145,4 @@ class AnnouncementController extends Controller
             ], 500);
         }
     }
-
 }

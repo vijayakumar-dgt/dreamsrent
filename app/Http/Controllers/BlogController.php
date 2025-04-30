@@ -39,16 +39,16 @@ class BlogController extends Controller
             ->leftJoin('blog_categories', 'blog_posts.category', '=', 'blog_categories.id')
             ->leftJoin('blog_tags', 'blog_posts.tags', '=', 'blog_tags.id')
             ->where('blog_posts.language_id', $lang_id)
-            ->where('blog_posts.deleted_at', NULL)
+            ->where('blog_posts.deleted_at', null)
             ->where('blog_posts.status', 1)
             ->select('blog_posts.*', 'users.name as customer', 'user_details.profile_image', 'blog_categories.name as category', 'blog_tags.name as tag');
 
-        // ✅ Filter by category
+
         if ($request->has('category') && $request->category !== 'all') {
             $query->where('blog_categories.name', $request->category);
         }
 
-        // ✅ Filter by search
+        
         if ($request->has('search') && !empty($request->search)) {
             $query->where(function ($q) use ($request) {
                 $q->where('blog_posts.title', 'like', '%' . $request->search . '%')
@@ -58,8 +58,8 @@ class BlogController extends Controller
 
         $blogPosts = $query->latest()->paginate(3);
 
-        $categories = BlogCategory::where('deleted_at', NULL)->where('language_id', $lang_id)->where('status', 1)->get();
-        $tags = BlogTag::where('deleted_at', NULL)->where('language_id', $lang_id)->where('status', 1)->get();
+        $categories = BlogCategory::where('deleted_at', null)->where('language_id', $lang_id)->where('status', 1)->get();
+        $tags = BlogTag::where('deleted_at', null)->where('language_id', $lang_id)->where('status', 1)->get();
 
         $latestblogs =  BlogPost::latest()->where('blog_posts.language_id', $lang_id)->where('blog_posts.status', 1)->limit(3)->get();
 
@@ -98,13 +98,13 @@ class BlogController extends Controller
             ->leftJoin('blog_categories', 'blog_posts.category', '=', 'blog_categories.id')
             ->leftJoin('blog_tags', 'blog_posts.tags', '=', 'blog_tags.id')
             ->where('blog_posts.language_id', $lang_id)
-            ->where('blog_posts.deleted_at', NULL)
+            ->where('blog_posts.deleted_at', null)
             ->where('blog_posts.status', 1)
             ->select('blog_posts.*', 'users.name as customer', 'user_details.profile_image', 'blog_categories.name as category', 'blog_tags.name as tag')
             ->paginate(4);
 
-        $categories = BlogCategory::where('deleted_at', NULL)->where('language_id', $lang_id)->where('status', 1)->get();
-        $tags = BlogTag::where('deleted_at', NULL)->where('language_id', $lang_id)->where('status', 1)->get();
+        $categories = BlogCategory::where('deleted_at', null)->where('language_id', $lang_id)->where('status', 1)->get();
+        $tags = BlogTag::where('deleted_at', null)->where('language_id', $lang_id)->where('status', 1)->get();
 
         $latestblogs =  BlogPost::latest()->where('blog_posts.language_id', $lang_id)->where('blog_posts.status', 1)->limit(3)->get();
 
@@ -138,7 +138,7 @@ class BlogController extends Controller
             ->where('blog_posts.slug', $id)
             ->where('blog_posts.status', 1)
             ->first();
-        
+
         $blogReviews = BlogReviews::where('blog_id', $blogPosts->id)->latest()->limit(5)->get();
         $countReview = count($blogReviews);
 

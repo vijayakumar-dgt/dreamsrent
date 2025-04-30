@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('account_holder_name');
             $table->string('branch');
             $table->string('ifsc');
-            $table->string('default')->nullable();  
+            $table->string('default')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

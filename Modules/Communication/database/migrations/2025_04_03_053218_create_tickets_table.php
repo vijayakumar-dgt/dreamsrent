@@ -9,7 +9,8 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up() {
+    public function up()
+    {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->string('ticket_id');

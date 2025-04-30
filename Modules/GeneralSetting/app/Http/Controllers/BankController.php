@@ -125,7 +125,6 @@ class BankController extends Controller
     public function delete(Request $request)
     {
         try {
-
             $id = $request->id;
             Bank::where('id', $id)->delete();
 

@@ -118,7 +118,7 @@
                                                 </select>
 
                                             </div>
-                                            <?php 
+                                            <?php
                                               $users = Illuminate\Support\Facades\DB::table('users')->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')->where('users.id', $invoice->customer_id)->first();
                                             ?>
                                             <div class="bg-light border p-3 rounded mb-3">

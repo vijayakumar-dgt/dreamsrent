@@ -4,6 +4,7 @@ namespace Modules\CarInfo\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 // use Modules\CarInfo\Database\Factories\DriverDocumentFactory;
 
 class DriverDocument extends Model
@@ -22,5 +23,4 @@ class DriverDocument extends Model
     {
         return $this->belongsTo(Driver::class, 'driver_id');
     }
-
 }

@@ -61,7 +61,7 @@ class MaintenanceController extends Controller
             $vehicleId = $request->vehicle_id;
             $startDate = $request->start_date;
             $endDate = $request->end_date;
-        
+
             $query = Maintenance::where('vehicle_id', $vehicleId)
                 ->where(function ($q) use ($startDate, $endDate) {
                     $q->whereBetween('start_date', [$startDate, $endDate])
@@ -81,21 +81,20 @@ class MaintenanceController extends Controller
                 $validator->errors()->add('end_date', __('admin.rentals.date_overlap'));
             }
         });
-        
 
-        if($validator->fails()){
+
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         $successMsg = empty($id) ? __("admin.rentals.maintenance_create_success") : __("admin.rentals.maintenance_update_success");
         $errorMsg = empty($id) ? __("admin.rentals.maintenance_create_error") : __("admin.rentals.maintenance_update_error");
 
         try {
-
             $data = [
                 'vehicle_id' => $request->vehicle_id,
                 'odometer' => $request->odometer,
@@ -122,9 +121,8 @@ class MaintenanceController extends Controller
                 'code'   => 500,
                 'message' => $errorMsg,
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
-
     }
 
     public function list(Request $request): JsonResponse
@@ -253,7 +251,7 @@ class MaintenanceController extends Controller
             $data->start_date = Carbon::parse($data->start_date)->format('d-m-Y');
             $data->end_date = Carbon::parse($data->end_date)->format('d-m-Y');
         }
-        
+
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -277,7 +275,7 @@ class MaintenanceController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_delete_error')
-            ],500);
+            ], 500);
         }
     }
 }

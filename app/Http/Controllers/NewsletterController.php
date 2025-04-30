@@ -30,16 +30,15 @@ class NewsletterController extends Controller
             'subscriber_email.unique' => __('web.user.subscriber_email_unique'),
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         try {
-
             NewsletterSubscriber::create([
                 'email' => $request->subscriber_email
             ]);
@@ -65,7 +64,7 @@ class NewsletterController extends Controller
                 'code'   => 500,
                 'message' => __('web.common.default_create_error'),
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
     }
 
@@ -79,10 +78,10 @@ class NewsletterController extends Controller
             $orderDir = $request->order[0]['dir'] ?? 'asc';
 
             $query = NewsletterSubscriber::select(
-                    'id',
-                    'email',
-                    'created_at',
-                );
+                'id',
+                'email',
+                'created_at',
+            );
 
             if (!empty($request->search)) {
                 $search = $request->search;
@@ -133,14 +132,13 @@ class NewsletterController extends Controller
                 "recordsFiltered" => $filteredRecords,
                 "data" => $reviews,
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('web.common.default_retrieve_error'),
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
     }
 
@@ -160,7 +158,7 @@ class NewsletterController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_delete_error')
-            ],500);
+            ], 500);
         }
     }
 
@@ -174,12 +172,12 @@ class NewsletterController extends Controller
             'email.required' => __('admin.common.email_required'),
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         try {
@@ -196,7 +194,7 @@ class NewsletterController extends Controller
                 'to_email' => $email
             ];
 
-            $requestData = New Request($data);
+            $requestData = new Request($data);
 
             $emailController = new EmailController();
             $emailController->sendEmail($requestData);
@@ -206,15 +204,13 @@ class NewsletterController extends Controller
                 'code'   => 200,
                 'message' => __('admin.others.newsletter_send_success')
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.others.newsletter_send_error'),
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
     }
-
 }

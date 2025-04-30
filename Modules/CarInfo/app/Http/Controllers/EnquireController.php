@@ -55,7 +55,6 @@ class EnquireController extends Controller
                 'message' => 'Enquiry submitted successfully!',
                 'data' => $enquiries
             ], 201);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code'   => 500,
@@ -189,7 +188,6 @@ class EnquireController extends Controller
                 'message' => 'Enquiry updated successfully!',
                 'data' => $enquiry
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -222,7 +220,6 @@ class EnquireController extends Controller
                 'success' => true,
                 'message' => __('admin.bookings.enquiry_delete_success')
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code'    => 500,
@@ -232,5 +229,4 @@ class EnquireController extends Controller
             ], 500);
         }
     }
-
 }

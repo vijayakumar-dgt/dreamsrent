@@ -14,6 +14,7 @@ use Modules\GeneralSetting\Models\TimeFormat;
 use Modules\GeneralSetting\Models\Timezone;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Modules\GeneralSetting\Models\Language;
+
 class LocalizationController extends Controller
 {
     /**
@@ -24,10 +25,10 @@ class LocalizationController extends Controller
         $timezones = Timezone::get();
         $timeformats = TimeFormat::get();
         $dateformats = DateFormat::get();
-        $currencies  = Currency::where('status',1)->get();
+        $currencies  = Currency::where('status', 1)->get();
         $weekdays    = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"];
-        $availableLanguages = Language::where('status',1)->pluck('language_id');
-        $languages   = TranslationLanguage::whereIn('id', $availableLanguages)->where('status',1)->get();
+        $availableLanguages = Language::where('status', 1)->pluck('language_id');
+        $languages   = TranslationLanguage::whereIn('id', $availableLanguages)->where('status', 1)->get();
         $data = [
             'page_title'  => 'Localization',
             'timezones'   => $timezones,
@@ -37,14 +38,14 @@ class LocalizationController extends Controller
             'currencies'  => $currencies,
             'languages'   => $languages
         ];
-        return view('generalsetting::website_settings.localization',$data);
+        return view('generalsetting::website_settings.localization', $data);
     }
 
     public function getTimezones(Request $request)
     {
         //search
         $search = $request->search;
-        $timezones = Timezone::where('name','like',"%$search%")->take(10)->get()->map(function($timezone){
+        $timezones = Timezone::where('name', 'like', "%$search%")->take(10)->get()->map(function ($timezone) {
             return [
                 'id' => $timezone->id,
                 'text' => $timezone->name
@@ -54,7 +55,7 @@ class LocalizationController extends Controller
             'status' => 'success',
             'code'   => 200,
             'data'   => $timezones,
-            'message'=>  __('admin.general_settings.timezone_success'),
+            'message' =>  __('admin.general_settings.timezone_success'),
         ]);
     }
 
@@ -63,7 +64,7 @@ class LocalizationController extends Controller
         $path = base_path('.env');
 
         if (file_exists($path)) {
-            $escaped = preg_quote('='.$value, '/');
+            $escaped = preg_quote('=' . $value, '/');
 
             if (strpos(file_get_contents($path), "{$key}=") !== false) {
                 file_put_contents($path, preg_replace(
@@ -72,7 +73,7 @@ class LocalizationController extends Controller
                     file_get_contents($path)
                 ));
             } else {
-                file_put_contents($path, PHP_EOL."{$key}=\"{$value}\"", FILE_APPEND);
+                file_put_contents($path, PHP_EOL . "{$key}=\"{$value}\"", FILE_APPEND);
             }
         }
     }
@@ -89,15 +90,15 @@ class LocalizationController extends Controller
                 'time_format'    => $request->time_format,
                 'default_language' => $request->default_language ?? null,
                 'currency'       => $request->currency,
-                'currency_symbol'=> $request->currency_symbol,
+                'currency_symbol' => $request->currency_symbol,
                 'currency_position' => $request->currency_position,
                 'decimal_seperator' => $request->decimal_seperator,
-                'thousand_seperator'=> $request->thousand_seperator,
+                'thousand_seperator' => $request->thousand_seperator,
                 'currency_switcher' => $request->currency_switcher == 'on' ? 1 : 0,
                 'language_switcher' => $request->language_switcher == 'on' ? 1 : 0
             ];
 
-            foreach($localizationArray as $k => $v) {
+            foreach ($localizationArray as $k => $v) {
                 GeneralSetting::updateOrCreate(
                     ['group_id' => $groupId, 'key' => $k],
                     ['value' => $v]
@@ -142,16 +143,16 @@ class LocalizationController extends Controller
 
     public function getTimezone(Request $request)
     {
-        $settingTimezone = GeneralSetting::where('group_id',5)->where('key','timezone')->first();
-        if(!empty($settingTimezone)){
-            $timezones = Timezone::where('id',$settingTimezone->value)->first();
+        $settingTimezone = GeneralSetting::where('group_id', 5)->where('key', 'timezone')->first();
+        if (!empty($settingTimezone)) {
+            $timezones = Timezone::where('id', $settingTimezone->value)->first();
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
                 'data'   => $timezones,
-                'message'=> __('admin.general_settings.timezone_success'),
+                'message' => __('admin.general_settings.timezone_success'),
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
@@ -159,5 +160,4 @@ class LocalizationController extends Controller
             ]);
         }
     }
-
 }

@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Location extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -25,11 +26,12 @@ class Location extends Model
     protected static function booted()
     {
         static::deleting(function ($location) {
-           $location->workingDays()->delete(); 
+            $location->workingDays()->delete();
         });
     }
 
-    public function workingDays(){
+    public function workingDays()
+    {
         return $this->hasMany(LocationWorkingDay::class);
     }
 }

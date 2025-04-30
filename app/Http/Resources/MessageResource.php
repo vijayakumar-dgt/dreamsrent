@@ -18,7 +18,7 @@ class MessageResource extends JsonResource
     {
         $authUser = current_user();
         $authUserId = $authUser ? $authUser->id : 0;
-        
+
         return [
            'id' => $this->id,
            'message_type'   => $this->type,
@@ -40,13 +40,13 @@ class MessageResource extends JsonResource
 
     public function getAvatar($userId)
     {
-      $user = User::find($userId);
-      return uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default', 'profile');
+        $user = User::find($userId);
+        return uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default', 'profile');
     }
 
     public function getAdminAvatar()
     {
-      $user = User::where('user_type',1)->first();
-      return uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default', 'profile');
+        $user = User::where('user_type', 1)->first();
+        return uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default', 'profile');
     }
 }

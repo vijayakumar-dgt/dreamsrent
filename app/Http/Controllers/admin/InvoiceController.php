@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
-
 class InvoiceController extends Controller
 {
     public function index()
@@ -24,9 +23,9 @@ class InvoiceController extends Controller
             ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image')
-            ->where('invoices.deleted_at', NULL)->get();
+            ->where('invoices.deleted_at', null)->get();
 
-         
+
 
         return view("admin.invoice.index", compact('invoices'));
     }
@@ -35,9 +34,9 @@ class InvoiceController extends Controller
     {
         $authId = current_user();
         $languageId = $authId->language_id;
-        $cars = VehicleInfo::where('status', 1)->where('deleted_at', Null)->where('language_id', $languageId)->get();
-        $currencies = Currency::where('status', 1)->where('deleted_at', Null)->get();
-        $users = User::where('status', 1)->where('deleted_at', Null)->get();
+        $cars = VehicleInfo::where('status', 1)->where('deleted_at', null)->where('language_id', $languageId)->get();
+        $currencies = Currency::where('status', 1)->where('deleted_at', null)->get();
+        $users = User::where('status', 1)->where('deleted_at', null)->get();
         $currentUser = Auth::user();
         $payments = GeneralSetting::where('group_id', 13)->where('value', 1)->get();
         $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();
@@ -50,7 +49,7 @@ class InvoiceController extends Controller
         ->leftJoin('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
         ->select('bookings.*', 'users.name as customer', 'user_details.profile_image', 'vehicle_info.vehicle_image', 'vehicle_info.name as vehicle')
         ->whereDate('start_datetime', '>=', Carbon::today())
-        ->orderBy('start_datetime', 'asc')->get();  
+        ->orderBy('start_datetime', 'asc')->get();
 
         return view("admin.invoice.add-invoice", compact('cars', 'currencies', 'users', 'currentUser', 'payments', 'symbol', 'bookings'));
     }
@@ -145,9 +144,9 @@ class InvoiceController extends Controller
     {
         $invoice = Invoices::findOrFail($id);
 
-        $cars = VehicleInfo::where('status', 1)->where('deleted_at', Null)->get();
-        $currencies = Currency::where('status', 1)->where('deleted_at', Null)->get();
-        $users = User::where('status', 1)->where('deleted_at', Null)->get();
+        $cars = VehicleInfo::where('status', 1)->where('deleted_at', null)->get();
+        $currencies = Currency::where('status', 1)->where('deleted_at', null)->get();
+        $users = User::where('status', 1)->where('deleted_at', null)->get();
         $currentUser = Auth::user();
         $payments = GeneralSetting::where('group_id', 13)->where('value', 1)->get();
         $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();

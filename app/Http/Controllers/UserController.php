@@ -47,9 +47,9 @@ class UserController extends Controller
                 ->sum('amount');
 
         $totalBalance = $totalCredit - $totalDebit;
-        $totalTransaction = Booking::where('customer_id', Auth::guard('web')->user()->id)->where('deleted_at', null)->where('payment_status',2)->sum('final_price');
+        $totalTransaction = Booking::where('customer_id', Auth::guard('web')->user()->id)->where('deleted_at', null)->where('payment_status', 2)->sum('final_price');
         $currency = getDefaultCurrencySymbol();
-        $seo_title = __('web.user.dashboard');        
+        $seo_title = __('web.user.dashboard');
         return view('frontend.user.dashboard', compact('totalBookingCount', 'totalWishlistCount', 'totalBalance', 'totalTransaction', 'currency', 'seo_title'));
     }
 
@@ -63,7 +63,7 @@ class UserController extends Controller
     {
         $bookings = Booking::where('customer_id', Auth::guard('web')->user()->id);
 
-        
+
 
         if ($request->has('duration') && $request->duration != "") {
             $customFrom = $request->custom_from_date ?? "";
@@ -265,11 +265,11 @@ class UserController extends Controller
                 'payment_status'  => $booking->payment_status ?? "",
                 'tototal_amount'  => $booking->final_price ?? ""
             ];
-            if(rentalNotificationEnabled()){
-                $appAdmin = User::where('user_type',1)->first();
-                sendNotification($appAdmin->email,'booking-cancelled-to-admin',$notifyData);
-                
-                sendNotification($authUser->email,'booking-cancelled-to-user',$notifyData);
+            if (rentalNotificationEnabled()) {
+                $appAdmin = User::where('user_type', 1)->first();
+                sendNotification($appAdmin->email, 'booking-cancelled-to-admin', $notifyData);
+
+                sendNotification($authUser->email, 'booking-cancelled-to-user', $notifyData);
             }
             DB::commit();
             return response()->json([
@@ -431,9 +431,9 @@ class UserController extends Controller
         $user = Auth::guard('web')->user();
         $countries = Country::where('status', 1)->get();
         $seo_title = __('web.user.profile');
-        return view('frontend.user.usersettings', compact('seo_title','user', 'countries'));
+        return view('frontend.user.usersettings', compact('seo_title', 'user', 'countries'));
     }
-    
+
     public function userprofile(Request $request)
     {
         try {
@@ -461,7 +461,7 @@ class UserController extends Controller
                 ], 422);
             }
 
-            $user = Auth::guard('web')->user(); 
+            $user = Auth::guard('web')->user();
             $user->update([
                 'email' => $request->email,
                 'phone_number' => $request->user_phone,
@@ -516,7 +516,7 @@ class UserController extends Controller
     public function userpreference()
     {
         $languages = Language::select('languages.language_id')
-            ->with(['transLang' => function($query) {
+            ->with(['transLang' => function ($query) {
                 $query->select('id', 'code', 'name');
             }])
             ->where('languages.status', 1)
@@ -525,7 +525,7 @@ class UserController extends Controller
         $preference = User::select('language_id', 'region_id')->where('id', $id)->first();
         $countries = Country::select('id', 'name')->where('status', 1)->get();
         $seo_title = __('web.user.preferences');
-        return view('frontend.user.preference', compact('languages', 'preference', 'countries','seo_title'));
+        return view('frontend.user.preference', compact('languages', 'preference', 'countries', 'seo_title'));
     }
     public function userintegration()
     {
@@ -649,13 +649,13 @@ class UserController extends Controller
         try {
             $id = Auth::guard('web')->user()->id;
             $data = [];
-            
+
             if ($request->has('language_id')) {
                 $data['language_id'] = $request->language_id;
             } elseif ($request->has('region_id')) {
                 $data['region_id'] = $request->region_id;
             }
-            
+
             User::where('id', $id)->update($data);
 
             $language = TranslationLanguage::select('code')->where('id', $request->language_id)->first();
@@ -671,7 +671,7 @@ class UserController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('web.common.default_update_error')
-            ],500);
+            ], 500);
         }
     }
 
@@ -693,7 +693,7 @@ class UserController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('web.common.default_retrieve_error')
-            ],500);
+            ], 500);
         }
     }
 
@@ -731,11 +731,11 @@ class UserController extends Controller
 
     public function getNotifications(Request $request)
     {
-        if(Auth::guard('web')->check()){
+        if (Auth::guard('web')->check()) {
             $authUser = Auth::guard('web')->user();
-            $notifications = Notification::where('user_id', $authUser->id)->where('readed', 0)->orderBy('created_at', 'desc')->limit(10)->get();            
+            $notifications = Notification::where('user_id', $authUser->id)->where('readed', 0)->orderBy('created_at', 'desc')->limit(10)->get();
             $notificationCount = Notification::where('user_id', $authUser->id)->where('readed', 0)->count();
-        }else{
+        } else {
             $notifications = [];
             $notificationCount = 0;
         }
@@ -750,22 +750,20 @@ class UserController extends Controller
     public function markAllAsRead(Request $request)
     {
         //check any unread notification
-        if(Notification::where('user_id', Auth::guard('web')->user()->id)->where('readed', 0)->count() > 0){
+        if (Notification::where('user_id', Auth::guard('web')->user()->id)->where('readed', 0)->count() > 0) {
             Notification::where('user_id', Auth::guard('web')->user()->id)->update(['readed' => 1]);
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
                 'message' => __('web.user.all_notofocations_marked_as_read')
-            ], 200);    
-        }else{
+            ], 200);
+        } else {
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('web.user.all_notofocations_marked_as_read')
             ], 200);
         }
-        
-
     }
 
     public function payments(Request $request)

@@ -13,7 +13,6 @@ use Modules\GeneralSetting\Models\TranslationLanguage;
 
 class MenuManagementController extends Controller
 {
-
     public function menu()
     {
         $languages = Language::with('transLang')->get();
@@ -244,5 +243,4 @@ class MenuManagementController extends Controller
             ], 500);
         }
     }
-
 }

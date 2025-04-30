@@ -15,7 +15,8 @@ use Modules\CarInfo\Models\VehicleInfo;
 
 class Booking extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -132,11 +133,13 @@ class Booking extends Model
         return $this->hasOne(BookingUserInfo::class, 'booking_id');
     }
 
-    public function customer(){
+    public function customer()
+    {
         return $this->belongsTo(User::class, 'customer_id');
     }
 
-    public function customerDetail(){
+    public function customerDetail()
+    {
         return $this->belongsTo(UserDetail::class, 'customer_id', 'user_id');
     }
 }

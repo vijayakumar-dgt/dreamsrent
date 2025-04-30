@@ -21,11 +21,11 @@ class SeasonController extends Controller
     /**
      * Save or update a season.
      *
-     * Validates the request data for a season name that is required, 
-     * has a maximum length of 100 characters, and is unique in the 
-     * seasons table. If validation passes, it either creates a new 
-     * season or updates an existing one based on the presence of an 
-     * 'id' in the request. Responds with a JSON containing status 
+     * Validates the request data for a season name that is required,
+     * has a maximum length of 100 characters, and is unique in the
+     * seasons table. If validation passes, it either creates a new
+     * season or updates an existing one based on the presence of an
+     * 'id' in the request. Responds with a JSON containing status
      * and appropriate messages.
      *
      * @param \Illuminate\Http\Request $request
@@ -45,21 +45,21 @@ class SeasonController extends Controller
             'name.unique' => __('admin.rentals.season_name_unique'),
             'name.max' => __('admin.rentals.season_name_maxlength'),
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
         $response = [];
         $successMessage = empty($request->id) ? __('admin.rentals.season_create_success') : __('admin.rentals.season_update_success');
         $errorMessage = empty($request->id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
-            if($request->has('id') && $request->id == ""){
+            if ($request->has('id') && $request->id == "") {
                 $season = new Season();
-            }else{
+            } else {
                 $season = Season::find($request->id);
                 $season->status = $request->status == 'on' ? 1 : 0;
             }
@@ -88,10 +88,10 @@ class SeasonController extends Controller
     public function getSeasons(Request $request)
     {
         $seasons = Season::orderBy('id', 'desc');
-        if($request->has('keyword') && $request->keyword != ""){
-            $seasons = $seasons->where('name', 'like', '%'.$request->keyword.'%');
+        if ($request->has('keyword') && $request->keyword != "") {
+            $seasons = $seasons->where('name', 'like', '%' . $request->keyword . '%');
         }
-        if($request->has('status') && $request->status != ""){
+        if ($request->has('status') && $request->status != "") {
             $seasons = $seasons->where('status', $request->status);
         }
         $seasons = $seasons->get();
@@ -108,7 +108,8 @@ class SeasonController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getSeason($id){
+    public function getSeason($id)
+    {
         $season = Season::find($id);
         return response()->json([
             'status' => 'success',
@@ -131,19 +132,19 @@ class SeasonController extends Controller
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
-                'message'=> __('admin.rentals.season_delete_success')
+                'message' => __('admin.rentals.season_delete_success')
             ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
-                'message'=> 'Season not found'
+                'message' => 'Season not found'
             ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
-                'message'=> $th->getMessage()
+                'message' => $th->getMessage()
             ]);
         }
     }

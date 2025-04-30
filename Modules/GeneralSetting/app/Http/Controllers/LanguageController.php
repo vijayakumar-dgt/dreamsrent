@@ -91,7 +91,6 @@ class LanguageController extends Controller
                 'code'    => 200,
                 'message' =>  __('admin.general_settings.language_added_successfully'),
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status'  => 'error',
@@ -106,7 +105,7 @@ class LanguageController extends Controller
     {
         // $languages = Language::with('transLang')->get();
         $languages = Language::query();
-        if($request->has('search') && $request->search != ""){
+        if ($request->has('search') && $request->search != "") {
             $languages->where(function ($query) use ($request) {
                 $search = $request->search;
                 $query->whereHas('transLang', function ($query) use ($search) {
@@ -194,13 +193,13 @@ class LanguageController extends Controller
 
             // Update field dynamically
             $field = $request->field;
-            if($field == 'default'){
+            if ($field == 'default') {
                 Language::where('default', 1)->update(['default' => 0]);
                 session()->forget('app_locale');
                 session()->forget('app_locale_user');
                 session(['app_locale' => $languageCode]);
                 session(['app_locale_user' => $languageCode]);
-                if(Auth::guard('admin')->check()){
+                if (Auth::guard('admin')->check()) {
                     $user = Auth::guard('admin')->user();
                     $user->language_id = $language->language_id;
                     $user->save();
@@ -212,7 +211,7 @@ class LanguageController extends Controller
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
-                'message' =>__('admin.general_settings.language_updated_successfully'),
+                'message' => __('admin.general_settings.language_updated_successfully'),
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
@@ -231,7 +230,7 @@ class LanguageController extends Controller
         if (!$language) {
             return response()->json([
                 'status' => 'error',
-                'message' =>__('admin.general_settings.language_not_found'),
+                'message' => __('admin.general_settings.language_not_found'),
             ], 404);
         }
 
@@ -261,7 +260,7 @@ class LanguageController extends Controller
         }
 
         session(['app_locale_user' => $request->language_code]);
-        if(Auth::guard('web')->check()){
+        if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
             $user->language_id = $language->id;
             $user->save();
@@ -313,7 +312,7 @@ class LanguageController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'code'    => 404,
-                'message' =>__('admin.general_settings.language_not_found'),
+                'message' => __('admin.general_settings.language_not_found'),
             ], 404);
         }
 
@@ -343,9 +342,9 @@ class LanguageController extends Controller
         // Loop through each module
         foreach ($defaultTranslations as $module => $keys) {
             // if request has search ? filter module
-            if($request->has('search') && $request->search != ""){
+            if ($request->has('search') && $request->search != "") {
                 $search = $request->search;
-                if(!str_contains($module, $search)){
+                if (!str_contains($module, $search)) {
                     continue;
                 }
             }
@@ -441,7 +440,7 @@ class LanguageController extends Controller
         // Calculate progress
         $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100, 2) : 0;
         //color
-        switch(true){
+        switch (true) {
             case $progress >= 100:
                 $color = "bg-success";
                 break;
@@ -535,7 +534,7 @@ class LanguageController extends Controller
         // Calculate progress
         $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100, 2) : 0;
          //color
-         switch(true){
+        switch (true) {
             case $progress >= 100:
                 $color = "bg-success";
                 break;
@@ -576,7 +575,7 @@ class LanguageController extends Controller
             ], 422);
         }
         $systemLanguage = 'en';
-        if($language->transLang->code == $systemLanguage){
+        if ($language->transLang->code == $systemLanguage) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 422,

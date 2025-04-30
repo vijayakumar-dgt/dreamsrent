@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TaxRate extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -25,5 +26,4 @@ class TaxRate extends Model
     {
         return $this->belongsToMany(TaxGroup::class, 'sub_taxes', 'tax_rate_id', 'tax_group_id');
     }
-
 }

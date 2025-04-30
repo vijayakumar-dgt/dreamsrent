@@ -9,7 +9,6 @@ use Modules\CarInfo\Models\Tag;
 
 class TagControlerController extends Controller
 {
-    
     /**
      * Display a listing of the resource.
      *
@@ -20,44 +19,45 @@ class TagControlerController extends Controller
         return view('carinfo::tag.index');
     }
 
-    
+
     /**
      * Save or update a tag in the database.
      *
      * This function validates the incoming request to ensure the 'tag' field is
      * required and unique. If validation fails, it returns a JSON response with
      * the validation errors. If the tag exists (identified by 'id'), it updates
-     * the existing tag, otherwise, it creates a new tag record. On success, it 
-     * returns a JSON response with a success message. In case of an exception, 
+     * the existing tag, otherwise, it creates a new tag record. On success, it
+     * returns a JSON response with a success message. In case of an exception,
      * it returns a JSON response with an error message.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function save(Request $request){
+    public function save(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
-            'tag' => 'required|unique:tags,tag,'.$request->id.',id,deleted_at,NULL',
-        ],[
+            'tag' => 'required|unique:tags,tag,' . $request->id . ',id,deleted_at,NULL',
+        ], [
             'tag.required' => __('admin.rentals.tag_required'),
             'tag.unique' => __('admin.rentals.tag_unique'),
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
         $response = [];
         $successMessage = empty($request->id) ? __('admin.rentals.tag_create_success') : __('admin.rentals.tag_update_success');
         $errorMessage = empty($request->id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
-            if($request->has('id') && $request->id == ""){
+            if ($request->has('id') && $request->id == "") {
                 $tag = new Tag();
-            }else{
+            } else {
                 $tag = Tag::find($request->id);
                 $tag->status = $request->status == 'on' ? 1 : 0;
             }
@@ -88,15 +88,15 @@ class TagControlerController extends Controller
     {
         $tags = Tag::query();
 
-        if($request->has('keyword') && $request->keyword != null){
-            $tags->where('tag','like','%'.$request->keyword.'%');
+        if ($request->has('keyword') && $request->keyword != null) {
+            $tags->where('tag', 'like', '%' . $request->keyword . '%');
         }
 
-        if($request->has('status') && $request->status != null){
-            $tags->where('status',$request->status);
+        if ($request->has('status') && $request->status != null) {
+            $tags->where('status', $request->status);
         }
 
-        $tags = $tags->orderBy('tag','asc')->get();
+        $tags = $tags->orderBy('tag', 'asc')->get();
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -106,7 +106,7 @@ class TagControlerController extends Controller
 
     /**
      * Get a tag by its ID.
-     * 
+     *
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
@@ -138,33 +138,32 @@ class TagControlerController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    
+
     public function deleteTag(Request $request)
     {
-        
+
         try {
             $tag = Tag::findOrFail($request->delete_id);
             $tag->delete();
             $response = [
                 'status' => 'success',
                 'code'   => 200,
-                'message'=> __('admin.rentals.tag_delete_success')
+                'message' => __('admin.rentals.tag_delete_success')
             ];
-            return response()->json($response,200);
-        }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return response()->json($response, 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
-                'message'=> __('admin.common.default_delete_error')
-            ],422);
+                'message' => __('admin.common.default_delete_error')
+            ], 422);
         } catch (\Throwable $th) {
             $response = [
                 'status' => 'error',
                 'code'   => 422,
-                'message'=> __('admin.common.default_delete_error')
+                'message' => __('admin.common.default_delete_error')
             ];
-            return response()->json($response,422);
+            return response()->json($response, 422);
         }
-
     }
 }

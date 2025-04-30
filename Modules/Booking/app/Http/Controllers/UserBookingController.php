@@ -40,7 +40,7 @@ class UserBookingController extends Controller
     private $provider;
     public function __construct()
     {
-        $this->provider = new PayPalClient;
+        $this->provider = new PayPalClient();
         $this->provider->getAccessToken();
     }
 
@@ -315,7 +315,7 @@ class UserBookingController extends Controller
         return view("booking::user_booking.success_page", compact("transaction_id", "booking", "vehicleId", "vehicle", "vehicleImageUrl", "dLocation", "rLocation", "mainLocation", "vehicleExtraServicesWithPrice", "vehicleInsurance", "driverInfo", "driverInfo_ride", "driverInfo_price", "bookingInfo", "currencySymbol"));
     }
 
-    
+
     public function paymentFail($transaction_id)
     {
         $booking = Booking::where('transaction_id', $transaction_id)->first();
@@ -341,13 +341,12 @@ class UserBookingController extends Controller
         if ($request->rent_type == "delivery") {
             $pickup_location_id = $request->delivery_location;
             $return_location_id = $request->delivery_return_location;
-        } else if ($request->rent_type == "self_pickup") {
+        } elseif ($request->rent_type == "self_pickup") {
             $pickup_location_id = $request->pickup_location;
             $return_location_id = $request->pickup_return_location;
         }
 
         if ($request->payment_type == "cod") {
-
             $generateID = 'COD' . str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
 
             $data = [
@@ -619,7 +618,6 @@ class UserBookingController extends Controller
         }
 
         if ($request->payment_type == "stripe") {
-
             Stripe::setApiKey(config('services.stripe.secret'));
             $purchase_units = [];
             $currency_details = "USD"; // Fix currency
@@ -727,7 +725,6 @@ class UserBookingController extends Controller
         }
 
         if ($request->payment_type == "wallet") {
-
             $totalAmount = WalletHistory::where('user_id', $authUser->id)->where('status', 'completed')->where('type', '1')->sum('amount');
             $totalAmountdebit = WalletHistory::where('user_id', $authUser->id)->where('status', 'completed')->where('type', '2')->sum('amount');
             $walletTotalAmount = $totalAmount - $totalAmountdebit;

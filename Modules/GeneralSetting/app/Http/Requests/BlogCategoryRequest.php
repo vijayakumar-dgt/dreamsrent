@@ -35,7 +35,7 @@ class BlogCategoryRequest extends CustomFailedValidation
      */
     public function rules(): array
     {
-        $languageId = $this->input('language_id'); 
+        $languageId = $this->input('language_id');
         $id = $this->input('id');
         $parentId = 0;
 
@@ -44,7 +44,7 @@ class BlogCategoryRequest extends CustomFailedValidation
             $parentId = $category->parent_id;
         }
 
-        if ($this->input('method') === 'add') { 
+        if ($this->input('method') === 'add') {
             return [
                 'category_name' => 'required|string|max:255|unique:blog_categories,name',
                 'slug' => 'required|string|max:255|unique:blog_categories,slug',
@@ -66,7 +66,7 @@ class BlogCategoryRequest extends CustomFailedValidation
                                         ->where('parent_id', '=', $id)
                                         ->where('id', '!=', $id);
                             }
-                    }),
+                        }),
                 ],
                 'slug' => [
                     'required',
@@ -83,12 +83,11 @@ class BlogCategoryRequest extends CustomFailedValidation
                                       ->where('parent_id', $id)
                                       ->where('id', '!=', $id);
                             }
-                    }),
+                        }),
                 ],
             ];
         }
         return [];
-
     }
 
     /**

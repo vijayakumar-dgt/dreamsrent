@@ -53,35 +53,35 @@ class SectionController extends Controller
         $sortBy = $request->input('sort_by', 'id');
         $authuser = current_user();
         $language_id = $authuser->language_id;
-    
+
         $allowedNames = ['Banner One', 'Banner Two', 'Best Vehicle'];
-    
+
         $sections = Section::orderBy($sortBy, $orderBy)
             ->where('status', 1)
             ->whereIn('name', $allowedNames)
             ->get();
-    
+
         $data = [];
         $baseUrl = asset('storage');
-    
+
         foreach ($sections as $section) {
             // Fetch matching section_datas row
             $sectionData = DB::table('section_datas')
                 ->where('section_id', $section->id)
                 ->where('language_id', $language_id)
                 ->value('datas');
-    
+
             $decodedDatas = $sectionData ? json_decode($sectionData, true) : [];
-    
+
             // Update image URLs
             if (!empty($decodedDatas['thumbnail_image_one'])) {
                 $decodedDatas['thumbnail_image_one'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_one'];
             }
-    
+
             if (!empty($decodedDatas['thumbnail_image_two'])) {
                 $decodedDatas['thumbnail_image_two'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_two'];
             }
-    
+
             $data[] = array_merge([
                 'id' => $section->id,
                 'theme_id' => $section->theme_id,
@@ -89,7 +89,7 @@ class SectionController extends Controller
                 'status' => $section->status,
             ], $decodedDatas);
         }
-    
+
         return response()->json([
             'code' => 200,
             'message' => __('Section details retrieved successfully.'),

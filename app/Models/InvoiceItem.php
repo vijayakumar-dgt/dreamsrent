@@ -10,7 +10,8 @@ use Illuminate\Notifications\Notifiable;
 class InvoiceItem extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -32,5 +33,4 @@ class InvoiceItem extends Authenticatable
     {
         return $this->belongsTo(Invoices::class);
     }
-
 }

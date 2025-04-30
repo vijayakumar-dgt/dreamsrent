@@ -10,8 +10,10 @@ use App\Models\User;
 use Modules\Communication\Models\TicketCategory;
 use Modules\Communication\Models\TicketHistory;
 
-class Ticket extends Model {
-    use HasFactory, SoftDeletes;
+class Ticket extends Model
+{
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'ticket_id', 'priority', 'user_id', 'subject', 'description',
@@ -22,7 +24,8 @@ class Ticket extends Model {
     protected $dates = ['deleted_at'];
 
     // Relationships
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 
@@ -31,11 +34,13 @@ class Ticket extends Model {
         return $this->belongsTo(User::class, 'assignee_id')->with('userDetail');
     }
 
-    public function creator() {
+    public function creator()
+    {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function updater() {
+    public function updater()
+    {
         return $this->belongsTo(User::class, 'updated_by');
     }
 
@@ -48,4 +53,3 @@ class Ticket extends Model {
         return $this->hasMany(TicketHistory::class, 'ticket_id');
     }
 }
-

@@ -20,18 +20,18 @@ class CategoryController extends Controller
     {
         $authUser = current_user();
         $id = $request->id ?? null;
-    
+
         $rules = [
             'name' => ['required', Rule::unique('categories', 'name')->ignore($id)->whereNull('deleted_at')],
         ];
-    
+
         $messages = [
             'name.required' => __('admin.rentals.category_required'),
             'name.unique' => __('admin.rentals.category_unique'),
         ];
-    
+
         $validator = Validator::make($request->all(), $rules, $messages);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
@@ -39,10 +39,10 @@ class CategoryController extends Controller
                 'errors' => $validator->errors()->toArray()
             ], 422);
         }
-    
+
         $successMsg = empty($id) ? __('admin.rentals.category_create_success') : __('admin.rentals.category_update_success');
         $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
-    
+
         try {
             if (empty($id)) {
                 $data = [
@@ -59,7 +59,7 @@ class CategoryController extends Controller
                 ];
                 Category::where('id', $id)->update($data);
             }
-    
+
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
@@ -73,31 +73,31 @@ class CategoryController extends Controller
             ], 500);
         }
     }
-    
+
 
     public function list(Request $request)
     {
         $orderBy = $request->order_by ?? 'desc';
         $search = $request->input('search');
         $status = $request->input('status');
-    
+
         try {
             $authUser = current_user();
             $language_id = $authUser->language_id ?? 1;
-    
+
             $query = Category::orderBy('id', $orderBy)
                 ->where('language_id', $language_id);
-    
+
             if (!empty($search)) {
                 $query->where('name', 'LIKE', "%{$search}%"); // Adjust column name if needed
             }
-    
+
             if ($status !== null && $status !== '') {
                 $query->where('status', $status); // Assumes 'status' column exists in categories table
             }
-    
+
             $data = $query->get();
-    
+
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.common.default_retrieve_success'),
@@ -127,7 +127,6 @@ class CategoryController extends Controller
     public function delete(Request $request)
     {
         try {
-
             $id = $request->id;
 
             Category::where('id', $id)->delete();

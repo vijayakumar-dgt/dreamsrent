@@ -148,7 +148,7 @@ class LocationController extends Controller
         }
 
         $locations = $query->get();
-        
+
         $locations->map(function ($location) {
             $location->image_url = !empty($location->image) && file_exists(public_path('storage/' . $location->image))
                 ? uploadedAsset($location->image)
@@ -186,7 +186,7 @@ class LocationController extends Controller
 
     /**
      * Delete a location by ID.
-     * 
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -218,7 +218,6 @@ class LocationController extends Controller
     public function getCountries(Request $request)
     {
         try {
-
             $countries = DB::table('countries')->get(['id', 'name']);
 
             return response()->json([
@@ -255,7 +254,6 @@ class LocationController extends Controller
         }
 
         try {
-
             $states = DB::table('states')->where('country_id', $countryId)->get(['id', 'country_id', 'name']);
 
             return response()->json([

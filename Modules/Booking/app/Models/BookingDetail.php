@@ -4,6 +4,7 @@ namespace Modules\Booking\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 // use Modules\Booking\Database\Factories\BookingDetailFactory;
 
 class BookingDetail extends Model

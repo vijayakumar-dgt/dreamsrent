@@ -10,13 +10,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Currency extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [];
-    protected $table    = 'currencies'; 
+    protected $table    = 'currencies';
 
     // protected static function newFactory(): CurrencyFactory
     // {

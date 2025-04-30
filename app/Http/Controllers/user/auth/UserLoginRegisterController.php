@@ -18,33 +18,32 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cache;
 use Jenssegers\Agent\Agent;
 
-
 class UserLoginRegisterController extends Controller
 {
     public function userLogin()
     {
-        if(Auth::guard('web')->check()){
+        if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.login');
     }
     public function userRegister()
     {
-        if(Auth::guard('web')->check()){
+        if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.register');
     }
     public function forgotPassword()
     {
-        if(Auth::guard('web')->check()){
+        if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.forgot-password');
     }
     public function resetPassword()
     {
-        if(Auth::guard('web')->check()){
+        if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.password-reset');
@@ -160,9 +159,7 @@ class UserLoginRegisterController extends Controller
             //     [$user->name, $otp],
             //     $template->content
             // );
-
         } elseif ($settings['otp_type'] === 'sms') {
-
             // Retrieve sms template
             $notificationType = 2;
             $template = Templates::select('subject', 'content')
@@ -248,11 +245,11 @@ class UserLoginRegisterController extends Controller
 
             session(['user_id' => $save->id]);
             Cache::forget('user_auth_id');
-            Cache::forever('user_auth_id',  $save->id);
+            Cache::forever('user_auth_id', $save->id);
             DB::table('otp_settings')->where('email', $request->email)->delete();
 
             return response()->json(['message' => 'OTP verified successfully']);
-        } else if ($request->login_type == "forgot_email") {
+        } elseif ($request->login_type == "forgot_email") {
             $request->validate([
                 'forgot_email' => 'required|email',
                 'otp' => 'required',
@@ -285,7 +282,7 @@ class UserLoginRegisterController extends Controller
             $data = "done";
 
             return response()->json(['code' => 200, 'message' => 'OTP verified successfully', 'data' => $data, 'email' => $request->forgot_email]);
-        } else{
+        } else {
             $request->validate([
                 'email' => 'required|email',
                 'otp' => 'required',
@@ -317,18 +314,17 @@ class UserLoginRegisterController extends Controller
             Auth::guard('web')->login($user);
 
             session(['user_id' => $user->id]);
-            if($user->user_type=='2'){
+            if ($user->user_type == '2') {
                 Cache::forget('provider_auth_id');
-                Cache::forever('provider_auth_id',  $user->id);
-            }else{
+                Cache::forever('provider_auth_id', $user->id);
+            } else {
                 Cache::forget('user_auth_id');
-                Cache::forever('user_auth_id',  $user->id);
+                Cache::forever('user_auth_id', $user->id);
             }
             DB::table('otp_settings')->where('email', $request->email)->delete();
 
             return response()->json(['message' => 'OTP verified successfully']);
         }
-
     }
 
     public function validateEmail(Request $request)
@@ -515,7 +511,6 @@ class UserLoginRegisterController extends Controller
         }
 
         if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password], $request->has('remember'))) {
-
             $agent = new Agent();
             $ip = $request->ip();
             $device_type = $agent->device() ?? "";
@@ -538,7 +533,7 @@ class UserLoginRegisterController extends Controller
             $redirectTo = session('intended_url', route('home'));
             session()->forget('intended_url');
             if (session()->has('intended_booking')) {
-               $redirectTo = route('user.booking.redirect');
+                $redirectTo = route('user.booking.redirect');
             }
             return response()->json([
                 'status' => true,
@@ -555,9 +550,9 @@ class UserLoginRegisterController extends Controller
         ], 401);
     }
 
-    public function userlogout(){
+    public function userlogout()
+    {
         Auth::guard('web')->logout();
         return redirect()->route('home');
     }
-
 }

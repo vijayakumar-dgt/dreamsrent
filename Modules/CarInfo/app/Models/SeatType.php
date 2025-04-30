@@ -10,13 +10,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SeatType extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      */
     protected $table = "seat_types";
-    
+
     protected $fillable = ["seat_type", "status"];
 
     // protected static function newFactory(): SeatTypeFactory

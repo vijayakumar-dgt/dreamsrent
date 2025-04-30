@@ -87,8 +87,8 @@ class AppServiceProvider extends ServiceProvider
             $languageId    = getLanguageId($appLanguage);
             $copyright   = null;
             if ($languageId) {
-               $key = 'copy_right_' . $languageId;
-               $copyright = GeneralSetting::where('key', $key)->where('language_id', $languageId)->pluck('value')->first();
+                $key = 'copy_right_' . $languageId;
+                $copyright = GeneralSetting::where('key', $key)->where('language_id', $languageId)->pluck('value')->first();
             }
             $view->with([
                 'allLanguages' => $allLanguages,
@@ -112,7 +112,7 @@ class AppServiceProvider extends ServiceProvider
             $companyName = $companyName ? $companyName->value : '';
             $theme = $defaultTheme ? $defaultTheme->value : 1;
 
-            $logoSetting = GeneralSetting::where('group_id',16)->pluck('value','key')->toArray();
+            $logoSetting = GeneralSetting::where('group_id', 16)->pluck('value', 'key')->toArray();
             $logo = uploadedAsset(($logoSetting['logo_image'] ?? null), 'default_logo');
             $favicon = uploadedAsset(($logoSetting['favicon_image'] ?? null), 'default_favicon');
             $smallLogo = uploadedAsset(($logoSetting['small_image'] ?? null), 'default_small_logo');
@@ -172,5 +172,4 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
     }
-
 }

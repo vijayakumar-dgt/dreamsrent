@@ -83,7 +83,6 @@ class AdminProfileController extends Controller
                 'code'    => 200,
                 'message' => __('admin.general_settings.profile_update_success')
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status'  => 'error',
@@ -127,7 +126,6 @@ class AdminProfileController extends Controller
                 'message' =>  __('admin.general_settings.profile_update_success'),
                 'data'    => $profile
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status'  => 'error',
@@ -150,7 +148,6 @@ class AdminProfileController extends Controller
         $isValid = Hash::check($request->current_password, $user->password);
 
         return response()->json($isValid);
-
     }
 
     public function deleteAccount($id, Request $request)
@@ -165,5 +162,4 @@ class AdminProfileController extends Controller
 
         return response()->json(['success' => true, 'message' =>  __('admin.general_settings.account_deleted_successfully')]);
     }
-
 }

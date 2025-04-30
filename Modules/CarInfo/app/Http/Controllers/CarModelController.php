@@ -185,7 +185,6 @@ class CarModelController extends Controller
     public function delete(Request $request): JsonResponse
     {
         try {
-
             $id = $request->id ?? '';
             $ids = $request->ids ?? [];
 
@@ -215,7 +214,6 @@ class CarModelController extends Controller
         $search = $request->search ?? null;
 
         try {
-
             $data = CarModel::when(function ($query) use ($search) {
                 return $query->where('model_name', 'LIKE', "%{$search}%");
             })

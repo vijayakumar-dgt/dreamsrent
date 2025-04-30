@@ -40,12 +40,12 @@ class TaxRateController extends Controller
             'tax_rate.required' => __('admin.general_settings.tax_rate_required'),
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         $successMsg = empty($id) ? __('admin.general_settings.tax_rate_create_success') : __('admin.general_settings.tax_rate_update_success');
@@ -74,17 +74,16 @@ class TaxRateController extends Controller
                 'code'   => 500,
                 'message' => $errorMsg,
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
-
     }
 
     public function list(Request $request): JsonResponse
     {
         try {
             $orderBy = $request->order_by ?? 'asc';
-            
-            $data = TaxRate::orderBy('id', $orderBy)->get()->map(function($taxRate){
+
+            $data = TaxRate::orderBy('id', $orderBy)->get()->map(function ($taxRate) {
                 $taxRate->created_on = formatDateTime($taxRate->created_at, false);
                 return $taxRate;
             });
@@ -94,7 +93,6 @@ class TaxRateController extends Controller
                 'message' => __('admin.common.default_retrieve_success'),
                 'data' => $data,
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -108,7 +106,7 @@ class TaxRateController extends Controller
     {
         $id = $request->id;
         $data = TaxRate::find($id);
-        
+
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -132,7 +130,7 @@ class TaxRateController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_delete_error')
-            ],500);
+            ], 500);
         }
     }
 
@@ -156,12 +154,12 @@ class TaxRateController extends Controller
             'sub_tax.required' => __('admin.general_settings.sub_taxes_required'),
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         $successMsg = empty($id) ? __('admin.general_settings.tax_group_create_success') : __('admin.general_settings.tax_group_update_success');
@@ -207,17 +205,16 @@ class TaxRateController extends Controller
                 'code'   => 500,
                 'message' => $errorMsg,
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
-
     }
 
     public function taxGroupList(Request $request): JsonResponse
     {
         try {
             $orderBy = $request->order_by ?? 'asc';
-            
-            $data = TaxGroup::with(['taxRates:id,tax_name,tax_rate'])->orderBy('id', $orderBy)->get()->map(function($tax){
+
+            $data = TaxGroup::with(['taxRates:id,tax_name,tax_rate'])->orderBy('id', $orderBy)->get()->map(function ($tax) {
                 $tax->created_on = formatDateTime($tax->created_at, false);
                 $tax->total_tax_rate = $tax->taxRates ? number_format($tax->taxRates->sum('tax_rate'), 2) : 0;
                 return $tax;
@@ -228,7 +225,6 @@ class TaxRateController extends Controller
                 'message' => __('admin.common.default_retrieve_success'),
                 'data' => $data,
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -246,7 +242,7 @@ class TaxRateController extends Controller
         if ($data->taxRates) {
             $data['total_tax_rate'] = $data->taxRates->sum('tax_rate');
         }
-        
+
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -270,7 +266,7 @@ class TaxRateController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_delete_error')
-            ],500);
+            ], 500);
         }
     }
 
@@ -284,7 +280,6 @@ class TaxRateController extends Controller
                 'message' => __('admin.common.default_retrieve_success'),
                 'data' => $data,
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -293,5 +288,4 @@ class TaxRateController extends Controller
             ], 500);
         }
     }
-    
 }

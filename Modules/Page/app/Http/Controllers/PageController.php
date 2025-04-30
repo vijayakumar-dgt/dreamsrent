@@ -50,23 +50,23 @@ class PageController extends Controller
     {
         $languageId = $request->query('language_id');
         $language = TranslationLanguage::find($languageId);
-    
+
         $slugsToTry = [$slug, Str::start($slug, 'pages/')];
-    
+
         $query = Page::whereIn('slug', $slugsToTry)
             ->when($languageId, fn($q) => $q->where('language_id', $languageId))
             ->first();
-    
+
         if (!$query && $languageId) {
             $basePage = Page::whereIn('slug', $slugsToTry)
                 ->whereNull('parent_id')
                 ->first();
-    
+
             if ($basePage) {
                 $query = Page::where('parent_id', $basePage->id)
                     ->where('language_id', $languageId)
                     ->first();
-    
+
                 if (!$query) {
                     $query = new Page([
                         'language_id' => $languageId,
@@ -76,17 +76,17 @@ class PageController extends Controller
                 }
             }
         }
-    
+
         if (!$query) {
             $basePage = Page::whereIn('slug', $slugsToTry)->first();
-    
+
             if ($basePage) {
                 $parentId = $basePage->parent_id ?? $basePage->id;
-    
+
                 $query = Page::where('parent_id', $parentId)
                     ->where('language_id', $languageId)
                     ->first();
-    
+
                 if (!$query) {
                     $query = new Page([
                         'language_id' => $languageId,
@@ -96,14 +96,14 @@ class PageController extends Controller
                 }
             }
         }
-    
+
         if ($language) {
             app()->setLocale($language->code);
         }
-    
+
         return view('page::page.edit.index', compact('query', 'languageId'));
     }
-    
+
 
 
 
@@ -453,9 +453,7 @@ class PageController extends Controller
         if (empty($pageContentSections) || !collect((array)$pageContentSections)->contains(fn($section) => $section['status'] == 1)) {
             $pageContentSections = [];
         } else {
-
             foreach ($pageContentSections as &$section) {
-
                 // Banner One
                 if ($section['status'] == 1) {
                     if (isset($section['section_content']) && strpos($section['section_content'], '[banner_one') !== false) {

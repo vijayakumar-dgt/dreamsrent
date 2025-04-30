@@ -10,7 +10,8 @@ use Modules\Communication\Models\Ticket;
 
 class TicketHistory extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'ticket_id', 'user_id', 'description',

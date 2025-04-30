@@ -75,19 +75,18 @@ class DriverController extends Controller
             'email.email' => __('admin.common.email_valid'),
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         $successMsg = empty($id) ? __('admin.manage.driver_create_success') : __('admin.manage.driver_update_success');
         $errorMsg = empty($id) ?  __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
-
             if (empty($id)) {
                 if ($request->hasFile('image')) {
                     $file = $request->file('image');
@@ -125,11 +124,11 @@ class DriverController extends Controller
                 if ($request->hasFile('documents')) {
                     foreach ($request->file('documents') as $file) {
                         if ($file->isValid()) {
-                        $document = uploadFile($file, 'drivers');
-                        DriverDocument::create([
+                            $document = uploadFile($file, 'drivers');
+                            DriverDocument::create([
                             'driver_id' => $driver->id,
                             'document' => $document,
-                        ]);
+                            ]);
                         }
                     }
                 }
@@ -139,8 +138,8 @@ class DriverController extends Controller
                         $removedDocument = DriverDocument::where('id', $docId)->first();
                         if ($removedDocument) {
                             $doc = $removedDocument->document;
-                            if (Storage::disk('public')->exists('/'.$doc)) {
-                                Storage::disk('public')->delete('drivers/'. $doc);
+                            if (Storage::disk('public')->exists('/' . $doc)) {
+                                Storage::disk('public')->delete('drivers/' . $doc);
                             }
                         }
                         DriverDocument::where('id', $docId)->delete();
@@ -161,9 +160,8 @@ class DriverController extends Controller
                 'code'   => 500,
                 'message' => $errorMsg,
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
-
     }
 
     public function list(Request $request): JsonResponse
@@ -194,14 +192,14 @@ class DriverController extends Controller
                 $status = $request->sort_by_status;
                 $query->where('drivers.status', $status);
             }
-            
+
             // Date Filter
             if ($request->has('sort_by_date') && !empty($request->sort_by_date)) {
                 $dates = explode(' - ', $request->sort_by_date);
                 if (count($dates) === 2) {
                     $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
                     $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
-                    
+
                     // Apply date filter only if valid date format
                     if ($startDate && $endDate) {
                         $query->whereBetween('drivers.created_at', [$startDate->startOfDay(), $endDate->endOfDay()]);
@@ -253,7 +251,7 @@ class DriverController extends Controller
                     $vehicle = VehicleInfo::where('vehicle_info.id', $firstCarId)
                         ->join('cartypes', 'cartypes.id', '=', 'vehicle_info.type_id')
                         ->first(['cartypes.name as cartype_name', 'vehicle_info.id', 'vehicle_info.name as vehicle_name']);
-                    
+
                     if ($vehicle) {
                         $driver->vehicle = [
                             'vehicle_id' => $vehicle->id,
@@ -277,7 +275,6 @@ class DriverController extends Controller
                 'recordsFiltered' => $filteredRecords,
                 'data' => $drivers,
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -294,7 +291,7 @@ class DriverController extends Controller
         if ($data) {
             $data->image = uploadedAsset($data->image, "profile");
         }
-        
+
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -326,7 +323,7 @@ class DriverController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_delete_error')
-            ],500);
+            ], 500);
         }
     }
 
@@ -353,7 +350,7 @@ class DriverController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_status_error')
-            ],500);
+            ], 500);
         }
     }
 
@@ -381,7 +378,7 @@ class DriverController extends Controller
                 'code'   => 500,
                 'message' => __('admin.common.default_retrieve_error'),
                 'error' => $e->getMessage(),
-            ],500);
+            ], 500);
         }
     }
 
@@ -391,15 +388,15 @@ class DriverController extends Controller
             $driverId = $request->driver_id;
 
             $driver = Driver::select(
-                'id', 
+                'id',
                 'driver_name',
                 'email',
                 'phone_number',
                 'image',
-                )
+            )
                 ->where(['status' => 1, 'id' => $driverId])
                 ->first();
-            
+
             if ($driver) {
                 $driver->image = uploadedAsset($driver->image, 'profile');
             }
@@ -414,8 +411,7 @@ class DriverController extends Controller
                 'code'   => 500,
                 'message' => __('admin.common.default_retrieve_error'),
                 'error' => $e->getMessage(),
-            ],500);
+            ], 500);
         }
     }
-
 }

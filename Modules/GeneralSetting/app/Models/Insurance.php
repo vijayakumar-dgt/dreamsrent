@@ -11,7 +11,8 @@ use Modules\CarInfo\Models\PricingType;
 
 class Insurance extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +25,7 @@ class Insurance extends Model
         'status'
     ];
 
-    public function insuranceBenefits() 
+    public function insuranceBenefits()
     {
         return $this->hasMany(InsuranceBenefit::class, 'insurance_id');
     }
@@ -33,5 +34,4 @@ class Insurance extends Model
     {
         return $this->belongsTo(PricingType::class, 'price_type_id');
     }
-
 }

@@ -18,12 +18,12 @@ class AddonController extends Controller
 
         $jsonData = file_exists($jsonPath) ? json_decode(file_get_contents($jsonPath), true) : [];
         $addonModules = Addon::get(['id', 'name', 'slug', 'version', 'price', 'status']);
-    
+
         $jsonCollection = collect($jsonData);
-    
+
         $modules = $jsonCollection->map(function ($jsonModule) use ($addonModules) {
             $dbModule = $addonModules->firstWhere('name', $jsonModule['module_name']);
-    
+
             return [
                 'module_name' => $jsonModule['module_name'],
                 'module_image' => $jsonModule['module_image'],
@@ -34,7 +34,7 @@ class AddonController extends Controller
                 'purchase_link' => $jsonModule['purchase_link'] ?? '',
             ];
         });
-    
+
         return view('generalsetting::addon.index', compact('modules'));
     }
 
@@ -105,7 +105,6 @@ class AddonController extends Controller
     public function listNewAddonModules(Request $request)
     {
         try {
-
             $jsonPath = base_path('addon_modules.json');
 
             $jsonData = file_exists($jsonPath) ? json_decode(file_get_contents($jsonPath), true) : [];
@@ -129,13 +128,13 @@ class AddonController extends Controller
 
             return response()->json([
                 'code' => 200,
-                'message' =>__('admin.general_settings.addon_retrieve_success'),
+                'message' => __('admin.general_settings.addon_retrieve_success'),
                 'data' => $modules,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
-                'message' =>__('admin.general_settings.retrive_error'),
+                'message' => __('admin.general_settings.retrive_error'),
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -157,7 +156,7 @@ class AddonController extends Controller
             $moduleName = $request->module_name;
             $modulesPath = base_path("Modules/{$moduleName}");
             $moduleNameLower = strtolower($moduleName);
-                
+
             if (!file_exists($modulesPath)) {
                 $command = "git clone \"$repoUrl\" \"$modulesPath\" 2>&1";
                 // dd($command);
@@ -306,7 +305,7 @@ class AddonController extends Controller
 
             return __('admin.general_settings.module_updated_successfully');
         } else {
-            abort(404,  __('admin.general_settings.module_not_found'));
+            abort(404, __('admin.general_settings.module_not_found'));
         }
     }
 }

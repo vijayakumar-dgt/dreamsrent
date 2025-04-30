@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\WalletHistory;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 use Illuminate\Http\Request;
@@ -96,7 +97,6 @@ class WalletController extends Controller
         }
 
         if ($request->payment_type == "stripe") {
-
             Stripe::setApiKey(config('services.stripe.secret'));
             $currency_details = "USD";
 
@@ -185,7 +185,6 @@ class WalletController extends Controller
             WalletHistory::where('transaction_id', $sessionId)->update(['status' => 'Completed']);
 
             return redirect()->route('user.wallet', ['transaction_id' => $sessionId]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -194,7 +193,8 @@ class WalletController extends Controller
         }
     }
 
-    public function paymentFailed(Request $request){
+    public function paymentFailed(Request $request)
+    {
         dd('Error in the payment');
     }
 
@@ -239,6 +239,4 @@ class WalletController extends Controller
             ], 500);
         }
     }
-
-
 }

@@ -23,7 +23,8 @@ use Modules\RolesPermission\Models\Permission;
 
 if (!function_exists('clearCache')) {
 
-    function clearCache() {
+    function clearCache()
+    {
         Artisan::call('cache:clear');
         Artisan::call('route:clear');
         Artisan::call('config:clear');
@@ -39,12 +40,12 @@ if (!function_exists('uploadFile')) {
         $disk = config('filesystems.default');
 
         if ($file instanceof UploadedFile && $file->isValid()) {
-            if (Storage::disk($disk)->exists($path. '/' .$oldFileName)) {
-                Storage::disk($disk)->delete($path. '/' .$oldFileName);
+            if (Storage::disk($disk)->exists($path . '/' . $oldFileName)) {
+                Storage::disk($disk)->delete($path . '/' . $oldFileName);
             }
             $filename = str_replace(',', '', Str::uuid() . '_' . time() . '.' . $file->getClientOriginalExtension());
             $file->storeAs($path, $filename, $disk);
-            return $path."/".$filename;
+            return $path . "/" . $filename;
         }
         return null;
     }
@@ -151,14 +152,16 @@ if (!function_exists('uploadedAsset')) {
 }
 
 
-function customEncrypt($data, $key = 'default_secret_key') {
+function customEncrypt($data, $key = 'default_secret_key')
+{
     $cipher = 'AES-128-CBC';
     $iv = substr(md5($key), 0, 16);
     $encrypted = openssl_encrypt($data, $cipher, $key, 0, $iv);
     return rtrim(strtr(base64_encode($encrypted), '+/', '-_'), '=');
 }
 
-function customDecrypt($encryptedData, $key = 'default_secret_key') {
+function customDecrypt($encryptedData, $key = 'default_secret_key')
+{
     $cipher = 'AES-128-CBC';
     $iv = substr(md5($key), 0, 16);
 
@@ -168,7 +171,8 @@ function customDecrypt($encryptedData, $key = 'default_secret_key') {
     return $decrypted;
 }
 
-function getDefaultCurrencySymbol() {
+function getDefaultCurrencySymbol()
+{
     $defaultCurrency = GeneralSetting::where('key', 'currency_symbol')->first();
     $currencyId = $defaultCurrency->value ?? '';
     if ($currencyId) {
@@ -180,7 +184,8 @@ function getDefaultCurrencySymbol() {
     return '$';
 }
 
-function isRTL($languageCode = null) {
+function isRTL($languageCode = null)
+{
 
     $language = TranslationLanguage::select('id')->where('code', $languageCode)->first();
     if ($language) {
@@ -191,7 +196,6 @@ function isRTL($languageCode = null) {
         }
     }
     return 0;
-
 }
 
 if (!function_exists('formatFileSize')) {
@@ -222,7 +226,8 @@ if (!function_exists('getUserPermissions')) {
     }
 }
 
-function hasPermission($permissions, $moduleSlug, $action) {
+function hasPermission($permissions, $moduleSlug, $action)
+{
 
     $user = current_user();
 
@@ -258,14 +263,16 @@ function current_user($guard = null)
         ? Auth::guard($guard)->user()
         : null;
 }
-function rentalNotificationEnabled(){
+function rentalNotificationEnabled()
+{
     $bookingNotification = GeneralSetting::where('group_id', 2)->where('key', 'bookingUpdates')->first();
-    if($bookingNotification){
+    if ($bookingNotification) {
         return $bookingNotification->value;
     }
     return 0;
 }
-function sendNotification($email,$slug,$notifyData=[]){
+function sendNotification($email, $slug, $notifyData = [])
+{
     $notificationType = NotificationType::where('slug', $slug)->first();
     if (!$notificationType) {
         return null;
@@ -292,7 +299,7 @@ function sendNotification($email,$slug,$notifyData=[]){
         return $text;
     };
 
-    if(!$email){
+    if (!$email) {
         return null;
     }
     $parsedTemplate = [
@@ -302,17 +309,17 @@ function sendNotification($email,$slug,$notifyData=[]){
         'notification_content' => $replaced($template->notification_content),
     ];
 
-    if(!empty($parsedTemplate)){
+    if (!empty($parsedTemplate)) {
         $payload = [
             'to_email' => $email,
             'subject' => $parsedTemplate['subject'],
             'content' => $parsedTemplate['content'],
         ];
         $emailPayload   = new Request($payload);
-        $emailController = new EmailController;
+        $emailController = new EmailController();
         $emailController->sendEmail($emailPayload);
         $user = User::where('email', $email)->first();
-        if($user){
+        if ($user) {
             Notification::create([
               'user_id' => $user->id,
               'subject' => $parsedTemplate['subject'],
@@ -322,7 +329,8 @@ function sendNotification($email,$slug,$notifyData=[]){
     }
 }
 
-function getLanguageId($langCode = 'en'){
+function getLanguageId($langCode = 'en')
+{
     $languageId = TranslationLanguage::where('code', $langCode)->value('id');
     return $languageId ?? 1;
 }
@@ -338,12 +346,13 @@ function getProfileImage()
     }
 }
 
-function isAccessMenu($menu){
+function isAccessMenu($menu)
+{
     $value = 0;
     if ($menu == 'reservation') {
         $value = GeneralSetting::where(['group_id' => 20, 'key' => 'reservation'])->pluck('value')->first();
     }
-    if($value){
+    if ($value) {
         return $value;
     }
     return 0;
@@ -360,4 +369,3 @@ if (!function_exists('getBaseUrl')) {
         return request()->getSchemeAndHttpHost();
     }
 }
-

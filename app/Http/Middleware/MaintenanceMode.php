@@ -19,7 +19,7 @@ class MaintenanceMode
         if ($request->is('admin/*') || $request->is('maintenance/*')) {
             return $next($request);
         }
-        $isMaintenance = GeneralSetting::where('group_id',4)->where('key','maintenance_status')->pluck('value')->first();
+        $isMaintenance = GeneralSetting::where('group_id', 4)->where('key', 'maintenance_status')->pluck('value')->first();
 
         if ($isMaintenance == 1) {
             return redirect()->route('maintenance');

@@ -1,4 +1,5 @@
 <?php
+
 return [
    'auth' => [
         'sign_in' => 'تسجيل الدخول',
@@ -61,7 +62,7 @@ return [
     ],
 
 
-  'home' => [
+   'home' => [
     'signin' => 'تسجيل الدخول',
     'signup' => 'إنشاء حساب',
     'view_all_blogs' => 'عرض جميع المدونات',
@@ -381,8 +382,8 @@ return [
     'average' => 'متوسط',
     'below_average' => 'اقل من المتوسط',
     'poor' => 'ضعيف',
-  ],
-  'common' => [
+   ],
+   'common' => [
     'back_to_home' => 'العودة إلى الصفحة الرئيسية',
     'search' => 'بحث',
     'minlength_3' => 'يجب أن لا يقل عن 3 أحرف.',
@@ -474,8 +475,8 @@ return [
     'saving' => 'جارٍ الحفظ',
     'logout' => 'تسجيل الخروج',
     'learn_more' => 'تعرف على المزيد',
-  ],
-  'user' => [
+   ],
+   'user' => [
     'user_dashboard' => 'لوحة تحكم المستخدم',
     'dashboard' => 'لوحة التحكم',
     'choose_your_payment_method' => 'اختر طريقة الدفع الخاصة بك',
@@ -729,9 +730,9 @@ return [
     'delete_all' => 'حذف الكل',
     'are_you_sure_delete_all' => 'هل انت متاكد انك تريد حذف الكل',
     'maxlength_50' => 'الحد الادنى لعدد الحروف هو 50',
-  ],
+   ],
 
-  'blog' => [
+   'blog' => [
     'blog_list' => 'قائمة المدونات',
     'blogs' => 'مدونات',
     'filter' => 'فلتر',
@@ -753,5 +754,5 @@ return [
     'no_blog_found' => 'لم يتم العثور على مدونة',
     'no_data_found' => 'لم يتم العثور على بيانات',
 
-  ]
+   ]
 ];

@@ -1,4 +1,5 @@
 <?php
+
 return [
     'auth' => [
         'sign_in' => 'Sign In',

@@ -37,10 +37,10 @@ class BookingController extends Controller
         $priceTypes = PricingType::where('type', 1)->get();
         $drivingTypes = DB::table('driving_types')->get();
         $customers = User::select(
-                'users.id', 
-                'users.name as username',
-                DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
-            )
+            'users.id',
+            'users.name as username',
+            DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
+        )
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 3, 'users.status' => 1])
             ->get()->map(function ($customer) {
@@ -56,14 +56,14 @@ class BookingController extends Controller
         try {
             $customerId = $request->customer_id ?? '';
             $customer = User::select(
-                'users.id', 
+                'users.id',
                 'users.name as username',
                 DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
                 DB::raw("(SELECT COUNT(*) FROM bookings WHERE bookings.customer_id = users.id) as bookings_count"),
-                'users.email', 
+                'users.email',
                 'users.phone_number',
                 'user_details.profile_image'
-                )
+            )
                 ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
                 ->where(['users.user_type' => 3, 'users.status' => 1, 'users.id' => $customerId])
                 ->first();
@@ -83,7 +83,7 @@ class BookingController extends Controller
                 'code'   => 500,
                 'message' => __('admin.common.default_retrieve_error'),
                 'error' => $e->getMessage(),
-            ],500);
+            ], 500);
         }
     }
 
@@ -127,18 +127,18 @@ class BookingController extends Controller
                 )->format('Y-m-d H:i:s');
                 $endDateFormat = Carbon::createFromFormat('d-m-Y', $endDate)->format('Y-m-d');
             }
-            
+
             $vehicles = VehicleInfo::select(
-                'vehicle_info.id', 
+                'vehicle_info.id',
                 'vehicle_info.vehicle_image as image',
-                'vehicle_info.name as vehicle_name', 
+                'vehicle_info.name as vehicle_name',
                 'vehicle_info.year',
                 'cartypes.name as vehicle_type',
                 'brands.brand_name',
                 'car_models.model_name',
                 'car_colors.name as color_name',
                 'car_colors.value as color_value',
-                )
+            )
                 ->Join('cartypes', 'vehicle_info.type_id', '=', 'cartypes.id')
                 ->Join('brands', 'vehicle_info.brand_id', '=', 'brands.id')
                 ->Join('car_models', 'vehicle_info.model_id', '=', 'car_models.id')
@@ -158,7 +158,7 @@ class BookingController extends Controller
                 ->when(!empty($typeIds), fn($query) => $query->whereIn('vehicle_info.type_id', $typeIds))
                 ->when(!empty($modelIds), fn($query) => $query->whereIn('vehicle_info.model_id', $modelIds))
                 ->when(!empty($colorIds), fn($query) => $query->whereIn('vehicle_info.color_id', $colorIds))
- 
+
                 ->when(!empty($pickupLocation), function ($query) use ($pickupLocation) {
                     return $query->where(function ($q) use ($pickupLocation) {
                         $q->where('vehicle_info.main_location_id', '=', $pickupLocation)
@@ -186,12 +186,12 @@ class BookingController extends Controller
 
                 ->when($tariff, function ($query) use ($tariff, $startDateTime, $endDateTime) {
                     $noOfDays = 1;
-                    
+
                     if (!empty($startDateTime) && !empty($endDateTime)) {
                         $start = Carbon::parse($startDateTime);
                         $end = Carbon::parse($endDateTime);
                         $diffMinutes = $start->diffInMinutes($end);
-                        $noOfDays = ceil($diffMinutes / 1440); 
+                        $noOfDays = ceil($diffMinutes / 1440);
                     }
 
                     return $query->join('vehicle_tarrifs', function ($join) use ($noOfDays) {
@@ -210,7 +210,7 @@ class BookingController extends Controller
 
                 ->when(empty($tariff), function ($query) use ($startDateTime, $endDateTime) {
                     $noOfDays = 1;
-                
+
                     if (!empty($startDateTime) && !empty($endDateTime)) {
                         $start = Carbon::parse($startDateTime);
                         $end = Carbon::parse($endDateTime);
@@ -221,7 +221,7 @@ class BookingController extends Controller
 
                     $tariffType = 'daily';
                     $seasonalRateColumn = 'seasonal_daily_rate';
-                
+
                     if ($noOfDays >= 7 && $noOfDays < $daysInMonth) {
                         $tariffType = 'weekly';
                         $seasonalRateColumn = 'seasonal_weekly_rate';
@@ -259,8 +259,7 @@ class BookingController extends Controller
                         $tariffType,
                         $tariffType
                     ]);
-                    
-                }) 
+                })
                 ->when(!empty($startDateTime) || !empty($endDateTime), function ($query) use ($request, $startDateTime, $endDateTime, $bookingId) {
                     $query->whereNotExists(function ($q) use ($startDateTime, $endDateTime, $bookingId) {
                         $q->select(DB::raw(1))
@@ -299,7 +298,6 @@ class BookingController extends Controller
                 'message' => __('Vehicles retrieved successfully.'),
                 'data' => $vehicles,
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -390,7 +388,7 @@ class BookingController extends Controller
                     $details['tariff_base_km'] = $vehicleTariff->tariff_base_km;
                     $details['tariff_extra_price'] = $vehicleTariff->tariff_extra_price;
                 }
-            } 
+            }
             if ($request->vehicle_season_id) {
                 $vehicleSeason = VehicleSeason::find($request->vehicle_season_id);
                 if ($vehicleSeason) {
@@ -403,7 +401,7 @@ class BookingController extends Controller
                     $details['seasonal_late_fee'] = $vehicleSeason->seasonal_late_fee;
                 }
             }
-            
+
             if (empty($bookingId)) {
                 $data['created_by'] = Auth::guard('admin')->id();
                 $booking = Booking::create($data);
@@ -413,9 +411,9 @@ class BookingController extends Controller
                 $booking->update(['reservation_id' => $bookingPrefix . $bookingNumber]);
                 $details['booking_id'] = $booking->id;
                 $bookingId = $booking->id;
-                
+
                 $bookingDetail = BookingDetail::create($details);
-        
+
                 $historyData = [
                     'bookings'         => $booking->toArray(),
                     'booking_details'  => $bookingDetail->toArray(),
@@ -448,19 +446,18 @@ class BookingController extends Controller
                     'payment_status'  => $booking->payment_status ?? "",
                     'tototal_amount'  => $booking->final_price ?? ""
                 ];
-                if(rentalNotificationEnabled()){
-                    $appAdmin = User::where('user_type',1)->first();
-                    sendNotification($appAdmin->email,'booking-confirmation-to-admin',$notifyData);
-                    
-                    sendNotification($customer->email,'booking-confirmation-to-user',$notifyData);
-                }
+                if (rentalNotificationEnabled()) {
+                    $appAdmin = User::where('user_type', 1)->first();
+                    sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
 
+                    sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
+                }
             } else {
                 $data['updated_by'] = Auth::guard('admin')->id();
-                
+
                 Booking::where('id', $bookingId)->update($data);
                 BookingDetail::where('booking_id', $bookingId)->update($details);
-                
+
                 $booking = Booking::find($bookingId);
                 $bookingDetail = BookingDetail::where('booking_id', $bookingId)->first();
 
@@ -475,7 +472,7 @@ class BookingController extends Controller
                     'message'    => 'Reservation updated'
                 ]);
             }
-            
+
 
             DB::commit();
 
@@ -484,7 +481,6 @@ class BookingController extends Controller
                 'message' => $successMsg,
                 'view_details_url' => route('reservation.details', ['id' => customEncrypt($bookingId, Booking::$reservationSecretKey)]),
             ], 200);
-
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -505,7 +501,7 @@ class BookingController extends Controller
             'users.id',
             'users.name as username',
             DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
-            )
+        )
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 3, 'users.status' => 1])
             ->get()->map(function ($customer) {
@@ -533,7 +529,7 @@ class BookingController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_delete_error'),
-            ],500);
+            ], 500);
         }
     }
 
@@ -580,7 +576,7 @@ class BookingController extends Controller
             if ($request->has('pickup_location_ids') && !empty($request->pickup_location_ids)) {
                 $query->whereIn('bookings.pickup_location', $request->pickup_location_ids);
             }
-    
+
             // Apply Drop Location Filter
             if ($request->has('drop_location_ids') && !empty($request->drop_location_ids)) {
                 $query->whereIn('bookings.return_location', $request->drop_location_ids);
@@ -592,7 +588,7 @@ class BookingController extends Controller
                 if (count($dates) === 2) {
                     $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
                     $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
-                    
+
                     // Apply date filter only if valid date format
                     if ($startDate && $endDate) {
                         $query->whereBetween('bookings.created_at', [$startDate->startOfDay(), $endDate->endOfDay()]);
@@ -600,7 +596,7 @@ class BookingController extends Controller
                 }
             }
 
-            // Apply Sort Filter 
+            // Apply Sort Filter
             if ($request->has('sort_by') && !empty($request->sort_by)) {
                 switch (strtolower($request->sort_by)) {
                     case 'latest':
@@ -679,7 +675,7 @@ class BookingController extends Controller
             }
 
             $booking = Booking::select(
-                'bookings.*', 
+                'bookings.*',
                 'vehicle_info.name as vehicle_name',
                 'vehicle_info.vehicle_image',
                 DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
@@ -726,11 +722,11 @@ class BookingController extends Controller
         $booking = Booking::select(
             'bookings.id',
             'bookings.reservation_id',
-            'bookings.vehicle_id', 
-            'bookings.booking_status', 
-            'bookings.booking_date', 
-            'bookings.start_datetime', 
-            'bookings.end_datetime', 
+            'bookings.vehicle_id',
+            'bookings.booking_status',
+            'bookings.booking_date',
+            'bookings.start_datetime',
+            'bookings.end_datetime',
             'bookings.no_of_days',
             'bookings.driving_type',
             'bookings.pickup_location',
@@ -832,7 +828,6 @@ class BookingController extends Controller
         ]);
 
         return view('booking::reservation.view_details', compact('booking', 'bookingHistories'));
-
     }
 
     public function calculateTotalPrice(Request $request): JsonResponse
@@ -856,20 +851,20 @@ class BookingController extends Controller
                 case 'daily':
                     $vehiclePriceRate = $noOfDays * $vehiclePrice;
                     break;
-                    
+
                 case 'weekly':
                     $noOfWeeks = ceil($noOfDays / 7);
                     $vehiclePriceRate = $noOfWeeks * $vehiclePrice;
                     break;
-                    
+
                 case 'monthly':
                     $vehiclePriceRate = $noOfMonths * $vehiclePrice;
                     break;
-                    
+
                 case 'yearly':
                     $vehiclePriceRate = $noOfYears * $vehiclePrice;
                     break;
-                    
+
                 default:
                     $vehiclePriceRate = $noOfDays * $vehiclePrice;
                     $vehiclePriceType = 'daily';
@@ -956,7 +951,6 @@ class BookingController extends Controller
                 'message' => 'Success',
                 'data' => $response,
             ], 200);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
@@ -1021,11 +1015,11 @@ class BookingController extends Controller
                 'payment_status'  => $booking->payment_status ?? "",
                 'tototal_amount'  => $booking->final_price ?? ""
             ];
-            if(rentalNotificationEnabled()){
-                $appAdmin = User::where('user_type',1)->first();
-                sendNotification($appAdmin->email,'booking-cancelled-to-admin',$notifyData);
-                
-                sendNotification($customer->email,'booking-cancelled-to-user',$notifyData);
+            if (rentalNotificationEnabled()) {
+                $appAdmin = User::where('user_type', 1)->first();
+                sendNotification($appAdmin->email, 'booking-cancelled-to-admin', $notifyData);
+
+                sendNotification($customer->email, 'booking-cancelled-to-user', $notifyData);
             }
 
             DB::commit();
@@ -1043,5 +1037,4 @@ class BookingController extends Controller
             ], 500);
         }
     }
-
 }

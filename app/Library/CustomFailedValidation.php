@@ -11,11 +11,11 @@ class CustomFailedValidation extends FormRequest
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(
-      response()->json([
-          'code' => 422,
-          'data' => null,
-          'message' => $validator->errors()->toArray(),
-      ], 422)
-    );
+            response()->json([
+            'code' => 422,
+            'data' => null,
+            'message' => $validator->errors()->toArray(),
+            ], 422)
+        );
     }
 }

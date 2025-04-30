@@ -18,19 +18,20 @@ class ExtraServiceController extends Controller
         return view('carinfo::extra_services.index');
     }
 
-    
+
     /**
      * Save or update an extra service.
      *
-     * Validates the request data and either creates a new extra service or updates an existing one 
-     * based on the presence of an 'id' in the request. Handles file uploads for 'icon' and 'image' 
-     * fields, ensuring they are of valid mime types and size. 
-     * 
+     * Validates the request data and either creates a new extra service or updates an existing one
+     * based on the presence of an 'id' in the request. Handles file uploads for 'icon' and 'image'
+     * fields, ensuring they are of valid mime types and size.
+     *
      * @param \Illuminate\Http\Request $request The request object containing input data.
      * @return \Illuminate\Http\JsonResponse JSON response with a success or error message.
      */
 
-    public function storeExtraService(Request $request){
+    public function storeExtraService(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name' => [
                 'required',
@@ -61,19 +62,19 @@ class ExtraServiceController extends Controller
             'description.required' => __('admin.rentals.description_required'),
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
         $successMessage = empty($request->id) ? __('admin.rentals.extra_service_create_success') : __('admin.rentals.extra_service_update_success');
         $errorMessage = empty($request->id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
         try {
-            if($request->has('id') && $request->id == ""){
+            if ($request->has('id') && $request->id == "") {
                 $extraService = new ExtraService();
-            }else{
+            } else {
                 $extraService = ExtraService::find($request->id);
                 $extraService->status = $request->status == 'on' ? 1 : 0;
             }
@@ -82,28 +83,27 @@ class ExtraServiceController extends Controller
                 //remove $folderName from old images
                 $oldIcon = str_replace($folderName . '/', '', $extraService->icon);
                 $oldImage = str_replace($folderName . '/', '', $extraService->image);
-                if($request->hasFile('icon') && $request->file('icon')->isValid()){
-                    $icon = $request->file('icon');
-                    $extraService->icon = uploadFile($icon, $folderName, $oldIcon);
-                }
-                if($request->hasFile('image') && $request->file('image')->isValid()){
-                    $image = $request->file('image');
-                    $extraService->image = uploadFile($image, $folderName, $oldImage);
-                }
+            if ($request->hasFile('icon') && $request->file('icon')->isValid()) {
+                $icon = $request->file('icon');
+                $extraService->icon = uploadFile($icon, $folderName, $oldIcon);
+            }
+            if ($request->hasFile('image') && $request->file('image')->isValid()) {
+                $image = $request->file('image');
+                $extraService->image = uploadFile($image, $folderName, $oldImage);
+            }
                 $extraService->description = $request->description;
                 $extraService->save();
                 return response()->json([
                     'status' => 'success',
                     'code'   => 200,
                     'message' => $successMessage
-                ],200);
-            
+                ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
                 'message' => $errorMessage
-            ],500);
+            ], 500);
         }
     }
 
@@ -115,21 +115,22 @@ class ExtraServiceController extends Controller
      */
 
 
-    public function getExtraServices(Request $request){
+    public function getExtraServices(Request $request)
+    {
         $authId = current_user();
         $language_id = $authId->language_id ?? null;
         $extraServices = ExtraService::query()->where("language_id", $language_id);
-        if($request->has('keyword') && $request->keyword != ""){
+        if ($request->has('keyword') && $request->keyword != "") {
             $extraServices->where('name', 'like', '%' . $request->keyword . '%');
         }
-        if($request->has('status') && $request->status != ""){
+        if ($request->has('status') && $request->status != "") {
             $extraServices->where('status', $request->status);
         }
         $extraServices = $extraServices->orderBy('name', 'asc')->get();
         //replace image path
-        $extraServices->map(function($extraService){
+        $extraServices->map(function ($extraService) {
             $extraService->icon  = $extraService->icon != "" && file_exists(public_path('storage/' . $extraService->icon)) ? uploadedAsset($extraService->icon) : null;
-            $extraService->image = $extraService->image != "" && file_exists(public_path('storage/' . $extraService->image)) ? uploadedAsset($extraService->image) : null; 
+            $extraService->image = $extraService->image != "" && file_exists(public_path('storage/' . $extraService->image)) ? uploadedAsset($extraService->image) : null;
         });
 
         return response()->json([
@@ -147,10 +148,11 @@ class ExtraServiceController extends Controller
      * @return \Illuminate\Http\JsonResponse JSON response containing the status, code, and extra service data.
      */
 
-    public function getExtraService($id){
-       $extraService = ExtraService::find($id);
-       $extraService->icon  = $extraService->icon != "" && file_exists(public_path('storage/' . $extraService->icon)) ? uploadedAsset($extraService->icon) : null;
-       $extraService->image = $extraService->image != "" && file_exists(public_path('storage/' . $extraService->image)) ? uploadedAsset($extraService->image) : null; 
+    public function getExtraService($id)
+    {
+        $extraService = ExtraService::find($id);
+        $extraService->icon  = $extraService->icon != "" && file_exists(public_path('storage/' . $extraService->icon)) ? uploadedAsset($extraService->icon) : null;
+        $extraService->image = $extraService->image != "" && file_exists(public_path('storage/' . $extraService->image)) ? uploadedAsset($extraService->image) : null;
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -166,7 +168,8 @@ class ExtraServiceController extends Controller
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the extra service is not found.
      * @throws \Throwable If any other error occurs.
      */
-    public function deleteExtraService(Request $request){
+    public function deleteExtraService(Request $request)
+    {
         try {
             $extraService = ExtraService::findOrFail($request->delete_id);
             $extraService->delete();
@@ -174,39 +177,38 @@ class ExtraServiceController extends Controller
                 'status' => 'success',
                 'code'   => 200,
                 'message' => __('admin.rentals.extra_service_delete_success')
-            ],200);
+            ], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' => __('admin.common.default_delete_error')
-            ],422);
+            ], 422);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' => __('admin.common.default_delete_error')
-            ],422);
+            ], 422);
         }
     }
 
     public function getVehicleExtraServices(Request $request)
     {
         try {
-
             $vehicleIds = $request->vehicle_ids;
 
             $extraServices = ExtraService::select(
-                'extra_services.id', 
+                'extra_services.id',
                 'extra_services.name',
                 'extra_services.description',
-                'vehicle_extra_services.value as extra_service_type', 
+                'vehicle_extra_services.value as extra_service_type',
                 'vehicle_extra_services.price'
-                )
+            )
                 ->Join('vehicle_extra_services', 'extra_services.id', '=', 'vehicle_extra_services.extra_service_id')
                 ->where('extra_services.status', 1)
                 ->whereIn('vehicle_id', $vehicleIds)
-                ->get()->map(function($extraService){
+                ->get()->map(function ($extraService) {
                     $extraService->price = number_format($extraService->price, 0);
                     return $extraService;
                 });
@@ -221,9 +223,7 @@ class ExtraServiceController extends Controller
                 'code'   => 500,
                 'message' => __('admin.common.default_retrieve_error'),
                 'error' => $e->getMessage(),
-            ],500);
+            ], 500);
         }
     }
-
 }
-

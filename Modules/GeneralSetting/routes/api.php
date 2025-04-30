@@ -5,7 +5,6 @@ use Modules\GeneralSetting\Http\Controllers\GeneralSettingController;
 use Modules\GeneralSetting\Http\Controllers\BlogsController;
 use Modules\GeneralSetting\Http\Controllers\AdminProfileController;
 
-
 /*
  *--------------------------------------------------------------------------
  * API Routes
@@ -22,7 +21,7 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 });
 Route::post('/admin/check-password', [AdminProfileController::class, 'checkPassword']);
 
-    Route::group(['prefix' => 'admin/blogs'], function() {
+    Route::group(['prefix' => 'admin/blogs'], function () {
         Route::post('/list-category', [BlogsController::class, 'index']);
         Route::post('/save-category', [BlogsController::class, 'store']);
         Route::post('/delete-category', [BlogsController::class, 'destroy']);

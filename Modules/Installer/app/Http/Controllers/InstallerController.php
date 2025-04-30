@@ -30,22 +30,19 @@ class InstallerController extends Controller
     {
 
         [$checks, $success, $failedChecks] = $this->checkMinimumRequirements();
-        session()->put( 'step-2-complete', true );
-        return view( 'installer::requirements', compact( 'checks', 'success', 'failedChecks' ) );
-        if ( $step = Configuration::stepExists( ) && $success) {
-            if($step == 5){
-                return redirect()->route( 'setup.complete' );
+        session()->put('step-2-complete', true);
+        return view('installer::requirements', compact('checks', 'success', 'failedChecks'));
+        if ($step = Configuration::stepExists() && $success) {
+            if ($step == 5) {
+                return redirect()->route('setup.complete');
             }
-
         }
-
-
     }
 
     public function database()
     {
         if ($this->requirementsCompleteStatus()) {
-            session()->put( 'requirements-complete', true );
+            session()->put('requirements-complete', true);
 
 
             return view('installer::database', ['isLocalHost' => InstallerInfo::isRemoteLocal()]);
@@ -53,8 +50,6 @@ class InstallerController extends Controller
             if (Configuration::stepExists()) {
                 return redirect()->route('setup.account');
             }
-
-
         }
 
         return redirect()->route('setup.requirements')->withInput()->withErrors(['errors' => 'Your server does not meet the minimum requirements.']);
@@ -96,9 +91,9 @@ class InstallerController extends Controller
             if ($request->has('fresh_install') && $request->filled('fresh_install') && $request->fresh_install == 'on') {
                 $deleteDummyData = true;
                 Cache::put('fresh_install', true, now()->addMinutes(60));
-                $migration = $this->importDatabase( InstallerInfo::getFreshDatabaseFilePath() );
-            }else{
-                $migration = $this->importDatabase( InstallerInfo::getDummyDatabaseFilePath() );
+                $migration = $this->importDatabase(InstallerInfo::getFreshDatabaseFilePath());
+            } else {
+                $migration = $this->importDatabase(InstallerInfo::getDummyDatabaseFilePath());
             }
 
             if ($migration !== true) {
@@ -141,20 +136,19 @@ class InstallerController extends Controller
         session()->put('step-3-complete', true);
         $step = Configuration::stepExists();
 
-        if ( $step >= 1 && $step < 5 && $this->requirementsCompleteStatus()) {
-            $admin = $step >= 2 ? User::select('name','email')->first() : null;
-            return view( 'installer::account',compact('admin') );
+        if ($step >= 1 && $step < 5 && $this->requirementsCompleteStatus()) {
+            $admin = $step >= 2 ? User::select('name', 'email')->first() : null;
+            return view('installer::account', compact('admin'));
         }
-        if($step == 5 || !$this->requirementsCompleteStatus()){
-            return redirect()->route( 'setup.requirements' );
+        if ($step == 5 || !$this->requirementsCompleteStatus()) {
+            return redirect()->route('setup.requirements');
         }
-        return redirect()->route( 'setup.database' );
+        return redirect()->route('setup.database');
     }
 
     public function accountSubmit(Request $request)
     {
         try {
-
             $request->validate([
                 'name' => 'required|string',
                 'email' => 'required|email',
@@ -174,7 +168,6 @@ class InstallerController extends Controller
 
             UserDetail::updateOrCreate(
                 ['user_id' => $admin->id],
-
             );
 
 
@@ -184,7 +177,6 @@ class InstallerController extends Controller
 
             return response()->json(['success' => true, 'message' => 'Admin Account Successfully Created'], 200);
         } catch (\Exception $e) {
-
             Log::error($e->getMessage(), ['trace' => $e->getTraceAsString()]);
 
 
@@ -197,14 +189,14 @@ class InstallerController extends Controller
     {
         $step = Configuration::stepExists();
 
-        if($step == 5 || !$this->requirementsCompleteStatus()){
-            return redirect()->route( 'setup.requirements' );
+        if ($step == 5 || !$this->requirementsCompleteStatus()) {
+            return redirect()->route('setup.requirements');
         }
-        if ( $step < 2 ) {
-            return redirect()->route( 'setup.account' );
+        if ($step < 2) {
+            return redirect()->route('setup.account');
         }
         $app_name = $step >= 3 ? GeneralSetting::where('key', 'organization_name')->first()->value : null;
-        return view( 'installer::config',compact('app_name') );
+        return view('installer::config', compact('app_name'));
     }
 
     public function configurationSubmit(Request $request)
@@ -224,9 +216,9 @@ class InstallerController extends Controller
             }
 
             Cache::forget('setting');
-            Configuration::updateStep( 4 );
-            session()->put( 'step-5-complete', true );
-            session()->put( 'step-6-complete', true );
+            Configuration::updateStep(4);
+            session()->put('step-5-complete', true);
+            session()->put('step-6-complete', true);
 
             return response()->json(['success' => true, 'message' => 'Configuration Successfully Saved'], 200);
         } catch (Exception $e) {
@@ -235,19 +227,20 @@ class InstallerController extends Controller
             return response()->json(['success' => false, 'message' => 'Configuration Failed'], 200);
         }
     }
-    public function smtp() {
+    public function smtp()
+    {
         $step = Configuration::stepExists();
 
 
-        if($step == 4 || !$this->requirementsCompleteStatus()){
-            return redirect()->route( 'setup.complete' );
+        if ($step == 4 || !$this->requirementsCompleteStatus()) {
+            return redirect()->route('setup.complete');
         }
-        if ( $step < 3 ) {
-            return redirect()->route( 'setup.configuration' );
+        if ($step < 3) {
+            return redirect()->route('setup.configuration');
         }
         $email = null;
         $setting_info = Cache::get('setting');
-        if($step >= 4 && ($setting_info->mail_username != 'mail_username' && $setting_info->mail_password != 'mail_password')){
+        if ($step >= 4 && ($setting_info->mail_username != 'mail_username' && $setting_info->mail_password != 'mail_password')) {
             $email = [];
             $email['mail_host'] = $setting_info->mail_host;
             $email['email'] = $setting_info->mail_sender_email;
@@ -259,9 +252,10 @@ class InstallerController extends Controller
 
             $email = (object) $email;
         }
-        return view( 'installer::smtp',compact('email') );
+        return view('installer::smtp', compact('email'));
     }
-    public function smtpSetup( Request $request ) {
+    public function smtpSetup(Request $request)
+    {
         try {
             $rules = [
                 'mail_host'       => 'required',
@@ -281,7 +275,7 @@ class InstallerController extends Controller
                 'mail_encryption.required' => 'Mail encryption is required',
                 'mail_sender_name.required' => 'Mail Sender Name is required',
             ];
-            $this->validate( $request, $rules, $customMessages );
+            $this->validate($request, $rules, $customMessages);
 
             Setting::where('key', 'mail_host')->update(['value' => $request->mail_host]);
             Setting::where('key', 'mail_sender_email')->update(['value' => $request->email]);
@@ -291,51 +285,53 @@ class InstallerController extends Controller
             Setting::where('key', 'mail_encryption')->update(['value' => $request->mail_encryption]);
             Setting::where('key', 'mail_sender_name')->update(['value' => $request->mail_sender_name]);
 
-            Configuration::updateStep( 4 );
+            Configuration::updateStep(4);
 
-            session()->put( 'step-6-complete', true );
+            session()->put('step-6-complete', true);
 
             Cache::forget('setting');
 
-            return response()->json( ['success' => true, 'message' => 'Successfully setup mail SMTP'], 200 );
-        } catch ( Exception $e ) {
+            return response()->json(['success' => true, 'message' => 'Successfully setup mail SMTP'], 200);
+        } catch (Exception $e) {
             Log::error($e->getMessage());
-            return response()->json( ['success' => false, 'message' => 'Failed to Setup SMTP'], 200 );
+            return response()->json(['success' => false, 'message' => 'Failed to Setup SMTP'], 200);
         }
     }
 
-    public function smtpSkip( ) {
-        Configuration::updateStep( 4 );
-        session()->put( 'step-6-complete', true );
-        return redirect()->route( 'setup.complete' );
+    public function smtpSkip()
+    {
+        Configuration::updateStep(4);
+        session()->put('step-6-complete', true);
+        return redirect()->route('setup.complete');
     }
 
-    public function setupComplete() {
-        session()->put( 'step-7-complete', true );
+    public function setupComplete()
+    {
+        session()->put('step-7-complete', true);
 
-        if ( Configuration::setupStepCheck( 4 )  && $this->requirementsCompleteStatus() ) {
-            $envContent = File::get( base_path( '.env' ) );
-            $envContent = preg_replace( ['/APP_ENV=(.*)\s/','/APP_DEBUG=(.*)\s/',], ['APP_ENV=' . 'production' . "\n",'APP_DEBUG=' . 'false' . "\n",], $envContent );
-            if ( $envContent !== null ) {
-                File::put( base_path( '.env' ), $envContent );
+        if (Configuration::setupStepCheck(4)  && $this->requirementsCompleteStatus()) {
+            $envContent = File::get(base_path('.env'));
+            $envContent = preg_replace(['/APP_ENV=(.*)\s/','/APP_DEBUG=(.*)\s/',], ['APP_ENV=' . 'production' . "\n",'APP_DEBUG=' . 'false' . "\n",], $envContent);
+            if ($envContent !== null) {
+                File::put(base_path('.env'), $envContent);
             }
 
-            return view( 'installer::complete' );
+            return view('installer::complete');
         }
-        if ( Configuration::setupStepCheck( 5 ) && $this->requirementsCompleteStatus() ) {
-            return $this->completedSetup( 'home' );
-        }
-
-        if ( Configuration::stepExists() < 4 ) {
-            return redirect()->route( 'setup.smtp' );
+        if (Configuration::setupStepCheck(5) && $this->requirementsCompleteStatus()) {
+            return $this->completedSetup('home');
         }
 
-        return redirect()->back()->withInput()->withErrors( ['errors' => 'Setup Is Incomplete hh'] );
+        if (Configuration::stepExists() < 4) {
+            return redirect()->route('setup.smtp');
+        }
+
+        return redirect()->back()->withInput()->withErrors(['errors' => 'Setup Is Incomplete hh']);
     }
 
     public function launchWebsite($type)
     {
-       
+
         $result = $this->completedSetup($type);
         $filePath = base_path('modules_statuses.json');
 

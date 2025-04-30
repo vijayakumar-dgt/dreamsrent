@@ -12,7 +12,8 @@ class CarTypeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function carTypes(){
+    public function carTypes()
+    {
         return view('carinfo::cartype.index');
     }
 
@@ -22,78 +23,77 @@ class CarTypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    
-     public function storeType(Request $request)
-     {
-         $authUser = current_user();
-     
-         $language_id = $authUser->language_id;
-     
-         $validator = Validator::make($request->all(), [
-             'name' => 'required|max:30|unique:cartypes,name,' . $request->id . ',id,deleted_at,NULL',
-         ], [
-             'name.required' => __('admin.rentals.vehicle_type_required'),
-             'name.unique' => __('admin.rentals.vehicle_type_unique'),
-         ]);
-     
-         if ($validator->fails()) {
-             return response()->json([
-                 'status' => 'error',
-                 'code'   => 422,
-                 'errors' => $validator->errors()->toArray()
-             ], 422);
-         }
-     
-         try {
-             $successMessage = "";
-     
-             if (empty($request->id)) {
-                 // CREATE
-                 $carType = new Cartype();
-                 $carType->language_id = $language_id;
-                 $successMessage = __('admin.rentals.vehicle_type_added');
-             } else {
-                 // UPDATE
-                 $carType = Cartype::find($request->id);
-                 if (!$carType) {
-                     return response()->json([
-                         'status' => 'error',
-                         'code' => 404,
-                         'message' => 'Vehicle type not found.'
-                     ], 404);
-                 }
-     
-                 $carType->language_id = $request->language_id ?? $carType->language_id;
-                 $carType->status = $request->status == 'on' ? 1 : 0;
-                 $successMessage = __('admin.rentals.vehicle_type_updated');
-             }
-     
-             $folderName = 'vehicle_types';
-             $oldIcon = str_replace($folderName . '/', '', $carType->icon);
-     
-             if ($request->hasFile('icon') && $request->file('icon')->isValid()) {
-                 $icon = $request->file('icon');
-                 $carType->icon = uploadFile($icon, $folderName, $oldIcon);
-             }
-     
-             $carType->name = $request->name;
-             $carType->save();
-     
-             return response()->json([
-                 'status' => 'success',
-                 'code'   => 200,
-                 'message' => $successMessage
-             ]);
-     
-         } catch (\Throwable $th) {
-             return response()->json([
-                 'status' => 'error',
-                 'code'   => 500,
-                 'message' => $th->getMessage()
-             ], 500);
-         }
-     }
-     
+
+    public function storeType(Request $request)
+    {
+        $authUser = current_user();
+
+        $language_id = $authUser->language_id;
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:30|unique:cartypes,name,' . $request->id . ',id,deleted_at,NULL',
+        ], [
+            'name.required' => __('admin.rentals.vehicle_type_required'),
+            'name.unique' => __('admin.rentals.vehicle_type_unique'),
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 422,
+                'errors' => $validator->errors()->toArray()
+            ], 422);
+        }
+
+        try {
+            $successMessage = "";
+
+            if (empty($request->id)) {
+                // CREATE
+                $carType = new Cartype();
+                $carType->language_id = $language_id;
+                $successMessage = __('admin.rentals.vehicle_type_added');
+            } else {
+                // UPDATE
+                $carType = Cartype::find($request->id);
+                if (!$carType) {
+                    return response()->json([
+                        'status' => 'error',
+                        'code' => 404,
+                        'message' => 'Vehicle type not found.'
+                    ], 404);
+                }
+
+                $carType->language_id = $request->language_id ?? $carType->language_id;
+                $carType->status = $request->status == 'on' ? 1 : 0;
+                $successMessage = __('admin.rentals.vehicle_type_updated');
+            }
+
+            $folderName = 'vehicle_types';
+            $oldIcon = str_replace($folderName . '/', '', $carType->icon);
+
+            if ($request->hasFile('icon') && $request->file('icon')->isValid()) {
+                $icon = $request->file('icon');
+                $carType->icon = uploadFile($icon, $folderName, $oldIcon);
+            }
+
+            $carType->name = $request->name;
+            $carType->save();
+
+            return response()->json([
+                'status' => 'success',
+                'code'   => 200,
+                'message' => $successMessage
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 500,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
 
     /**
      * Get all car types.
@@ -101,8 +101,9 @@ class CarTypeController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCarTypes(Request $request){
-        $carTypes = Cartype::orderBy('name','asc')->get();
+    public function getCarTypes(Request $request)
+    {
+        $carTypes = Cartype::orderBy('name', 'asc')->get();
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -116,7 +117,8 @@ class CarTypeController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCarType($id){
+    public function getCarType($id)
+    {
         try {
             $carType = Cartype::find($id);
             $carType->icon = $carType->icon != "" && file_exists(public_path('storage/' . $carType->icon)) ? uploadedAsset($carType->icon) : '';
@@ -143,7 +145,8 @@ class CarTypeController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function deleteType(Request $request){
+    public function deleteType(Request $request)
+    {
         try {
             $carType = Cartype::findOrFail($request->delete_id);
             $carType->delete();
@@ -152,23 +155,24 @@ class CarTypeController extends Controller
                 'status' => 'success',
                 'code'   => 200,
                 'message' => __('admin.rentals.vehicle_type_deleted')
-            ],200);
-        }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' => __('admin.rentals.vehicle_type_not_found')
-            ],422);
+            ], 422);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' => $th->getMessage()
-            ],422);
+            ], 422);
         }
     }
 
-    public function getCartypeServerside(Request $request){
+    public function getCartypeServerside(Request $request)
+    {
         $pageLength = $request->length;
         $offset     = $request->start;
         $authUser = current_user();
@@ -200,16 +204,16 @@ class CarTypeController extends Controller
             'recordsFiltered' => $filteredRecords,
             'data' => $cartypes
         ]);
-
     }
 
-    public function getVehicleTypes(Request $request){
+    public function getVehicleTypes(Request $request)
+    {
         $orderBy = $request->order_by ?? 'asc';
         $search = $request->search ?? null;
 
         $carTypes = Cartype::when($search, function ($query) use ($search) {
                 return $query->where('name', 'LIKE', "%{$search}%");
-            })
+        })
             ->orderBy('id', $orderBy)
             ->where('status', 1)
             ->get();
@@ -220,5 +224,4 @@ class CarTypeController extends Controller
             'data' => $carTypes
         ]);
     }
-
 }

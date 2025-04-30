@@ -126,7 +126,6 @@ class CarFuelController extends Controller
     public function delete(Request $request)
     {
         try {
-
             $id = $request->id;
 
             CarFuel::where('id', $id)->delete();

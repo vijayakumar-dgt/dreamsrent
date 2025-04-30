@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class State extends Model
 {
-    protected $table ='states';
+    protected $table = 'states';
 
-    protected $fillable = ['name', 'country_id', 'status'];    
-    
+    protected $fillable = ['name', 'country_id', 'status'];
+
     public function country()
     {
         return $this->belongsTo(Country::class, 'country_id');

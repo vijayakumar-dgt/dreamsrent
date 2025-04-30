@@ -16,14 +16,13 @@ use Illuminate\Support\Str;
 
 class BlogsController extends Controller
 {
-
     public function blogCategory(Request $request)
     {
         $authId = current_user();
 
         $languageId = $authId->language_id;
         $languages = Language::with('transLang')->get();
-        $categories = BlogCategory::where('deleted_at', NULL)->where('language_id', $languageId)->orderBy('name', 'asc')->get();
+        $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->orderBy('name', 'asc')->get();
         return view('generalsetting::cms.blogs.blog-category', compact('languages', 'categories'));
     }
 
@@ -75,7 +74,7 @@ class BlogsController extends Controller
 
         $languageId = $authId->language_id;
         $languages = Language::with('transLang')->get();
-        $tags = BlogTag::where('deleted_at', NULL)->where('language_id', $languageId)->orderBy('name', 'asc')->get();
+        $tags = BlogTag::where('deleted_at', null)->where('language_id', $languageId)->orderBy('name', 'asc')->get();
         return view('generalsetting::cms.blogs.blog-tags', compact('languages', 'tags'));
     }
 
@@ -123,7 +122,7 @@ class BlogsController extends Controller
 
     public function blogComments(Request $request)
     {
-        $comments = BlogReviews::Join('blog_posts', 'blog_reviews.blog_id', '=', 'blog_posts.id')->select('blog_reviews.*', 'blog_posts.title')->where('blog_reviews.deleted_at', NULL)->get();
+        $comments = BlogReviews::Join('blog_posts', 'blog_reviews.blog_id', '=', 'blog_posts.id')->select('blog_reviews.*', 'blog_posts.title')->where('blog_reviews.deleted_at', null)->get();
         return view('generalsetting::cms.blogs.blog-comments', compact('comments'));
     }
 
@@ -135,12 +134,12 @@ class BlogsController extends Controller
         $blogPosts = BlogPost::Join('users', 'blog_posts.created_by', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where('blog_posts.language_id', $languageId)
-            ->where('blog_posts.deleted_at', NULL)
+            ->where('blog_posts.deleted_at', null)
             ->select('blog_posts.*', 'users.name', 'user_details.profile_image')
             ->orderBy('blog_posts.id', 'desc')
             ->get();
-        $categories = BlogCategory::where('deleted_at', NULL)->where('language_id', $languageId)->get();
-        $tags = BlogTag::where('deleted_at', NULL)->where('language_id', $languageId)->get();
+        $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->get();
+        $tags = BlogTag::where('deleted_at', null)->where('language_id', $languageId)->get();
 
         return view('generalsetting::cms.blogs.blogs', compact('blogPosts', 'languages', 'categories', 'tags'));
     }
@@ -162,8 +161,8 @@ class BlogsController extends Controller
         $authId = current_user();
         $languageId = $authId->language_id;
         $languages = Language::with('transLang')->get();
-        $tags = BlogTag::where('deleted_at', NULL)->where('language_id', $languageId)->where('status', '1')->get();
-        $categories = BlogCategory::where('deleted_at', NULL)->where('language_id', $languageId)->where('status', '1')->get();
+        $tags = BlogTag::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
+        $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
         return view('generalsetting::cms.blogs.add-blog', compact('languages', 'tags', 'categories'));
     }
 
@@ -213,8 +212,8 @@ class BlogsController extends Controller
         $languageId = $authId->language_id;
         $blog = BlogPost::findOrFail($id);
         $languages = Language::with('transLang')->get();
-        $tags = BlogTag::where('deleted_at', NULL)->where('language_id', $languageId)->where('status', '1')->get();
-        $categories = BlogCategory::where('deleted_at', NULL)->where('language_id', $languageId)->where('status', '1')->get();
+        $tags = BlogTag::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
+        $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
 
         return view('generalsetting::cms.blogs.edit-blog', compact('blog', 'languages', 'tags', 'categories'));
     }
@@ -241,6 +240,4 @@ class BlogsController extends Controller
 
         return response()->json(['success' => true]);
     }
-
-
 }

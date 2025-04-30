@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<ruleset name="MyProject">
+    <description>My custom coding standard</description>
+
+    <!-- Include standard -->
+    <rule ref="PSR12" />
+
+    <!-- Directories to scan -->
+    <file>app</file>
+    <file>routes</file>
+    <file>config</file>
+    <file>resources</file>
+    <file>Modules</file>
+
+    <!-- Exclude specific files or patterns -->
+    <exclude-pattern>*/tests/*</exclude-pattern>
+
+    <!-- Report format -->
+    <arg name="report" value="full"/>
+</ruleset>

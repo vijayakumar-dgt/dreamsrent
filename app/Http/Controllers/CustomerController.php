@@ -23,7 +23,7 @@ class CustomerController extends Controller
     public function index(Request $request): View | JsonResponse
     {
         $languages = Language::select('languages.language_id')
-            ->with(['transLang' => function($query) {
+            ->with(['transLang' => function ($query) {
                 $query->select('id', 'code', 'name');
             }])
             ->where('languages.status', 1)
@@ -94,12 +94,12 @@ class CustomerController extends Controller
             'email.unique' => __('admin.common.email_unique'),
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         $successMsg = empty($id) ? __('admin.manage.customer_create_success') : __('admin.manage.customer_update_success');
@@ -147,8 +147,7 @@ class CustomerController extends Controller
                         ]);
                     }
                 }
-            }
-            else {
+            } else {
                 $user = UserDetail::where('user_id', $id)->first();
                 $oldImage = '';
                 if ($user) {
@@ -163,11 +162,11 @@ class CustomerController extends Controller
                 if ($request->hasFile('documents')) {
                     foreach ($request->file('documents') as $file) {
                         if ($file->isValid()) {
-                        $document = uploadFile($file, 'documents');
-                        UserDocument::create([
+                            $document = uploadFile($file, 'documents');
+                            UserDocument::create([
                             'user_id' => $user->user_id,
                             'document' => $document,
-                        ]);
+                            ]);
                         }
                     }
                 }
@@ -177,7 +176,7 @@ class CustomerController extends Controller
                         $removedDocument = UserDocument::where('id', $docId)->first();
                         if ($removedDocument) {
                             $doc = $removedDocument->document;
-                            if (Storage::disk('public')->exists('/'.$doc)) {
+                            if (Storage::disk('public')->exists('/' . $doc)) {
                                 Storage::disk('public')->delete($doc);
                             }
                         }
@@ -205,7 +204,7 @@ class CustomerController extends Controller
                 'code'   => 500,
                 'message' => $errorMsg,
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
     }
 
@@ -311,7 +310,7 @@ class CustomerController extends Controller
                 $user->valid_date = formatDateTime($user->valid_date, false);
                 $user->date_of_issue = formatDateTime($user->date_of_issue, false);
                 $user->profile_image = uploadedAsset($user->profile_image, 'profile');
-                $user->language_flag = url('/assets/img/flags/'.$user->language_code.'.svg');
+                $user->language_flag = url('/assets/img/flags/' . $user->language_code . '.svg');
                 $user->encrypted_id = customEncrypt($user->id, User::$userSecretKey);
                 $user->documents = $user->documents->map(function ($document) {
                     $document->document = uploadedAsset($document->document, 'documents');
@@ -331,7 +330,6 @@ class CustomerController extends Controller
                 'recordsFiltered' => $filteredRecords,
                 'data' => $users,
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -417,13 +415,13 @@ class CustomerController extends Controller
             ->first();
 
         $bookings = Booking::select(
-                'bookings.id',
-                'bookings.reservation_id',
-                'vehicle_info.name as vehicle_name',
-                'vehicle_info.vehicle_image',
-                'bookings.booking_date',
-                'bookings.final_price',
-            )
+            'bookings.id',
+            'bookings.reservation_id',
+            'vehicle_info.name as vehicle_name',
+            'vehicle_info.vehicle_image',
+            'bookings.booking_date',
+            'bookings.final_price',
+        )
             ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
             ->where('bookings.customer_id', $id)
             ->orderBy('bookings.id', 'desc')
@@ -434,11 +432,11 @@ class CustomerController extends Controller
             });
 
         $bookingHistories = Booking::select(
-                'bookings.id',
-                'booking_histories.created_at',
-                'booking_histories.action',
-                'booking_histories.message',
-            )
+            'bookings.id',
+            'booking_histories.created_at',
+            'booking_histories.action',
+            'booking_histories.message',
+        )
             ->join('booking_histories', 'booking_histories.booking_id', '=', 'bookings.id')
             ->where('bookings.customer_id', $id)
             ->get();
@@ -488,8 +486,7 @@ class CustomerController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_delete_error')
-            ],500);
+            ], 500);
         }
     }
-
 }
