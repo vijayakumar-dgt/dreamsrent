@@ -122,10 +122,8 @@ class AdminUserController extends Controller
                 $userData['password'] = Hash::make($request->password);
                 $user = User::create($userData);
 
-                if ($user) {
-                    $userDetailsData['user_id'] = $user->id;
-                    UserDetail::create($userDetailsData);
-                }
+                $userDetailsData['user_id'] = $user->id;
+                UserDetail::create($userDetailsData);
             } else {
                 $user = UserDetail::where('user_id', $id)->first();
                 $oldImage = '';
@@ -329,8 +327,8 @@ class AdminUserController extends Controller
 
     public function getNotifications(Request $request): JsonResponse
     {
-        if (Auth::guard('admin')->check()) {
-            $authUser = Auth::guard('admin')->user();
+        $authUser = Auth::guard('admin')->user();
+        if ($authUser !== null) {
             $notifications = Notification::
                 where('user_id', $authUser->id)->where('readed', 0)->orderBy('created_at', 'desc')->limit(10)->get();
             $notificationCount = Notification::where('user_id', $authUser->id)->where('readed', 0)->count();
@@ -350,7 +348,9 @@ class AdminUserController extends Controller
 
     public function markAllAsRead(Request $request): JsonResponse
     {
-        if (Notification::where('user_id', Auth::guard('admin')->user()->id)->where('readed', 0)->count() > 0) {
+        $authUser = Auth::guard('admin')->user();
+
+        if ($authUser !== null && Notification::where('user_id', $authUser->id)->where('readed', 0)->count() > 0) {
             Notification::where('user_id', Auth::guard('admin')->user()->id)->update(['readed' => 1]);
             return response()->json([
                 'status' => 'success',
