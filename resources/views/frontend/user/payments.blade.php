@@ -97,27 +97,11 @@
                             <table class="table table-bordered">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
+                                        @for ($i = 0; $i < 7; $i++)
+                                            <th>
+                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
+                                        @endfor
                                     </tr>
                                 </thead>
                                 <tbody>
