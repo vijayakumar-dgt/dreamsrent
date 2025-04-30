@@ -48,7 +48,7 @@ class AdminUserController extends Controller
             ],
             'phone_number' => ['required'],
             'email' => [
-                'required', 
+                'required',
                 'email',
                 Rule::unique('users', 'email')->ignore($id)->whereNull('deleted_at'),
             ],
@@ -85,12 +85,12 @@ class AdminUserController extends Controller
             return empty($id);
         });
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         $successMsg = empty($id) ? __('admin.user_management.user_create_success') : __('admin.user_management.user_update_success');
@@ -125,8 +125,7 @@ class AdminUserController extends Controller
                     $userDetailsData['user_id'] = $user->id;
                     UserDetail::create($userDetailsData);
                 }
-            } 
-            else {
+            } else {
                 $user = UserDetail::where('user_id', $id)->first();
                 $oldImage = '';
                 if ($user) {
@@ -140,7 +139,7 @@ class AdminUserController extends Controller
 
                 user::where('id', $id)->update($userData);
                 UserDetail::updateOrCreate(
-                    ['user_id' => $id], 
+                    ['user_id' => $id],
                     $userDetailsData
                 );
             }
@@ -159,7 +158,7 @@ class AdminUserController extends Controller
                 'code'   => 500,
                 'message' => $errorMsg,
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
     }
 
@@ -176,16 +175,16 @@ class AdminUserController extends Controller
             $userId = current_user()->id ?? $request->user_id;
 
             $query = User::select(
-                    'users.id',
-                    'users.name as username', 
-                    DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
-                    'users.email',
-                    'users.phone_number',
-                    'users.status',
-                    'user_details.profile_image',
-                    'users.role_id',
-                    'roles.role_name'
-                )
+                'users.id',
+                'users.name as username',
+                DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
+                'users.email',
+                'users.phone_number',
+                'users.status',
+                'user_details.profile_image',
+                'users.role_id',
+                'roles.role_name'
+            )
                 ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
                 ->join('roles', 'roles.id', '=', 'users.role_id')
                 ->where(['user_details.parent_id' => $userId]);
@@ -260,7 +259,6 @@ class AdminUserController extends Controller
                 'recordsFiltered' => $filteredRecords,
                 'data' => $users,
             ]);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
@@ -275,16 +273,16 @@ class AdminUserController extends Controller
         $id = $request->id;
 
         $data = User::select(
-                'users.id',
-                'users.name as username', 
-                'users.email',
-                'users.phone_number',
-                'users.role_id',
-                'users.status',
-                'user_details.first_name',
-                'user_details.last_name',
-                'user_details.profile_image',
-            )
+            'users.id',
+            'users.name as username',
+            'users.email',
+            'users.phone_number',
+            'users.role_id',
+            'users.status',
+            'user_details.first_name',
+            'user_details.last_name',
+            'user_details.profile_image',
+        )
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 2, 'users.id' => $id])
             ->first();
@@ -292,7 +290,7 @@ class AdminUserController extends Controller
         if ($data) {
             $data->profile_image = uploadedAsset($data->profile_image, "profile");
         }
-        
+
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -318,18 +316,18 @@ class AdminUserController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_delete_error')
-            ],500);
+            ], 500);
         }
     }
 
 
     public function getNotifications(Request $request)
     {
-        if(Auth::guard('admin')->check()){
+        if (Auth::guard('admin')->check()) {
             $authUser = Auth::guard('admin')->user();
-            $notifications = Notification::where('user_id', $authUser->id)->where('readed', 0)->orderBy('created_at', 'desc')->limit(10)->get();            
+            $notifications = Notification::where('user_id', $authUser->id)->where('readed', 0)->orderBy('created_at', 'desc')->limit(10)->get();
             $notificationCount = Notification::where('user_id', $authUser->id)->where('readed', 0)->count();
-        }else{
+        } else {
             $notifications = [];
             $notificationCount = 0;
         }
@@ -345,14 +343,14 @@ class AdminUserController extends Controller
 
     public function markAllAsRead(Request $request)
     {
-        if(Notification::where('user_id', Auth::guard('admin')->user()->id)->where('readed', 0)->count() > 0){
+        if (Notification::where('user_id', Auth::guard('admin')->user()->id)->where('readed', 0)->count() > 0) {
             Notification::where('user_id', Auth::guard('admin')->user()->id)->update(['readed' => 1]);
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
                 'message' => __('web.user.all_notofocations_marked_as_read')
-            ], 200);    
-        }else{
+            ], 200);
+        } else {
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,

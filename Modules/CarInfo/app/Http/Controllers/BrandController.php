@@ -12,7 +12,7 @@ use Modules\CarInfo\Models\Brand;
 
 class BrandController extends Controller
 {
-    public function index():View
+    public function index(): View
     {
         return view('carinfo::brand.index');
     }
@@ -21,12 +21,12 @@ class BrandController extends Controller
     {
         $authUser = current_user();
         $id = $request->id ?? '';
-    
+
         $data = [
             'brand_name' => $request->brand_name,
             'total_cars' => $request->total_cars,
         ];
-    
+
         $validator = Validator::make($request->all(), [
             'brand_name' => [
                 'required',
@@ -48,23 +48,23 @@ class BrandController extends Controller
             'brand_image.mimes' => __('admin.rentals.brand_image_format'),
             'brand_image.max' => __('admin.rentals.brand_image_size', ['size' => 2]),
         ]);
-    
-        if($validator->fails()){
+
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
-    
+
         $successMsg = empty($id) ? __('admin.rentals.brand_create_success') : __('admin.rentals.brand_update_success');
         $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
-    
+
         try {
             if (empty($id)) {
                 // CREATE
                 $data['language_id'] = $authUser->language_id;
-    
+
                 if ($request->hasFile('brand_image')) {
                     $file = $request->file('brand_image');
                     $data['brand_image'] = uploadFile($file, 'brands');
@@ -73,12 +73,12 @@ class BrandController extends Controller
                     $file = $request->file('brand_icon');
                     $data['brand_icon'] = uploadFile($file, 'brands');
                 }
-    
+
                 Brand::create($data);
             } else {
                 // UPDATE
                 $brand = Brand::find($id);
-    
+
                 if (!$brand) {
                     return response()->json([
                         'status' => 'error',
@@ -86,10 +86,10 @@ class BrandController extends Controller
                         'message' => __('admin.common.not_found')
                     ], 404);
                 }
-    
+
                 $oldImage = $brand->brand_image;
                 $oldIcon = $brand->brand_icon;
-    
+
                 if ($request->hasFile('brand_image')) {
                     $file = $request->file('brand_image');
                     $data['brand_image'] = uploadFile($file, 'brands', $oldImage);
@@ -98,13 +98,13 @@ class BrandController extends Controller
                     $file = $request->file('brand_icon');
                     $data['brand_icon'] = uploadFile($file, 'brands', $oldIcon);
                 }
-    
+
                 $data['status'] = $request->status ?? 1;
                 $data['language_id'] = $request->language_id ?? $brand->language_id;
-    
+
                 $brand->update($data);
             }
-    
+
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
@@ -116,10 +116,10 @@ class BrandController extends Controller
                 'code'   => 500,
                 'message' => $errorMsg,
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
     }
-    
+
 
     public function list(Request $request): JsonResponse
     {
@@ -127,7 +127,7 @@ class BrandController extends Controller
             $authUser = current_user();
             $language_id = $authUser->language_id;
             $query = Brand::query()->where("language_id", $language_id);
-    
+
             // Search
             if (!empty($request->search)) {
                 $search = $request->search;
@@ -136,38 +136,38 @@ class BrandController extends Controller
                         ->orWhere('total_cars', 'like', "%{$search}%");
                 });
             }
-    
+
             // Status Filter
             if ($request->has('sort_by_status') && !empty($request->sort_by_status) || $request->sort_by_status == '0') {
                 $status = $request->sort_by_status;
                 $query->where('brands.status', $status);
             }
-    
+
             // Ordering
             $columnIndex = $request->order[0]['column'] ?? 1;
             $columnName = $request->columns[$columnIndex]['data'] ?? 'brand_name';
             $orderDir = $request->order[0]['dir'] ?? 'asc';
-    
+
             // Validate column names to avoid SQL injection
             if (in_array($columnName, ['brand_name', 'total_cars', 'status'])) {
                 $query->orderBy($columnName, $orderDir);
             }
-    
+
             // Pagination
             $start = $request->start ?? 0;
             $length = $request->length ?? 10;
-    
+
             // Total Records Count
             $filterTotalRecords = $query->count();
             $totalRecords = Brand::where("language_id", $language_id)->count();
-    
+
             // Data Fetch
             $data = $query->skip($start)->take($length)->get()->map(function ($brand) {
                 $brand->brand_image = uploadedAsset($brand->brand_image);
                 $brand->brand_icon = uploadedAsset($brand->brand_icon);
                 return $brand;
             });
-    
+
             // Return Response
             return response()->json([
                 'draw' => intval($request->draw),
@@ -175,7 +175,6 @@ class BrandController extends Controller
                 'recordsFiltered' => $filterTotalRecords,
                 'data' => $data,
             ], 200);
-    
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -193,7 +192,7 @@ class BrandController extends Controller
             $data->brand_image = uploadedAsset($data->brand_image);
             $data->brand_icon = uploadedAsset($data->brand_icon);
         }
-        
+
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -217,7 +216,7 @@ class BrandController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_delete_error')
-            ],500);
+            ], 500);
         }
     }
 
@@ -227,10 +226,9 @@ class BrandController extends Controller
         $search = $request->search ?? null;
 
         try {
-
             $data = Brand::when($search, function ($query) use ($search) {
                     return $query->where('brand_name', 'LIKE', "%{$search}%");
-                })
+            })
                 ->orderBy('id', $orderBy)
                 ->where('status', 1)
                 ->get(['id', 'brand_name'])
@@ -245,7 +243,6 @@ class BrandController extends Controller
                 'message' => __('admin.common.default_retrieve_success'),
                 'data' => $data,
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,

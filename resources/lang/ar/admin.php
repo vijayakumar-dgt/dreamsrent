@@ -1,4 +1,5 @@
 <?php
+
 return [
   'general_settings' =>
   [
@@ -508,7 +509,7 @@ return [
     'delete_currency' => 'حذف العملة',
     'delete_currency_confirmation' => 'هل أنت متأكد أنك تريد حذف هذه العملة؟',
     'bank_account' => 'الحساب البنكي',
-    'add_new_account'=> 'إضافة حساب جديد',
+    'add_new_account' => 'إضافة حساب جديد',
     'bank' => 'البنك',
     'branch' => 'الفرع',
     'account_number' => 'رقم الحساب',
@@ -542,7 +543,7 @@ return [
     'country' => 'الدولة',
     'add_country' => 'إضافة دولة',
     'active' => 'نشط',
-    'inactive'=> 'غير نشط',
+    'inactive' => 'غير نشط',
     'insurance_name_required' => 'اسم التأمين مطلوب',
     'insurance_name_exist' => 'اسم التأمين موجود بالفعل',
     'price_required' => 'السعر مطلوب',
@@ -2334,7 +2335,7 @@ return [
     'expenses_this_week' => 'النفقات هذا الأسبوع',
     'maintenance' => 'صيانة',
     'odometer' => 'عداد المسافات',
-    'km' =>'كم',
+    'km' => 'كم',
     'reservation_statistics' => 'إحصائيات الحجز',
     'drivers' => 'السائقين',
     'no_of_raids' => 'عدد الغارات',

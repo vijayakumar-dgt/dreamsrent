@@ -23,22 +23,25 @@ class SitemapController extends Controller
 
     public function store()
     {
-        $validator = Validator::make(request()->all(), [
+        $validator = Validator::make(
+            request()->all(),
+            [
             'id' => ['nullable', 'exists:sitemap_urls,id'],
             'url' => [
-                'required', 
-                'string', 
-                'max:200', 
-                request()->id 
-                    ? 'unique:sitemap_urls,url,' . request()->id . ',id' 
+                'required',
+                'string',
+                'max:200',
+                request()->id
+                    ? 'unique:sitemap_urls,url,' . request()->id . ',id'
                     : 'unique:sitemap_urls,url',
                 'regex:/^(https?:\/\/)(localhost|(\d{1,3}\.){3}\d{1,3}|([a-zA-Z0-9.-]+\.[a-zA-Z]{2,}))(:\d+)?(\/.*)?$/'
             ]
 
-        ],
-        [
+            ],
+            [
             'url.unique' => __('admin.general_settings.url_added'),
-        ]);
+            ]
+        );
 
         if ($validator->fails()) {
             return response()->json([
@@ -46,7 +49,7 @@ class SitemapController extends Controller
                 'code' => 422,
                 'errors' => $validator->errors()->toArray(),
                 'message' => __('admin.general_settings.invalid'),
-            ],422);
+            ], 422);
         }
 
         try {
@@ -59,14 +62,13 @@ class SitemapController extends Controller
                 'code' => 200,
                 'message' =>  __('admin.general_settings.sitemap_success'),
             ]);
-
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
                 'code' => 422,
                 'message' => __('admin.general_settings.retrived_error'),
                 'error' => $th->getMessage()
-            ],422);
+            ], 422);
         }
     }
 
@@ -77,7 +79,7 @@ class SitemapController extends Controller
             if ($urls->isEmpty()) {
                 return;
             }
-    
+
             $sitemap = Sitemap::create();
             foreach ($urls as $url) {
                 $sitemap->add(
@@ -102,9 +104,8 @@ class SitemapController extends Controller
             if ($latestUrl) {
                 $latestUrl->update(['sitemap_path' => $relativePath]);
             }
-    
+
             return $relativePath;
-    
         } catch (\Throwable $e) {
             return;
         }
@@ -156,10 +157,9 @@ class SitemapController extends Controller
             return response()->json([
                 'status' => 'error',
                 'code' => 422,
-                'message' =>__('admin.general_settings.retrive_error'),
+                'message' => __('admin.general_settings.retrive_error'),
                 'error' => $th->getMessage()
-            ],422);
+            ], 422);
         }
-        
     }
 }

@@ -14,7 +14,7 @@ class LoginController extends Controller
 {
     public function index()
     {
-        if(Auth::guard('admin')->check()){
+        if (Auth::guard('admin')->check()) {
             return redirect()->route('dashboard');
         }
         return view('admin.auth.login');
@@ -22,18 +22,21 @@ class LoginController extends Controller
 
     public function verifyLogin(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make(
+            $request->all(),
+            [
             'email' => 'required|email|exists:users',
             'password' => 'required|min:6',
-        ],
-        [
+            ],
+            [
             'email.required' => 'Email is required',
             'email.email' => 'Email is invalid',
             'email.exists' => 'Email does not exist',
             'password.required' => 'Password is required',
             'password.min' => 'Password must be at least 6 characters',
-        ]);
-        if($validator->fails()){
+            ]
+        );
+        if ($validator->fails()) {
             return response()->json([
                 'status' => false,
                 'code'   => 422,
@@ -58,9 +61,9 @@ class LoginController extends Controller
             $browser = $agent->browser();
             $locationData = Http::get("http://ip-api.com/json/{$ip}?fields=status,country,city,regionName,lat,lon")->json();
             $localtion = "";
-            if($locationData['status'] !== 'success'){
-               $localtion = "India / Coimbatore";
-            }else{
+            if ($locationData['status'] !== 'success') {
+                $localtion = "India / Coimbatore";
+            } else {
                 $localtion = $locationData['country'] . ' / ' . $locationData['city'];
             }
             $user_device = new UserDevice();
@@ -77,7 +80,7 @@ class LoginController extends Controller
                 'redirect_url' => route('dashboard'),
                 'message' => 'Login successfully',
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status' => false,
                 'code'   => 401,
@@ -86,7 +89,8 @@ class LoginController extends Controller
         }
     }
 
-    public function logout(){
+    public function logout()
+    {
         Auth::guard('admin')->logout();
         return redirect()->route('admin-login');
     }

@@ -33,19 +33,18 @@ class PricingTypeController extends Controller
             'pricing_type.unique' => "Pricing type already exists.",
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         $successMsg = "Pricing type added successfully.";
         $errorMsg = "An error occured while adding!";
 
         try {
-
             if (empty($id)) {
                 PricingType::create($data);
             } else {
@@ -67,9 +66,8 @@ class PricingTypeController extends Controller
                 'code'   => 500,
                 'message' => $errorMsg,
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
-
     }
 
     public function list(Request $request)
@@ -77,7 +75,6 @@ class PricingTypeController extends Controller
         $orderBy = $request->order_by ?? 'desc';
 
         try {
-
             $data = PricingType::orderBy('id', $orderBy)->get();
 
             return response()->json([
@@ -85,7 +82,6 @@ class PricingTypeController extends Controller
                 'message' => __('Pricing types retrieved successfully.'),
                 'data' => $data,
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -99,7 +95,7 @@ class PricingTypeController extends Controller
     {
         $id = $request->id;
         $doorType = PricingType::find($id);
-        
+
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -110,7 +106,6 @@ class PricingTypeController extends Controller
     public function delete(Request $request)
     {
         try {
-
             $id = $request->id;
 
             PricingType::where('id', $id)->delete();
@@ -125,7 +120,7 @@ class PricingTypeController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => 'An error occured while deleting!'
-            ],500);
+            ], 500);
         }
     }
 }

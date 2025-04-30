@@ -46,7 +46,7 @@ class UserWishlist extends JsonResource
     {
         $vehiclePrices = json_decode($vehicle->vehicle_price, true);
         $filteredPrices = [];
-    
+
         if (!empty($vehiclePrices) && is_array($vehiclePrices)) {
             foreach ($vehiclePrices as $price) {
                 foreach ($price as $key => $value) {
@@ -56,7 +56,7 @@ class UserWishlist extends JsonResource
                 }
             }
         }
-    
+
         if ($firstPrice) {
             // Get the first key-value pair correctly
             $firstKey = array_key_first($filteredPrices);
@@ -65,8 +65,7 @@ class UserWishlist extends JsonResource
                 'value' => $filteredPrices[$firstKey]
             ];
         }
-    
+
         return $filteredPrices;
     }
-    
 }

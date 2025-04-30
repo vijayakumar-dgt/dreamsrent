@@ -40,7 +40,6 @@ class CarColorController extends Controller
         $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
-
             $data = [
                 'name' => $request->name,
                 'value' => $request->value,
@@ -122,7 +121,6 @@ class CarColorController extends Controller
     public function delete(Request $request)
     {
         try {
-
             $id = $request->id;
 
             CarColor::where('id', $id)->delete();
@@ -160,7 +158,6 @@ class CarColorController extends Controller
         $search = $request->search ?? null;
 
         try {
-
             $data = CarColor::when(function ($query) use ($search) {
                 return $query->where('name', 'LIKE', "%{$search}%");
             })

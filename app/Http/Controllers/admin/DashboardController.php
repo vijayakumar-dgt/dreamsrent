@@ -12,7 +12,6 @@ use App\Models\Invoices;
 use Modules\CarInfo\Models\Maintenance;
 use Illuminate\Support\Facades\DB;
 
-
 class DashboardController extends Controller
 {
     public function index()
@@ -196,25 +195,25 @@ class DashboardController extends Controller
             ->orderBy('date')
             ->orderBy('time')
             ->get();
-        
+
             // Extract unique dates (x-axis) and times (y-axis)
             $dates = $bookingsRes->pluck('date')->unique()->values();
             $times = $bookingsRes->pluck('time')->unique()->sort()->values();
-        
+
             // Format data for ApexCharts
             $series = [];
-            foreach ($times as $time) {
-                $seriesData = [];
-                foreach ($dates as $date) {
-                    $count = $bookingsRes->where('date', $date)->where('time', $time)->first()->count ?? 0;
-                    $seriesData[] = ['x' => $date, 'y' => $count];
-                }
-                $series[] = [
-                    'name' => $time,
-                    'data' => $seriesData
-                ];
+        foreach ($times as $time) {
+            $seriesData = [];
+            foreach ($dates as $date) {
+                $count = $bookingsRes->where('date', $date)->where('time', $time)->first()->count ?? 0;
+                $seriesData[] = ['x' => $date, 'y' => $count];
             }
-            $formattedDates = $dates->map(function($date) {
+            $series[] = [
+                'name' => $time,
+                'data' => $seriesData
+            ];
+        }
+            $formattedDates = $dates->map(function ($date) {
                 return \Carbon\Carbon::parse($date)->format('d M');
             })->values();
 
@@ -222,7 +221,7 @@ class DashboardController extends Controller
             ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image')
-            ->where('invoices.deleted_at', NULL)->limit(5)->get();
+            ->where('invoices.deleted_at', null)->limit(5)->get();
 
         return view('admin.dashboard.index', compact('current_user', 'carTypes', 'bookingCount', 'upcomingCount', 'symbol', 'amount', 'booking', 'percentageChange', 'sign', 'amountPercentageChange', 'amountSymbol', 'carSymbol', 'carPercentageChange', 'reservations', 'users', 'chartbooking', 'maintenances', 'drivers', 'dates', 'times', 'series', 'formattedDates', 'invoices'));
     }

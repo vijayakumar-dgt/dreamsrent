@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+
 class ForgotpasswordController extends Controller
 {
     public function index()
@@ -22,13 +23,13 @@ class ForgotpasswordController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users',
-        ],[
+        ], [
             'email.required' => 'Email is required',
             'email.email' => 'Email is invalid',
             'email.exists' => 'Email does not exist',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => false,
                 'code'   => 422,
@@ -41,8 +42,8 @@ class ForgotpasswordController extends Controller
             $otp   = rand(1000, 9999);//4 digit OTP
             $token = Str::random(64);
             $user  = User::where('email', $email)->first();
-            Cache::put('forgotPasswordEmail_'.$token, $email, 600);
-            Cache::put('forgotPasswordOtp_'.$token, $otp, 600);
+            Cache::put('forgotPasswordEmail_' . $token, $email, 600);
+            Cache::put('forgotPasswordOtp_' . $token, $otp, 600);
             $data  = [
                 'otp' => $otp,
                 'name' => $user->name ?? 'User',
@@ -66,30 +67,32 @@ class ForgotpasswordController extends Controller
         }
     }
 
-    public function verifyOtp(Request $request){
+    public function verifyOtp(Request $request)
+    {
         $token = $request->token;
-        $email = Cache::get('forgotPasswordEmail_'.$token);
-        $otp   = Cache::get('forgotPasswordOtp_'.$token);
-        if($token && $email && $otp){
+        $email = Cache::get('forgotPasswordEmail_' . $token);
+        $otp   = Cache::get('forgotPasswordOtp_' . $token);
+        if ($token && $email && $otp) {
             $data = [
                 'token' => $token,
                 'email' => $email
             ];
-            return view('admin.auth.verify-otp',$data);
-        }else{
+            return view('admin.auth.verify-otp', $data);
+        } else {
             return redirect()->route('forgot-password');
         }
     }
 
-    public function resendOtp(Request $request){
-       $token = $request->token;
-       $email = Cache::get('forgotPasswordEmail_'.$token);
+    public function resendOtp(Request $request)
+    {
+        $token = $request->token;
+        $email = Cache::get('forgotPasswordEmail_' . $token);
 
-       if($email && User::where('email', $email)->exists()){
+        if ($email && User::where('email', $email)->exists()) {
             $otp   = rand(1000, 9999);//4 digit OTP
             $user  = User::where('email', $email)->first();
-            Cache::put('forgotPasswordEmail_'.$token, $email, 600);
-            Cache::put('forgotPasswordOtp_'.$token, $otp, 600);
+            Cache::put('forgotPasswordEmail_' . $token, $email, 600);
+            Cache::put('forgotPasswordOtp_' . $token, $otp, 600);
             $data  = [
                 'otp' => $otp,
                 'name' => $user->name ?? 'User',
@@ -104,30 +107,29 @@ class ForgotpasswordController extends Controller
                 'token'  => $token,
                 'message' => 'OTP sent successfully',
             ]);
-       }else{
+        } else {
             return response()->json([
                 'status' => false,
                 'code'   => 422,
                 'message' => 'Email does not exist or token is invalid',
             ], 422);
-       }
+        }
     }
 
     public function confirmOtp(Request $request)
     {
         $token = $request->token;
-        $email = Cache::get('forgotPasswordEmail_'.$token);
-        $cache_otp   = Cache::get('forgotPasswordOtp_'.$token);
-        if($token && $email && $cache_otp){
-            if($request->otp == $cache_otp){
+        $email = Cache::get('forgotPasswordEmail_' . $token);
+        $cache_otp   = Cache::get('forgotPasswordOtp_' . $token);
+        if ($token && $email && $cache_otp) {
+            if ($request->otp == $cache_otp) {
                 return response()->json([
                     'status' => true,
                     'code'   => 200,
                     'redirect_url' => route('reset-password', ['token' => $token]),
                     'message' => 'OTP verified successfully',
                 ]);
-
-            }else{
+            } else {
                 return response()->json([
                     'status' => false,
                     'code'   => 422,
@@ -135,7 +137,7 @@ class ForgotpasswordController extends Controller
                     // 'valid_otp' => $cache_otp
                 ], 200);
             }
-        }else{
+        } else {
             return response()->json([
                 'status' => false,
                 'code'   => 422,
@@ -147,14 +149,14 @@ class ForgotpasswordController extends Controller
     public function resetPassword(Request $request)
     {
         $token = $request->token;
-        $email = Cache::get('forgotPasswordEmail_'.$token);
-        if($token && $email){
+        $email = Cache::get('forgotPasswordEmail_' . $token);
+        if ($token && $email) {
             $data = [
                 'token' => $token,
                 'email' => $email
             ];
-            return view('admin.auth.reset-password',$data);
-        }else{
+            return view('admin.auth.reset-password', $data);
+        } else {
             return redirect()->route('forgot-password');
         }
     }
@@ -162,14 +164,14 @@ class ForgotpasswordController extends Controller
     public function updatePassword(Request $request)
     {
         $token = $request->token;
-        $email = Cache::get('forgotPasswordEmail_'.$token);
-        if($token && $email){
+        $email = Cache::get('forgotPasswordEmail_' . $token);
+        if ($token && $email) {
             $validator = Validator::make($request->all(), [
                 'password' => 'required|min:6',
                 'password_confirmation' => 'required|same:password',
             ]);
 
-            if($validator->fails()){
+            if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
                     'code'   => 422,
@@ -182,15 +184,15 @@ class ForgotpasswordController extends Controller
             $user->password = Hash::make($request->password);
             $user->last_password_changed_at = now();
             $user->save();
-            Cache::forget('forgotPasswordEmail_'.$token);
-            Cache::forget('forgotPasswordOtp_'.$token);
+            Cache::forget('forgotPasswordEmail_' . $token);
+            Cache::forget('forgotPasswordOtp_' . $token);
             return response()->json([
                 'status' => true,
                 'code'   => 200,
                 'message' => 'Password updated successfully',
                 'redirect_url' => route('admin-login'),
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status' => false,
                 'code'   => 422,

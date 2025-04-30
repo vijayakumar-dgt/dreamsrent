@@ -72,7 +72,6 @@ class CountryController extends Controller
         $orderBy = $request->order_by ?? 'desc';
 
         try {
-
             $data = Country::orderBy('id', $orderBy)->get();
 
             return response()->json([
@@ -104,7 +103,6 @@ class CountryController extends Controller
     public function delete(Request $request)
     {
         try {
-
             $id = $request->id;
 
             Country::where('id', $id)->delete();

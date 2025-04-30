@@ -9,7 +9,8 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up() {
+    public function up()
+    {
         Schema::create('communication_settings', function (Blueprint $table) {
             $table->id();
             $table->string('type');

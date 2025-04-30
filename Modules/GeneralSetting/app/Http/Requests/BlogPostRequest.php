@@ -19,7 +19,7 @@ class BlogPostRequest extends CustomFailedValidation
         return true;
     }
 
-    
+
     protected function prepareForValidation()
     {
         if ($this->has('slug')) {
@@ -36,7 +36,7 @@ class BlogPostRequest extends CustomFailedValidation
      */
     public function rules(): array
     {
-        $languageId = $this->input('language_id'); 
+        $languageId = $this->input('language_id');
         $id = $this->input('id');
         $parentId = 0;
 
@@ -45,7 +45,7 @@ class BlogPostRequest extends CustomFailedValidation
             $parentId = $post->parent_id;
         }
 
-        if ($this->input('method') === 'add') { 
+        if ($this->input('method') === 'add') {
             return [
                 'title' => 'required|string|max:255|unique:blog_posts,title',
                 'slug' => 'required|string|max:255|unique:blog_posts,slug',
@@ -77,7 +77,7 @@ class BlogPostRequest extends CustomFailedValidation
                                       ->where('parent_id', $id)
                                       ->where('id', '!=', $id);
                             }
-                    }),
+                        }),
                 ],
                 'slug' => [
                     'required',
@@ -94,7 +94,7 @@ class BlogPostRequest extends CustomFailedValidation
                                       ->where('parent_id', $id)
                                       ->where('id', '!=', $id);
                             }
-                    }),
+                        }),
                 ],
                 'image' => 'mimes:jpeg,jpg,png|max:2048',
                 'category' => 'required',
@@ -109,7 +109,6 @@ class BlogPostRequest extends CustomFailedValidation
             ];
         }
         return [];
-
     }
 
     /**

@@ -141,13 +141,13 @@ class CalanderController extends Controller
 
         if ($userInfo) {
             $userDetail = $userInfo->userDetail; // Assuming hasOne relationship
-        
+
             $customerData = [
                 'first_name' => $userDetail->first_name ?? '',
                 'last_name' => $userDetail->last_name ?? '',
                 'phone_number' => $userInfo->phone_number ?? '',
-                'profile_image' => $userDetail->profile_image 
-                    ? url('storage/' . $userDetail->profile_image) 
+                'profile_image' => $userDetail->profile_image
+                    ? url('storage/' . $userDetail->profile_image)
                     : url('assets/img/default-avatar.jpg'),
             ];
         } else {

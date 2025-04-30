@@ -22,7 +22,7 @@ class UserPermission
 
         if ($userType == 2) {
             $permissions = getUserPermissions();
-            
+
             $routeModules = [
                 'dashboard' => ['module' => 'dashboard', 'action' => 'view'],
                 'admin.profile-settings' => ['module' => 'account_settings', 'action' => 'view'],
@@ -81,7 +81,7 @@ class UserPermission
                 'admin.otp-settings' => ['module' => 'website_settings', 'action' => 'view'],
                 'admin.languages' => ['module' => 'website_settings', 'action' => 'view'],
                 'admin.addonIndex-settings' => ['module' => 'website_settings', 'action' => 'view'],
-                
+
                 'admin.sitemap' => ['module' => 'other_settings', 'action' => 'view'],
                 'admin.storage-settings' => ['module' => 'other_settings', 'action' => 'view'],
                 'admin.system-backup-settings' => ['module' => 'other_settings', 'action' => 'view'],
@@ -154,7 +154,7 @@ class UserPermission
                 $redirectRoute = hasPermission($permissions, 'dashboard', 'view') ? 'dashboard' : 'admin.profile-settings';
                 return redirect()->route($redirectRoute)->with('permission-error', __('admin.common.permission_access_denied'));
             }
-        } else if ($userType == 1) {
+        } elseif ($userType == 1) {
             if ($routeName == 'reservation.index' || $routeName == 'reservation.create' || $routeName == 'reservation.edit' || $routeName == 'reservation.details') {
                 if (!isAccessMenu('reservation')) {
                     return redirect()->route('dashboard')->with('permission-error', 'Currently this menu is disabled!');

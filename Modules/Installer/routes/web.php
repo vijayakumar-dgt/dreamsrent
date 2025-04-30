@@ -6,7 +6,6 @@ use Modules\Installer\Http\Middleware\PurchaseVerifyMiddleware;
 use Modules\Installer\Http\Middleware\SetupMiddleware;
 use Modules\Installer\Http\Controllers\PuchaseVerificationController;
 
-
 //all setup route
 Route::prefix('setup')->withoutMiddleware(PurchaseVerifyMiddleware::class)->group(function () {
 
@@ -32,4 +31,3 @@ Route::prefix('setup')->withoutMiddleware(PurchaseVerifyMiddleware::class)->grou
 
     Route::get('lunch/{type}', [InstallerController::class, 'launchWebsite'])->name('website.completed')->withoutMiddleware('demo')->withoutMiddleware(SetupMiddleware::class);
 });
-

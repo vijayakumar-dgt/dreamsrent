@@ -46,12 +46,12 @@ class RolesPermissionController extends Controller
             'role.unique' => __('admin.user_management.role_unique'),
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         $successMsg = empty($id) ? __('admin.user_management.role_create_success') : __('admin.user_management.role_update_success');
@@ -81,9 +81,8 @@ class RolesPermissionController extends Controller
                 'code'   => 500,
                 'message' => $errorMsg,
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
-
     }
 
     public function list(Request $request): JsonResponse
@@ -93,31 +92,31 @@ class RolesPermissionController extends Controller
             $query = Role::query();
 
             $query->where('created_by', $userId);
-    
+
             if (!empty($request->search)) {
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {
                     $q->where('role_name', 'like', "%{$search}%");
                 });
             }
-    
+
             if ($request->has('sort_by_status') && !empty($request->sort_by_status) || $request->sort_by_status == '0') {
                 $status = $request->sort_by_status;
                 $query->where('roles.status', $status);
             }
-    
+
             $columnIndex = $request->order[0]['column'] ?? 1;
             $columnName = $request->columns[$columnIndex]['data'] ?? 'role_name';
             $orderDir = $request->order[0]['dir'] ?? 'asc';
-    
+
             $query->orderBy($columnName, $orderDir);
-    
+
             $start = $request->start ?? 0;
             $length = $request->length ?? 10;
-    
+
             $filterTotalRecords = $query->count();
             $totalRecords = Role::where('created_by', $userId)->count();
-    
+
             $data = $query->skip($start)->take($length)->get()->map(function ($role) {
                 $role->encrypted_role_id = customEncrypt($role->id, Role::$roleSecretKey);
                 $role->created_date = formatDateTime($role->created_at, false);
@@ -131,7 +130,6 @@ class RolesPermissionController extends Controller
                 'recordsFiltered' => $filterTotalRecords,
                 'data' => $data,
             ], 200);
-    
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -145,7 +143,7 @@ class RolesPermissionController extends Controller
     {
         $id = $request->id;
         $data = Role::find($id);
-        
+
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -169,7 +167,7 @@ class RolesPermissionController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_delete_error')
-            ],500);
+            ], 500);
         }
     }
 
@@ -182,7 +180,7 @@ class RolesPermissionController extends Controller
         if ($userType == 2) {
             $userType = 1;
         }
-        
+
         $role = Role::select('id', 'role_name')->where('id', $roleId)->first();
         $modules = ModuleModel::select('id', 'module_name', 'module_slug', 'parent_id')
             ->with([
@@ -209,7 +207,7 @@ class RolesPermissionController extends Controller
         try {
             foreach ($permissions as $permission) {
                 Permission::updateOrCreate(
-                    ['id' => $permission['id'], 'role_id' => $roleId], 
+                    ['id' => $permission['id'], 'role_id' => $roleId],
                     [
                         'module_id' => $permission['module_id'],
                         'create' => $permission['create'] ?? 0,
@@ -225,7 +223,6 @@ class RolesPermissionController extends Controller
                 'code' => 200,
                 'message' => __('admin.user_management.permission_update_success'),
             ], 200);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
@@ -245,7 +242,6 @@ class RolesPermissionController extends Controller
                 'data' => $permissions,
                 'message' => __('admin.common.default_retrieve_success'),
             ], 200);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
@@ -254,6 +250,4 @@ class RolesPermissionController extends Controller
             ], 500);
         }
     }
-
-
 }

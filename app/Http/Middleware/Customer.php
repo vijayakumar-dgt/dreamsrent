@@ -16,9 +16,9 @@ class Customer
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!Auth::guard('web')->check()){
+        if (!Auth::guard('web')->check()) {
             return to_route('user-login');
-        }elseif(Auth::guard('web')->check() && Auth::guard('web')->user()->user_type !== 3){
+        } elseif (Auth::guard('web')->check() && Auth::guard('web')->user()->user_type !== 3) {
             abort(403);
         }
         Auth::shouldUse('web');

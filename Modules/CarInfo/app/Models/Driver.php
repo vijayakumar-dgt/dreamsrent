@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Driver extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -32,5 +33,4 @@ class Driver extends Model
     {
         return $this->hasMany(DriverDocument::class, 'driver_id');
     }
-
 }

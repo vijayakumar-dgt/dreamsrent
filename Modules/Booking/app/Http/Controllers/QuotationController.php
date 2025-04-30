@@ -329,7 +329,7 @@ class QuotationController extends Controller
                 }
             }
 
-            // Apply Sort Filter 
+            // Apply Sort Filter
             if ($request->has('sort_by') && !empty($request->sort_by)) {
                 switch (strtolower($request->sort_by)) {
                     case 'latest':
@@ -408,7 +408,7 @@ class QuotationController extends Controller
             }
 
             $booking = Booking::select(
-                'bookings.*', 
+                'bookings.*',
                 'vehicle_info.name as vehicle_name',
                 'vehicle_info.vehicle_image',
                 DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
@@ -456,11 +456,11 @@ class QuotationController extends Controller
         $booking = Booking::select(
             'bookings.id',
             'bookings.reservation_id',
-            'bookings.vehicle_id', 
-            'bookings.booking_status', 
-            'bookings.booking_date', 
-            'bookings.start_datetime', 
-            'bookings.end_datetime', 
+            'bookings.vehicle_id',
+            'bookings.booking_status',
+            'bookings.booking_date',
+            'bookings.start_datetime',
+            'bookings.end_datetime',
             'bookings.no_of_days',
             'bookings.driving_type',
             'bookings.pickup_location',
@@ -562,6 +562,5 @@ class QuotationController extends Controller
         ]);
 
         return view('booking::quotations.view_details', compact('booking', 'bookingHistories'));
-
     }
 }

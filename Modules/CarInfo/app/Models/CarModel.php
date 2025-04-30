@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CarModel extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -27,5 +28,4 @@ class CarModel extends Model
     {
         return $this->belongsTo(Brand::class, 'brand_id');
     }
-
 }

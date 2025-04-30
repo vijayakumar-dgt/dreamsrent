@@ -199,7 +199,6 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
         //logo-setting
         Route::get('logo-settings', [GeneralSettingController::class, 'logoSettings'])->name('admin.logo-settings');
         Route::post('logo/store', [GeneralSettingController::class, 'storeLogoSettings'])->name('admin.logostore-settings');
-
     });
     Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
         //Faq
@@ -251,6 +250,4 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
     });
 
     Route::post('get-vehicle-insurances', [InsuranceController::class, 'getVehicleInsurances']);
-
 });
-

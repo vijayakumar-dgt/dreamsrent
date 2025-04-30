@@ -28,28 +28,29 @@ class CylinderController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function storeCylinderType(Request $request){
-        $validator = Validator::make($request->all(),[
-            'cylinder_type' => 'required|unique:cylinders,cylinder_type,'.$request->id.',id,deleted_at,NULL',
-        ],[
+    public function storeCylinderType(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'cylinder_type' => 'required|unique:cylinders,cylinder_type,' . $request->id . ',id,deleted_at,NULL',
+        ], [
             'cylinder_type.required' => __('admin.rentals.cylinder_type_required'),
             'cylinder_type.unique' => __('admin.rentals.cylinder_type_unique'),
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                  'status' => 'error',
                  'code'   => 422,
-                 'errors' => $validator->errors()->toArray(),                
-            ],422);
+                 'errors' => $validator->errors()->toArray(),
+            ], 422);
         }
 
         try {
             $successMessage = "";
-            if($request->has('id') && $request->id == ''){
+            if ($request->has('id') && $request->id == '') {
                 $cylinder = new Cylinder();
                 $successMessage = __('admin.rentals.cylinder_type_added');
-            }else{
+            } else {
                 $cylinder = Cylinder::find($request->id);
                 $cylinder->status = $request->status == 'on' ? 1 : 0;
                 $successMessage = __('admin.rentals.cylinder_type_updated');
@@ -61,68 +62,70 @@ class CylinderController extends Controller
                 'status' => 'success',
                 'code'   => 200,
                 'message' => $successMessage
-            ],200);
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' => $th->getMessage()
-            ],422);
+            ], 422);
         }
     }
 
     /**
      * Retrieves all cylinder types
-     * 
+     *
      * Returns a JSON response with a collection of cylinder types ordered by ID in descending order.
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCylinders(){
-        $cylinders = Cylinder::orderBy('id','desc')->get();
+    public function getCylinders()
+    {
+        $cylinders = Cylinder::orderBy('id', 'desc')->get();
         return response()->json([
             'status' => 'success',
             'code'   => 200,
             'data' => $cylinders
-        ],200);
+        ], 200);
     }
 
     /**
      * Retrieves a cylinder type
-     * 
+     *
      * Returns a JSON response with the cylinder type found by the given ID.
-     * 
+     *
      * @param int $id
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCylinder($id){
+    public function getCylinder($id)
+    {
         try {
             $cylinder = Cylinder::find($id);
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
                 'data' => $cylinder
-            ],200);
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' => $th->getMessage()
-            ],422);
+            ], 422);
         }
-        
     }
 
     /**
      * Delete a cylinder type by ID
-     * 
+     *
      * @param \Illuminate\Http\Request $request
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    
-    public function deleteCylinder(Request $request){
+
+    public function deleteCylinder(Request $request)
+    {
         try {
             $cylinder = Cylinder::findOrFail($request->delete_id);
             $cylinder->delete();
@@ -130,57 +133,58 @@ class CylinderController extends Controller
                 'status' => 'success',
                 'code'   => 200,
                 'message' => __('admin.rentals.cylinder_type_deleted')
-            ],200);
-        }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' => __('admin.rentals.cylinder_type_not_found')
-            ],422);
-        }catch (\Throwable $th) {
+            ], 422);
+        } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' => $th->getMessage()
-            ],422);
+            ], 422);
         }
     }
 
     /**
      * Retrieve cylinder types in a serverside paginated manner.
-     * 
+     *
      * The request must contain the following parameters:
-     * 
+     *
      * - `draw`: The draw counter that ensures the DataTables request is processed correctly.
      * - `length`: The number of records to display on each page.
      * - `start`: The starting point for the query.
      * - `search[value]`: The search string to filter the records.
-     * 
+     *
      * The response will contain the following keys:
-     * 
+     *
      * - `draw`: The same draw counter as the request.
      * - `recordsTotal`: The total number of records in the database.
      * - `recordsFiltered`: The total number of records that are filtered.
      * - `data`: An array of records.
-     * 
+     *
      * @param \Illuminate\Http\Request $request
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCylinderServerside(Request $request){
+    public function getCylinderServerside(Request $request)
+    {
         $pageLength = $request->length;
         $offset     = $request->start;
         $cylinders  = Cylinder::query();
-        if($request->has('search') && $request->search != null){
-            $cylinders = $cylinders->where(function($query) use ($request){
-                          $query->where('cylinder_type','like','%'.$request->search.'%')
-                                ->orWhere('status','like','%'.$request->search.'%'); 
+        if ($request->has('search') && $request->search != null) {
+            $cylinders = $cylinders->where(function ($query) use ($request) {
+                          $query->where('cylinder_type', 'like', '%' . $request->search . '%')
+                                ->orWhere('status', 'like', '%' . $request->search . '%');
             });
         }
-        if($request->has('status') && $request->status != null){
+        if ($request->has('status') && $request->status != null) {
             $cylinders = $cylinders->where('status', $request->status);
         }
-        $cylinders = $cylinders->skip($offset)->take($pageLength)->orderBy('cylinder_type','asc')->get();
+        $cylinders = $cylinders->skip($offset)->take($pageLength)->orderBy('cylinder_type', 'asc')->get();
         $totalRecords = $filteredRecords =  Cylinder::count();
 
         return response()->json([

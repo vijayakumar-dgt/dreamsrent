@@ -12,7 +12,9 @@ use Modules\Booking\Models\Booking;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory;
+    use Notifiable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -75,6 +77,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Booking::class, 'customer_id', 'id');
     }
-    
-
 }

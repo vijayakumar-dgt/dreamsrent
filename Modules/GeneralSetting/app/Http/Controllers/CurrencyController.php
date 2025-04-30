@@ -17,33 +17,33 @@ class CurrencyController extends Controller
         $data = [
             'page_title' => 'Currencies'
         ];
-        return view('generalsetting::finance_settings.currencies',$data);
+        return view('generalsetting::finance_settings.currencies', $data);
     }
 
     public function save_currency(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'currency_name' => 'required|unique:currencies,currency_name,'.$request->id.',id,deleted_at,NULL',
+        $validator = Validator::make($request->all(), [
+            'currency_name' => 'required|unique:currencies,currency_name,' . $request->id . ',id,deleted_at,NULL',
             'exchange_rate' => 'required|numeric|min:0',
             'code'          => 'required',
             'symbol'        => 'required'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                  'status' => 'error',
                  'code'   => 422,
-                 'message'=> __('admin.general_settings.validation_error'),
+                 'message' => __('admin.general_settings.validation_error'),
                  'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
         try {
             $successMessage = "";
-            if($request->has('id') && $request->id != ""){
+            if ($request->has('id') && $request->id != "") {
                 $currency = Currency::find($request->id);
                 $currency->status         = $request->status == 'on' ? 1 : 0;
-                $successMessage =__('admin.general_settings.currency_created_successfully');
-            }else{
+                $successMessage = __('admin.general_settings.currency_created_successfully');
+            } else {
                 $currency = new Currency();
                 $successMessage = __('admin.general_settings.currency_updated_successfully');
             }
@@ -52,7 +52,7 @@ class CurrencyController extends Controller
             $currency->symbol         = $request->symbol;
             $currency->exchange_rate  = $request->exchange_rate;
             $currency->save();
-            
+
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
@@ -63,7 +63,7 @@ class CurrencyController extends Controller
                 'status' => 'error',
                 'code'   => 422,
                 'message' => $th->getMessage()
-            ],422);
+            ], 422);
         }
     }
 
@@ -72,13 +72,13 @@ class CurrencyController extends Controller
         $pageLength = $request->length;
         $offset     = $request->start;
         $currencies = Currency::query();
-        if($request->has('keyword') && $request->keyword != ""){
-            $currencies = $currencies->where(function($query) use ($request){
-                          $query->where('currency_name','like','%'.$request->keyword.'%')  
-                                ->orWhere('code','like','%'.$request->keyword.'%');
+        if ($request->has('keyword') && $request->keyword != "") {
+            $currencies = $currencies->where(function ($query) use ($request) {
+                          $query->where('currency_name', 'like', '%' . $request->keyword . '%')
+                                ->orWhere('code', 'like', '%' . $request->keyword . '%');
             });
         }
-        $currencies = $currencies->orderBy('currency_name','asc');
+        $currencies = $currencies->orderBy('currency_name', 'asc');
         $currencies = $currencies->skip($offset)->take($pageLength)->get();
         $totalRecords = $filteredRecords = Currency::count();
         return response()->json([
@@ -89,13 +89,14 @@ class CurrencyController extends Controller
         ]);
     }
 
-    public function editCurrency($id){
+    public function editCurrency($id)
+    {
         $currency = Currency::find($id);
         return response()->json([
             'status' => 'success',
             'code'   => 200,
             'data'   => $currency,
-            'message'=> __('admin.general_settings.currency_fetched_successfully')
+            'message' => __('admin.general_settings.currency_fetched_successfully')
         ]);
     }
 
@@ -108,19 +109,19 @@ class CurrencyController extends Controller
                 'status' => 'success',
                 'code'   => 200,
                 'message' =>  __('admin.general_settings.currency_deleted_successfully')
-            ],200);
-        }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' =>  __('admin.general_settings.currency_not_found')
-            ],422);
-        }catch (\Throwable $th) {
+            ], 422);
+        } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' => $th->getMessage()
-            ],422);
+            ], 422);
         }
     }
 }

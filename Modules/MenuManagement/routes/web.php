@@ -19,7 +19,5 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
         //menu management
         Route::get('menu-management', [MenuManagementController::class, 'menuManagement'])->name('admin.menuManagement')->middleware('permission');
         Route::post('menu-management/update', [MenuManagementController::class, 'menuManagementUpdate'])->name('admin.menuManagementUpdate');
-
     });
-
 });

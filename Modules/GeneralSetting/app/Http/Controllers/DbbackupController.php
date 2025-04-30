@@ -10,7 +10,6 @@ use Spatie\DbDumper\Exceptions\DumpFailed;
 use Illuminate\Support\Facades\Log;
 use Modules\GeneralSetting\Models\Dbbackup;
 
-
 class DbbackupController extends Controller
 {
     public function datebaseSettings(Request $request): View
@@ -56,10 +55,10 @@ class DbbackupController extends Controller
             // Save backup details in database
             Dbbackup::create(['name' => $fileName]);
 
-            return redirect()->route('admin.datebase-settings')->with('success',  __('admin.general_settings.backup_successfull'));
+            return redirect()->route('admin.datebase-settings')->with('success', __('admin.general_settings.backup_successfull'));
         } catch (\Exception $e) {
             Log::error('An unexpected error occurred during database backup: ' . $e->getMessage());
-            return redirect()->route('admin.datebase-settings')->with('error',  __('admin.general_settings.retrieve_error') . $e->getMessage());
+            return redirect()->route('admin.datebase-settings')->with('error', __('admin.general_settings.retrieve_error') . $e->getMessage());
         }
     }
 
@@ -89,7 +88,7 @@ class DbbackupController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' =>__('admin.general_settings.retrieve_error'),
+                'message' => __('admin.general_settings.retrieve_error'),
                 'error' => $e->getMessage(),
             ], 500);
         }
@@ -114,7 +113,7 @@ class DbbackupController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' =>__('admin.general_settings.backup_successfull'),
+                'message' => __('admin.general_settings.backup_successfull'),
                 'data' => $formattedBackups,
             ], 200);
         } catch (\Exception $e) {

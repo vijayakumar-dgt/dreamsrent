@@ -85,7 +85,7 @@ class CarSteeringController extends Controller
             if ($status !== null && $status !== '') {
                 $query->where('status', $status); // Assumes 'status' column exists in categories table
             }
-            
+
             $data = $query->get();
 
             return response()->json([
@@ -117,7 +117,6 @@ class CarSteeringController extends Controller
     public function delete(Request $request)
     {
         try {
-
             $id = $request->id;
 
             CarSteering::where('id', $id)->delete();
@@ -165,5 +164,4 @@ class CarSteeringController extends Controller
             ->header('Content-Type', 'application/pdf')
             ->header('Content-Disposition', 'attachment; filename="Car_Fuels.pdf"');
     }
-
 }

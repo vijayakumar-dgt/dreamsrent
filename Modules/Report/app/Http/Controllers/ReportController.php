@@ -24,12 +24,12 @@ class ReportController extends Controller
         $bookingsCount = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
             ->paginate(10);
         $totalIncome = $bookings->filter(function ($booking) {
-                if ($booking->booking_by === 'admin') {
-                    return is_null($booking->payment_status) || $booking->payment_status == 2;
-                } else {
-                    return $booking->payment_status == 2;
-                }
-            })->sum('final_price');
+            if ($booking->booking_by === 'admin') {
+                return is_null($booking->payment_status) || $booking->payment_status == 2;
+            } else {
+                return $booking->payment_status == 2;
+            }
+        })->sum('final_price');
         $topEarningCar = $bookings
             ->groupBy('vehicle_id')
             ->map(fn($group) => $group->sum('final_price'))
@@ -38,7 +38,7 @@ class ReportController extends Controller
             ->first();
 
         $vehicle = VehicleInfo::find($topEarningCar);
-        $vehicleInfo = VehicleInfo::where('status', 1)->where('deleted_at', NULL)->get();
+        $vehicleInfo = VehicleInfo::where('status', 1)->where('deleted_at', null)->get();
 
         $startOfThisWeek = now()->startOfWeek();
         $endOfThisWeek = now()->endOfWeek();
@@ -215,26 +215,26 @@ class ReportController extends Controller
     }
 
     public function getMonthlyEarnings(Request $request)
-{
-    $monthlyEarnings = Booking::select(
-        DB::raw('SUM(final_price) as total_income'),
-        DB::raw('MONTH(created_at) as month')
-    )
-    ->groupBy('month')
-    ->orderBy('month')
-    ->get();
+    {
+        $monthlyEarnings = Booking::select(
+            DB::raw('SUM(final_price) as total_income'),
+            DB::raw('MONTH(created_at) as month')
+        )
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
 
-    return response()->json($monthlyEarnings); // Ensure JSON response
-}
+        return response()->json($monthlyEarnings); // Ensure JSON response
+    }
 
-public function getEarningsBreakdown()
-{
-    $breakdown = Booking::select(
-        DB::raw('SUM(total_insurance_price) as total_insurance_price'),
-        DB::raw('SUM(total_extra_service_price) as total_extra_service_price'),
-        DB::raw('SUM(vehicle_total_price) as vehicle_total_price')
-    )->first();
+    public function getEarningsBreakdown()
+    {
+        $breakdown = Booking::select(
+            DB::raw('SUM(total_insurance_price) as total_insurance_price'),
+            DB::raw('SUM(total_extra_service_price) as total_extra_service_price'),
+            DB::raw('SUM(vehicle_total_price) as vehicle_total_price')
+        )->first();
 
-    return response()->json($breakdown);
-}
+        return response()->json($breakdown);
+    }
 }

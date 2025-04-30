@@ -16,7 +16,7 @@ class UserBookings extends JsonResource
      */
     public function toArray(Request $request): array
     {
-       return [
+        return [
            'id' => $this->id,
            'reservation_id' => $this->reservation_id,
            'vehicle_name'   => $this->vehicle ? $this->vehicle->name : '',
@@ -25,8 +25,8 @@ class UserBookings extends JsonResource
            'driving_type'   => $this->delivery_type ? ucfirst($this->delivery_type) : '',
            'rental_type'    => $this->rental_type ? ($this->rental_type) : '',
            'main_location'  => $this->vehicle && $this->vehicle->mainLocation ? $this->vehicle->mainLocation->name : '',
-           'pickup_location'=> $this->pickupLocation ? $this->pickupLocation->name : '',
-           'return_location'=> $this->returnLocation ? $this->returnLocation->name : '',
+           'pickup_location' => $this->pickupLocation ? $this->pickupLocation->name : '',
+           'return_location' => $this->returnLocation ? $this->returnLocation->name : '',
            'start_datetime' => $this->start_datetime,
            'end_datetime'   => $this->end_datetime,
            'formated_start_datetime' => formatDateTime($this->start_datetime),
@@ -46,7 +46,7 @@ class UserBookings extends JsonResource
            'no_of_passengers' => $this->no_of_passengers,
            'customer'       => $this->customer ? $this->customer  : null,
            'customer_detail' => $this->customerDetail ? $this->customerDetail : null
-       ];
+        ];
     }
 
     public function getExtraServices($extraserviceJsonString)

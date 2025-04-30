@@ -36,7 +36,7 @@ class CityController extends Controller
                 'exists:states,id'
             ],
         ], [
-            'name.required' =>__('admin.cms.city_required'),
+            'name.required' => __('admin.cms.city_required'),
             'name.unique' => __('admin.cms.city_exists'),
             'state_id.required' => __('admin.cms.state_required'),
             'state_id.exists' => __('admin.cms.state_exists'),
@@ -92,9 +92,9 @@ class CityController extends Controller
             $orderByColumnIndex = $request->input('order.0.column');
             $orderByColumn = $request->input("columns.$orderByColumnIndex.data") ?? 'name';
             $orderDirection = $request->input('order.0.dir') ?? 'asc';
-    
+
             $query = City::with(['state.country']);
-    
+
             if ($search) {
                 $query->where('name', 'like', "%{$search}%")
                       ->orWhereHas('state', function ($q) use ($search) {
@@ -104,21 +104,20 @@ class CityController extends Controller
                             });
                       });
             }
-    
+
             $total = $query->count();
-    
+
             $cities = $query->orderBy($orderByColumn, $orderDirection)
                             ->skip($start)
                             ->take($length)
                             ->get();
-    
+
             return response()->json([
                 'draw' => intval($request->input('draw')),
                 'recordsTotal' => $total,
                 'recordsFiltered' => $total,
                 'data' => $cities,
             ]);
-    
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -143,7 +142,6 @@ class CityController extends Controller
     public function delete(Request $request)
     {
         try {
-
             $id = $request->id;
 
             City::where('id', $id)->delete();

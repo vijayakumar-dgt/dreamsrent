@@ -4,6 +4,7 @@ namespace Modules\RolesPermission\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 // use Modules\RolesPermission\Database\Factories\PermissionFactory;
 
 class Permission extends Model
@@ -33,5 +34,4 @@ class Permission extends Model
     {
         return $this->belongsTo(Role::class);
     }
-
 }

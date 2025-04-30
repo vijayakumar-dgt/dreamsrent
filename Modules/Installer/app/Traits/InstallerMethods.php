@@ -12,9 +12,10 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
 use Modules\Installer\Models\Configuration;
 
-
-trait InstallerMethods {
-    private function checkMinimumRequirements(): array {
+trait InstallerMethods
+{
+    private function checkMinimumRequirements(): array
+    {
         $checks = [
             // Base requirements
             'php_version'         => [
@@ -109,7 +110,8 @@ trait InstallerMethods {
         return [$checks, $success, $failedChecks];
     }
 
-    private function requirementsCompleteStatus() {
+    private function requirementsCompleteStatus()
+    {
         $success = $this->checkMinimumRequirements();
 
         return $success[1];
@@ -286,7 +288,6 @@ trait InstallerMethods {
             }
 
             return true;
-
         } catch (Exception $e) {
             Log::error($e->getMessage());
             return 'Database connection failed! It looks like you have entered wrong database credentials (host, port, database, user, or password).';
@@ -319,7 +320,8 @@ trait InstallerMethods {
         }
     }
 
-    private function changeEnvDatabaseConfig($config) {
+    private function changeEnvDatabaseConfig($config)
+    {
         $envContent = File::get(base_path('.env'));
         $lineBreak = "\n";
         $envContent = preg_replace([
@@ -341,7 +343,8 @@ trait InstallerMethods {
         }
     }
 
-    private function completedSetup($type) {
+    private function completedSetup($type)
+    {
         Configuration::updateCompeteStatus(1);
         Session::flush();
         Artisan::call('cache:clear');
@@ -352,14 +355,16 @@ trait InstallerMethods {
         }
     }
 
-    private function removeDummyFiles() {
+    private function removeDummyFiles()
+    {
         // delete files
         $this->deleteFolderAndFiles(public_path('uploads/custom-images'));
         $this->deleteFolderAndFiles(public_path('uploads/forum-images'));
         $this->deleteFolderAndFiles(public_path('uploads/store'));
     }
 
-    private function deleteFolderAndFiles($directory) {
+    private function deleteFolderAndFiles($directory)
+    {
         // Check if the directory exists
         if (File::exists($directory)) {
             // Delete the directory and its contents

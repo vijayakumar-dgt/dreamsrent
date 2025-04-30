@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DoorType extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -22,5 +23,4 @@ class DoorType extends Model
         'updated_at',
         'deleted_at'
     ];
-
 }

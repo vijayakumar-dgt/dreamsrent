@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 // use Modules\CarInfo\Database\Factories\CarFactory;
 class VehicleInfo extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -143,5 +144,4 @@ class VehicleInfo extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-
 }

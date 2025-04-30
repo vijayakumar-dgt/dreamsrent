@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Maintenance extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -24,11 +25,11 @@ class Maintenance extends Model
         'status'
     ];
 
-    
+
     public static $planned = 1;
     public static $inprogress = 2;
     public static $completed = 3;
-    
+
     public function car()
     {
         return $this->hasOne(VehicleInfo::class, 'id');
@@ -38,5 +39,4 @@ class Maintenance extends Model
     {
         return $this->belongsTo(VehicleInfo::class, 'vehicle_id');
     }
-
 }

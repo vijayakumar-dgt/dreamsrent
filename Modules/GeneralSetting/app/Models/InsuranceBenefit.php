@@ -4,6 +4,7 @@ namespace Modules\GeneralSetting\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 // use Modules\GeneralSetting\Database\Factories\InsuranceBenefitFactory;
 
 class InsuranceBenefit extends Model
@@ -22,5 +23,4 @@ class InsuranceBenefit extends Model
     {
         return $this->belongsTo(Insurance::class, 'id');
     }
-
 }

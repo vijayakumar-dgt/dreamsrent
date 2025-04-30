@@ -215,24 +215,16 @@ $(document).ready(function () {
                     if (response.register_status == 0) {
                         $("#userRegisterForm")[0].reset();
                         $(".form-control").removeClass("is-invalid is-valid");
-
+                        if (response.redirect_url) {
+                            window.location.href = response.redirect_url;
+                        }
                         const userName = response.email;
                         const emailData = {
                             subject: response.email_subject,
                             content: response.email_content,
                         };
 
-                        sendEmail(userName, emailData)
-                            .then(() => {
-                                showToast('success', response.message);
-
-                                if (response.redirect_url) {
-                                    window.location.href = response.redirect_url;
-                                }
-                            })
-                            .catch((error) => {
-                                showToast('error', _l('web.auth.failed_to_send_welcome_email'));
-                            });
+                      
                     } else if (response.register_status === "1") {
                         $("#register-modal").modal("hide");
 

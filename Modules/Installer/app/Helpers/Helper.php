@@ -56,7 +56,6 @@ if (!function_exists('purchaseVerificationHashed')) {
         } else {
             // return ['success' => false, 'message' => 'Verification file not found'];
             return ['success' => true, 'message' => 'Demo mode - verification bypassed'];
-
         }
     }
 }
@@ -65,8 +64,8 @@ if (! function_exists('changeEnvValues')) {
     function changeEnvValues($key, $value)
     {
         file_put_contents(app()->environmentFilePath(), str_replace(
-            $key.'='.env($key),
-            $key.'='.$value,
+            $key . '=' . env($key),
+            $key . '=' . $value,
             file_get_contents(app()->environmentFilePath())
         ));
     }

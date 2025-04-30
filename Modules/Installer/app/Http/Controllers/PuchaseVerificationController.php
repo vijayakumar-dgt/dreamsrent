@@ -19,7 +19,7 @@ class PuchaseVerificationController extends Controller
 
     public function index()
     {
-       
+
         return view('installer::index');
     }
 
@@ -36,7 +36,6 @@ class PuchaseVerificationController extends Controller
             ]);
             $data = $response->json();
             if ($data['status'] == true) {
-
                 session()->put('step-1-complete', true);
                 Configuration::updateStep(2);
 
@@ -44,9 +43,7 @@ class PuchaseVerificationController extends Controller
                     return response()->json(['success' => true, 'message' => "Purchase Code Verified Successfully"], 200);
                 // }
                 // dd($data['status']);
-
-            }
-            else {
+            } else {
                 return response()->json([
                     'success' => false,
                     'message' => $data['message'] ?? 'Purchase Code is Invalid'

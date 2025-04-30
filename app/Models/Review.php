@@ -19,5 +19,4 @@ class Review extends Model
         'cleanliness_ratings',
         'average_ratings',
     ];
-
 }

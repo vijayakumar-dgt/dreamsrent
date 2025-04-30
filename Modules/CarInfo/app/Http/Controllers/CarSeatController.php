@@ -44,7 +44,6 @@ class CarSeatController extends Controller
         $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
-
             $data = [
                 'seat_type' => $request->seat_type,
                 'status' => $request->status ?? 1
@@ -70,7 +69,7 @@ class CarSeatController extends Controller
         }
     }
 
- 
+
     public function list(Request $request)
     {
         $orderBy = $request->order_by ?? 'desc';
@@ -119,7 +118,6 @@ class CarSeatController extends Controller
     public function delete(Request $request)
     {
         try {
-
             $id = $request->id;
 
             SeatType::where('id', $id)->delete();
@@ -144,7 +142,7 @@ class CarSeatController extends Controller
 
         if (!$ids || count($ids) == 0) {
             return response()->json(['success' => false, 'message' => 'No items selected.']);
-        }       
+        }
 
         SeatType::whereIn('id', $ids)->delete();
 

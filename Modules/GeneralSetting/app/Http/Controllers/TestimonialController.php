@@ -64,7 +64,7 @@ class TestimonialController extends Controller
             // Handle search
             if ($request->has('search') && !empty($request->search)) {
                 $searchTerm = $request->search;
-                $query->where(function($q) use ($searchTerm) {
+                $query->where(function ($q) use ($searchTerm) {
                     $q->where('customer_name', 'like', '%' . $searchTerm . '%')
                     ->orWhere('review', 'like', '%' . $searchTerm . '%');
                 });
@@ -99,7 +99,6 @@ class TestimonialController extends Controller
                 'message' =>  __('admin.general_settings.testimonial_retrive_success'),
                 'data'    => $testimonials
             ], 200);
-
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
@@ -185,6 +184,4 @@ class TestimonialController extends Controller
             ]);
         }
     }
-
-
 }

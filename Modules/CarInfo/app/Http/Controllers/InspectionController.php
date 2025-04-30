@@ -20,7 +20,7 @@ class InspectionController extends Controller
     {
         $cars = DB::table('vehicle_info')->select('id', 'name')->where('deleted_at', null)->orderBy('name', 'asc')->get();
         $users = DB::table('users')->select('id', 'name')->orderBy('name', 'asc')->get();
-        $checklists = Checklist::where('status',true)->orderBy('name','asc')->get();
+        $checklists = Checklist::where('status', true)->orderBy('name', 'asc')->get();
         $data = [
             'cars' => $cars,
             'users' => $users,
@@ -31,7 +31,7 @@ class InspectionController extends Controller
 
     public function save(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'vehicle_info_id' => 'required|exists:vehicle_info,id',
             'inspection_date' => 'required|date|after_or_equal:today',
             'inspection_by' => 'required|exists:users,id',
@@ -39,7 +39,7 @@ class InspectionController extends Controller
             'fuel'          => 'required|numeric|min:0',
             'inspection_status' => 'required',
             'repair_status' => 'required',
-        ],[
+        ], [
           'vehicle_info_id.required' => __('admin.rentals.vehicle_required'),
           'inspection_date.required' => __('admin.rentals.inspection_date_required'),
           'inspection_date.date' => 'Please enter valid date',
@@ -61,16 +61,16 @@ class InspectionController extends Controller
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         $successMessage = empty($request->id) ? __('admin.rentals.inspection_create_success') : __('admin.rentals.inspection_update_success');
         $errorMessage = empty($request->id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
-            if($request->has('id') && $request->id != null){
+            if ($request->has('id') && $request->id != null) {
                 $inspection = Inspection::find($request->id);
-            }else{
+            } else {
                 $inspection = new Inspection();
             }
             $inspection->vehicle_info_id = $request->vehicle_info_id;
@@ -81,7 +81,7 @@ class InspectionController extends Controller
             $inspection->notes = $request->notes;
             $inspection->inspection_status = $request->inspection_status;
             $inspection->repair_status = $request->repair_status;
-            if($request->has('checklist_id') && is_array($request->checklist_id) && count($request->checklist_id) > 0){
+            if ($request->has('checklist_id') && is_array($request->checklist_id) && count($request->checklist_id) > 0) {
                 $inspection->check_list = json_encode($request->checklist_id);
             }
             $inspection->save();
@@ -98,16 +98,15 @@ class InspectionController extends Controller
                 'message' => $errorMessage
             ], 422);
         }
-        
     }
 
     public function getInspections(Request $request)
     {
         $inspections = Inspection::with(['car', 'inspector']);
-    
+
         if ($request->has('search') && $request->search != null) {
             $search = $request->search;
-    
+
             $inspections = $inspections->where(function ($query) use ($search) {
                 $query->whereHas('car', function ($q) use ($search) {
                     $q->where('name', 'like', '%' . $search . '%');
@@ -121,28 +120,29 @@ class InspectionController extends Controller
             $status = $request->status;
             $inspections = $inspections->where('inspection_status', $status);
         }
-    
+
         $inspections = $inspections->orderBy('id', 'desc')->get()->map(function ($inspection) {
             $inspection->inspectiondate = $inspection->inspection_date
                 ? Carbon::parse($inspection->inspection_date)->format('d M Y')
                 : null;
 
-            
+
 
             return $inspection;
         });
-    
+
         return response()->json([
             'status' => 'success',
             'code' => 200,
             'data' => $inspections
         ]);
     }
-    
 
-    public function getInspection($id){
+
+    public function getInspection($id)
+    {
         try {
-            $inspection = Inspection::with('car','inspector')
+            $inspection = Inspection::with('car', 'inspector')
                             ->find($id);
             return response()->json([
                 'status' => 'success',
@@ -156,10 +156,10 @@ class InspectionController extends Controller
                 'message' => $th->getMessage()
             ], 422);
         }
-        
     }
 
-    public function deleteInspection(Request $request){
+    public function deleteInspection(Request $request)
+    {
         try {
             $inspection = Inspection::findOrFail($request->delete_id);
             $inspection->delete();
@@ -167,20 +167,19 @@ class InspectionController extends Controller
                 'status' => 'success',
                 'code'   => 200,
                 'message' => __('admin.rentals.inspection_delete_success')
-            ],200);
+            ], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-
-           return response()->json([
+            return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' => 'Inspection not found!'
-           ],422);
+            ], 422);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' => $th->getMessage()
-            ],422);
+            ], 422);
         }
     }
 
@@ -216,6 +215,4 @@ class InspectionController extends Controller
 
         return response()->json(['exists' => $exists]);
     }
-
-
 }

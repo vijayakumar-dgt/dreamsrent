@@ -1181,7 +1181,6 @@ class CarInfoController extends Controller
             $location = Location::where('name', 'LIKE', "%{$request->location}%")->first();
 
             if (!$location) {
-
                 return response()->json([
                     'code' => 200,
                     'message' => __('Vehicles list retrieved successfully.'),
@@ -1667,7 +1666,7 @@ class CarInfoController extends Controller
         return response()->json($models);
     }
 
-    public  function vehicleDetailsList(Request $request)
+    public function vehicleDetailsList(Request $request)
     {
         $vehicleSlug = $request->vehicle_slug;
 

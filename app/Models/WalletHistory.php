@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class WalletHistory extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'wallet_history';
 
@@ -25,4 +26,3 @@ class WalletHistory extends Model
 
     protected $dates = ['deleted_at']; // For soft deletes
 }
-

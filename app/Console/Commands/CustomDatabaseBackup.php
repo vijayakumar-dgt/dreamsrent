@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\DbDumper\Databases\MySql;
 use Modules\GeneralSetting\Models\Dbbackup;
 
-
 class CustomDatabaseBackup extends Command
 {
     protected $signature = 'backup:database';

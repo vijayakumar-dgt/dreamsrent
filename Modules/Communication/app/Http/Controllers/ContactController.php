@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use Modules\Communication\Models\Contact;
 use Illuminate\Support\Facades\Log;
 
-
-
 class ContactController extends Controller
 {
     /**
@@ -123,7 +121,6 @@ class ContactController extends Controller
                 'success' => true,
                 'message' => __('admin.support.contact_message_delete_success')
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code'    => 500,
@@ -133,6 +130,4 @@ class ContactController extends Controller
             ], 500);
         }
     }
-
-
 }

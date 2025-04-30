@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Storage;
 use Modules\GeneralSetting\Models\SignatureSetting;
 use Illuminate\Support\Facades\Artisan;
 
-
 class SignatureSettingsController extends Controller
 {
     public function signature()
@@ -125,11 +124,10 @@ class SignatureSettingsController extends Controller
                 'message' => __('admin.general_settings.signature_update_success'),
                 'data' => $signature
             ], 200);
-
         } catch (Exception $e) {
             return response()->json([
                 'code' => 500,
-                'message' =>__('admin.general_settings.retrive_error'),
+                'message' => __('admin.general_settings.retrive_error'),
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -142,7 +140,7 @@ class SignatureSettingsController extends Controller
 
             $signatures = SignatureSetting::when($search, function ($query) use ($search) {
                     $query->where('signature_name', 'like', "%{$search}%");
-                })
+            })
                 ->orderBy('created_at', 'desc')
                 ->get()
                 ->map(function ($signature) {
@@ -155,7 +153,7 @@ class SignatureSettingsController extends Controller
 
             return response()->json([
                 'code' => 200,
-                'message' =>__('admin.general_settings.signature_list_fetch_success'),
+                'message' => __('admin.general_settings.signature_list_fetch_success'),
                 'data' => $signatures,
                 'totalRecords' => $signatures->count()
             ], 200);
@@ -187,10 +185,9 @@ class SignatureSettingsController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
-                'message' =>__('admin.general_settings.fail_delete_signature'),
+                'message' => __('admin.general_settings.fail_delete_signature'),
                 'error' => $e->getMessage()
             ], 500);
         }
     }
-
 }

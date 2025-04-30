@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Invoices extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory;
+    use Notifiable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -42,6 +44,4 @@ class Invoices extends Authenticatable
     {
         return $this->hasMany(InvoiceItem::class, 'invoice_id'); // explicitly tell Laravel the FK
     }
-    
-
 }

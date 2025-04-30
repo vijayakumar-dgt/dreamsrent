@@ -97,11 +97,11 @@ class CommunicationSettingController extends Controller
         try {
             $rules = $this->getValidationRules($request['type']);
             $validator = Validator::make($request->all(), $rules);
-            
+
             if ($validator->fails()) {
                 return response()->json($validator->errors(), 422);
             }
-            
+
             $settingsType = $this->getSettingsType($request['type']);
             $settings = $this->getSettingsData($request);
 
@@ -244,12 +244,12 @@ class CommunicationSettingController extends Controller
             'email_address.email' => __('admin.common.email_valid'),
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         try {
@@ -278,7 +278,7 @@ class CommunicationSettingController extends Controller
                 'to_email' => $request->email_address
             ];
 
-            $requestData = New Request($data);
+            $requestData = new Request($data);
 
             $emailController = new EmailController();
             $emailController->sendEmail($requestData);
@@ -295,6 +295,4 @@ class CommunicationSettingController extends Controller
             ], 400);
         }
     }
-
-
 }

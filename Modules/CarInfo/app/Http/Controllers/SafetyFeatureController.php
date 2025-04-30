@@ -22,12 +22,12 @@ class SafetyFeatureController extends Controller
         $id = $request->id ?? '';
         $authUser = current_user(); // Ensure this returns the logged-in user
         $languageId = $authUser->language_id ?? 1;
-    
+
         $data = [
             'feature' => $request->feature,
             'language_id' => $languageId
         ];
-    
+
         $validator = Validator::make($request->all(), [
             'feature' => [
                 'required',
@@ -41,7 +41,7 @@ class SafetyFeatureController extends Controller
             'feature.min' => __('admin.rentals.feature_minlength'),
             'feature.unique' => __('admin.rentals.feature_unique'),
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
@@ -49,10 +49,10 @@ class SafetyFeatureController extends Controller
                 'errors' => $validator->errors()->toArray()
             ], 422);
         }
-    
+
         $successMsg = empty($id) ? __('admin.rentals.safety_feature_create_success') : __('admin.rentals.safety_feature_update_success');
         $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
-    
+
         try {
             if (empty($id)) {
                 SafetyFeature::create($data);
@@ -60,7 +60,7 @@ class SafetyFeatureController extends Controller
                 $data['status'] = $request->status ?? 1;
                 SafetyFeature::where('id', $id)->update($data);
             }
-    
+
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
@@ -75,7 +75,7 @@ class SafetyFeatureController extends Controller
             ], 500);
         }
     }
-    
+
 
     public function list(Request $request): JsonResponse
     {
@@ -83,7 +83,7 @@ class SafetyFeatureController extends Controller
             $authUser = current_user(); // Make sure this helper returns the logged-in user
             $languageId = $authUser->language_id ?? 1;
             $query = SafetyFeature::query()->where("language_id", $languageId);
-    
+
             // Search
             if (!empty($request->search)) {
                 $search = $request->search;
@@ -91,13 +91,13 @@ class SafetyFeatureController extends Controller
                     $q->where('feature', 'like', "%{$search}%");
                 });
             }
-    
+
             // Status Filter
             if ($request->has('sort_by_status') && !empty($request->sort_by_status) || $request->sort_by_status == '0') {
                 $status = $request->sort_by_status;
                 $query->where('safety_features.status', $status);
             }
-    
+
             // Ordering
             $columnIndex = $request->order[0]['column'] ?? 1;
             $columnName = $request->columns[$columnIndex]['data'] ?? 'feature';
@@ -108,15 +108,15 @@ class SafetyFeatureController extends Controller
             } else {
                 $query->orderBy('feature', 'asc');
             }
-    
+
             // Pagination
             $start = $request->start ?? 0;
             $length = $request->length ?? 10;
-    
+
             // Total records count
             $filterTotalRecords = $query->count();
             $totalRecords = SafetyFeature::where("language_id", $languageId)->count();
-    
+
             // Get data
             $data = $query->skip($start)->take($length)->get();
 
@@ -126,7 +126,6 @@ class SafetyFeatureController extends Controller
                 'recordsFiltered' => $filterTotalRecords,
                 'data' => $data,
             ], 200);
-    
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -135,13 +134,13 @@ class SafetyFeatureController extends Controller
             ], 500);
         }
     }
-    
+
 
     public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
         $doorType = SafetyFeature::find($id);
-        
+
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -165,7 +164,7 @@ class SafetyFeatureController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_delete_error')
-            ],500);
+            ], 500);
         }
     }
 }

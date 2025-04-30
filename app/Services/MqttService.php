@@ -1,8 +1,10 @@
 <?php
+
 namespace App\Services;
 
 use PhpMqtt\Client\ConnectionSettings;
 use PhpMqtt\Client\MqttClient;
+
 class MqttService
 {
     protected $client;
@@ -13,7 +15,7 @@ class MqttService
         $server   = env('MQTT_HOST', 'broker.emqx.io');
         $port     = env('MQTT_PORT', 1883);
         $clientId = 'dreamsrent_' . uniqid();
-        $connectionSettings = (new ConnectionSettings)
+        $connectionSettings = (new ConnectionSettings())
                             ->setKeepAliveInterval(60)
                             ->setLastWillTopic(null)
                             ->setUsername(null)

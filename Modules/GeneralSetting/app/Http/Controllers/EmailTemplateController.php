@@ -17,9 +17,9 @@ class EmailTemplateController extends Controller
      */
     public function index()
     {
-        $tags = NotificationTag::where('status',true)->get();
-        $notificationTypes = NotificationType::where('status',true)->get();
-        return view('generalsetting::system_settings.email_template',compact('tags','notificationTypes'));
+        $tags = NotificationTag::where('status', true)->get();
+        $notificationTypes = NotificationType::where('status', true)->get();
+        return view('generalsetting::system_settings.email_template', compact('tags', 'notificationTypes'));
     }
 
     public function store(Request $request)
@@ -118,12 +118,12 @@ class EmailTemplateController extends Controller
         $pageLength = $request->length;
         $offset     = $request->start;
         $emailTemplates = EmailTemplate::query();
-        if($request->has('keyword') && $request->keyword != ""){
-            $emailTemplates = $emailTemplates->where(function($query) use ($request){
-                          $query->where('title','like','%'.$request->keyword.'%');
+        if ($request->has('keyword') && $request->keyword != "") {
+            $emailTemplates = $emailTemplates->where(function ($query) use ($request) {
+                          $query->where('title', 'like', '%' . $request->keyword . '%');
             });
         }
-        $emailTemplates = $emailTemplates->orderBy('id','desc');
+        $emailTemplates = $emailTemplates->orderBy('id', 'desc');
         $emailTemplates = $emailTemplates->skip($offset)->take($pageLength)->get();
         $totalRecords = $filteredRecords = EmailTemplate::count();
         return response()->json([
@@ -142,7 +142,7 @@ class EmailTemplateController extends Controller
             'status' => 'success',
             'code'   => 200,
             'data'   => $emailTemplate
-        ],200);
+        ], 200);
     }
 
     public function deleteEmailTeplate(Request $request)
@@ -154,26 +154,26 @@ class EmailTemplateController extends Controller
                 'status' => 'success',
                 'code'   => 200,
                 'message' =>  __('admin.general_settings.email_template_deleted_success'),
-            ],200);
-        }catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' => 'Currency not found'
-            ],422);
-        }catch (\Throwable $th) {
+            ], 422);
+        } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' => $th->getMessage()
-            ],422);
+            ], 422);
         }
     }
 
     public function getTags($id)
     {
         $notificationType = NotificationType::find($id);
-        $defaultTags = NotificationTag::where('status',true)->pluck('title')->toArray();
+        $defaultTags = NotificationTag::where('status', true)->pluck('title')->toArray();
         $tags = $notificationType && $notificationType->tags ? json_decode($notificationType->tags) : $defaultTags;
         return response()->json([
             'status' => 'success',

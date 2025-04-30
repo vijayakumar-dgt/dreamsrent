@@ -12,7 +12,6 @@ use Modules\GeneralSetting\Models\Language;
 
 class FaqController extends Controller
 {
-
     public function faq(Request $request)
     {
         $languages = Language::with('transLang')->get();
@@ -240,9 +239,9 @@ class FaqController extends Controller
 
             $faqs = Faq::when($request->language_id, function ($query) use ($request) {
                     return $query->where('language_id', $request->language_id);
-                }, function ($query) use ($defaultLanguage) {
-                    return $query->where('language_id', $defaultLanguage);
-                })
+            }, function ($query) use ($defaultLanguage) {
+                return $query->where('language_id', $defaultLanguage);
+            })
                 ->when($request->has('status'), function ($query) use ($request) {
                     return $query->where('status', $request->status);
                 })
@@ -352,5 +351,4 @@ class FaqController extends Controller
             ], 500);
         }
     }
-
 }

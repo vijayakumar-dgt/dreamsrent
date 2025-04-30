@@ -124,7 +124,6 @@ class CarTransmissionContollerController extends Controller
     public function delete(Request $request)
     {
         try {
-
             $id = $request->id;
 
             Transmission::where('id', $id)->delete();

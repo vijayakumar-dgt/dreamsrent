@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserDetail extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id',
@@ -39,5 +40,4 @@ class UserDetail extends Model
     {
         return $this->hasOne(UserDetail::class);
     }
-
 }

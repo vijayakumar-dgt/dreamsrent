@@ -180,11 +180,11 @@ class GeneralSettingController extends Controller
             'logo_image.image' => __('admin.general_settings.logo_image_type'),
             'favicon_image.image' => __('admin.general_settings.favicon_image_type'),
             'small_image.image' => __('admin.general_settings.small_image_type'),
-            'dark_logo.image' =>__('admin.general_settings.dark_logo_image_type'),
-            'logo_image.max' =>__('admin.general_settings.logo_image_size'),
+            'dark_logo.image' => __('admin.general_settings.dark_logo_image_type'),
+            'logo_image.max' => __('admin.general_settings.logo_image_size'),
             'favicon_image.max' => __('admin.general_settings.favicon_image_size'),
-            'small_image.max' =>__('admin.general_settings.small_image_size'),
-            'dark_logo.max' =>__('admin.general_settings.dark_logo_image_size'),
+            'small_image.max' => __('admin.general_settings.small_image_size'),
+            'dark_logo.max' => __('admin.general_settings.dark_logo_image_size'),
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -196,7 +196,8 @@ class GeneralSettingController extends Controller
         try {
             $groupId = 16;
 
-            function updateOrCreateLogoSetting($key, $path, $groupId) {
+            function updateOrCreateLogoSetting($key, $path, $groupId)
+            {
                 return GeneralSetting::updateOrCreate(
                     ['key' => $key],
                     ['value' => $path, 'group_id' => $groupId]
@@ -329,7 +330,6 @@ class GeneralSettingController extends Controller
 
             return response()->json(['success' => true, 'message' => $message]);
         } catch (\Exception $e) {
-
             return response()->json([
                 'success' => false,
                 'message' => __('admin.general_settings.retrive_error'),
@@ -394,7 +394,7 @@ class GeneralSettingController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
-                'message' =>__('admin.general_settings.retrive_error'),
+                'message' => __('admin.general_settings.retrive_error'),
             ], 500);
         }
     }
@@ -461,7 +461,7 @@ class GeneralSettingController extends Controller
 
             return response()->json([
                 'code' => 200,
-                'message' =>__('admin.general_settings.invoice_setting_success'),
+                'message' => __('admin.general_settings.invoice_setting_success'),
                 'data' => []
             ], 200);
         } catch (\Exception $e) {
@@ -533,7 +533,7 @@ class GeneralSettingController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'code'    => 500,
-                'message' =>__('admin.general_settings.retrive_error'),
+                'message' => __('admin.general_settings.retrive_error'),
                 'error'   => $e->getMessage()
             ], 500);
         }
@@ -964,7 +964,7 @@ class GeneralSettingController extends Controller
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
-                'message' =>__('admin.general_settings.setting_retrive_success'),
+                'message' => __('admin.general_settings.setting_retrive_success'),
                 'data'    => $settings
             ]);
         } catch (\Exception $e) {
@@ -1002,7 +1002,7 @@ class GeneralSettingController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'code'    => 422,
-                'message' =>__('admin.general_settings.current_password_incorrect'),
+                'message' => __('admin.general_settings.current_password_incorrect'),
             ]);
         }
     }
@@ -1063,7 +1063,7 @@ class GeneralSettingController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'code'    => 422,
-                'message' =>__('admin.general_settings.validation_error'),
+                'message' => __('admin.general_settings.validation_error'),
                 'errors'  => $validator->errors()->toArray()
             ], 422);
         }
@@ -1072,7 +1072,7 @@ class GeneralSettingController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'code'    => 500,
-                'message' =>__('admin.general_settings.current_password_incorrect'),
+                'message' => __('admin.general_settings.current_password_incorrect'),
                 'errors'  => $validator->errors()->toArray()
             ], 500);
         }
@@ -1113,7 +1113,7 @@ class GeneralSettingController extends Controller
             ], 200);
         }
         $currentPassword = $request->phone_current_password;
-        if(!Hash::check($currentPassword, Auth::guard('admin')->user()->password)){
+        if (!Hash::check($currentPassword, Auth::guard('admin')->user()->password)) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 200,
@@ -1154,7 +1154,7 @@ class GeneralSettingController extends Controller
         }
         $current_email = $request->current_email;
         $authUser = Auth::guard('admin')->user();
-        if($authUser->email != $current_email){
+        if ($authUser->email != $current_email) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 200,
@@ -1162,7 +1162,7 @@ class GeneralSettingController extends Controller
             ]);
         }
         $email_current_password = $request->email_current_password;
-        if(!Hash::check($email_current_password, Auth::guard('admin')->user()->password)){
+        if (!Hash::check($email_current_password, Auth::guard('admin')->user()->password)) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 200,
@@ -1445,12 +1445,11 @@ class GeneralSettingController extends Controller
         $orderBy = $request->order_by ?? 'desc';
 
         try {
-
             $data = GeneralSetting::orderBy('id', $orderBy)->where('group_id', 13)->get();
 
             return response()->json([
                 'code' => 200,
-                'message' =>__('admin.general_settings.general_settings_success'),
+                'message' => __('admin.general_settings.general_settings_success'),
                 'data' => $data,
             ], 200);
         } catch (\Exception $e) {

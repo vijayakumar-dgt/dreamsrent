@@ -14,7 +14,6 @@ use Modules\Booking\Models\Booking;
 
 class ReviewController extends Controller
 {
-
     protected $authUser;
     public function __construct()
     {
@@ -33,12 +32,12 @@ class ReviewController extends Controller
             'comments.min' => __('web.home.comments_minlength'),
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         $userId = $this->authUser->id ?? $request->user_id;
@@ -91,7 +90,7 @@ class ReviewController extends Controller
                 'code'   => 500,
                 'message' => __('web.common.default_create_error'),
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
     }
 
@@ -107,12 +106,12 @@ class ReviewController extends Controller
             'reply_comments.min' => __('web.home.reply_comments_minlength'),
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         $userId = $this->authUser->id ?? $request->user_id;
@@ -149,7 +148,7 @@ class ReviewController extends Controller
                 'code'   => 500,
                 'message' => __('web.home.reply_create_error'),
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
     }
 
@@ -161,30 +160,30 @@ class ReviewController extends Controller
             'vehicle_id.required' => __('web.home.vehicle_id_required'),
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         try {
             $vehicleId = $request->vehicle_id ?? null;
 
             $reviewsData = Review::select(
-                    'reviews.id',
-                    'reviews.vehicle_id',
-                    'reviews.user_id',
-                    'reviews.average_ratings',
-                    'review_messages.comments',
-                    'review_messages.likes',
-                    'review_messages.dislikes',
-                    'users.name as user_name',
-                    DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
-                    'user_details.profile_image',
-                    'reviews.created_at',
-                )
+                'reviews.id',
+                'reviews.vehicle_id',
+                'reviews.user_id',
+                'reviews.average_ratings',
+                'review_messages.comments',
+                'review_messages.likes',
+                'review_messages.dislikes',
+                'users.name as user_name',
+                DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
+                'user_details.profile_image',
+                'reviews.created_at',
+            )
                 ->join('review_messages', 'review_messages.review_id', '=', 'reviews.id')
                 ->join('users', 'users.id', '=', 'reviews.user_id')
                 ->leftJoin('user_details', 'user_details.user_id', '=', 'reviews.user_id')
@@ -246,21 +245,21 @@ class ReviewController extends Controller
                 'code'   => 500,
                 'message' => __('web.common.default_retrieve_error'),
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
     }
 
     function fetchReviewReplies($reviewId)
     {
         $replies = ReviewMessages::select(
-                'review_messages.comments',
-                'review_messages.likes',
-                'review_messages.dislikes',
-                'users.name as user_name',
-                DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
-                'user_details.profile_image',
-                'review_messages.created_at',
-            )
+            'review_messages.comments',
+            'review_messages.likes',
+            'review_messages.dislikes',
+            'users.name as user_name',
+            DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
+            'user_details.profile_image',
+            'review_messages.created_at',
+        )
             ->join('users', 'users.id', '=', 'review_messages.user_id')
             ->leftJoin('user_details', 'user_details.user_id', '=', 'review_messages.user_id')
             ->where('review_messages.parent_id', $reviewId)
@@ -324,7 +323,7 @@ class ReviewController extends Controller
                 $customFrom = $request->custom_from_date ?? "";
                 $customTo   = $request->custom_to_date ?? "";
                 $duration = $this->getDuration($request->duration, $customFrom, $customTo);
-    
+
                 if ($duration) {
                     $query->whereBetween('reviews.created_at', [$duration['from'], $duration['to']]);
                 }
@@ -367,14 +366,13 @@ class ReviewController extends Controller
                 "recordsFiltered" => $filteredRecords,
                 "data" => $reviews,
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('web.common.default_retrieve_error'),
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
     }
 
@@ -448,7 +446,7 @@ class ReviewController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('web.common.default_delete_error')
-            ],500);
+            ], 500);
         }
     }
 
@@ -552,7 +550,7 @@ class ReviewController extends Controller
                 $item->vehicle_image = uploadedAsset($item->vehicle_image);
                 $item->profile_image = uploadedAsset($item->profile_image ?? '', 'profile');
                 $item->review_date = formatDateTime($item->created_at, false);
-                
+
                 unset($item->created_at);
                 return $item;
             });
@@ -563,15 +561,13 @@ class ReviewController extends Controller
                 "recordsFiltered" => $filteredRecords,
                 "data" => $reviews,
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('web.common.default_retrieve_error'),
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
     }
-
 }

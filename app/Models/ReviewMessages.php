@@ -17,5 +17,4 @@ class ReviewMessages extends Model
         'likes',
         'dislikes',
     ];
-
 }

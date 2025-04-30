@@ -35,19 +35,18 @@ class DoorTypeController extends Controller
             'door_type.max' => __('admin.rentals.door_type_maxlength'),
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'errors' => $validator->errors()->toArray()
-            ],422);
+            ], 422);
         }
 
         $successMsg = "Door type added successfully.";
         $errorMsg = "An error occured while adding door type!";
 
         try {
-
             if (empty($id)) {
                 DoorType::create($data);
             } else {
@@ -69,9 +68,8 @@ class DoorTypeController extends Controller
                 'code'   => 500,
                 'message' => $errorMsg,
                 'error' => $e->getMessage()
-            ],500);
+            ], 500);
         }
-
     }
 
     public function list(Request $request): JsonResponse
@@ -87,7 +85,7 @@ class DoorTypeController extends Controller
             }
 
              // Status Filter
-             if ($request->has('sort_by_status') && !empty($request->sort_by_status) || $request->sort_by_status == '0') {
+            if ($request->has('sort_by_status') && !empty($request->sort_by_status) || $request->sort_by_status == '0') {
                 $status = $request->sort_by_status;
                 $query->where('door_types.status', $status);
             }
@@ -112,7 +110,6 @@ class DoorTypeController extends Controller
                 'recordsFiltered' => $filterTotalRecords,
                 'data' => $data,
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -127,7 +124,7 @@ class DoorTypeController extends Controller
     {
         $id = $request->id;
         $doorType = DoorType::find($id);
-        
+
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -138,7 +135,6 @@ class DoorTypeController extends Controller
     public function delete(Request $request)
     {
         try {
-
             $id = $request->id;
 
             DoorType::where('id', $id)->delete();
@@ -153,7 +149,7 @@ class DoorTypeController extends Controller
                 'status' => 'error',
                 'code'   => 500,
                 'message' => 'An error occured while deleting door type!'
-            ],500);
+            ], 500);
         }
     }
 }

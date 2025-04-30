@@ -4,6 +4,7 @@ namespace Modules\RolesPermission\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 // use Modules\RolesPermission\Database\Factories\ModuleFactory;
 
 class Module extends Model
@@ -32,7 +33,4 @@ class Module extends Model
     {
         return $this->hasMany(Permission::class, 'module_id', 'id');
     }
-
-
-
 }

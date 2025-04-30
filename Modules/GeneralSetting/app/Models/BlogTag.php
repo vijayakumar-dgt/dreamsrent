@@ -21,5 +21,4 @@ class BlogTag extends Model
     {
         return $this->hasMany(\Modules\GeneralSetting\Models\BlogPost::class, 'category');
     }
-
 }

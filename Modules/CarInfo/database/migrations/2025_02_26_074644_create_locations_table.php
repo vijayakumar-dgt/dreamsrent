@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('locations', function (Blueprint $table) {
-           $table->longText('image')->nullable()->after('name');
-           $table->string('email')->nullable()->after('image');
-           $table->string('phone')->nullable()->after('email');
-           $table->longText('address')->nullable()->after('phone');
-           $table->unsignedBigInteger('country')->nullable()->after('address');
-           $table->unsignedBigInteger('state')->nullable()->after('country');
-           $table->unsignedBigInteger('city')->nullable()->after('state');
-           $table->string('pincode')->nullable()->after('city');
+            $table->longText('image')->nullable()->after('name');
+            $table->string('email')->nullable()->after('image');
+            $table->string('phone')->nullable()->after('email');
+            $table->longText('address')->nullable()->after('phone');
+            $table->unsignedBigInteger('country')->nullable()->after('address');
+            $table->unsignedBigInteger('state')->nullable()->after('country');
+            $table->unsignedBigInteger('city')->nullable()->after('state');
+            $table->string('pincode')->nullable()->after('city');
         });
     }
 
