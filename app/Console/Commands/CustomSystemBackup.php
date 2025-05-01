@@ -12,7 +12,7 @@ class CustomSystemBackup extends Command
     protected $signature = 'backup:system';
     protected $description = 'Backup the entire system files as a zip archive';
 
-    public function handle()
+    public function handle() : int
     {
         $backupDir = storage_path('app/public/backups');
 
@@ -45,9 +45,10 @@ class CustomSystemBackup extends Command
         } catch (\Exception $e) {
             $this->error("System backup failed: " . $e->getMessage());
         }
+        return 0;
     }
 
-    private function zipDirectory($folder, ZipArchive $zip, $root)
+    private function zipDirectory(string $folder, ZipArchive $zip, string $root): bool
     {
         $files = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($folder, \RecursiveDirectoryIterator::SKIP_DOTS),
@@ -62,5 +63,6 @@ class CustomSystemBackup extends Command
                 $zip->addFile($file->getPathname(), $localPath);
             }
         }
+        return true;
     }
 }

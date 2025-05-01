@@ -8,7 +8,7 @@ use Modules\Booking\Models\Booking;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\CarInfo\Models\VehicleInfo;
 use App\Models\User;
-use App\Models\Invoices;
+use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +19,7 @@ class InvoiceController extends Controller
 {
     public function index()
     {
-        $invoices = Invoices::with('items')
+        $invoices = Invoice::with('items')
             ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image')
@@ -110,7 +110,7 @@ class InvoiceController extends Controller
         try {
             DB::beginTransaction();
 
-            $invoice = Invoices::create([
+            $invoice = Invoice::create([
                 'invoice_number' => $request->invoice_number,
                 'car_id' => $request->car_id,
                 'currency_id' => $request->currency_id,
@@ -153,7 +153,7 @@ class InvoiceController extends Controller
 
     public function edit($id)
     {
-        $invoice = Invoices::findOrFail($id);
+        $invoice = Invoice::findOrFail($id);
 
         $cars = VehicleInfo::where('status', 1)->where('deleted_at', null)->get();
         $currencies = Currency::where('status', 1)->where('deleted_at', null)->get();
@@ -189,7 +189,7 @@ class InvoiceController extends Controller
     {
         try {
             // Find the invoice by ID
-            $invoice = Invoices::findOrFail($id);
+            $invoice = Invoice::findOrFail($id);
 
             // Delete related items from the items table
             $invoice->items()->delete(); // Assuming you have a relationship set up between Invoices and Items
@@ -211,7 +211,7 @@ class InvoiceController extends Controller
         //dd($request->all());
         try {
             // Find the invoice to update
-            $invoice = Invoices::findOrFail($id);
+            $invoice = Invoice::findOrFail($id);
 
             // Update the invoice data
             $invoice->update([

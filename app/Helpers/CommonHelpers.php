@@ -20,10 +20,12 @@ use Modules\GeneralSetting\Models\TimeFormat;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Modules\RolesPermission\Models\Module as ModuleModel;
 use Modules\RolesPermission\Models\Permission;
+use Illuminate\Support\Collection;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 if (!function_exists('clearCache')) {
 
-    function clearCache()
+    function clearCache(): bool
     {
         Artisan::call('cache:clear');
         Artisan::call('route:clear');
@@ -35,11 +37,11 @@ if (!function_exists('clearCache')) {
 }
 
 if (!function_exists('uploadFile')) {
-    function uploadFile($file, $path = 'uploads', $oldFileName = '', $disk = 'public')
+    function uploadFile(UploadedFile $file, string $path = 'uploads', string $oldFileName = '', string $disk = 'public'): ?string
     {
         $disk = config('filesystems.default');
 
-        if ($file instanceof UploadedFile && $file->isValid()) {
+        if ($file->isValid()) {
             if (Storage::disk($disk)->exists($path . '/' . $oldFileName)) {
                 Storage::disk($disk)->delete($path . '/' . $oldFileName);
             }
@@ -52,11 +54,11 @@ if (!function_exists('uploadFile')) {
 }
 
 if (!function_exists('uploadMutipleFile')) {
-    function uploadMutipleFile($file, $path = 'uploads', $oldFileName = '', $disk = 'public')
+    function uploadMutipleFile(UploadedFile $file, string $path = 'uploads', string $oldFileName = '', string $disk = 'public'): ?string
     {
         $disk = config('filesystems.default');
 
-        if ($file instanceof \Illuminate\Http\UploadedFile && $file->isValid()) {
+        if ($file->isValid()) {
             if ($oldFileName && Storage::disk($disk)->exists("$path/$oldFileName")) {
                 Storage::disk($disk)->delete("$path/$oldFileName");
             }
@@ -71,35 +73,43 @@ if (!function_exists('uploadMutipleFile')) {
 }
 
 if (!function_exists('formatDateTime')) {
-    function formatDateTime($date, $includeTime = true, $timeOnly = false)
+    function formatDateTime(mixed $date, bool $includeTime = true, bool $timeOnly = false): string
     {
-        // Fetch settings once
         $generalSettings = GeneralSetting::where('group_id', 5)->pluck('value', 'key');
 
-        // Set default formats
         $dateFormat = 'Y-m-d';
         $timeFormat = 'H:i:s';
 
-        // Get custom formats if available
         if ($generalSettings->isNotEmpty()) {
-            $dateFormat = DateFormat::find($generalSettings->get('date_format'))?->name ?? $dateFormat;
-            $timeFormat = TimeFormat::find($generalSettings->get('time_format'))?->name ?? $timeFormat;
+            $dateFormat = optional(DateFormat::find($generalSettings->get('date_format')))->name ?? $dateFormat;
+            $timeFormat = optional(TimeFormat::find($generalSettings->get('time_format')))->name ?? $timeFormat;
         }
 
-        // Determine the format based on flags
         $format = $timeOnly ? $timeFormat : ($includeTime ? "$dateFormat $timeFormat" : $dateFormat);
 
-        // Apply format
         try {
             return Carbon::parse($date)->format($format);
         } catch (\Throwable $th) {
-            return $date;
+            return (string) $date;
         }
     }
 }
 
 if (!function_exists('uploadedAsset')) {
-    function uploadedAsset($filePath, $default = '', $fileFullDetails = false)
+    /**
+     * Get the URL or full details of an uploaded asset.
+     *
+     * @param string $filePath The file path in storage.
+     * @param string $default The default image key to use if file doesn't exist.
+     * @param bool $fileFullDetails Whether to return full file details.
+     * @return string|array{
+     *     url: string,
+     *     file_name?: string,
+     *     extension: string,
+     *     size: string|int
+     * }
+     */
+    function uploadedAsset(string $filePath, string $default = '', bool $fileFullDetails = false): string|array
     {
         $disk = config('filesystems.default');
 
@@ -114,7 +124,6 @@ if (!function_exists('uploadedAsset')) {
             'default_logo' => $baseUrl . '/assets/img/logo.svg',
             'default_small_logo' => $baseUrl . '/frontend/assets/img/logo-small.png',
             'default_favicon' => $baseUrl . '/assets/img/favicon.png',
-
         ];
 
         // If file does not exist, return default image
@@ -133,65 +142,83 @@ if (!function_exists('uploadedAsset')) {
 
         // Format URL properly for public/local disks
         if ($disk === 'public' || $disk === 'local') {
-            $fileUrl = $baseUrl . '/' . ltrim(parse_url($fileUrl, PHP_URL_PATH), '/');
+            // Ensure that parse_url returns a valid string before calling ltrim
+            $urlPath = parse_url($fileUrl, PHP_URL_PATH);
+            $fileUrl = $baseUrl . '/' . (is_string($urlPath) ? ltrim($urlPath, '/') : '');
         }
-
         return $fileFullDetails
             ? ['url' => $fileUrl, 'file_name' => $fileName, 'extension' => $fileExtension, 'size' => $formattedSize]
             : $fileUrl;
     }
-
 }
 
 
-function customEncrypt($data, $key = 'default_secret_key')
+/**
+ * Encrypts data using AES-128-CBC encryption.
+ *
+ * @param string $data The data to be encrypted.
+ * @param string $key The encryption key (optional).
+ * @return string The encrypted and encoded string, or an empty string on failure.
+ */
+function customEncrypt(string $data, string $key = 'default_secret_key'): string
 {
     $cipher = 'AES-128-CBC';
     $iv = substr(md5($key), 0, 16);
     $encrypted = openssl_encrypt($data, $cipher, $key, 0, $iv);
+
+    if ($encrypted === false) {
+        return ''; // or throw an exception depending on your needs
+    }
+
     return rtrim(strtr(base64_encode($encrypted), '+/', '-_'), '=');
 }
 
-function customDecrypt($encryptedData, $key = 'default_secret_key')
+function customDecrypt(string $encryptedData, string $key = 'default_secret_key'): ?string
 {
     $cipher = 'AES-128-CBC';
     $iv = substr(md5($key), 0, 16);
 
     $encryptedData = strtr($encryptedData, '-_', '+/');
-    $decrypted = openssl_decrypt(base64_decode($encryptedData), $cipher, $key, 0, $iv);
+    $decoded = base64_decode($encryptedData, true);
 
-    return $decrypted;
+    if ($decoded === false) {
+        return null; // base64 decode failed
+    }
+
+    $decrypted = openssl_decrypt($decoded, $cipher, $key, 0, $iv);
+
+    return $decrypted !== false ? $decrypted : null;
 }
 
-function getDefaultCurrencySymbol()
+function getDefaultCurrencySymbol(): string
 {
     $defaultCurrency = GeneralSetting::where('key', 'currency_symbol')->first();
     $currencyId = $defaultCurrency->value ?? '';
     if ($currencyId) {
-        $currency = Currency::find($currencyId);
-        if ($currency) {
+        $currency = Currency::find((string) $currencyId); // or (int) if it's numeric
+        if ($currency instanceof Currency) {
             return $currency->symbol;
         }
     }
     return '$';
 }
 
-function isRTL($languageCode = null)
+function isRTL(?string $languageCode = null): bool
 {
 
     $language = TranslationLanguage::select('id')->where('code', $languageCode)->first();
     if ($language) {
         $languageId = $language->id;
         $language = Language::select('rtl')->where('language_id', $languageId)->first();
-        if ($language) {
-            return $language->rtl;
+        if ($language && isset($language->rtl)) {
+            return (bool) $language->rtl;
         }
     }
     return 0;
 }
 
 if (!function_exists('formatFileSize')) {
-    function formatFileSize($bytes)
+    function formatFileSize(int $bytes): string
     {
         $sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
         $factor = floor((strlen($bytes) - 1) / 3);
@@ -200,7 +227,7 @@ if (!function_exists('formatFileSize')) {
 }
 
 if (!function_exists('getUserPermissions')) {
-    function getUserPermissions($userId = null)
+    function getUserPermissions(int|string|null $userId = null): array
     {
         $user = $userId ? User::find($userId) : current_user();
 
@@ -225,9 +252,8 @@ if (!function_exists('getUserPermissions')) {
     }
 }
 
-function hasPermission($permissions, $moduleSlug, $action)
+function hasPermission(Array $permissions, $moduleSlug, string $action): bool
 {
-
     $user = current_user();
 
     $userType = $user->user_type ?? '';
@@ -254,7 +280,7 @@ function hasPermission($permissions, $moduleSlug, $action)
     return false;
 }
 
-function current_user($guard = null)
+function current_user(?string $guard = null): ?Authenticatable
 {
     $guard = $guard ?? Auth::getDefaultDriver();
 
@@ -262,11 +288,11 @@ function current_user($guard = null)
         ? Auth::guard($guard)->user()
         : null;
 }
-function rentalNotificationEnabled()
+function rentalNotificationEnabled(): int
 {
     $bookingNotification = GeneralSetting::where('group_id', 2)->where('key', 'bookingUpdates')->first();
     if ($bookingNotification) {
-        return $bookingNotification->value;
+        return (int) $bookingNotification->value; // Ensure returning an integer value
     }
     return 0;
 }
@@ -278,8 +304,8 @@ function sendNotification($email, $slug, $notifyData = [])
     }
     $placeholders = json_decode($notificationType->tags, true);
     $template = EmailTemplate::where('notification_type', $notificationType->id)
-                ->where('status', 1)
-                ->first();
+        ->where('status', 1)
+        ->first();
     if (!$template) {
         return null;
     }
@@ -320,9 +346,9 @@ function sendNotification($email, $slug, $notifyData = [])
         $user = User::where('email', $email)->first();
         if ($user) {
             Notification::create([
-              'user_id' => $user->id,
-              'subject' => $parsedTemplate['subject'],
-              'content' => $parsedTemplate['notification_content']
+                'user_id' => $user->id,
+                'subject' => $parsedTemplate['subject'],
+                'content' => $parsedTemplate['notification_content']
             ]);
         }
     }
