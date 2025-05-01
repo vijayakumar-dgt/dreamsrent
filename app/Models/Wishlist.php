@@ -10,8 +10,12 @@ class Wishlist extends Model
 {
     protected $fillable = ['user_id','vehicle_id'];
 
+    /**
+     * @return BelongsTo<VehicleInfo, Wishlist>
+     */
     public function vehicle(): BelongsTo
     {
+        /** @var belongsTo<VehicleInfo, Wishlist> */
         return $this->belongsTo(VehicleInfo::class);
     }
 }
