@@ -6,13 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Modules\GeneralSetting\Models\Currency;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class CurrencyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index():View
     {
         $data = [
             'page_title' => 'Currencies'
@@ -20,7 +22,7 @@ class CurrencyController extends Controller
         return view('generalsetting::finance_settings.currencies', $data);
     }
 
-    public function save_currency(Request $request)
+    public function save_currency(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'currency_name' => 'required|unique:currencies,currency_name,' . $request->id . ',id,deleted_at,NULL',
@@ -67,7 +69,7 @@ class CurrencyController extends Controller
         }
     }
 
-    public function getCurrencies(Request $request)
+    public function getCurrencies(Request $request):JsonResponse
     {
         $pageLength = $request->length;
         $offset     = $request->start;
@@ -89,7 +91,7 @@ class CurrencyController extends Controller
         ]);
     }
 
-    public function editCurrency($id)
+    public function editCurrency($id):JsonResponse
     {
         $currency = Currency::find($id);
         return response()->json([
@@ -100,7 +102,7 @@ class CurrencyController extends Controller
         ]);
     }
 
-    public function deleteCurrency(Request $request)
+    public function deleteCurrency(Request $request):JsonResponse
     {
         try {
             $currency = Currency::findOrFail($request->id);

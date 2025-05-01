@@ -7,20 +7,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Modules\GeneralSetting\Models\SignatureSetting;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 class SignatureSettingsController extends Controller
 {
-    public function signature()
+    public function signature():View
     {
         return view('generalsetting::app_settings.signature-setting');
     }
 
-    public function clearCache()
+    public function clearCache():View
     {
         return view('generalsetting::other_settings.clear-cache');
     }
 
-    public function clear(Request $request)
+    public function clear(Request $request):JsonResponse
     {
         try {
             Artisan::call('optimize:clear');
@@ -39,7 +42,7 @@ class SignatureSettingsController extends Controller
     }
 
     // Store a new signature
-    public function store(Request $request)
+    public function store(Request $request):JsonResponse
     {
         try {
             $request->validate([
@@ -81,7 +84,7 @@ class SignatureSettingsController extends Controller
     }
 
 
-    public function update(Request $request)
+    public function update(Request $request):JsonResponse
     {
         try {
             $request->validate([
@@ -133,7 +136,7 @@ class SignatureSettingsController extends Controller
         }
     }
 
-    public function index(Request $request)
+    public function index(Request $request):JsonResponse
     {
         try {
             $search = $request->input('search');
@@ -167,7 +170,7 @@ class SignatureSettingsController extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    public function destroy(Request $request):JsonResponse
     {
         try {
             $request->validate([

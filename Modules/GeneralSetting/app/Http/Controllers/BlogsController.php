@@ -10,13 +10,16 @@ use Modules\GeneralSetting\Models\BlogReviews;
 use Modules\GeneralSetting\Models\BlogTag;
 use Modules\GeneralSetting\Models\BlogPost;
 use Carbon\Carbon;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Modules\GeneralSetting\Models\BlogComment;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\Support\Str;
 
 class BlogsController extends Controller
 {
-    public function blogCategory(Request $request)
+    public function blogCategory(Request $request):View
     {
         $authId = current_user();
 
@@ -26,7 +29,7 @@ class BlogsController extends Controller
         return view('generalsetting::cms.blogs.blog-category', compact('languages', 'categories'));
     }
 
-    public function categoryStore(Request $request)
+    public function categoryStore(Request $request):JsonResponse
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:blog_categories,name',
@@ -46,7 +49,7 @@ class BlogsController extends Controller
         ], 200);
     }
 
-    public function categoryUpdate(Request $request, $id)
+    public function categoryUpdate(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:blog_categories,name,' . $id,
@@ -62,13 +65,13 @@ class BlogsController extends Controller
         return redirect()->back()->with('success', 'Blog Category updated successfully.');
     }
 
-    public function categoryDestroy($id)
+    public function categoryDestroy($id): RedirectResponse
     {
         BlogCategory::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'Blog Category deleted successfully.');
     }
 
-    public function blogTags(Request $request)
+    public function blogTags(Request $request):View
     {
         $authId = current_user();
 
@@ -78,7 +81,7 @@ class BlogsController extends Controller
         return view('generalsetting::cms.blogs.blog-tags', compact('languages', 'tags'));
     }
 
-    public function tagStore(Request $request)
+    public function tagStore(Request $request):JsonResponse
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:blog_tags,name',
@@ -98,7 +101,7 @@ class BlogsController extends Controller
         ], 200);
     }
 
-    public function tagUpdate(Request $request, $id)
+    public function tagUpdate(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:blog_tags,name,' . $id,
@@ -114,19 +117,19 @@ class BlogsController extends Controller
         return redirect()->back()->with('success', 'Blog Tag updated successfully.');
     }
 
-    public function tagDestroy($id)
+    public function tagDestroy($id): RedirectResponse
     {
         BlogTag::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'Blog Tag deleted successfully.');
     }
 
-    public function blogComments(Request $request)
+    public function blogComments(Request $request):View
     {
         $comments = BlogReviews::Join('blog_posts', 'blog_reviews.blog_id', '=', 'blog_posts.id')->select('blog_reviews.*', 'blog_posts.title')->where('blog_reviews.deleted_at', null)->get();
         return view('generalsetting::cms.blogs.blog-comments', compact('comments'));
     }
 
-    public function blogs(Request $request)
+    public function blogs(Request $request):View
     {
         $authId = current_user();
         $languageId = $authId->language_id;
@@ -144,7 +147,7 @@ class BlogsController extends Controller
         return view('generalsetting::cms.blogs.blogs', compact('blogPosts', 'languages', 'categories', 'tags'));
     }
 
-    public function blogDetails($id)
+    public function blogDetails($id):View
     {
         $languages = Language::with('transLang')->get();
         $blogPosts = BlogPost::Join('blog_categories', 'blog_posts.category', '=', 'blog_categories.id')
@@ -156,7 +159,7 @@ class BlogsController extends Controller
         return view('generalsetting::cms.blogs.blog-details', compact('blogPosts', 'languages'));
     }
 
-    public function blogAdd(Request $request)
+    public function blogAdd(Request $request):View
     {
         $authId = current_user();
         $languageId = $authId->language_id;
@@ -166,7 +169,7 @@ class BlogsController extends Controller
         return view('generalsetting::cms.blogs.add-blog', compact('languages', 'tags', 'categories'));
     }
 
-    public function blogStore(Request $request)
+    public function blogStore(Request $request):JsonResponse
     {
 
         $request->validate([
@@ -197,7 +200,7 @@ class BlogsController extends Controller
         return response()->json(['message' => 'Blog added successfully!']);
     }
 
-    public function blogDestroy($id)
+    public function blogDestroy($id):JsonResponse
     {
         $blog = BlogPost::findOrFail($id);
         $blog->deleted_at = Carbon::now();
@@ -206,7 +209,7 @@ class BlogsController extends Controller
         return response()->json(['success' => true, 'message' => 'Blog deleted successfully']);
     }
 
-    public function blogEdit($id)
+    public function blogEdit($id):View
     {
         $authId = current_user();
         $languageId = $authId->language_id;
@@ -218,7 +221,7 @@ class BlogsController extends Controller
         return view('generalsetting::cms.blogs.edit-blog', compact('blog', 'languages', 'tags', 'categories'));
     }
 
-    public function BlogUpdate(Request $request, $id)
+    public function BlogUpdate(Request $request, $id):JsonResponse
     {
         $blog = BlogPost::findOrFail($id);
 

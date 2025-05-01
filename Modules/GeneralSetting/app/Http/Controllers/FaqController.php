@@ -9,24 +9,25 @@ use Illuminate\Support\Facades\Validator;
 use Modules\GeneralSetting\Models\Faq;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
+use Illuminate\View\View;
 
 class FaqController extends Controller
 {
-    public function faq(Request $request)
+    public function faq(Request $request):View
     {
         $languages = Language::with('transLang')->get();
 
         return view('generalsetting::cms.faq', compact('languages'));
     }
 
-    public function howItWorks(Request $request)
+    public function howItWorks(Request $request):View
     {
         $languages = Language::with('transLang')->get();
 
         return view('generalsetting::cms.how-it-work', compact('languages'));
     }
 
-    public function howItWorksUpdate(Request $request)
+    public function howItWorksUpdate(Request $request):JsonResponse
     {
         $request->validate([
             'group_id' => 'required|integer',
@@ -61,7 +62,7 @@ class FaqController extends Controller
         }
     }
 
-    public function howItWorksList(Request $request)
+    public function howItWorksList(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'group_id'    => 'required|integer',
@@ -101,14 +102,14 @@ class FaqController extends Controller
     }
 
 
-    public function copyright(Request $request)
+    public function copyright(Request $request):View
     {
         $languages = Language::with('transLang')->get();
 
         return view('generalsetting::cms.copyright', compact('languages'));
     }
 
-    public function copyrightUpdate(Request $request)
+    public function copyrightUpdate(Request $request):JsonResponse
     {
         $request->validate([
             'group_id' => 'required|integer',
@@ -143,7 +144,7 @@ class FaqController extends Controller
         }
     }
 
-    public function copyrightList(Request $request)
+    public function copyrightList(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'group_id'    => 'required|integer',

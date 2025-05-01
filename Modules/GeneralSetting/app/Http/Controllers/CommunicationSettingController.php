@@ -7,6 +7,7 @@ use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Modules\Communication\Http\Controllers\EmailController;
@@ -15,12 +16,12 @@ use Modules\GeneralSetting\Models\EmailTemplate;
 
 class CommunicationSettingController extends Controller
 {
-    public function smsGateway(Request $request)
+    public function smsGateway(Request $request):View
     {
         return view('generalsetting::system_settings.sms-gateway');
     }
 
-    public function emailSettings(Request $request)
+    public function emailSettings(Request $request):View
     {
         return view('generalsetting::system_settings.email_settings');
     }

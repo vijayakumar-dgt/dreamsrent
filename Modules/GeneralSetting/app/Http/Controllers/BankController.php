@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Modules\GeneralSetting\Models\Bank;
+use Illuminate\Http\JsonResponse;
 
 class BankController extends Controller
 {
@@ -15,7 +16,7 @@ class BankController extends Controller
         return view('generalsetting::bank.index');
     }
 
-    public function store(Request $request)
+    public function store(Request $request):JsonResponse
     {
         $id = $request->id ?? '';
 
@@ -80,7 +81,7 @@ class BankController extends Controller
             ], 500);
         }
     }
-    public function list(Request $request)
+    public function list(Request $request):JsonResponse
     {
         $orderBy = $request->order_by ?? 'desc';
         $search = $request->input('search'); // Get the search input
@@ -110,7 +111,7 @@ class BankController extends Controller
     }
 
 
-    public function edit(Request $request)
+    public function edit(Request $request):JsonResponse
     {
         $id = $request->id;
         $bank = Bank::find($id);
@@ -122,7 +123,7 @@ class BankController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request):JsonResponse
     {
         try {
             $id = $request->id;

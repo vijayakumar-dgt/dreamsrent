@@ -12,13 +12,16 @@ use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 class LanguageController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index():View
     {
         $translationLanguages = TranslationLanguage::where('status', 1)->get();
         $data = [
@@ -27,7 +30,7 @@ class LanguageController extends Controller
         return view('generalsetting::website_settings.languages', $data);
     }
 
-    public function addLanguage(Request $request)
+    public function addLanguage(Request $request):JsonResponse
     {
         $languageTranslation = TranslationLanguage::find($request->lang_id);
 
@@ -101,7 +104,7 @@ class LanguageController extends Controller
         }
     }
 
-    public function getLanguages(Request $request)
+    public function getLanguages(Request $request):JsonResponse
     {
         // $languages = Language::with('transLang')->get();
         $languages = Language::query();
@@ -178,7 +181,7 @@ class LanguageController extends Controller
         ], 200);
     }
 
-    public function updateLanguageSettings(Request $request)
+    public function updateLanguageSettings(Request $request):JsonResponse
     {
         try {
             $language = Language::find($request->id);
@@ -223,7 +226,7 @@ class LanguageController extends Controller
         }
     }
 
-    public function changeLanguage(Request $request)
+    public function changeLanguage(Request $request):JsonResponse
     {
         $language = TranslationLanguage::where('code', $request->language_code)->first();
 
@@ -248,7 +251,7 @@ class LanguageController extends Controller
         ]);
     }
 
-    public function userFlagChangeLanguage(Request $request)
+    public function userFlagChangeLanguage(Request $request):JsonResponse
     {
         $language = TranslationLanguage::where('code', $request->language_code)->first();
 
@@ -272,7 +275,7 @@ class LanguageController extends Controller
         ]);
     }
 
-    public function language(Request $request)
+    public function language(Request $request):View
     {
         $langDefaultFiles = ['admin', 'app', 'web'];
 
@@ -291,7 +294,7 @@ class LanguageController extends Controller
     }
 
 
-    public function getLanguageModules(Request $request)
+    public function getLanguageModules(Request $request):JsonResponse
     {
         $validTabs = ['admin', 'app', 'web'];
         $tab = $request->tab;
@@ -369,7 +372,7 @@ class LanguageController extends Controller
         ], 200);
     }
 
-    public function editModuleLanguage(Request $request)
+    public function editModuleLanguage(Request $request):JsonResponse
     {
         $code = $request->code;
         $tab = $request->tab;
@@ -471,7 +474,7 @@ class LanguageController extends Controller
     }
 
 
-    public function updateModuleLanguage(Request $request)
+    public function updateModuleLanguage(Request $request):JsonResponse
     {
         $code = $request->code;
         $tab = $request->tab;
@@ -561,7 +564,7 @@ class LanguageController extends Controller
         ]);
     }
 
-    public function deleteLanguage(Request $request)
+    public function deleteLanguage(Request $request):JsonResponse
     {
         $language = Language::find($request->id);
 
