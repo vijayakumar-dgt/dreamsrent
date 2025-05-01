@@ -18,7 +18,7 @@ class UserPermission
     {
         $routeName = $request->route()?->getName();
         $user = current_user();
-        $userType = $user->user_type;
+        $userType = $user->user_type ?? '';
 
         if ($userType == 2) {
             $permissions = getUserPermissions();

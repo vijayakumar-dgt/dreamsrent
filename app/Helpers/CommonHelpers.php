@@ -37,7 +37,7 @@ if (!function_exists('clearCache')) {
 }
 
 if (!function_exists('uploadFile')) {
-    function uploadFile(UploadedFile $file, string $path = 'uploads', string $oldFileName = '', string $disk = 'public'): ?string
+    function uploadFile(UploadedFile $file, string $path = 'uploads', ?string $oldFileName = '', string $disk = 'public'): ?string
     {
         $disk = config('filesystems.default');
 
@@ -54,7 +54,7 @@ if (!function_exists('uploadFile')) {
 }
 
 if (!function_exists('uploadMutipleFile')) {
-    function uploadMutipleFile(UploadedFile $file, string $path = 'uploads', string $oldFileName = '', string $disk = 'public'): ?string
+    function uploadMutipleFile(UploadedFile $file, string $path = 'uploads', ?string $oldFileName = '', string $disk = 'public'): ?string
     {
         $disk = config('filesystems.default');
 
@@ -96,20 +96,14 @@ if (!function_exists('formatDateTime')) {
 }
 
 if (!function_exists('uploadedAsset')) {
+    
     /**
-     * Get the URL or full details of an uploaded asset.
-     *
-     * @param string $filePath The file path in storage.
-     * @param string $default The default image key to use if file doesn't exist.
-     * @param bool $fileFullDetails Whether to return full file details.
-     * @return string|array{
-     *     url: string,
-     *     file_name?: string,
-     *     extension: string,
-     *     size: string|int
-     * }
+     * @param string $filePath
+     * @param string $default
+     * @param bool $fileFullDetails
+     * @return string|array{url: string, file_name?: string, extension?: string, size?: string}
      */
-    function uploadedAsset(string $filePath, string $default = '', bool $fileFullDetails = false): string|array
+    function uploadedAsset(?string $filePath, ?string $default = '', bool $fileFullDetails = false): string|array
     {
         $disk = config('filesystems.default');
 
@@ -129,7 +123,7 @@ if (!function_exists('uploadedAsset')) {
         // If file does not exist, return default image
         if (!$filePath || !Storage::disk($disk)->exists($filePath)) {
             return $fileFullDetails
-                ? ['url' => $defaultImages[$default] ?? $defaultImages['default'], 'extension' => '', 'size' => 0]
+                ? ['url' => $defaultImages[$default] ?? $defaultImages['default'], 'extension' => '', 'size' => '0']
                 : ($defaultImages[$default] ?? $defaultImages['default']);
         }
 
