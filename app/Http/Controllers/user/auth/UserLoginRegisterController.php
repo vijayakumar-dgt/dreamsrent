@@ -17,38 +17,40 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cache;
 use Jenssegers\Agent\Agent;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class UserLoginRegisterController extends Controller
 {
-    public function userLogin()
+    public function userLogin() : View|RedirectResponse
     {
         if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.login');
     }
-    public function userRegister()
+    public function userRegister() : View|RedirectResponse
     {
         if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.register');
     }
-    public function forgotPassword()
+    public function forgotPassword() : View|RedirectResponse
     {
         if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.forgot-password');
     }
-    public function resetPassword()
+    public function resetPassword() : View|RedirectResponse
     {
         if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.password-reset');
     }
-    public function resetPasswordUpdate(Request $request)
+    public function resetPasswordUpdate(Request $request) : JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users,email',
@@ -331,7 +333,7 @@ class UserLoginRegisterController extends Controller
         }
     }
 
-    public function validateEmail(Request $request)
+    public function validateEmail(Request $request) : JsonResponse
     {
         $request->validate([
             'email' => 'required|email',
@@ -342,7 +344,7 @@ class UserLoginRegisterController extends Controller
         return response()->json(['exists' => $exists]);
     }
 
-    public function register(Request $request)
+    public function register(Request $request) : JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|regex:/^[A-Za-z]+$/|min:3|max:50',
@@ -439,21 +441,6 @@ class UserLoginRegisterController extends Controller
             ['otp' => $otp, 'expires_at' => $expiresAt]
         );
 
-        // $template = Templates::select('subject', 'content')
-        //     ->where('type', $settings['otp_type'] === 'email' ? 1 : 2)
-        //     ->where('notification_type', $notificationType)
-        //     ->first();
-
-        // if (!$template) {
-        //     return response()->json(['error' => ucfirst($settings['otp_type']) . ' template not found'], 404);
-        // }
-
-        // $subject = $template->subject;
-        // $content = str_replace(
-        //     ['{{user_name}}', '{{otp}}'],
-        //     [$request->username, $otp],
-        //     $template->content
-        // );
 
         $subject = 'OTP Verification for Register';
         $content = 'Your OTP Verification for Register {{otp}} ';
@@ -464,7 +451,6 @@ class UserLoginRegisterController extends Controller
             $content
         );
 
-        // dd( $content);
         return response()->json([
             'status' => true,
             'code' => 200,
@@ -482,7 +468,7 @@ class UserLoginRegisterController extends Controller
     }
 
 
-    public function login(Request $request)
+    public function login(Request $request) : JsonResponse
     {
         // Validate request
         $validator = Validator::make($request->all(), [
@@ -555,7 +541,7 @@ class UserLoginRegisterController extends Controller
         ], 401);
     }
 
-    public function userlogout()
+    public function userlogout() : RedirectResponse
     {
         Auth::guard('web')->logout();
         return redirect()->route('home');
