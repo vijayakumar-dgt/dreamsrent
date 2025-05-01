@@ -7,13 +7,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Modules\CarInfo\Models\ExtraService;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 class ExtraServiceController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         return view('carinfo::extra_services.index');
     }
@@ -30,7 +33,7 @@ class ExtraServiceController extends Controller
      * @return \Illuminate\Http\JsonResponse JSON response with a success or error message.
      */
 
-    public function storeExtraService(Request $request)
+    public function storeExtraService(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'name' => [
@@ -115,7 +118,7 @@ class ExtraServiceController extends Controller
      */
 
 
-    public function getExtraServices(Request $request)
+    public function getExtraServices(Request $request): JsonResponse
     {
         $authId = current_user();
         $language_id = $authId->language_id ?? null;
@@ -148,7 +151,7 @@ class ExtraServiceController extends Controller
      * @return \Illuminate\Http\JsonResponse JSON response containing the status, code, and extra service data.
      */
 
-    public function getExtraService($id)
+    public function getExtraService($id): JsonResponse
     {
         $extraService = ExtraService::find($id);
         $extraService->icon  = $extraService->icon != "" && file_exists(public_path('storage/' . $extraService->icon)) ? uploadedAsset($extraService->icon) : null;
@@ -168,7 +171,7 @@ class ExtraServiceController extends Controller
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the extra service is not found.
      * @throws \Throwable If any other error occurs.
      */
-    public function deleteExtraService(Request $request)
+    public function deleteExtraService(Request $request): JsonResponse
     {
         try {
             $extraService = ExtraService::findOrFail($request->delete_id);
@@ -193,7 +196,7 @@ class ExtraServiceController extends Controller
         }
     }
 
-    public function getVehicleExtraServices(Request $request)
+    public function getVehicleExtraServices(Request $request): JsonResponse
     {
         try {
             $vehicleIds = $request->vehicle_ids;

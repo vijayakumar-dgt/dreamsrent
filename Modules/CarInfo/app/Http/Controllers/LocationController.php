@@ -9,13 +9,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Models\LocationWorkingDay;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class LocationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         return view('carinfo::location.index');
     }
@@ -23,7 +25,7 @@ class LocationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function storeLocation(Request $request)
+    public function storeLocation(Request $request): JsonResponse
     {
         $authUser = current_user();
 
@@ -127,7 +129,7 @@ class LocationController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function getLocations(Request $request)
+    public function getLocations(Request $request): JsonResponse
     {
         $search = $request->input('search');
         $status = $request->input('status');
@@ -170,7 +172,7 @@ class LocationController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getLocation($id)
+    public function getLocation($id): JsonResponse
     {
         $location = Location::with('workingDays')->find($id);
         $location->working_days = $location->workingDays;
@@ -190,7 +192,7 @@ class LocationController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteLocation(Request $request)
+    public function deleteLocation(Request $request): JsonResponse
     {
         try {
             $location = Location::findOrFail($request->delete_id);
@@ -215,7 +217,7 @@ class LocationController extends Controller
         }
     }
 
-    public function getCountries(Request $request)
+    public function getCountries(Request $request): JsonResponse
     {
         try {
             $countries = DB::table('countries')->get(['id', 'name']);
@@ -233,7 +235,7 @@ class LocationController extends Controller
         }
     }
 
-    public function getStates(Request $request)
+    public function getStates(Request $request): JsonResponse
     {
         $countryId = $request->country_id;
 
@@ -269,7 +271,7 @@ class LocationController extends Controller
         }
     }
 
-    public function getCities(Request $request)
+    public function getCities(Request $request): JsonResponse
     {
         $stateId = $request->state_id;
 
@@ -305,7 +307,7 @@ class LocationController extends Controller
         }
     }
 
-    public function getAllLocations(Request $request)
+    public function getAllLocations(Request $request): JsonResponse
     {
         $orderBy = $request->order_by ?? 'asc';
         $search = $request->search ?? null;

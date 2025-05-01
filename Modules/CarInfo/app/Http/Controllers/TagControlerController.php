@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Modules\CarInfo\Models\Tag;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 class TagControlerController extends Controller
 {
@@ -14,7 +17,7 @@ class TagControlerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         return view('carinfo::tag.index');
     }
@@ -34,7 +37,7 @@ class TagControlerController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function save(Request $request)
+    public function save(Request $request): JsonResponse
     {
 
         $validator = Validator::make($request->all(), [
@@ -84,7 +87,7 @@ class TagControlerController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getTags(Request $request)
+    public function getTags(Request $request): JsonResponse
     {
         $tags = Tag::query();
 
@@ -110,7 +113,7 @@ class TagControlerController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getTag($id)
+    public function getTag($id): JsonResponse
     {
         $response = '';
         try {
@@ -139,7 +142,7 @@ class TagControlerController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function deleteTag(Request $request)
+    public function deleteTag(Request $request): JsonResponse
     {
 
         try {

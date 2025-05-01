@@ -7,13 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Modules\CarInfo\Models\Season;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class SeasonController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         return view('carinfo::season.index');
     }
@@ -32,7 +34,7 @@ class SeasonController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function save(Request $request)
+    public function save(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'name' => [
@@ -85,7 +87,7 @@ class SeasonController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getSeasons(Request $request)
+    public function getSeasons(Request $request): JsonResponse
     {
         $seasons = Season::orderBy('id', 'desc');
         if ($request->has('keyword') && $request->keyword != "") {
@@ -108,7 +110,7 @@ class SeasonController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getSeason($id)
+    public function getSeason($id): JsonResponse
     {
         $season = Season::find($id);
         return response()->json([
@@ -124,7 +126,7 @@ class SeasonController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         try {
             $season = Season::findOrFail($request->delete_id);

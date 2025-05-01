@@ -6,13 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Modules\CarInfo\Models\Cylinder;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class CylinderController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         return view('carinfo::cylinder.index');
     }
@@ -28,7 +30,7 @@ class CylinderController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function storeCylinderType(Request $request)
+    public function storeCylinderType(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'cylinder_type' => 'required|unique:cylinders,cylinder_type,' . $request->id . ',id,deleted_at,NULL',
@@ -79,7 +81,7 @@ class CylinderController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCylinders()
+    public function getCylinders(): JsonResponse
     {
         $cylinders = Cylinder::orderBy('id', 'desc')->get();
         return response()->json([
@@ -98,7 +100,7 @@ class CylinderController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCylinder($id)
+    public function getCylinder($id): JsonResponse
     {
         try {
             $cylinder = Cylinder::find($id);
@@ -124,7 +126,7 @@ class CylinderController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function deleteCylinder(Request $request)
+    public function deleteCylinder(Request $request): JsonResponse
     {
         try {
             $cylinder = Cylinder::findOrFail($request->delete_id);
@@ -170,7 +172,7 @@ class CylinderController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCylinderServerside(Request $request)
+    public function getCylinderServerside(Request $request): JsonResponse
     {
         $pageLength = $request->length;
         $offset     = $request->start;

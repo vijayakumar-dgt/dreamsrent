@@ -13,6 +13,7 @@ use Illuminate\View\View;
 use Modules\CarInfo\Models\Maintenance;
 use Modules\CarInfo\Models\VehicleInfo;
 
+
 class MaintenanceController extends Controller
 {
     public function index(): View

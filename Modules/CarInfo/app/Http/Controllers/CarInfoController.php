@@ -41,13 +41,15 @@ use Modules\GeneralSetting\Models\TranslationLanguage;
 use Illuminate\Support\Facades\App;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Models\GeneralSetting;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class CarInfoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function vehiclelist()
+    public function vehiclelist(): View
     {
         $vechileName = VehicleInfo::orderBy('id', 'desc')->get();
         $vechileType = Cartype::orderBy('id', 'desc')->get();
@@ -56,7 +58,7 @@ class CarInfoController extends Controller
         return view('carinfo::vehicle.index', compact("vechileName", "vechileType", "vechileLocation"));
     }
 
-    public function vehicleadd()
+    public function vehicleadd(): View
     {
         $authUser = current_user();
         $language_id = $authUser->language_id;
@@ -89,7 +91,7 @@ class CarInfoController extends Controller
 
         return view('carinfo::vehicle.add', compact('carTypes', 'Brands', 'CarModel', 'Category', 'Location', 'CarColor', 'CarFuel', 'Transmission', 'SafetyFeature', 'DamageTypes', 'ExtraServices', 'ExtraServiceInfo', 'insurances', 'priceType', 'authUser'));
     }
-    public function vehicleedit($slug, Request $request)
+    public function vehicleedit($slug, Request $request): View
     {
         if ($request->has('language_id')) {
             $language_id = $request->query('language_id');
@@ -217,7 +219,7 @@ class CarInfoController extends Controller
         return view('carinfo::vehicle.edit', compact('carTypes', 'Brands', 'Models', 'Category', 'Location', 'CarFuel', 'CarColor', 'Transmission', 'SafetyFeature', 'selectedFeatures', 'vehiclePrices', 'ExtraServices', 'ExtraServiceInfo', 'insurances', 'priceType', 'DamageTypes', 'query'));
     }
 
-    public function getvehiclelist()
+    public function getvehiclelist(): JsonResponse
     {
         $carTypes = VehicleInfo::orderBy('id', 'desc')->get();
         return response()->json([
@@ -229,7 +231,7 @@ class CarInfoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         return view('carinfo::create');
     }
@@ -272,7 +274,7 @@ class CarInfoController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show($id)
+    public function show($id): View
     {
         return view('carinfo::show');
     }
@@ -280,7 +282,7 @@ class CarInfoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit($id): View
     {
         return view('carinfo::edit');
     }
@@ -309,7 +311,7 @@ class CarInfoController extends Controller
     //_____________________________________________________________________________________
     //_____________________________________________________________________________________
 
-    public function saveCarInfo(Request $request)
+    public function saveCarInfo(Request $request):JsonResponse
     {
 
         $authId = Auth::id();
@@ -657,7 +659,7 @@ class CarInfoController extends Controller
     }
 
 
-    public function updateCarInfo(Request $request)
+    public function updateCarInfo(Request $request): JsonResponse
     {
         $authId = Auth::id();
 
@@ -1002,7 +1004,7 @@ class CarInfoController extends Controller
         ], 200);
     }
 
-    public function vehicleListApi(Request $request)
+    public function vehicleListApi(Request $request): JsonResponse
     {
         $authId = current_user();
 
@@ -1144,7 +1146,7 @@ class CarInfoController extends Controller
     }
 
 
-    public function vehicleLists(Request $request)
+    public function vehicleLists(Request $request): JsonResponse
     {
         $query = VehicleInfo::with([
             'carType:id,name',
@@ -1473,7 +1475,7 @@ class CarInfoController extends Controller
 
 
 
-    public function getCarInfo(Request $request)
+    public function getCarInfo(Request $request): JsonResponse
     {
         try {
             $vehicleSlug = $request->get('vehicle_slug');
@@ -1493,7 +1495,7 @@ class CarInfoController extends Controller
         }
     }
 
-    public function seasonalInfo(Request $request)
+    public function seasonalInfo(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
 
@@ -1518,7 +1520,7 @@ class CarInfoController extends Controller
         return response()->json(['success' => true, 'data' => $vehicleSeasons], 200);
     }
 
-    public function tarrifInfo(Request $request)
+    public function tarrifInfo(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
 
@@ -1535,7 +1537,7 @@ class CarInfoController extends Controller
         return response()->json(['success' => true, 'data' => $vehicleTrraifs], 200);
     }
 
-    public function documents(Request $request)
+    public function documents(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
 
@@ -1587,7 +1589,7 @@ class CarInfoController extends Controller
         return response()->json(['success' => true, 'data' => $response], 200);
     }
 
-    public function faq(Request $request)
+    public function faq(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
 
@@ -1604,7 +1606,7 @@ class CarInfoController extends Controller
         return response()->json(['success' => true, 'data' => $vehicleFaqs], 200);
     }
 
-    public function damage(Request $request)
+    public function damage(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
 
@@ -1621,7 +1623,7 @@ class CarInfoController extends Controller
         return response()->json(['success' => true, 'data' => $vehicleDamages], 200);
     }
 
-    public function insurance(Request $request)
+    public function insurance(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
 
@@ -1659,14 +1661,14 @@ class CarInfoController extends Controller
         return response()->json(['success' => true, 'data' => $insuranceData], 200);
     }
 
-    public function getModel(Request $request)
+    public function getModel(Request $request): JsonResponse
     {
         $models = CarModel::where('brand_id', $request->brand_id)->get(['id', 'model_name']);
 
         return response()->json($models);
     }
 
-    public function vehicleDetailsList(Request $request)
+    public function vehicleDetailsList(Request $request): JsonResponse
     {
         $vehicleSlug = $request->vehicle_slug;
 
@@ -1864,7 +1866,7 @@ class CarInfoController extends Controller
         return response()->json(['code' => 200, 'success' => true, 'data' => $data], 200);
     }
 
-    public function deleteVehicleImage(Request $request)
+    public function deleteVehicleImage(Request $request): JsonResponse
     {
         $request->validate([
             'vehicle_id' => 'required|exists:vehicle_metas,vehicle_id',
@@ -1900,7 +1902,7 @@ class CarInfoController extends Controller
 
 
 
-    public function deleteVehiclePolicy(Request $request)
+    public function deleteVehiclePolicy(Request $request): JsonResponse
     {
         $request->validate([
             'vehicle_id' => 'required|exists:vehicle_metas,vehicle_id',
@@ -1933,7 +1935,7 @@ class CarInfoController extends Controller
         return response()->json(['success' => false, 'message' => 'Policy file not found in database.'], 404);
     }
 
-    public function vehicleIntrestLists(Request $request)
+    public function vehicleIntrestLists(Request $request): JsonResponse
     {
         $authUser = current_user();
 
@@ -2052,7 +2054,7 @@ class CarInfoController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         $vehicleId = $request->input('delete_id');
 
@@ -2067,7 +2069,7 @@ class CarInfoController extends Controller
         return response()->json(['success' => false, 'message' => 'Vehicle not found']);
     }
 
-    public function getDamageDetails(Request $request)
+    public function getDamageDetails(Request $request): JsonResponse
     {
         // Retrieve the damage ID from the request
         $damageId = $request->get('id');
@@ -2088,7 +2090,7 @@ class CarInfoController extends Controller
         ]);
     }
 
-    public function deleteMultiple(Request $request)
+    public function deleteMultiple(Request $request): JsonResponse
     {
         $ids = $request->input('delete_id', []);
 

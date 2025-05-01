@@ -10,15 +10,17 @@ use Yajra\DataTables\Facades\DataTables as FacadesDataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class CarSeatController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('carinfo::car_seat.index');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $id = $request->id ?? '';
 
@@ -70,7 +72,7 @@ class CarSeatController extends Controller
     }
 
 
-    public function list(Request $request)
+    public function list(Request $request): JsonResponse
     {
         $orderBy = $request->order_by ?? 'desc';
         $search = $request->input('search');
@@ -103,7 +105,7 @@ class CarSeatController extends Controller
         }
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
         $seatType = SeatType::find($id);
@@ -115,7 +117,7 @@ class CarSeatController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         try {
             $id = $request->id;
@@ -136,7 +138,7 @@ class CarSeatController extends Controller
         }
     }
 
-    public function bulkDelete(Request $request)
+    public function bulkDelete(Request $request): JsonResponse
     {
         $ids = $request->ids;
 
@@ -149,7 +151,7 @@ class CarSeatController extends Controller
         return response()->json(['success' => true, 'message' => 'Selected items deleted successfully.']);
     }
 
-    public function pdfExport(Request $request)
+    public function pdfExport(Request $request): Response
     {
         $ids = $request->input('ids');
 

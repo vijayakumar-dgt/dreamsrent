@@ -6,15 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Modules\CarInfo\Models\CarColor;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class CarColorController extends Controller
 {
-    public function index()
+    public function index():View
     {
         return view('carinfo::car_color.index');
     }
 
-    public function store(Request $request)
+    public function store(Request $request):JsonResponse
     {
         $authUser = current_user();
         $languageId = $authUser->language_id ?? 1;
@@ -68,7 +70,7 @@ class CarColorController extends Controller
     }
 
 
-    public function list(Request $request)
+    public function list(Request $request): JsonResponse
     {
         $orderBy = $request->order_by ?? 'desc';
         $search = $request->input('search');
@@ -106,7 +108,7 @@ class CarColorController extends Controller
         }
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
         $carColor = CarColor::find($id);
@@ -118,7 +120,7 @@ class CarColorController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         try {
             $id = $request->id;
@@ -139,7 +141,7 @@ class CarColorController extends Controller
         }
     }
 
-    public function bulkDelete(Request $request)
+    public function bulkDelete(Request $request): JsonResponse
     {
         $ids = $request->ids;
 

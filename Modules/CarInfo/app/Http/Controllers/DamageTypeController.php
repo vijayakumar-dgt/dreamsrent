@@ -6,18 +6,21 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Modules\CarInfo\Models\DamageType;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 class DamageTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         return view('carinfo::damage_type.index');
     }
 
-    public function storeDamageType(Request $request)
+    public function storeDamageType(Request $request): JsonResponse
     {
         $authUser = current_user();
         $language_id = $authUser->language_id;
@@ -85,7 +88,7 @@ class DamageTypeController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getDamageTypes(Request $request)
+    public function getDamageTypes(Request $request): JsonResponse
     {
         $authUser = current_user();
         $language_id = $authUser->language_id;
@@ -110,7 +113,7 @@ class DamageTypeController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getDamageType($id)
+    public function getDamageType($id): JsonResponse
     {
         $damageType = DamageType::find($id);
         return response()->json([
@@ -126,7 +129,7 @@ class DamageTypeController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteDamageType(Request $request)
+    public function deleteDamageType(Request $request): JsonResponse
     {
         try {
             $damageType = DamageType::findOrFail($request->delete_id);

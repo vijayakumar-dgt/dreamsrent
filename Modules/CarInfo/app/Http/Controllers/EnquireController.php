@@ -7,16 +7,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Modules\CarInfo\Models\Enquiry;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class EnquireController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $cars = DB::table('vehicle_info')->get(['id', 'name']);
         return view('carinfo::car_enquires.index', compact('cars'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'assigned_cars' => 'required|array',
@@ -64,7 +66,7 @@ class EnquireController extends Controller
             ], 500);
         }
     }
-    public function list(Request $request)
+    public function list(Request $request): JsonResponse
     {
         try {
             $enquiries = Enquiry::select('enquiries.*', 'vehicle_info.name as car_name', 'vehicle_info.vehicle_image', 'vehicle_info.type_id', 'cartypes.name as type_name')
@@ -139,7 +141,7 @@ class EnquireController extends Controller
             ]);
         }
     }
-    public function update(Request $request)
+    public function update(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'comment' => 'required|string|max:500',
@@ -199,7 +201,7 @@ class EnquireController extends Controller
     }
 
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         try {
             $id = $request->id;

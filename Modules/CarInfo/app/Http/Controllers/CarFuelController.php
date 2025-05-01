@@ -7,15 +7,18 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Modules\CarInfo\Models\CarFuel;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class CarFuelController extends Controller
 {
-    public function index()
+    public function index():View
     {
         return view('carinfo::car_fuel.index');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $id = $request->id ?? null;
         $authUser = current_user();
@@ -74,7 +77,7 @@ class CarFuelController extends Controller
 
 
 
-    public function list(Request $request)
+    public function list(Request $request): JsonResponse
     {
         $orderBy = $request->order_by ?? 'desc';
         $search = $request->input('search');
@@ -111,7 +114,7 @@ class CarFuelController extends Controller
         }
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
         $carType = CarFuel::find($id);
@@ -123,7 +126,7 @@ class CarFuelController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         try {
             $id = $request->id;
@@ -144,7 +147,7 @@ class CarFuelController extends Controller
         }
     }
 
-    public function bulkDelete(Request $request)
+    public function bulkDelete(Request $request): JsonResponse
     {
         $ids = $request->ids;
 
@@ -157,7 +160,7 @@ class CarFuelController extends Controller
         return response()->json(['success' => true, 'message' => 'Selected items deleted successfully.']);
     }
 
-    public function pdfExport(Request $request)
+    public function pdfExport(Request $request): Response|JsonResponse
     {
         $ids = $request->input('ids');
 

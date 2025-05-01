@@ -7,15 +7,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Modules\CarInfo\Models\PricingType;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class PricingTypeController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('carinfo::pricing_type.index');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $id = $request->id ?? '';
         $data = [
@@ -70,7 +72,7 @@ class PricingTypeController extends Controller
         }
     }
 
-    public function list(Request $request)
+    public function list(Request $request): JsonResponse
     {
         $orderBy = $request->order_by ?? 'desc';
 
@@ -91,7 +93,7 @@ class PricingTypeController extends Controller
         }
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
         $doorType = PricingType::find($id);
@@ -103,7 +105,7 @@ class PricingTypeController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         try {
             $id = $request->id;

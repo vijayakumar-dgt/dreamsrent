@@ -6,13 +6,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Modules\CarInfo\Models\Cartype;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 class CarTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function carTypes()
+    public function carTypes(): View
     {
         return view('carinfo::cartype.index');
     }
@@ -24,7 +27,7 @@ class CarTypeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function storeType(Request $request)
+    public function storeType(Request $request): JsonResponse
     {
         $authUser = current_user();
 
@@ -101,7 +104,7 @@ class CarTypeController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCarTypes(Request $request)
+    public function getCarTypes(Request $request): JsonResponse
     {
         $carTypes = Cartype::orderBy('name', 'asc')->get();
         return response()->json([
@@ -117,7 +120,7 @@ class CarTypeController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCarType($id)
+    public function getCarType($id): JsonResponse
     {
         try {
             $carType = Cartype::find($id);
@@ -145,7 +148,7 @@ class CarTypeController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function deleteType(Request $request)
+    public function deleteType(Request $request): JsonResponse
     {
         try {
             $carType = Cartype::findOrFail($request->delete_id);
@@ -171,7 +174,7 @@ class CarTypeController extends Controller
         }
     }
 
-    public function getCartypeServerside(Request $request)
+    public function getCartypeServerside(Request $request): JsonResponse
     {
         $pageLength = $request->length;
         $offset     = $request->start;
@@ -206,7 +209,7 @@ class CarTypeController extends Controller
         ]);
     }
 
-    public function getVehicleTypes(Request $request)
+    public function getVehicleTypes(Request $request): JsonResponse
     {
         $orderBy = $request->order_by ?? 'asc';
         $search = $request->search ?? null;

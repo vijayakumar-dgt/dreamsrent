@@ -8,15 +8,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Modules\CarInfo\Models\DoorType;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class DoorTypeController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('carinfo::door_type.index');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $id = $request->id ?? '';
         $data = [
@@ -120,7 +122,7 @@ class DoorTypeController extends Controller
     }
 
 
-    public function edit(Request $request)
+    public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
         $doorType = DoorType::find($id);
@@ -132,7 +134,7 @@ class DoorTypeController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         try {
             $id = $request->id;

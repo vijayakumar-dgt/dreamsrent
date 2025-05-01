@@ -10,13 +10,15 @@ use Illuminate\Support\Facades\Validator;
 use Modules\CarInfo\Models\Checklist;
 use Modules\CarInfo\Models\Inspection;
 use Modules\CarInfo\Models\VehicleInfo;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class InspectionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $cars = DB::table('vehicle_info')->select('id', 'name')->where('deleted_at', null)->orderBy('name', 'asc')->get();
         $users = DB::table('users')->select('id', 'name')->orderBy('name', 'asc')->get();
@@ -29,7 +31,7 @@ class InspectionController extends Controller
         return view('carinfo::inspection.index', $data);
     }
 
-    public function save(Request $request)
+    public function save(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'vehicle_info_id' => 'required|exists:vehicle_info,id',
@@ -100,7 +102,7 @@ class InspectionController extends Controller
         }
     }
 
-    public function getInspections(Request $request)
+    public function getInspections(Request $request): JsonResponse
     {
         $inspections = Inspection::with(['car', 'inspector']);
 
@@ -139,7 +141,7 @@ class InspectionController extends Controller
     }
 
 
-    public function getInspection($id)
+    public function getInspection($id): JsonResponse
     {
         try {
             $inspection = Inspection::with('car', 'inspector')
@@ -158,7 +160,7 @@ class InspectionController extends Controller
         }
     }
 
-    public function deleteInspection(Request $request)
+    public function deleteInspection(Request $request): JsonResponse
     {
         try {
             $inspection = Inspection::findOrFail($request->delete_id);
@@ -183,7 +185,7 @@ class InspectionController extends Controller
         }
     }
 
-    public function getVehicles(Request $request)
+    public function getVehicles(Request $request): JsonResponse
     {
         $vehicles = VehicleInfo::where('status', 1)
                        ->when($request->has('search') && $request->search != null, function ($query) use ($request) {
@@ -203,7 +205,7 @@ class InspectionController extends Controller
         ]);
     }
 
-    public function checkVehicleInspection(Request $request)
+    public function checkVehicleInspection(Request $request): JsonResponse
     {
         $inspection_date = Carbon::parse($request->inspection_date)->format('Y-m-d');
         $exists = Inspection::where('vehicle_info_id', $request->vehicle_info_id)

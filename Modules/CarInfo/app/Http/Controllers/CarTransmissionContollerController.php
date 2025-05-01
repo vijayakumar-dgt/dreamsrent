@@ -7,15 +7,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Modules\CarInfo\Models\Transmission;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class CarTransmissionContollerController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('carinfo::car_transmission.index');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $id = $request->id ?? '';
         $authUser = current_user(); // Make sure this helper returns the logged-in user
@@ -72,7 +74,7 @@ class CarTransmissionContollerController extends Controller
     }
 
 
-    public function list(Request $request)
+    public function list(Request $request): JsonResponse
     {
         $orderBy = $request->order_by ?? 'desc';
         $search = $request->input('search');
@@ -109,7 +111,7 @@ class CarTransmissionContollerController extends Controller
         }
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
         $transmission = Transmission::find($id);
@@ -121,7 +123,7 @@ class CarTransmissionContollerController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         try {
             $id = $request->id;
@@ -142,7 +144,7 @@ class CarTransmissionContollerController extends Controller
         }
     }
 
-    public function bulkDelete(Request $request)
+    public function bulkDelete(Request $request): JsonResponse
     {
         $ids = $request->ids;
 
