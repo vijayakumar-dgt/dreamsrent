@@ -197,7 +197,7 @@ class InsuranceController extends Controller
         }
     }
 
-    public function getVehicleInsurances(Request $request)
+    public function getVehicleInsurances(Request $request):JsonResponse
     {
         try {
             $vehicleId = $request->vehicle_ids;

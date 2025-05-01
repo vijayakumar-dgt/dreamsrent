@@ -9,17 +9,18 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class TestimonialController extends Controller
 {
-    public function testimoials(Request $request)
+    public function testimoials(Request $request):View
     {
         $languages = Language::with('transLang')->get();
 
         return view('generalsetting::cms.testimoials', compact('languages'));
     }
 
-    public function testimoialStore(Request $request)
+    public function testimoialStore(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'customer_name'   => 'required|string|max:255',
@@ -56,7 +57,7 @@ class TestimonialController extends Controller
         ], 200);
     }
 
-    public function testimoiallist(Request $request)
+    public function testimoiallist(Request $request): JsonResponse
     {
         try {
             $query = Testimonial::query();
@@ -108,7 +109,7 @@ class TestimonialController extends Controller
         }
     }
 
-    public function updateTestimonial(Request $request)
+    public function updateTestimonial(Request $request):JsonResponse
     {
         // Validate the request
         $validator = Validator::make($request->all(), [

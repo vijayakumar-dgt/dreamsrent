@@ -9,6 +9,9 @@ use Spatie\DbDumper\Databases\MySql;
 use Spatie\DbDumper\Exceptions\DumpFailed;
 use Illuminate\Support\Facades\Log;
 use Modules\GeneralSetting\Models\Dbbackup;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+
 
 class DbbackupController extends Controller
 {
@@ -22,7 +25,7 @@ class DbbackupController extends Controller
         return view('generalsetting::other_settings.system-backup');
     }
 
-    public function backupDatabase(Request $request)
+    public function backupDatabase(Request $request):RedirectResponse
     {
         try {
             $backupDir = storage_path('app/public/dbbackups');
@@ -62,7 +65,7 @@ class DbbackupController extends Controller
         }
     }
 
-    public function listBackups()
+    public function listBackups():JsonResponse
     {
         try {
             $backups = Dbbackup::where('type', 1)->orderBy('created_at', 'desc')->get();
@@ -94,7 +97,7 @@ class DbbackupController extends Controller
         }
     }
 
-    public function listSystemBackups()
+    public function listSystemBackups():JsonResponse
     {
         try {
             $backups = Dbbackup::where('type', 2)->orderBy('created_at', 'desc')->get();
@@ -126,7 +129,7 @@ class DbbackupController extends Controller
             ], 500);
         }
     }
-    public function deleteSystemBackup(Request $request)
+    public function deleteSystemBackup(Request $request):JsonResponse
     {
         try {
             $request->validate([
@@ -150,7 +153,7 @@ class DbbackupController extends Controller
         }
     }
 
-    public function deleteBackup(Request $request)
+    public function deleteBackup(Request $request):JsonResponse
     {
         try {
             $request->validate([

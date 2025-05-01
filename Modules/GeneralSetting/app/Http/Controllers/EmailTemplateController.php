@@ -9,20 +9,23 @@ use Illuminate\Validation\Rules\Email;
 use Modules\GeneralSetting\Models\EmailTemplate;
 use Modules\GeneralSetting\Models\NotificationTag;
 use Modules\GeneralSetting\Models\NotificationType;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+
 
 class EmailTemplateController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index():View
     {
         $tags = NotificationTag::where('status', true)->get();
         $notificationTypes = NotificationType::where('status', true)->get();
         return view('generalsetting::system_settings.email_template', compact('tags', 'notificationTypes'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request):JsonResponse
     {
         $existing = EmailTemplate::where('notification_type', $request->notification_type)
             ->when($request->id, function ($query) use ($request) {
@@ -113,7 +116,7 @@ class EmailTemplateController extends Controller
         }
     }
 
-    public function getEmailTemplates(Request $request)
+    public function getEmailTemplates(Request $request):JsonResponse
     {
         $pageLength = $request->length;
         $offset     = $request->start;
@@ -135,7 +138,7 @@ class EmailTemplateController extends Controller
     }
 
 
-    public function getEmailTemplate($id)
+    public function getEmailTemplate($id):JsonResponse
     {
         $emailTemplate = EmailTemplate::find($id);
         return response()->json([
@@ -145,7 +148,7 @@ class EmailTemplateController extends Controller
         ], 200);
     }
 
-    public function deleteEmailTeplate(Request $request)
+    public function deleteEmailTeplate(Request $request):JsonResponse
     {
         try {
             $template = EmailTemplate::findOrFail($request->id);
@@ -170,7 +173,7 @@ class EmailTemplateController extends Controller
         }
     }
 
-    public function getTags($id)
+    public function getTags($id):JsonResponse
     {
         $notificationType = NotificationType::find($id);
         $defaultTags = NotificationTag::where('status', true)->pluck('title')->toArray();

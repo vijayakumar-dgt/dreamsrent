@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Validator;
 use Modules\GeneralSetting\Models\SitemapUrl;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 use function PHPUnit\Framework\fileExists;
 
@@ -16,12 +19,12 @@ class SitemapController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index():View
     {
         return view('generalsetting::other_settings.sitemap');
     }
 
-    public function store()
+    public function store():JsonResponse
     {
         $validator = Validator::make(
             request()->all(),
@@ -111,7 +114,7 @@ class SitemapController extends Controller
         }
     }
 
-    public function getSitemapUrls(Request $request)
+    public function getSitemapUrls(Request $request):JsonResponse
     {
         $pageLength = $request->input('length', 10);
         $offset = $request->input('start', 0);
@@ -149,7 +152,7 @@ class SitemapController extends Controller
         ]);
     }
 
-    public function deleteSitemapUrl(Request $request)
+    public function deleteSitemapUrl(Request $request):JsonResponse
     {
         $sitemapUrl = SitemapUrl::find($request->id);
         try {

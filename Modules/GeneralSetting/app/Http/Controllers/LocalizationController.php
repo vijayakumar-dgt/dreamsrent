@@ -14,13 +14,15 @@ use Modules\GeneralSetting\Models\TimeFormat;
 use Modules\GeneralSetting\Models\Timezone;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Modules\GeneralSetting\Models\Language;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class LocalizationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index():View
     {
         $timezones = Timezone::get();
         $timeformats = TimeFormat::get();
@@ -41,7 +43,7 @@ class LocalizationController extends Controller
         return view('generalsetting::website_settings.localization', $data);
     }
 
-    public function getTimezones(Request $request)
+    public function getTimezones(Request $request):JsonResponse
     {
         //search
         $search = $request->search;
@@ -59,7 +61,7 @@ class LocalizationController extends Controller
         ]);
     }
 
-    public function setEnvValue($key, $value)
+    public function setEnvValue($key, $value):void
     {
         $path = base_path('.env');
 
@@ -78,7 +80,7 @@ class LocalizationController extends Controller
         }
     }
 
-    public function updateLocalization(Request $request)
+    public function updateLocalization(Request $request):JsonResponse
     {
         DB::beginTransaction();
         try {
@@ -141,7 +143,7 @@ class LocalizationController extends Controller
 
 
 
-    public function getTimezone(Request $request)
+    public function getTimezone(Request $request):JsonResponse
     {
         $settingTimezone = GeneralSetting::where('group_id', 5)->where('key', 'timezone')->first();
         if (!empty($settingTimezone)) {

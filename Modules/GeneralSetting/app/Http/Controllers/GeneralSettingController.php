@@ -17,24 +17,25 @@ use App\Models\UserDetail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Modules\GeneralSetting\Models\Language;
+use Illuminate\Http\RedirectResponse;
 
 class GeneralSettingController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index():View
     {
         return view('generalsetting::index');
     }
 
 
-    public function logoSettings(Request $request)
+    public function logoSettings(Request $request):View
     {
         return view('generalsetting::website_settings.logo-setting');
     }
 
-    public function company(Request $request)
+    public function company(Request $request):View
     {
         $industries = IndustryType::all();
         $teamSizes = TeamSize::all();
@@ -43,38 +44,38 @@ class GeneralSettingController extends Controller
         return view('generalsetting::company.index', compact('industries', 'teamSizes', 'users'));
     }
 
-    public function notifications(Request $request)
+    public function notifications(Request $request):View
     {
         return view('generalsetting::notifications-setting.index');
     }
 
-    public function prefixes(Request $request)
+    public function prefixes(Request $request):View
     {
         return view('generalsetting::website_settings.prefixes');
     }
 
-    public function maintenance(Request $request)
+    public function maintenance(Request $request):View
     {
         return view('generalsetting::maintenance.index');
     }
 
-    public function seosetup(Request $request)
+    public function seosetup(Request $request):View
     {
         return view('generalsetting::website_settings.seosetup');
     }
 
-    public function gdprCookies(Request $request)
+    public function gdprCookies(Request $request):View
     {
         $languages = Language::with('transLang')->get();
         return view('generalsetting::system_settings.gdpr-cookies', compact('languages'));
     }
 
-    public function storage(Request $request)
+    public function storage(Request $request):View
     {
         return view('generalsetting::other_settings.storage-setting');
     }
 
-    public function invoiceSettings(Request $request)
+    public function invoiceSettings(Request $request):View
     {
         return view('generalsetting::app_settings.invoice-setting');
     }
@@ -90,7 +91,7 @@ class GeneralSettingController extends Controller
         return view('generalsetting::rental_settings.rental-settings');
     }
 
-    public function storeRentalSettings(Request $request)
+    public function storeRentalSettings(Request $request):JsonResponse
     {
         $rules = [
             'minAdvanceReservation' => 'required|string|in:1 Day,2 Days,3 Days,1 Week',
@@ -167,7 +168,7 @@ class GeneralSettingController extends Controller
             ], 500);
         }
     }
-    public function storeLogoSettings(Request $request)
+    public function storeLogoSettings(Request $request):JsonResponse
     {
         $rules = [
             'logo_image' => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
@@ -239,7 +240,7 @@ class GeneralSettingController extends Controller
 
 
 
-    public function storeOtpSettings(Request $request)
+    public function storeOtpSettings(Request $request):JsonResponse
     {
         $rules = [
             'otp_type' => 'required',
@@ -303,7 +304,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storageStatusUpdate(Request $request)
+    public function storageStatusUpdate(Request $request):JsonResponse
     {
         $request->validate([
             'storage_type' => 'required|in:local_storage,aws_storage',
@@ -337,7 +338,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeAwsSettings(Request $request)
+    public function storeAwsSettings(Request $request):JsonResponse
     {
         $rules = [
             'aws_access_key' => 'required|string',
@@ -399,7 +400,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeInvoiceSettings(Request $request)
+    public function storeInvoiceSettings(Request $request):JsonResponse
     {
         $rules = [
             'invoice_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -472,7 +473,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'organization_name'    => 'required|string|max:100',
@@ -539,7 +540,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function transferOwnership(Request $request)
+    public function transferOwnership(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'owner_id' => 'required|exists:users,id'
@@ -578,7 +579,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeNotificationSettings(Request $request)
+    public function storeNotificationSettings(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'group_id'                   => 'required|integer',
@@ -629,7 +630,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeSeoSetupSettings(Request $request)
+    public function storeSeoSetupSettings(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'metaImage'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Image validation (5MB max)
@@ -689,7 +690,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeMaintenanceSettings(Request $request)
+    public function storeMaintenanceSettings(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'group_id'                => 'required',
@@ -752,7 +753,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeCookiesSettings(Request $request)
+    public function storeCookiesSettings(Request $request):JsonResponse
     {
         $request->validate([
             'group_id'           => 'required|integer',
@@ -803,7 +804,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function cookiesSettingsList(Request $request)
+    public function cookiesSettingsList(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'group_id'    => 'required|integer',
@@ -871,7 +872,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function listCompany(Request $request)
+    public function listCompany(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'group_id' => 'required|integer'
@@ -936,7 +937,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function list(Request $request)
+    public function list(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'group_id' => 'required|integer'
@@ -977,7 +978,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function security(Request $request)
+    public function security(Request $request):View
     {
         return view('generalsetting::security.index');
     }
@@ -988,7 +989,7 @@ class GeneralSettingController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function checkCurrentPassword(Request $request)
+    public function checkCurrentPassword(Request $request):JsonResponse
     {
         // Check if the current password is correct
         $password = $request->password;
@@ -1013,7 +1014,7 @@ class GeneralSettingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function checkCurrentPhoneNumber(Request $request)
+    public function checkCurrentPhoneNumber(Request $request):JsonResponse
     {
         $currentPhoneNumber = $request->currentPhoneNumber;
         $user = Auth::user();
@@ -1051,7 +1052,7 @@ class GeneralSettingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function updatePassword(Request $request)
+    public function updatePassword(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'current_password' => 'required',
@@ -1099,7 +1100,7 @@ class GeneralSettingController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updatePhoneNumber(Request $request)
+    public function updatePhoneNumber(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'new_phonenumber' => 'required|digits_between:8,12|unique:users,phone_number',
@@ -1139,7 +1140,7 @@ class GeneralSettingController extends Controller
         ]);
     }
 
-    public function updateEmail(Request $request)
+    public function updateEmail(Request $request):JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'new_email' => 'required|email|unique:users,email',
@@ -1180,7 +1181,7 @@ class GeneralSettingController extends Controller
         ]);
     }
 
-    public function getSecuritySettings()
+    public function getSecuritySettings():JsonResponse
     {
         $userDevices = UserDevice::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->take(5)->get()->map(function ($device) {
             return [
@@ -1205,7 +1206,7 @@ class GeneralSettingController extends Controller
         ]);
     }
 
-    public function logoutDevice(Request $request)
+    public function logoutDevice(Request $request):JsonResponse
     {
 
         if ($request->isAll === "true") {
@@ -1229,7 +1230,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function updateGoogleAuth(Request $request)
+    public function updateGoogleAuth(Request $request):JsonResponse
     {
         try {
             $user = Auth::user();
@@ -1355,7 +1356,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function paymentIndex(Request $request)
+    public function paymentIndex(Request $request):View
     {
         return view('generalsetting::payment.index');
     }
@@ -1424,7 +1425,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function updatepaymentStatus(Request $request)
+    public function updatepaymentStatus(Request $request):JsonResponse
     {
         $request->validate([
             'key' => 'required|string',
@@ -1440,7 +1441,7 @@ class GeneralSettingController extends Controller
         return response()->json(['success' => true, 'message' => __('admin.general_settings.payment_updated_successfull')]);
     }
 
-    public function paymentList(Request $request)
+    public function paymentList(Request $request):JsonResponse
     {
         $orderBy = $request->order_by ?? 'desc';
 
