@@ -6,18 +6,21 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Modules\Communication\Models\Contact;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 class ContactController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         return view('communication::contact-message.index');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         try {
             $request->validate([
@@ -59,7 +62,7 @@ class ContactController extends Controller
         }
     }
 
-    public function list(Request $request)
+    public function list(Request $request): JsonResponse
     {
         try {
             $sortBy = $request->get('sort_by', 'latest');
@@ -100,7 +103,7 @@ class ContactController extends Controller
         }
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         try {
             $id = $request->id;

@@ -8,10 +8,12 @@ use Illuminate\Support\Facades\Validator;
 use Modules\CarInfo\Models\VehicleInfo;
 use Modules\Page\Models\Section;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class SectionController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $orderBy = $request->input('order_by', 'asc');
         $sortBy = $request->input('sort_by', 'id');
@@ -47,7 +49,7 @@ class SectionController extends Controller
         return response()->json(['code' => 200, 'message' => __('Section details retrieved successfully.'), 'data' => $data, 'theme' => $theme], 200);
     }
 
-    public function indexListSection(Request $request)
+    public function indexListSection(Request $request): JsonResponse
     {
         $orderBy = $request->input('order_by', 'asc');
         $sortBy = $request->input('sort_by', 'id');
@@ -97,7 +99,7 @@ class SectionController extends Controller
         ], 200);
     }
 
-    public function indexSection()
+    public function indexSection(): View
     {
         $vehicles = VehicleInfo::select("id", "name")->get();
 
@@ -105,7 +107,7 @@ class SectionController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $authuser = current_user();
         $language_id = $authuser->language_id;

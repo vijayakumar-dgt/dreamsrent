@@ -11,13 +11,15 @@ use Modules\CarInfo\Models\VehicleInfo;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function incomeReport()
+    public function incomeReport(): View
     {
         $bookings = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
             ->get();
@@ -80,7 +82,7 @@ class ReportController extends Controller
         return view('report::incomeReport', compact("totalIncome", "topEarningCar", "vehicle", "percentageChange", "sign", "symbol", "bookings", "vehicleInfo", "bookingsCount"));
     }
 
-    public function earningReport()
+    public function earningReport(): View
     {
 
         $bookings = Booking::Join('users', 'bookings.customer_id', '=', 'users.id')->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image')->get();
@@ -214,7 +216,7 @@ class ReportController extends Controller
         return view('report::earningReport', compact("symbol", "bookings", "totalIncome", "percentageChangeFormatted", "sign", "vehicle", "topEarningCarTotal", "percentageCarChangeFormatted", "signCar", "grandTotal", "percentageBreakChangeFormatted", "signbreak", "bookingCount"));
     }
 
-    public function getMonthlyEarnings(Request $request)
+    public function getMonthlyEarnings(Request $request): JsonResponse
     {
         $monthlyEarnings = Booking::select(
             DB::raw('SUM(final_price) as total_income'),
@@ -227,7 +229,7 @@ class ReportController extends Controller
         return response()->json($monthlyEarnings); // Ensure JSON response
     }
 
-    public function getEarningsBreakdown()
+    public function getEarningsBreakdown(): JsonResponse
     {
         $breakdown = Booking::select(
             DB::raw('SUM(total_insurance_price) as total_insurance_price'),

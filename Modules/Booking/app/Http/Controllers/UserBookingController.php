@@ -34,6 +34,9 @@ use Modules\GeneralSetting\Models\SubTax;
 use Modules\GeneralSetting\Models\TaxGroup;
 use Modules\GeneralSetting\Models\TaxRate;
 use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 class UserBookingController extends Controller
 {
@@ -44,7 +47,7 @@ class UserBookingController extends Controller
         $this->provider->getAccessToken();
     }
 
-    public function redirectToBooking(Request $request)
+    public function redirectToBooking(Request $request): View|RedirectResponse
     {
         if (session()->has('intended_booking')) {
             $booking = session('intended_booking');
@@ -55,7 +58,7 @@ class UserBookingController extends Controller
         }
         return redirect()->route('home');
     }
-    public function index(Request $request, $slug)
+    public function index(Request $request, $slug): View|RedirectResponse
     {
         if (!Auth::guard('web')->check()) {
             session(['intended_url' => url()->current()]);
@@ -201,19 +204,19 @@ class UserBookingController extends Controller
             ->with($request->all());
     }
 
-    public function getStates($country_id)
+    public function getStates($country_id): JsonResponse
     {
         $states = State::where('country_id', $country_id)->get(['id', 'name']);
         return response()->json($states);
     }
 
-    public function getCities($state_id)
+    public function getCities($state_id): JsonResponse
     {
         $cities = City::where('state_id', $state_id)->get(['id', 'name']);
         return response()->json($cities);
     }
 
-    public function checkBooking(Request $request)
+    public function checkBooking(Request $request): JsonResponse
     {
         $pickupDatetime = $request->input('start_datetime');
         $returnDatetime = $request->input('end_datetime');
@@ -248,7 +251,7 @@ class UserBookingController extends Controller
     }
 
 
-    public function paymentSuccess($transaction_id)
+    public function paymentSuccess($transaction_id): View
     {
         $booking = Booking::where('transaction_id', $transaction_id)->first();
 
@@ -316,7 +319,7 @@ class UserBookingController extends Controller
     }
 
 
-    public function paymentFail($transaction_id)
+    public function paymentFail($transaction_id): View
     {
         $booking = Booking::where('transaction_id', $transaction_id)->first();
 
@@ -324,7 +327,7 @@ class UserBookingController extends Controller
     }
 
 
-    public function userPayments(Request $request)
+    public function userPayments(Request $request): JsonResponse
     {
         $authUser = current_user();
 
@@ -872,7 +875,7 @@ class UserBookingController extends Controller
         }
     }
 
-    public function paypalPaymentSuccess(Request $request)
+    public function paypalPaymentSuccess(Request $request): JsonResponse|RedirectResponse
     {
         try {
             $response = $this->provider->capturePaymentOrder($request->get('token'));
@@ -923,7 +926,7 @@ class UserBookingController extends Controller
         }
     }
 
-    public function paypalPaymentFailed(Request $request)
+    public function paypalPaymentFailed(Request $request): JsonResponse|RedirectResponse
     {
         try {
             $response = $this->provider->capturePaymentOrder($request->get('token'));
@@ -949,7 +952,7 @@ class UserBookingController extends Controller
         }
     }
 
-    public function stripPaymentSuccess(Request $request)
+    public function stripPaymentSuccess(Request $request): JsonResponse|RedirectResponse
     {
         try {
             Stripe::setApiKey(config('stripe.test.sk'));
@@ -993,7 +996,7 @@ class UserBookingController extends Controller
         }
     }
 
-    public function transaction(Request $request)
+    public function transaction(Request $request): JsonResponse
     {
 
         $user = current_user();

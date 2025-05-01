@@ -12,28 +12,30 @@ use Modules\Communication\Models\Ticket;
 use Modules\Communication\Models\TicketHistory;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class TicketController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $category = TicketCategory::all();
         $users = User::whereIn('user_type', [1, 2])->get();
         return view('communication::ticket.index', compact('category', 'users'));
     }
-    public function ticketDetails()
+    public function ticketDetails(): View
     {
         $category = TicketCategory::all();
         return view('communication::ticket.admin-ticket-details', compact('category'));
     }
-    public function userTicket()
+    public function userTicket(): View
     {
         $category = TicketCategory::all();
         $seo_title = __('web.user.tickets');
         return view('communication::ticket.user-ticket', compact('category', 'seo_title'));
     }
 
-    public function userTicketStore(Request $request)
+    public function userTicketStore(Request $request): JsonResponse
     {
         try {
             // Get user from either 'admin' or 'web' guard
@@ -102,7 +104,7 @@ class TicketController extends Controller
         }
     }
 
-    public function listTickets(Request $request)
+    public function listTickets(Request $request): JsonResponse
     {
         try {
             $user = current_user();
@@ -206,7 +208,7 @@ class TicketController extends Controller
         }
     }
 
-    public function ticketUpdateAsssign(Request $request)
+    public function ticketUpdateAsssign(Request $request): JsonResponse
     {
         try {
             $user = Auth::guard('admin')->check() ? Auth::guard('admin')->user() : Auth::guard('web')->user();
@@ -273,7 +275,7 @@ class TicketController extends Controller
         }
     }
 
-    public function ticketUpdate(Request $request)
+    public function ticketUpdate(Request $request): JsonResponse
     {
         try {
             $user = Auth::guard('admin')->check() ? Auth::guard('admin')->user() : Auth::guard('web')->user();
@@ -364,7 +366,7 @@ class TicketController extends Controller
         }
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         try {
             $id = $request->id;
