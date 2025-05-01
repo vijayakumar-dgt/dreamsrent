@@ -79,9 +79,10 @@ class AppServiceProvider extends ServiceProvider
                     ->where('users.id', $user->id)
                     ->first();
 
-                if ($userDetails && $userDetails->profile_image) {
+                if ($userDetails && is_string($userDetails->profile_image) && $userDetails->profile_image !== '') {
                     $userDetails->profile_image = uploadedAsset($userDetails->profile_image, 'profile');
                 }
+                    
             }
 
             $permissions = getUserPermissions();

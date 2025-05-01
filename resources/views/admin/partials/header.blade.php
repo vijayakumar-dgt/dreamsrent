@@ -101,13 +101,13 @@
                     <div class="dropdown profile-dropdown">
                         <a href="javascript:void(0);" class="d-flex align-items-center" data-bs-toggle="dropdown"  data-bs-auto-close="outside">
                             <span class="avatar avatar-sm">
-                                <img src="{{ $userDetails && $userDetails->profile_image ? asset('storage/' . $userDetails->profile_image) : asset('/assets/img/profiles/avatar-05.jpg') }}" alt="Img" class="img-fluid rounded-circle">
+                                <img src="{{ $userDetails && $userDetails->profile_image ? $userDetails->profile_image : asset('assets/img/default-profile.png') }}" alt="Img" class="img-fluid rounded-circle">
                             </span>
                         </a>
                         <div class="dropdown-menu">
                             <div class="profileset d-flex align-items-center">
                                 <span class="user-img me-2">
-                                    <img src="{{ $userDetails && $userDetails->profile_image ? asset('storage/' . $userDetails->profile_image) : asset('/assets/img/profiles/avatar-05.jpg') }}" alt="">
+                                    <img src="{{ $userDetails && $userDetails->profile_image ? $userDetails->profile_image : asset('/assets/img/default-profile.png') }}" alt="">
                                 </span>
                                 <div>
                                     <h6 class="fw-semibold mb-1"> {{ $userDetails->first_name ?? 'Andrew Simmonds' }} </h6>

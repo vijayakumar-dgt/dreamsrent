@@ -17,34 +17,35 @@ class MessageResource extends JsonResource
     public function toArray(Request $request): array
     {
         $authUser = current_user();
-        $authUserId = $authUser ? $authUser->id : 0;
+        $authUserId = $authUser ? $authUser->getAuthIdentifier() : 0;
+        $resource = $this->resource;
 
         return [
-           'id' => $this->id,
-           'message_type'   => $this->type,
-           'file_path' => uploadedAsset($this->file),
-           'message' => $this->message,
-           'created_at' => $this->created_at->format('Y-m-d H:i:s'),
-           'time' => $this->created_at->format('h:i A'),
-           'alignment' => $this->sender_id == $authUserId ? 'right' : 'left',
-           'is_sender' => $this->sender_id == $authUserId,
-           'sender_id' => $this->sender_id,
-           'receiver_id' => $this->receiver_id,
-           'sender_username' => $this->sender->name ?? "",
-           'sender_avatar' => $this->getAvatar($this->sender_id),
-           'receiver_username' => $this->receiver->name ?? "",
-           'receiver_avatar' => $this->getAvatar($this->receiver_id),
-           'admin_avatar' => $this->getAdminAvatar(),
+           'id' => $resource->id,
+           'message_type'   => $resource->type,
+           'file_path' => uploadedAsset($resource->file),
+           'message' => $resource->message,
+           'created_at' => $resource->created_at->format('Y-m-d H:i:s'),
+           'time' => $resource->created_at->format('h:i A'),
+           'alignment' => $resource->sender_id == $authUserId ? 'right' : 'left',
+           'is_sender' => $resource->sender_id == $authUserId,
+           'sender_id' => $resource->sender_id,
+           'receiver_id' => $resource->receiver_id,
+           'sender_username' => $resource->sender->name ?? "",
+           'sender_avatar' => $resource->getAvatar($resource->sender_id),
+           'receiver_username' => $resource->receiver->name ?? "",
+           'receiver_avatar' => $resource->getAvatar($resource->receiver_id),
+           'admin_avatar' => $resource->getAdminAvatar(),
         ];
     }
 
-    public function getAvatar($userId)
+    public function getAvatar(int $userId): string
     {
         $user = User::find($userId);
         return uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default', 'profile');
     }
 
-    public function getAdminAvatar()
+    public function getAdminAvatar(): string
     {
         $user = User::where('user_type', 1)->first();
         return uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default', 'profile');
