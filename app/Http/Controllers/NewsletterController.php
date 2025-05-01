@@ -7,13 +7,14 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 use Modules\Communication\Http\Controllers\EmailController;
 use Modules\GeneralSetting\Models\EmailTemplate;
 use Spatie\Sitemap\Tags\News;
 
 class NewsletterController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         return view('admin.newsletters');
     }
@@ -43,10 +44,15 @@ class NewsletterController extends Controller
                 'email' => $request->subscriber_email
             ]);
 
+            $notificationType = 3;
+            $template = EmailTemplate::select('subject', 'description')
+                    ->where('notification_type', $notificationType)
+                    ->first();
+
             $data = [
                 'to_email' => $request->subscriber_email,
                 'subject' => $template->subject ?? 'Reg - Newsletter',
-                'content' => 'You have been subscribed to our newsletter.',
+                'content' => $template->description ?? 'You have been subscribed to our newsletter.',
             ];
 
             $request = new Request($data);

@@ -6,21 +6,24 @@ use App\Models\DrivingType;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Models\VehicleInfo;
 
-// use Modules\Booking\Database\Factories\BookingFactory;
-
 /**
  * @property string|null $booking_date
  * @property string|null $vehicle_image
+ * @property string|null $start_datetime
+ * @property string|null $end_datetime
+ * @property int|null $day_count
+ * @property string|null $booking_by
+ * @property string|null $payment_status
+ * @property string|null $final_price
+ * 
  */
 
 class Booking extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     /**
