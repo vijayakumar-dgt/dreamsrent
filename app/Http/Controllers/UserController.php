@@ -29,6 +29,7 @@ use Modules\CarInfo\Models\Enquiry;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UserController extends Controller
 {
@@ -113,7 +114,7 @@ class UserController extends Controller
             'status' => 'success',
         ]);
     }
-    public function ajaxBookings(Request $request)
+    public function ajaxBookings(Request $request): AnonymousResourceCollection
     {
         $bookings = Booking::where('customer_id', Auth::guard('web')->user()->id);
 
@@ -164,7 +165,7 @@ class UserController extends Controller
     }
 
 
-    public function getDuration($duration, $customFromDate = null, $customToDate = null)
+    public function getDuration(?string $duration, ?string $customFromDate = null, ?string $customToDate = null): array
     {
         switch ($duration) {
             case 'this_week':
@@ -199,27 +200,34 @@ class UserController extends Controller
                 break;
             case 'custom':
                 if (!empty($customFromDate) && !empty($customToDate)) {
-                    if (strtotime($customFromDate) > strtotime($customToDate)) {
+                    $fromTimestamp = strtotime($customFromDate);
+                    $toTimestamp = strtotime($customToDate);
+
+                    if ($fromTimestamp === false || $toTimestamp === false) {
+                        return ['error' => 'Invalid custom date format'];
+                    }
+
+                    if ($fromTimestamp > $toTimestamp) {
                         return ['error' => 'Custom from date cannot be greater than to date'];
                     }
 
                     $duration = [
-                        'from' => date('Y-m-d 00:00:00', strtotime($customFromDate)),
-                        'to' => date('Y-m-d 23:59:59', strtotime($customToDate))
+                        'from' => date('Y-m-d', $fromTimestamp) . ' 00:00:00',
+                        'to' => date('Y-m-d', $toTimestamp) . ' 23:59:59'
                     ];
                 } else {
                     return ['error' => 'Custom dates are required'];
                 }
                 break;
             default:
-                $duration = null;
+                $duration = ['error' => 'Invalid duration specified'];
         }
 
         return $duration;
     }
 
 
-    public function bookingDetails($id)
+    public function bookingDetails(?int $id): JsonResponse
     {
         $booking = Booking::where('id', $id)->first();
         return response()->json([
@@ -445,7 +453,7 @@ class UserController extends Controller
         }
     }
 
-    public function ajaxWishlists(Request $request)
+    public function ajaxWishlists(Request $request): JsonResponse
     {
         $wishlists = Wishlist::where('user_id', Auth::guard('web')->user()->id)->get();
         return response()->json([
@@ -543,7 +551,7 @@ class UserController extends Controller
 
 
 
-    public function userpreference()
+    public function userpreference(): View
     {
         $languages = Language::select('languages.language_id')
             ->with(['transLang' => function ($query) {
@@ -557,22 +565,22 @@ class UserController extends Controller
         $seo_title = __('web.user.preferences');
         return view('frontend.user.preference', compact('languages', 'preference', 'countries', 'seo_title'));
     }
-    public function userintegration()
+    public function userintegration(): View
     {
         return view('frontend.user.integration');
     }
-    public function usernotification()
+    public function usernotification(): View
     {
         $seo_title = __('web.user.notifications');
         return view('frontend.user.notification', compact('seo_title'));
     }
-    public function usersecurity()
+    public function usersecurity(): View
     {
         $seo_title = __('web.user.security');
         return view('frontend.user.security', compact('seo_title'));
     }
 
-    public function checkCurrentPassword(Request $request)
+    public function checkCurrentPassword(Request $request): JsonResponse
     {
         $password = $request->password;
         if (Hash::check($password, Auth::guard('web')->user()->password)) {
@@ -590,7 +598,7 @@ class UserController extends Controller
         }
     }
 
-    public function updatePassword(Request $request)
+    public function updatePassword(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'current_password' => 'required',
@@ -626,7 +634,7 @@ class UserController extends Controller
             'message' => __('web.user.password_updated_successfully')
         ]);
     }
-    public function getSecuritySettings()
+    public function getSecuritySettings(): JsonResponse
     {
         $userDevices = UserDevice::where('user_id', Auth::guard('web')->user()->id)->orderBy('created_at', 'desc')
         ->take(5)->get()->map(function ($device) {
@@ -653,7 +661,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function logoutDevice(Request $request)
+    public function logoutDevice(Request $request): JsonResponse
     {
 
         if ($request->isAll === "true") {
@@ -676,7 +684,7 @@ class UserController extends Controller
         }
     }
 
-    public function updatePreference(Request $request)
+    public function updatePreference(Request $request): JsonResponse
     {
         try {
             $id = Auth::guard('web')->user()->id;
@@ -707,7 +715,7 @@ class UserController extends Controller
         }
     }
 
-    public function getPreferences(Request $request)
+    public function getPreferences(Request $request): JsonResponse
     {
         try {
             $id = Auth::guard('web')->user()->id ?? $request->user_id;
@@ -735,7 +743,7 @@ class UserController extends Controller
         return view('frontend.user.reviews', compact('seo_title'));
     }
 
-    public function storeEnquiry(Request $request)
+    public function storeEnquiry(Request $request): JsonResponse
     {
         try {
             Enquiry::create([
@@ -761,7 +769,7 @@ class UserController extends Controller
         }
     }
 
-    public function getNotifications(Request $request)
+    public function getNotifications(Request $request): JsonResponse
     {
         if (Auth::guard('web')->check()) {
             $authUser = Auth::guard('web')->user();
@@ -780,7 +788,7 @@ class UserController extends Controller
             'count' => $notificationCount
         ]);
     }
-    public function markAllAsRead(Request $request)
+    public function markAllAsRead(Request $request): JsonResponse
     {
         //check any unread notification
         if (
@@ -802,13 +810,13 @@ class UserController extends Controller
         }
     }
 
-    public function payments(Request $request)
+    public function payments(Request $request): View
     {
         $seo_title = __('web.user.payments');
         return view('frontend.user.payments', compact('seo_title'));
     }
 
-    public function ajaxTransactions(Request $request)
+    public function ajaxTransactions(Request $request): AnonymousResourceCollection
     {
         $bookings = Booking::where('customer_id', Auth::guard('web')->user()->id);
 
@@ -858,7 +866,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function notifications(Request $request)
+    public function notifications(Request $request): View | JsonResponse
     {
         $notifications = Notification::where('user_id', Auth::guard('web')->user()->id)
         ->orderBy('created_at', 'desc')->paginate(10);
@@ -879,7 +887,7 @@ class UserController extends Controller
         return view('frontend.user.notifications', compact('notifications'));
     }
 
-    public function markNotificationAsRead(Request $request)
+    public function markNotificationAsRead(Request $request): JsonResponse
     {
         Notification::where('id', $request->id)->update(['readed' => 1]);
         return response()->json([
@@ -889,7 +897,7 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function deleteNotification(Request $request)
+    public function deleteNotification(Request $request): JsonResponse
     {
         Notification::where('id', $request->id)->delete();
         return response()->json([
@@ -899,7 +907,7 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function deleteAllNotification(Request $request)
+    public function deleteAllNotification(Request $request): JsonResponse
     {
         Notification::where('user_id', Auth::guard('web')->user()->id)->delete();
         return response()->json([

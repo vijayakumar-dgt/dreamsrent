@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Modules\Booking\Models\Booking;
 use Modules\Booking\Models\BookingUserInfo;
 use Modules\CarInfo\Models\VehicleInfo;
 
 class PaymentController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $GetPayments = Booking::select("payment_type")->distinct()->pluck("payment_type")->toArray();
 
@@ -18,7 +20,7 @@ class PaymentController extends Controller
     }
 
 
-    public function paymentList(Request $request)
+    public function paymentList(Request $request): JsonResponse
     {
         $sortby = $request->sortby ?? 'latest';
         $search = $request->search ?? null;

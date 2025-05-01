@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 
 class TranslationController extends Controller
 {
-    public function getFileTranslations($file, $modules): JsonResponse
+    public function getFileTranslations(mixed $file, mixed $modules): JsonResponse
     {
         $locale = App::getLocale();
 

@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use App\Models\ReviewMessages;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
+use stdClass;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -14,7 +17,7 @@ use Modules\Booking\Models\Booking;
 
 class ReviewController extends Controller
 {
-    protected $authUser;
+    protected ?Authenticatable $authUser;
     public function __construct()
     {
         $this->authUser = current_user();
@@ -72,13 +75,11 @@ class ReviewController extends Controller
 
             $reviews = Review::create($data);
 
-            if ($reviews) {
-                ReviewMessages::create([
-                    'review_id' => $reviews->id,
-                    'user_id' => $this->authUser->id ?? $request->user_id,
-                    'comments' => $request->comments,
-                ]);
-            }
+            ReviewMessages::create([
+                'review_id' => $reviews->id,
+                'user_id' => $this->authUser->id ?? $request->user_id,
+                'comments' => $request->comments,
+            ]);
 
             return response()->json([
                 'status' => 'success',
@@ -192,10 +193,12 @@ class ReviewController extends Controller
                 ->where('review_messages.parent_id', 0)
                 ->orderBy('reviews.id', 'desc')
                 ->get()->map(function ($review) {
-                    $review->profile_image = uploadedAsset($review->profile_image, 'profile');
+                    $review->profile_image = is_string($review->profile_image) || is_null($review->profile_image)
+                        ? uploadedAsset($review->profile_image, 'profile')
+                        : uploadedAsset(null, 'profile');
                     $review->review_date = formatDateTime($review->created_at, false);
-                    $review->user_name = ucfirst($review->user_name);
-                    $review->full_name = ucfirst($review->full_name);
+                    $review->user_name = ucfirst((string) $review->user_name);
+                    $review->full_name = ucfirst((string) $review->full_name);
                     unset($review->created_at);
                     $review->replies = $this->fetchReviewReplies($review->id);
                     return $review;
@@ -217,23 +220,23 @@ class ReviewController extends Controller
 
             $finalData = [
                 'reviews_meta' => [
-                    'avg_service_ratings' => number_format($serviceRatings, 1),
+                    'avg_service_ratings' => number_format((float)$serviceRatings, 1),
                     'service_ratings_percentage' => $servicePercentage . '%',
-                    'avg_location_ratings' => number_format($locationRatings, 1),
+                    'avg_location_ratings' => number_format((float)$locationRatings, 1),
                     'location_ratings_percentage' => $locationPercentage . '%',
-                    'avg_facility_ratings' => number_format($facilityRatings, 1),
+                    'avg_facility_ratings' => number_format((float)$facilityRatings, 1),
                     'facility_ratings_percentage' => $facilityPercentage . '%',
-                    'avg_value_for_money_ratings' => number_format($valueForMoneyRatings, 1),
+                    'avg_value_for_money_ratings' => number_format((float)$valueForMoneyRatings, 1),
                     'value_for_money_ratings_percentage' => $valueForMoneyPercentage . '%',
-                    'avg_cleanliness_ratings' => number_format($cleanlinessRatings, 1),
+                    'avg_cleanliness_ratings' => number_format((float)$cleanlinessRatings, 1),
                     'cleanliness_ratings_percentage' => $cleanlinessPercentage . '%',
-                    'overall_avg_ratings' => number_format($overallRatings, 1),
-                    'overall_ratings_percentage' => round(($overallRatings / 5) * 100, 1) . '%',
+                    'overall_avg_ratings' => number_format((float)$overallRatings, 1),
+                    'overall_ratings_percentage' => round(((float)$overallRatings / 5) * 100, 1) . '%',
                     'rating_description' => $totalReviews > 0 ? $this->getRatingDescription($overallRatings) : '',
                     'total_reviews' => $totalReviews,
                 ],
                 'reviews' => $reviewsData
-            ];
+            ];            
 
             return response()->json([
                 'status' => 'success',
@@ -250,7 +253,13 @@ class ReviewController extends Controller
         }
     }
 
-    function fetchReviewReplies($reviewId)
+    /**
+     * Fetch review replies.
+     *
+     * @param int|null $reviewId
+     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\ReviewMessages>
+     */
+    function fetchReviewReplies(?int $reviewId): Collection
     {
         $replies = ReviewMessages::select(
             'review_messages.comments',
@@ -265,17 +274,19 @@ class ReviewController extends Controller
             ->leftJoin('user_details', 'user_details.user_id', '=', 'review_messages.user_id')
             ->where('review_messages.parent_id', $reviewId)
             ->get()->map(function ($reply) {
-                $reply->profile_image = uploadedAsset($reply->profile_image, 'profile');
+                $reply->profile_image = is_string($reply->profile_image) || is_null($reply->profile_image)
+                    ? uploadedAsset($reply->profile_image, 'profile')
+                    : uploadedAsset(null, 'profile');
                 $reply->reply_date = formatDateTime($reply->created_at, false);
-                $reply->full_name = ucfirst($reply->full_name);
-                $reply->user_name = ucfirst($reply->user_name);
+                $reply->full_name = ucfirst((string) $reply->full_name);
+                $reply->user_name = ucfirst((string) $reply->user_name);
                 unset($reply->created_at);
                 return $reply;
             });
         return $replies;
     }
 
-    function getRatingDescription($rating)
+    function getRatingDescription(mixed  $rating): string
     {
         if ($rating >= 4.5) {
             return __('web.home.excellent');
@@ -321,7 +332,7 @@ class ReviewController extends Controller
                 $customTo   = $request->custom_to_date ?? "";
                 $duration = $this->getDuration($request->duration, $customFrom, $customTo);
 
-                if ($duration) {
+                if (!isset($duration['error']) && isset($duration['from'])) {
                     $query->whereBetween('reviews.created_at', [$duration['from'], $duration['to']]);
                 }
             }
@@ -352,7 +363,9 @@ class ReviewController extends Controller
             $query->offset($request->start)->limit($request->length);
 
             $reviews = $query->get()->map(function ($item) {
-                $item->vehicle_image = uploadedAsset($item->vehicle_image);
+                $item->vehicle_image = is_string($item->vehicle_image) || is_null($item->vehicle_image)
+                    ? uploadedAsset($item->vehicle_image, 'profile')
+                    : uploadedAsset(null, 'profile');
                 return $item;
             });
 
@@ -372,7 +385,10 @@ class ReviewController extends Controller
         }
     }
 
-    public function getDuration($duration, $customFromDate = null, $customToDate = null)
+    /**
+     * @return array{from: string, to: string}|array{error: string}
+     */
+    public function getDuration(?string $duration, ?string $customFromDate = null, ?string $customToDate = null): array
     {
         switch ($duration) {
             case 'this_week':
@@ -411,16 +427,27 @@ class ReviewController extends Controller
                         return ['error' => 'Custom from date cannot be greater than to date'];
                     }
 
+                    $fromTimestamp = strtotime($customFromDate);
+                    $toTimestamp = strtotime($customToDate);
+
+                    if ($fromTimestamp === false || $toTimestamp === false) {
+                        return ['error' => 'Invalid custom date format'];
+                    }
+
+                    if ($fromTimestamp > $toTimestamp) {
+                        return ['error' => 'Custom from date cannot be greater than to date'];
+                    }
+
                     $duration = [
-                        'from' => date('Y-m-d 00:00:00', strtotime($customFromDate)),
-                        'to' => date('Y-m-d 23:59:59', strtotime($customToDate))
+                        'from' => date('Y-m-d', $fromTimestamp) . ' 00:00:00',
+                        'to' => date('Y-m-d', $toTimestamp) . ' 23:59:59'
                     ];
                 } else {
                     return ['error' => 'Custom dates are required'];
                 }
                 break;
             default:
-                $duration = null;
+                $duration = ['error' => 'Invalid duration specified'];
         }
 
         return $duration;
@@ -544,8 +571,12 @@ class ReviewController extends Controller
             $query->offset($request->start)->limit($request->length);
 
             $reviews = $query->get()->map(function ($item) {
-                $item->vehicle_image = uploadedAsset($item->vehicle_image);
-                $item->profile_image = uploadedAsset($item->profile_image ?? '', 'profile');
+                $item->vehicle_image = is_string($item->vehicle_image) || is_null($item->vehicle_image)
+                    ? uploadedAsset($item->vehicle_image, 'profile')
+                    : uploadedAsset(null, 'profile');
+                $item->profile_image = is_string($item->profile_image) || is_null($item->profile_image)
+                    ? uploadedAsset($item->profile_image, 'profile')
+                    : uploadedAsset(null, 'profile');
                 $item->review_date = formatDateTime($item->created_at, false);
 
                 unset($item->created_at);

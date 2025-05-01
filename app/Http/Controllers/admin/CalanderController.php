@@ -5,8 +5,10 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\DrivingType;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use Modules\Booking\Models\Booking;
 use Modules\Booking\Models\BookingUserInfo;
 use Modules\CarInfo\Models\Cartype;
@@ -17,7 +19,7 @@ use Modules\CarInfo\Models\VehicleInfo;
 
 class CalanderController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $cartypes = Cartype::get();
         $customerss = User::get();
@@ -47,7 +49,7 @@ class CalanderController extends Controller
             ));
     }
 
-    public function getCalenderBooking(Request $request)
+    public function getCalenderBooking(Request $request): JsonResponse
     {
         $status = $request->json('status');
         $vehicles = $request->json('vehicles');
@@ -106,7 +108,7 @@ class CalanderController extends Controller
     }
 
 
-    public function getBookingDetail(Request $request)
+    public function getBookingDetail(Request $request): JsonResponse
     {
         $bookingId = $request->get('booking_id');
 

@@ -352,7 +352,7 @@ function sendNotification($email, $slug, $notifyData = [])
     }
 }
 
-function getLanguageId($langCode = 'en')
+function getLanguageId(?string $langCode = 'en'): int
 {
     $languageId = TranslationLanguage::where('code', $langCode)->value('id');
     return $languageId ?? 1;
@@ -369,7 +369,7 @@ function getProfileImage()
     }
 }
 
-function isAccessMenu($menu)
+function isAccessMenu(?string $menu): int
 {
     $value = 0;
     if ($menu == 'reservation') {
@@ -381,7 +381,8 @@ function isAccessMenu($menu)
     return 0;
 }
 
-if (!function_exists('getBaseUrl')) {
+if (!function_exists('getBaseUrl')) 
+{
     function getBaseUrl()
     {
         if (app()->runningInConsole()) {

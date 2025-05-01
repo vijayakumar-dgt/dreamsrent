@@ -10,6 +10,7 @@ use Stripe\Checkout\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 class WalletController extends Controller
 {
@@ -145,7 +146,7 @@ class WalletController extends Controller
         ]);
     }
 
-    public function paypalPaymentSuccessWallet(Request $request)
+    public function paypalPaymentSuccessWallet(Request $request): JsonResponse | RedirectResponse
     {
         try {
             $accessToken = $this->provider->getAccessToken();
@@ -178,7 +179,7 @@ class WalletController extends Controller
         }
     }
 
-    public function stripePaymentSuccessWallet(Request $request)
+    public function stripePaymentSuccessWallet(Request $request): JsonResponse | RedirectResponse
     {
         try {
             Stripe::setApiKey(config('stripe.test.sk'));
@@ -195,7 +196,7 @@ class WalletController extends Controller
         }
     }
 
-    public function paymentFailed(Request $request)
+    public function paymentFailed(Request $request): JsonResponse
     {
         dd('Error in the payment');
     }
