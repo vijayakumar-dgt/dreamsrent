@@ -3,14 +3,13 @@
 namespace Modules\GeneralSetting\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\GeneralSetting\Database\Factories\CurrencyFactory;
-
+/**
+ * @property string|null $symbol
+ */
 class Currency extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     /**
@@ -19,8 +18,4 @@ class Currency extends Model
     protected $fillable = [];
     protected $table    = 'currencies';
 
-    // protected static function newFactory(): CurrencyFactory
-    // {
-    //     // return CurrencyFactory::new();
-    // }
 }

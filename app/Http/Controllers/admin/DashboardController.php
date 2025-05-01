@@ -11,10 +11,12 @@ use Carbon\Carbon;
 use App\Models\Invoices;
 use Modules\CarInfo\Models\Maintenance;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
+use Modules\GeneralSetting\Models\Currency;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $authId = current_user();
 
@@ -29,8 +31,8 @@ class DashboardController extends Controller
 
         $booking = Booking::get();
 
-        $startOfThisWeek = Carbon::now()->startOfWeek();   // Monday this week
-        $endOfThisWeek = Carbon::now()->endOfWeek();       // Sunday this week
+        $startOfThisWeek = Carbon::now()->startOfWeek();
+        $endOfThisWeek = Carbon::now()->endOfWeek();
 
         $startOfLastWeek = Carbon::now()->subWeek()->startOfWeek();
         $endOfLastWeek = Carbon::now()->subWeek()->endOfWeek();
@@ -91,9 +93,14 @@ class DashboardController extends Controller
         })->sum('final_price');
 
         $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();
+        $symbol = null;
 
-        $currency = \DB::table('currencies')->where('id', $generalSettings->value)->select('symbol')->first();
-        $symbol = $currency->symbol;
+        if ($generalSettings !== null) {
+            $currency = Currency::where('id', $generalSettings->value)->select('symbol')->first();
+            if ($currency !== null) {
+                $symbol = $currency->symbol;
+            }
+        }
 
         // Count cars created this week
         $thisWeekCars = VehicleInfo::whereBetween('created_at', [$startOfThisWeek, $endOfThisWeek])
@@ -135,11 +142,12 @@ class DashboardController extends Controller
 
         // Add day count to each booking
         $reservations->transform(function ($booking) {
+            /** @var \Modules\Booking\Models\Booking $booking */
             $start = Carbon::parse($booking->start_datetime);
             $end = Carbon::parse($booking->end_datetime);
 
             // +1 if you want to include both start and end date as full days
-            $booking->day_count = $start->diffInDays($end) + 1;
+            $booking->day_count = (int) $start->diffInDays($end) + 1;
             $days = $booking->day_count;
 
             return $booking;
@@ -159,16 +167,18 @@ class DashboardController extends Controller
             return Carbon::parse($booking->booking_date)->format('Y-m-d'); // Group by date
         })
             ->map(function ($dayBookings) {
+                $firstBooking = $dayBookings->first();
+
                 return [
-                    'date' => $dayBookings->first()->booking_date,
+                    'date' => $firstBooking?->booking_date,
                     'income' => $dayBookings->sum(function ($booking) {
                         return ($booking->payment_status == 1 || $booking->booking_by == 'admin') ?
                          $booking->final_price : 0;
                     }),
-                    'expense' => 0 // Placeholder, modify if you have expenses
+                    'expense' => 0
                 ];
             })
-            ->values(); // Convert collection to array
+            ->values();
 
         $maintenances =  Maintenance::Join('vehicle_info', 'maintenances.vehicle_id', '=', 'vehicle_info.id')
             ->LeftJoin('car_models', 'vehicle_info.model_id', '=', 'car_models.id')

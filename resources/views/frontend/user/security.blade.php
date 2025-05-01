@@ -122,7 +122,7 @@
                                     <h5>{{__('web.user.device_management')}}</h5>
                                 </div>
                                 <div class="security-content">
-                                    <p class="device_management_time" >{{__('web.user.last_changed')}} </p>
+                                    <p class="device_management_time" >{{__('web.user.last_login_at')}} </p>
                                 </div>
                                 <div class="security-btn">
                                     <a href="javascript:void(0)" class="btn btn-secondary device_management" data-bs-toggle="modal" data-bs-target="#device_management">{{__('web.user.manage')}}</a>
@@ -160,10 +160,10 @@
                                 <div class="security-heading">
                                     <h5>{{__('web.user.delete_account')}}</h5>
                                 </div>
-                                <div class="security-content">
+                                <div class="security-content d-none">
                                     <p class="delete_account_time">{{__('web.user.last_changed')}} </p>
                                 </div>
-                                <div class="security-btn">
+                                <div class="security-btn mt-5">
                                     <a href="javascript:void(0)" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_account">{{__('web.common.delete')}}</a>
                                 </div>
                             </div>

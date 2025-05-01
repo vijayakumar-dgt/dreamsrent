@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Http\JsonResponse;
 
-
 class TranslationController extends Controller
 {
     public function getFileTranslations($file, $modules): JsonResponse

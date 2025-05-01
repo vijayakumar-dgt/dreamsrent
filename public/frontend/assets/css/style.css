@@ -21097,7 +21097,7 @@ input.form-control.rounded-pill:focus {
   background: #201F1D;
   border: 1px solid #201F1D;
   border-radius: 5px;
-  padding: 8px 15px;
+  padding: 7px 7px;
   min-width: 136px;
 }
 @media (max-width: 767.96px) {

@@ -476,6 +476,7 @@ return [
         'saving' => 'Saving',
         'logout' => 'Logout',
         'learn_more' => 'Learn More',
+        'notice' => 'Notice',
     ],
     'user' => [
         'user_dashboard' => 'User Dashboard',
@@ -493,7 +494,7 @@ return [
         'transaction_for'  => 'Transaction For',
         'user_wallet'  => 'User Wallet',
         'wallet'  => 'Wallet',
-        'my_bookings' => 'My Bookings',
+        'my_bookings' => 'Bookings',
         'all_bookings' => 'All Bookings',
         'view_all_bookings' => 'View All Bookings',
         'wishlist' => 'Wishlist',
@@ -566,7 +567,7 @@ return [
         'last_bookings_5' => 'Last 5 Bookings',
         'saving' => 'Saving',
         'messages' => 'Messages',
-        'my_wallet' => 'My Wallet',
+        'my_wallet' => 'Wallet',
         'tickets' => 'Tickets',
         'payment' => 'Payment',
         'opening_hours' => 'Opening Hours',
@@ -731,6 +732,7 @@ return [
         'delete_all' => 'Delete All',
         'are_you_sure_delete_all' => 'Are you sure you want to delete all?',
         'maxlength_50' => 'Maxlength 50 characters',
+        'last_login_at' => 'Last Login At',
     ],
     'blog' => [
         'blog_list' => 'Blog List',

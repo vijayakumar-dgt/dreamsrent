@@ -10,7 +10,7 @@
     <!-- Notification item -->
     <div class="d-flex">
         <div class="flex-grow-1">
-            <p class="mb-1"><a href="javascript:void(0);">{{ $notificationContent }}</a></p>
+            <p class="mb-1"><a href="javascript:void(0);"><span class="fw-bold text-dark">{{ __('web.common.notice') }}: </span>{{ $notificationContent }}</a></p>
             <span class="fs-12 noti-time"><i class="ti ti-clock me-1"></i>{{$notification->created_at->diffForHumans()}}</span>
         </div>
     </div>

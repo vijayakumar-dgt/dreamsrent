@@ -1,18 +1,21 @@
-
 (async () => {
     "use strict";
 
     await loadTranslationFile('web', 'user,common');
-    document.getElementById('wallet_amount').addEventListener('input', function () {
-        if (this.value.length > 5) {
-            this.value = this.value.slice(0, 5);
-        }
+
+    const walletAmountInput = document.getElementById('wallet_amount');
+    const addWalletForm = $("#add_wallet");
+    const walletTableElement = $("#walletTable");
+
+    walletAmountInput.addEventListener('input', () => {
+        walletAmountInput.value = walletAmountInput.value.slice(0, 5);
     });
 
-    $(document).ready(function () {
-        walletTable();
-        $(".wallet-btn a").on("click", function () {
-            let walletAmount = $("#wallet_amount").val();
+    $(document).ready(() => {
+        initializeWalletTable();
+
+        $(".wallet-btn a").on("click", () => {
+            const walletAmount = walletAmountInput.value;
 
             if (walletAmount && parseFloat(walletAmount) >= 50) {
                 $("#add_payment input[name='wallet_amount']").val(walletAmount);
@@ -21,72 +24,54 @@
             }
         });
 
-        $("#add_wallet").on("submit", function (event) {
+        addWalletForm.on("submit", (event) => {
             event.preventDefault();
 
-            let walletAmount = $("#wallet_amount").val();
-            let paymentType = $("input[name='payment_one']:checked").attr("id");
+            const walletAmount = walletAmountInput.value;
+            const paymentType = $("input[name='payment_one']:checked").attr("id");
 
             if (!walletAmount || !paymentType) {
                 showToast('error', _l('web.user.enter_amount_and_select_payment_method'));
                 return;
             }
 
-            $.ajax({
-                url: "/user/addwallet",
-                type: "POST",
-                data: {
-                    wallet_amount: walletAmount,
-                    payment_type: paymentType,
-                    _token: $('meta[name="csrf-token"]').attr("content"),
-                },
-                success: function (response) {
-                    if (response.code == 200) {
+            $.post("/user/addwallet", {
+                wallet_amount: walletAmount,
+                payment_type: paymentType,
+                _token: $('meta[name="csrf-token"]').attr("content"),
+            })
+                .done((response) => {
+                    if (response.code === 200) {
                         showToast('success', response.message);
-                        if (response.paypal_url) {
-                            window.location.href = response.paypal_url;
-                        }
-                        else if (response.stripe_url) {
-                            window.location.href = response.stripe_url;
-                        }
-                        $("#add_payment").modal("hide"); // Close modal
+                        if (response.paypal_url) window.location.href = response.paypal_url;
+                        else if (response.stripe_url) window.location.href = response.stripe_url;
+                        $("#add_payment").modal("hide");
                     } else {
                         showToast('error', response.message);
                     }
-                },
-                error: function () {
+                })
+                .fail(() => {
                     showToast('error', _l('web.user.something_went_wrong'));
-                }
-            });
+                });
         });
     });
-    function walletTable() {
-        $.ajax({
-            url: "/user/wallet-list",
-            type: "GET",
-            success: function(response) {
+
+    function initializeWalletTable() {
+        $.get("/user/wallet-list")
+            .done((response) => {
                 const currencySymbol = response.currency_symbol || '$';
                 $(".total_credit").text(`${currencySymbol}${parseFloat(response.total_credit).toFixed(2)}`);
                 $(".total_debit").text(`${currencySymbol}${parseFloat(response.total_debit).toFixed(2)}`);
                 $(".available_balance").text(`${currencySymbol}${parseFloat(response.total_balance).toFixed(2)}`);
 
-                let tableBody = "";
-
-                if ($.fn.DataTable.isDataTable("#walletTable")) {
-                    $("#walletTable").DataTable().destroy();
-                }
-
-                if (response.data.length > 0) {
-                    let data = response.data;
-
-                    $.each(data, function(index, value) {
-                        tableBody += `
+                const tableBody = response.data.length
+                    ? response.data.map((value) => `
                         <tr>
-                            <td>#${value.id ? value.id : 'N/A'}</td>
+                            <td>#${value.id || 'N/A'}</td>
                             <td>
                                 <div class="table-avatar">
                                     <div class="table-head-name flex-grow-1">
-                                        <a href="javascript:void(0);" class="mb-0">${value.payment_type}</a>
+                                        <a href="javascript:void(0);" class="mb-0">${ucfirst(value.payment_type)}</a>
                                     </div>
                                 </div>
                             </td>
@@ -99,20 +84,15 @@
                                     ${value.status}
                                 </span>
                             </td>
-                        </tr>`;
-                    });
-                } else {
-                    tableBody += `
-                    <tr>
+                        </tr>`).join('')
+                    : `<tr>
                         <td colspan="5" class="text-center">${_l('web.user.no_wallet_transaction_available')}</td>
                     </tr>`;
-                    $('.table-footer').empty();
-                }
 
-                $("#walletTable tbody").html(tableBody);
+                walletTableElement.find("tbody").html(tableBody);
 
-                if (response.data.length > 0) {
-                    $('#walletTable').DataTable({
+                if (response.data.length) {
+                    walletTableElement.DataTable({
                         ordering: false,
                         searching: false,
                         pageLength: 10,
@@ -133,19 +113,17 @@
                             $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
                         }
                     });
-                }
-            },
-            error: function(error) {
-                if (error.responseJSON && error.responseJSON.error) {
-                    showToast('error', error.responseJSON.error);
                 } else {
-                    showToast('error', _l('web.user.errot_occured_while_retrieving_wallet_history'));
+                    $('.table-footer').empty();
                 }
-            },
-            complete: function() {
+            })
+            .fail((error) => {
+                const errorMessage = error.responseJSON?.error || _l('web.user.errot_occured_while_retrieving_wallet_history');
+                showToast('error', errorMessage);
+            })
+            .always(() => {
                 $(".table-loader, .input-loader, .label-loader").hide();
                 $('.real-table, .real-label, .real-input').removeClass('d-none');
-            },
-        });
+            });
     }
 })();

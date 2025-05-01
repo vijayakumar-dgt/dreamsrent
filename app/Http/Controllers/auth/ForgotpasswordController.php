@@ -14,8 +14,6 @@ use Illuminate\Support\Str;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
-
-
 class ForgotpasswordController extends Controller
 {
     public function index(): View

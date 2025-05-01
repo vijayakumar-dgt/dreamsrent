@@ -23,17 +23,13 @@
 <!-- Page Content -->
 <div class="content settings-profile-content">
     <div class="container">
-
         <!-- Content Header -->
         <div class="content-header content-settings-header">
             <h4>{{__('web.common.settings')}}</h4>
         </div>
         <!-- /Content Header -->
-
         <div class="row">
-
             @include('frontend.user.user_sidebar')
-
             <!-- Settings Details -->
             <div class="col-lg-9">
                 <div class="settings-info">
@@ -81,15 +77,12 @@
                 </div>
             </div>
             <!-- /Settings Details -->
-
         </div>
     </div>
 </div>
 <!-- /Page Content -->
-
 @endsection
 
 @push('scripts')
 <script src="{{ asset('frontend/assets/js/custom/user/preference.js') }}"></script>
 @endpush
-

@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\CarInfo\Models\VehicleInfo;
 
 class Wishlist extends Model
 {
     protected $fillable = ['user_id','vehicle_id'];
 
-    public function vehicle()
+    public function vehicle(): BelongsTo
     {
         return $this->belongsTo(VehicleInfo::class);
     }

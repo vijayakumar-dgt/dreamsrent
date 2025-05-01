@@ -113,30 +113,39 @@ class SitemapController extends Controller
 
     public function getSitemapUrls(Request $request)
     {
-        $pageLength = $request->length;
-        $offset     = $request->start;
-        $sitemapurls   = SitemapUrl::query();
-        if ($request->has('keyword') && $request->keyword != null) {
-            $sitemapurls->where('url', 'like', '%' . $request->keyword . '%');
+        $pageLength = $request->input('length', 10);
+        $offset = $request->input('start', 0);
+
+        $sitemapUrlsQuery = SitemapUrl::query();
+
+        if ($request->filled('keyword')) {
+            $sitemapUrlsQuery->where('url', 'like', '%' . $request->input('keyword') . '%');
         }
-        $filteredRecords = $sitemapurls->count();
-        $totalRecords    = SitemapUrl::count();
-        $sitemapurls = $sitemapurls->orderBy('id', 'desc')
+
+        $filteredRecords = $sitemapUrlsQuery->count();
+        $totalRecords = SitemapUrl::count();
+
+        $sitemapUrls = $sitemapUrlsQuery->orderBy('id', 'desc')
             ->skip($offset)
             ->take($pageLength)
-            ->get()->map(function ($sitemapurl) {
+            ->get()
+            ->map(function ($sitemapUrl) {
                 return [
-                    'filePath' => !empty($sitemapurl->sitemap_path) && file_exists(public_path($sitemapurl->sitemap_path)) ? asset($sitemapurl->sitemap_path) : '',
-                    'url' => $sitemapurl->url,
-                    'sitemap_path' => $sitemapurl->sitemap_path,
-                    'id' => $sitemapurl->id,
+                    'filePath' => !empty($sitemapUrl->sitemap_path) &&
+                        file_exists(public_path($sitemapUrl->sitemap_path))
+                            ? asset($sitemapUrl->sitemap_path)
+                            : '',
+                    'url' => $sitemapUrl->url,
+                    'sitemap_path' => $sitemapUrl->sitemap_path,
+                    'id' => $sitemapUrl->id,
                 ];
             });
+
         return response()->json([
-            'draw' => $request->draw,
+            'draw' => $request->input('draw', 0),
             'recordsTotal' => $totalRecords,
             'recordsFiltered' => $filteredRecords,
-            'data' => $sitemapurls
+            'data' => $sitemapUrls,
         ]);
     }
 

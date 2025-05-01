@@ -30,7 +30,6 @@ use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Illuminate\Http\JsonResponse;
 
-
 class UserController extends Controller
 {
     public function dashboard(Request $request): View
@@ -298,9 +297,7 @@ class UserController extends Controller
                     if (!empty($authUser->email)) {
                         sendNotification($authUser->email, 'booking-cancelled-to-user', $notifyData);
                     }
-
                 } catch (\Throwable $ex) {
-
                 }
             }
 
@@ -309,7 +306,6 @@ class UserController extends Controller
                 'code'    => 200,
                 'message' => __('web.user.reservation_cancelled')
             ]);
-
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json([
@@ -383,7 +379,6 @@ class UserController extends Controller
                 'message' => __('web.user.ride_started')
             ], 200);
         } catch (\Throwable $th) {
-
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
@@ -648,7 +643,7 @@ class UserController extends Controller
         $response    = [
             'user' => Auth::guard('web')->user(),
             'last_password_changed_at' => Auth::guard('web')->user()->last_password_changed_at ? Carbon::parse(Auth::guard('web')
-            ->user()->last_password_changed_at)->format('d M Y, h:i A') : "null",
+            ->user()->last_password_changed_at)->format('d M Y, h:i A') : "",
             'devices' => $userDevices
         ];
         return response()->json([

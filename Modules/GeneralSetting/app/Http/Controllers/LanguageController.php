@@ -300,7 +300,7 @@ class LanguageController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'code'    => 422,
-                'message' => 'Invalid tab provided'
+                'message' => 'Invalid tab provided',
             ], 422);
         }
 
@@ -322,11 +322,9 @@ class LanguageController extends Controller
         $translatedPath = base_path("resources/lang/{$langCode}/{$tab}.php");
         $responseArray = [];
 
-        // Load default translations
         $defaultTranslations = file_exists($filePath) ? include $filePath : [];
         $translatedTranslations = file_exists($translatedPath) ? include $translatedPath : [];
 
-        // Recursive function to count keys
         $countKeys = function ($array, $checkEmpty = false) use (&$countKeys) {
             $count = 0;
             foreach ($array as $value) {
@@ -339,35 +337,35 @@ class LanguageController extends Controller
             return $count;
         };
 
-        // Loop through each module
         foreach ($defaultTranslations as $module => $keys) {
-            // if request has search ? filter module
-            if ($request->has('search') && $request->search != "") {
+            if ($request->has('search') && $request->search !== "") {
                 $search = $request->search;
                 if (!str_contains($module, $search)) {
                     continue;
                 }
             }
-            $totalKeys = $countKeys($keys);
-            $translatedCount = isset($translatedTranslations[$module]) ? $countKeys($translatedTranslations[$module], true) : 0;
 
-            // Calculate progress
+            $totalKeys = $countKeys($keys);
+            $translatedCount = isset($translatedTranslations[$module])
+                ? $countKeys($translatedTranslations[$module], true)
+                : 0;
+
             $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100, 2) : 0;
 
-            // Add module progress to response array
             $responseArray[] = [
-                'module_name' => ucfirst(str_replace('_', ' ', $module)),
-                'module_key' => $module,
-                'total_keys' => $totalKeys,
-                'translated_keys' => $translatedCount,
-                'progress' => $progress
+                'module_name'      => ucfirst(str_replace('_', ' ', $module)),
+                'module_key'       => $module,
+                'total_keys'       => $totalKeys,
+                'translated_keys'  => $translatedCount,
+                'progress'         => $progress,
             ];
         }
+
         return response()->json([
             'status'  => 'success',
             'code'    => 200,
             'message' => __('admin.general_settings.module_fetched_success'),
-            'data'    => $responseArray
+            'data'    => $responseArray,
         ], 200);
     }
 

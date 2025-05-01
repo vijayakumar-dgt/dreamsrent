@@ -145,8 +145,7 @@ class WalletController extends Controller
         ]);
     }
 
-    public function paypalPaymentSuccessWallet(Request $request): View | JsonResponse
-
+    public function paypalPaymentSuccessWallet(Request $request)
     {
         try {
             $accessToken = $this->provider->getAccessToken();
@@ -179,7 +178,7 @@ class WalletController extends Controller
         }
     }
 
-    public function stripePaymentSuccessWallet(Request $request): View | JsonResponse
+    public function stripePaymentSuccessWallet(Request $request)
     {
         try {
             Stripe::setApiKey(config('stripe.test.sk'));

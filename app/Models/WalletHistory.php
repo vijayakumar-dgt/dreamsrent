@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class WalletHistory extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     protected $table = 'wallet_history';
@@ -24,5 +22,8 @@ class WalletHistory extends Model
         'transaction_date',
     ];
 
-    protected $dates = ['deleted_at']; // For soft deletes
+    /**
+     * @var array<int, string>
+     */
+    protected $dates = ['deleted_at'];
 }

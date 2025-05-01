@@ -54,7 +54,8 @@ class RolesPermissionController extends Controller
             ], 422);
         }
 
-        $successMsg = empty($id) ? __('admin.user_management.role_create_success') : __('admin.user_management.role_update_success');
+        $successMsg = empty($id) ? __('admin.user_management.role_create_success')
+        : __('admin.user_management.role_update_success');
         $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
@@ -100,7 +101,8 @@ class RolesPermissionController extends Controller
                 });
             }
 
-            if ($request->has('sort_by_status') && !empty($request->sort_by_status) || $request->sort_by_status == '0') {
+            if ($request->has('sort_by_status') && !empty($request->sort_by_status)
+             || $request->sort_by_status == '0') {
                 $status = $request->sort_by_status;
                 $query->where('roles.status', $status);
             }

@@ -475,6 +475,7 @@ return [
     'saving' => 'جارٍ الحفظ',
     'logout' => 'تسجيل الخروج',
     'learn_more' => 'تعرف على المزيد',
+    'notice' => 'إشعار',
    ],
    'user' => [
     'user_dashboard' => 'لوحة تحكم المستخدم',
@@ -730,6 +731,7 @@ return [
     'delete_all' => 'حذف الكل',
     'are_you_sure_delete_all' => 'هل انت متاكد انك تريد حذف الكل',
     'maxlength_50' => 'الحد الادنى لعدد الحروف هو 50',
+    'last_login_at' => 'آخر تسجيل دخول في',
    ],
 
    'blog' => [
