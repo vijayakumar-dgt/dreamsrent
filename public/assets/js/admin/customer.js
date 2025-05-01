@@ -650,7 +650,7 @@ function initTable(sortByDate = '') {
             { data: "id",
                 render: function (data, type, row) {
                     if (row.documents && row.documents.length > 0) {
-                        let docUrl = row.documents[0].document;
+                        let docUrl = row.documents[0].document_url;
             
                         return `
                             <div class="d-flex align-items-center">
@@ -898,7 +898,7 @@ $(document).on('click', '.edit-customer', function() {
                      $.each(response.data.documents, function(index, value) {
                          $('.document-preview-container').append(
                              `<div class="document-preview me-2">
-                                 <a href="${value.document}" target="_blank" class="btn btn-sm btn-light me-0" ><i class="ti ti-file-text fs-40"></i></a>
+                                 <a href="${value.document_url}" target="_blank" class="btn btn-sm btn-light me-0" ><i class="ti ti-file-text fs-40"></i></a>
                                  <button type="button" class="btn btn-sm btn-light remove-document" data-id="${value.id}"><i class="ti ti-trash"></i></button>
                              </div>`
                          );

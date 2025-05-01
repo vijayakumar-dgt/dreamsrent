@@ -130,15 +130,19 @@ class CustomerController extends Controller
             if (empty($id)) {
                 if ($request->hasFile('image')) {
                     $file = $request->file('image');
-                    $userDetailsData['profile_image'] = uploadFile($file, 'profile');
+                    if ($file instanceof UploadedFile) {
+                        $userDetailsData['profile_image'] = uploadFile($file, 'profile');
+                    }
                 }
                 $user = User::create($userData);
 
                 $userDetailsData['user_id'] = $user->id;
                 UserDetail::create($userDetailsData);
 
-                if ($request->hasFile('documents')) {
-                    foreach ((array) $request->file('documents') as $file) {
+                /** @var UploadedFile[]|UploadedFile|null $files */
+                $files = $request->file('documents');
+                if (is_array($files)) {
+                    foreach ($files as $file) {
                         $document = uploadFile($file, 'documents');
                         UserDocument::create([
                             'user_id' => $user->id,
@@ -155,11 +159,15 @@ class CustomerController extends Controller
 
                 if ($request->hasFile('image')) {
                     $file = $request->file('image');
-                    $userDetailsData['profile_image'] = uploadFile($file, 'profile', $oldImage);
+                    if ($file instanceof UploadedFile) {
+                        $userDetailsData['profile_image'] = uploadFile($file, 'profile', $oldImage);
+                    }
                 }
 
-                if ($request->hasFile('documents')) {
-                    foreach ((array) $request->file('documents') as $file) {
+                /** @var UploadedFile[]|UploadedFile|null $files */
+                $files = $request->file('documents');
+                if (is_array($files)) {
+                    foreach ($files as $file) {
                         $document = uploadFile($file, 'documents');
                         UserDocument::create([
                             'user_id' => $id,
@@ -313,11 +321,12 @@ class CustomerController extends Controller
                     : uploadedAsset(null, 'profile');
                 $user->language_flag = url('/assets/img/flags/' . $user->language_code . '.svg');
                 $user->encrypted_id = customEncrypt($user->id, User::$userSecretKey);
-                $user->documents->map(function ($documents) {
-                    /** @var \App\Models\UserDocument $documents */
-                    $documents->document = uploadedAsset($documents->document, 'documents');
 
-                    return $documents;
+                /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserDocument> $documents */
+                $documents = $user->documents;
+                $documents->map(function (UserDocument $document) {
+                    $document->document_url = uploadedAsset($document->document, 'documents');
+                    return $document;
                 });
 
                 if ($user->customer_full_name == ' ') {
@@ -378,9 +387,10 @@ class CustomerController extends Controller
             $data->valid_date = Carbon::parse($data->valid_date)->format('d-m-Y');
             $data->date_of_issue = Carbon::parse($data->date_of_issue)->format('d-m-Y');
             $data->dob = Carbon::parse($data->dob)->format('d-m-Y');
-            $data->documents->map(function ($document) {
-                /** @var \App\Models\UserDocument $document */
-                $document->document = uploadedAsset($document->document, 'documents');
+            /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserDocument> $documents */
+            $documents = $data->documents;
+            $documents->map(function (UserDocument $document) {
+                $document->document_url = uploadedAsset($document->document, 'documents');
                 return $document;
             });
         }
@@ -421,19 +431,20 @@ class CustomerController extends Controller
             ->first();
 
         $bookings = Booking::select(
-            'bookings.id',
-            'bookings.reservation_id',
-            'vehicle_info.name as vehicle_name',
-            'vehicle_info.vehicle_image',
-            'bookings.booking_date',
-            'bookings.final_price',
-        )
+                'bookings.id',
+                'bookings.reservation_id',
+                'vehicle_info.name as vehicle_name',
+                'vehicle_info.vehicle_image',
+                'bookings.booking_date',
+                'bookings.final_price',
+            )
             ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
             ->where('bookings.customer_id', $id)
             ->orderBy('bookings.id', 'desc')
+            ->limit(10)
             ->get()->map(function ($booking) {
                 $booking->booking_date = formatDateTime($booking->booking_date);
-                $booking->vehicle_image = uploadedAsset($booking->vehicle_image, 'default');
+                $booking->vehicle_image_url = uploadedAsset($booking->vehicle_image, 'default');
                 return $booking;
             });
 
@@ -456,11 +467,12 @@ class CustomerController extends Controller
             $customer->dob = $customer->dob ? formatDateTime($customer->dob, false) : null;
             $customer->added_on = formatDateTime($customer->created_at);
 
-            $customer->documents->map(function ($document) {
-                /** @var \App\Models\UserDocument $document */
+            /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserDocument> $documents */
+            $documents = $customer->documents;
+            $documents->map(function (UserDocument $document) {
                 $fileDetails = uploadedAsset($document->document, '', true);
                 $document->file_name = $fileDetails['file_name'] ?? null;
-                $document->size = $fileDetails['size'];
+                $document->size = $fileDetails['size'] ?? '';
                 $document->extension = $fileDetails['extension'] ?? '';
                 $document->document_url = uploadedAsset($document->document, '');
                 $document->icon = url('assets/img/file-icon.svg');

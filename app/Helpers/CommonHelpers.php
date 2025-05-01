@@ -154,7 +154,7 @@ if (!function_exists('uploadedAsset')) {
  * @param string $key The encryption key (optional).
  * @return string The encrypted and encoded string, or an empty string on failure.
  */
-function customEncrypt(string $data, string $key = 'default_secret_key'): string
+function customEncrypt(string|int|null $data, string $key = 'default_secret_key'): string
 {
     $cipher = 'AES-128-CBC';
     $iv = substr(md5($key), 0, 16);
@@ -167,7 +167,7 @@ function customEncrypt(string $data, string $key = 'default_secret_key'): string
     return rtrim(strtr(base64_encode($encrypted), '+/', '-_'), '=');
 }
 
-function customDecrypt(string $encryptedData, string $key = 'default_secret_key'): ?string
+function customDecrypt(string|int|null $encryptedData, string $key = 'default_secret_key'): ?string
 {
     $cipher = 'AES-128-CBC';
     $iv = substr(md5($key), 0, 16);
