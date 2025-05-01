@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Booking\Models\Booking;
+use App\Models\UserDetail;
 
 /**
  * @property int|null $language_id
@@ -61,7 +62,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public static $userSecretKey = 'userId';
+    public static string $userSecretKey = 'userId';
 
     /**
      * Get the attributes that should be cast.
@@ -75,23 +76,39 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    /**
+     * @return HasOne<UserDetail, User>
+     */
     public function userDetail(): HasOne
     {
+        /** @var hasOne<UserDetail, User> */
         return $this->hasOne(UserDetail::class, 'user_id');
     }
 
+    /**
+     * @return HasMany<UserDetail, User>
+     */
     public function documents(): HasMany
     {
+        /** @var hasMany<UserDetail, User> */
         return $this->hasMany(UserDocument::class, 'user_id');
     }
 
+    /**
+     * @return HasOne<UserDetail, User>
+     */
     public function userDetails(): HasOne
     {
+        /** @var hasOne<UserDetail, User> */
         return $this->hasOne(UserDetail::class, 'user_id');
     }
 
+    /**
+     * @return HasMany<UserDetail, User>
+     */
     public function bookings(): HasMany
     {
+        /** @var hasMany<UserDetail, User> */
         return $this->hasMany(Booking::class, 'customer_id', 'id');
     }
 }

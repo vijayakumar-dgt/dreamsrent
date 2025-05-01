@@ -2,17 +2,27 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Message extends Model
 {
-    public function sender()
+     /**
+     * @return BelongsTo<User, Message>
+     */
+    public function sender(): BelongsTo
     {
+         /** @var BelongsTo<User, Message> */
         return $this->belongsTo(User::class, 'sender_id');
     }
 
-    public function receiver()
+     /**
+     * @return BelongsTo<User, Message>
+     */
+    public function receiver(): BelongsTo
     {
+         /** @var BelongsTo<User, Message> */
         return $this->belongsTo(User::class, 'receiver_id');
     }
 }
