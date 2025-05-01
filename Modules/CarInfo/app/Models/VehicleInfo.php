@@ -6,13 +6,13 @@ use App\Models\Review;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\CarInfo\Database\Factories\CarFactory;
+/**
+ * @property string|null $vehicle_price
+ */
 class VehicleInfo extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     /**
@@ -59,10 +59,6 @@ class VehicleInfo extends Model
 
     protected $appends = ['vehicle_image_url'];
     protected $table = "vehicle_info";
-    // protected static function newFactory(): CarFactory
-    // {
-    //     // return CarFactory::new();
-    // }
 
     public function carType()
     {

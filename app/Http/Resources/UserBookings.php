@@ -16,44 +16,46 @@ class UserBookings extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $resource = $this->resource;
         return [
-           'id' => $this->id,
-           'reservation_id' => $this->reservation_id,
-           'vehicle_name'   => $this->vehicle ? $this->vehicle->name : '',
-           'vehicle_image'  => $this->vehicle ? uploadedAsset($this->vehicle->vehicle_image)
+           'id' => $resource->id,
+           'reservation_id' => $resource->reservation_id,
+           'vehicle_name'   => $resource->vehicle ? $resource->vehicle->name : '',
+           'vehicle_image'  => $resource->vehicle ? uploadedAsset($resource->vehicle->vehicle_image)
             : uploadedAsset('default.png'),
-           'vehicle_page_url' => $this->vehicle ? route('vehicleDetails', $this->vehicle->slug) : '',
-           'driving_type'   => $this->delivery_type ? ucfirst($this->delivery_type) : '',
-           'rental_type'    => $this->rental_type ? ($this->rental_type) : '',
-           'main_location'  => $this->vehicle && $this->vehicle->mainLocation ? $this->vehicle->mainLocation->name : '',
-           'pickup_location' => $this->pickupLocation ? $this->pickupLocation->name : '',
-           'return_location' => $this->returnLocation ? $this->returnLocation->name : '',
-           'start_datetime' => $this->start_datetime,
-           'end_datetime'   => $this->end_datetime,
-           'formated_start_datetime' => formatDateTime($this->start_datetime),
-           'formated_end_datetime'   => formatDateTime($this->end_datetime),
-           'booked_on'      => $this->created_at,
-           'formated_booked_on' => formatDateTime($this->created_at),
-           'total_amount'   => $this->final_price,
+           'vehicle_page_url' => $resource->vehicle ? route('vehicleDetails', $resource->vehicle->slug) : '',
+           'driving_type'   => $resource->delivery_type ? ucfirst($resource->delivery_type) : '',
+           'rental_type'    => $resource->rental_type ? ($resource->rental_type) : '',
+           'main_location'  => $resource->vehicle && $resource->vehicle->mainLocation ? $resource->vehicle->mainLocation->name : '',
+           'pickup_location' => $resource->pickupLocation ? $resource->pickupLocation->name : '',
+           'return_location' => $resource->returnLocation ? $resource->returnLocation->name : '',
+           'start_datetime' => $resource->start_datetime,
+           'end_datetime'   => $resource->end_datetime,
+           'formated_start_datetime' => formatDateTime($resource->start_datetime),
+           'formated_end_datetime'   => formatDateTime($resource->end_datetime),
+           'booked_on'      => $resource->created_at,
+           'formated_booked_on' => formatDateTime($resource->created_at),
+           'total_amount'   => $resource->final_price,
            'currency'       => getDefaultCurrencySymbol(),
-           'status'         => $this->booking_status,
-           'payment_status' => $this->payment_status,
-           'payment_type'   => $this->payment_type,
-           'extra_services' => $this->getExtraServices($this->extra_service),
-           'cancel_reason'  => $this->cancel_reason,
-           'cancel_date'    => $this->cancel_date,
-           'formated_cancel_date' => formatDateTime($this->cancel_date),
-           'cancel_by'      => $this->cancelledUser ? $this->cancelledUser->name : '',
-           'no_of_passengers' => $this->no_of_passengers,
-           'customer'       => $this->customer ? $this->customer  : null,
-           'customer_detail' => $this->customerDetail ? $this->customerDetail : null
+           'status'         => $resource->booking_status,
+           'payment_status' => $resource->payment_status,
+           'payment_type'   => $resource->payment_type,
+           'extra_services' => $resource->getExtraServices($resource->extra_service),
+           'cancel_reason'  => $resource->cancel_reason,
+           'cancel_date'    => $resource->cancel_date,
+           'formated_cancel_date' => formatDateTime($resource->cancel_date),
+           'cancel_by'      => $resource->cancelledUser ? $resource->cancelledUser->name : '',
+           'no_of_passengers' => $resource->no_of_passengers,
+           'customer'       => $resource->customer ? $resource->customer  : null,
+           'customer_detail' => $resource->customerDetail ? $resource->customerDetail : null
         ];
     }
 
-    public function getExtraServices($extraserviceJsonString)
+    public function getExtraServices(?string $extraserviceJsonString): string
     {
         $extraServices = [];
         if (!empty($extraserviceJsonString)) {
+            /** @var array<int, object{ id: int }> $extraservice */
             $extraservice = json_decode($extraserviceJsonString);
             if (!empty($extraservice)) {
                 $extraServices = collect($extraservice)->pluck('id')->toArray();
