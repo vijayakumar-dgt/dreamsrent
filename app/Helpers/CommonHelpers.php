@@ -227,12 +227,16 @@ if (!function_exists('formatFileSize')) {
 }
 
 if (!function_exists('getUserPermissions')) {
-    function getUserPermissions(int|string|null $userId = null): array
+
+    /**
+     * @return Collection<int, Permission>
+     */
+    function getUserPermissions(int|string|null $userId = null): Collection
     {
         $user = $userId ? User::find($userId) : current_user();
 
         if (!$user || empty($user->role_id)) {
-            return [];
+            return collect();
         }
 
         return Permission::where('permissions.role_id', $user->role_id)
@@ -252,7 +256,7 @@ if (!function_exists('getUserPermissions')) {
     }
 }
 
-function hasPermission(Array $permissions, $moduleSlug, string $action): bool
+function hasPermission(Collection $permissions, $moduleSlug, string $action): bool
 {
     $user = current_user();
 

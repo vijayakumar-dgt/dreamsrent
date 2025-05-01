@@ -26,8 +26,8 @@
                 <ul class="main-nav">
                     @if ($headers)
                         @foreach ($headers as $header)
-                            @if ($header->menus)
-                                @foreach ($header->menus as $menu)
+                            @if ($header->menus_array)
+                                @foreach ($header->menus_array as $menu)
                                     @php
                                         $rawLink = trim($menu['link']);
                                         $isFullUrl = filter_var($rawLink, FILTER_VALIDATE_URL);

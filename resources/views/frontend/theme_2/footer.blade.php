@@ -48,7 +48,7 @@
                                 <h5 class="footer-title">{{ ucfirst($footer->name) }}</h5>
                                 <ul>
                                     @if ($footer->menus)
-                                    @foreach ($footer->menus as $menu)
+                                    @foreach ($footer->parsed_menus as $menu)
                                         @php
                                             $rawLink = trim($menu['link']);
                                             $isFullUrl = filter_var($rawLink, FILTER_VALIDATE_URL);

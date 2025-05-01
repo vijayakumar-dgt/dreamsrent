@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Crypt;
@@ -49,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
         }
     }
 
-    public function globalViews()
+    public function globalViews(): void
     {
         $allLanguages = Language::select(
             'languages.id',
@@ -66,8 +67,7 @@ class AppServiceProvider extends ServiceProvider
             $userDetails = null;
 
             if ($user) {
-                $userDetails = DB::table('users')
-                    ->select(
+                $userDetails = User::select(
                         'users.id',
                         'users.name',
                         'users.email',
@@ -80,10 +80,7 @@ class AppServiceProvider extends ServiceProvider
                     ->first();
 
                 if ($userDetails && $userDetails->profile_image) {
-                    $filePath = storage_path('app/public/' . $userDetails->profile_image);
-                    if (!File::exists($filePath)) {
-                        $userDetails->profile_image = null;
-                    }
+                    $userDetails->profile_image = uploadedAsset($userDetails->profile_image, 'profile');
                 }
             }
 
@@ -94,7 +91,7 @@ class AppServiceProvider extends ServiceProvider
             if ($languageId) {
                 $key = 'copy_right_' . $languageId;
                 $copyright = GeneralSetting::where('key', $key)
-                ->where('language_id', $languageId)->pluck('value')->first();
+                ->where('language_id', $languageId)->value('value');
             }
             $view->with([
                 'allLanguages' => $allLanguages,
@@ -105,7 +102,7 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    public function shareThemeAndLayout()
+    public function shareThemeAndLayout(): void
     {
         view()->composer('*', function ($view) {
             $defaultTheme = GeneralSetting::where('key', 'default_theme')->first();
@@ -135,7 +132,7 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    public function shareHeader()
+    public function shareHeader(): void
     {
         view()->composer(["frontend.theme_1.header", "frontend.theme_2.header"], function ($view) {
             $appLanguage = App::getLocale();
@@ -145,9 +142,22 @@ class AppServiceProvider extends ServiceProvider
                 ->get(['id', 'name', 'menus']);
 
             $headers->transform(function ($header) {
-                $menus = !empty($header->menus) ? json_decode($header->menus, true) : [];
-                $filteredMenus = collect($menus)->where('status', true)->values()->all();
-                $header->menus = $filteredMenus;
+                $menus = [];
+
+                if (!empty($header->menus)) {
+                    $decoded = json_decode($header->menus, true);
+                    if (is_array($decoded)) {
+                        $menus = $decoded;
+                    }
+                }
+
+                $filteredMenus = collect($menus)
+                    ->filter(fn ($menu) => isset($menu['status']) && $menu['status'] === true)
+                    ->values()
+                    ->all();
+
+                $header->menus_array = $filteredMenus;
+
                 return $header;
             });
 
@@ -157,7 +167,7 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    public function shareFooter()
+    public function shareFooter(): void
     {
         view()->composer(["frontend.theme_1.footer", "frontend.theme_2.footer"], function ($view) {
             $appLanguage = App::getLocale();
@@ -167,9 +177,18 @@ class AppServiceProvider extends ServiceProvider
                 ->get(['id', 'name', 'menus']);
 
             $footers->transform(function ($footer) {
+                /** @var array<int, array<string, mixed>> $menus */
                 $menus = !empty($footer->menus) ? json_decode($footer->menus, true) : [];
-                $filteredMenus = collect($menus)->where('status', true)->values()->all();
-                $footer->menus = $filteredMenus;
+
+                /** @var array<int, array<string, mixed>> $filteredMenus */
+                $filteredMenus = collect($menus)
+                    ->filter(function ($menu) {
+                        return !empty($menu['status']);
+                    })
+                    ->values()
+                    ->all();
+
+                $footer->parsed_menus = $filteredMenus;
                 return $footer;
             });
 
