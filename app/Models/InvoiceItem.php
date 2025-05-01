@@ -2,22 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Invoice;
 
-class InvoiceItem extends Authenticatable
+class InvoiceItem extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory;
-    use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'invoice_id',
         'description',
@@ -29,8 +20,12 @@ class InvoiceItem extends Authenticatable
         'updated_at',
     ];
 
-    public function invoice()
+    /**
+     * @return BelongsTo<Invoice, InvoiceItem>
+     */
+    public function invoice(): BelongsTo
     {
-        return $this->belongsTo(Invoices::class);
+        /** @var BelongsTo<Invoice, InvoiceItem> */
+        return $this->belongsTo(Invoice::class);
     }
 }

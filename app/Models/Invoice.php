@@ -2,25 +2,20 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\InvoiceItem;
 
-class Invoices extends Authenticatable
+/**
+ * @property InvoiceItem $InvoiceItem
+ */
+class Invoice extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory;
     use Notifiable;
     use SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'invoice_number',
         'car_id',
@@ -41,8 +36,14 @@ class Invoices extends Authenticatable
         'to_date'
     ];
 
+    /**
+     * Get all the invoice items for the invoice.
+     *
+     * @return HasMany<InvoiceItem, Invoice>
+     */
     public function items(): HasMany
     {
+         /** @var hasMany<InvoiceItem, Invoice> */
         return $this->hasMany(InvoiceItem::class, 'invoice_id'); // explicitly tell Laravel the FK
     }
 }

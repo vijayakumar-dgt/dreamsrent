@@ -252,7 +252,7 @@ if (!function_exists('getUserPermissions')) {
     }
 }
 
-function hasPermission(Collection $permissions, $moduleSlug, string $action): bool
+function hasPermission(Array $permissions, $moduleSlug, string $action): bool
 {
     $user = current_user();
 

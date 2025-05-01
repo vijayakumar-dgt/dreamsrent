@@ -8,7 +8,7 @@ use Modules\CarInfo\Models\VehicleInfo;
 use Modules\Booking\Models\Booking;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Carbon\Carbon;
-use App\Models\Invoices;
+use App\Models\Invoice;
 use Modules\CarInfo\Models\Maintenance;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -237,7 +237,7 @@ class DashboardController extends Controller
                 return \Carbon\Carbon::parse($date)->format('d M');
             })->values();
 
-            $invoices = Invoices::with('items')
+            $invoices = Invoice::with('items')
             ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image')
