@@ -158,7 +158,7 @@ function customEncrypt(string|int|null $data, string $key = 'default_secret_key'
 {
     $cipher = 'AES-128-CBC';
     $iv = substr(md5($key), 0, 16);
-    $encrypted = openssl_encrypt($data, $cipher, $key, 0, $iv);
+    $encrypted = openssl_encrypt((string) $data, $cipher, $key, 0, $iv);
 
     if ($encrypted === false) {
         return ''; // or throw an exception depending on your needs
@@ -172,7 +172,7 @@ function customDecrypt(string|int|null $encryptedData, string $key = 'default_se
     $cipher = 'AES-128-CBC';
     $iv = substr(md5($key), 0, 16);
 
-    $encryptedData = strtr($encryptedData, '-_', '+/');
+    $encryptedData = strtr((string)$encryptedData, '-_', '+/');
     $decoded = base64_decode($encryptedData, true);
 
     if ($decoded === false) {
@@ -189,9 +189,9 @@ function getDefaultCurrencySymbol(): string
     $defaultCurrency = GeneralSetting::where('key', 'currency_symbol')->first();
     $currencyId = $defaultCurrency->value ?? '';
     if ($currencyId) {
-        $currency = Currency::find((string) $currencyId); // or (int) if it's numeric
+        $currency = Currency::find((string) $currencyId);
         if ($currency instanceof Currency) {
-            return $currency->symbol;
+            return $currency->symbol ?? '$';
         }
     }
     return '$';
@@ -212,10 +212,13 @@ function isRTL(?string $languageCode = null): bool
 }
 
 if (!function_exists('formatFileSize')) {
-    function formatFileSize(int $bytes): string
+    function formatFileSize(int|string $bytes): string
     {
+        $bytes = (int) $bytes;
+        if ($bytes === 0) return '0 B';
+
         $sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-        $factor = floor((strlen($bytes) - 1) / 3);
+        $factor = floor(log($bytes, 1024));
         return sprintf("%.2f", $bytes / pow(1024, $factor)) . ' ' . $sizes[$factor];
     }
 }
@@ -255,7 +258,6 @@ function hasPermission(Collection $permissions, $moduleSlug, string $action): bo
     $user = current_user();
 
     $userType = $user->user_type ?? '';
-
     if ($userType == 1) {
         return true;
     }
