@@ -23,7 +23,6 @@ use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\UserDevice;
 use Carbon\Carbon;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Storage;
 use Modules\CarInfo\Models\Driver;
 use Modules\CarInfo\Models\Enquiry;
 use Modules\GeneralSetting\Models\GeneralSetting;
@@ -35,10 +34,14 @@ class UserController extends Controller
 {
     public function dashboard(Request $request): View
     {
-        $totalBookingCount = Booking::where('customer_id', Auth::guard('web')->user()->id)
-            ->where('deleted_at', null)->count();
-        $totalWishlistCount = Wishlist::where('user_id', Auth::guard('web')->user()->id)->count();
         $user = Auth::guard('web')->user();
+
+        if (!$user) {
+            abort(403, 'Unauthorized access');
+        }
+        $totalBookingCount = Booking::where('customer_id', $user->id)
+            ->where('deleted_at', null)->count();
+        $totalWishlistCount = Wishlist::where('user_id', $user->id)->count();
         $totalCredit = WalletHistory::where('user_id', $user->id)
             ->where('status', 'Completed')
             ->where('type', '1')
@@ -50,7 +53,7 @@ class UserController extends Controller
             ->sum('amount');
 
         $totalBalance = $totalCredit - $totalDebit;
-        $totalTransaction = Booking::where('customer_id', Auth::guard('web')->user()->id)
+        $totalTransaction = Booking::where('customer_id', $user->id)
             ->where('deleted_at', null)->where('payment_status', 2)->sum('final_price');
         $currency = getDefaultCurrencySymbol();
         $seo_title = __('web.user.dashboard');
@@ -62,14 +65,22 @@ class UserController extends Controller
 
     public function bookings(Request $request): View
     {
-        $totalBookingCount = Booking::where('customer_id', Auth::guard('web')->user()->id)
+        $user = Auth::guard('web')->user();
+        if (!$user) {
+            abort(403, 'Unauthorized access');
+        }
+        $totalBookingCount = Booking::where('customer_id', $user->id)
             ->where('deleted_at', null)->count();
         $seo_title = __('web.user.my_bookings');
         return view('frontend.user.bookings', compact('totalBookingCount', 'seo_title'));
     }
     public function ajaxLastBookings(Request $request): AnonymousResourceCollection
     {
-        $bookings = Booking::where('customer_id', Auth::guard('web')->user()->id);
+        $user = Auth::guard('web')->user();
+        if (!$user) {
+            abort(403, 'Unauthorized access');
+        }
+        $bookings = Booking::where('customer_id', $user->id);
 
         if ($request->has('duration') && $request->duration != "") {
             $customFrom = $request->custom_from_date ?? "";
@@ -114,7 +125,12 @@ class UserController extends Controller
     }
     public function ajaxBookings(Request $request): AnonymousResourceCollection
     {
-        $bookings = Booking::where('customer_id', Auth::guard('web')->user()->id);
+        $user = Auth::guard('web')->user();
+
+        if (!$user) {
+            abort(403, 'Unauthorized access');
+        }
+        $bookings = Booking::where('customer_id', $user->id);
 
         if ($request->has('limit')) {
             $bookings->take($request->limit);
@@ -162,6 +178,11 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Get a date range based on a given duration or custom dates.
+     *
+     * @return array{from: string, to: string}
+     */
     public function getDuration(?string $duration, ?string $customFromDate = null, ?string $customToDate = null): array
     {
         switch ($duration) {
@@ -201,11 +222,11 @@ class UserController extends Controller
                     $toTimestamp = strtotime($customToDate);
 
                     if ($fromTimestamp === false || $toTimestamp === false) {
-                        return ['error' => 'Invalid custom date format'];
+                        return ['from' => '', 'to' => '', 'error' => 'Invalid custom date format'];
                     }
 
                     if ($fromTimestamp > $toTimestamp) {
-                        return ['error' => 'Custom from date cannot be greater than to date'];
+                        return ['from' => '', 'to' => '', 'error' => 'Custom from date cannot be greater than to date'];
                     }
 
                     $duration = [
@@ -213,11 +234,11 @@ class UserController extends Controller
                         'to' => date('Y-m-d', $toTimestamp) . ' 23:59:59'
                     ];
                 } else {
-                    return ['error' => 'Custom dates are required'];
+                    return ['from' => '', 'to' => '', 'error' => 'Custom dates are required'];
                 }
                 break;
             default:
-                $duration = ['error' => 'Invalid duration specified'];
+                $duration = ['from' => '', 'to' => '', 'error' => 'Invalid duration specified'];
         }
 
         return $duration;
@@ -238,6 +259,14 @@ class UserController extends Controller
         try {
             $booking = Booking::find($request->id);
             if (!$booking) {
+                return response()->json([
+                    'status' => 'error',
+                    'code'   => 404,
+                    'message' => __('web.user.booking_not_found')
+                ]);
+            }
+
+            if (!$booking instanceof \Modules\Booking\Models\Booking) {
                 return response()->json([
                     'status' => 'error',
                     'code'   => 404,
@@ -271,8 +300,8 @@ class UserController extends Controller
                 try {
                     $authUser = Auth::user();
                     $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
-                    $vehicle = VehicleInfo::find($booking->vehicle_id);
-                    $driver  = Driver::find($booking->driver_id);
+                    $vehicle = VehicleInfo::find($booking->vehicle_id ?? '');
+                    $driver  = Driver::find($booking->driver_id ?? '');
                     $appAdmin = User::where('user_type', 1)->first();
 
                     $notifyData = [
@@ -281,11 +310,11 @@ class UserController extends Controller
                         'email'           => $authUser->email ?? '',
                         'phonenumber'     => $authUser->phone_number ?? '',
                         'vehicle_name'    => $vehicle->name ?? "",
-                        'driver_name'     => $driver?->driver_name ?? "",
+                        'driver_name'     => $driver->driver_name ?? "",
                         'reservation_id'  => $booking->reservation_id ?? "",
                         'start_date'      => formatDateTime($booking->start_datetime),
                         'end_date'        => formatDateTime($booking->end_datetime),
-                        'pickup_location' => $booking->pickupLocation?->name ?? "",
+                        'pickup_location' => $booking->pickupLocation->name ?? "",
                         'delivery_type'   => $booking->delivery_type ?? "",
                         'rental_type'     => $booking->rental_type ?? "",
                         'payment_type'    => $booking->payment_type ?? "",
