@@ -3,14 +3,13 @@
 namespace Modules\CarInfo\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\CarInfo\Database\Factories\CarModelFactory;
 
 class CarModel extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     /**
@@ -23,9 +22,11 @@ class CarModel extends Model
         'total_cars',
         'status'
     ];
-
-    public function brands()
+    /**
+     * @return BelongsTo<Brand, CarModel> */
+    public function brands(): BelongsTo
     {
+        /** @var BelongsTo<Brand, CarModel> */
         return $this->belongsTo(Brand::class, 'brand_id');
     }
 }

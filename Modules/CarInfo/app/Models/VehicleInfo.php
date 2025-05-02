@@ -4,12 +4,26 @@ namespace Modules\CarInfo\Models;
 
 use App\Models\Review;
 use App\Models\User;
-use App\Models\UserDetail;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Modules\CarInfo\Models\Brand;
+use Modules\CarInfo\Models\Cartype;
+use Modules\CarInfo\Models\Category;
+use Modules\CarInfo\Models\CarColor;
+use Modules\CarInfo\Models\CarFuel;
+use Modules\CarInfo\Models\Location;
+use Modules\CarInfo\Models\Maintenance;
+use Modules\CarInfo\Models\Transmission;
+use Modules\CarInfo\Models\VehicleDamage;
+use Modules\CarInfo\Models\VehicleExtraService;
+use Modules\CarInfo\Models\VehicleFaq;
+use Modules\CarInfo\Models\VehicleSeason;
+use Modules\CarInfo\Models\VehicleTarrif;
 /**
  * @property string|null $vehicle_price
+ * @property string|null $vehicle_image
  */
 class VehicleInfo extends Model
 {
@@ -60,84 +74,133 @@ class VehicleInfo extends Model
     protected $appends = ['vehicle_image_url'];
     protected $table = "vehicle_info";
 
-    public function carType()
+    /** 
+     * @return BelongsTo<\Modules\CarInfo\Models\Cartype, \Modules\CarInfo\Models\VehicleInfo> 
+     */
+    public function carType(): BelongsTo
     {
-        return $this->belongsTo(Cartype::class, 'type_id', 'id');
+        /** @var BelongsTo<Cartype,VehicleInfo> */
+        return $this->belongsTo(\Modules\CarInfo\Models\Cartype::class, 'type_id', 'id');
     }
 
-    public function reviews()
+    /** 
+     * @return HasMany<Review, VehicleInfo> 
+     */
+    public function reviews(): HasMany
     {
+        /** @var HasMany<Review,VehicleInfo> */
         return $this->hasMany(Review::class, 'vehicle_id');
     }
 
-
-    public function brand()
+    /** 
+     * @return BelongsTo<Brand, VehicleInfo> 
+     */
+    public function brand(): BelongsTo
     {
+        /** @var BelongsTo<Brand,VehicleInfo> */
         return $this->belongsTo(Brand::class, 'brand_id');
     }
 
-    public function category()
+    /** 
+     * @return BelongsTo<Category, VehicleInfo> 
+     */
+    public function category(): BelongsTo
     {
+        /** @var BelongsTo<Category,VehicleInfo> */
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function mainLocation()
+    /**
+     * @return BelongsTo<Location, VehicleInfo>
+     */
+    public function mainLocation(): BelongsTo
     {
+        /** @var BelongsTo<Location,VehicleInfo> */
         return $this->belongsTo(Location::class, 'main_location_id');
     }
-
-    public function color()
+    /**
+     * @return BelongsTo<CarColor, VehicleInfo>
+     */
+    public function color(): BelongsTo
     {
+        /** @var BelongsTo<CarColor,VehicleInfo> */
         return $this->belongsTo(CarColor::class, 'color_id');
     }
-
-    public function fuel_type()
+    /**
+     * @return BelongsTo<CarFuel, VehicleInfo>
+     */
+    public function fuel_type(): BelongsTo
     {
+        /** @var BelongsTo<CarFuel,VehicleInfo> */
         return $this->belongsTo(CarFuel::class, 'fuel_type_id');
     }
-
-    public function transmission()
+    /**
+     * @return BelongsTo<Transmission, VehicleInfo>
+     */
+    public function transmission(): BelongsTo
     {
+        /** @var BelongsTo<Transmission,VehicleInfo> */
         return $this->belongsTo(Transmission::class, 'transmission_id');
     }
 
-    public function getVehicleImageUrlAttribute()
+    public function getVehicleImageUrlAttribute(): ?string
     {
         return $this->vehicle_image ? asset('storage/' . $this->vehicle_image) : null;
     }
-
-    public function faqs()
+    /**
+     * @return HasMany<VehicleFaq, VehicleInfo>
+     */
+    public function faqs(): HasMany
     {
+        /** @var HasMany<VehicleFaq,VehicleInfo> */
         return $this->hasMany(VehicleFaq::class, 'vehicle_id', 'id');
     }
-
-    public function damages()
+    /**
+     * @return HasMany<VehicleDamage, VehicleInfo>
+     */
+    public function damages(): HasMany
     {
+        /** @var HasMany<VehicleDamage,VehicleInfo> */
         return $this->hasMany(VehicleDamage::class, 'vehicle_id', 'id');
     }
-
-    public function tariffs()
+    /**
+     * @return HasMany<VehicleTarrif, VehicleInfo>
+     */
+    public function tariffs(): HasMany
     {
+        /** @var HasMany<VehicleTarrif,VehicleInfo> */
         return $this->hasMany(VehicleTarrif::class, 'vehicle_id', 'id');
     }
-
-    public function seasonals()
+    /**
+     * @return HasMany<VehicleSeason, VehicleInfo>
+     */
+    public function seasonals(): HasMany
     {
+        /** @var HasMany<VehicleSeason,VehicleInfo> */
         return $this->hasMany(VehicleSeason::class, 'vehicle_id', 'id');
     }
-
-    public function extraservices()
+    /**
+     * @return HasMany<VehicleExtraService, VehicleInfo>
+     */
+    public function extraservices(): HasMany
     {
+        /** @var HasMany<VehicleExtraService,VehicleInfo> */
         return $this->hasMany(VehicleExtraService::class, 'vehicle_id', 'id');
     }
-
-    public function maintenances()
+    /**
+     * @return HasMany<Maintenance, VehicleInfo>
+     */
+    public function maintenances(): HasMany
     {
+        /** @var HasMany<Maintenance,VehicleInfo> */
         return $this->hasMany(Maintenance::class, 'vehicle_id');
     }
-
-    public function owner()
+    /**
+     * @return BelongsTo<User, VehicleInfo>
+     */
+    public function owner(): BelongsTo
     {
+        /** @var BelongsTo<User,VehicleInfo> */
         return $this->belongsTo(User::class, 'created_by');
     }
 }

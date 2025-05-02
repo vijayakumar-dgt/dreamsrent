@@ -3,14 +3,13 @@
 namespace Modules\CarInfo\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\CarInfo\Database\Factories\BrandFactory;
 
 class Brand extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     /**
@@ -27,9 +26,11 @@ class Brand extends Model
         'updated_at',
         'deleted_at'
     ];
-
-    public function carModels()
+    /**
+     * @return HasMany<CarModel, Brand> */
+    public function carModels(): HasMany
     {
+        /** @var HasMany<CarModel, Brand> */
         return $this->hasMany(CarModel::class, 'brand_id');
     }
 }

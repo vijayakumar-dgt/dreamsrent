@@ -15,7 +15,7 @@ class TagControlerController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index(): View
     {
@@ -58,14 +58,21 @@ class TagControlerController extends Controller
         $errorMessage = empty($request->id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
-            if ($request->has('id') && $request->id == "") {
+            if (!$request->filled('id')) {
                 $tag = new Tag();
             } else {
                 $tag = Tag::find($request->id);
-                $tag->status = $request->status == 'on' ? 1 : 0;
+            
+                if (!($tag instanceof Tag)) {
+                    return response()->json(['message' => 'Tag not found.'], 404);
+                }
+            
+                $tag->status = $request->status === 'on' ? 1 : 0;
             }
+            
             $tag->tag = $request->tag;
             $tag->save();
+            
             $response = [
                 'status' => 'success',
                 'code'   => 200,
@@ -146,7 +153,7 @@ class TagControlerController extends Controller
     {
 
         try {
-            $tag = Tag::findOrFail($request->delete_id);
+            $tag = Tag::where('id', $request->delete_id)->firstOrFail();
             $tag->delete();
             $response = [
                 'status' => 'success',
@@ -154,13 +161,13 @@ class TagControlerController extends Controller
                 'message' => __('admin.rentals.tag_delete_success')
             ];
             return response()->json($response, 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
                 'message' => __('admin.common.default_delete_error')
             ], 422);
-        } catch (\Throwable $th) {
+        } catch (\Throwable) {
             $response = [
                 'status' => 'error',
                 'code'   => 422,

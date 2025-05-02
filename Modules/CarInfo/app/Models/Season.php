@@ -3,13 +3,15 @@
 namespace Modules\CarInfo\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 // use Modules\CarInfo\Database\Factories\SeasonFactory;
-
+/**
+ * @property int $id
+ * @property string $name
+ * @property int $status
+ */
 class Season extends Model
 {
-    use HasFactory;
 
     /**
      * The attributes that are mass assignable.

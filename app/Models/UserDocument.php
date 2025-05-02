@@ -25,7 +25,7 @@ class UserDocument extends Model
 
      /**
      * @return BelongsTo<User, UserDocument>
-     */
+     */ 
     public function user(): BelongsTo
     {
          /** @var belongsTo<User, UserDocument> */

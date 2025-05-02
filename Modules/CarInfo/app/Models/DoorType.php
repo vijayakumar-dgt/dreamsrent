@@ -3,14 +3,12 @@
 namespace Modules\CarInfo\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\CarInfo\Database\Factories\DoorTypeFactory;
 
 class DoorType extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     /**

@@ -59,10 +59,17 @@ class SeasonController extends Controller
         $errorMessage = empty($request->id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
-            if ($request->has('id') && $request->id == "") {
+            if (!$request->filled('id')) {
                 $season = new Season();
             } else {
                 $season = Season::find($request->id);
+                if(!($season instanceof Season)) {
+                    return response()->json([
+                        'status' => 'error',
+                        'code'   => 422,
+                        'message' => 'Season not found'
+                    ]);
+                }
                 $season->status = $request->status == 'on' ? 1 : 0;
             }
             $season->name = $request->name;
@@ -129,7 +136,7 @@ class SeasonController extends Controller
     public function delete(Request $request): JsonResponse
     {
         try {
-            $season = Season::findOrFail($request->delete_id);
+            $season = Season::where('id',$request->delete_id)->firstOrFail();
             $season->delete();
             return response()->json([
                 'status' => 'success',
