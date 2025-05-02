@@ -25,9 +25,9 @@ class RolesPermissionController extends Controller
 
     public function __construct()
     {
-        $this->authUser = current_user();  // current_user() should return a User model or null
+        $user = current_user();
+        $this->authUser = $user instanceof User ? $user : null;
     }
-
     public function index(): View
     {
         return view('rolespermission::admin.roles-permissions');
