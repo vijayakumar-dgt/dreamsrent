@@ -177,7 +177,7 @@
 	@else
 <script src="{{ asset('frontend/assets/js/script.js') }}"></script>
     @endif
-<script src="{{ asset('frontend/assets/js/custom/custom-script.js?v=1.0.3') }}"></script>
+<script src="{{ asset('frontend/assets/js/custom/custom-script.js?v=1.0.4') }}"></script>
  
 </body>
 

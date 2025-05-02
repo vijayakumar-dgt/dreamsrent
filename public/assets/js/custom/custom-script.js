@@ -127,3 +127,11 @@ $(document).on("click", "#markAllAsRead", function () {
 		}
 	});
 }); 
+$(document).on('hide.bs.modal', function (e) {
+    const activeElement = document.activeElement;
+    const modal = e.target;
+
+    if (modal.contains(activeElement)) {
+        activeElement.blur();
+    }
+});

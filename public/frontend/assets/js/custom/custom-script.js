@@ -594,4 +594,11 @@ function ucfirst(str) {
     if (!str) return '';
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
-  
+$(document).on('hide.bs.modal', function (e) {
+    const activeElement = document.activeElement;
+    const modal = e.target;
+
+    if (modal.contains(activeElement)) {
+        activeElement.blur();
+    }
+});
