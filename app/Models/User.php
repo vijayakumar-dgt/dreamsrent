@@ -24,6 +24,7 @@ use App\Models\UserDetail;
  * @property string|null $dob
  * @property string|null $added_on
  * @property int|null $id
+ * @property \Carbon\Carbon|null $last_password_changed_at
  *
  */
 
@@ -50,6 +51,7 @@ class User extends Authenticatable
         'region_id',
         'language_id',
         'role_id',
+        'last_password_changed_at'
     ];
 
     /**
