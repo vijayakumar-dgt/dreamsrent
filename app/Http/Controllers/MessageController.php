@@ -36,18 +36,18 @@ class MessageController extends Controller
         if ($request->messageType == 'file' && $request->hasFile('file')) {
             $foldername = 'chat_attachments';
             $file       = $request->file('file');
-            $filename   = $file->getClientOriginalName();
-            $mime_type  = $file->getClientMimeType();
-            $size       = $file->getSize();
-            $path = uploadFile($file, $foldername, $filename);
+            $filename   = $file ? $file->getClientOriginalName() : null;
+            $mime_type  = $file ? $file->getClientMimeType() : null;
+            $size       = $file ? $file->getSize() : null;
+            $path = $file ? uploadFile($file, $foldername, $filename) : null;
             $_message = new Message();
             $_message->sender_id = $request->sender_id;
             $_message->receiver_id = $request->receiver_id;
             $_message->type        = 'file';
             $_message->file        = $path;
             $_message->mime_type   = $mime_type;
-            $_message->size        = $size;
-            $_message->message     = $filename;
+            $_message->size        = $size !== null ? (string) $size : null;
+            $_message->message = $filename ?? '';
             $_message->save();
         }
         if (!empty($request->message)) {
@@ -57,7 +57,7 @@ class MessageController extends Controller
             $message->message     = $request->message;
             $message->save();
         }
-        $publishMessage = $request->messageType == 'file' ? $path : $request->message;
+        $publishMessage = ($request->messageType == 'file' && isset($path)) ? $path : $request->message;
         $payload = [
             'sender_id' => $request->sender_id,
             'receiver_id' => $request->receiver_id,
@@ -65,6 +65,12 @@ class MessageController extends Controller
             'type' => $request->messageType,
         ];
         $payload = json_encode($payload);
+        if ($payload === false) {
+            return response()->json([
+                'success' => false,
+                'message' => __('admin.others.message_encoding_failed')
+            ], 500);
+        }
         $mqtt = new MqttService();
         $mqtt->publish($request->topic, $payload);
         $response = [
@@ -89,8 +95,9 @@ class MessageController extends Controller
         if ($perPage > 10) {
             $perPage = 10;
         }
+        /** @var \Illuminate\Contracts\Auth\Authenticatable|null $authUser */
         $authUser = current_user();
-        $authUserId = $authUser ? $authUser->id : 0;
+        $authUserId = $authUser ? $authUser->getAuthIdentifier() : 0;
         $messagePartnerId = $request->user_id;
         $totalMessages = Message::where(function ($query) use ($authUserId, $messagePartnerId) {
             $query->where('sender_id', $authUserId)
@@ -141,7 +148,7 @@ class MessageController extends Controller
             $lastMessageResp = [
                 'id' => $lastMessage->id,
                 'message' => $lastMessage->type == 'text' ? $messageText : '<i class="fa fa-link"></i> ' . $messageText,
-                'created_at' => $lastMessage->created_at->diffForHumans(),
+                'created_at' => $lastMessage->created_at ? $lastMessage->created_at->diffForHumans() : null,
             ];
         }
         return response()->json([
