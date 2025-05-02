@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\GeneralSetting\Models\Insurance;
 use Modules\GeneralSetting\Models\InsuranceBenefit;
 
+/**
+ * @property Insurance $insurance
+ * @property InsuranceBenefit $insuranceBenefits
+ */
 class VehicleInsurance extends Model
 {
 
@@ -20,6 +24,7 @@ class VehicleInsurance extends Model
      */
     public function insurance(): BelongsTo
     {
+        /** @var BelongsTo<Insurance, VehicleInsurance> */
         return $this->belongsTo(Insurance::class, 'insurances_id');
     }
 
@@ -28,6 +33,7 @@ class VehicleInsurance extends Model
      */
     public function insuranceBenefits(): HasMany
     {
+        /** @var HasMany<InsuranceBenefit, VehicleInsurance> */
         return $this->hasMany(InsuranceBenefit::class, 'insurance_id', 'insurances_id');
     }
 }

@@ -3,24 +3,16 @@
 namespace Modules\CarInfo\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 // use Modules\CarInfo\Database\Factories\VehicleExtraServiceFactory;
 
 class VehicleExtraService extends Model
 {
-    use HasFactory;
 
     /**
-     * The attributes that are mass assignable.
+     * @var list<string>
      */
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-
     protected $fillable = ['vehicle_id', 'extra_service_id', 'value', 'price'];
 
     // protected static function newFactory(): VehicleExtraServiceFactory
@@ -28,8 +20,14 @@ class VehicleExtraService extends Model
     //     // return VehicleExtraServiceFactory::new();
     // }
 
-    public function extraService()
+    /**
+     * @return BelongsTo<ExtraService, VehicleExtraService>
+     */
+    public function extraService(): BelongsTo
     {
+        /**
+         * @var BelongsTo<ExtraService, VehicleExtraService>
+         */
         return $this->belongsTo(ExtraService::class, 'extra_service_id', 'id');
     }
 }

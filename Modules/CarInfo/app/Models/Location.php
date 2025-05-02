@@ -3,14 +3,13 @@
 namespace Modules\CarInfo\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\CarInfo\Database\Factories\LocationFactory;
 
 class Location extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     /**
@@ -29,9 +28,12 @@ class Location extends Model
             $location->workingDays()->delete();
         });
     }
-
-    public function workingDays()
-    {
+    /**
+     * @return HasMany<LocationWorkingDay,Location>
+     */
+    public function workingDays(): HasMany
+    {   
+        /** @var HasMany<LocationWorkingDay, Location>*/
         return $this->hasMany(LocationWorkingDay::class);
     }
 }

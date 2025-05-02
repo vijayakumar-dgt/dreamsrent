@@ -3,13 +3,12 @@
 namespace Modules\CarInfo\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 // use Modules\CarInfo\Database\Factories\DriverDocumentFactory;
 
 class DriverDocument extends Model
 {
-    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -18,9 +17,12 @@ class DriverDocument extends Model
         'driver_id',
         'document'
     ];
-
-    public function driver()
+    /**
+     * @return BelongsTo<Driver, DriverDocument>
+     */
+    public function driver(): BelongsTo
     {
+        /** @var BelongsTo<Driver, DriverDocument> */
         return $this->belongsTo(Driver::class, 'driver_id');
     }
 }
