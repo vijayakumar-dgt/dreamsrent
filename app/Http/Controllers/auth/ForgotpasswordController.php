@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class ForgotpasswordController extends Controller
@@ -47,7 +48,7 @@ class ForgotpasswordController extends Controller
             Cache::put('forgotPasswordEmail_' . $token, $email, 600);
             Cache::put('forgotPasswordOtp_' . $token, $otp, 600);
             $data  = [
-                'otp' => $otp,
+                'otp' => (string) $otp,
                 'name' => $user->name ?? 'User',
                 'subject' => 'Forgot Password Otp'
             ];
@@ -69,7 +70,7 @@ class ForgotpasswordController extends Controller
         }
     }
 
-    public function verifyOtp(Request $request): View
+    public function verifyOtp(Request $request): View | RedirectResponse
     {
         $token = $request->token;
         $email = Cache::get('forgotPasswordEmail_' . $token);
@@ -96,7 +97,7 @@ class ForgotpasswordController extends Controller
             Cache::put('forgotPasswordEmail_' . $token, $email, 600);
             Cache::put('forgotPasswordOtp_' . $token, $otp, 600);
             $data  = [
-                'otp' => $otp,
+                'otp' => (string) $otp,
                 'name' => $user->name ?? 'User',
                 'subject' => 'Forgot Password Otp'
             ];
@@ -148,7 +149,7 @@ class ForgotpasswordController extends Controller
         }
     }
 
-    public function resetPassword(Request $request): View
+    public function resetPassword(Request $request): View | RedirectResponse
     {
         $token = $request->token;
         $email = Cache::get('forgotPasswordEmail_' . $token);
@@ -183,9 +184,17 @@ class ForgotpasswordController extends Controller
             }
 
             $user = User::where('email', $email)->first();
-            $user->password = Hash::make($request->password);
-            $user->last_password_changed_at = now();
-            $user->save();
+            if ($user) {
+                $user->password = Hash::make($request->password);
+                $user->last_password_changed_at = now();
+                $user->save();
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'code'   => 422,
+                    'message' => 'User not found',
+                ], 422);
+            }
             Cache::forget('forgotPasswordEmail_' . $token);
             Cache::forget('forgotPasswordOtp_' . $token);
             return response()->json([
