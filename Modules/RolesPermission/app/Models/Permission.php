@@ -3,14 +3,10 @@
 namespace Modules\RolesPermission\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-// use Modules\RolesPermission\Database\Factories\PermissionFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Permission extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      */
@@ -24,14 +20,21 @@ class Permission extends Model
         'allow_all',
         'created_by',
     ];
-
-    public function module()
+    
+    /**
+     * @return BelongsTo<Module, Permission>
+     */
+    public function module(): BelongsTo
     {
+        /** @var belongsTo<Module, Permission> */
         return $this->belongsTo(Module::class, 'module_id');
     }
-
+ /**
+     * @return BelongsTo<Role, Permission>
+     */
     public function role()
     {
+        /** @var belongsTo<Role, Permission> */
         return $this->belongsTo(Role::class);
     }
 }

@@ -16,9 +16,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Role extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
 
+    use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      */
@@ -27,6 +26,8 @@ class Role extends Model
         'created_by',
         'status',
     ];
-
+     /**
+     * @var string
+     */
     public static $roleSecretKey = 'RoleId';
 }
