@@ -46,8 +46,8 @@ class NewsletterController extends Controller
 
             $notificationType = 3;
             $template = EmailTemplate::select('subject', 'description')
-                    ->where('notification_type', $notificationType)
-                    ->first();
+                ->where('notification_type', $notificationType)
+                ->first();
 
             $data = [
                 'to_email' => $request->subscriber_email,
@@ -191,8 +191,8 @@ class NewsletterController extends Controller
 
             $notificationType = 3;
             $template = EmailTemplate::select('subject', 'description')
-                    ->where('notification_type', $notificationType)
-                    ->first();
+                ->where('notification_type', $notificationType)
+                ->first();
 
             $data = [
                 'subject' => $template->subject ?? 'Reg - Newsletter',

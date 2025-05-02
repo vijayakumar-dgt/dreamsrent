@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Jenssegers\Agent\Agent;
 use Modules\GeneralSetting\Models\UserDevice;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class LoginController extends Controller
 {
-    public function index()
+    public function index() : View|RedirectResponse
     {
         if (Auth::guard('admin')->check()) {
             return redirect()->route('dashboard');
@@ -92,7 +94,7 @@ class LoginController extends Controller
         }
     }
 
-    public function logout()
+    public function logout() : RedirectResponse
     {
         Auth::guard('admin')->logout();
         return redirect()->route('admin-login');

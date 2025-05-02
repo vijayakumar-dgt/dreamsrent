@@ -21,7 +21,7 @@ class MessageController extends Controller
         $lastMessage = Message::where(function ($query) use ($sender, $receiver) {
             $query->where(function ($query) use ($sender, $receiver) {
                 $query->where('sender_id', $sender->id)
-                      ->orWhere('receiver_id', $sender->id);
+                    ->orWhere('receiver_id', $sender->id);
             });
         })->orderBy('id', 'desc')->first();
         $seo_title = __('web.user.messages');
@@ -30,8 +30,6 @@ class MessageController extends Controller
 
     public function sendMessage(Request $request): JsonResponse
     {
-        // DB::beginTransaction();
-        // try {
         if ($request->messageType == 'file' && $request->hasFile('file')) {
             $foldername = 'chat_attachments';
             $file       = $request->file('file');
@@ -56,31 +54,22 @@ class MessageController extends Controller
             $message->message     = $request->message;
             $message->save();
         }
-            $publishMessage = $request->messageType == 'file' ? $path : $request->message;
-            $payload = [
-                'sender_id' => $request->sender_id,
-                'receiver_id' => $request->receiver_id,
-                'message' => $publishMessage,
-                'type' => $request->messageType,
-            ];
-            $payload = json_encode($payload);
-            $mqtt = new MqttService();
-            $mqtt->publish($request->topic, $payload);
-            $response = [
-                'success' => true,
-                'message' => __('admin.others.message_send_success')
-            ];
+        $publishMessage = $request->messageType == 'file' ? $path : $request->message;
+        $payload = [
+            'sender_id' => $request->sender_id,
+            'receiver_id' => $request->receiver_id,
+            'message' => $publishMessage,
+            'type' => $request->messageType,
+        ];
+        $payload = json_encode($payload);
+        $mqtt = new MqttService();
+        $mqtt->publish($request->topic, $payload);
+        $response = [
+            'success' => true,
+            'message' => __('admin.others.message_sent_success')
+        ];
 
-        //     DB::commit();
-        // } catch (\Throwable $th) {
-        //     DB::rollBack();
-        //     $response = [
-        //         'success' => false,
-        //         'message' => $th->getMessage()
-        //     ];
-        // }
-
-            return response()->json($response);
+        return response()->json($response);
     }
 
     public function adminMessages(): View
@@ -101,27 +90,27 @@ class MessageController extends Controller
         $authUserId = $authUser ? $authUser->id : 0;
         $messagePartnerId = $request->user_id;
         $totalMessages = Message::where(function ($query) use ($authUserId, $messagePartnerId) {
-                            $query->where('sender_id', $authUserId)
-                                ->where('receiver_id', $messagePartnerId);
+            $query->where('sender_id', $authUserId)
+                ->where('receiver_id', $messagePartnerId);
         })
-                        ->orWhere(function ($query) use ($authUserId, $messagePartnerId) {
-                            $query->where('sender_id', $messagePartnerId)
-                                ->where('receiver_id', $authUserId);
-                        })
-                        ->count();
+            ->orWhere(function ($query) use ($authUserId, $messagePartnerId) {
+                $query->where('sender_id', $messagePartnerId)
+                    ->where('receiver_id', $authUserId);
+            })
+            ->count();
         if (!$request->has('offset') || $request->offset == "") {
             $offset = max(0, ($totalMessages - $perPage) + 1);
         } else {
             $offset = max(0, (int) $request->offset);
         }
         $messages = Message::where(function ($query) use ($authUserId, $messagePartnerId) {
-                                $query->where('sender_id', $authUserId)
-                                    ->where('receiver_id', $messagePartnerId);
+            $query->where('sender_id', $authUserId)
+                ->where('receiver_id', $messagePartnerId);
         })
-                            ->orWhere(function ($query) use ($authUserId, $messagePartnerId) {
-                                $query->where('sender_id', $messagePartnerId)
-                                    ->where('receiver_id', $authUserId);
-                            })
+            ->orWhere(function ($query) use ($authUserId, $messagePartnerId) {
+                $query->where('sender_id', $messagePartnerId)
+                    ->where('receiver_id', $authUserId);
+            })
             ->orderBy('id', 'asc')
             ->offset($offset)
             ->limit($perPage)
@@ -145,7 +134,7 @@ class MessageController extends Controller
         $lastMessageResp = null;
         if ($lastMessage) {
             $messageText = strlen($lastMessage->message) > 20 ?
-            substr($lastMessage->message, 0, 20) . '...' : $lastMessage->message;
+                substr($lastMessage->message, 0, 20) . '...' : $lastMessage->message;
             $lastMessageResp = [
                 'id' => $lastMessage->id,
                 'message' => $lastMessage->type == 'text' ? $messageText : '<i class="fa fa-link"></i> ' . $messageText,

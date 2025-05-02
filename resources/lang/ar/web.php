@@ -732,6 +732,7 @@ return [
     'are_you_sure_delete_all' => 'هل انت متاكد انك تريد حذف الكل',
     'maxlength_50' => 'الحد الادنى لعدد الحروف هو 50',
     'last_login_at' => 'آخر تسجيل دخول في',
+    'device_not_found' => 'الجهاز غير موجود',
    ],
 
    'blog' => [

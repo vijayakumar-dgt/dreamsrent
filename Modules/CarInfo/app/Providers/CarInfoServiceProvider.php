@@ -13,7 +13,6 @@ class CarInfoServiceProvider extends ServiceProvider
     use PathNamespace;
 
     protected string $name = 'CarInfo';
-
     protected string $nameLower = 'carinfo';
 
     /**
@@ -39,7 +38,7 @@ class CarInfoServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register commands in the format of Command::class
+     * Register commands in the format of Command::class.
      */
     protected function registerCommands(): void
     {
@@ -47,7 +46,7 @@ class CarInfoServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register command Schedules.
+     * Register command schedules.
      */
     protected function registerCommandSchedules(): void
     {
@@ -87,7 +86,7 @@ class CarInfoServiceProvider extends ServiceProvider
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
                     $relativePath = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
-                    $configKey = $this->nameLower . '.' . str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
+                    $configKey = $this->nameLower . '.' . str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], (string) $relativePath);
                     $key = ($relativePath === 'config.php') ? $this->nameLower : $configKey;
 
                     $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
@@ -115,12 +114,19 @@ class CarInfoServiceProvider extends ServiceProvider
 
     /**
      * Get the services provided by the provider.
+     *
+     * @return array<int, class-string>
      */
     public function provides(): array
     {
         return [];
     }
 
+    /**
+     * Get publishable view paths.
+     *
+     * @return array<int, string>
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];

@@ -733,6 +733,7 @@ return [
         'are_you_sure_delete_all' => 'Are you sure you want to delete all?',
         'maxlength_50' => 'Maxlength 50 characters',
         'last_login_at' => 'Last Login At',
+        'device_not_found' => 'Device not found',
     ],
     'blog' => [
         'blog_list' => 'Blog List',

@@ -40,7 +40,7 @@ class UserBookings extends JsonResource
            'status'         => $resource->booking_status,
            'payment_status' => $resource->payment_status,
            'payment_type'   => $resource->payment_type,
-           'extra_services' => $resource->getExtraServices($resource->extra_service),
+           'extra_services' => $this->getExtraServices($resource->extra_service),
            'cancel_reason'  => $resource->cancel_reason,
            'cancel_date'    => $resource->cancel_date,
            'formated_cancel_date' => formatDateTime($resource->cancel_date),

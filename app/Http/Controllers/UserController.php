@@ -36,22 +36,22 @@ class UserController extends Controller
     public function dashboard(Request $request): View
     {
         $totalBookingCount = Booking::where('customer_id', Auth::guard('web')->user()->id)
-        ->where('deleted_at', null)->count();
+            ->where('deleted_at', null)->count();
         $totalWishlistCount = Wishlist::where('user_id', Auth::guard('web')->user()->id)->count();
         $user = Auth::guard('web')->user();
         $totalCredit = WalletHistory::where('user_id', $user->id)
-                ->where('status', 'Completed')
-                ->where('type', '1')
-                ->sum('amount');
+            ->where('status', 'Completed')
+            ->where('type', '1')
+            ->sum('amount');
 
-            $totalDebit = WalletHistory::where('user_id', $user->id)
-                ->where('status', 'Completed')
-                ->where('type', '2')
-                ->sum('amount');
+        $totalDebit = WalletHistory::where('user_id', $user->id)
+            ->where('status', 'Completed')
+            ->where('type', '2')
+            ->sum('amount');
 
         $totalBalance = $totalCredit - $totalDebit;
         $totalTransaction = Booking::where('customer_id', Auth::guard('web')->user()->id)
-        ->where('deleted_at', null)->where('payment_status', 2)->sum('final_price');
+            ->where('deleted_at', null)->where('payment_status', 2)->sum('final_price');
         $currency = getDefaultCurrencySymbol();
         $seo_title = __('web.user.dashboard');
         return view(
@@ -63,15 +63,13 @@ class UserController extends Controller
     public function bookings(Request $request): View
     {
         $totalBookingCount = Booking::where('customer_id', Auth::guard('web')->user()->id)
-        ->where('deleted_at', null)->count();
+            ->where('deleted_at', null)->count();
         $seo_title = __('web.user.my_bookings');
         return view('frontend.user.bookings', compact('totalBookingCount', 'seo_title'));
     }
-    public function ajaxLastBookings(Request $request)
+    public function ajaxLastBookings(Request $request): AnonymousResourceCollection
     {
         $bookings = Booking::where('customer_id', Auth::guard('web')->user()->id);
-
-
 
         if ($request->has('duration') && $request->duration != "") {
             $customFrom = $request->custom_from_date ?? "";
@@ -164,7 +162,6 @@ class UserController extends Controller
         ]);
     }
 
-
     public function getDuration(?string $duration, ?string $customFromDate = null, ?string $customToDate = null): array
     {
         switch ($duration) {
@@ -225,7 +222,6 @@ class UserController extends Controller
 
         return $duration;
     }
-
 
     public function bookingDetails(?int $id): JsonResponse
     {
@@ -323,7 +319,6 @@ class UserController extends Controller
             ]);
         }
     }
-
 
     public function completeRide(Request $request): JsonResponse
     {
@@ -425,7 +420,7 @@ class UserController extends Controller
         try {
             $vehicle = VehicleInfo::find($request->id);
             $wishlist = Wishlist::where('user_id', Auth::guard('web')->user()->id)
-            ->where('vehicle_id', $vehicle->id)->first();
+                ->where('vehicle_id', $vehicle->id)->first();
             if ($wishlist) {
                 $wishlist->delete();
                 return response()->json([
@@ -463,7 +458,6 @@ class UserController extends Controller
         ]);
     }
 
-
     public function userprofilesettings(): View
     {
         $user = Auth::guard('web')->user();
@@ -475,7 +469,6 @@ class UserController extends Controller
     public function userprofile(Request $request): JsonResponse
     {
         try {
-            // Validation logic
             $validator = Validator::make($request->all(), [
                 'id' => 'required|exists:users,id',
                 'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -505,14 +498,12 @@ class UserController extends Controller
                 'phone_number' => $request->user_phone,
             ]);
 
-            // Handle profile photo upload
             $profilePhoto = null;
             if ($request->hasFile('profile_photo')) {
                 $folder = "profile";
                 $profilePhoto = uploadFile($request->file('profile_photo'), $folder);
             }
 
-            // Update or create user detail
             UserDetail::updateOrCreate(
                 ['user_id' => $user->id],
                 [
@@ -527,7 +518,6 @@ class UserController extends Controller
                     'profile_image' => $profilePhoto ?? $user->userDetail->profile_image ?? null,
                 ]
             );
-
             $profileImage = UserDetail::where('user_id', $user->id)->pluck('profile_image')->first();
 
             return response()->json([
@@ -548,9 +538,6 @@ class UserController extends Controller
         }
     }
 
-
-
-
     public function userpreference(): View
     {
         $languages = Language::select('languages.language_id')
@@ -565,15 +552,18 @@ class UserController extends Controller
         $seo_title = __('web.user.preferences');
         return view('frontend.user.preference', compact('languages', 'preference', 'countries', 'seo_title'));
     }
+
     public function userintegration(): View
     {
         return view('frontend.user.integration');
     }
+
     public function usernotification(): View
     {
         $seo_title = __('web.user.notifications');
         return view('frontend.user.notification', compact('seo_title'));
     }
+
     public function usersecurity(): View
     {
         $seo_title = __('web.user.security');
@@ -637,21 +627,21 @@ class UserController extends Controller
     public function getSecuritySettings(): JsonResponse
     {
         $userDevices = UserDevice::where('user_id', Auth::guard('web')->user()->id)->orderBy('created_at', 'desc')
-        ->take(5)->get()->map(function ($device) {
-            return [
-                'id' => $device->id,
-                'device_type' => $device->device_type,
-                'browser' => $device->browser,
-                'os' => $device->os,
-                'ip_address' => $device->ip_address,
-                'location' => $device->location,
-                'date'     => Carbon::parse($device->created_at)->format('d M Y, h:i A')
-            ];
-        });
+            ->take(5)->get()->map(function ($device) {
+                return [
+                    'id' => $device->id,
+                    'device_type' => $device->device_type,
+                    'browser' => $device->browser,
+                    'os' => $device->os,
+                    'ip_address' => $device->ip_address,
+                    'location' => $device->location,
+                    'date'     => Carbon::parse($device->created_at)->format('d M Y, h:i A')
+                ];
+            });
         $response    = [
             'user' => Auth::guard('web')->user(),
             'last_password_changed_at' => Auth::guard('web')->user()->last_password_changed_at ? Carbon::parse(Auth::guard('web')
-            ->user()->last_password_changed_at)->format('d M Y, h:i A') : "",
+                ->user()->last_password_changed_at)->format('d M Y, h:i A') : "",
             'devices' => $userDevices
         ];
         return response()->json([
@@ -663,7 +653,6 @@ class UserController extends Controller
 
     public function logoutDevice(Request $request): JsonResponse
     {
-
         if ($request->isAll === "true") {
             UserDevice::where('user_id', Auth::guard('web')->user()->id)->delete();
             return response()->json([
@@ -682,6 +671,11 @@ class UserController extends Controller
                 ]);
             }
         }
+        return response()->json([
+            'status'  => 'error',
+            'code'    => 404,
+            'message' => __('web.user.device_not_found')
+        ], 404);
     }
 
     public function updatePreference(Request $request): JsonResponse
@@ -719,7 +713,6 @@ class UserController extends Controller
     {
         try {
             $id = Auth::guard('web')->user()->id ?? $request->user_id;
-
             $data = User::select('language_id', 'region_id')->where('id', $id)->first();
 
             return response()->json([
@@ -774,7 +767,7 @@ class UserController extends Controller
         if (Auth::guard('web')->check()) {
             $authUser = Auth::guard('web')->user();
             $notifications = Notification::where('user_id', $authUser->id)
-            ->where('readed', 0)->orderBy('created_at', 'desc')->limit(10)->get();
+                ->where('readed', 0)->orderBy('created_at', 'desc')->limit(10)->get();
             $notificationCount = Notification::where('user_id', $authUser->id)->where('readed', 0)->count();
         } else {
             $notifications = [];
@@ -790,7 +783,6 @@ class UserController extends Controller
     }
     public function markAllAsRead(Request $request): JsonResponse
     {
-        //check any unread notification
         if (
             Notification::where('user_id', Auth::guard('web')->user()->id)
             ->where('readed', 0)->count() > 0
@@ -869,7 +861,7 @@ class UserController extends Controller
     public function notifications(Request $request): View | JsonResponse
     {
         $notifications = Notification::where('user_id', Auth::guard('web')->user()->id)
-        ->orderBy('created_at', 'desc')->paginate(10);
+            ->orderBy('created_at', 'desc')->paginate(10);
 
         if ($request->ajax()) {
             $view = view('frontend.user.partials.notification-items', compact('notifications'))->render();

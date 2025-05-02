@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('vehicle_id');
             $table->string('tariff_title');
-            $table->string('tariff_daily_price', 10, 2);
+            $table->decimal('tariff_daily_price', 10, 2);
             $table->string('tariff_from_days');
             $table->string('tariff_to_days');
             $table->string('tariff_base_km');

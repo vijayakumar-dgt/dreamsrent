@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class VehicleMeta extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     /**
