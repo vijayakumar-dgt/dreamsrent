@@ -92,7 +92,7 @@ class RolesPermissionServiceProvider extends ServiceProvider
                         ['.', ''],
                         $relativePath
                     );
-                    $key = ($relativePath === 'config.php') ? $this->nameLower : $configKey;
+                    $key = ($relativePath === 'config.php') ? $this->nameLower : (string) $configKey;
 
                     $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
                     $this->mergeConfigFrom($file->getPathname(), $key);
@@ -122,12 +122,19 @@ class RolesPermissionServiceProvider extends ServiceProvider
 
     /**
      * Get the services provided by the provider.
+     *
+     * @return string[] An array of service names provided by the provider.
      */
     public function provides(): array
     {
         return [];
     }
 
+    /**
+     * Get the paths for the publishable views.
+     *
+     * @return string[] An array of view paths.
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];

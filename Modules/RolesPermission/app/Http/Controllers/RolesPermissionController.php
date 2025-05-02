@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -14,12 +13,19 @@ use Modules\RolesPermission\Models\Module as ModuleModel;
 use Modules\RolesPermission\Models\Permission;
 use Modules\RolesPermission\Models\Role;
 
+/**
+ * @property User|null $authUser
+ */
 class RolesPermissionController extends Controller
 {
-    protected $authUser;
+    /**
+     * @var User|null
+     */
+    protected ?User $authUser;
+
     public function __construct()
     {
-        $this->authUser = current_user();
+        $this->authUser = current_user();  // current_user() should return a User model or null
     }
 
     public function index(): View
@@ -101,8 +107,7 @@ class RolesPermissionController extends Controller
                 });
             }
 
-            if ($request->has('sort_by_status') && !empty($request->sort_by_status)
-             || $request->sort_by_status == '0') {
+            if ($request->has('sort_by_status') && !empty($request->sort_by_status) || $request->sort_by_status == '0') {
                 $status = $request->sort_by_status;
                 $query->where('roles.status', $status);
             }
@@ -120,9 +125,11 @@ class RolesPermissionController extends Controller
             $totalRecords = Role::where('created_by', $userId)->count();
 
             $data = $query->skip($start)->take($length)->get()->map(function ($role) {
+                // Dynamically add the encrypted_role_id and created_date properties
                 $role->encrypted_role_id = customEncrypt($role->id, Role::$roleSecretKey);
-                $role->created_date = formatDateTime($role->created_at, false);
-                unset($role->created_at);
+                $role->created_date = formatDateTime($role->created_at, false);  // Assuming you have a helper for formatting
+                unset($role->created_at);  // Remove the created_at property to avoid conflicts
+
                 return $role;
             });
 

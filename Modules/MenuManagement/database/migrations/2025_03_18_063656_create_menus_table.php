@@ -9,7 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void // Added the return type void here
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->softDeletes(); // Adds deleted_at column for SoftDeletes
         });
     }
+
     /**
      * Reverse the migrations.
      */
