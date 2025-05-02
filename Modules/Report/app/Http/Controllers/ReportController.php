@@ -59,11 +59,23 @@ class ReportController extends Controller
             $sign = $thisWeekIncome > 0 ? '+' : '0'; // If last week was 0, show +100% increase
         }
 
+        // Fetch GeneralSetting for currency
         $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();
 
-        $currency = DB::table('currencies')->where('id', $generalSettings->value)->select('symbol')->first();
-        $symbol = $currency->symbol;
-
+        if ($generalSettings !== null) {
+            // Proceed with the currency fetching if generalSettings is found
+            $currency = DB::table('currencies')->where('id', $generalSettings->value)->select('symbol')->first();
+            if ($currency !== null && isset($currency->symbol)) {
+                $symbol = $currency->symbol;
+            } else {
+                \Log::warning("Currency or symbol not found for currency ID: " . $generalSettings->value);
+                $symbol = 'USD';  // Fallback to a default value
+            }
+        } else {
+            // Handle the case where generalSettings is not found, set a default value for symbol
+            \Log::warning("GeneralSetting not found for group_id=5 and key='currency'. Using default symbol.");
+            $symbol = 'USD'; // Fallback to a default value
+        }
 
         $bookings->groupBy(function ($booking) {
             return Carbon::parse($booking->booking_date)->format('Y-m-d'); // Group by date
@@ -84,19 +96,22 @@ class ReportController extends Controller
 
     public function earningReport(): View
     {
+        $bookings = Booking::Join('users', 'bookings.customer_id', '=', 'users.id')
+            ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
+            ->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image')
+            ->get();
 
-        $bookings = Booking::Join('users', 'bookings.customer_id', '=', 'users.id')->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image')->get();
-
-        $bookingCount = Booking::Join('users', 'bookings.customer_id', '=', 'users.id')->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image')->paginate(10);
+        $bookingCount = Booking::Join('users', 'bookings.customer_id', '=', 'users.id')
+            ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
+            ->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image')
+            ->paginate(10);
 
         $totalIncome = $bookings->sum('final_price');
-
         $totalInsurancePrice = $bookings->sum('total_insurance_price');
         $totalExtraServicePrice = $bookings->sum('total_extra_service_price');
 
         // Get overall total
         $grandTotal = $totalInsurancePrice + $totalExtraServicePrice;
-
 
         // Get total sum for this month
         $thisMonthInsurance = $bookings->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
@@ -132,8 +147,6 @@ class ReportController extends Controller
 
         $percentageBreakChangeFormatted = $signbreak . (abs($percentageBreakChange)) . '%';
 
-
-
         // Get the total earnings per vehicle
         $earningsByCar = $bookings
             ->groupBy('vehicle_id')
@@ -151,7 +164,6 @@ class ReportController extends Controller
 
         // Get active vehicles
         $vehicleInfo = VehicleInfo::where('status', 1)->whereNull('deleted_at')->get();
-
 
         $thisMonthIncome = $bookings->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->sum('final_price');
@@ -207,11 +219,26 @@ class ReportController extends Controller
 
         $percentageCarChangeFormatted = $signCar . (abs($percentageCarChange)) . '%';
 
+        // Fetch GeneralSetting for currency
         $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();
 
-        $currency = \DB::table('currencies')->where('id', $generalSettings->value)->select('symbol')->first();
-        $symbol = $currency->symbol;
-
+        if ($generalSettings !== null) {
+            // Proceed with the currency fetching if generalSettings is found
+            $currency = \DB::table('currencies')->where('id', $generalSettings->value)->select('symbol')->first();
+            
+            if ($currency !== null && isset($currency->symbol)) {
+                $symbol = $currency->symbol;
+            } else {
+                \Log::warning("Currency or symbol not found for currency ID: " . $generalSettings->value);
+                $symbol = 'USD';  // Fallback to a default value
+            }
+            
+            
+        } else {
+            // Handle the case where generalSettings is not found, set a default value for symbol
+            \Log::warning("GeneralSetting not found for group_id=5 and key='currency'. Using default symbol.");
+            $symbol = 'USD'; // Fallback to a default value
+        }
 
         return view('report::earningReport', compact("symbol", "bookings", "totalIncome", "percentageChangeFormatted", "sign", "vehicle", "topEarningCarTotal", "percentageCarChangeFormatted", "signCar", "grandTotal", "percentageBreakChangeFormatted", "signbreak", "bookingCount"));
     }
