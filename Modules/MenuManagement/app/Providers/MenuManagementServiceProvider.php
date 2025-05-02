@@ -116,10 +116,20 @@ class MenuManagementServiceProvider extends ServiceProvider
     /**
      * Get the services provided by the provider.
      */
+    /**
+ * Get the services provided by the provider.
+ *
+ * @return array<string>  // List of string service names
+ */
     public function provides(): array
     {
         return [];
     }
+    /**
+ * Get the paths for publishable views.
+ *
+ * @return array<string>  // Indicates the array contains strings (paths)
+ */
 
     private function getPublishableViewPaths(): array
     {

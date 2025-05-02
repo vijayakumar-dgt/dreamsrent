@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\RolesPermission\Database\Factories\RoleFactory;
 
+/**
+ * @property string $encrypted_role_id
+ * @property \Carbon\Carbon $created_at
+ * @property string $created_date
+ */
+
 class Role extends Model
 {
     use HasFactory;

@@ -873,6 +873,8 @@ class UserBookingController extends Controller
                 return response()->json(['error' => __('web.home.failed_to_create_booking')], 500);
             }
         }
+
+        return response()->json(['error' => __('web.home.failed_to_create_booking')], 500);
     }
 
     public function paypalPaymentSuccess(Request $request): JsonResponse|RedirectResponse

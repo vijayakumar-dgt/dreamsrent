@@ -3,14 +3,14 @@
 namespace Modules\Booking\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\Booking\Database\Factories\BookingUserInfoFactory;
-
+/**
+ * @property string|null $first_name
+ * @property string|null $last_name
+ */
 class BookingUserInfo extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     /**
@@ -38,9 +38,4 @@ class BookingUserInfo extends Model
         'add_info',
         'terms_check',
     ];
-
-    // protected static function newFactory(): BookingUserInfoFactory
-    // {
-    //     // return BookingUserInfoFactory::new();
-    // }
 }

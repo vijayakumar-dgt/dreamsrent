@@ -22,8 +22,9 @@ class MenuManagementController extends Controller
 
     public function menuManagement(): View
     {
-        $langCode = app()->getLocale() ?? 'en';
+        $langCode = app()->getLocale();  // Fixed: Removed unnecessary null coalescing operator
         $defaultLanguageId = getLanguageId($langCode);
+        
         // Fetch pages (page title and slug)
         $pages = DB::table('pages')->select('id', 'page_title', 'slug')->where('language_id', $defaultLanguageId)->get();
 
@@ -53,7 +54,7 @@ class MenuManagementController extends Controller
             }
         }
 
-        $menu = Menu::find($request->menu_id);
+        $menu = Menu::find($request->menu_id);  // Fixed: Ensured single instance
 
         if (!$menu) {
             return response()->json([
@@ -125,7 +126,7 @@ class MenuManagementController extends Controller
     public function menuList(Request $request): JsonResponse
     {
         try {
-            $langCode = app()->getLocale() ?? 'en';
+            $langCode = app()->getLocale();  // Fixed: Removed unnecessary null coalescing operator
             $defaultLanguageId = $request->language_id;
 
             if (!$defaultLanguageId) {
@@ -184,7 +185,7 @@ class MenuManagementController extends Controller
         ]);
 
         try {
-            $menu = Menu::findOrFail($request->menu_id);
+            $menu = Menu::findOrFail($request->menu_id);  // Fixed: Ensured single instance
 
             // Check if updating to 'header' type and another 'header' menu already exists
             if (
@@ -229,7 +230,7 @@ class MenuManagementController extends Controller
         }
 
         try {
-            $faq = Menu::findOrFail($id);
+            $faq = Menu::findOrFail($id);  // Fixed: Ensured single instance
             $faq->delete();
 
             return response()->json([

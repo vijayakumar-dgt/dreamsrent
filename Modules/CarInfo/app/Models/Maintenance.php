@@ -8,7 +8,20 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\CarInfo\Database\Factories\MaintananceFactory;
-
+/**
+ * @property int $id
+ * @property int $vehicle_id
+ * @property string $odometer
+ * @property string|null $start_date
+ * @property string|null $end_date
+ * @property string $details
+ * @property int $status
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $deleted_at
+ * @property string|array<string>|null $vehicle_image
+ * @property string|null $status_text
+ */
 class Maintenance extends Model
 {
     use SoftDeletes;

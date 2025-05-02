@@ -141,7 +141,7 @@
 
 	<script src="{{ asset('assets/js/permission/permission-script.js') }}"></script>
 
-	<script src="{{ asset('assets/js/custom/custom-script.js') }}"></script>
+	<script src="{{ asset('assets/js/custom/custom-script.js?v=1.1') }}"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
