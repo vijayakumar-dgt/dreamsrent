@@ -43,7 +43,7 @@ class MenuManagementController extends Controller
             'menu_id' => 'required|exists:menus,id',
             'menu_items' => 'required|array|min:1',
         ]);
-
+    
         foreach ($request->menu_items as $item) {
             if (empty($item['link'])) {
                 return response()->json([
@@ -53,21 +53,22 @@ class MenuManagementController extends Controller
                 ], 422);
             }
         }
-
-        $menu = Menu::find($request->menu_id);  // Fixed: Ensured single instance
-
+    
+        // Use `first()` instead of `find()` to avoid possible collection ambiguity
+        $menu = Menu::where('id', $request->menu_id)->first();
+    
         if (!$menu) {
             return response()->json([
                 'code' => 404,
                 'success' => false,
-                'message' => 'Menu not found'
+                'message' => 'Menu not found',
             ], 404);
         }
-
+    
         $menu->update([
             'menus' => json_encode($request->menu_items),
         ]);
-
+    
         return response()->json([
             'code' => 200,
             'success' => true,
@@ -75,6 +76,7 @@ class MenuManagementController extends Controller
             'menu' => $menu
         ], 200);
     }
+    
 
     public function menuStore(Request $request): JsonResponse
     {
@@ -174,7 +176,6 @@ class MenuManagementController extends Controller
 
     public function menuUpdate(Request $request): JsonResponse
     {
-        // Validate request data
         $request->validate([
             'menu_id' => 'required|exists:menus,id',
             'editMenuType' => 'required',
@@ -183,14 +184,18 @@ class MenuManagementController extends Controller
             'menu_status' => 'nullable|in:on,off',
             'language' => 'required|integer',
         ]);
-
+    
         try {
-            $menu = Menu::findOrFail($request->menu_id);  // Fixed: Ensured single instance
-
-            // Check if updating to 'header' type and another 'header' menu already exists
+            /** @var \Modules\MenuManagement\Models\Menu $menu */
+            $menu = Menu::findOrFail($request->menu_id);
+    
+            // Prevent duplicate header menus for the same language
             if (
                 $request->editMenuType == 'header' &&
-                Menu::where(['menu_type' => 'header', 'language_id' => $request->language])->where('id', '!=', $request->menu_id)->exists()
+                Menu::where('menu_type', 'header')
+                    ->where('language_id', $request->language)
+                    ->where('id', '!=', $request->menu_id)
+                    ->exists()
             ) {
                 return response()->json([
                     'code' => 422,
@@ -198,8 +203,7 @@ class MenuManagementController extends Controller
                     'errors' => ['editMenuType' => [__('admin.cms.header_menu_exists')]],
                 ], 422);
             }
-
-            // Update menu
+    
             $menu->update([
                 'name' => $request->editMenuName,
                 'permenantlink' => $request->editMenuPermalink,
@@ -207,36 +211,44 @@ class MenuManagementController extends Controller
                 'language_id' => $request->language,
                 'menu_type' => $request->editMenuType,
             ]);
-
+    
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.cms.menu_update_success'),
                 'data' => $menu
             ]);
         } catch (\Exception $e) {
+            \Log::error('Menu update failed: ' . $e->getMessage());
             return response()->json([
                 'code' => 500,
                 'message' => __('admin.common.default_update_error'),
             ], 500);
         }
     }
-
+    
     public function menuDelete(Request $request): JsonResponse
     {
         $id = $request->id;
-
+    
         if (!$id) {
             return response()->json(['code' => 400, 'message' => 'Menu ID is required.'], 400);
         }
-
+    
         try {
-            $faq = Menu::findOrFail($id);  // Fixed: Ensured single instance
-            $faq->delete();
-
+            // Use firstOrFail to ensure a single model is returned
+            $menu = Menu::where('id', $id)->firstOrFail();
+    
+            $menu->delete();
+    
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.cms.menu_delete_success'),
             ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'code' => 404,
+                'message' => 'Menu not found.',
+            ], 404);
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -245,4 +257,6 @@ class MenuManagementController extends Controller
             ], 500);
         }
     }
+    
+    
 }

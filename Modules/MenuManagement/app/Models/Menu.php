@@ -4,11 +4,10 @@ namespace Modules\MenuManagement\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 /**
  * @property string|null $menus
- * @property array|null $menus_array
- * @property array|null $parsed_menus
+ * @property array<int, mixed>|null $menus_array
+ * @property array<string, mixed>|null $parsed_menus
  */
 class Menu extends Model
 {
