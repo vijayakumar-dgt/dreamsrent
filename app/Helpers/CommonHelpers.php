@@ -158,7 +158,7 @@ function customEncrypt(string|int|null $data, string $key = 'default_secret_key'
 {
     $cipher = 'AES-128-CBC';
     $iv = substr(md5($key), 0, 16);
-    $encrypted = openssl_encrypt($data, $cipher, $key, 0, $iv);
+    $encrypted = openssl_encrypt((string) $data, $cipher, $key, 0, $iv);
 
     if ($encrypted === false) {
         return ''; // or throw an exception depending on your needs
@@ -172,7 +172,7 @@ function customDecrypt(string|int|null $encryptedData, string $key = 'default_se
     $cipher = 'AES-128-CBC';
     $iv = substr(md5($key), 0, 16);
 
-    $encryptedData = strtr($encryptedData, '-_', '+/');
+    $encryptedData = strtr((string)$encryptedData, '-_', '+/');
     $decoded = base64_decode($encryptedData, true);
 
     if ($decoded === false) {
@@ -189,9 +189,9 @@ function getDefaultCurrencySymbol(): string
     $defaultCurrency = GeneralSetting::where('key', 'currency_symbol')->first();
     $currencyId = $defaultCurrency->value ?? '';
     if ($currencyId) {
-        $currency = Currency::find((string) $currencyId); // or (int) if it's numeric
+        $currency = Currency::find((string) $currencyId);
         if ($currency instanceof Currency) {
-            return $currency->symbol;
+            return $currency->symbol ?? '$';
         }
     }
     return '$';
@@ -212,10 +212,13 @@ function isRTL(?string $languageCode = null): bool
 }
 
 if (!function_exists('formatFileSize')) {
-    function formatFileSize(int $bytes): string
+    function formatFileSize(int|string $bytes): string
     {
+        $bytes = (int) $bytes;
+        if ($bytes === 0) return '0 B';
+
         $sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-        $factor = floor((strlen($bytes) - 1) / 3);
+        $factor = floor(log($bytes, 1024));
         return sprintf("%.2f", $bytes / pow(1024, $factor)) . ' ' . $sizes[$factor];
     }
 }
@@ -255,7 +258,6 @@ function hasPermission(Collection $permissions, $moduleSlug, string $action): bo
     $user = current_user();
 
     $userType = $user->user_type ?? '';
-
     if ($userType == 1) {
         return true;
     }
@@ -294,18 +296,26 @@ function rentalNotificationEnabled(): int
     }
     return 0;
 }
-function sendNotification($email, $slug, $notifyData = [])
+/**
+ * Send a notification to the given email based on the provided slug and data.
+ *
+ * @param string $email
+ * @param string $slug
+ * @param array<string, mixed> $notifyData
+ * @return void
+ */
+function sendNotification(string $email, string $slug, array $notifyData = []): void
 {
     $notificationType = NotificationType::where('slug', $slug)->first();
     if (!$notificationType) {
-        return null;
+        return;
     }
-    $placeholders = json_decode($notificationType->tags, true);
+    $placeholders = json_decode($notificationType->getAttribute('tags'), true);
     $template = EmailTemplate::where('notification_type', $notificationType->id)
         ->where('status', 1)
         ->first();
     if (!$template) {
-        return null;
+        return;
     }
 
     $replaced = function ($text) use ($placeholders, $notifyData) {
@@ -323,13 +333,13 @@ function sendNotification($email, $slug, $notifyData = [])
     };
 
     if (!$email) {
-        return null;
+        return;
     }
     $parsedTemplate = [
         'subject'     => $replaced($template->subject),
         'content' => $replaced($template->description),
-        'sms_content' => $replaced($template->sms_content),
-        'notification_content' => $replaced($template->notification_content),
+        'sms_content' => $replaced($template->sms_content ?? ''),
+        'notification_content' => $replaced($template->notification_content ?? ''),
     ];
 
     if (!empty($parsedTemplate)) {
@@ -358,22 +368,29 @@ function getLanguageId(?string $langCode = 'en'): int
     return $languageId ?? 1;
 }
 
-function getProfileImage()
+/**
+ * Get the profile image URL of the current user.
+ *
+ * @return string|null
+ */
+function getProfileImage(): ?string
 {
+    /** @var \App\Models\User|null $user */
     $user = current_user();
-    if ($user) {
-        $userDetails = $user->userDetail;
-        if ($userDetails) {
-            return uploadedAsset($userDetails->profile_image, 'profile');
-        }
+
+    if ($user && $user->userDetail) {
+        $asset = uploadedAsset($user->userDetail->profile_image, 'profile');
+        return is_array($asset) ? $asset['url'] : $asset;
     }
+
+    return null;
 }
 
 function isAccessMenu(?string $menu): int
 {
     $value = 0;
     if ($menu == 'reservation') {
-        $value = GeneralSetting::where(['group_id' => 20, 'key' => 'reservation'])->pluck('value')->first();
+        $value = GeneralSetting::where(['group_id' => 20, 'key' => 'reservation'])->value('value');
     }
     if ($value) {
         return $value;
@@ -383,13 +400,12 @@ function isAccessMenu(?string $menu): int
 
 if (!function_exists('getBaseUrl')) 
 {
-    function getBaseUrl()
-    {
-        if (app()->runningInConsole()) {
-            return 1;
-            return config('app.url');
-        }
-
-        return request()->getSchemeAndHttpHost();
+  function getBaseUrl(): string
+{
+    if (app()->runningInConsole()) {
+        return config('app.url');
     }
+
+    return request()->getSchemeAndHttpHost();
+}
 }

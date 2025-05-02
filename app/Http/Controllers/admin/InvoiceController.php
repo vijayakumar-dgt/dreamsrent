@@ -9,7 +9,6 @@ use Modules\GeneralSetting\Models\Currency;
 use Modules\CarInfo\Models\VehicleInfo;
 use App\Models\User;
 use App\Models\Invoice;
-use App\Models\InvoiceItem;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -37,7 +36,7 @@ class InvoiceController extends Controller
     public function addInvoice(): View
     {
         $authId = current_user();
-        $languageId = $authId->language_id;
+        $languageId = $authId->language_id ?? null;
         $cars = VehicleInfo::where('status', 1)->where('deleted_at', null)->where('language_id', $languageId)->get();
         $currencies = Currency::where('status', 1)->where('deleted_at', null)->get();
         $users = User::where('status', 1)->where('deleted_at', null)->get();
@@ -45,8 +44,8 @@ class InvoiceController extends Controller
         $payments = GeneralSetting::where('group_id', 13)->where('value', 1)->get();
         $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();
 
-        $currency = DB::table('currencies')->where('id', $generalSettings->value)->select('symbol')->first();
-        $symbol = $currency->symbol;
+        $currency = $generalSettings ? DB::table('currencies')->where('id', $generalSettings->value)->select('symbol')->first() : null;
+        $symbol = $currency->symbol ?? '$';
 
         $bookings = Booking::Join('users', 'bookings.customer_id', '=', 'users.id')
         ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
@@ -166,8 +165,8 @@ class InvoiceController extends Controller
         $payments = GeneralSetting::where('group_id', 13)->where('value', 1)->get();
         $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();
 
-        $currency = DB::table('currencies')->where('id', $generalSettings->value)->select('symbol')->first();
-        $symbol = $currency->symbol;
+        $currency = DB::table('currencies')->where('id', ($generalSettings->value ?? ''))->select('symbol')->first();
+        $symbol = $currency->symbol ?? '$';
 
         $bookings = Booking::Join('users', 'bookings.customer_id', '=', 'users.id')
         ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
