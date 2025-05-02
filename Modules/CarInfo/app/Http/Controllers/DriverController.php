@@ -90,6 +90,13 @@ class DriverController extends Controller
             if (empty($id)) {
                 if ($request->hasFile('image')) {
                     $file = $request->file('image');
+                    if(!$file || !$file->isValid()) {
+                        return response()->json([
+                            'status' => 'error',
+                            'code'   => 422,
+                            'message' => __('admin.common.file_upload_error')
+                        ], 422);
+                    }
                     $data['image'] = uploadFile($file, 'drivers');
                 }
                 $assignedCars = $request->assigned_cars ;
@@ -98,53 +105,69 @@ class DriverController extends Controller
                 }
                 $driver = Driver::create($data);
 
-                if ($request->hasFile('documents')) {
-                    foreach ($request->file('documents') as $file) {
-                        $document = uploadFile($file, 'drivers');
-                        DriverDocument::create([
-                            'driver_id' => $driver->id,
-                            'document' => $document,
-                        ]);
-                    }
+                $documents = $request->file('documents');
+
+                if ($documents instanceof \Illuminate\Http\UploadedFile) {
+                    $documents = [$documents]; // Wrap in array if only one file is uploaded
                 }
+                
+                foreach ($documents ?? [] as $file) {
+                    // No need to check instanceof, we assume it's a valid UploadedFile
+                    $document = uploadFile($file, 'drivers');
+                    DriverDocument::create([
+                        'driver_id' => $driver->id,
+                        'document' => $document,
+                    ]);
+                }
+                
+                                 
             } else {
+                /** @var \Modules\CarInfo\Models\Driver */
                 $driver = Driver::find($id);
                 $oldImage = $driver->image;
 
                 if ($request->hasFile('image')) {
                     $file = $request->file('image');
-                    $data['image'] = uploadFile($file, 'drivers', $oldImage);
+                    if($file && $file->isValid()){
+                        $oldImage = is_string($oldImage) ? $oldImage : '';
+                        $data['image'] = uploadFile($file, 'drivers', $oldImage);
+                    }
                 }
 
                 $assignedCars = $request->assigned_cars ;
                 if (is_array($assignedCars)) {
                     $data['assigned_cars'] = implode(',', $assignedCars);
                 }
+                $documents = $request->file('documents');
 
-                if ($request->hasFile('documents')) {
-                    foreach ($request->file('documents') as $file) {
-                        if ($file->isValid()) {
-                            $document = uploadFile($file, 'drivers');
-                            DriverDocument::create([
-                            'driver_id' => $driver->id,
-                            'document' => $document,
-                            ]);
+                if ($documents instanceof \Illuminate\Http\UploadedFile) {
+                    $documents = [$documents]; // Wrap in array if only one file is uploaded
+                }
+                foreach($documents ?? [] as $file) {
+                    // No need to check instanceof, we assume it's a valid UploadedFile
+                    $document = uploadFile($file, 'drivers');
+                    DriverDocument::create([
+                        'driver_id' => $driver->id,
+                        'document' => $document,
+                    ]);
+                }
+                
+                $removedDocuments = explode(',', $request->removed_documents);
+
+                foreach ($removedDocuments as $docId) {
+                    $removedDocument = DriverDocument::where('id', $docId)->first();
+                    if ($removedDocument) {
+                        $doc = $removedDocument->document;
+
+                        if (is_string($doc) && Storage::disk('public')->exists('drivers/' . $doc)) {
+                            Storage::disk('public')->delete('drivers/' . $doc);
                         }
                     }
-                }
-                $removedDocuments = explode(',', $request->removed_documents);
-                if (!empty($removedDocuments)) {
-                    foreach ($removedDocuments as $docId) {
-                        $removedDocument = DriverDocument::where('id', $docId)->first();
-                        if ($removedDocument) {
-                            $doc = $removedDocument->document;
-                            if (Storage::disk('public')->exists('/' . $doc)) {
-                                Storage::disk('public')->delete('drivers/' . $doc);
-                            }
-                        }
+                    if(DriverDocument::where('id', $docId)->exists()){
                         DriverDocument::where('id', $docId)->delete();
                     }
                 }
+
                 $data['status'] = $request->status;
                 Driver::where('id', $id)->update($data);
             }
@@ -155,6 +178,7 @@ class DriverController extends Controller
                 'message' => $successMsg
             ]);
         } catch (\Exception $e) {
+            dd($e);
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
@@ -245,8 +269,8 @@ class DriverController extends Controller
             // Format Response Data
             $drivers->map(function ($driver) {
                 $assignedCarIds = explode(',', $driver->assigned_cars);
-                $firstCarId = isset($assignedCarIds[0]) ? trim($assignedCarIds[0]) : null;
-
+                $firstCarId = !empty($assignedCarIds[0]) ? trim($assignedCarIds[0]) : null;
+                
                 if ($firstCarId) {
                     $vehicle = VehicleInfo::where('vehicle_info.id', $firstCarId)
                         ->join('cartypes', 'cartypes.id', '=', 'vehicle_info.type_id')
@@ -263,7 +287,8 @@ class DriverController extends Controller
 
                 // Format date and image
                 $driver->valid_date = formatDateTime($driver->valid_date, false);
-                $driver->image = uploadedAsset($driver->image, 'profile');
+                $imagePath = is_array($driver->image) ? null : $driver->image;
+                $driver->image = uploadedAsset($imagePath, 'profile');
 
                 return $driver;
             });
@@ -287,9 +312,12 @@ class DriverController extends Controller
     public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
+        /** @var \Modules\CarInfo\Models\Driver|null $data */
         $data = Driver::with('documents')->find($id);
+
         if ($data) {
-            $data->image = uploadedAsset($data->image, "profile");
+            $imagePath = is_array($data->image) ? null : $data->image;
+            $data->image = uploadedAsset($imagePath, "profile");
         }
 
         return response()->json([
@@ -398,7 +426,8 @@ class DriverController extends Controller
                 ->first();
 
             if ($driver) {
-                $driver->image = uploadedAsset($driver->image, 'profile');
+                $imagePath = is_array($driver->image) ? null : $driver->image;
+                $driver->image = uploadedAsset($imagePath, 'profile');
             }
 
             return response()->json([

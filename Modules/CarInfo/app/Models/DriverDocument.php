@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 // use Modules\CarInfo\Database\Factories\DriverDocumentFactory;
-
+/**
+ * @property int $id
+ * @property int $driver_id
+ * @property string|array<string>|null $document
+ */
 class DriverDocument extends Model
 {
 
