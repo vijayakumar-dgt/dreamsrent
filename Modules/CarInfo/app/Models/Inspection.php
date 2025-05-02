@@ -8,7 +8,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\CarInfo\Database\Factories\InspectionFactory;
-
+/**
+ * @property int $id
+ * @property int $vehicle_info_id
+ * @property string $inspection_date
+ * @property double $odometer
+ * @property int $inspector_id
+ * @property double $fuel
+ * @property string $notes
+ * @property string $inspection_status
+ * @property string $repair_status
+ * @property string|null $check_list
+ * @property string|null $inspectiondate
+ */
 class Inspection extends Model
 {
     use SoftDeletes;

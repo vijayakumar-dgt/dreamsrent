@@ -6,6 +6,8 @@
     const $intlPhoneInput = $("#international_phone_number");
     const $userProfileForm = $("#locationForm");
     const iti = window.intlTelInput($userPhoneInput[0], {
+        initialCountry: "auto",
+        nationalMode: false,
         utilsScript: `${window.location.origin}/frontend/assets/plugins/intltelinput/js/utils.js`,
         separateDialCode: true,
     });
@@ -69,7 +71,7 @@
                     required: true,
                     email: true,
                 },
-                mobile: {
+                international_phone_number: {
                     required: true,
                     digits: true, 
                     minlength: 10, 
@@ -108,7 +110,7 @@
                     required:_l('admin.common.email_required'),
                     email: _l('admin.common.email_valid'),
                 },
-                mobile: {
+                international_phone_number: {
                     required: _l('admin.common.phone_number_required'),
                     pattern: _l('admin.manage.valid_phone_number'),
                 },
@@ -149,6 +151,7 @@
             submitHandler: function (form) {
                 
                 let locationFormData = new FormData(form);
+                locationFormData.set('international_phone_number', iti.getNumber());
                 $("#add_location .submitbtn").html(`<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}...`);
                 $("#add_location .submitbtn").prop("disabled", true);
                 $.ajax({
@@ -425,10 +428,12 @@
                     }
                     $("#email").val(data.email);
                     if(data.phone && data.phone.length > 0){
-                        iti.setNumber(data.phone);
+                        let cleanPhone = data.phone.replace(/[^+\d]/g, '');
+                        iti.setNumber(cleanPhone);
+                        $("#international_phone_number").val(cleanPhone);
                     }else{
                         iti.setNumber("");
-                        iti.setCountry("in");
+                        $("#international_phone_number").val("");
                     }
                     $("#address").val(data.address);
                     $("#pincode").val(data.pincode);

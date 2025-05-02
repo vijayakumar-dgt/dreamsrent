@@ -286,7 +286,7 @@
                         <div class="d-flex justify-content-between align-items-center w-100">
                             <div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
                                 <label for="status" class="form-check-label form-label mt-0 mb-0">
-                                <input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked>
+                                <input class="form-check-input form-label me-2 status" name="status" id="status" type="checkbox" role="switch" checked>
                                     {{ __('admin.common.status') }}
                                 </label>
                             </div>
@@ -306,8 +306,7 @@
         <div class="modal fade deletemodal" id="delete-modal">
             <div class="modal-dialog modal-dialog-centered modal-sm">
                 <div class="modal-content">
-                    <form action="" id="deleteExtraService">
-                        @csrf
+                    <form id="deleteExtraService">
                         <input type="hidden" name="delete_id" id="delete_id">
                     <div class="modal-body text-center">
                         <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">

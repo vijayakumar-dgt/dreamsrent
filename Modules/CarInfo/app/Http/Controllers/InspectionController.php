@@ -21,7 +21,7 @@ class InspectionController extends Controller
     public function index(): View
     {
         $cars = DB::table('vehicle_info')->select('id', 'name')->where('deleted_at', null)->orderBy('name', 'asc')->get();
-        $users = DB::table('users')->select('id', 'name')->orderBy('name', 'asc')->get();
+        $users = DB::table('users')->select('id', 'name')->where('user_type',2)->orderBy('name', 'asc')->get();
         $checklists = Checklist::where('status', true)->orderBy('name', 'asc')->get();
         $data = [
             'cars' => $cars,
@@ -71,12 +71,20 @@ class InspectionController extends Controller
 
         try {
             if ($request->has('id') && $request->id != null) {
+                /** @var \Modules\CarInfo\Models\Inspection */
                 $inspection = Inspection::find($request->id);
+                if($inspection == null) {
+                    return response()->json([
+                        'status' => 'error',
+                        'code' => 404,
+                        'message' => 'Inspection not found.',
+                    ], 404);
+                }
             } else {
                 $inspection = new Inspection();
             }
-            $inspection->vehicle_info_id = $request->vehicle_info_id;
-            $inspection->inspection_date = $request->inspection_date ? Carbon::parse($request->inspection_date)->format('Y-m-d') : null;
+            $inspection->vehicle_info_id = $request->vehicle_info_id;   
+            $inspection->inspection_date = Carbon::parse($request->inspection_date)->format('Y-m-d');
             $inspection->inspector_id = $request->inspection_by;
             $inspection->odometer = $request->odometer;
             $inspection->fuel = $request->fuel;
@@ -84,8 +92,19 @@ class InspectionController extends Controller
             $inspection->inspection_status = $request->inspection_status;
             $inspection->repair_status = $request->repair_status;
             if ($request->has('checklist_id') && is_array($request->checklist_id) && count($request->checklist_id) > 0) {
-                $inspection->check_list = json_encode($request->checklist_id);
+                // Attempt to encode the checklist data
+                $encodedChecklist = json_encode($request->checklist_id);
+            
+                // Check if json_encode was successful
+                if ($encodedChecklist === false) {
+                    // If encoding fails, set check_list to null (or an empty string)
+                    $inspection->check_list = null;
+                } else {
+                    // If encoding is successful, assign the encoded data
+                    $inspection->check_list = $encodedChecklist;
+                }
             }
+            
             $inspection->save();
             return response()->json([
                 'status' => 'success',
@@ -141,7 +160,7 @@ class InspectionController extends Controller
     }
 
 
-    public function getInspection($id): JsonResponse
+    public function getInspection(int $id): JsonResponse
     {
         try {
             $inspection = Inspection::with('car', 'inspector')
@@ -163,7 +182,7 @@ class InspectionController extends Controller
     public function deleteInspection(Request $request): JsonResponse
     {
         try {
-            $inspection = Inspection::findOrFail($request->delete_id);
+            $inspection = Inspection::where('id',$request->delete_id)->firstOrFail();
             $inspection->delete();
             return response()->json([
                 'status' => 'success',
@@ -191,7 +210,8 @@ class InspectionController extends Controller
                        ->when($request->has('search') && $request->search != null, function ($query) use ($request) {
                            $query->where('name', 'like', '%' . $request->search . '%');
                        })
-                       ->get(['id', 'name'])->map(function ($vehicle) {
+                       ->get(['id', 'name'])
+                       ->map(function (VehicleInfo $vehicle) {
                            return [
                                'id' => $vehicle->id,
                                'text' => $vehicle->name

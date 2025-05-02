@@ -7,6 +7,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\CarInfo\Database\Factories\ExtraServiceFactory;
 
+/**
+ *  @property int $id
+ *  @property string $name
+ *  @property string|array<string>|null $icon
+ *  @property string|array<string>|null $image
+ *  @property string $description
+ *  @property int $status
+ *  @property int $language_id
+ *  @property \Illuminate\Support\Carbon $created_at
+ *  @property \Illuminate\Support\Carbon $updated_at
+ *  @property \Illuminate\Support\Carbon $deleted_at
+ *  @property double $price
+ */
 class ExtraService extends Model
 {
     use SoftDeletes;

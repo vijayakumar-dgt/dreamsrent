@@ -183,6 +183,18 @@ $(document).ready(function(){
                        showToast('success', resp.message);
                        $("#add_inspection").modal('hide');
                        initTable();
+                       //reset form
+                        $("#inspectionForm")[0].reset();
+                        $("#inspectionForm #id").val('');
+                        $("#inspectionForm input[type=checkbox]").prop('checked', false);
+                        $(".error-text").text("");
+                        $(".form-control").removeClass("is-invalid is-valid");
+                        //empty select2
+                        $('#vehicle_info_id').val(null).trigger('change');
+                        $('#inspection_by').val(null).trigger('change');
+                        $('#inspection_status').val(null).trigger('change');
+                        $('#repair_status').val(null).trigger('change');
+                        $('#checklist_id').val(null).trigger('change');
                    }
                },
                error:function(error){
@@ -359,6 +371,35 @@ function initTable(statusFilter = null){
     });
 }
 
+$("#deleteInspection").on('submit', function(e){
+    e.preventDefault();
+    $("#deleteInspection .submitbtn").text('Please Wait...');
+    $("#deleteInspection .submitbtn").prop('disabled', true);
+    $.ajax({
+        type:"POST",
+        url:"/admin/delete_inspection",
+        data:$("#deleteInspection").serialize(),
+        success:function(response){
+            if(response.code === 200){
+                showToast('success', response.message);
+                $("#delete-modal").modal('hide');
+                initTable();
+            }else{
+                showToast('error', response.message);
+                $("#delete-modal").modal('hide');
+            }
+            $("#deleteInspection .submitbtn").text('Yes, Delete');
+            $("#deleteInspection .submitbtn").prop('disabled', false);
+        },
+        error:function(error){
+          showToast('error', error.responseJSON.message);
+          $("#delete-modal").modal('hide');
+          $("#deleteInspection .submitbtn").text('Yes, Delete');
+          $("#deleteInspection .submitbtn").prop('disabled', false);
+        }
+    });
+});
+
 }) ();
 
 
@@ -372,6 +413,11 @@ $(document).on('click','#add_new_inspection', function(){
     $(".error-text").text("");
     $(".form-control").removeClass("is-invalid is-valid");
     $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
+    $('#vehicle_info_id').val(null).trigger('change');
+    $('#inspection_by').val(null).trigger('change');
+    $('#inspection_status').val(null).trigger('change');
+    $('#repair_status').val(null).trigger('change');
+    $('#checklist_id').val(null).trigger('change');
 });
 
 function editInspection(id){
@@ -413,7 +459,6 @@ function editInspection(id){
                 $("#add_inspection .submitbtn").text(_l('admin.common.save_changes'));
                 $(".error-text").text("");
                 $(".form-control").removeClass("is-invalid is-valid");
-                $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
 
                 $("#add_inspection").modal('show');
             
@@ -431,34 +476,7 @@ function deleteInspection(id){
     $("#delete_id").val(id);
 }
 
-$("#deleteInspection").on('submit', function(e){
-    e.preventDefault();
-    $("#deleteInspection .submitbtn").text('Please Wait...');
-    $("#deleteInspection .submitbtn").prop('disabled', true);
-    $.ajax({
-        type:"POST",
-        url:"/admin/delete_inspection",
-        data:$("#deleteInspection").serialize(),
-        success:function(response){
-            if(response.code === 200){
-                showToast('success', response.message);
-                $("#delete-modal").modal('hide');
-                initTable();
-            }else{
-                showToast('error', response.message);
-                $("#delete-modal").modal('hide');
-            }
-            $("#deleteInspection .submitbtn").text('Yes, Delete');
-            $("#deleteInspection .submitbtn").prop('disabled', false);
-        },
-        error:function(error){
-          showToast('error', error.responseJSON.message);
-          $("#delete-modal").modal('hide');
-          $("#deleteInspection .submitbtn").text('Yes, Delete');
-          $("#deleteInspection .submitbtn").prop('disabled', false);
-        }
-    });
-});
+
 function formatInspectionStatus(_status){
     let inspection_status = "";
     switch (_status) {
