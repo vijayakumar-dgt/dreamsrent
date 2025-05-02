@@ -15,9 +15,14 @@ class ForgotPasswordOtp extends Mailable
     use SerializesModels;
 
     /**
-     * Create a new message instance.
+     * @var array<string, string>
      */
     protected $data;
+    /**
+     * Create a new message instance.
+     *
+     * @param array<string, string> $data
+     */
     public function __construct($data)
     {
         $this->data = $data;

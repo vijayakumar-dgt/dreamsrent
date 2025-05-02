@@ -9,6 +9,7 @@ use Modules\GeneralSetting\Models\UserDevice;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\EmailTemplate;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -16,39 +17,40 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\View\View;
 use Jenssegers\Agent\Agent;
 
 class UserLoginRegisterController extends Controller
 {
-    public function userLogin()
+    public function userLogin(): RedirectResponse|View
     {
         if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.login');
     }
-    public function userRegister()
+    public function userRegister(): RedirectResponse|View
     {
         if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.register');
     }
-    public function forgotPassword()
+    public function forgotPassword(): RedirectResponse|View
     {
         if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.forgot-password');
     }
-    public function resetPassword()
+    public function resetPassword(): RedirectResponse|View
     {
         if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.password-reset');
     }
-    public function resetPasswordUpdate(Request $request)
+    public function resetPasswordUpdate(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users,email',
@@ -162,22 +164,22 @@ class UserLoginRegisterController extends Controller
         } elseif ($settings['otp_type'] === 'sms') {
             // Retrieve sms template
             $notificationType = 2;
-            $template = Templates::select('subject', 'content')
-                ->where('type', 2)
-                ->where('notification_type', $notificationType)
-                ->first();
+            // $template = Templates::select('subject', 'content')
+            //     ->where('type', 2)
+            //     ->where('notification_type', $notificationType)
+            //     ->first();
 
-            if (!$template) {
-                return response()->json(['error' => 'SMS template not found'], 404);
-            }
+            // if (!$template) {
+            //     return response()->json(['error' => 'SMS template not found'], 404);
+            // }
 
             //for SMS
-            $subject = $template->subject;
-            $content = str_replace(
-                ['{{user_name}}', '{{otp}}'],
-                [$user->name, $otp],
-                $template->content
-            );
+            // $subject = $template->subject;
+            // $content = str_replace(
+            //     ['{{user_name}}', '{{otp}}'],
+            //     [$user->name, $otp],
+            //     $template->content
+            // );
         }
         // dd($subject ,  $content);
         return response()->json([
@@ -331,7 +333,7 @@ class UserLoginRegisterController extends Controller
         }
     }
 
-    public function validateEmail(Request $request)
+    public function validateEmail(Request $request): JsonResponse
     {
         $request->validate([
             'email' => 'required|email',
@@ -342,7 +344,7 @@ class UserLoginRegisterController extends Controller
         return response()->json(['exists' => $exists]);
     }
 
-    public function register(Request $request)
+    public function register(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|regex:/^[A-Za-z]+$/|min:3|max:50',
@@ -388,7 +390,8 @@ class UserLoginRegisterController extends Controller
             $template = EmailTemplate::select('subject', 'description')
                 ->where('notification_type', $notificationType)
                 ->first();
-
+            $settings = GeneralSetting::whereIn('key', ['otp_digit_limit', 'otp_expire_time', 'otp_type'])
+            ->pluck('value', 'key');
             if (!$template) {
                 return response()
                 ->json(['error' => ucfirst($settings['otp_type']) . 'Welcome Template is not Found'], 404);
@@ -482,7 +485,7 @@ class UserLoginRegisterController extends Controller
     }
 
 
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
         // Validate request
         $validator = Validator::make($request->all(), [
@@ -555,7 +558,7 @@ class UserLoginRegisterController extends Controller
         ], 401);
     }
 
-    public function userlogout()
+    public function userlogout(): RedirectResponse
     {
         Auth::guard('web')->logout();
         return redirect()->route('home');

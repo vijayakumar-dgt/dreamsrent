@@ -7,24 +7,26 @@ use PhpMqtt\Client\MqttClient;
 
 class MqttService
 {
-    protected $client;
-    protected $connected = false;
+    protected MqttClient $client;
+    protected bool $connected = false;
+    protected ConnectionSettings $connectionSettings;
 
     public function __construct()
     {
-        $server   = env('MQTT_HOST', 'broker.emqx.io');
-        $port     = env('MQTT_PORT', 1883);
+        $server   = config('mqtt.host', 'broker.emqx.io'); 
+        $port     = (int) config('mqtt.port', 1883);       
         $clientId = 'dreamsrent_' . uniqid();
         $connectionSettings = (new ConnectionSettings())
-                            ->setKeepAliveInterval(60)
-                            ->setLastWillTopic(null)
-                            ->setUsername(null)
-                            ->setPassword(null);
+            ->setKeepAliveInterval(60)
+            ->setLastWillTopic(null)
+            ->setUsername(null)
+            ->setPassword(null);
+
         $this->client = new MqttClient($server, $port, $clientId);
         $this->connectionSettings = $connectionSettings;
     }
 
-    public function connect()
+    public function connect(): void
     {
         if (!$this->connected) {
             $this->client->connect(null, true);
@@ -32,13 +34,13 @@ class MqttService
         }
     }
 
-    public function publish($topic, $message)
+    public function publish(string $topic, string $message): void
     {
         $this->connect();
         $this->client->publish($topic, $message);
     }
 
-    public function disconnect()
+    public function disconnect(): void
     {
         if ($this->connected) {
             $this->client->disconnect();

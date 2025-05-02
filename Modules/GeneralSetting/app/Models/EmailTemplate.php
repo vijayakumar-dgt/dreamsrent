@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use Modules\GeneralSetting\Database\Factories\EmailTemplateFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+/**
+ * @property string|null $subject
+ * @property string|null $description
+ */
 class EmailTemplate extends Model
 {
     use HasFactory;
