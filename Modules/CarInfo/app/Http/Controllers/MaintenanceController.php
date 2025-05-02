@@ -25,11 +25,17 @@ class MaintenanceController extends Controller
     public function store(Request $request): JsonResponse
     {
         $id = $request->id ?? '';
+        $startDate = $request->start_date 
+            ? Carbon::createFromFormat('d-m-Y', $request->start_date) 
+            : null;
+        $endDate = $request->end_date 
+            ? Carbon::createFromFormat('d-m-Y', $request->end_date) 
+            : null;
+        
         $request->merge([
-            'start_date' => Carbon::createFromFormat('d-m-Y', $request->start_date)->format('Y-m-d'),
-            'end_date'   => Carbon::createFromFormat('d-m-Y', $request->end_date)->format('Y-m-d'),
+            'start_date' => $startDate ? $startDate->format('Y-m-d') : null,
+            'end_date'   => $endDate ? $endDate->format('Y-m-d') : null,
         ]);
-
         $validator = Validator::make($request->all(), [
             'vehicle_id' => [
                 'required',
@@ -62,27 +68,23 @@ class MaintenanceController extends Controller
             $vehicleId = $request->vehicle_id;
             $startDate = $request->start_date;
             $endDate = $request->end_date;
-
             $query = Maintenance::where('vehicle_id', $vehicleId)
                 ->where(function ($q) use ($startDate, $endDate) {
                     $q->whereBetween('start_date', [$startDate, $endDate])
-                    ->orWhereBetween('end_date', [$startDate, $endDate])
-                    ->orWhere(function ($q) use ($startDate, $endDate) {
-                        $q->where('start_date', '<=', $startDate)
-                            ->where('end_date', '>=', $endDate);
-                    });
+                        ->orWhereBetween('end_date', [$startDate, $endDate])
+                        ->orWhere(function ($q) use ($startDate, $endDate) {
+                            $q->where('start_date', '<=', $startDate)
+                                ->where('end_date', '>=', $endDate);
+                        });
                 });
-
             if (!empty($id)) {
                 $query->where('id', '!=', $id);
             }
-
             if ($query->exists()) {
                 $validator->errors()->add('start_date', __('admin.rentals.date_overlap'));
                 $validator->errors()->add('end_date', __('admin.rentals.date_overlap'));
             }
         });
-
 
         if ($validator->fails()) {
             return response()->json([
@@ -216,8 +218,9 @@ class MaintenanceController extends Controller
             $data->map(function ($maintenance) {
                 $maintenance->start_date = formatDateTime($maintenance->start_date, false);
                 $maintenance->end_date = formatDateTime($maintenance->end_date, false);
-                $maintenance->vehicle_image = uploadedAsset($maintenance->vehicle_image);
-                $maintenance->odometer = number_format($maintenance->odometer, 0, ',');
+                $vehicleImage = uploadedAsset(is_array($maintenance->vehicle_image) ? null : $maintenance->vehicle_image);
+                $maintenance->vehicle_image = is_array($vehicleImage) ? $vehicleImage['url'] : $vehicleImage;
+                $maintenance->odometer = number_format((float)$maintenance->odometer, 0, ',');
 
                 $statusMap = [
                     Maintenance::$planned => __('admin.common.planned'),
@@ -247,10 +250,13 @@ class MaintenanceController extends Controller
     public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
+        /** @var \Modules\CarInfo\Models\Maintenance|null $data */
         $data = Maintenance::find($id);
         if ($data) {
-            $data->start_date = Carbon::parse($data->start_date)->format('d-m-Y');
-            $data->end_date = Carbon::parse($data->end_date)->format('d-m-Y');
+            $startDate = $data->start_date ? Carbon::createFromFormat('Y-m-d', $data->start_date) : null;
+            $endDate = $data->end_date ? Carbon::createFromFormat('Y-m-d', $data->end_date) : null;
+            $data->start_date = $startDate ? $startDate->format('d-m-Y') : null;
+            $data->end_date = $endDate ? $endDate->format('d-m-Y') : null;
         }
 
         return response()->json([
