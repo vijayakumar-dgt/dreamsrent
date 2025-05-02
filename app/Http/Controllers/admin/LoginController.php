@@ -48,11 +48,11 @@ class LoginController extends Controller
         }
         $credentials = $request->only('email', 'password');
         $remember = $request->get('remember', false);
-        if (
-            Auth::guard('admin')
-            ->attempt($credentials, $remember) && ((Auth::guard('admin')->user()->status == 1) || (Auth::guard('admin')->user()->user_type == 1) || (Auth::guard('admin')->user()->user_type == 2))
-        ) {
-            if (Auth::guard('admin')->user()->status == 0 && Auth::guard('admin')->user()->user_type == 2) {
+        if (Auth::guard('admin')->attempt($credentials, $remember)) {
+            $user = Auth::guard('admin')->user();
+        
+            if ($user && ($user->status == 1 || $user->user_type == 1 || $user->user_type == 2)) {
+                if ($user->status == 0 && $user->user_type == 2) {
                 return response()->json([
                     'status' => false,
                     'code'   => 401,
@@ -61,7 +61,7 @@ class LoginController extends Controller
             }
             $agent = new Agent();
             $ip    = $request->ip();
-            $device_type = $agent->device() ?? "";
+            $device_type = $agent->device();
             $os    = $agent->platform();
             $browser = $agent->browser();
             $locationData = Http::get("http://ip-api.com/json/{$ip}?fields=status,country,city,regionName,lat,lon")->json();
@@ -71,13 +71,16 @@ class LoginController extends Controller
             } else {
                 $localtion = $locationData['country'] . ' / ' . $locationData['city'];
             }
+            $user = Auth::guard('web')->user();
             $user_device = new UserDevice();
-            $user_device->user_id = Auth::guard('admin')->user()->id;
-            $user_device->device_type = $device_type ?? "";
-            $user_device->browser     = $browser ?? "";
-            $user_device->os          = $os ?? "";
+            if ($user && isset($user->id)) {
+                $user_device->user_id = $user->id;
+            }
+            $user_device->device_type = is_string($device_type) ? $device_type : null;
+            $user_device->browser = is_string($browser) ? $browser : null;
+            $user_device->os = is_string($os) ? $os : null;
             $user_device->ip_address  = $ip ?? "";
-            $user_device->location    = $localtion ?? "";
+            $user_device->location    = $localtion;
             $user_device->save();
             return response()->json([
                 'status' => true,
@@ -85,6 +88,7 @@ class LoginController extends Controller
                 'redirect_url' => route('dashboard'),
                 'message' => 'Login successfully',
             ]);
+         }
         } else {
             return response()->json([
                 'status' => false,
