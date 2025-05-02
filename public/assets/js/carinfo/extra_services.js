@@ -263,12 +263,12 @@
                                            ${ hasPermission(permissions, 'extra_service', 'edit') ? 
 
                                             `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(${value.id});" onclick="editExtraService(${value.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                                <a class="dropdown-item rounded-1" id="editExtraservice" href="javascript:void(${value.id});" data-id="${value.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                                             </li>`:''}
                                             ${ hasPermission(permissions, 'extra_service', 'delete') ? 
 
                                             `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(${value.id});" onclick="deleteExtraService(${value.id});" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                                <a class="dropdown-item rounded-1" id="deleteService" href="javascript:void(${value.id});" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
                                             </li>`:''}
                                         </ul>
                                     </div>
@@ -327,7 +327,39 @@
             },
         });
     }
-    
+    $(document).on('submit', '#deleteExtraService', function(e){
+        e.preventDefault();
+        let serviceFormData = new FormData(this);
+        serviceFormData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+        $.ajax({
+            type:"POST",
+            url:"/admin/delete_extra_service",
+            data: serviceFormData,
+            processData: false,
+            contentType: false,
+            beforeSend: function(){
+              $("#deleteExtraService .submitbtn").attr('disabled', true).html(_l('admin.common.please_wait'))
+            },
+            success:function(response){
+                if(response.code === 200){
+                    showToast('success', response.message);
+                    $("#delete-modal").modal('hide');
+                    initTable();
+                }else{
+                    showToast('error', response.message);
+                    $("#delete-modal").modal('hide');
+                }
+            },
+            error:function(error){
+                showToast('error', error.responseJSON.message);
+                $("#delete-modal").modal('hide');
+            },
+            complete: function(){
+                $("#deleteExtraService .submitbtn").attr('disabled', false).html(_l('admin.common.delete'));
+            }
+        });
+    });
+
     $(document).on('click', '#add_new_extra_service', function () {
         $("#add_extra_service .modal-title").text(_l('admin.rentals.create_extra_service'));
         $("#add_extra_service .submitbtn").text(_l('admin.common.create_new'));
@@ -348,75 +380,53 @@
 })();
 
 
-
-function editExtraService(id){
-    $.ajax({
+$(document).on('click', '#editExtraservice', function(){
+   let id = $(this).data('id');
+   $.ajax({
         type:"GET",
         url:"/admin/get_extra_service/"+id,
         success:function(response){
-         if(response.code === 200){
-             let data = response.data;
-             $("#add_extra_service #name").val(data.name);
-             $("#add_extra_service #id").val(data.id);
-             $("#add_extra_service #language_id").val(data.language_id);
-             if(data.icon && data.icon != null){
-                 $("#icon_preview").attr('src', data.icon).removeClass('d-none');
-                 $(".icon_placeholder").hide();
-             }else{
-                 $("#icon_preview").addClass('d-none');
-                 $(".icon_placeholder").show();
-             }
-             if(data.image && data.image != null){
-                 $("#image_preview").attr('src', data.image).removeClass('d-none');
-                 $(".image_placeholder").hide();
-             }else{
-                 $("#image_preview").addClass('d-none');
-                 $(".image_placeholder").show();
-             }
-             $("#add_extra_service #description").val(data.description);
-             if(data.status === 1){
-                 $("#add_extra_service #status").prop('checked', true);
-             }else{
-                 $("#add_extra_service #status").prop('checked', false);
-             }
-             $("#add_extra_service .modal-title").text(_l('admin.rentals.edit_extra_service'));
-             $("#add_extra_service .submitbtn").text(_l('admin.common.save_changes'));
-             $("#add_extra_service #icon").val('');
-             $("#add_extra_service #image").val('');
-             $("#add_extra_service").modal('show');
-             $(".error-text").text("");
-             $(".form-control").removeClass("is-invalid is-valid");
-             $(".icon_asterisk").hide();
-             $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
-         }
-         
-        }
-     });
-}
-
-function deleteExtraService(id){
-    $("#delete_id").val(id);
-}
-
-$("#deleteExtraService").on('submit', function(e){
-    e.preventDefault();
-    $.ajax({
-        type:"POST",
-        url:"/admin/delete_extra_service",
-        data:$("#deleteExtraService").serialize(),
-        success:function(response){
-            if(response.code === 200){
-                showToast('success', response.message);
-                $("#delete-modal").modal('hide');
-                initTable();
+        if(response.code === 200){
+            let data = response.data;
+            $("#add_extra_service #name").val(data.name);
+            $("#add_extra_service #id").val(data.id);
+            $("#add_extra_service #language_id").val(data.language_id);
+            if(data.icon && data.icon != null){
+                $("#icon_preview").attr('src', data.icon).removeClass('d-none');
+                $(".icon_placeholder").hide();
             }else{
-                showToast('error', response.message);
-                $("#delete-modal").modal('hide');
+                $("#icon_preview").addClass('d-none');
+                $(".icon_placeholder").show();
             }
-        },
-        error:function(error){
-            showToast('error', error.responseJSON.message);
-            $("#delete-modal").modal('hide');
+            if(data.image && data.image != null){
+                $("#image_preview").attr('src', data.image).removeClass('d-none');
+                $(".image_placeholder").hide();
+            }else{
+                $("#image_preview").addClass('d-none');
+                $(".image_placeholder").show();
+            }
+            $("#add_extra_service #description").val(data.description);
+            if(data.status === 1){
+                $("#add_extra_service #status").prop('checked', true);
+            }else{
+                $("#add_extra_service #status").prop('checked', false);
+            }
+            $("#add_extra_service .modal-title").text(_l('admin.rentals.edit_extra_service'));
+            $("#add_extra_service .submitbtn").text(_l('admin.common.save_changes'));
+            $("#add_extra_service #icon").val('');
+            $("#add_extra_service #image").val('');
+            $("#add_extra_service").modal('show');
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid is-valid");
+            $(".icon_asterisk").hide();
+            $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
+        }
+        
         }
     });
+});
+
+$(document).on('click', '#deleteService', function(){
+  let id = $(this).data('id');
+  $("#delete_id").val(id);
 });

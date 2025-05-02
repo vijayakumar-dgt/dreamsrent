@@ -27,8 +27,16 @@ class LocationController extends Controller
      */
     public function storeLocation(Request $request): JsonResponse
     {
+        /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
-
+        if (!$authUser) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 401,
+                'message' => 'Unauthorized: User not authenticated.'
+            ], 401);
+        }
+        
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:locations,name,' . $request->id . ',id,deleted_at,NULL',
             'email' => 'required|email|unique:locations,email,' . $request->id . ',id,deleted_at,NULL',
@@ -60,19 +68,30 @@ class LocationController extends Controller
         $successMessage = empty($request->id) ? __('admin.manage.location_create_success') : __('admin.manage.location_update_success');
         $errorMessage = empty($request->id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
         try {
-            if ($request->has('id') && $request->id == '') {
+            if (!$request->filled('id')) {
+                /** @var \App\Models\User $authUser  */
                 $location = new Location();
                 $location->language_id = $authUser->language_id;
             } else {
+                /** @var \Modules\CarInfo\Models\Location|null $location  */
                 $location = Location::find($request->id);
+                if (!$location) {
+                    return response()->json([
+                        'status' => 'error',
+                        'code'   => 404,
+                        'message' => __('admin.common.default_update_error')
+                    ], 404);
+                }
                 $location->status = $request->status == 'on' ? 1 : 0;
                 $location->language_id = $request->language_id ?? $authUser->language_id;
             }
-            $oldImage = $location->image;
+            $oldImage = is_array($location->image) ? null : $location->image;
             $folderName = 'location';
-            if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $location->image = uploadFile($image, $folderName, $oldImage);
+                if($image && $image->isValid()){
+                    $location->image = uploadFile($image, $folderName, $oldImage);
+                }
             }
             $location->name = $request->name;
             $location->email = $request->email;
@@ -114,7 +133,6 @@ class LocationController extends Controller
                 'message' => $successMessage
             ]);
         } catch (\Throwable $th) {
-            dd($th);
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
@@ -133,8 +151,15 @@ class LocationController extends Controller
     {
         $search = $request->input('search');
         $status = $request->input('status');
-
+        /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
+        if (!$authUser) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 401,
+                'message' => 'Unauthorized: User not authenticated.'
+            ], 401);
+        }
         $language_id = $authUser->language_id;
         $query = Location::orderBy('id', 'desc')->where("language_id", $language_id)->with('workingDays');
 
@@ -152,10 +177,15 @@ class LocationController extends Controller
         $locations = $query->get();
 
         $locations->map(function ($location) {
-            $location->image_url = !empty($location->image) && file_exists(public_path('storage/' . $location->image))
-                ? uploadedAsset($location->image)
+            $image = is_string($location->image) ? $location->image : null;
+        
+            $location->image_url = $image && file_exists(public_path('storage/' . $image))
+                ? uploadedAsset($image)
                 : null;
+        
+            return $location;
         });
+        
 
         return response()->json([
             'status' => 'success',
@@ -175,8 +205,19 @@ class LocationController extends Controller
     public function getLocation($id): JsonResponse
     {
         $location = Location::with('workingDays')->find($id);
+        if(!$location) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 404,
+                'message' => __('admin.common.default_update_error')
+            ], 404);
+        }
         $location->working_days = $location->workingDays;
-        $location->image = file_exists(public_path('storage/' . $location->image)) ? uploadedAsset($location->image) : null;
+        $image = is_string($location->image) ? $location->image : null;
+
+        $location->image = $image && file_exists(public_path('storage/' . $image))
+            ? uploadedAsset($image)
+            : null;
 
         return response()->json([
             'status' => 'success',
@@ -195,7 +236,7 @@ class LocationController extends Controller
     public function deleteLocation(Request $request): JsonResponse
     {
         try {
-            $location = Location::findOrFail($request->delete_id);
+            $location = Location::where('id',$request->delete_id)->firstOrFail();
             $location->delete();
             return response()->json([
                 'status' => 'success',

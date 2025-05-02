@@ -322,7 +322,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="d-flex justify-content-end align-items-center w-100">
                     <div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
                         <label for="status" class="form-check-label form-label mt-0 mb-0">
                         <input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked>

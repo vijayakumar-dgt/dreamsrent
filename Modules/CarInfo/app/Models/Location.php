@@ -7,7 +7,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\CarInfo\Database\Factories\LocationFactory;
-
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $address
+ * @property string $phone
+ * @property string $email
+ * @property int|null $language_id
+ * @property int $status
+ * @property string|array<string>|null $image
+ * @property int $country
+ * @property int $state
+ * @property int $city
+ * @property string $pincode
+ * @property string|array<string>|null $image_url
+ * @property string|null $working_days
+ */
 class Location extends Model
 {
     use SoftDeletes;
