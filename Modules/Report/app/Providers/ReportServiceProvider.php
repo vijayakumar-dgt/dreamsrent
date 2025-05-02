@@ -102,25 +102,55 @@ class ReportServiceProvider extends ServiceProvider
      */
     public function registerViews(): void
     {
-        $viewPath = resource_path('views/modules/' . $this->nameLower);
+        // Ensure that $this->nameLower is a string
+        $nameLower = (string)$this->nameLower;  // Casting to string
+    
+        // Ensure the paths are valid (concatenation of strings only)
+        $viewPath = resource_path('views/modules/' . $nameLower); // Ensure it's a string
         $sourcePath = module_path($this->name, 'resources/views');
-
-        $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower . '-module-views']);
-
-        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->nameLower);
-
-        $componentNamespace = $this->module_namespace($this->name, $this->app_path(config('modules.paths.generator.component-class.path')));
-        Blade::componentNamespace($componentNamespace, $this->nameLower);
+    
+        // Publishing the views
+        $this->publishes([$sourcePath => $viewPath], ['views', $nameLower . '-module-views']);
+    
+        // Load views from multiple paths
+        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $nameLower);
+    
+        // Ensure $componentPath is a string (it might come as an array)
+        $componentPath = config('modules.paths.generator.component-class.path');
+    
+        // If $componentPath is an array, implode it to ensure it becomes a string
+        if (is_array($componentPath)) {
+            $componentPath = implode('', $componentPath);  // Convert array to string if necessary
+        }
+    
+        // Ensure $componentPath is now a string
+        $componentPath = (string)$componentPath;  // Double-check it's a string
+    
+        // Concatenate the namespace with $componentPath and $this->name
+        $componentNamespace = $this->module_namespace($this->name, $componentPath);
+    
+        // Register the component namespace with Blade
+        Blade::componentNamespace($componentNamespace, $nameLower);
     }
-
-    /**
-     * Get the services provided by the provider.
-     */
+    
+    
+    
+    
+    
+/**
+ * Get the publishable view paths.
+ *
+ * @return string[]  Array of view paths.
+ */
     public function provides(): array
     {
         return [];
     }
-
+/**
+ * Get the publishable view paths.
+ *
+ * @return string[]  Array of view paths.
+ */
     private function getPublishableViewPaths(): array
     {
         $paths = [];
