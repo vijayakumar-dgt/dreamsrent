@@ -25,7 +25,14 @@ use Modules\CarInfo\Models\VehicleInfo;
  * @property string|int|null $booking_status
  * @property string|int|null $customer_id
  * @property string|null $created_at
- * 
+ * @property int|string|null $driving_type
+ * @property string|null $delivery_type
+ * @property \App\Models\DrivingType|null $driver_type_info
+ * @property string|null $pickup_location
+ * @property string|null $return_location
+ * @property string|null $delivery_location
+ * @property string|null $delivery_return_location
+ * @property-read \Modules\CarInfo\Models\VehicleInfo|null $vehicle
  * 
  */
 

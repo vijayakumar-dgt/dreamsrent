@@ -37,16 +37,16 @@ class CalanderController extends Controller
             ->where(['users.user_type' => 3, 'users.status' => 1])
             ->get();
 
-            return view('admin.calender.index', compact(
-                'Vehicles',
-                'customerss',
-                'drivers',
-                'cartypes',
-                'locations',
-                'priceTypes',
-                'drivingTypes',
-                'customers'
-            ));
+        return view('admin.calender.index', compact(
+            'Vehicles',
+            'customerss',
+            'drivers',
+            'cartypes',
+            'locations',
+            'priceTypes',
+            'drivingTypes',
+            'customers'
+        ));
     }
 
     public function getCalenderBooking(Request $request): JsonResponse
@@ -112,17 +112,22 @@ class CalanderController extends Controller
     {
         $bookingId = $request->get('booking_id');
 
+        /** @var \Modules\Booking\Models\Booking|null $booking */
         $booking = Booking::with('userInfo', 'vehicle')->find($bookingId);
 
         if (!$booking) {
             return response()->json(['code' => 404, 'message' => 'Booking not found']);
         }
 
+        /** @var \Modules\CarInfo\Models\VehicleInfo|null $vehicle */
         $vehicle = $booking->vehicle;
         $vehicleType = null;
         if ($vehicle) {
-            $booking->vehicle->vehicle_image = uploadedAsset($booking->vehicle->vehicle_image ?? '');
-            $vehicleType = Cartype::select('name')->where("id", $booking->vehicle->type_id)->first();
+            $vehicle->vehicle_image = is_string($vehicle->vehicle_image) 
+                ? uploadedAsset($vehicle->vehicle_image ?? '')
+                : uploadedAsset('', 'default');
+            $vehicleTypeId = $vehicle->type_id ?? null;
+            $vehicleType = Cartype::select('name')->where("id", $vehicleTypeId)->first();
         }
 
         $pickupLocation = $booking->delivery_location
@@ -139,7 +144,9 @@ class CalanderController extends Controller
                 ->first();
 
             if ($driverDetails && $driverDetails->image) {
-                $driverDetails->image = uploadedAsset($driverDetails->image, 'profile');
+                $driverDetails->image = is_string($driverDetails->image)
+                    ? uploadedAsset($driverDetails->image, 'profile')
+                    : uploadedAsset('', 'profile');
             }
         } else {
             $bookingUser = BookingUserInfo::where('booking_id', $booking->id)->first();
@@ -154,22 +161,26 @@ class CalanderController extends Controller
         $userInfo = User::where("id", $booking->customer_id)->first();
 
         if ($userInfo) {
-            $userDetail = $userInfo->userDetail; // Assuming hasOne relationship
+            $userDetail = $userInfo->userDetail;
 
             $customerData = [
                 'first_name' => $userDetail->first_name ?? '',
                 'last_name' => $userDetail->last_name ?? '',
                 'phone_number' => $userInfo->phone_number ?? '',
-                'profile_image' => $userDetail->profile_image
+                'profile_image' => ($userDetail && $userDetail->profile_image)
                     ? uploadedAsset($userDetail->profile_image, 'profile')
                     : uploadedAsset('', 'profile'),
             ];
         } else {
             $customerData = null;
         }
-        $booking->driver_type_info = DrivingType::where('id', $booking->driving_type)->first();
+        $drivingTypeId = $booking->driving_type ?? null;
+        $booking->driver_type_info = null;
+        if ($drivingTypeId) {
+            $booking->driver_type_info = DrivingType::where('id', $drivingTypeId)->first();
+        }
+        $booking->delivery_type = $booking->delivery_type ? ucfirst(str_replace('_', ' ', $booking->delivery_type)) : 'N/A';
 
-        $booking->delivery_type = $booking->delivery_type ?? 'N/A';
         return response()->json([
             'code' => 200,
             'booking' => $booking,

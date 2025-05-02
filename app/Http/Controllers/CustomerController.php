@@ -470,7 +470,7 @@ class CustomerController extends Controller
             /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserDocument> $documents */
             $documents = $customer->documents;
             $documents->map(function (UserDocument $document) {
-                $fileDetails = uploadedAsset($document->document, '', true);
+                $fileDetails = uploadedAssetDetails($document->document, '');
                 $document->file_name = $fileDetails['file_name'] ?? null;
                 $document->size = $fileDetails['size'] ?? '';
                 $document->extension = $fileDetails['extension'] ?? '';

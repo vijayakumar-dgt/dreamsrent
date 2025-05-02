@@ -100,10 +100,9 @@ if (!function_exists('uploadedAsset')) {
     /**
      * @param string $filePath
      * @param string $default
-     * @param bool $fileFullDetails
-     * @return string|array{url: string, file_name?: string, extension?: string, size?: string}
+     * @return string
      */
-    function uploadedAsset(?string $filePath, ?string $default = '', bool $fileFullDetails = false): string|array
+    function uploadedAsset(?string $filePath, ?string $default = ''): string
     {
         $disk = config('filesystems.default');
 
@@ -122,9 +121,48 @@ if (!function_exists('uploadedAsset')) {
 
         // If file does not exist, return default image
         if (!$filePath || !Storage::disk($disk)->exists($filePath)) {
-            return $fileFullDetails
-                ? ['url' => $defaultImages[$default] ?? $defaultImages['default'], 'extension' => '', 'size' => '0']
-                : ($defaultImages[$default] ?? $defaultImages['default']);
+            return ($defaultImages[$default] ?? $defaultImages['default']);
+        }
+
+        // Get file details
+        $fileUrl = Storage::disk($disk)->url($filePath);
+
+        // Format URL properly for public/local disks
+        if ($disk === 'public' || $disk === 'local') {
+            // Ensure that parse_url returns a valid string before calling ltrim
+            $urlPath = parse_url($fileUrl, PHP_URL_PATH);
+            $fileUrl = $baseUrl . '/' . (is_string($urlPath) ? ltrim($urlPath, '/') : '');
+        }
+        return $fileUrl;
+    }
+}
+
+if (!function_exists('uploadedAssetDetails')) {
+    /**
+     * @param string $filePath
+     * @param string $default
+     * @return array{url: string, file_name?: string, extension?: string, size?: string}
+     */
+    function uploadedAssetDetails(?string $filePath, ?string $default = ''): array
+    {
+        $disk = config('filesystems.default');
+
+        // Use getBaseUrl() for consistent domain
+        $baseUrl = getBaseUrl();
+
+        // Default response structure
+        $defaultImages = [
+            'profile' => $baseUrl . '/assets/img/default-profile.png',
+            'default2' => $baseUrl . '/assets/img/default-placeholder-image.png',
+            'default' => $baseUrl . '/assets/img/default-image-02.jpg',
+            'default_logo' => $baseUrl . '/assets/img/logo.svg',
+            'default_small_logo' => $baseUrl . '/frontend/assets/img/logo-small.png',
+            'default_favicon' => $baseUrl . '/assets/img/favicon.png',
+        ];
+
+        // If file does not exist, return default image
+        if (!$filePath || !Storage::disk($disk)->exists($filePath)) {
+            return ['url' => $defaultImages[$default] ?? $defaultImages['default'], 'extension' => '', 'size' => '0'];
         }
 
         // Get file details
@@ -140,9 +178,7 @@ if (!function_exists('uploadedAsset')) {
             $urlPath = parse_url($fileUrl, PHP_URL_PATH);
             $fileUrl = $baseUrl . '/' . (is_string($urlPath) ? ltrim($urlPath, '/') : '');
         }
-        return $fileFullDetails
-            ? ['url' => $fileUrl, 'file_name' => $fileName, 'extension' => $fileExtension, 'size' => $formattedSize]
-            : $fileUrl;
+        return ['url' => $fileUrl, 'file_name' => $fileName, 'extension' => $fileExtension, 'size' => $formattedSize];
     }
 }
 

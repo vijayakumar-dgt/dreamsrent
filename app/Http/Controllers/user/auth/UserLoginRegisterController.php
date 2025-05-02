@@ -318,10 +318,7 @@ class UserLoginRegisterController extends Controller
             $template = EmailTemplate::select('subject', 'description')
                 ->where('notification_type', $notificationType)
                 ->first();
-            if (!$template) {
-                return response()
-                ->json(['error' => ucfirst($settings['otp_type']) . 'Welcome Template is not Found'], 404);
-            }
+                
             $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
             $subject = $template->subject ?? '';
             $content = str_replace(

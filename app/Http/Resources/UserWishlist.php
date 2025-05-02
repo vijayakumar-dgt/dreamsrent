@@ -26,7 +26,7 @@ class UserWishlist extends JsonResource
             'vehicle_id' => $this->resource->getAttribute('vehicle_id'),
             'name' => $vehicle->name ?? '',
             'slug' => $vehicle->slug ?? '',
-            'vehicle_image' => isset($vehicle->vehicle_image) ? uploadedAsset($vehicle->vehicle_image) : null,
+            'vehicle_image' => uploadedAsset($vehicle->vehicle_image ?? ''),
             'brand' => $vehicle->brand->brand_name ?? null,
             'car_type' => $vehicle->carType->name ?? null,
             'category' => $vehicle->category->name ?? null,
