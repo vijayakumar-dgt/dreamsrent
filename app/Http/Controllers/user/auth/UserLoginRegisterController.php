@@ -320,7 +320,7 @@ class UserLoginRegisterController extends Controller
                 ->first();
             if (!$template) {
                 return response()
-                ->json(['error' => ucfirst($settings['otp_type'] ?? '') . 'Welcome Template is not Found'], 404);
+                ->json(['error' => ucfirst($settings['otp_type']) . 'Welcome Template is not Found'], 404);
             }
             $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
             $subject = $template->subject ?? '';

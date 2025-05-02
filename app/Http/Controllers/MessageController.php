@@ -18,12 +18,15 @@ class MessageController extends Controller
     {
         $sender = current_user();
         $receiver = User::where('user_type', 1)->first();
-        $lastMessage = Message::where(function ($query) use ($sender, $receiver) {
-            $query->where(function ($query) use ($sender, $receiver) {
-                $query->where('sender_id', $sender->id)
-                    ->orWhere('receiver_id', $sender->id);
-            });
-        })->orderBy('id', 'desc')->first();
+        $lastMessage = null;
+        if ($sender) {
+            $lastMessage = Message::where(function ($query) use ($sender) {
+                $query->where(function ($query) use ($sender) {
+                    $query->where('sender_id', $sender->getAuthIdentifier())
+                        ->orWhere('receiver_id', $sender->getAuthIdentifier());
+                });
+            })->orderBy('id', 'desc')->first();
+        }
         $seo_title = __('web.user.messages');
         return view('frontend.user.messages', compact('sender', 'receiver', 'lastMessage', 'seo_title'));
     }

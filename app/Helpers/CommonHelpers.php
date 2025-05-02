@@ -296,18 +296,26 @@ function rentalNotificationEnabled(): int
     }
     return 0;
 }
-function sendNotification($email, $slug, $notifyData = [])
+/**
+ * Send a notification to the given email based on the provided slug and data.
+ *
+ * @param string $email
+ * @param string $slug
+ * @param array<string, mixed> $notifyData
+ * @return void
+ */
+function sendNotification(string $email, string $slug, array $notifyData = []): void
 {
     $notificationType = NotificationType::where('slug', $slug)->first();
     if (!$notificationType) {
-        return null;
+        return;
     }
-    $placeholders = json_decode($notificationType->tags, true);
+    $placeholders = json_decode($notificationType->getAttribute('tags'), true);
     $template = EmailTemplate::where('notification_type', $notificationType->id)
         ->where('status', 1)
         ->first();
     if (!$template) {
-        return null;
+        return;
     }
 
     $replaced = function ($text) use ($placeholders, $notifyData) {
@@ -325,13 +333,13 @@ function sendNotification($email, $slug, $notifyData = [])
     };
 
     if (!$email) {
-        return null;
+        return;
     }
     $parsedTemplate = [
         'subject'     => $replaced($template->subject),
         'content' => $replaced($template->description),
-        'sms_content' => $replaced($template->sms_content),
-        'notification_content' => $replaced($template->notification_content),
+        'sms_content' => $replaced($template->sms_content ?? ''),
+        'notification_content' => $replaced($template->notification_content ?? ''),
     ];
 
     if (!empty($parsedTemplate)) {
@@ -360,22 +368,29 @@ function getLanguageId(?string $langCode = 'en'): int
     return $languageId ?? 1;
 }
 
-function getProfileImage()
+/**
+ * Get the profile image URL of the current user.
+ *
+ * @return string|null
+ */
+function getProfileImage(): ?string
 {
+    /** @var \App\Models\User|null $user */
     $user = current_user();
-    if ($user) {
-        $userDetails = $user->userDetail;
-        if ($userDetails) {
-            return uploadedAsset($userDetails->profile_image, 'profile');
-        }
+
+    if ($user && $user->userDetail) {
+        $asset = uploadedAsset($user->userDetail->profile_image, 'profile');
+        return is_array($asset) ? $asset['url'] : $asset;
     }
+
+    return null;
 }
 
 function isAccessMenu(?string $menu): int
 {
     $value = 0;
     if ($menu == 'reservation') {
-        $value = GeneralSetting::where(['group_id' => 20, 'key' => 'reservation'])->pluck('value')->first();
+        $value = GeneralSetting::where(['group_id' => 20, 'key' => 'reservation'])->value('value');
     }
     if ($value) {
         return $value;
@@ -385,13 +400,12 @@ function isAccessMenu(?string $menu): int
 
 if (!function_exists('getBaseUrl')) 
 {
-    function getBaseUrl()
-    {
-        if (app()->runningInConsole()) {
-            return 1;
-            return config('app.url');
-        }
-
-        return request()->getSchemeAndHttpHost();
+  function getBaseUrl(): string
+{
+    if (app()->runningInConsole()) {
+        return config('app.url');
     }
+
+    return request()->getSchemeAndHttpHost();
+}
 }
