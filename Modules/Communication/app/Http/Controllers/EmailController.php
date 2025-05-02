@@ -8,6 +8,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
 use Modules\Communication\Emails\Samplemail;
 use Modules\Communication\Helpers\MailConfigurator;
+use Illuminate\View\View;
+
 
 class EmailController extends Controller
 {

@@ -24,14 +24,15 @@ use Modules\CarInfo\Models\VehicleTarrif;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\InsuranceBenefit;
 
+
 class QuotationController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('booking::quotations.index');
     }
 
-    public function create()
+    public function create(): View
     {
         $locations = Location::where('status', 1)->get();
         $priceTypes = PricingType::where('type', 1)->get();
@@ -47,7 +48,7 @@ class QuotationController extends Controller
         return view('booking::quotations.add', compact('locations', 'priceTypes', 'drivingTypes', 'customers'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'start_date' => 'required',
@@ -266,7 +267,7 @@ class QuotationController extends Controller
         return view('booking::quotations.edit', compact('locations', 'priceTypes', 'drivingTypes', 'customers', 'bookingId', "booking"));
     }
 
-    public function bookingList(Request $request)
+    public function bookingList(Request $request): JsonResponse
     {
         try {
             $query = Booking::select(
@@ -394,7 +395,7 @@ class QuotationController extends Controller
         }
     }
 
-    public function getBookingDetails(Request $request)
+    public function getBookingDetails(Request $request): JsonResponse
     {
         try {
             $id = $request->booking_id ?? '';

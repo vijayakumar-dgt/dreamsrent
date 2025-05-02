@@ -6,19 +6,22 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Modules\Communication\Models\Announcement;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 
 class AnnouncementController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $announcement_types = DB::table('announcement_types')->get(['id', 'name']);
         return view('communication::announcement.index', compact('announcement_types'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'announcement_title' => 'required|string|max:100',
@@ -68,7 +71,7 @@ class AnnouncementController extends Controller
     }
 
 
-    public function list(Request $request)
+    public function list(Request $request): JsonResponse
     {
         try {
             if ($request->input('id')) {
@@ -115,7 +118,7 @@ class AnnouncementController extends Controller
         }
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         try {
             $id = $request->id;

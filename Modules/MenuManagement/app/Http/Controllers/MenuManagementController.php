@@ -10,16 +10,17 @@ use Modules\GeneralSetting\Models\Language;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Modules\GeneralSetting\Models\TranslationLanguage;
+use Illuminate\View\View;
 
 class MenuManagementController extends Controller
 {
-    public function menu()
+    public function menu(): View
     {
         $languages = Language::with('transLang')->get();
         return view('menumanagement::menu.menulist', compact('languages'));
     }
 
-    public function menuManagement()
+    public function menuManagement(): View
     {
         $langCode = app()->getLocale() ?? 'en';
         $defaultLanguageId = getLanguageId($langCode);
@@ -35,7 +36,7 @@ class MenuManagementController extends Controller
         return view('menumanagement::menu.menumanagement', compact('pages', 'menus'));
     }
 
-    public function menuManagementUpdate(Request $request)
+    public function menuManagementUpdate(Request $request): JsonResponse
     {
         $request->validate([
             'menu_id' => 'required|exists:menus,id',
@@ -74,7 +75,7 @@ class MenuManagementController extends Controller
         ], 200);
     }
 
-    public function menuStore(Request $request)
+    public function menuStore(Request $request): JsonResponse
     {
         try {
             $validator = Validator::make($request->all(), [
@@ -121,7 +122,7 @@ class MenuManagementController extends Controller
         }
     }
 
-    public function menuList(Request $request)
+    public function menuList(Request $request): JsonResponse
     {
         try {
             $langCode = app()->getLocale() ?? 'en';
@@ -170,7 +171,7 @@ class MenuManagementController extends Controller
         }
     }
 
-    public function menuUpdate(Request $request)
+    public function menuUpdate(Request $request): JsonResponse
     {
         // Validate request data
         $request->validate([
@@ -219,7 +220,7 @@ class MenuManagementController extends Controller
         }
     }
 
-    public function menuDelete(Request $request)
+    public function menuDelete(Request $request): JsonResponse
     {
         $id = $request->id;
 

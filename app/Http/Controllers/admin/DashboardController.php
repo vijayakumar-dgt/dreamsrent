@@ -18,10 +18,9 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
-        $authId = current_user();
+        $current_user = current_user();
 
-        $languageId = $authId->language_id;
-        $current_user = Auth::guard('admin')->user();
+        $languageId = $current_user->language_id ?? 1;
         $carTypes = VehicleInfo::Join('car_fuels', 'vehicle_info.fuel_type_id', '=', 'car_fuels.id')
             ->LeftJoin('driving_types', 'vehicle_info.type_id', '=', 'driving_types.id')
             ->select('vehicle_info.*', 'driving_types.name as driving_name', 'car_fuels.fuel_type')

@@ -4,13 +4,14 @@ namespace Modules\Communication\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CommunicationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         return view('communication::index');
     }
@@ -18,7 +19,7 @@ class CommunicationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         return view('communication::create');
     }
@@ -34,7 +35,7 @@ class CommunicationController extends Controller
     /**
      * Show the specified resource.
      */
-    public function show($id)
+    public function show($id): View
     {
         return view('communication::show');
     }
@@ -42,7 +43,7 @@ class CommunicationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit($id): View
     {
         return view('communication::edit');
     }

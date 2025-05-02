@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -117,7 +118,9 @@ class AdminUserController extends Controller
             if (empty($id)) {
                 if ($request->hasFile('image')) {
                     $file = $request->file('image');
-                    $userDetailsData['profile_image'] = uploadFile($file, 'profile');
+                    if ($file instanceof UploadedFile) {
+                        $userDetailsData['profile_image'] = uploadFile($file, 'profile');
+                    }
                 }
                 $userData['password'] = Hash::make($request->password);
                 $user = User::create($userData);
@@ -133,7 +136,9 @@ class AdminUserController extends Controller
 
                 if ($request->hasFile('image')) {
                     $file = $request->file('image');
-                    $userDetailsData['profile_image'] = uploadFile($file, 'profile', $oldImage);
+                    if ($file instanceof UploadedFile) {
+                        $userDetailsData['profile_image'] = uploadFile($file, 'profile', $oldImage);
+                    }
                 }
 
                 user::where('id', $id)->update($userData);
@@ -252,7 +257,8 @@ class AdminUserController extends Controller
             $users = $query->get();
 
             $users->map(function ($user) {
-                $user->profile_image = uploadedAsset($user->profile_image, 'profile');
+                $profileImage = is_string($user->profile_image) ? $user->profile_image : '';
+                $user->profile_image = uploadedAsset($profileImage, 'profile');
 
                 return $user;
             });
@@ -292,7 +298,8 @@ class AdminUserController extends Controller
             ->first();
 
         if ($data) {
-            $data->profile_image = uploadedAsset($data->profile_image, "profile");
+            $profileImage = is_string($data->profile_image) ? $data->profile_image : '';
+            $data->profile_image = uploadedAsset($profileImage, "profile");
         }
 
         return response()->json([

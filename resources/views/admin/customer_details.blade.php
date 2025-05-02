@@ -130,7 +130,7 @@
                                                                 <div class="col-lg-4">
                                                                     <div class="d-flex align-items-center">
                                                                         <span class="avatar flex-shrink-0 me-2">
-                                                                            <img src="{{ $booking->vehicle_image }}" alt="">
+                                                                            <img src="{{ $booking->vehicle_image_url }}" alt="">
                                                                         </span>
                                                                         <div>
                                                                             <a href="#" class="text-info">{{ $booking->reservation_id }}</a>

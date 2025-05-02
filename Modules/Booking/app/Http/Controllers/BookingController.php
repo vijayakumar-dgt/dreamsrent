@@ -26,12 +26,12 @@ use Modules\GeneralSetting\Models\InsuranceBenefit;
 
 class BookingController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('booking::reservation.index');
     }
 
-    public function create()
+    public function create(): View
     {
         $locations = Location::where('status', 1)->get();
         $priceTypes = PricingType::where('type', 1)->get();
@@ -51,7 +51,7 @@ class BookingController extends Controller
         return view('booking::reservation.add', compact('locations', 'priceTypes', 'drivingTypes', 'customers'));
     }
 
-    public function getCustomerDetails(Request $request)
+    public function getCustomerDetails(Request $request): JsonResponse
     {
         try {
             $customerId = $request->customer_id ?? '';
@@ -87,7 +87,7 @@ class BookingController extends Controller
         }
     }
 
-    public function getFilterVehicles(Request $request)
+    public function getFilterVehicles(Request $request): JsonResponse
     {
         try {
             $orderBy = $request->order_by ?? 'desc';
@@ -307,7 +307,7 @@ class BookingController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'start_date' => 'required',
@@ -512,7 +512,7 @@ class BookingController extends Controller
 
         return view('booking::reservation.edit', compact('locations', 'priceTypes', 'drivingTypes', 'customers', 'bookingId'));
     }
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         try {
             $id = $request->id;
@@ -533,7 +533,7 @@ class BookingController extends Controller
         }
     }
 
-    public function bookingList(Request $request)
+    public function bookingList(Request $request): JsonResponse
     {
         try {
             $query = Booking::select(
@@ -661,7 +661,7 @@ class BookingController extends Controller
         }
     }
 
-    public function getBookingDetails(Request $request)
+    public function getBookingDetails(Request $request): JsonResponse
     {
         try {
             $id = $request->booking_id ?? '';

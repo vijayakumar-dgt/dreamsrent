@@ -27,26 +27,28 @@ use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\TranslationLanguage;
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class PageController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $authUser = current_user();
         $languages = Language::with('transLang')->get();
         return view('page::page.index', compact("authUser", "languages"));
     }
 
-    public function addPage()
+    public function addPage(): View
     {
         $authUser = current_user();
         return view('page::page.add.index', compact("authUser"));
     }
 
-    public function editPage($slug, Request $request)
+    public function editPage($slug, Request $request): View
     {
         $languageId = $request->query('language_id');
         $language = TranslationLanguage::find($languageId);
@@ -107,7 +109,7 @@ class PageController extends Controller
 
 
 
-    public function getPageInfo(Request $request)
+    public function getPageInfo(Request $request): JsonResponse
     {
         try {
             $pageSlug = $request->get('page_slug');
@@ -132,7 +134,7 @@ class PageController extends Controller
         }
     }
 
-    public function pageContent(Request $request)
+    public function pageContent(Request $request): JsonResponse
     {
         $pageId = $request->page_id;
 
@@ -160,7 +162,7 @@ class PageController extends Controller
         ], 200);
     }
 
-    public function pageStore(Request $request)
+    public function pageStore(Request $request): JsonResponse
     {
         $authUser = current_user();
 
@@ -241,7 +243,7 @@ class PageController extends Controller
         return response()->json(['code' => 200, 'message' => __('page_create_success'), 'data' => []], 200);
     }
 
-    public function pageUpdate(Request $request)
+    public function pageUpdate(Request $request): JsonResponse
     {
         $rules = [
             'page_id' => 'nullable|exists:pages,id',
@@ -332,7 +334,7 @@ class PageController extends Controller
         ]);
     }
 
-    public function indexBuilderList(Request $request)
+    public function indexBuilderList(Request $request): JsonResponse
     {
         $orderBy = $request->input('order_by', 'desc'); // Default to latest
         $sortBy = $request->input('sort_by', 'created_at'); // Default to created_at
@@ -397,7 +399,7 @@ class PageController extends Controller
 
 
 
-    public function pageBuilderApi(Request $request)
+    public function pageBuilderApi(Request $request): View|JsonResponse
     {
         $defaultThemeValue = GeneralSetting::where('key', 'default_theme')->first();
 
@@ -1153,7 +1155,7 @@ class PageController extends Controller
         }
     }
 
-    public function getPage($slug)
+    public function getPage($slug): View
     {
         $defaultLang = 'en';
         $language    = TranslationLanguage::where('code', $defaultLang)->first();

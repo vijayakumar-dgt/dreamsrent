@@ -173,7 +173,7 @@ class RolesPermissionController extends Controller
         }
     }
 
-    public function permissions(Request $request)
+    public function permissions(Request $request): View
     {
         $roleId = customDecrypt($request->encrypted_role_id, Role::$roleSecretKey);
         $userId = $this->authUser->id ?? $request->user_id;

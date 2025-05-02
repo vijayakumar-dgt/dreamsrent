@@ -11,7 +11,7 @@ use App\Models\User;
  * @property string|null $file_name
  * @property string|null $size
  * @property string|null $extension
- * @property string|null $document_url
+ * @property string|array<string>|null $document_url
  * @property string|null $icon
  * 
  */

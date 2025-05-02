@@ -6,13 +6,15 @@ use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use App\Models\User;
 use App\Services\MqttService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class MessageController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $sender = current_user();
         $receiver = User::where('user_type', 1)->first();
@@ -26,7 +28,7 @@ class MessageController extends Controller
         return view('frontend.user.messages', compact('sender', 'receiver', 'lastMessage', 'seo_title'));
     }
 
-    public function sendMessage(Request $request)
+    public function sendMessage(Request $request): JsonResponse
     {
         // DB::beginTransaction();
         // try {
@@ -81,14 +83,14 @@ class MessageController extends Controller
             return response()->json($response);
     }
 
-    public function adminMessages()
+    public function adminMessages(): View
     {
         $users = User::where('user_type', 3)->orderBy('id', 'desc')->get();
         $sender = current_user();
         return view('admin.chat.messages', compact('users', 'sender'));
     }
 
-    public function fetchMessages(Request $request)
+    public function fetchMessages(Request $request): JsonResponse
     {
         $last_offset = $request->last_offset ?? "";
         $perPage = $last_offset ? (intval($last_offset)) : 10;

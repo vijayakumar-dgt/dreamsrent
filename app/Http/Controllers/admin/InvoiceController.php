@@ -13,11 +13,15 @@ use App\Models\InvoiceItem;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class InvoiceController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $invoices = Invoice::with('items')
             ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
@@ -30,7 +34,7 @@ class InvoiceController extends Controller
         return view("admin.invoice.index", compact('invoices'));
     }
 
-    public function addInvoice()
+    public function addInvoice(): View
     {
         $authId = current_user();
         $languageId = $authId->language_id;
@@ -63,7 +67,7 @@ class InvoiceController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'car_id' => 'required',
@@ -151,7 +155,7 @@ class InvoiceController extends Controller
         }
     }
 
-    public function edit($id)
+    public function edit(?int $id): View
     {
         $invoice = Invoice::findOrFail($id);
 
@@ -185,7 +189,7 @@ class InvoiceController extends Controller
         );
     }
 
-    public function destroy($id)
+    public function destroy(?int $id): JsonResponse
     {
         try {
             // Find the invoice by ID
@@ -206,7 +210,7 @@ class InvoiceController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(Request $request, ?int $id): RedirectResponse
     {
         //dd($request->all());
         try {
@@ -240,7 +244,7 @@ class InvoiceController extends Controller
             $invoice->items()->delete();
 
             foreach ($items as $item) {
-                \Log::info("Creating item: ", $item);
+                Log::info("Creating item: ", $item);
 
                 $invoice->items()->create([
                     'description' => $item['description'] ?? 0,

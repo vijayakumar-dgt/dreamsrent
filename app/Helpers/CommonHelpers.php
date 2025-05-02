@@ -37,7 +37,7 @@ if (!function_exists('clearCache')) {
 }
 
 if (!function_exists('uploadFile')) {
-    function uploadFile(UploadedFile $file, string $path = 'uploads', string $oldFileName = '', string $disk = 'public'): ?string
+    function uploadFile(UploadedFile $file, string $path = 'uploads', ?string $oldFileName = '', string $disk = 'public'): ?string
     {
         $disk = config('filesystems.default');
 
@@ -54,7 +54,7 @@ if (!function_exists('uploadFile')) {
 }
 
 if (!function_exists('uploadMutipleFile')) {
-    function uploadMutipleFile(UploadedFile $file, string $path = 'uploads', string $oldFileName = '', string $disk = 'public'): ?string
+    function uploadMutipleFile(UploadedFile $file, string $path = 'uploads', ?string $oldFileName = '', string $disk = 'public'): ?string
     {
         $disk = config('filesystems.default');
 
@@ -96,20 +96,14 @@ if (!function_exists('formatDateTime')) {
 }
 
 if (!function_exists('uploadedAsset')) {
+    
     /**
-     * Get the URL or full details of an uploaded asset.
-     *
-     * @param string $filePath The file path in storage.
-     * @param string $default The default image key to use if file doesn't exist.
-     * @param bool $fileFullDetails Whether to return full file details.
-     * @return string|array{
-     *     url: string,
-     *     file_name?: string,
-     *     extension: string,
-     *     size: string|int
-     * }
+     * @param string $filePath
+     * @param string $default
+     * @param bool $fileFullDetails
+     * @return string|array{url: string, file_name?: string, extension?: string, size?: string}
      */
-    function uploadedAsset(string $filePath, string $default = '', bool $fileFullDetails = false): string|array
+    function uploadedAsset(?string $filePath, ?string $default = '', bool $fileFullDetails = false): string|array
     {
         $disk = config('filesystems.default');
 
@@ -129,7 +123,7 @@ if (!function_exists('uploadedAsset')) {
         // If file does not exist, return default image
         if (!$filePath || !Storage::disk($disk)->exists($filePath)) {
             return $fileFullDetails
-                ? ['url' => $defaultImages[$default] ?? $defaultImages['default'], 'extension' => '', 'size' => 0]
+                ? ['url' => $defaultImages[$default] ?? $defaultImages['default'], 'extension' => '', 'size' => '0']
                 : ($defaultImages[$default] ?? $defaultImages['default']);
         }
 
@@ -160,7 +154,7 @@ if (!function_exists('uploadedAsset')) {
  * @param string $key The encryption key (optional).
  * @return string The encrypted and encoded string, or an empty string on failure.
  */
-function customEncrypt(string $data, string $key = 'default_secret_key'): string
+function customEncrypt(string|int|null $data, string $key = 'default_secret_key'): string
 {
     $cipher = 'AES-128-CBC';
     $iv = substr(md5($key), 0, 16);
@@ -173,7 +167,7 @@ function customEncrypt(string $data, string $key = 'default_secret_key'): string
     return rtrim(strtr(base64_encode($encrypted), '+/', '-_'), '=');
 }
 
-function customDecrypt(string $encryptedData, string $key = 'default_secret_key'): ?string
+function customDecrypt(string|int|null $encryptedData, string $key = 'default_secret_key'): ?string
 {
     $cipher = 'AES-128-CBC';
     $iv = substr(md5($key), 0, 16);
@@ -358,7 +352,7 @@ function sendNotification($email, $slug, $notifyData = [])
     }
 }
 
-function getLanguageId($langCode = 'en')
+function getLanguageId(?string $langCode = 'en'): int
 {
     $languageId = TranslationLanguage::where('code', $langCode)->value('id');
     return $languageId ?? 1;
@@ -375,7 +369,7 @@ function getProfileImage()
     }
 }
 
-function isAccessMenu($menu)
+function isAccessMenu(?string $menu): int
 {
     $value = 0;
     if ($menu == 'reservation') {
@@ -387,7 +381,8 @@ function isAccessMenu($menu)
     return 0;
 }
 
-if (!function_exists('getBaseUrl')) {
+if (!function_exists('getBaseUrl')) 
+{
     function getBaseUrl()
     {
         if (app()->runningInConsole()) {
