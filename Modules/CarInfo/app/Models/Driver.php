@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\CarInfo\Database\Factories\DriverFactory;
 
+/**
+ * @property int $id
+ * @property string $driver_name
+ * @property string|array<string>|null $image
+ * @property string $assigned_cars
+ * @property array<string,mixed> $vehicle
+ * @property string $valid_date
+ */
 class Driver extends Model
 {
     use SoftDeletes;

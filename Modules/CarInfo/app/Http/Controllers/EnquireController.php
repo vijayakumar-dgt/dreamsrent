@@ -96,12 +96,17 @@ class EnquireController extends Controller
                     $dates = explode(' - ', $range);
                     if (count($dates) === 2) {
                         try {
-                            $start = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]))->startOfDay();
-                            $end = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]))->endOfDay();
-                            $query->whereBetween('enquiries.enquiry_date', [$start, $end]);
+                            $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
+                            $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
+                        
+                            if ($startDate && $endDate) {
+                                $start = $startDate->startOfDay();
+                                $end = $endDate->endOfDay();
+                                $query->whereBetween('enquiries.enquiry_date', [$start, $end]);
+                            }
                         } catch (\Exception $e) {
                             // Log error if needed
-                        }
+                        }                        
                     }
                 })
                 ->when($request->filled('sort_by'), function ($query) use ($request) {
@@ -158,6 +163,7 @@ class EnquireController extends Controller
         }
 
         try {
+            /** @var \Modules\CarInfo\Models\Enquiry */
             $enquiry = Enquiry::findOrFail($id);
 
 
@@ -207,7 +213,7 @@ class EnquireController extends Controller
             $id = $request->id;
             $enquiry = Enquiry::find($id);
 
-            if (!$enquiry) {
+            if (!$enquiry instanceof Enquiry) {
                 return response()->json([
                     'code'    => 404,
                     'success' => false,
@@ -215,7 +221,7 @@ class EnquireController extends Controller
                 ], 404);
             }
 
-            $enquiry->delete(); // Soft delete
+            $enquiry->delete();
 
             return response()->json([
                 'code'    => 200,
