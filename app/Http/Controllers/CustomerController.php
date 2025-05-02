@@ -59,7 +59,7 @@ class CustomerController extends Controller
                 'email',
                 Rule::unique('users', 'email')->ignore($id)->whereNull('deleted_at'),
             ],
-            'address' => ['required','max:150'],
+            'address' => ['required', 'max:150'],
             'card_number' => [
                 'required',
                 Rule::unique('user_details', 'card_number')->ignore($id, 'user_id')->whereNull('deleted_at'),
@@ -431,13 +431,13 @@ class CustomerController extends Controller
             ->first();
 
         $bookings = Booking::select(
-                'bookings.id',
-                'bookings.reservation_id',
-                'vehicle_info.name as vehicle_name',
-                'vehicle_info.vehicle_image',
-                'bookings.booking_date',
-                'bookings.final_price',
-            )
+            'bookings.id',
+            'bookings.reservation_id',
+            'vehicle_info.name as vehicle_name',
+            'vehicle_info.vehicle_image',
+            'bookings.booking_date',
+            'bookings.final_price',
+        )
             ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
             ->where('bookings.customer_id', $id)
             ->orderBy('bookings.id', 'desc')

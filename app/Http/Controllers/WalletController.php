@@ -14,7 +14,7 @@ use Illuminate\Http\RedirectResponse;
 
 class WalletController extends Controller
 {
-    protected $provider;
+    protected PayPalClient $provider;
 
     public function __construct()
     {
@@ -28,8 +28,6 @@ class WalletController extends Controller
         return view('frontend.user.wallet', compact('seo_title'));
     }
 
-
-
     public function addWallet(Request $request): JsonResponse
     {
         $request->validate([
@@ -40,6 +38,13 @@ class WalletController extends Controller
         $user = Auth::guard('web')->user();
         $amount = $request->wallet_amount;
         $paymentType = ucfirst($request->payment_type);
+
+        if (!$user) {
+            return response()->json([
+                'code' => 401,
+                'message' => 'Unauthorized access. Please log in.',
+            ], 401);
+        }
 
         if ($paymentType === "Paypal") {
             try {
@@ -63,6 +68,12 @@ class WalletController extends Controller
 
                 $response = $this->provider->createOrder($order);
 
+                if ($response instanceof \Psr\Http\Message\StreamInterface) {
+                    $response = json_decode($response->getContents(), true);
+                } elseif (is_string($response)) {
+                    $response = json_decode($response, true);
+                }
+
                 if (!$response || !isset($response['id'])) {
                     return response()->json([
                         'code' => 500,
@@ -85,7 +96,6 @@ class WalletController extends Controller
                         'message' => 'Failed to generate PayPal payment link.',
                     ]);
                 }
-                // dd($response['links'][1]['href']);
                 return response()->json([
                     'code' => 200,
                     'message' => 'PayPal payment initiated. Redirecting...',
@@ -159,7 +169,11 @@ class WalletController extends Controller
 
             $response = $this->provider->capturePaymentOrder($request->get('token'));
 
-
+            if ($response instanceof \Psr\Http\Message\StreamInterface) {
+                $response = json_decode($response->getContents(), true);
+            } elseif (is_string($response)) {
+                $response = json_decode($response, true);
+            }
 
             if (isset($response['status']) && $response['status'] == 'COMPLETED') {
                 WalletHistory::where('transaction_id', $response['id'])->update(['status' => 'Completed']);

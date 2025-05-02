@@ -70,7 +70,7 @@ class ReviewController extends Controller
                 'cleanliness_ratings' => $request->cleanliness_ratings ?? 0,
             ];
             $totalRatings = $data['service_ratings'] +
-             $data['location_ratings'] + $data['facility_ratings'] + $data['value_for_money_ratings'] + $data['cleanliness_ratings'];
+                $data['location_ratings'] + $data['facility_ratings'] + $data['value_for_money_ratings'] + $data['cleanliness_ratings'];
             $data['average_ratings'] = $totalRatings / 5;
 
             $reviews = Review::create($data);
@@ -236,7 +236,7 @@ class ReviewController extends Controller
                     'total_reviews' => $totalReviews,
                 ],
                 'reviews' => $reviewsData
-            ];            
+            ];
 
             return response()->json([
                 'status' => 'success',
@@ -313,19 +313,19 @@ class ReviewController extends Controller
             $orderDir = $request->order[0]['dir'] ?? 'asc';
 
             $query = Review::select(
-                'reviews.id',
-                'reviews.vehicle_id',
-                'reviews.user_id',
-                'reviews.average_ratings',
-                'review_messages.comments',
-                'vehicle_info.name as vehicle_name',
-                'vehicle_info.vehicle_image',
-                'reviews.created_at',
-            )
-            ->join('review_messages', 'review_messages.review_id', '=', 'reviews.id')
-            ->join('vehicle_info', 'reviews.vehicle_id', '=', 'vehicle_info.id')
-            ->where('reviews.user_id', $userId)
-            ->where('review_messages.parent_id', 0);
+                    'reviews.id',
+                    'reviews.vehicle_id',
+                    'reviews.user_id',
+                    'reviews.average_ratings',
+                    'review_messages.comments',
+                    'vehicle_info.name as vehicle_name',
+                    'vehicle_info.vehicle_image',
+                    'reviews.created_at',
+                )
+                ->join('review_messages', 'review_messages.review_id', '=', 'reviews.id')
+                ->join('vehicle_info', 'reviews.vehicle_id', '=', 'vehicle_info.id')
+                ->where('reviews.user_id', $userId)
+                ->where('review_messages.parent_id', 0);
 
             if ($request->has('duration') && $request->duration != "") {
                 $customFrom = $request->custom_from_date ?? "";
@@ -500,11 +500,11 @@ class ReviewController extends Controller
                 'user_details.profile_image',
                 DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
             )
-            ->join('users', 'users.id', '=', 'reviews.user_id')
-            ->leftJoin('user_details', 'user_details.user_id', '=', 'reviews.user_id')
-            ->join('review_messages', 'review_messages.review_id', '=', 'reviews.id')
-            ->join('vehicle_info', 'reviews.vehicle_id', '=', 'vehicle_info.id')
-            ->where('review_messages.parent_id', 0);
+                ->join('users', 'users.id', '=', 'reviews.user_id')
+                ->leftJoin('user_details', 'user_details.user_id', '=', 'reviews.user_id')
+                ->join('review_messages', 'review_messages.review_id', '=', 'reviews.id')
+                ->join('vehicle_info', 'reviews.vehicle_id', '=', 'vehicle_info.id')
+                ->where('review_messages.parent_id', 0);
 
             if ($request->has('search') && !empty($request->search)) {
                 $search = $request->search;
@@ -558,7 +558,7 @@ class ReviewController extends Controller
                 $query->orderByRaw("LOWER(CONCAT_WS(' ', vehicle_info.name)) {$orderDir}");
             } elseif ($columnName === 'customer_full_name') {
                 $query
-                ->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) {$orderDir}");
+                    ->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) {$orderDir}");
             } elseif ($columnName === 'review_date') {
                 $query->orderBy('reviews.created_at', $orderDir);
             } else {

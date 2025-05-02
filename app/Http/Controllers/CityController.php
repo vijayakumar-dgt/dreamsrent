@@ -94,25 +94,23 @@ class CityController extends Controller
             $orderByColumnIndex = $request->input('order.0.column');
             $orderByColumn = $request->input("columns.$orderByColumnIndex.data") ?? 'name';
             $orderDirection = $request->input('order.0.dir') ?? 'asc';
-
             $query = City::with(['state.country']);
 
             if ($search) {
                 $query->where('name', 'like', "%{$search}%")
-                      ->orWhereHas('state', function ($q) use ($search) {
-                          $q->where('name', 'like', "%{$search}%")
+                    ->orWhereHas('state', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%")
                             ->orWhereHas('country', function ($qc) use ($search) {
                                 $qc->where('name', 'like', "%{$search}%");
                             });
-                      });
+                    });
             }
 
             $total = $query->count();
-
             $cities = $query->orderBy($orderByColumn, $orderDirection)
-                            ->skip($start)
-                            ->take($length)
-                            ->get();
+                ->skip($start)
+                ->take($length)
+                ->get();
 
             return response()->json([
                 'draw' => intval($request->input('draw')),
@@ -145,7 +143,6 @@ class CityController extends Controller
     {
         try {
             $id = $request->id;
-
             City::where('id', $id)->delete();
 
             return response()->json([

@@ -35,28 +35,28 @@ class HomeController extends Controller
         $languageId = getLanguageId($languageCode);
         $brands = Brand::where('status', 1)->where("language_id", $languageId)->orderBy('brand_name', 'asc')->get();
         $vehicleTypes = Cartype::where('language_id', $languageId)
-        ->where('status', 1)->orderBy('name', 'asc')->get()->map(function ($vehicleType) {
-            $vehicleCount = VehicleInfo::where('type_id', $vehicleType->id)->count();
-            return [
-                'id' => $vehicleType->id,
-                'name' => $vehicleType->name,
-                'vehicle_count' => $vehicleCount
-            ];
-        });
+            ->where('status', 1)->orderBy('name', 'asc')->get()->map(function ($vehicleType) {
+                $vehicleCount = VehicleInfo::where('type_id', $vehicleType->id)->count();
+                return [
+                    'id' => $vehicleType->id,
+                    'name' => $vehicleType->name,
+                    'vehicle_count' => $vehicleCount
+                ];
+            });
         $years = VehicleInfo::where('language_id', $languageId)
-        ->select('year')->distinct()->orderBy('year', 'desc')->pluck('year')->toArray();
+            ->select('year')->distinct()->orderBy('year', 'desc')->pluck('year')->toArray();
         $fuelTypes = CarFuel::where('language_id', $languageId)
-        ->where('status', 1)->orderBy('fuel_type', 'asc')->get();
+            ->where('status', 1)->orderBy('fuel_type', 'asc')->get();
         $transmissions = Transmission::where('language_id', $languageId)
-        ->where('status', 1)->orderBy('name', 'asc')->get();
+            ->where('status', 1)->orderBy('name', 'asc')->get();
         $colors = CarColor::where('language_id', $languageId)
-        ->where('status', 1)->orderBy('name', 'asc')->get();
+            ->where('status', 1)->orderBy('name', 'asc')->get();
         $features = SafetyFeature::where('language_id', $languageId)
-        ->where('status', 1)->orderBy('feature', 'asc')->get();
+            ->where('status', 1)->orderBy('feature', 'asc')->get();
         $allowBooking = GeneralSetting::where('group_id', 20)
-        ->where('key', 'booking')->pluck('value')->first() ?? 1;
+            ->where('key', 'booking')->pluck('value')->first() ?? 1;
         $allowEnquiries = GeneralSetting::where('group_id', 20)
-        ->where('key', 'enquiries')->pluck('value')->first() ?? 1;
+            ->where('key', 'enquiries')->pluck('value')->first() ?? 1;
         $data = [
             'brands' => $brands,
             'vehicleTypes' => $vehicleTypes,
@@ -95,7 +95,7 @@ class HomeController extends Controller
         $data['returntime'] = $returntime;
         $data['seo_title']  = __('web.common.vehicles');
         $data['initialPickupLocation'] = $pickuplocation ?
-        Location::select('id', 'name')->where('status', 1)->where('language_id', $languageId)->where('name', 'like', '%' . $pickuplocation . '%')->first() : null;
+            Location::select('id', 'name')->where('status', 1)->where('language_id', $languageId)->where('name', 'like', '%' . $pickuplocation . '%')->first() : null;
         return view('frontend.home.list.list', $data);
     }
 
@@ -104,7 +104,7 @@ class HomeController extends Controller
         $slug = $request->slug;
 
         $vehicle = VehicleInfo::select('id', 'main_location_id', "other_location_id", 'views')
-        ->where('slug', $slug)->first();
+            ->where('slug', $slug)->first();
         if (!$vehicle) {
             abort(404);
         }
@@ -156,9 +156,9 @@ class HomeController extends Controller
         $lastUpdateFormatted = $lastUpdate ? \Carbon\Carbon::parse($lastUpdate)->format('d, M Y') : 'N/A';
 
         $allowBooking = GeneralSetting::where('group_id', 20)
-        ->where('key', 'booking')->pluck('value')->first() ?? 1;
+            ->where('key', 'booking')->pluck('value')->first() ?? 1;
         $allowEnquiries = GeneralSetting::where('group_id', 20)
-        ->where('key', 'enquiries')->pluck('value')->first() ?? 1;
+            ->where('key', 'enquiries')->pluck('value')->first() ?? 1;
         $vehicleDetail = VehicleInfo::where('id', $vehicle->id)->first();
         $vehicleDetail->name = ucfirst($vehicleDetail->name);
         $vehicleDetail->location_name = $vehicleDetail->mainLocation ? $vehicleDetail->mainLocation->name : '';
@@ -202,7 +202,7 @@ class HomeController extends Controller
         $title = "Dreamsrent - Maintenance";
         $maintenance = GeneralSetting::where('group_id', 4)->pluck('value', 'key')->toArray();
         $response['image'] = $maintenance['maintenance_image'] ?
-        uploadedAsset($maintenance['maintenance_image']) : '';
+            uploadedAsset($maintenance['maintenance_image']) : '';
         $response['description'] = $maintenance['maintenance_description'] ?? "";
         return view('frontend.home.maintenance', compact("title", "response"));
     }
@@ -220,19 +220,5 @@ class HomeController extends Controller
             'frontend.home.contact-us',
             compact("seo_title", "companyPhoneNumber", "companyEmail", "companyAddress")
         );
-    }
-
-    public function test()
-    {
-        $authUser = Auth::guard('web')->user();
-        $vehicle = VehicleInfo::where('id', 1)->first();
-        $adminNotifyData = [
-            'user_name' => $authUser->name ?? '',
-            'email'     => $authUser->email ?? '',
-            'phonenumber' => $authUser->phone_number ?? '',
-            'vehicle_name' => $vehicle->name ?? ""
-        ];
-        $admin_template = getNotificationTemplate('booking-confirmation-to-admin', $adminNotifyData);
-        dd($admin_template);
     }
 }

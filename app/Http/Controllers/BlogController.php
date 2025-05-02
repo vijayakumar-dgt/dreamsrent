@@ -9,15 +9,15 @@ use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\BlogPost;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Illuminate\Support\Facades\App;
 use Modules\GeneralSetting\Models\BlogReviews;
-use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class BlogController extends Controller
 {
-    public function BlogList(Request $request):  View|Response
+    public function BlogList(Request $request): View | JsonResponse
     {
         $authUser = current_user();
 
@@ -67,18 +67,18 @@ class BlogController extends Controller
         $blogPosts = $query->latest()->paginate(3);
 
         $categories = BlogCategory::where('deleted_at', null)
-        ->where('language_id', $lang_id)->where('status', 1)->get();
+            ->where('language_id', $lang_id)->where('status', 1)->get();
         $tags = BlogTag::where('deleted_at', null)->where('language_id', $lang_id)->where('status', 1)->get();
 
         $latestblogs =  BlogPost::latest()->where('blog_posts.language_id', $lang_id)
-        ->where('blog_posts.status', 1)->limit(3)->get();
+            ->where('blog_posts.status', 1)->limit(3)->get();
 
         $seo_title  = __('web.blog.blogs_title');
 
         if ($request->ajax()) {
             return response()->json([
                 'html' => view('frontend.blogs.partials.blogs-list', compact('blogPosts'))->render()
-            ]);    
+            ]);
         }
 
         return view(
@@ -121,11 +121,11 @@ class BlogController extends Controller
             ->paginate(4);
 
         $categories = BlogCategory::where('deleted_at', null)
-        ->where('language_id', $lang_id)->where('status', 1)->get();
+            ->where('language_id', $lang_id)->where('status', 1)->get();
         $tags = BlogTag::where('deleted_at', null)->where('language_id', $lang_id)->where('status', 1)->get();
 
         $latestblogs =  BlogPost::latest()
-        ->where('blog_posts.language_id', $lang_id)->where('blog_posts.status', 1)->limit(3)->get();
+            ->where('blog_posts.language_id', $lang_id)->where('blog_posts.status', 1)->limit(3)->get();
 
         $seo_title  = __('web.blog.blogs_title');
         return view('frontend.blogs.blog-grid', compact(
