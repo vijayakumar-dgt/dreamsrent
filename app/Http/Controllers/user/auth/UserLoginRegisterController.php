@@ -422,7 +422,7 @@ class UserLoginRegisterController extends Controller
 
                 if ($user) {
                     $user_device = new UserDevice();
-                    $user_device->user_id = $user->id;
+                    $user_device->user_id = (int) $user->id;
                     $user_device->device_type = is_string($device_type) ? $device_type : null;
                     $user_device->browser = is_string($browser) ? $browser : null;
                     $user_device->os = is_string($os) ? $os : null;

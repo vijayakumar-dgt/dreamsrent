@@ -68,13 +68,13 @@ class AppServiceProvider extends ServiceProvider
 
             if ($user) {
                 $userDetails = User::select(
-                        'users.id',
-                        'users.name',
-                        'users.email',
-                        'user_details.profile_image',
-                        'user_details.first_name',
-                        'user_details.last_name'
-                    )
+                    'users.id',
+                    'users.name',
+                    'users.email',
+                    'user_details.profile_image',
+                    'user_details.first_name',
+                    'user_details.last_name'
+                )
                     ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
                     ->where('users.id', $user->id)
                     ->first();
@@ -82,7 +82,6 @@ class AppServiceProvider extends ServiceProvider
                 if ($userDetails && is_string($userDetails->profile_image) && $userDetails->profile_image !== '') {
                     $userDetails->profile_image = uploadedAsset($userDetails->profile_image, 'profile');
                 }
-                    
             }
 
             $permissions = getUserPermissions();
@@ -92,7 +91,7 @@ class AppServiceProvider extends ServiceProvider
             if ($languageId) {
                 $key = 'copy_right_' . $languageId;
                 $copyright = GeneralSetting::where('key', $key)
-                ->where('language_id', $languageId)->value('value');
+                    ->where('language_id', $languageId)->value('value');
             }
             $view->with([
                 'allLanguages' => $allLanguages,
@@ -144,16 +143,14 @@ class AppServiceProvider extends ServiceProvider
 
             $headers->transform(function ($header) {
                 $menus = [];
-
                 if (!empty($header->menus)) {
                     $decoded = json_decode($header->menus, true);
                     if (is_array($decoded)) {
                         $menus = $decoded;
                     }
                 }
-
                 $filteredMenus = collect($menus)
-                    ->filter(fn ($menu) => isset($menu['status']) && $menu['status'] === true)
+                    ->filter(fn($menu) => isset($menu['status']) && $menu['status'] === true)
                     ->values()
                     ->all();
 
@@ -178,10 +175,13 @@ class AppServiceProvider extends ServiceProvider
                 ->get(['id', 'name', 'menus']);
 
             $footers->transform(function ($footer) {
-                /** @var array<int, array<string, mixed>> $menus */
-                $menus = !empty($footer->menus) ? json_decode($footer->menus, true) : [];
-
-                /** @var array<int, array<string, mixed>> $filteredMenus */
+                $menus = [];
+                if (!empty($footer->menus)) {
+                    $decoded = json_decode($footer->menus, true);
+                    if (is_array($decoded)) {
+                        $menus = $decoded;
+                    }
+                }
                 $filteredMenus = collect($menus)
                     ->filter(function ($menu) {
                         return !empty($menu['status']);

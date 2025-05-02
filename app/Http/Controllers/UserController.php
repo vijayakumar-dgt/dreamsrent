@@ -87,7 +87,7 @@ class UserController extends Controller
             $customTo   = $request->custom_to_date ?? "";
             $duration = $this->getDuration($request->duration, $customFrom, $customTo);
 
-            if ($duration) {
+            if (!isset($duration['error']) && isset($duration['from'])) {
                 $bookings->whereBetween('booking_date', [$duration['from'], $duration['to']]);
             }
         }
@@ -141,7 +141,7 @@ class UserController extends Controller
             $customTo   = $request->custom_to_date ?? "";
             $duration = $this->getDuration($request->duration, $customFrom, $customTo);
 
-            if ($duration) {
+            if (!isset($duration['error']) && isset($duration['from'])) {
                 $bookings->whereBetween('start_datetime', [$duration['from'], $duration['to']]);
             }
         }
@@ -178,10 +178,8 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Get a date range based on a given duration or custom dates.
-     *
-     * @return array{from: string, to: string}
+     /**
+     * @return array{from: string, to: string}|array{error: string}
      */
     public function getDuration(?string $duration, ?string $customFromDate = null, ?string $customToDate = null): array
     {
@@ -218,15 +216,19 @@ class UserController extends Controller
                 break;
             case 'custom':
                 if (!empty($customFromDate) && !empty($customToDate)) {
+                    if (strtotime($customFromDate) > strtotime($customToDate)) {
+                        return ['error' => 'Custom from date cannot be greater than to date'];
+                    }
+
                     $fromTimestamp = strtotime($customFromDate);
                     $toTimestamp = strtotime($customToDate);
 
                     if ($fromTimestamp === false || $toTimestamp === false) {
-                        return ['from' => '', 'to' => '', 'error' => 'Invalid custom date format'];
+                        return ['error' => 'Invalid custom date format'];
                     }
 
                     if ($fromTimestamp > $toTimestamp) {
-                        return ['from' => '', 'to' => '', 'error' => 'Custom from date cannot be greater than to date'];
+                        return ['error' => 'Custom from date cannot be greater than to date'];
                     }
 
                     $duration = [
@@ -446,9 +448,10 @@ class UserController extends Controller
 
     public function addToWishlist(Request $request): JsonResponse
     {
+        $authUserId = Auth::guard('web')->user()->id ?? 0;
         try {
             $vehicle = VehicleInfo::find($request->id);
-            $wishlist = Wishlist::where('user_id', Auth::guard('web')->user()->id)
+            $wishlist = Wishlist::where('user_id', $authUserId)
                 ->where('vehicle_id', $vehicle->id)->first();
             if ($wishlist) {
                 $wishlist->delete();
@@ -459,7 +462,7 @@ class UserController extends Controller
                 ]);
             } else {
                 Wishlist::create([
-                    'user_id' => Auth::guard('web')->user()->id,
+                    'user_id' => $authUserId,
                     'vehicle_id' => $vehicle->id
                 ]);
                 return response()->json([
@@ -479,7 +482,8 @@ class UserController extends Controller
 
     public function ajaxWishlists(Request $request): JsonResponse
     {
-        $wishlists = Wishlist::where('user_id', Auth::guard('web')->user()->id)->get();
+        $authUserId = Auth::guard('web')->user()->id ?? 0;
+        $wishlists = Wishlist::where('user_id', $authUserId)->get();
         return response()->json([
             'status' => 'success',
             'code'   => 200,
@@ -534,7 +538,7 @@ class UserController extends Controller
             }
 
             UserDetail::updateOrCreate(
-                ['user_id' => $user->id],
+                ['user_id' => $user?->id],
                 [
                     'first_name' => $request->first_name,
                     'last_name' => $request->last_name,
@@ -547,7 +551,7 @@ class UserController extends Controller
                     'profile_image' => $profilePhoto ?? $user->userDetail->profile_image ?? null,
                 ]
             );
-            $profileImage = UserDetail::where('user_id', $user->id)->pluck('profile_image')->first();
+            $profileImage = UserDetail::where('user_id', $user?->id)->value('profile_image');
 
             return response()->json([
                 'status' => 'success',
@@ -575,7 +579,7 @@ class UserController extends Controller
             }])
             ->where('languages.status', 1)
             ->get();
-        $id = Auth::guard('web')->user()->id;
+        $id = Auth::guard('web')->user()->id ?? 0;
         $preference = User::select('language_id', 'region_id')->where('id', $id)->first();
         $countries = Country::select('id', 'name')->where('status', 1)->get();
         $seo_title = __('web.user.preferences');
@@ -655,7 +659,8 @@ class UserController extends Controller
     }
     public function getSecuritySettings(): JsonResponse
     {
-        $userDevices = UserDevice::where('user_id', Auth::guard('web')->user()->id)->orderBy('created_at', 'desc')
+        $authUserId = Auth::guard('web')->user()->id ?? 0;
+        $userDevices = UserDevice::where('user_id', $authUserId)->orderBy('created_at', 'desc')
             ->take(5)->get()->map(function ($device) {
                 return [
                     'id' => $device->id,
@@ -682,8 +687,9 @@ class UserController extends Controller
 
     public function logoutDevice(Request $request): JsonResponse
     {
+        $authUserId = Auth::guard('web')->user()->id ?? 0;
         if ($request->isAll === "true") {
-            UserDevice::where('user_id', Auth::guard('web')->user()->id)->delete();
+            UserDevice::where('user_id', $authUserId)->delete();
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
@@ -710,7 +716,7 @@ class UserController extends Controller
     public function updatePreference(Request $request): JsonResponse
     {
         try {
-            $id = Auth::guard('web')->user()->id;
+            $id = Auth::guard('web')->user()->id ?? 0;
             $data = [];
 
             if ($request->has('language_id')) {
@@ -793,14 +799,13 @@ class UserController extends Controller
 
     public function getNotifications(Request $request): JsonResponse
     {
+        $notifications = [];
+        $notificationCount = 0;
         if (Auth::guard('web')->check()) {
-            $authUser = Auth::guard('web')->user();
-            $notifications = Notification::where('user_id', $authUser->id)
+            $authUserId = Auth::guard('web')->user()->id ?? 0;
+            $notifications = Notification::where('user_id', $authUserId)
                 ->where('readed', 0)->orderBy('created_at', 'desc')->limit(10)->get();
-            $notificationCount = Notification::where('user_id', $authUser->id)->where('readed', 0)->count();
-        } else {
-            $notifications = [];
-            $notificationCount = 0;
+            $notificationCount = Notification::where('user_id', $authUserId)->where('readed', 0)->count();
         }
         $html = view('frontend.user.notifications-popup', compact('notifications'))->render();
         return response()->json([
@@ -812,11 +817,12 @@ class UserController extends Controller
     }
     public function markAllAsRead(Request $request): JsonResponse
     {
+        $authUserId = Auth::guard('web')->user()->id ?? 0;
         if (
-            Notification::where('user_id', Auth::guard('web')->user()->id)
+            Notification::where('user_id', $authUserId)
             ->where('readed', 0)->count() > 0
         ) {
-            Notification::where('user_id', Auth::guard('web')->user()->id)->update(['readed' => 1]);
+            Notification::where('user_id', $authUserId)->update(['readed' => 1]);
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
@@ -839,7 +845,8 @@ class UserController extends Controller
 
     public function ajaxTransactions(Request $request): AnonymousResourceCollection
     {
-        $bookings = Booking::where('customer_id', Auth::guard('web')->user()->id);
+        $authUserId = Auth::guard('web')->user()->id ?? 0;
+        $bookings = Booking::where('customer_id', $authUserId);
 
         if ($request->has('limit')) {
             $bookings->take($request->limit);
@@ -850,7 +857,7 @@ class UserController extends Controller
             $customTo   = $request->custom_to_date ?? "";
             $duration = $this->getDuration($request->duration, $customFrom, $customTo);
 
-            if ($duration) {
+            if (!isset($duration['error']) && isset($duration['from'])) {
                 $bookings->whereBetween('start_datetime', [$duration['from'], $duration['to']]);
             }
         }
@@ -889,7 +896,8 @@ class UserController extends Controller
 
     public function notifications(Request $request): View | JsonResponse
     {
-        $notifications = Notification::where('user_id', Auth::guard('web')->user()->id)
+        $authUserId = Auth::guard('web')->user()->id ?? 0;
+        $notifications = Notification::where('user_id', $authUserId)
             ->orderBy('created_at', 'desc')->paginate(10);
 
         if ($request->ajax()) {
@@ -930,7 +938,8 @@ class UserController extends Controller
 
     public function deleteAllNotification(Request $request): JsonResponse
     {
-        Notification::where('user_id', Auth::guard('web')->user()->id)->delete();
+        $authUserId = Auth::guard('web')->user()->id ?? 0;
+        Notification::where('user_id', $authUserId)->delete();
         return response()->json([
             'status' => 'success',
             'code'   => 200,

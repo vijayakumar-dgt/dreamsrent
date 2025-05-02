@@ -25,6 +25,7 @@ use App\Models\UserDetail;
  * @property string|null $added_on
  * @property int|null $id
  * @property \Carbon\Carbon|null $last_password_changed_at
+ * @property string|null $password
  *
  */
 

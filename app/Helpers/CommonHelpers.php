@@ -96,7 +96,7 @@ if (!function_exists('formatDateTime')) {
 }
 
 if (!function_exists('uploadedAsset')) {
-    
+
     /**
      * @param string $filePath
      * @param string $default
@@ -182,7 +182,6 @@ if (!function_exists('uploadedAssetDetails')) {
     }
 }
 
-
 /**
  * Encrypts data using AES-128-CBC encryption.
  *
@@ -233,15 +232,14 @@ function getDefaultCurrencySymbol(): string
     return '$';
 }
 
-function isRTL(?string $languageCode = null): bool
+function isRTL(?string $languageCode = null): int
 {
-
     $language = TranslationLanguage::select('id')->where('code', $languageCode)->first();
     if ($language) {
         $languageId = $language->id;
         $language = Language::select('rtl')->where('language_id', $languageId)->first();
         if ($language && isset($language->rtl)) {
-            return (bool) $language->rtl;
+            return $language->rtl;
         }
     }
     return 0;
@@ -289,17 +287,19 @@ if (!function_exists('getUserPermissions')) {
     }
 }
 
-function hasPermission(Collection $permissions, $moduleSlug, string $action): bool
+/**
+ * @param Collection<int, \Modules\RolesPermission\Models\Permission> $permissions
+ * @param string|string[] $moduleSlug
+ * @param string $action
+ * @return bool
+ */
+function hasPermission(Collection $permissions, string|array $moduleSlug, string $action): bool
 {
     $user = current_user();
 
     $userType = $user->user_type ?? '';
     if ($userType == 1) {
         return true;
-    }
-
-    if (!$permissions) {
-        return false;
     }
 
     $moduleSlugs = is_array($moduleSlug) ? $moduleSlug : [$moduleSlug];
@@ -378,23 +378,21 @@ function sendNotification(string $email, string $slug, array $notifyData = []): 
         'notification_content' => $replaced($template->notification_content ?? ''),
     ];
 
-    if (!empty($parsedTemplate)) {
-        $payload = [
-            'to_email' => $email,
+    $payload = [
+        'to_email' => $email,
+        'subject' => $parsedTemplate['subject'],
+        'content' => $parsedTemplate['content'],
+    ];
+    $emailPayload   = new Request($payload);
+    $emailController = new EmailController();
+    $emailController->sendEmail($emailPayload);
+    $user = User::where('email', $email)->first();
+    if ($user) {
+        Notification::create([
+            'user_id' => $user->id,
             'subject' => $parsedTemplate['subject'],
-            'content' => $parsedTemplate['content'],
-        ];
-        $emailPayload   = new Request($payload);
-        $emailController = new EmailController();
-        $emailController->sendEmail($emailPayload);
-        $user = User::where('email', $email)->first();
-        if ($user) {
-            Notification::create([
-                'user_id' => $user->id,
-                'subject' => $parsedTemplate['subject'],
-                'content' => $parsedTemplate['notification_content']
-            ]);
-        }
+            'content' => $parsedTemplate['notification_content']
+        ]);
     }
 }
 
@@ -415,8 +413,8 @@ function getProfileImage(): ?string
     $user = current_user();
 
     if ($user && $user->userDetail) {
-        $asset = uploadedAsset($user->userDetail->profile_image, 'profile');
-        return is_array($asset) ? $asset['url'] : $asset;
+        $asset = uploadedAsset($user->userDetail->profile_image ?? '', 'profile');
+        return $asset;
     }
 
     return null;
@@ -434,14 +432,13 @@ function isAccessMenu(?string $menu): int
     return 0;
 }
 
-if (!function_exists('getBaseUrl')) 
-{
-  function getBaseUrl(): string
-{
-    if (app()->runningInConsole()) {
-        return config('app.url');
-    }
+if (!function_exists('getBaseUrl')) {
+    function getBaseUrl(): string
+    {
+        if (app()->runningInConsole()) {
+            return config('app.url');
+        }
 
-    return request()->getSchemeAndHttpHost();
-}
+        return request()->getSchemeAndHttpHost();
+    }
 }
