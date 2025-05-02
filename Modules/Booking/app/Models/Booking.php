@@ -6,6 +6,8 @@ use App\Models\DrivingType;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Models\VehicleInfo;
@@ -20,6 +22,10 @@ use Modules\CarInfo\Models\VehicleInfo;
  * @property string|null $booking_by
  * @property string|null $payment_status
  * @property string|null $final_price
+ * @property string|int|null $booking_status
+ * @property string|int|null $customer_id
+ * @property string|null $created_at
+ * 
  * 
  */
 
@@ -102,52 +108,52 @@ class Booking extends Model
         return $statuses[$status] ?? 'Unknown';
     }
 
-    public function getEncryptedIdAttribute()
+    public function getEncryptedIdAttribute(): string
     {
         return customEncrypt($this->id, Booking::$reservationSecretKey);
     }
 
-    public function vehicle()
+    public function vehicle(): BelongsTo
     {
         return $this->belongsTo(VehicleInfo::class, 'vehicle_id');
     }
 
-    public function drivingType()
+    public function drivingType(): BelongsTo
     {
         return $this->belongsTo(DrivingType::class, 'driving_type');
     }
 
-    public function bookingDetail()
+    public function bookingDetail(): HasOne
     {
         return $this->hasOne(BookingDetail::class, 'booking_id');
     }
 
-    public function pickupLocation()
+    public function pickupLocation(): BelongsTo
     {
         return $this->belongsTo(Location::class, 'pickup_location');
     }
 
-    public function returnLocation()
+    public function returnLocation(): BelongsTo
     {
         return $this->belongsTo(Location::class, 'return_location');
     }
 
-    public function cancelledUser()
+    public function cancelledUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'cancel_by');
     }
 
-    public function userInfo()
+    public function userInfo(): HasOne
     {
         return $this->hasOne(BookingUserInfo::class, 'booking_id');
     }
 
-    public function customer()
+    public function customer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'customer_id');
     }
 
-    public function customerDetail()
+    public function customerDetail(): BelongsTo
     {
         return $this->belongsTo(UserDetail::class, 'customer_id', 'user_id');
     }

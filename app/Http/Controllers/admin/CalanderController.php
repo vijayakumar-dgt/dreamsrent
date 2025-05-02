@@ -73,14 +73,14 @@ class CalanderController extends Controller
         if (!empty($drivers)) {
             $query->whereIn('driver_id', $drivers);
         }
-
         $bookings = $query->get();
 
-        $data = $bookings->map(function ($booking) {
+        $data = $bookings->map(function (Booking $booking): array {
+            /** @var \Modules\Booking\Models\BookingUserInfo|null $userInfo */
             $userInfo = $booking->userInfo;
 
             $userName = "N/A";
-            if ($booking && $booking->customer_id) {
+            if ($booking->customer_id) {
                 $user = User::select("name")->where('id', $booking->customer_id)->first();
                 $userName = $user ? ucwords(strtolower($user->name)) : "N/A";
             }
@@ -118,9 +118,12 @@ class CalanderController extends Controller
             return response()->json(['code' => 404, 'message' => 'Booking not found']);
         }
 
-        $booking->vehicle->vehicle_image = asset('/storage/' . $booking->vehicle->vehicle_image);
-
-        $vehicleType = Cartype::select('name')->where("id", $booking->vehicle->type_id)->first();
+        $vehicle = $booking->vehicle;
+        $vehicleType = null;
+        if ($vehicle) {
+            $booking->vehicle->vehicle_image = uploadedAsset($booking->vehicle->vehicle_image ?? '');
+            $vehicleType = Cartype::select('name')->where("id", $booking->vehicle->type_id)->first();
+        }
 
         $pickupLocation = $booking->delivery_location
             ? $booking->delivery_location
@@ -136,7 +139,7 @@ class CalanderController extends Controller
                 ->first();
 
             if ($driverDetails && $driverDetails->image) {
-                $driverDetails->image = asset('/storage/' . $driverDetails->image);
+                $driverDetails->image = uploadedAsset($driverDetails->image, 'profile');
             }
         } else {
             $bookingUser = BookingUserInfo::where('booking_id', $booking->id)->first();
@@ -144,7 +147,7 @@ class CalanderController extends Controller
             $driverDetails = (object) [
                 'driver_name'    => $bookingUser->driver_first_name ?? null,
                 'phone_number'   => $bookingUser->driver_mobile_number ?? null,
-                'image'          => null,
+                'image'          => uploadedAsset('', 'profile'),
             ];
         }
 
@@ -158,8 +161,8 @@ class CalanderController extends Controller
                 'last_name' => $userDetail->last_name ?? '',
                 'phone_number' => $userInfo->phone_number ?? '',
                 'profile_image' => $userDetail->profile_image
-                    ? url('storage/' . $userDetail->profile_image)
-                    : url('assets/img/default-avatar.jpg'),
+                    ? uploadedAsset($userDetail->profile_image, 'profile')
+                    : uploadedAsset('', 'profile'),
             ];
         } else {
             $customerData = null;

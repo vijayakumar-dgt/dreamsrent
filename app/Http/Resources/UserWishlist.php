@@ -7,6 +7,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\CarInfo\Models\VehicleInfo;
 
 /** @mixin \App\Models\Wishlist */
+/**
+ * @property \Modules\Booking\Models\Booking $resource
+ */
 class UserWishlist extends JsonResource
 {
     /**
@@ -20,7 +23,7 @@ class UserWishlist extends JsonResource
 
         return [
             'id' => $this->resource->id,
-            'vehicle_id' => $this->resource->vehicle_id,
+            'vehicle_id' => $this->resource->getAttribute('vehicle_id'),
             'name' => $vehicle->name ?? '',
             'slug' => $vehicle->slug ?? '',
             'vehicle_image' => isset($vehicle->vehicle_image) ? uploadedAsset($vehicle->vehicle_image) : null,
@@ -40,8 +43,12 @@ class UserWishlist extends JsonResource
             'vehicle_video' => $vehicle->vehicle_video ?? null,
             'features' => $vehicle->features ?? [],
             'currency' => getDefaultCurrencySymbol(),
-            'price' => $vehicle ? $this->getPrice($vehicle) : 0,
-            'filtered_price' => $vehicle ? $this->getPrice($vehicle, true, true) : 0,
+            'price' => ($vehicle instanceof \Modules\CarInfo\Models\VehicleInfo)
+                ? $this->getPrice($vehicle)
+                : 0,
+            'filtered_price' => ($vehicle instanceof \Modules\CarInfo\Models\VehicleInfo)
+                ? $this->getPrice($vehicle, true, true)
+                : 0,
             'rating' => rand(1, 5),
         ];
     }
@@ -52,7 +59,7 @@ class UserWishlist extends JsonResource
      * @param VehicleInfo $vehicle
      * @param bool $firstPrice
      * @param bool $type
-     * @return array<string, int|float>|array{type: string|null, value: int|float|null}
+     * @return array<string, mixed>
      */
     public function getPrice(VehicleInfo $vehicle, bool $firstPrice = false, bool $type = false): array
     {

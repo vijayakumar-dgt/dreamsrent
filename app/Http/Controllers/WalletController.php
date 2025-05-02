@@ -42,7 +42,7 @@ class WalletController extends Controller
         if (!$user) {
             return response()->json([
                 'code' => 401,
-                'message' => 'Unauthorized access. Please log in.',
+                'message' => 'Unauthorized access.',
             ], 401);
         }
 
@@ -219,6 +219,13 @@ class WalletController extends Controller
     {
         try {
             $user = Auth::guard('web')->user();
+
+            if (!$user) {
+                return response()->json([
+                    'code' => 401,
+                    'message' => 'Unauthorized access.',
+                ], 401);
+            }
 
             $walletHistory = WalletHistory::where('user_id', $user->id)
                 ->where('type', '1')
