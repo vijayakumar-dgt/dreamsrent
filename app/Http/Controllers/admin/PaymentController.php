@@ -71,7 +71,7 @@ class PaymentController extends Controller
 
                 case 'last_7_days':
                     $query->where('created_at', '>=', now()->subDays(7))
-                          ->orderBy('created_at', 'desc');
+                        ->orderBy('created_at', 'desc');
                     break;
 
                 case 'latest':

@@ -42,13 +42,11 @@ class MessageResource extends JsonResource
     public function getAvatar(int $userId): string
     {
         $user = User::find($userId);
-        if($user && $user->userDetail){
-            $profileImage = uploadedAsset($user->userDetail->profile_image, 'profile');
-            return is_array($profileImage) ? $profileImage['url'] : $profileImage;
+        if ($user && $user->userDetail) {
+            return uploadedAsset($user->userDetail->profile_image, 'profile');
         }
-        //return default avatar if user not found
-        $defaultProfile = uploadedAsset('default', 'profile');
-        return is_array($defaultProfile) ? $defaultProfile['url'] : $defaultProfile;
+    
+        return uploadedAsset('default', 'profile');
     }
 
     public function getAdminAvatar(): string
@@ -56,10 +54,8 @@ class MessageResource extends JsonResource
         $user = User::where('user_type', 1)->first();
         if($user && $user->userDetail){
             $profileImage = uploadedAsset($user->userDetail->profile_image, 'profile');
-            return is_array($profileImage) ? $profileImage['url'] : $profileImage;
+            return $profileImage;
         }
-        //return default avatar if user not found
-        $defaultProfile = uploadedAsset('default', 'profile');
-        return is_array($defaultProfile) ? $defaultProfile['url'] : $defaultProfile;
+        return uploadedAsset('default', 'profile');
     }
 }

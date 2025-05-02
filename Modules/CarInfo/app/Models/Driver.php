@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\CarInfo\Database\Factories\DriverFactory;
-
+/**
+ * @property string|array<string>|null $image
+ *
+ */ 
 class Driver extends Model
 {
     use SoftDeletes;
