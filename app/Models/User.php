@@ -15,7 +15,7 @@ use App\Models\UserDetail;
 /**
  * @property int|null $language_id
  * @property string|null $customer_full_name
- * @property string|array|null $profile_image
+ * @property string|array<string>|null $profile_image
  * @property string|null $language_code
  * @property string|null $language_flag
  * @property string|null $encrypted_id
