@@ -7,8 +7,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Modules\Booking\Models\Booking;
-use Modules\Booking\Models\BookingUserInfo;
-use Modules\CarInfo\Models\VehicleInfo;
 
 class PaymentController extends Controller
 {
@@ -41,7 +39,7 @@ class PaymentController extends Controller
                         $sub->where('first_name', 'LIKE', "%{$search}%")
                             ->orWhere('last_name', 'LIKE', "%{$search}%");
                     })
-                    ->orWhere('payment_type', 'LIKE', "%{$search}%");
+                        ->orWhere('payment_type', 'LIKE', "%{$search}%");
                 });
             }
 
@@ -82,18 +80,23 @@ class PaymentController extends Controller
 
             $bookings = $query->get();
 
+            /** @var \Illuminate\Database\Eloquent\Collection<int, \Modules\Booking\Models\Booking> $bookings */
             $data = $bookings->map(function ($booking) {
+                /** @var \Modules\Booking\Models\Booking $booking */
                 $userInfo = $booking->userInfo;
 
                 return [
                     'id' => $booking->reservation_id,
                     'name' => $userInfo ? "{$userInfo->first_name} {$userInfo->last_name}" : "N/A",
                     'amount' => $booking->final_price,
-                    'payment_type' => ucfirst(str_replace('_', ' ', $booking->payment_type)),
-                    'created_at' => $booking->created_at->format('d M Y'),
+                    'payment_type' => ucfirst(str_replace('_', ' ', (string)$booking->payment_type)),
+                    'created_at' => $booking->created_at?->format('d M Y'),
                     'payment_status' => $booking->payment_status,
                 ];
             });
+
+
+
 
             return response()->json([
                 'code' => 200,

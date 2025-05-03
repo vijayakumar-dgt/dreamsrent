@@ -28,9 +28,14 @@ use Modules\CarInfo\Models\VehicleTarrif;
  * @property string $name
  * @property string $vehicle_name
  * @property string $cartype_name
+ * @property string|null $location_name
+ * @property string|null $image_url
  */
 class VehicleInfo extends Model
 {
+    public ?string $location_name = null;
+    public ?string $image_url = null;
+
     use SoftDeletes;
 
     /**
