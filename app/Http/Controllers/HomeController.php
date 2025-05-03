@@ -25,8 +25,11 @@ class HomeController extends Controller
     {
         $defaultTheme = GeneralSetting::where('key', 'default_theme')->first();
         $theme = $defaultTheme->value ?? 1;
-        $viewFileName = 'home_' . $theme;
-        return view('frontend.home.' . $viewFileName);
+        $viewPath = 'frontend.home.home_' . $theme;
+        if (!view()->exists($viewPath)) {
+            $viewPath = 'frontend.home.home_1';
+        }
+        return view($viewPath);
     }
 
     public function list(Request $request): View | JsonResponse

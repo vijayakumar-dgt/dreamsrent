@@ -30,6 +30,7 @@ use Modules\CarInfo\Models\VehicleTarrif;
  * @property string $cartype_name
  * @property string|null $location_name
  * @property string|null $image_url
+ * @property int|null $main_location_id
  */
 class VehicleInfo extends Model
 {

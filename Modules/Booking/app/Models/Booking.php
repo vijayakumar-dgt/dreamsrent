@@ -35,7 +35,7 @@ use Modules\CarInfo\Models\VehicleInfo;
  * @property-read \Modules\CarInfo\Models\VehicleInfo|null $vehicle
  * @property int $reservation_id
  * @property string|null $payment_type
- * @property-read \App\Models\User|null $userInfo
+ * @property-read \Modules\Booking\Models\BookingUserInfo|null $userInfo
  * 
  */
 

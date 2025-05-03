@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Modules\Booking\Models\Booking;
+use Modules\Booking\Models\BookingUserInfo;
 
 class PaymentController extends Controller
 {
@@ -16,7 +17,6 @@ class PaymentController extends Controller
 
         return view("admin.payment.index", compact('GetPayments'));
     }
-
 
     public function paymentList(Request $request): JsonResponse
     {
@@ -80,23 +80,22 @@ class PaymentController extends Controller
 
             $bookings = $query->get();
 
-            /** @var \Illuminate\Database\Eloquent\Collection<int, \Modules\Booking\Models\Booking> $bookings */
-            $data = $bookings->map(function ($booking) {
-                /** @var \Modules\Booking\Models\Booking $booking */
+            $data = $bookings->map(function (Booking $booking): array {
+                /** @var \Modules\Booking\Models\BookingUserInfo|null $userInfo */
                 $userInfo = $booking->userInfo;
+
+                /** @var \Carbon\CarbonInterface|null $createdAt */
+                $createdAt = $booking->created_at;
 
                 return [
                     'id' => $booking->reservation_id,
                     'name' => $userInfo ? "{$userInfo->first_name} {$userInfo->last_name}" : "N/A",
                     'amount' => $booking->final_price,
                     'payment_type' => ucfirst(str_replace('_', ' ', (string)$booking->payment_type)),
-                    'created_at' => $booking->created_at?->format('d M Y'),
+                    'created_at' => $createdAt?->format('d M Y'),
                     'payment_status' => $booking->payment_status,
                 ];
             });
-
-
-
 
             return response()->json([
                 'code' => 200,
