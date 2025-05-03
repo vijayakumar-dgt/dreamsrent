@@ -18,6 +18,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Collection;
 
 class GeneralSettingController extends Controller
 {
@@ -91,6 +92,14 @@ class GeneralSettingController extends Controller
         return view('generalsetting::rental_settings.rental-settings');
     }
 
+    private function updateOrCreateRentalSetting(?string $key, ?string $value): bool
+    {
+        return (bool) GeneralSetting::updateOrCreate(
+            ['key' => $key],
+            ['value' => $value, 'group_id' => 20]
+        );
+    }
+
     public function storeRentalSettings(Request $request):JsonResponse
     {
         $rules = [
@@ -126,14 +135,6 @@ class GeneralSettingController extends Controller
         }
 
         try {
-            function updateOrCreateRentalSetting($key, $value)
-            {
-                return GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    ['value' => $value, 'group_id' => 20] // Assuming rental settings belong to group_id 20
-                );
-            }
-
             $settings = [
                 'minAdvanceReservation' => $request->minAdvanceReservation,
                 'maxAdvanceReservation' => $request->maxAdvanceReservation,
@@ -150,7 +151,7 @@ class GeneralSettingController extends Controller
             ];
 
             foreach ($settings as $key => $value) {
-                $saveSetting = updateOrCreateRentalSetting($key, $value);
+                $saveSetting = $this->updateOrCreateRentalSetting($key, $value);
                 if (!$saveSetting) {
                     throw new \Exception("Failed to save $key");
                 }
@@ -168,6 +169,15 @@ class GeneralSettingController extends Controller
             ], 500);
         }
     }
+
+    private function updateOrCreateLogoSetting(?string $key, ?string $path, ?int $groupId): GeneralSetting
+    {
+        return GeneralSetting::updateOrCreate(
+            ['key' => $key],
+            ['value' => $path, 'group_id' => $groupId]
+        );
+    }
+
     public function storeLogoSettings(Request $request):JsonResponse
     {
         $rules = [
@@ -196,17 +206,7 @@ class GeneralSettingController extends Controller
 
         try {
             $groupId = 16;
-
-            function updateOrCreateLogoSetting($key, $path, $groupId)
-            {
-                return GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    ['value' => $path, 'group_id' => $groupId]
-                );
-            }
-
             $paths = [];
-
             $logoFields = [
                 'logo_image' => 'logo',
                 'favicon_image' => 'favicon',
@@ -219,7 +219,7 @@ class GeneralSettingController extends Controller
                     $file = $request->file($field);
                     $fullPath = uploadFile($file, 'logos');
 
-                    updateOrCreateLogoSetting($field, $fullPath, $groupId);
+                    $this->updateOrCreateLogoSetting($field, $fullPath, $groupId);
 
                     $paths[$field] = $fullPath;
                 }
@@ -238,7 +238,13 @@ class GeneralSettingController extends Controller
         }
     }
 
-
+    private function updateOrCreateOtpSetting(?string $key, ?string $value): bool
+    {
+        return (bool) GeneralSetting::updateOrCreate(
+            ['key' => $key],
+            ['value' => $value, 'group_id' => 15]
+        );
+    }
 
     public function storeOtpSettings(Request $request):JsonResponse
     {
@@ -268,14 +274,6 @@ class GeneralSettingController extends Controller
         }
 
         try {
-            function updateOrCreateOtpSetting($key, $value)
-            {
-                return GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    ['value' => $value, 'group_id' => 15] // Assuming OTP settings belong to group_id 9
-                );
-            }
-
             $settings = [
                 'otp_type' => $request->otp_type,
                 'otp_digit_limit' => $request->otp_digit_limit,
@@ -285,7 +283,7 @@ class GeneralSettingController extends Controller
             ];
 
             foreach ($settings as $key => $value) {
-                $saveSetting = updateOrCreateOtpSetting($key, $value);
+                $saveSetting = $this->updateOrCreateOtpSetting($key, $value);
                 if (!$saveSetting) {
                     throw new \Exception("Failed to save $key");
                 }
@@ -338,6 +336,14 @@ class GeneralSettingController extends Controller
         }
     }
 
+    private function updateOrCreateAwsSetting(?string $key, ?string $value): bool
+    {
+        return (bool) GeneralSetting::updateOrCreate(
+            ['key' => $key],
+            ['value' => $value, 'group_id' => 8]
+        );
+    }
+    
     public function storeAwsSettings(Request $request):JsonResponse
     {
         $rules = [
@@ -364,14 +370,6 @@ class GeneralSettingController extends Controller
         }
 
         try {
-            function updateOrCreateAwsSetting($key, $value)
-            {
-                return GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    ['value' => $value, 'group_id' => 8]
-                );
-            }
-
             $settings = [
                 'aws_access_key' => $request->aws_access_key,
                 'aws_secret_key' => $request->aws_secret_key,
@@ -381,7 +379,7 @@ class GeneralSettingController extends Controller
             ];
 
             foreach ($settings as $key => $value) {
-                $saveSetting = updateOrCreateAwsSetting($key, $value);
+                $saveSetting = $this->updateOrCreateAwsSetting($key, $value);
                 if (!$saveSetting) {
                     throw new \Exception("Failed to save $key");
                 }
@@ -398,6 +396,14 @@ class GeneralSettingController extends Controller
                 'message' => __('admin.general_settings.retrive_error'),
             ], 500);
         }
+    }
+
+    private function updateOrCreateInvoiceSetting(?string $key, ?string $value): bool
+    {
+        return (bool) GeneralSetting::updateOrCreate(
+            ['key' => $key],
+            ['value' => $value, 'group_id' => 9]
+        );
     }
 
     public function storeInvoiceSettings(Request $request):JsonResponse
@@ -430,18 +436,9 @@ class GeneralSettingController extends Controller
         }
 
         try {
-            function updateOrCreateInvoiceSetting($key, $value)
-            {
-                return GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    ['value' => $value, 'group_id' => 9] // Assuming group_id for invoice settings
-                );
-            }
-
-            // Handle logo upload if present
             if ($request->hasFile('invoice_logo')) {
                 $logoPath = $request->file('invoice_logo')->store('invoices', 'public');
-                updateOrCreateInvoiceSetting('invoice_logo', $logoPath);
+                $this->updateOrCreateInvoiceSetting('invoice_logo', $logoPath);
             }
 
             $settings = [
@@ -454,7 +451,7 @@ class GeneralSettingController extends Controller
             ];
 
             foreach ($settings as $key => $value) {
-                $saveSetting = updateOrCreateInvoiceSetting($key, $value);
+                $saveSetting = $this->updateOrCreateInvoiceSetting($key, $value);
                 if (!$saveSetting) {
                     throw new \Exception("Failed to save $key");
                 }
