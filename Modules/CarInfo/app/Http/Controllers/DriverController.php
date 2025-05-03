@@ -178,7 +178,6 @@ class DriverController extends Controller
                 'message' => $successMsg
             ]);
         } catch (\Exception $e) {
-            dd($e);
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
