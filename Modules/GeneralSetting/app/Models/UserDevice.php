@@ -11,9 +11,12 @@ use Illuminate\Database\Eloquent\Model;
  *  @property string|null $os
  *  @property string|null $ip_address
  *  @property string|null $location
+ *  @property \Illuminate\Support\Carbon|null $created_at
+ *  @property \Illuminate\Support\Carbon|null $updated_at
  */
 class UserDevice extends Model
 {
+    public $timestamps = true;
     /**
      * The attributes that are mass assignable.
      */

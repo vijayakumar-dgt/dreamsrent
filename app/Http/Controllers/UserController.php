@@ -354,23 +354,26 @@ class UserController extends Controller
     public function completeRide(Request $request): JsonResponse
     {
         try {
+            /** @var Booking|null $booking */
             $booking = Booking::find($request->id);
             $bookingDetail = BookingDetail::where('booking_id', $request->id)->first();
             $historyData = [
-                'booking' => $booking->toArray(),
+                'booking' => $booking ? $booking->toArray() : '',
                 'booking_detail' => $bookingDetail ? $bookingDetail->toArray() : []
             ];
 
             BookingHistory::create([
-                'booking_id' => $booking->id,
+                'booking_id' => $booking->id ?? '',
                 'action'     => 'completed',
                 'data'       => json_encode($historyData),
                 'message'    => __('web.user.ride_completed')
             ]);
 
-            $booking->update([
-                'booking_status' => 5
-            ]);
+            if ($booking) {
+                $booking->update([
+                    'booking_status' => 5,
+                ]);
+            }
 
             return response()->json([
                 'status' => 'success',
@@ -389,23 +392,26 @@ class UserController extends Controller
     public function startRide(Request $request): JsonResponse
     {
         try {
+             /** @var Booking|null $booking */
             $booking = Booking::find($request->id);
             $bookingDetail = BookingDetail::where('booking_id', $request->id)->first();
             $historyData = [
-                'booking' => $booking->toArray(),
+                'booking' => $booking ? $booking->toArray() : '',
                 'booking_detail' => $bookingDetail ? $bookingDetail->toArray() : []
             ];
 
             BookingHistory::create([
-                'booking_id' => $booking->id,
+                'booking_id' => $booking->id ?? '',
                 'action'     => 'started',
                 'data'       => json_encode($historyData),
                 'message'    => __('web.user.ride_started')
             ]);
 
-            $booking->update([
-                'booking_status' => 1
-            ]);
+            if ($booking) {
+                $booking->update([
+                    'booking_status' => 1,
+                ]);
+            }
 
             return response()->json([
                 'status' => 'success',
@@ -424,8 +430,11 @@ class UserController extends Controller
     public function deleteRide(Request $request): JsonResponse
     {
         try {
+            /** @var Booking|null $booking */
             $booking = Booking::find($request->id);
+            if ($booking) {
             $booking->delete();
+            }
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
@@ -450,9 +459,11 @@ class UserController extends Controller
     {
         $authUserId = Auth::guard('web')->user()->id ?? 0;
         try {
+            /** @var VehicleInfo|null $vehicle */
             $vehicle = VehicleInfo::find($request->id);
             $wishlist = Wishlist::where('user_id', $authUserId)
-                ->where('vehicle_id', $vehicle->id)->first();
+                                    ->where('vehicle_id', $vehicle->id ?? '')
+                                    ->first();
             if ($wishlist) {
                 $wishlist->delete();
                 return response()->json([
@@ -463,7 +474,7 @@ class UserController extends Controller
             } else {
                 Wishlist::create([
                     'user_id' => $authUserId,
-                    'vehicle_id' => $vehicle->id
+                    'vehicle_id' => $vehicle->id ?? ''
                 ]);
                 return response()->json([
                     'status' => 'success',
@@ -526,15 +537,16 @@ class UserController extends Controller
             }
 
             $user = Auth::guard('web')->user();
-            $user->update([
-                'email' => $request->email,
-                'phone_number' => $request->user_phone,
-            ]);
-
+            if ($user instanceof User) {
+                $user->update([
+                    'email' => $request->email,
+                    'phone_number' => $request->user_phone,
+                ]);
+            }
             $profilePhoto = null;
             if ($request->hasFile('profile_photo')) {
                 $folder = "profile";
-                $profilePhoto = uploadFile($request->file('profile_photo'), $folder);
+                $profilePhoto = $request->file('profile_photo') ? uploadFile($request->file('profile_photo'), $folder) : null;
             }
 
             UserDetail::updateOrCreate(
@@ -606,7 +618,8 @@ class UserController extends Controller
     public function checkCurrentPassword(Request $request): JsonResponse
     {
         $password = $request->password;
-        if (Hash::check($password, Auth::guard('web')->user()->password)) {
+        $user = Auth::guard('web')->user();
+        if ($user && $user->password && Hash::check($password, $user->password)) {
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
@@ -638,7 +651,8 @@ class UserController extends Controller
             ], 422);
         }
 
-        if (!Hash::check($request->current_password, Auth::guard('web')->user()->password)) {
+        $user = Auth::guard('web')->user();
+        if (!$user || !$user->password || !Hash::check($request->current_password, $user->password)) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 500,
@@ -647,10 +661,12 @@ class UserController extends Controller
         }
 
         $user = Auth::guard('web')->user();
-        $user->password = Hash::make($request->new_password);
-        $user->last_password_changed_at = now();
-        $user->save();
-
+        if ($user instanceof User && $user->password) {
+            $user->password = Hash::make($request->new_password);
+            $user->last_password_changed_at = now();
+            $user->save();
+        }
+        
         return response()->json([
             'status'  => 'success',
             'code'    => 200,
@@ -669,13 +685,15 @@ class UserController extends Controller
                     'os' => $device->os,
                     'ip_address' => $device->ip_address,
                     'location' => $device->location,
-                    'date'     => Carbon::parse($device->created_at)->format('d M Y, h:i A')
+                    'date'     => Carbon::parse($device->created_at ?? '')->format('d M Y, h:i A')
                 ];
             });
+            $user = Auth::guard('web')->user();
         $response    = [
             'user' => Auth::guard('web')->user(),
-            'last_password_changed_at' => Auth::guard('web')->user()->last_password_changed_at ? Carbon::parse(Auth::guard('web')
-                ->user()->last_password_changed_at)->format('d M Y, h:i A') : "",
+            'last_password_changed_at' => Auth::guard('web')->check() && $user && $user->last_password_changed_at 
+                ? Carbon::parse($user->last_password_changed_at)->format('d M Y, h:i A') 
+                : "",
             'devices' => $userDevices
         ];
         return response()->json([
@@ -698,7 +716,9 @@ class UserController extends Controller
         } else {
             $device = UserDevice::find($request->id);
             if ($device) {
-                $device->delete();
+                if ($device instanceof UserDevice) {
+                    $device->delete();
+                }
                 return response()->json([
                     'status'  => 'success',
                     'code'    => 200,

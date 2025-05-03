@@ -33,6 +33,9 @@ use Modules\CarInfo\Models\VehicleInfo;
  * @property string|null $delivery_location
  * @property string|null $delivery_return_location
  * @property-read \Modules\CarInfo\Models\VehicleInfo|null $vehicle
+ * @property int $reservation_id
+ * @property string|null $payment_type
+ * @property-read \App\Models\User|null $userInfo
  * 
  */
 
@@ -149,9 +152,12 @@ class Booking extends Model
     {
         return $this->belongsTo(User::class, 'cancel_by');
     }
-
+    /**
+     * @return HasOne<BookingUserInfo, Booking>
+     */
     public function userInfo(): HasOne
     {
+         /** @var hasOne<BookingUserInfo, Booking> */
         return $this->hasOne(BookingUserInfo::class, 'booking_id');
     }
 

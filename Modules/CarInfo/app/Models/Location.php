@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $pincode
  * @property string|array<string>|null $image_url
  * @property string|null $working_days
+ * @property int|null $main_location_id
  */
 class Location extends Model
 {

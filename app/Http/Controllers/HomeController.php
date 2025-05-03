@@ -34,15 +34,22 @@ class HomeController extends Controller
         $languageCode = app()->getLocale();
         $languageId = getLanguageId($languageCode);
         $brands = Brand::where('status', 1)->where("language_id", $languageId)->orderBy('brand_name', 'asc')->get();
-        $vehicleTypes = Cartype::where('language_id', $languageId)
-            ->where('status', 1)->orderBy('name', 'asc')->get()->map(function ($vehicleType) {
-                $vehicleCount = VehicleInfo::where('type_id', $vehicleType->id)->count();
-                return [
-                    'id' => $vehicleType->id,
-                    'name' => $vehicleType->name,
-                    'vehicle_count' => $vehicleCount
-                ];
-            });
+        /** @var \Illuminate\Database\Eloquent\Collection<int, \Modules\CarInfo\Models\Cartype> $cartypes */
+        $cartypes = Cartype::where('language_id', $languageId)
+            ->where('status', 1)
+            ->orderBy('name', 'asc')
+            ->get();
+
+        /** @var \Illuminate\Support\Collection<int, array{id: int, name: string, vehicle_count: int}> $vehicleTypes */
+        $vehicleTypes = $cartypes->map(function (Cartype $vehicleType) {
+            $vehicleCount = VehicleInfo::where('type_id', $vehicleType->id)->count();
+            return [
+                'id' => $vehicleType->id,
+                'name' => $vehicleType->name,
+                'vehicle_count' => $vehicleCount
+            ];
+        });
+
         $years = VehicleInfo::where('language_id', $languageId)
             ->select('year')->distinct()->orderBy('year', 'desc')->pluck('year')->toArray();
         $fuelTypes = CarFuel::where('language_id', $languageId)
@@ -54,9 +61,9 @@ class HomeController extends Controller
         $features = SafetyFeature::where('language_id', $languageId)
             ->where('status', 1)->orderBy('feature', 'asc')->get();
         $allowBooking = GeneralSetting::where('group_id', 20)
-            ->where('key', 'booking')->pluck('value')->first() ?? 1;
-        $allowEnquiries = GeneralSetting::where('group_id', 20)
-            ->where('key', 'enquiries')->pluck('value')->first() ?? 1;
+            ->where('key', 'booking')
+            ->value('value') ?? 1;
+        $allowEnquiries = GeneralSetting::where('group_id', 20)->where('key', 'enquiries')->value('value') ?? 1;
         $data = [
             'brands' => $brands,
             'vehicleTypes' => $vehicleTypes,
@@ -108,7 +115,7 @@ class HomeController extends Controller
         if (!$vehicle) {
             abort(404);
         }
-        $mainLocation = Location::select('id', 'name', 'address')->where('id', $vehicle->main_location_id)->first();
+        $mainLocation = Location::select('id', 'name', 'address')->where('id', $vehicle->main_location_id ?? '')->first();
         $allLocation = collect();
 
         // Get main location
@@ -156,23 +163,34 @@ class HomeController extends Controller
         $lastUpdateFormatted = $lastUpdate ? \Carbon\Carbon::parse($lastUpdate)->format('d, M Y') : 'N/A';
 
         $allowBooking = GeneralSetting::where('group_id', 20)
-            ->where('key', 'booking')->pluck('value')->first() ?? 1;
+            ->where('key', 'booking')->value('value') ?? 1;
         $allowEnquiries = GeneralSetting::where('group_id', 20)
-            ->where('key', 'enquiries')->pluck('value')->first() ?? 1;
-        $vehicleDetail = VehicleInfo::where('id', $vehicle->id)->first();
-        $vehicleDetail->name = ucfirst($vehicleDetail->name);
-        $vehicleDetail->location_name = $vehicleDetail->mainLocation ? $vehicleDetail->mainLocation->name : '';
-        $vehicleDetail->image_url     = $vehicleDetail->vehicle_image ? uploadedAsset($vehicleDetail->vehicle_image) : '';
-
-        $seo_title = $vehicleDetail->vehicle_metatitle;
-        $seo_description = $vehicleDetail->vehicle_metadesc;
-        $meta_keywords = $vehicleDetail->vehicle_metakeywords;
-        $og_image = $vehicleDetail->vehicle_image ? uploadedAsset($vehicleDetail->vehicle_image) : '';
+            ->where('key', 'enquiries')->value('value') ?? 1;
+        $vehicleDetail = VehicleInfo::find($vehicle->id);
+        $seo_title = '';
+        $seo_description = '';
+        $meta_keywords = '';
+        $og_image = '';
+        $mainLocation = null;
+        
+        $vehicleDetail = VehicleInfo::find($vehicle->id);
+        
+        if ($vehicleDetail) {
+            $vehicleDetail->name = ucfirst($vehicleDetail->name ?? '');
+            $vehicleDetail->location_name = $vehicleDetail->mainLocation->name ?? '';
+            $vehicleDetail->image_url = $vehicleDetail->vehicle_image ? uploadedAsset($vehicleDetail->vehicle_image) : '';
+        
+            $seo_title = $vehicleDetail->vehicle_metatitle ?? '';
+            $seo_description = $vehicleDetail->vehicle_metadesc ?? '';
+            $meta_keywords = $vehicleDetail->vehicle_metakeywords ?? '';
+            $og_image = $vehicleDetail->vehicle_image ? uploadedAsset($vehicleDetail->vehicle_image) : '';
+            $mainLocation = $vehicleDetail->mainLocation;
+        }
+        
         $data['author_location'] = GeneralSetting::where('key', 'company_address_line')->first()->value ?? '';
         $appAdmin = User::where('user_type', 1)->first();
-        $appAdminDetails = UserDetail::where('user_id', $appAdmin->id)->first();
-        $data['author_profile'] = uploadedAsset($appAdminDetails->profile_image, 'profile');
-        $data['author_name'] = $appAdmin->name ?? "";
+        $appAdminDetails = $appAdmin ? UserDetail::where('user_id', $appAdmin->id)->first() : null;
+        $data['author_profile'] = $appAdminDetails ? uploadedAsset($appAdminDetails->profile_image, 'profile') : '';
         $data['author_email'] = $appAdmin->email ?? "";
         $data['author_phone'] = $appAdminDetails->mobile_number ?? "";
         return view(
