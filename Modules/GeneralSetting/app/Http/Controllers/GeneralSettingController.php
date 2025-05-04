@@ -19,6 +19,7 @@ use Illuminate\View\View;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class GeneralSettingController extends Controller
 {
@@ -555,7 +556,7 @@ class GeneralSettingController extends Controller
         try {
             $newOwnerId = $request->owner_id;
 
-            \DB::transaction(function () use ($newOwnerId) {
+            DB::transaction(function () use ($newOwnerId) {
                 \App\Models\User::where('user_type', 1)->update(['user_type' => 4]);
 
                 \App\Models\User::where('id', $newOwnerId)->update(['user_type' => 1]);
@@ -1075,6 +1076,7 @@ class GeneralSettingController extends Controller
             ], 500);
         }
 
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $user->password = Hash::make($request->new_password);
         $user->last_password_changed_at = now();
@@ -1126,6 +1128,7 @@ class GeneralSettingController extends Controller
                 'message'  => __('admin.general_settings.phone_number_incorrect')
             ]);
         }
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $user->phone_number = $request->new_phonenumber;
         $user->save();
@@ -1167,6 +1170,7 @@ class GeneralSettingController extends Controller
                 'message'  => __('admin.general_settings.current_password_incorrect')
             ]);
         }
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         $user->email = $request->new_email;
         $user->save();
@@ -1203,7 +1207,7 @@ class GeneralSettingController extends Controller
         ]);
     }
 
-    public function logoutDevice(Request $request):JsonResponse
+    public function logoutDevice(Request $request): JsonResponse
     {
 
         if ($request->isAll === "true") {
@@ -1214,22 +1218,20 @@ class GeneralSettingController extends Controller
                 'code'    => 200,
                 'message' => __('admin.general_settings.all_device_removed_successfully'),
             ]);
-        } else {
-            $device = UserDevice::find($request->id);
-            if ($device) {
-                $device->delete();
-                return response()->json([
-                    'status'  => 'success',
-                    'code'    => 200,
-                    'message' => __('admin.general_settings.device_removed_successfully'),
-                ]);
-            }
         }
+        $device = UserDevice::find($request->id);
+        $device->delete();
+        return response()->json([
+            'status'  => 'success',
+            'code'    => 200,
+            'message' => __('admin.general_settings.device_removed_successfully'),
+        ]);
     }
 
     public function updateGoogleAuth(Request $request):JsonResponse
     {
         try {
+            /** @var \App\Models\User $user */
             $user = Auth::user();
             $user->google_auth_enabled = $request->googleAuthEnabled === "true" ? 1 : 0;
             $user->save();

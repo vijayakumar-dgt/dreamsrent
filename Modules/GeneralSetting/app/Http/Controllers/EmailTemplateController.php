@@ -80,6 +80,7 @@ class EmailTemplateController extends Controller
             $successMessage =  __('admin.general_settings.email_template_success');
 
             if ($request->has('id') && $request->id != '') {
+                /** @var \Modules\GeneralSetting\Models\EmailTemplate $emailTemplate */
                 $emailTemplate = EmailTemplate::find($request->id);
                 if (!$emailTemplate) {
                     return response()->json([
@@ -138,7 +139,7 @@ class EmailTemplateController extends Controller
     }
 
 
-    public function getEmailTemplate($id):JsonResponse
+    public function getEmailTemplate(?int $id):JsonResponse
     {
         $emailTemplate = EmailTemplate::find($id);
         return response()->json([
@@ -151,6 +152,7 @@ class EmailTemplateController extends Controller
     public function deleteEmailTeplate(Request $request):JsonResponse
     {
         try {
+            /** @var \Modules\GeneralSetting\Models\EmailTemplate $template */
             $template = EmailTemplate::findOrFail($request->id);
             $template->delete();
             return response()->json([
@@ -173,7 +175,7 @@ class EmailTemplateController extends Controller
         }
     }
 
-    public function getTags($id):JsonResponse
+    public function getTags(?int $id):JsonResponse
     {
         $notificationType = NotificationType::find($id);
         $defaultTags = NotificationTag::where('status', true)->pluck('title')->toArray();

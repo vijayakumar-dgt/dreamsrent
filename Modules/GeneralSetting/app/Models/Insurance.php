@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\CarInfo\Models\PricingType;
 
+/**
+ * @property float|string $price
+ * @property string $insurance_type
+ */
 class Insurance extends Model
 {
     use SoftDeletes;

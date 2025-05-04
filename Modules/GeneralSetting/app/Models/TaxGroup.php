@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property string $created_on
+ * @property string|float $total_tax_rate
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Modules\GeneralSetting\Models\TaxRate[] $taxRates
+ */
 class TaxGroup extends Model
 {
     use SoftDeletes;

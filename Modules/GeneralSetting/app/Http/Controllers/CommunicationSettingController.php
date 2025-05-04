@@ -124,6 +124,9 @@ class CommunicationSettingController extends Controller
         }
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function getValidationRules(string $type): array
     {
         return match ($type) {
@@ -167,6 +170,9 @@ class CommunicationSettingController extends Controller
         };
     }
 
+     /**
+     * @return int
+     */
     private function getSettingsType(string $type): int
     {
         return match ($type) {
@@ -177,6 +183,9 @@ class CommunicationSettingController extends Controller
         };
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getSettingsData(Request $request): array
     {
         return match ($request['type']) {
@@ -225,7 +234,7 @@ class CommunicationSettingController extends Controller
         };
     }
 
-    private function updateOrCreateSetting(string $key, string|int $value, int $settingsType, string $type)
+    private function updateOrCreateSetting(string $key, string|int $value, int $settingsType, string $type): CommunicationSetting
     {
         return CommunicationSetting::updateOrCreate(
             ['key' => $key],
@@ -262,8 +271,7 @@ class CommunicationSettingController extends Controller
             if ($userDetail) {
                 $name = $userDetail->first_name . ' ' . $userDetail->last_name;
             }
-
-            $name = $name ?? 'Admin';
+            $name = $name;
 
             $template = EmailTemplate::select('subject', 'description')
                 ->where('notification_type', 7)
@@ -280,7 +288,6 @@ class CommunicationSettingController extends Controller
             ];
 
             $requestData = new Request($data);
-
             $emailController = new EmailController();
             $emailController->sendEmail($requestData);
 

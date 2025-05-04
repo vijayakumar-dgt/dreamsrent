@@ -75,12 +75,12 @@ class SitemapController extends Controller
         }
     }
 
-    public function generateSitemap()
+    public function generateSitemap(): ?string
     {
         try {
             $urls = SitemapUrl::all();
             if ($urls->isEmpty()) {
-                return;
+                return '';
             }
 
             $sitemap = Sitemap::create();
@@ -95,13 +95,13 @@ class SitemapController extends Controller
 
             $sitemapFolder = public_path('sitemaps');
             if (!file_exists($sitemapFolder) && !mkdir($sitemapFolder, 0777, true) && !is_dir($sitemapFolder)) {
-                return;
+                return '';
             }
             $relativePath = 'sitemaps/sitemap-' . now()->format('YmdHis') . '.xml';
             $fullPath = public_path($relativePath);
             $sitemap->writeToFile($fullPath);
             if (!file_exists($fullPath)) {
-                return;
+                return '';
             }
             $latestUrl = SitemapUrl::latest()->first();
             if ($latestUrl) {
@@ -110,7 +110,7 @@ class SitemapController extends Controller
 
             return $relativePath;
         } catch (\Throwable $e) {
-            return;
+            return '';
         }
     }
 

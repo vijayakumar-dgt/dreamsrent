@@ -203,6 +203,7 @@ class LanguageController extends Controller
                 session(['app_locale' => $languageCode]);
                 session(['app_locale_user' => $languageCode]);
                 if (Auth::guard('admin')->check()) {
+                    /** @var \App\Models\User $user */
                     $user = Auth::guard('admin')->user();
                     $user->language_id = $language->language_id;
                     $user->save();
@@ -239,6 +240,7 @@ class LanguageController extends Controller
 
         session(['app_locale' => $request->language_code]);
         if (Auth::guard('admin')->check()) {
+            /** @var \App\Models\User $user */
             $user = Auth::guard('admin')->user();
             $user->language_id = $language->id;
             $user->save();
@@ -264,6 +266,7 @@ class LanguageController extends Controller
 
         session(['app_locale_user' => $request->language_code]);
         if (Auth::guard('web')->check()) {
+            /** @var \App\Models\User $user */
             $user = Auth::guard('web')->user();
             $user->language_id = $language->id;
             $user->save();
@@ -434,7 +437,7 @@ class LanguageController extends Controller
             $responseArray[] = [
                 'default' => $value,
                 'key'   => $key,
-                'value' => $translatedValue ?? '',
+                'value' => $translatedValue,
             ];
         }
 
@@ -528,7 +531,7 @@ class LanguageController extends Controller
             $responseArray[] = [
                 'default' => $value,
                 'key'   => $key,
-                'value' => $translatedValue ?? '',
+                'value' => $translatedValue,
             ];
         }
 
@@ -566,15 +569,9 @@ class LanguageController extends Controller
 
     public function deleteLanguage(Request $request):JsonResponse
     {
+        /** @var \Modules\GeneralSetting\Models\Language $language */
         $language = Language::find($request->id);
 
-        if (!$language) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' =>  __('admin.general_settings.language_not_found'),
-            ], 422);
-        }
         $systemLanguage = 'en';
         if ($language->transLang->code == $systemLanguage) {
             return response()->json([
@@ -583,7 +580,6 @@ class LanguageController extends Controller
                 'message' =>  __('admin.general_settings.language_not_found'),
             ], 422);
         }
-        // Check if it's the default language
         if ($language->default == 1) {
             return response()->json([
                 'status'  => 'error',
@@ -592,11 +588,9 @@ class LanguageController extends Controller
             ], 422);
         }
 
-        // Check if transLang relation exists and has code
         if ($language->transLang && $language->transLang->code) {
             $langPath = base_path('resources/lang/' . $language->transLang->code);
 
-            // Delete language folder if it exists
             if (is_dir($langPath)) {
                 $files = glob($langPath . '/*');
                 foreach ($files as $file) {
@@ -616,7 +610,4 @@ class LanguageController extends Controller
             'message' =>  __('admin.general_settings.language_deleted'),
         ], 200);
     }
-
- #user name = u474594475_homeservice
- #P7!qgmRzbty
 }

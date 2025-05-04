@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use Throwable;
 
 class TestimonialController extends Controller
 {
@@ -100,7 +101,7 @@ class TestimonialController extends Controller
                 'message' =>  __('admin.general_settings.testimonial_retrive_success'),
                 'data'    => $testimonials
             ], 200);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
                 'message' =>  __('admin.general_settings.fail_retrive_testimonial'),
@@ -111,7 +112,6 @@ class TestimonialController extends Controller
 
     public function updateTestimonial(Request $request):JsonResponse
     {
-        // Validate the request
         $validator = Validator::make($request->all(), [
             'id' => 'required|exists:testimonials,id',
             'customer_name' => 'required|string|min:3',
@@ -121,7 +121,6 @@ class TestimonialController extends Controller
             'testimonial_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120', // 5MB
         ]);
 
-        // Return validation errors
         if ($validator->fails()) {
             return response()->json([
                 'code' => 422,
@@ -129,7 +128,7 @@ class TestimonialController extends Controller
             ], 422);
         }
 
-        // Find the testimonial by ID
+        /** @var \Modules\GeneralSetting\Models\Testimonial $testimonial */
         $testimonial = Testimonial::findOrFail($request->id);
 
         if ($request->hasFile('testimonial_image')) {
@@ -164,13 +163,11 @@ class TestimonialController extends Controller
         }
 
         try {
+            /** @var \Modules\GeneralSetting\Models\Testimonial $testimonial */
             $testimonial = Testimonial::findOrFail($id);
-
-            // If testimonial has an image, delete it from storage
             if ($testimonial->testimonial_image) {
-                \Storage::delete('public/testimonials/' . $testimonial->testimonial_image);
+                Storage::delete('public/testimonials/' . $testimonial->testimonial_image);
             }
-
             $testimonial->delete();
 
             return response()->json([

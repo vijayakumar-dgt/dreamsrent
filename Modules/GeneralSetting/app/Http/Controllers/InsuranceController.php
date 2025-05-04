@@ -120,7 +120,6 @@ class InsuranceController extends Controller
         }
     }
 
-
     public function list(Request $request): JsonResponse
     {
         try {
@@ -197,7 +196,7 @@ class InsuranceController extends Controller
         }
     }
 
-    public function getVehicleInsurances(Request $request):JsonResponse
+    public function getVehicleInsurances(Request $request): JsonResponse
     {
         try {
             $vehicleId = $request->vehicle_ids;
@@ -212,7 +211,7 @@ class InsuranceController extends Controller
                 ->join('vehicle_insurances', 'vehicle_insurances.insurances_id', '=', 'insurances.id')
                 ->whereIn('vehicle_insurances.vehicle_id', $vehicleId)
                 ->get()->map(function ($item) {
-                    $item->price = number_format($item->price, 0);
+                    $item->price = number_format((float) $item->price, 0);
                     $item->insurance_type = strtolower($item->insurance_type);
                     return $item;
                 });

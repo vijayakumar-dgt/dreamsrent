@@ -87,8 +87,6 @@ class DbbackupController extends Controller
                 'data' => $formattedBackups,
             ], 200);
         } catch (\Exception $e) {
-            \Log::error('Fetching backups failed: ' . $e->getMessage());
-
             return response()->json([
                 'success' => false,
                 'message' => __('admin.general_settings.retrieve_error'),
@@ -101,7 +99,6 @@ class DbbackupController extends Controller
     {
         try {
             $backups = Dbbackup::where('type', 2)->orderBy('created_at', 'desc')->get();
-
             $baseUrl = asset('storage/backups');
 
             // Format data for response
@@ -120,8 +117,6 @@ class DbbackupController extends Controller
                 'data' => $formattedBackups,
             ], 200);
         } catch (\Exception $e) {
-            \Log::error('Fetching backups failed: ' . $e->getMessage());
-
             return response()->json([
                 'success' => false,
                 'message' => __('admin.general_settings.retrieve_error'),
@@ -136,6 +131,7 @@ class DbbackupController extends Controller
                 'id' => 'required|integer|exists:dbbackups,id'
             ]);
 
+            /** @var \Modules\GeneralSetting\Models\Dbbackup $backup */
             $backup = Dbbackup::findOrFail($request->id);
             $backup->delete();
 
@@ -160,6 +156,7 @@ class DbbackupController extends Controller
                 'id' => 'required|integer|exists:dbbackups,id'
             ]);
 
+            /** @var \Modules\GeneralSetting\Models\Dbbackup $backup */
             $backup = Dbbackup::findOrFail($request->id);
             $backup->delete();
 

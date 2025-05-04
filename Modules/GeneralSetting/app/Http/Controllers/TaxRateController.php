@@ -172,26 +172,21 @@ class TaxRateController extends Controller
 
             if (empty($id)) {
                 $taxGroup = TaxGroup::create($data);
-                if ($taxGroup && !empty($request->sub_tax)) {
-                    foreach ($request->sub_tax as $taxRateId) {
-                        SubTax::updateOrCreate(
-                            ['tax_group_id' => $taxGroup->id, 'tax_rate_id' => $taxRateId],
-                            ['tax_group_id' => $taxGroup->id, 'tax_rate_id' => $taxRateId]
-                        );
-                    }
+                foreach ($request->sub_tax as $taxRateId) {
+                    SubTax::updateOrCreate(
+                        ['tax_group_id' => $taxGroup->id, 'tax_rate_id' => $taxRateId],
+                        ['tax_group_id' => $taxGroup->id, 'tax_rate_id' => $taxRateId]
+                    );
                 }
             } else {
                 $data['status'] = $request->status ?? 1;
                 $taxGroup = TaxGroup::where('id', $id)->update($data);
-
-                if ($taxGroup && !empty($request->sub_tax)) {
-                    SubTax::where('tax_group_id', $id)->whereNotIn('tax_rate_id', $request->sub_tax)->delete();
-                    foreach ($request->sub_tax as $taxRateId) {
-                        SubTax::updateOrCreate(
-                            ['tax_group_id' => $id, 'tax_rate_id' => $taxRateId],
-                            ['tax_group_id' => $id, 'tax_rate_id' => $taxRateId]
-                        );
-                    }
+                SubTax::where('tax_group_id', $id)->whereNotIn('tax_rate_id', $request->sub_tax)->delete();
+                foreach ($request->sub_tax as $taxRateId) {
+                    SubTax::updateOrCreate(
+                        ['tax_group_id' => $id, 'tax_rate_id' => $taxRateId],
+                        ['tax_group_id' => $id, 'tax_rate_id' => $taxRateId]
+                    );
                 }
             }
             return response()->json([
@@ -216,7 +211,7 @@ class TaxRateController extends Controller
 
             $data = TaxGroup::with(['taxRates:id,tax_name,tax_rate'])->orderBy('id', $orderBy)->get()->map(function ($tax) {
                 $tax->created_on = formatDateTime($tax->created_at, false);
-                $tax->total_tax_rate = $tax->taxRates ? number_format($tax->taxRates->sum('tax_rate'), 2) : 0;
+                $tax->total_tax_rate = number_format($tax->taxRates->sum('tax_rate'), 2);
                 return $tax;
             });
 
@@ -238,10 +233,15 @@ class TaxRateController extends Controller
     {
         $id = $request->id;
         $data = TaxGroup::with('taxRates')->find($id);
-
-        if ($data->taxRates) {
-            $data['total_tax_rate'] = $data->taxRates->sum('tax_rate');
+        if (!$data instanceof TaxGroup) {
+            return response()->json([
+                'status'  => 'error',
+                'code'    => 404,
+                'message' => 'Tax group not found.',
+                'data'    => null,
+            ], 404);
         }
+        $data['total_tax_rate'] = $data->taxRates->sum('tax_rate');
 
         return response()->json([
             'status' => 'success',

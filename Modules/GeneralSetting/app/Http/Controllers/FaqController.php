@@ -306,6 +306,7 @@ class FaqController extends Controller
         }
 
         try {
+            /** @var \Modules\GeneralSetting\Models\Faq $faq */
             $faq = Faq::findOrFail($id);
             $faq->update([
                 'question' => $request->question,
@@ -337,6 +338,7 @@ class FaqController extends Controller
         }
 
         try {
+            /** @var \Modules\GeneralSetting\Models\Faq $faq */
             $faq = Faq::findOrFail($id);
             $faq->delete();
 

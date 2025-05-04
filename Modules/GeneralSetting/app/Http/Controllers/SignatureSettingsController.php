@@ -32,7 +32,7 @@ class SignatureSettingsController extends Controller
                 'code' => 200,
                 'message' => __('admin.general_settings.cache_cleared_successfully')
             ], 200);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
                 'message' => __('admin.general_settings.cache_clear_error'),
@@ -41,7 +41,6 @@ class SignatureSettingsController extends Controller
         }
     }
 
-    // Store a new signature
     public function store(Request $request):JsonResponse
     {
         try {
@@ -62,7 +61,7 @@ class SignatureSettingsController extends Controller
             $signature = SignatureSetting::create([
                 'signature_name' => $request->signature_name,
                 'signature_image' => $imagePath ?? null,
-                'status' => 1, // Default to active
+                'status' => 1,
                 'is_default' => $request->is_default ? 1 : 0,
             ]);
 
@@ -95,13 +94,8 @@ class SignatureSettingsController extends Controller
                 'status' => 'nullable|boolean'
             ]);
 
+            /** @var \Modules\GeneralSetting\Models\SignatureSetting $signature */
             $signature = SignatureSetting::find($request->id);
-            if (!$signature) {
-                return response()->json([
-                    'code' => 404,
-                    'message' =>  __('admin.general_settings.signature_error')
-                ], 404);
-            }
 
             if ($request->hasFile('signature_image')) {
                 if ($signature->signature_image && Storage::disk('public')->exists($signature->signature_image)) {
@@ -127,7 +121,7 @@ class SignatureSettingsController extends Controller
                 'message' => __('admin.general_settings.signature_update_success'),
                 'data' => $signature
             ], 200);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
@@ -177,6 +171,7 @@ class SignatureSettingsController extends Controller
                 'id' => 'required|integer|exists:signature_settings,id'
             ]);
 
+            /** @var \Modules\GeneralSetting\Models\SignatureSetting $signature */
             $signature = SignatureSetting::findOrFail($request->id);
             $signature->delete();
 

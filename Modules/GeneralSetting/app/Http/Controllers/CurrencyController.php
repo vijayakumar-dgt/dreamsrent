@@ -42,6 +42,7 @@ class CurrencyController extends Controller
         try {
             $successMessage = "";
             if ($request->has('id') && $request->id != "") {
+                /** @var \Modules\GeneralSetting\Models\Currency $currency */
                 $currency = Currency::find($request->id);
                 $currency->status         = $request->status == 'on' ? 1 : 0;
                 $successMessage = __('admin.general_settings.currency_created_successfully');
@@ -91,7 +92,7 @@ class CurrencyController extends Controller
         ]);
     }
 
-    public function editCurrency($id):JsonResponse
+    public function editCurrency(?int $id):JsonResponse
     {
         $currency = Currency::find($id);
         return response()->json([
@@ -105,6 +106,7 @@ class CurrencyController extends Controller
     public function deleteCurrency(Request $request):JsonResponse
     {
         try {
+            /** @var \Modules\GeneralSetting\Models\Currency $currency */
             $currency = Currency::findOrFail($request->id);
             $currency->delete();
             return response()->json([

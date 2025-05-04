@@ -202,7 +202,7 @@ class AddonController extends Controller
     /**
      * Copy JavaScript files from module to public directory
      */
-    private function copyJsFiles($moduleName, $type, $destinationDir): void
+    private function copyJsFiles(string $moduleName, string $type, string $destinationDir): void
     {
         $sourceDir = base_path("Modules/{$moduleName}/js/{$type}/");
         if (File::exists($sourceDir)) {
@@ -224,7 +224,7 @@ class AddonController extends Controller
     /**
      * Execute SQL files in the module
      */
-    private function executeSqlFiles($moduleName): void
+    private function executeSqlFiles(string $moduleName): void
     {
         $sqlPath = base_path("Modules/{$moduleName}/sql");
         if (File::exists($sqlPath)) {
@@ -256,7 +256,7 @@ class AddonController extends Controller
     /**
      * Update module status in modules_statuses.json
      */
-    private function updateModuleStatus($moduleName): void
+    private function updateModuleStatus(string $moduleName): void
     {
         $moduleStatusPath = base_path('modules_statuses.json');
         if (!File::exists($moduleStatusPath)) {
@@ -270,7 +270,7 @@ class AddonController extends Controller
     /**
      * Update modules.php configuration
      */
-    private function updateModulesConfig($moduleName, $moduleNameLower): void
+    private function updateModulesConfig(string $moduleName, string $moduleNameLower): void
     {
         $moduleClass = "Modules\\" . ucfirst($moduleName) . "\\Providers\\" . ucfirst($moduleName) . "ServiceProvider::class";
         $configPath = config_path('modules.php');
