@@ -3,14 +3,10 @@
 namespace Modules\GeneralSetting\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-// use Modules\GeneralSetting\Database\Factories\InsuranceBenefitFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class InsuranceBenefit extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      */
@@ -19,8 +15,12 @@ class InsuranceBenefit extends Model
         'benefit',
     ];
 
-    public function insurance()
+    /**
+     * @return BelongsTo<Insurance, InsuranceBenefit>
+     */
+    public function insurance(): BelongsTo
     {
+        /** @var BelongsTo<Insurance, InsuranceBenefit> */
         return $this->belongsTo(Insurance::class, 'id');
     }
 }

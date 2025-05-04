@@ -3,29 +3,40 @@
 namespace Modules\GeneralSetting\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Modules\GeneralSetting\Database\Factories\FaqFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Faq extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     protected $fillable = ['order_by', 'question', 'answer', 'status', 'language_id', 'parent_id'];
 
-    public function language()
+    /**
+     * @return BelongsTo<Language, Faq>
+     */
+    public function language(): BelongsTo
     {
+        /** @var BelongsTo<Language, Faq> */
         return $this->belongsTo(Language::class);
     }
 
-    public function parent()
+    /**
+     * @return BelongsTo<Faq, Faq>
+     */
+    public function parent(): BelongsTo
     {
+        /** @var BelongsTo<Faq, Faq> */
         return $this->belongsTo(Faq::class, 'parent_id');
     }
 
-    public function children()
+    /**
+     * @return HasMany<Faq, Faq>
+     */
+    public function children(): HasMany
     {
+        /** @var HasMany<Faq, Faq> */
         return $this->hasMany(Faq::class, 'parent_id');
     }
 }

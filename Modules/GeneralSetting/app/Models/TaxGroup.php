@@ -3,14 +3,11 @@
 namespace Modules\GeneralSetting\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-// use Modules\GeneralSetting\Database\Factories\TaxGroupFactory;
 
 class TaxGroup extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     /**
@@ -21,8 +18,12 @@ class TaxGroup extends Model
         'status',
     ];
 
-    public function taxRates()
+    /**
+     * @return BelongsToMany<TaxRate, TaxGroup>
+     */
+    public function taxRates(): BelongsToMany
     {
+        /** @var belongsToMany<TaxRate, TaxGroup> */
         return $this->belongsToMany(TaxRate::class, 'sub_taxes', 'tax_group_id', 'tax_rate_id');
     }
 }

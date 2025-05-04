@@ -3,15 +3,13 @@
 namespace Modules\GeneralSetting\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\CarInfo\Models\PricingType;
 
-// use Modules\GeneralSetting\Database\Factories\InsuranceFactory;
-
 class Insurance extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     /**
@@ -25,13 +23,21 @@ class Insurance extends Model
         'status'
     ];
 
-    public function insuranceBenefits()
+    /**
+     * @return HasMany<InsuranceBenefit, Insurance>
+     */
+    public function insuranceBenefits(): HasMany
     {
+        /** @var HasMany<InsuranceBenefit, Insurance> */
         return $this->hasMany(InsuranceBenefit::class, 'insurance_id');
     }
 
-    public function priceType()
+    /**
+     * @return BelongsTo<PricingType, Insurance>
+     */
+    public function priceType(): BelongsTo
     {
+        /** @var BelongsTo<PricingType, Insurance> */
         return $this->belongsTo(PricingType::class, 'price_type_id');
     }
 }

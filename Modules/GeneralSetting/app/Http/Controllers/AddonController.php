@@ -3,16 +3,18 @@
 namespace Modules\GeneralSetting\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Modules\GeneralSetting\Models\Addon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class AddonController extends Controller
 {
-    public function addonIndex(Request $request)
+    public function addonIndex(Request $request): View
     {
         $jsonPath = base_path('addon_modules.json');
 
@@ -38,7 +40,7 @@ class AddonController extends Controller
         return view('generalsetting::addon.index', compact('modules'));
     }
 
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         try {
             $orderBy = $request->order_by ?? 'desc';
@@ -77,8 +79,7 @@ class AddonController extends Controller
         }
     }
 
-
-    public function changeAddonStatus(Request $request)
+    public function changeAddonStatus(Request $request): JsonResponse
     {
         $id = $request->id;
         $status = $request->status;
@@ -102,7 +103,7 @@ class AddonController extends Controller
         }
     }
 
-    public function listNewAddonModules(Request $request)
+    public function listNewAddonModules(Request $request): JsonResponse
     {
         try {
             $jsonPath = base_path('addon_modules.json');
@@ -140,9 +141,8 @@ class AddonController extends Controller
         }
     }
 
-    public function purchaseModule(Request $request)
+    public function purchaseModule(Request $request): JsonResponse
     {
-        // dd($request); exit;
         try {
             $data = [
                 'name' => $request->module_name,
@@ -202,7 +202,7 @@ class AddonController extends Controller
     /**
      * Copy JavaScript files from module to public directory
      */
-    private function copyJsFiles($moduleName, $type, $destinationDir)
+    private function copyJsFiles($moduleName, $type, $destinationDir): void
     {
         $sourceDir = base_path("Modules/{$moduleName}/js/{$type}/");
         if (File::exists($sourceDir)) {
@@ -224,7 +224,7 @@ class AddonController extends Controller
     /**
      * Execute SQL files in the module
      */
-    private function executeSqlFiles($moduleName)
+    private function executeSqlFiles($moduleName): void
     {
         $sqlPath = base_path("Modules/{$moduleName}/sql");
         if (File::exists($sqlPath)) {
@@ -256,7 +256,7 @@ class AddonController extends Controller
     /**
      * Update module status in modules_statuses.json
      */
-    private function updateModuleStatus($moduleName)
+    private function updateModuleStatus($moduleName): void
     {
         $moduleStatusPath = base_path('modules_statuses.json');
         if (!File::exists($moduleStatusPath)) {
@@ -270,7 +270,7 @@ class AddonController extends Controller
     /**
      * Update modules.php configuration
      */
-    private function updateModulesConfig($moduleName, $moduleNameLower)
+    private function updateModulesConfig($moduleName, $moduleNameLower): void
     {
         $moduleClass = "Modules\\" . ucfirst($moduleName) . "\\Providers\\" . ucfirst($moduleName) . "ServiceProvider::class";
         $configPath = config_path('modules.php');
@@ -285,7 +285,7 @@ class AddonController extends Controller
         }
     }
 
-    public function updateModule(Request $request)
+    public function updateModule(Request $request): string
     {
         $moduleName = $request->module ?? '';
         $moduleName = ucfirst($moduleName);

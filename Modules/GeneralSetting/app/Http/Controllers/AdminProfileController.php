@@ -5,20 +5,22 @@ namespace Modules\GeneralSetting\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserDetail;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
 class AdminProfileController extends Controller
 {
-    public function adminProfile(Request $request)
+    public function adminProfile(Request $request): View
     {
         return view('generalsetting::adminProfile.index');
     }
 
-    public function updateProfile(Request $request)
+    public function updateProfile(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'id'            => 'required|exists:users,id',
@@ -93,7 +95,7 @@ class AdminProfileController extends Controller
         }
     }
 
-    public function getProfile($id)
+    public function getProfile(int $id): JsonResponse
     {
         try {
             $user = Auth::guard('admin')->user();
@@ -136,7 +138,7 @@ class AdminProfileController extends Controller
         }
     }
 
-    public function checkPassword(Request $request)
+    public function checkPassword(Request $request): JsonResponse
     {
         $id = $request->id;
         $user = User::find($id);
@@ -150,7 +152,7 @@ class AdminProfileController extends Controller
         return response()->json($isValid);
     }
 
-    public function deleteAccount($id, Request $request)
+    public function deleteAccount($id, Request $request): JsonResponse
     {
         $user = Auth::guard('admin')->user();
 

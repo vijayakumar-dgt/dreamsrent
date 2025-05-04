@@ -125,10 +125,9 @@ class RolesPermissionController extends Controller
             $totalRecords = Role::where('created_by', $userId)->count();
 
             $data = $query->skip($start)->take($length)->get()->map(function ($role) {
-                // Dynamically add the encrypted_role_id and created_date properties
                 $role->encrypted_role_id = customEncrypt($role->id, Role::$roleSecretKey);
-                $role->created_date = formatDateTime($role->created_at, false);  // Assuming you have a helper for formatting
-                unset($role->created_at);  // Remove the created_at property to avoid conflicts
+                $role->created_date = formatDateTime($role->created_at, false);
+                unset($role->created_at);
 
                 return $role;
             });

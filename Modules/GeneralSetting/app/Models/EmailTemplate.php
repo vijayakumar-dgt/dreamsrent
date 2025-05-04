@@ -3,8 +3,6 @@
 namespace Modules\GeneralSetting\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Modules\GeneralSetting\Database\Factories\EmailTemplateFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property string|null $subject
@@ -12,7 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class EmailTemplate extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     /**
@@ -20,8 +17,4 @@ class EmailTemplate extends Model
      */
     protected $fillable = [];
     protected $table    = 'email_templates';
-    // protected static function newFactory(): EmailTemplateFactory
-    // {
-    //     // return EmailTemplateFactory::new();
-    // }
 }

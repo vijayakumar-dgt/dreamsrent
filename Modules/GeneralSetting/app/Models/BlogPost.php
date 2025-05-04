@@ -4,6 +4,7 @@ namespace Modules\GeneralSetting\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $tags
  * @property string $seo_title
  * @property string $seo_description
+ * @property int|null $parent_id
  */
 class BlogPost extends Model
 {
@@ -41,11 +43,18 @@ class BlogPost extends Model
      */
     public function category(): BelongsTo
     {
+        /** @var BelongsTo<BlogCategory, BlogPost> */
         return $this->belongsTo(BlogCategory::class, 'category');
     }
 
-    public function tags()
+    /**
+     * Get the tags for the blog post.
+     *
+     * @return BelongsToMany<BlogTag, BlogPost>
+     */
+    public function tags(): BelongsToMany
     {
+        /** @var BelongsToMany<BlogTag, BlogPost> */
         return $this->belongsToMany(BlogTag::class, 'blog_post_tag');
     }
 }

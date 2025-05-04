@@ -8,15 +8,16 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Modules\GeneralSetting\Models\Bank;
 use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class BankController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         return view('generalsetting::bank.index');
     }
 
-    public function store(Request $request):JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $id = $request->id ?? '';
 
@@ -84,12 +85,10 @@ class BankController extends Controller
     public function list(Request $request):JsonResponse
     {
         $orderBy = $request->order_by ?? 'desc';
-        $search = $request->input('search'); // Get the search input
+        $search = $request->input('search');
 
         try {
             $query = Bank::orderBy('id', $orderBy);
-
-            // Apply search filter if search is not empty
             if (!empty($search)) {
                 $query->where('bank_name', 'LIKE', "%{$search}%");
             }
