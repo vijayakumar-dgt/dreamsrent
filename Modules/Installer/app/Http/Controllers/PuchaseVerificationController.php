@@ -19,14 +19,12 @@ class PuchaseVerificationController extends Controller
         set_time_limit(8000000);
     }
 
-    /**
-     * Display the installer view.
-     *
-     * @return View
-     */
+
     public function index(): View
     {
-        return view('installer::index');
+        /** @var view-string $view */
+        $view = 'installer::index';
+        return view($view);
     }
 
     /**
@@ -49,7 +47,7 @@ class PuchaseVerificationController extends Controller
             $data = $response->json();
             if ($data['status'] == true) {
                 session()->put('step-1-complete', true);
-                Configuration::updateStep('2'); // Pass the step as a string
+                Configuration::updateStep(2);
 
                 return response()->json(['success' => true, 'message' => "Purchase Code Verified Successfully"], 200);
             } else {
