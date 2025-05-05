@@ -18,26 +18,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class GeneralSettingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index():View
+    public function index(): View
     {
         return view('generalsetting::index');
     }
 
-
-    public function logoSettings(Request $request):View
+    public function logoSettings(Request $request): View
     {
         return view('generalsetting::website_settings.logo-setting');
     }
 
-    public function company(Request $request):View
+    public function company(Request $request): View
     {
         $industries = IndustryType::all();
         $teamSizes = TeamSize::all();
@@ -46,42 +43,41 @@ class GeneralSettingController extends Controller
         return view('generalsetting::company.index', compact('industries', 'teamSizes', 'users'));
     }
 
-    public function notifications(Request $request):View
+    public function notifications(Request $request): View
     {
         return view('generalsetting::notifications-setting.index');
     }
 
-    public function prefixes(Request $request):View
+    public function prefixes(Request $request): View
     {
         return view('generalsetting::website_settings.prefixes');
     }
 
-    public function maintenance(Request $request):View
+    public function maintenance(Request $request): View
     {
         return view('generalsetting::maintenance.index');
     }
 
-    public function seosetup(Request $request):View
+    public function seosetup(Request $request): View
     {
         return view('generalsetting::website_settings.seosetup');
     }
 
-    public function gdprCookies(Request $request):View
+    public function gdprCookies(Request $request): View
     {
         $languages = Language::with('transLang')->get();
         return view('generalsetting::system_settings.gdpr-cookies', compact('languages'));
     }
 
-    public function storage(Request $request):View
+    public function storage(Request $request): View
     {
         return view('generalsetting::other_settings.storage-setting');
     }
 
-    public function invoiceSettings(Request $request):View
+    public function invoiceSettings(Request $request): View
     {
         return view('generalsetting::app_settings.invoice-setting');
     }
-
 
     public function otpSettings(Request $request): View
     {
@@ -101,7 +97,7 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeRentalSettings(Request $request):JsonResponse
+    public function storeRentalSettings(Request $request): JsonResponse
     {
         $rules = [
             'minAdvanceReservation' => 'required|string|in:1 Day,2 Days,3 Days,1 Week',
@@ -179,7 +175,7 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeLogoSettings(Request $request):JsonResponse
+    public function storeLogoSettings(Request $request): JsonResponse
     {
         $rules = [
             'logo_image' => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
@@ -218,10 +214,11 @@ class GeneralSettingController extends Controller
             foreach ($logoFields as $field => $prefix) {
                 if ($request->hasFile($field)) {
                     $file = $request->file($field);
-                    $fullPath = uploadFile($file, 'logos');
-
+                    $fullPath = null;
+                    if ($file instanceof UploadedFile) {
+                        $fullPath = uploadFile($file, 'logos');
+                    }
                     $this->updateOrCreateLogoSetting($field, $fullPath, $groupId);
-
                     $paths[$field] = $fullPath;
                 }
             }
@@ -247,7 +244,7 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeOtpSettings(Request $request):JsonResponse
+    public function storeOtpSettings(Request $request): JsonResponse
     {
         $rules = [
             'otp_type' => 'required',
@@ -303,7 +300,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storageStatusUpdate(Request $request):JsonResponse
+    public function storageStatusUpdate(Request $request): JsonResponse
     {
         $request->validate([
             'storage_type' => 'required|in:local_storage,aws_storage',
@@ -344,8 +341,8 @@ class GeneralSettingController extends Controller
             ['value' => $value, 'group_id' => 8]
         );
     }
-    
-    public function storeAwsSettings(Request $request):JsonResponse
+
+    public function storeAwsSettings(Request $request): JsonResponse
     {
         $rules = [
             'aws_access_key' => 'required|string',
@@ -407,7 +404,7 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeInvoiceSettings(Request $request):JsonResponse
+    public function storeInvoiceSettings(Request $request): JsonResponse
     {
         $rules = [
             'invoice_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -438,8 +435,11 @@ class GeneralSettingController extends Controller
 
         try {
             if ($request->hasFile('invoice_logo')) {
-                $logoPath = $request->file('invoice_logo')->store('invoices', 'public');
-                $this->updateOrCreateInvoiceSetting('invoice_logo', $logoPath);
+                $file = $request->file('invoice_logo');
+                if ($file instanceof UploadedFile) {
+                    $logoPath = uploadFile($file, 'invoices');
+                    $this->updateOrCreateInvoiceSetting('invoice_logo', $logoPath);
+                }
             }
 
             $settings = [
@@ -471,7 +471,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function store(Request $request):JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'organization_name'    => 'required|string|max:100',
@@ -501,8 +501,11 @@ class GeneralSettingController extends Controller
         try {
             $settings = $request->except('_token', 'company_profile_photo');
             if ($request->hasFile('company_profile_photo')) {
-                $image = $request->file('company_profile_photo');
-                $imagePath = $image->store('company_profiles', 'public');
+                $file = $request->file('company_profile_photo');
+                $imagePath = null;
+                if ($file instanceof UploadedFile) {
+                    $imagePath = uploadFile($file, 'company_profiles');
+                }
 
                 GeneralSetting::updateOrCreate(
                     ['key' => 'company_profile_photo'],
@@ -538,7 +541,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function transferOwnership(Request $request):JsonResponse
+    public function transferOwnership(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'owner_id' => 'required|exists:users,id'
@@ -577,7 +580,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeNotificationSettings(Request $request):JsonResponse
+    public function storeNotificationSettings(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'group_id'                   => 'required|integer',
@@ -605,10 +608,10 @@ class GeneralSettingController extends Controller
 
             foreach ($settings as $key => $value) {
                 GeneralSetting::updateOrCreate(
-                    ['key' => $key], // Find by key
+                    ['key' => $key],
                     [
                         'value'    => $value,
-                        'group_id' => $request->group_id ?? null // Optional if you want to include group_id
+                        'group_id' => $request->group_id ?? null
                     ]
                 );
             }
@@ -628,16 +631,15 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeSeoSetupSettings(Request $request):JsonResponse
+    public function storeSeoSetupSettings(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'metaImage'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Image validation (5MB max)
+            'metaImage'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
             'metaTitle'       => 'required|string|min:5|max:255',
             'siteDescription' => 'required|string|min:10|max:5000',
             'keywords'        => 'required|string|max:1000'
         ]);
 
-        // Handle validation failure
         if ($validator->fails()) {
             return response()->json([
                 'status'  => 'error',
@@ -651,8 +653,11 @@ class GeneralSettingController extends Controller
             $settings = $request->except('_token', 'metaImage');
 
             if ($request->hasFile('metaImage')) {
-                $image = $request->file('metaImage');
-                $imagePath = $image->store('seo', 'public');
+                $file = $request->file('metaImage');
+                $imagePath = null;
+                if ($file instanceof UploadedFile) {
+                    $imagePath = uploadFile($file, 'seo');
+                }
 
                 GeneralSetting::updateOrCreate(
                     ['key' => 'metaImage'],
@@ -688,16 +693,15 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeMaintenanceSettings(Request $request):JsonResponse
+    public function storeMaintenanceSettings(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'group_id'                => 'required',
-            'maintenance_image'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image validation
-            'maintenance_description' => 'nullable|string|max:5000', // Allow rich text
-            'maintenance_status'      => 'nullable' // Status validation
+            'maintenance_image'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'maintenance_description' => 'nullable|string|max:5000',
+            'maintenance_status'      => 'nullable'
         ]);
 
-        // Handle validation failure
         if ($validator->fails()) {
             return response()->json([
                 'status'  => 'error',
@@ -708,30 +712,30 @@ class GeneralSettingController extends Controller
         }
 
         try {
-            $settings = $request->except('_token', 'maintenance_image'); // Exclude CSRF token and image
+            $settings = $request->except('_token', 'maintenance_image');
             $groupId = $request->group_id;
 
-            // Handle image upload
             if ($request->hasFile('maintenance_image')) {
-                $image = $request->file('maintenance_image');
-                $imagePath = $image->store('maintenance', 'public'); // Store in 'storage/app/public/maintenance'
+                $file = $request->file('maintenance_image');
+                $imagePath = null;
+                if ($file instanceof UploadedFile) {
+                    $imagePath = uploadFile($file, 'maintenance');
+                }
 
-                // Save image path to general settings
                 GeneralSetting::updateOrCreate(
                     ['key' => 'maintenance_image'],
                     [
-                        'value' => "$imagePath", // Public path for serving the image
+                        'value' => "$imagePath",
                         'group_id' => $request->group_id ?? null
                     ]
                 );
             }
-            // Save other settings with group_id
             foreach ($settings as $key => $value) {
                 GeneralSetting::updateOrCreate(
-                    ['key' => $key], // Find by key
+                    ['key' => $key],
                     [
                         'value' => $value,
-                        'group_id' => $request->group_id ?? null // Optional group_id if needed
+                        'group_id' => $request->group_id ?? null
                     ]
                 );
             }
@@ -751,7 +755,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeCookiesSettings(Request $request):JsonResponse
+    public function storeCookiesSettings(Request $request): JsonResponse
     {
         $request->validate([
             'group_id'           => 'required|integer',
@@ -802,7 +806,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function cookiesSettingsList(Request $request):JsonResponse
+    public function cookiesSettingsList(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'group_id'    => 'required|integer',
@@ -870,13 +874,12 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function listCompany(Request $request):JsonResponse
+    public function listCompany(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'group_id' => 'required|integer'
         ]);
 
-        // Handle validation failure
         if ($validator->fails()) {
             return response()->json([
                 'status'  => 'error',
@@ -887,7 +890,6 @@ class GeneralSettingController extends Controller
         }
 
         try {
-            // Fetch settings by group_id
             $settings = GeneralSetting::where('group_id', $request->group_id)->pluck('value', 'key');
 
             if ($settings->isEmpty()) {
@@ -898,7 +900,6 @@ class GeneralSettingController extends Controller
                 ], 404);
             }
 
-            // Get industry and team size names based on their IDs
             $industryName = IndustryType::find($settings['industry'])->name ?? null;
             $teamSizeName = TeamSize::find($settings['team_size'])->name ?? null;
 
@@ -906,7 +907,6 @@ class GeneralSettingController extends Controller
                 'organization_name'    => $settings['organization_name'] ?? null,
                 'owner_name'           => $settings['owner_name'] ?? null,
                 'company_email'        => $settings['company_email'] ?? null,
-                // 'company_phone'        => $settings['company_phone'] ?? null,
                 'company_phone'        => $settings['international_phone_number'] ?? null,
                 'industry'             => $settings['industry'] ?? null,
                 'industry_name'        => $industryName,
@@ -917,7 +917,7 @@ class GeneralSettingController extends Controller
                 'state'                => $settings['state'] ?? null,
                 'city'                 => $settings['city'] ?? null,
                 'company_postal_code'  => $settings['company_postal_code'] ?? null,
-                'company_profile_photo' => uploadedAsset($settings['company_profile_photo'] ?? null, 'default') // Add profile photo here
+                'company_profile_photo' => uploadedAsset($settings['company_profile_photo'] ?? null, 'default')
             ];
 
             return response()->json([
@@ -935,7 +935,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function list(Request $request):JsonResponse
+    public function list(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'group_id' => 'required|integer'
@@ -952,11 +952,9 @@ class GeneralSettingController extends Controller
 
         try {
             $settings = GeneralSetting::where('group_id', $request->group_id)->get()->map(function ($setting) {
-
                 if ($setting->key == 'logo_image' || $setting->key == 'favicon_image' || $setting->key == 'small_image' || $setting->key == 'dark_logo') {
                     $setting->value = uploadedAsset($setting->value, 'default2');
                 }
-
                 return $setting;
             });
 
@@ -976,7 +974,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function security(Request $request):View
+    public function security(Request $request): View
     {
         return view('generalsetting::security.index');
     }
@@ -987,11 +985,12 @@ class GeneralSettingController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function checkCurrentPassword(Request $request):JsonResponse
+    public function checkCurrentPassword(Request $request): JsonResponse
     {
-        // Check if the current password is correct
+        /** @var \App\Models\User $authUser */
+        $authUser = Auth::guard('admin')->user();
         $password = $request->password;
-        if (Hash::check($password, Auth::user()->password)) {
+        if ($authUser->password !== null && Hash::check($password, $authUser->password)) {
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
@@ -1006,16 +1005,11 @@ class GeneralSettingController extends Controller
         }
     }
 
-    /**
-     * Check if the current phone number is correct
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function checkCurrentPhoneNumber(Request $request):JsonResponse
+    public function checkCurrentPhoneNumber(Request $request): JsonResponse
     {
         $currentPhoneNumber = $request->currentPhoneNumber;
-        $user = Auth::user();
+        /** @var \App\Models\User $user */
+        $user = current_user();
         if ($user->phone_number == "") {
             return response()->json([
                 'status'  => 'error',
@@ -1044,13 +1038,8 @@ class GeneralSettingController extends Controller
             ], 422);
         }
     }
-    /**
-     * Update the user's password.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function updatePassword(Request $request):JsonResponse
+
+    public function updatePassword(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'current_password' => 'required',
@@ -1067,7 +1056,10 @@ class GeneralSettingController extends Controller
             ], 422);
         }
 
-        if (!Hash::check($request->current_password, Auth::user()->password)) {
+        /** @var \App\Models\User $user */
+        $user = current_user();
+
+        if ($user->password !== null && !Hash::check($request->current_password, $user->password)) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 500,
@@ -1076,8 +1068,6 @@ class GeneralSettingController extends Controller
             ], 500);
         }
 
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
         $user->password = Hash::make($request->new_password);
         $user->last_password_changed_at = now();
         $user->save();
@@ -1099,7 +1089,7 @@ class GeneralSettingController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updatePhoneNumber(Request $request):JsonResponse
+    public function updatePhoneNumber(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'new_phonenumber' => 'required|digits_between:8,12|unique:users,phone_number',
@@ -1113,7 +1103,10 @@ class GeneralSettingController extends Controller
             ], 200);
         }
         $currentPassword = $request->phone_current_password;
-        if (!Hash::check($currentPassword, Auth::guard('admin')->user()->password)) {
+        /** @var \App\Models\User $authUser */
+        $authUser = Auth::guard('admin')->user();
+
+        if ($authUser->password !== null && !Hash::check($currentPassword, $authUser->password)) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 200,
@@ -1121,17 +1114,15 @@ class GeneralSettingController extends Controller
             ]);
         }
         $currentPhoneNumber = $request->current_phonenumber;
-        if (Auth::guard('admin')->user()->phone_number != $currentPhoneNumber && Auth::guard('admin')->user()->phone_number != "") {
+        if ($authUser->phone_number != $currentPhoneNumber && $authUser->phone_number != "") {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 200,
                 'message'  => __('admin.general_settings.phone_number_incorrect')
             ]);
         }
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $user->phone_number = $request->new_phonenumber;
-        $user->save();
+        $authUser->phone_number = $request->new_phonenumber;
+        $authUser->save();
 
         return response()->json([
             'status'  => 'success',
@@ -1140,7 +1131,7 @@ class GeneralSettingController extends Controller
         ]);
     }
 
-    public function updateEmail(Request $request):JsonResponse
+    public function updateEmail(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'new_email' => 'required|email|unique:users,email',
@@ -1154,6 +1145,7 @@ class GeneralSettingController extends Controller
             ], 422);
         }
         $current_email = $request->current_email;
+        /** @var \App\Models\User $authUser */
         $authUser = Auth::guard('admin')->user();
         if ($authUser->email != $current_email) {
             return response()->json([
@@ -1163,17 +1155,15 @@ class GeneralSettingController extends Controller
             ]);
         }
         $email_current_password = $request->email_current_password;
-        if (!Hash::check($email_current_password, Auth::guard('admin')->user()->password)) {
+        if ($authUser->password !== null && !Hash::check($email_current_password, $authUser->password)) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 200,
                 'message'  => __('admin.general_settings.current_password_incorrect')
             ]);
         }
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $user->email = $request->new_email;
-        $user->save();
+        $authUser->email = $request->new_email;
+        $authUser->save();
 
         return response()->json([
             'status'  => 'success',
@@ -1182,9 +1172,11 @@ class GeneralSettingController extends Controller
         ]);
     }
 
-    public function getSecuritySettings():JsonResponse
+    public function getSecuritySettings(): JsonResponse
     {
-        $userDevices = UserDevice::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->take(5)->get()->map(function ($device) {
+        /** @var \App\Models\User $authUser */
+        $authUser = Auth::guard('admin')->user();
+        $userDevices = UserDevice::where('user_id', $authUser->id)->orderBy('created_at', 'desc')->take(5)->get()->map(function ($device) {
             return [
                 'id' => $device->id,
                 'device_type' => $device->device_type,
@@ -1197,7 +1189,7 @@ class GeneralSettingController extends Controller
         });
         $response    = [
             'user' => Auth::user(),
-            'last_password_changed_at' => Auth::user()->last_password_changed_at ? Carbon::parse(Auth::user()->last_password_changed_at)->format('d M Y, h:i A') : "null",
+            'last_password_changed_at' => $authUser->last_password_changed_at ? Carbon::parse($authUser->last_password_changed_at)->format('d M Y, h:i A') : "null",
             'devices' => $userDevices
         ];
         return response()->json([
@@ -1209,9 +1201,10 @@ class GeneralSettingController extends Controller
 
     public function logoutDevice(Request $request): JsonResponse
     {
-
+        /** @var \App\Models\User $authUser */
+        $authUser = Auth::guard('admin')->user();
         if ($request->isAll === "true") {
-            UserDevice::where('user_id', Auth::user()->id)->delete();
+            UserDevice::where('user_id', $authUser->id)->delete();
             Auth::guard('admin')->logout();
             return response()->json([
                 'status'  => 'success',
@@ -1219,6 +1212,7 @@ class GeneralSettingController extends Controller
                 'message' => __('admin.general_settings.all_device_removed_successfully'),
             ]);
         }
+        /** @var \Modules\GeneralSetting\Models\UserDevice $device */
         $device = UserDevice::find($request->id);
         $device->delete();
         return response()->json([
@@ -1228,11 +1222,11 @@ class GeneralSettingController extends Controller
         ]);
     }
 
-    public function updateGoogleAuth(Request $request):JsonResponse
+    public function updateGoogleAuth(Request $request): JsonResponse
     {
         try {
             /** @var \App\Models\User $user */
-            $user = Auth::user();
+            $user = Auth::guard('admin')->user();
             $user->google_auth_enabled = $request->googleAuthEnabled === "true" ? 1 : 0;
             $user->save();
             $message = $user->google_auth_enabled === 1 ? "Google Authentication Enabled Successfully" : "Google Authentication Disabled Successfully";
@@ -1355,7 +1349,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function paymentIndex(Request $request):View
+    public function paymentIndex(Request $request): View
     {
         return view('generalsetting::payment.index');
     }
@@ -1376,7 +1370,6 @@ class GeneralSettingController extends Controller
                     );
                 }
 
-                // Update PayPal Keys in .env
                 if ($key == 'paypal_key') {
                     $this->updateEnvFile('PAYPAL_SANDBOX_CLIENT_ID', $value);
                 }
@@ -1411,9 +1404,13 @@ class GeneralSettingController extends Controller
 
         if (file_exists($path)) {
             $envContent = file_get_contents($path);
+
+            if ($envContent === false) {
+                return;
+            }
+
             $pattern = "/^{$key}=.*/m";
 
-            // If the key exists, replace it; otherwise, add a new entry
             if (preg_match($pattern, $envContent)) {
                 $envContent = preg_replace($pattern, "{$key}={$value}", $envContent);
             } else {
@@ -1424,7 +1421,8 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function updatepaymentStatus(Request $request):JsonResponse
+
+    public function updatepaymentStatus(Request $request): JsonResponse
     {
         $request->validate([
             'key' => 'required|string',
@@ -1440,7 +1438,7 @@ class GeneralSettingController extends Controller
         return response()->json(['success' => true, 'message' => __('admin.general_settings.payment_updated_successfull')]);
     }
 
-    public function paymentList(Request $request):JsonResponse
+    public function paymentList(Request $request): JsonResponse
     {
         $orderBy = $request->order_by ?? 'desc';
 
