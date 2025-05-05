@@ -80,22 +80,26 @@ class PageServiceProvider extends ServiceProvider
     {
         $relativeConfigPath = config('modules.paths.generator.config.path');
         $configPath = module_path($this->name, $relativeConfigPath);
-
+    
         if (is_dir($configPath)) {
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configPath));
-
+    
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
                     $relativePath = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
-                    $configKey = $this->nameLower . '.' . str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
-                    $key = ($relativePath === 'config.php') ? $this->nameLower : $configKey;
-
+                    $nameLower = (string) $this->nameLower; // Ensure it's a string
+                    $relativePath = (string) $relativePath; // Ensure it's a string
+                    
+                    $configKey = $nameLower . '.' . str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
+                    $key = ($relativePath === 'config.php') ? $nameLower : $configKey;
+    
                     $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
                     $this->mergeConfigFrom($file->getPathname(), $key);
                 }
             }
         }
     }
+    
 
     /**
      * Register views.
@@ -112,15 +116,20 @@ class PageServiceProvider extends ServiceProvider
         $componentNamespace = $this->module_namespace($this->name, $this->app_path(config('modules.paths.generator.component-class.path')));
         Blade::componentNamespace($componentNamespace, $this->nameLower);
     }
-
     /**
      * Get the services provided by the provider.
+     *
+     * @return string[]  // Specifies the return type as an array of strings (service names).
      */
     public function provides(): array
     {
         return [];
     }
-
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]  // Specifies the return type as an array of strings (service names).
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];

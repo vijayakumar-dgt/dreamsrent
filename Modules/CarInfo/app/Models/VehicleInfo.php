@@ -22,15 +22,29 @@ use Modules\CarInfo\Models\VehicleFaq;
 use Modules\CarInfo\Models\VehicleSeason;
 use Modules\CarInfo\Models\VehicleTarrif;
 /**
- * @property string|null $vehicle_price
- * @property string|null $vehicle_image
  * @property int $id
  * @property string $name
- * @property string $vehicle_name
- * @property string $cartype_name
+ * @property string|null $vehicle_image
+ * @property string|null $slug
+ * @property int|null $year
+ * @property int|null $mileage
+ * @property int|null $odometer
+ * @property int|null $passenger_capacity
+ * @property int|null $num_seats
+ * @property int|null $num_doors
+ * @property int|null $num_airbags
+ * @property string|null $vehicle_video
+ * @property string|null $vehicle_metatitle
+ * @property string|null $vehicle_metakeywords
+ * @property string|null $vehicle_metadesc
+ * @property string|null $features
+ * @property string|null $vehicle_price
+ * @property string|null $vehicle_image_url
  * @property string|null $location_name
  * @property string|null $image_url
  * @property int|null $main_location_id
+ * @property string|null $created_at
+ * @property string|null $updated_at
  */
 class VehicleInfo extends Model
 {

@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int|null $language_id
  * @property int $status
  * @property string|null $icon
+ * @property int $car_count
+ * @property string|null $image_url
  */
 class Cartype extends Model
 {
