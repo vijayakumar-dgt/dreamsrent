@@ -126,7 +126,7 @@
                                                     <a href="javascript:void(0);" class="avatar avatar-lg me-2 avatar-rounded">
                                                         @php
                                                         $imagePath = 'storage/' . $users->profile_image;
-                                                        $defaultImage = asset('assets/img/default-profile.png');
+                                                        $defaultImage = asset('backend/assets/img/default-profile.png');
                                                         @endphp
 
                                                         <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="profile image">
@@ -316,7 +316,7 @@
                                         <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
                                             @php
                                             $imagePath = 'storage/' . $booking->vehicle_image;
-                                            $defaultImage = asset('assets/img/default-profile.png');
+                                            $defaultImage = asset('backend/assets/img/default-profile.png');
                                             @endphp
 
                                             <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="profile image">
@@ -330,7 +330,7 @@
                                     <div class="d-flex align-items-center">
                                         <a href="javascript:void(0);" class="avatar avatar-rounded me-2 flex-shrink-0"> @php
                                             $imagePath = 'storage/' . $booking->profile_image;
-                                            $defaultImage = asset('assets/img/default-profile.png');
+                                            $defaultImage = asset('backend/assets/img/default-profile.png');
                                             @endphp
 
                                             <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="profile image"></a>
@@ -389,5 +389,5 @@
 <!-- /Link Reservation -->
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/admin/invoice.js') }}"></script>
+<script src="{{ asset('backend/assets/js/admin/invoice.js') }}"></script>
 @endpush

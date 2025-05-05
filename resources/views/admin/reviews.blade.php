@@ -252,5 +252,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/admin/reviews.js') }}"></script>
+<script src="{{ asset('backend/assets/js/admin/reviews.js') }}"></script>
 @endpush

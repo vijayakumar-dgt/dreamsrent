@@ -104,5 +104,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/general_setting/ai-configuration.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/general_setting/ai-configuration.js') }}"></script>
 @endpush

@@ -48,7 +48,7 @@
                                         <div class="d-flex align-items-center justify-content-between mb-3">
                                             <div class="d-flex align-items-center">
                                                 <span class="avatar avatar-lg bg-light me-2 p-2">
-                                                    <img src="/assets/img/settings/phpmail.svg" class="img-fluid" alt="img">
+                                                    <img src="/backend/assets/img/settings/phpmail.svg" class="img-fluid" alt="img">
                                                 </span>
                                                 <p class="text-gray-9">{{ __('admin.general_settings.php_mailer') }}</p>
                                             </div>
@@ -87,7 +87,7 @@
                                         <div class="d-flex align-items-center justify-content-between mb-3">
                                             <div class="d-flex align-items-center">
                                                 <span class="avatar avatar-lg bg-light me-2 p-2">
-                                                    <img src="/assets/img/settings/smtp.svg" class="img-fluid" alt="img">
+                                                    <img src="/backend/assets/img/settings/smtp.svg" class="img-fluid" alt="img">
                                                 </span>
                                                 <p class="text-gray-9">{{ __('admin.general_settings.smtp') }}</p>
                                             </div>
@@ -126,7 +126,7 @@
                                         <div class="d-flex align-items-center justify-content-between mb-3">
                                             <div class="d-flex align-items-center">
                                                 <span class="avatar avatar-lg bg-light me-2 p-2">
-                                                    <img src="/assets/img/settings/sendgrid.svg" class="img-fluid" alt="img">
+                                                    <img src="/backend/assets/img/settings/sendgrid.svg" class="img-fluid" alt="img">
                                                 </span>
                                                 <p class="text-gray-9">{{ __('admin.general_settings.send_grid') }}</p>
                                             </div>
@@ -356,5 +356,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/general_setting/email-settings.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/general_setting/email-settings.js') }}"></script>
 @endpush

@@ -96,5 +96,5 @@
 </div>
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/admin/notifications.js') }}"></script>
+<script src="{{ asset('backend/assets/js/admin/notifications.js') }}"></script>
 @endpush

@@ -134,6 +134,6 @@
 @endsection 
 
 @push('scripts')
-<script src="{{ asset('/assets/js/others/mqtt.min.js') }}"></script>
-<script src="{{ asset('/assets/js/others/messages.js?v=1.2') }}"></script>
+<script src="{{ asset('/backend/assets/js/others/mqtt.min.js') }}"></script>
+<script src="{{ asset('/backend/assets/js/others/messages.js?v=1.2') }}"></script>
 @endpush

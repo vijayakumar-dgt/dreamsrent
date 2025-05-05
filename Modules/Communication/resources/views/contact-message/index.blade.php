@@ -196,5 +196,5 @@
 
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/communication/contact.js') }}"></script>
+<script src="{{ asset('backend/assets/js/communication/contact.js') }}"></script>
 @endpush

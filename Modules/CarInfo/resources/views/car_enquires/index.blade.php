@@ -427,6 +427,6 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/carinfo/enquiry.js') }}"></script>
+<script src="{{ asset('backend/assets/js/carinfo/enquiry.js') }}"></script>
 
 @endpush

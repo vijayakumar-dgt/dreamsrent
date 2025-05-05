@@ -306,6 +306,6 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/menu_management/menulist.js') }}"></script>
+<script src="{{ asset('backend/assets/js/menu_management/menulist.js') }}"></script>
 
 @endpush

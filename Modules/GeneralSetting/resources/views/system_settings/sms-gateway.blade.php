@@ -38,7 +38,7 @@
                                             <div class="card flex-fill">
                                                 <div class="card-body">
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
-                                                        <img src="/assets/img/icons/nexmo-logo-icon.svg" alt="Nexmo" class="img-flui">
+                                                        <img src="/backend/assets/img/icons/nexmo-logo-icon.svg" alt="Nexmo" class="img-flui">
                                                         <span class="badge badge-outline d-flex align-items-center"><i class="ti ti-point-filled text-success me-1"></i>{{ __('admin.general_settings.connected') }}</span>
                                                     </div>
                                                     <p class="mb-0">{{ __('admin.general_settings.enable_communication_sms') }}</p>
@@ -64,7 +64,7 @@
                                             <div class="card flex-fill">
                                                 <div class="card-body">
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
-                                                        <img src="/assets/img/icons/two-factor-icon.svg" alt="2Factor" class="img-flui">
+                                                        <img src="/backend/assets/img/icons/two-factor-icon.svg" alt="2Factor" class="img-flui">
                                                         <span class="badge badge-outline d-flex align-items-center"><i class="ti ti-point-filled text-success me-1"></i>{{ __('admin.general_settings.connected') }}</span>
                                                     </div>
                                                     <p class="mb-0">{{ __('admin.general_settings.sms_integration') }}</p>
@@ -90,7 +90,7 @@
                                             <div class="card flex-fill">
                                                 <div class="card-body">
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
-                                                        <img src="/assets/img/icons/twilio-icon.svg" alt="Twilio" class="img-flui">
+                                                        <img src="/backend/assets/img/icons/twilio-icon.svg" alt="Twilio" class="img-flui">
                                                         <span class="badge badge-outline d-flex align-items-center"><i class="ti ti-point-filled text-success me-1"></i>{{ __('admin.general_settings.connected') }}</span>
                                                     </div>
                                                     <p class="mb-0">{{ __('admin.general_settings.twilio_api_integration') }}</p>
@@ -266,7 +266,7 @@
 
 @endsection
 @push('scripts')
-    <script src="{{ asset('assets/js/general_setting/sms-gateway-setting.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/general_setting/sms-gateway-setting.js') }}"></script>
 @endpush
 
 

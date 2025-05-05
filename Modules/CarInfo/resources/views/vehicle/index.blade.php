@@ -388,5 +388,5 @@
 </div>
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/add-car.js') }}"></script>
+<script src="{{ asset('backend/assets/js/add-car.js') }}"></script>
 @endpush

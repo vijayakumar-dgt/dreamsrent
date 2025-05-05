@@ -131,7 +131,7 @@
 		<!-- /Page Wrapper -->
 @endsection
 @push('scripts')
-    <script src="{{ asset('assets/js/general_setting/prefixes-setting.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/general_setting/prefixes-setting.js') }}"></script>
 @endpush
 
 

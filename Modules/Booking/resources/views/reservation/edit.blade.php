@@ -346,7 +346,7 @@
                                                 <div class="skeleton card-sm-skeleton card-loader mb-2"></div>
                                             </div>
                                             <div id="vehicle_list_container" class="car-select d-none">
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -355,12 +355,12 @@
                                             <div class="field-btns">
                                                 <div class="skeleton label-skeleton label-loader me-2"></div>
                                                 <a class="btn btn-light me-2 d-none real-label" href="{{ route('reservation.index') }}"><i class="ti ti-chevron-left me-1"></i>{{ __('admin.common.cancel') }}</a>
-                                            </div> 
+                                            </div>
                                             <div class="field-btns">
                                                 <div class="skeleton label-skeleton label-loader"></div>
                                                 <button class="btn btn-primary d-none real-label" id="basic_info_btn" type="button">{{ __('admin.bookings.add_customer') }}<i class="ti ti-chevron-right ms-1"></i></button>
-                                            </div>  
-                                        </div> 
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -493,11 +493,11 @@
                                         <div class="d-flex align-items-center justify-content-end">
                                             <div class="field-btns">
                                                 <button class="btn btn-light me-2" id="customer_prev_btn" type="button"><i class="ti ti-chevron-left me-1"></i>{{ __('admin.common.back') }}</button>
-                                            </div> 
+                                            </div>
                                             <div class="field-btns">
                                                 <button class="btn btn-primary" id="customer_next_btn" type="button">{{ __('admin.bookings.add_extra_services') }}<i class="ti ti-chevron-right ms-1"></i></button>
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -562,11 +562,11 @@
                                         <div class="d-flex align-items-center justify-content-end">
                                             <div class="field-btns">
                                                 <button class="btn btn-light me-2" id="extra_service_prev_btn" type="button"><i class="ti ti-chevron-left me-1"></i>{{ __('admin.common.back') }}</button>
-                                            </div> 
+                                            </div>
                                             <div class="field-btns">
                                                 <button class="btn btn-primary" id="extra_service_next_btn" type="button">{{ __('admin.bookings.proceed_to_billing') }}<i class="ti ti-chevron-right ms-1"></i></button>
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -578,7 +578,7 @@
                                 <h5 class="text-white">{{ __('admin.common.summary') }}</h5>
                             </div>
                             <div class="card-body" id="extra_service_summary">
-                                
+
                             </div>
                         </div>
                         <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#booking_cancel_modal" class="btn btn-danger w-100"><i class="ti ti-x me-1"></i>{{ __('admin.bookings.cancel_booking') }}</a>
@@ -627,18 +627,18 @@
                                             </div>
                                         </div>
                                         <div class="row" id="insurance_list_container">
-                                            
+
                                         </div>
                                     </div>
                                     <div class="card-footer px-0 pb-0">
                                         <div class="d-flex align-items-center justify-content-end">
                                             <div class="field-btns">
                                                 <button class="btn btn-light me-2" id="billing_prev_btn" type="button"><i class="ti ti-chevron-left me-1"></i>{{ __('admin.common.back') }}</button>
-                                            </div> 
+                                            </div>
                                             <div class="field-btns">
                                                 <button class="btn btn-primary" id="reservation_complete_btn" type="button">{{ __('admin.common.finish') }} & {{ __('admin.common.save') }}<i class="ti ti-chevron-right ms-1"></i></button>
-                                            </div>  
-                                        </div> 
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -698,7 +698,7 @@
                             <div class="mb-3">
                                 <label class="form-label">{{ __('admin.manage.drivers') }}<span class="text-danger"> *</span></label>
                                 <div class="d-flex align-items-center mt-2">
-                                    <a href="#" class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0"><img src="/assets/img/default-profile.png" class="edit_driver_img" alt=""></a>
+                                    <a href="#" class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0"><img src="/backend/assets/img/default-profile.png" class="edit_driver_img" alt=""></a>
                                     <div>
                                         <a class="d-block fw-semibold edit_driver_name" href="#"></a>
                                     </div>
@@ -738,7 +738,7 @@
 				@csrf
 				<div class="modal-body">
 					<div class="row">
-						<div class="col-md-12"> 
+						<div class="col-md-12">
                             <div class="mb-3">
 								<label class="form-label">{{ __('admin.bookings.cancel_reason') }}<span class="text-danger"> *</span></label>
 								<textarea class="form-control" rows="4" name="cancel_reason" id="cancel_reason"></textarea>
@@ -761,5 +761,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/booking/edit-reservation.js') }}"></script>
+<script src="{{ asset('backend/assets/js/booking/edit-reservation.js') }}"></script>
 @endpush

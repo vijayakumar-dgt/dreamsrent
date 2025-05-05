@@ -391,5 +391,5 @@
     <!-- /Delete -->
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/communication/adminticket.js') }}"></script>
+<script src="{{ asset('backend/assets/js/communication/adminticket.js') }}"></script>
 @endpush

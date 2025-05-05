@@ -365,5 +365,5 @@
 <!-- Delete Modal End -->
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/carinfo/inspection.js') }}"></script>
+<script src="{{ asset('backend/assets/js/carinfo/inspection.js') }}"></script>
 @endpush

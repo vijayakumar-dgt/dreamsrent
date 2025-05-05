@@ -196,5 +196,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/locationHandler.js') }}"></script>
+<script src="{{ asset('backend/assets/js/locationHandler.js') }}"></script>
 @endpush

@@ -199,5 +199,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/others/newsletter.js') }}"></script>
+<script src="{{ asset('backend/assets/js/others/newsletter.js') }}"></script>
 @endpush

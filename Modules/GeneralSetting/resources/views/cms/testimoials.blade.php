@@ -213,7 +213,7 @@
                         <label class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                             <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-                                <img id="testimonial_image_preview" src="/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
+                                <img id="testimonial_image_preview" src="/backend/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
                             </div>
                             <div class="profile-upload">
                                 <div class="profile-uploader d-flex align-items-center">
@@ -301,7 +301,7 @@
                         <label class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                             <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames p-2">
-                                <img id="edit_testimonial_preview" src="/assets/img/settings/company-logo-01.jpg" class="rounded-2 img-fluid" alt="brands">
+                                <img id="edit_testimonial_preview" src="/backend/assets/img/settings/company-logo-01.jpg" class="rounded-2 img-fluid" alt="brands">
 
                             </div>
                             <div class="profile-upload">
@@ -404,6 +404,6 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/general_setting/testimoials.js') }}"></script>
+<script src="{{ asset('backend/assets/js/general_setting/testimoials.js') }}"></script>
 
 @endpush

@@ -25,7 +25,7 @@
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 
                                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames p-2 preview-image-add">
-                                            <img src="{{ asset('/assets/img/default-image-02.jpg') }}" class="rounded-2 img-fluid" alt="brands">
+                                            <img src="{{ asset('/backend/assets/img/default-image-02.jpg') }}" class="rounded-2 img-fluid" alt="brands">
                                         </div>
                                         <div class="profile-upload">
                                             <div class="profile-uploader d-flex align-items-center">
@@ -111,6 +111,6 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/general_setting/blog.js') }}"></script>
+<script src="{{ asset('backend/assets/js/general_setting/blog.js') }}"></script>
 
 @endpush

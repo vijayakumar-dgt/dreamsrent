@@ -125,5 +125,5 @@
 	<!-- /Page Wrapper -->
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/communication/adminticketdetails.js') }}"></script>
+<script src="{{ asset('backend/assets/js/communication/adminticketdetails.js') }}"></script>
 @endpush

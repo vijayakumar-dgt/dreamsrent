@@ -40,7 +40,7 @@
                                                     <div class="d-flex align-items-center justify-content-between">
                                                         <div class="d-flex align-items-center">
                                                             <span class="avatar avatar-lg bg-gray-100 me-2 flex-shrink-0">
-                                                                <img src="/assets/img/icons/storage-icon-03.svg" class="w-auto h-auto" alt="Local Storage Icon">
+                                                                <img src="/backend/assets/img/icons/storage-icon-03.svg" class="w-auto h-auto" alt="Local Storage Icon">
                                                             </span>
                                                             <div>
                                                                 <div class="skeleton label-skeleton label-loader"></div>
@@ -68,7 +68,7 @@
                                                     <div class="d-flex align-items-center justify-content-between">
                                                         <div class="d-flex align-items-center">
                                                             <span class="avatar avatar-lg bg-gray-100 me-2 flex-shrink-0">
-                                                                <img src="/assets/img/icons/aws.svg" class="w-auto h-auto" alt="AWS Icon">
+                                                                <img src="/backend/assets/img/icons/aws.svg" class="w-auto h-auto" alt="AWS Icon">
                                                             </span>
                                                             <div>
                                                                 <div class="skeleton label-skeleton label-loader"></div>
@@ -165,7 +165,7 @@
 		<!-- /Add Cronjob -->
 @endsection
 @push('scripts')
-    <script src="{{ asset('assets/js/general_setting/storage-setting.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/general_setting/storage-setting.js') }}"></script>
 @endpush
 
 

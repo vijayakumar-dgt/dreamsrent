@@ -214,5 +214,5 @@
 <!-- /Page Wrapper -->
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/page/edit.js') }}"></script>
+<script src="{{ asset('backend/assets/js/page/edit.js') }}"></script>
 @endpush

@@ -342,5 +342,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/quotations/quotations.js') }}"></script>
+<script src="{{ asset('backend/assets/js/quotations/quotations.js') }}"></script>
 @endpush

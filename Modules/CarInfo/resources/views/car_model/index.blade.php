@@ -279,5 +279,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/carinfo/car-model.js') }}"></script>
+<script src="{{ asset('backend/assets/js/carinfo/car-model.js') }}"></script>
 @endpush

@@ -157,8 +157,8 @@
 
 @push('scripts')
 <!-- Sortable JS -->
-<script src="{{ asset('assets/plugins/sortablejs/Sortable.js') }}"></script>
+<script src="{{ asset('backend/assets/plugins/sortablejs/Sortable.js') }}"></script>
 <!-- Internal Sortable JS -->
-<script src="{{ asset('assets/js/sortable.js') }}"></script>
-<script src="{{ asset('assets/js/menu_management/menumanagement.js') }}"></script>
+<script src="{{ asset('backend/assets/js/sortable.js') }}"></script>
+<script src="{{ asset('backend/assets/js/menu_management/menumanagement.js') }}"></script>
 @endpush

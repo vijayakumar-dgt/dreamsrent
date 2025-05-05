@@ -228,5 +228,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/admin/roles-permissions.js') }}"></script>
+<script src="{{ asset('backend/assets/js/admin/roles-permissions.js') }}"></script>
 @endpush
