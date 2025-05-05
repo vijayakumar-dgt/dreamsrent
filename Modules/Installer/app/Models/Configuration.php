@@ -11,16 +11,23 @@ class Configuration extends Model
 {
     use HasFactory;
 
-    public $fillable = [
+    protected $fillable = [
         'config',
         'value',
     ];
 
-    public static function setupStepCheck($step)
+    /**
+     * Check if the setup step matches the given step.
+     *
+     * @param int $step
+     * @return bool
+     */
+    public static function setupStepCheck(int $step): bool
     {
         try {
             $data = Configuration::where('config', 'setup_stage')->first();
-            if ($step == $data['value']) {
+
+            if ($data && $step == $data['value']) {
                 return true;
             }
 
@@ -31,10 +38,17 @@ class Configuration extends Model
         }
     }
 
-    public static function stepExists()
+    /**
+     * Get the current setup step if it exists.
+     *
+     * @return int|false
+     */
+    public static function stepExists(): int|false
     {
         try {
-            if ($data = Configuration::where('config', 'setup_stage')->first()) {
+            $data = Configuration::where('config', 'setup_stage')->first();
+
+            if ($data) {
                 return $data['value'];
             }
 
@@ -45,28 +59,34 @@ class Configuration extends Model
         }
     }
 
-    public static function updateStep($step)
+    /**
+     * Update the setup step to the provided value.
+     *
+     * @param int $step
+     * @return bool
+     */
+    public static function updateStep(int $step): bool
     {
         try {
-            if (Configuration::where('config', 'setup_stage')->firstOrFail()->update(['value' => $step])) {
-                return true;
-            }
-
-            return false;
+            $configuration = Configuration::where('config', 'setup_stage')->firstOrFail();
+            return $configuration->update(['value' => $step]);
         } catch (Exception $e) {
             Log::error($e->getMessage());
             return false;
         }
     }
 
-    public static function updateCompeteStatus($step)
+    /**
+     * Update the setup complete status.
+     *
+     * @param int $step
+     * @return bool
+     */
+    public static function updateCompeteStatus(int $step): bool
     {
         try {
-            if (Configuration::where('config', 'setup_complete')->firstOrFail()->update(['value' => $step])) {
-                return true;
-            }
-
-            return false;
+            $configuration = Configuration::where('config', 'setup_complete')->firstOrFail();
+            return $configuration->update(['value' => $step]);
         } catch (Exception $e) {
             Log::error($e->getMessage());
             return false;

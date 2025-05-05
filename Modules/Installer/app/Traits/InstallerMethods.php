@@ -14,6 +14,13 @@ use Modules\Installer\Models\Configuration;
 
 trait InstallerMethods
 {
+    /**
+     * @return array{
+     *     0: array<string, array{check: bool, message: string, url?: string}>,
+     *     1: bool,
+     *     2: array<string, array{message: string, url: string|null}>
+     * }
+     */
     private function checkMinimumRequirements(): array
     {
         $checks = [
@@ -110,130 +117,28 @@ trait InstallerMethods
         return [$checks, $success, $failedChecks];
     }
 
-    private function requirementsCompleteStatus()
+    private function requirementsCompleteStatus(): bool
     {
         $success = $this->checkMinimumRequirements();
 
         return $success[1];
     }
 
-    // private function createDatabaseConnection($details)
-    // {
-    //     try {
-    //         // Step 1: Clear existing configuration cache
-    //         Artisan::call('config:clear');
 
-    //         // Step 2: Retrieve the default connection name from config
-    //         $defaultConnectionName = config('database.default');
-    //         $availableConnections = array_keys(config('database.connections'));
-
-    //         if (!in_array($defaultConnectionName, $availableConnections)) {
-    //             Log::error("Default connection '{$defaultConnectionName}' not found.");
-    //             return 'invalid-connection'; // Custom error code for invalid connection
-    //         }
-
-    //         // Step 3: Temporarily set the connection to 'mysql' to create the desired database
-    //         // Save the current database name
-    //         $currentDatabase = config("database.connections.$defaultConnectionName.database");
-    //         // Temporarily set to 'mysql' or any existing database
-    //         Config::set("database.connections.$defaultConnectionName.database", 'mysql');
-
-    //         // Step 4: Reconnect with the updated configuration
-    //         DB::purge($defaultConnectionName);
-    //         DB::reconnect($defaultConnectionName);
-
-    //         // Step 5: Verify the connection to 'mysql' database
-    //         DB::connection($defaultConnectionName)->getPdo();
-    //         Log::info("Connected to 'mysql' database successfully.");
-
-    //         // Step 6: Check if the desired database exists
-    //         $databaseExists = DB::connection($defaultConnectionName)->select(
-    //             'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?',
-    //             [$details['database']]
-    //         );
-
-    //         if (empty($databaseExists)) {
-    //             // Database does not exist, create it
-    //             DB::connection($defaultConnectionName)->statement(
-    //                 "CREATE DATABASE `" . $details['database'] . "` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
-    //             );
-    //             Log::info("Database '{$details['database']}' created successfully.");
-
-    //             // Restore the desired database name in config
-    //             Config::set("database.connections.$defaultConnectionName.database", $details['database']);
-
-    //             // Reconnect with the new database
-    //             DB::purge($defaultConnectionName);
-    //             DB::reconnect($defaultConnectionName);
-
-    //             // Verify the new connection
-    //             DB::connection($defaultConnectionName)->getPdo();
-    //             Log::info("Connected to '{$details['database']}' database successfully.");
-    //         } else {
-    //             Log::info("Database '{$details['database']}' already exists.");
-    //         }
-
-    //         // Step 7: Check if tables exist in the connected database using Doctrine's Schema Manager
-    //         try {
-    //             $schemaManager = DB::connection($defaultConnectionName)->getDoctrineSchemaManager();
-    //             $tables = $schemaManager->listTableNames();
-    //         } catch (\Exception $e) {
-    //             // If Doctrine's Schema Manager is unavailable, use alternative method
-    //             Log::warning("Doctrine Schema Manager unavailable: " . $e->getMessage());
-    //             $tables = DB::connection($defaultConnectionName)->select('SHOW TABLES');
-    //             $tables = array_map(function($table) {
-    //                 return array_values((array)$table)[0];
-    //             }, $tables);
-    //         }
-
-    //         if (count($tables) > 0) {
-    //             if (!empty($details['reset_database']) && $details['reset_database'] === 'on') {
-    //                 // Drop all existing tables
-    //                 Schema::dropAllTables();
-    //                 Log::info("All tables in '{$details['database']}' have been dropped.");
-    //                 return true;
-    //             }
-    //             Log::info("Tables already exist in '{$details['database']}'.");
-    //             return 'table-exist'; // Tables already exist
-    //         }
-
-    //         // Step 8: Import tables if none exist
-    //         $databasePath = $details['database_path'] ?? storage_path('app/database.sql'); // Adjust the path as needed
-    //         $importResult = $this->importDatabase($databasePath);
-
-    //         if ($importResult === true) {
-    //             Log::info("Database imported successfully from '{$databasePath}'.");
-    //             return true;
-    //         } else {
-    //             Log::error("Database import failed: {$importResult}");
-    //             return 'database-import-failed'; // Custom error code
-    //         }
-
-    //     } catch (\PDOException $e) {
-    //         // Detailed error logging for PDO exceptions
-    //         Log::error('PDOException in createDatabaseConnection: ' . $e->getMessage(), [
-    //             'host' => $details['host'],
-    //             'port' => $details['port'],
-    //             'database' => $details['database'],
-    //             'user' => $details['user'],
-    //             // Note: Do NOT log the password or other sensitive information
-    //         ]);
-
-    //         return 'database-connection-failed'; // Custom error code for connection failure
-    //     } catch (\Exception $e) {
-    //         // General exception logging
-    //         Log::error('Exception in createDatabaseConnection: ' . $e->getMessage(), [
-    //             'host' => $details['host'],
-    //             'port' => $details['port'],
-    //             'database' => $details['database'],
-    //             'user' => $details['user'],
-    //             // Note: Do NOT log the password or other sensitive information
-    //         ]);
-
-    //         return 'unexpected-error'; // Custom error code for unexpected errors
-    //     }
-    // }
-    private function createDatabaseConnection($details)
+    /**
+     * Attempt to create a database connection with given credentials.
+     *
+     * @param array{
+     *     host: string,
+     *     port: int|string,
+     *     database: string,
+     *     user: string,
+     *     password: string,
+     *     reset_database?: string
+     * } $details
+     * @return bool|string Returns true on success, "not-found", "table-exist", or an error message on failure.
+     */
+    private function createDatabaseConnection(array $details): bool|string
     {
         try {
             // Get the default connection name
@@ -320,7 +225,19 @@ trait InstallerMethods
         }
     }
 
-    private function changeEnvDatabaseConfig($config)
+    /**
+     * Update environment database configuration variables.
+     *
+     * @param array{
+     *     host: string,
+     *     port: int|string,
+     *     database: string,
+     *     user: string,
+     *     password: string
+     * } $config
+     * @return void
+     */
+    private function changeEnvDatabaseConfig(array $config): void
     {
         $envContent = File::get(base_path('.env'));
         $lineBreak = "\n";
@@ -343,19 +260,20 @@ trait InstallerMethods
         }
     }
 
-    private function completedSetup($type)
+    private function completedSetup(string $type): \Illuminate\Http\RedirectResponse
     {
         Configuration::updateCompeteStatus(1);
         Session::flush();
         Artisan::call('cache:clear');
-        if ($type == 'admin') {
+
+        if ($type === 'admin') {
             return redirect()->route('storage-linkadmin');
-        } else {
-            return redirect()->route('storage-link');
         }
+
+        return redirect()->route('storage-link');
     }
 
-    private function removeDummyFiles()
+    private function removeDummyFiles(): void
     {
         // delete files
         $this->deleteFolderAndFiles(public_path('uploads/custom-images'));
@@ -363,7 +281,7 @@ trait InstallerMethods
         $this->deleteFolderAndFiles(public_path('uploads/store'));
     }
 
-    private function deleteFolderAndFiles($directory)
+    private function deleteFolderAndFiles(string $directory): void
     {
         // Check if the directory exists
         if (File::exists($directory)) {
