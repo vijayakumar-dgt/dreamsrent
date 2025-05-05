@@ -198,18 +198,16 @@
                             <ul class="location-lists">
                                 <li>
                                     <h6>{{__('web.home.driver_type')}}</h6>
-                                    <p>{{__('web.home.acting_driver')}}</p>
+                                    <p>Self Driver</p>
                                 </li>
                             </ul>
                             <div class="driver-info">
                                 <span>
-                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRJ0tCOel3GeTItNxpqvhsILtxfV8yrbD5yA&s" alt="img">
+                                    <img src="{{ $bookingInfo->first_name}}" alt="img">
                                 </span>
                                 <div class="driver-name">
-                                    <h6>Ruban</h6>
-                                    <ul>
-                                        <li>{{__('web.home.no_of_rides_completed')}} : 32</li>
-                                    </ul>
+                                    <h6>{{ $bookingInfo->first_name}} {{ $bookingInfo->last_name }}</h6>
+                                  
                                 </div>
                             </div>
                         </div>
