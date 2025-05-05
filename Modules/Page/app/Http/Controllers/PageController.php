@@ -106,10 +106,6 @@ class PageController extends Controller
         return view('page::page.edit.index', compact('query', 'languageId'));
     }
 
-
-
-
-
     public function getPageInfo(Request $request): JsonResponse
     {
         try {
@@ -260,9 +256,6 @@ class PageController extends Controller
             ], 500);
         }
     }
-
-
-
 
     public function pageUpdate(Request $request): JsonResponse
     {
@@ -524,8 +517,6 @@ class PageController extends Controller
                     }
                 }
 
-
-
                 // Banner Two
                 if ($section['status'] == 1) {
                     if (isset($section['section_content']) && strpos($section['section_content'], '[banner_two') !== false) {
@@ -583,7 +574,6 @@ class PageController extends Controller
                         $section['section_content'] = $banners;
                     }
                 }
-
 
                 // BestVehicle
                 if ($section['status'] == 1) {
@@ -1190,7 +1180,10 @@ class PageController extends Controller
             } else {
                 $defaultTheme = GeneralSetting::where('key', 'default_theme')->first();
                 $theme = $defaultTheme ? $defaultTheme->value : 1;
-                $viewPath = 'frontend.home.home_' . $theme;  // Ensure view file exists
+                $viewPath = 'frontend.home.home_' . $theme;
+                if (!view()->exists($viewPath)) {
+                    $viewPath = 'frontend.home.home_1';
+                }
 
                 return view($viewPath, compact('data', 'content_sections', 'vehicleBrand', 'seo_title', 'seo_description', 'og_title', 'og_description', 'meta_keywords'));
             }
@@ -1206,7 +1199,7 @@ class PageController extends Controller
         $language = TranslationLanguage::where('code', $defaultLang)->first();
 
         if (!$language) {
-            // Handle the case where the language is not found
+
             abort(404, 'Default language not found');
         }
 
@@ -1225,7 +1218,7 @@ class PageController extends Controller
         $userLanguage = TranslationLanguage::where('code', $userLanguageCode)->first();
 
         if (!$userLanguage) {
-            // Handle the case where the user language is not found
+
             abort(404, 'User language not found');
         }
 
