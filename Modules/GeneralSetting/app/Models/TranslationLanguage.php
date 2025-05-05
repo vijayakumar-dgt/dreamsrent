@@ -18,8 +18,5 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TranslationLanguage extends Model
 {
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [];
 }

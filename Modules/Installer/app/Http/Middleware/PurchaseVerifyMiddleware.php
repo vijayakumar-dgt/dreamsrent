@@ -11,27 +11,32 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Modules\Installer\Enums\InstallerInfo;
 use Modules\Installer\Models\Configuration;
+use Illuminate\Http\RedirectResponse;
 
 class PurchaseVerifyMiddleware
 {
     /**
      * Handle an incoming request.
+     *
+     * @param Request $request
+     * @param Closure $next
+     * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
-        if (strtolower(config('app.app_mode')) == 'demo') {
+        if (strtolower(config('app.app_mode')) === 'demo') {
             return $next($request);
         }
 
         if (InstallerInfo::licenseFileExist()) {
             $filepath = InstallerInfo::getLicenseFilePath();
-            if (! InstallerInfo::isRemoteLocal() && InstallerInfo::licenseFileDataHasLocalTrue()) {
+
+            if (!InstallerInfo::isRemoteLocal() && InstallerInfo::licenseFileDataHasLocalTrue()) {
                 $response = purchaseVerificationHashed($filepath, true);
                 if ($response && InstallerInfo::rewriteHashedFile($response)) {
                     return $next($request);
                 } else {
                     InstallerInfo::deleteLicenseFile();
-
                     return $this->invalidHashed();
                 }
             } elseif (Carbon::now()->day == 1) {
@@ -49,7 +54,12 @@ class PurchaseVerifyMiddleware
         return $this->invalidHashed();
     }
 
-    private function invalidHashed()
+    /**
+     * Handle invalid hashed file scenario.
+     *
+     * @return RedirectResponse
+     */
+    private function invalidHashed(): RedirectResponse
     {
         try {
             Configuration::updateCompeteStatus(0);

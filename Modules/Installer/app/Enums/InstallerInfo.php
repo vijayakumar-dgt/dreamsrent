@@ -82,11 +82,18 @@ enum InstallerInfo: string
     public static function getLicenseFileData(bool $isJson = true): mixed
     {
         if (self::licenseFileExist()) {
-            if ($isJson) {
-                return json_decode(file_get_contents(self::getLicenseFilePath()), true);
+            $fileContent = file_get_contents(self::getLicenseFilePath());
+
+            if ($fileContent === false) {
+                Log::error('Failed to read the license file.');
+                return null;
             }
 
-            return file_get_contents(self::getLicenseFilePath());
+            if ($isJson) {
+                return json_decode($fileContent, true);
+            }
+
+            return $fileContent;
         }
 
         return null;
@@ -109,53 +116,57 @@ enum InstallerInfo: string
         }
     }
 
-    public static function rewriteHashedFile(array $response, string $purchaseCode = null): bool
+    /**
+     * Rewrite license hash data to the file based on verification response.
+     *
+     * @param array{
+     *     success: bool,
+     *     isLocal?: string,
+     *     newHash?: string,
+     *     verification_hashed?: string,
+     *     last_updated_at?: string|null
+     * } $response
+     */
+    public static function rewriteHashedFile(array $response, ?string $purchaseCode = null): bool
     {
-        if (isset($response['last_updated_at']) && !is_null($response['last_updated_at'])) {
+        if (!empty($response['last_updated_at'])) {
             Cache::put('last_updated_at', $response['last_updated_at']);
         }
 
+        $isLocal = filter_var($response['isLocal'] ?? true, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+        $data = [];
+
         if (
-            isset($response['success'], $response['isLocal']) &&
-            $response['success'] &&
-            $response['isLocal'] === 'false'
-        ) {
-            try {
-                $data = ['verification_hashed' => $response['newHash'] ?? ''];
-                file_put_contents(self::getLicenseFilePath(), json_encode($data, JSON_PRETTY_PRINT));
-
-                return true;
-            } catch (Exception $e) {
-                Log::error('Error rewriting hashed file: ' . $e->getMessage());
-
-                return false;
-            }
-        } elseif (
             isset($response['success']) &&
-            $response['success']
+            $response['success'] &&
+            $isLocal === false
         ) {
-            try {
-                $data = [];
-                if (!is_null($purchaseCode) && self::isRemoteLocal()) {
-                    $data['isLocal'] = true;
-                    $data['purchase_code'] = $purchaseCode;
-                }
-                $data['verification_hashed'] = $response['verification_hashed'] ?? '';
-                file_put_contents(
-                    self::getLicenseFilePath(),
-                    json_encode($data, JSON_PRETTY_PRINT)
-                );
-
-                return true;
-            } catch (Exception $e) {
-                Log::error('Error rewriting hashed file with purchase code: ' . $e->getMessage());
-
-                return false;
+            $data['verification_hashed'] = $response['newHash'] ?? '';
+        } elseif ($response['success']) {
+            if ($purchaseCode !== null && self::isRemoteLocal()) {
+                $data['isLocal'] = true;
+                $data['purchase_code'] = $purchaseCode;
             }
+            $data['verification_hashed'] = $response['verification_hashed'] ?? '';
+        } else {
+            return false;
         }
 
-        return false;
+        try {
+            $encoded = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+            if ($encoded === false) {
+                throw new \RuntimeException('Failed to encode license data.');
+            }
+
+            file_put_contents(self::getLicenseFilePath(), $encoded);
+            return true;
+        } catch (\Throwable $e) {
+            Log::error('Error rewriting hashed file: ' . $e->getMessage());
+            return false;
+        }
     }
+
 
     public static function writeAssetUrl(): bool
     {
@@ -184,13 +195,15 @@ enum InstallerInfo: string
         try {
             $envFile = base_path('.env');
             if (File::exists($envFile)) {
-                $envContent = File::get($envFile);
+                $envContent = File::get($envFile) ?? '';
+
                 $pattern = "/^{$key}=.*/m";
                 if (preg_match($pattern, $envContent)) {
-                    $envContent = preg_replace($pattern, "{$key}={$value}", $envContent);
+                    $envContent = preg_replace($pattern, "{$key}={$value}", $envContent) ?? $envContent;
                 } else {
                     $envContent .= "\n{$key}={$value}";
                 }
+
                 File::put($envFile, $envContent);
                 return true;
             }
@@ -201,6 +214,13 @@ enum InstallerInfo: string
         return false;
     }
 
+
+    /**
+     * Validates the provided purchase code against the local license file.
+     *
+     * @param string $purchaseCode
+     * @return array{success: bool, message: string}
+     */
     public static function localValidatePurchase(string $purchaseCode): array
     {
         $licenseData = self::getLicenseFileData();
@@ -211,6 +231,7 @@ enum InstallerInfo: string
                 'message' => 'License file does not exist.',
             ];
         }
+
         if (!isset($licenseData['purchase_code']) || $licenseData['purchase_code'] !== $purchaseCode) {
             return [
                 'success' => false,

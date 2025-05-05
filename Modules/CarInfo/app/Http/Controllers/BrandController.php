@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Modules\CarInfo\Models\Brand;
+use Illuminate\Http\UploadedFile;
 
 class BrandController extends Controller
 {
@@ -19,7 +20,13 @@ class BrandController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
+        if(!$authUser){
+            return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
+        }
+        $language_id = $authUser->language_id;
+
         $id = $request->id ?? '';
 
         $data = [
@@ -63,21 +70,26 @@ class BrandController extends Controller
         try {
             if (empty($id)) {
                 // CREATE
-                $data['language_id'] = $authUser->language_id;
+                $data['language_id'] = $language_id;
 
                 if ($request->hasFile('brand_image')) {
                     $file = $request->file('brand_image');
-                    $data['brand_image'] = uploadFile($file, 'brands');
+                    if ($file instanceof UploadedFile) {
+                        $data['brand_image'] = uploadFile($file, 'brands');
+                    }
                 }
+                
                 if ($request->hasFile('brand_icon')) {
                     $file = $request->file('brand_icon');
-                    $data['brand_icon'] = uploadFile($file, 'brands');
+                    if ($file instanceof UploadedFile) {
+                        $data['brand_icon'] = uploadFile($file, 'brands');
+                    }
                 }
 
                 Brand::create($data);
             } else {
                 // UPDATE
-                $brand = Brand::find($id);
+                $brand = Brand::where("id", $id)->first();
 
                 if (!$brand) {
                     return response()->json([
@@ -92,11 +104,16 @@ class BrandController extends Controller
 
                 if ($request->hasFile('brand_image')) {
                     $file = $request->file('brand_image');
-                    $data['brand_image'] = uploadFile($file, 'brands', $oldImage);
+                    if ($file instanceof UploadedFile) {
+                        $data['brand_image'] = uploadFile($file, 'brands', $oldImage);
+                    }
                 }
+                
                 if ($request->hasFile('brand_icon')) {
                     $file = $request->file('brand_icon');
-                    $data['brand_icon'] = uploadFile($file, 'brands', $oldIcon);
+                    if ($file instanceof UploadedFile) {
+                        $data['brand_icon'] = uploadFile($file, 'brands', $oldIcon);
+                    }
                 }
 
                 $data['status'] = $request->status ?? 1;
@@ -124,7 +141,15 @@ class BrandController extends Controller
     public function list(Request $request): JsonResponse
     {
         try {
+            /** @var \App\Models\User|null $authUser */
             $authUser = current_user();
+            if (!$authUser) {
+                return response()->json([
+                    'status' => 'error',
+                    'code'   => 401,
+                    'message' => 'Unauthorized: User not authenticated.'
+                ], 401);
+            }
             $language_id = $authUser->language_id;
             $query = Brand::query()->where("language_id", $language_id);
 
@@ -187,7 +212,7 @@ class BrandController extends Controller
     public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
-        $data = Brand::find($id);
+        $data = Brand::where("id", $id)->first();
         if ($data) {
             $data->brand_image = uploadedAsset($data->brand_image);
             $data->brand_icon = uploadedAsset($data->brand_icon);

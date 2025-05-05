@@ -9,19 +9,20 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
 use Throwable;
 
 class TestimonialController extends Controller
 {
-    public function testimoials(Request $request):View
+    public function testimoials(Request $request): View
     {
         $languages = Language::with('transLang')->get();
 
         return view('generalsetting::cms.testimoials', compact('languages'));
     }
 
-    public function testimoialStore(Request $request):JsonResponse
+    public function testimoialStore(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'customer_name'   => 'required|string|max:255',
@@ -40,7 +41,10 @@ class TestimonialController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('testimonial_image')) {
-            $imagePath = $request->file('testimonial_image')->store('testimonials', 'public');
+            $file = $request->file('testimonial_image');
+            if ($file instanceof UploadedFile) {
+                $imagePath = uploadFile($file, 'testimonials');
+            }
         }
 
         $testimonial = Testimonial::create([
@@ -68,7 +72,7 @@ class TestimonialController extends Controller
                 $searchTerm = $request->search;
                 $query->where(function ($q) use ($searchTerm) {
                     $q->where('customer_name', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('review', 'like', '%' . $searchTerm . '%');
+                        ->orWhere('review', 'like', '%' . $searchTerm . '%');
                 });
             }
 
@@ -110,7 +114,7 @@ class TestimonialController extends Controller
         }
     }
 
-    public function updateTestimonial(Request $request):JsonResponse
+    public function updateTestimonial(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'id' => 'required|exists:testimonials,id',
@@ -118,7 +122,7 @@ class TestimonialController extends Controller
             'customer_rating' => 'required|integer|min:1|max:5',
             'customer_review' => 'required|string|min:10',
             'status' => 'required|boolean',
-            'testimonial_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120', // 5MB
+            'testimonial_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
 
         if ($validator->fails()) {
@@ -132,12 +136,12 @@ class TestimonialController extends Controller
         $testimonial = Testimonial::findOrFail($request->id);
 
         if ($request->hasFile('testimonial_image')) {
-            if ($testimonial->image) {
-                Storage::disk('public')->delete($testimonial->image);
+            $oldImage = $testimonial->image ?? '';
+            $file = $request->file('testimonial_image');
+            if ($file instanceof UploadedFile) {
+                $imagePath = uploadFile($file, 'testimonials', $oldImage);
+                $testimonial->image = $imagePath;
             }
-
-            $imagePath = $request->file('testimonial_image')->store('testimonials', 'public');
-            $testimonial->image = $imagePath;
         }
 
         $testimonial->customer_name = $request->customer_name;

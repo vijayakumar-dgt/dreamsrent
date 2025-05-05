@@ -4,6 +4,9 @@ namespace Modules\GeneralSetting\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+ /**
+ * @property string|null $tags
+ */
 class NotificationType extends Model
 {
     /**

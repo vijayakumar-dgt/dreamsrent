@@ -6,14 +6,28 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\CarInfo\Database\Factories\BrandFactory;
-
+/**
+ * Class Brand
+ * 
+ * @property int $id
+ * @property int|null $language_id
+ * @property string|null $brand_image
+ * @property string|null $brand_icon
+ * @property string $brand_name
+ * @property int $total_cars
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ */
 class Brand extends Model
 {
     use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
+     *
+     * @var array
      */
     protected $fillable = [
         'language_id',
@@ -26,11 +40,14 @@ class Brand extends Model
         'updated_at',
         'deleted_at'
     ];
+
     /**
-     * @return HasMany<CarModel, Brand> */
+     * Get the car models associated with the brand.
+     *
+     * @return HasMany
+     */
     public function carModels(): HasMany
     {
-        /** @var HasMany<CarModel, Brand> */
         return $this->hasMany(CarModel::class, 'brand_id');
     }
 }

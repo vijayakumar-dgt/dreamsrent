@@ -81,7 +81,11 @@
                         </td>
                         <td>
                             <?php
-                            $count = Modules\GeneralSetting\Models\BlogPost::where('category', $category->id)->count();
+                            if (isset($category)) {
+                                $count = Modules\GeneralSetting\Models\BlogPost::where('category', $category->id)->count();
+                            } else {
+                                $count = 0;
+                            }
                             ?>
                             <span class="text-gray-9">{{$count}}</span>
                         </td>

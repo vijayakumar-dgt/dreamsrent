@@ -17,7 +17,9 @@ const fetchReviews = (sort_by = '') => {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             data: d => {
-                d.duration = $(".datefilter.active").data('id');
+                d.duration = $(".datefilter.active").data("id");
+                d.custom_from_date = $(".datefilter.active").data("id") == "custom" ? $("#custom_from_date").val() : '',
+                d.custom_to_date = $(".datefilter.active").data("id") == "custom" ? $("#custom_to_date").val() : '',
                 d.sort_by = sort_by;
             },
             dataSrc: json => {
@@ -135,13 +137,19 @@ $("#reviewDeleteForm").on('submit', async e => {
 
 const deleteReview = id => $("#delete_id").val(id);
 
-$(document).on('click', '.sort_by_list .dropdown-item', function () {
-    const sortBy = $(this).data('sort');
-    $('#sort_by_input').val(sortBy);
-    $('#current_sort').text(sortBy.charAt(0).toUpperCase() + sortBy.slice(1).toLowerCase());
-    $('.sort_by_list .dropdown-item').removeClass('active');
-    $(this).addClass('active');
-    $('#reviewsTable').DataTable().ajax.reload();
+$(document).on('click', '#apply-custom-filter', () => {
+    const from = $("#custom_from_date").val(), to = $("#custom_to_date").val();
+    if (!from || !to) {
+        $("#custom_date_error").text(_l('web.common.enter_from_to_date'));
+        return;
+    }
+    if (new Date(to) < new Date(from)) {
+        $("#custom_date_error").text(_l('web.common.to_date_must_greater'));
+        return;
+    }
+    $("#custom_date_error").text("");
+    $("#custom_date").modal("hide");
+    fetchReviews();
 });
 
 $(document).on('click', '.datefilter', function () {
@@ -150,7 +158,7 @@ $(document).on('click', '.datefilter', function () {
     $(this).addClass("active");
     $(".datefilter_text").text($(this).text().trim());
 
-    if (selectedFilter !== "custom") {
+    if (selectedFilter != "custom") {
         $("#custom_from_date, #custom_to_date").val("");
         $('#reviewsTable').DataTable().ajax.reload();
     }
