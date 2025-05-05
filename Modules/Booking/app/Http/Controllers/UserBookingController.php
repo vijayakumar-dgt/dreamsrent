@@ -58,7 +58,7 @@ class UserBookingController extends Controller
         }
         return redirect()->route('home');
     }
-    public function index(Request $request, $slug): View|RedirectResponse
+    public function index(Request $request, string $slug): View|RedirectResponse
     {
         if (!Auth::guard('web')->check()) {
             session(['intended_url' => url()->current()]);
@@ -70,24 +70,38 @@ class UserBookingController extends Controller
             ]);
             return redirect()->route('user-login');
         }
-        $vehicle = VehicleInfo::select('id', 'name', 'vehicle_image', 'main_location_id', 'other_location_id', 'vehicle_price', "passenger_capacity")->where('slug', $slug)->first();
-        $vehicleImageUrl = $vehicle ? asset('/storage/' . $vehicle->vehicle_image) : null;
+        $vehicle = VehicleInfo::select('id', 'name', 'vehicle_image', 'main_location_id', 'other_location_id', 'vehicle_price', 'passenger_capacity')
+            ->where('slug', $slug)
+            ->first();
 
-        $vehicleId = $vehicle->id;
+        $vehicleImageUrl = $vehicle?->vehicle_image ? asset('/storage/' . $vehicle->vehicle_image) : null;
 
-        $prices = json_decode($vehicle->vehicle_price, true)[0] ?? [];
+        $vehicleId = $vehicle?->id;
+
+        $prices = $vehicle && is_string($vehicle->vehicle_price)
+            ? (json_decode($vehicle->vehicle_price, true)[0] ?? [])
+            : [];
+
 
         $filteredPrices = array_filter($prices, function ($price) {
             return $price > 0;
         });
 
-        $mainLocation = Location::select('name', 'address')->where('id', $vehicle->main_location_id)->first();
+        $mainLocation = null;
 
+        if ($vehicle?->main_location_id) {
+            $mainLocation = Location::select('name', 'address')
+                ->where('id', $vehicle->main_location_id)
+                ->first();
+        }
 
         $allLocation = collect();
 
-        // Get main location
-        if ($vehicle->main_location_id) {
+        if ($vehicle?->main_location_id) {
+            $mainLocation = Location::select('name', 'address')
+                ->where('id', $vehicle->main_location_id)
+                ->first();
+
             $mainLocations = Location::select('id', 'name', 'address')
                 ->where('id', $vehicle->main_location_id)
                 ->first();
@@ -126,7 +140,7 @@ class UserBookingController extends Controller
             ->where('vehicle_id', $vehicleId)
             ->get()
             ->map(function ($service) {
-                if (!empty($service->extraService->icon)) {
+                if (!empty($service->extraService->icon) && is_string($service->extraService->icon)) {
                     $service->extraService->icon = asset('storage/' . $service->extraService->icon);
                 }
                 return $service;
@@ -162,7 +176,7 @@ class UserBookingController extends Controller
 
         $vehicleInsurance->transform(function ($insurance) {
             $insurance->benefits_count = $insurance->insuranceBenefits->count();
-            $insurance->first_benefit = $insurance->insuranceBenefits->first()?->benefit ?? 'No benefits available';
+            $insurance->first_benefit = $insurance->insuranceBenefits->first()->benefit ?? 'No benefits available';
             return $insurance;
         });
 
@@ -204,13 +218,13 @@ class UserBookingController extends Controller
             ->with($request->all());
     }
 
-    public function getStates($country_id): JsonResponse
+    public function getStates(int $country_id): JsonResponse
     {
         $states = State::where('country_id', $country_id)->get(['id', 'name']);
         return response()->json($states);
     }
 
-    public function getCities($state_id): JsonResponse
+    public function getCities(int $state_id): JsonResponse
     {
         $cities = City::where('state_id', $state_id)->get(['id', 'name']);
         return response()->json($cities);
@@ -251,21 +265,31 @@ class UserBookingController extends Controller
     }
 
 
-    public function paymentSuccess($transaction_id): View
+    public function paymentSuccess(int $transaction_id): View
     {
         $booking = Booking::where('transaction_id', $transaction_id)->first();
 
+        if (!$booking) {
+            abort(404, 'Booking not found.');
+        }
+
         $vehicleId = $booking->vehicle_id;
 
-        if ($booking) {
-            $extraServices = json_decode($booking->extra_service, true);
-            $extraServiceIds = collect($extraServices)->pluck('id')->toArray();
-        }
+        /** @var array<array{id: int|string}> $extraServices */
+        $extraServices = json_decode($booking->extra_service ?? '[]', true);
+
+        $extraServiceIds = collect($extraServices)->pluck('id')->toArray();
 
         $vehicle = VehicleInfo::select('id', 'name', 'vehicle_image', 'main_location_id', 'vehicle_price')->where('id', $vehicleId)->first();
         $vehicleImageUrl = $vehicle ? asset('/storage/' . $vehicle->vehicle_image) : null;
 
-        $mainLocation = Location::select('name', 'address')->where('id', $vehicle->main_location_id)->first();
+        $mainLocation = null;
+
+        if ($vehicle) {
+            $mainLocation = Location::select('name', 'address')
+                ->where('id', $vehicle->main_location_id)
+                ->first();
+        }
         $dLocation = Location::select('name', 'address')->where('id', $booking->pickup_location)->first();
         $rLocation = Location::select('name', 'address')->where('id', $booking->return_location)->first();
         $vehicleExtraServices = ExtraService::select('id', 'name')
@@ -319,7 +343,7 @@ class UserBookingController extends Controller
     }
 
 
-    public function paymentFail($transaction_id): View
+    public function paymentFail(int $transaction_id): View
     {
         $booking = Booking::where('transaction_id', $transaction_id)->first();
 
@@ -333,24 +357,36 @@ class UserBookingController extends Controller
 
         $formattedBookingDate = Carbon::now()->format('Y-m-d H:i:s');
 
-        $startDatetime = Carbon::createFromFormat('d-m-Y H:i', $request->input('pickup_date') . ' ' . $request->input('pickup_time'))
-            ->format('Y-m-d H:i:s');
+        $pickupInput = $request->input('pickup_date') . ' ' . $request->input('pickup_time');
+        $returnInput = $request->input('return_date') . ' ' . $request->input('return_time');
 
-        $endDatetime = Carbon::createFromFormat('d-m-Y H:i', $request->input('return_date') . ' ' . $request->input('return_time'))
-            ->format('Y-m-d H:i:s');
+        $startDatetimeObj = Carbon::createFromFormat('d-m-Y H:i', $pickupInput);
+        $endDatetimeObj = Carbon::createFromFormat('d-m-Y H:i', $returnInput);
+
+        $startDatetime = $startDatetimeObj ? $startDatetimeObj->format('Y-m-d H:i:s') : null;
+        $endDatetime = $endDatetimeObj ? $endDatetimeObj->format('Y-m-d H:i:s') : null;
 
         $noOfDays = Carbon::parse($startDatetime)->diffInDays(Carbon::parse($endDatetime)) + 1;
 
-        if ($request->rent_type == "delivery") {
+        $pickup_location_id = null;
+        $return_location_id = null;
+        $pickup_location = null;
+        $return_location = null;
+
+        if ($request->rent_type === 'delivery') {
             $pickup_location_id = $request->delivery_location;
             $return_location_id = $request->delivery_return_location;
-        } elseif ($request->rent_type == "self_pickup") {
+            $pickup_location = $request->delivery_location;
+            $return_location = $request->delivery_return_location;
+        } elseif ($request->rent_type === 'self_pickup') {
             $pickup_location_id = $request->pickup_location;
             $return_location_id = $request->pickup_return_location;
+            $pickup_location = $request->pickup_location;
+            $return_location = $request->pickup_return_location;
         }
 
         if ($request->payment_type == "cod") {
-            $generateID = 'COD' . str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
+            $generateID = 'COD' . str_pad((string) mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
 
             $data = [
                 "vehicle_id" => $request->input('vehicle_id'),
@@ -359,8 +395,8 @@ class UserBookingController extends Controller
                 "booking_date" => $formattedBookingDate,
                 "start_datetime" => $startDatetime,
                 "end_datetime" => $endDatetime,
-                "pickup_location" => $pickup_location_id ?? null,
-                "return_location" => $return_location_id ?? null,
+                "pickup_location" => $pickup_location_id,
+                "return_location" => $return_location_id,
                 "delivery_location" => $pickup_location ?? null,
                 "delivery_return_location" => $return_location ?? null,
                 "delivery_type" => $request->rent_type,
@@ -405,7 +441,7 @@ class UserBookingController extends Controller
                 'message' => __('web.home.booking_created'),
             ]);
 
-            $reservationId = 'RES-' . str_pad($booking->id, 4, '0', STR_PAD_LEFT);
+            $reservationId = 'RES-' . str_pad((string) $booking->id, 4, '0', STR_PAD_LEFT);
 
             $booking->update(['reservation_id' => $reservationId]);
 
@@ -416,7 +452,7 @@ class UserBookingController extends Controller
                 'driver_age' => $request->driver_age,
                 'driver_mobile_number' => $request->driver_mobile_number,
                 'driver_licence' => $request->driver_licence,
-                'driver_check' => $request->has('driver_check') ?? 1,
+                'driver_check' => $request->has('driver_check') ? 1 : 0,
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'no_person' => $request->no_person ?? 0,
@@ -429,7 +465,7 @@ class UserBookingController extends Controller
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
                 'add_info' => $request->add_info,
-                'terms' => $request->has('terms') ?? 1,
+                'terms' => $request->has('terms') ? 1 : 0,
             ];
 
             $bookingInfo = BookingUserInfo::create($addData);

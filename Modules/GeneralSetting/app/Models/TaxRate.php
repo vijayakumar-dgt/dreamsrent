@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property \Illuminate\Support\Carbon $created_at
  * @property string $created_on
+ * @property float $tax_rate
+ * @property string $tax_name
  */
 class TaxRate extends Model
 {

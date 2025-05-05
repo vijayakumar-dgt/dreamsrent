@@ -36,6 +36,19 @@ use Modules\CarInfo\Models\VehicleInfo;
  * @property int $reservation_id
  * @property string|null $payment_type
  * @property-read \Modules\Booking\Models\BookingUserInfo|null $userInfo
+ * @property int $vehicle_id
+ * @property string|null $extra_service
+ * @property int|null $driver_id
+ * @property string|null $reservation_id
+ * @property string|null $start_datetime
+ * @property string|null $end_datetime
+ * @property string|null $delivery_type
+ * @property string|null $rental_type
+ * @property string|null $payment_type
+ * @property string|null $payment_status
+ * @property float|null $final_price
+ * @property string|null $transaction_id
+ * @property-read \Modules\GeneralSetting\Models\Location|null $pickupLocation
  * 
  */
 

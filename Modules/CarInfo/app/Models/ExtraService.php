@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *  @property \Illuminate\Support\Carbon $created_at
  *  @property \Illuminate\Support\Carbon $updated_at
  *  @property \Illuminate\Support\Carbon $deleted_at
+ * @property float|null $price      // Dynamically added
+ * @property string|null $value     // Dynamically added
  *  @property double $price
  */
 class ExtraService extends Model

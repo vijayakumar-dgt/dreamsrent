@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $created_on
  * @property string|float $total_tax_rate
  * @property-read \Illuminate\Database\Eloquent\Collection|\Modules\GeneralSetting\Models\TaxRate[] $taxRates
+ * @property string $tax_name
+ * @property \Illuminate\Database\Eloquent\Collection<int, TaxRate> $taxRates
  */
 class TaxGroup extends Model
 {
