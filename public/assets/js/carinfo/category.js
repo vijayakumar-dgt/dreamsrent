@@ -230,7 +230,7 @@
                                                     "delete"
                                                 )
                                                     ? `<li>
-                                                <a class="dropdown-item rounded-1 delateCategory" href="javascript:void(0);" data-id="${
+                                                <a class="dropdown-item rounded-1 delatecat" href="javascript:void(0);" data-id="${
                                                     value.id
                                                 }" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l(
                                                           "admin.common.delete"
@@ -616,7 +616,7 @@
         });
     });
 
-    $(document).on("click", ".deletecategory", function () {
+    $(document).on("click", ".delatecat", function () {
         let id = $(this).data("id");
         $("#delete_id").val(id);
     });

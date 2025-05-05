@@ -10,8 +10,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property int $id
  * @property string $name
- * @property int $language_id
+ * @property int|null $language_id
  * @property int $status
+ * @property string|null $icon
  */
 class Cartype extends Model
 {

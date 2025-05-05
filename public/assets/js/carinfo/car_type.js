@@ -382,7 +382,6 @@ $(document).on("click", "#add_new_type", function(){
 });
 
 function deleteType(id){
-    console.log('delete id '+ id);
     $("#delete_id").val(id);
 }
 

@@ -15,7 +15,11 @@ class CarModelController extends Controller
 {
     public function index(): View
     {
+        /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
+        if (!$authUser) {
+            return view('carinfo::car_model.index');
+        }
         $language_id = $authUser->language_id;
         $brands = Brand::orderBy('id', 'desc')->where("language_id", $language_id)->where('status', 1)->get();
 
@@ -24,7 +28,15 @@ class CarModelController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
+        if (!$authUser) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 401,
+                'message' => 'Unauthorized: User not authenticated.'
+            ], 401);
+        }
         $id = $request->id ?? '';
 
         $data = [
@@ -99,7 +111,15 @@ class CarModelController extends Controller
 
     public function list(Request $request): JsonResponse
     {
+        /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
+        if (!$authUser) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 401,
+                'message' => 'Unauthorized: User not authenticated.'
+            ], 401);
+        }
         $language_id = $authUser->language_id;
         try {
             $query = CarModel::join('brands', 'car_models.brand_id', '=', 'brands.id')
