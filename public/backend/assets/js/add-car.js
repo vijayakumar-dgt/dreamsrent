@@ -1233,9 +1233,9 @@
             let fileExtension = fileName.split(".").pop().toLowerCase();
             let iconPath = ''; // 🛠️ Declare it here first
             if (fileExtension === "doc" || fileExtension === "docx") {
-                iconPath = "/assets/img/icons/pdf-icon.svg";
+                iconPath = "/backend/assets/img/icons/pdf-icon.svg";
             } else if (fileExtension === "pdf") {
-                iconPath = "/assets/img/icons/pdf-icon.svg";
+                iconPath = "/backend/assets/img/icons/pdf-icon.svg";
             }
 
             return iconPath;
@@ -1341,11 +1341,11 @@
         
         
             if (fileExtension === "doc" || fileExtension === "docx") {
-                iconPath = "/assets/img/icons/pdf-icon.svg"; // 📝 maybe a Word icon instead?
+                iconPath = "/backend/assets/img/icons/pdf-icon.svg"; // 📝 maybe a Word icon instead?
             } else if (fileExtension === "pdf") {
-                iconPath = "/assets/img/icons/pdf-icon.svg";
+                iconPath = "/backend/assets/img/icons/pdf-icon.svg";
             } else {
-                iconPath = "/assets/img/icons/default-file-icon.svg"; // ⚙️ default for unknown files
+                iconPath = "/backend/assets/img/icons/default-file-icon.svg"; // ⚙️ default for unknown files
             }
         
             return iconPath;
@@ -1447,7 +1447,7 @@
 
             if (youtubeRegex.test(videoUrl)) {
                 let videoItem = `
-                    <img src="/assets/img/car/car-lg-01.jpg" alt="img">
+                    <img src="/backend/assets/img/car/car-lg-01.jpg" alt="img">
                     <a href="${videoUrl}" target="_blank" data-fancybox="" class="play-icon">
                         <i class="ti ti-player-play-filled"></i>
                     </a>

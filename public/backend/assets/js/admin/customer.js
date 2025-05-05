@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (userPhoneInput) {
         const iti = intlTelInput(userPhoneInput, {
-            utilsScript: window.location.origin + "/assets/plugins/intltelinput/js/utils.js",
+            utilsScript: window.location.origin + "/backend/assets/plugins/intltelinput/js/utils.js",
             separateDialCode: true,
         });
 
@@ -913,7 +913,7 @@ $(document).on('click', '.edit-customer', function() {
                      $(phoneInput).data('itiInstance').destroy();
                  }
                  const iti = intlTelInput(phoneInput, {
-                     utilsScript: window.location.origin + "/assets/plugins/intltelinput/js/utils.js",
+                     utilsScript: window.location.origin + "/backend/assets/plugins/intltelinput/js/utils.js",
                      separateDialCode: true,
                  });
                  $(phoneInput).data('itiInstance', iti);

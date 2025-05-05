@@ -91,7 +91,7 @@ function initTable() {
                             <td>
                             <div class="d-flex align-items-center">
                                 <a href="customer-details.html" class="avatar me-2 flex-shrink-0">
-                                    <img src="/assets/img/profiles/avatar-20.jpg" class="rounded-circle" alt="">
+                                    <img src="/backend/assets/img/profiles/avatar-20.jpg" class="rounded-circle" alt="">
                                 </a>
                                 <h6><a href="customer-details.html" class="fs-14 fw-semibold">${
                                     value.name

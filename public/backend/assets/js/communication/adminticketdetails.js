@@ -175,7 +175,7 @@ function ticketDetails() {
                     let attachmentHTML = `
                         <div class="bg-light br-5 p-3 d-flex align-items-center border mb-2">
                             <span class="avatar bg-white d-flex align-items-center justify-content-center me-2">
-                                ${isPdf ? `<img src="/assets/img/icons/pdf.svg" alt="pdf" class="w-10 h-10">` : ''}
+                                ${isPdf ? `<img src="/backend/assets/img/icons/pdf.svg" alt="pdf" class="w-10 h-10">` : ''}
                                 ${isImage ? `<img src="${fileUrl}" alt="img" class="w-10 h-10 rounded">` : ''}
                             </span>
                             <div class="me-2">
@@ -203,7 +203,7 @@ function ticketDetails() {
             ticket.ticket_histories.forEach(history => {
                 let userImage = history.user && history.user.profile_image
                     ? history.user.profile_image
-                    : "/assets/img/profiles/avatar-20.jpg";
+                    : "/backend/assets/img/profiles/avatar-20.jpg";
 
                 let userName = history.user ? history.user.name : "Unknown User";
                 let createdAt = new Date(history.created_at).toLocaleString();

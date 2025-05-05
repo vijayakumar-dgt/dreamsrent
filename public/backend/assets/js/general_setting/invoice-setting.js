@@ -179,7 +179,7 @@ function removeImage() {
     const preview = document.getElementById('profile_photo_preview');
     const fileInput = document.getElementById('profile_photo');
 
-    preview.src = '/assets/img/settings/company-logo-01.jpg';
+    preview.src = '/backend/assets/img/settings/company-logo-01.jpg';
     fileInput.value = '';
 }
 
