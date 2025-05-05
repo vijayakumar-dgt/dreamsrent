@@ -25,7 +25,7 @@ class DbbackupController extends Controller
         return view('generalsetting::other_settings.system-backup');
     }
 
-    public function backupDatabase(Request $request):RedirectResponse
+    public function backupDatabase(Request $request): RedirectResponse
     {
         try {
             $backupDir = storage_path('app/public/dbbackups');
@@ -65,14 +65,15 @@ class DbbackupController extends Controller
         }
     }
 
-    public function listBackups():JsonResponse
+    public function listBackups(): JsonResponse
     {
         try {
             $backups = Dbbackup::where('type', 1)->orderBy('created_at', 'desc')->get();
 
             $baseUrl = asset('storage/database');
 
-            $formattedBackups = $backups->map(function ($backup) use ($baseUrl) {
+            /** @var \Illuminate\Support\Collection<int, Dbbackup> $backups */
+            $formattedBackups = $backups->map(function (Dbbackup $backup) use ($baseUrl): array {
                 return [
                     'id' => $backup->id,
                     'name' => $backup->name,
@@ -80,6 +81,7 @@ class DbbackupController extends Controller
                     'download_url' => "{$baseUrl}/{$backup->name}",
                 ];
             });
+
 
             return response()->json([
                 'success' => true,
@@ -95,7 +97,7 @@ class DbbackupController extends Controller
         }
     }
 
-    public function listSystemBackups():JsonResponse
+    public function listSystemBackups(): JsonResponse
     {
         try {
             $backups = Dbbackup::where('type', 2)->orderBy('created_at', 'desc')->get();
@@ -124,7 +126,7 @@ class DbbackupController extends Controller
             ], 500);
         }
     }
-    public function deleteSystemBackup(Request $request):JsonResponse
+    public function deleteSystemBackup(Request $request): JsonResponse
     {
         try {
             $request->validate([
@@ -149,7 +151,7 @@ class DbbackupController extends Controller
         }
     }
 
-    public function deleteBackup(Request $request):JsonResponse
+    public function deleteBackup(Request $request): JsonResponse
     {
         try {
             $request->validate([
