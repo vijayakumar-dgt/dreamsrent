@@ -18,14 +18,18 @@ class AddonController extends Controller
     {
         $jsonPath = base_path('addon_modules.json');
 
-        $jsonData = file_exists($jsonPath) ? json_decode(file_get_contents($jsonPath), true) : [];
+        $jsonData = [];
+        if (file_exists($jsonPath)) {
+            $fileContents = file_get_contents($jsonPath);
+            if ($fileContents !== false) {
+                $jsonData = json_decode($fileContents, true);
+            }
+        }
         $addonModules = Addon::get(['id', 'name', 'slug', 'version', 'price', 'status']);
-
+        /** @var array<string, mixed> $jsonData */
         $jsonCollection = collect($jsonData);
-
         $modules = $jsonCollection->map(function ($jsonModule) use ($addonModules) {
             $dbModule = $addonModules->firstWhere('name', $jsonModule['module_name']);
-
             return [
                 'module_name' => $jsonModule['module_name'],
                 'module_image' => $jsonModule['module_image'],
@@ -49,10 +53,21 @@ class AddonController extends Controller
                 ->get(['id', 'slug', 'name', 'version', 'price', 'status']);
 
             $jsonPath = base_path('addon_modules.json');
-            $jsonData = file_exists($jsonPath) ? json_decode(file_get_contents($jsonPath), true) : [];
+            $fileContents = file_exists($jsonPath) ? file_get_contents($jsonPath) : '';
+            $jsonData = $fileContents !== false ? json_decode($fileContents, true) : [];
+            /** @var array<int, array<string, mixed>> $jsonData */
             $jsonCollection = collect($jsonData);
-
-            $data = $addonModules->map(function ($dbModule) use ($jsonCollection) {
+            /** @var \Illuminate\Support\Collection $addonModules */
+            /** @var \Illuminate\Support\Collection $jsonCollection */
+            /**
+             * Maps over the $addonModules collection and applies a callback function.
+             *
+             * @param \Illuminate\Support\Collection<TKey, TValue> $addonModules The collection of addon modules.
+             * @param \Illuminate\Support\Collection<TKey, TValue> $jsonCollection The JSON collection used within the callback.
+             *
+             * @return array The transformed array after mapping over the collection.
+             */
+            $data = $addonModules->map(function ($dbModule) use ($jsonCollection): array {
                 $jsonModule = $jsonCollection->firstWhere('module_name', $dbModule->name);
                 return [
                     'id' => $dbModule->id,
@@ -108,11 +123,11 @@ class AddonController extends Controller
         try {
             $jsonPath = base_path('addon_modules.json');
 
-            $jsonData = file_exists($jsonPath) ? json_decode(file_get_contents($jsonPath), true) : [];
+            $fileContents = file_exists($jsonPath) ? file_get_contents($jsonPath) : '';
+            $jsonData = $fileContents !== false ? json_decode($fileContents, true) : [];
             $addonModules = Addon::get(['id', 'name', 'slug', 'version', 'price', 'status']);
-
+            /** @var array<int, array<string, mixed>> $jsonData */
             $jsonCollection = collect($jsonData);
-
             $modules = $jsonCollection->map(function ($jsonModule) use ($addonModules) {
                 $dbModule = $addonModules->firstWhere('name', $jsonModule['module_name']);
 
@@ -126,7 +141,6 @@ class AddonController extends Controller
                     'purchase_link' => $jsonModule['purchase_link'] ?? '',
                 ];
             });
-
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.general_settings.addon_retrieve_success'),
@@ -140,7 +154,6 @@ class AddonController extends Controller
             ], 500);
         }
     }
-
     public function purchaseModule(Request $request): JsonResponse
     {
         try {
@@ -151,32 +164,20 @@ class AddonController extends Controller
                 'status' => 1,
                 'slug' => Str::slug(Str::plural($request->module_name))
             ];
-
             $repoUrl = $request->input('git_link');
             $moduleName = $request->module_name;
             $modulesPath = base_path("Modules/{$moduleName}");
             $moduleNameLower = strtolower($moduleName);
-
             if (!file_exists($modulesPath)) {
                 $command = "git clone \"$repoUrl\" \"$modulesPath\" 2>&1";
-                // dd($command);
                 $output = shell_exec($command);
             }
-
             if (file_exists($modulesPath)) {
-                // Copy JS files to public directories (Admin & Provider)
                 $this->copyJsFiles($moduleName, 'admin', public_path('assets/js/'));
                 $this->copyJsFiles($moduleName, 'provider', public_path('front/js/'));
-
-                // Execute SQL Files
                 $this->executeSqlFiles($moduleName);
-
-                // Update module status JSON file
                 $this->updateModuleStatus($moduleName);
-
-                // Update modules.php configuration
                 $this->updateModulesConfig($moduleName, $moduleNameLower);
-
                 Addon::create($data);
                 clearCache();
             } else {
@@ -185,7 +186,6 @@ class AddonController extends Controller
                     'message' => __('admin.general_settings.module_activated_successfully'),
                 ], 500);
             }
-
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.general_settings.module_activated_successfully'),
@@ -198,16 +198,11 @@ class AddonController extends Controller
             ], 500);
         }
     }
-
-    /**
-     * Copy JavaScript files from module to public directory
-     */
     private function copyJsFiles(string $moduleName, string $type, string $destinationDir): void
     {
         $sourceDir = base_path("Modules/{$moduleName}/js/{$type}/");
         if (File::exists($sourceDir)) {
             $files = File::glob($sourceDir . '*.js');
-
             if (!empty($files)) {
                 foreach ($files as $file) {
                     $fileName = basename($file);
@@ -220,89 +215,76 @@ class AddonController extends Controller
             }
         }
     }
-
-    /**
-     * Execute SQL files in the module
-     */
     private function executeSqlFiles(string $moduleName): void
     {
         $sqlPath = base_path("Modules/{$moduleName}/sql");
         if (File::exists($sqlPath)) {
             $sqlFiles = File::files($sqlPath);
-
             foreach ($sqlFiles as $file) {
                 if ($file->getExtension() == 'sql') {
                     $sql = File::get($file);
-
                     if (preg_match('/CREATE TABLE\s+`?(\w+)`?/i', $sql, $matches)) {
                         $tableName = $matches[1];
                         $tableExists = DB::select("SHOW TABLES LIKE '{$tableName}'");
-
                         if ($tableExists) {
                             // Drop the table before recreating it
                             DB::statement("DROP TABLE IF EXISTS `{$tableName}`");
                         }
-
                         $sql = preg_replace('/CREATE TABLE\s+`?(\w+)`?/i', 'CREATE TABLE IF NOT EXISTS `$1`', $sql);
                     }
-
-                    DB::unprepared($sql);
+                    if (!is_null($sql)) {
+                        DB::unprepared($sql);
+                    }
                 }
             }
         }
     }
-
-
-    /**
-     * Update module status in modules_statuses.json
-     */
     private function updateModuleStatus(string $moduleName): void
     {
         $moduleStatusPath = base_path('modules_statuses.json');
         if (!File::exists($moduleStatusPath)) {
-            File::put($moduleStatusPath, json_encode([], JSON_PRETTY_PRINT));
+            $encodedData = json_encode([], JSON_PRETTY_PRINT);
+            if ($encodedData !== false) {
+                File::put($moduleStatusPath, $encodedData);
+            } else {
+                throw new \RuntimeException('Failed to encode JSON data.');
+            }
         }
         $modules = json_decode(File::get($moduleStatusPath), true);
         $modules[$moduleName] = true;
-        File::put($moduleStatusPath, json_encode($modules, JSON_PRETTY_PRINT));
+        $encodedModules = json_encode($modules, JSON_PRETTY_PRINT);
+        if ($encodedModules === false) {
+            throw new \RuntimeException('Failed to encode JSON data.');
+        }
+        File::put($moduleStatusPath, $encodedModules);
     }
-
-    /**
-     * Update modules.php configuration
-     */
     private function updateModulesConfig(string $moduleName, string $moduleNameLower): void
     {
         $moduleClass = "Modules\\" . ucfirst($moduleName) . "\\Providers\\" . ucfirst($moduleName) . "ServiceProvider::class";
         $configPath = config_path('modules.php');
         if (File::exists($configPath)) {
             $configContent = File::get($configPath);
-
             if (strpos($configContent, "'$moduleNameLower' => [") === false) {
                 $newModuleEntry = "\n        '$moduleNameLower' => [\n            'active' => true,\n            'providers' => [\n                $moduleClass,\n            ],\n        ],";
                 $newConfigContent = preg_replace('/(\'modules\'\s*=>\s*\[)/s', "$1$newModuleEntry", $configContent, 1);
-                File::put($configPath, $newConfigContent);
+                if (!is_null($newConfigContent)) {
+                    File::put($configPath, $newConfigContent);
+                }
             }
         }
     }
-
     public function updateModule(Request $request): string
     {
         $moduleName = $request->module ?? '';
         $moduleName = ucfirst($moduleName);
         $modulesPath = base_path("Modules/{$moduleName}");
         $moduleNameLower = strtolower($moduleName);
-
         if (file_exists($modulesPath)) {
             $command = "cd {$modulesPath} && git reset --hard && git pull origin main 2>&1";
             $output = shell_exec($command);
-
-            // Copy JS files to public directories (Admin & Provider)
             $this->copyJsFiles($moduleName, 'admin', public_path('assets/js/'));
             $this->copyJsFiles($moduleName, 'provider', public_path('front/js/'));
-
-            // Execute SQL Files
             $this->executeSqlFiles($moduleName);
-
             return __('admin.general_settings.module_updated_successfully');
         } else {
             abort(404, __('admin.general_settings.module_not_found'));
