@@ -108,7 +108,7 @@
                                                         <label class="form-label d-none real-label">{{ __('admin.common.phone_number') }} <span class="text-danger">*</span></label>
                                                         <div class="skeleton input-skeleton input-loader"></div>
                                                         <div class="d-none real-label">
-                                                            <input type="text" class="form-control company_phone" id="company_phone" name="company_phone">
+                                                            <input type="text" class="form-control company_phone" id="company_phone" name="company_phone" maxlength="15">
                                                             <input type="hidden" id="international_phone_number" name="international_phone_number">
                                                         </div>
                                                         <span id="company_phone_error" class="text-danger error-text"></span>
