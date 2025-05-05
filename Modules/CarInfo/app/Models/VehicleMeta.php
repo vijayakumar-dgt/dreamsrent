@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\CarInfo\Database\Factories\VehicleMetaFactory;
-
+/**
+ * @property int $id
+ * @property int $vehicle_id
+ * @property string $key
+ * @property string $value
+ */
 class VehicleMeta extends Model
 {
     use SoftDeletes;

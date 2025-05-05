@@ -6,10 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int|null $language_id
+ * Language Model
+ *
+ * @property int $id
+ * @property int $language_id
+ * @property string $name
+ * @property string $code
+ * @property string $flag
+ * @property string $direction
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $default
  * @property string|null $rtl
- * @property int|null $status
  */
 class Language extends Model
 {
