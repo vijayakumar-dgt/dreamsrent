@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int|null $parent_id
+ * @property string $name
  */
 class BlogCategory extends Model
 {

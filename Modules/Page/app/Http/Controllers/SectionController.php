@@ -17,44 +17,59 @@ class SectionController extends Controller
     {
         $orderBy = $request->input('order_by', 'asc');
         $sortBy = $request->input('sort_by', 'id');
-
-        $sections = Section::orderBy($sortBy, $orderBy)->where("theme_id", $request->theme_id)->where("status", 1)->get();
-
+    
+        $sections = Section::orderBy($sortBy, $orderBy)
+            ->where("theme_id", $request->theme_id)
+            ->where("status", 1)
+            ->get();
+    
         $data = [];
         $baseUrl = asset('storage/uploads');
-
+        $theme = ['theme_id' => null];
+    
         foreach ($sections as $section) {
-            $decodedDatas = json_decode($section->datas, true);
-
+            $decodedDatas = json_decode($section->datas ?? '{}', true);
+    
             if (isset($decodedDatas['background_image'])) {
                 $decodedDatas['background_image'] = $baseUrl . '/background_image_banner/' . $decodedDatas['background_image'];
             }
-
+    
             if (isset($decodedDatas['thumbnail_image'])) {
                 $decodedDatas['thumbnail_image'] = $baseUrl . '/thumbnail_image_banner/' . $decodedDatas['thumbnail_image'];
             }
-
+    
             $data[] = array_merge([
                 'id' => $section->id,
                 'name' => $section->name,
                 'status' => $section->status,
             ], $decodedDatas);
-
+    
             $theme = [
                 'theme_id' => $section->theme_id,
             ];
         }
-
-
-        return response()->json(['code' => 200, 'message' => __('Section details retrieved successfully.'), 'data' => $data, 'theme' => $theme], 200);
-    }
+    
+        return response()->json([
+            'code' => 200,
+            'message' => __('Section details retrieved successfully.'),
+            'data' => $data,
+            'theme' => $theme
+        ], 200);
+    }   
 
     public function indexListSection(Request $request): JsonResponse
     {
         $orderBy = $request->input('order_by', 'asc');
         $sortBy = $request->input('sort_by', 'id');
         $authuser = current_user();
-        $language_id = $authuser->language_id;
+        if (!$authuser) {
+            return response()->json([
+                'code' => 401,
+                'message' => __('Unauthorized. User not found.'),
+            ], 401);
+        }
+       $language_id = $authuser->language_id;
+        
 
         $allowedNames = ['Banner One', 'Banner Two', 'Best Vehicle'];
 
@@ -160,12 +175,12 @@ class SectionController extends Controller
 
         if ($request->section_id == 1) {
             $thumbnailPath = $existingData['thumbnail_image_one'] ?? null;
-        
+
             // Check if the file exists and is an instance of UploadedFile
             if ($request->hasFile('thumbnail_image_one') && $request->file('thumbnail_image_one') instanceof \Illuminate\Http\UploadedFile) {
                 $thumbnailPath = uploadFile($request->file('thumbnail_image_one'), 'thumbnail_image_banner_one');
             }
-        
+
             $data = [
                 'label_one' => $request->label_one,
                 'line_one' => $request->line_one,
@@ -175,12 +190,12 @@ class SectionController extends Controller
             ];
         } elseif ($request->section_id == 29) {
             $thumbnailPath = $existingData['thumbnail_image_two'] ?? null;
-        
+
             // Check if the file exists and is an instance of UploadedFile
             if ($request->hasFile('thumbnail_image_two') && $request->file('thumbnail_image_two') instanceof \Illuminate\Http\UploadedFile) {
                 $thumbnailPath = uploadFile($request->file('thumbnail_image_two'), 'thumbnail_image_banner_two');
             }
-        
+
             $data = [
                 'label_two' => $request->label_two,
                 'description_two' => $request->description_two,
@@ -203,7 +218,7 @@ class SectionController extends Controller
                 'dis_6'   => $request->dis_6,
             ];
         }
-        
+
 
         try {
             // Try update first

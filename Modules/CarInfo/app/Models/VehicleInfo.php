@@ -50,7 +50,7 @@ use Modules\CarInfo\Models\VehicleTarrif;
  * @property string|null $avatar_image
  * @property int $damage_count
  * @property int $status
- * @property string|null $created_at
+ * @property int $created_at
  * @property string|null $updated_at
  * @property int $created_by
  * @property string|null $vin
