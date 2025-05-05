@@ -22,7 +22,15 @@ class DamageTypeController extends Controller
 
     public function storeDamageType(Request $request): JsonResponse
     {
+        /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
+        if (!$authUser) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 401,
+                'message' => 'Unauthorized: User not authenticated.'
+            ], 401);
+        }
         $language_id = $authUser->language_id;
 
         $validator = Validator::make($request->all(), [
@@ -44,15 +52,14 @@ class DamageTypeController extends Controller
             $successMessage = "";
 
             if (empty($request->id)) {
-                // CREATE
                 $carType = new DamageType();
                 $carType->language_id = $language_id;
                 $successMessage = __('admin.rentals.damage_type_added');
             } else {
-                // UPDATE
+                /** @var \Modules\CarInfo\Models\DamageType  */
                 $carType = DamageType::find($request->id);
 
-                if (!$carType) {
+                if ($carType == null) {
                     return response()->json([
                         'status' => 'error',
                         'code' => 404,
@@ -90,6 +97,7 @@ class DamageTypeController extends Controller
      */
     public function getDamageTypes(Request $request): JsonResponse
     {
+        /** @var \App\Models\User $authUser  */
         $authUser = current_user();
         $language_id = $authUser->language_id;
         $damageTypes = DamageType::when($request->has('keyword') && $request->keyword != "", function ($query) use ($request) {
@@ -132,14 +140,14 @@ class DamageTypeController extends Controller
     public function deleteDamageType(Request $request): JsonResponse
     {
         try {
-            $damageType = DamageType::findOrFail($request->delete_id);
+            $damageType = DamageType::where('id',$request->delete_id)->firstOrFail();
             $damageType->delete();
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
                 'message' => __('admin.rentals.damage_type_deleted')
             ], 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) { 
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,

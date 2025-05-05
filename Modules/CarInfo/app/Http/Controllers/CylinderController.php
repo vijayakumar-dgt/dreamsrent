@@ -53,6 +53,7 @@ class CylinderController extends Controller
                 $cylinder = new Cylinder();
                 $successMessage = __('admin.rentals.cylinder_type_added');
             } else {
+                 /** @var \Modules\CarInfo\Models\Cylinder  */
                 $cylinder = Cylinder::find($request->id);
                 $cylinder->status = $request->status == 'on' ? 1 : 0;
                 $successMessage = __('admin.rentals.cylinder_type_updated');
@@ -129,7 +130,7 @@ class CylinderController extends Controller
     public function deleteCylinder(Request $request): JsonResponse
     {
         try {
-            $cylinder = Cylinder::findOrFail($request->delete_id);
+            $cylinder = Cylinder::where('id',$request->delete_id)->firstOrFail();
             $cylinder->delete();
             return response()->json([
                 'status' => 'success',

@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\CarInfo\Database\Factories\CylinderFactory;
-
+/**
+ * @property int $id
+ * @property string $cylinder_type
+ * @property int|null $language_id
+ * @property int $status
+ */
 class Cylinder extends Model
 {
     use SoftDeletes;
