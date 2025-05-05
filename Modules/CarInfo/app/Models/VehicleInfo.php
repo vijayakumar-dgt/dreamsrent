@@ -31,6 +31,15 @@ use Modules\CarInfo\Models\VehicleTarrif;
  * @property string|null $location_name
  * @property string|null $image_url
  * @property int|null $main_location_id
+ * @property int|null $parent_id
+ * @property string|array<string>|null $features
+ * @property string|null $vehicle_price
+ * @property int|null $brand_id
+ * @property array<string,mixed> $multiple_vehicle_images
+ * @property bool $has_multiple_image
+ * @property string|null $avatar_image
+ * @property int $damage_count
+ * @property int $status
  */
 class VehicleInfo extends Model
 {

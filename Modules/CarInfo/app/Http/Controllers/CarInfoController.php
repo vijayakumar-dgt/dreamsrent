@@ -43,6 +43,7 @@ use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
 
 class CarInfoController extends Controller
 {
@@ -60,7 +61,11 @@ class CarInfoController extends Controller
 
     public function vehicleadd(): View
     {
+        /** @var \App\Models\User|null $authUser  */
         $authUser = current_user();
+        if(!$authUser) {
+            return view('carinfo::vehicle.index');
+        }
         $language_id = $authUser->language_id;
         $carTypes = Cartype::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
         $Brands = Brand::where('status', 1)->where("language_id", $language_id)->orderBy('id', 'desc')->get();
@@ -91,10 +96,11 @@ class CarInfoController extends Controller
 
         return view('carinfo::vehicle.add', compact('carTypes', 'Brands', 'CarModel', 'Category', 'Location', 'CarColor', 'CarFuel', 'Transmission', 'SafetyFeature', 'DamageTypes', 'ExtraServices', 'ExtraServiceInfo', 'insurances', 'priceType', 'authUser'));
     }
-    public function vehicleedit($slug, Request $request): View
+    public function vehicleedit(string $slug, Request $request): View
     {
         if ($request->has('language_id')) {
             $language_id = $request->query('language_id');
+            /** @var \Modules\GeneralSetting\Models\Language */
             $language = Language::find($language_id);
             $languageId = $language->language_id;
         } else {
@@ -171,12 +177,12 @@ class CarInfoController extends Controller
         if (!$query) {
             $baseVehicle = VehicleInfo::where('slug', $slug)->first();
 
-            if ($baseVehicle) {
+            if ($baseVehicle != null) {
                 $query = VehicleInfo::where('id', $baseVehicle->parent_id)
                     ->where('language_id', $languageId)
                     ->first();
 
-                if (!$query) {
+                if ($query == null) {
                     $query = new VehicleInfo([
                         'language_id' => $languageId,
                         'parent_id' => $baseVehicle->parent_id,
@@ -184,16 +190,27 @@ class CarInfoController extends Controller
                 }
             }
         }
-
-        $selectedFeatures = is_array($query->features) ? $query->features : json_decode($query->features, true);
-        $vehiclePrices = json_decode($query->vehicle_price, true)[0] ?? [];
-
+        $selectedFeatures = [];
+        if ($query && $query->features) {
+            $selectedFeatures = is_array($query->features)
+                ? $query->features
+                : json_decode($query->features, true) ?? [];
+        }
+        $vehiclePrices = [];
+        if ($query && $query->vehicle_price) {
+            $vehiclePrices = json_decode($query->vehicle_price, true)[0] ?? [];
+        }
+        
         $carTypes = Cartype::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
         $Brands = Brand::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
-        $Models = CarModel::where('status', 1)
-            ->where('brand_id', $query->brand_id)
-            ->orderBy('id', 'desc')
-            ->get();
+        $Models = collect();
+        if ($query && $query->brand_id) {
+            $Models = CarModel::where('status', 1)
+                ->where('brand_id', $query->brand_id)
+                ->orderBy('id', 'desc')
+                ->get();
+        }
+
         $Category = Category::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
         $Location = Location::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
         $CarFuel = CarFuel::where('status', 1)->where("language_id", $languageId)->orderBy('id', 'desc')->get();
@@ -214,7 +231,7 @@ class CarInfoController extends Controller
 
         $priceType = PricingType::where('status', 1)->get();
 
-        app()->setLocale($languageCode->code);
+        app()->setLocale($languageCode->code ?? 'en');
 
         return view('carinfo::vehicle.edit', compact('carTypes', 'Brands', 'Models', 'Category', 'Location', 'CarFuel', 'CarColor', 'Transmission', 'SafetyFeature', 'selectedFeatures', 'vehiclePrices', 'ExtraServices', 'ExtraServiceInfo', 'insurances', 'priceType', 'DamageTypes', 'query'));
     }
@@ -228,89 +245,7 @@ class CarInfoController extends Controller
             'data' => $carTypes
         ]);
     }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(): View
-    {
-        return view('carinfo::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function vehiclesave(Request $request)
-    {
-        //
-        echo "TEST ALL";
-        $slug = Str::slug($request->name);
-        $carType = new VehicleInfo();
-        $carType->name = $request->name;
-        $carType->type_id = $request->type_id;
-        $carType->brand_id = $request->brand_id;
-        $carType->model_id = $request->model_id;
-        $carType->category_id = $request->category_id;
-        $carType->plate_number = $request->plate_number;
-        $carType->vin = $request->vin;
-        $carType->year = $request->year;
-        $carType->passenger_capacity = $request->passenger_capacity;
-        $carType->mileage = $request->mileage;
-        $carType->num_airbags = $request->num_airbags;
-        $carType->num_seats = $request->num_seats;
-        $carType->num_doors = $request->num_doors;
-        $carType->main_location_id = $request->main_location_id;
-        $carType->fuel_type_id = $request->fuel_type_id;
-        $carType->odometer = $request->odometer;
-        $carType->color_id = $request->color_id;
-        $carType->slug = $slug;
-        $carType->vehicle_pricetype = 1;
-        $carType->vehicle_price = 100.2;
-        $carType->vehicle_basekm = 100.2;
-        $carType->vehicle_extrakmprice = 100.2;
-        $carType->vehicle_metatitle = $request->name;
-        $carType->save();
-    }
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id): View
-    {
-        return view('carinfo::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id): View
-    {
-        return view('carinfo::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    //_____________________________________________________________________________________
-    //_____________________________________________________________________________________
-    //_____________________________________________________________________________________
-    //Vehicles information
-    //_____________________________________________________________________________________
-    //_____________________________________________________________________________________
-    //_____________________________________________________________________________________
-
+    
     public function saveCarInfo(Request $request):JsonResponse
     {
 
@@ -357,14 +292,13 @@ class CarInfoController extends Controller
 
 
         $slug = Str::slug($request->title);
-
+        $vehicleImagePath = null;
         if ($request->hasFile('vehicle_image')) {
             $file = $request->file('vehicle_image');
-
-            $vehicleImagePath = uploadFile($file, 'vehicles');
-        } else {
-            $vehicleImagePath = null;
-        }
+            if($file && $file->isValid()){
+                $vehicleImagePath = uploadFile($file, 'vehicles');
+            }
+        } 
 
         $BaseKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('basic_kilometer', null);
         $ExtraKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('extra_kilometer', null);
@@ -408,17 +342,17 @@ class CarInfoController extends Controller
 
         $save = VehicleInfo::create($data);
 
-        //Mutipe Image Upload::
         if ($request->hasFile('car_images')) {
+            /** @var UploadedFile[]|UploadedFile|null $images */
             $images = $request->file('car_images');
             $imagePaths = [];
-
-            foreach ($images as $image) {
-                $fileName = uploadMutipleFile($image, 'vehicles');
-
-                $imagePaths[] = 'vehicles/' . $fileName;
+            if(is_array($images)){
+                foreach ($images as $image) {
+                        $fileName = uploadFile($image, 'vehicles');
+                        $imagePaths[] = 'vehicles/' . $fileName;
+                }
             }
-
+            
             if (!empty($imagePaths)) {
                 VehicleMeta::create([
                     'vehicle_id' => $save->id,
@@ -430,12 +364,14 @@ class CarInfoController extends Controller
 
         // Handle car documents
         if ($request->hasFile('car_document')) {
+            /** @var UploadedFile[]|UploadedFile|null $carDocs */
             $carDocs = $request->file('car_document');
             $carDocPaths = [];
-
-            foreach ($carDocs as $doc) {
-                $fileName = uploadMutipleFile($doc, 'vehicle_doc');
-                $carDocPaths[] = 'vehicle_doc/' . $fileName;
+            if(is_array($carDocs)){
+                foreach ($carDocs as $doc) {
+                    $fileName = uploadMutipleFile($doc, 'vehicle_doc');
+                    $carDocPaths[] = 'vehicle_doc/' . $fileName;
+                }
             }
 
             if (!empty($carDocPaths)) {
@@ -449,12 +385,14 @@ class CarInfoController extends Controller
 
         // Handle policy documents
         if ($request->hasFile('policy_document')) {
+            /** @var UploadedFile[]|UploadedFile|null $policyDocs */
             $policyDocs = $request->file('policy_document');
             $policyDocPaths = [];
-
-            foreach ($policyDocs as $doc) {
-                $fileName = uploadMutipleFile($doc, 'vehicle_policy');
-                $policyDocPaths[] = 'vehicle_policy/' . $fileName;
+            if(is_array($policyDocs)){
+                foreach ($policyDocs as $doc) {
+                    $fileName = uploadMutipleFile($doc, 'vehicle_policy');
+                    $policyDocPaths[] = 'vehicle_policy/' . $fileName;
+                }
             }
 
             if (!empty($policyDocPaths)) {
@@ -610,24 +548,31 @@ class CarInfoController extends Controller
 
 
         if ($request->has('vehicle_damage')) {
+            /** @var array<int, array<string, mixed>>|null $vehicleDamages */
             $vehicleDamages = json_decode($request->input('vehicle_damage'), true);
-
+        
             if (is_array($vehicleDamages)) {
                 foreach ($vehicleDamages as $index => $damage) {
-                    $imageFile = $request->file('damage_image')[$index] ?? null; // Get uploaded file
-                    $uploadedImage = $damage['image'] ?? null; // Default to existing image
+                    $damageImages = $request->allFiles()['damage_image'] ?? null;
 
-                    if ($imageFile) {
-                        // Store image in storage/app/public/VehicleDamage
+                    $imageFile = null;
+                    if (is_array($damageImages)) {
+                        $imageFile = $damageImages[$index] ?? null;
+                    } elseif ($index === 0 && $damageImages instanceof \Illuminate\Http\UploadedFile) {
+                        $imageFile = $damageImages;
+                    }
+                    
+                    $uploadedImage = $damage['image'] ?? null;
+                    if ($imageFile instanceof \Illuminate\Http\UploadedFile) {
                         $uploadedImage = $imageFile->store('vehicle_damage', 'public');
                     } elseif (!empty($uploadedImage) && strpos($uploadedImage, 'data:image') === 0) {
-                        // Convert base64 to an image file and store
-                        $imageData = explode(',', $uploadedImage)[1]; // Remove metadata
+                        $imageData = explode(',', $uploadedImage)[1];
                         $imageName = 'vehicle_damage/' . uniqid() . '.png';
                         Storage::disk('public')->put($imageName, base64_decode($imageData));
                         $uploadedImage = $imageName;
                     }
-
+        
+                    // Update or create damage record
                     if (!empty($damage['id'])) {
                         VehicleDamage::where('id', $damage['id'])
                             ->where('vehicle_id', $save->id)
@@ -649,6 +594,7 @@ class CarInfoController extends Controller
                 }
             }
         }
+        
 
 
         return response()->json([
@@ -664,6 +610,7 @@ class CarInfoController extends Controller
         $authId = Auth::id();
 
         $vehicleID  = $request->vehicle_id;
+        /** @var \Modules\CarInfo\Models\VehicleInfo $vehicle */
         $vehicle = VehicleInfo::find($vehicleID);
 
         $rules = [
@@ -706,14 +653,15 @@ class CarInfoController extends Controller
         $vehiclePriceJson = json_encode([$vehiclePrice]);
 
         $slug = Str::slug($request->title);
-
+        $vehicleImagePath = null;
         if ($request->hasFile('vehicle_image')) {
             $file = $request->file('vehicle_image');
-            $existingImage = $vehicle ? $vehicle->vehicle_image : null;
-
-            $vehicleImagePath = uploadFile($file, 'vehicles', $existingImage);
+            $existingImage = $vehicle->vehicle_image;
+            if($file && $file->isValid()){
+                $vehicleImagePath = uploadFile($file, 'vehicles', $existingImage);
+            }
         } else {
-            $vehicleImagePath = $vehicle ? $vehicle->vehicle_image : null;
+            $vehicleImagePath = $vehicle->vehicle_image;
         }
 
         $BaseKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('basic_kilometer', null);
@@ -760,7 +708,7 @@ class CarInfoController extends Controller
         }
 
         if ($request->filled('vehicle_id')) {
-            $update = VehicleInfo::findOrFail($request->vehicle_id);
+            $update = VehicleInfo::firstOrFail($request->vehicle_id);
 
             $update->update($data);
         } else {
@@ -769,14 +717,16 @@ class CarInfoController extends Controller
         }
 
         if ($request->hasFile('car_images')) {
+            /** @var UploadedFile[]|UploadedFile|null $images */
             $images = $request->file('car_images');
             $imagePaths = [];
-
-            foreach ($images as $image) {
-                $fileName = uploadMutipleFile($image, 'vehicles');
-                $imagePaths[] = 'vehicles/' . $fileName;
+            if(is_array($images)){
+                foreach ($images as $image) {
+                    $fileName = uploadMutipleFile($image, 'vehicles');
+                    $imagePaths[] = 'vehicles/' . $fileName;
+                }
             }
-
+            
             $vehicleMeta = VehicleMeta::where('vehicle_id', $update->id)
                 ->where('key', 'vehicle_image')
                 ->first();
@@ -799,12 +749,14 @@ class CarInfoController extends Controller
 
         // Handle policy documents
         if ($request->hasFile('policy_document')) {
+            /** @var UploadedFile[]|UploadedFile|null $policyDocs */
             $policyDocs = $request->file('policy_document');
             $policyDocPaths = [];
-
-            foreach ($policyDocs as $doc) {
-                $fileName = uploadMutipleFile($doc, 'vehicle_policy');
-                $policyDocPaths[] = 'vehicle_policy/' . $fileName;
+            if(is_array($policyDocs)){
+                foreach ($policyDocs as $doc) {
+                    $fileName = uploadMutipleFile($doc, 'vehicle_policy');
+                    $policyDocPaths[] = 'vehicle_policy/' . $fileName;
+                }
             }
 
             // Retrieve existing policy documents
@@ -956,19 +908,25 @@ class CarInfoController extends Controller
         }
 
         if ($request->has('vehicle_damage')) {
+            /** @var array<int, array<string, mixed>>|null $vehicleDamages */
             $vehicleDamages = json_decode($request->input('vehicle_damage'), true);
 
             if (is_array($vehicleDamages)) {
                 foreach ($vehicleDamages as $index => $damage) {
-                    $imageFile = $request->file('damage_image')[$index] ?? null; // Get uploaded file
-                    $uploadedImage = $damage['image'] ?? null; // Default to existing image
+                    $damageImages = $request->allFiles()['damage_image'] ?? null;
+
+                    $imageFile = null;
+                    if (is_array($damageImages)) {
+                        $imageFile = $damageImages[$index] ?? null;
+                    } elseif ($index === 0 && $damageImages instanceof \Illuminate\Http\UploadedFile) {
+                        $imageFile = $damageImages;
+                    }
+                    $uploadedImage = $damage['image'] ?? null;
 
                     if ($imageFile) {
-                        // Store image in storage/app/public/VehicleDamage
                         $uploadedImage = $imageFile->store('vehicle_damage', 'public');
                     } elseif (!empty($uploadedImage) && strpos($uploadedImage, 'data:image') === 0) {
-                        // Convert base64 to an image file and store
-                        $imageData = explode(',', $uploadedImage)[1]; // Remove metadata
+                        $imageData = explode(',', $uploadedImage)[1];
                         $imageName = 'vehicle_damage/' . uniqid() . '.png';
                         Storage::disk('public')->put($imageName, base64_decode($imageData));
                         $uploadedImage = $imageName;
@@ -1006,8 +964,14 @@ class CarInfoController extends Controller
 
     public function vehicleListApi(Request $request): JsonResponse
     {
+        /** @var \App\Models\User|null $authId */
         $authId = current_user();
-
+        if (!$authId) {
+            return response()->json([
+                'code' => 401,
+                'message' => __('Unauthorized.'),
+            ], 401);
+        }
         $languageId = $authId->language_id;
         $query = VehicleInfo::with([
             'carType:id,name',
@@ -1102,9 +1066,20 @@ class CarInfoController extends Controller
             $dates = explode(' - ', $request->sort_by_date);
             if (count($dates) === 2) {
                 try {
-                    $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]))->startOfDay();
-                    $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]))->endOfDay();
-                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                    $stDate = $dates[0];
+                    $enDate = $dates[1];
+                    
+                    if ($stDate && $enDate) {
+                        $startDate = Carbon::createFromFormat('m/d/Y', trim($stDate));
+                        $endDate = Carbon::createFromFormat('m/d/Y', trim($enDate));
+                    
+                        if ($startDate && $endDate) {
+                            $query->whereBetween('created_at', [
+                                $startDate->startOfDay(),
+                                $endDate->endOfDay()
+                            ]);
+                        }
+                    }                    
                 } catch (\Exception $e) {
                     return response()->json([
                         'code' => 400,
@@ -1132,7 +1107,7 @@ class CarInfoController extends Controller
             $vehicle->avatar_image = 'https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-2-512.png';
 
             $damageCount = VehicleDamage::where('vehicle_id', $vehicle->id)->count();
-            $vehicle->damage_count = $damageCount ?? 0;
+            $vehicle->damage_count = $damageCount;
             $vehicle->status = 1;
 
             return $vehicle;
@@ -1340,9 +1315,18 @@ class CarInfoController extends Controller
             $dates = explode(' - ', $request->sort_by_date);
             if (count($dates) === 2) {
                 try {
-                    $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]))->startOfDay();
-                    $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]))->endOfDay();
-                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                    $stDate = $dates[0];
+                    $eDate  = $dates[1];
+                    if($stDate && $eDate){
+                        $startDate = Carbon::createFromFormat('m/d/Y', trim($stDate));
+                        $endDate = Carbon::createFromFormat('m/d/Y', trim($eDate));
+                        if($startDate && $endDate) {
+                            $query->whereBetween('created_at', [
+                                $startDate->startOfDay(),
+                                $endDate->endOfDay()
+                            ]);
+                        }
+                    }
                 } catch (\Exception $e) {
                     return response()->json([
                         'code' => 400,
@@ -1353,9 +1337,10 @@ class CarInfoController extends Controller
         }
 
         $perPage = $request->paginate ?? 1;
+
         $vehicles = $query->where("language_id", $lang_id)->paginate($perPage);
 
-        $data = $vehicles->map(function ($vehicle) {
+        $data = $vehicles->map(function (VehicleInfo $vehicle): array {
             $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
                 ->where('key', 'vehicle_image')
                 ->first();
