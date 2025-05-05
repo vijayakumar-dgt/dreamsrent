@@ -16,9 +16,6 @@ use Modules\Communication\Http\Controllers\ContactController;
  *
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('communication', CommunicationController::class)->names('communication');
-});
 Route::prefix('mail')->group(function () {
     Route::post('/sendmail', [EmailController::class, 'sendEmail']);
 });

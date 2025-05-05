@@ -12,6 +12,7 @@ class MailConfigurator
      */
     public static function configureMail(): void
     {
+          /** @var CommunicationSetting|null $settings */
         $settings = CommunicationSetting::where('settings_type', 1)
             ->whereIn('key', ['phpmail_status', 'smtp_status', 'sendgrid_status'])
             ->where('value', 1)
@@ -30,7 +31,7 @@ class MailConfigurator
         }
     }
 
-    private static function configurePhpMail()
+    private static function configurePhpMail(): void
     {
         $phpmail = CommunicationSetting::where('settings_type', 1)
             ->where('type', 'phpmail')
@@ -50,7 +51,7 @@ class MailConfigurator
         }
     }
 
-    private static function configureSmtpMail()
+    private static function configureSmtpMail(): void
     {
         $getmail = CommunicationSetting::where('settings_type', 1)
             ->where('type', 'smtp')
@@ -90,7 +91,7 @@ class MailConfigurator
         ]);
     }
 
-    private static function configureSendGrid()
+    private static function configureSendGrid(): void
     {
         $getmail = CommunicationSetting::where('settings_type', 1)
             ->where('type', 'sendgrid')

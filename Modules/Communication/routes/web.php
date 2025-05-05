@@ -19,7 +19,6 @@ use Modules\Communication\Http\Controllers\TicketController;
 Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function () {
 
     Route::group(['prefix' => 'admin','middleware' => 'admin'], function () {
-        Route::resource('communication', CommunicationController::class)->names('communication');
         //announcement
         Route::get('announcement', [AnnouncementController::class, 'index'])->name('communication.announcement')->middleware('permission');
         Route::post('announcement/save', [AnnouncementController::class, 'store'])->name('communication.announcement.store');
