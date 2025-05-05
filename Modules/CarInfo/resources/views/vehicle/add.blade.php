@@ -64,7 +64,7 @@
 
 								<div class="dropdown flag-dropdown">
 									<a class="dropdown-toggle btn btn-white d-flex align-items-center justify-content-between py-1 px-2" data-bs-toggle="dropdown" href="javascript:void(0);">
-										<img src="{{ asset('backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
+										<img src="{{ asset('backend/backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
 											alt="Language"
 											class="img-fluid rounded-circle me-2 lang-flag">
 										<span>{{ $currentLang->name ?? 'Language' }}</span>
@@ -77,7 +77,7 @@
 												class="dropdown-item d-flex align-items-center change-language"
 												data-id="{{ $language->id }}"
 												data-language_code="{{ $language->code }}">
-												<img src="{{ asset('backend/assets/img/flags/' . $language->code . '.svg') }}"
+												<img src="{{ asset('backend/backend/assets/img/flags/' . $language->code . '.svg') }}"
 													alt="{{ $language->name }}"
 													class="rounded-circle me-2 lang-flag">
 												{{ $language->name }}

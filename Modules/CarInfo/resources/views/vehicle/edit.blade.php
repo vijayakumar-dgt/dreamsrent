@@ -63,7 +63,7 @@
 
                                 @if ($allLanguages)
                                 <div class="d-flex align-items-center gap-2">
-                                    <img src="{{ asset('backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
+                                    <img src="{{ asset('backend/backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
                                         alt="Language"
                                         class="img-fluid rounded-circle lang-flag">
 
