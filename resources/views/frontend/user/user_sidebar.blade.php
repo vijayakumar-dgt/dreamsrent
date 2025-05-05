@@ -4,30 +4,25 @@
         <div class="settings-menu">
             <ul>
                 <li>
-                    <a href="{{ route('user.usersettings') }}"
-                        class="{{ request()->routeIs('user.usersettings') ? 'active' : '' }}">
+                    <a href="{{ route('user.usersettings') }}" class="{{ request()->routeIs('user.usersettings') ? 'active' : '' }}">
                         <i class="feather-user"></i> {{ __('web.user.profile') }}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('user.security') }}"
-                    class="{{ request()->routeIs('user.security') ? 'active' : '' }}">
+                    <a href="{{ route('user.security') }}" class="{{ request()->routeIs('user.security') ? 'active' : '' }}">
                         <i class="feather-shield"></i> {{ __('web.user.security') }}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('user.preference') }}"
-                        class="{{ request()->routeIs('user.preference') ? 'active' : '' }}">
+                    <a href="{{ route('user.preference') }}" class="{{ request()->routeIs('user.preference') ? 'active' : '' }}">
                         <i class="feather-star"></i> {{ __('web.user.preferences') }}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('user.notification') }}"
-                    class="{{ request()->routeIs('user.notification') ? 'active' : '' }}">
+                    <a href="{{ route('user.notification') }}" class="{{ request()->routeIs('user.notification') ? 'active' : '' }}">
                         <i class="feather-bell"></i> {{ __('web.user.notifications') }}
                     </a>
                 </li>
-               
             </ul>
         </div>
     </div>

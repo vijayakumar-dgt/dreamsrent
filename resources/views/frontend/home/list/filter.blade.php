@@ -400,7 +400,6 @@
                     </div>
                 </div>
             </div>
-        
         </div>
         <button type="submit" id="filter" class="d-inline-flex align-items-center justify-content-center btn w-100 btn-primary filter-btn">
             <span><i class="feather-filter me-2"></i></span>{{ __('web.common.filter_results') }}

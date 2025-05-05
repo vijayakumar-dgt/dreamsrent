@@ -9,7 +9,7 @@
                 <h2 class="breadcrumb-title">{{ __('web.user.user_settings') }}</h2>
                 <nav aria-label="breadcrumb" class="page-breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">{{__('web.home.home')}}</a></li>
+                        <li class="breadcrumb-item"><a href="/">{{ __('web.home.home') }}</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{ __('web.user.user_settings') }}</li>
                     </ol>
                 </nav>
@@ -18,6 +18,7 @@
     </div>
 </div>
 <!-- /Breadscrumb Section -->
+
 @include('frontend.user.nav_menu')
 
 <!-- Page Content -->
@@ -25,7 +26,7 @@
     <div class="container">
         <!-- Content Header -->
         <div class="content-header content-settings-header">
-            <h4>{{__('web.common.settings')}}</h4>
+            <h4>{{ __('web.common.settings') }}</h4>
         </div>
         <!-- /Content Header -->
         <div class="row">
@@ -34,7 +35,7 @@
             <div class="col-lg-9">
                 <div class="settings-info">
                     <div class="settings-sub-heading">
-                        <h4>{{__('web.user.preferences')}}</h4>
+                        <h4>{{ __('web.user.preferences') }}</h4>
                     </div>
                     <div class="row">
                         <div class="col-lg-12">

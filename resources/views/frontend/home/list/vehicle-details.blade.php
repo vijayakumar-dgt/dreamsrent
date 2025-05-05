@@ -12,14 +12,12 @@
     <div class="vehl_dets_skeleton">
         <!-- Header -->
         <div class="vehl_dets_banner skeleton"></div>
-
         <!-- Vehicle Info -->
         <div class="vehl_dets_info">
             <div class="vehl_dets_badge skeleton"></div>
             <div class="vehl_dets_title skeleton"></div>
             <div class="vehl_dets_meta skeleton"></div>
         </div>
-
         <!-- Main Content -->
         <div class="vehl_dets_main">
             <!-- Left Side (Image, Gallery, and Additional Skeleton) -->
@@ -31,13 +29,11 @@
                     <div class="vehl_dets_gallery_item skeleton"></div>
                     <div class="vehl_dets_gallery_item skeleton"></div>
                 </div>
-                <!-- Additional Dummy Skeleton Lines -->
                 <div class="vehl_dets_text skeleton"></div>
                 <div class="vehl_dets_text skeleton"></div>
                 <div class="vehl_dets_text skeleton"></div>
                 <div class="vehl_dets_text skeleton"></div>
             </div>
-
             <!-- Right Side (Pricing & Booking) -->
             <div class="vehl_dets_sidebar">
                 <div class="vehl_dets_pricing">
@@ -46,7 +42,6 @@
                     <div class="vehl_dets_price skeleton"></div>
                     <div class="vehl_dets_price skeleton"></div>
                 </div>
-
                 <div class="vehl_dets_delivery skeleton"></div>
                 <div class="vehl_dets_location skeleton"></div>
                 <div class="vehl_dets_date skeleton"></div>
@@ -119,7 +114,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <div class="details-btn">
@@ -139,7 +133,6 @@
                             <span class="badge-km d-none"><i class="fa-solid fa-person-walking"></i>4.2 Km Away</span>
                             <a href="javascript:void(0);" class="fav-icon"><i class="fa-regular fa-heart"></i></a>
                         </div>
-
                     </div>
                     <div class="slider detail-bigimg">
                         <div class="product-img">
@@ -251,7 +244,6 @@
                     </div>
                 </div>
                 <!-- /Listing Section -->
-
                 <!-- Specifications -->
                 <div class="review-sec specification-card ">
                     <div class="review-header">
@@ -334,13 +326,11 @@
                                         <h6 class="vehicle_doors"> 4 Doors</h6>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Specifications -->
-
                 <!-- Car Features -->
                 <div class="review-sec listing-feature feature_section">
                     <div class="review-header">
@@ -348,12 +338,10 @@
                     </div>
                     <div class="listing-description">
                         <div class="row">
-
                         </div>
                     </div>
                 </div>
                 <!-- /Car Features -->
-
                 <!-- Tariff -->
                 <div class="review-sec listing-feature tariff_section">
                     <div class="review-header">
@@ -370,13 +358,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-
                             </tbody>
                         </table>
                     </div>
                 </div>
                 <!-- /Tariff -->
-
                 <!-- Gallery -->
                 <div class="review-sec mb-0 pb-0 gallery_section">
                     <div class="review-header">
@@ -416,7 +402,6 @@
                     </div>
                 </div>
                 <!-- /Gallery -->
-
                 <!-- Video -->
                 <div class="review-sec mb-0 video_section d-none">
                     <div class="review-header">
@@ -430,7 +415,6 @@
                     </div>
                 </div>
                 <!-- /Video -->
-
                 <!-- FAQ -->
                 <div class="review-sec faq-feature faq_section">
                     <div class="review-header">
@@ -472,7 +456,6 @@
                     </div>
                 </div>
                 <!-- /FAQ -->
-
                 <!-- Policies -->
                 <div class="review-sec">
                     <div class="review-header">
@@ -496,7 +479,6 @@
                     </div>
                 </div>
                 <!-- /Policies -->
-
                 <!-- Reviews -->
                 <div class="review-sec listing-review">
                     <div class="review-header">
@@ -556,7 +538,6 @@
                     </div>
                 </div>
                 <!-- /Reviews -->
-
                 <!-- Leave a Reply -->
                 @if (current_user() != null)
                 <div class="review-sec leave-reply-form mb-0">
@@ -679,7 +660,6 @@
                 </div>
                 @endif
                 <!-- /Leave a Reply -->
-
             </div>
             <div class="col-lg-4 theiaStickySidebar">
                 <div class="review-sec mt-0">
@@ -1006,17 +986,17 @@
                             <a href="#"><img src="{{ $data['author_profile'] }}" alt="User"></a>
                         </div>
                         <div class="reviewbox-list-rating">
-                            <h5><a>{{ $data['author_name'] }}</a></h5>
+                            <h5><a>{{ $data['author_name'] ?? "" }}</a></h5>
                         </div>
                     </div>
                     <ul class="booking-list">
                         <li>
                             {{__('web.user.email')}}
-                            <span>{{ $data['author_email'] }}</span>
+                            <span>{{ $data['author_email'] ?? "" }}</span>
                         </li>
                         <li>
                             {{ __('web.home.phone_number') }}
-                            <span>{{ $data['author_phone'] }}</span>
+                            <span>{{ $data['author_phone'] ?? ""}}</span>
                         </li>
                         <li>
                             {{__('web.home.location')}}
@@ -1029,7 +1009,6 @@
             </div>
         </div>
         <div id="recommended-vehicle">
-
         </div>
     </div>
 </section>
@@ -1092,20 +1071,15 @@
     </div>
 </div>
 <!-- /Enquiry Modal -->
-
-
 @endsection
 @push('scripts')
 <!-- Slick JS -->
 <script src="/frontend/assets/plugins/slick/slick.js"></script>
-
 <!-- Sticky Sidebar JS -->
 <script src="/frontend/assets/plugins/theia-sticky-sidebar/ResizeSensor.js"></script>
 <script src="/frontend/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js"></script>
-
 <!-- Fancybox JS -->
 <script src="/frontend/assets/plugins/fancybox/fancybox.umd.js"></script>
 <script src="{{ asset('assets/plugins/intltelinput/js/intlTelInput.js') }}"></script>
-
 <script src="{{ asset('/frontend/assets/js/custom/home/vehicle-details.js?v=1.1') }}"></script>
 @endpush

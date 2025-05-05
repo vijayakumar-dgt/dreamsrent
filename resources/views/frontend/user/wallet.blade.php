@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row align-items-center text-center">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title">{{ __('web.user.user_wallet') }} </h2>
+                <h2 class="breadcrumb-title">{{ __('web.user.user_wallet') }}</h2>
                 <nav aria-label="breadcrumb" class="page-breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/">{{ __('web.home.home') }}</a></li>
@@ -25,7 +25,6 @@
 <!-- Page Content -->
 <div class="content">
     <div class="container">
-
         <!-- Content Header -->
         <div class="content-header">
             <h4>{{ __('web.user.wallet') }}</h4>
@@ -40,7 +39,7 @@
                         <div class="balance-info">
                             <div class="balance-grid">
                                 <div class="balance-content">
-                                    <h6 >{{ __('web.user.available_balance') }}</h6>
+                                    <h6>{{ __('web.user.available_balance') }}</h6>
                                     <h4 class="available_balance">$0.00</h4>
                                 </div>
                                 <div class="refersh-icon d-none">
@@ -82,7 +81,6 @@
                     </div>
                 </div>
             </div>
-            
         </div>
         <!-- /Wallet Info -->
 
@@ -146,17 +144,15 @@
         <!-- Real Wallet Table (Initially Hidden) -->
         <div class="table-responsive dashboard-table dashboard-table-info d-none real-table">
             <table class="table" id="realWalletTable">
-
                 <tbody>
                     <!-- Real data rows will go here -->
                 </tbody>
             </table>
         </div>
-
-
     </div>
 </div>
 <!-- /Page Content -->
+
 <!-- Add Payment Modal -->
 <div class="modal new-modal multi-step fade" id="add_payment" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-md">
@@ -188,7 +184,6 @@
                                 </label>
                             </div>
                         </div>
-
                         <div class="add-payment-table-info d-none">
                             <div class="wallet-table add-payment-table">
                                 <div class="table-responsive">
@@ -197,7 +192,7 @@
                                             <tr>
                                                 <td>
                                                     <label class="custom_radio">
-                                                        <input type="radio" name="payment_two" value="wallet_two" >
+                                                        <input type="radio" name="payment_two" value="wallet_two">
                                                         <span class="checkmark"></span>
                                                         <img src="/frontend/assets/img/icons/wallet-01.svg" alt="Icon">
                                                     </label>

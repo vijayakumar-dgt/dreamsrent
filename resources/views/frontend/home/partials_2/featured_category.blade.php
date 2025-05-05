@@ -2,7 +2,6 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-
                 <!-- Heading title-->
                 <div class="section-heading heading-four" data-aos="fade-down">
                     <h2>{{ $section['section_title'] }}</h2>

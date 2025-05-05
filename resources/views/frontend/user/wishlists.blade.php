@@ -18,9 +18,7 @@
         </div>
     </div>
     <!-- /Breadcrumb Section -->
-
     @include('frontend.user.nav_menu')
-
     <div class="content dashboard-content">
         <div class="container">
             <!-- Content Header -->
@@ -28,7 +26,6 @@
                 <h4>{{ __('web.user.wishlist') }}</h4>
             </div>
             <!-- /Content Header -->
-
             <div class="row">
                 <!-- Wishlist Skeleton -->
                 <div class="col-md-12 data-loader">
@@ -66,7 +63,6 @@
                     @endfor
                 </div>
                 <!-- /Wishlist Skeleton -->
-
                 <!-- Real Wishlist -->
                 <div class="col-md-12 d-none real-table">
                     <div class="wishlist-wrap">
@@ -78,7 +74,6 @@
         </div>
     </div>
 @endsection
-
 @push('scripts')
     <script src="{{ asset('frontend/assets/js/custom/user/wishlists.js') }}"></script>
 @endpush

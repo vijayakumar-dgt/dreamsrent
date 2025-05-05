@@ -16,7 +16,7 @@
                         <li class="breadcrumb-item"><a href="/">{{__('web.home.home')}}</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{__('web.user.notifications')}}</li>
                     </ol>
-                </nav>							
+                </nav>
             </div>
         </div>
     </div>
@@ -31,31 +31,30 @@
         <div class="row">
             <div class="col-lg-12 d-flex">
                 <div class="card">
-                  <div class="card-body">
-                    <div class="col-xl-12">
-                        <div class="d-flex justify-content-end align-items-center mb-3">
-                            <div id="notification_action" class="d-none">
-                                <a href="javascript:void(0);" class="btn btn-sm btn-outline-secondary me-2" id="markAllAsRead"><i class="feather-check"></i> {{__('web.user.mark_all_as_read')}}</a>
-                                <a href="javascript:void(0);" class="btn btn-sm btn-outline-danger" id="deleteAll"><i class="feather-trash-2"></i> {{__('web.user.delete_all')}}</a>
-                            </div>
-                        </div>
-                    
-                        <div class="notification-list" id="notification-list">
-                            
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="float-end" id="pagination-container">
-                                  
+                    <div class="card-body">
+                        <div class="col-xl-12">
+                            <div class="d-flex justify-content-end align-items-center mb-3">
+                                <div id="notification_action" class="d-none">
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-secondary me-2" id="markAllAsRead">
+                                        <i class="feather-check"></i> {{__('web.user.mark_all_as_read')}}
+                                    </a>
+                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-danger" id="deleteAll">
+                                        <i class="feather-trash-2"></i> {{__('web.user.delete_all')}}
+                                    </a>
                                 </div>
                             </div>
-                        </div>                        
-                  </div>
+                            <div class="notification-list" id="notification-list"></div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="float-end" id="pagination-container"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- /Payments Table -->
-        </div>
     </div>
 </div>
 <div class="modal fade" id="delete_notification" data-keyboard="false" data-backdrop="static">
@@ -106,7 +105,7 @@
                                 <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary w-100">
                                     {{__('web.common.cancel')}}
                                 </a>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </div>

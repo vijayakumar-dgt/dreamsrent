@@ -56,7 +56,6 @@
     </div>
 </div>
 <!-- /Add Card Modal -->
-
 <!-- Add Payment Modal -->
 <div class="modal new-modal multi-step fade" id="add_payment" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-md">
@@ -85,7 +84,6 @@
                                 @endforeach
                             </div>
                         </div>
-
                         <div class="add-payment-table-info d-none">
                             <div class="wallet-table add-payment-table">
                                 <div class="table-responsive">
@@ -120,7 +118,6 @@
     </div>
 </div>
 <!-- /Add Payment Modal -->
-
 <!-- Delete Modal -->
 <div class="modal new-modal fade" id="delete_modal" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
