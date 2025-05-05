@@ -159,19 +159,32 @@ class InstallerController extends Controller
         }
     }
 
-    /**
-     * @param array<string, string> $data
-     */
-    protected function updateEnv(array $data): void
-    {
-        foreach ($data as $key => $value) {
-            file_put_contents(app()->environmentFilePath(), preg_replace(
-                "/^{$key}=.*/m",
-                "{$key}={$value}",
-                file_get_contents(app()->environmentFilePath())
-            ));
-        }
+/**
+ * @param array<string, string> $data
+ */
+protected function updateEnv(array $data): void
+{
+    $envPath = app()->environmentFilePath();
+    $rawContent = file_get_contents($envPath);
+
+    if ($rawContent === false) {
+        throw new \RuntimeException("Failed to read .env file at: {$envPath}");
     }
+
+    $content = (string) $rawContent;
+
+    foreach ($data as $key => $value) {
+        $content = preg_replace(
+            "/^{$key}=.*/m",
+            "{$key}={$value}",
+            $content
+        ) ?? $content; // fallback in case of null
+    }
+
+    file_put_contents($envPath, $content);
+}
+
+
 
     public function account(): View|RedirectResponse
     {

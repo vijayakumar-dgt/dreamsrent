@@ -24,9 +24,8 @@ trait InstallerMethods
     private function checkMinimumRequirements(): array
     {
         $checks = [
-            // Base requirements
-            'php_version'         => [
-                'check'   => PHP_VERSION_ID >= 80100,
+            'php_version' => [
+                'check'   => version_compare(PHP_VERSION, '8.1.0', '>='),
                 'message' => 'PHP version 8.1.0 or higher is required. Current version: ' . PHP_VERSION,
                 'url'     => 'https://www.php.net/releases/8.1/en.php',
             ],
