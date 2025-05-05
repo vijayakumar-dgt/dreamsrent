@@ -249,7 +249,9 @@ if (!function_exists('formatFileSize')) {
     function formatFileSize(int|string $bytes): string
     {
         $bytes = (int) $bytes;
-        if ($bytes === 0) return '0 B';
+        if ($bytes === 0) {
+            return '0 B';
+        }
 
         $sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
         $factor = floor(log($bytes, 1024));

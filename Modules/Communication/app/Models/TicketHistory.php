@@ -52,4 +52,3 @@ class TicketHistory extends Model
         return $relation;
     }
 }
-

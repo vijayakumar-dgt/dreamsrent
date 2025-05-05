@@ -13,7 +13,7 @@ use App\Models\User;
  * @property string|null $extension
  * @property string|array<string>|null $document_url
  * @property string|null $icon
- * 
+ *
  */
 
 class UserDocument extends Model
@@ -25,7 +25,7 @@ class UserDocument extends Model
 
      /**
      * @return BelongsTo<User, UserDocument>
-     */ 
+     */
     public function user(): BelongsTo
     {
          /** @var belongsTo<User, UserDocument> */

@@ -12,7 +12,6 @@ use Modules\GeneralSetting\Models\NotificationType;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 
-
 class EmailTemplateController extends Controller
 {
     /**

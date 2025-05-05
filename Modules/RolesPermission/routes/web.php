@@ -17,7 +17,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
             Route::post('/delete', [RolesPermissionController::class, 'delete'])->name('admin.role.delete');
         });
 
-        Route::group(['prefix' => 'permission'],function(){
+        Route::group(['prefix' => 'permission'], function () {
             Route::post('/update', [RolesPermissionController::class, 'permissionUpdate'])
             ->name('admin.permission.update');
         });

@@ -66,7 +66,7 @@ class TicketController extends Controller
             // Generate ticket ID
             $latestTicket = Ticket::latest('id')->first();
             $nextId = $latestTicket ? $latestTicket->id + 1 : 1;
-            $ticketId = 'TICKET-' . str_pad( (string) $nextId, 6, '0', STR_PAD_LEFT);
+            $ticketId = 'TICKET-' . str_pad((string) $nextId, 6, '0', STR_PAD_LEFT);
 
             // Handle file uploads
             $filePaths = [];
@@ -74,7 +74,7 @@ class TicketController extends Controller
             if ($file instanceof \Illuminate\Http\UploadedFile) {
                 $filePath = $file->store('tickets', 'public');
                 $filePaths[] = $filePath;
-            }        
+            }
 
             // Create ticket
             $ticket = Ticket::create([
@@ -107,20 +107,20 @@ class TicketController extends Controller
     {
         try {
             $user = current_user();
-    
+
             if (!$user instanceof \App\Models\User) {
                 return response()->json([
                     'code' => 401,
                     'message' => 'Unauthenticated'
                 ], 401);
             }
-            
+
             $ticketId = $request->input('ticketId');
             $priorityFilters = $request->input('priority', []);
             $statusFilters = $request->input('status', []);
             $sortBy = $request->input('sort_by', 'latest');
             $searchTerm = $request->input('search', '');
-    
+
             $withRelations = [
                 'user:id,name,email',
                 'user.userDetail:id,user_id,first_name,last_name,profile_image',
@@ -131,10 +131,10 @@ class TicketController extends Controller
                 'ticketHistories.user:id,name,email',
                 'ticketHistories.user.userDetail:id,user_id,first_name,last_name,profile_image',
             ];
-    
-        
+
+
             $query = Ticket::query()->with($withRelations);
-    
+
             // Apply user-specific filters
             if ($user->user_type == 1) {
                 // Admin can see all tickets
@@ -160,17 +160,17 @@ class TicketController extends Controller
                     'user' => $user
                 ], 403);
             }
-    
+
             // Apply priority filters
             if (!empty($priorityFilters)) {
                 $query->whereIn('priority', $priorityFilters);
             }
-    
+
             // Apply status filters
             if (!empty($statusFilters)) {
                 $query->whereIn('status', $statusFilters);
             }
-    
+
             // Apply search filter
             if (!empty($searchTerm)) {
                 $query->where(function ($q) use ($searchTerm) {
@@ -183,7 +183,7 @@ class TicketController extends Controller
                       });
                 });
             }
-    
+
             // Apply sorting
             switch ($sortBy) {
                 case 'ascending':
@@ -202,9 +202,9 @@ class TicketController extends Controller
                     $query->latest();
                     break;
             }
-    
+
             $tickets = $query->get();
-    
+
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.common.default_retrieve_success'),

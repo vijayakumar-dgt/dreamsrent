@@ -5,6 +5,7 @@ namespace Modules\CarInfo\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 /**
  * @property int $id
  * @property string $name
@@ -41,7 +42,7 @@ class Location extends Model
      * @return HasMany<LocationWorkingDay,Location>
      */
     public function workingDays(): HasMany
-    {   
+    {
         /** @var HasMany<LocationWorkingDay, Location>*/
         return $this->hasMany(LocationWorkingDay::class);
     }

@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class LocationWorkingDay extends Model
 {
-
     /**
      * The attributes that are mass assignable.
      */

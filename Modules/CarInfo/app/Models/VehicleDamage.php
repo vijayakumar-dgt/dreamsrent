@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class VehicleDamage extends Model
 {
-
     /**
      * The attributes that are mass assignable.
      */
@@ -30,5 +29,4 @@ class VehicleDamage extends Model
         'image',
         'description',
     ];
-
 }

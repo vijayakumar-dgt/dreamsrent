@@ -33,7 +33,7 @@ class PurchaseVerifyMiddleware
 
             if (!InstallerInfo::isRemoteLocal() && InstallerInfo::licenseFileDataHasLocalTrue()) {
                 $response = purchaseVerificationHashed($filepath, true);
-                if ( InstallerInfo::rewriteHashedFile($response)) {
+                if (InstallerInfo::rewriteHashedFile($response)) {
                     return $next($request);
                 } else {
                     InstallerInfo::deleteLicenseFile();

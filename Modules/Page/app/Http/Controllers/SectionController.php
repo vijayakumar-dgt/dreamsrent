@@ -17,45 +17,45 @@ class SectionController extends Controller
     {
         $orderBy = $request->input('order_by', 'asc');
         $sortBy = $request->input('sort_by', 'id');
-    
+
         $sections = Section::orderBy($sortBy, $orderBy)
             ->where("theme_id", $request->theme_id)
             ->where("status", 1)
             ->get();
-    
+
         $data = [];
         $baseUrl = asset('storage/uploads');
         $theme = ['theme_id' => null];
-    
+
         foreach ($sections as $section) {
             $decodedDatas = json_decode($section->datas ?? '{}', true);
-    
+
             if (isset($decodedDatas['background_image'])) {
                 $decodedDatas['background_image'] = $baseUrl . '/background_image_banner/' . $decodedDatas['background_image'];
             }
-    
+
             if (isset($decodedDatas['thumbnail_image'])) {
                 $decodedDatas['thumbnail_image'] = $baseUrl . '/thumbnail_image_banner/' . $decodedDatas['thumbnail_image'];
             }
-    
+
             $data[] = array_merge([
                 'id' => $section->id,
                 'name' => $section->name,
                 'status' => $section->status,
             ], $decodedDatas);
-    
+
             $theme = [
                 'theme_id' => $section->theme_id,
             ];
         }
-    
+
         return response()->json([
             'code' => 200,
             'message' => __('Section details retrieved successfully.'),
             'data' => $data,
             'theme' => $theme
         ], 200);
-    }   
+    }
 
     public function indexListSection(Request $request): JsonResponse
     {
@@ -68,8 +68,8 @@ class SectionController extends Controller
                 'message' => __('Unauthorized. User not found.'),
             ], 401);
         }
-       $language_id = $authuser->language_id;
-        
+        $language_id = $authuser->language_id;
+
 
         $allowedNames = ['Banner One', 'Banner Two', 'Best Vehicle'];
 

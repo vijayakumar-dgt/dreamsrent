@@ -10,7 +10,6 @@ use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Modules\CarInfo\Models\SafetyFeature;
 
-
 class SafetyFeatureController extends Controller
 {
     public function index(): View

@@ -25,8 +25,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
-
-
 class InstallerController extends Controller
 {
     use InstallerMethods;
@@ -162,27 +160,27 @@ class InstallerController extends Controller
 /**
  * @param array<string, string> $data
  */
-protected function updateEnv(array $data): void
-{
-    $envPath = app()->environmentFilePath();
-    $rawContent = file_get_contents($envPath);
+    protected function updateEnv(array $data): void
+    {
+        $envPath = app()->environmentFilePath();
+        $rawContent = file_get_contents($envPath);
 
-    if ($rawContent === false) {
-        throw new \RuntimeException("Failed to read .env file at: {$envPath}");
+        if ($rawContent === false) {
+            throw new \RuntimeException("Failed to read .env file at: {$envPath}");
+        }
+
+        $content = (string) $rawContent;
+
+        foreach ($data as $key => $value) {
+            $content = preg_replace(
+                "/^{$key}=.*/m",
+                "{$key}={$value}",
+                $content
+            ) ?? $content; // fallback in case of null
+        }
+
+        file_put_contents($envPath, $content);
     }
-
-    $content = (string) $rawContent;
-
-    foreach ($data as $key => $value) {
-        $content = preg_replace(
-            "/^{$key}=.*/m",
-            "{$key}={$value}",
-            $content
-        ) ?? $content; // fallback in case of null
-    }
-
-    file_put_contents($envPath, $content);
-}
 
 
 

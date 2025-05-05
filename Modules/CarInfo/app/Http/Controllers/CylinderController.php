@@ -130,7 +130,7 @@ class CylinderController extends Controller
     public function deleteCylinder(Request $request): JsonResponse
     {
         try {
-            $cylinder = Cylinder::where('id',$request->delete_id)->firstOrFail();
+            $cylinder = Cylinder::where('id', $request->delete_id)->firstOrFail();
             $cylinder->delete();
             return response()->json([
                 'status' => 'success',

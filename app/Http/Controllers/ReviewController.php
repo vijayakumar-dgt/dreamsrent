@@ -286,7 +286,7 @@ class ReviewController extends Controller
         return $replies;
     }
 
-    function getRatingDescription(mixed  $rating): string
+    function getRatingDescription(mixed $rating): string
     {
         if ($rating >= 4.5) {
             return __('web.home.excellent');
@@ -313,15 +313,15 @@ class ReviewController extends Controller
             $orderDir = $request->order[0]['dir'] ?? 'asc';
 
             $query = Review::select(
-                    'reviews.id',
-                    'reviews.vehicle_id',
-                    'reviews.user_id',
-                    'reviews.average_ratings',
-                    'review_messages.comments',
-                    'vehicle_info.name as vehicle_name',
-                    'vehicle_info.vehicle_image',
-                    'reviews.created_at',
-                )
+                'reviews.id',
+                'reviews.vehicle_id',
+                'reviews.user_id',
+                'reviews.average_ratings',
+                'review_messages.comments',
+                'vehicle_info.name as vehicle_name',
+                'vehicle_info.vehicle_image',
+                'reviews.created_at',
+            )
                 ->join('review_messages', 'review_messages.review_id', '=', 'reviews.id')
                 ->join('vehicle_info', 'reviews.vehicle_id', '=', 'vehicle_info.id')
                 ->where('reviews.user_id', $userId)

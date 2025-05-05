@@ -49,7 +49,7 @@ use Modules\CarInfo\Models\VehicleInfo;
  * @property float|null $final_price
  * @property string|null $transaction_id
  * @property-read \Modules\GeneralSetting\Models\Location|null $pickupLocation
- * 
+ *
  */
 
 class Booking extends Model

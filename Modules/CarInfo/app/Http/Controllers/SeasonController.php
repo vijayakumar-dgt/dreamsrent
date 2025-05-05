@@ -63,7 +63,7 @@ class SeasonController extends Controller
                 $season = new Season();
             } else {
                 $season = Season::find($request->id);
-                if(!($season instanceof Season)) {
+                if (!($season instanceof Season)) {
                     return response()->json([
                         'status' => 'error',
                         'code'   => 422,
@@ -136,7 +136,7 @@ class SeasonController extends Controller
     public function delete(Request $request): JsonResponse
     {
         try {
-            $season = Season::where('id',$request->delete_id)->firstOrFail();
+            $season = Season::where('id', $request->delete_id)->firstOrFail();
             $season->delete();
             return response()->json([
                 'status' => 'success',

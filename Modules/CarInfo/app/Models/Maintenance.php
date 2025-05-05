@@ -54,7 +54,7 @@ class Maintenance extends Model
      *  @return BelongsTo<VehicleInfo, Maintenance>
      */
     public function vehicle(): BelongsTo
-    {  
+    {
         /** @var BelongsTo<VehicleInfo,Maintenance> */
         return $this->belongsTo(VehicleInfo::class, 'vehicle_id');
     }

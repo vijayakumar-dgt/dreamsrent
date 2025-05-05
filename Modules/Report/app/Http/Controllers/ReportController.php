@@ -89,7 +89,7 @@ class ReportController extends Controller
                 'expense' => 0 // Placeholder, modify if you have expenses
             ];
         })
-        
+
             ->values(); // Convert collection to array
 
         return view('report::incomeReport', compact("totalIncome", "topEarningCar", "vehicle", "percentageChange", "sign", "symbol", "bookings", "vehicleInfo", "bookingsCount"));
@@ -101,65 +101,65 @@ class ReportController extends Controller
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image')
             ->get();
-    
+
         $bookingCount = Booking::join('users', 'bookings.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image')
             ->paginate(10);
-    
+
         $totalIncome = (float) $bookings->sum('final_price');
         $totalInsurancePrice = (float) $bookings->sum('total_insurance_price');
         $totalExtraServicePrice = (float) $bookings->sum('total_extra_service_price');
-    
+
         $grandTotal = $totalInsurancePrice + $totalExtraServicePrice;
-    
+
         // This month
         $thisMonthInsurance = (float) $bookings->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->sum('total_insurance_price');
         $thisMonthExtraService = (float) $bookings->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->sum('total_extra_service_price');
         $thisMonthGrandTotal = $thisMonthInsurance + $thisMonthExtraService;
-    
+
         // Last month
         $lastMonthInsurance = (float) $bookings->whereBetween('created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()])
             ->sum('total_insurance_price');
         $lastMonthExtraService = (float) $bookings->whereBetween('created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()])
             ->sum('total_extra_service_price');
         $lastMonthGrandTotal = $lastMonthInsurance + $lastMonthExtraService;
-    
+
         // Break percentage
         $percentageBreakChange = $lastMonthGrandTotal > 0
             ? (($thisMonthGrandTotal - $lastMonthGrandTotal) / $lastMonthGrandTotal) * 100
             : ($thisMonthGrandTotal > 0 ? 100 : 0);
-    
+
         $signbreak = $percentageBreakChange >= 0 ? '+' : '-';
         $class = $percentageBreakChange >= 0 ? 'text-success' : 'text-danger';
         $icon = $percentageBreakChange >= 0 ? 'ti ti-arrow-wave-right-up' : 'ti ti-arrow-wave-right-down';
         $percentageBreakChangeFormatted = $signbreak . abs($percentageBreakChange) . '%';
-    
+
         // Earnings per vehicle
         $earningsByCar = $bookings
             ->groupBy('vehicle_id')
             ->map(fn($group) => $group->sum('final_price'))
             ->sortDesc();
-    
+
         $topEarningCar = $earningsByCar->keys()->first();
         $topEarningCarTotal = $earningsByCar->first();
-    
+
         $vehicle = VehicleInfo::find($topEarningCar);
         $vehicleInfo = VehicleInfo::where('status', 1)->whereNull('deleted_at')->get();
-    
+
         $thisMonthIncome = (float) $bookings->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->sum('final_price');
         $lastMonthIncome = (float) $bookings->whereBetween('created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()])
             ->sum('final_price');
-    
+
         $percentageChange = $lastMonthIncome > 0
             ? (($thisMonthIncome - $lastMonthIncome) / $lastMonthIncome) * 100
             : ($thisMonthIncome > 0 ? 100 : 0);
         $sign = $percentageChange >= 0 ? '+' : '-';
         $percentageChangeFormatted = $sign . abs($percentageChange) . '%';
-    
+
         // Per-vehicle earnings
         $thisMonthEarnings = $bookings->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->groupBy('vehicle_id')
@@ -168,27 +168,27 @@ class ReportController extends Controller
         $lastMonthEarnings = $bookings->whereBetween('created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()])
             ->groupBy('vehicle_id')
             ->map(fn($group) => $group->sum('final_price'));
-    
+
         $topEarningCar = $thisMonthEarnings->keys()->first();
         $topEarningCarsTotal = $thisMonthEarnings->first();
         $lastMonthEarningsForCar = (float) ($lastMonthEarnings[$topEarningCar] ?? 0);
-    
+
         $percentageCarChange = $lastMonthEarningsForCar > 0
             ? (($topEarningCarsTotal - $lastMonthEarningsForCar) / $lastMonthEarningsForCar) * 100
             : ($topEarningCarsTotal > 0 ? 100 : 0);
-    
+
         $signCar = $percentageCarChange >= 0 ? '+' : '-';
         $class = $percentageCarChange >= 0 ? 'text-success' : 'text-danger';
         $icon = $percentageCarChange >= 0 ? 'ti ti-arrow-wave-right-up' : 'ti ti-arrow-wave-right-down';
         $percentageCarChangeFormatted = $signCar . abs($percentageCarChange) . '%';
-    
+
         // Currency symbol
         $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();
 
         if ($generalSettings !== null) {
             $currency = DB::table('currencies')->where('id', $generalSettings->value)->select('symbol')->first();
             $symbol = $currency->symbol ?? 'USD';
-        
+
             if (!$currency) {
                 \Log::warning("Currency or symbol not found for currency ID: " . $generalSettings->value);
             }
@@ -196,7 +196,7 @@ class ReportController extends Controller
             \Log::warning("GeneralSetting not found for group_id=5 and key='currency'. Using default symbol.");
             $symbol = 'USD';
         }
-        
+
         return view('report::earningReport', compact(
             'symbol',
             'bookings',
@@ -213,7 +213,7 @@ class ReportController extends Controller
             'bookingCount'
         ));
     }
-    
+
     public function getMonthlyEarnings(Request $request): JsonResponse
     {
         $monthlyEarnings = Booking::select(

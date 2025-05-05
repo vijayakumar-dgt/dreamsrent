@@ -12,7 +12,7 @@ class CustomSystemBackup extends Command
     protected $signature = 'backup:system';
     protected $description = 'Backup the entire system files as a zip archive';
 
-    public function handle() : int
+    public function handle(): int
     {
         $backupDir = storage_path('app/public/backups');
 

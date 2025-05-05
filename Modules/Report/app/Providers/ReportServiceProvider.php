@@ -80,35 +80,35 @@ class ReportServiceProvider extends ServiceProvider
     {
         $relativeConfigPath = config('modules.paths.generator.config.path');
         $configPath = module_path($this->name, $relativeConfigPath);
-    
+
         if (is_dir($configPath)) {
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configPath));
-    
+
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
                     $relativePath = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
-    
+
                     // Ensure the result is a string to avoid Larastan error
                     $sanitized = str_replace(
                         [DIRECTORY_SEPARATOR, '.php'],
                         ['.', ''],
                         $relativePath
                     );
-    
+
                     if (is_array($sanitized)) {
                         $sanitized = implode('', $sanitized); // fallback safety, though it shouldn't be an array
                     }
-    
+
                     $configKey = $this->nameLower . '.' . (string) $sanitized;
                     $key = ($relativePath === 'config.php') ? $this->nameLower : $configKey;
-    
+
                     $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
                     $this->mergeConfigFrom($file->getPathname(), $key);
                 }
             }
         }
     }
-    
+
     /**
      * Register views.
      */
@@ -116,39 +116,39 @@ class ReportServiceProvider extends ServiceProvider
     {
         // Ensure that $this->nameLower is a string
         $nameLower = (string)$this->nameLower;  // Casting to string
-    
+
         // Ensure the paths are valid (concatenation of strings only)
         $viewPath = resource_path('views/modules/' . $nameLower); // Ensure it's a string
         $sourcePath = module_path($this->name, 'resources/views');
-    
+
         // Publishing the views
         $this->publishes([$sourcePath => $viewPath], ['views', $nameLower . '-module-views']);
-    
+
         // Load views from multiple paths
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $nameLower);
-    
+
         // Ensure $componentPath is a string (it might come as an array)
         $componentPath = config('modules.paths.generator.component-class.path');
-    
+
         // If $componentPath is an array, implode it to ensure it becomes a string
         if (is_array($componentPath)) {
             $componentPath = implode('', $componentPath);  // Convert array to string if necessary
         }
-    
+
         // Ensure $componentPath is now a string
         $componentPath = (string)$componentPath;  // Double-check it's a string
-    
+
         // Concatenate the namespace with $componentPath and $this->name
         $componentNamespace = $this->module_namespace($this->name, $componentPath);
-    
+
         // Register the component namespace with Blade
         Blade::componentNamespace($componentNamespace, $nameLower);
     }
-    
-    
-    
-    
-    
+
+
+
+
+
 /**
  * Get the publishable view paths.
  *

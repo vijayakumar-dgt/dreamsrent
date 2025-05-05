@@ -3,6 +3,7 @@
 namespace Modules\CarInfo\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
 /**
  * @property int $id
  * @property int $vehicle_id
@@ -18,7 +19,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class VehicleTarrif extends Model
 {
-
     /**
      * The attributes that are mass assignable.
      */

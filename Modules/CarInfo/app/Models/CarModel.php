@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class CarModel
- * 
+ *
  * @property int $id
  * @property int|null $language_id
  * @property string $model_name

@@ -123,7 +123,7 @@ class CalanderController extends Controller
         $vehicle = $booking->vehicle;
         $vehicleType = null;
         if ($vehicle) {
-            $vehicle->vehicle_image = is_string($vehicle->vehicle_image) 
+            $vehicle->vehicle_image = is_string($vehicle->vehicle_image)
                 ? uploadedAsset($vehicle->vehicle_image ?? '')
                 : uploadedAsset('', 'default');
             $vehicleTypeId = $vehicle->type_id ?? null;

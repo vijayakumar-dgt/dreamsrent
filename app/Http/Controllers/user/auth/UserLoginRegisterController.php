@@ -22,35 +22,35 @@ use Illuminate\View\View;
 
 class UserLoginRegisterController extends Controller
 {
-    public function userLogin() : View|RedirectResponse
+    public function userLogin(): View|RedirectResponse
     {
         if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.login');
     }
-    public function userRegister() : View|RedirectResponse
+    public function userRegister(): View|RedirectResponse
     {
         if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.register');
     }
-    public function forgotPassword() : View|RedirectResponse
+    public function forgotPassword(): View|RedirectResponse
     {
         if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.forgot-password');
     }
-    public function resetPassword() : View|RedirectResponse
+    public function resetPassword(): View|RedirectResponse
     {
         if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }
         return view('user.auth.password-reset');
     }
-    public function resetPasswordUpdate(Request $request) : JsonResponse
+    public function resetPasswordUpdate(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users,email',
@@ -270,7 +270,7 @@ class UserLoginRegisterController extends Controller
             return response()->json(['message' => 'OTP verified successfully']);
         }
     }
-    public function validateEmail(Request $request) : JsonResponse
+    public function validateEmail(Request $request): JsonResponse
     {
         $request->validate([
             'email' => 'required|email',
@@ -278,7 +278,7 @@ class UserLoginRegisterController extends Controller
         $exists = User::where('email', $request->email)->exists();
         return response()->json(['exists' => $exists]);
     }
-    public function register(Request $request) : JsonResponse
+    public function register(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|regex:/^[A-Za-z]+$/|min:3|max:50',
@@ -318,7 +318,7 @@ class UserLoginRegisterController extends Controller
             $template = EmailTemplate::select('subject', 'description')
                 ->where('notification_type', $notificationType)
                 ->first();
-                
+
             $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
             $subject = $template->subject ?? '';
             $content = str_replace(
@@ -378,7 +378,7 @@ class UserLoginRegisterController extends Controller
             'email' => $request->email,
         ]);
     }
-    public function login(Request $request) : JsonResponse
+    public function login(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users,email',
@@ -405,7 +405,7 @@ class UserLoginRegisterController extends Controller
                 'code'   => 422,
                 'message' => __('web.auth.admin_access_not_allowed'),
             ], 422);
-        }  
+        }
         if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password], $request->has('remember'))) {
             $agent = new Agent();
             $ip = $request->ip();
@@ -420,16 +420,16 @@ class UserLoginRegisterController extends Controller
 
                 $user = Auth::guard('web')->user();
 
-                if ($user) {
-                    $user_device = new UserDevice();
-                    $user_device->user_id = (int) $user->id;
-                    $user_device->device_type = is_string($device_type) ? $device_type : null;
-                    $user_device->browser = is_string($browser) ? $browser : null;
-                    $user_device->os = is_string($os) ? $os : null;
-                    $user_device->ip_address = $ip;
-                    $user_device->location = $location;
-                    $user_device->save();
-                }
+            if ($user) {
+                $user_device = new UserDevice();
+                $user_device->user_id = (int) $user->id;
+                $user_device->device_type = is_string($device_type) ? $device_type : null;
+                $user_device->browser = is_string($browser) ? $browser : null;
+                $user_device->os = is_string($os) ? $os : null;
+                $user_device->ip_address = $ip;
+                $user_device->location = $location;
+                $user_device->save();
+            }
             $redirectTo = session('intended_url', route('home'));
             session()->forget('intended_url');
             if (session()->has('intended_booking')) {
@@ -450,7 +450,7 @@ class UserLoginRegisterController extends Controller
         ], 401);
     }
 
-    public function userlogout() : RedirectResponse
+    public function userlogout(): RedirectResponse
     {
         Auth::guard('web')->logout();
         return redirect()->route('home');

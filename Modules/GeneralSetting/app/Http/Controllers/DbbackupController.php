@@ -12,7 +12,6 @@ use Modules\GeneralSetting\Models\Dbbackup;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
-
 class DbbackupController extends Controller
 {
     public function datebaseSettings(Request $request): View

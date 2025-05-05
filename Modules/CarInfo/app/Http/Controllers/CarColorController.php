@@ -11,12 +11,12 @@ use Illuminate\Http\JsonResponse;
 
 class CarColorController extends Controller
 {
-    public function index():View
+    public function index(): View
     {
         return view('carinfo::car_color.index');
     }
 
-    public function store(Request $request):JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $authUser = current_user();
         $languageId = $authUser->language_id ?? 1;

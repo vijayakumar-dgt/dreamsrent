@@ -4,10 +4,8 @@ namespace Modules\Booking\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class BookingDetail extends Model
 {
-
     /**
      * The attributes that are mass assignable.
      */

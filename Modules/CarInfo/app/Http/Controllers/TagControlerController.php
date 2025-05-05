@@ -62,17 +62,17 @@ class TagControlerController extends Controller
                 $tag = new Tag();
             } else {
                 $tag = Tag::find($request->id);
-            
+
                 if (!($tag instanceof Tag)) {
                     return response()->json(['message' => 'Tag not found.'], 404);
                 }
-            
+
                 $tag->status = $request->status === 'on' ? 1 : 0;
             }
-            
+
             $tag->tag = $request->tag;
             $tag->save();
-            
+
             $response = [
                 'status' => 'success',
                 'code'   => 200,

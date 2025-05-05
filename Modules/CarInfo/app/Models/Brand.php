@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Brand
- * 
+ *
  * @property int $id
  * @property int|null $language_id
  * @property string|null $brand_image

@@ -24,7 +24,7 @@ class MenuManagementController extends Controller
     {
         $langCode = app()->getLocale();  // Fixed: Removed unnecessary null coalescing operator
         $defaultLanguageId = getLanguageId($langCode);
-        
+
         // Fetch pages (page title and slug)
         $pages = DB::table('pages')->select('id', 'page_title', 'slug')->where('language_id', $defaultLanguageId)->get();
 
@@ -43,7 +43,7 @@ class MenuManagementController extends Controller
             'menu_id' => 'required|exists:menus,id',
             'menu_items' => 'required|array|min:1',
         ]);
-    
+
         foreach ($request->menu_items as $item) {
             if (empty($item['link'])) {
                 return response()->json([
@@ -53,10 +53,10 @@ class MenuManagementController extends Controller
                 ], 422);
             }
         }
-    
+
         // Use `first()` instead of `find()` to avoid possible collection ambiguity
         $menu = Menu::where('id', $request->menu_id)->first();
-    
+
         if (!$menu) {
             return response()->json([
                 'code' => 404,
@@ -64,11 +64,11 @@ class MenuManagementController extends Controller
                 'message' => 'Menu not found',
             ], 404);
         }
-    
+
         $menu->update([
             'menus' => json_encode($request->menu_items),
         ]);
-    
+
         return response()->json([
             'code' => 200,
             'success' => true,
@@ -76,7 +76,7 @@ class MenuManagementController extends Controller
             'menu' => $menu
         ], 200);
     }
-    
+
 
     public function menuStore(Request $request): JsonResponse
     {
@@ -184,11 +184,11 @@ class MenuManagementController extends Controller
             'menu_status' => 'nullable|in:on,off',
             'language' => 'required|integer',
         ]);
-    
+
         try {
             /** @var \Modules\MenuManagement\Models\Menu $menu */
             $menu = Menu::findOrFail($request->menu_id);
-    
+
             // Prevent duplicate header menus for the same language
             if (
                 $request->editMenuType == 'header' &&
@@ -203,7 +203,7 @@ class MenuManagementController extends Controller
                     'errors' => ['editMenuType' => [__('admin.cms.header_menu_exists')]],
                 ], 422);
             }
-    
+
             $menu->update([
                 'name' => $request->editMenuName,
                 'permenantlink' => $request->editMenuPermalink,
@@ -211,7 +211,7 @@ class MenuManagementController extends Controller
                 'language_id' => $request->language,
                 'menu_type' => $request->editMenuType,
             ]);
-    
+
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.cms.menu_update_success'),
@@ -225,21 +225,21 @@ class MenuManagementController extends Controller
             ], 500);
         }
     }
-    
+
     public function menuDelete(Request $request): JsonResponse
     {
         $id = $request->id;
-    
+
         if (!$id) {
             return response()->json(['code' => 400, 'message' => 'Menu ID is required.'], 400);
         }
-    
+
         try {
             // Use firstOrFail to ensure a single model is returned
             $menu = Menu::where('id', $id)->firstOrFail();
-    
+
             $menu->delete();
-    
+
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.cms.menu_delete_success'),
@@ -257,6 +257,4 @@ class MenuManagementController extends Controller
             ], 500);
         }
     }
-    
-    
 }

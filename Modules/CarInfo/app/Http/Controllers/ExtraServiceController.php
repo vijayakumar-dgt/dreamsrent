@@ -101,13 +101,13 @@ class ExtraServiceController extends Controller
             //check if the file is valid
             if ($request->hasFile('icon')) {
                 $icon = $request->file('icon');
-                if($icon && $icon->isValid()){
+                if ($icon && $icon->isValid()) {
                     $extraService->icon = uploadFile($icon, $folderName, $oldIcon);
                 }
             }
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                if($image && $image->isValid()){
+                if ($image && $image->isValid()) {
                     $extraService->image = uploadFile($image, $folderName, $oldImage);
                 }
             }
@@ -153,14 +153,13 @@ class ExtraServiceController extends Controller
             $extraService->icon = ($iconPath !== '' && file_exists(public_path('storage/' . $iconPath)))
                 ? uploadedAsset($iconPath)
                 : uploadedAsset('default.png');
-            
+
              $imagePath = is_string($extraService->image) ? $extraService->image : '';
                 $extraService->image = ($imagePath !== '' && file_exists(public_path('storage/' . $imagePath)))
                 ? uploadedAsset($imagePath)
                 : uploadedAsset('default.png');
-            
         });
-        
+
 
         return response()->json([
             'status' => 'success',
@@ -180,13 +179,13 @@ class ExtraServiceController extends Controller
     public function getExtraService($id): JsonResponse
     {
         $extraService = ExtraService::find($id);
-        if($extraService){
+        if ($extraService) {
             $iconPath = is_string($extraService->icon) ? $extraService->icon : '';
-            $extraService->icon = $iconPath !== "" && file_exists(public_path('storage/' . $iconPath)) 
+            $extraService->icon = $iconPath !== "" && file_exists(public_path('storage/' . $iconPath))
                 ? uploadedAsset($iconPath)
                 : uploadedAsset('default.png');
             $imagePath = is_string($extraService->image) ? $extraService->image : '';
-            $extraService->image = $imagePath !== "" && file_exists(public_path('storage/' . $imagePath)) 
+            $extraService->image = $imagePath !== "" && file_exists(public_path('storage/' . $imagePath))
                 ? uploadedAsset($imagePath)
                 : uploadedAsset('default.png');
 
@@ -195,7 +194,7 @@ class ExtraServiceController extends Controller
                 'code'   => 200,
                 'data' => $extraService
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,
@@ -215,7 +214,7 @@ class ExtraServiceController extends Controller
     public function deleteExtraService(Request $request): JsonResponse
     {
         try {
-            $extraService = ExtraService::where('id',$request->delete_id)->firstOrFail();
+            $extraService = ExtraService::where('id', $request->delete_id)->firstOrFail();
             $extraService->delete();
             return response()->json([
                 'status' => 'success',

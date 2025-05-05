@@ -23,7 +23,6 @@ use Modules\GeneralSetting\Models\InsuranceBenefit;
 
 class VehicleInsurance extends Model
 {
-
     protected $table = 'vehicle_insurances';
 
     protected $fillable = ['vehicle_id', 'insurances_id', 'value', 'price'];

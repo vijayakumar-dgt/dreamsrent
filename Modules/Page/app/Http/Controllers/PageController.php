@@ -1171,33 +1171,32 @@ class PageController extends Controller
                 'status' => $page->status,
                 'cookie_settings' => $cookieResponse
             ];
-        
+
             $seo_title = $page->seo_title;
             $seo_description = $page->seo_description;
             $og_title = $page->og_title;
             $og_description = $page->og_description;
             $meta_keywords  = $page->keywords;
-        
+
             $vehicleBrand = Brand::select("id", "brand_name", "brand_image", "brand_icon")
                 ->where("language_id", $language_id)
                 ->where("status", 1)
                 ->get();
-        
+
             $content_sections = collect((array) $data['content_sections']);
-        
+
             if (request()->has('is_mobile') && request()->get('is_mobile') === "yes") {
                 return response()->json(['code' => "200", 'message' => __('Page details retrieved successfully.'), 'data' => $data], 200);
             } else {
                 $defaultTheme = GeneralSetting::where('key', 'default_theme')->first();
                 $theme = $defaultTheme ? $defaultTheme->value : 1;
                 $viewPath = 'frontend.home.home_' . $theme;  // Ensure view file exists
-        
+
                 return view($viewPath, compact('data', 'content_sections', 'vehicleBrand', 'seo_title', 'seo_description', 'og_title', 'og_description', 'meta_keywords'));
             }
         } else {
             return response()->json(['code' => '404', 'message' => __('Page not found.')], 404);
         }
-        
     }
 
 
@@ -1235,22 +1234,21 @@ class PageController extends Controller
                 $translatedPage = Page::where('parent_id', $page->id)
                     ->where('language_id', $userLanguage->id)
                     ->first();
-        
+
                 if ($translatedPage) {
                     $page = $translatedPage;
                 } else {
                     abort(404);
                 }
             }
-        
+
             $pageContent = $page->page_content ? json_decode($page->page_content) : [];
             $sectionContent = $pageContent && isset($pageContent[0]->section_content) ? $pageContent[0]->section_content : [];
             $seo_title = $page->page_title;
-        
+
             return view('frontend.pages.page', compact('page', 'sectionContent', 'seo_title'));
         } else {
             abort(404);
         }
-        
     }
 }
