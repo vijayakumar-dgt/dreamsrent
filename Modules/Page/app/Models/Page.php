@@ -53,8 +53,4 @@ class Page extends Model
         'created_at',
     ];
 
-    // protected static function newFactory(): PageFactory
-    // {
-    //     // return PageFactory::new();
-    // }
 }

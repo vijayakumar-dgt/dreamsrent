@@ -4,20 +4,21 @@
         <div class="card-header d-flex justify-content-between">
             <p>Setup Admin Account</p>
             <div>
-                <a class="btn btn-outline-primary @if (!session()->has('step-4-complete')) disabled @endif" href="{{route('setup.configuration')}}">Next &raquo;</a>
+                <a class="btn btn-outline-primary @if (!session()->has('step-4-complete')) disabled @endif"
+                    href="{{ route('setup.configuration') }}">Next &raquo;</a>
             </div>
         </div>
         <div class="card-body">
             <form id="account_form" autocomplete="off">
                 <div class="mb-3">
                     <label>Full Name <span class="text-danger">*</span></label>
-                    <input type="text" name="name" id="name" class="form-control" value="{{ old('name',$admin?->name) }}"
-                        placeholder="Enter Your Full Name">
+                    <input type="text" name="name" id="name" class="form-control"
+                        value="{{ old('name', $admin?->name) }}" placeholder="Enter Your Full Name">
                 </div>
                 <div class="mb-3">
                     <label>E-Mail <span class="text-danger">*</span></label>
-                    <input type="text" name="email" id="email" class="form-control" value="{{ old('email',$admin?->email) }}"
-                        placeholder="Enter Your E-Mail Address">
+                    <input type="text" name="email" id="email" class="form-control"
+                        value="{{ old('email', $admin?->email) }}" placeholder="Enter Your E-Mail Address">
                 </div>
                 <div class="mb-3">
                     <label>Password <span class="text-danger">*</span></label>
@@ -33,8 +34,8 @@
             </form>
         </div>
         <div class="card-footer text-center">
-            <p>For script support, contact us at <a href="https://dreamstechnologies.com/page/support"
-                target="_blank" rel="noopener noreferrer">@dreamstechnologies</a>. We're here to help. Thank you!</p>
+            <p>For script support, contact us at <a href="https://dreamstechnologies.com/page/support" target="_blank"
+                    rel="noopener noreferrer">@dreamstechnologies</a>. We're here to help. Thank you!</p>
         </div>
     </div>
 @endsection

@@ -43,7 +43,7 @@ class PageServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+       
     }
 
     /**
@@ -51,10 +51,7 @@ class PageServiceProvider extends ServiceProvider
      */
     protected function registerCommandSchedules(): void
     {
-        // $this->app->booted(function () {
-        //     $schedule = $this->app->make(Schedule::class);
-        //     $schedule->command('inspire')->hourly();
-        // });
+        
     }
 
     /**
@@ -117,8 +114,6 @@ class PageServiceProvider extends ServiceProvider
         Blade::componentNamespace($componentNamespace, $this->nameLower);
     }
     /**
-     * Get the services provided by the provider.
-     *
      * @return string[]  // Specifies the return type as an array of strings (service names).
      */
     public function provides(): array
@@ -126,8 +121,6 @@ class PageServiceProvider extends ServiceProvider
         return [];
     }
     /**
-     * Get the services provided by the provider.
-     *
      * @return string[]  // Specifies the return type as an array of strings (service names).
      */
     private function getPublishableViewPaths(): array

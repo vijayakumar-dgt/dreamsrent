@@ -28,8 +28,4 @@ class Section extends Model
     protected $fillable = ["name", "theme_id", "content", "status", "datas"];
 
 
-    // protected static function newFactory(): SectionFactory
-    // {
-    //     // return SectionFactory::new();
-    // }
 }

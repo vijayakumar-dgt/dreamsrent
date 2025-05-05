@@ -157,9 +157,9 @@ class InstallerController extends Controller
         }
     }
 
-/**
- * @param array<string, string> $data
- */
+    /**
+     * @param array<string, string> $data
+     */
     protected function updateEnv(array $data): void
     {
         $envPath = app()->environmentFilePath();

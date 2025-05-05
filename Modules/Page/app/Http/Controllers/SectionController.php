@@ -61,15 +61,24 @@ class SectionController extends Controller
     {
         $orderBy = $request->input('order_by', 'asc');
         $sortBy = $request->input('sort_by', 'id');
-        $authuser = current_user();
+
+        $authuser = auth()->user(); 
+
         if (!$authuser) {
             return response()->json([
                 'code' => 401,
                 'message' => __('Unauthorized. User not found.'),
             ], 401);
         }
-        $language_id = $authuser->language_id;
 
+        $language_id = $authuser->language_id ?? null; 
+
+        if (!$language_id) {
+            return response()->json([
+                'code' => 400,
+                'message' => __('Language ID not found for the user.'),
+            ], 400);
+        }
 
         $allowedNames = ['Banner One', 'Banner Two', 'Best Vehicle'];
 
@@ -124,8 +133,17 @@ class SectionController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        $authuser = current_user();
+
+        $authuser = auth()->user();
+        if (!$authuser) {
+            return response()->json([
+                'code' => 401,
+                'message' => __('Unauthorized. User not found.'),
+            ], 401);
+        }
+
         $language_id = $authuser->language_id;
+        $rules = [];
 
         if ($request->section_id == 1) {
             $rules['description_one'] = 'required';
@@ -173,10 +191,10 @@ class SectionController extends Controller
 
         $existingData = $existingData ? json_decode($existingData, true) : [];
 
+        // Process section data based on section_id
         if ($request->section_id == 1) {
             $thumbnailPath = $existingData['thumbnail_image_one'] ?? null;
 
-            // Check if the file exists and is an instance of UploadedFile
             if ($request->hasFile('thumbnail_image_one') && $request->file('thumbnail_image_one') instanceof \Illuminate\Http\UploadedFile) {
                 $thumbnailPath = uploadFile($request->file('thumbnail_image_one'), 'thumbnail_image_banner_one');
             }
@@ -191,7 +209,6 @@ class SectionController extends Controller
         } elseif ($request->section_id == 29) {
             $thumbnailPath = $existingData['thumbnail_image_two'] ?? null;
 
-            // Check if the file exists and is an instance of UploadedFile
             if ($request->hasFile('thumbnail_image_two') && $request->file('thumbnail_image_two') instanceof \Illuminate\Http\UploadedFile) {
                 $thumbnailPath = uploadFile($request->file('thumbnail_image_two'), 'thumbnail_image_banner_two');
             }
@@ -205,20 +222,19 @@ class SectionController extends Controller
             $data = [
                 'vehicle_id' => $request->vehicle_id,
                 'label_1' => $request->label_1,
-                'dis_1'   => $request->dis_1,
+                'dis_1' => $request->dis_1,
                 'label_2' => $request->label_2,
-                'dis_2'   => $request->dis_2,
+                'dis_2' => $request->dis_2,
                 'label_3' => $request->label_3,
-                'dis_3'   => $request->dis_3,
+                'dis_3' => $request->dis_3,
                 'label_4' => $request->label_4,
-                'dis_4'   => $request->dis_4,
+                'dis_4' => $request->dis_4,
                 'label_5' => $request->label_5,
-                'dis_5'   => $request->dis_5,
+                'dis_5' => $request->dis_5,
                 'label_6' => $request->label_6,
-                'dis_6'   => $request->dis_6,
+                'dis_6' => $request->dis_6,
             ];
         }
-
 
         try {
             // Try update first

@@ -51,10 +51,7 @@ class RolesPermissionServiceProvider extends ServiceProvider
      */
     protected function registerCommandSchedules(): void
     {
-        // $this->app->booted(function () {
-        //     $schedule = $this->app->make(Schedule::class);
-        //     $schedule->command('inspire')->hourly();
-        // });
+   
     }
 
     /**
@@ -130,8 +127,6 @@ class RolesPermissionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the services provided by the provider.
-     *
      * @return string[] An array of service names provided by the provider.
      */
     public function provides(): array
@@ -140,8 +135,6 @@ class RolesPermissionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the paths for the publishable views.
-     *
      * @return string[] An array of view paths.
      */
     private function getPublishableViewPaths(): array
