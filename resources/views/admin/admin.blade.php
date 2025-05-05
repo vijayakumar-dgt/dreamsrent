@@ -68,7 +68,6 @@
 	@endif
 	@stack('style')
 	<link rel="stylesheet" href="{{ asset('backend/assets/css/custom/custom-style.css') }}">
-
 </head>
 
 <body data-page="{{ Route::currentRouteName() }}" data-user-type="{{ current_user()->user_type ?? '' }}" data-currency="{{ getDefaultCurrencySymbol() ?? '$' }}" data-permission_error="{{ session('permission-error') }}">
@@ -121,9 +120,6 @@
 
 	<!-- summernote JS -->
 	<script src="{{ asset('backend/assets/plugins/summernote/summernote-bs5.min.js') }}"></script>
-	<!-- jQuery (needed for Summernote) -->
-
-	<!-- Summernote JS -->
 
 	<!-- Mobile Input -->
 	<script src="{{ asset('backend/assets/plugins/intltelinput/js/intlTelInput.js') }}"></script>
@@ -146,7 +142,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 	@stack('scripts')
-
 </body>
 
 </html>

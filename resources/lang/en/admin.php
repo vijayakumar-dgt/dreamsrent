@@ -930,6 +930,7 @@ return array(
     'enquiry_update_success' => 'Enquiry updated successfully.',
     'enquiry_delete_success' => 'Enquiry deleted successfully.',
     'add_new_quotation' => 'Add New Quotation',
+    'add_reservation' => 'Add Reservation',
   ),
   'manage' =>
   array(
@@ -2231,7 +2232,6 @@ return array(
     'wallet' => 'Wallet',
     'star' => 'Star',
     'id' => 'ID',
-
   ),
   'page' => [
     'pages' => 'Pages',
@@ -2307,7 +2307,6 @@ return array(
     'new_page_created' => 'New Page Created Successfully!',
     'page_slug' => 'Page Slug',
   ],
-
   'dashboard' =>
   [
     'dashboard' => 'Dashboard',

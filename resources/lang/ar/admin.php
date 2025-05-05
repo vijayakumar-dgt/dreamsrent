@@ -918,6 +918,7 @@ return [
     'enquiry_update_success' => 'تم تحديث الاستفسار بنجاح.',
     'enquiry_delete_success' => 'تم حذف الاستفسار بنجاح.',
     'add_new_quotation' => 'إضافة عرض جديد',
+    'add_reservation' => 'إضافة حجز',
   ],
   'manage' =>
   [

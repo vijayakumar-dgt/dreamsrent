@@ -572,8 +572,8 @@ class ReviewController extends Controller
 
             $reviews = $query->get()->map(function ($item) {
                 $item->vehicle_image = is_string($item->vehicle_image) || is_null($item->vehicle_image)
-                    ? uploadedAsset($item->vehicle_image, 'profile')
-                    : uploadedAsset(null, 'profile');
+                    ? uploadedAsset($item->vehicle_image, 'default')
+                    : uploadedAsset(null, 'default');
                 $item->profile_image = is_string($item->profile_image) || is_null($item->profile_image)
                     ? uploadedAsset($item->profile_image, 'profile')
                     : uploadedAsset(null, 'profile');

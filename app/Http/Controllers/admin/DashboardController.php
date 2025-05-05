@@ -158,7 +158,6 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-
         $chartbooking = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
             ->get();
 
@@ -221,17 +220,17 @@ class DashboardController extends Controller
 
             // Format data for ApexCharts
             $series = [];
-        foreach ($times as $time) {
-            $seriesData = [];
-            foreach ($dates as $date) {
-                $count = $bookingsRes->where('date', $date)->where('time', $time)->first()->count ?? 0;
-                $seriesData[] = ['x' => $date, 'y' => $count];
+            foreach ($times as $time) {
+                $seriesData = [];
+                foreach ($dates as $date) {
+                    $count = $bookingsRes->where('date', $date)->where('time', $time)->first()->count ?? 0;
+                    $seriesData[] = ['x' => $date, 'y' => $count];
+                }
+                $series[] = [
+                    'name' => $time,
+                    'data' => $seriesData
+                ];
             }
-            $series[] = [
-                'name' => $time,
-                'data' => $seriesData
-            ];
-        }
             $formattedDates = $dates->map(function ($date) {
                 return \Carbon\Carbon::parse($date)->format('d M');
             })->values();
