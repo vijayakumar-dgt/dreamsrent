@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (userPhoneInput) {
         window.iti = intlTelInput(userPhoneInput, {
-            utilsScript: "/assets/plugins/intltelinput/js/utils.js",
+            utilsScript: "/backend/assets/plugins/intltelinput/js/utils.js",
             separateDialCode: true,
         });
 
