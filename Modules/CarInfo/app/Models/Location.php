@@ -5,8 +5,6 @@ namespace Modules\CarInfo\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-// use Modules\CarInfo\Database\Factories\LocationFactory;
 /**
  * @property int $id
  * @property string $name
@@ -32,11 +30,6 @@ class Location extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [];
-
-    // protected static function newFactory(): LocationFactory
-    // {
-    //     // return LocationFactory::new();
-    // }
 
     protected static function booted()
     {

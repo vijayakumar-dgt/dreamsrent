@@ -27,7 +27,7 @@ class CarModel extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'language_id',
@@ -47,6 +47,7 @@ class CarModel extends Model
      */
     public function brand(): BelongsTo
     {
+        /** @var BelongsTo<Brand, CarModel> */
         return $this->belongsTo(Brand::class, 'brand_id');
     }
 }

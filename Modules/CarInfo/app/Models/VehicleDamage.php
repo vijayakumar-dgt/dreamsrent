@@ -4,8 +4,18 @@ namespace Modules\CarInfo\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-// use Modules\CarInfo\Database\Factories\VehicleDamageFactory;
-
+/**
+ * VehicleDamage Model
+ *
+ * @property int $id
+ * @property int $vehicle_id
+ * @property string $damage_type
+ * @property string $damage_loaction
+ * @property string $image
+ * @property string $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ */
 class VehicleDamage extends Model
 {
 
@@ -21,8 +31,4 @@ class VehicleDamage extends Model
         'description',
     ];
 
-    // protected static function newFactory(): VehicleDamageFactory
-    // {
-    //     // return VehicleDamageFactory::new();
-    // }
 }

@@ -28,6 +28,7 @@ use App\Models\UserDetail;
  * @property string|null $password
  * @property string|null $first_name
  * @property string|null $last_name
+ * @property string|null $mobile_number
  * @property string|null $phone_number
  * @property int|null $google_auth_enabled
  *
