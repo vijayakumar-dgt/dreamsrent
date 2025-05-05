@@ -241,7 +241,7 @@
 						<div class="mb-3">
 							<label class="form-label">{{ __('admin.general_settings.current_phone_number') }}<span class="text-danger">*</span></label>
 							<div>
-								<input type="number" class="form-control" name="current_phonenumber" id="current_phonenumber">
+								<input type="text" class="form-control" name="current_phonenumber" id="current_phonenumber">
                                 <span id="current_phonenumber_error" class="text-danger error-text"></span>
                                 <span id="current_phonenumber_success" class="text-success"></span>
 							</div>
@@ -249,8 +249,8 @@
 						<div class="mb-3">
 							<div class="mb-3">
 								<label class="form-label">{{ __('admin.general_settings.new_phone_number') }} <span class="text-danger">*</span></label>
-								<div >
-									<input type="number" class="form-control" name="new_phonenumber" id="new_phonenumber">
+								<div>
+									<input type="text" class="form-control" name="new_phonenumber" id="new_phonenumber">
 								</div>
                                 <span id="new_phonenumber_error" class="text-danger error-text"></span>
 							</div>

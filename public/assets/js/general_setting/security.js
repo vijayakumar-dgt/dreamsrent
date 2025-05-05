@@ -239,44 +239,19 @@
             }
 
         }
-
-
-
-
-        function checkCurrentPhoneNumber(){
-            return new Promise((resolve, reject) => {
-                let currentPhoneNumber = $('#current_phonenumber').val();
-                $.ajax({
-                    type:"POST",
-                    url:"/admin/settings/check-current-phonenumber",
-                    data:{"_token": $('meta[name="csrf-token"]').attr('content'),
-                        "currentPhoneNumber": currentPhoneNumber
-                    },
-                    success:function(resp){
-                        if (resp.code === 200) {
-                            resolve(resp);
-                        }else{
-                            resolve(resp);
-                        }
-                    },
-                    error:function(error){
-                        resolve(error.responseJSON);
-                    }
-                });
-            });
-        }
-
         $("#changePhoneNumberForm").validate({
             rules: {
                 current_phonenumber: {
                     required: true,
                     minlength: 8,
-                    maxlength: 12,
+                    maxlength: 15,
+                    pattern: /^\+?[0-9]+$/
                 },
                 new_phonenumber: {
                     required: true,
                     minlength: 8,
-                    maxlength: 12,
+                    maxlength: 15,
+                    pattern: /^\+?[0-9]+$/
                 },
                 phone_current_password: {
                     required: true,
@@ -288,11 +263,13 @@
                     required: _l('admin.general_settings.enter_phone_number'),
                     minlength: _l('admin.general_settings.phone_number_character'),
                     maxlength: _l('admin.general_settings.phone_number_max_character'),
+                    pattern: _l('admin.common.phone_number_valid'),
                 },
                 new_phonenumber: {
                     required:  _l('admin.general_settings.phone_number_max_character'),
                     minlength:  _l('admin.general_settings.new_phone_number_min_character'),
                     maxlength:  _l('admin.general_settings.new_phone_number_max_character'),
+                    pattern: _l('admin.common.phone_number_valid'),
                 },
                 phone_current_password: {
                     required:  _l('admin.general_settings.enter_current_password'),
