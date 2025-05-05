@@ -21,7 +21,15 @@ class CategoryController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
+        if (!$authUser) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 401,
+                'message' => 'Unauthorized: User not authenticated.'
+            ], 401);
+        }
         $id = $request->id ?? null;
 
         $rules = [

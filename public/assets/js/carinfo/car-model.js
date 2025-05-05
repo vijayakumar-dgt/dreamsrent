@@ -259,7 +259,7 @@ $("#add_car_model").on('click', function() {
     $('#brand_id').val('').trigger('change');
     $(".error-text").text("");
     $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-    $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
+    $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
 });
 
 $("#total_cars").on("input", function () {

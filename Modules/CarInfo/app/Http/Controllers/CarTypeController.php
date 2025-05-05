@@ -24,13 +24,20 @@ class CarTypeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
 
     public function storeType(Request $request): JsonResponse
     {
+        /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
-
+        if (!$authUser) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 401,
+                'message' => 'Unauthorized: User not authenticated.'
+            ], 401);
+        }
         $language_id = $authUser->language_id;
 
         $validator = Validator::make($request->all(), [
@@ -57,9 +64,9 @@ class CarTypeController extends Controller
                 $carType->language_id = $language_id;
                 $successMessage = __('admin.rentals.vehicle_type_added');
             } else {
-                // UPDATE
+                /** @var \Modules\CarInfo\Models\Cartype */
                 $carType = Cartype::find($request->id);
-                if (!$carType) {
+                if ($carType == null) {
                     return response()->json([
                         'status' => 'error',
                         'code' => 404,
@@ -73,11 +80,14 @@ class CarTypeController extends Controller
             }
 
             $folderName = 'vehicle_types';
-            $oldIcon = str_replace($folderName . '/', '', $carType->icon);
+            $cartypeIcon = $carType->icon ?? '';
+            $oldIcon = str_replace($folderName . '/', '', $cartypeIcon);
 
-            if ($request->hasFile('icon') && $request->file('icon')->isValid()) {
-                $icon = $request->file('icon');
-                $carType->icon = uploadFile($icon, $folderName, $oldIcon);
+            if ($request->hasFile('icon')) {
+                $carIcon = $request->file('icon');
+                if($carIcon && $carIcon->isValid()){
+                    $carType->icon = uploadFile($carIcon, $folderName, $oldIcon);
+                }
             }
 
             $carType->name = $request->name;
@@ -123,6 +133,7 @@ class CarTypeController extends Controller
     public function getCarType($id): JsonResponse
     {
         try {
+            /** @var \Modules\CarInfo\Models\Cartype */
             $carType = Cartype::find($id);
             $carType->icon = $carType->icon != "" && file_exists(public_path('storage/' . $carType->icon)) ? uploadedAsset($carType->icon) : '';
             $response = [
@@ -151,7 +162,7 @@ class CarTypeController extends Controller
     public function deleteType(Request $request): JsonResponse
     {
         try {
-            $carType = Cartype::findOrFail($request->delete_id);
+            $carType = Cartype::where('id',$request->delete_id)->firstOrFail();
             $carType->delete();
 
             return response()->json([
@@ -178,7 +189,15 @@ class CarTypeController extends Controller
     {
         $pageLength = $request->length;
         $offset     = $request->start;
+       /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
+        if (!$authUser) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 401,
+                'message' => 'Unauthorized: User not authenticated.'
+            ], 401);
+        }
         $language_id = $authUser->language_id;
         $cartypes   = Cartype::query()->where("language_id", $language_id);
         if ($request->has('search') && $request->search != null) {
