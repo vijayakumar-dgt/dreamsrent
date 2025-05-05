@@ -4,8 +4,9 @@
         <div class="card-header d-flex justify-content-between">
             <p>Minimum Requirements</p>
             <div>
-                <a class="btn btn-outline-primary" href="{{route('setup.verify')}}">&laquo; Back</a>
-                <a class="btn btn-outline-primary @if (!session()->has('requirements-complete')) disabled @endif" href="{{route('setup.database')}}">Next &raquo;</a>
+                <a class="btn btn-outline-primary" href="{{ route('setup.verify') }}">&laquo; Back</a>
+                <a class="btn btn-outline-primary @if (!session()->has('requirements-complete')) disabled @endif"
+                    href="{{ route('setup.database') }}">Next &raquo;</a>
             </div>
         </div>
         <div class="card-body">
@@ -46,8 +47,8 @@
             </div>
         </div>
         <div class="card-footer text-center">
-            <p>For script support, contact us at <a href="https://dreamstechnologies.com/page/support"
-                target="_blank" rel="noopener noreferrer">@dreamstechnologies</a>. We're here to help. Thank you!</p>
+            <p>For script support, contact us at <a href="https://dreamstechnologies.com/page/support" target="_blank"
+                    rel="noopener noreferrer">@dreamstechnologies</a>. We're here to help. Thank you!</p>
         </div>
     </div>
 @endsection

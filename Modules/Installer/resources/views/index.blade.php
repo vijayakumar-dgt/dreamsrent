@@ -3,7 +3,8 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between">
             <p>Verify Purchase</p>
-            <a class="btn btn-outline-primary @if (!session()->has('step-1-complete')) disabled @endif" href="{{ route('setup.requirements') }}">Next &raquo;</a>
+            <a class="btn btn-outline-primary @if (!session()->has('step-1-complete')) disabled @endif"
+                href="{{ route('setup.requirements') }}">Next &raquo;</a>
         </div>
         <div class="card-body">
             <div class="mb-3 row">
@@ -29,8 +30,8 @@
             </div>
         </div>
         <div class="card-footer text-center">
-            <p>For script support, contact us at <a href="https://dreamstechnologies.com/page/support"
-                target="_blank" rel="noopener noreferrer">@dreamstechnologies</a>. We're here to help. Thank you!</p>
+            <p>For script support, contact us at <a href="https://dreamstechnologies.com/page/support" target="_blank"
+                    rel="noopener noreferrer">@dreamstechnologies</a>. We're here to help. Thank you!</p>
         </div>
     </div>
 @endsection
