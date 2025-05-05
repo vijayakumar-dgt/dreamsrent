@@ -11,7 +11,16 @@ use Modules\GeneralSetting\Models\InsuranceBenefit;
 /**
  * @property Insurance $insurance
  * @property InsuranceBenefit $insuranceBenefits
+ * @property int $vehicle_id
+ * @property int $insurances_id
+ * @property float $value
+ * @property float $price
+ * @property int $id
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $deleted_at
  */
+
 class VehicleInsurance extends Model
 {
 

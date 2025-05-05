@@ -27,7 +27,7 @@ class Brand extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var list<string>
      */
     protected $fillable = [
         'language_id',
@@ -42,12 +42,11 @@ class Brand extends Model
     ];
 
     /**
-     * Get the car models associated with the brand.
-     *
-     * @return HasMany
+     * @return HasMany<CarModel,Brand>
      */
     public function carModels(): HasMany
     {
+         /** @var HasMany<CarModel, Brand>*/
         return $this->hasMany(CarModel::class, 'brand_id');
     }
 }

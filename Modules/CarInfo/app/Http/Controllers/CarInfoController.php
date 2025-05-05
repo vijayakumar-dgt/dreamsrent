@@ -192,9 +192,7 @@ class CarInfoController extends Controller
         }
         $selectedFeatures = [];
         if ($query && $query->features) {
-            $selectedFeatures = is_array($query->features)
-                ? $query->features
-                : json_decode($query->features, true) ?? [];
+            $selectedFeatures = json_decode($query->features, true);
         }
         $vehiclePrices = [];
         if ($query && $query->vehicle_price) {
@@ -1345,8 +1343,8 @@ class CarInfoController extends Controller
                 ->where('key', 'vehicle_image')
                 ->first();
 
-            $vehiclePrices = json_decode($vehicle->vehicle_price, true);
-            $filteredPrices = [];
+        $vehiclePrices = is_string($vehicle->vehicle_price) ? json_decode($vehicle->vehicle_price, true) : [];
+        $filteredPrices = [];
 
             if (!empty($vehiclePrices)) {
                 foreach ($vehiclePrices as $price) {
@@ -1362,15 +1360,10 @@ class CarInfoController extends Controller
                 array_unshift($multipleImages, $vehicle->vehicle_image);
             }
             $multipleImages = array_map(fn($img) => url('storage/vehicles/' . basename($img)), $multipleImages);
-            $user = null;
-            $wishlist = null;
-            if (Auth::guard('web')->check()) {
-                $user = Auth::guard('web')->user();
-                $wishlist = Wishlist::where('user_id', Auth::guard('web')->id())->where('vehicle_id', $vehicle->id)->first();
-            }
-
+           
+            /** @var \App\Models\User $auth */
             $auth = current_user();
-            $authId = $auth?->id;
+            $authId = $auth->id;
 
             $wishlistExists = false;
 
@@ -1389,13 +1382,18 @@ class CarInfoController extends Controller
 
             $currencySymbol = $currency->symbol ?? "$";
 
-            $user = User::where('id', $vehicle->created_by)
-                ->first();
+            $user = User::where('id', $vehicle->created_by)->first();
 
-            $userDetail = UserDetail::where("user_id", $user->id)->first();
-            $userProfileImg = $userDetail && $userDetail->profile_image
-                ? url('/storage/' . $userDetail->profile_image)
-                : null;
+            $userDetail = null;
+            $userProfileImg = null;
+
+            if ($user) {
+                $userDetail = UserDetail::where("user_id", $user->id)->first();
+                $userProfileImg = $userDetail && $userDetail->profile_image
+                    ? url('/storage/' . $userDetail->profile_image)
+                    : null;
+            }
+
 
             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
             $review_count = Review::where("vehicle_id", $vehicle->id)->count();
@@ -1433,7 +1431,6 @@ class CarInfoController extends Controller
                 'seo_key' => $vehicle->vehicle_metakeywords,
                 'seo_description' => $vehicle->vehicle_metadesc,
                 'authenticated' => $user ? true : false,
-                'wishlist' => $wishlist ? true : false,
                 'created_at' => $vehicle->created_at,
                 'status' => $vehicle->status,
             ];
@@ -1615,7 +1612,6 @@ class CarInfoController extends Controller
         if (!$vehicleId) {
             return response()->json(['success' => false, 'message' => 'Vehicle ID is required'], 400);
         }
-
         $vehicleInsurance = VehicleInsurance::where("vehicle_id", $vehicleId)
             ->with(['insurance', 'insuranceBenefits']) // Load related data
             ->get();
@@ -1624,10 +1620,10 @@ class CarInfoController extends Controller
             return response()->json(['success' => true, 'message' => 'No info found', 'data' => [],], 200);
         }
 
-        // Format response data
-        $insuranceData = $vehicleInsurance->map(function ($insurance) {
+        /** @var \Illuminate\Database\Eloquent\Collection<int, \Modules\CarInfo\Models\VehicleInsurance> $vehicleInsurance */
+        $insuranceData = $vehicleInsurance->map(function (VehicleInsurance $insurance) {
             $benefitCount = $insurance->insuranceBenefits->count();
-            $formattedBenefits = str_pad($benefitCount, 2, '0', STR_PAD_LEFT);
+            $formattedBenefits = str_pad((string)$benefitCount, 2, '0', STR_PAD_LEFT);
 
             return [
                 'id' => $insurance->id,
@@ -1692,7 +1688,7 @@ class CarInfoController extends Controller
         $data = [];
 
         foreach ($vehicles as $vehicle) {
-            $featureIds = json_decode($vehicle->features, true) ?? [];
+            $featureIds = json_decode($vehicle->features ?? '', true);
             $featureNames = SafetyFeature::whereIn('id', $featureIds)->pluck('feature');
 
             $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
@@ -1704,10 +1700,8 @@ class CarInfoController extends Controller
             $vehicleDoc = VehicleMeta::where('vehicle_id', $vehicle->id)
                 ->where('key', 'vehicle_doc')
                 ->first();
-
-            $vehiclePrices = json_decode($vehicle->vehicle_price, true);
             $filteredPrices = [];
-
+            $vehiclePrices = json_decode($vehicle->vehicle_price ?? '', true);
             if (!empty($vehiclePrices)) {
                 foreach ($vehiclePrices as $price) {
                     foreach ($price as $key => $value) {
@@ -1734,7 +1728,7 @@ class CarInfoController extends Controller
                 $wishlist = Wishlist::where('user_id', Auth::id())->where('vehicle_id', $vehicle->id)->first();
             }
             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
-
+            /** @var \App\Models\User|null $auth */
             $auth = current_user();
             $authId = $auth?->id;
 
@@ -1746,9 +1740,6 @@ class CarInfoController extends Controller
             if ($currencySetting && $currencySetting->value) {
                 $currency = Currency::find($currencySetting->value);
             }
-
-            $currencySymbol = $currency->symbol ?? "$";
-
             if ($authId) {
                 $wishlistExists = Wishlist::where("user_id", $authId)
                     ->where("vehicle_id", $vehicle->id)
@@ -1775,7 +1766,6 @@ class CarInfoController extends Controller
                 'mileage' => $vehicle->mileage,
                 'vin' => $vehicle->vin,
                 'rating' => $rating,
-                'currency' => $currencySymbol,
                 'passenger_capacity' => $vehicle->passenger_capacity,
                 'num_seats' => $vehicle->num_seats,
                 'num_doors' => $vehicle->num_doors,
@@ -1791,9 +1781,8 @@ class CarInfoController extends Controller
                 'is_featured' => (bool) rand(0, 1),
                 'is_top_rated' => (bool) rand(0, 1),
                 'authenticated' => $user ? true : false,
-                'wishlist' => $wishlist ? true : false,
                 'description' => $vehicle->description,
-                'extraservice' => $vehicle->extraservices->map(function ($extraservice) {
+                'extraservice' => $vehicle->extraservices->map(function (VehicleExtraService $extraservice) {
                     return [
                         'extra_service_id' => $extraservice->extra_service_id,
                         'value' => $extraservice->value,
@@ -1804,7 +1793,7 @@ class CarInfoController extends Controller
                         'image' => url('/storage/' . optional($extraservice->extraService)->image), // Convert image to full URL
                     ];
                 }),
-                'tariff' => $vehicle->tariffs->map(function ($tariff) {
+                'tariff' => $vehicle->tariffs->map(function (VehicleTarrif $tariff) {
                     return [
                         'tariff_title' => $tariff->tariff_title,
                         'tariff_daily_price' => $tariff->tariff_daily_price,
@@ -1814,7 +1803,7 @@ class CarInfoController extends Controller
                         'tariff_extra_price' => $tariff->tariff_extra_price,
                     ];
                 }),
-                'seasonal' => $vehicle->seasonals->map(function ($seasonal) {
+                'seasonal' => $vehicle->seasonals->map(function (VehicleSeason $seasonal) {
                     return [
                         'seasonal_title' => $seasonal->seasonal_title,
                         'seasonal_start_date' => $seasonal->seasonal_start_date,
@@ -1825,13 +1814,13 @@ class CarInfoController extends Controller
                         'seasonal_late_fee' => $seasonal->seasonal_late_fee,
                     ];
                 }),
-                'faqs' => $vehicle->faqs->map(function ($faq) {
+                'faqs' => $vehicle->faqs->map(function (VehicleFaq $faq) {
                     return [
                         'question' => $faq->question,
                         'answer' => $faq->answer,
                     ];
                 }),
-                'damages' => $vehicle->damages->map(function ($damage) {
+                'damages' => $vehicle->damages->map(function (VehicleDamage $damage) {
                     return [
                         'damage_type' => $damage->damage_type,
                         'damage_loaction' => $damage->damage_loaction,
@@ -1869,14 +1858,19 @@ class CarInfoController extends Controller
         $images = json_decode($vehicleMeta->value, true);
 
         // Extract relative path from full URL if needed
+        $relativePath = null;
         $imageToDelete = parse_url($request->image_path, PHP_URL_PATH);
-        $relativePath = ltrim(str_replace('/storage/', '', $imageToDelete), '/');
-
+        if (is_string($imageToDelete)) {
+            $relativePath = ltrim(str_replace('/storage/', '', $imageToDelete), '/');
+        }
+        
         // Find and remove image
         if (($key = array_search($relativePath, $images)) !== false) {
             unset($images[$key]);
-            Storage::delete($relativePath); // Delete from storage
-            $vehicleMeta->value = json_encode(array_values($images)); // Reindex and save
+            if($relativePath) {
+                Storage::delete($relativePath);              
+            }
+            $vehicleMeta->value = json_encode(array_values($images)) ?: '';
             $vehicleMeta->save();
 
             return response()->json(['success' => true, 'message' => 'Image deleted successfully.']);
@@ -1911,7 +1905,7 @@ class CarInfoController extends Controller
         if (($key = array_search($filePath, $policyFiles)) !== false) {
             unset($policyFiles[$key]);
             Storage::delete($filePath); // Delete from storage
-            $vehicleMeta->value = json_encode(array_values($policyFiles)); // Update JSON
+            $vehicleMeta->value = json_encode(array_values($policyFiles)) ?: '';
             $vehicleMeta->save();
 
             return response()->json(['success' => true, 'message' => 'Policy file deleted successfully.']);
@@ -1953,7 +1947,7 @@ class CarInfoController extends Controller
                 ->where('key', 'vehicle_image')
                 ->first();
 
-            $vehiclePrices = json_decode($vehicle->vehicle_price, true);
+            $vehiclePrices = json_decode((string) $vehicle->vehicle_price, true) ?? [];
             $filteredPrices = [];
 
             if (!empty($vehiclePrices)) {
@@ -1971,9 +1965,9 @@ class CarInfoController extends Controller
                 array_unshift($multipleImages, $vehicle->vehicle_image);
             }
             $multipleImages = array_map(fn($img) => url('storage/vehicles/' . basename($img)), $multipleImages);
-
+            /** @var \App\Models\User $auth|null */
             $auth = current_user();
-            $authId = $auth?->id;
+            $authId = $auth->id ?? null;
 
             $wishlistExists = false;
             if ($authId) {
@@ -1987,11 +1981,14 @@ class CarInfoController extends Controller
 
             $user = User::where('id', $vehicle->created_by)
                 ->first();
-
-            $userDetail = UserDetail::where("user_id", $user->id)->first();
-            $userProfileImg = $userDetail && $userDetail->profile_image
-                ? url('/storage/' . $userDetail->profile_image)
-                : null;
+            $userDetail = null;
+            $userProfileImg = null;
+            if ($user) {
+                $userDetail = UserDetail::where("user_id", $user->id)->first();
+                $userProfileImg = $userDetail && $userDetail->profile_image
+                    ? url('/storage/' . $userDetail->profile_image)
+                    : null;
+            }
 
             return [
                 'id' => $vehicle->id,
@@ -2043,9 +2040,9 @@ class CarInfoController extends Controller
     {
         $vehicleId = $request->input('delete_id');
 
-        $vehicle = VehicleInfo::find($vehicleId);
+        $vehicle = VehicleInfo::firstOrFail($vehicleId);
 
-        if ($vehicle) {
+        if ($vehicle != null) {
             $vehicle->delete();
 
             return response()->json(['success' => true]);
