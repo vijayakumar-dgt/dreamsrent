@@ -1,6 +1,6 @@
-// document.addEventListener("DOMContentLoaded", function () {
-//     const userPhoneInput = document.querySelector("#company_phone");
-//     const intlPhoneInput = document.querySelector("#international_phone_number");
+document.addEventListener("DOMContentLoaded", function () {
+    const userPhoneInput = document.querySelector("#company_phone");
+    const intlPhoneInput = document.querySelector("#international_phone_number");
 
     if (userPhoneInput) {
         window.iti = intlTelInput(userPhoneInput, {
@@ -9,16 +9,16 @@
         });
 
 
-//     }
+    }
 
-//     document.querySelector("#companySettingForm").addEventListener("submit", function (event) {
-//         event.preventDefault();
-//         if (window.iti) {
-//             const intlNumber = window.iti.getNumber();
-//             intlPhoneInput.value = intlNumber;
-//         }
-//     });
-// });
+    document.querySelector("#companySettingForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        if (window.iti) {
+            const intlNumber = window.iti.getNumber();
+            intlPhoneInput.value = intlNumber;
+        }
+    });
+});
 
 (async () => {
    
