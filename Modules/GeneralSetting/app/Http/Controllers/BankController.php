@@ -82,7 +82,7 @@ class BankController extends Controller
             ], 500);
         }
     }
-    public function list(Request $request):JsonResponse
+    public function list(Request $request): JsonResponse
     {
         $orderBy = $request->order_by ?? 'desc';
         $search = $request->input('search');
@@ -110,7 +110,7 @@ class BankController extends Controller
     }
 
 
-    public function edit(Request $request):JsonResponse
+    public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
         $bank = Bank::find($id);
@@ -122,7 +122,7 @@ class BankController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request):JsonResponse
+    public function delete(Request $request): JsonResponse
     {
         try {
             $id = $request->id;

@@ -32,7 +32,7 @@ class ContactController extends Controller
             ]);
 
             $imagePath = null;
-            if ($request->hasFile('image')) {
+            if ($request->hasFile('image') && $request->file('image') !== null) {
                 $imagePath = $request->file('image')->store('contacts', 'public');
             }
 
@@ -81,7 +81,7 @@ class ContactController extends Controller
                 ->when($sortBy === 'last_7_days', fn($query) => $query->whereBetween('created_at', [now()->subDays(7), now()]))
                 ->get()
                 ->map(function ($contact) {
-                    $contact->image = uploadedAsset($contact->image, 'profile');
+                    $contact->image = is_array($url = uploadedAsset($contact->image, 'profile')) ? $url['url'] : $url;
                     return $contact;
                 });
 
@@ -106,7 +106,7 @@ class ContactController extends Controller
     public function delete(Request $request): JsonResponse
     {
         try {
-            $id = $request->id;
+            $id = (int) $request->id;
             $contact = Contact::find($id);
 
             if (!$contact) {

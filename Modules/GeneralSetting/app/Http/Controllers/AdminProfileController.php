@@ -1,5 +1,7 @@
 <?php
+
 namespace Modules\GeneralSetting\Http\Controllers;
+
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserDetail;
@@ -10,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+
 class AdminProfileController extends Controller
 {
     public function adminProfile(Request $request): View
@@ -138,6 +141,7 @@ class AdminProfileController extends Controller
     }
     public function deleteAccount(int $id, Request $request): JsonResponse
     {
+        /** @var \App\Models\User $user */
         $user = Auth::guard('admin')->user();
         if (!$user) {
             return response()->json(['success' => false, 'message' =>   __('admin.general_settings.user_not_found')], 404);

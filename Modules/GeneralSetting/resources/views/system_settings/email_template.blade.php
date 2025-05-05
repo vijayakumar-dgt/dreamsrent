@@ -246,7 +246,7 @@
                                     <div class="placeholders" id="placeholders">
                                         @if(!empty($tags) && count($tags) > 0)
                                         @foreach($tags as $tag)
-                                        <span class="var_placeholder btn btn-light text-info  btn-sm" data-placeholder="{{$tag->title}}">{<?=$tag->title?>}</span>
+                                        <span class="var_placeholder btn btn-light text-info  btn-sm" data-placeholder="{{$tag->title}}">{{ $tag->title }}</span>
                                         @endforeach
                                         @endif
                                     </div>

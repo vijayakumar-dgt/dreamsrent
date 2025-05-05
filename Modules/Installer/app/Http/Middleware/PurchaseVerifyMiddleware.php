@@ -33,7 +33,7 @@ class PurchaseVerifyMiddleware
 
             if (!InstallerInfo::isRemoteLocal() && InstallerInfo::licenseFileDataHasLocalTrue()) {
                 $response = purchaseVerificationHashed($filepath, true);
-                if ($response && InstallerInfo::rewriteHashedFile($response)) {
+                if ( InstallerInfo::rewriteHashedFile($response)) {
                     return $next($request);
                 } else {
                     InstallerInfo::deleteLicenseFile();
@@ -41,7 +41,7 @@ class PurchaseVerifyMiddleware
                 }
             } elseif (Carbon::now()->day == 1) {
                 $response = purchaseVerificationHashed($filepath);
-                if ($response && $response['success']) {
+                if ($response['success']) {
                     return $next($request);
                 }
 

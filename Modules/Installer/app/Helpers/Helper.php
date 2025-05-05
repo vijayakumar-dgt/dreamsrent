@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Modules\Installer\app\Enums\InstallerInfo;
-use Modules\Installer\app\Models\Configuration;
+use Modules\Installer\Enums\InstallerInfo;
+use Modules\Installer\Models\Configuration;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\EmailTemplate;
 use stdClass;
@@ -50,21 +50,21 @@ function purchaseVerificationHashed(string $filepath, bool $isLocal = false): ar
 
     // Proceed only if the license file exists
     if (file_exists($filepath)) {
-        $licenseFile = \Modules\Installer\app\Enums\InstallerInfo::getLicenseFileData();
+        $licenseFile = InstallerInfo::getLicenseFileData();
 
         $data = [];
 
         if ($isLocal) {
-            $data['isLocal'] = \Modules\Installer\app\Enums\InstallerInfo::licenseFileDataHasLocalTrue() ? 'false' : 'true';
+            $data['isLocal'] = InstallerInfo::licenseFileDataHasLocalTrue() ? 'false' : 'true';
             $data['purchase_code'] = $licenseFile['purchase_code'];
         }
 
         $data['verification_hashed'] = $licenseFile['verification_hashed'];
-        $data['incoming_url'] = \Modules\Installer\app\Enums\InstallerInfo::getHost();
-        $data['incoming_ip'] = \Modules\Installer\app\Enums\InstallerInfo::getRemoteAddr();
+        $data['incoming_url'] = InstallerInfo::getHost();
+        $data['incoming_ip'] = InstallerInfo::getRemoteAddr();
 
         return Http::post(
-            \Modules\Installer\app\Enums\InstallerInfo::VERIFICATION_HASHED_URL->value,
+            InstallerInfo::VERIFICATION_HASHED_URL->value,
             $data
         )->json();
     }
@@ -174,13 +174,13 @@ if (!function_exists('getTemplatedEmailContent')) {
             ->where('notification_type', $notificationType)
             ->first();
 
-        if (!$template) {
+        if (!$template || is_null($template->subject) || is_null($template->description)) {
             return null;
         }
 
         return [
-            'subject' => $template->subject,
-            'content' => $template->description,
+            'subject' => (string)$template->subject,
+            'content' => (string)$template->description,
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Modules\Communication\Models\Announcement;
+use Modules\Communication\Models\Enquiry;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -41,7 +42,7 @@ class AnnouncementController extends Controller
                         'message' => 'Announcement not found!'
                     ], 404);
                 }
-
+                /** @var \Modules\Communication\Models\Announcement $announcement */
                 $announcement->update($request->all());
 
                 return response()->json([
@@ -131,7 +132,7 @@ class AnnouncementController extends Controller
                     'message' => 'Announcement not found.'
                 ], 404);
             }
-
+            /** @var \Modules\Communication\Models\Announcement $enquiry */
             $enquiry->delete();
 
             return response()->json([

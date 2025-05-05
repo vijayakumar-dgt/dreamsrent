@@ -22,11 +22,9 @@ class Samplemail extends Mailable
      */
     public ?string $attachment;
 
-    /**
-     * Samplemail constructor.
-     *
-     * @param array $messageBody
-     */
+  /**
+ * @param array{subject: string, message: string, attachment?: string|null} $messageBody
+ */
     public function __construct(array $messageBody)
     {
         $this->subject = $messageBody['subject'];

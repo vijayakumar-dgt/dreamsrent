@@ -29,6 +29,8 @@ use App\Models\UserDetail;
  * @property string|null $first_name
  * @property string|null $last_name
  * @property string|null $mobile_number
+ * @property string|null $phone_number
+ * @property int|null $google_auth_enabled
  *
  */
 
@@ -55,7 +57,7 @@ class User extends Authenticatable
         'region_id',
         'language_id',
         'role_id',
-        'last_password_changed_at'
+        'last_password_changed_at',
     ];
 
     /**

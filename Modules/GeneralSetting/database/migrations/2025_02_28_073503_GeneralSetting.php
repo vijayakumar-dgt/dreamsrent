@@ -12,11 +12,11 @@ return new class extends Migration {
     {
         Schema::create('general_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('key')->unique(); // Unique key
+            $table->string('key')->unique();
             $table->text('value')->nullable();
             $table->unsignedBigInteger('group_id')->nullable();
             $table->unsignedBigInteger('language_id')->nullable();
-            $table->softDeletes(); // Soft delete column
+            $table->softDeletes();
             $table->timestamps();
         });
     }

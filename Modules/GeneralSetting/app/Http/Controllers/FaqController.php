@@ -13,21 +13,21 @@ use Illuminate\View\View;
 
 class FaqController extends Controller
 {
-    public function faq(Request $request):View
+    public function faq(Request $request): View
     {
         $languages = Language::with('transLang')->get();
 
         return view('generalsetting::cms.faq', compact('languages'));
     }
 
-    public function howItWorks(Request $request):View
+    public function howItWorks(Request $request): View
     {
         $languages = Language::with('transLang')->get();
 
         return view('generalsetting::cms.how-it-work', compact('languages'));
     }
 
-    public function howItWorksUpdate(Request $request):JsonResponse
+    public function howItWorksUpdate(Request $request): JsonResponse
     {
         $request->validate([
             'group_id' => 'required|integer',
@@ -62,7 +62,7 @@ class FaqController extends Controller
         }
     }
 
-    public function howItWorksList(Request $request):JsonResponse
+    public function howItWorksList(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'group_id'    => 'required|integer',
@@ -102,14 +102,14 @@ class FaqController extends Controller
     }
 
 
-    public function copyright(Request $request):View
+    public function copyright(Request $request): View
     {
         $languages = Language::with('transLang')->get();
 
         return view('generalsetting::cms.copyright', compact('languages'));
     }
 
-    public function copyrightUpdate(Request $request):JsonResponse
+    public function copyrightUpdate(Request $request): JsonResponse
     {
         $request->validate([
             'group_id' => 'required|integer',
@@ -144,7 +144,7 @@ class FaqController extends Controller
         }
     }
 
-    public function copyrightList(Request $request):JsonResponse
+    public function copyrightList(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'group_id'    => 'required|integer',
@@ -239,7 +239,7 @@ class FaqController extends Controller
             $defaultLanguage = Language::where('default', 1)->value('language_id');
 
             $faqs = Faq::when($request->language_id, function ($query) use ($request) {
-                    return $query->where('language_id', $request->language_id);
+                return $query->where('language_id', $request->language_id);
             }, function ($query) use ($defaultLanguage) {
                 return $query->where('language_id', $defaultLanguage);
             })

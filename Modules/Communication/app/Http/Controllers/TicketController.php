@@ -66,16 +66,15 @@ class TicketController extends Controller
             // Generate ticket ID
             $latestTicket = Ticket::latest('id')->first();
             $nextId = $latestTicket ? $latestTicket->id + 1 : 1;
-            $ticketId = 'TICKET-' . str_pad($nextId, 6, '0', STR_PAD_LEFT);
+            $ticketId = 'TICKET-' . str_pad( (string) $nextId, 6, '0', STR_PAD_LEFT);
 
             // Handle file uploads
             $filePaths = [];
-            if ($request->hasFile('document')) {
-                foreach ($request->file('document') as $file) {
-                    $filePath = $file->store('tickets', 'public');
-                    $filePaths[] = $filePath;
-                }
-            }
+            $file = $request->file('document');
+            if ($file instanceof \Illuminate\Http\UploadedFile) {
+                $filePath = $file->store('tickets', 'public');
+                $filePaths[] = $filePath;
+            }        
 
             // Create ticket
             $ticket = Ticket::create([
@@ -108,6 +107,13 @@ class TicketController extends Controller
     {
         try {
             $user = current_user();
+
+            if (!$user instanceof \App\Models\User) {
+                return response()->json([
+                    'code' => 401,
+                    'message' => 'Unauthenticated'
+                ], 401);
+            }
             $ticketId = $request->input('ticketId');
             $priorityFilters = $request->input('priority', []);
             $statusFilters = $request->input('status', []);
@@ -232,7 +238,7 @@ class TicketController extends Controller
                     'errors' => $validator->errors()
                 ], 422);
             }
-
+          /** @var \Modules\Communication\Models\Ticket $ticket */
             $ticket = Ticket::findOrFail($request->ticketid);
 
             // Only assign if the ticket is still open and not yet assigned
@@ -309,7 +315,7 @@ class TicketController extends Controller
                     'errors' => $validator->errors()
                 ], 422);
             }
-
+           /** @var \Modules\Communication\Models\Ticket $ticket */
             $ticket = Ticket::findOrFail($request->ticketid);
             $statusChanged = ($ticket->status !== (int)$request->status);
 
@@ -370,6 +376,7 @@ class TicketController extends Controller
     {
         try {
             $id = $request->id;
+         /** @var \Modules\Communication\Models\Ticket|null $ticket */
             $ticket = Ticket::find($id);
 
             if (!$ticket) {

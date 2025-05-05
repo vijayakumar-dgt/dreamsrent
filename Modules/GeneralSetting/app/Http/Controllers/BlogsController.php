@@ -171,7 +171,7 @@ class BlogsController extends Controller
         ]);
         assert($request->file('image') instanceof \Illuminate\Http\UploadedFile);
         $imagePath = $request->hasFile('image') ? $request->file('image')->store('blogs', 'public') : null;
-                BlogPost::create([
+        BlogPost::create([
             'title' => $request->title,
             'slug' => Str::slug($request->title),
             'language_id' => $request->language,

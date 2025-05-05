@@ -34,7 +34,9 @@ enum InstallerInfo: string
     {
         return storage_path(self::LICENSE_FILE_PATH->value);
     }
-
+    /**
+     * @return string[]
+     */
     public static function getAllLocalIp(): array
     {
         return [
@@ -138,7 +140,6 @@ enum InstallerInfo: string
         $data = [];
 
         if (
-            isset($response['success']) &&
             $response['success'] &&
             $isLocal === false
         ) {
@@ -195,7 +196,7 @@ enum InstallerInfo: string
         try {
             $envFile = base_path('.env');
             if (File::exists($envFile)) {
-                $envContent = File::get($envFile) ?? '';
+                $envContent = File::get($envFile) ;
 
                 $pattern = "/^{$key}=.*/m";
                 if (preg_match($pattern, $envContent)) {
