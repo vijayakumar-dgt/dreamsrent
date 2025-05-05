@@ -1092,7 +1092,7 @@ class GeneralSettingController extends Controller
     public function updatePhoneNumber(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'new_phonenumber' => 'required|digits_between:8,12|unique:users,phone_number',
+            'new_phonenumber' => 'required|unique:users,phone_number',
         ]);
 
         if ($validator->fails()) {
