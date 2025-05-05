@@ -82,6 +82,7 @@ class EmailTemplateController extends Controller
             if ($request->has('id') && $request->id != '') {
                 /** @var \Modules\GeneralSetting\Models\EmailTemplate $emailTemplate */
                 $emailTemplate = EmailTemplate::find($request->id);
+                /** @var EmailTemplate|null $emailTemplate */
                 if (!$emailTemplate) {
                     return response()->json([
                         'status' => 'error',

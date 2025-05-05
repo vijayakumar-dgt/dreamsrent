@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string|null $symbol
+ * @property string $currency_name
+ * @property string $code
+ * @property float $exchange_rate
+ * @property int $status
  */
 class Currency extends Model
 {
