@@ -63,8 +63,8 @@ class BlogCategoryRequest extends CustomFailedValidation
                                     ->where('id', '!=', $id);
                             } else {
                                 $query->where('language_id', '!=', $languageId)
-                                        ->where('parent_id', '=', $id)
-                                        ->where('id', '!=', $id);
+                                    ->where('parent_id', '=', $id)
+                                    ->where('id', '!=', $id);
                             }
                         }),
                 ],
@@ -80,8 +80,8 @@ class BlogCategoryRequest extends CustomFailedValidation
                                     ->where('id', '!=', $id);
                             } else {
                                 $query->where('language_id', '!=', $languageId)
-                                      ->where('parent_id', $id)
-                                      ->where('id', '!=', $id);
+                                    ->where('parent_id', $id)
+                                    ->where('id', '!=', $id);
                             }
                         }),
                 ],

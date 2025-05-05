@@ -18,14 +18,14 @@ class EmailTemplateController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index():View
+    public function index(): View
     {
         $tags = NotificationTag::where('status', true)->get();
         $notificationTypes = NotificationType::where('status', true)->get();
         return view('generalsetting::system_settings.email_template', compact('tags', 'notificationTypes'));
     }
 
-    public function store(Request $request):JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $existing = EmailTemplate::where('notification_type', $request->notification_type)
             ->when($request->id, function ($query) use ($request) {
@@ -118,14 +118,14 @@ class EmailTemplateController extends Controller
         }
     }
 
-    public function getEmailTemplates(Request $request):JsonResponse
+    public function getEmailTemplates(Request $request): JsonResponse
     {
         $pageLength = $request->length;
         $offset     = $request->start;
         $emailTemplates = EmailTemplate::query();
         if ($request->has('keyword') && $request->keyword != "") {
             $emailTemplates = $emailTemplates->where(function ($query) use ($request) {
-                          $query->where('title', 'like', '%' . $request->keyword . '%');
+                $query->where('title', 'like', '%' . $request->keyword . '%');
             });
         }
         $emailTemplates = $emailTemplates->orderBy('id', 'desc');
@@ -140,7 +140,7 @@ class EmailTemplateController extends Controller
     }
 
 
-    public function getEmailTemplate(?int $id):JsonResponse
+    public function getEmailTemplate(?int $id): JsonResponse
     {
         $emailTemplate = EmailTemplate::find($id);
         return response()->json([
@@ -150,7 +150,7 @@ class EmailTemplateController extends Controller
         ], 200);
     }
 
-    public function deleteEmailTeplate(Request $request):JsonResponse
+    public function deleteEmailTeplate(Request $request): JsonResponse
     {
         try {
             /** @var \Modules\GeneralSetting\Models\EmailTemplate $template */
@@ -176,7 +176,7 @@ class EmailTemplateController extends Controller
         }
     }
 
-    public function getTags(?int $id):JsonResponse
+    public function getTags(?int $id): JsonResponse
     {
         $notificationType = NotificationType::find($id);
         $defaultTags = NotificationTag::where('status', true)->pluck('title')->toArray();

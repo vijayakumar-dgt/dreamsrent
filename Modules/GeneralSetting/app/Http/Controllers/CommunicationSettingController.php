@@ -16,12 +16,12 @@ use Modules\GeneralSetting\Models\EmailTemplate;
 
 class CommunicationSettingController extends Controller
 {
-    public function smsGateway(Request $request):View
+    public function smsGateway(Request $request): View
     {
         return view('generalsetting::system_settings.sms-gateway');
     }
 
-    public function emailSettings(Request $request):View
+    public function emailSettings(Request $request): View
     {
         return view('generalsetting::system_settings.email_settings');
     }
@@ -170,7 +170,7 @@ class CommunicationSettingController extends Controller
         };
     }
 
-     /**
+    /**
      * @return int
      */
     private function getSettingsType(string $type): int

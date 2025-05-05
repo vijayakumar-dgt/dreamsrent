@@ -14,7 +14,7 @@ class CurrencyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index():View
+    public function index(): View
     {
         $data = [
             'page_title' => 'Currencies'
@@ -22,7 +22,7 @@ class CurrencyController extends Controller
         return view('generalsetting::finance_settings.currencies', $data);
     }
 
-    public function save_currency(Request $request):JsonResponse
+    public function save_currency(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'currency_name' => 'required|unique:currencies,currency_name,' . $request->id . ',id,deleted_at,NULL',
@@ -33,10 +33,10 @@ class CurrencyController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                 'status' => 'error',
-                 'code'   => 422,
-                 'message' => __('admin.general_settings.validation_error'),
-                 'errors' => $validator->errors()->toArray()
+                'status' => 'error',
+                'code'   => 422,
+                'message' => __('admin.general_settings.validation_error'),
+                'errors' => $validator->errors()->toArray()
             ], 422);
         }
         try {
@@ -70,15 +70,15 @@ class CurrencyController extends Controller
         }
     }
 
-    public function getCurrencies(Request $request):JsonResponse
+    public function getCurrencies(Request $request): JsonResponse
     {
         $pageLength = $request->length;
         $offset     = $request->start;
         $currencies = Currency::query();
         if ($request->has('keyword') && $request->keyword != "") {
             $currencies = $currencies->where(function ($query) use ($request) {
-                          $query->where('currency_name', 'like', '%' . $request->keyword . '%')
-                                ->orWhere('code', 'like', '%' . $request->keyword . '%');
+                $query->where('currency_name', 'like', '%' . $request->keyword . '%')
+                    ->orWhere('code', 'like', '%' . $request->keyword . '%');
             });
         }
         $currencies = $currencies->orderBy('currency_name', 'asc');
@@ -92,7 +92,7 @@ class CurrencyController extends Controller
         ]);
     }
 
-    public function editCurrency(?int $id):JsonResponse
+    public function editCurrency(?int $id): JsonResponse
     {
         $currency = Currency::find($id);
         return response()->json([
@@ -103,7 +103,7 @@ class CurrencyController extends Controller
         ]);
     }
 
-    public function deleteCurrency(Request $request):JsonResponse
+    public function deleteCurrency(Request $request): JsonResponse
     {
         try {
             /** @var \Modules\GeneralSetting\Models\Currency $currency */
