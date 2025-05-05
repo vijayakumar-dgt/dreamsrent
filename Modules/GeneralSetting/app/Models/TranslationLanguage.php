@@ -3,7 +3,9 @@
 namespace Modules\GeneralSetting\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+/**
+ * @property string $code
+ */
 class TranslationLanguage extends Model
 {
     /**

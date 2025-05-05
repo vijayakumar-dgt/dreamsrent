@@ -160,11 +160,12 @@ class SectionController extends Controller
 
         if ($request->section_id == 1) {
             $thumbnailPath = $existingData['thumbnail_image_one'] ?? null;
-
-            if ($request->hasFile('thumbnail_image_one')) {
+        
+            // Check if the file exists and is an instance of UploadedFile
+            if ($request->hasFile('thumbnail_image_one') && $request->file('thumbnail_image_one') instanceof \Illuminate\Http\UploadedFile) {
                 $thumbnailPath = uploadFile($request->file('thumbnail_image_one'), 'thumbnail_image_banner_one');
             }
-
+        
             $data = [
                 'label_one' => $request->label_one,
                 'line_one' => $request->line_one,
@@ -174,11 +175,12 @@ class SectionController extends Controller
             ];
         } elseif ($request->section_id == 29) {
             $thumbnailPath = $existingData['thumbnail_image_two'] ?? null;
-
-            if ($request->hasFile('thumbnail_image_two')) {
+        
+            // Check if the file exists and is an instance of UploadedFile
+            if ($request->hasFile('thumbnail_image_two') && $request->file('thumbnail_image_two') instanceof \Illuminate\Http\UploadedFile) {
                 $thumbnailPath = uploadFile($request->file('thumbnail_image_two'), 'thumbnail_image_banner_two');
             }
-
+        
             $data = [
                 'label_two' => $request->label_two,
                 'description_two' => $request->description_two,
@@ -201,6 +203,7 @@ class SectionController extends Controller
                 'dis_6'   => $request->dis_6,
             ];
         }
+        
 
         try {
             // Try update first
