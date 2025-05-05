@@ -141,7 +141,7 @@ class AdminProfileController extends Controller
     }
     public function deleteAccount(int $id, Request $request): JsonResponse
     {
-        /** @var \App\Models\User $user */
+        /** @var \App\Models\User|null $user */
         $user = Auth::guard('admin')->user();
         if (!$user) {
             return response()->json(['success' => false, 'message' =>   __('admin.general_settings.user_not_found')], 404);
