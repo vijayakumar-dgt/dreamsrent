@@ -19,9 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class CommunicationSetting extends Model
 {
-    use HasFactory;
     use SoftDeletes;
-
     protected $table = 'communication_settings';
 
     protected $fillable = [
