@@ -81,10 +81,10 @@ class ContactController extends Controller
                 ->when($sortBy === 'last_7_days', fn($query) => $query->whereBetween('created_at', [now()->subDays(7), now()]))
                 ->get()
                 ->map(function ($contact) {
-                    $contact->image = is_array($url = uploadedAsset($contact->image, 'profile')) ? $url['url'] : $url;
+                    $url = uploadedAsset($contact->image, 'profile');
+                    $contact->image = $url;
                     return $contact;
                 });
-
             return response()->json([
                 'code' => 200,
                 'success' => true,

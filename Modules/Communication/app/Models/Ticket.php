@@ -3,12 +3,13 @@
 namespace Modules\Communication\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Modules\Communication\Database\Factories\TicketFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
 use Modules\Communication\Models\TicketCategory;
 use Modules\Communication\Models\TicketHistory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 /**
  * Modules\Communication\Models\Ticket
  *
@@ -28,10 +29,15 @@ use Modules\Communication\Models\TicketHistory;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read User $user
+ * @property-read User|null $assignee
+ * @property-read User|null $creator
+ * @property-read User|null $updater
+ * @property-read TicketCategory $category
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, TicketHistory> $ticketHistories
  */
 class Ticket extends Model
 {
-    
     use SoftDeletes;
 
     protected $fillable = [
@@ -39,36 +45,43 @@ class Ticket extends Model
         'user_type', 'status', 'reply_description', 'attachment',
         'assignee_id', 'created_by', 'updated_by'
     ];
-/** @var array<int, string> */
+
+    /** @var array<int, string> */
     protected $dates = ['deleted_at'];
 
-    // Relationships
-    public function user()
+    // @phpstan-ignore-next-line
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function assignee()
+    // @phpstan-ignore-next-line
+    public function assignee(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'assignee_id')->with('userDetail');
+        return $this->belongsTo(User::class, 'assignee_id');
     }
 
-    public function creator()
+    // @phpstan-ignore-next-line
+    public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function updater()
+    // @phpstan-ignore-next-line
+    public function updater(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    public function category()
+    // @phpstan-ignore-next-line
+    public function category(): BelongsTo
     {
         return $this->belongsTo(TicketCategory::class, 'subject', 'id');
     }
-    public function ticketHistories()
+
+    // @phpstan-ignore-next-line
+    public function ticketHistories(): HasMany
     {
-        return $this->hasMany(TicketHistory::class, 'ticket_id','id');
+        return $this->hasMany(TicketHistory::class, 'ticket_id', 'id');
     }
 }

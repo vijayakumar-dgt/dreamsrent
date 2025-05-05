@@ -107,19 +107,20 @@ class TicketController extends Controller
     {
         try {
             $user = current_user();
-
+    
             if (!$user instanceof \App\Models\User) {
                 return response()->json([
                     'code' => 401,
                     'message' => 'Unauthenticated'
                 ], 401);
             }
+            
             $ticketId = $request->input('ticketId');
             $priorityFilters = $request->input('priority', []);
             $statusFilters = $request->input('status', []);
             $sortBy = $request->input('sort_by', 'latest');
             $searchTerm = $request->input('search', '');
-
+    
             $withRelations = [
                 'user:id,name,email',
                 'user.userDetail:id,user_id,first_name,last_name,profile_image',
@@ -130,20 +131,24 @@ class TicketController extends Controller
                 'ticketHistories.user:id,name,email',
                 'ticketHistories.user.userDetail:id,user_id,first_name,last_name,profile_image',
             ];
-
-            $query = Ticket::with($withRelations);
-
+    
+        
+            $query = Ticket::query()->with($withRelations);
+    
             // Apply user-specific filters
             if ($user->user_type == 1) {
+                // Admin can see all tickets
                 if ($ticketId) {
                     $query->where('id', $ticketId);
                 }
             } elseif ($user->user_type == 3) {
+                // Regular user can only see their own tickets
                 $query->where('user_id', $user->id);
                 if ($ticketId) {
                     $query->where('id', $ticketId);
                 }
             } elseif ($user->user_type == 2) {
+                // Assignee can only see tickets assigned to them
                 $query->where('assignee_id', $user->id);
                 if ($ticketId) {
                     $query->where('id', $ticketId);
@@ -155,17 +160,17 @@ class TicketController extends Controller
                     'user' => $user
                 ], 403);
             }
-
+    
             // Apply priority filters
             if (!empty($priorityFilters)) {
                 $query->whereIn('priority', $priorityFilters);
             }
-
+    
             // Apply status filters
             if (!empty($statusFilters)) {
                 $query->whereIn('status', $statusFilters);
             }
-
+    
             // Apply search filter
             if (!empty($searchTerm)) {
                 $query->where(function ($q) use ($searchTerm) {
@@ -178,7 +183,7 @@ class TicketController extends Controller
                       });
                 });
             }
-
+    
             // Apply sorting
             switch ($sortBy) {
                 case 'ascending':
@@ -197,9 +202,9 @@ class TicketController extends Controller
                     $query->latest();
                     break;
             }
-
+    
             $tickets = $query->get();
-
+    
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.common.default_retrieve_success'),

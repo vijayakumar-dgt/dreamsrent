@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\User;
 use Modules\Communication\Models\Ticket;
 
-
 class TicketHistory extends Model
 {
     use SoftDeletes;
@@ -21,25 +20,36 @@ class TicketHistory extends Model
     /** @var array<int, string> */
     protected $dates = ['deleted_at'];
 
-    // Relationships
-
+    /** @return BelongsTo<Ticket, TicketHistory> */
     public function ticket(): BelongsTo
     {
-        return $this->belongsTo(Ticket::class, 'ticket_id');
+        /** @var BelongsTo<Ticket, TicketHistory> $relation */
+        $relation = $this->belongsTo(Ticket::class, 'ticket_id');
+        return $relation;
     }
 
+    /** @return BelongsTo<User, TicketHistory> */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        /** @var BelongsTo<User, TicketHistory> $relation */
+        $relation = $this->belongsTo(User::class, 'user_id');
+        return $relation;
     }
 
+    /** @return BelongsTo<User, TicketHistory> */
     public function creator(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by');
+        /** @var BelongsTo<User, TicketHistory> $relation */
+        $relation = $this->belongsTo(User::class, 'created_by');
+        return $relation;
     }
 
+    /** @return BelongsTo<User, TicketHistory> */
     public function updater(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'updated_by');
+        /** @var BelongsTo<User, TicketHistory> $relation */
+        $relation = $this->belongsTo(User::class, 'updated_by');
+        return $relation;
     }
 }
+

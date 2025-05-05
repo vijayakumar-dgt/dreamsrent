@@ -15,10 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- *
- * @extends \Illuminate\Database\Eloquent\Model<\Modules\Communication\Models\Contact>
  */
-
 class Contact extends Model
 {
     use SoftDeletes;
