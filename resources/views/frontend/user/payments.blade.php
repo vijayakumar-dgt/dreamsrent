@@ -25,7 +25,6 @@
 @include('frontend.user.nav_menu')
 <div class="content">
     <div class="container">
-
         <!-- Content Header -->
         <div class="content-header">
             <h4>{{__('web.user.payments')}}</h4>
@@ -39,53 +38,53 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-md-5">
-                                <h5>{{__('web.user.all_payments')}} </h5>
+                                <h5>{{__('web.user.all_payments')}}</h5>
                             </div>
                             <div class="col-md-7 text-md-end">
-                            <div class="filter-group">
-                                <div class="sort-week sort">
-                                    <div class="dropdown dropdown-action">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                           <span class="datefilter_text">{{__('web.common.filter_by')}}</span> <i class="fas fa-chevron-down"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item datefilter active" href="javascript:void(0);" data-id="">
-                                                {{__('web.common.filter_by')}}
+                                <div class="filter-group">
+                                    <div class="sort-week sort">
+                                        <div class="dropdown dropdown-action">
+                                            <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <span class="datefilter_text">{{__('web.common.filter_by')}}</span> <i class="fas fa-chevron-down"></i>
                                             </a>
-                                            <a class="dropdown-item datefilter" href="javascript:void(0);" data-id="this_week">
-                                                {{__('web.common.this_week')}}
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item datefilter active" href="javascript:void(0);" data-id="">
+                                                    {{__('web.common.filter_by')}}
+                                                </a>
+                                                <a class="dropdown-item datefilter" href="javascript:void(0);" data-id="this_week">
+                                                    {{__('web.common.this_week')}}
+                                                </a>
+                                                <a class="dropdown-item datefilter" href="javascript:void(0);" data-id="this_month">
+                                                    {{__('web.common.this_month')}}
+                                                </a>
+                                                <a class="dropdown-item datefilter" href="javascript:void(0);" data-id="last30">
+                                                    {{ __('web.user.last_days', ['count' => 30]) }}
+                                                </a>
+                                                <a class="dropdown-item datefilter" href="javascript:void(0);" data-id="custom" data-bs-toggle="modal" data-bs-target="#custom_date">
+                                                    {{__('web.common.custom')}}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="sort-relevance sort" id="sort_filter">
+                                        <div class="dropdown dropdown-action">
+                                            <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <span class="sortfilter_text">{{__('web.common.sort_by_asc')}}</span><i class="fas fa-chevron-down"></i>
                                             </a>
-                                            <a class="dropdown-item datefilter" href="javascript:void(0);" data-id="this_month">
-                                                {{__('web.common.this_month')}}
-                                            </a>
-                                            <a class="dropdown-item datefilter" href="javascript:void(0);" data-id="last30">
-                                               {{ __('web.user.last_days', ['count' => 30]) }}
-                                            </a>
-                                            <a class="dropdown-item datefilter" href="javascript:void(0);" data-id="custom"  data-bs-toggle="modal" data-bs-target="#custom_date">
-                                                {{__('web.common.custom')}}
-                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a class="dropdown-item active sort-filter" data-id="asc" href="javascript:void(0);">
+                                                    {{__('web.common.sort_by_asc')}}
+                                                </a>
+                                                <a class="dropdown-item sort-filter" data-id="desc" href="javascript:void(0);">
+                                                    {{__('web.common.sort_by_desc')}}
+                                                </a>
+                                                <a class="dropdown-item sort-filter" data-id="alphabet" href="javascript:void(0);">
+                                                    {{__('web.common.sort_by_alpha')}}
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="sort-relevance sort" id="sort_filter">
-                                    <div class="dropdown dropdown-action">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <span class="sortfilter_text">{{__('web.common.sort_by_asc')}} </span><i class="fas fa-chevron-down"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item active sort-filter" data-id="asc" href="javascript:void(0);">
-                                                {{__('web.common.sort_by_asc')}}
-                                            </a>
-                                            <a class="dropdown-item sort-filter" data-id="desc" href="javascript:void(0);">
-                                                {{__('web.common.sort_by_desc')}}
-                                            </a>
-                                            <a class="dropdown-item sort-filter" data-id="alphabet" href="javascript:void(0);">
-                                                {{__('web.common.sort_by_alpha')}}
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                                 <div class="table-search">
                                     <div id="tablefilter" class="me-0"></div>
                                 </div>
@@ -130,11 +129,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                 </tbody>
                             </table>
                         </div>
-
                         <div class="table-footer">
                             <div class="row">
                                 <div class="col-md-6">
@@ -150,7 +147,6 @@
             </div>
         </div>
         <!-- /Payments Table -->
-
     </div>
 </div>
 

@@ -1,5 +1,5 @@
-<footer class="footer footer-four">	
-    <!-- Footer Top -->	
+<footer class="footer footer-four">
+    <!-- Footer Top -->
     <div class="footer-top aos" data-aos="fade-up">
         <div class="container">
             <div class="row">
@@ -10,7 +10,7 @@
                         </div>
                         <div class="footer-contact-info">
                             <p>{{ __('web.home.theme_2_footer_content') }}</p>
-                        </div>	
+                        </div>
                         <div class="d-flex align-items-center gap-1 app-icon">
                             <a href="javascript:void(0);">
                                 <img src="/frontend/assets/img/icons/gpay.svg" class="img-fluid" alt="logo">
@@ -30,7 +30,7 @@
                                 <a href="javascript:void(0)"><i class="fab fa-behance"></i></a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"><i class="fab fa-twitter"></i> </a>
+                                <a href="javascript:void(0)"><i class="fab fa-twitter"></i></a>
                             </li>
                             <li>
                                 <a href="javascript:void(0)"><i class="fab fa-linkedin"></i></a>
@@ -40,40 +40,38 @@
                 </div>
                 <div class="col-lg-7">
                     <div class="row">
-                        @if (!empty($footers)) 
+                        @if (!empty($footers))
                             @foreach ($footers as $footer)
-                        <div class="col-lg-4 col-md-6">
-                            <!-- Footer Widget -->
-                            <div class="footer-widget footer-menu">
-                                <h5 class="footer-title">{{ ucfirst($footer->name) }}</h5>
-                                <ul>
-                                    @if ($footer->menus)
-                                    @foreach ($footer->parsed_menus as $menu)
-                                        @php
-                                            $rawLink = trim($menu['link']);
-                                            $isFullUrl = filter_var($rawLink, FILTER_VALIDATE_URL);
-                                            $menuLink = $isFullUrl ? rtrim($rawLink, '/') : rtrim(url($rawLink), '/');
-
-                                            $currentUrl = rtrim(Request::url(), '/');
-                                        @endphp
-                                        <li>
-                                            <a href="{{ $menuLink }}">{{ $menu['label'] }}</a>
-                                        </li>
-                                    @endforeach
-                                @endif							
-                                </ul>
-                            </div>
-                            <!-- /Footer Widget -->
-                        </div>
-                        @endforeach
-                        @endif									
-                    </div>							
+                                <div class="col-lg-4 col-md-6">
+                                    <!-- Footer Widget -->
+                                    <div class="footer-widget footer-menu">
+                                        <h5 class="footer-title">{{ ucfirst($footer->name) }}</h5>
+                                        <ul>
+                                            @if ($footer->menus)
+                                                @foreach ($footer->parsed_menus as $menu)
+                                                    @php
+                                                        $rawLink = trim($menu['link']);
+                                                        $isFullUrl = filter_var($rawLink, FILTER_VALIDATE_URL);
+                                                        $menuLink = $isFullUrl ? rtrim($rawLink, '/') : rtrim(url($rawLink), '/');
+                                                        $currentUrl = rtrim(Request::url(), '/');
+                                                    @endphp
+                                                    <li>
+                                                        <a href="{{ $menuLink }}">{{ $menu['label'] }}</a>
+                                                    </li>
+                                                @endforeach
+                                            @endif
+                                        </ul>
+                                    </div>
+                                    <!-- /Footer Widget -->
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
                 </div>
-            </div>					
+            </div>
         </div>
     </div>
     <!-- /Footer Top -->
-
     <!-- Footer Bottom -->
     <div class="footer-bottom">
         <div class="container">
@@ -116,5 +114,5 @@
             <!-- /Copyright -->
         </div>
     </div>
-    <!-- /Footer Bottom -->			
+    <!-- /Footer Bottom -->
 </footer>

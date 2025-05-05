@@ -45,7 +45,6 @@
                 </div>
             </div>
         </div>
-
         <div class="count-sec">
             <div class="row row-gap-4" >
                 @if(!empty($section['facts_content']) && count($section['facts_content']) > 0)
@@ -59,7 +58,6 @@
                             </div>
                         </div>
                         @break
-
                         @case('vehicle_count')
                         <div class="col-lg-3 col-md-6 d-flex">
                             <div class="count-item flex-fill">

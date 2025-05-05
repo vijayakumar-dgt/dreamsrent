@@ -16,9 +16,7 @@
         </div>
     </div>
 </div>
-
 @include('frontend.user.nav_menu')
-
 <div class="content content-chat top-space-chat">
     <div class="container">
         <!-- Content Header -->
@@ -26,7 +24,6 @@
             <h4>{{ __('web.user.messages') }}</h4>
         </div>
         <!-- /Content Header -->
-
         <div class="row chat-window">
             <div class="col-xl-12">
                 <div class="chat-window">
@@ -69,7 +66,6 @@
                         </div>
                     </div>
                     <!-- /Chat Left -->
-
                     <!-- Chat Right -->
                     <div class="chat-cont-right">
                         <div class="chat-header">

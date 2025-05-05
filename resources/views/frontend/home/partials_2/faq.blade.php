@@ -13,7 +13,6 @@
                             $isFirst = $index === 0;
                             $collapseId = 'faqCollapse' . $index;
                         @endphp
-
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                                 <button
@@ -22,16 +21,14 @@
                                     data-bs-toggle="collapse"
                                     data-bs-target="#{{ $collapseId }}"
                                     aria-expanded="{{ $isFirst ? 'true' : 'false' }}"
-                                    aria-controls="{{ $collapseId }}"
-                                >
+                                    aria-controls="{{ $collapseId }}">
                                     {{ ucfirst($content->question ?? '') }}
                                 </button>
                             </h2>
                             <div
                                 id="{{ $collapseId }}"
                                 class="accordion-collapse collapse {{ $isFirst ? 'show' : '' }}"
-                                data-bs-parent="#faqAccordion"
-                            >
+                                data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
                                     <p>{{ ucfirst($content->answer ?? '') }}</p>
                                 </div>
@@ -39,7 +36,6 @@
                         </div>
                     @endforeach
                 @endif
-
                 </div>
             </div>
         </div>

@@ -18,6 +18,7 @@
     </div>
 </div>
 <!-- /Breadscrumb Section -->
+
 @include('frontend.user.nav_menu')
 
 <!-- Page Content -->
@@ -28,8 +29,10 @@
             <h4>Settings</h4>
         </div>
         <!-- /Content Header -->
+
         <div class="row">
             @include('frontend.user.user_sidebar')
+
             <!-- Settings Details -->
             <div class="col-lg-9">
                 <div class="settings-info">
@@ -92,6 +95,7 @@
                             </div>
                         </div>
                         <!-- /Basic Info -->
+
                         <!-- Address Info -->
                         <div class="profile-info-grid">
                             <div class="profile-info-header">
@@ -134,6 +138,7 @@
                             </div>
                         </div>
                         <!-- /Address Info -->
+
                         <!-- Profile Submit -->
                         <div class="profile-submit-btn">
                             <button type="submit" class="btn btn-secondary">Cancel</button>

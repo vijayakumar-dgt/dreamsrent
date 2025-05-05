@@ -2,20 +2,16 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6">
-
                 <div class="feature-img">
                     <div class="section-heading heading-four text-start" data-aos="fade-down">
-                        <h2>{{ ucfirst($section['section_title'] ?? "" )}}</h2>
+                        <h2>{{ ucfirst($section['section_title'] ?? "") }}</h2>
                         <p>{{ ucfirst($section['section_label'] ?? "") }}</p>
                     </div>
                     <img src="{{ $section['section_content'][0]->vehicle_image_url ?? asset('frontend/assets/img/cars/car.png') }}" alt="img" class="img-fluid">
                 </div>
-
             </div>
-
             <div class="col-lg-6">
                 <div class="row row-gap-4">
-
                     <!-- Feature Item -->
                     <div class="col-md-6 d-flex">
                         <div class="feature-item flex-fill">
@@ -29,7 +25,6 @@
                         </div>
                     </div>
                     <!-- /Feature Item -->
-
                     <!-- Feature Item -->
                     <div class="col-md-6 d-flex">
                         <div class="feature-item flex-fill">
@@ -43,7 +38,6 @@
                         </div>
                     </div>
                     <!-- /Feature Item -->
-
                     <!-- Feature Item -->
                     <div class="col-md-6 d-flex">
                         <div class="feature-item flex-fill">
@@ -57,11 +51,9 @@
                         </div>
                     </div>
                     <!-- /Feature Item -->
-
                     <!-- Feature Item -->
                     <div class="col-md-6 d-flex">
                         <div class="feature-item flex-fill">
-
                             <span class="feature-icon">
                                 <i class="bx bxs-car-mechanic"></i>
                             </span>
@@ -72,7 +64,6 @@
                         </div>
                     </div>
                     <!-- /Feature Item -->
-
                     <!-- Feature Item -->
                     <div class="col-md-6 d-flex">
                         <div class="feature-item flex-fill">
@@ -86,7 +77,6 @@
                         </div>
                     </div>
                     <!-- /Feature Item -->
-
                     <!-- Feature Item -->
                     <div class="col-md-6 d-flex">
                         <div class="feature-item flex-fill">
@@ -100,7 +90,6 @@
                         </div>
                     </div>
                     <!-- /Feature Item -->
-
                 </div>
             </div>
         </div>

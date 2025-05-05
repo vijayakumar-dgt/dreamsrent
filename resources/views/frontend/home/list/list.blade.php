@@ -138,7 +138,6 @@
                                             <i class="feather-list"></i>
                                         </a>
                                     </li>
-                                   
                                 </ul>
                             </div>
                         </div>
@@ -245,11 +244,9 @@
 @endsection
 @push('scripts')
 <script src="{{ asset('frontend/assets/js/custom/home/list.js?v=1.1') }}"></script>
-
 <!-- Rangeslider JS -->
 <script src="{{ asset('frontend/assets/plugins/ion-rangeslider/js/ion.rangeSlider.min.js') }}"></script>
 <script src="{{ asset('frontend/assets/plugins/ion-rangeslider/js/custom-rangeslider.js') }}"></script>
-
 <!-- Sticky Sidebar JS -->
 <script src="{{ asset('frontend/assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
 <script src="{{ asset('frontend/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>	

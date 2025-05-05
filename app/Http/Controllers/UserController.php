@@ -865,8 +865,9 @@ class UserController extends Controller
 
     public function ajaxTransactions(Request $request): AnonymousResourceCollection
     {
+        $bookingUsers = ['admin','user'];
         $authUserId = Auth::guard('web')->user()->id ?? 0;
-        $bookings = Booking::where('customer_id', $authUserId);
+        $bookings = Booking::where('customer_id', $authUserId)->whereIn('booking_by', $bookingUsers);
 
         if ($request->has('limit')) {
             $bookings->take($request->limit);
