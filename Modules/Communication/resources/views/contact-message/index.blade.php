@@ -1,9 +1,8 @@
 @extends('admin.admin')
 @section('content')
-	<!-- Page Wrapper -->
+    <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-
             <!-- Breadcrumb -->
             <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
                 <div class="my-auto mb-2">
@@ -26,7 +25,7 @@
                     <div class="skeleton label-skeleton label-loader"></div>
                     <div class="dropdown sort-dropdown me-2 d-none real-label">
                         <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center sort-dropdown-toggle"
-                           data-bs-toggle="dropdown">
+                            data-bs-toggle="dropdown">
                             <i class="ti ti-filter me-1 sort"></i> {{ __('admin.common.sort_by_latest') }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end p-2">
@@ -56,41 +55,91 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                            <th><div class="skeleton th-skeleton th-loader"></div></th>
+                            <th>
+                                <div class="skeleton th-skeleton th-loader"></div>
+                            </th>
+                            <th>
+                                <div class="skeleton th-skeleton th-loader"></div>
+                            </th>
+                            <th>
+                                <div class="skeleton th-skeleton th-loader"></div>
+                            </th>
+                            <th>
+                                <div class="skeleton th-skeleton th-loader"></div>
+                            </th>
+                            <th>
+                                <div class="skeleton th-skeleton th-loader"></div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
                         </tr>
                         <tr>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
                         </tr>
                         <tr>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
                         </tr>
                         <tr>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton data-skeleton data-loader"></div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -121,13 +170,14 @@
         @include('admin.partials.footer')
     </div>
     <!-- /Page Wrapper -->
-        	<!-- Delete  -->
-	<div class="modal fade" id="delete_contact">
-		<div class="modal-dialog modal-dialog-centered modal-sm">
-			<div class="modal-content">
-				<div class="modal-body text-center">
+
+    <!-- Delete  -->
+    <div class="modal fade" id="delete_contact">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center">
                     <form id="contactDeleteForm">
-				        <input type="hidden" name="delete_id" id="delete_id">
+                        <input type="hidden" name="delete_id" id="delete_id">
                         <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
                             <i class="ti ti-trash-x fs-26"></i>
                         </span>
@@ -138,11 +188,11 @@
                             <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
                         </div>
                     </form>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- /Delete -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Delete -->
 
 @endsection
 @push('scripts')

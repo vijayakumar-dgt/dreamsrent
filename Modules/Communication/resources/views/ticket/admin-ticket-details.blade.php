@@ -3,11 +3,9 @@
 	<!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-
             <div class="mb-3">
                 <a href="{{ route('communication.ticket') }}" class="d-inline-flex align-items-center fw-medium"><i class="ti ti-arrow-left me-1"></i>{{ __('admin.common.back_to_list') }}</a>
             </div>
-
             <div class="filterbox p-20 mb-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
                 <h4 class="d-flex align-items-center"><i class="ti ti-menu-2 text-secondary fs-24 me-2"></i>{{ __('admin.support.ticket_details') }}</h4>
             </div>
@@ -20,11 +18,8 @@
                         <!-- Top Info -->
                         <div class="border br-5 mb-3">
                             <div class="p-3 bg-light d-flex align-items-center justify-content-between flex-wrap gap-3">
-
                                 <div class="skeleton section-title-skeleton label-loader"></div>
                                 <h6 class="ticket_id d-none real-label"> <span class="text-default category_name"></span></h6>
-
-
                                 <div class="skeleton input-skeleton input-loader"></div>
                                 <div class="dropdown d-none real-label">
                                     <select class="select form-control status" id="status" name="status">
@@ -36,13 +31,11 @@
                                     </select>
                                 </div>
                             </div>
-
                             <input type="hidden" id="assign_staff" name="assign_staff">
 
                             <!-- Info Grid -->
                             <div class="p-3">
                                 <div class="row row-cols-xl-5 row-cols-md-3 row-cols-sm-2 row-cols-1 row-gap-3">
-
                                     <div class="col">
                                         <div class="skeleton input-skeleton input-loader"></div>
                                         <h6 class="fs-14 fw-semibold mb-1 d-none real-label">{{ __('admin.common.created_by') }}</h6>
@@ -101,7 +94,6 @@
                         <div class="mb-3">
                             <div class="skeleton label-skeleton label-loader"></div>
                             <h6 class="mb-2 d-none real-label">{{ __('admin.common.reply') }}</h6>
-
                             <div class="skeleton textarea-skeleton input-loader mb-2"></div>
                             <textarea id="reply" name="reply" class="form-control summernote d-none real-label"></textarea>
                             <p class="mt-2 d-none real-label">{{ __('admin.common.maximum_60_words') }}</p>
@@ -115,7 +107,6 @@
                             <div class="skeleton button-skeleton label-loader"></div>
                             <button type="submit" class="btn btn-primary d-none real-label send_reply_btn">{{ __('admin.support.send_reply') }}</button>
                         </div>
-
                     </form>
 
                     <!-- Ticket History -->
@@ -131,7 +122,7 @@
 
         </div>
     </div>
-		<!-- /Page Wrapper -->
+	<!-- /Page Wrapper -->
 @endsection
 @push('scripts')
 <script src="{{ asset('assets/js/communication/adminticketdetails.js') }}"></script>

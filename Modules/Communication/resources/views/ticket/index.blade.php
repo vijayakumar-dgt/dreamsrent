@@ -297,7 +297,6 @@
         @include('admin.partials.footer')
     </div>
     <!-- /Page Wrapper -->
-
    
     <!-- Edit Status ticket -->
     <div class="modal fade" id="edit_ticket">
@@ -340,6 +339,7 @@
             </div>
         </div>
     </div>
+
     <!-- Edit Status ticket -->
     <div class="modal fade" id="histroy_ticket">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -366,6 +366,7 @@
             </div>
         </div>
     </div>
+    
     <!-- Delete  -->
     <div class="modal fade" id="delete_ticket">
         <div class="modal-dialog modal-dialog-centered modal-sm">
