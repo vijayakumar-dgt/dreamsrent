@@ -1,10 +1,11 @@
 @extends('admin.admin')
 
+@section('meta_title', __('admin.general_settings.bank_accounts') . ' || ' . $companyName)
+
 @section('content')
 <!-- Page Wrapper -->
 <div class="page-wrapper">
     <div class="content me-0 pb-0">
-
         <!-- Breadcrumb -->
         <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
             <div class="my-auto mb-2">
@@ -20,7 +21,6 @@
             </div>
         </div>
         <!-- /Breadcrumb -->
-
         <div class="row">
             @include('admin.partials.general_settings_side_menu')
             <div class="col-xl-9">
@@ -47,15 +47,13 @@
                                 <div>
                                     <div class="mb-2 me-2">
                                         @if (hasPermission($permissions, 'finance_settings', 'create'))
-
                                         <div class="skeleton label-skeleton label-loader"></div>
                                         <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center d-none real-label" data-bs-toggle="modal" data-bs-target="#add_bank" id="bank_clear"><i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new_account') }}</a>
-                                  @endif
+                                        @endif
                                     </div>
                                 </div>
                             </div>
                             <!-- /Table Header -->
-
                             <div class="custom-datatable-filter table-responsive table-loader">
                                 <table class="table table-bordered">
                                     <thead class="thead-light">
@@ -166,7 +164,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
                             <div class="custom-datatable-filter table-responsive brandstable country-table d-none real-table">
                                 <table class="table datatable" id="bankTable">
                                     <thead class="thead-light">
@@ -178,13 +175,11 @@
                                             <th>{{ __('admin.general_settings.ifsc') }}</th>
                                             <th>{{ __('admin.general_settings.status') }}</th>
                                             @if (hasPermission($permissions, 'finance_settings', 'edit') || hasPermission($permissions, 'finance_settings', 'delete'))
-
                                             <th>{{ __('admin.common.action') }}</th>
                                             @endif
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>
@@ -194,9 +189,7 @@
                 </div>
             </div>
         </div>
-
     </div>
-
     @include('admin.partials.footer')
 </div>
 <!-- /Page Wrapper -->

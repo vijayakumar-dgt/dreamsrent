@@ -25,7 +25,6 @@
                         @endif
                     </ul>
                 </li>
-
                 @if (hasPermission($permissions, 'website_settings', 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.general_settings.website_settings')) }}</span></li>
                 <li>
@@ -94,7 +93,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (hasPermission($permissions, 'rental_settings', 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.general_settings.rental_settings')) }}</span></li>
                 <li>
@@ -112,7 +110,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (hasPermission($permissions, 'app_settings', 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.general_settings.app_settings')) }}</span></li>
                 <li>
@@ -130,7 +127,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (hasPermission($permissions, 'system_settings', 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.general_settings.system_settings')) }}</span></li>
                 <li>
@@ -158,7 +154,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (hasPermission($permissions, 'finance_settings', 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.general_settings.finance_settings')) }}</span></li>
                 <li>
@@ -186,7 +181,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (hasPermission($permissions, 'other_settings', 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.general_settings.other_settings')) }}</span></li>
                 <li>
@@ -219,7 +213,6 @@
                     </ul>
                 </li>
                 @endif
-
             </ul>
         </div>
     </div>

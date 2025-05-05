@@ -28,7 +28,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (haspermission($permissions, ['reservations', 'calendar', 'enquiries', 'quotations'], 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.bookings.bookings')) }}</span></li>
                 <li>
@@ -40,7 +39,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (haspermission($permissions, 'calendar', 'view'))
                         <li class="{{ request()->routeIs('calendar.index') ? 'active' : '' }}">
                             <a href="{{ route('calendar.index') }}">
@@ -48,7 +46,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (haspermission($permissions, 'quotations', 'view'))
                         <li class="{{ request()->routeIs('quotations.index') ? 'active' : '' }}">
                             <a href="{{ route('quotations.index') }}">
@@ -56,9 +53,8 @@
                             </a>
                         </li>
                         @endif
-
                         @if (haspermission($permissions, 'enquiries', 'view'))
-                        <li class="{{ request()->routeIs('enquiry.index') ? 'active' : ''}}">
+                        <li class="{{ request()->routeIs('enquiry.index') ? 'active' : '' }}">
                             <a href="{{ route('enquiry.index') }}">
                                 <i class="ti ti-mail"></i><span>{{ __('admin.common.enquiries') }}</span>
                             </a>
@@ -67,7 +63,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (haspermission($permissions, ['customers', 'drivers', 'locations'], 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.manage.manage')) }}</span></li>
                 <li>
@@ -79,7 +74,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (haspermission($permissions, 'drivers', 'view'))
                         <li class="{{ request()->routeIs('driver.index') ? 'active' : ''}}">
                             <a href="{{ route('driver.index') }}">
@@ -87,7 +81,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (haspermission($permissions, 'locations', 'view'))
                         <li class="{{ request()->routeIs('locations') ? 'active' : ''}}">
                             <a href="{{ route('locations') }}">
@@ -98,7 +91,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (haspermission($permissions, ['vehicles', 'vehicle_attributes', 'extra_service', 'inspections', 'maintenance'], 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.rentals.rentals')) }}</span></li>
                 <li>
@@ -110,7 +102,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (haspermission($permissions, 'vehicle_attributes', 'view'))
                         <li class="submenu">
                             <a href="javascript:void(0);"
@@ -137,7 +128,6 @@
                             </ul>
                         </li>
                         @endif
-
                         @if (haspermission($permissions, 'extra_service', 'view'))
                         <li class="{{ request()->routeIs('extra_services') ? 'active' : '' }}">
                             <a href="{{ route('extra_services') }}">
@@ -145,7 +135,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (haspermission($permissions, 'inspections', 'view'))
                         <li class="{{ request()->routeIs('inspection.index') ? 'active' : '' }}">
                             <a href="{{ route('inspection.index') }}">
@@ -153,7 +142,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (haspermission($permissions, 'maintenance', 'view'))
                         <li class="{{ request()->routeIs('maintenance.index') ? 'active' : '' }}">
                             <a href="{{ route('maintenance.index') }}">
@@ -161,7 +149,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (haspermission($permissions, 'reviews', 'view'))
                         <li class="{{ request()->routeIs('admin.reviews') ? 'active' : '' }}">
                             <a href="{{ route('admin.reviews') }}">
@@ -172,7 +159,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (hasPermission($permissions, ['invoices', 'payments'], 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.finance_accounts.finance_accounts')) }}</span></li>
                 <li>
@@ -184,7 +170,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'payments', 'view'))
                         <li class="{{ request()->routeIs('payment.payment') ? 'active' : '' }}">
                             <a href="{{ route('payment.payment') }}">
@@ -195,7 +180,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (hasPermission($permissions, ['messages', 'newsletters'], 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.others.others')) }}</span></li>
                 <li>
@@ -207,7 +191,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'newsletters', 'view'))
                         <li class="{{ request()->routeIs('admin.newsletters') ? 'active' : '' }}">
                             <a href="{{ route('admin.newsletters') }}">
@@ -218,7 +201,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (hasPermission($permissions, ['page', 'section', 'menu_management', 'testimonials', 'faq', 'blogs', 'cms_locations', 'how_it_works', 'copyright'], 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.cms.cms')) }}</span></li>
                 <li>
@@ -230,7 +212,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'section', 'view'))
                         <li class="{{ request()->routeIs('admin.indexSection') ? 'active' : '' }}">
                             <a href="{{ route('admin.indexSection') }}">
@@ -238,7 +219,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'menu_management', 'view'))
                         <li class="{{ request()->routeIs('admin.menu') ? 'active' : '' }}">
                             <a href="{{ route('admin.menu') }}">
@@ -246,7 +226,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'blogs', 'view'))
                         <li class="submenu">
                             <a href="javascript:void(0);" class="{{ request()->is('admin/content/blog-category') || request()->is('admin/content/blogs') || request()->is('admin/content/blog-comments') || request()->is('admin/content/blog-tags') || request()->is('admin/content/add-blog') || request()->is('admin/content/blogs/*') ? 'subdrop active' : '' }}">
@@ -260,7 +239,6 @@
                             </ul>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'cms_locations', 'view'))
                         <li class="submenu">
                             <a href="javascript:void(0);" class="{{ request()->routeIs(['country.index', 'state.index', 'city.index']) ? 'subdrop active' : '' }}">
@@ -274,7 +252,6 @@
                             </ul>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'testimonials', 'view'))
                         <li class="{{ request()->routeIs('admin.testimoials') ? 'active' : '' }}">
                             <a href="{{ route('admin.testimoials') }}">
@@ -282,7 +259,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'faq', 'view'))
                         <li class="{{ request()->routeIs('admin.faq') ? 'active' : '' }}">
                             <a href="{{ route('admin.faq') }}">
@@ -290,7 +266,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'how_it_works', 'view'))
                         <li class="{{ request()->routeIs('admin.howItWorks') ? 'active' : '' }}">
                             <a href="{{ route('admin.howItWorks') }}">
@@ -301,7 +276,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (hasPermission($permissions, ['income_vs_expense', 'earnings'], 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.common.reports')) }}</span></li>
                 <li>
@@ -313,7 +287,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'earnings', 'view'))
                         <li class="{{ request()->routeIs('admin.earning-report') ? 'active' : '' }}">
                             <a href="{{ route('admin.earning-report') }}">
@@ -324,7 +297,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (hasPermission($permissions, ['contact_messages', 'announcements', 'tickets'], 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.support.support')) }}</span></li>
                 <li>
@@ -336,7 +308,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'announcements', 'view'))
                         <li class="{{ request()->routeIs('communication.announcement') ? 'active' : '' }}">
                             <a href="{{ route('communication.announcement') }}">
@@ -344,7 +315,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'tickets', 'view'))
                         <li class="{{ request()->routeIs('communication.ticket') ? 'active' : '' }}">
                             <a href="{{ route('communication.ticket') }}">
@@ -355,7 +325,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (hasPermission($permissions, ['users', 'roles_permissions'], 'view'))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.user_management.user_management')) }}</span></li>
                 <li>
@@ -367,7 +336,6 @@
                             </a>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'roles_permissions', 'view'))
                         <li class="{{ request()->routeIs(['admin.roles-permisions', 'admin.permissions']) ? 'active' : '' }}">
                             <a href="{{ route('admin.roles-permisions') }}">
@@ -378,7 +346,6 @@
                     </ul>
                 </li>
                 @endif
-
                 @if (hasPermission($permissions, ['account_settings', 'website_settings', 'rental_settings', 'app_settings', 'system_settings', 'finance_settings', 'other_settings'], 'view') || request()->routeIs(['admin.profile-settings']))
                 <li class="menu-title"><span>{{ strtoupper(__('admin.general_settings.settings_configuration')) }}</span></li>
                 <li>
@@ -402,7 +369,6 @@
                                 @endif
                             </ul>
                         </li>
-
                         @if (hasPermission($permissions, 'website_settings', 'view'))
                         <li class="submenu">
                             <a href="javascript:void(0);" class="{{ request()->routeIs(['admin.company-settings','admin.localization','admin.prefixes-settings','admin.seosetup-settings','admin.languages','admin.copyright','admin.maintenance-settings','admin.ai-configuration', 'admin.theme-settings', 'admin.otp-settings']) ? 'subdrop active' : '' }}">
@@ -449,7 +415,6 @@
                             </ul>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'rental_settings', 'view'))
                         <li class="submenu">
                             <a href="javascript:void(0);" class="{{ request()->routeIs(['admin.rental-settings', 'insurance.index']) ? 'subdrop active' : '' }}">
@@ -466,7 +431,6 @@
                             </ul>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'app_settings', 'view'))
                         <li class="submenu">
                             <a href="javascript:void(0);" class="{{ request()->routeIs(['admin.signature-setting', 'admin.invoiceSettings-settings']) ? 'subdrop active' : '' }}">
@@ -483,7 +447,6 @@
                             </ul>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'system_settings', 'view'))
                         <li class="submenu">
                             <a href="javascript:void(0);" class="{{ request()->routeIs(['email_templates.index', 'admin.smsGateway-settings', 'admin.gdpr-cookies-settings', 'admin.email-settings']) ? 'subdrop active' : '' }}">
@@ -506,7 +469,6 @@
                             </ul>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'finance_settings', 'view'))
                         <li class="submenu">
                             <a href="javascript:void(0);" class="{{ request()->routeIs(['admin.currencies', 'admin.tax-rates']) ? 'subdrop active' : '' }}">
@@ -529,7 +491,6 @@
                             </ul>
                         </li>
                         @endif
-
                         @if (hasPermission($permissions, 'other_settings', 'view'))
                         <li class="submenu">
                             <a href="javascript:void(0);" class="{{ request()->routeIS(['admin.sitemap','admin.storage-settings', 'admin.database-settings', 'admin.system-backup-settings']) ? 'subdrop active' : '' }}">

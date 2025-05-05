@@ -45,10 +45,10 @@ class CurrencyController extends Controller
                 /** @var \Modules\GeneralSetting\Models\Currency $currency */
                 $currency = Currency::find($request->id);
                 $currency->status         = $request->status == 'on' ? 1 : 0;
-                $successMessage = __('admin.general_settings.currency_created_successfully');
+                $successMessage = __('admin.general_settings.currency_updated_successfully');
             } else {
                 $currency = new Currency();
-                $successMessage = __('admin.general_settings.currency_updated_successfully');
+                $successMessage = __('admin.general_settings.currency_created_successfully');
             }
             $currency->currency_name  = $request->currency_name;
             $currency->code           = $request->code;

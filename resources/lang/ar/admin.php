@@ -2270,31 +2270,23 @@ return [
     'title_required' => 'عنوان الصفحة مطلوب.',
     'title_min' => 'يجب أن يكون العنوان 3 أحرف على الأقل.',
     'title_max' => 'لا يمكن أن يتجاوز العنوان 255 حرفًا.',
-
     'slug_required' => 'المُعرّف (Slug) مطلوب.',
     'slug_min' => 'يجب أن يكون المُعرّف 3 أحرف على الأقل.',
     'slug_max' => 'لا يمكن أن يتجاوز المُعرّف 255 حرفًا.',
-
     'keyword_required' => 'الكلمات المفتاحية مطلوبة.',
-
     'description_required' => 'الوصف مطلوب.',
     'description_min' => 'يجب أن يكون الوصف 10 أحرف على الأقل.',
-
     'meta_title_required' => 'عنوان الميتا مطلوب.',
     'meta_title_min' => 'يجب أن يكون عنوان الميتا 3 أحرف على الأقل.',
     'meta_title_max' => 'لا يمكن أن يتجاوز عنوان الميتا 255 حرفًا.',
-
     'meta_keywords_required' => 'كلمات الميتا المفتاحية مطلوبة.',
     'meta_description_required' => 'وصف الميتا مطلوب.',
     'meta_description_min' => 'يجب أن يكون وصف الميتا 10 أحرف على الأقل.',
-
     'canonical_required' => 'الرابط الكنسي مطلوب.',
     'canonical_url' => 'يرجى إدخال رابط صحيح.',
-
     'og_title_required' => 'عنوان OG مطلوب.',
     'og_title_min' => 'يجب أن يكون عنوان OG 3 أحرف على الأقل.',
     'og_title_max' => 'لا يمكن أن يتجاوز عنوان OG 255 حرفًا.',
-
     'og_description_required' => 'وصف OG مطلوب.',
     'og_description_min' => 'يجب أن يكون وصف OG 10 أحرف على الأقل.',
     'please_wait' => 'يرجى الانتظار...',
@@ -2350,7 +2342,6 @@ return [
     'DUE_DATE' => 'تاريخان',
     'INVOICE_AMOUNT' => 'مبلغ الفاتورة'
   ],
-
   'blog' =>
   [
     'blogs' => 'مدونات',
@@ -2436,5 +2427,6 @@ return [
     'no_blog_found' => 'لم يتم العثور على مدونة',
     'no_data_found' => 'لم يتم العثور على بيانات',
     'image_dimensions_must_be_exactly_735_310_pixels' => 'يجب أن تكون أبعاد الصورة 735 × 310 بكسل بالضبط',
+    'blog_details' => 'تفاصيل المدونة',
   ],
 ];

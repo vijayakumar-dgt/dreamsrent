@@ -1,197 +1,164 @@
 @extends('admin.admin')
+
+@section('meta_title', __('admin.general_settings.email_templates') . ' || ' . $companyName)
+
 @section('content')
-<div class="page-wrapper">
-    <div class="content me-0 pb-0 me-lg-4">
-
-        <!-- Breadcrumb -->
-        <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-            <div class="my-auto mb-2">
-                <h2 class="mb-1">{{ __('admin.general_settings.settings') }}</h2>
-                <nav>
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ __('admin.general_settings.settings') }}</li>
-                    </ol>
-                </nav>
+    <!-- Page Wrapper -->
+    <div class="page-wrapper">
+        <div class="content me-0 pb-0 me-lg-4">
+            <!-- Breadcrumb -->
+            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
+                <div class="my-auto mb-2">
+                    <h2 class="mb-1">{{ __('admin.general_settings.settings') }}</h2>
+                    <nav>
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('admin.general_settings.settings') }}</li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
-        </div>
-        <!-- /Breadcrumb -->
-
-        <!-- Settings Prefix -->
-        <div class="row">
-            @include('admin.partials.general_settings_side_menu')
-            <div class="col-lg-9">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="fw-bold">{{ __('admin.general_settings.system_settings') }}</h5>
-                    </div>
-                    <div class="card-body">
-
-                        <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
-                            <div class="d-flex align-items-center flex-wrap row-gap-3">
-                                <h6 class="fw-bold mb-0">{{ __('admin.general_settings.email_templates') }}</h6>
+            <!-- /Breadcrumb -->
+            <!-- Settings Prefix -->
+            <div class="row">
+                @include('admin.partials.general_settings_side_menu')
+                <div class="col-lg-9">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="fw-bold">{{ __('admin.general_settings.system_settings') }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
+                                <div class="d-flex align-items-center flex-wrap row-gap-3">
+                                    <h6 class="fw-bold mb-0">{{ __('admin.general_settings.email_templates') }}</h6>
+                                </div>
+                                @if (hasPermission($permissions, 'system_settings', 'create'))
+                                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
+                                    <a href="javascript:void(0);" data-bs-toggle="modal" id="add_new_template" data-bs-target="#add_email" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new_template') }}</a>
+                                </div>
+                                @endif
                             </div>
-                            @if (hasPermission($permissions, 'system_settings', 'create'))
-
-                            <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
-                                <a href="javascript:void(0);" data-bs-toggle="modal" id="add_new_template" data-bs-target="#add_email" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new_template') }}</a>
+                            <div class="custom-datatable-filter table-responsive table-loader">
+                                <table class="table table-bordered">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>
+                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
+                                            <th>
+                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
+                                            <th>
+                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
+                                            <th>
+                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            @endif
+                            <div class="custom-datatable-filter table-responsive d-none real-table">
+                                <table class="table" id="emailTemplateTable">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>{{ __('admin.general_settings.template_name') }}</th>
+                                            <th>{{ __('admin.general_settings.created_on') }}</th>
+                                            <th>{{ __('admin.general_settings.status') }}</th>
+                                            @if (hasPermission($permissions, 'system_settings', 'edit') || hasPermission($permissions, 'system_settings', 'delete'))
+                                            <th>{{ __('admin.common.action') }}</th>
+                                            @endif
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-footer"></div>
                         </div>
-                        <div class="custom-datatable-filter table-responsive table-loader">
-                            <table class="table table-bordered">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="custom-datatable-filter table-responsive d-none real-table">
-                            <table class="table" id="emailTemplateTable">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th>{{ __('admin.general_settings.template_name') }}</th>
-                                        <th>{{ __('admin.general_settings.created_on') }}</th>
-                                        <th>{{ __('admin.general_settings.status') }}</th>
-                                        @if (hasPermission($permissions, 'system_settings', 'edit') || hasPermission($permissions, 'system_settings', 'delete'))
-                                         <th>{{ __('admin.common.action') }}</th>
-                                        @endif
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Skeleton loader rows -->
-                                    <tr>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                    </tr>
-                                    <tr>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                    </tr>
-                                    <tr>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        <td><div class="skeleton data-skeleton data-loader"></div></td>
-
-                                    </tr>
-                                    
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="table-footer"></div>
                     </div>
                 </div>
             </div>
+            <!-- /Settings Prefix -->
         </div>
-        <!-- /Settings Prefix -->
+        @include('admin.partials.footer')
     </div>
-    @include('admin.partials.footer')
-    
+    <!-- /Page Wrapper -->
+
     <div class="modal fade addmodal" id="add_email">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -275,13 +242,13 @@
                             </div>
                         </div>
                         <div class="row">
-                             <div class="col-md-12">
-                                 <div class="mb-0">
-                                     <label for="form-label">{{ __('admin.general_settings.notification_content') }} <em class="text-danger">*</em></label>
-                                         <textarea name="notification_content" id="notification_content" cols="30" rows="5" class="form-control" required></textarea>
-                                 </div>
-                                 <span id="notification_content_error" class="text-danger error-text"></span>
-                             </div>
+                            <div class="col-md-12">
+                                <div class="mb-0">
+                                    <label for="form-label">{{ __('admin.general_settings.notification_content') }} <em class="text-danger">*</em></label>
+                                        <textarea name="notification_content" id="notification_content" cols="30" rows="5" class="form-control" required></textarea>
+                                </div>
+                                <span id="notification_content_error" class="text-danger error-text"></span>
+                            </div>
                         </div>
 
                     </div>
@@ -323,6 +290,7 @@
             </div>
         </div>
     </div>
+
     <!-- Delete  -->
     <div class="modal fade" id="delete-modal">
         <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -346,8 +314,8 @@
         </div>
     </div>
     <!-- /Delete -->
-</div>
 @endsection
+
 @push('scripts')
 <script src="{{ asset('backend/assets/js/general_setting/email_template.js') }}"></script>
 @endpush

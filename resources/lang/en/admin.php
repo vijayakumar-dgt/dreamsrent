@@ -1884,7 +1884,6 @@ return array(
     'city_update_success' => 'City updated successfully.',
     'city_delete_confirmation' => 'Are you sure you want to delete city?',
     'city_delete_success' => 'City deleted successfully.',
-
   ),
   'support' =>
   array(
@@ -2285,31 +2284,23 @@ return array(
     'title_required' => 'Title is required.',
     'title_min' => 'Title must be at least 3 characters.',
     'title_max' => 'Title cannot exceed 255 characters.',
-
     'slug_required' => 'Page Slug is required.',
     'slug_min' => 'Slug must be at least 3 characters.',
     'slug_max' => 'Slug cannot exceed 255 characters.',
-
     'keyword_required' => 'Keywords are required.',
-
     'description_required' => 'Description is required.',
     'description_min' => 'Description must be at least 10 characters.',
-
     'meta_title_required' => 'Meta Title is required.',
     'meta_title_min' => 'Meta Title must be at least 3 characters.',
     'meta_title_max' => 'Meta Title cannot exceed 255 characters.',
-
     'meta_keywords_required' => 'Meta Keywords are required.',
     'meta_description_required' => 'Meta Description is required.',
     'meta_description_min' => 'Meta Description must be at least 10 characters.',
-
     'canonical_required' => 'Canonical URL is required.',
     'canonical_url' => 'Enter a valid URL.',
-
     'og_title_required' => 'OG Title is required.',
     'og_title_min' => 'OG Title must be at least 3 characters.',
     'og_title_max' => 'OG Title cannot exceed 255 characters.',
-
     'og_description_required' => 'OG Description is required.',
     'og_description_min' => 'OG Description must be at least 10 characters.',
     'please_wait' => 'Please Wait...',
@@ -2452,6 +2443,7 @@ return array(
     'no_blog_found' => 'No Blog Found',
     'no_data_found' => 'No Data Found',
     'image_dimensions_must_be_exactly_735_310_pixels' => 'Image dimensions must be exactly 735 x 310 pixels',
+    'blog_details' => 'Blog Details',
   ],
 
 );

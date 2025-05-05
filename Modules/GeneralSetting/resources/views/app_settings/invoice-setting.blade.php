@@ -1,10 +1,11 @@
 @extends('admin.admin')
 
+@section('meta_title', __('admin.general_settings.invoice_settings') . ' || ' . $companyName)
+
 @section('content')
     <!-- Page Wrapper -->
 	<div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-
              <!-- Breadcrumb -->
 				<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 					<div class="my-auto mb-2">
@@ -20,7 +21,6 @@
 					</div>
 				</div>
 			 <!-- /Breadcrumb -->
-
             <!-- Settings Prefix -->
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
@@ -62,7 +62,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <!-- Invoice Prefix -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
@@ -77,7 +76,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <!-- Invoice Due -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
@@ -99,7 +97,6 @@
                                         <span class="text-danger" id="invoice_due_error"></span>
                                     </div>
                                 </div>
-
                                 <!-- Invoice Round Off -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
@@ -125,7 +122,6 @@
                                         <span class="text-danger" id="invoice_round_off_error"></span>
                                     </div>
                                 </div>
-
                                 <!-- Show Company Details -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
@@ -141,7 +137,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <!-- Invoice Terms -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
@@ -177,15 +172,12 @@
             </div>
             <!-- /Settings Prefix -->
         </div>
-
         @include('admin.partials.footer')
     </div>
-		<!-- /Page Wrapper -->
-
-
+    <!-- /Page Wrapper -->
 @endsection
 @push('scripts')
-    <script src="{{ asset('backend/assets/js/general_setting/invoice-setting.js') }}"></script>
+<script src="{{ asset('backend/assets/js/general_setting/invoice-setting.js') }}"></script>
 @endpush
 
 

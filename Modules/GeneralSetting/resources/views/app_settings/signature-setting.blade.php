@@ -1,26 +1,26 @@
 @extends('admin.admin')
 
+@section('meta_title', __('admin.general_settings.signatures') . ' || ' . $companyName)
+
 @section('content')
     <!-- Page Wrapper -->
 	<div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-
             <!-- Breadcrumb -->
-				<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-					<div class="my-auto mb-2">
-						<h2 class="mb-1">{{ __('admin.general_settings.settings') }}</h2>
-						<nav>
-							<ol class="breadcrumb mb-0">
-								<li class="breadcrumb-item">
-									<a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-								</li>
-								<li class="breadcrumb-item active" aria-current="page">{{ __('admin.general_settings.settings') }}</li>
-							</ol>
-						</nav>
-					</div>
-				</div>
+            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
+                <div class="my-auto mb-2">
+                    <h2 class="mb-1">{{ __('admin.general_settings.settings') }}</h2>
+                    <nav>
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('admin.general_settings.settings') }}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
 			<!-- /Breadcrumb -->
-
             <!-- Settings Prefix -->
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
@@ -45,7 +45,6 @@
                                 </div>
                                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                                     @if (hasPermission($permissions, 'app_settings', 'create'))
-
                                     <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_signatures" class="btn btn-primary d-none real-label">
                                         <i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new_signature') }}
                                     </a>
@@ -53,7 +52,6 @@
                                     @endif
                                 </div>
                             </div>
-
                             <!-- Skeleton Loader Table -->
                             <div class="custom-datatable-filter table-responsive table-loader">
                                 <table class="table">
@@ -81,7 +79,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
                             <!-- Real Table (hidden initially) -->
                             <div class="custom-datatable-filter d-none real-table">
                                 <table class="table" id="signatureTable">
@@ -97,7 +94,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Populated by AJAX -->
                                     </tbody>
                                 </table>
                             </div>
@@ -122,9 +118,7 @@
                                 <!-- Signature Image Upload -->
                                 <div class="mb-3">
                                     <label for="signature_image" class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
-
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
-
                                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
                                             <img id="profile_photo_preview" src="/backend/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
                                             <a href="javascript:void(0);" class="uploadimgtrash btn btn-sm rounded-circle" onclick="removeImage()">
@@ -132,7 +126,6 @@
                                             </a>
                                         </div>
                                         <div class="profile-upload">
-
                                             <div class="profile-uploader d-flex align-items-center">
                                                 <div class="drag-upload-btn btn btn-md btn-dark">
                                                     <i class="ti ti-photo-up fs-14"></i>
@@ -140,7 +133,6 @@
                                                     <input type="file" class="form-control image-sign" id="signature_image" name="signature_image" accept="image/*" onchange="previewImage(event)">
                                                 </div>
                                             </div>
-
                                             <div class="mt-2">
                                                 <p class="fs-14">{{ __('admin.general_settings.upload_image_size_180_180_within_5MB') }}</p>
                                             </div>
@@ -148,7 +140,6 @@
                                     </div>
                                     <span id="signature_image_error" class="text-danger error-text"></span>
                                 </div>
-
                                 <!-- Default Checkbox -->
                                 <div class="mb-3">
                                     <label class="form-check-label form-label mb-3" for="is_default">
@@ -157,7 +148,6 @@
                                     </label>
                                     <span id="is_default_error" class="text-danger error-text"></span>
                                 </div>
-
                                 <!-- Signature Name -->
                                 <div class="mb-3">
                                     <label for="signature_name" class="form-label">{{ __('admin.general_settings.signatures_name') }} <span class="text-danger">*</span></label>
@@ -166,7 +156,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="modal-footer">
                             <div class="d-flex justify-content-center">
                                 <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
@@ -181,7 +170,6 @@
             <div class="modal-dialog modal-dialog-centered modal-md">
                 <form id="editSignatureForm">
                     <input type="hidden" id="edit_signature_id" name="id">
-
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="mb-0">{{ __('admin.general_settings.edit_signature') }}</h4>
@@ -196,7 +184,6 @@
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 p-2 flex-shrink-0 text-dark frames">
                                             <img id="edit_signature_preview" src="backend/assets/img/icons/sign.svg" class="img-fluid rounded object-fit-contain" alt="img">
-
                                         </div>
                                         <div class="profile-upload">
                                             <div class="profile-uploader d-flex align-items-center">
@@ -212,12 +199,10 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="form-check mb-3">
                                     <input type="checkbox" id="edit_signature_default" name="is_default" class="form-check-input" value="1">
                                     <label for="edit_signature_default" class="form-check-label form-label">{{ __('admin.general_settings.mark_as_default') }}</label>
                                 </div>
-
                                 <div class="mb-0">
                                     <label class="form-label">{{ __('admin.general_settings.signatures_name') }} <span class="text-danger">*</span></label>
                                     <input type="text" id="edit_signature_name" name="signature_name" class="form-control">
@@ -225,7 +210,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="modal-footer justify-content-between">
                             <div class="form-check form-check-md form-switch me-2">
                                 <input type="checkbox" id="edit_signature_status" name="status" class="form-check-input" value="1">
@@ -263,12 +247,10 @@
         </div>
         @include('admin.partials.footer')
     </div>
-		<!-- /Page Wrapper -->
-
-
+    <!-- /Page Wrapper -->
 @endsection
 @push('scripts')
-    <script src="{{ asset('backend/assets/js/general_setting/signature-setting.js') }}"></script>
+<script src="{{ asset('backend/assets/js/general_setting/signature-setting.js') }}"></script>
 @endpush
 
 

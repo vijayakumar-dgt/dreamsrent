@@ -1,7 +1,6 @@
 <!-- Header -->
 <div class="header">
     <div class="main-header">
-
         <div class="header-left">
             <a href="#" class="logo">
                 <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" alt="Logo">
@@ -10,7 +9,6 @@
                 <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" alt="Logo">
             </a>
         </div>
-
         <a id="mobile_btn" class="mobile_btn" href="#sidebar">
             <span class="bar-icon">
                 <span></span>
@@ -18,10 +16,8 @@
                 <span></span>
             </span>
         </a>
-
         <div class="header-user">
             <div class="nav user-menu nav-list">
-
                 <div class="me-auto d-flex align-items-center" id="header-search">
                     <a id="toggle_btn" href="javascript:void(0);">
                         <i class="ti ti-menu-deep"></i>
@@ -34,9 +30,7 @@
                     </div>
                     @endif
                 </div>
-
                 <div class="d-flex align-items-center header-icons">
-
                     <!-- Flag -->
                     <div class="nav-item dropdown has-arrow flag-nav nav-item-box">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
@@ -57,7 +51,6 @@
                         </ul>
                     </div>
                     <!-- /Flag -->
-
                     <div class="theme-item">
                         <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle btn btn-menubar">
                             <i class="ti ti-moon"></i>
@@ -86,7 +79,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div>
                         <a href="/admin/messages" class="btn btn-menubar position-relative">
                             <i class="ti ti-message"></i>
@@ -97,7 +89,6 @@
                             <i class="ti ti-chart-bar"></i>
                         </a>
                     </div>
-
                     <div class="dropdown profile-dropdown">
                         <a href="javascript:void(0);" class="d-flex align-items-center" data-bs-toggle="dropdown"  data-bs-auto-close="outside">
                             <span class="avatar avatar-sm">
@@ -138,7 +129,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Mobile Menu -->
         <div class="dropdown mobile-user-menu">
             <a href="javascript:void(0);" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -151,8 +141,6 @@
             </div>
         </div>
         <!-- /Mobile Menu -->
-
     </div>
-
 </div>
 <!-- /Header -->

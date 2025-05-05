@@ -139,7 +139,7 @@ class BlogsController extends Controller
         $tags = BlogTag::where('deleted_at', null)->where('language_id', $languageId)->get();
         return view('generalsetting::cms.blogs.blogs', compact('blogPosts', 'languages', 'categories', 'tags'));
     }
-    public function blogDetails(int $id): View
+    public function blogDetails(string $id): View
     {
         $languages = Language::with('transLang')->get();
         $blogPosts = BlogPost::Join('blog_categories', 'blog_posts.category', '=', 'blog_categories.id')

@@ -112,7 +112,7 @@ class AppServiceProvider extends ServiceProvider
 
             $companyPhoneNumber = $companyPhoneNumber ? $companyPhoneNumber->value : '';
             $companyEmail = $companyEmail ? $companyEmail->value : '';
-            $companyName = $companyName ? $companyName->value : '';
+            $companyName = $companyName ? $companyName->value : 'Dreams Rent';
             $theme = $defaultTheme ? $defaultTheme->value : 1;
 
             $logoSetting = GeneralSetting::where('group_id', 16)->pluck('value', 'key')->toArray();

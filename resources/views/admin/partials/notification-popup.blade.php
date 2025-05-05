@@ -19,7 +19,7 @@
 @else
 <div class="notification-list">
     <div class="text-center">
-            <p class="mb-0">No Notifications</p>
+        <p class="mb-0">No Notifications</p>
     </div>
 </div>
 @endif
