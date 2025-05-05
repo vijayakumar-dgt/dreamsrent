@@ -10,20 +10,21 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\UploadedFile;
 
 class SignatureSettingsController extends Controller
 {
-    public function signature():View
+    public function signature(): View
     {
         return view('generalsetting::app_settings.signature-setting');
     }
 
-    public function clearCache():View
+    public function clearCache(): View
     {
         return view('generalsetting::other_settings.clear-cache');
     }
 
-    public function clear(Request $request):JsonResponse
+    public function clear(Request $request): JsonResponse
     {
         try {
             Artisan::call('optimize:clear');
@@ -41,7 +42,7 @@ class SignatureSettingsController extends Controller
         }
     }
 
-    public function store(Request $request):JsonResponse
+    public function store(Request $request): JsonResponse
     {
         try {
             $request->validate([
@@ -50,8 +51,12 @@ class SignatureSettingsController extends Controller
                 'is_default' => 'nullable|boolean',
             ]);
 
+            $imagePath = null;
             if ($request->hasFile('signature_image')) {
-                $imagePath = $request->file('signature_image')->store('signatures', 'public');
+                $file = $request->file('signature_image');
+                if ($file instanceof UploadedFile) {
+                    $imagePath = uploadFile($file, 'signatures');
+                }
             }
 
             if ($request->is_default) {
@@ -83,7 +88,7 @@ class SignatureSettingsController extends Controller
     }
 
 
-    public function update(Request $request):JsonResponse
+    public function update(Request $request): JsonResponse
     {
         try {
             $request->validate([
@@ -98,12 +103,12 @@ class SignatureSettingsController extends Controller
             $signature = SignatureSetting::find($request->id);
 
             if ($request->hasFile('signature_image')) {
-                if ($signature->signature_image && Storage::disk('public')->exists($signature->signature_image)) {
-                    Storage::disk('public')->delete($signature->signature_image);
+                $oldImage = $signature->signature_image ?? '';
+                $file = $request->file('signature_image');
+                if ($file instanceof UploadedFile) {
+                    $imagePath = uploadFile($file, 'signatures', $oldImage);
+                    $signature->signature_image = $imagePath;
                 }
-
-                $imagePath = $request->file('signature_image')->store('signatures', 'public');
-                $signature->signature_image = $imagePath;
             }
 
             if ($request->is_default) {
@@ -130,13 +135,13 @@ class SignatureSettingsController extends Controller
         }
     }
 
-    public function index(Request $request):JsonResponse
+    public function index(Request $request): JsonResponse
     {
         try {
             $search = $request->input('search');
 
             $signatures = SignatureSetting::when($search, function ($query) use ($search) {
-                    $query->where('signature_name', 'like', "%{$search}%");
+                $query->where('signature_name', 'like', "%{$search}%");
             })
                 ->orderBy('created_at', 'desc')
                 ->get()
@@ -164,7 +169,7 @@ class SignatureSettingsController extends Controller
         }
     }
 
-    public function destroy(Request $request):JsonResponse
+    public function destroy(Request $request): JsonResponse
     {
         try {
             $request->validate([

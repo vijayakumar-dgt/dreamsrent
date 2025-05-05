@@ -19,16 +19,13 @@ use Illuminate\Http\JsonResponse;
 
 class LocalizationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index():View
+    public function index(): View
     {
         $timezones = Timezone::get();
         $timeformats = TimeFormat::get();
         $dateformats = DateFormat::get();
         $currencies  = Currency::where('status', 1)->get();
-        $weekdays    = ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"];
+        $weekdays    = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
         $availableLanguages = Language::where('status', 1)->pluck('language_id');
         $languages   = TranslationLanguage::whereIn('id', $availableLanguages)->where('status', 1)->get();
         $data = [
@@ -43,9 +40,8 @@ class LocalizationController extends Controller
         return view('generalsetting::website_settings.localization', $data);
     }
 
-    public function getTimezones(Request $request):JsonResponse
+    public function getTimezones(Request $request): JsonResponse
     {
-        //search
         $search = $request->search;
         $timezones = Timezone::where('name', 'like', "%$search%")->take(10)->get()->map(function ($timezone) {
             return [
@@ -61,18 +57,21 @@ class LocalizationController extends Controller
         ]);
     }
 
-    public function setEnvValue($key, $value):void
+    public function setEnvValue(string $key, string $value): void
     {
         $path = base_path('.env');
 
         if (file_exists($path)) {
-            $escaped = preg_quote('=' . $value, '/');
+            $envContent = file_get_contents($path);
+            if ($envContent === false) {
+                return;
+            }
 
-            if (strpos(file_get_contents($path), "{$key}=") !== false) {
+            if (strpos($envContent, "{$key}=") !== false) {
                 file_put_contents($path, preg_replace(
                     "/^{$key}=.*/m",
                     "{$key}=\"{$value}\"",
-                    file_get_contents($path)
+                    $envContent
                 ));
             } else {
                 file_put_contents($path, PHP_EOL . "{$key}=\"{$value}\"", FILE_APPEND);
@@ -80,7 +79,7 @@ class LocalizationController extends Controller
         }
     }
 
-    public function updateLocalization(Request $request):JsonResponse
+    public function updateLocalization(Request $request): JsonResponse
     {
         DB::beginTransaction();
         try {
@@ -113,12 +112,12 @@ class LocalizationController extends Controller
             } else {
                 $timezoneName = 'UTC';
             }
-
             config(['app.timezone' => $timezoneName]);
-            // $this->setEnvValue('APP_TIMEZONE', $timezoneName);
+
+            /** @var \App\Models\User $authUser */
             $authUser = Auth::guard('admin')->user();
             $refresh = false;
-            if (!empty($authUser) && $authUser->language_id != $request->default_language) {
+            if ($authUser->language_id != $request->default_language) {
                 $authUser->language_id = $request->default_language;
                 $authUser->save();
                 $refresh = true;
@@ -141,9 +140,7 @@ class LocalizationController extends Controller
         }
     }
 
-
-
-    public function getTimezone(Request $request):JsonResponse
+    public function getTimezone(Request $request): JsonResponse
     {
         $settingTimezone = GeneralSetting::where('group_id', 5)->where('key', 'timezone')->first();
         if (!empty($settingTimezone)) {
