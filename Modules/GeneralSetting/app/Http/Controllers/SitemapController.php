@@ -16,33 +16,30 @@ use function PHPUnit\Framework\fileExists;
 
 class SitemapController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index():View
+    public function index(): View
     {
         return view('generalsetting::other_settings.sitemap');
     }
 
-    public function store():JsonResponse
+    public function store(): JsonResponse
     {
         $validator = Validator::make(
             request()->all(),
             [
-            'id' => ['nullable', 'exists:sitemap_urls,id'],
-            'url' => [
-                'required',
-                'string',
-                'max:200',
-                request()->id
-                    ? 'unique:sitemap_urls,url,' . request()->id . ',id'
-                    : 'unique:sitemap_urls,url',
-                'regex:/^(https?:\/\/)(localhost|(\d{1,3}\.){3}\d{1,3}|([a-zA-Z0-9.-]+\.[a-zA-Z]{2,}))(:\d+)?(\/.*)?$/'
-            ]
+                'id' => ['nullable', 'exists:sitemap_urls,id'],
+                'url' => [
+                    'required',
+                    'string',
+                    'max:200',
+                    request()->id
+                        ? 'unique:sitemap_urls,url,' . request()->id . ',id'
+                        : 'unique:sitemap_urls,url',
+                    'regex:/^(https?:\/\/)(localhost|(\d{1,3}\.){3}\d{1,3}|([a-zA-Z0-9.-]+\.[a-zA-Z]{2,}))(:\d+)?(\/.*)?$/'
+                ]
 
             ],
             [
-            'url.unique' => __('admin.general_settings.url_added'),
+                'url.unique' => __('admin.general_settings.url_added'),
             ]
         );
 
@@ -85,12 +82,15 @@ class SitemapController extends Controller
 
             $sitemap = Sitemap::create();
             foreach ($urls as $url) {
-                $sitemap->add(
-                    Url::create($url->url)
-                        ->setLastModificationDate(now())
-                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
-                        ->setPriority(0.8)
-                );
+                $url = $url->url;
+                if ($url) {
+                    $sitemap->add(
+                        Url::create($url)
+                            ->setLastModificationDate(now())
+                            ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                            ->setPriority(0.8)
+                    );
+                }
             }
 
             $sitemapFolder = public_path('sitemaps');
@@ -114,7 +114,7 @@ class SitemapController extends Controller
         }
     }
 
-    public function getSitemapUrls(Request $request):JsonResponse
+    public function getSitemapUrls(Request $request): JsonResponse
     {
         $pageLength = $request->input('length', 10);
         $offset = $request->input('start', 0);
@@ -136,8 +136,8 @@ class SitemapController extends Controller
                 return [
                     'filePath' => !empty($sitemapUrl->sitemap_path) &&
                         file_exists(public_path($sitemapUrl->sitemap_path))
-                            ? asset($sitemapUrl->sitemap_path)
-                            : '',
+                        ? asset($sitemapUrl->sitemap_path)
+                        : '',
                     'url' => $sitemapUrl->url,
                     'sitemap_path' => $sitemapUrl->sitemap_path,
                     'id' => $sitemapUrl->id,
@@ -152,8 +152,9 @@ class SitemapController extends Controller
         ]);
     }
 
-    public function deleteSitemapUrl(Request $request):JsonResponse
+    public function deleteSitemapUrl(Request $request): JsonResponse
     {
+        /** @var \Modules\GeneralSetting\Models\SitemapUrl */
         $sitemapUrl = SitemapUrl::find($request->id);
         try {
             if (!empty($sitemapUrl->sitemap_path) && file_exists(public_path($sitemapUrl->sitemap_path))) {

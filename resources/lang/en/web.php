@@ -60,8 +60,6 @@ return [
         'registration_success' => 'Registration Successfull!',
         'otp_sent_success' => 'OTP sent successfully.',
     ],
-
-
     'home' => [
         'signin' => 'Sign In',
         'signup' => 'Sign Up',
