@@ -38,7 +38,10 @@ class InstallerController extends Controller
     {
         [$checks, $success, $failedChecks] = $this->checkMinimumRequirements();
         session()->put('step-2-complete', true);
-        return view('installer::requirements', compact('checks', 'success', 'failedChecks'));
+
+        /** @var view-string $view */
+        $view = 'installer::requirements';
+        return view($view, compact('checks', 'success', 'failedChecks'));
     }
     /**
      * @return View|RedirectResponse
@@ -47,7 +50,10 @@ class InstallerController extends Controller
     {
         if ($this->requirementsCompleteStatus()) {
             session()->put('requirements-complete', true);
-            return view('installer::database', ['isLocalHost' => InstallerInfo::isRemoteLocal()]);
+
+            /** @var view-string $view */
+            $view = 'installer::database';
+            return view($view, ['isLocalHost' => InstallerInfo::isRemoteLocal()]);
         }
 
         return redirect()->route('setup.requirements')->withInput()->withErrors([
@@ -264,30 +270,27 @@ class InstallerController extends Controller
         session()->put('step-6-complete', true);
         return redirect()->route('setup.complete');
     }
-    /**
-     * Handle the completion of the setup process.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function setupComplete(): Response
+    public function setupComplete(): Response|RedirectResponse
     {
         session()->put('step-7-complete', true);
 
-        if (Configuration::setupStepCheck(4) && $this->requirementsCompleteStatus()) { // Cast to string
+        if (Configuration::setupStepCheck(4) && $this->requirementsCompleteStatus()) {
             $envContent = File::get(base_path('.env'));
             $envContent = preg_replace(
                 ['/APP_ENV=(.*)\s/', '/APP_DEBUG=(.*)\s/'],
-                ['APP_ENV=' . 'production' . "\n", 'APP_DEBUG=' . 'false' . "\n"],
+                ['APP_ENV=production' . "\n", 'APP_DEBUG=false' . "\n"],
                 $envContent
             );
             if ($envContent !== null) {
                 File::put(base_path('.env'), $envContent);
             }
 
-            return response(view('installer::complete')); // Wrap the view with `response()` to match the return type
+            /** @var view-string $view */
+            $view = 'installer::complete';
+            return response(view($view));
         }
 
-        if (Configuration::setupStepCheck(5) && $this->requirementsCompleteStatus()) { // Cast to string
+        if (Configuration::setupStepCheck(5) && $this->requirementsCompleteStatus()) {
             return $this->completedSetup('home');
         }
 

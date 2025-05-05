@@ -24,19 +24,19 @@ class PurchaseVerifyMiddleware
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (strtolower(config('app.app_mode')) == 'demo') {
+        if (strtolower(config('app.app_mode')) === 'demo') {
             return $next($request);
         }
 
         if (InstallerInfo::licenseFileExist()) {
             $filepath = InstallerInfo::getLicenseFilePath();
-            if (! InstallerInfo::isRemoteLocal() && InstallerInfo::licenseFileDataHasLocalTrue()) {
+
+            if (!InstallerInfo::isRemoteLocal() && InstallerInfo::licenseFileDataHasLocalTrue()) {
                 $response = purchaseVerificationHashed($filepath, true);
                 if ($response && InstallerInfo::rewriteHashedFile($response)) {
                     return $next($request);
                 } else {
                     InstallerInfo::deleteLicenseFile();
-
                     return $this->invalidHashed();
                 }
             } elseif (Carbon::now()->day == 1) {

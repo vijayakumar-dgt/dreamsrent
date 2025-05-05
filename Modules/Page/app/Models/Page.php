@@ -7,10 +7,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\Page\Database\Factories\PageFactory;
+/**
+ * @property int|null $theme_id
+ * @property int|null $parent_id
+ * @property int|null $language_id
+ * @property string|null $page_title
+ * @property string|null $page_content
+ * @property string|null $slug
+ * @property int|null $read
+ * @property string|null $status
+ * @property \Carbon\Carbon|null $created_at
+ */
 
 class Page extends Model
 {
-    use HasFactory;
     use SoftDeletes;
 
     /**
