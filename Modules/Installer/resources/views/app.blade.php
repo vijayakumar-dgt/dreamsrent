@@ -22,19 +22,33 @@
 
         <div class="row">
             <ul class="progressbar installer-progress-bar">
-                <li class="@if (request()->routeIs('setup.verify') || (session()->has('step-1-complete') && session()->get('step-1-complete'))) active @endif"><a href="{{route('setup.verify')}}">Verification</a></li>
+                <li class="@if (request()->routeIs('setup.verify') || (session()->has('step-1-complete') && session()->get('step-1-complete'))) active @endif"><a
+                        href="{{ route('setup.verify') }}">Verification</a></li>
 
                 <li class="@if (request()->routeIs('setup.requirements') ||
-                        (session()->has('step-2-complete') && session()->get('step-2-complete'))) active @endif"><a href="@if ((session()->has('step-1-complete') && session()->get('step-1-complete'))) {{route('setup.requirements')}} @else # @endif" class="@if (!session()->has('step-1-complete')) text-muted @endif">Requirements</a></li>
+                        (session()->has('step-2-complete') && session()->get('step-2-complete'))) active @endif"><a
+                        href="@if (session()->has('step-1-complete') && session()->get('step-1-complete')) {{ route('setup.requirements') }} @else # @endif"
+                        class="@if (!session()->has('step-1-complete')) text-muted @endif">Requirements</a></li>
 
-                <li class="@if (request()->routeIs('setup.database') || (session()->has('step-3-complete') && session()->get('step-3-complete'))) active @endif"><a href="@if ((session()->has('step-2-complete') && session()->get('step-2-complete') && session()->has('requirements-complete') && session()->get('requirements-complete'))) {{route('setup.database')}} @else # @endif" class="@if (!session()->has('requirements-complete')) text-muted @endif">Database Setup</a></li>
+                <li class="@if (request()->routeIs('setup.database') || (session()->has('step-3-complete') && session()->get('step-3-complete'))) active @endif"><a
+                        href="@if (session()->has('step-2-complete') &&
+                                session()->get('step-2-complete') &&
+                                session()->has('requirements-complete') &&
+                                session()->get('requirements-complete')) {{ route('setup.database') }} @else # @endif"
+                        class="@if (!session()->has('requirements-complete')) text-muted @endif">Database Setup</a></li>
 
-                <li class="@if (request()->routeIs('setup.account') || (session()->has('step-4-complete') && session()->get('step-4-complete'))) active @endif"><a href="@if ((session()->has('step-3-complete') && session()->get('step-3-complete'))) {{route('setup.account')}} @else # @endif" class="@if (!session()->has('step-3-complete')) text-muted @endif">Account Setup</a></li>
+                <li class="@if (request()->routeIs('setup.account') || (session()->has('step-4-complete') && session()->get('step-4-complete'))) active @endif"><a
+                        href="@if (session()->has('step-3-complete') && session()->get('step-3-complete')) {{ route('setup.account') }} @else # @endif"
+                        class="@if (!session()->has('step-3-complete')) text-muted @endif">Account Setup</a></li>
 
                 <li class="@if (request()->routeIs('setup.configuration') ||
-                        (session()->has('step-5-complete') && session()->get('step-5-complete'))) active @endif"><a href="@if ((session()->has('step-4-complete') && session()->get('step-4-complete'))) {{route('setup.configuration')}} @else # @endif" class="@if (!session()->has('step-4-complete')) text-muted @endif">Configuration</a></li>
+                        (session()->has('step-5-complete') && session()->get('step-5-complete'))) active @endif"><a
+                        href="@if (session()->has('step-4-complete') && session()->get('step-4-complete')) {{ route('setup.configuration') }} @else # @endif"
+                        class="@if (!session()->has('step-4-complete')) text-muted @endif">Configuration</a></li>
 
-                <li class="@if (request()->routeIs('setup.complete') || (session()->has('step-7-complete') && session()->get('step-7-complete'))) active @endif"><a href="@if ((session()->has('step-6-complete') && session()->get('step-6-complete'))) {{route('setup.complete')}} @else # @endif" class="@if (!session()->has('step-6-complete')) text-muted @endif">Complete</a></li>
+                <li class="@if (request()->routeIs('setup.complete') || (session()->has('step-7-complete') && session()->get('step-7-complete'))) active @endif"><a
+                        href="@if (session()->has('step-6-complete') && session()->get('step-6-complete')) {{ route('setup.complete') }} @else # @endif"
+                        class="@if (!session()->has('step-6-complete')) text-muted @endif">Complete</a></li>
             </ul>
 
         </div>
@@ -78,33 +92,32 @@
             });
         });
     }
-    $(document).ready(function () {
+    $(document).ready(function() {
         toastr.options = {
-                "closeButton": true,
-                "positionClass": "toast-top-right",
-                "timeOut": "3000",
-                "progressBar": true,
-                "onShown": function () {
-                    $('.toast-success').css({
-                        'background-color': '#28a745',
-                        'color': '#fff'
-                    });
-                    $('.toast-error').css({
-                        'background-color': '#dc3545',
-                        'color': '#fff'
-                    });
-                    $('.toast-warning').css({
-                        'background-color': '#f0ad4e',
-                        'color': '#fff'
-                    });
-                    $('.toast-info').css({
-                        'background-color': '#17a2b8',
-                        'color': '#fff'
-                    });
-                }
+            "closeButton": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000",
+            "progressBar": true,
+            "onShown": function() {
+                $('.toast-success').css({
+                    'background-color': '#28a745',
+                    'color': '#fff'
+                });
+                $('.toast-error').css({
+                    'background-color': '#dc3545',
+                    'color': '#fff'
+                });
+                $('.toast-warning').css({
+                    'background-color': '#f0ad4e',
+                    'color': '#fff'
+                });
+                $('.toast-info').css({
+                    'background-color': '#17a2b8',
+                    'color': '#fff'
+                });
+            }
         };
     });
-
 </script>
 @stack('scripts')
 

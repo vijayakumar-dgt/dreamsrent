@@ -278,5 +278,5 @@
 
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/page/list.js') }}"></script>
+<script src="{{ asset('backend/assets/js/page/list.js') }}"></script>
 @endpush

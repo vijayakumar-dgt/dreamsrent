@@ -302,5 +302,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/page/section.js') }}"></script>
+<script src="{{ asset('backend/assets/js/page/section.js') }}"></script>
 @endpush

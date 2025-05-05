@@ -111,12 +111,12 @@ if (!function_exists('uploadedAsset')) {
 
         // Default response structure
         $defaultImages = [
-            'profile' => $baseUrl . '/assets/img/default-profile.png',
-            'default2' => $baseUrl . '/assets/img/default-placeholder-image.png',
-            'default' => $baseUrl . '/assets/img/default-image-02.jpg',
-            'default_logo' => $baseUrl . '/assets/img/logo.svg',
+            'profile' => $baseUrl . '/backend/assets/img/default-profile.png',
+            'default2' => $baseUrl . '/backend/assets/img/default-placeholder-image.png',
+            'default' => $baseUrl . '/backend/assets/img/default-image-02.jpg',
+            'default_logo' => $baseUrl . '/backend/assets/img/logo.svg',
             'default_small_logo' => $baseUrl . '/frontend/assets/img/logo-small.png',
-            'default_favicon' => $baseUrl . '/assets/img/favicon.png',
+            'default_favicon' => $baseUrl . '/backend/assets/img/favicon.png',
         ];
 
         // If file does not exist, return default image
@@ -152,12 +152,12 @@ if (!function_exists('uploadedAssetDetails')) {
 
         // Default response structure
         $defaultImages = [
-            'profile' => $baseUrl . '/assets/img/default-profile.png',
-            'default2' => $baseUrl . '/assets/img/default-placeholder-image.png',
-            'default' => $baseUrl . '/assets/img/default-image-02.jpg',
-            'default_logo' => $baseUrl . '/assets/img/logo.svg',
+            'profile' => $baseUrl . '/backend/assets/img/default-profile.png',
+            'default2' => $baseUrl . '/backend/assets/img/default-placeholder-image.png',
+            'default' => $baseUrl . '/backend/assets/img/default-image-02.jpg',
+            'default_logo' => $baseUrl . '/backend/assets/img/logo.svg',
             'default_small_logo' => $baseUrl . '/frontend/assets/img/logo-small.png',
-            'default_favicon' => $baseUrl . '/assets/img/favicon.png',
+            'default_favicon' => $baseUrl . '/backend/assets/img/favicon.png',
         ];
 
         // If file does not exist, return default image
@@ -232,7 +232,7 @@ function getDefaultCurrencySymbol(): string
     return '$';
 }
 
-function isRTL(?string $languageCode = null): int
+function isRTL(?string $languageCode = null): int|string
 {
     $language = TranslationLanguage::select('id')->where('code', $languageCode)->first();
     if ($language) {
@@ -249,7 +249,9 @@ if (!function_exists('formatFileSize')) {
     function formatFileSize(int|string $bytes): string
     {
         $bytes = (int) $bytes;
-        if ($bytes === 0) return '0 B';
+        if ($bytes === 0) {
+            return '0 B';
+        }
 
         $sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
         $factor = floor(log($bytes, 1024));

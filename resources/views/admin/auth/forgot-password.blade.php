@@ -8,7 +8,7 @@
                 <form action="" class="p-4" id="resetpasswordForm">
                      @csrf
                     <div class="mx-auto mb-5 text-center">
-                        <img src="{{ $logo ?? asset('assets/img/logo.svg') }}" class="img-fluid" alt="Logo">
+                        <img src="{{ $logo ?? asset('backend/assets/img/logo.svg') }}" class="img-fluid" alt="Logo">
                     </div>
                     <div class="card authentication-card mb-0">
                         <div class="card-body">
@@ -44,5 +44,5 @@
 </div>
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/admin/auth/forgot-password.js') }}"></script>
+<script src="{{ asset('backend/assets/js/admin/auth/forgot-password.js') }}"></script>
 @endpush

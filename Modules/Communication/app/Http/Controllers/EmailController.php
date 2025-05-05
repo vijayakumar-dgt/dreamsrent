@@ -10,7 +10,6 @@ use Modules\Communication\Emails\Samplemail;
 use Modules\Communication\Helpers\MailConfigurator;
 use Illuminate\View\View;
 
-
 class EmailController extends Controller
 {
     public function sendEmail(Request $request): JsonResponse

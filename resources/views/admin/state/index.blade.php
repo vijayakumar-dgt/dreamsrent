@@ -201,5 +201,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/state.js') }}"></script>
+<script src="{{ asset('backend/assets/js/state.js') }}"></script>
 @endpush

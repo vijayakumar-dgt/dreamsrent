@@ -5,13 +5,13 @@ namespace Modules\Installer\Models;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+
 /**
  * @property string $config
  * @property int|string|null $value
  */
 class Configuration extends Model
 {
-
     protected $fillable = [
         'config',
         'value',

@@ -113,30 +113,30 @@ class CommunicationServiceProvider extends ServiceProvider
         Blade::componentNamespace($componentNamespace, $this->nameLower);
     }
 
-   
+
     /**
      * Get the services provided by the provider.
-     * 
+     *
      * @return array<int, string>
      */
     public function provides(): array
     {
         return [];
     }
-    
+
     /**
  * @return string[]
  */
 
-  private function getPublishableViewPaths(): array
-{
-    $paths = [];
-    foreach (config('view.paths') as $path) {
-        if (is_dir($path . '/modules/' . $this->nameLower)) {
-            $paths[] = $path . '/modules/' . $this->nameLower;
+    private function getPublishableViewPaths(): array
+    {
+        $paths = [];
+        foreach (config('view.paths') as $path) {
+            if (is_dir($path . '/modules/' . $this->nameLower)) {
+                $paths[] = $path . '/modules/' . $this->nameLower;
+            }
         }
-    }
 
-    return $paths;
-}
+        return $paths;
+    }
 }

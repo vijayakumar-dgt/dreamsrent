@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class DriverDocument extends Model
 {
-
     /**
      * The attributes that are mass assignable.
      */

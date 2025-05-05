@@ -70,15 +70,25 @@
             <ul class="nav header-navbar-rht">
                 <li class="nav-item">
                     <div class="nav-item dropdown has-arrow flag-nav flag-nav1 nav-item-box">
+<<<<<<< HEAD
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);" role="button">
                             <img src="{{ asset('/assets/img/flags/' . app()->getLocale() . '.svg') }}" alt="Language" class="img-fluid">
+=======
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
+                            role="button">
+                            <img src="{{ asset('/backend/assets/img/flags/'. app()->getLocale() .'.svg') }}" alt="Language" class="img-fluid">
+>>>>>>> development
                         </a>
                         <ul class="dropdown-menu flag-menu p-2">
                             @if ($allLanguages)
                                 @foreach ($allLanguages as $language)
                                     <li>
                                         <a href="javascript:void(0);" class="dropdown-item change-user-language" data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
+<<<<<<< HEAD
                                             <img src="{{ asset('/assets/img/flags/' . $language->code . '.svg') }}" alt="" height="16">
+=======
+                                            <img src="{{ asset('/backend/assets/img/flags/'. $language->code.'.svg') }}" alt="" height="16">
+>>>>>>> development
                                             {{ $language->name }}
                                         </a>
                                     </li>

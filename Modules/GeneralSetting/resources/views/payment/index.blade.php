@@ -39,7 +39,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/paypal-name.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/paypal-name.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     @if (hasPermission($permissions, 'finance_settings', 'edit'))
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_paypal"><i class="ti ti-settings"></i></a>
@@ -70,7 +70,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/stripe-icon.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/stripe-icon.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     @if (hasPermission($permissions, 'finance_settings', 'edit'))
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_stripe"><i class="ti ti-settings"></i></a>
@@ -101,7 +101,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/brain-tree.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/brain-tree.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_braintree"><i class="ti ti-settings"></i></a>
                                                 </div>
@@ -128,7 +128,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/Razorpay-icon.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/Razorpay-icon.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_razorpay"><i class="ti ti-settings"></i></a>
                                                 </div>
@@ -155,7 +155,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/2checkout-icon.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/2checkout-icon.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_2checkout">
                                                         <i class="ti ti-settings"></i>
@@ -186,7 +186,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/skrill-icon.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/skrill-icon.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_skrill">
                                                         <i class="ti ti-settings"></i>
@@ -217,7 +217,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/payu-icon.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/payu-icon.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_payu">
                                                         <i class="ti ti-settings"></i>
@@ -248,7 +248,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/apple-pay-icon.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/apple-pay-icon.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_applepay">
                                                         <i class="ti ti-settings"></i>
@@ -279,7 +279,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/payonner-icon.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/payonner-icon.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_payoneer">
                                                         <i class="ti ti-settings"></i>
@@ -310,7 +310,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/payonner-icon.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/payonner-icon.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_payoneer">
                                                         <i class="ti ti-settings"></i>
@@ -342,7 +342,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/mercad-pago-icon.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/mercad-pago-icon.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_mercadopago">
                                                         <i class="ti ti-settings"></i>
@@ -374,7 +374,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/payment-icon.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/payment-icon.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_payment">
                                                         <i class="ti ti-settings"></i>
@@ -406,7 +406,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/pytorch-icon.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/pytorch-icon.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_pytorch">
                                                         <i class="ti ti-settings"></i>
@@ -438,7 +438,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/bank-transfer-icon.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/bank-transfer-icon.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_bank">
                                                         <i class="ti ti-settings"></i>
@@ -470,7 +470,7 @@
                                             <div>
                                                 <div class="payment-content">
                                                     <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                    <span class="d-none real-label"><img src="/assets/img/icons/cash-delivery-icon.svg" alt="image"></span>
+                                                    <span class="d-none real-label"><img src="/backend/assets/img/icons/cash-delivery-icon.svg" alt="image"></span>
                                                     <div class="skeleton label-skeleton label-loader payIcon"></div>
                                                     <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_cod">
                                                         <i class="ti ti-settings"></i>
@@ -1142,5 +1142,5 @@
 
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/general_setting/payment.js') }}"></script>
+<script src="{{ asset('backend/assets/js/general_setting/payment.js') }}"></script>
 @endpush

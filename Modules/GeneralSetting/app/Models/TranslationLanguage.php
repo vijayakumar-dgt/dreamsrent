@@ -3,6 +3,7 @@
 namespace Modules\GeneralSetting\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
 /**
  * TranslationLanguage Model
  *

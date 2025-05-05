@@ -11,6 +11,5 @@ class GeneralSettingDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        
     }
 }

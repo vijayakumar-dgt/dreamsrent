@@ -85,7 +85,7 @@ class CarTypeController extends Controller
 
             if ($request->hasFile('icon')) {
                 $carIcon = $request->file('icon');
-                if($carIcon && $carIcon->isValid()){
+                if ($carIcon && $carIcon->isValid()) {
                     $carType->icon = uploadFile($carIcon, $folderName, $oldIcon);
                 }
             }
@@ -162,7 +162,7 @@ class CarTypeController extends Controller
     public function deleteType(Request $request): JsonResponse
     {
         try {
-            $carType = Cartype::where('id',$request->delete_id)->firstOrFail();
+            $carType = Cartype::where('id', $request->delete_id)->firstOrFail();
             $carType->delete();
 
             return response()->json([

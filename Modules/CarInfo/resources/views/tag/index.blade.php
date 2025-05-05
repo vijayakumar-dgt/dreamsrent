@@ -229,5 +229,5 @@
         <!-- Delete Modal End -->
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/carinfo/tag.js') }}"></script>
+<script src="{{ asset('backend/assets/js/carinfo/tag.js') }}"></script>
 @endpush

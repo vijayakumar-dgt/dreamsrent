@@ -21,7 +21,7 @@ class InspectionController extends Controller
     public function index(): View
     {
         $cars = DB::table('vehicle_info')->select('id', 'name')->where('deleted_at', null)->orderBy('name', 'asc')->get();
-        $users = DB::table('users')->select('id', 'name')->where('user_type',2)->orderBy('name', 'asc')->get();
+        $users = DB::table('users')->select('id', 'name')->where('user_type', 2)->orderBy('name', 'asc')->get();
         $checklists = Checklist::where('status', true)->orderBy('name', 'asc')->get();
         $data = [
             'cars' => $cars,
@@ -73,7 +73,7 @@ class InspectionController extends Controller
             if ($request->has('id') && $request->id != null) {
                 /** @var \Modules\CarInfo\Models\Inspection */
                 $inspection = Inspection::find($request->id);
-                if($inspection == null) {
+                if ($inspection == null) {
                     return response()->json([
                         'status' => 'error',
                         'code' => 404,
@@ -83,7 +83,7 @@ class InspectionController extends Controller
             } else {
                 $inspection = new Inspection();
             }
-            $inspection->vehicle_info_id = $request->vehicle_info_id;   
+            $inspection->vehicle_info_id = $request->vehicle_info_id;
             $inspection->inspection_date = Carbon::parse($request->inspection_date)->format('Y-m-d');
             $inspection->inspector_id = $request->inspection_by;
             $inspection->odometer = $request->odometer;
@@ -94,7 +94,7 @@ class InspectionController extends Controller
             if ($request->has('checklist_id') && is_array($request->checklist_id) && count($request->checklist_id) > 0) {
                 // Attempt to encode the checklist data
                 $encodedChecklist = json_encode($request->checklist_id);
-            
+
                 // Check if json_encode was successful
                 if ($encodedChecklist === false) {
                     // If encoding fails, set check_list to null (or an empty string)
@@ -104,7 +104,7 @@ class InspectionController extends Controller
                     $inspection->check_list = $encodedChecklist;
                 }
             }
-            
+
             $inspection->save();
             return response()->json([
                 'status' => 'success',
@@ -182,7 +182,7 @@ class InspectionController extends Controller
     public function deleteInspection(Request $request): JsonResponse
     {
         try {
-            $inspection = Inspection::where('id',$request->delete_id)->firstOrFail();
+            $inspection = Inspection::where('id', $request->delete_id)->firstOrFail();
             $inspection->delete();
             return response()->json([
                 'status' => 'success',

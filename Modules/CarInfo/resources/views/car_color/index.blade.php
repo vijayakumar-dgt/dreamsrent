@@ -4,7 +4,7 @@
 <!-- Page Wrapper -->
 <div class="page-wrapper">
 	<div class="content me-4">
-		
+
 		<!-- Breadcrumb -->
 		<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 			<div class="my-auto mb-2">
@@ -32,7 +32,7 @@
 		<!-- Table Header -->
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
             <div class="skeleton label-skeleton label-loader"></div>
-			<div class="d-flex align-items-center flex-wrap row-gap-3 d-none real-label"> 
+			<div class="d-flex align-items-center flex-wrap row-gap-3 d-none real-label">
 				<div class="top-search">
 					<div class="top-search-group">
 						<span class="input-icon">
@@ -43,8 +43,8 @@
 				</div>
 			</div>
 			<div class="skeleton label-skeleton label-loader"></div>
-			<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3 d-none real-label">  
-				<input type="hidden" id="sort_by_status">             
+			<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3 d-none real-label">
+				<input type="hidden" id="sort_by_status">
 				<div class="dropdown">
 					<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 						<i class="ti ti-badge me-1"></i> <span class="ms-1" id="current_sort_status">{{ __('admin.common.status') }}</span>
@@ -168,16 +168,16 @@
 						@endif
 					</tr>
 				</thead>
-				<tbody>			
+				<tbody>
 
 				</tbody>
 			</table>
 		</div>
 		<!-- Custom Data Table -->
 
-		<div class="table-footer d-none"></div>			
+		<div class="table-footer d-none"></div>
 
-	</div>	
+	</div>
     @include('admin.partials.footer')
 </div>
 <!-- /Page Wrapper -->
@@ -197,7 +197,7 @@
 				@csrf
 				<input type="hidden" name="id" id="id">
 				<input type="hidden" name="language_id" id="language_id">
-				<div class="modal-body">                     
+				<div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.rentals.color_name') }}<span class="text-danger"> *</span></label>
                         <input type="text" class="form-control" name="name" id="name" maxlength="50">
@@ -256,5 +256,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/carinfo/car-color.js') }}"></script>
+<script src="{{ asset('backend/assets/js/carinfo/car-color.js') }}"></script>
 @endpush

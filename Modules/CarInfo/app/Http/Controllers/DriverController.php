@@ -90,7 +90,7 @@ class DriverController extends Controller
             if (empty($id)) {
                 if ($request->hasFile('image')) {
                     $file = $request->file('image');
-                    if(!$file || !$file->isValid()) {
+                    if (!$file || !$file->isValid()) {
                         return response()->json([
                             'status' => 'error',
                             'code'   => 422,
@@ -110,7 +110,7 @@ class DriverController extends Controller
                 if ($documents instanceof \Illuminate\Http\UploadedFile) {
                     $documents = [$documents]; // Wrap in array if only one file is uploaded
                 }
-                
+
                 foreach ($documents ?? [] as $file) {
                     // No need to check instanceof, we assume it's a valid UploadedFile
                     $document = uploadFile($file, 'drivers');
@@ -119,8 +119,6 @@ class DriverController extends Controller
                         'document' => $document,
                     ]);
                 }
-                
-                                 
             } else {
                 /** @var \Modules\CarInfo\Models\Driver */
                 $driver = Driver::find($id);
@@ -128,7 +126,7 @@ class DriverController extends Controller
 
                 if ($request->hasFile('image')) {
                     $file = $request->file('image');
-                    if($file && $file->isValid()){
+                    if ($file && $file->isValid()) {
                         $oldImage = is_string($oldImage) ? $oldImage : '';
                         $data['image'] = uploadFile($file, 'drivers', $oldImage);
                     }
@@ -143,7 +141,7 @@ class DriverController extends Controller
                 if ($documents instanceof \Illuminate\Http\UploadedFile) {
                     $documents = [$documents]; // Wrap in array if only one file is uploaded
                 }
-                foreach($documents ?? [] as $file) {
+                foreach ($documents ?? [] as $file) {
                     // No need to check instanceof, we assume it's a valid UploadedFile
                     $document = uploadFile($file, 'drivers');
                     DriverDocument::create([
@@ -151,7 +149,7 @@ class DriverController extends Controller
                         'document' => $document,
                     ]);
                 }
-                
+
                 $removedDocuments = explode(',', $request->removed_documents);
 
                 foreach ($removedDocuments as $docId) {
@@ -163,7 +161,7 @@ class DriverController extends Controller
                             Storage::disk('public')->delete('drivers/' . $doc);
                         }
                     }
-                    if(DriverDocument::where('id', $docId)->exists()){
+                    if (DriverDocument::where('id', $docId)->exists()) {
                         DriverDocument::where('id', $docId)->delete();
                     }
                 }
@@ -269,7 +267,7 @@ class DriverController extends Controller
             $drivers->map(function ($driver) {
                 $assignedCarIds = explode(',', $driver->assigned_cars);
                 $firstCarId = !empty($assignedCarIds[0]) ? trim($assignedCarIds[0]) : null;
-                
+
                 if ($firstCarId) {
                     $vehicle = VehicleInfo::where('vehicle_info.id', $firstCarId)
                         ->join('cartypes', 'cartypes.id', '=', 'vehicle_info.type_id')

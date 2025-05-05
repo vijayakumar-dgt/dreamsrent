@@ -93,5 +93,5 @@
 		<!-- /Page Wrapper -->
 @endsection
 @push('scripts')
-    <script src="{{ asset('assets/js/general_setting/how-it-work.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/general_setting/how-it-work.js') }}"></script>
 @endpush

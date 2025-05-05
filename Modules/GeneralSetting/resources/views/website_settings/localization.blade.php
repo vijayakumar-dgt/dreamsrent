@@ -264,5 +264,5 @@
 </div>
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/general_setting/localization.js?v=1.0') }}"></script>
+<script src="{{ asset('backend/assets/js/general_setting/localization.js?v=1.0') }}"></script>
 @endpush

@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 // use Modules\Page\Database\Factories\SectionFactory;
 
+/**
+ * @property int $id
+ * @property int|null $theme_id
+ * @property string|null $name
+ * @property int|null $status
+ * @property string|null $datas
+ */
 class Section extends Model
 {
     use SoftDeletes;
@@ -21,8 +28,4 @@ class Section extends Model
     protected $fillable = ["name", "theme_id", "content", "status", "datas"];
 
 
-    // protected static function newFactory(): SectionFactory
-    // {
-    //     // return SectionFactory::new();
-    // }
 }

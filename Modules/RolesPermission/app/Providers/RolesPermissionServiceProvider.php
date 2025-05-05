@@ -51,10 +51,7 @@ class RolesPermissionServiceProvider extends ServiceProvider
      */
     protected function registerCommandSchedules(): void
     {
-        // $this->app->booted(function () {
-        //     $schedule = $this->app->make(Schedule::class);
-        //     $schedule->command('inspire')->hourly();
-        // });
+   
     }
 
     /**
@@ -80,14 +77,14 @@ class RolesPermissionServiceProvider extends ServiceProvider
     {
         $relativeConfigPath = config('modules.paths.generator.config.path');
         $configPath = module_path($this->name, $relativeConfigPath);
-    
+
         if (is_dir($configPath)) {
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configPath));
-    
+
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
                     $relativePath = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
-    
+
                     // Ensure relativePath is treated as a string
                     /** @var string $relativePath */
                     $sanitizedPath = str_replace(
@@ -95,20 +92,20 @@ class RolesPermissionServiceProvider extends ServiceProvider
                         ['.', ''],
                         $relativePath
                     );
-    
+
                     $configKey = $this->nameLower . '.' . $sanitizedPath;
                     $key = ($relativePath === 'config.php') ? $this->nameLower : $configKey;
-    
+
                     $this->publishes([
                         $file->getPathname() => config_path($relativePath)
                     ], 'config');
-    
+
                     $this->mergeConfigFrom($file->getPathname(), $key);
                 }
             }
         }
     }
-    
+
 
     /**
      * Register views.
@@ -130,8 +127,6 @@ class RolesPermissionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the services provided by the provider.
-     *
      * @return string[] An array of service names provided by the provider.
      */
     public function provides(): array
@@ -140,8 +135,6 @@ class RolesPermissionServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the paths for the publishable views.
-     *
      * @return string[] An array of view paths.
      */
     private function getPublishableViewPaths(): array

@@ -13,7 +13,7 @@ use Illuminate\Http\Response;
 
 class CarFuelController extends Controller
 {
-    public function index():View
+    public function index(): View
     {
         return view('carinfo::car_fuel.index');
     }

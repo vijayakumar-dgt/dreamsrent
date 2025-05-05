@@ -4,7 +4,7 @@ namespace Modules\GeneralSetting\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-/** 
+/**
  *  @property int|null $user_id
  *  @property string|null $device_type
  *  @property string|null $browser

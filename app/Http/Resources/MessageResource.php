@@ -45,14 +45,14 @@ class MessageResource extends JsonResource
         if ($user && $user->userDetail) {
             return uploadedAsset($user->userDetail->profile_image, 'profile');
         }
-    
+
         return uploadedAsset('default', 'profile');
     }
 
     public function getAdminAvatar(): string
     {
         $user = User::where('user_type', 1)->first();
-        if($user && $user->userDetail){
+        if ($user && $user->userDetail) {
             $profileImage = uploadedAsset($user->userDetail->profile_image, 'profile');
             return $profileImage;
         }

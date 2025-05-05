@@ -24,7 +24,6 @@ use Modules\CarInfo\Models\VehicleTarrif;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\InsuranceBenefit;
 
-
 class QuotationController extends Controller
 {
     public function index(): View

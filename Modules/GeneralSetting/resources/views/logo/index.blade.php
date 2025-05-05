@@ -43,7 +43,7 @@
                                                 <div class="d-flex justify-content-between mb-3">
                                                     <div class="d-flex align-items-center">
                                                         <span class="avatar avatar-xl border rounded d-flex align-items-center justify-content-center p-2 me-2">
-                                                            <img src="{{ asset('assets/img/logo-small.svg') }}" alt="{{ __('Logo Preview') }}" id="logo-preview">
+                                                            <img src="{{ asset('backend/assets/img/logo-small.svg') }}" alt="{{ __('Logo Preview') }}" id="logo-preview">
                                                         </span>
                                                         <h5>{{ __('logo') }}</h5>
                                                     </div>
@@ -67,7 +67,7 @@
                                                 <div class="d-flex justify-content-between mb-3">
                                                     <div class="d-flex align-items-center">
                                                         <span class="avatar avatar-xl border rounded d-flex align-items-center justify-content-center p-2 me-2">
-                                                            <img src="{{ asset('assets/img/logo-small.svg') }}" alt="{{ __('Favicon Preview') }}" id="favicon-preview">
+                                                            <img src="{{ asset('backend/assets/img/logo-small.svg') }}" alt="{{ __('Favicon Preview') }}" id="favicon-preview">
                                                         </span>
                                                         <h5>{{ __('favicon') }}</h5>
                                                     </div>
@@ -91,7 +91,7 @@
                                                 <div class="d-flex justify-content-between mb-3">
                                                     <div class="d-flex align-items-center">
                                                         <span class="avatar avatar-xl border rounded d-flex align-items-center justify-content-center p-2 me-2">
-                                                            <img src="{{ asset('assets/img/logo-small.svg') }}" alt="{{ __('Icon Preview') }}" id="icon-preview">
+                                                            <img src="{{ asset('backend/assets/img/logo-small.svg') }}" alt="{{ __('Icon Preview') }}" id="icon-preview">
                                                         </span>
                                                         <h5>{{ __('icon') }}</h5>
                                                     </div>
@@ -115,7 +115,7 @@
                                                 <div class="d-flex justify-content-between mb-3">
                                                     <div class="d-flex align-items-center">
                                                         <span class="avatar avatar-xl border rounded d-flex align-items-center justify-content-center p-2 me-2">
-                                                            <img src="{{ asset('assets/img/logo-small.svg') }}" alt="{{ __('Dark Logo Preview') }}" id="dark-logo-preview">
+                                                            <img src="{{ asset('backend/assets/img/logo-small.svg') }}" alt="{{ __('Dark Logo Preview') }}" id="dark-logo-preview">
                                                         </span>
                                                         <h5>{{ __('dark_logo') }}</h5>
                                                     </div>

@@ -434,7 +434,7 @@
                             <div class="mb-3">
                                 <label class="form-label">{{ __('admin.common.documents') }}</label><span class="text-danger"> *</span></label>
                                 <div class="document-upload text-center br-3 mb-3">
-                                    <img src="{{ asset('assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+                                    <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
                                     <p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span></p>
                                     <p class="fs-12 mb-0">{{ __('admin.common.maximum_size', ['size' => 5]) }}</p>
                                     <input type="file" class="form-control image-sign" name="documents[]" id="documents" multiple="">
@@ -599,7 +599,7 @@
                             <div class="mb-3">
                                 <label class="form-label">{{ __('admin.common.documents') }}</label><span class="text-danger"> *</span></label>
                                 <div class="document-upload text-center br-3 mb-3">
-                                    <img src="{{ asset('assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+                                    <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
                                     <p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span></p>
                                     <p class="fs-12 mb-0">{{ __('admin.common.maximum_size', ['size' => 5]) }}</p>
                                     <input type="file" class="form-control image-sign" name="documents[]" id="edit_documents" multiple="">
@@ -652,5 +652,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/admin/customer.js') }}"></script>
+<script src="{{ asset('backend/assets/js/admin/customer.js') }}"></script>
 @endpush

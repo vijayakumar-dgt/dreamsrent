@@ -87,7 +87,11 @@ class BookingServiceProvider extends ServiceProvider
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
                     $relativePath = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
-                    $configKey = $this->nameLower . '.' . str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
+                    $cleanPath = str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
+
+                    $cleanPathString = is_string($cleanPath) ? $cleanPath : '';
+
+                    $configKey = $this->nameLower . '.' . $cleanPathString;
                     $key = ($relativePath === 'config.php') ? $this->nameLower : $configKey;
 
                     $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
@@ -114,13 +118,16 @@ class BookingServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the services provided by the provider.
+     * @return array<string>
      */
     public function provides(): array
     {
         return [];
     }
 
+    /**
+     * @return array<string>
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];

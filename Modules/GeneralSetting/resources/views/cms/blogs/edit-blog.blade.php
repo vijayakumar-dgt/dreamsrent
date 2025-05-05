@@ -130,6 +130,6 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/general_setting/blog.js') }}"></script>
+<script src="{{ asset('backend/assets/js/general_setting/blog.js') }}"></script>
 
 @endpush

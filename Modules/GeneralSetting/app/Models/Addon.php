@@ -9,9 +9,9 @@ class Addon extends Model
    /**
     * The attributes that are mass assignable.
     */
-   protected $table = 'addons';
+    protected $table = 'addons';
 
-   protected $fillable = [
+    protected $fillable = [
       'name',
       'status',
       'slug',
@@ -20,5 +20,5 @@ class Addon extends Model
       'created_at',
       'updated_at',
       'deleted_at'
-   ];
+    ];
 }

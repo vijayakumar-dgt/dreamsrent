@@ -63,7 +63,7 @@
 
                                 @if ($allLanguages)
                                 <div class="d-flex align-items-center gap-2">
-                                    <img src="{{ asset('assets/img/flags/' . app()->getLocale() . '.svg') }}"
+                                    <img src="{{ asset('backend/backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
                                         alt="Language"
                                         class="img-fluid rounded-circle lang-flag">
 
@@ -669,7 +669,7 @@
                                             <div class="col-xxl-8 col-lg-10">
                                                 <h6 class="mb-3">{{ __('admin.rentals.upload_document') }}</h6>
                                                 <div class="document-upload text-center bg-light br-5 mb-3">
-                                                    <img src="{{ asset('assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+                                                    <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
                                                     <p class="mb-2">{{ __('admin.rentals.drop_files_or_browse') }} <span class="text-info text-decoration-underline"></span></p>
                                                     <p class="fs-12 mb-0">{{ __('admin.rentals.max_file_size') }}</p>
                                                     <input type="file" class="form-control image-sign" name="car_document[]" id="car_document" multiple>
@@ -697,7 +697,7 @@
                                             <div class="col-xxl-8 col-lg-10">
                                                 <h6 class="mb-3">{{ __('admin.rentals.upload_policy') }}</h6>
                                                 <div class="document-upload text-center bg-light br-5 mb-3">
-                                                    <img src="{{ asset('assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+                                                    <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
                                                     <p class="mb-2">{{ __('admin.rentals.drop_files_or_browse') }} <span class="text-info text-decoration-underline"></span></p>
                                                     <p class="fs-12 mb-0">{{ __('admin.rentals.max_file_size') }}</p>
                                                     <input type="file" class="form-control image-sign" name="policy_document[]" id="policy_document" multiple>
@@ -725,7 +725,7 @@
                                             <div class="col-xxl-8 col-lg-10">
                                                 <h6 class="mb-3">{{ __('admin.rentals.upload_image') }}</h6>
                                                 <div class="document-upload text-center bg-light br-5 mb-3">
-                                                    <img src="{{ asset('assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+                                                    <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
                                                     <p class="mb-2">{{ __('admin.rentals.drop_files_or_browse') }} <span class="text-info text-decoration-underline"></span></p>
                                                     <p class="fs-12 mb-0">{{ __('admin.rentals.max_file_size') }}</p>
                                                     <input type="file" class="form-control image-sign" name="car_images[]" id="car_images" multiple>
@@ -1338,5 +1338,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/edit-car.js') }}"></script>
+<script src="{{ asset('backend/assets/js/edit-car.js') }}"></script>
 @endpush

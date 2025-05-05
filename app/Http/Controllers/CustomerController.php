@@ -319,7 +319,7 @@ class CustomerController extends Controller
                 $user->profile_image = is_string($user->profile_image) || is_null($user->profile_image)
                     ? uploadedAsset($user->profile_image, 'profile')
                     : uploadedAsset(null, 'profile');
-                $user->language_flag = url('/assets/img/flags/' . $user->language_code . '.svg');
+                $user->language_flag = url('/backend/backend/assets/img/flags/' . $user->language_code . '.svg');
                 $user->encrypted_id = customEncrypt($user->id, User::$userSecretKey);
 
                 /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserDocument> $documents */

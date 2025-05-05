@@ -22,7 +22,7 @@ class BrandController extends Controller
     {
         /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
-        if(!$authUser){
+        if (!$authUser) {
             return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
         }
         $language_id = $authUser->language_id;
@@ -78,7 +78,7 @@ class BrandController extends Controller
                         $data['brand_image'] = uploadFile($file, 'brands');
                     }
                 }
-                
+
                 if ($request->hasFile('brand_icon')) {
                     $file = $request->file('brand_icon');
                     if ($file instanceof UploadedFile) {
@@ -108,7 +108,7 @@ class BrandController extends Controller
                         $data['brand_image'] = uploadFile($file, 'brands', $oldImage);
                     }
                 }
-                
+
                 if ($request->hasFile('brand_icon')) {
                     $file = $request->file('brand_icon');
                     if ($file instanceof UploadedFile) {

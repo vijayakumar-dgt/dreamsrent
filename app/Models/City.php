@@ -36,10 +36,10 @@ class City extends Model
         return $this->hasOneThrough(
             Country::class,
             State::class,
-            'id',         
-            'id',        
-            'state_id',  
-            'country_id'  
+            'id',
+            'id',
+            'state_id',
+            'country_id'
         );
     }
 }

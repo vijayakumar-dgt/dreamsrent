@@ -52,23 +52,23 @@ class PageController extends Controller
     {
         $languageId = $request->query('language_id');
         $language = TranslationLanguage::find($languageId);
-    
+
         $slugsToTry = [$slug, Str::start($slug, 'pages/')];
-    
+
         $query = Page::whereIn('slug', $slugsToTry)
             ->when($languageId, fn($q) => $q->where('language_id', $languageId))
             ->first();
-    
+
         if (!$query && $languageId) {
             $basePage = Page::whereIn('slug', $slugsToTry)
                 ->whereNull('parent_id')
                 ->first();
-    
+
             if ($basePage) {
                 $query = Page::where('parent_id', $basePage->id)
                     ->where('language_id', $languageId)
                     ->first();
-    
+
                 if (!$query) {
                     $query = new Page([
                         'language_id' => $languageId,
@@ -78,17 +78,17 @@ class PageController extends Controller
                 }
             }
         }
-    
+
         if (!$query) {
             $basePage = Page::whereIn('slug', $slugsToTry)->first();
-    
+
             if ($basePage) {
                 $parentId = $basePage->parent_id ?? $basePage->id;
-    
+
                 $query = Page::where('parent_id', $parentId)
                     ->where('language_id', $languageId)
                     ->first();
-    
+
                 if (!$query) {
                     $query = new Page([
                         'language_id' => $languageId,
@@ -98,17 +98,13 @@ class PageController extends Controller
                 }
             }
         }
-    
+
         if ($language) {
             app()->setLocale($language->code);
         }
-    
+
         return view('page::page.edit.index', compact('query', 'languageId'));
     }
-    
-
-
-
 
     public function getPageInfo(Request $request): JsonResponse
     {
@@ -138,42 +134,44 @@ class PageController extends Controller
     public function pageContent(Request $request): JsonResponse
     {
         $pageId = $request->page_id;
-    
+
         if (!$pageId) {
             return response()->json([
                 'success' => false,
                 'message' => 'Page ID is required'
             ], 400);
         }
-        $page = Page::find($pageId);  
+
+        /** @var \Modules\Page\Models\Page|null $page */
+        $page = Page::find($pageId);
+
         if (!$page) {
             return response()->json([
                 'success' => false,
                 'message' => 'Page not found'
             ], 404);
-        }     
+        }
+
         return response()->json([
             'success' => true,
             'data' => [
-                'page_content' => $page->page_content 
+                'page_content' => $page->page_content
             ]
         ], 200);
     }
 
+
     public function pageStore(Request $request): JsonResponse
     {
-        // Get the current authenticated user
         $authUser = current_user();
-    
-        // Check if the user is authenticated
+
         if (!$authUser) {
             return response()->json([
                 'code' => 401,
                 'message' => __('User is not authenticated')
             ], 401);
         }
-    
-        // Validate the incoming request
+
         $rules = [
             'title' => 'required|max:100|unique:pages,page_title',
             'slug' => 'required|max:100|unique:pages,slug',
@@ -184,9 +182,9 @@ class PageController extends Controller
             'page_content' => 'nullable|array|min:1',
             'page_content.*' => 'nullable|string',
         ];
-    
+
         $messages = [
-            'page_title.required' => __('The page title field is required.'),
+            'title.required' => __('The page title field is required.'),
             'slug.required' => __('The slug field is required.'),
             'slug.unique' => __('The slug has already been taken.'),
             'section_title.required' => __('At least one section title is required.'),
@@ -196,16 +194,13 @@ class PageController extends Controller
             'section_label.*.required' => __('Each section label is required.'),
             'page_content.*.required' => __('Each page content section is required.'),
         ];
-    
-        // Run the validator
+
         $validator = Validator::make($request->all(), $rules, $messages);
-    
-        // If validation fails, return the errors
+
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
-    
-        // Ensure the page content is not empty
+
         if (empty($request->page_content) || count($request->page_content) === 0) {
             return response()->json([
                 'code' => 422,
@@ -213,28 +208,24 @@ class PageController extends Controller
                 'errors' => ['page_content' => [__('Please add at least one section!')]]
             ], 422);
         }
-    
-        // Collect the sections from the request
+
         $sections = [];
-        $titles = $request->input('section_title');
-        $labels = $request->input('section_label');
-        $contents = $request->input('page_content');
+        $titles = $request->input('section_title', []);
+        $labels = $request->input('section_label', []);
+        $contents = $request->input('page_content', []);
         $statuses = $request->input('page_status', []);
-    
-        // Loop through the sections and prepare the data
+
         for ($i = 0; $i < count($titles); $i++) {
             $sections[] = [
-                'section_title' => $titles[$i],
-                'section_label' => $labels[$i],
-                'section_content' => $contents[$i],
+                'section_title' => $titles[$i] ?? '',
+                'section_label' => $labels[$i] ?? '',
+                'section_content' => $contents[$i] ?? '',
                 'status' => isset($statuses[$i]) ? 1 : 0,
             ];
         }
-    
-        // Generate the slug for the page
+
         $slug = Str::slug($request->slug);
-    
-        // Prepare the data to be saved
+
         $data = [
             'page_title' => $request->title,
             'slug' => $slug,
@@ -246,23 +237,25 @@ class PageController extends Controller
             'canonical_url' => $request->canonical_url,
             'og_title' => $request->og_title,
             'og_description' => $request->og_description,
-            'language_id' => $authUser->language_id ?? null, // Safely access the language_id
+            'language_id' => $authUser->language_id ?? null,
             'status' => 1,
         ];
-    
-        // Create the page
-        $save = Page::create($data);
-    
-        // If saving fails, return an error message
-        if (!$save) {
-            return response()->json(['message' => __('Something went wrong while saving!')], 500);
-        }
-    
-        // Return a success response
-        return response()->json(['code' => 200, 'message' => __('page_create_success'), 'data' => []], 200);
-    }
-    
 
+        try {
+            Page::create($data);
+            return response()->json([
+                'code' => 200,
+                'message' => __('page_create_success'),
+                'data' => []
+            ], 200);
+        } catch (\Exception $e) {
+            \Log::error('Page creation failed', ['error' => $e->getMessage()]);
+            return response()->json([
+                'code' => 500,
+                'message' => __('Something went wrong while saving!')
+            ], 500);
+        }
+    }
 
     public function pageUpdate(Request $request): JsonResponse
     {
@@ -328,6 +321,7 @@ class PageController extends Controller
         }
 
         if ($request->filled('page_id')) {
+            /** @var \Modules\Page\Models\Page $page */
             $page = Page::findOrFail($request->page_id);
             $page->update($data);
 
@@ -357,27 +351,27 @@ class PageController extends Controller
         $status = $request->input('status');
         $sortType = $request->input('sort');
         $sortLang = $request->input('language_id');
-    
+
         $query = Page::orderBy($sortBy, $orderBy);
-    
+
         // Apply search filter
         if (!empty($search)) {
             $query->where('page_title', 'LIKE', "%{$search}%");
         }
-    
+
         // Apply status filter
         if ($status !== null) {
             $query->where('status', $status);
         }
-    
+
         if (empty($sortLang)) {
             $sortLang = $request->input('lang_id');
         }
-    
+
         if (!empty($sortLang)) {
             $query->where('language_id', $sortLang);
         }
-    
+
         // Apply sorting filter
         if ($sortType === 'asc') {
             $query->orderBy('created_at', 'asc');
@@ -388,11 +382,11 @@ class PageController extends Controller
         } elseif ($sortType === 'last_7_days') {
             $query->whereBetween('created_at', [now()->subDays(7), now()]);
         }
-    
+
         $pages = $query->get();
-    
+
         $data = [];
-    
+
         foreach ($pages as $page) {
             $data[] = [
                 'id' => $page->id,
@@ -405,14 +399,14 @@ class PageController extends Controller
                 'created_at' => $page->created_at ? $page->created_at->format('Y-m-d H:i:s') : null,
             ];
         }
-    
+
         return response()->json([
             'status' => 'success',
             'code'   => 200,
             'data' => $data
         ]);
     }
-    
+
 
 
 
@@ -477,12 +471,12 @@ class PageController extends Controller
                 if ($section['status'] == 1) {
                     if (isset($section['section_content']) && strpos($section['section_content'], '[banner_one') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-                
+
                         // Ensure $limit is an integer
                         $limit = (int)($matches[1] ?? 10);  // Cast to integer
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-                
+
                         // Use provided $lang_id instead of current_user()
                         $banners = DB::table('sections')
                             ->join('section_datas', function ($join) use ($lang_id) {
@@ -494,47 +488,45 @@ class PageController extends Controller
                             ->orderBy('sections.id', $order)
                             ->limit($limit)  // This now expects an integer
                             ->get();
-                
+
                         foreach ($banners as &$banner) {
                             $decodedData = json_decode($banner->datas, true);
-                
+
                             $banner->label = $decodedData['label_one'] ?? null;
                             $banner->line_one = $decodedData['line_one'] ?? null;
                             $banner->line_two = $decodedData['line_two'] ?? null;
                             $banner->description = $decodedData['description_one'] ?? null;
-                
+
                             $relativePath = 'storage/' . ($decodedData['thumbnail_image_one'] ?? '');
                             $defaultImage = asset('assets/img/car/car-right.png');
                             $thumbnailKey = 'thumbnail_image_one';
-                
+
                             $banner->thumbnail_image = (
                                 isset($decodedData[$thumbnailKey]) &&
                                 !empty($decodedData[$thumbnailKey]) &&
                                 file_exists(public_path($relativePath))
                             ) ? asset($relativePath) : $defaultImage;
-                
+
                             unset($banner->datas);
                         }
-                
+
                         $section['section_type'] = 'banner';
                         $section['type'] = 'banner';
                         $section['design'] = 'banner_one';
                         $section['section_content'] = $banners;
                     }
                 }
-                
-                
 
                 // Banner Two
                 if ($section['status'] == 1) {
                     if (isset($section['section_content']) && strpos($section['section_content'], '[banner_two') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-                
+
                         // Ensure $limit is cast to an integer
                         $limit = (int)($matches[1] ?? 10);  // Explicitly cast to integer
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-                
+
                         // Fetch from sections + section_datas with language-specific data
                         $banners = DB::table('sections')
                             ->join('section_datas', function ($join) use ($lang_id) {
@@ -546,54 +538,53 @@ class PageController extends Controller
                             ->orderBy('sections.id', $order)
                             ->limit($limit)  // Ensure $limit is an integer
                             ->get();
-                
+
                         $userCount = User::count();
-                
+
                         foreach ($banners as &$banner) {
                             $decodedData = json_decode($banner->datas, true);
-                
+
                             $banner->label = $decodedData['label_two'] ?? null;
                             $banner->description = $decodedData['description_two'] ?? null;
-                
+
                             $relativePath = 'storage/' . ($decodedData['thumbnail_image_two'] ?? '');
                             $defaultImage = asset('assets/img/car/car-right.png');
                             $thumbnailKey = 'thumbnail_image_two';
-                
+
                             $banner->thumbnail_image = (
                                 isset($decodedData[$thumbnailKey]) &&
                                 !empty($decodedData[$thumbnailKey]) &&
                                 file_exists(public_path($relativePath))
                             ) ? asset($relativePath) : $defaultImage;
-                
+
                             $banner->customer_count = $userCount;
-                
+
                             $banner->customer_images = [
                                 asset('assets/img/profiles/avatar-05.jpg'),
                                 asset('assets/img/profiles/avatar-12.jpg'),
                                 asset('assets/img/profiles/avatar-22.jpg'),
                             ];
-                
+
                             unset($banner->datas);
                         }
-                
+
                         $section['section_type'] = 'banner_two';
                         $section['type'] = 'banner_two';
                         $section['design'] = 'banner_two';
                         $section['section_content'] = $banners;
                     }
                 }
-                
 
                 // BestVehicle
                 if ($section['status'] == 1) {
                     if (isset($section['section_content']) && strpos($section['section_content'], '[bestVehicle') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-                
+
                         // Ensure $limit is cast to an integer
                         $limit = (int)($matches[1] ?? 10);  // Explicitly cast to integer
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-                
+
                         $best_vehicles = DB::table('sections')
                             ->join('section_datas', function ($join) use ($lang_id) {
                                 $join->on('sections.id', '=', 'section_datas.section_id')
@@ -604,53 +595,53 @@ class PageController extends Controller
                             ->orderBy('sections.id', $order)
                             ->limit($limit)  // Ensure $limit is an integer
                             ->get();
-                
+
                         foreach ($best_vehicles as &$best_vehicle) {
                             $decodedData = json_decode($best_vehicle->datas, true);
-                
+
                             $vehicleId = $decodedData['vehicle_id'] ?? null;
                             $best_vehicle->vehicle_id = $vehicleId;
-                
+
                             if ($vehicleId) {
                                 $vehicle = VehicleInfo::where("language_id", $lang_id)->find($vehicleId);
-                
+
                                 $best_vehicle->vehicle_name = $vehicle->name ?? null;
-                
+
                                 $imagePath = $vehicle->vehicle_image ?? null;
                                 $best_vehicle->vehicle_image_url = $imagePath ? asset('storage/' . $imagePath) : null;
                             } else {
                                 $best_vehicle->vehicle_name = null;
                                 $best_vehicle->vehicle_image_url = null;
                             }
-                
+
                             $best_vehicle->label_1 = $decodedData['label_1'] ?? null;
                             $best_vehicle->dis_1   = $decodedData['dis_1'] ?? null;
-                
+
                             $best_vehicle->label_2 = $decodedData['label_2'] ?? null;
                             $best_vehicle->dis_2   = $decodedData['dis_2'] ?? null;
-                
+
                             $best_vehicle->label_3 = $decodedData['label_3'] ?? null;
                             $best_vehicle->dis_3   = $decodedData['dis_3'] ?? null;
-                
+
                             $best_vehicle->label_4 = $decodedData['label_4'] ?? null;
                             $best_vehicle->dis_4   = $decodedData['dis_4'] ?? null;
-                
+
                             $best_vehicle->label_5 = $decodedData['label_5'] ?? null;
                             $best_vehicle->dis_5   = $decodedData['dis_5'] ?? null;
-                
+
                             $best_vehicle->label_6 = $decodedData['label_6'] ?? null;
                             $best_vehicle->dis_6   = $decodedData['dis_6'] ?? null;
-                
+
                             unset($best_vehicle->content);
                         }
-                
+
                         $section['section_type'] = 'best_vehicle';
                         $section['type'] = 'best_vehicle';
                         $section['design'] = 'best_vehicle';
                         $section['section_content'] = $best_vehicles;
                     }
                 }
-                
+
 
                 // Brands section
                 if ($section['status'] == 1) {
@@ -813,6 +804,7 @@ class PageController extends Controller
                             }
                             $multipleImages = array_map(fn($img) => url('storage/vehicles/' . basename($img)), $multipleImages);
 
+                            /** @var \App\Models\User|null $auth */
                             $auth = current_user();
                             $authId = $auth?->id;
 
@@ -838,10 +830,17 @@ class PageController extends Controller
                             $user = User::where('id', $vehicle->created_by)
                                 ->first();
 
-                            $userDetail = UserDetail::where("user_id", $user->id)->first();
-                            $userProfileImg = $userDetail && $userDetail->profile_image
-                                ? url('/storage/' . $userDetail->profile_image)
-                                : null;
+                            $user = User::where('id', $vehicle->created_by)->first();
+                            $userDetail = null;
+                            $userProfileImg = null;
+
+                            if ($user) {
+                                $userDetail = UserDetail::where("user_id", $user->id)->first();
+
+                                $userProfileImg = $userDetail && $userDetail->profile_image
+                                    ? url('/storage/' . $userDetail->profile_image)
+                                    : null;
+                            }
 
                             return [
                                 'id' => $vehicle->id,
@@ -1162,84 +1161,87 @@ class PageController extends Controller
                 'status' => $page->status,
                 'cookie_settings' => $cookieResponse
             ];
+
             $seo_title = $page->seo_title;
             $seo_description = $page->seo_description;
             $og_title = $page->og_title;
             $og_description = $page->og_description;
             $meta_keywords  = $page->keywords;
-        
+
             $vehicleBrand = Brand::select("id", "brand_name", "brand_image", "brand_icon")
                 ->where("language_id", $language_id)
                 ->where("status", 1)
                 ->get();
+
             $content_sections = collect((array) $data['content_sections']);
-        
+
             if (request()->has('is_mobile') && request()->get('is_mobile') === "yes") {
                 return response()->json(['code' => "200", 'message' => __('Page details retrieved successfully.'), 'data' => $data], 200);
             } else {
                 $defaultTheme = GeneralSetting::where('key', 'default_theme')->first();
                 $theme = $defaultTheme ? $defaultTheme->value : 1;
-                $viewFileName = 'home_' . $theme;
-                return view('frontend.home.' . $viewFileName, compact('data', 'content_sections', 'vehicleBrand', 'seo_title', 'seo_description', 'og_title', 'og_description', 'meta_keywords'));
+                $viewPath = 'frontend.home.home_' . $theme;
+                if (!view()->exists($viewPath)) {
+                    $viewPath = 'frontend.home.home_1';
+                }
+
+                return view($viewPath, compact('data', 'content_sections', 'vehicleBrand', 'seo_title', 'seo_description', 'og_title', 'og_description', 'meta_keywords'));
             }
         } else {
-            // Handle case when $page is null
             return response()->json(['code' => '404', 'message' => __('Page not found.')], 404);
         }
-        
     }
 
-   
+
     public function getPage(string $slug): View
-{
-    $defaultLang = 'en';
-    $language = TranslationLanguage::where('code', $defaultLang)->first();
+    {
+        $defaultLang = 'en';
+        $language = TranslationLanguage::where('code', $defaultLang)->first();
 
-    if (!$language) {
-        // Handle the case where the language is not found
-        abort(404, 'Default language not found');
-    }
+        if (!$language) {
 
-    $page = Page::where('slug', $slug)
-        ->where('language_id', $language->id)
-        ->first();
-
-    if (!$page) {
-        $fallbackSlug = 'pages/' . ltrim($slug, '/');
-        $page = Page::where('slug', $fallbackSlug)
-            ->where('language_id', $language->id)
-            ->first();
-    }
-
-    $userLanguageCode = App::getLocale();
-    $userLanguage = TranslationLanguage::where('code', $userLanguageCode)->first();
-
-    if (!$userLanguage) {
-        // Handle the case where the user language is not found
-        abort(404, 'User language not found');
-    }
-
-    if ($page && $userLanguage) {
-        if ($userLanguage->id != $language->id) {
-            $translatedPage = Page::where('parent_id', $page->id)
-                ->where('language_id', $userLanguage->id)
-                ->first();
-
-            if ($translatedPage) {
-                $page = $translatedPage;
-            } else {
-                abort(404);
-            }
+            abort(404, 'Default language not found');
         }
 
-        $pageContent = $page->page_content ? json_decode($page->page_content) : [];
-        $sectionContent = $pageContent && isset($pageContent[0]->section_content) ? $pageContent[0]->section_content : [];
-        $seo_title = $page->page_title;
-        
-        return view('frontend.pages.page', compact('page', 'sectionContent', 'seo_title'));
-    } else {
-        abort(404);
-    }
-}
+        $page = Page::where('slug', $slug)
+            ->where('language_id', $language->id)
+            ->first();
 
+        if (!$page) {
+            $fallbackSlug = 'pages/' . ltrim($slug, '/');
+            $page = Page::where('slug', $fallbackSlug)
+                ->where('language_id', $language->id)
+                ->first();
+        }
+
+        $userLanguageCode = App::getLocale();
+        $userLanguage = TranslationLanguage::where('code', $userLanguageCode)->first();
+
+        if (!$userLanguage) {
+
+            abort(404, 'User language not found');
+        }
+
+        if ($page) {
+            if ($userLanguage->id != $language->id) {
+                $translatedPage = Page::where('parent_id', $page->id)
+                    ->where('language_id', $userLanguage->id)
+                    ->first();
+
+                if ($translatedPage) {
+                    $page = $translatedPage;
+                } else {
+                    abort(404);
+                }
+            }
+
+            $pageContent = $page->page_content ? json_decode($page->page_content) : [];
+            $sectionContent = $pageContent && isset($pageContent[0]->section_content) ? $pageContent[0]->section_content : [];
+            $seo_title = $page->page_title;
+
+            return view('frontend.pages.page', compact('page', 'sectionContent', 'seo_title'));
+        } else {
+            abort(404);
+        }
+    }
 }

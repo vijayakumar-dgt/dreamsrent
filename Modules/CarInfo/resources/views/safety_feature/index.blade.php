@@ -245,5 +245,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/carinfo/safety-feature.js') }}"></script>
+<script src="{{ asset('backend/assets/js/carinfo/safety-feature.js') }}"></script>
 @endpush

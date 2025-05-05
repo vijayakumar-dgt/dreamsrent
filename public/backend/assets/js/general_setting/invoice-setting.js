@@ -3,60 +3,71 @@
     await loadTranslationFile('admin', 'general_settings,common');
 
     $(document).ready(function() {
-        $("#maintenanceSettingsForm").validate({
+        $("#invoiceSettingForm").validate({
             rules: {
-                maintenance_image: {
+                invoice_logo: {
                     required: false,
                     accept: "image/*"
                 },
-                maintenance_description: {
+                invoice_prefix: {
                     required: true,
-                    minlength: 10
+                    minlength: 2
                 },
-                maintenance_status: {
-                    required: false
+                invoice_due: {
+                    required: true
+                },
+                invoice_round_off: {
+                    required: true
+                },
+                invoice_terms: {
+                    required: true,
+                    maxlength: 300
                 }
             },
             messages: {
-                maintenance_image: {
-                    required: _l('admin.general_settings.please_upload_image'),
-                    accept: _l('admin.general_settings.favicon_image_resolution'),
+                invoice_logo: {
+                    accept: _l('admin.general_settings.invoice_logo_accept'),
                 },
-                maintenance_description: {
-                    required:_l('admin.general_settings.enter_description'),
-                    minlength:_l('admin.general_settings.description_characters'),
+                invoice_prefix: {
+                    required: _l('admin.general_settings.invoice_prefix_required'),
+                    minlength:_l('admin.general_settings.invoice_prefix_minlength'),
+                },
+                invoice_due: {
+                    required: _l('admin.general_settings.invoice_due_required'),
+                },
+                invoice_round_off: {
+                    required: _l('admin.general_settings.invoice_round_off_required'),
+                },
+                invoice_terms: {
+                    required: _l('admin.general_settings.invoice_terms_required'),
+                    maxlength: _l('admin.general_settings.invoice_terms_maxlength'),
                 }
             },
-            errorPlacement: function (error, element) {
+            errorPlacement: function(error, element) {
                 var errorId = element.attr("id") + "_error";
                 $("#" + errorId).text(error.text());
             },
-            highlight: function (element) {
+            highlight: function(element) {
                 $(element).addClass("is-invalid").removeClass("is-valid");
             },
-            unhighlight: function (element) {
+            unhighlight: function(element) {
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = $(element).attr("id") + "_error";
+                var errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
-            onkeyup: function (element) {
+            onkeyup: function(element) {
                 $(element).valid();
             },
-            onchange: function (element) {
+            onchange: function(element) {
                 $(element).valid();
             },
-            submitHandler: function (form) {
-                let maintenanceData = new FormData(form);
-
-                let maintenanceStatus = $("#maintenance_status").prop("checked") ? 1 : 0;
-                maintenanceData.set("maintenance_status", maintenanceStatus);
-
-
+            submitHandler: function(form) {
+                let invoiceData = new FormData(form);
 
                 $.ajax({
                     type: "POST",
-                    url: "/admin/settings/maintenance/update",
-                    data: maintenanceData,
+                    url: "/admin/settings/invoice-settings/store",
+                    data: invoiceData,
                     processData: false,
                     contentType: false,
                     headers: {
@@ -71,19 +82,20 @@
                     complete: function () {
                         $('.btn-primary').attr('disabled', false).html(_l('admin.common.save_changes'));
                     },
-                    success: function (resp) {
+
+                    success: function(resp) {
                         if (resp.code === 200) {
-                            loadMaintenanceSettings();
+                            loadInvoiceSettings();
                             showToast('success', resp.message);
 
                         }
                     },
-                    error: function (error) {
+                    error: function(error) {
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
 
                         if (error.responseJSON.code === 422) {
-                            $.each(error.responseJSON.errors, function (key, val) {
+                            $.each(error.responseJSON.errors, function(key, val) {
                                 $("#" + key).addClass("is-invalid");
                                 $("#" + key + "_error").text(val[0]);
                             });
@@ -97,17 +109,18 @@
             }
         });
 
-        loadMaintenanceSettings();
+        loadInvoiceSettings();
 
-        function loadMaintenanceSettings() {
+        function loadInvoiceSettings() {
             $.ajax({
                 url: '/admin/settings/company/list',
                 type: 'POST',
-                data: { 'group_id': 4 },
+                data: { 'group_id': 9 },
                 headers: {
                     'Accept': 'application/json',
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
+
                 success: function(response) {
                     if (response.code === 200) {
                         const settings = response.data;
@@ -115,16 +128,16 @@
                         settings.forEach(setting => {
                             const element = $('#' + setting.key);
 
-                            if (setting.key === 'maintenance_image' && setting.value) {
+                            if (setting.key === 'invoice_logo' && setting.value) {
                                 const imageUrl = `/storage/${setting.value}`;
                                 $('#profile_photo_preview').attr('src', imageUrl).show();
                             }
 
-                            else if (setting.key === 'maintenance_description') {
-                                $('#maintenance_description').summernote('code', setting.value);
+                            else if (setting.key === 'invoice_terms') {
+                                $('#invoice_terms').val(setting.value);
                             }
 
-                            else if (setting.key === 'maintenance_status') {
+                            else if (setting.key === 'show_company_details' || setting.key === 'round_off_enabled') {
                                 element.prop('checked', setting.value == 1);
                             }
 
@@ -145,8 +158,8 @@
         }
     });
 
-
 })();
+
 
 
 function previewImage(event) {
@@ -166,6 +179,7 @@ function removeImage() {
     const preview = document.getElementById('profile_photo_preview');
     const fileInput = document.getElementById('profile_photo');
 
-    preview.src = '/assets/img/settings/company-logo-01.jpg';
+    preview.src = '/backend/assets/img/settings/company-logo-01.jpg';
     fileInput.value = '';
 }
+

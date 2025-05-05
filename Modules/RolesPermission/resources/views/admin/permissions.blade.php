@@ -145,5 +145,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/admin/permissions.js') }}"></script>
+<script src="{{ asset('backend/assets/js/admin/permissions.js') }}"></script>
 @endpush

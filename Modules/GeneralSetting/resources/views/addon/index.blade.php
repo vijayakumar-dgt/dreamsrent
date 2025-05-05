@@ -44,7 +44,7 @@
                                             <div class="d-flex align-items-center justify-content-between mb-3">
                                                 <div class="d-flex align-items-center">
                                                     <div class="plugin-icons me-2">
-                                                        <span><img src="/assets/img/icons/paypal-icons.svg" alt="image" class="img-fluid"></span>
+                                                        <span><img src="/backend/assets/img/icons/paypal-icons.svg" alt="image" class="img-fluid"></span>
                                                     </div>
                                                     <h6 class="fw-normal fs-13">{{ __('admin.general_settings.google') }}</h6>
                                                 </div>
@@ -74,7 +74,7 @@
                                             <div class="d-flex align-items-center justify-content-between mb-3">
                                                 <div class="d-flex align-items-center">
                                                     <div class="plugin-icons  me-2">
-                                                        <span><img src="/assets/img/icons/google-analytics-icon.svg" alt="image" class="img-fluid"></span>
+                                                        <span><img src="/backend/assets/img/icons/google-analytics-icon.svg" alt="image" class="img-fluid"></span>
                                                     </div>
                                                     <h6 class="fw-normal fs-13">{{ __('admin.general_settings.google_analytics') }}</h6>
                                                 </div>
@@ -199,5 +199,5 @@
 
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/general_setting/addon.js') }}"></script>
+<script src="{{ asset('backend/assets/js/general_setting/addon.js') }}"></script>
 @endpush

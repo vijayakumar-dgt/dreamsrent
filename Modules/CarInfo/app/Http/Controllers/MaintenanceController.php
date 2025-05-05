@@ -13,7 +13,6 @@ use Illuminate\View\View;
 use Modules\CarInfo\Models\Maintenance;
 use Modules\CarInfo\Models\VehicleInfo;
 
-
 class MaintenanceController extends Controller
 {
     public function index(): View
@@ -25,13 +24,13 @@ class MaintenanceController extends Controller
     public function store(Request $request): JsonResponse
     {
         $id = $request->id ?? '';
-        $startDate = $request->start_date 
-            ? Carbon::createFromFormat('d-m-Y', $request->start_date) 
+        $startDate = $request->start_date
+            ? Carbon::createFromFormat('d-m-Y', $request->start_date)
             : null;
-        $endDate = $request->end_date 
-            ? Carbon::createFromFormat('d-m-Y', $request->end_date) 
+        $endDate = $request->end_date
+            ? Carbon::createFromFormat('d-m-Y', $request->end_date)
             : null;
-        
+
         $request->merge([
             'start_date' => $startDate ? $startDate->format('Y-m-d') : null,
             'end_date'   => $endDate ? $endDate->format('Y-m-d') : null,
@@ -220,7 +219,7 @@ class MaintenanceController extends Controller
                 $maintenance->end_date = formatDateTime($maintenance->end_date, false);
                 $vehicleImage = uploadedAsset(is_array($maintenance->vehicle_image) ? null : $maintenance->vehicle_image);
                 $maintenance->vehicle_image = $vehicleImage;
-                
+
                 $maintenance->odometer = number_format((float)$maintenance->odometer, 0, ',');
 
                 $statusMap = [

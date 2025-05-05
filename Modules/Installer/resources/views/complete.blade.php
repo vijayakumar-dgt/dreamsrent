@@ -19,8 +19,8 @@
             </div>
         </div>
         <div class="card-footer">
-            <p>For script support, contact us at <a href="https://dreamstechnologies.com/page/support"
-                target="_blank" rel="noopener noreferrer">@dreamstechnologies</a>. We're here to help. Thank you!</p>
+            <p>For script support, contact us at <a href="https://dreamstechnologies.com/page/support" target="_blank"
+                    rel="noopener noreferrer">@dreamstechnologies</a>. We're here to help. Thank you!</p>
         </div>
     </div>
 @endsection

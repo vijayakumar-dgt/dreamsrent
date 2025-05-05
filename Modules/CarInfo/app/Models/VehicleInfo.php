@@ -21,6 +21,7 @@ use Modules\CarInfo\Models\VehicleExtraService;
 use Modules\CarInfo\Models\VehicleFaq;
 use Modules\CarInfo\Models\VehicleSeason;
 use Modules\CarInfo\Models\VehicleTarrif;
+
 /**
  * @property int $id
  * @property string $name
@@ -50,7 +51,7 @@ use Modules\CarInfo\Models\VehicleTarrif;
  * @property string|null $avatar_image
  * @property int $damage_count
  * @property int $status
- * @property string|null $created_at
+ * @property int $created_at
  * @property string|null $updated_at
  * @property int $created_by
  * @property string|null $vin
@@ -111,8 +112,8 @@ class VehicleInfo extends Model
     protected $appends = ['vehicle_image_url'];
     protected $table = "vehicle_info";
 
-    /** 
-     * @return BelongsTo<\Modules\CarInfo\Models\Cartype, \Modules\CarInfo\Models\VehicleInfo> 
+    /**
+     * @return BelongsTo<\Modules\CarInfo\Models\Cartype, \Modules\CarInfo\Models\VehicleInfo>
      */
     public function carType(): BelongsTo
     {
@@ -120,8 +121,8 @@ class VehicleInfo extends Model
         return $this->belongsTo(\Modules\CarInfo\Models\Cartype::class, 'type_id', 'id');
     }
 
-    /** 
-     * @return HasMany<Review, VehicleInfo> 
+    /**
+     * @return HasMany<Review, VehicleInfo>
      */
     public function reviews(): HasMany
     {
@@ -129,8 +130,8 @@ class VehicleInfo extends Model
         return $this->hasMany(Review::class, 'vehicle_id');
     }
 
-    /** 
-     * @return BelongsTo<Brand, VehicleInfo> 
+    /**
+     * @return BelongsTo<Brand, VehicleInfo>
      */
     public function brand(): BelongsTo
     {
@@ -138,8 +139,8 @@ class VehicleInfo extends Model
         return $this->belongsTo(Brand::class, 'brand_id');
     }
 
-    /** 
-     * @return BelongsTo<Category, VehicleInfo> 
+    /**
+     * @return BelongsTo<Category, VehicleInfo>
      */
     public function category(): BelongsTo
     {

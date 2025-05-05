@@ -175,21 +175,21 @@ class HomeController extends Controller
         $meta_keywords = '';
         $og_image = '';
         $mainLocation = null;
-        
+
         $vehicleDetail = VehicleInfo::find($vehicle->id);
-        
+
         if ($vehicleDetail) {
             $vehicleDetail->name = ucfirst($vehicleDetail->name ?? '');
             $vehicleDetail->location_name = $vehicleDetail->mainLocation->name ?? '';
             $vehicleDetail->image_url = $vehicleDetail->vehicle_image ? uploadedAsset($vehicleDetail->vehicle_image) : '';
-        
+
             $seo_title = $vehicleDetail->vehicle_metatitle ?? '';
             $seo_description = $vehicleDetail->vehicle_metadesc ?? '';
             $meta_keywords = $vehicleDetail->vehicle_metakeywords ?? '';
             $og_image = $vehicleDetail->vehicle_image ? uploadedAsset($vehicleDetail->vehicle_image) : '';
             $mainLocation = $vehicleDetail->mainLocation;
         }
-        
+
         $data['author_location'] = GeneralSetting::where('key', 'company_address_line')->first()->value ?? '';
         $appAdmin = User::where('user_type', 1)->first();
         $appAdminDetails = $appAdmin ? UserDetail::where('user_id', $appAdmin->id)->first() : null;

@@ -16,8 +16,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $slug
  * @property int|null $read
  * @property string|null $status
+ * @property string|null $seo_tag
+ * @property string|null $seo_title
+ * @property string|null $seo_description
+ * @property string|null $keywords
+ * @property string|null $canonical_url
+ * @property string|null $og_title
+ * @property string|null $og_description
  * @property \Carbon\Carbon|null $created_at
  */
+
 
 class Page extends Model
 {
@@ -45,8 +53,4 @@ class Page extends Model
         'created_at',
     ];
 
-    // protected static function newFactory(): PageFactory
-    // {
-    //     // return PageFactory::new();
-    // }
 }

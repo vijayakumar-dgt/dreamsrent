@@ -269,7 +269,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (userPhoneInput) {
         iti = intlTelInput(userPhoneInput, {
-            utilsScript: window.location.origin + "/assets/plugins/intltelinput/js/utils.js",
+            utilsScript: window.location.origin + "/backend/assets/plugins/intltelinput/js/utils.js",
             separateDialCode: true,
         });
 
@@ -394,7 +394,7 @@ function removeImage() {
     const preview = document.getElementById('profile_photo_preview');
     const fileInput = document.getElementById('profile_photo');
 
-    preview.src = '/assets/img/customer/customer-01.jpg';
+    preview.src = '/backend/assets/img/customer/customer-01.jpg';
     fileInput.value = '';
 }
 function fetchCountries(){

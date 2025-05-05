@@ -5,7 +5,8 @@
             <p>SMTP credentials setup.</p>
             <div>
                 <a class="btn btn-outline-primary" href="{{ route('setup.configuration') }}">&laquo; Back</a>
-                <a class="btn btn-outline-primary @if (!session()->has('step-6-complete')) disabled @endif" href="{{ route('setup.complete') }}">Next &raquo;</a>
+                <a class="btn btn-outline-primary @if (!session()->has('step-6-complete')) disabled @endif"
+                    href="{{ route('setup.complete') }}">Next &raquo;</a>
             </div>
         </div>
         <div class="card-body">
@@ -37,8 +38,8 @@
                 </div>
                 <div class="mb-3">
                     <label>Mail Sender Name <span class="text-danger">*</span></label>
-                    <input type="text" id="mail_sender_name" name="mail_sender_name" value="{{ $email?->mail_sender_name }}"
-                        class="form-control" placeholder="Enter Mail Sender Name">
+                    <input type="text" id="mail_sender_name" name="mail_sender_name"
+                        value="{{ $email?->mail_sender_name }}" class="form-control" placeholder="Enter Mail Sender Name">
                 </div>
                 <div class="mb-3">
                     <label>Mail Encryption <span class="text-danger">*</span></label>
@@ -55,14 +56,14 @@
             </form>
         </div>
         <div class="card-footer text-center">
-            <p>For script support, contact us at <a href="https://dreamstechnologies.com/page/support"
-                target="_blank" rel="noopener noreferrer">@dreamstechnologies</a>. We're here to help. Thank you!</p>
+            <p>For script support, contact us at <a href="https://dreamstechnologies.com/page/support" target="_blank"
+                    rel="noopener noreferrer">@dreamstechnologies</a>. We're here to help. Thank you!</p>
         </div>
     </div>
     <!-- Skip Modal -->
     <div class="modal" id="skipModal">
         <div class="modal-dialog">
-            <form class="modal-content" action="{{route('setup.smtp.skip')}}" method="POST">
+            <form class="modal-content" action="{{ route('setup.smtp.skip') }}" method="POST">
                 @csrf
                 <!-- Modal Header -->
                 <div class="modal-header">
@@ -72,7 +73,8 @@
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <p class="text-center text-danger">Are you sure you want to skip the SMTP setup? Skipping this step will prevent users from sending any
+                    <p class="text-center text-danger">Are you sure you want to skip the SMTP setup? Skipping this step will
+                        prevent users from sending any
                         emails or receiving verification emails.</p>
                 </div>
 
@@ -111,7 +113,7 @@
                     toastr.warning("Mail port is required");
                 } else if ($.trim(mail_encryption) === '') {
                     toastr.warning("Mail encryption is required");
-                }else if ($.trim(mail_sender_name) === '') {
+                } else if ($.trim(mail_sender_name) === '') {
                     toastr.warning("Mail Sender Name is required");
                 } else {
                     submit_btn.html(

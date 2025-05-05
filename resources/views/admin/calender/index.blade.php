@@ -180,7 +180,7 @@
                             <div class="col-6">
                                 <div class="d-flex align-items-center">
                                     <span class="avatar flex-shrink-0 me-2">
-                                        <img id="car_img" src="/assets/img/car/car-01.jpg" alt="">
+                                        <img id="car_img" src="/backend/assets/img/car/car-01.jpg" alt="">
                                     </span>
                                     <div>
                                         <h6 id="car_title" class="fs-14 mb-1"></h6>
@@ -238,7 +238,7 @@
                         </div>
                         <div class="d-flex align-items-center mb-3">
                             <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                <img id="customer_img" src="/assets/img/default-profile.png" alt="">
+                                <img id="customer_img" src="/backend/assets/img/default-profile.png" alt="">
                             </span>
                             <div>
                                 <h6 class="fs-14 fw-medium mb-1" id="customer_name"></h6>
@@ -252,7 +252,7 @@
                         </div>
                         <div class="d-flex align-items-center mb-3">
                             <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                <img id="driver_img" src="/assets/img/customer/customer-01.jpg" alt="">
+                                <img id="driver_img" src="/backend/assets/img/customer/customer-01.jpg" alt="">
                             </span>
                             <div>
                                 <h6 class="fs-14 fw-medium mb-1" id="driver_name"></h6>
@@ -853,7 +853,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Drivers <span class="text-danger">*</span></label>
                                 <div class="d-flex align-items-center mt-2">
-                                    <a href="#" class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0"><img src="/assets/img/default-profile.png" class="edit_driver_img" alt=""></a>
+                                    <a href="#" class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0"><img src="/backend/assets/img/default-profile.png" class="edit_driver_img" alt=""></a>
                                     <div>
                                         <a class="d-block fw-semibold edit_driver_name" href="#">Reuben Keen</a>
                                     </div>
@@ -883,7 +883,7 @@
 
 @push('scripts')
 <!-- Fullcalendar JS -->
-<script src="{{ asset('assets/plugins/fullcalendar/index.global.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/fullcalendar/calendar-data.js') }}"></script>
-<script src="{{ asset('assets/js/admin/calender.js') }}"></script>
+<script src="{{ asset('backend/assets/plugins/fullcalendar/index.global.min.js') }}"></script>
+<script src="{{ asset('backend/assets/plugins/fullcalendar/calendar-data.js') }}"></script>
+<script src="{{ asset('backend/assets/js/admin/calender.js') }}"></script>
 @endpush

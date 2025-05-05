@@ -55,8 +55,8 @@
             </div>
         </form>
         <div class="card-footer text-center">
-            <p>For script support, contact us at <a href="https://dreamstechnologies.com/page/support"
-                target="_blank" rel="noopener noreferrer">@dreamstechnologies</a>. We're here to help. Thank you!</p>
+            <p>For script support, contact us at <a href="https://dreamstechnologies.com/page/support" target="_blank"
+                    rel="noopener noreferrer">@dreamstechnologies</a>. We're here to help. Thank you!</p>
         </div>
     </div>
 @endsection
@@ -112,7 +112,7 @@
                 reset_database = $('#reset_database');
 
 
-              if ($.trim(port) === '') {
+                if ($.trim(port) === '') {
                     toastr.warning("Port is required");
                 } else if ($.trim(database) === '') {
                     toastr.warning("Database Name is required");

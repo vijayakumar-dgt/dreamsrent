@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (userPhoneInput) {
         window.iti = intlTelInput(userPhoneInput, {
-            utilsScript: "/assets/plugins/intltelinput/js/utils.js",
+            utilsScript: "/backend/assets/plugins/intltelinput/js/utils.js",
             separateDialCode: true,
         });
 
@@ -248,6 +248,10 @@ $(document).ready(function() {
         });
     });
 
+});
+
+$("#company_phone").on("input", function () {
+    $(this).val($(this).val().replace(/[^0-9]/g, ""));
 });
 
 function company_list() {
@@ -520,6 +524,6 @@ function removeImage() {
     const preview = document.getElementById('profile_photo_preview');
     const fileInput = document.getElementById('profile_photo');
 
-    preview.src = '/assets/img/settings/company-logo-01.jpg';
+    preview.src = '/backend/assets/img/settings/company-logo-01.jpg';
     fileInput.value = '';
 }

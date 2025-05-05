@@ -43,7 +43,7 @@ class PageServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+       
     }
 
     /**
@@ -51,10 +51,7 @@ class PageServiceProvider extends ServiceProvider
      */
     protected function registerCommandSchedules(): void
     {
-        // $this->app->booted(function () {
-        //     $schedule = $this->app->make(Schedule::class);
-        //     $schedule->command('inspire')->hourly();
-        // });
+        
     }
 
     /**
@@ -80,26 +77,26 @@ class PageServiceProvider extends ServiceProvider
     {
         $relativeConfigPath = config('modules.paths.generator.config.path');
         $configPath = module_path($this->name, $relativeConfigPath);
-    
+
         if (is_dir($configPath)) {
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configPath));
-    
+
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getExtension() === 'php') {
                     $relativePath = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
                     $nameLower = (string) $this->nameLower; // Ensure it's a string
                     $relativePath = (string) $relativePath; // Ensure it's a string
-                    
+
                     $configKey = $nameLower . '.' . str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
                     $key = ($relativePath === 'config.php') ? $nameLower : $configKey;
-    
+
                     $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
                     $this->mergeConfigFrom($file->getPathname(), $key);
                 }
             }
         }
     }
-    
+
 
     /**
      * Register views.
@@ -117,8 +114,6 @@ class PageServiceProvider extends ServiceProvider
         Blade::componentNamespace($componentNamespace, $this->nameLower);
     }
     /**
-     * Get the services provided by the provider.
-     *
      * @return string[]  // Specifies the return type as an array of strings (service names).
      */
     public function provides(): array
@@ -126,8 +121,6 @@ class PageServiceProvider extends ServiceProvider
         return [];
     }
     /**
-     * Get the services provided by the provider.
-     *
      * @return string[]  // Specifies the return type as an array of strings (service names).
      */
     private function getPublishableViewPaths(): array

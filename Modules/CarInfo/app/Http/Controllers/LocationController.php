@@ -36,7 +36,7 @@ class LocationController extends Controller
                 'message' => 'Unauthorized: User not authenticated.'
             ], 401);
         }
-        
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:locations,name,' . $request->id . ',id,deleted_at,NULL',
             'email' => 'required|email|unique:locations,email,' . $request->id . ',id,deleted_at,NULL',
@@ -89,7 +89,7 @@ class LocationController extends Controller
             $folderName = 'location';
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                if($image && $image->isValid()){
+                if ($image && $image->isValid()) {
                     $location->image = uploadFile($image, $folderName, $oldImage);
                 }
             }
@@ -178,14 +178,14 @@ class LocationController extends Controller
 
         $locations->map(function ($location) {
             $image = is_string($location->image) ? $location->image : null;
-        
+
             $location->image_url = $image && file_exists(public_path('storage/' . $image))
                 ? uploadedAsset($image)
                 : null;
-        
+
             return $location;
         });
-        
+
 
         return response()->json([
             'status' => 'success',
@@ -205,7 +205,7 @@ class LocationController extends Controller
     public function getLocation($id): JsonResponse
     {
         $location = Location::with('workingDays')->find($id);
-        if(!$location) {
+        if (!$location) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 404,
@@ -236,7 +236,7 @@ class LocationController extends Controller
     public function deleteLocation(Request $request): JsonResponse
     {
         try {
-            $location = Location::where('id',$request->delete_id)->firstOrFail();
+            $location = Location::where('id', $request->delete_id)->firstOrFail();
             $location->delete();
             return response()->json([
                 'status' => 'success',

@@ -45,7 +45,7 @@ function contactTable(sortBy = "latest", searchQuery = "") {
 
             if (response.success && response.data.length > 0) {
                 $.each(response.data, function (index, value) {
-                    let imageSrc = value.image ? value.image : "/assets/img/profiles/avatar-20.jpg";
+                    let imageSrc = value.image ? value.image : "/backend/assets/img/profiles/avatar-20.jpg";
 
                     tableBody += `<tr>
                         <td>

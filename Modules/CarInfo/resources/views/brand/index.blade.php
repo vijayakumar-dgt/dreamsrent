@@ -4,7 +4,7 @@
 <!-- Page Wrapper -->
 <div class="page-wrapper">
 	<div class="content me-4">
-		
+
 		<!-- Breadcrumb -->
 		<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 			<div class="my-auto mb-2">
@@ -44,7 +44,7 @@
 		<!-- Table Header -->
 		<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
 			<div class="skeleton label-skeleton label-loader"></div>
-			<div class="d-flex align-items-center flex-wrap row-gap-3 d-none real-label"> 
+			<div class="d-flex align-items-center flex-wrap row-gap-3 d-none real-label">
 				<div class="top-search">
 					<div class="top-search-group">
 						<span class="input-icon">
@@ -55,8 +55,8 @@
 				</div>
 			</div>
 			<div class="skeleton label-skeleton label-loader"></div>
-			<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3 d-none real-label">  
-				<input type="hidden" id="sort_by_status">             
+			<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3 d-none real-label">
+				<input type="hidden" id="sort_by_status">
 				<div class="dropdown">
 					<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 						<i class="ti ti-badge me-1"></i> <span class="ms-1" id="current_sort_status">{{ __('admin.common.status') }}</span>
@@ -161,16 +161,16 @@
 						@endif
 					</tr>
 				</thead>
-				<tbody>			
+				<tbody>
 
 				</tbody>
 			</table>
 		</div>
 		<!-- Custom Data Table -->
 
-		<div class="table-footer d-none"></div>			
+		<div class="table-footer d-none"></div>
 
-	</div>	
+	</div>
 	@include('admin.partials.footer')
 </div>
 <!-- /Page Wrapper -->
@@ -192,13 +192,13 @@
 				<input type="hidden" name="language_id" id="language_id">
 				<div class="modal-body">
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.rentals.brand_image') }}<span class="text-danger"> *</span></label>							
+						<label class="form-label">{{ __('admin.rentals.brand_image') }}<span class="text-danger"> *</span></label>
 
-						<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">                                                
+						<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 							<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
 								<img id="imagePreview" src="" class="img-fluid d-none">
 								<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
-							</div>                                              
+							</div>
 							<div class="profile-upload">
 								<div class="profile-uploader d-flex align-items-center">
 									<div class="drag-upload-btn btn btn-md btn-dark">
@@ -214,14 +214,14 @@
 							<span class="text-danger error-text" id="brand_image_error"></span>
 						</div>
 
-					</div>  
+					</div>
 					<div class="mb-3">
-						<label class="form-label">{{ __('admin.rentals.brand_icon') }}<span class="text-danger"> *</span></label>							
-						<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">                                                
+						<label class="form-label">{{ __('admin.rentals.brand_icon') }}<span class="text-danger"> *</span></label>
+						<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 							<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
 								<img id="iconPreview" src="" class="img-fluid d-none">
 								<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon_2"></i>
-							</div>                                              
+							</div>
 							<div class="profile-upload">
 								<div class="profile-uploader d-flex align-items-center">
 									<div class="drag-upload-btn btn btn-md btn-dark">
@@ -236,7 +236,7 @@
 							</div>
 							<span class="text-danger error-text" id="brand_icon_error"></span>
 						</div>
-					</div>                     
+					</div>
 					<div class="mb-3">
 						<label class="form-label">{{ __('admin.rentals.brand_name') }}<span class="text-danger"> *</span></label>
 						<input type="text" class="form-control" name="brand_name" id="brand_name">
@@ -295,5 +295,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/carinfo/brand.js') }}"></script>
+<script src="{{ asset('backend/assets/js/carinfo/brand.js') }}"></script>
 @endpush

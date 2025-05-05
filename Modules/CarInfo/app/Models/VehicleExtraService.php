@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class VehicleExtraService extends Model
 {
-
     /**
      * @var list<string>
      */

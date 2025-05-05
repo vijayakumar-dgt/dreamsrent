@@ -326,7 +326,7 @@ function initTable() {
 
             if (response.success && response.data.length > 0) {
                 $.each(response.data, function(index, value) {
-                    let vehicleImageUrl = value.vehicle_image ? `/storage/${value.vehicle_image}` : '/assets/img/car/default.jpg';
+                    let vehicleImageUrl = value.vehicle_image ? `/storage/${value.vehicle_image}` : '/backend/assets/img/car/default.jpg';
 
                     tableBody += `<tr>
                         <td>
@@ -586,7 +586,7 @@ function editDriver(id){
                     $(phoneInput).data('itiInstance').destroy();
                 }
                 const iti = intlTelInput(phoneInput, {
-                    utilsScript: window.location.origin + "/assets/plugins/intltelinput/js/utils.js",
+                    utilsScript: window.location.origin + "/backend/assets/plugins/intltelinput/js/utils.js",
                     separateDialCode: true,
                 });
                 $(phoneInput).data('itiInstance', iti);

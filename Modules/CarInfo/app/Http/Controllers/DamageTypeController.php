@@ -140,14 +140,14 @@ class DamageTypeController extends Controller
     public function deleteDamageType(Request $request): JsonResponse
     {
         try {
-            $damageType = DamageType::where('id',$request->delete_id)->firstOrFail();
+            $damageType = DamageType::where('id', $request->delete_id)->firstOrFail();
             $damageType->delete();
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
                 'message' => __('admin.rentals.damage_type_deleted')
             ], 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) { 
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 422,

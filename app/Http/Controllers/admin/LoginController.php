@@ -72,7 +72,7 @@ class LoginController extends Controller
                 } else {
                     $localtion = $locationData['country'] . ' / ' . $locationData['city'];
                 }
-                $user = Auth::guard('web')->user();
+                $user = Auth::guard('admin')->user();
                 $user_device = new UserDevice();
                 if ($user && isset($user->id)) {
                     $user_device->user_id = $user->id;

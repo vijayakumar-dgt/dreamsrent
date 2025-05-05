@@ -8,7 +8,6 @@ use App\Models\Invoice;
 
 class InvoiceItem extends Model
 {
-
     protected $fillable = [
         'invoice_id',
         'description',

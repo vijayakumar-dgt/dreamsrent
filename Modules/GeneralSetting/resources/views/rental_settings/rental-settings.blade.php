@@ -219,5 +219,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/general_setting/rental-settings.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/general_setting/rental-settings.js') }}"></script>
 @endpush

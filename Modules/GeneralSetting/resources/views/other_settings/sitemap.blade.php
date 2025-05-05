@@ -206,5 +206,5 @@
  <!-- /Delete Sitemap -->
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/general_setting/sitemap.js') }}"></script>
+<script src="{{ asset('backend/assets/js/general_setting/sitemap.js') }}"></script>
 @endpush

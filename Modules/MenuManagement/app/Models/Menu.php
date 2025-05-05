@@ -4,6 +4,7 @@ namespace Modules\MenuManagement\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 /**
  * @property string|null $menus
  * @property array<int, mixed>|null $menus_array

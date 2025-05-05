@@ -64,7 +64,7 @@
 
 								<div class="dropdown flag-dropdown">
 									<a class="dropdown-toggle btn btn-white d-flex align-items-center justify-content-between py-1 px-2" data-bs-toggle="dropdown" href="javascript:void(0);">
-										<img src="{{ asset('assets/img/flags/' . app()->getLocale() . '.svg') }}"
+										<img src="{{ asset('backend/backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
 											alt="Language"
 											class="img-fluid rounded-circle me-2 lang-flag">
 										<span>{{ $currentLang->name ?? 'Language' }}</span>
@@ -77,7 +77,7 @@
 												class="dropdown-item d-flex align-items-center change-language"
 												data-id="{{ $language->id }}"
 												data-language_code="{{ $language->code }}">
-												<img src="{{ asset('assets/img/flags/' . $language->code . '.svg') }}"
+												<img src="{{ asset('backend/backend/assets/img/flags/' . $language->code . '.svg') }}"
 													alt="{{ $language->name }}"
 													class="rounded-circle me-2 lang-flag">
 												{{ $language->name }}
@@ -97,7 +97,7 @@
 									<div class="col-xl-9">
 										<div class="d-flex align-items-center flex-wrap row-gap-3 upload-pic">
 											<div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 border rounded-circle frames">
-												<img src="/assets/img/car/car-02.jpg" class="img-fluid rounded-circle" alt="brands">
+												<img src="/backend/assets/img/car/car-02.jpg" class="img-fluid rounded-circle" alt="brands">
 												<a href="javascript:void(0);" id="delImg" class="upload-img-trash trash-end btn btn-sm rounded-circle">
 													<i class="ti ti-trash fs-12"></i>
 												</a>
@@ -628,7 +628,7 @@
 											<div class="col-xxl-8 col-lg-10">
 												<h6 class="mb-3">{{ __('admin.rentals.upload_document') }}</h6>
 												<div class="document-upload text-center bg-light br-5 mb-3">
-													<img src="{{ asset('assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+													<img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
 													<p class="mb-2">{{ __('admin.rentals.drop_files_or_browse') }} <span class="text-info text-decoration-underline"></span></p>
 													<p class="fs-12 mb-0">{{ __('admin.rentals.max_file_size') }}</p>
 													<input type="file" class="form-control image-sign" name="car_document[]" id="car_document" multiple>
@@ -656,7 +656,7 @@
 											<div class="col-xxl-8 col-lg-10">
 												<h6 class="mb-3">{{ __('admin.rentals.upload_policy') }}</h6>
 												<div class="document-upload text-center bg-light br-5 mb-3">
-													<img src="{{ asset('assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+													<img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
 													<p class="mb-2">{{ __('admin.rentals.drop_files_or_browse') }} <span class="text-info text-decoration-underline"></span></p>
 													<p class="fs-12 mb-0">{{ __('admin.rentals.max_file_size') }}</p>
 													<input type="file" class="form-control image-sign" name="policy_document[]" id="policy_document" multiple>
@@ -684,7 +684,7 @@
 											<div class="col-xxl-8 col-lg-10">
 												<h6 class="mb-3">{{ __('admin.rentals.upload_image') }}</h6>
 												<div class="document-upload text-center bg-light br-5 mb-3">
-													<img src="{{ asset('assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+													<img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
 													<p class="mb-2">{{ __('admin.rentals.drop_files_or_browse') }} <span class="text-info text-decoration-underline"></span></p>
 													<p class="fs-12 mb-0">{{ __('admin.rentals.max_file_size') }}</p>
 													<input type="file" class="form-control image-sign" name="car_images[]" id="car_images" multiple>
@@ -1298,5 +1298,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/add-car.js') }}"></script>
+<script src="{{ asset('backend/assets/js/add-car.js') }}"></script>
 @endpush

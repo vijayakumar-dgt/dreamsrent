@@ -13,8 +13,8 @@ class MqttService
 
     public function __construct()
     {
-        $server   = config('mqtt.host', 'broker.emqx.io'); 
-        $port     = (int) config('mqtt.port', 1883);       
+        $server   = config('mqtt.host', 'broker.emqx.io');
+        $port     = (int) config('mqtt.port', 1883);
         $clientId = 'dreamsrent_' . uniqid();
         $connectionSettings = (new ConnectionSettings())
             ->setKeepAliveInterval(60)

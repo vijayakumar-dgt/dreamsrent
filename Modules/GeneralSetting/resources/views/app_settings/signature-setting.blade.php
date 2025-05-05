@@ -126,7 +126,7 @@
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 
                                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
-                                            <img id="profile_photo_preview" src="/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
+                                            <img id="profile_photo_preview" src="/backend/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
                                             <a href="javascript:void(0);" class="uploadimgtrash btn btn-sm rounded-circle" onclick="removeImage()">
                                                 <i class="ti ti-trash fs-12"></i>
                                             </a>
@@ -195,7 +195,7 @@
                                     <label class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 p-2 flex-shrink-0 text-dark frames">
-                                            <img id="edit_signature_preview" src="assets/img/icons/sign.svg" class="img-fluid rounded object-fit-contain" alt="img">
+                                            <img id="edit_signature_preview" src="backend/assets/img/icons/sign.svg" class="img-fluid rounded object-fit-contain" alt="img">
 
                                         </div>
                                         <div class="profile-upload">
@@ -268,7 +268,7 @@
 
 @endsection
 @push('scripts')
-    <script src="{{ asset('assets/js/general_setting/signature-setting.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/general_setting/signature-setting.js') }}"></script>
 @endpush
 
 

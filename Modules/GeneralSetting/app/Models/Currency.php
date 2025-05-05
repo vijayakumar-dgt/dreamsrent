@@ -21,5 +21,4 @@ class Currency extends Model
      */
     protected $fillable = [];
     protected $table    = 'currencies';
-
 }

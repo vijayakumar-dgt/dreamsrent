@@ -336,7 +336,7 @@
                                 <a href="" class="avatar avatar-rounded me-2 flex-shrink-0">
                                     @php
                                     $imagePath = 'storage/' . $booking->profile_image;
-                                    $defaultImage = asset('assets/img/default-profile.png');
+                                    $defaultImage = asset('backend/assets/img/default-profile.png');
                                     @endphp
 
                                     <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="img"></a>
@@ -389,5 +389,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/report/earning.js') }}"></script>
+<script src="{{ asset('backend/assets/js/report/earning.js') }}"></script>
 @endpush

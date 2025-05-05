@@ -41,12 +41,16 @@ class GeneralSettingServiceProvider extends ServiceProvider
     /**
      * Register commands in the format of Command::class
      */
-    protected function registerCommands(): void {}
+    protected function registerCommands(): void
+    {
+    }
 
     /**
      * Register command Schedules.
      */
-    protected function registerCommandSchedules(): void {}
+    protected function registerCommandSchedules(): void
+    {
+    }
 
     /**
      * Register translations.

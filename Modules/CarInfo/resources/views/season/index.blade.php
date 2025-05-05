@@ -226,5 +226,5 @@
         <!-- Delete Modal End -->
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/js/carinfo/season.js') }}"></script>
+<script src="{{ asset('backend/assets/js/carinfo/season.js') }}"></script>
 @endpush

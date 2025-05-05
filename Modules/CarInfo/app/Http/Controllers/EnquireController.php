@@ -98,7 +98,7 @@ class EnquireController extends Controller
                         try {
                             $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
                             $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
-                        
+
                             if ($startDate && $endDate) {
                                 $start = $startDate->startOfDay();
                                 $end = $endDate->endOfDay();
@@ -106,7 +106,7 @@ class EnquireController extends Controller
                             }
                         } catch (\Exception $e) {
                             // Log error if needed
-                        }                        
+                        }
                     }
                 })
                 ->when($request->filled('sort_by'), function ($query) use ($request) {

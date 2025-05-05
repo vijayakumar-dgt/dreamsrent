@@ -107,7 +107,7 @@
                             <a href="/admin/content/blog-details/{{$blogPost->slug}}">
                                 @php
                                 $imagePath = 'storage/' . $blogPost->image;
-                                $defaultImage = asset('assets/img/default-image-02.jpg');
+                                $defaultImage = asset('backend/assets/img/default-image-02.jpg');
                                 @endphp
 
                                 <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image">
@@ -135,7 +135,7 @@
                                     <a href="javascript:void(0);">
                                         @php
                                         $imagePath = 'storage/' . $blogPost->profile_image;
-                                        $defaultImage = asset('assets/img/default-profile.png');
+                                        $defaultImage = asset('backend/assets/img/default-profile.png');
                                         @endphp
 
                                         <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image" class="avatar avatar-sm rounded-circle me-1">
@@ -194,6 +194,6 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/general_setting/blog.js') }}"></script>
+<script src="{{ asset('backend/assets/js/general_setting/blog.js') }}"></script>
 
 @endpush

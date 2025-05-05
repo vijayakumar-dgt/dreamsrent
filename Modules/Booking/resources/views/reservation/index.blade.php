@@ -348,5 +348,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/booking/reservation.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/booking/reservation.js') }}"></script>
 @endpush
