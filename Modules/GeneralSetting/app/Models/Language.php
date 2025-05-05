@@ -5,6 +5,12 @@ namespace Modules\GeneralSetting\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int|null $language_id
+ * @property int|null $default
+ * @property string|null $rtl
+ * @property int|null $status
+ */
 class Language extends Model
 {
     /**

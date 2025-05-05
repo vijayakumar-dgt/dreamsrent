@@ -115,12 +115,19 @@ class InstallerServiceProvider extends ServiceProvider
 
     /**
      * Get the services provided by the provider.
+     *
+     * @return string[] Array of service names.
      */
     public function provides(): array
     {
         return [];
     }
 
+    /**
+     * Get the publishable view paths.
+     *
+     * @return string[] Array of view paths.
+     */
     private function getPublishableViewPaths(): array
     {
         $paths = [];

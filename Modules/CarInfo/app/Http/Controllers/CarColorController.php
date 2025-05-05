@@ -154,7 +154,7 @@ class CarColorController extends Controller
         return response()->json(['success' => true, 'message' => 'Selected items deleted successfully.']);
     }
 
-    public function getVehicleColors(Request $request)
+    public function getVehicleColors(Request $request): JsonResponse
     {
         $orderBy = $request->order_by ?? 'asc';
         $search = $request->search ?? null;

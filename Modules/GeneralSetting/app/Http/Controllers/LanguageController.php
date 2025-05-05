@@ -18,10 +18,7 @@ use Illuminate\Http\RedirectResponse;
 
 class LanguageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index():View
+    public function index(): View
     {
         $translationLanguages = TranslationLanguage::where('status', 1)->get();
         $data = [
@@ -30,11 +27,12 @@ class LanguageController extends Controller
         return view('generalsetting::website_settings.languages', $data);
     }
 
-    public function addLanguage(Request $request):JsonResponse
+    public function addLanguage(Request $request): JsonResponse
     {
+        /** @var TranslationLanguage $languageTranslation */
         $languageTranslation = TranslationLanguage::find($request->lang_id);
 
-        if (!$languageTranslation) {
+        if ($languageTranslation == null) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 422,
@@ -42,7 +40,6 @@ class LanguageController extends Controller
             ], 422);
         }
 
-        // Check if the language is already added
         if (Language::where('language_id', $languageTranslation->id)->exists()) {
             return response()->json([
                 'status'  => 'error',
@@ -52,19 +49,16 @@ class LanguageController extends Controller
         }
 
         try {
-            // Add new language
             $language = new Language();
             $language->language_id = $languageTranslation->id;
             $language->save();
 
             $langPath = base_path('resources/lang/' . $languageTranslation->code);
 
-            // Create directory if not exists
             if (!file_exists($langPath)) {
                 mkdir($langPath, 0777, true);
             }
 
-            // Copy default files from English
             $defaultLang = 'en';
             $langDefaultFiles = ['admin.php', 'app.php', 'web.php'];
 
@@ -74,8 +68,6 @@ class LanguageController extends Controller
 
                 if (file_exists($sourcePath) && !file_exists($destinationPath)) {
                     $translations = include $sourcePath;
-
-                    // Remove values, keep structure
                     $clearedTranslations = array_map(function ($module) {
                         return array_map(function () {
                             return '';
@@ -104,9 +96,8 @@ class LanguageController extends Controller
         }
     }
 
-    public function getLanguages(Request $request):JsonResponse
+    public function getLanguages(Request $request): JsonResponse
     {
-        // $languages = Language::with('transLang')->get();
         $languages = Language::query();
         if ($request->has('search') && $request->search != "") {
             $languages->where(function ($query) use ($request) {
@@ -121,12 +112,9 @@ class LanguageController extends Controller
         $languages = $languages->with('transLang')->get();
         $langDefaultFiles = ['admin.php', 'app.php', 'web.php'];
         $responseArray = [];
-
-        // Set English as the base language
         $defaultLang = 'en';
         $totalKeys = 0;
 
-        // Calculate total keys in the default language
         foreach ($langDefaultFiles as $file) {
             $filePath = base_path("resources/lang/{$defaultLang}/{$file}");
             if (file_exists($filePath)) {
@@ -137,9 +125,10 @@ class LanguageController extends Controller
                 }
             }
         }
-
-        // Compare each language against the English base
         foreach ($languages as $language) {
+            if (!$language->transLang) {
+                continue;
+            }
             $langCode = $language->transLang->code;
             $translatedCount = 0;
 
@@ -181,20 +170,12 @@ class LanguageController extends Controller
         ], 200);
     }
 
-    public function updateLanguageSettings(Request $request):JsonResponse
+    public function updateLanguageSettings(Request $request): JsonResponse
     {
         try {
+            /** @var \Modules\GeneralSetting\Models\Language $language */
             $language = Language::find($request->id);
-            $languageCode = $language->transLang->code;
-            if (!$language) {
-                return response()->json([
-                    'status'  => 'error',
-                    'code'    => 404,
-                    'message' => __('admin.general_settings.language_not_found')
-                ], 404);
-            }
-
-            // Update field dynamically
+            $languageCode = $language->transLang->code ?? null;
             $field = $request->field;
             if ($field == 'default') {
                 Language::where('default', 1)->update(['default' => 0]);
@@ -227,7 +208,7 @@ class LanguageController extends Controller
         }
     }
 
-    public function changeLanguage(Request $request):JsonResponse
+    public function changeLanguage(Request $request): JsonResponse
     {
         $language = TranslationLanguage::where('code', $request->language_code)->first();
 
@@ -253,7 +234,7 @@ class LanguageController extends Controller
         ]);
     }
 
-    public function userFlagChangeLanguage(Request $request):JsonResponse
+    public function userFlagChangeLanguage(Request $request): JsonResponse
     {
         $language = TranslationLanguage::where('code', $request->language_code)->first();
 
@@ -278,7 +259,7 @@ class LanguageController extends Controller
         ]);
     }
 
-    public function language(Request $request):View
+    public function language(Request $request): View
     {
         $langDefaultFiles = ['admin', 'app', 'web'];
 
@@ -289,15 +270,14 @@ class LanguageController extends Controller
         $language = Language::with('transLang')
             ->whereHas('transLang', fn($query) => $query->where('code', $request->code))
             ->firstOrFail();
-
-        $flag = asset("assets/img/flags/{$language->transLang->code}.svg");
+        $langCode = $language->transLang->code ?? null;
+        $flag = asset("assets/img/flags/{$langCode}.svg");
         $tab = $request->type;
 
         return view('generalsetting::website_settings.language_details', compact('language', 'flag', 'tab'));
     }
 
-
-    public function getLanguageModules(Request $request):JsonResponse
+    public function getLanguageModules(Request $request): JsonResponse
     {
         $validTabs = ['admin', 'app', 'web'];
         $tab = $request->tab;
@@ -322,7 +302,7 @@ class LanguageController extends Controller
             ], 404);
         }
 
-        $langCode = $language->transLang->code;
+        $langCode = $language->transLang->code ?? null;
         $defaultLang = 'en';
         $filePath = base_path("resources/lang/{$defaultLang}/{$tab}.php");
         $translatedPath = base_path("resources/lang/{$langCode}/{$tab}.php");
@@ -375,7 +355,7 @@ class LanguageController extends Controller
         ], 200);
     }
 
-    public function editModuleLanguage(Request $request):JsonResponse
+    public function editModuleLanguage(Request $request): JsonResponse
     {
         $code = $request->code;
         $tab = $request->tab;
@@ -401,23 +381,15 @@ class LanguageController extends Controller
             ], 404);
         }
 
-        $langCode = $language->transLang->code;
+        $langCode = $language->transLang->code ?? null;
         $defaultLang = 'en';
-
-        // Paths for translations
         $filePath = base_path("resources/lang/{$defaultLang}/{$tab}.php");
         $translatedPath = base_path("resources/lang/{$langCode}/{$tab}.php");
-
-        // Load translations
         $defaultTranslations = file_exists($filePath) ? include $filePath : [];
         $translatedTranslations = file_exists($translatedPath) ? include $translatedPath : [];
-
         $moduleKeys = $defaultTranslations[$module] ?? [];
         $translatedModuleKeys = $translatedTranslations[$module] ?? [];
-
-        // Prepare response array
         $responseArray = [];
-
         $translatedCount = 0;
         $totalKeys = count($moduleKeys);
 
@@ -441,9 +413,7 @@ class LanguageController extends Controller
             ];
         }
 
-        // Calculate progress
         $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100, 2) : 0;
-        //color
         switch (true) {
             case $progress >= 100:
                 $color = "bg-success";
@@ -462,22 +432,20 @@ class LanguageController extends Controller
                 break;
         }
 
-        // Return response
         return response()->json([
             'status'   => 'success',
             'code'     => 200,
             'message'  => 'Module keys fetched successfully',
             'data'     => $responseArray,
             'language' => $language,
-            'icon'     => url('assets/img/flags/' . $language->transLang->code . '.svg'),
+            'icon'     => url('assets/img/flags/' . $langCode . '.svg'),
             'progress' => $progress,
             'color'    => $color,
-            'uppercaseName' => strtoupper($language->transLang->name)
+            'uppercaseName' => strtoupper($language->transLang->name ?? ''),
         ]);
     }
 
-
-    public function updateModuleLanguage(Request $request):JsonResponse
+    public function updateModuleLanguage(Request $request): JsonResponse
     {
         $code = $request->code;
         $tab = $request->tab;
@@ -497,14 +465,10 @@ class LanguageController extends Controller
             ], 404);
         }
 
-        $langCode = $language->transLang->code;
+        $langCode = $language->transLang->code ?? null;
         $defaultLang = 'en';
-
-        // Paths for translations
         $filePath = base_path("resources/lang/{$defaultLang}/{$tab}.php");
         $translatedPath = base_path("resources/lang/{$langCode}/{$tab}.php");
-
-        // Load translations
         $defaultTranslations = file_exists($filePath) ? include $filePath : [];
         $translatedTranslations = file_exists($translatedPath) ? include $translatedPath : [];
 
@@ -514,7 +478,6 @@ class LanguageController extends Controller
             $translatedTranslations[$module][$key] = $value;
         }
 
-        // Save translations
         file_put_contents($translatedPath, '<?php return ' . var_export($translatedTranslations, true) . ';');
         $moduleKeys = $defaultTranslations[$module] ?? [];
         $translatedModuleKeys = $translatedTranslations[$module] ?? [];
@@ -535,9 +498,7 @@ class LanguageController extends Controller
             ];
         }
 
-        // Calculate progress
         $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100, 2) : 0;
-         //color
         switch (true) {
             case $progress >= 100:
                 $color = "bg-success";
@@ -560,20 +521,21 @@ class LanguageController extends Controller
             'code'     => 200,
             'message'  => 'Module key updated successfully',
             'language' => $language,
-            'icon'     => url('assets/img/flags/' . $language->transLang->code . '.svg'),
-            'uppercaseName' => strtoupper($language->transLang->name),
+            'icon'     => url('assets/img/flags/' . $langCode . '.svg'),
+            'uppercaseName' => strtoupper($language->transLang->name ?? ''),
             'progress' => $progress,
             'color'    => $color
         ]);
     }
 
-    public function deleteLanguage(Request $request):JsonResponse
+    public function deleteLanguage(Request $request): JsonResponse
     {
         /** @var \Modules\GeneralSetting\Models\Language $language */
         $language = Language::find($request->id);
 
         $systemLanguage = 'en';
-        if ($language->transLang->code == $systemLanguage) {
+        $langCode = $language->transLang->code ?? null;
+        if ($langCode == $systemLanguage) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 422,
@@ -593,15 +555,16 @@ class LanguageController extends Controller
 
             if (is_dir($langPath)) {
                 $files = glob($langPath . '/*');
-                foreach ($files as $file) {
-                    if (is_file($file)) {
-                        unlink($file);
+                if (is_array($files)) {
+                    foreach ($files as $file) {
+                        if (is_file($file)) {
+                            unlink($file);
+                        }
                     }
                 }
                 rmdir($langPath);
             }
         }
-
         $language->delete();
 
         return response()->json([
