@@ -48,7 +48,7 @@
 	@else
 		<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
 	@endif
-	<link rel="stylesheet" href="{{ asset('assets/css/custom/custom-style.css?v=1.4') }}">
+	<link rel="stylesheet" href="{{ asset('backend/assets/css/custom/custom-style.css?v=1.4') }}">
 </head>
 <body data-theme={{ $theme ?? 1 }} data-dir="{{ $isRTL ? 'rtl' : 'ltr' }}">
 	<div class="main-wrapper home-three">
@@ -75,8 +75,8 @@
 	<!-- jQuery -->
 	<script src="{{ asset('frontend/assets/js/jquery-3.7.1.min.js') }}"></script>
 	<!-- jQuery validation -->
-	<script src="{{ asset('assets/js/jquery/jquery-validation.min.js') }}"></script>
-	<script src="{{ asset('assets/js/jquery/jquery-validation-additional-methods.min.js') }}"></script>
+	<script src="{{ asset('backend/assets/js/jquery/jquery-validation.min.js') }}"></script>
+	<script src="{{ asset('backend/assets/js/jquery/jquery-validation-additional-methods.min.js') }}"></script>
 	<!-- Bootstrap Core JS -->
 	<script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>
 	<!-- counterup JS -->
