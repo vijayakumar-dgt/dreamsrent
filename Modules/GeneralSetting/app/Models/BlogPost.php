@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $seo_title
  * @property string $seo_description
  * @property int|null $parent_id
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $deleted_at
  */
 class BlogPost extends Model
 {

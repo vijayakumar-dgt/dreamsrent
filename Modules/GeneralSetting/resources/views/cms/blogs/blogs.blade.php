@@ -123,7 +123,7 @@
                                 </div>
                                 <span class="badge badge-info badge-md">
                                     <?php
-                                    $category = Modules\GeneralSetting\Models\BlogCategory::where('id', $blogPost->category)->first();
+                                    $category = isset($blogPost) ? Modules\GeneralSetting\Models\BlogCategory::where('id', $blogPost->category)->first() : null;
                                     ?>
                                     {{$category->name ?? '-'}}
                                 </span>
