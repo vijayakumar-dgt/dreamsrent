@@ -219,7 +219,8 @@ class MaintenanceController extends Controller
                 $maintenance->start_date = formatDateTime($maintenance->start_date, false);
                 $maintenance->end_date = formatDateTime($maintenance->end_date, false);
                 $vehicleImage = uploadedAsset(is_array($maintenance->vehicle_image) ? null : $maintenance->vehicle_image);
-                $maintenance->vehicle_image = is_array($vehicleImage) ? $vehicleImage['url'] : $vehicleImage;
+                $maintenance->vehicle_image = $vehicleImage;
+                
                 $maintenance->odometer = number_format((float)$maintenance->odometer, 0, ',');
 
                 $statusMap = [
