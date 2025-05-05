@@ -138,7 +138,7 @@ class CalanderController extends Controller
             ? $booking->delivery_return_location
             : Location::where('id', $booking->return_location)->value('name');
 
-        if (!empty($booking->driver_id) && $booking->driver_id != 0) {
+        if (!empty($booking->driver_id)) {
             $driverDetails = Driver::select('driver_name', 'image', 'phone_number')
                 ->where('id', $booking->driver_id)
                 ->first();

@@ -232,7 +232,7 @@ function getDefaultCurrencySymbol(): string
     return '$';
 }
 
-function isRTL(?string $languageCode = null): int
+function isRTL(?string $languageCode = null): int|string
 {
     $language = TranslationLanguage::select('id')->where('code', $languageCode)->first();
     if ($language) {
