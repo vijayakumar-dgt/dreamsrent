@@ -100,12 +100,8 @@
             var btnId = '#change_password';
             var data = new FormData(form);
             data.append('id', $('#id').val());
-
-
         }
     });
-
-
 });
 $(document).ready(function() {
     $("#adminProfileForm").validate({
@@ -219,12 +215,7 @@ $(document).ready(function() {
         },
         submitHandler: function(form) {
             let adminProfileData = new FormData(form);
-
-            const userPhoneInput = document.querySelector(".admin_phone");
-            const iti = window.intlTelInputGlobals.getInstance(userPhoneInput);
-            const fullPhoneNumber = iti.getNumber();
-            adminProfileData.set("phone", fullPhoneNumber);
-            adminProfileData.set("international_phone_number", fullPhoneNumber);
+            adminProfileData.set("phone", $('#international_phone_number').val());
 
             $.ajax({
                 type: "POST",
@@ -265,6 +256,9 @@ $(document).ready(function() {
     });
 });
 
+$("#admin_phone").on("input", function () {
+    $(this).val($(this).val().replace(/[^0-9]/g, ""));
+});
 
 })();
 
@@ -289,7 +283,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (intlNumber) {
                 document.querySelector("#international_phone_number").value = intlNumber;
 
-                userPhoneInput.value = intlNumber;
+                intlPhoneInput.value = intlNumber;
             }
 
             if ($("#adminProfileForm").valid()) {
@@ -298,8 +292,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
-
-
 
 function validateImageSize(input, event) {
     const file = input.files[0];

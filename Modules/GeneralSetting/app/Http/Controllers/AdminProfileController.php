@@ -27,7 +27,7 @@ class AdminProfileController extends Controller
             'first_name'    => 'required|string|max:255',
             'last_name'     => 'required|string|max:255',
             'email'         => 'required|email|unique:users,email,' . $request->id,
-            'phone'         => 'required|numeric',
+            'phone'         => 'required',
             'address_line'  => 'nullable|string|max:255',
             'country'       => 'required|integer|exists:countries,id',
             'state'         => 'required|integer|exists:states,id',
