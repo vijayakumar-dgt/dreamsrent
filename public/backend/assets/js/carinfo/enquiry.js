@@ -23,8 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (initialPhoneNumber) {
             iti.setNumber(initialPhoneNumber);
         }
-
-
     }
 });
 
@@ -34,7 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const permissions = await loadUserPermissions();
 
 $(document).ready(function() {
-
 
     initTable();
 
@@ -326,13 +323,12 @@ function initTable() {
 
             if (response.success && response.data.length > 0) {
                 $.each(response.data, function(index, value) {
-                    let vehicleImageUrl = value.vehicle_image ? `/storage/${value.vehicle_image}` : '/backend/assets/img/car/default.jpg';
 
                     tableBody += `<tr>
                         <td>
                             <div class="d-flex align-items-center">
                                 <a href="" class="avatar me-2 flex-shrink-0">
-                                    <img src="${vehicleImageUrl}" alt="Vehicle Image" class="avatar-img">
+                                    <img src="${value.vehicle_image}" alt="Vehicle Image" class="avatar-img">
                                 </a>
                                 <div>
                                     <a href="" class="fw-semibold d-block">${value.car_name}</a>
@@ -450,9 +446,6 @@ function initTable() {
         }
     });
 }
-
-
-
 
 $(document).on('click', '.dataTables_paginate a', function() {
     $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
