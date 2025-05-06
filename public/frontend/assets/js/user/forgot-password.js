@@ -87,7 +87,7 @@
 
                         sendEmail(username, emailData, "email", userName, otp)
                             .then(() => {
-                                const successMessage = _l('web.auth.otp_sent_email', { username: username }) || "OTP sent to your Email Address";
+                                const successMessage = _l('web.auth.otp_sent_to_email', { username: username }) || "OTP sent to your Email Address";
                                 $("#otp-email-message").text(successMessage);
                                 $("#otp-email-modal").modal("show");
                                 startTimer(otpExpireTime);
@@ -97,7 +97,7 @@
                             });
                     } else {
                         // Show OTP Modal immediately if not using email
-                        const successMessage = _l('web.auth.otp_sent_email', { username: username }) || "OTP sent to your Email Address";
+                        const successMessage = _l('web.auth.otp_sent_to_email', { username: username }) || "OTP sent to your Email Address";
                         $("#otp-email-message").text(successMessage);
                         $("#otp-email-modal").modal("show");
                         startTimer(otpExpireTime);
