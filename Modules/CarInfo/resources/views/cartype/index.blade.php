@@ -3,7 +3,7 @@
 @section('meta_title', __('admin.rentals.vehicle_types') . ' || ' . $companyName)
 
 @section('content')
-<!-- Page Wrapper -->
+    <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
         <!-- Breadcrumb -->
@@ -195,7 +195,7 @@
         </div>
         @include('admin.partials.footer')
     </div>
-<!-- /Page Wrapper -->
+    <!-- /Page Wrapper -->
 
     <!-- Add/Edit Type Start-->
     <div class="modal fade addmodal" id="add_type">
