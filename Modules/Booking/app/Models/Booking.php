@@ -143,8 +143,6 @@ class Booking extends Model
 
     public const RESERVATION_SECRET_KEY = 'ReservationId';
 
-    protected $appends = ['encrypted_id'];
-
     /**
      * Get the status label for a given status.
      *
