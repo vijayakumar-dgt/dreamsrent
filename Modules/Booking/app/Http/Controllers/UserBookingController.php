@@ -489,7 +489,7 @@ class UserBookingController extends Controller
                 'reservation_id' => $booking->reservation_id ?? "",
                 'start_date'     => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
                 'end_date'       => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
-                'pickup_location' => $booking->pickupLocation?->name ?? '',
+                'pickup_location' => $booking->pickupLocation->name ?? '',
                 'delivery_type'   => $booking->delivery_type ?? "",
                 'rental_type'     => $booking->rental_type ?? "",
                 'payment_type'    => $booking->payment_type ?? "",
@@ -558,10 +558,10 @@ class UserBookingController extends Controller
 
             $response = $this->provider->createOrder($order);
 
-            if (!$response || !isset($response['id'])) {
+            if (!is_array($response) || !array_key_exists('id', $response)) {
                 return response()->json([
                     'code' => 500,
-                    'message' => __('web.home.paypal_order_failded'),
+                    'message' => __('web.home.paypal_order_failed'), // Fixed typo in "failed"
                 ]);
             }
 
@@ -936,6 +936,7 @@ class UserBookingController extends Controller
     {
         try {
             $response = $this->provider->capturePaymentOrder($request->get('token'));
+            
 
             if (isset($response['status']) && $response['status'] == 'COMPLETED') {
                 Booking::where('transaction_id', $response['id'])->update(['payment_status' => 2]);
@@ -1036,7 +1037,7 @@ class UserBookingController extends Controller
                 'reservation_id' => $booking->reservation_id ?? '',
                 'start_date' => ($booking && $booking->start_datetime) ? formatDateTime($booking->start_datetime) : '',
                 'end_date' => ($booking && $booking->end_datetime) ? formatDateTime($booking->end_datetime) : '',
-                'pickup_location' => $booking?->pickupLocation?->name ?? '',
+                'pickup_location' => $booking->pickupLocation->name ?? '',
                 'delivery_type' => $booking->delivery_type ?? '',
                 'rental_type' => $booking->rental_type ?? '',
                 'payment_type' => $booking->payment_type ?? '',
