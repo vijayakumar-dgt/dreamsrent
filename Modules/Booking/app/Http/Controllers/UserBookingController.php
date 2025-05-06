@@ -489,7 +489,7 @@ class UserBookingController extends Controller
                 'reservation_id' => $booking->reservation_id ?? "",
                 'start_date'     => $booking->start_datetime ? formatDateTime($booking->start_datetime) : "",
                 'end_date'       => $booking->end_datetime ? formatDateTime($booking->end_datetime) : "",
-                'pickup_location' => $booking->pickupLocation?->name ?? '',
+                'pickup_location' => $booking->pickupLocation->name ?? '',
                 'delivery_type'   => $booking->delivery_type ?? "",
                 'rental_type'     => $booking->rental_type ?? "",
                 'payment_type'    => $booking->payment_type ?? "",
@@ -558,10 +558,10 @@ class UserBookingController extends Controller
 
             $response = $this->provider->createOrder($order);
 
-            if (!$response || !isset($response['id'])) {
+            if (!is_array($response) || !array_key_exists('id', $response)) {
                 return response()->json([
                     'code' => 500,
-                    'message' => __('web.home.paypal_order_failded'),
+                    'message' => __('web.home.paypal_order_failed'), // Fixed typo in "failed"
                 ]);
             }
 
@@ -937,43 +937,50 @@ class UserBookingController extends Controller
         try {
             $response = $this->provider->capturePaymentOrder($request->get('token'));
 
-            if (isset($response['status']) && $response['status'] == 'COMPLETED') {
-                Booking::where('transaction_id', $response['id'])->update(['payment_status' => 2]);
-                $booking = Booking::where('transaction_id', $response['id'])->first();
-                $authUser = Auth::guard('web')->user();
-                $vehicle = VehicleInfo::where('id', $request->vehicle_id)->first();
-                $driver = $booking ? Driver::find($booking->driver_id) : null;
-                $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
-                $notifyData = [
-                    'user_name' => $authUser->name ?? '',
-                    'company_name' => $companyName,
-                    'email'     => $authUser->email ?? '',
-                    'phonenumber' => $authUser->phone_number ?? '',
-                    'vehicle_name' => $vehicle->name ?? "",
-                    'driver_name'  => $driver ? $driver->driver_name : "",
-                    'reservation_id' => $booking->reservation_id ?? "",
-                    'start_date' => ($booking && $booking->start_datetime) ? formatDateTime($booking->start_datetime) : '',
-                    'end_date' => ($booking && $booking->end_datetime) ? formatDateTime($booking->end_datetime) : '',
-                    'pickup_location' => ($booking && $booking->pickupLocation) ? $booking->pickupLocation->name : '',
-                    'delivery_type'   => $booking->delivery_type ?? "",
-                    'rental_type'     => $booking->rental_type ?? "",
-                    'payment_type'    => $booking->payment_type ?? "",
-                    'payment_status'  => $booking->payment_status ?? "",
-                    'tototal_amount'  => $booking->final_price ?? ""
-                ];
-                if (rentalNotificationEnabled()) {
-                    $appAdmin = User::where('user_type', 1)->first();
+            // Ensure $response is an array before accessing it as one
+            if (is_array($response) && isset($response['status']) && $response['status'] == 'COMPLETED') {
+                if (isset($response['id'])) {
+                    Booking::where('transaction_id', $response['id'])->update(['payment_status' => 2]);
+                    $booking = Booking::where('transaction_id', $response['id'])->first();
+                    $authUser = Auth::guard('web')->user();
+                    $vehicle = VehicleInfo::where('id', $request->vehicle_id)->first();
+                    $driver = $booking ? Driver::find($booking->driver_id) : null;
+                    $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
+                    $notifyData = [
+                        'user_name' => $authUser->name ?? '',
+                        'company_name' => $companyName,
+                        'email'     => $authUser->email ?? '',
+                        'phonenumber' => $authUser->phone_number ?? '',
+                        'vehicle_name' => $vehicle->name ?? "",
+                        'driver_name'  => $driver ? $driver->driver_name : "",
+                        'reservation_id' => $booking->reservation_id ?? "",
+                        'start_date' => ($booking && $booking->start_datetime) ? formatDateTime($booking->start_datetime) : '',
+                        'end_date' => ($booking && $booking->end_datetime) ? formatDateTime($booking->end_datetime) : '',
+                        'pickup_location' => ($booking && $booking->pickupLocation) ? $booking->pickupLocation->name : '',
+                        'delivery_type'   => $booking->delivery_type ?? "",
+                        'rental_type'     => $booking->rental_type ?? "",
+                        'payment_type'    => $booking->payment_type ?? "",
+                        'payment_status'  => $booking->payment_status ?? "",
+                        'tototal_amount'  => $booking->final_price ?? ""
+                    ];
+                    if (rentalNotificationEnabled()) {
+                        $appAdmin = User::where('user_type', 1)->first();
 
-                    if ($appAdmin) {
-                        sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
-                    }
+                        if ($appAdmin) {
+                            sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+                        }
 
-                    if ($authUser && $authUser->email) {
-                        sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
+                        if ($authUser && $authUser->email) {
+                            sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
+                        }
                     }
+                    return redirect()->route('payment.success.page', ['transaction_id' => $response['id']]);
                 }
 
-                return redirect()->route('payment.success.page', ['transaction_id' => $response['id']]);
+                return response()->json([
+                    'code' => 400,
+                    'message' => __('web.home.payment_id_missing'),
+                ], 400);
             } else {
                 return response()->json([
                     'code' => 400,
@@ -1036,7 +1043,7 @@ class UserBookingController extends Controller
                 'reservation_id' => $booking->reservation_id ?? '',
                 'start_date' => ($booking && $booking->start_datetime) ? formatDateTime($booking->start_datetime) : '',
                 'end_date' => ($booking && $booking->end_datetime) ? formatDateTime($booking->end_datetime) : '',
-                'pickup_location' => $booking?->pickupLocation?->name ?? '',
+                'pickup_location' => $booking->pickupLocation->name ?? '',
                 'delivery_type' => $booking->delivery_type ?? '',
                 'rental_type' => $booking->rental_type ?? '',
                 'payment_type' => $booking->payment_type ?? '',

@@ -117,10 +117,10 @@
     <!-- jQuery -->
     <script src="{{ asset('frontend/assets/js/jquery-3.7.1.min.js') }}"></script>
     <!-- jQuery validation -->
-    <script src="{{ asset('assets/js/jquery/jquery-validation.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery/jquery-validation-additional-methods.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/jquery/jquery-validation.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/jquery/jquery-validation-additional-methods.min.js') }}"></script>
     <!-- Toastr JS -->
-    <script src="{{ asset('assets/plugins/toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/plugins/toastr/toastr.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/custom/lang_script.js') }}"></script>
     <!-- Bootstrap Core JS -->
     <script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>

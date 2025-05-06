@@ -33,7 +33,7 @@
                 <li>
                     <ul>
                         @if (haspermission($permissions, 'reservations', 'view') && isAccessMenu('reservation'))
-                        <li class="{{ request()->routeIs(['reservation.index', 'reservation.create', 'reservation.edit']) ? 'active' : '' }}">
+                        <li class="{{ request()->routeIs(['reservation.index', 'reservation.create', 'reservation.edit', 'reservation.details']) ? 'active' : '' }}">
                             <a href="{{ route('reservation.index') }}">
                                 <i class="ti ti-files"></i><span>{{ __('admin.common.reservations') }}</span>
                             </a>
@@ -47,7 +47,7 @@
                         </li>
                         @endif
                         @if (haspermission($permissions, 'quotations', 'view'))
-                        <li class="{{ request()->routeIs('quotations.index') ? 'active' : '' }}">
+                        <li class="{{ request()->routeIs(['quotations.index', 'quotations.create', 'quotations.edit', 'quotations.details']) ? 'active' : '' }}">
                             <a href="{{ route('quotations.index') }}">
                                 <i class="ti ti-file-symlink"></i><span>{{ __('admin.common.quotations') }}</span>
                             </a>
