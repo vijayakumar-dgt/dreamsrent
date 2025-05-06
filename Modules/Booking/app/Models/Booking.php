@@ -16,15 +16,9 @@ use Modules\Booking\Models\BookingUserInfo;
 
 /**
  * @property string|null $booking_date
-<<<<<<< HEAD
  * @property string|null $extra_service_names
  * @property int $insurance_count
  * @property string|null $driver_image
-=======
- * @property string|null $vehicle_image
- * @property string|null $driver_image
- * @property string|null $customer_image
->>>>>>> 7b7ab55f7e0109510f2a109c4bd245b0e4128e9f
  * @property string|array<string>|null $vehicle_image_url
  * @property string|null $start_datetime
  * @property string|null $end_datetime
@@ -79,8 +73,6 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property string|int|null $booking_status_text
  * @property string|null $insurance
  * @property int|null $extra_service_count
- * @property array|null $insurance
- * @property array|null $extra_service
  *
  */
 
