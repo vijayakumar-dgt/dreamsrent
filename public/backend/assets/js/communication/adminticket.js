@@ -356,9 +356,9 @@ function showTicketHistory(ticketId) {
     let historyHtml = "";
 
     ticket.ticket_histories.forEach(history => {
-        let userImage = history.user && history.user.profile_image
-            ? history.user.profile_image
-            : "/backend/assets/img/default-profile.png";
+        let userImage =history.user && history.user.user_detail && history.user.user_detail.profile_image
+        ? '/storage/' + history.user.user_detail.profile_image
+        : '/backend/assets/img/profiles/avatar-20.jpg';
 
         let userName = history.user ? history.user.name : "Unknown User";
         let createdAt = new Date(history.created_at).toLocaleString();

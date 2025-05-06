@@ -79,5 +79,4 @@ class UserBookings extends JsonResource
 
         return "";
     }
-
 }
