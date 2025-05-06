@@ -124,7 +124,7 @@
 
                         $.each(data, function (index, value) {
                             let countryCode = value.country.code.toLowerCase();
-                            let flagImage = `<img src="/backend/backend/assets/img/flags/${countryCode}.svg"
+                            let flagImage = `<img src="/backend/assets/img/flags/${countryCode}.svg"
                             alt="${value.country.name} Flag" width="20"
                             onerror="this.style.display='none'; this.parentNode.innerHTML='${value.country.name}';">`;
                             tableBody += `<tr>
