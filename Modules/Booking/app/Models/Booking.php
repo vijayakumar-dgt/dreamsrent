@@ -78,7 +78,7 @@ class Booking extends Model
 {
     use SoftDeletes;
 
-    public static $reservationSecretKey = 'ReservationId';
+    public static string $reservationSecretKey = 'ReservationId';
 
     protected $appends = ['encrypted_id'];
 
