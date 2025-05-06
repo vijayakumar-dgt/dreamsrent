@@ -56,11 +56,11 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property float|null $vehicle_price
  * @property float|null $driver_price
  * @property string|null $currency_symbol
- * @property array|null $insurance_benefits
+ * @property array<string>|null $insurance_benefits
  * @property float|null $final_price
  * @property float|null $extra_service_count
  * @property float|null $insurance_count
- * @property array|null $extra_service_names
+ * @property array<string>|null $extra_service_names
  * @property string|null $transaction_id
  * @property string|null $transaction_id
  * @property-read \Modules\GeneralSetting\Models\Location|null $pickupLocation
