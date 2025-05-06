@@ -498,7 +498,7 @@ class PageController extends Controller
                             $banner->description = $decodedData['description_one'] ?? null;
 
                             $relativePath = 'storage/' . ($decodedData['thumbnail_image_one'] ?? '');
-                            $defaultImage = asset('assets/img/car/car-right.png');
+                            $defaultImage = asset('backend/assets/img/car/car-right.png');
                             $thumbnailKey = 'thumbnail_image_one';
 
                             $banner->thumbnail_image = (
@@ -548,7 +548,7 @@ class PageController extends Controller
                             $banner->description = $decodedData['description_two'] ?? null;
 
                             $relativePath = 'storage/' . ($decodedData['thumbnail_image_two'] ?? '');
-                            $defaultImage = asset('assets/img/car/car-right.png');
+                            $defaultImage = asset('backend/assets/img/car/car-right.png');
                             $thumbnailKey = 'thumbnail_image_two';
 
                             $banner->thumbnail_image = (
@@ -560,9 +560,9 @@ class PageController extends Controller
                             $banner->customer_count = $userCount;
 
                             $banner->customer_images = [
-                                asset('assets/img/profiles/avatar-05.jpg'),
-                                asset('assets/img/profiles/avatar-12.jpg'),
-                                asset('assets/img/profiles/avatar-22.jpg'),
+                                asset('backend/assets/img/profiles/avatar-05.jpg'),
+                                asset('backend/assets/img/profiles/avatar-12.jpg'),
+                                asset('backend/assets/img/profiles/avatar-22.jpg'),
                             ];
 
                             unset($banner->datas);
