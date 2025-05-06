@@ -74,6 +74,8 @@ class QuotationController extends Controller
         }
 
 
+        $bookingId = $request->input('booking_id'); // or wherever the booking ID comes from
+
         $successMsg = !empty($bookingId) ? __('admin.bookings.reservation_create_success') : __('admin.bookings.reservation_update_success');
         $errorMsg = !empty($bookingId) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
@@ -83,7 +85,7 @@ class QuotationController extends Controller
             $startDateTime = $request->start_date . ' ' . $request->start_time;
             $endDateTime = $request->end_date . ' ' . $request->end_time;
             $startDateTime = Carbon::parse($request->start_date . ' ' . $request->start_time)->format('Y-m-d H:i:s');
-            $endDateTime   = Carbon::parse($request->end_date . ' ' . $request->end_time)->format('Y-m-d H:i:s');            
+            $endDateTime   = Carbon::parse($request->end_date . ' ' . $request->end_time)->format('Y-m-d H:i:s');
             $bookingId = $request->booking_id ?? null;
 
             $data = [
@@ -128,7 +130,7 @@ class QuotationController extends Controller
 
             if ($request->vehicle_tariff_id) {
                 $vehicleTariff = VehicleTarrif::find($request->vehicle_tariff_id);
-            
+
                 if ($vehicleTariff instanceof \Modules\CarInfo\Models\VehicleTarrif) {
                     $details['tariff_title']        = $vehicleTariff->tariff_title;
                     $details['tariff_price']        = $vehicleTariff->tariff_daily_price;
@@ -137,10 +139,10 @@ class QuotationController extends Controller
                     $details['tariff_base_km']      = $vehicleTariff->tariff_base_km;
                     $details['tariff_extra_price']  = $vehicleTariff->tariff_extra_price;
                 }
-            }            
+            }
             if ($request->vehicle_season_id) {
                 $vehicleSeason = VehicleSeason::find($request->vehicle_season_id);
-            
+
                 if ($vehicleSeason instanceof \Modules\CarInfo\Models\VehicleSeason) {
                     $details['seasonal_title']         = $vehicleSeason->seasonal_title;
                     $details['seasonal_start_date']    = $vehicleSeason->seasonal_start_date;
@@ -150,7 +152,7 @@ class QuotationController extends Controller
                     $details['seasonal_monthly_rate']  = $vehicleSeason->seasonal_monthly_rate;
                     $details['seasonal_late_fee']      = $vehicleSeason->seasonal_late_fee;
                 }
-            }            
+            }
 
             if (empty($bookingId)) {
                 $data['created_by'] = Auth::guard('admin')->id();
@@ -201,11 +203,11 @@ class QuotationController extends Controller
                     if ($appAdmin !== null) {
                         sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
                     }
-                
+
                     if ($customer !== null) {
                         sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
                     }
-                }                
+                }
             } else {
                 $data['updated_by'] = Auth::guard('admin')->id();
 
@@ -218,7 +220,7 @@ class QuotationController extends Controller
                 $historyData = [
                     'bookings' => $booking instanceof \Modules\Booking\Models\Booking ? $booking->toArray() : [],
                     'booking_details' => $bookingDetail instanceof \Modules\Booking\Models\BookingDetail ? $bookingDetail->toArray() : [],
-                ];                
+                ];
                 if ($booking instanceof \Modules\Booking\Models\Booking) {
                     BookingHistory::create([
                         'booking_id' => $booking->id,
@@ -542,11 +544,10 @@ class QuotationController extends Controller
 
             if (!empty($booking->insurance)) {
                 /** @var array<array{id: int}> $insuranceArray */
-                $insuranceArray = json_decode($booking->insurance, true);
-                $booking->insurance = $insuranceArray;
-                $booking->insurance_count = count($insuranceArray);
-                $insuranceIds = collect($insuranceArray)->pluck('id')->toArray();
-            }
+                $insuranceArray = $booking->insurance; // Use the already decoded array
+                $booking->insurance_count = count($insuranceArray); // Count the items in the array
+                $insuranceIds = collect($insuranceArray)->pluck('id')->toArray(); // Extract the 'id' values
+            }            
 
             $insuranceBenefits = [];
             if (!empty($insuranceIds)) {
