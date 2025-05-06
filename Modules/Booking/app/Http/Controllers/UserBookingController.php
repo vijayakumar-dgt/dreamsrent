@@ -265,7 +265,7 @@ class UserBookingController extends Controller
     }
 
 
-    public function paymentSuccess(int $transaction_id): View
+    public function paymentSuccess(string $transaction_id): View
     {
         $booking = Booking::where('transaction_id', $transaction_id)->first();
 
