@@ -1377,27 +1377,23 @@
         var extraServiceName = "";
         if ($(".vehicle_extra_service").length > 0) {
             $(".vehicle_extra_service").each(function () {
-                isExtraService = $(this).is(":checked");
+                let isExtraService = $(this).is(":checked"); // ✅ declare it
                 if (isExtraService) {
                     if ($(this).data("price_type") == "per_day") {
                         total_extra_service_price +=
                             no_of_days * parseFloat($(this).data("price"));
                         total_extra_service++;
                     } else if ($(this).data("price_type") == "one_time") {
-                        total_extra_service_price += parseFloat(
-                            $(this).data("price")
-                        );
+                        total_extra_service_price += parseFloat($(this).data("price"));
                         total_extra_service++;
                     } else if ($(this).data("price_type") == "percentage") {
                         total_extra_service_price +=
-                            (vehiclePriceRate *
-                                parseFloat($(this).data("price"))) /
-                            100;
+                            (vehiclePriceRate * parseFloat($(this).data("price"))) / 100;
                         total_extra_service++;
                     }
                     extraServiceName += $(this).data("name") + ", ";
                 }
-            });
+            });            
         }
 
         var total_insurance_price = 0;
