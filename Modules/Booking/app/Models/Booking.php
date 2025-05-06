@@ -16,8 +16,6 @@ use Modules\Booking\Models\BookingUserInfo;
 
 /**
  * @property string|null $booking_date
- * @property string|null $extra_service_names
- * @property int $insurance_count
  * @property string|null $driver_image
  * @property string|array<string>|null $vehicle_image_url
  * @property string|null $start_datetime
@@ -37,18 +35,13 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property string|null $delivery_location
  * @property string|null $delivery_return_location
  * @property-read \Modules\CarInfo\Models\VehicleInfo|null $vehicle
- * @property int $reservation_id
  * @property string|null $payment_type
  * @property-read \Modules\Booking\Models\BookingUserInfo|null $userInfo
  * @property int $vehicle_id
  * @property string|null $extra_service
  * @property int|null $driver_id
  * @property string|null $reservation_id
- * @property string|null $start_datetime
- * @property string|null $end_datetime
- * @property string|null $delivery_type
  * @property string|null $rental_type
- * @property string|null $payment_type
  * @property string|null $payment_status
  * @property double|null $total_extra_service_price
  * @property float|null $total_insurance_price
@@ -58,10 +51,7 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property string|null $currency_symbol
  * @property array<string>|null $insurance_benefits
  * @property float|null $final_price
- * @property float|null $extra_service_count
- * @property float|null $insurance_count
  * @property array<string>|null $extra_service_names
- * @property string|null $transaction_id
  * @property string|null $transaction_id
  * @property-read \Modules\GeneralSetting\Models\Location|null $pickupLocation
  * @property int $id
@@ -73,6 +63,8 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property string|int|null $booking_status_text
  * @property string|null $insurance
  * @property int|null $extra_service_count
+ * @property int|null $insurance_count
+ * 
  *
  */
 
