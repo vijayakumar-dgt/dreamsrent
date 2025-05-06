@@ -163,7 +163,7 @@
                             <div class="col-md-12">
                                 <label class="form-label">{{__('web.user.document')}}</label>
                                 <div class="document-upload text-center br-3 mb-3">
-                                    <img src="/assets/img/icons/upload-icon.svg" alt="img" class="mb-2">
+                                    <img src="/backend/assets/img/icons/upload-icon.svg" alt="img" class="mb-2">
                                     <p class="mb-2">
                                         {{__('web.user.drop_file_here')}} <span class="text-info text-decoration-underline">{{__('web.user.browse')}}</span>
                                     </p>
