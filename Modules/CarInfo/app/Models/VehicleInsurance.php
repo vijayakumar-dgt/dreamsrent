@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\GeneralSetting\Models\Insurance;
 use Modules\GeneralSetting\Models\InsuranceBenefit;
+use Illuminate\Support\Collection;
 
 /**
  * @property Insurance $insurance
- * @property InsuranceBenefit $insuranceBenefits
+ * @property Collection<int, InsuranceBenefit> $insuranceBenefits
  * @property int $vehicle_id
  * @property int $insurances_id
  * @property float $value
@@ -18,9 +19,11 @@ use Modules\GeneralSetting\Models\InsuranceBenefit;
  * @property int $id
  * @property string $created_at
  * @property string $updated_at
- * @property string $deleted_at
+ * @property string|null $deleted_at
+ * 
+ * @property int $benefits_count
+ * @property string $first_benefit
  */
-
 class VehicleInsurance extends Model
 {
     protected $table = 'vehicle_insurances';
@@ -32,16 +35,14 @@ class VehicleInsurance extends Model
      */
     public function insurance(): BelongsTo
     {
-        /** @var BelongsTo<Insurance, VehicleInsurance> */
         return $this->belongsTo(Insurance::class, 'insurances_id');
     }
 
     /**
-     * @return HasMany<InsuranceBenefit, VehicleInsurance>
+     * @return HasMany<InsuranceBenefit>
      */
     public function insuranceBenefits(): HasMany
     {
-        /** @var HasMany<InsuranceBenefit, VehicleInsurance> */
         return $this->hasMany(InsuranceBenefit::class, 'insurance_id', 'insurances_id');
     }
 }

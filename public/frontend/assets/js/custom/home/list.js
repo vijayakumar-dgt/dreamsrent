@@ -380,6 +380,10 @@
                     </div>`;
 
     }
+    function ucfirst(str) {
+        if (!str) return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
     function createVehicleGridCard(vehicle) {
         let price_type;
         let price_value;

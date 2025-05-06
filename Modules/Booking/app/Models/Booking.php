@@ -52,6 +52,7 @@ use Modules\CarInfo\Models\VehicleInfo;
  * @property int $id
  * @property \Illuminate\Support\Carbon $updated_at
  * @property-read \Modules\CarInfo\Models\VehicleInfo|null $vehicle
+ * @property-read Location|null $pickupLocation
  *
  */
 

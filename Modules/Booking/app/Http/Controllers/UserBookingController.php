@@ -789,7 +789,7 @@ class UserBookingController extends Controller
                 ], 422);
             }
 
-            $generateID = 'wallet' . str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
+            $generateID = 'wallet' . str_pad((string) mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
 
             $data = [
                 "vehicle_id" => $request->input('vehicle_id'),
@@ -844,7 +844,7 @@ class UserBookingController extends Controller
                 'message' => __('web.home.booking_created'),
             ]);
 
-            $reservationId = 'RES-' . str_pad($booking->id, 4, '0', STR_PAD_LEFT);
+            $reservationId = 'RES-' . str_pad((string) $booking->id, 4, '0', STR_PAD_LEFT);
 
             $booking->update(['reservation_id' => $reservationId]);
 
@@ -855,7 +855,7 @@ class UserBookingController extends Controller
                 'driver_age' => $request->driver_age,
                 'driver_mobile_number' => $request->driver_mobile_number,
                 'driver_licence' => $request->driver_licence,
-                'driver_check' => $request->has('driver_check') ?? 1,
+                'driver_check' => $request->has('driver_check') ? 1 : 0,
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'no_person' => $request->no_person ?? 0,
@@ -868,7 +868,7 @@ class UserBookingController extends Controller
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
                 'add_info' => $request->add_info,
-                'terms' => $request->has('terms') ?? 1,
+                'terms' => $request->has('terms') ? 1 : 0,
             ];
 
             $bookingInfo = BookingUserInfo::create($addData);
@@ -910,9 +910,14 @@ class UserBookingController extends Controller
             ];
             if (rentalNotificationEnabled()) {
                 $appAdmin = User::where('user_type', 1)->first();
-                sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
 
-                sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
+                if ($appAdmin) {
+                    sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+                }
+
+                if ($authUser && $authUser->email) {
+                    sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
+                }
             }
 
             return response()->json([
@@ -1031,7 +1036,7 @@ class UserBookingController extends Controller
                 'reservation_id' => $booking->reservation_id ?? '',
                 'start_date' => ($booking && $booking->start_datetime) ? formatDateTime($booking->start_datetime) : '',
                 'end_date' => ($booking && $booking->end_datetime) ? formatDateTime($booking->end_datetime) : '',
-                'pickup_location' => ($booking && $booking->pickupLocation) ? $booking->pickupLocation->name : '',
+                'pickup_location' => $booking?->pickupLocation?->name ?? '',
                 'delivery_type' => $booking->delivery_type ?? '',
                 'rental_type' => $booking->rental_type ?? '',
                 'payment_type' => $booking->payment_type ?? '',
