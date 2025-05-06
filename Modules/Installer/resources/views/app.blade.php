@@ -7,12 +7,12 @@
     <title> Rental - Installer</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('frontend/assets/img/favicon.png') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/fontawesome.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap-icons/bootstrap-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/plugins/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/plugins/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/global/toastr/toastr.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/style.css') }}">
 
 </head>
 
@@ -69,7 +69,7 @@
 </body>
 <script src="{{ asset('frontend/global/js/jquery-3.7.1.min.js') }}"></script>
 <script src="{{ asset('frontend/global/toastr/toastr.min.js') }}"></script>
-<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('backend/assets/js/bootstrap.min.js') }}"></script>
 <script>
     $.ajaxSetup({
         headers: {
