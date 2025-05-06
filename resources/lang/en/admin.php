@@ -1601,6 +1601,8 @@ return array(
     'delete_review' => 'Delete Review',
     'delete_review_confirmation' => 'Are you sure you want to delete review?',
     'brand_icon_dimension' => 'Icon dimensions must be between 10x10 and 25x25 pixels (inclusive).',
+    'edit_vehicle' => 'Edit Vehicle',
+    'add_vehicle' => 'Add Vehicle',
   ),
   'user_management' =>
   array(
