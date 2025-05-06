@@ -63,12 +63,13 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property float|null $insurance_count
  * @property array|null $extra_service_names
  * @property string|null $transaction_id
+ * @property string|null $transaction_id
  * @property-read \Modules\GeneralSetting\Models\Location|null $pickupLocation
  * @property int $id
  * @property \Illuminate\Support\Carbon $updated_at
  * @property-read \Modules\CarInfo\Models\VehicleInfo|null $vehicle
  * @property-read Location|null $pickupLocation
- * @property string|null $insurance
+ * @property array|null $insurance
  * @property array|null $extra_service
  *
  */
@@ -82,6 +83,7 @@ class Booking extends Model
     protected $appends = ['encrypted_id'];
 
     protected $casts = [
+        'insurance' => 'array',
         'extra_service' => 'array',
     ];
     /**

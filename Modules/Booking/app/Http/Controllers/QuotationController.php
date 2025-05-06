@@ -73,6 +73,7 @@ class QuotationController extends Controller
             ], 400);
         }
 
+
         $successMsg = !empty($bookingId) ? __('admin.bookings.reservation_create_success') : __('admin.bookings.reservation_update_success');
         $errorMsg = !empty($bookingId) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
@@ -81,8 +82,8 @@ class QuotationController extends Controller
 
             $startDateTime = $request->start_date . ' ' . $request->start_time;
             $endDateTime = $request->end_date . ' ' . $request->end_time;
-            $startDateTime = Carbon::createFromFormat('d-m-Y H:i', $startDateTime)->format('Y-m-d H:i:s');
-            $endDateTime = Carbon::createFromFormat('d-m-Y H:i', $endDateTime)->format('Y-m-d H:i:s');
+            $startDateTime = Carbon::parse($request->start_date . ' ' . $request->start_time)->format('Y-m-d H:i:s');
+            $endDateTime   = Carbon::parse($request->end_date . ' ' . $request->end_time)->format('Y-m-d H:i:s');            
             $bookingId = $request->booking_id ?? null;
 
             $data = [
@@ -109,7 +110,6 @@ class QuotationController extends Controller
                 'no_of_passengers' => $request->no_of_passengers ?? null,
                 'no_of_days' => $request->no_of_days ?? null,
                 'vehicle_total_price' => $request->vehicle_total_price ?? null,
-                'rental_type' => $request->vehicle_price_type ?? null,
                 'base_km' => $request->base_km ?? null,
                 'km_extra_price' => $request->km_extra_price ?? null,
                 'expenses' => $request->expenses ?? null,
@@ -128,32 +128,34 @@ class QuotationController extends Controller
 
             if ($request->vehicle_tariff_id) {
                 $vehicleTariff = VehicleTarrif::find($request->vehicle_tariff_id);
-                if ($vehicleTariff) {
-                    $details['tariff_title'] = $vehicleTariff->tariff_title;
-                    $details['tariff_price'] = $vehicleTariff->tariff_daily_price;
-                    $details['tariff_from_days'] = $vehicleTariff->tariff_from_days;
-                    $details['tariff_to_days'] = $vehicleTariff->tariff_to_days;
-                    $details['tariff_base_km'] = $vehicleTariff->tariff_base_km;
-                    $details['tariff_extra_price'] = $vehicleTariff->tariff_extra_price;
+            
+                if ($vehicleTariff instanceof \Modules\CarInfo\Models\VehicleTarrif) {
+                    $details['tariff_title']        = $vehicleTariff->tariff_title;
+                    $details['tariff_price']        = $vehicleTariff->tariff_daily_price;
+                    $details['tariff_from_days']    = $vehicleTariff->tariff_from_days;
+                    $details['tariff_to_days']      = $vehicleTariff->tariff_to_days;
+                    $details['tariff_base_km']      = $vehicleTariff->tariff_base_km;
+                    $details['tariff_extra_price']  = $vehicleTariff->tariff_extra_price;
                 }
-            }
+            }            
             if ($request->vehicle_season_id) {
                 $vehicleSeason = VehicleSeason::find($request->vehicle_season_id);
-                if ($vehicleSeason) {
-                    $details['seasonal_title'] = $vehicleSeason->seasonal_title;
-                    $details['seasonal_start_date'] = $vehicleSeason->seasonal_start_date;
-                    $details['seasonal_end_date'] = $vehicleSeason->seasonal_end_date;
-                    $details['seasonal_daily_rate'] = $vehicleSeason->seasonal_daily_rate;
-                    $details['seasonal_weekly_rate'] = $vehicleSeason->seasonal_weekly_rate;
-                    $details['seasonal_monthly_rate'] = $vehicleSeason->seasonal_monthly_rate;
-                    $details['seasonal_late_fee'] = $vehicleSeason->seasonal_late_fee;
+            
+                if ($vehicleSeason instanceof \Modules\CarInfo\Models\VehicleSeason) {
+                    $details['seasonal_title']         = $vehicleSeason->seasonal_title;
+                    $details['seasonal_start_date']    = $vehicleSeason->seasonal_start_date;
+                    $details['seasonal_end_date']      = $vehicleSeason->seasonal_end_date;
+                    $details['seasonal_daily_rate']    = $vehicleSeason->seasonal_daily_rate;
+                    $details['seasonal_weekly_rate']   = $vehicleSeason->seasonal_weekly_rate;
+                    $details['seasonal_monthly_rate']  = $vehicleSeason->seasonal_monthly_rate;
+                    $details['seasonal_late_fee']      = $vehicleSeason->seasonal_late_fee;
                 }
-            }
+            }            
 
             if (empty($bookingId)) {
                 $data['created_by'] = Auth::guard('admin')->id();
                 $booking = Booking::create($data);
-                $bookingNumber = str_pad($booking->id, 4, '0', STR_PAD_LEFT);
+                $bookingNumber = str_pad((string) $booking->id, 4, '0', STR_PAD_LEFT);
                 $bookingPrefix = GeneralSetting::select('value')->where('key', 'reservation_prefix')->first();
                 $bookingPrefix = $bookingPrefix->value ?? 'RES';
                 $booking->update(['reservation_id' => $bookingPrefix . $bookingNumber]);
@@ -196,10 +198,14 @@ class QuotationController extends Controller
                 ];
                 if (rentalNotificationEnabled()) {
                     $appAdmin = User::where('user_type', 1)->first();
-                    sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
-
-                    sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
-                }
+                    if ($appAdmin !== null) {
+                        sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+                    }
+                
+                    if ($customer !== null) {
+                        sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
+                    }
+                }                
             } else {
                 $data['updated_by'] = Auth::guard('admin')->id();
 
@@ -210,15 +216,17 @@ class QuotationController extends Controller
                 $bookingDetail = BookingDetail::where('booking_id', $bookingId)->first();
 
                 $historyData = [
-                    'bookings'         => $booking->toArray(),
-                    'booking_details'  => $bookingDetail->toArray(),
-                ];
-                BookingHistory::create([
-                    'booking_id' => $booking->id,
-                    'action'     => 'update',
-                    'data'       => json_encode($historyData),
-                    'message'    => 'Quotations updated'
-                ]);
+                    'bookings' => $booking instanceof \Modules\Booking\Models\Booking ? $booking->toArray() : [],
+                    'booking_details' => $bookingDetail instanceof \Modules\Booking\Models\BookingDetail ? $bookingDetail->toArray() : [],
+                ];                
+                if ($booking instanceof \Modules\Booking\Models\Booking) {
+                    BookingHistory::create([
+                        'booking_id' => $booking->id,
+                        'action'     => 'update',
+                        'data'       => json_encode($historyData),
+                        'message'    => 'Quotations updated'
+                    ]);
+                }
             }
 
 
@@ -374,7 +382,7 @@ class QuotationController extends Controller
             $bookings->map(function ($booking) {
                 $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
                 $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
-                $booking->booking_status_text = Booking::getStatusLabel($booking->booking_status);
+                $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
 
                 return $booking;
             });
@@ -428,11 +436,14 @@ class QuotationController extends Controller
             if (!empty($booking)) {
                 $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
                 $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
-                if ($booking->insurance) {
-                    $booking->insurance = json_decode($booking->insurance);
-                }
-                $booking->extra_service = json_decode($booking->extra_service);
-                $booking->booking_status_text =  Booking::getStatusLabel($booking->booking_status);
+
+                $booking->insurance = $booking->insurance;
+                $booking->extra_service = $booking->extra_service;
+
+                $booking->insurance = $booking->insurance ?? [];
+                $booking->extra_service = $booking->extra_service ?? [];
+
+                $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
             }
 
             return response()->json([
@@ -514,10 +525,10 @@ class QuotationController extends Controller
             if (!empty($booking->extra_service)) {
                 /** @var array<array{id: int}> $extraServiceArray */
                 $extraServiceArray = $booking->extra_service; // no need for json_decode
-            
+
                 $booking->extra_service_count = count($extraServiceArray);
                 $extraServiceIds = collect($extraServiceArray)->pluck('id')->toArray();
-            }            
+            }
             $extraServiceNames = [];
             if (!empty($extraServiceIds)) {
                 $extraServiceNames = ExtraService::whereIn('id', $extraServiceIds)
@@ -536,7 +547,7 @@ class QuotationController extends Controller
                 $booking->insurance_count = count($insuranceArray);
                 $insuranceIds = collect($insuranceArray)->pluck('id')->toArray();
             }
-            
+
             $insuranceBenefits = [];
             if (!empty($insuranceIds)) {
                 $insuranceBenefits = InsuranceBenefit::whereIn('insurance_id', $insuranceIds)
