@@ -178,14 +178,10 @@ class LocationController extends Controller
 
         $locations->map(function ($location) {
             $image = is_string($location->image) ? $location->image : null;
-
-            $location->image_url = $image && file_exists(public_path('storage/' . $image))
-                ? uploadedAsset($image)
-                : null;
+            $location->image_url = uploadedAsset($image ?? '', 'default');
 
             return $location;
         });
-
 
         return response()->json([
             'status' => 'success',
@@ -193,8 +189,6 @@ class LocationController extends Controller
             'data'   => $locations
         ]);
     }
-
-
 
     /**
      * Get a location by ID.
@@ -225,7 +219,6 @@ class LocationController extends Controller
             'data' => $location
         ]);
     }
-
 
     /**
      * Delete a location by ID.
