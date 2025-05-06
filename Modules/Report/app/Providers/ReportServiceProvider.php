@@ -43,7 +43,6 @@ class ReportServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        
     }
 
     /**
@@ -51,7 +50,6 @@ class ReportServiceProvider extends ServiceProvider
      */
     protected function registerCommandSchedules(): void
     {
-       
     }
 
     /**
@@ -111,20 +109,20 @@ class ReportServiceProvider extends ServiceProvider
      */
     public function registerViews(): void
     {
-       
-        $nameLower = (string)$this->nameLower;  
-        $viewPath = resource_path('views/modules/' . $nameLower); 
+
+        $nameLower = (string)$this->nameLower;
+        $viewPath = resource_path('views/modules/' . $nameLower);
         $sourcePath = module_path($this->name, 'resources/views');
         $this->publishes([$sourcePath => $viewPath], ['views', $nameLower . '-module-views']);
-        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $nameLower);     
+        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $nameLower);
         $componentPath = config('modules.paths.generator.component-class.path');
 
-   
+
         if (is_array($componentPath)) {
-            $componentPath = implode('', $componentPath);  
+            $componentPath = implode('', $componentPath);
         }
 
-        $componentPath = (string)$componentPath;     
+        $componentPath = (string)$componentPath;
         $componentNamespace = $this->module_namespace($this->name, $componentPath);
 
         Blade::componentNamespace($componentNamespace, $nameLower);

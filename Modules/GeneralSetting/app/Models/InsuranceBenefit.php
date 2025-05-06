@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $benefit
  * @property string|null $created_at
  * @property string|null $updated_at
- * 
+ *
  * @property-read Insurance $insurance
  */
 class InsuranceBenefit extends Model

@@ -51,7 +51,6 @@ class RolesPermissionServiceProvider extends ServiceProvider
      */
     protected function registerCommandSchedules(): void
     {
-   
     }
 
     /**

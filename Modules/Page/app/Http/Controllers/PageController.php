@@ -1199,7 +1199,6 @@ class PageController extends Controller
         $language = TranslationLanguage::where('code', $defaultLang)->first();
 
         if (!$language) {
-
             abort(404, 'Default language not found');
         }
 
@@ -1218,7 +1217,6 @@ class PageController extends Controller
         $userLanguage = TranslationLanguage::where('code', $userLanguageCode)->first();
 
         if (!$userLanguage) {
-
             abort(404, 'User language not found');
         }
 

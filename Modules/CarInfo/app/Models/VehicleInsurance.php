@@ -20,7 +20,7 @@ use Illuminate\Support\Collection;
  * @property string $created_at
  * @property string $updated_at
  * @property string|null $deleted_at
- * 
+ *
  * @property int $benefits_count
  * @property string $first_benefit
  */
