@@ -32,23 +32,23 @@
                     <div class="booking-wizard-lists">
                         <ul>
                             <li class="active" id="firstBar">
-                                <span><img src="/assets/img/icons/booking-head-icon-01.svg" alt="Booking Icon"></span>
+                                <span><img src="/backend/assets/img/icons/booking-head-icon-01.svg" alt="Booking Icon"></span>
                                 <h6>{{__('web.home.location_and_time')}}</h6>
                             </li>
                             <li id="secondBar">
-                                <span><img src="/assets/img/icons/booking-head-icon-02.svg" alt="Booking Icon"></span>
+                                <span><img src="/backend/assets/img/icons/booking-head-icon-02.svg" alt="Booking Icon"></span>
                                 <h6>{{__('web.user.extra_services')}}</h6>
                             </li>
                             <li id="thirdBar">
-                                <span><img src="/assets/img/icons/booking-head-icon-03.svg" alt="Booking Icon"></span>
+                                <span><img src="/backend/assets/img/icons/booking-head-icon-03.svg" alt="Booking Icon"></span>
                                 <h6>{{__('web.user.details')}}</h6>
                             </li>
                             <li id="fourthbar">
-                                <span><img src="/assets/img/icons/booking-head-icon-04.svg" alt="Booking Icon"></span>
+                                <span><img src="/backend/assets/img/icons/booking-head-icon-04.svg" alt="Booking Icon"></span>
                                 <h6>{{__('web.home.checkout')}}</h6>
                             </li>
                             <li id="fifthBar">
-                                <span><img src="/assets/img/icons/booking-head-icon-05.svg" alt="Booking Icon"></span>
+                                <span><img src="/backend/assets/img/icons/booking-head-icon-05.svg" alt="Booking Icon"></span>
                                 <h6>{{__('web.home.booking_confirmed')}}</h6>
                             </li>
                         </ul>
@@ -661,7 +661,7 @@
                                                 <label class="payment_custom_check">
                                                     <input type="radio" name="payment_type" id="paypal" value="paypal">
                                                     <span class="payment_checkmark">
-                                                        <span class="checked-title"><img src="/assets/img/icons/payment-method-01.svg" alt="Img"></span>
+                                                        <span class="checked-title"><img src="/backend/assets/img/icons/payment-method-01.svg" alt="Img"></span>
                                                     </span>
                                                 </label>
                                             </li>
@@ -669,7 +669,7 @@
                                                 <label class="payment_custom_check">
                                                     <input type="radio" name="payment_type" id="stripe" value="stripe">
                                                     <span class="payment_checkmark">
-                                                        <span class="checked-title"><img src="/assets/img/icons/payment-method-02.svg" alt="Img"></span>
+                                                        <span class="checked-title"><img src="/backend/assets/img/icons/payment-method-02.svg" alt="Img"></span>
                                                     </span>
                                                 </label>
                                             </li>
@@ -677,7 +677,7 @@
                                                 <label class="payment_custom_check">
                                                     <input type="radio" name="payment_type" id="cod" value="cod">
                                                     <span class="payment_checkmark">
-                                                        <span class="checked-title"><img src="/assets/img/icons/cash-delivery-icon.svg" alt="Img"></span>
+                                                        <span class="checked-title"><img src="/backend/assets/img/icons/cash-delivery-icon.svg" alt="Img"></span>
                                                     </span>
                                                 </label>
                                             </li>
@@ -687,7 +687,7 @@
                                                     <input type="radio" name="payment_type" id="wallet" value="wallet">
                                                     <span class="payment_checkmark">
                                                         <span class="checked-title">
-                                                            <img src="/assets/img/icons/payment-method-04.svg" alt="Img">
+                                                            <img src="/backend/assets/img/icons/payment-method-04.svg" alt="Img">
                                                         </span>
                                                     </span>
                                                 </label>

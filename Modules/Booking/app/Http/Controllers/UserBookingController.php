@@ -265,7 +265,7 @@ class UserBookingController extends Controller
     }
 
 
-    public function paymentSuccess(int $transaction_id): View
+    public function paymentSuccess(string $transaction_id): View
     {
         $booking = Booking::where('transaction_id', $transaction_id)->first();
 
@@ -275,10 +275,11 @@ class UserBookingController extends Controller
 
         $vehicleId = $booking->vehicle_id;
 
-        /** @var array<array{id: int|string}> $extraServices */
-        $extraServices = json_decode($booking->extra_service ?? '[]', true);
+        $extraServices = $booking->extra_service ?? [];
 
-        $extraServiceIds = collect($extraServices)->pluck('id')->toArray();
+        $extraServiceIds = collect($extraServices)
+            ->pluck('id')
+            ->toArray();
 
         $vehicle = VehicleInfo::select('id', 'name', 'vehicle_image', 'main_location_id', 'vehicle_price')->where('id', $vehicleId)->first();
         $vehicleImageUrl = $vehicle ? asset('/storage/' . $vehicle->vehicle_image) : null;

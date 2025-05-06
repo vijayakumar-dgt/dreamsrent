@@ -51,18 +51,33 @@ class UserBookings extends JsonResource
         ];
     }
 
-    public function getExtraServices(?string $extraserviceJsonString): string
+    /**
+     * @param array<int, object{id: int}>|string|null $extraserviceData
+     */
+    public function getExtraServices(array|string|null $extraserviceData): string
     {
         $extraServices = [];
-        if (!empty($extraserviceJsonString)) {
-            /** @var array<int, object{ id: int }> $extraservice */
-            $extraservice = json_decode($extraserviceJsonString);
-            if (!empty($extraservice)) {
-                $extraServices = collect($extraservice)->pluck('id')->toArray();
-                $extraServices = ExtraService::whereIn('id', $extraServices)->pluck('name')->toArray();
-                return implode(", ", $extraServices);
-            }
+
+        if (is_array($extraserviceData)) {
+            /** @var array<int, object{id: int}> $extraservice */
+            $extraservice = $extraserviceData;
+        } elseif (is_string($extraserviceData)) {
+            /** @var array<int, object{id: int}> $extraservice */
+            $extraservice = json_decode($extraserviceData);
+        } else {
+            $extraservice = [];
         }
+
+        if (!empty($extraservice)) {
+            /** @var \Illuminate\Support\Collection<int, object{id: int}> $collection */
+            $collection = collect($extraservice);
+            $ids = $collection->pluck('id')->toArray();
+
+            $extraServices = ExtraService::whereIn('id', $ids)->pluck('name')->toArray();
+            return implode(", ", $extraServices);
+        }
+
         return "";
     }
+
 }

@@ -6,9 +6,9 @@
 <!-- Datatable CSS -->
 <link rel="stylesheet" href="{{ asset('frontend/assets/plugins/datatables/datatables.min.css') }}">
 <!-- summernote CSS -->
-<link rel="stylesheet" href="{{ asset('assets/plugins/summernote/summernote-bs5.min.css') }}">
+<link rel="stylesheet" href="{{ asset('backend/assets/plugins/summernote/summernote-bs5.min.css') }}">
 
-<link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datetimepicker.min.css') }}">
+<link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap-datetimepicker.min.css') }}">
 @endpush
  
 @section('content')
@@ -163,7 +163,7 @@
                             <div class="col-md-12">
                                 <label class="form-label">{{__('web.user.document')}}</label>
                                 <div class="document-upload text-center br-3 mb-3">
-                                    <img src="/assets/img/icons/upload-icon.svg" alt="img" class="mb-2">
+                                    <img src="/backend/assets/img/icons/upload-icon.svg" alt="img" class="mb-2">
                                     <p class="mb-2">
                                         {{__('web.user.drop_file_here')}} <span class="text-info text-decoration-underline">{{__('web.user.browse')}}</span>
                                     </p>
@@ -312,5 +312,5 @@
 <script src="{{ asset('frontend/assets/plugins/datatables/datatables.min.js') }}"></script>
 <script src="{{ asset('frontend/assets/js/custom/user/ticket.js') }}"></script>
 <!-- summernote JS -->
-<script src="{{ asset('assets/plugins/summernote/summernote-bs5.min.js') }}"></script>
+<script src="{{ asset('backend/assets/plugins/summernote/summernote-bs5.min.js') }}"></script>
 @endpush

@@ -2,7 +2,7 @@
 @push('styles')
 <!-- Fancybox CSS -->
 <link rel="stylesheet" href="/frontend/assets/plugins/fancybox/fancybox.css">
-<link rel="stylesheet" href="{{ asset('assets/plugins/intltelinput/css/intlTelInput.css') }}">
+<link rel="stylesheet" href="{{ asset('backend/assets/plugins/intltelinput/css/intlTelInput.css') }}">
 
 
 @endpush
@@ -1080,6 +1080,6 @@
 <script src="/frontend/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js"></script>
 <!-- Fancybox JS -->
 <script src="/frontend/assets/plugins/fancybox/fancybox.umd.js"></script>
-<script src="{{ asset('assets/plugins/intltelinput/js/intlTelInput.js') }}"></script>
+<script src="{{ asset('backend/assets/plugins/intltelinput/js/intlTelInput.js') }}"></script>
 <script src="{{ asset('/frontend/assets/js/custom/home/vehicle-details.js?v=1.1') }}"></script>
 @endpush

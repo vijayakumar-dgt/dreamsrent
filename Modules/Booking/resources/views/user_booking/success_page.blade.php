@@ -33,23 +33,23 @@
                     <div class="booking-wizard-lists">
                         <ul>
                             <li class="active activated">
-                                <span><img src="assets/img/icons/booking-head-icon-01.svg" alt="Booking Icon"></span>
+                                <span><img src="/backend/assets/img/icons/booking-head-icon-01.svg" alt="Booking Icon"></span>
                                 <h6>{{__('web.home.location_and_time')}}</h6>
                             </li>
                             <li class="active activated">
-                                <span><img src="assets/img/icons/booking-head-icon-02.svg" alt="Booking Icon"></span>
+                                <span><img src="/backend/assets/img/icons/booking-head-icon-02.svg" alt="Booking Icon"></span>
                                 <h6>{{__('web.user.extra_services')}}</h6>
                             </li>
                             <li class="active activated">
-                                <span><img src="assets/img/icons/booking-head-icon-03.svg" alt="Booking Icon"></span>
+                                <span><img src="/backend/assets/img/icons/booking-head-icon-03.svg" alt="Booking Icon"></span>
                                 <h6>{{__('web.user.details')}}</h6>
                             </li>
                             <li class="active activated">
-                                <span><img src="assets/img/icons/booking-head-icon-04.svg" alt="Booking Icon"></span>
+                                <span><img src="/backend/assets/img/icons/booking-head-icon-04.svg" alt="Booking Icon"></span>
                                 <h6>{{__('web.home.checkout')}}</h6>
                             </li>
                             <li class="active">
-                                <span><img src="/assets/img/icons/booking-head-icon-05.svg" alt="Booking Icon"></span>
+                                <span><img src="/backend/assets/img/icons/booking-head-icon-05.svg" alt="Booking Icon"></span>
                                 <h6>{{__('web.home.booking_confirmed')}}</h6>
                             </li>
                         </ul>
@@ -203,10 +203,10 @@
                             </ul>
                             <div class="driver-info">
                                 <span>
-                                    <img src="{{ $bookingInfo->first_name}}" alt="img">
                                 </span>
                                 <div class="driver-name">
                                     <h6>{{ $bookingInfo->first_name}} {{ $bookingInfo->last_name }}</h6>
+                                    <p>{{ $bookingInfo->phone_number }}</p>
                                   
                                 </div>
                             </div>

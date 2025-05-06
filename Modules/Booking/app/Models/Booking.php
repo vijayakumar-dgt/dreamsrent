@@ -16,9 +16,15 @@ use Modules\Booking\Models\BookingUserInfo;
 
 /**
  * @property string|null $booking_date
+<<<<<<< HEAD
  * @property string|null $extra_service_names
  * @property int $insurance_count
  * @property string|null $driver_image
+=======
+ * @property string|null $vehicle_image
+ * @property string|null $driver_image
+ * @property string|null $customer_image
+>>>>>>> 7b7ab55f7e0109510f2a109c4bd245b0e4128e9f
  * @property string|array<string>|null $vehicle_image_url
  * @property string|null $start_datetime
  * @property string|null $end_datetime
@@ -58,6 +64,10 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property string|null $currency_symbol
  * @property array|null $insurance_benefits
  * @property float|null $final_price
+ * @property float|null $extra_service_count
+ * @property float|null $insurance_count
+ * @property array|null $extra_service_names
+ * @property string|null $transaction_id
  * @property string|null $transaction_id
  * @property-read \Modules\GeneralSetting\Models\Location|null $pickupLocation
  * @property int $id
@@ -69,6 +79,8 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property string|int|null $booking_status_text
  * @property string|null $insurance
  * @property int|null $extra_service_count
+ * @property array|null $insurance
+ * @property array|null $extra_service
  *
  */
 
@@ -76,6 +88,14 @@ class Booking extends Model
 {
     use SoftDeletes;
 
+    public static string $reservationSecretKey = 'ReservationId';
+
+    protected $appends = ['encrypted_id'];
+
+    protected $casts = [
+        'insurance' => 'array',
+        'extra_service' => 'array',
+    ];
     /**
      * The attributes that are mass assignable.
      */
@@ -134,8 +154,6 @@ class Booking extends Model
     public const CANCELLED = 6;
 
     public const RESERVATION_SECRET_KEY = 'ReservationId';
-
-    protected $appends = ['encrypted_id'];
 
     /**
      * Get the status label for a given status.

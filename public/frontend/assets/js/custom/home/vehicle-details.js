@@ -1567,7 +1567,7 @@ $(document).ready(function () {
 
     if ($userPhoneInput.length && $userProfileForm.length) {
         const iti = window.intlTelInput($userPhoneInput[0], {
-            utilsScript: `${window.location.origin}/frontend/assets/plugins/intltelinput/js/utils.js`,
+            utilsScript: `${window.location.origin}/backend/assets/plugins/intltelinput/js/utils.js`,
             separateDialCode: true,
         });
 

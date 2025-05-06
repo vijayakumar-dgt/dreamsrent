@@ -919,6 +919,8 @@ return [
     'enquiry_delete_success' => 'تم حذف الاستفسار بنجاح.',
     'add_new_quotation' => 'إضافة عرض جديد',
     'add_reservation' => 'إضافة حجز',
+    'add_quotation' => 'إضافة عرض',
+    'edit_quotation' => 'تعديل العرض',
   ],
   'manage' =>
   [
@@ -1577,6 +1579,8 @@ return [
     'delete_review' => 'حذف المراجعة',
     'delete_review_confirmation' => 'هل تريد حذف المراجعة؟',
     'brand_icon_dimension' => 'الايقونة يجب ان تكون بالاقل 10x10 والاكبر 25x25 بكسل.',
+    'edit_vehicle' => 'تعديل السيارة',
+    'add_vehicle' => 'إضافة سيارة',
   ],
   'user_management' =>
   [
