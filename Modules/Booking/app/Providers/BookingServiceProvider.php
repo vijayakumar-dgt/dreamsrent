@@ -79,17 +79,18 @@ class BookingServiceProvider extends ServiceProvider
     protected function registerConfig(): void
     {
         $relativeConfigPath = config('modules.paths.generator.config.path');
+        $relativeConfigPath = is_string($relativeConfigPath) ? $relativeConfigPath : '';
         $configPath = module_path($this->name, $relativeConfigPath);
 
         if (is_dir($configPath)) {
             $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($configPath));
 
             foreach ($iterator as $file) {
-                if ($file->isFile() && $file->getExtension() === 'php') {
+                if ($file instanceof \SplFileInfo && $file->isFile() && $file->getExtension() === 'php') {
                     $relativePath = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
                     $cleanPath = str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
 
-                    $cleanPathString = is_string($cleanPath) ? $cleanPath : '';
+                    $cleanPathString = $cleanPath;
 
                     $configKey = $this->nameLower . '.' . $cleanPathString;
                     $key = ($relativePath === 'config.php') ? $this->nameLower : $configKey;
@@ -113,7 +114,8 @@ class BookingServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->nameLower);
 
-        $componentNamespace = $this->module_namespace($this->name, $this->app_path(config('modules.paths.generator.component-class.path')));
+        $componentPath = config('modules.paths.generator.component-class.path');
+        $componentNamespace = $this->module_namespace($this->name, $this->app_path(is_string($componentPath) ? $componentPath : null));
         Blade::componentNamespace($componentNamespace, $this->nameLower);
     }
 
@@ -131,11 +133,15 @@ class BookingServiceProvider extends ServiceProvider
     private function getPublishableViewPaths(): array
     {
         $paths = [];
-        foreach (config('view.paths') as $path) {
+        /** @var array<string> $viewPaths */
+        $viewPaths = config('view.paths');
+
+        foreach ($viewPaths as $path) {
             if (is_dir($path . '/modules/' . $this->nameLower)) {
                 $paths[] = $path . '/modules/' . $this->nameLower;
             }
         }
+
 
         return $paths;
     }

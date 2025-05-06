@@ -52,6 +52,7 @@ class UserBookingController extends Controller
         if (session()->has('intended_booking')) {
             $booking = session('intended_booking');
             session()->forget('intended_booking');
+            /** @var array{slug: string, data: mixed} $booking */
             $slug = $booking['slug'];
             $data = $booking['data'];
             return view('frontend.redirect-to-booking', compact('slug', 'data'));
@@ -79,11 +80,11 @@ class UserBookingController extends Controller
         $vehicleId = $vehicle?->id;
 
         $prices = $vehicle && is_string($vehicle->vehicle_price)
-            ? (json_decode($vehicle->vehicle_price, true)[0] ?? [])
+            ? (is_array($decodedPrice = json_decode($vehicle->vehicle_price, true)) ? ($decodedPrice[0] ?? []) : [])
             : [];
 
 
-        $filteredPrices = array_filter($prices, function ($price) {
+        $filteredPrices = array_filter(is_array($prices) ? $prices : [], function ($price) {
             return $price > 0;
         });
 
@@ -186,7 +187,7 @@ class UserBookingController extends Controller
         $driverInfo_ride = 35;
         $driverInfo_price = 0;
 
-        $finalRate = (float) $request->final_price_rate;
+        $finalRate = is_numeric($request->final_price_rate) ? (float) $request->final_price_rate : 0.0;
 
         // Get all tax groups with their tax rates using Eloquent relationship
         $taxGroups = TaxGroup::with(['taxRates'])->get();
@@ -373,8 +374,9 @@ class UserBookingController extends Controller
 
         $formattedBookingDate = Carbon::now()->format('Y-m-d H:i:s');
 
-        $pickupInput = $request->input('pickup_date') . ' ' . $request->input('pickup_time');
-        $returnInput = $request->input('return_date') . ' ' . $request->input('return_time');
+        $pickupInput = ($request->input('pickup_date') ?? '') . ' ' . ($request->input('pickup_time') ?? '');
+        $returnInput = ($request->input('return_date') ?? '') . ' ' . ($request->input('return_time') ?? '');
+
 
         $startDatetimeObj = Carbon::createFromFormat('d-m-Y H:i', $pickupInput);
         $endDatetimeObj = Carbon::createFromFormat('d-m-Y H:i', $returnInput);
@@ -659,7 +661,13 @@ class UserBookingController extends Controller
             ]);
 
             // Handle PayPal URL error
-            if (!isset($response['links'][1]['href'])) {
+            if (
+                isset($response['links']) &&
+                is_array($response['links']) &&
+                isset($response['links'][1]) &&
+                is_array($response['links'][1]) &&
+                isset($response['links'][1]['href'])
+            ) {                
                 return response()->json([
                     'code' => 500,
                     'message' => __('web.home.failed_to_create_paypal_link')
@@ -674,7 +682,8 @@ class UserBookingController extends Controller
         }
 
         if ($request->payment_type == "stripe") {
-            Stripe::setApiKey(config('services.stripe.secret'));
+            $stripeSecret = config('services.stripe.secret') ?? '';
+            Stripe::setApiKey(is_string($stripeSecret) ? $stripeSecret : '');
             $purchase_units = [];
             $currency_details = "USD"; // Fix currency
 
@@ -683,7 +692,7 @@ class UserBookingController extends Controller
                     'price_data' => [
                         'currency' => "USD",
                         'product_data' => ['name' => "Rental Services"],
-                        'unit_amount' => intval($request->total_price * 100),
+                        'unit_amount' => intval((float) (is_numeric($request->input('total_price')) ? $request->input('total_price') : 0) * 100),
                     ],
                     'quantity' => 1,
                 ]],
@@ -947,7 +956,8 @@ class UserBookingController extends Controller
     public function paypalPaymentSuccess(Request $request): JsonResponse|RedirectResponse
     {
         try {
-            $response = $this->provider->capturePaymentOrder($request->get('token'));
+            $token = $request->get('token');
+            $response = $this->provider->capturePaymentOrder(is_string($token) ? $token : '');
 
             // Ensure $response is an array before accessing it as one
             if (is_array($response) && isset($response['status']) && $response['status'] == 'COMPLETED') {
@@ -1010,8 +1020,10 @@ class UserBookingController extends Controller
     public function paypalPaymentFailed(Request $request): JsonResponse|RedirectResponse
     {
         try {
-            $response = $this->provider->capturePaymentOrder($request->get('token'));
-
+            $token = $request->get('token') ?? '';
+            if (is_string($token)) {
+                $response = $this->provider->capturePaymentOrder($token);
+            } 
             Booking::where('transaction_id', $request->token)
                 ->update([
                     'payment_status' => 3,
@@ -1036,7 +1048,8 @@ class UserBookingController extends Controller
     public function stripPaymentSuccess(Request $request): JsonResponse|RedirectResponse
     {
         try {
-            Stripe::setApiKey(config('stripe.test.sk'));
+            $stripeSecret = config('stripe.test.sk', '');
+            Stripe::setApiKey(is_string($stripeSecret) ? $stripeSecret : '');
             $sessionId = $request->get('session_id');
 
             Booking::where('transaction_id', $sessionId)->update(['payment_status' => 2]);
