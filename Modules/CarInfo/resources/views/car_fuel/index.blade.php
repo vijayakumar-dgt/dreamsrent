@@ -158,7 +158,6 @@
 	</div>
 	<!-- /Page Wrapper -->
 
-
 	<!-- Add Fuel -->
 	<div class="modal fade addmodal" id="fuel_type_modal">
 		<div class="modal-dialog modal-dialog-centered modal-md">
