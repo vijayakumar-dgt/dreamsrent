@@ -278,7 +278,7 @@ class BookingController extends Controller
                             $tariffType
                         ]);
                 })
-                ->when(!empty($startDateTime) || !empty($endDateTime), function ($query) use ($request, $startDateTime, $endDateTime, $bookingId) {
+                ->when(!empty($startDateTime) || !empty($endDateTime), function ($query) use ($startDateTime, $endDateTime, $bookingId) {
                     $query->whereNotExists(function ($q) use ($startDateTime, $endDateTime, $bookingId) {
                         $q->select(DB::raw(1))
                             ->from('bookings')
@@ -825,11 +825,12 @@ class BookingController extends Controller
             $booking->insurance_count = 0;
             $insuranceIds = [];
             if ($booking->insurance) {
-                $insuranceArray = $booking->insurance; // No need to json_decode again
+                /** @var array<array{id: int}> $insuranceArray */
+                $insuranceArray = $booking->insurance; // Explicitly stating that it's an array of arrays with 'id' field
                 $booking->insurance_count = count($insuranceArray);
                 $insuranceIds = collect($insuranceArray)
                     ->pluck('id')
-                    ->toArray(); 
+                    ->toArray();
             }
             $insuranceBenefits = [];
             if (!empty($insuranceIds)) {
@@ -1087,18 +1088,18 @@ class BookingController extends Controller
                     'tototal_amount'  => $booking->final_price ?? ""
                 ];
             }
-                $appAdmin = User::where('user_type', 1)->first();
-                if ($appAdmin && isset($appAdmin->email)) {
-                    sendNotification($appAdmin->email, 'booking-cancelled-to-admin', $notifyData ?? []);
-                }
+            $appAdmin = User::where('user_type', 1)->first();
+            if ($appAdmin && isset($appAdmin->email)) {
+                sendNotification($appAdmin->email, 'booking-cancelled-to-admin', $notifyData ?? []);
+            }
 
-                if (isset($customer) && isset($notifyData) && !empty($customer->email)) {
-                    sendNotification($customer->email, 'booking-cancelled-to-user', $notifyData);
-                }
-                if (isset($customer) && isset($notifyData) && !empty($customer->email)) {
-                    sendNotification($customer->email, 'booking-cancelled-to-user', $notifyData);
-                }
-            
+            if (isset($customer) && isset($notifyData) && !empty($customer->email)) {
+                sendNotification($customer->email, 'booking-cancelled-to-user', $notifyData);
+            }
+            if (isset($customer) && isset($notifyData) && !empty($customer->email)) {
+                sendNotification($customer->email, 'booking-cancelled-to-user', $notifyData);
+            }
+
 
             DB::commit();
             return response()->json([

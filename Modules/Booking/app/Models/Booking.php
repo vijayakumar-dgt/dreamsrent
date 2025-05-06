@@ -87,7 +87,9 @@ class Booking extends Model
     protected $casts = [
         'insurance' => 'array',
         'extra_service' => 'array',
+        'extra_service_names' => 'string',
     ];
+
     /**
      * The attributes that are mass assignable.
      */
