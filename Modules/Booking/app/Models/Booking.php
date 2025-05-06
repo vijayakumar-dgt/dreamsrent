@@ -148,76 +148,84 @@ class Booking extends Model
         return customEncrypt($this->id, self::RESERVATION_SECRET_KEY);
     }
 
-     /**
-     * @return BelongsTo<VehicleInfo, self>
+    /**
+     * @return BelongsTo<\Modules\CarInfo\Models\VehicleInfo, \Modules\Booking\Models\Booking>
      */
-
     public function vehicle(): BelongsTo
     {
+        /** @var BelongsTo<VehicleInfo, Booking> */
         return $this->belongsTo(VehicleInfo::class, 'vehicle_id');
     }
 
     /**
-     * @return BelongsTo<DrivingType, self>
+     * @return BelongsTo<\App\Models\DrivingType, \Modules\Booking\Models\Booking>
      */
     public function drivingType(): BelongsTo
     {
+        /** @var BelongsTo<DrivingType, Booking> */
         return $this->belongsTo(DrivingType::class, 'driving_type');
     }
 
     /**
-     * @return HasOne<BookingDetail, self>
+     * @return HasOne<\Modules\Booking\Models\BookingDetail, \Modules\Booking\Models\Booking>
      */
     public function bookingDetail(): HasOne
     {
+        /** @var HasOne<BookingDetail, Booking> */
         return $this->hasOne(BookingDetail::class, 'booking_id');
     }
 
     /**
-     * @return BelongsTo<Location, self>
+     * @return BelongsTo<\Modules\CarInfo\Models\Location, \Modules\Booking\Models\Booking>
      */
     public function pickupLocation(): BelongsTo
     {
+        /** @var BelongsTo<Location, Booking> */
         return $this->belongsTo(Location::class, 'pickup_location');
     }
 
     /**
-     * @return BelongsTo<Location, self>
+     * @return BelongsTo<\Modules\CarInfo\Models\Location, \Modules\Booking\Models\Booking>
      */
     public function returnLocation(): BelongsTo
     {
+        /** @var BelongsTo<Location, Booking> */
         return $this->belongsTo(Location::class, 'return_location');
     }
 
     /**
-     * @return BelongsTo<User, self>
+     * @return BelongsTo<\App\Models\User, \Modules\Booking\Models\Booking>
      */
     public function cancelledUser(): BelongsTo
     {
+        /** @var BelongsTo<User, Booking> */
         return $this->belongsTo(User::class, 'cancel_by');
     }
 
     /**
-     * @return HasOne<BookingUserInfo, self>
+     * @return HasOne<\Modules\Booking\Models\BookingUserInfo, \Modules\Booking\Models\Booking>
      */
     public function userInfo(): HasOne
     {
+        /** @var HasOne<BookingUserInfo, Booking> */
         return $this->hasOne(BookingUserInfo::class, 'booking_id');
     }
 
     /**
-     * @return BelongsTo<User, self>
+     * @return BelongsTo<\App\Models\User, \Modules\Booking\Models\Booking>
      */
     public function customer(): BelongsTo
     {
+        /** @var BelongsTo<User, Booking> */
         return $this->belongsTo(User::class, 'customer_id');
     }
 
     /**
-     * @return BelongsTo<UserDetail, self>
+     * @return BelongsTo<\App\Models\UserDetail, \Modules\Booking\Models\Booking>
      */
     public function customerDetail(): BelongsTo
     {
+        /** @var BelongsTo<UserDetail, Booking> */
         return $this->belongsTo(UserDetail::class, 'customer_id', 'user_id');
     }
 }
