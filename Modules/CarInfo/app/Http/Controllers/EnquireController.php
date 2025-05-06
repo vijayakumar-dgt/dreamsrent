@@ -86,9 +86,9 @@ class EnquireController extends Controller
                     $search = $request->input('search');
                     $query->where(function ($q) use ($search) {
                         $q->where('enquiries.customer_name', 'like', "%{$search}%")
-                          ->orWhere('enquiries.email', 'like', "%{$search}%")
-                          ->orWhere('enquiries.phone', 'like', "%{$search}%")
-                          ->orWhere('vehicle_info.name', 'like', "%{$search}%");
+                            ->orWhere('enquiries.email', 'like', "%{$search}%")
+                            ->orWhere('enquiries.phone', 'like', "%{$search}%")
+                            ->orWhere('vehicle_info.name', 'like', "%{$search}%");
                     });
                 })
                 ->when($request->filled('date_range'), function ($query) use ($request) {
@@ -105,7 +105,6 @@ class EnquireController extends Controller
                                 $query->whereBetween('enquiries.enquiry_date', [$start, $end]);
                             }
                         } catch (\Exception $e) {
-                            // Log error if needed
                         }
                     }
                 })
@@ -129,7 +128,10 @@ class EnquireController extends Controller
                             break;
                     }
                 })
-                ->get();
+                ->get()->map(function ($enquiry) {
+                    $enquiry->vehicle_image = uploadedAsset($enquiry->vehicle_image ?? null, 'default');
+                    return $enquiry;
+                });
 
             return response()->json([
                 'code' => 200,
@@ -205,7 +207,6 @@ class EnquireController extends Controller
             ], 500);
         }
     }
-
 
     public function delete(Request $request): JsonResponse
     {

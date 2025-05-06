@@ -1363,7 +1363,7 @@ class CarInfoController extends Controller
 
             /** @var \App\Models\User $auth */
             $auth = current_user();
-            $authId = $auth?->id ?? null;
+            $authId = $auth->id ?? null;
 
             $wishlistExists = false;
 

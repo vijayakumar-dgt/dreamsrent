@@ -26,7 +26,9 @@ class GeneralSettingController extends Controller
 {
     public function index(): View
     {
-        return view('generalsetting::index');
+        /** @var view-string $view */
+        $view = 'generalsetting::index';
+        return view($view);
     }
 
     public function logoSettings(Request $request): View
