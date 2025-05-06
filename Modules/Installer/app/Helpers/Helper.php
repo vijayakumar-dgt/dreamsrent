@@ -21,19 +21,20 @@ if (!function_exists('setupStatus')) {
 
         if (!Cache::has($cacheKey)) {
             try {
-                Cache::rememberForever($cacheKey, function () {
-                    return Configuration::where('config', 'setup_complete')->first()?->value != 0;
+                Cache::rememberForever($cacheKey, function (): bool {
+                    $config = Configuration::where('config', 'setup_complete')->first();
+                    return $config && $config->value != 0;
                 });
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
-                Cache::rememberForever($cacheKey, fn() => false);
+                Cache::rememberForever($cacheKey, fn(): bool => false);
             }
         }
 
-        return Cache::get($cacheKey, false);
+        $result = Cache::get($cacheKey, false);
+        return is_bool($result) ? $result : false;
     }
 }
-
 /**
  * Verify the license file by sending hashed data to a remote server.
  *
@@ -44,7 +45,8 @@ if (!function_exists('setupStatus')) {
 function purchaseVerificationHashed(string $filepath, bool $isLocal = false): array
 {
     // Skip verification in demo mode
-    if (strtolower(config('app.app_mode')) === 'demo') {
+    $appMode = config('app.app_mode');
+    if (is_string($appMode) && strtolower($appMode) === 'demo') {
         return ['success' => true, 'message' => 'Demo mode - verification bypassed'];
     }
 
@@ -52,21 +54,43 @@ function purchaseVerificationHashed(string $filepath, bool $isLocal = false): ar
     if (file_exists($filepath)) {
         $licenseFile = InstallerInfo::getLicenseFileData();
 
+        if (!is_array($licenseFile)) {
+            return ['success' => false, 'message' => 'Invalid license file format'];
+        }
+
         $data = [];
 
         if ($isLocal) {
             $data['isLocal'] = InstallerInfo::licenseFileDataHasLocalTrue() ? 'false' : 'true';
-            $data['purchase_code'] = $licenseFile['purchase_code'];
+            if (isset($licenseFile['purchase_code']) && is_string($licenseFile['purchase_code'])) {
+                $data['purchase_code'] = $licenseFile['purchase_code'];
+            }
         }
 
-        $data['verification_hashed'] = $licenseFile['verification_hashed'];
+        if (isset($licenseFile['verification_hashed']) && is_string($licenseFile['verification_hashed'])) {
+            $data['verification_hashed'] = $licenseFile['verification_hashed'];
+        }
+
         $data['incoming_url'] = InstallerInfo::getHost();
         $data['incoming_ip'] = InstallerInfo::getRemoteAddr();
 
-        return Http::post(
+        $response = Http::post(
             InstallerInfo::VERIFICATION_HASHED_URL->value,
             $data
         )->json();
+
+        // Strict type validation of the response
+        if (!is_array($response)
+            || !array_key_exists('success', $response)
+            || !is_bool($response['success'])
+            || !array_key_exists('message', $response)
+            || !is_string($response['message'])
+        ) {
+            return ['success' => false, 'message' => 'Invalid verification response'];
+        }
+
+        /** @var array{success: bool, message: string} $response */
+        return $response;
     }
 
     // Treat missing file as demo
@@ -110,52 +134,70 @@ if (! function_exists('updateChecking')) {
      * Check for available updates from the remote update server.
      *
      * @param string $last_update_date
-     * @return string|false
+     * @return string|false Returns update URL string or false
      */
     function updateChecking(string $last_update_date): string|false
     {
         $cacheKey = 'update_url';
 
-        if (! Cache::has($cacheKey)) {
+        if (!Cache::has($cacheKey)) {
             try {
-                Cache::remember($cacheKey, now()->addDay(), function () use ($last_update_date) {
-                    $response = Http::post(InstallerInfo::UPDATE_CHECK_URL->value, [
-                        'updated_at' => $last_update_date,
-                        'verification_hashed' => InstallerInfo::getLicenseFileData()['verification_hashed'],
-                    ])->json();
+                $licenseData = InstallerInfo::getLicenseFileData();
+                $verificationHashed = is_array($licenseData) && isset($licenseData['verification_hashed'])
+                    ? $licenseData['verification_hashed']
+                    : '';
 
-                    if (isset($response['success']) && $response['success']) {
-                        return $response['update_url'];
-                    }
+                $response = Http::post(InstallerInfo::UPDATE_CHECK_URL->value, [
+                    'updated_at' => $last_update_date,
+                    'verification_hashed' => $verificationHashed,
+                ])->json();
 
-                    return false;
-                });
+                // Validate response structure
+                if (is_array($response) && isset($response['success']) && $response['success'] === true) {
+                    $updateUrl = $response['update_url'] ?? false;
+                    $finalUrl = is_string($updateUrl) ? $updateUrl : false;
+
+                    Cache::put($cacheKey, $finalUrl, now()->addDay());
+
+                    return $finalUrl;
+                }
+
+                Cache::put($cacheKey, false, now()->addDay());
+                return false;
             } catch (Exception $e) {
-                Cache::remember($cacheKey, now()->addDay(), fn () => false);
                 Log::error($e->getMessage());
+                Cache::put($cacheKey, false, now()->addDay());
+                return false;
             }
         }
 
-        return Cache::get($cacheKey);
+        $cachedValue = Cache::get($cacheKey);
+        return is_string($cachedValue) ? $cachedValue : false;
     }
 }
 
 if (! function_exists('showUpdateAvailablity')) {
     function showUpdateAvailablity(): stdClass
     {
-        if (Cache::has('setting') && $settings = Cache::get('setting')) {
-            if ($settings->last_update_date && $update_url = updateChecking($settings->last_update_date)) {
-                return (object) [
-                    'status' => true,
-                    'message' => __('Update is available'),
-                    'url' => $update_url,
-                ];
+        if (Cache::has('setting')) {
+            $settings = Cache::get('setting');
+
+            if (is_object($settings) && isset($settings->last_update_date)) {
+                $update_url = updateChecking($settings->last_update_date);
+
+                if ($update_url) {
+                    return (object) [
+                        'status' => true,
+                        'message' => __('Update is available'),
+                        'url' => $update_url,
+                    ];
+                }
             }
         }
 
         return (object) [
             'status' => false,
-            'message' => __('Your are using latest version already.'),
+            'message' => __('You are using the latest version already.'),
             'url' => null,
         ];
     }

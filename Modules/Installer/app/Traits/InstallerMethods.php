@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
 use Modules\Installer\Models\Configuration;
+use RuntimeException;
 
 trait InstallerMethods
 {
@@ -140,16 +141,21 @@ trait InstallerMethods
     private function createDatabaseConnection(array $details): bool|string
     {
         try {
-            // Get the default connection name
             $defaultConnectionName = config('database.default');
-            $connection = config("database.connections.$defaultConnectionName");
+            if (!is_string($defaultConnectionName)) {
+                throw new RuntimeException('Invalid database connection configuration');
+            }
 
-            // Store original database name if needed
+            $connection = config("database.connections.$defaultConnectionName");
+            if (!is_array($connection)) {
+                throw new RuntimeException('Invalid database connection configuration');
+            }
+
             $originalDatabase = $connection['database'] ?? null;
 
             // Update connection details with provided credentials
             $connection['host'] = $details['host'];
-            $connection['port'] = $details['port'];
+            $connection['port'] = is_int($details['port']) ? $details['port'] : (int)$details['port'];
             $connection['username'] = $details['user'];
             $connection['password'] = $details['password'];
 
@@ -180,11 +186,17 @@ trait InstallerMethods
             // Check if the target database has existing tables
             $tables = DB::connection($defaultConnectionName)->select('SHOW TABLES');
             if (count($tables) > 0) {
-                if (!empty($details['reset_database']) && $details['reset_database'] == 'on') {
+                if (!empty($details['reset_database']) && $details['reset_database'] === 'on') {
                     // Drop all existing tables if reset is requested
                     foreach ($tables as $table) {
-                        $tableName = array_values(get_object_vars($table))[0];
-                        Schema::drop($tableName);
+                        $tableArray = get_object_vars($table);
+                        if (empty($tableArray)) {
+                            continue;
+                        }
+                        $tableName = array_values($tableArray)[0];
+                        if (is_string($tableName)) {
+                            Schema::drop($tableName);
+                        }
                     }
                     return true;
                 }

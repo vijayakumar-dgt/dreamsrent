@@ -42,15 +42,16 @@ class Configuration extends Model
     /**
      * Get the current setup step if it exists.
      *
-     * @return int|false
+     * @return int|false Returns the step number (int) if found, false otherwise
      */
     public static function stepExists(): int|false
     {
         try {
             $data = Configuration::where('config', 'setup_stage')->first();
 
-            if ($data) {
-                return $data['value'];
+            if ($data && isset($data['value'])) {
+                $value = $data['value'];
+                return is_numeric($value) ? (int)$value : false;
             }
 
             return false;

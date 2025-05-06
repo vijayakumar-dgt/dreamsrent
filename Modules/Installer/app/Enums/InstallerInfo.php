@@ -104,8 +104,9 @@ enum InstallerInfo: string
     public static function licenseFileDataHasLocalTrue(): bool
     {
         $data = self::getLicenseFileData();
-        if ($data !== null) {
-            return isset($data['isLocal']) && $data['isLocal'] === true;
+
+        if (is_array($data)) {
+            return array_key_exists('isLocal', $data) && $data['isLocal'] === true;
         }
 
         return false;
@@ -226,21 +227,29 @@ enum InstallerInfo: string
     {
         $licenseData = self::getLicenseFileData();
 
-        if ($licenseData === null) {
+        // First verify we have an array
+        if (!is_array($licenseData)) {
             return [
                 'success' => false,
-                'message' => 'License file does not exist.',
+                'message' => 'License file does not exist or is invalid.',
             ];
         }
 
-        if (!isset($licenseData['purchase_code']) || $licenseData['purchase_code'] !== $purchaseCode) {
+        // Check purchase code exists and matches
+        if (!array_key_exists('purchase_code', $licenseData) ||
+            !is_string($licenseData['purchase_code']) ||
+            $licenseData['purchase_code'] !== $purchaseCode
+        ) {
             return [
                 'success' => false,
                 'message' => 'Invalid purchase code.',
             ];
         }
 
-        if (isset($licenseData['isLocal']) && $licenseData['isLocal'] === false) {
+        // Check isLocal flag if it exists
+        if (array_key_exists('isLocal', $licenseData) &&
+            $licenseData['isLocal'] === false
+        ) {
             return [
                 'success' => false,
                 'message' => 'License is not marked as local.',
