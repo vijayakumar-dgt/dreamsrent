@@ -435,18 +435,18 @@ class QuotationController extends Controller
                 ->where('bookings.id', $id)
                 ->first();
 
-            if (!empty($booking)) {
-                $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
-                $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
-
-                $booking->insurance = $booking->insurance;
-                $booking->extra_service = $booking->extra_service;
-
-                $booking->insurance = $booking->insurance ?? [];
-                $booking->extra_service = $booking->extra_service ?? [];
-
-                $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
-            }
+                if (!empty($booking)) {
+                    $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
+                    $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
+                    if (!empty($booking->insurance)) {
+                        $booking->insurance = json_decode($booking->insurance, true);
+                    }
+    
+                    if ($booking->extra_service) {
+                        $booking->extra_service = json_decode($booking->extra_service, true);
+                    }
+                    $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
+                }
 
             return response()->json([
                 'code' => 200,

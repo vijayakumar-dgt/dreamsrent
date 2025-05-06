@@ -56,11 +56,11 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property float|null $vehicle_price
  * @property float|null $driver_price
  * @property string|null $currency_symbol
- * @property array|null $insurance_benefits
+ * @property array<string>|null $insurance_benefits
  * @property float|null $final_price
  * @property float|null $extra_service_count
  * @property float|null $insurance_count
- * @property array|null $extra_service_names
+ * @property array<string>|null $extra_service_names
  * @property string|null $transaction_id
  * @property string|null $transaction_id
  * @property-read \Modules\GeneralSetting\Models\Location|null $pickupLocation
@@ -140,12 +140,12 @@ class Booking extends Model
     ];
 
     // Booking Status Constants with type declaration
-    public static $inprogress = 1;
-    public static $confirmed = 2;
-    public static $rejected = 3;
-    public static $booked = 4;
-    public static $completed = 5;
-    public static $cancelled = 6;
+    public static int $inprogress = 1;
+    public static int $confirmed = 2;
+    public static int $rejected = 3;
+    public static int $booked = 4;
+    public static int $completed = 5;
+    public static int $cancelled = 6;
 
     public const RESERVATION_SECRET_KEY = 'ReservationId';
 
