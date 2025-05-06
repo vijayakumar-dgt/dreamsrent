@@ -275,11 +275,22 @@ class UserBookingController extends Controller
 
         $vehicleId = $booking->vehicle_id;
 
-        $extraServices = $booking->extra_service ?? [];
+        /** @var mixed $rawExtraService */
+        $rawExtraService = $booking->extra_service;
 
-        $extraServiceIds = collect($extraServices)
-            ->pluck('id')
-            ->toArray();
+        $extraServices = [];
+
+        /** @var array<array{id: int|string}> $extraServices */
+        if (is_array($rawExtraService)) {
+            $extraServices = $rawExtraService;
+        } elseif (is_string($rawExtraService)) {
+            $decoded = json_decode($rawExtraService, true);
+            if (is_array($decoded)) {
+                $extraServices = $decoded;
+            }
+        }
+
+        $extraServiceIds = collect($extraServices)->pluck('id')->toArray();
 
         $vehicle = VehicleInfo::select('id', 'name', 'vehicle_image', 'main_location_id', 'vehicle_price')->where('id', $vehicleId)->first();
         $vehicleImageUrl = $vehicle ? asset('/storage/' . $vehicle->vehicle_image) : null;
