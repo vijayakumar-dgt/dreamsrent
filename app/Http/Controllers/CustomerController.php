@@ -474,7 +474,7 @@ class CustomerController extends Controller
                 $document->size = $fileDetails['size'] ?? '';
                 $document->extension = $fileDetails['extension'] ?? '';
                 $document->document_url = uploadedAsset($document->document, '');
-                $document->icon = url('assets/img/file-icon.svg');
+                $document->icon = url('backend/assets/img/file-icon.svg');
                 return $document;
             });
         }

@@ -50,7 +50,7 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property string|null $rental_type
  * @property string|null $payment_type
  * @property string|null $payment_status
- * @property float|null $total_extra_service_price
+ * @property double|null $total_extra_service_price
  * @property float|null $total_insurance_price
  * @property float|null $vehicle_total_price
  * @property float|null $vehicle_price
@@ -85,9 +85,8 @@ class Booking extends Model
     protected $appends = ['encrypted_id'];
 
     protected $casts = [
-        'insurance' => 'array',
-        'extra_service' => 'array',
-        'extra_service_names' => 'string',
+        // 'insurance' => 'array',
+        // 'extra_service' => 'array',
     ];
 
     /**
@@ -147,8 +146,6 @@ class Booking extends Model
     public static int $completed = 5;
     public static int $cancelled = 6;
 
-    public const RESERVATION_SECRET_KEY = 'ReservationId';
-
     /**
      * Get the status label for a given status.
      *
@@ -171,7 +168,7 @@ class Booking extends Model
 
     public function getEncryptedIdAttribute(): string
     {
-        return customEncrypt($this->id, self::RESERVATION_SECRET_KEY);
+        return customEncrypt($this->id, self::$reservationSecretKey);
     }
 
     /**
