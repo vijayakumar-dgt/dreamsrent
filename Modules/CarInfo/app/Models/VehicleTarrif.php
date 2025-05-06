@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $vehicle_id
- * @property string $tariff_title
- * @property float $tariff_daily_price
- * @property int $tariff_from_days
- * @property int $tariff_to_days
- * @property float $tariff_base_km
- * @property float $tariff_extra_price
  * @property string $created_at
  * @property string $updated_at
+ * @property string|null $tariff_title
+ * @property float|null $tariff_daily_price
+ * @property int|null $tariff_from_days
+ * @property int|null $tariff_to_days
+ * @property float|null $tariff_base_km
+ * @property float|null $tariff_extra_price
  * @property string $deleted_at
  */
 class VehicleTarrif extends Model

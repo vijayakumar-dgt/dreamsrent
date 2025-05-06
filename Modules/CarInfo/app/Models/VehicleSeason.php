@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property int $id
  * @property int $vehicle_id
- * @property string $seasonal_title
- * @property string $seasonal_start_date
- * @property string $seasonal_end_date
- * @property float $seasonal_daily_rate
- * @property float $seasonal_weekly_rate
- * @property float $seasonal_monthly_rate
- * @property float $seasonal_late_fee
  * @property string $created_at
  * @property string $updated_at
+ * @property string|null $seasonal_title
+ * @property string|null $seasonal_start_date
+ * @property string|null $seasonal_end_date
+ * @property float|null $seasonal_daily_rate
+ * @property float|null $seasonal_weekly_rate
+ * @property float|null $seasonal_monthly_rate
+ * @property float|null $seasonal_late_fee
  * @property string $deleted_at
  */
 class VehicleSeason extends Model

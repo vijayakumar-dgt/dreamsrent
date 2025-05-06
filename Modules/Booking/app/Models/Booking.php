@@ -15,6 +15,7 @@ use Modules\CarInfo\Models\VehicleInfo;
 /**
  * @property string|null $booking_date
  * @property string|null $vehicle_image
+ * @property string|null $customer_image
  * @property string|array<string>|null $vehicle_image_url
  * @property string|null $start_datetime
  * @property string|null $end_datetime

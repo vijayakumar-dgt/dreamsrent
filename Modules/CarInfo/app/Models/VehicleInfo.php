@@ -59,6 +59,8 @@ use Modules\CarInfo\Models\VehicleTarrif;
  * @property string|null $vehicle_name
  * @property string|null $cartype_name
  * @property string $name
+ * @property string|null $image
+ * @property string|null $encrypted_id
  */
 class VehicleInfo extends Model
 {
