@@ -417,13 +417,13 @@ class QuotationController extends Controller
                 'pickup_location.name as pickup_location_name',
                 'drop_location.name as drop_location_name',
             )
-            ->join('users', 'users.id', '=', 'bookings.customer_id')
-            ->join('user_details', 'user_details.user_id', '=', 'users.id')
-            ->join('locations as pickup_location', 'pickup_location.id', '=', 'bookings.pickup_location')
-            ->join('locations as drop_location', 'drop_location.id', '=', 'bookings.return_location')
-            ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
-            ->where('bookings.id', $id)
-            ->first();
+                ->join('users', 'users.id', '=', 'bookings.customer_id')
+                ->join('user_details', 'user_details.user_id', '=', 'users.id')
+                ->join('locations as pickup_location', 'pickup_location.id', '=', 'bookings.pickup_location')
+                ->join('locations as drop_location', 'drop_location.id', '=', 'bookings.return_location')
+                ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
+                ->where('bookings.id', $id)
+                ->first();
 
             if (!empty($booking)) {
                 $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
@@ -493,16 +493,16 @@ class QuotationController extends Controller
             'bookings.delivery_type',
             'bookings.booking_by'
         )
-        ->leftjoin('booking_details', 'booking_details.booking_id', '=', 'bookings.id')
-        ->join('users', 'users.id', '=', 'bookings.customer_id')
-        ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
-        ->join('locations as pickup_location', 'pickup_location.id', '=', 'bookings.pickup_location')
-        ->join('locations as drop_location', 'drop_location.id', '=', 'bookings.return_location')
-        ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
-        ->leftJoin('cartypes', 'cartypes.id', '=', 'vehicle_info.type_id')
-        ->leftjoin('drivers', 'drivers.id', '=', 'bookings.driver_id')
-        ->where('bookings.id', $bookingId)
-        ->first();
+            ->leftjoin('booking_details', 'booking_details.booking_id', '=', 'bookings.id')
+            ->join('users', 'users.id', '=', 'bookings.customer_id')
+            ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
+            ->join('locations as pickup_location', 'pickup_location.id', '=', 'bookings.pickup_location')
+            ->join('locations as drop_location', 'drop_location.id', '=', 'bookings.return_location')
+            ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
+            ->leftJoin('cartypes', 'cartypes.id', '=', 'vehicle_info.type_id')
+            ->leftjoin('drivers', 'drivers.id', '=', 'bookings.driver_id')
+            ->where('bookings.id', $bookingId)
+            ->first();
 
         if ($booking) {
             $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
@@ -539,19 +539,32 @@ class QuotationController extends Controller
             }
             $booking->insurance_benefits = $insuranceBenefits;
 
-            $booking->booking_status_text =  Booking::getStatusLabel($booking->booking_status) ?? Booking::getStatusLabel(4);
+            $status = is_numeric($booking->booking_status) ? (int)$booking->booking_status : 4;
+            $booking->booking_status_text = Booking::getStatusLabel($status);
             $booking->currency_symbol = getDefaultCurrencySymbol();
 
             if ($booking->delivery_type) {
                 $booking->delivery_type = $booking->delivery_type == "self_pickup" ? 'Self Pickup' : 'Delivery';
             }
 
-            $booking->driver_price = number_format($booking->driver_price, 2, '.', '');
-            $booking->vehicle_price = number_format($booking->vehicle_price, 2, '.', '');
-            $booking->vehicle_total_price = number_format($booking->vehicle_total_price, 2, '.', '');
-            $booking->total_insurance_price = number_format($booking->total_insurance_price, 2, '.', '');
-            $booking->total_extra_service_price = number_format($booking->total_extra_service_price, 2, '.', '');
-            $booking->final_price = number_format($booking->final_price, 2, '.', '');
+            if ($booking->driver_price !== null) {
+                $booking->driver_price = round($booking->driver_price, 2);
+            }
+            if ($booking->vehicle_price !== null) {
+                $booking->vehicle_price = round($booking->vehicle_price, 2);
+            }
+            if ($booking->vehicle_total_price !== null) {
+                $booking->vehicle_total_price = round($booking->vehicle_total_price, 2);
+            }
+            if ($booking->total_insurance_price !== null) {
+                $booking->total_insurance_price = round($booking->total_insurance_price, 2);
+            }
+            if ($booking->total_extra_service_price !== null) {
+                $booking->total_extra_service_price = round($booking->total_extra_service_price, 2);
+            }
+            if ($booking->final_price !== null) {
+                $booking->final_price = round($booking->final_price, 2);
+            }
         }
 
         $bookingHistories = BookingHistory::where('booking_id', $bookingId)->get([

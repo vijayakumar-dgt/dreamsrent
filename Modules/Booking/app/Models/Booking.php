@@ -48,6 +48,14 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property string|null $rental_type
  * @property string|null $payment_type
  * @property string|null $payment_status
+ * @property float|null $total_extra_service_price
+ * @property float|null $total_insurance_price
+ * @property float|null $vehicle_total_price
+ * @property float|null $vehicle_price
+ * @property float|null $driver_price
+ * @property string|null $currency_symbol
+ * @property string|null $booking_status_text
+ * @property array|null $insurance_benefits
  * @property float|null $final_price
  * @property string|null $transaction_id
  * @property-read \Modules\GeneralSetting\Models\Location|null $pickupLocation
