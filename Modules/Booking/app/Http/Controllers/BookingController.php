@@ -820,7 +820,7 @@ class BookingController extends Controller
                     ->pluck('name')
                     ->toArray();
             }
-            $booking->extra_service_names = implode(', ', $extraServiceNames);
+            $booking->extra_service_names = $extraServiceNames;
 
             $booking->insurance_count = 0;
             $insuranceIds = [];
