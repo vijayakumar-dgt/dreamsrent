@@ -63,6 +63,7 @@
 		'home',
 		'list',
 		'vehicleDetails',
+		'pages*',
 	]))
 		<!-- Owl carousel CSS -->
 		<link rel="stylesheet" href="{{ asset('frontend/assets/css/owl.carousel.min.css') }}">
@@ -152,6 +153,7 @@
 		'home',
 		'list',
 		'vehicleDetails',
+		'pages*',
 	]))
 		<!-- Owl Carousel JS -->
 		<script src="{{ asset('frontend/assets/js/owl.carousel.min.js') }}"></script>
