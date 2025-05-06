@@ -81,11 +81,19 @@ class QuotationController extends Controller
 
         try {
             DB::beginTransaction();
+            $startDate = $request->input('start_date');
+            $startTime = $request->input('start_time');
+            $endDate = $request->input('end_date');
+            $endTime = $request->input('end_time');
 
-            $startDateTime = $request->start_date . ' ' . $request->start_time;
-            $endDateTime = $request->end_date . ' ' . $request->end_time;
-            $startDateTime = Carbon::parse($request->start_date . ' ' . $request->start_time)->format('Y-m-d H:i:s');
-            $endDateTime   = Carbon::parse($request->end_date . ' ' . $request->end_time)->format('Y-m-d H:i:s');
+            if (!is_string($startDate) || !is_string($startTime) || !is_string($endDate) || !is_string($endTime)) {
+                throw new \InvalidArgumentException('Invalid date or time input.');
+            }
+
+            $startDateTime = Carbon::parse($startDate . ' ' . $startTime)->format('Y-m-d H:i:s');
+            $endDateTime   = Carbon::parse($endDate . ' ' . $endTime)->format('Y-m-d H:i:s');
+
+
             $bookingId = $request->booking_id ?? null;
 
             $data = [
@@ -237,7 +245,7 @@ class QuotationController extends Controller
             return response()->json([
                 'code' => 200,
                 'message' => $successMsg,
-                'view_details_url' => route('quotations.details', ['id' => customEncrypt($bookingId, Booking::$reservationSecretKey)]),
+                'view_details_url' => route('quotations.details', ['id' => customEncrypt(strval($bookingId), Booking::$reservationSecretKey)]),
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -262,7 +270,7 @@ class QuotationController extends Controller
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 3, 'users.status' => 1])
             ->get();
-        $bookingId = customDecrypt($request->id, Booking::$reservationSecretKey);
+        $bookingId = (string) customDecrypt((string) ($request->id ?? ''), Booking::$reservationSecretKey);
 
         $booking = Booking::select(
             'base_km',
@@ -305,6 +313,7 @@ class QuotationController extends Controller
             if ($request->has('search') && !empty($request->search)) {
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {
+                    $search = (string) $search;
                     $q->where('bookings.reservation_id', 'LIKE', "%{$search}%")
                         ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%")
                         ->orWhere('users.name', 'LIKE', "%{$search}%");
@@ -327,7 +336,8 @@ class QuotationController extends Controller
 
             // Date Filter
             if ($request->has('sort_by_date') && !empty($request->sort_by_date)) {
-                $dates = explode(' - ', $request->sort_by_date);
+                $sortByDate = is_string($request->sort_by_date) ? $request->sort_by_date : '';
+                $dates = explode(' - ', $sortByDate);
                 if (count($dates) === 2) {
                     $startDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[0]));
                     $endDate = \Carbon\Carbon::createFromFormat('m/d/Y', trim($dates[1]));
@@ -341,7 +351,7 @@ class QuotationController extends Controller
 
             // Apply Sort Filter
             if ($request->has('sort_by') && !empty($request->sort_by)) {
-                switch (strtolower($request->sort_by)) {
+                switch (strtolower((string) ($request->sort_by ?? ''))) {
                     case 'latest':
                         $query->orderBy('bookings.created_at', 'desc');
                         break;
@@ -377,7 +387,7 @@ class QuotationController extends Controller
                 ->count();
             $filteredRecords = $query->count();
 
-            $query->offset($request->start)->limit($request->length);
+            $query->offset((int) $request->start)->limit((int) $request->length);
             $bookings = $query->get();
 
             // Format Response Data
@@ -390,7 +400,7 @@ class QuotationController extends Controller
             });
 
             return response()->json([
-                "draw" => intval($request->draw),
+                "draw" => intval($request->input('draw', 0)),
                 "recordsTotal" => $totalRecords,
                 "recordsFiltered" => $filteredRecords,
                 "data" => $bookings
@@ -435,18 +445,18 @@ class QuotationController extends Controller
                 ->where('bookings.id', $id)
                 ->first();
 
-                if (!empty($booking)) {
-                    $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
-                    $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
-                    if (!empty($booking->insurance)) {
-                        $booking->insurance = json_decode($booking->insurance, true);
-                    }
-    
-                    if ($booking->extra_service) {
-                        $booking->extra_service = json_decode($booking->extra_service, true);
-                    }
-                    $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
+            if (!empty($booking)) {
+                $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
+                $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
+                if (!empty($booking->insurance)) {
+                    $booking->insurance = json_decode($booking->insurance, true);
                 }
+
+                if ($booking->extra_service) {
+                    $booking->extra_service = json_decode($booking->extra_service, true);
+                }
+                $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
+            }
 
             return response()->json([
                 'code' => 200,
@@ -547,7 +557,7 @@ class QuotationController extends Controller
                 $insuranceArray = $booking->insurance; // Use the already decoded array
                 $booking->insurance_count = count($insuranceArray); // Count the items in the array
                 $insuranceIds = collect($insuranceArray)->pluck('id')->toArray(); // Extract the 'id' values
-            }            
+            }
 
             $insuranceBenefits = [];
             if (!empty($insuranceIds)) {
