@@ -52,5 +52,4 @@ class Page extends Model
         'status',
         'created_at',
     ];
-
 }

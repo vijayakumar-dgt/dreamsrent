@@ -151,7 +151,7 @@ class LanguageController extends Controller
             $responseArray[$langCode] = [
                 'id'            => $language->id,
                 'language_name' => $language->transLang->name,
-                'lang_img'      => url('assets/img/flags/' . $langCode . '.svg'),
+                'lang_img'      => url('backend/assets/img/flags/' . $langCode . '.svg'),
                 'lang_code'     => $langCode,
                 'lang_rtl'      => $language->rtl,
                 'default'       => $language->default,
@@ -271,7 +271,7 @@ class LanguageController extends Controller
             ->whereHas('transLang', fn($query) => $query->where('code', $request->code))
             ->firstOrFail();
         $langCode = $language->transLang->code ?? null;
-        $flag = asset("assets/img/flags/{$langCode}.svg");
+        $flag = asset("backend/assets/img/flags/{$langCode}.svg");
         $tab = $request->type;
 
         return view('generalsetting::website_settings.language_details', compact('language', 'flag', 'tab'));
@@ -438,7 +438,7 @@ class LanguageController extends Controller
             'message'  => 'Module keys fetched successfully',
             'data'     => $responseArray,
             'language' => $language,
-            'icon'     => url('assets/img/flags/' . $langCode . '.svg'),
+            'icon'     => url('backend/assets/img/flags/' . $langCode . '.svg'),
             'progress' => $progress,
             'color'    => $color,
             'uppercaseName' => strtoupper($language->transLang->name ?? ''),
@@ -521,7 +521,7 @@ class LanguageController extends Controller
             'code'     => 200,
             'message'  => 'Module key updated successfully',
             'language' => $language,
-            'icon'     => url('assets/img/flags/' . $langCode . '.svg'),
+            'icon'     => url('backend/assets/img/flags/' . $langCode . '.svg'),
             'uppercaseName' => strtoupper($language->transLang->name ?? ''),
             'progress' => $progress,
             'color'    => $color

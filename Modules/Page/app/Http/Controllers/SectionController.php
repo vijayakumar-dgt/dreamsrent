@@ -62,7 +62,7 @@ class SectionController extends Controller
         $orderBy = $request->input('order_by', 'asc');
         $sortBy = $request->input('sort_by', 'id');
 
-        $authuser = auth()->user(); 
+        $authuser = auth()->user();
 
         if (!$authuser) {
             return response()->json([
@@ -71,7 +71,7 @@ class SectionController extends Controller
             ], 401);
         }
 
-        $language_id = $authuser->language_id ?? null; 
+        $language_id = $authuser->language_id ?? null;
 
         if (!$language_id) {
             return response()->json([

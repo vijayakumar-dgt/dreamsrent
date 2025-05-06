@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $enquiry_details
  * @property int $status
  * @property string $comment
+ * @property string|null $vehicle_image
  */
 class Enquiry extends Model
 {

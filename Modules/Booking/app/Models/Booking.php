@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Models\VehicleInfo;
+use Modules\Booking\Models\BookingDetail;
+use Modules\Booking\Models\BookingUserInfo;
 
 /**
  * @property string|null $booking_date
@@ -47,9 +49,21 @@ use Modules\CarInfo\Models\VehicleInfo;
  * @property string|null $rental_type
  * @property string|null $payment_type
  * @property string|null $payment_status
+ * @property float|null $total_extra_service_price
+ * @property float|null $total_insurance_price
+ * @property float|null $vehicle_total_price
+ * @property float|null $vehicle_price
+ * @property float|null $driver_price
+ * @property string|null $currency_symbol
+ * @property string|null $booking_status_text
+ * @property array|null $insurance_benefits
  * @property float|null $final_price
  * @property string|null $transaction_id
  * @property-read \Modules\GeneralSetting\Models\Location|null $pickupLocation
+ * @property int $id
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property-read \Modules\CarInfo\Models\VehicleInfo|null $vehicle
+ * @property-read Location|null $pickupLocation
  *
  */
 
@@ -106,27 +120,33 @@ class Booking extends Model
         'tax_type',
     ];
 
-    // Booking Status Constants
-    public static $inprogress = 1;
-    public static $confirmed = 2;
-    public static $rejected = 3;
-    public static $booked = 4;
-    public static $completed = 5;
-    public static $cancelled = 6;
+    // Booking Status Constants with type declaration
+    public const IN_PROGRESS = 1;
+    public const CONFIRMED = 2;
+    public const REJECTED = 3;
+    public const BOOKED = 4;
+    public const COMPLETED = 5;
+    public const CANCELLED = 6;
 
-    public static $reservationSecretKey = 'ReservationId';
+    public const RESERVATION_SECRET_KEY = 'ReservationId';
 
     protected $appends = ['encrypted_id'];
 
-    public static function getStatusLabel($status)
+    /**
+     * Get the status label for a given status.
+     *
+     * @param int $status
+     * @return string
+     */
+    public static function getStatusLabel(int $status): string
     {
         $statuses = [
-            self::$inprogress => __('admin.common.in_progress'),
-            self::$confirmed  => __('admin.common.confirmed'),
-            self::$rejected   => __('admin.common.rejected'),
-            self::$booked   => __('admin.common.booked'),
-            self::$completed  => __('admin.common.completed'),
-            self::$cancelled  => __('admin.common.cancelled'),
+            self::IN_PROGRESS => __('admin.common.in_progress'),
+            self::CONFIRMED  => __('admin.common.confirmed'),
+            self::REJECTED   => __('admin.common.rejected'),
+            self::BOOKED     => __('admin.common.booked'),
+            self::COMPLETED  => __('admin.common.completed'),
+            self::CANCELLED  => __('admin.common.cancelled'),
         ];
 
         return $statuses[$status] ?? 'Unknown';
@@ -134,54 +154,87 @@ class Booking extends Model
 
     public function getEncryptedIdAttribute(): string
     {
-        return customEncrypt($this->id, Booking::$reservationSecretKey);
+        return customEncrypt($this->id, self::RESERVATION_SECRET_KEY);
     }
 
+    /**
+     * @return BelongsTo<\Modules\CarInfo\Models\VehicleInfo, \Modules\Booking\Models\Booking>
+     */
     public function vehicle(): BelongsTo
     {
+        /** @var BelongsTo<VehicleInfo, Booking> */
         return $this->belongsTo(VehicleInfo::class, 'vehicle_id');
     }
 
+    /**
+     * @return BelongsTo<\App\Models\DrivingType, \Modules\Booking\Models\Booking>
+     */
     public function drivingType(): BelongsTo
     {
+        /** @var BelongsTo<DrivingType, Booking> */
         return $this->belongsTo(DrivingType::class, 'driving_type');
     }
 
+    /**
+     * @return HasOne<\Modules\Booking\Models\BookingDetail, \Modules\Booking\Models\Booking>
+     */
     public function bookingDetail(): HasOne
     {
+        /** @var HasOne<BookingDetail, Booking> */
         return $this->hasOne(BookingDetail::class, 'booking_id');
     }
 
+    /**
+     * @return BelongsTo<\Modules\CarInfo\Models\Location, \Modules\Booking\Models\Booking>
+     */
     public function pickupLocation(): BelongsTo
     {
+        /** @var BelongsTo<Location, Booking> */
         return $this->belongsTo(Location::class, 'pickup_location');
     }
 
+    /**
+     * @return BelongsTo<\Modules\CarInfo\Models\Location, \Modules\Booking\Models\Booking>
+     */
     public function returnLocation(): BelongsTo
     {
+        /** @var BelongsTo<Location, Booking> */
         return $this->belongsTo(Location::class, 'return_location');
     }
 
+    /**
+     * @return BelongsTo<\App\Models\User, \Modules\Booking\Models\Booking>
+     */
     public function cancelledUser(): BelongsTo
     {
+        /** @var BelongsTo<User, Booking> */
         return $this->belongsTo(User::class, 'cancel_by');
     }
+
     /**
-     * @return HasOne<BookingUserInfo, Booking>
+     * @return HasOne<\Modules\Booking\Models\BookingUserInfo, \Modules\Booking\Models\Booking>
      */
     public function userInfo(): HasOne
     {
-         /** @var hasOne<BookingUserInfo, Booking> */
+        /** @var HasOne<BookingUserInfo, Booking> */
         return $this->hasOne(BookingUserInfo::class, 'booking_id');
     }
 
+    /**
+     * @return BelongsTo<\App\Models\User, \Modules\Booking\Models\Booking>
+     */
     public function customer(): BelongsTo
     {
+        /** @var BelongsTo<User, Booking> */
         return $this->belongsTo(User::class, 'customer_id');
     }
 
+    /**
+     * @return BelongsTo<\App\Models\UserDetail, \Modules\Booking\Models\Booking>
+     */
     public function customerDetail(): BelongsTo
     {
+        /** @var BelongsTo<UserDetail, Booking> */
         return $this->belongsTo(UserDetail::class, 'customer_id', 'user_id');
     }
 }

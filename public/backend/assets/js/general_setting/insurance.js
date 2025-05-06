@@ -201,7 +201,7 @@ function initTable(){
                         </ul>
                     </div>`;
             },
-            visible: hasPermission(permissions, 'vehicle_attributes', 'edit') || hasPermission(permissions, 'vehicle_attributes', 'delete')
+            visible: hasPermission(permissions, 'rental_settings', 'edit') || hasPermission(permissions, 'rental_settings', 'delete')
 
         }
         ],

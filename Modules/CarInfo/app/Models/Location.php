@@ -30,7 +30,7 @@ class Location extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = [];
+    protected $fillable = ['id', 'name'];
 
     protected static function booted()
     {

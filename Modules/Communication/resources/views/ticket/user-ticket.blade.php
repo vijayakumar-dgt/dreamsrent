@@ -1,4 +1,7 @@
 @extends($layout)
+
+@section('meta_title', __('web.user.tickets') . ' || ' . $companyName)
+
 @push('styles')
 <!-- Datatable CSS -->
 <link rel="stylesheet" href="{{ asset('frontend/assets/plugins/datatables/datatables.min.css') }}">
@@ -6,9 +9,9 @@
 <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/summernote-bs5.min.css') }}">
 
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datetimepicker.min.css') }}">
- @endpush
+@endpush
  
-    @section('content')
+@section('content')
     <!-- Breadscrumb Section -->
     <div class="breadcrumb-bar">
         <div class="container">
@@ -25,22 +28,22 @@
             </div>
         </div>
     </div>
-
     <!-- /Breadscrumb Section -->
+
     @include('frontend.user.nav_menu')
     <!-- Page Content -->
     <div class="content">
         <div class="container">
-
             <!-- Content Header -->
             <div class="content-header d-none">
                 <h4>{{ __('admin.support.tickets') }}</h4>
                 <div class="mb-2">
-                    <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_ticket"><i class="ti ti-plus me-2"></i>{{ __('web.user.add_new_ticket') }}</a>
+                    <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_ticket">
+                        <i class="ti ti-plus me-2"></i>{{ __('web.user.add_new_ticket') }}
+                    </a>
                 </div>
             </div>
             <!-- /Content Header -->
-
             <!-- Ticket Table -->
             <div class="row">
                 <div class="col-lg-12 d-flex">
@@ -51,12 +54,10 @@
                                     <h5>{{ __('web.user.tickets') }}</h5>
                                 </div>
                                 <div class="col-md-7 d-flex justify-content-end align-items-center">
-                                    <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center me-3"
-                                        data-bs-toggle="modal" data-bs-target="#add_ticket">
+                                    <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center me-3" data-bs-toggle="modal" data-bs-target="#add_ticket">
                                         <i class="ti ti-plus me-2"></i>{{ __('web.user.add_new_ticket') }}
                                     </a>
                                 </div>
-
                             </div>
                         </div>
                         <div class="card-body">
@@ -76,13 +77,13 @@
                                     <tbody>
                                         @for ($i = 0; $i < 5; $i++)
                                             <tr>
-                                            @for ($j = 0; $j < 7; $j++)
-                                                <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
+                                                @for ($j = 0; $j < 7; $j++)
+                                                    <td>
+                                                        <div class="skeleton data-skeleton data-loader"></div>
+                                                    </td>
                                                 @endfor
-                                                </tr>
-                                                @endfor
+                                            </tr>
+                                        @endfor
                                     </tbody>
                                 </table>
                             </div>
@@ -100,18 +101,17 @@
                     </div>
                 </div>
             </div>
-            <!-- /Wallet Table -->
+            <!-- /Ticket Table -->
             <div class="table-responsive dashboard-table dashboard-table-info d-none real-table">
                 <table class="table" id="userTickerTable">
                     <tbody>
-
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
     <!-- /Page Content -->
+
     <div class="modal fade" id="add_ticket">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -214,7 +214,6 @@
                             <div class="modal-body pb-1">
                                 <div class="row">
                                     <input type="hidden" name="ticketid" id="ticketid">
-
                                     <!-- Hidden Status Field -->
                                     <div class="col-md-6 d-none">
                                         <div class="mb-3">
@@ -229,7 +228,6 @@
                                             <span class="text-danger error-message" id="statusError"></span>
                                         </div>
                                     </div>
-
                                     <!-- Reply Field -->
                                     <div class="col-md-12">
                                         <div class="mb-3">
@@ -249,7 +247,6 @@
                             </div>
                         </form>
                     </div>
-
                     <!-- Ticket History Tab -->
                     <div class="tab-pane fade" id="historyTabPane" role="tabpanel" aria-labelledby="history-tab">
                         <div class="p-3 ticket_histroy">
@@ -257,7 +254,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -273,10 +269,7 @@
                 </div>
                 <form id="editTicketstatus">
                     <div class="modal-body histroy-ticket pb-1">
-
-
                     </div>
-
                     <div class="modal-footer">
                         <div class="d-flex justify-content-center">
                             <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.common.cancel')}}</a>
@@ -311,8 +304,8 @@
         </div>
     </div>
     <!-- /Delete -->
-
 @endsection
+
 @push('scripts')
 <!-- Datatable JS -->
 <script src="{{ asset('frontend/assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>

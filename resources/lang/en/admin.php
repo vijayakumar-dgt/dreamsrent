@@ -931,6 +931,8 @@ return array(
     'enquiry_delete_success' => 'Enquiry deleted successfully.',
     'add_new_quotation' => 'Add New Quotation',
     'add_reservation' => 'Add Reservation',
+    'add_quotation' => 'Add Quotation',
+    'edit_quotation' => 'Edit Quotation',
   ),
   'manage' =>
   array(

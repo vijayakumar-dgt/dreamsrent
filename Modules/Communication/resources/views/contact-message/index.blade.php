@@ -1,4 +1,7 @@
 @extends('admin.admin')
+
+@section('meta_title', __('admin.support.contact_messages') . ' || ' . $companyName)
+
 @section('content')
     <!-- Page Wrapper -->
     <div class="page-wrapper">
@@ -24,8 +27,7 @@
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                     <div class="skeleton label-skeleton label-loader"></div>
                     <div class="dropdown sort-dropdown me-2 d-none real-label">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center sort-dropdown-toggle"
-                            data-bs-toggle="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center sort-dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="ti ti-filter me-1 sort"></i> {{ __('admin.common.sort_by_latest') }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end p-2">
@@ -55,91 +57,41 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
-                            <th>
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
-                            <th>
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
-                            <th>
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
-                            <th>
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
+                            <th><div class="skeleton th-skeleton th-loader"></div></th>
+                            <th><div class="skeleton th-skeleton th-loader"></div></th>
+                            <th><div class="skeleton th-skeleton th-loader"></div></th>
+                            <th><div class="skeleton th-skeleton th-loader"></div></th>
+                            <th><div class="skeleton th-skeleton th-loader"></div></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
                         </tr>
                         <tr>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
                         </tr>
                         <tr>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
                         </tr>
                         <tr>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
+                            <td><div class="skeleton data-skeleton data-loader"></div></td>
                         </tr>
                     </tbody>
                 </table>
@@ -160,8 +112,7 @@
                             @endif
                         </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
             <!-- Custom Data Table -->
@@ -171,7 +122,7 @@
     </div>
     <!-- /Page Wrapper -->
 
-    <!-- Delete  -->
+    <!-- Delete -->
     <div class="modal fade" id="delete_contact">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">

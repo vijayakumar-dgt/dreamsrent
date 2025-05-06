@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\GeneralSetting\Models\Insurance;
 use Modules\GeneralSetting\Models\InsuranceBenefit;
+use Illuminate\Support\Collection;
 
 /**
  * @property Insurance $insurance
- * @property InsuranceBenefit $insuranceBenefits
  * @property int $vehicle_id
  * @property int $insurances_id
  * @property float $value
@@ -18,9 +18,10 @@ use Modules\GeneralSetting\Models\InsuranceBenefit;
  * @property int $id
  * @property string $created_at
  * @property string $updated_at
- * @property string $deleted_at
+ * @property string|null $deleted_at
+ * @property int $benefits_count
+ * @property string $first_benefit
  */
-
 class VehicleInsurance extends Model
 {
     protected $table = 'vehicle_insurances';
