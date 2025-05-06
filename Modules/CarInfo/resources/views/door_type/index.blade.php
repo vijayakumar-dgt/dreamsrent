@@ -1,167 +1,166 @@
 @extends('admin.admin')
+
+@section('meta_title', __('admin.rentals.door_types') . ' || ' . $companyName)
+
 @section('content')
-
 <!-- Page Wrapper -->
-<div class="page-wrapper">
-	<div class="content me-4">
-		
-		<!-- Breadcrumb -->
-		<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-			<div class="my-auto mb-2">
-				<h2 class="mb-1"></h2>
-				<nav>
-					<ol class="breadcrumb mb-0">
-						<li class="breadcrumb-item">
-							<a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-						</li>
-						<li class="breadcrumb-item active" aria-current="page">{{ __('admin.rentals.door_types') }}</li>
-					</ol>
-				</nav>
-			</div>
-			<div class="d-flex my-xl-auto right-content align-items-center flex-wrap">                        
-				<div class="mb-2">
-					@if (hasPermission($permissions, 'vehicle_attributes', 'create'))
-					<div class="skeleton label-skeleton label-loader"></div>
-					<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#door_type_modal" id="add_door_type" class="btn btn-primary d-flex align-items-center d-none real-label"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_door_type') }}</a>
-					@endif
+	<div class="page-wrapper">
+		<div class="content me-4">		
+		 <!-- Breadcrumb -->
+			<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
+				<div class="my-auto mb-2">
+					<h2 class="mb-1"></h2>
+					<nav>
+						<ol class="breadcrumb mb-0">
+							<li class="breadcrumb-item">
+								<a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
+							</li>
+							<li class="breadcrumb-item active" aria-current="page">{{ __('admin.rentals.door_types') }}</li>
+						</ol>
+					</nav>
 				</div>
-			</div>
-		</div>
-		<!-- /Breadcrumb -->
-
-		<!-- Table Header -->
-		<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
-			<div class="skeleton label-skeleton label-loader"></div>
-			<div class="d-flex align-items-center flex-wrap row-gap-3 d-none real-label"> 
-				<div class="top-search">
-					<div class="top-search-group">
-						<span class="input-icon">
-							<i class="ti ti-search"></i>
-						</span>
-						<input type="text" class="form-control" name="search" id="search" placeholder="{{ __('admin.common.search') }}">
+				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap">                        
+					<div class="mb-2">
+						@if (hasPermission($permissions, 'vehicle_attributes', 'create'))
+						<div class="skeleton label-skeleton label-loader"></div>
+						<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#door_type_modal" id="add_door_type" class="btn btn-primary d-flex align-items-center d-none real-label"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_door_type') }}</a>
+						@endif
 					</div>
 				</div>
 			</div>
-			<div class="skeleton label-skeleton label-loader"></div>
-			<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3 d-none real-label">  
-				<input type="hidden" id="sort_by_status">             
-				<div class="dropdown">
-					<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-						<i class="ti ti-badge me-1"></i> <span class="ms-1" id="current_sort_status">{{ __('admin.common.status') }}</span>
-					</a>
-					<ul class="dropdown-menu  dropdown-menu-end p-2" id="status_filter">
-						<li>
-							<a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="1">{{ __('admin.common.active') }}</a>
-						</li>
-						<li>
-							<a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="0">{{ __('admin.common.inactive') }}</a>
-						</li>
-					</ul>
+			<!-- /Breadcrumb -->
+
+			<!-- Table Header -->
+			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
+				<div class="skeleton label-skeleton label-loader"></div>
+				<div class="d-flex align-items-center flex-wrap row-gap-3 d-none real-label"> 
+					<div class="top-search">
+						<div class="top-search-group">
+							<span class="input-icon">
+								<i class="ti ti-search"></i>
+							</span>
+							<input type="text" class="form-control" name="search" id="search" placeholder="{{ __('admin.common.search') }}">
+						</div>
+					</div>
+				</div>
+				<div class="skeleton label-skeleton label-loader"></div>
+				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3 d-none real-label">  
+					<input type="hidden" id="sort_by_status">             
+					<div class="dropdown">
+						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+							<i class="ti ti-badge me-1"></i> <span class="ms-1" id="current_sort_status">{{ __('admin.common.status') }}</span>
+						</a>
+						<ul class="dropdown-menu  dropdown-menu-end p-2" id="status_filter">
+							<li>
+								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="1">{{ __('admin.common.active') }}</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="0">{{ __('admin.common.inactive') }}</a>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
-		</div>
-		<!-- /Table Header -->
+			<!-- /Table Header -->
 
-		<div class="custom-datatable-filter table-responsive table-loader">
-			<table class="table table-bordered">
-				<thead class="thead-light">
-					<tr>
-						<th class="text-center">
-							<div class="skeleton th-skeleton th-loader"></div>
-						</th>
-						<th>
-							<div class="skeleton th-skeleton th-loader"></div>
-						</th>
-						<th>
-							<div class="skeleton th-skeleton th-loader"></div>
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+			<div class="custom-datatable-filter table-responsive table-loader">
+				<table class="table table-bordered">
+					<thead class="thead-light">
+						<tr>
+							<th class="text-center">
+								<div class="skeleton th-skeleton th-loader"></div>
+							</th>
+							<th>
+								<div class="skeleton th-skeleton th-loader"></div>
+							</th>
+							<th>
+								<div class="skeleton th-skeleton th-loader"></div>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 
-		<!-- Custom Data Table -->
-		<div class="custom-datatable-filter table-responsive brandstable d-none real-table">
-			<table class="table" id="doorTypeTable">
-				<thead class="thead-light"> 
-					<tr>
-						<th>{{ strtoupper(__('admin.rentals.door_type')) }}</th>
-						<th>{{ strtoupper(__('admin.common.status')) }}</th>
-						@if (hasPermission($permissions, 'vehicle_attributes', 'edit') || hasPermission($permissions, 'vehicle_attributes', 'delete'))
-						<th>{{ strtoupper(__('admin.common.action')) }}</th>
-						@endif
-					</tr>
-				</thead>
-				<tbody>
-						
-				</tbody>
-			</table>
-		</div>
-		<!-- Custom Data Table -->
-
-		<div class="table-footer d-none"></div>			
-
-	</div>			
-    @include('admin.partials.footer')
-</div>
-<!-- /Page Wrapper -->
+			<!-- Custom Data Table -->
+			<div class="custom-datatable-filter table-responsive brandstable d-none real-table">
+				<table class="table" id="doorTypeTable">
+					<thead class="thead-light"> 
+						<tr>
+							<th>{{ strtoupper(__('admin.rentals.door_type')) }}</th>
+							<th>{{ strtoupper(__('admin.common.status')) }}</th>
+							@if (hasPermission($permissions, 'vehicle_attributes', 'edit') || hasPermission($permissions, 'vehicle_attributes', 'delete'))
+							<th>{{ strtoupper(__('admin.common.action')) }}</th>
+							@endif
+						</tr>
+					</thead>
+					<tbody>	
+											
+					</tbody>
+				</table>
+			</div>
+			<!-- Custom Data Table -->
+			<div class="table-footer d-none"></div>			
+		</div>			
+		@include('admin.partials.footer')
+	</div>
+	<!-- /Page Wrapper -->
 
 <!-- Add/Edit Door Type -->
 <div class="modal fade addmodal" id="door_type_modal">
@@ -226,9 +225,8 @@
 	</div>
 </div>
 <!-- /Delete Door Type -->
-
 @endsection
 
 @push('scripts')
-<script src="{{ asset('assets/js/carinfo/door-type.js') }}"></script>
+<script src="{{ asset('backend/assets/js/carinfo/door-type.js') }}"></script>
 @endpush

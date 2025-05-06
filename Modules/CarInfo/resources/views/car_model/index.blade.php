@@ -1,199 +1,196 @@
 @extends('admin.admin')
+
+@section('meta_title', __('admin.rentals.vehicle_models') . ' || ' . $companyName)
+
 @section('content')
-
-<!-- Page Wrapper -->
-<div class="page-wrapper">
-	<div class="content me-4">
-		
-		<!-- Breadcrumb -->
-		<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-			<div class="my-auto mb-2">
-				<h2 class="mb-1">{{ __('admin.rentals.vehicle_models') }}</h2>
-				<nav>
-					<ol class="breadcrumb mb-0">
-						<li class="breadcrumb-item">
-							<a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-						</li>
-						<li class="breadcrumb-item active" aria-current="page">{{ __('admin.rentals.vehicle_models') }}</li>
-					</ol>
-				</nav>
-			</div>
-			<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-				<div class="mb-2 me-2 d-none">
-					<div class="skeleton label-skeleton label-loader"></div>
-					<a href="javascript:void(0);" class="btn btn-white d-flex align-items-center d-none real-label"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</a>
+	<!-- Page Wrapper -->
+	<div class="page-wrapper">
+		<div class="content me-4">	
+			<!-- Breadcrumb -->
+			<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
+				<div class="my-auto mb-2">
+					<h2 class="mb-1">{{ __('admin.rentals.vehicle_models') }}</h2>
+					<nav>
+						<ol class="breadcrumb mb-0">
+							<li class="breadcrumb-item">
+								<a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
+							</li>
+							<li class="breadcrumb-item active" aria-current="page">{{ __('admin.rentals.vehicle_models') }}</li>
+						</ol>
+					</nav>
 				</div>
-				<div class="me-2 mb-2 d-none">
-					<div class="skeleton label-skeleton label-loader"></div>
-					<div class="dropdown d-none real-label">
-						<a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center">
-							<i class="ti ti-upload me-1"></i>{{ __('admin.common.export') }}
-						</a>
+				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
+					<div class="mb-2 me-2 d-none">
+						<div class="skeleton label-skeleton label-loader"></div>
+						<a href="javascript:void(0);" class="btn btn-white d-flex align-items-center d-none real-label"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</a>
 					</div>
-				</div>
-				<div class="mb-2">
-					@if (hasPermission($permissions, 'vehicle_attributes', 'create'))
-					<div class="skeleton label-skeleton label-loader"></div>
-					<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#car_model_modal" id="add_car_model" class="btn btn-primary d-flex align-items-center d-none real-label"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_vehicle_model') }}</a>
-					@endif
-				</div>
-			</div>
-		</div>
-		<!-- /Breadcrumb -->
-
-		<!-- Table Header -->
-		<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
-			<div class="skeleton label-skeleton label-loader"></div>
-			<div class="d-flex align-items-center flex-wrap row-gap-3 d-none real-label"> 
-				<div class="top-search">
-					<div class="top-search-group">
-						<span class="input-icon">
-							<i class="ti ti-search"></i>
-						</span>
-						<input type="text" class="form-control" name="search" id="search" placeholder="{{ __('admin.common.search') }}">
+					<div class="me-2 mb-2 d-none">
+						<div class="skeleton label-skeleton label-loader"></div>
+						<div class="dropdown d-none real-label">
+							<a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center">
+								<i class="ti ti-upload me-1"></i>{{ __('admin.common.export') }}
+							</a>
+						</div>
 					</div>
-				</div>
-			</div>
-			<div class="skeleton label-skeleton label-loader"></div>
-			<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3 d-none real-label">  
-				<input type="hidden" id="sort_by_status">             
-				<div class="dropdown">
-					<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-						<i class="ti ti-badge me-1"></i> <span class="ms-1" id="current_sort_status">{{ __('admin.common.status') }}</span>
-					</a>
-					<ul class="dropdown-menu  dropdown-menu-end p-2" id="status_filter">
-						<li>
-							<a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="1">{{ __('admin.common.active') }}</a>
-						</li>
-						<li>
-							<a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="0">{{ __('admin.common.inactive') }}</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<!-- /Table Header -->
-
-		<div class="custom-datatable-filter table-responsive table-loader">
-			<table class="table table-bordered">
-				<thead class="thead-light">
-					<tr>
-						<th class="text-center">
-							<div class="skeleton th-skeleton th-loader"></div>
-						</th>
-						<th>
-							<div class="skeleton th-skeleton th-loader"></div>
-						</th>
-						<th>
-							<div class="skeleton th-skeleton th-loader"></div>
-						</th>
-						<th>
-							<div class="skeleton th-skeleton th-loader"></div>
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-						<td>
-							<div class="skeleton data-skeleton data-loader"></div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-
-		<!-- Custom Data Table -->
-		<div class="custom-datatable-filter table-responsive brandstable d-none real-table">
-			<table class="table" id="carModelTable">
-				<thead class="thead-light">
-					<tr>
-						<th>{{ strtoupper(__('admin.common.vehicle_model')) }}</th>
-						<th>{{ strtoupper(__('admin.rentals.brand_name')) }}</th>
-						<th>{{ strtoupper(__('admin.common.status')) }}</th>
-						@if (hasPermission($permissions, 'vehicle_attributes', 'edit') || hasPermission($permissions, 'vehicle_attributes', 'delete'))
-						<th>{{ strtoupper(__('admin.common.action')) }}</th>
+					<div class="mb-2">
+						@if (hasPermission($permissions, 'vehicle_attributes', 'create'))
+						<div class="skeleton label-skeleton label-loader"></div>
+						<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#car_model_modal" id="add_car_model" class="btn btn-primary d-flex align-items-center d-none real-label"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_vehicle_model') }}</a>
 						@endif
-					</tr>
-				</thead>
-				<tbody>			
+					</div>
+				</div>
+			</div>
+			<!-- /Breadcrumb -->
 
-				</tbody>
-			</table>
-		</div>
-		<!-- Custom Data Table -->
+			<!-- Table Header -->
+			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
+				<div class="skeleton label-skeleton label-loader"></div>
+				<div class="d-flex align-items-center flex-wrap row-gap-3 d-none real-label"> 
+					<div class="top-search">
+						<div class="top-search-group">
+							<span class="input-icon">
+								<i class="ti ti-search"></i>
+							</span>
+							<input type="text" class="form-control" name="search" id="search" placeholder="{{ __('admin.common.search') }}">
+						</div>
+					</div>
+				</div>
+				<div class="skeleton label-skeleton label-loader"></div>
+				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3 d-none real-label">  
+					<input type="hidden" id="sort_by_status">             
+					<div class="dropdown">
+						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+							<i class="ti ti-badge me-1"></i> <span class="ms-1" id="current_sort_status">{{ __('admin.common.status') }}</span>
+						</a>
+						<ul class="dropdown-menu  dropdown-menu-end p-2" id="status_filter">
+							<li>
+								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="1">{{ __('admin.common.active') }}</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="0">{{ __('admin.common.inactive') }}</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- /Table Header -->
 
-		<div class="table-footer d-none"></div>			
+			<div class="custom-datatable-filter table-responsive table-loader">
+				<table class="table table-bordered">
+					<thead class="thead-light">
+						<tr>
+							<th class="text-center">
+								<div class="skeleton th-skeleton th-loader"></div>
+							</th>
+							<th>
+								<div class="skeleton th-skeleton th-loader"></div>
+							</th>
+							<th>
+								<div class="skeleton th-skeleton th-loader"></div>
+							</th>
+							<th>
+								<div class="skeleton th-skeleton th-loader"></div>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+							<td>
+								<div class="skeleton data-skeleton data-loader"></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 
-	</div>	
-    @include('admin.partials.footer')
-</div>
-<!-- /Page Wrapper -->
-
+			<!-- Custom Data Table -->
+			<div class="custom-datatable-filter table-responsive brandstable d-none real-table">
+				<table class="table" id="carModelTable">
+					<thead class="thead-light">
+						<tr>
+							<th>{{ strtoupper(__('admin.common.vehicle_model')) }}</th>
+							<th>{{ strtoupper(__('admin.rentals.brand_name')) }}</th>
+							<th>{{ strtoupper(__('admin.common.status')) }}</th>
+							@if (hasPermission($permissions, 'vehicle_attributes', 'edit') || hasPermission($permissions, 'vehicle_attributes', 'delete'))
+							<th>{{ strtoupper(__('admin.common.action')) }}</th>
+							@endif
+						</tr>
+					</thead>
+					<tbody>			
+					</tbody>
+				</table>
+			</div>
+			<!-- Custom Data Table -->
+			<div class="table-footer d-none"></div>			
+		</div>	
+		@include('admin.partials.footer')
+	</div>
+	<!-- /Page Wrapper -->
 
 <!-- Add/Edit Car Model -->
 <div class="modal fade addmodal" id="car_model_modal">
@@ -275,7 +272,6 @@
 	</div>
 </div>
 <!-- /Delete Car model -->
-
 @endsection
 
 @push('scripts')
