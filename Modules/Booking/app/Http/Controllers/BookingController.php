@@ -307,7 +307,7 @@ class BookingController extends Controller
             $vehicles->getCollection()->map(function ($vehicle) {
                 $vehicle->image = uploadedAsset($vehicle->image);
                 $vehicle->vehicle_price = number_format((float) $vehicle->vehicle_price, 2, '.', '');
-                $vehicle->encrypted_id = customEncrypt($vehicle->id, Booking::RESERVATION_SECRET_KEY);
+                $vehicle->encrypted_id = customEncrypt($vehicle->id, Booking::$reservationSecretKey);
                 return $vehicle;
             });
 
@@ -505,7 +505,7 @@ class BookingController extends Controller
             return response()->json([
                 'code' => 200,
                 'message' => $successMsg,
-                'view_details_url' => route('reservation.details', ['id' => customEncrypt($bookingId, Booking::RESERVATION_SECRET_KEY)]),
+                'view_details_url' => route('reservation.details', ['id' => customEncrypt($bookingId, Booking::$reservationSecretKey)]),
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -534,7 +534,7 @@ class BookingController extends Controller
                 $customer->full_name = $customer->full_name ?? $customer->username;
                 return $customer;
             });
-        $bookingId = customDecrypt($request->id, Booking::RESERVATION_SECRET_KEY);
+        $bookingId = customDecrypt($request->id, Booking::$reservationSecretKey);
 
         return view('booking::reservation.edit', compact('locations', 'priceTypes', 'drivingTypes', 'customers', 'bookingId'));
     }
@@ -723,12 +723,12 @@ class BookingController extends Controller
             if (!empty($booking)) {
                 $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
                 $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
-                if (!empty($booking->insurance)) {
-                    $booking->insurance = json_decode($booking->insurance, true);
+                if ($booking->insurance) {
+                    $booking->insurance = json_decode($booking->insurance);
                 }
 
                 if ($booking->extra_service) {
-                    $booking->extra_service = json_decode($booking->extra_service, true);
+                    $booking->extra_service = json_decode($booking->extra_service);
                 }
                 $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
             }
@@ -749,7 +749,7 @@ class BookingController extends Controller
 
     public function reservationViewDetails(Request $request): View
     {
-        $bookingId = customDecrypt($request->id, Booking::RESERVATION_SECRET_KEY);
+        $bookingId = customDecrypt($request->id, Booking::$reservationSecretKey);
         $booking = Booking::select(
             'bookings.id',
             'bookings.reservation_id',
@@ -811,8 +811,7 @@ class BookingController extends Controller
             if ($booking->extra_service) {
                 $booking->extra_service = json_decode($booking->extra_service, true);
                 $booking->extra_service_count = count($booking->extra_service);
-                $extraService = is_array($booking->extra_service) ? $booking->extra_service : [];
-                $extraServiceIds = collect($extraService)->pluck('id')->toArray();
+                $extraServiceIds = collect($booking->extra_service)->pluck('id')->toArray();
             }
             $extraServiceNames = [];
             if (!empty($extraServiceIds)) {
@@ -825,12 +824,9 @@ class BookingController extends Controller
             $booking->insurance_count = 0;
             $insuranceIds = [];
             if ($booking->insurance) {
-                /** @var array<array{id: int}> $insuranceArray */
-                $insuranceArray = $booking->insurance; // Explicitly stating that it's an array of arrays with 'id' field
-                $booking->insurance_count = count($insuranceArray);
-                $insuranceIds = collect($insuranceArray)
-                    ->pluck('id')
-                    ->toArray();
+                $booking->insurance = json_decode($booking->insurance, true);
+                $booking->insurance_count = count($booking->insurance);
+                $insuranceIds = collect($booking->insurance)->pluck('id')->toArray();
             }
             $insuranceBenefits = [];
             if (!empty($insuranceIds)) {
@@ -847,12 +843,12 @@ class BookingController extends Controller
                 $booking->delivery_type = $booking->delivery_type == "self_pickup" ? 'Self Pickup' : 'Delivery';
             }
 
-            $booking->driver_price = (float) number_format($booking->driver_price ?? 0.0, 2, '.', '');
-            $booking->vehicle_price = (float) number_format($booking->vehicle_price ?? 0.0, 2, '.', '');
-            $booking->vehicle_total_price = (float) number_format($booking->vehicle_total_price ?? 0.0, 2, '.', '');
-            $booking->total_insurance_price = (float) number_format($booking->total_insurance_price ?? 0.0, 2, '.', '');
-            $booking->total_extra_service_price = (float) number_format($booking->total_extra_service_price ?? 0.0, 2, '.', '');
-            $booking->final_price = (float) number_format($booking->final_price ?? 0.0, 2, '.', '');
+            $booking->driver_price = (float) number_format($booking->driver_price ?? 0.00, 2, '.', '');
+            $booking->vehicle_price = (float) number_format($booking->vehicle_price ?? 0.00, 2, '.', '');
+            $booking->vehicle_total_price = (float) number_format($booking->vehicle_total_price ?? 0.00, 2, '.', '');
+            $booking->total_insurance_price = (float) number_format($booking->total_insurance_price ?? 0.00, 2, '.', '');
+            $booking->total_extra_service_price = (float) number_format($booking->total_extra_service_price ?? 0.00, 2, '.', '');
+            $booking->final_price = (float) number_format($booking->final_price ?? 0.00, 2, '.', '');
         }
 
         $bookingHistories = BookingHistory::where('booking_id', $bookingId)->get([

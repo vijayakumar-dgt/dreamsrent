@@ -24,7 +24,9 @@ class PurchaseVerifyMiddleware
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        if (strtolower(config('app.app_mode')) === 'demo') {
+        $appMode = config('app.app_mode');
+        
+        if (is_string($appMode) && strtolower($appMode) === 'demo') {
             return $next($request);
         }
 

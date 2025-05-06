@@ -66,32 +66,29 @@ class InstallerController extends Controller
                 ->withInput()
                 ->withErrors(['errors' => 'Your server does not meet the minimum requirements.']);
         }
-
+    
         try {
-            $request->validate([
+            $validated = $request->validate([
                 'host' => 'required|ip',
-                'port' => 'required|integer',
-                'database' => 'required',
-                'user' => 'required',
+                'port' => 'required|numeric',
+                'database' => 'required|string',
+                'user' => 'required|string',
+                'password' => InstallerInfo::isRemoteLocal() ? 'nullable' : 'required|string',
+                'reset_database' => 'nullable|string',
+                'fresh_install' => 'nullable|boolean',
             ]);
-
-            if (!InstallerInfo::isRemoteLocal()) {
-                $request->validate([
-                    'password' => 'required',
-                ]);
-            }
-
+    
             $databaseDetails = [
-                'host' => $request->input('host'),
-                'port' => $request->input('port'),
-                'database' => $request->input('database'),
-                'user' => $request->input('user'),
-                'password' => $request->input('password'),
-                'reset_database' => $request->input('reset_database'),
+                'host' => $validated['host'],
+                'port' => is_numeric($validated['port']) ? (int)$validated['port'] : $validated['port'],
+                'database' => $validated['database'],
+                'user' => $validated['user'],
+                'password' => $validated['password'] ?? '',
+                'reset_database' => $validated['reset_database'] ?? null,
             ];
-
+    
             $databaseCreate = $this->createDatabaseConnection($databaseDetails);
-
+    
             if ($databaseCreate !== true) {
                 if ($databaseCreate === 'not-found') {
                     return response()->json([
@@ -109,7 +106,7 @@ class InstallerController extends Controller
                     'message' => $databaseCreate
                 ], 200);
             }
-
+    
             $deleteDummyData = false;
             if ($request->boolean('fresh_install')) {
                 $deleteDummyData = true;
@@ -118,32 +115,32 @@ class InstallerController extends Controller
             } else {
                 $migration = $this->importDatabase(InstallerInfo::getDummyDatabaseFilePath());
             }
-
+    
             if ($migration !== true) {
                 return response()->json([
                     'success' => false,
                     'message' => $migration
                 ], 200);
             }
-
+    
             // Create properly typed config array
             $envConfig = [
-                'host' => (string)$request->input('host'),
-                'port' => $request->input('port'), // int|string
-                'database' => (string)$request->input('database'),
-                'user' => (string)$request->input('user'),
-                'password' => (string)$request->input('password', ''),
+                'host' => $validated['host'],
+                'port' => $databaseDetails['port'], // Already properly typed
+                'database' => $validated['database'],
+                'user' => $validated['user'],
+                'password' => $validated['password'] ?? '',
             ];
             $this->changeEnvDatabaseConfig($envConfig);
-
+    
             if ($deleteDummyData) {
                 $this->removeDummyFiles();
             }
-
+    
             Cache::forget('fresh_install');
             session()->put('step-3-complete', true);
             Configuration::updateStep(1);
-
+    
             return response()->json([
                 'success' => true,
                 'message' => 'Successfully setup the database'
@@ -208,31 +205,42 @@ class InstallerController extends Controller
     public function accountSubmit(Request $request): JsonResponse
     {
         try {
-            $request->validate([
+            $validated = $request->validate([
                 'name' => 'required|string',
                 'email' => 'required|email',
-                'password' => 'required|same:confirm_password',
+                'password' => 'required|string|same:confirm_password|min:8',
+                'confirm_password' => 'required|string|min:8'
             ]);
-
+    
+            // Ensure password is a string before hashing
+            $password = $validated['password'];
+            if (!is_string($password)) {
+                throw new \InvalidArgumentException('Password must be a string');
+            }
+    
             $admin = User::updateOrCreate(
-                ['email' => $request->email],
+                ['email' => $validated['email']],
                 [
-                    'name' => $request->name,
-                    'password' => Hash::make($request->password),
+                    'name' => $validated['name'],
+                    'password' => Hash::make($password),
                     'user_type' => 1,
                     'role_id' => 1,
                 ]
             );
-
+    
             UserDetail::updateOrCreate(['user_id' => $admin->id]);
-
+    
             Configuration::updateStep(2);
             session()->put('step-4-complete', true);
-
-            return response()->json(['success' => true, 'message' => 'Admin Account Successfully Created'], 200);
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Admin Account Successfully Created'
+            ], 200);
+    
         } catch (\Exception $e) {
             Log::error($e->getMessage(), ['trace' => $e->getTraceAsString()]);
-
+    
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to Create Admin Account',
@@ -240,7 +248,6 @@ class InstallerController extends Controller
             ], 500);
         }
     }
-
 
     public function configuration(): View|RedirectResponse
     {
@@ -254,7 +261,12 @@ class InstallerController extends Controller
             return redirect()->route('setup.account');
         }
 
-        $app_name = $step >= 3 ? optional(GeneralSetting::where('key', 'organization_name')->first())->value : null;
+        // Safely get organization name if step >= 3
+        $app_name = null;
+        if ($step >= 3) {
+            $setting = GeneralSetting::where('key', 'organization_name')->first();
+            $app_name = $setting && property_exists($setting, 'value') ? $setting->value : null;
+        }
 
         /** @phpstan-var view-string $view */
         $view = 'installer::config';
@@ -357,10 +369,13 @@ class InstallerController extends Controller
             if ($fileContent !== false) {
                 $statuses = json_decode($fileContent, true);
 
-                if (json_last_error() === JSON_ERROR_NONE) {
+                if (is_array($statuses) && json_last_error() === JSON_ERROR_NONE) {
                     $statuses['Installer'] = false;
                     $updatedContent = json_encode($statuses, JSON_PRETTY_PRINT);
-                    file_put_contents($filePath, $updatedContent);
+                    
+                    if ($updatedContent !== false) {
+                        file_put_contents($filePath, $updatedContent);
+                    }
                 }
             }
         }

@@ -1576,7 +1576,7 @@ function getInsurances() {
             } else {
                 $('#insurance_list_container').html(`
                     <div class="row">
-                        <span class="text-center mb-3">${_l('admin.common.no_insurance_found')}</span>
+                        <span class="text-center mb-3">${_l('admin.bookings.no_insurance_found')}</span>
                     </div>
                 `);
             }

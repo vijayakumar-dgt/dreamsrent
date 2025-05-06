@@ -138,7 +138,7 @@ class BlogController extends Controller
         ));
     }
 
-    public function BlogDetail(int $id): View
+    public function BlogDetail(int|string $id): View
     {
         $authUser = current_user();
 

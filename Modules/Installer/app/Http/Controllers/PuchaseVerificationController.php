@@ -11,6 +11,7 @@ use Modules\Installer\Enums\InstallerInfo;
 use Modules\Installer\Models\Configuration;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use RuntimeException;
 
 class PuchaseVerificationController extends Controller
 {
@@ -39,26 +40,46 @@ class PuchaseVerificationController extends Controller
         $request->validate([
             'purchase_code' => 'required|string',
         ]);
-
+    
         try {
             $response = Http::asForm()->post(InstallerInfo::VERIFICATION_URL->value, [
                 'purchase_code' => $request->purchase_code,
             ]);
+    
             $data = $response->json();
-            if ($data['status'] == true) {
+            
+            // Validate response structure
+            if (!is_array($data)) {
+                throw new RuntimeException('Invalid verification response format');
+            }
+    
+            // Check status with proper type safety
+            if (isset($data['status']) && $data['status'] === true) {
                 session()->put('step-1-complete', true);
                 Configuration::updateStep(2);
-
-                return response()->json(['success' => true, 'message' => "Purchase Code Verified Successfully"], 200);
-            } else {
+    
                 return response()->json([
-                    'success' => false,
-                    'message' => $data['message'] ?? 'Purchase Code is Invalid'
+                    'success' => true,
+                    'message' => "Purchase Code Verified Successfully"
                 ], 200);
             }
+    
+            // Handle error response
+            $errorMessage = isset($data['message']) && is_string($data['message'])
+                ? $data['message']
+                : 'Purchase Code is Invalid';
+    
+            return response()->json([
+                'success' => false,
+                'message' => $errorMessage
+            ], 200);
+    
         } catch (Exception $e) {
             Log::error($e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Server Error'], 200);
+            return response()->json([
+                'success' => false,
+                'message' => 'Server Error'
+            ], 200);
         }
     }
 }

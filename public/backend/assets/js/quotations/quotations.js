@@ -282,7 +282,7 @@ function bookingList(sort_by_date = '') {
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2">
                             <li>
-                                <a class="dropdown-item rounded-1" href="/admin/quotations-details/${row.encrypted_id}w"><i class="ti ti-eye me-1"></i>${_l('admin.common.view_details')}</a>
+                                <a class="dropdown-item rounded-1" href="/admin/quotations-details/${row.encrypted_id}"><i class="ti ti-eye me-1"></i>${_l('admin.common.view_details')}</a>
                             </li>
                             ${(row.booking_status != 6 && row.booking_by != 'user') && hasPermission(permissions, 'reservations', 'edit') ?
                             `<li>
