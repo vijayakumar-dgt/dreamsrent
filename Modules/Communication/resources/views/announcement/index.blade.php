@@ -1,10 +1,11 @@
 @extends('admin.admin')
-@section('content')
 
+@section('meta_title', __('admin.support.announcements') . ' || ' . $companyName)
+
+@section('content')
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-
 			<!-- Breadcrumb -->
 			<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 				<div class="my-auto mb-2">
@@ -18,9 +19,11 @@
 						</ol>
 					</nav>
 				</div>
-				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
+				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
 					<div class="mb-2 me-2 d-none">
-						<a href="javascript:void(0);" class="btn btn-white d-flex align-items-center"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</a>
+						<a href="javascript:void(0);" class="btn btn-white d-flex align-items-center">
+							<i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}
+						</a>
 					</div>
 					<div class="me-2 mb-2 d-none">
 						<div class="dropdown">
@@ -32,7 +35,9 @@
 					<div class="mb-2">
 						@if (hasPermission($permissions, 'announcements', 'create'))
 						<div class="skeleton label-skeleton label-loader"></div>
-						<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_announcement_modal" id="add_announcement" class="btn btn-primary d-flex align-items-center d-none real-label"><i class="ti ti-plus me-2"></i>{{ __('admin.support.add_new_announcement') }}</a>
+						<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_announcement_modal" id="add_announcement" class="btn btn-primary d-flex align-items-center d-none real-label">
+							<i class="ti ti-plus me-2"></i>{{ __('admin.support.add_new_announcement') }}
+						</a>
 						@endif
 					</div>
 				</div>
@@ -47,7 +52,7 @@
 						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }} : {{ __('admin.common.latest') }}
 						</a>
-						<ul class="dropdown-menu  dropdown-menu-end p-2">
+						<ul class="dropdown-menu dropdown-menu-end p-2">
 							<li>
 								<a href="javascript:void(0);" class="dropdown-item rounded-1">{{ __('admin.common.latest') }}</a>
 							</li>
@@ -78,7 +83,7 @@
 						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-badge me-1"></i> {{ __('admin.common.status') }}
 						</a>
-						<ul class="dropdown-menu  dropdown-menu-end p-2">
+						<ul class="dropdown-menu dropdown-menu-end p-2">
 							<li>
 								<a href="javascript:void(0);" class="dropdown-item rounded-1">{{ __('admin.common.active') }}</a>
 							</li>
@@ -177,14 +182,11 @@
 						</tr>
 					</thead>
 					<tbody>
-
 					</tbody>
 				</table>
 			</div>
 			<!-- Custom Data Table -->
-
 			<div class="table-footer d-none"></div>
-
 		</div>
 		@include('admin.partials.footer')
 	</div>
@@ -216,9 +218,9 @@
 									<label class="form-label">{{ __('admin.support.announcement_type') }}<span class="text-danger"> *</span></label>
 									<select class="select select2" id="announcement_type" name="announcement_type" data-placeholder="{{ __('admin.common.select') }}">
 										@if ($announcement_types)
-										@foreach ($announcement_types as $announcement_type)
-										<option value="{{ $announcement_type->id }}">{{ $announcement_type->name }}</option>
-										@endforeach
+											@foreach ($announcement_types as $announcement_type)
+												<option value="{{ $announcement_type->id }}">{{ $announcement_type->name }}</option>
+											@endforeach
 										@endif
 									</select>
 									<span class="text-danger error-text" id="announcement_type_error"></span>
@@ -283,9 +285,9 @@
 									<label class="form-label">{{ __('admin.support.announcement_type') }}<span class="text-danger"> *</span></label>
 									<select class="select select2" id="edit_announcement_type" name="edit_announcement_type" data-placeholder="{{ __('admin.common.select') }}">
 										@if ($announcement_types)
-										@foreach ($announcement_types as $announcement_type)
-										<option value="{{ $announcement_type->id }}">{{ $announcement_type->name }}</option>
-										@endforeach
+											@foreach ($announcement_types as $announcement_type)
+												<option value="{{ $announcement_type->id }}">{{ $announcement_type->name }}</option>
+											@endforeach
 										@endif
 									</select>
 									<span class="text-danger error-text" id="announcement_type_error"></span>
@@ -346,15 +348,14 @@
 						<p class="mb-3">{{ __('admin.support.delete_announcement_description') }}</p>
 						<div class="d-flex justify-content-center">
 							<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</a>
+							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
 						</div>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
-    <!-- /Delete Brand -->
-
+	<!-- /Delete Brand -->
 @endsection
 
 @push('scripts')

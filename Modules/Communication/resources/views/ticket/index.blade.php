@@ -1,9 +1,11 @@
 @extends('admin.admin')
+
+@section('meta_title', __('admin.support.tickets') . ' || ' . $companyName)
+
 @section('content')
-	<!-- Page Wrapper -->
+    <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-
             <!-- Breadcrumb -->
             <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
                 <div class="my-auto mb-2">
@@ -17,9 +19,11 @@
                         </ol>
                     </nav>
                 </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
+                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
                     <div class="mb-2 me-2 d-none">
-                        <a href="javascript:void(0);" class="btn btn-white d-flex align-items-center"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</a>
+                        <a href="javascript:void(0);" class="btn btn-white d-flex align-items-center">
+                            <i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}
+                        </a>
                     </div>
                     <div class="mb-2 me-2 d-none">
                         <div class="dropdown">
@@ -29,12 +33,13 @@
                         </div>
                     </div>
                     <div class="mb-2 d-none">
-                        <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_ticket"><i class="ti ti-plus me-2"></i>{{ __('admin.support.add_new_ticket') }}</a>
+                        <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_ticket">
+                            <i class="ti ti-plus me-2"></i>{{ __('admin.support.add_new_ticket') }}
+                        </a>
                     </div>
                 </div>
             </div>
             <!-- /Breadcrumb -->
-
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
@@ -81,7 +86,6 @@
                 </div>
             </div>
             <!-- /Table Header -->
-
             <div class="collapse" id="filtercollapse">
                 <div class="filterbox mb-3 d-flex align-items-center">
                     <h6 class="me-3">{{ __('admin.common.filters') }}</h6>
@@ -134,22 +138,22 @@
                             </li>
                             <li>
                                 <label class="dropdown-item d-flex align-items-center rounded-1">
-                                    <input class="form-check-input m-0 me-2" type="checkbox" name="status[]" value="1">{{__('admin.support.open')}}
+                                    <input class="form-check-input m-0 me-2" type="checkbox" name="status[]" value="1">{{ __('admin.support.open') }}
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item d-flex align-items-center rounded-1">
-                                    <input class="form-check-input m-0 me-2" type="checkbox" name="status[]" value="2">{{__('admin.support.assigned')}}
+                                    <input class="form-check-input m-0 me-2" type="checkbox" name="status[]" value="2">{{ __('admin.support.assigned') }}
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item d-flex align-items-center rounded-1">
-                                    <input class="form-check-input m-0 me-2" type="checkbox" name="status[]" value="3">{{__('admin.support.inprogress')}}
+                                    <input class="form-check-input m-0 me-2" type="checkbox" name="status[]" value="3">{{ __('admin.support.inprogress') }}
                                 </label>
                             </li>
                             <li>
                                 <label class="dropdown-item d-flex align-items-center rounded-1">
-                                    <input class="form-check-input m-0 me-2" type="checkbox" name="status[]" value="4">{{__('admin.support.closed')}}
+                                    <input class="form-check-input m-0 me-2" type="checkbox" name="status[]" value="4">{{ __('admin.support.closed') }}
                                 </label>
                             </li>
                         </ul>
@@ -158,7 +162,6 @@
                     <a href="javascript:void(0);" class="text-danger links">{{ __('admin.common.clear_all') }}</a>
                 </div>
             </div>
-
             <div class="custom-datatable-filter table-responsive table-loader">
                 <table class="table table-bordered">
                     <thead class="thead-light">
@@ -269,7 +272,6 @@
                     </tbody>
                 </table>
             </div>
-
             <!-- Custom Data Table -->
             <div class="custom-datatable-filter table-responsive d-none real-table">
                 <table id="adminTicketTable" class="table">
@@ -283,7 +285,7 @@
                             <th>{{ strtoupper(__('admin.support.assignee')) }}</th>
                             <th>{{ strtoupper(__('admin.common.status')) }}</th>
                             @if (hasPermission($permissions, 'tickets', 'edit') || hasPermission($permissions, 'tickets', 'delete') || hasPermission($permissions, 'tickets', 'view'))
-                            <th>{{ strtoupper(__('admin.common.action')) }}</th>
+                                <th>{{ strtoupper(__('admin.common.action')) }}</th>
                             @endif
                         </tr>
                     </thead>
@@ -297,7 +299,7 @@
         @include('admin.partials.footer')
     </div>
     <!-- /Page Wrapper -->
-   
+
     <!-- Edit Status ticket -->
     <div class="modal fade" id="edit_ticket">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -315,7 +317,9 @@
                             <!-- Assign Staff -->
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label" for="assignStaff">{{ __('admin.support.assign_staff') }} <span class="text-danger">*</span></label>
+                                    <label class="form-label" for="assignStaff">
+                                        {{ __('admin.support.assign_staff') }} <span class="text-danger">*</span>
+                                    </label>
                                     <select class="select form-control" id="assignStaff" name="assign_staff" data-placeholder="{{ __('admin.common.select') }}">
                                         <option value="">{{ __('admin.common.select') }}</option>
                                         @foreach($users as $user)
@@ -327,7 +331,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="modal-footer">
                         <div class="d-flex justify-content-center">
                             <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
@@ -335,10 +338,10 @@
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
+    <!-- /Edit Status ticket -->
 
     <!-- Edit Status ticket -->
     <div class="modal fade" id="histroy_ticket">
@@ -351,11 +354,7 @@
                     </button>
                 </div>
                 <form id="editTicketstatus">
-                    <div class="modal-body histroy-ticket pb-1">
-
-
-                    </div>
-
+                    <div class="modal-body histroy-ticket pb-1"></div>
                     <div class="modal-footer">
                         <div class="d-flex justify-content-center">
                             <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
@@ -366,8 +365,9 @@
             </div>
         </div>
     </div>
-    
-    <!-- Delete  -->
+    <!-- /Edit Status ticket -->
+     
+    <!-- Delete -->
     <div class="modal fade" id="delete_ticket">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
@@ -390,6 +390,7 @@
     </div>
     <!-- /Delete -->
 @endsection
+
 @push('scripts')
 <script src="{{ asset('backend/assets/js/communication/adminticket.js') }}"></script>
 @endpush
