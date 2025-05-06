@@ -173,6 +173,7 @@
 })();
 
 
+let emailTimerInterval;``
 
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
