@@ -84,11 +84,6 @@ class Booking extends Model
 
     protected $appends = ['encrypted_id'];
 
-    protected $casts = [
-        // 'insurance' => 'array',
-        // 'extra_service' => 'array',
-    ];
-
     /**
      * The attributes that are mass assignable.
      */
