@@ -196,7 +196,7 @@
                         <div class="d-flex align-items-center flex-wrap gap-2">
                             <a href="{{ route('admin.languages') }}" class="btn btn-dark me-2"><i class="ti ti-arrow-left me-1"></i>{{ __('admin.general_settings.back_to_translation') }}</a>
                             <a href="javascript:void(0);" class="btn btn-white me-2">
-                                <img src="backend/backend/assets/img/flags/uae.svg" alt="img" id="lngicon" class="avatar avatar-sm rounded-circle me-1">
+                                <img src="backend/backend/backend/assets/img/flags/uae.svg" alt="img" id="lngicon" class="avatar avatar-sm rounded-circle me-1">
                             <span class="lngTitile"> {{ __('admin.general_settings.arabic') }}</span>
                             </a>
                             <div class="progress-percent">

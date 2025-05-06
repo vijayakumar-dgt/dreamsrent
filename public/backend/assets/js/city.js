@@ -133,7 +133,7 @@
                         render: function (data, type, row) {
                             if (row.state && row.state.country) {
                                 let countryCode = row.state.country.code.toLowerCase();
-                                return `<img src="/backend/assets/img/flags/${countryCode}.svg" alt="${row.state.country.name} Flag" width="20"
+                                return `<img src="/backend/backend/assets/img/flags/${countryCode}.svg" alt="${row.state.country.name} Flag" width="20"
                                 onerror="this.style.display='none'; this.parentNode.innerHTML='${row.state.country.name}';"> ${row.state.country.name}`;
                             } else {
                                 return 'N/A';
