@@ -138,12 +138,12 @@ class Booking extends Model
     ];
 
     // Booking Status Constants with type declaration
-    public const IN_PROGRESS = 1;
-    public const CONFIRMED = 2;
-    public const REJECTED = 3;
-    public const BOOKED = 4;
-    public const COMPLETED = 5;
-    public const CANCELLED = 6;
+    public static $inprogress = 1;
+    public static $confirmed = 2;
+    public static $rejected = 3;
+    public static $booked = 4;
+    public static $completed = 5;
+    public static $cancelled = 6;
 
     public const RESERVATION_SECRET_KEY = 'ReservationId';
 

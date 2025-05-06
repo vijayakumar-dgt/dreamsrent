@@ -825,9 +825,11 @@ class BookingController extends Controller
             $booking->insurance_count = 0;
             $insuranceIds = [];
             if ($booking->insurance) {
-                $booking->insurance = json_decode($booking->insurance, true);
-                $booking->insurance_count = count($booking->insurance);
-                $insuranceIds = collect($booking->insurance)->pluck('id')->toArray();
+                $insuranceArray = $booking->insurance; // No need to json_decode again
+                $booking->insurance_count = count($insuranceArray);
+                $insuranceIds = collect($insuranceArray)
+                    ->pluck('id')
+                    ->toArray(); 
             }
             $insuranceBenefits = [];
             if (!empty($insuranceIds)) {
