@@ -23,7 +23,6 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property int|null $day_count
  * @property string|null $booking_by
  * @property string|null $payment_status
- * @property string|null $final_price
  * @property string|int|null $booking_status
  * @property string|int|null $customer_id
  * @property string|null $created_at
@@ -38,20 +37,19 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property string|null $payment_type
  * @property-read \Modules\Booking\Models\BookingUserInfo|null $userInfo
  * @property int $vehicle_id
- * @property string|null $extra_service
  * @property int|null $driver_id
  * @property string|null $reservation_id
  * @property string|null $rental_type
  * @property string|null $payment_status
- * @property double|null $total_extra_service_price
- * @property float|null $total_insurance_price
- * @property float|null $vehicle_total_price
- * @property float|null $vehicle_price
- * @property float|null $driver_price
+ * @property float|string|null $total_extra_service_price
+ * @property float|string|null $total_insurance_price
+ * @property float|string|null $vehicle_total_price
+ * @property float|string|null $vehicle_price
+ * @property float|string|null $driver_price
+ * @property float|string|null $final_price
  * @property string|null $currency_symbol
- * @property array<string>|null $insurance_benefits
- * @property float|null $final_price
- * @property array<string>|null $extra_service_names
+ * @property string|null $insurance_benefits
+ * @property array<mixed> $extra_service_names
  * @property string|null $transaction_id
  * @property-read \Modules\GeneralSetting\Models\Location|null $pickupLocation
  * @property int $id
@@ -61,9 +59,13 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property string|null $customer_image
  * @property string|null $vehicle_image
  * @property string|int|null $booking_status_text
- * @property string|null $insurance
  * @property int|null $extra_service_count
  * @property int|null $insurance_count
+ * @property string|null $extra_service
+ * @property string|null $insurance
+ * @property mixed $extra_service_formatted
+ * @property mixed $insurance_formatted
+ * @property mixed $insurance_benefits_formatted
  * 
  *
  */

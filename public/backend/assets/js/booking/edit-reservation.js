@@ -226,8 +226,8 @@ function editReservation() {
                 edit_driver_id = data.driver_id;
                 edit_driver_price = data.driver_price;
                 edit_vehicle_id = data.vehicle_id;
-                edit_insurance = data.insurance;
-                edit_extra_service = data.extra_service;
+                edit_insurance = data.insurance_formatted;
+                edit_extra_service = data.extra_service_formatted;
                 edit_vehicle_price = data.vehicle_price;
 
                 checkAndFetchVehicles();
@@ -1351,7 +1351,7 @@ function calculateVehiclePrice() {
     var extraServiceName = '';
     if ($('.vehicle_extra_service').length > 0) {
         $('.vehicle_extra_service').each(function () {
-            isExtraService = $(this).is(':checked');
+            let isExtraService = $(this).is(':checked');
             if(isExtraService) {
                 if ($(this).data('price_type') == 'per_day') {
                     total_extra_service_price += (no_of_days * parseFloat($(this).data('price')));

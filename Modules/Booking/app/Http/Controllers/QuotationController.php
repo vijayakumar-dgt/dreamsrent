@@ -239,13 +239,14 @@ class QuotationController extends Controller
                 }
             }
 
-
             DB::commit();
+
+            $encryptedId = (is_int($bookingId) || is_string($bookingId)) ? customEncrypt($bookingId, Booking::$reservationSecretKey) : null;
 
             return response()->json([
                 'code' => 200,
                 'message' => $successMsg,
-                'view_details_url' => route('quotations.details', ['id' => customEncrypt(strval($bookingId), Booking::$reservationSecretKey)]),
+                'view_details_url' => route('quotations.details', ['id' => $encryptedId]),
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -258,7 +259,7 @@ class QuotationController extends Controller
         }
     }
 
-    public function edit(Request $request): View
+    public function edit(Request $request, string|int|null $id): View
     {
         $locations = Location::where('status', 1)->get();
         $priceTypes = PricingType::where('type', 1)->get();
@@ -270,7 +271,7 @@ class QuotationController extends Controller
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 3, 'users.status' => 1])
             ->get();
-        $bookingId = (string) customDecrypt((string) ($request->id ?? ''), Booking::$reservationSecretKey);
+        $bookingId = customDecrypt(($id ?? ''), Booking::$reservationSecretKey);
 
         $booking = Booking::select(
             'base_km',
@@ -449,11 +450,11 @@ class QuotationController extends Controller
                 $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
                 $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
                 if (!empty($booking->insurance)) {
-                    $booking->insurance = json_decode($booking->insurance, true);
+                    $booking->insurance_formatted = json_decode($booking->insurance, true);
                 }
 
                 if ($booking->extra_service) {
-                    $booking->extra_service = json_decode($booking->extra_service, true);
+                    $booking->extra_service_formatted = json_decode($booking->extra_service, true);
                 }
                 $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
             }
@@ -472,9 +473,9 @@ class QuotationController extends Controller
         }
     }
 
-    public function reservationViewDetails(Request $request): View
+    public function reservationViewDetails(Request $request, string|int|null $id): View
     {
-        $bookingId = customDecrypt($request->id, Booking::$reservationSecretKey);
+        $bookingId = customDecrypt($id, Booking::$reservationSecretKey);
 
         $booking = Booking::select(
             'bookings.id',
@@ -533,34 +534,30 @@ class QuotationController extends Controller
             $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
 
             $booking->extra_service_count = 0;
-            $extraServiceIds = [];
-            if ($booking->extra_service) {
-                $booking->extra_service = json_decode($booking->extra_service, true);
-                $booking->extra_service_count = count($booking->extra_service);
-                $extraServiceIds = collect($booking->extra_service)->pluck('id')->toArray();
+            $booking->extra_service_names = [];
+
+            if (!empty($booking->extra_service)) {
+                $extraServiceArray = json_decode($booking->extra_service, true);
+                if (is_array($extraServiceArray)) {
+                    $booking->extra_service_formatted = $extraServiceArray;
+                    $booking->extra_service_count = count($extraServiceArray);
+                    $extraServiceIds = collect($extraServiceArray)->pluck('id')->toArray();
+                    $booking->extra_service_names = ExtraService::whereIn('id', $extraServiceIds)->pluck('name')->toArray();
+                }
             }
-            $extraServiceNames = [];
-            if (!empty($extraServiceIds)) {
-                $extraServiceNames = ExtraService::whereIn('id', $extraServiceIds)
-                    ->pluck('name')
-                    ->toArray();
-            }
-            $booking->extra_service_names = $extraServiceNames;
 
             $booking->insurance_count = 0;
-            $insuranceIds = [];
-            if ($booking->insurance) {
-                $booking->insurance = json_decode($booking->insurance, true);
-                $booking->insurance_count = count($booking->insurance);
-                $insuranceIds = collect($booking->insurance)->pluck('id')->toArray();
+            $booking->insurance_benefits_formatted = [];
+
+            if (!empty($booking->insurance)) {
+                $insuranceArray = json_decode($booking->insurance, true);
+                if (is_array($insuranceArray)) {
+                    $booking->insurance_formatted = $insuranceArray;
+                    $booking->insurance_count = count($insuranceArray);
+                    $insuranceIds = collect($insuranceArray)->pluck('id')->toArray();
+                    $booking->insurance_benefits_formatted = InsuranceBenefit::whereIn('insurance_id', $insuranceIds)->pluck('benefit')->toArray();
+                }
             }
-            $insuranceBenefits = [];
-            if (!empty($insuranceIds)) {
-                $insuranceBenefits = InsuranceBenefit::whereIn('insurance_id', $insuranceIds)
-                    ->pluck('benefit')
-                    ->toArray();
-            }
-            $booking->insurance_benefits = $insuranceBenefits;
 
             $status = is_numeric($booking->booking_status) ? (int)$booking->booking_status : 4;
             $booking->booking_status_text = Booking::getStatusLabel($status);
@@ -570,24 +567,12 @@ class QuotationController extends Controller
                 $booking->delivery_type = $booking->delivery_type == "self_pickup" ? 'Self Pickup' : 'Delivery';
             }
 
-            if ($booking->driver_price !== null) {
-                $booking->driver_price = round($booking->driver_price, 2);
-            }
-            if ($booking->vehicle_price !== null) {
-                $booking->vehicle_price = round($booking->vehicle_price, 2);
-            }
-            if ($booking->vehicle_total_price !== null) {
-                $booking->vehicle_total_price = round($booking->vehicle_total_price, 2);
-            }
-            if ($booking->total_insurance_price !== null) {
-                $booking->total_insurance_price = round($booking->total_insurance_price, 2);
-            }
-            if ($booking->total_extra_service_price !== null) {
-                $booking->total_extra_service_price = round($booking->total_extra_service_price, 2);
-            }
-            if ($booking->final_price !== null) {
-                $booking->final_price = round($booking->final_price, 2);
-            }
+            $booking->driver_price = number_format((float) ($booking->driver_price ?? 0), 2, '.', '');
+            $booking->vehicle_price = number_format((float) ($booking->vehicle_price ?? 0), 2, '.', '');
+            $booking->vehicle_total_price = number_format((float) ($booking->vehicle_total_price ?? 0), 2, '.', '');
+            $booking->total_insurance_price = number_format((float) ($booking->total_insurance_price ?? 0), 2, '.', '');
+            $booking->total_extra_service_price = number_format((float) ($booking->total_extra_service_price ?? 0), 2, '.', '');
+            $booking->final_price = number_format((float) ($booking->final_price ?? 0), 2, '.', '');
         }
 
         $bookingHistories = BookingHistory::where('booking_id', $bookingId)->get([

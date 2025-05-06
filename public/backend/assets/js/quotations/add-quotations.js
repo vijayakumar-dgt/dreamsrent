@@ -1377,7 +1377,7 @@
         var extraServiceName = "";
         if ($(".vehicle_extra_service").length > 0) {
             $(".vehicle_extra_service").each(function () {
-                let isExtraService = $(this).is(":checked"); // ✅ declare it
+                let isExtraService = $(this).is(":checked");
                 if (isExtraService) {
                     if ($(this).data("price_type") == "per_day") {
                         total_extra_service_price +=
@@ -1916,7 +1916,7 @@
                     $("#insurance_list_container").html(`
                     <div class="row">
                         <span class="text-center mb-3">${_l(
-                            "admin.common.no_insurance_found"
+                            "admin.bookings.no_insurance_found"
                         )}</span>
                     </div>
                 `);

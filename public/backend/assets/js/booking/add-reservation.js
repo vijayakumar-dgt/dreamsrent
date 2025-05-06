@@ -1175,7 +1175,7 @@ function calculateVehiclePrice() {
     var extraServiceName = '';
     if ($('.vehicle_extra_service').length > 0) {
         $('.vehicle_extra_service').each(function () {
-            isExtraService = $(this).is(':checked');
+            let isExtraService = $(this).is(':checked');
             if(isExtraService) {
                 if ($(this).data('price_type') == 'per_day') {
                     total_extra_service_price += (no_of_days * parseFloat($(this).data('price')));
