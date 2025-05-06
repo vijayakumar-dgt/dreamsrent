@@ -1,6 +1,6 @@
 @extends($layout)
 @push('styles')
-<link rel="stylesheet" href="{{ asset('assets/plugins/intltelinput/css/intlTelInput.css') }}">
+<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/intltelinput/css/intlTelInput.css') }}">
 @endpush
 @section('content')
 <!-- Breadscrumb Section -->
@@ -170,6 +170,6 @@
 <!-- /Page Content -->
 @endsection
 @push('scripts')
-<script src="{{ asset('assets/plugins/intltelinput/js/intlTelInput.js') }}"></script>
+<script src="{{ asset('frontend/assets/plugins/intltelinput/js/intlTelInput.js') }}"></script>
 <script src="{{ asset('frontend/assets/js/user/userprofile.js') }}"></script>
 @endpush
