@@ -6,9 +6,9 @@
 <!-- Datatable CSS -->
 <link rel="stylesheet" href="{{ asset('frontend/assets/plugins/datatables/datatables.min.css') }}">
 <!-- summernote CSS -->
-<link rel="stylesheet" href="{{ asset('assets/plugins/summernote/summernote-bs5.min.css') }}">
+<link rel="stylesheet" href="{{ asset('backend/assets/plugins/summernote/summernote-bs5.min.css') }}">
 
-<link rel="stylesheet" href="{{ asset('assets/css/bootstrap-datetimepicker.min.css') }}">
+<link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap-datetimepicker.min.css') }}">
 @endpush
  
 @section('content')
@@ -312,5 +312,5 @@
 <script src="{{ asset('frontend/assets/plugins/datatables/datatables.min.js') }}"></script>
 <script src="{{ asset('frontend/assets/js/custom/user/ticket.js') }}"></script>
 <!-- summernote JS -->
-<script src="{{ asset('assets/plugins/summernote/summernote-bs5.min.js') }}"></script>
+<script src="{{ asset('backend/assets/plugins/summernote/summernote-bs5.min.js') }}"></script>
 @endpush

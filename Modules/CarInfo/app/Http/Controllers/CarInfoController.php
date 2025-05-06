@@ -706,7 +706,7 @@ class CarInfoController extends Controller
         }
 
         if ($request->filled('vehicle_id')) {
-            $update = VehicleInfo::where('id', $request->vehicle_id)->first();
+            $update = VehicleInfo::where('id', $request->vehicle_id)->firstOrFail();
 
             $update->update($data);
         } else {
