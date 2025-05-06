@@ -153,15 +153,15 @@ class Booking extends Model
      * @param int $status
      * @return string
      */
-    public static function getStatusLabel(int $status): string
+    public static function getStatusLabel($status)
     {
         $statuses = [
-            self::IN_PROGRESS => __('admin.common.in_progress'),
-            self::CONFIRMED  => __('admin.common.confirmed'),
-            self::REJECTED   => __('admin.common.rejected'),
-            self::BOOKED     => __('admin.common.booked'),
-            self::COMPLETED  => __('admin.common.completed'),
-            self::CANCELLED  => __('admin.common.cancelled'),
+            self::$inprogress => __('admin.common.in_progress'),
+            self::$confirmed  => __('admin.common.confirmed'),
+            self::$rejected   => __('admin.common.rejected'),
+            self::$booked   => __('admin.common.booked'),
+            self::$completed  => __('admin.common.completed'),
+            self::$cancelled  => __('admin.common.cancelled'),
         ];
 
         return $statuses[$status] ?? 'Unknown';
