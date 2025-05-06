@@ -49,6 +49,9 @@ use Modules\CarInfo\Models\VehicleInfo;
  * @property float|null $final_price
  * @property string|null $transaction_id
  * @property-read \Modules\GeneralSetting\Models\Location|null $pickupLocation
+ * @property int $id
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property-read \Modules\CarInfo\Models\VehicleInfo|null $vehicle
  *
  */
 
