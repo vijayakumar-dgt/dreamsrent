@@ -79,7 +79,7 @@
 @endpush
 
 @push('scripts')
-    <script src="{{ asset('assets/js/bootstrap-toggle.jquery.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/bootstrap-toggle.jquery.min.js') }}"></script>
     <script>
         "use strict";
         $('#reset_database').bootstrapToggle({
