@@ -126,7 +126,9 @@ class RolesPermissionServiceProvider extends ServiceProvider
     }
 
     /**
-     * @return string[] An array of service names provided by the provider.
+     * Get the services provided by the provider.
+     *
+     * @return array<int, class-string>
      */
     public function provides(): array
     {
@@ -134,7 +136,9 @@ class RolesPermissionServiceProvider extends ServiceProvider
     }
 
     /**
-     * @return string[] An array of view paths.
+     * Get publishable view paths.
+     *
+     * @return array<int, string>
      */
     private function getPublishableViewPaths(): array
     {

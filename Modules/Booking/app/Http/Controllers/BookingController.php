@@ -113,12 +113,16 @@ class BookingController extends Controller
             $returnLocation = $request->return_location ?? null;
             $bookingId = $request->booking_id ?? null;
 
-            if ($startDate) {
-                $startDateCarbon = Carbon::createFromFormat(
-                    $startTime ? 'd-m-Y H:i' : 'd-m-Y',
-                    $startTime ? "$startDate $startTime" : $startDate
-                );
-
+            if (!empty($startDate) && is_string($startDate)) {
+                $dateTimeString = $startDate;
+            
+                if (!empty($startTime) && is_string($startTime)) {
+                    $dateTimeString .= ' ' . $startTime;
+                    $startDateCarbon = Carbon::createFromFormat('d-m-Y H:i', $dateTimeString);
+                } else {
+                    $startDateCarbon = Carbon::createFromFormat('d-m-Y', $dateTimeString);
+                }
+            
                 if ($startDateCarbon instanceof Carbon) {
                     $startDateTime = $startDateCarbon->format('Y-m-d H:i:s');
                 }
@@ -129,12 +133,16 @@ class BookingController extends Controller
                 }
             }
 
-            if ($endDate) {
-                $endDateCarbon = Carbon::createFromFormat(
-                    $endTime ? 'd-m-Y H:i' : 'd-m-Y',
-                    $endTime ? "$endDate $endTime" : $endDate
-                );
-
+            if (!empty($endDate) && is_string($endDate)) {
+                $dateTimeString = $endDate;
+            
+                if (!empty($endTime) && is_string($endTime)) {
+                    $dateTimeString .= ' ' . $endTime;
+                    $endDateCarbon = Carbon::createFromFormat('d-m-Y H:i', $dateTimeString);
+                } else {
+                    $endDateCarbon = Carbon::createFromFormat('d-m-Y', $dateTimeString);
+                }
+            
                 if ($endDateCarbon instanceof Carbon) {
                     $endDateTime = $endDateCarbon->format('Y-m-d H:i:s');
                 }
@@ -144,6 +152,7 @@ class BookingController extends Controller
                     $endDateFormat = $endDateCarbonOnly->format('Y-m-d');
                 }
             }
+            
             $vehicles = VehicleInfo::select(
                 'vehicle_info.id',
                 'vehicle_info.vehicle_image as image',
@@ -189,6 +198,8 @@ class BookingController extends Controller
                 })
 
                 ->when($search, function ($query) use ($search, $tariff) {
+                    $search = (string) $search;
+                    $tariff = (string) $tariff;
                     return $query->where(function ($q) use ($search, $tariff) {
                         $q->where('vehicle_info.year', 'LIKE', "%{$search}%")
                             ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%")
@@ -596,7 +607,7 @@ class BookingController extends Controller
 
             //  DataTables Search
             if ($request->has('search') && !empty($request->search)) {
-                $search = $request->search;
+                $search = (string) $request->search;
                 $query->where(function ($q) use ($search) {
                     $q->where('bookings.reservation_id', 'LIKE', "%{$search}%")
                         ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%")
