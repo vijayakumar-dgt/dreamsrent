@@ -32,6 +32,8 @@ use App\Models\UserDetail;
  * @property string|null $phone_number
  * @property string|null $phone_number
  * @property int|null $google_auth_enabled
+ * @property string|null $full_name
+ * @property string|null $username
  *
  */
 
