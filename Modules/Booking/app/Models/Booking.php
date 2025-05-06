@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Models\VehicleInfo;
+use Modules\Booking\Models\BookingDetail;
+use Modules\Booking\Models\BookingUserInfo;
 
 /**
  * @property string|null $booking_date
@@ -109,27 +111,33 @@ class Booking extends Model
         'tax_type',
     ];
 
-    // Booking Status Constants
-    public static $inprogress = 1;
-    public static $confirmed = 2;
-    public static $rejected = 3;
-    public static $booked = 4;
-    public static $completed = 5;
-    public static $cancelled = 6;
+    // Booking Status Constants with type declaration
+    public const IN_PROGRESS = 1;
+    public const CONFIRMED = 2;
+    public const REJECTED = 3;
+    public const BOOKED = 4;
+    public const COMPLETED = 5;
+    public const CANCELLED = 6;
 
-    public static $reservationSecretKey = 'ReservationId';
+    public const RESERVATION_SECRET_KEY = 'ReservationId';
 
     protected $appends = ['encrypted_id'];
 
-    public static function getStatusLabel($status)
+    /**
+     * Get the status label for a given status.
+     *
+     * @param int $status
+     * @return string
+     */
+    public static function getStatusLabel(int $status): string
     {
         $statuses = [
-            self::$inprogress => __('admin.common.in_progress'),
-            self::$confirmed  => __('admin.common.confirmed'),
-            self::$rejected   => __('admin.common.rejected'),
-            self::$booked   => __('admin.common.booked'),
-            self::$completed  => __('admin.common.completed'),
-            self::$cancelled  => __('admin.common.cancelled'),
+            self::IN_PROGRESS => __('admin.common.in_progress'),
+            self::CONFIRMED  => __('admin.common.confirmed'),
+            self::REJECTED   => __('admin.common.rejected'),
+            self::BOOKED     => __('admin.common.booked'),
+            self::COMPLETED  => __('admin.common.completed'),
+            self::CANCELLED  => __('admin.common.cancelled'),
         ];
 
         return $statuses[$status] ?? 'Unknown';
@@ -137,52 +145,77 @@ class Booking extends Model
 
     public function getEncryptedIdAttribute(): string
     {
-        return customEncrypt($this->id, Booking::$reservationSecretKey);
+        return customEncrypt($this->id, self::RESERVATION_SECRET_KEY);
     }
+
+     /**
+     * @return BelongsTo<VehicleInfo, self>
+     */
 
     public function vehicle(): BelongsTo
     {
         return $this->belongsTo(VehicleInfo::class, 'vehicle_id');
     }
 
+    /**
+     * @return BelongsTo<DrivingType, self>
+     */
     public function drivingType(): BelongsTo
     {
         return $this->belongsTo(DrivingType::class, 'driving_type');
     }
 
+    /**
+     * @return HasOne<BookingDetail, self>
+     */
     public function bookingDetail(): HasOne
     {
         return $this->hasOne(BookingDetail::class, 'booking_id');
     }
 
+    /**
+     * @return BelongsTo<Location, self>
+     */
     public function pickupLocation(): BelongsTo
     {
         return $this->belongsTo(Location::class, 'pickup_location');
     }
 
+    /**
+     * @return BelongsTo<Location, self>
+     */
     public function returnLocation(): BelongsTo
     {
         return $this->belongsTo(Location::class, 'return_location');
     }
 
+    /**
+     * @return BelongsTo<User, self>
+     */
     public function cancelledUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'cancel_by');
     }
+
     /**
-     * @return HasOne<BookingUserInfo, Booking>
+     * @return HasOne<BookingUserInfo, self>
      */
     public function userInfo(): HasOne
     {
-         /** @var hasOne<BookingUserInfo, Booking> */
         return $this->hasOne(BookingUserInfo::class, 'booking_id');
     }
 
+    /**
+     * @return BelongsTo<User, self>
+     */
     public function customer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'customer_id');
     }
 
+    /**
+     * @return BelongsTo<UserDetail, self>
+     */
     public function customerDetail(): BelongsTo
     {
         return $this->belongsTo(UserDetail::class, 'customer_id', 'user_id');
