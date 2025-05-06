@@ -6,7 +6,7 @@
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-		<!-- Breadcrumb -->
+		   <!-- Breadcrumb -->
 			<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 				<div class="my-auto mb-2">
 					<h2 class="mb-1">{{ __('admin.rentals.vehicle_colors') }}</h2>
@@ -29,7 +29,6 @@
 				</div>
 			</div>
 			<!-- /Breadcrumb -->
-
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
 				<div class="skeleton label-skeleton label-loader"></div>
@@ -62,7 +61,6 @@
 				</div>
 			</div>
 			<!-- /Table Header -->
-
 			<div class="custom-datatable-filter table-responsive table-loader">
 				<table class="table table-bordered">
 					<thead class="thead-light">
@@ -155,7 +153,6 @@
 					</tbody>
 				</table>
 			</div>
-
 			<!-- Custom Data Table -->
 			<div class="custom-datatable-filter table-responsive d-none real-table">
 				<table class="table" id="carColorTable">
@@ -181,75 +178,75 @@
 	</div>
 	<!-- /Page Wrapper -->
 
-<!-- Add/Edit Car Color -->
-<div class="modal fade addmodal" id="car_color_modal">
-	<div class="modal-dialog modal-dialog-centered modal-md">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="mb-0 modal-title">{{ __('admin.rentals.vehicle_color') }}</h4>
-				<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-					<i class="ti ti-x fs-16"></i>
-				</button>
-			</div>
-			<form id="carColorForm" autocomplete="off">
-				@csrf
-				<input type="hidden" name="id" id="id">
-				<input type="hidden" name="language_id" id="language_id">
-				<div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.rentals.color_name') }}<span class="text-danger"> *</span></label>
-                        <input type="text" class="form-control" name="name" id="name" maxlength="50">
-                        <span id="name_error" class="text-danger error-text"></span>
-                    </div>
-					<div class="mb-3">
-                        <label class="form-label">{{ __('admin.rentals.color_code') }}<span class="text-danger"> *</span></label>
-                        <input type="color" class="form-control border rounded-0 w-100" name="value" id="value" value="#000000" title="Choose your color">
-                        <span id="value_error" class="text-danger error-text"></span>
-					</div>
+	<!-- Add/Edit Car Color -->
+	<div class="modal fade addmodal" id="car_color_modal">
+		<div class="modal-dialog modal-dialog-centered modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="mb-0 modal-title">{{ __('admin.rentals.vehicle_color') }}</h4>
+					<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
+						<i class="ti ti-x fs-16"></i>
+					</button>
 				</div>
-				<div class="modal-footer">
-					<div class="d-flex justify-content-between align-items-center w-100">
-						<div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
-							<label for="status" class="form-check-label form-label mt-0 mb-0">
-							<input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked>
-								{{ __('admin.common.status') }}
-							</label>
+				<form id="carColorForm" autocomplete="off">
+					@csrf
+					<input type="hidden" name="id" id="id">
+					<input type="hidden" name="language_id" id="language_id">
+					<div class="modal-body">
+						<div class="mb-3">
+							<label class="form-label">{{ __('admin.rentals.color_name') }}<span class="text-danger"> *</span></label>
+							<input type="text" class="form-control" name="name" id="name" maxlength="50">
+							<span id="name_error" class="text-danger error-text"></span>
 						</div>
+						<div class="mb-3">
+							<label class="form-label">{{ __('admin.rentals.color_code') }}<span class="text-danger"> *</span></label>
+							<input type="color" class="form-control border rounded-0 w-100" name="value" id="value" value="#000000" title="Choose your color">
+							<span id="value_error" class="text-danger error-text"></span>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="d-flex justify-content-between align-items-center w-100">
+							<div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
+								<label for="status" class="form-check-label form-label mt-0 mb-0">
+								<input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked>
+									{{ __('admin.common.status') }}
+								</label>
+							</div>
+							<div class="d-flex justify-content-center">
+								<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+								<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- /Add Brand -->
+
+	<!-- Delete Brand -->
+	<div class="modal fade deletemodal" id="delete-modal">
+		<div class="modal-dialog modal-dialog-centered modal-sm">
+			<div class="modal-content">
+				<form action="deleteData" id="delateCarColorForm">
+					@csrf
+					<input type="hidden" name="delete_id" id="delete_id">
+					<div class="modal-body text-center">
+						<span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
+							<i class="ti ti-trash-x fs-26"></i>
+						</span>
+						<h4 class="mb-1">{{ __('admin.rentals.delete_vehicle_color') }}</h4>
+						<p class="mb-3">{{ __('admin.rentals.delete_vehicle_color_confirmation') }}</p>
 						<div class="d-flex justify-content-center">
 							<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-							<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
+							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</a>
 						</div>
 					</div>
-				</div>
-			</form>
+				</form>
+			</div>
 		</div>
 	</div>
-</div>
-<!-- /Add Brand -->
-
-<!-- Delete Brand -->
-<div class="modal fade deletemodal" id="delete-modal">
-	<div class="modal-dialog modal-dialog-centered modal-sm">
-		<div class="modal-content">
-			<form action="deleteData" id="delateCarColorForm">
-                @csrf
-				<input type="hidden" name="delete_id" id="delete_id">
-				<div class="modal-body text-center">
-					<span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-						<i class="ti ti-trash-x fs-26"></i>
-					</span>
-					<h4 class="mb-1">{{ __('admin.rentals.delete_vehicle_color') }}</h4>
-					<p class="mb-3">{{ __('admin.rentals.delete_vehicle_color_confirmation') }}</p>
-					<div class="d-flex justify-content-center">
-						<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-						<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</a>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-<!-- /Delete Brand -->
+	<!-- /Delete Brand -->
 @endsection
 
 @push('scripts')

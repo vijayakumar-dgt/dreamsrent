@@ -423,7 +423,6 @@
 	</div>
 </div>
 <!-- /Delete Brand -->
-
 @endsection
 
 @push('scripts')
