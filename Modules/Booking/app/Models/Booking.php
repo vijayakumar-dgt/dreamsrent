@@ -17,6 +17,8 @@ use Modules\Booking\Models\BookingUserInfo;
 /**
  * @property string|null $booking_date
  * @property string|null $vehicle_image
+ * @property string|null $driver_image
+ * @property string|null $customer_image
  * @property string|array<string>|null $vehicle_image_url
  * @property string|null $start_datetime
  * @property string|null $end_datetime
@@ -57,12 +59,17 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property string|null $booking_status_text
  * @property array|null $insurance_benefits
  * @property float|null $final_price
+ * @property float|null $extra_service_count
+ * @property float|null $insurance_count
+ * @property array|null $extra_service_names
  * @property string|null $transaction_id
  * @property-read \Modules\GeneralSetting\Models\Location|null $pickupLocation
  * @property int $id
  * @property \Illuminate\Support\Carbon $updated_at
  * @property-read \Modules\CarInfo\Models\VehicleInfo|null $vehicle
  * @property-read Location|null $pickupLocation
+ * @property string|null $insurance
+ * @property array|null $extra_service
  *
  */
 
@@ -70,6 +77,13 @@ class Booking extends Model
 {
     use SoftDeletes;
 
+    public static $reservationSecretKey = 'ReservationId';
+
+    protected $appends = ['encrypted_id'];
+
+    protected $casts = [
+        'extra_service' => 'array',
+    ];
     /**
      * The attributes that are mass assignable.
      */

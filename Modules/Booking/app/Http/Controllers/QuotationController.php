@@ -511,11 +511,13 @@ class QuotationController extends Controller
 
             $booking->extra_service_count = 0;
             $extraServiceIds = [];
-            if ($booking->extra_service) {
-                $booking->extra_service = json_decode($booking->extra_service, true);
-                $booking->extra_service_count = count($booking->extra_service);
-                $extraServiceIds = collect($booking->extra_service)->pluck('id')->toArray();
-            }
+            if (!empty($booking->extra_service)) {
+                /** @var array<array{id: int}> $extraServiceArray */
+                $extraServiceArray = $booking->extra_service; // no need for json_decode
+            
+                $booking->extra_service_count = count($extraServiceArray);
+                $extraServiceIds = collect($extraServiceArray)->pluck('id')->toArray();
+            }            
             $extraServiceNames = [];
             if (!empty($extraServiceIds)) {
                 $extraServiceNames = ExtraService::whereIn('id', $extraServiceIds)
@@ -526,11 +528,15 @@ class QuotationController extends Controller
 
             $booking->insurance_count = 0;
             $insuranceIds = [];
-            if ($booking->insurance) {
-                $booking->insurance = json_decode($booking->insurance, true);
-                $booking->insurance_count = count($booking->insurance);
-                $insuranceIds = collect($booking->insurance)->pluck('id')->toArray();
+
+            if (!empty($booking->insurance)) {
+                /** @var array<array{id: int}> $insuranceArray */
+                $insuranceArray = json_decode($booking->insurance, true);
+                $booking->insurance = $insuranceArray;
+                $booking->insurance_count = count($insuranceArray);
+                $insuranceIds = collect($insuranceArray)->pluck('id')->toArray();
             }
+            
             $insuranceBenefits = [];
             if (!empty($insuranceIds)) {
                 $insuranceBenefits = InsuranceBenefit::whereIn('insurance_id', $insuranceIds)
