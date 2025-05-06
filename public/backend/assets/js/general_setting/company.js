@@ -7,8 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
             utilsScript: "/backend/assets/plugins/intltelinput/js/utils.js",
             separateDialCode: true,
         });
-
-
     }
 
     document.querySelector("#companySettingForm").addEventListener("submit", function (event) {
