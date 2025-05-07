@@ -157,7 +157,7 @@
                     } else {
                         tableBody += `
                                     <tr>
-                                        <td colspan="4" class="text-center">${_l('admin.common.empty_table')}</td></td>
+                                        <td colspan="4" class="text-center">${_l('admin.common.empty_table')}</td>
                                     </tr>`;
                         $('.table-footer').empty();
                     }

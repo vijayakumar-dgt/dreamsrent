@@ -28,8 +28,6 @@ class InvoiceController extends Controller
             ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image')
             ->where('invoices.deleted_at', null)->get();
 
-
-
         return view("admin.invoice.index", compact('invoices'));
     }
 
@@ -191,13 +189,8 @@ class InvoiceController extends Controller
     public function destroy(?int $id): JsonResponse
     {
         try {
-            // Find the invoice by ID
             $invoice = Invoice::findOrFail($id);
-
-            // Delete related items from the items table
-            $invoice->items()->delete(); // Assuming you have a relationship set up between Invoices and Items
-
-            // Delete the invoice itself
+            $invoice->items()->delete();
             $invoice->delete();
 
             return response()->json(['success' => true,
@@ -211,12 +204,8 @@ class InvoiceController extends Controller
 
     public function update(Request $request, ?int $id): RedirectResponse
     {
-        //dd($request->all());
         try {
-            // Find the invoice to update
             $invoice = Invoice::findOrFail($id);
-
-            // Update the invoice data
             $invoice->update([
                 'invoice_number' => $request->invoice_number,
                 'car_id' => $request->car_id,
@@ -233,13 +222,8 @@ class InvoiceController extends Controller
                 'updated_at' => Carbon::now(),
             ]);
 
-            // First, delete existing invoice items if any
             $invoice->items()->delete();
-
-            // Then, add new invoice items
-            $items = json_decode($request->items, true); // decode JSON array
-
-            // Remove existing items before inserting fresh data
+            $items = json_decode($request->items, true);
             $invoice->items()->delete();
 
             foreach ($items as $item) {
@@ -256,11 +240,9 @@ class InvoiceController extends Controller
                 ]);
             }
 
-            // Return success response
             return redirect()->route('admin.invoice')
             ->with('success', __('admin.finance_accounts.invoice_update_success'));
         } catch (\Exception $e) {
-            // Return error response
             return back()->with('error', __('admin.common.default_update_error'));
         }
     }

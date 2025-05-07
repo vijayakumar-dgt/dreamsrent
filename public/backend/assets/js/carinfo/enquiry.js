@@ -545,7 +545,6 @@ function editDriver(id){
                 $("#edit_valid_date").val(data.valid_date);
                 $("#edit_card_number").val(data.card_number);
                 $("#status").prop('checked', data.status == 1);
-                // $("#edit_phone_number").val(data.phone_number);
                 var phone_number = data.phone_number;
 
                 if (data.assigned_cars) {

@@ -256,7 +256,7 @@
                             <tr>
                                 <td colspan="5" class="text-center">${_l(
                                     "admin.common.empty_table"
-                                )}</td></td>
+                                )}</td>
                             </tr>`;
                     $(".table-footer").empty();
                 }

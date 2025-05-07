@@ -158,15 +158,16 @@
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end p-2">
                                           ${hasPermission(permissions, 'vehicle_attributes', 'edit') ?
-                                    `<li>
+                                            `<li>
                                                 <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editCarTransmission(${value.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                                             </li>`: ''
-                                }
+                                            }
                                               ${hasPermission(permissions, 'vehicle_attributes', 'delete') ?
-                                    `<li>
+                                            `<li>
                                                 <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="delateCarTransmissionForm(${value.id});" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
                                             </li>`:''
-                                                                          }                                        </ul>
+                                            }                                        
+                                        </ul>
                                     </div>
                                 </td>`: ''}
                             </tr>`;
@@ -175,7 +176,7 @@
                 } else {
                     tableBody += `
                             <tr>
-                                <td colspan="4" class="text-center">${_l('admin.common.empty_table')}</td></td>
+                                <td colspan="4" class="text-center">${_l('admin.common.empty_table')}</td>
                             </tr>`;
                     $('.table-footer').empty();
                 }

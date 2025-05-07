@@ -182,6 +182,7 @@
                                 </span>
                                 @endif
                             </td>
+                            @if (hasPermission($permissions, 'invoices', 'edit') || hasPermission($permissions, 'invoices', 'delete'))
                             <td>
                                 <div class="dropdown">
                                     <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -189,7 +190,6 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                         @if (hasPermission($permissions, 'invoices', 'edit'))
-
                                         <li>
                                             <a class="dropdown-item rounded-1 edit-invoice-btn" href="edit-invoice/{{$invoice->id}}" data-id="{{$invoice->id}}">
                                                 <i class="ti ti-edit me-1"></i>{{ __('admin.common.edit') }}
@@ -197,7 +197,6 @@
                                         </li>
                                         @endif
                                         @if (hasPermission($permissions, 'invoices', 'delete'))
-
                                         <li>
                                             <a class="dropdown-item rounded-1" id="delete-invoice-btn" href="javascript:void(0);" data-bs-toggle="modal" data-id="{{$invoice->id}}" data-bs-target="#delete_modal">
                                                 <i class="ti ti-trash me-1"></i>{{ __('admin.common.delete') }}
@@ -207,6 +206,7 @@
                                     </ul>
                                 </div>
                             </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>
