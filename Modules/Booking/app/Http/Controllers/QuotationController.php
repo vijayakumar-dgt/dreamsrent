@@ -33,7 +33,8 @@ class QuotationController extends Controller
 
     public function create(): View
     {
-        $locations = Location::where('status', 1)->get();
+        $auth = current_user();
+        $locations = Location::where('status', 1)->where('language_id', $auth->language_id)->get();
         $priceTypes = PricingType::where('type', 1)->get();
         $drivingTypes = DB::table('driving_types')->get();
         $customers = User::select(
