@@ -323,7 +323,7 @@
                                     </div>
                                     <div class="featues-info">
                                         <span>Door </span>
-                                        <h6 class="vehicle_doors"> 4 Doors</h6>
+                                        <h6 class="vehicle_doors"></h6>
                                     </div>
                                 </div>
                             </div>

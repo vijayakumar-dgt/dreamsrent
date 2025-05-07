@@ -802,6 +802,7 @@ function fetchVehicleDetails() {
 }
 
 function populateVehicleDetails(vehicle) {
+    console.log(vehicle.num_doors);
     $(".vehicle_name").text(vehicle.name ?? "");
     $(".vehicle_type").text(vehicle.car_type ?? "");
     $(".vehicle_year").text(vehicle.year ?? "");
@@ -812,7 +813,7 @@ function populateVehicleDetails(vehicle) {
     $(".vehicle_mileage").text(
         vehicle.mileage ? Math.ceil(vehicle.mileage) : ""
     );
-    $("vehicle_doors").text(vehicle.num_doors ?? "");
+    $(".vehicle_doors").text(vehicle.num_doors ?? "");
     let vehicleImages = createVehicleCard(vehicle);
     $(".detail-product").html(vehicleImages);
     let ratingHtml = renderStars(vehicle.rating || 0);
