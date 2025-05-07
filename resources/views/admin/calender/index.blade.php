@@ -279,7 +279,7 @@
                         <i class="ti ti-x"></i>
                     </button>
                 </div>
-                <div class="wizard-form">
+                <div class="wizard-form calTop">
                     <fieldset id="first-field">
                         <div class="row">
                             <div class="col-lg-12">
