@@ -37,13 +37,18 @@ class QuotationController extends Controller
         $locations = Location::where('status', 1)->where('language_id', $auth->language_id)->get();
         $priceTypes = PricingType::where('type', 1)->get();
         $drivingTypes = DB::table('driving_types')->get();
-        $customers = User::select(
+         /** @var \Illuminate\Support\Collection<int, \stdClass> $customers */
+         $customers = User::select(
             'users.id',
+            'users.name as username',
             DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
         )
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 3, 'users.status' => 1])
-            ->get();
+            ->get()->map(function ($customer) {
+                $customer->full_name = $customer->full_name ?? $customer->username;
+                return $customer;
+            });
 
         return view('booking::quotations.add', compact('locations', 'priceTypes', 'drivingTypes', 'customers'));
     }
