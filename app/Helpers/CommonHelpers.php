@@ -24,7 +24,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 if (!function_exists('clearCache')) {
-
     function clearCache(): bool
     {
         Artisan::call('cache:clear');

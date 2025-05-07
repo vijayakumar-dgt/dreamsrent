@@ -156,7 +156,10 @@ class DashboardController extends Controller
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->orderBy('users.id', 'desc')
             ->limit(5)
-            ->get();
+            ->get()->map(function ($user) {
+                $user->name = !empty($user->first_name) ? ucwords($user->first_name . ' ' . $user->last_name) : ucwords($user->name); 
+                return $user;
+            });
 
         $chartbooking = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
             ->get();

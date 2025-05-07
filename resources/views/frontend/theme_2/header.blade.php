@@ -55,14 +55,14 @@
 
                     @if (Auth::guard('web')->check())
                         <li class="login-link">
-                            <a href="{{ route('user.logout') }}">Logout</a>
+                            <a href="{{ route('user.logout') }}">{{ __('web.common.logout') }}</a>
                         </li>
                     @else
                         <li class="login-link">
-                            <a href="#">Sign Up</a>
+                            <a href="{{ route('user-register') }}">{{ __('web.home.signup') }}</a>
                         </li>
                         <li class="login-link">
-                            <a href="#">Sign In</a>
+                            <a href="{{ route('user-login') }}">{{ __('web.home.signin') }}</a>
                         </li>
                     @endif
                 </ul>

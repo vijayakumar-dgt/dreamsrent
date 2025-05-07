@@ -81,6 +81,7 @@ class ContactController extends Controller
                 ->when($sortBy === 'last_7_days', fn($query) => $query->whereBetween('created_at', [now()->subDays(7), now()]))
                 ->get()
                 ->map(function ($contact) {
+                    $contact->name = ucwords($contact->name);
                     $url = uploadedAsset($contact->image, 'profile');
                     $contact->image = $url;
                     return $contact;
