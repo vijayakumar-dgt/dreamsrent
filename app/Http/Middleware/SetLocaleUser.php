@@ -38,7 +38,7 @@ class SetLocaleUser
 
             $languageCode = $language->code ?? 'en';
 
-            Session::put('app_locale', $languageCode);
+            Session::put('app_locale_user', $languageCode);
             app()->setLocale($languageCode);
         }
 
