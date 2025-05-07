@@ -15,6 +15,23 @@
                 <a href="/" class="navbar-brand logo-small">
                     <img src="{{ $smallLogo ?? asset('frontend/assets/img/logo-small.png') }}" class="img-fluid" alt="Logo">
                 </a>
+                <div class="navbar-brand dropdown has-arrow flag-nav flag-nav1 nav-item-box flag-resposnive">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);" role="button">
+                            <img src="{{ asset('/backend/assets/img/flags/' . app()->getLocale() . '.svg') }}" alt="Language" class="img-fluid">
+                        </a>
+                        <ul class="dropdown-menu flag-menu p-2">
+                            @if ($allLanguages)
+                                @foreach ($allLanguages as $language)
+                                    <li>
+                                        <a href="javascript:void(0);" class="dropdown-item change-user-language" data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
+                                            <img src="{{ asset('/backend/assets/img/flags/' . $language->code . '.svg') }}" alt="" height="16">
+                                            {{ $language->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            @endif
+                        </ul>
+                    </div>
             </div>
             <div class="main-menu-wrapper">
                 <div class="menu-header">
