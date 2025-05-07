@@ -8,39 +8,37 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
 use Modules\Communication\Emails\Samplemail;
 use Modules\Communication\Helpers\MailConfigurator;
-use Illuminate\View\View;
 
 class EmailController extends Controller
 {
     public function sendEmail(Request $request): JsonResponse
     {
-        MailConfigurator::configureMail();
-        $tomail = $request->input('to_email');
-        $subject = $request->input('subject');
-        $content = $request->input('content');
-        $attachment = $request->input('attachment');
+        // ✅ Validate input to enforce correct types
+        $validated = $request->validate([
+            'to_email' => 'required|array',
+            'to_email.*' => 'email',
+            'subject' => 'required|string',
+            'content' => 'required|string',
+            'attachment' => 'nullable|string',
+        ]);
 
+        MailConfigurator::configureMail();
+
+        $tomail = $validated['to_email'];
         $data = [
-            'message' => $content,
-            'subject' => $subject,
-            'attachment' => $attachment,
+            'message' => $validated['content'],
+            'subject' => $validated['subject'],
+            'attachment' => $validated['attachment'] ?? null,
         ];
 
-        if (empty($tomail)) {
-            return response()->json([
-                'code' => 400,
-                'message' => 'Recipient email is required.',
-            ], 400);
+        foreach ($tomail as $email) {
+            Mail::to($email)->send(new Samplemail($data));
         }
 
-        if (is_array($tomail)) {
-            foreach ($tomail as $email) {
-                Mail::to($email)->send(new Samplemail($data));
-            }
-        } else {
-            Mail::to($tomail)->send(new Samplemail($data));
-        }
-
-        return response()->json(['code' => 200, 'message' => __('Email sent successfully.'), 'data' => []], 200);
+        return response()->json([
+            'code' => 200,
+            'message' => __('Email sent successfully.'),
+            'data' => [],
+        ], 200);
     }
 }

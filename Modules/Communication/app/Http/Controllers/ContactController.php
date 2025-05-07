@@ -66,13 +66,15 @@ class ContactController extends Controller
     {
         try {
             $sortBy = $request->get('sort_by', 'latest');
-            $search = $request->get('search', '');
+            $searchInput = $request->get('search', '');
+            // Ensure search is always a string
+            $search = is_string($searchInput) ? $searchInput : '';
 
             $contacts = Contact::query()
                 ->when($search, function ($query) use ($search) {
-                    $query->where('name', 'LIKE', "%{$search}%")
-                          ->orWhere('phone_number', 'LIKE', "%{$search}%")
-                          ->orWhere('email', 'LIKE', "%{$search}%");
+                    $query->where('name', 'LIKE', '%' . $search . '%')
+                          ->orWhere('phone_number', 'LIKE', '%' . $search . '%')
+                          ->orWhere('email', 'LIKE', '%' . $search . '%');
                 })
                 ->when($sortBy === 'latest', fn($query) => $query->orderBy('created_at', 'desc'))
                 ->when($sortBy === 'ascending', fn($query) => $query->orderBy('name', 'asc'))
@@ -107,7 +109,17 @@ class ContactController extends Controller
     public function delete(Request $request): JsonResponse
     {
         try {
-            $id = (int) $request->id;
+            $idInput = $request->id;
+            // Validate id is numeric before conversion
+            if (!is_numeric($idInput)) {
+                return response()->json([
+                    'code'    => 400,
+                    'success' => false,
+                    'message' => 'Invalid contact ID format.'
+                ], 400);
+            }
+            
+            $id = (int) $idInput;
             $contact = Contact::find($id);
 
             if (!$contact) {
