@@ -1179,6 +1179,7 @@ return [
     'base_location' => 'الموقع الأساسي',
     'damages' => 'الأضرار',
     'is_featured' => 'مميز؟',
+    'is_recommended' => 'يوصى به',
     'created_date' => 'تاريخ الإنشاء',
     'status' => 'الحالة',
     'back_to_list' => 'العودة إلى القائمة',

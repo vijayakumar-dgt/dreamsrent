@@ -251,7 +251,7 @@ const renderButtons = data => {
             return `<a href="javascript:void(0);" id="cancel_booking" data-id="${data.id}" class="btn btn-secondary">${_l('web.common.cancel')} ${_l('web.user.booking')}</a>
                     <a href="javascript:void(0);" id="start_ride" data-id="${data.id}" class="btn btn-primary">${_l('web.user.start_ride')}</a>`;
         case 1:
-            return `<a href="javascript:void(0);" id="complete_booking" data-id="${data.id}" class="btn btn-primary">${_l('web.user.complete_ride')}</a>`;
+            return `<button class="btn btn-light" data-bs-dismiss="modal">${_l('web.common.close')}</button>`;
         default:
             return `<button class="btn btn-light" data-bs-dismiss="modal">${_l('web.common.close')}</button>`;
     }

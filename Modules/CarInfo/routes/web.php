@@ -215,6 +215,8 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
         Route::post('vehicle/delete', [CarInfoController::class, 'delete'])->name('vehicle.delete');
         Route::get('/get-damage-details', [CarInfoController::class, 'getDamageDetails']);
         Route::post('/vehicle/multiple/delete', [CarInfoController::class, 'deleteMultiple'])->name('admin.vehicles.deleteMultiple');
+        Route::get('/set-popular', [CarInfoController::class, 'setPopular'])->name('admin.setPopular');
+        Route::get('/set-recommended', [CarInfoController::class, 'setRecommended'])->name('admin.setRecommended');
     });
 
     Route::post('/get-brands', [BrandController::class, 'getBrands']);

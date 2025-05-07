@@ -346,8 +346,8 @@ class CarInfoController extends Controller
             $imagePaths = [];
             if (is_array($images)) {
                 foreach ($images as $image) {
-                        $fileName = uploadFile($image, 'vehicles');
-                        $imagePaths[] = 'vehicles/' . $fileName;
+                    $fileName = uploadFile($image, 'vehicles');
+                    $imagePaths[] = 'vehicles/' . $fileName;
                 }
             }
 
@@ -1009,7 +1009,9 @@ class CarInfoController extends Controller
             "vehicle_metatitle",
             "vehicle_metadesc",
             "vehicle_metakeywords",
-            "features"
+            "features",
+            "popular",
+            "recommended"
         );
 
         // $adminID = Auth::guard('web')->user()->id;
@@ -2086,5 +2088,33 @@ class CarInfoController extends Controller
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error deleting vehicles.']);
         }
+    }
+
+    public function setPopular(Request $request)
+    {
+        $vehicle = VehicleInfo::find($request->id);
+
+        if (!$vehicle) {
+            return response()->json(['error' => 'Vehicle not found'], 404);
+        }
+
+        $vehicle->popular = $request->popular ? 1 : 0;
+        $vehicle->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function setRecommended(Request $request)
+    {
+        $vehicle = VehicleInfo::find($request->id);
+
+        if (!$vehicle) {
+            return response()->json(['error' => 'Vehicle not found'], 404);
+        }
+
+        $vehicle->recommended = $request->recommended ? 1 : 0;
+        $vehicle->save();
+
+        return response()->json(['success' => true]);
     }
 }

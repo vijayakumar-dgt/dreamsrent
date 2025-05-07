@@ -210,6 +210,7 @@
                             <th>{{ __('admin.rentals.price') }}</th>
                             <th>{{ __('admin.rentals.damages') }}</th>
                             <th>{{ __('admin.rentals.is_featured') }}</th>
+                            <th>{{ __('admin.rentals.is_recommended') }}</th>
                             <th>{{ __('admin.rentals.created_date') }}</th>
                             @if (hasPermission($permissions, 'vehicles', 'edit') || hasPermission($permissions, 'vehicles', 'delete'))
                             <th>{{ __('admin.rentals.status') }}</th>

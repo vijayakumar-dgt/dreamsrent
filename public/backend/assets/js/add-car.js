@@ -234,7 +234,20 @@
                             <td>${value.main_location.name}</td>
                              <td>${priceText}</td>
                             <td>0${value.damage_count}</td>
-                            <td><i class="ti ti-star-filled text-warning"></i></td>
+                         <td>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox"
+                                    ${value.popular == 1 ? "checked" : ""}
+                                    onchange="togglePopular(${value.id}, this.checked)">
+                            </div>
+                        </td>
+                         <td>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox"
+                                    ${value.recommended == 1 ? "checked" : ""}
+                                    onchange="toggleRecommended(${value.id}, this.checked)">
+                            </div>
+                        </td>
                             <td class="text-start">
                                 <h6 class="fs-14 fw-normal">${
                                     formatDateTime(value.created_at)
@@ -310,7 +323,7 @@
                 } else {
                     tableBody += `
                             <tr>
-                                <td colspan="7" class="text-center">${_l(
+                                <td colspan="8" class="text-center">${_l(
                                     "admin.common.empty_table"
                                 )}e</td>
                             </tr>`;
@@ -359,10 +372,32 @@
                         },
                         language: {
                             emptyTable: _l("admin.common.no_matching_records"),
-                            info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
-                            infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
-                            infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
-                            lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
+                            info:
+                                _l("admin.common.showing") +
+                                " _START_ " +
+                                _l("admin.common.to") +
+                                " _END_ " +
+                                _l("admin.common.of") +
+                                " _TOTAL_ " +
+                                _l("admin.common.entries"),
+                            infoEmpty:
+                                _l("admin.common.showing") +
+                                " 0 " +
+                                _l("admin.common.to") +
+                                " 0 " +
+                                _l("admin.common.of") +
+                                " 0 " +
+                                _l("admin.common.entries"),
+                            infoFiltered:
+                                "(" +
+                                _l("admin.common.filtered_from") +
+                                " _MAX_ " +
+                                _l("admin.common.total_entries") +
+                                ")",
+                            lengthMenu:
+                                _l("admin.common.show") +
+                                " _MENU_ " +
+                                _l("admin.common.entries"),
                             search: _l("admin.common.search") + ":",
                             zeroRecords: _l("admin.common.empty_table"),
                             paginate: {
@@ -1231,7 +1266,7 @@
 
         function docGetFileTypeIcon(fileName) {
             let fileExtension = fileName.split(".").pop().toLowerCase();
-            let iconPath = ''; // 🛠️ Declare it here first
+            let iconPath = ""; // 🛠️ Declare it here first
             if (fileExtension === "doc" || fileExtension === "docx") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg";
             } else if (fileExtension === "pdf") {
@@ -1337,9 +1372,8 @@
 
         function policyGetFileTypeIcon(fileName) {
             let fileExtension = fileName.split(".").pop().toLowerCase();
-            let iconPath = ''; // 🛠️ Declare it here first
-        
-        
+            let iconPath = ""; // 🛠️ Declare it here first
+
             if (fileExtension === "doc" || fileExtension === "docx") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg"; // 📝 maybe a Word icon instead?
             } else if (fileExtension === "pdf") {
@@ -1347,10 +1381,9 @@
             } else {
                 iconPath = "/backend/assets/img/icons/default-file-icon.svg"; // ⚙️ default for unknown files
             }
-        
+
             return iconPath;
         }
-        
 
         $(document).on("click", ".policy-delete-file", function () {
             let fileItem = $(this).closest(".file-item");
@@ -2621,3 +2654,37 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
     }
 });
+
+
+function togglePopular(vehicleId, isChecked) {
+    $.ajax({
+        url: "/admin/set-popular",
+        type: "GET",
+        data: {
+            id: vehicleId,
+            popular: isChecked ? 1 : 0
+        },
+        success: function (response) {
+            showToast("success", "Popular status updated.");
+        },
+        error: function (xhr, status, error) {
+            showToast("error", "Something went wrong.");
+        }
+    });
+}
+function toggleRecommended(vehicleId, isChecked) {
+    $.ajax({
+        url: "/admin/set-recommended",
+        type: "GET",
+        data: {
+            id: vehicleId,
+            recommended: isChecked ? 1 : 0
+        },
+        success: function (response) {
+            showToast("success", "Recommended status updated.");
+        },
+        error: function (xhr, status, error) {
+            showToast("error", "Something went wrong.");
+        }
+    });
+}

@@ -408,8 +408,6 @@ class PageController extends Controller
     }
 
 
-
-
     public function pageBuilderApi(Request $request): View|JsonResponse
     {
         $defaultThemeValue = GeneralSetting::where('key', 'default_theme')->first();
@@ -642,7 +640,6 @@ class PageController extends Controller
                     }
                 }
 
-
                 // Brands section
                 if ($section['status'] == 1) {
                     if (isset($section['section_content']) && strpos($section['section_content'], '[brand') !== false) {
@@ -770,7 +767,7 @@ class PageController extends Controller
                             $section['section_type'] = 'popular_vehicle';
                             $section['design'] = 'vehicle_one';
                         } elseif ($type === 'featured') {
-                            $vehicles = $query->where('feature', 1)->get();
+                            $vehicles = $query->where('recommended', 1)->get();
                             $section['section_type'] = 'feature_vehicle';
                             $section['design'] = 'vehicle_two';
                         } else {
@@ -871,8 +868,8 @@ class PageController extends Controller
                                 'vehicle_video' => $vehicle->vehicle_video,
                                 'features' => $vehicle->features,
                                 'price' => !empty($filteredPrices) ? $filteredPrices : null,
-                                'is_featured' => (bool) rand(0, 1),
-                                'is_top_rated' => (bool) rand(0, 1),
+                                'is_featured' => $vehicle->popular,
+                                'is_top_rated' => $vehicle->recommended,
                                 'seo_title' => $vehicle->vehicle_metatitle,
                                 'seo_key' => $vehicle->vehicle_metakeywords,
                                 'seo_description' => $vehicle->vehicle_metadesc,

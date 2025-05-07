@@ -105,6 +105,8 @@ class VehicleInfo extends Model
         'vehicle_metadesc',
         'vehicle_metakeywords',
         'features',
+        'popular',
+        'recommended',
         'views',
         'description',
         'created_by',

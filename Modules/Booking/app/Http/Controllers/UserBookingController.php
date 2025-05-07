@@ -581,7 +581,7 @@ class UserBookingController extends Controller
 
             $data = [
                 "vehicle_id" => $request->input('vehicle_id'),
-                "booking_status" => 4,
+                "booking_status" => 1,
                 "booking_by" => "user",
                 "booking_date" => $formattedBookingDate,
                 "start_datetime" => $startDatetime,
@@ -702,7 +702,7 @@ class UserBookingController extends Controller
 
             $data = [
                 "vehicle_id" => $request->input('vehicle_id'),
-                "booking_status" => 4,
+                "booking_status" => 1,
                 "booking_by" => "user",
                 "booking_date" => $formattedBookingDate,
                 "start_datetime" => $startDatetime,
@@ -962,7 +962,10 @@ class UserBookingController extends Controller
             // Ensure $response is an array before accessing it as one
             if (is_array($response) && isset($response['status']) && $response['status'] == 'COMPLETED') {
                 if (isset($response['id'])) {
-                    Booking::where('transaction_id', $response['id'])->update(['payment_status' => 2]);
+                    Booking::where('transaction_id', $response['id'])->update([
+                        'payment_status' => 2,
+                        'booking_status' => 4,
+                    ]);                    
                     $booking = Booking::where('transaction_id', $response['id'])->first();
                     $authUser = Auth::guard('web')->user();
                     $vehicle = VehicleInfo::where('id', $request->vehicle_id)->first();
@@ -1052,7 +1055,10 @@ class UserBookingController extends Controller
             Stripe::setApiKey(is_string($stripeSecret) ? $stripeSecret : '');
             $sessionId = $request->get('session_id');
 
-            Booking::where('transaction_id', $sessionId)->update(['payment_status' => 2]);
+            Booking::where('transaction_id', $sessionId)->update([
+                        'payment_status' => 2,
+                        'booking_status' => 4,
+                    ]);               
             $booking = Booking::where('transaction_id', $sessionId)->first();
             $authUser = Auth::guard('web')->user();
             $vehicle = VehicleInfo::where('id', $request->vehicle_id)->first();

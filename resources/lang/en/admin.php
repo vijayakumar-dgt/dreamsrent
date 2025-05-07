@@ -1197,6 +1197,7 @@ return array(
     'price' => 'Price',
     'damages' => 'Damages',
     'is_featured' => 'Is Featured',
+    'is_recommended' => 'Is Recommended',
     'created_date' => 'Created Date',
     'status' => 'Status',
     'back_to_list' => 'Back to List',
