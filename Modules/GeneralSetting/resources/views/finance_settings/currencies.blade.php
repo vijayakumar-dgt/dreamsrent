@@ -186,7 +186,7 @@
                     <div class="modal-footer">
                         <div class="d-flex justify-content-center">
                             <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
-                            <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.general_settings.yes_delete') }}</button>
+                            <button type="submit" class="btn btn-primary">{{ __('admin.general_settings.yes_delete') }}</button>
                         </div>
                     </div>
                 </form>
