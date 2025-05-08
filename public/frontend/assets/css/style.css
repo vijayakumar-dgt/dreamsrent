@@ -24504,9 +24504,3 @@ input.form-control.rounded-pill:focus {
       align-items: start !important;
     }
   }
-
-  @media (min-width: 992px) {
-    .userNavMenu .col-lg-12 {
-      min-width: 110%;
-    }
-  }
