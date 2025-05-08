@@ -12,10 +12,10 @@
 	<title>@yield('meta_title', $companyName)</title>
 
 	<!-- Favicon -->
-	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('backend/assets/img/favicon.png') }}">
+	<link rel="shortcut icon" type="image/x-icon" href="{{ $favicon }}">
 
 	<!-- Apple Touch Icon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('backend/assets/img/apple-touch-icon.png') }}">
+	<link rel="apple-touch-icon" sizes="180x180" href="{{ $favicon }}">
 
 	<!-- Bootstrap CSS -->
 	@php
