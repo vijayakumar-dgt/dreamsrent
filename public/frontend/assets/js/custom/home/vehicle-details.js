@@ -1207,7 +1207,7 @@ function createVehicleCard(vehicle) {
 
     const vehicleInfo = `
         <div class="pro-info">
-            <div class="pro-badge">
+            <div class="">
                 <span class="badge-km d-none">
                     <i class="fa-solid fa-person-walking"></i> 4.2 Km Away
                 </span>
