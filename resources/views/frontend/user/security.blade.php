@@ -247,20 +247,19 @@
 <!-- /Change-password -->
 
 <!-- deviceManagement -->
-<div class="modal fade addmodal" id="device_management">
+<div class="modal fade" id="device_management" tabindex="-1" aria-labelledby="deviceManagementLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <form action="" id="deviceManagement">
                 @csrf
                 <div class="modal-header">
-                    <h4 class="mb-0">{{ __('web.user.device_management') }}</h4>
-                    <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti ti-x fs-16"></i>
-                    </button>
+                    <h5 class="modal-title" id="deviceManagementLabel">{{ __('web.user.device_management') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body">
-                    <div class="custom-datatable-filter table-responsive brandstable security-table">
-                        <table class="table" id="userDevicesTable">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="userDevicesTable">
                             <thead class="thead-light">
                                 <tr>
                                     <th>{{ strtoupper(__('web.user.device')) }}</th>
@@ -272,12 +271,14 @@
                             <tbody></tbody>
                         </table>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('web.common.close') }}</button>
+
+                    <div class="modal-footer d-flex justify-content-end mt-1">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">
+                            {{ __('web.common.close') }}
+                        </button>
                     </div>
                 </div>
+
             </form>
         </div>
     </div>
