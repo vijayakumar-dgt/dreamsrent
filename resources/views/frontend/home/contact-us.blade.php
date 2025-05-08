@@ -1,6 +1,6 @@
     @extends($layout)
     @push('styles')
-    <link rel="stylesheet" href="{{ asset('assets/plugins/intltelinput/css/intlTelInput.css') }}">
+    <link rel="stylesheet" href="{{ asset('/backend/assets/plugins/intltelinput/css/intlTelInput.css') }}">
     @endpush
     @section('content')
         <section class="contact-section">
@@ -86,6 +86,6 @@
         </section>
     @endsection
     @push('scripts')
-    <script src="{{ asset('assets/plugins/intltelinput/js/intlTelInput.js') }}"></script>
+    <script src="{{ asset('/backend/assets/plugins/intltelinput/js/intlTelInput.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/custom/home/contact-us.js') }}"></script>
     @endpush
