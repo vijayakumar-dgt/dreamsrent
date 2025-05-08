@@ -82,7 +82,14 @@ function createWishlistCard(wishlist) {
 }
 
 function createRatingCard(rating) {
-    return Array.from({ length: rating }, () => `<i class="fas fa-star filled"></i>`).join('');
+    const maxStars = 5;
+    const filledStars = Math.round(rating); // In case it's a float
+    const unfilledStars = maxStars - filledStars;
+
+    const filled = Array.from({ length: filledStars }, () => `<i class="fas fa-star filled"></i>`).join('');
+    const unfilled = Array.from({ length: unfilledStars }, () => `<i class="fas fa-star"></i>`).join('');
+
+    return filled + unfilled;
 }
 
 function createDetailsList(wishlist) {
