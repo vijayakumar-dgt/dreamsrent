@@ -392,7 +392,9 @@ function populateEditForm(ticketId, assigneeId, categoryId, priority, status, re
 
     $('#reply').val(reply);
     let plainText = $('<div>').html(description).text();
-    console.log(plainText);
+
+    plainText = plainText.charAt(0).toUpperCase() + plainText.slice(1);
+    
     $('.description').text(plainText);
 }
 
