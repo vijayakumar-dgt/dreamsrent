@@ -32,7 +32,7 @@
                         <div class="chat-header">
                             <span>{{ __('web.user.chats') }}</span>
                         </div>
-                        <form class="chat-search">
+                        <form class="chat-search d-none">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <i class="fas fa-search"></i>
