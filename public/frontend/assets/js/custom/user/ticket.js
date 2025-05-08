@@ -301,7 +301,7 @@
                 // Initialize DataTable
                 if (response.data.length > 0) {
                     $('#ticketTable').DataTable({
-                        ordering: true,
+                        ordering: false,
                         searching: false,
                         pageLength: 10,
                         lengthChange: false,
