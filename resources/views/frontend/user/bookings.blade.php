@@ -203,13 +203,8 @@
                         <div class="booking-wrapper">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h5 class="mb-0">{{ __('web.user.booking') }} {{ __('web.user.details') }}</h5>
-                                <div>
-                                    <a href="javascript:void(0);" data-bs-target="#cancel_ride" data-bs-toggle="modal" data-bs-dismiss="modal" class="btn btn-sm btn-dark me-2">
-                                        {{ __('web.user.cancel_booking') }}
-                                    </a>
-                                    <a href="javascript:void(0);" data-bs-target="#start_rides" data-bs-toggle="modal" data-bs-dismiss="modal" class="btn btn-sm btn-warning text-white">
-                                        {{ __('web.user.start_ride') }}
-                                    </a>
+                                <div class="modal_footer">
+
                                 </div>
                             </div>
                             <div class="row text-start mb-3">
@@ -299,6 +294,9 @@
                             </div>
                         </div>
                         <div class="cancel-reason-section"></div>
+                    </div>
+                    <div class="modal-btn modal-btn-sm text-end">
+                        <button class="btn btn-light" data-bs-dismiss="modal">{{ __('web.common.close')}}</button>
                     </div>
                 </div>
             </div>
