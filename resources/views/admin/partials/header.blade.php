@@ -106,23 +106,22 @@
                                 </div>
                             </div>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('admin.profile-settings') }}">
-                                <i class="ti ti-user-edit"></i>Edit Profile
+                                <i class="ti ti-user-edit"></i>{{ __('admin.common.edit_profile') }}
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('payment.payment') }}">
-                                <i class="ti ti-credit-card"></i>Payments
+                                <i class="ti ti-credit-card"></i>{{ __('admin.finance_accounts.payments') }}
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="/admin/notifications">
                                 <i class="ti ti-bell"></i>{{ __('web.user.notifications') }}
                             </a>
-
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('admin.security-settings') }}">
-                                <i class="ti ti-exchange"></i>Change Password
+                                <i class="ti ti-exchange"></i>{{ __('admin.general_settings.change_password') }}
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('admin.company-settings') }}">
-                                <i class="ti ti-settings"></i>Settings
+                                <i class="ti ti-settings"></i>{{ __('admin.general_settings.settings') }}
                             </a>
                             <a class="dropdown-item logout d-flex align-items-center" href="{{ route('admin.logout') }}">
-                                <i class="ti ti-logout"></i>Logout Account
+                                <i class="ti ti-logout"></i>{{ __('admin.common.logout') }}
                             </a>
                         </div>
                     </div>
@@ -135,9 +134,9 @@
                 <i class="fa fa-ellipsis-v"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item" href="{{ route('admin.profile-settings') }}">My Profile</a>
-                <a class="dropdown-item" href="{{ route('admin.company-settings') }}">Settings</a>
-                <a class="dropdown-item" href="{{ route('admin.logout') }}">Logout</a>
+                <a class="dropdown-item" href="{{ route('admin.profile-settings') }}">{{ __('admin.general_settings.profile') }}</a>
+                <a class="dropdown-item" href="{{ route('admin.company-settings') }}">{{ __('admin.general_settings.settings') }}</a>
+                <a class="dropdown-item" href="{{ route('admin.logout') }}">{{ __('admin.common.logout') }}</a>
             </div>
         </div>
         <!-- /Mobile Menu -->

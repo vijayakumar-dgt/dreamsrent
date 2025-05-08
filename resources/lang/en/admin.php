@@ -2237,6 +2237,8 @@ return array(
     'wallet' => 'Wallet',
     'star' => 'Star',
     'id' => 'ID',
+    'edit_profile' => 'Edit Profile',
+    'logout' => 'Logout',
   ),
   'page' => [
     'pages' => 'Pages',
