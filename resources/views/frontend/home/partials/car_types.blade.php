@@ -23,10 +23,11 @@
                     </div>
                 </div>
             </div>
-            <!-- View More -->
-            <div class="view-all text-center" data-aos="fade-down">
-                <a href="/vehicles" class="btn btn-view d-inline-flex align-items-center">{{ __('web.home.view_all_cars') }}<i class="feather-arrow-right ms-2"></i></span></a>
-            </div>
-            <!-- View More -->
+        <!-- View More -->
+        <div class="view-all text-center" data-aos="fade-down">
+            <a href="/vehicles" class="btn btn-view d-inline-flex align-items-center">{{ __('web.home.view_all_cars') }}<i class="feather-arrow-right ms-2"></i></a>
         </div>
-    </section>
+        <!-- View More -->
+        </div>
+    </div>
+</section>

@@ -93,7 +93,7 @@
                 <td>
                     <p class="text-darker">${booking.currency}${booking.total_amount}</p>
                 </td>
-                <td><span class="badge badge-light-secondary">${booking.payment_type || ""}</span></td>
+                <td><span class="badge badge-light-secondary">${booking.payment_type ? booking.payment_type.charAt(0).toUpperCase() + booking.payment_type.slice(1) : ""}</span></td>
                 <td>${statusLabel}</td>
             </tr>`;
     };

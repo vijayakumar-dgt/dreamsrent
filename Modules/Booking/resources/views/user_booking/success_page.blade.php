@@ -132,6 +132,9 @@
                             <h6>{{__('web.home.location_and_time')}}</h6>
                         </div>
                         <div class="book-body">
+                            @php
+                            use Carbon\Carbon;
+                            @endphp
                             <ul class="location-lists">
                                 <li>
                                     <h6>{{__('web.home.booking_type')}}</h6>
@@ -143,13 +146,13 @@
                                 </li>
                                 <li>
                                     <h6>{{ __('web.home.pickup_location') }}</h6>
-                                    <p>{{ $dLocation->name }} - {{ $dLocation->address ?? "N/A" }}</p>
-                                    <p>{{ $booking->start_datetime ?? "N/A" }}</p>
+                                    <p>{{ $dLocation->name }}</p>
+                                    <p>{{ $booking->start_datetime ? Carbon::parse($booking->start_datetime)->format('m/d/Y H:i') : 'N/A' }}</p>
                                 </li>
                                 <li>
-                                    <h6>{{__('web.home.return_location')}}</h6>
-                                    <p>{{ $rLocation->name }} - {{ $rLocation->address ?? "N/A" }}</p>
-                                    <p>{{ $booking->end_datetime ?? "N/A" }}</p>
+                                    <h6>{{ __('web.home.return_location') }}</h6>
+                                    <p>{{ $rLocation->name }}</p>
+                                    <p>{{ $booking->end_datetime ? Carbon::parse($booking->end_datetime)->format('m/d/Y H:i') : 'N/A' }}</p>
                                 </li>
                             </ul>
                         </div>
@@ -207,7 +210,7 @@
                                 <div class="driver-name">
                                     <h6>{{ $bookingInfo->first_name}} {{ $bookingInfo->last_name }}</h6>
                                     <p>{{ $bookingInfo->phone_number }}</p>
-                                  
+
                                 </div>
                             </div>
                         </div>

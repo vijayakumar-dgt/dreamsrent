@@ -640,9 +640,6 @@
                 </div>
 
 
-
-
-
                 <div class="col-lg-8 d-none" id="fourth-field">
                     <div class="booking-information-main">
                         <form id="bookPaymentForm">

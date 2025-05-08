@@ -1,6 +1,6 @@
 <div class="dashboard-section">
     <div class="container">
-        <div class="row">
+        <div class="row userNavMenu">
             <div class="col-lg-12">
                 <div class="dashboard-menu">
                     <ul>

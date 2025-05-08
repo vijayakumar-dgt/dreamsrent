@@ -29,6 +29,12 @@ class CurrencyController extends Controller
             'exchange_rate' => 'required|numeric|min:0',
             'code'          => 'required',
             'symbol'        => 'required'
+        ], [
+            'currency_name.required' => __('admin.general_settings.enter_currency_name'),
+            'currency_name.unique'   => __('admin.general_settings.currency_name_unique'),
+            'exchange_rate.required' => __('admin.general_settings.enter_exchange_rate'),
+            'code.required'          => __('admin.general_settings.enter_currency_code'),
+            'symbol.required'        => __('admin.general_settings.enter_currency_symbol')
         ]);
 
         if ($validator->fails()) {

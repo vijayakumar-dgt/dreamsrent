@@ -44,7 +44,7 @@
                                 <label class="form-label">
                                     {{ __('web.auth.email') }} <span class="text-danger">*</span>
                                 </label>
-                                <input type="email" class="form-control" id="email" name="email" />
+                                <input type="email" class="form-control" id="email" name="email" >
                                 <span class="error-text text-danger" id="email_error"></span>
                             </div>
                             <div class="input-block">
@@ -52,7 +52,7 @@
                                     {{ __('web.auth.password') }} <span class="text-danger">*</span>
                                 </label>
                                 <div class="pass-group">
-                                    <input type="password" class="form-control pass-input" id="password" name="password" />
+                                    <input type="password" class="form-control pass-input" id="password" name="password" >
                                     <span class="fas fa-eye-slash toggle-password"></span>
                                 </div>
                                 <span class="error-text text-danger" id="password_error"></span>

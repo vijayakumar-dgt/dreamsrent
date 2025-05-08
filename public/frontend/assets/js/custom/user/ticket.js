@@ -212,7 +212,9 @@
 
                     $.each(data, function(index, value) {
                         let subjectName = value.category ? value.category.name : _l('web.user.no_subject');
-                        let assigneeName = value.assignee ? value.assignee.name : _l('web.user.unassigned');
+                        let assigneeName = value.assignee && value.assignee.user_detail
+                        ? value.assignee.user_detail.first_name + ' ' + value.assignee.user_detail.last_name
+                        : (value.assignee ? value.assignee.name : _l('web.user.unassigned'));
                         let createdDate = new Date(value.created_at).toLocaleDateString();
                         let assigneeImage = value.assignee?.user_detail?.profile_image
                         ? "/storage/" + value.assignee.user_detail.profile_image
