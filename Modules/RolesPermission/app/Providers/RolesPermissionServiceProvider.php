@@ -43,7 +43,7 @@ class RolesPermissionServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+        
     }
 
     /**
