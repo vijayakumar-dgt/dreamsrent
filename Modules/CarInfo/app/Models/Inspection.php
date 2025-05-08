@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\CarInfo\Database\Factories\InspectionFactory;
 /**
  * @property int $id
  * @property int $vehicle_info_id
@@ -30,10 +29,6 @@ class Inspection extends Model
      */
     protected $fillable = [];
 
-    // protected static function newFactory(): InspectionFactory
-    // {
-    //     // return InspectionFactory::new();
-    // }
     /**
      *  @return BelongsTo<VehicleInfo,Inspection>
      */

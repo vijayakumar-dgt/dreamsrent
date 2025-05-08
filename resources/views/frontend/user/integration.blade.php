@@ -10,7 +10,7 @@
 					<nav aria-label="breadcrumb" class="page-breadcrumb">
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item">
-								<a href="/">{{ __('web.home.home') }}</a>
+								<a href="{{ route('home') }}">{{ __('web.home.home') }}</a>
 							</li>
 							<li class="breadcrumb-item active" aria-current="page">
 								{{ __('web.user.user_bookings') }}

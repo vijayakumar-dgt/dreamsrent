@@ -27,7 +27,7 @@
 				<img src="/frontend/assets/img/500.png" class="img-fluid" alt="Unexpected error">
 				<h3 class="error-500">Unexpected error</h3>
 				<div class="back-button">
-					<a href="/" class="btn btn-primary">Back to Home</a>
+					<a href="{{ route('home') }}" class="btn btn-primary">Back to Home</a>
 				</div>
 			</div>
 		

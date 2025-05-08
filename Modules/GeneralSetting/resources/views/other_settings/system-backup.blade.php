@@ -140,6 +140,6 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('backend/assets/js/general_setting/system-settings.js?v=1') }}"></script>
+<script src="{{ asset('backend/assets/js/general_setting/system-settings.js') }}"></script>
 @endpush
 

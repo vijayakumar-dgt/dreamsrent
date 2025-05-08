@@ -32,7 +32,7 @@
 				<p>{!! $response['description'] ?? 'Our website is currently undergoing scheduled maintenance, will be right
 					back in a few minutes.' !!}</p>
 				<h6>{{ __('web.home.maintenence_text') }}</h6>
-				<a href="/" class="btn-maintance btn btn-primary mt-3">{{ __('web.home.back_to_home') }}</a>
+				<a href="{{ route('home') }}" class="btn-maintance btn btn-primary mt-3">{{ __('web.home.back_to_home') }}</a>
 			</div>
 
         </div>

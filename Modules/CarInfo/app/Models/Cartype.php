@@ -5,8 +5,6 @@ namespace Modules\CarInfo\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\CarInfo\Database\Factories\CartypeFactory;
-
 /**
  * @property int $id
  * @property string $name
@@ -25,8 +23,4 @@ class Cartype extends Model
      */
     protected $fillable = [];
 
-    // protected static function newFactory(): CartypeFactory
-    // {
-    //     // return CartypeFactory::new();
-    // }
 }

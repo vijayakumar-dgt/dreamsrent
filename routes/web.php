@@ -292,7 +292,7 @@ Route::group(['middleware' => ['setLocaleUser', 'checkInstallerStatus']], functi
     Route::post('/userprofile', [UserController::class, 'userprofile'])->name('userprofile');
     Route::post('user/mark-all-notifications-as-read', [UserController::class, 'markAllAsRead']);
     Route::get('user/get-notifications', [UserController::class, 'getNotifications'])->name('user.notifications');
-    Route::get('user/notifications', [UserController::class, 'notifications'])->name('user.notifications');
+    Route::get('user/notifications', [UserController::class, 'notifications'])->name('user.notifications')->middleware('customer');
     Route::post('user/mark-notification-as-read', [UserController::class, 'markNotificationAsRead']);
     Route::post('user/delete-notification', [UserController::class, 'deleteNotification']);
     Route::post('user/delete-all-notifications', [UserController::class, 'deleteAllNotification']);

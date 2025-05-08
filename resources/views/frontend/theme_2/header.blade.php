@@ -9,16 +9,16 @@
                         <span></span>
                     </span>
                 </a>
-                <a href="/" class="navbar-brand logo">
+                <a href="{{ route('home') }}" class="navbar-brand logo">
                     <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" class="img-fluid" alt="Logo">
                 </a>
-                <a href="/" class="navbar-brand logo-small">
+                <a href="{{ route('home') }}" class="navbar-brand logo-small">
                     <img src="{{ $smallLogo ?? asset('frontend/assets/img/logo-small.png') }}" class="img-fluid" alt="Logo">
                 </a>
             </div>
             <div class="main-menu-wrapper">
                 <div class="menu-header">
-                    <a href="/" class="menu-logo">
+                    <a href="{{ route('home') }}" class="menu-logo">
                         <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" class="img-fluid" alt="Logo">
                     </a>
                     <a id="menu_close" class="menu-close" href="javascript:void(0);">

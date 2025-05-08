@@ -1,113 +1,123 @@
-<header class="header">
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg header-nav">
-            <div class="navbar-header">
-                <a id="mobile_btn" href="javascript:void(0);">
-                    <span class="bar-icon">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </span>
-                </a>
-                <a href="/" class="navbar-brand logo">
-                    <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" class="img-fluid" alt="Logo">
-                </a>
-                <a href="/" class="navbar-brand logo-small">
-                    <img src="{{ $smallLogo ?? asset('frontend/assets/img/logo-small.png') }}" class="img-fluid" alt="Logo">
-                </a>
-                <div class="navbar-brand dropdown has-arrow flag-nav flag-nav1 nav-item-box flag-resposnive">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);" role="button">
-                            <img src="{{ asset('/backend/assets/img/flags/' . app()->getLocale() . '.svg') }}" alt="Language" class="img-fluid">
+    <header class="header">
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg header-nav">
+                <div class="navbar-header">
+                    <a id="mobile_btn" href="javascript:void(0);">
+                        <span class="bar-icon">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </a>
+                    <a href="{{ route('home') }}" class="navbar-brand logo">
+                        <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" class="img-fluid" alt="Logo">
+                    </a>
+                    <a href="{{ route('home') }}" class="navbar-brand logo-small">
+                        <img src="{{ $smallLogo ?? asset('frontend/assets/img/logo-small.png') }}" class="img-fluid"
+                            alt="Logo">
+                    </a>
+                    <div class="navbar-brand dropdown has-arrow flag-nav flag-nav1 nav-item-box flag-resposnive">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
+                            role="button">
+                            <img src="{{ asset('/backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
+                                alt="Language" class="img-fluid">
                         </a>
                         <ul class="dropdown-menu flag-menu p-2">
                             @if ($allLanguages)
-                                @foreach ($allLanguages as $language)
-                                    <li>
-                                        <a href="javascript:void(0);" class="dropdown-item change-user-language" data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
-                                            <img src="{{ asset('/backend/assets/img/flags/' . $language->code . '.svg') }}" alt="" height="16">
-                                            {{ $language->name }}
-                                        </a>
-                                    </li>
-                                @endforeach
+                            @foreach ($allLanguages as $language)
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-item change-user-language"
+                                    data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
+                                    <img src="{{ asset('/backend/assets/img/flags/' . $language->code . '.svg') }}"
+                                        alt="" height="16">
+                                    {{ $language->name }}
+                                </a>
+                            </li>
+                            @endforeach
                             @endif
                         </ul>
                     </div>
-            </div>
-            <div class="main-menu-wrapper">
-                <div class="menu-header">
-                    <a href="/" class="menu-logo">
-                        <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" class="img-fluid" alt="Logo">
-                    </a>
-                    <a id="menu_close" class="menu-close" href="javascript:void(0);">
-                        <i class="fas fa-times"></i>
-                    </a>
                 </div>
-                <ul class="main-nav">
-                    @if ($headers)
+                <div class="main-menu-wrapper">
+                    <div class="menu-header">
+                        <a href="{{ route('home') }}" class="menu-logo">
+                            <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" class="img-fluid"
+                                alt="Logo">
+                        </a>
+                        <a id="menu_close" class="menu-close" href="javascript:void(0);">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    </div>
+                    <ul class="main-nav">
+                        @if ($headers)
                         @foreach ($headers as $header)
-                            @if ($header->menus_array)
-                                @foreach ($header->menus_array as $menu)
-                                    @php
-                                        $rawLink = trim($menu['link']);
-                                        $isFullUrl = filter_var($rawLink, FILTER_VALIDATE_URL);
-                                        $menuLink = $isFullUrl ? rtrim($rawLink, '/') : rtrim(url($rawLink), '/');
-                                        $currentUrl = rtrim(Request::url(), '/');
-                                        $active = '';
+                        @if ($header->menus_array)
+                        @foreach ($header->menus_array as $menu)
+                        @php
+                        $rawLink = trim($menu['link']);
+                        $isFullUrl = filter_var($rawLink, FILTER_VALIDATE_URL);
+                        $menuLink = $isFullUrl ? rtrim($rawLink, '/') : rtrim(url($rawLink), '/');
+                        $currentUrl = rtrim(Request::url(), '/');
+                        $active = '';
 
-                                        if (
-                                            $currentUrl == $menuLink ||
-                                            (Str::contains($menuLink, 'vehicles') && Str::contains($currentUrl, 'vehicle-details')) ||
-                                            (Str::contains($menuLink, 'blogs') && Str::contains($currentUrl, 'blog-details'))
-                                        ) {
-                                            $active = 'active';
-                                        }
-                                    @endphp
-                                    <li class="{{ $active }}">
-                                        <a href="{{ $menuLink }}">{{ $menu['label'] }}</a>
-                                    </li>
-                                @endforeach
-                            @endif
+                        if (
+                        $currentUrl == $menuLink ||
+                        (Str::contains($menuLink, 'vehicles') && Str::contains($currentUrl, 'vehicle-details')) ||
+                        (Str::contains($menuLink, 'blogs') && Str::contains($currentUrl, 'blog-details'))
+                        ) {
+                        $active = 'active';
+                        }
+                        @endphp
+                        <li class="{{ $active }}">
+                            <a href="{{ $menuLink }}">{{ $menu['label'] }}</a>
+                        </li>
                         @endforeach
-                    @endif
+                        @endif
+                        @endforeach
+                        @endif
 
-                    @if (Auth::guard('web')->check())
+                        @if (Auth::guard('web')->check())
                         <li class="login-link">
                             <a href="{{ route('user.dashboard') }}">{{ __('web.user.dashboard') }}</a>
                         </li>
                         <li class="login-link">
                             <a href="{{ route('user.logout') }}">{{ __('web.common.logout') }}</a>
-                        </li>                        
-                    @else
+                        </li>
+                        @else
                         <li class="login-link">
                             <a href="{{ route('user-register') }}">{{ __('web.home.signup') }}</a>
                         </li>
                         <li class="login-link">
                             <a href="{{ route('user-login') }}">{{ __('web.home.signin') }}</a>
                         </li>
-                    @endif
-                </ul>
-            </div>
-            <ul class="nav header-navbar-rht">
-                <li class="nav-item">
-                    <div class="nav-item dropdown has-arrow flag-nav flag-nav1 nav-item-box">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);" role="button">
-                            <img src="{{ asset('/backend/assets/img/flags/' . app()->getLocale() . '.svg') }}" alt="Language" class="img-fluid">
-                        </a>
-                        <ul class="dropdown-menu flag-menu p-2">
-                            @if ($allLanguages)
+                        @endif
+                    </ul>
+                </div>
+                <ul class="nav header-navbar-rht">
+                    <li class="nav-item">
+                        <div class="nav-item dropdown has-arrow flag-nav flag-nav1 nav-item-box">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
+                                role="button">
+                                <img src="{{ asset('/backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
+                                    alt="Language" class="img-fluid">
+                            </a>
+                            <ul class="dropdown-menu flag-menu p-2">
+                                @if ($allLanguages)
                                 @foreach ($allLanguages as $language)
-                                    <li>
-                                        <a href="javascript:void(0);" class="dropdown-item change-user-language" data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
-                                            <img src="{{ asset('/backend/assets/img/flags/' . $language->code . '.svg') }}" alt="" height="16">
-                                            {{ $language->name }}
-                                        </a>
-                                    </li>
+                                <li>
+                                    <a href="javascript:void(0);" class="dropdown-item change-user-language"
+                                        data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
+                                        <img src="{{ asset('/backend/assets/img/flags/' . $language->code . '.svg') }}"
+                                            alt="" height="16">
+                                        {{ $language->name }}
+                                    </a>
+                                </li>
                                 @endforeach
-                            @endif
-                        </ul>
-                    </div>
-                </li>
-                @if (Auth::guard('web')->check())
+                                @endif
+                            </ul>
+                        </div>
+                    </li>
+                    @if (Auth::guard('web')->check())
                     <!-- Show this if user is logged in -->
                     <!-- Notifications -->
                     <li class="nav-item dropdown logged-item noti-nav noti-wrapper">
@@ -120,7 +130,8 @@
                         <div class="dropdown-menu notifications">
                             <div class="topnav-dropdown-header">
                                 <span class="notification-title">{{ __('web.user.notifications') }}</span>
-                                <a href="javascript:void(0)" class="clear-noti has-notification d-none" id="markAllAsRead">
+                                <a href="javascript:void(0)" class="clear-noti has-notification d-none"
+                                    id="markAllAsRead">
                                     {{ __('web.user.clear_all') }}
                                 </a>
                             </div>
@@ -140,7 +151,8 @@
                     <li class="nav-item dropdown has-arrow logged-item">
                         <a href="#" class="dropdown-toggle user-drop-down nav-link" data-bs-toggle="dropdown">
                             <span class="user-img">
-                                <img class="rounded-circle header_profile_image" src="{{ getProfileImage() }}" width="31" alt="Profile">
+                                <img class="rounded-circle header_profile_image" src="{{ getProfileImage() }}"
+                                    width="31" alt="Profile">
                             </span>
                             <span class="user-text">{{ Auth::guard('web')->user()->username }}</span>
                         </a>
@@ -151,7 +163,8 @@
                             <a class="dropdown-item" href="{{ route('user.usersettings') }}">
                                 <i class="feather-settings"></i> {{ __('web.common.settings') }}
                             </a>
-                            <a class="dropdown-item" href="{{ route('user.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <a class="dropdown-item" href="{{ route('user.logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="feather-power"></i> {{ __('web.common.logout') }}
                             </a>
                             <form id="logout-form" action="{{ route('user.logout') }}" method="GET" class="d-none">
@@ -160,7 +173,7 @@
                         </div>
                     </li>
                     <!-- /User Menu -->
-                @else
+                    @else
                     <!-- Show this if user is NOT logged in -->
                     <li class="nav-item">
                         <a class="nav-link header-login" href="{{ route('user-login') }}">
@@ -172,8 +185,8 @@
                             <span><i class="fa-solid fa-lock"></i></span> {{ __('web.home.signup') }}
                         </a>
                     </li>
-                @endif
-            </ul>
-        </nav>
-    </div>
-</header>
+                    @endif
+                </ul>
+            </nav>
+        </div>
+    </header>

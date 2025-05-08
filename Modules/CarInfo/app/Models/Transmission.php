@@ -5,8 +5,6 @@ namespace Modules\CarInfo\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\CarInfo\Database\Factories\TransmissionFactory;
-
 class Transmission extends Model
 {
     use SoftDeletes;
@@ -18,8 +16,4 @@ class Transmission extends Model
 
     protected $fillable = ["name", "status", "language_id"];
 
-    // protected static function newFactory(): TransmissionFactory
-    // {
-    //     // return TransmissionFactory::new();
-    // }
 }

@@ -5,7 +5,6 @@ namespace Modules\CarInfo\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-// use Modules\CarInfo\Database\Factories\DriverDocumentFactory;
 /**
  * @property int $id
  * @property int $driver_id

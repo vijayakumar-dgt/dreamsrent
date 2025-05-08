@@ -5,8 +5,6 @@ namespace Modules\CarInfo\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\CarInfo\Database\Factories\SeatTypeFactory;
-
 class SeatType extends Model
 {
     use SoftDeletes;
@@ -18,8 +16,4 @@ class SeatType extends Model
 
     protected $fillable = ["seat_type", "status"];
 
-    // protected static function newFactory(): SeatTypeFactory
-    // {
-    //     // return SeatTypeFactory::new();
-    // }
 }
