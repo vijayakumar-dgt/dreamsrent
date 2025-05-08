@@ -466,16 +466,16 @@ class PageController extends Controller
         } else {
             foreach ($pageContentSections as &$section) {
                 // Banner One
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[banner_one') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-
-                        // Ensure $limit is an integer
-                        $limit = (int)($matches[1] ?? 10);  // Cast to integer
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+                
+                    if (is_string($content) && strpos($content, '[banner_one') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                
+                        $limit = (int)($matches[1] ?? 10);
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
-                        // Use provided $lang_id instead of current_user()
+                
                         $banners = DB::table('sections')
                             ->join('section_datas', function ($join) use ($lang_id) {
                                 $join->on('sections.id', '=', 'section_datas.section_id')
@@ -484,36 +484,38 @@ class PageController extends Controller
                             ->select('sections.id', 'section_datas.datas')
                             ->where('sections.name', 'Banner One')
                             ->orderBy('sections.id', $order)
-                            ->limit($limit)  // This now expects an integer
+                            ->limit($limit)
                             ->get();
-
+                
                         foreach ($banners as &$banner) {
                             $decodedData = json_decode($banner->datas, true);
-
+                            $decodedData = is_array($decodedData) ? $decodedData : [];
+                
                             $banner->label = $decodedData['label_one'] ?? null;
                             $banner->line_one = $decodedData['line_one'] ?? null;
                             $banner->line_two = $decodedData['line_two'] ?? null;
                             $banner->description = $decodedData['description_one'] ?? null;
-
+                
                             $relativePath = 'storage/' . ($decodedData['thumbnail_image_one'] ?? '');
                             $defaultImage = asset('backend/assets/img/car/car-right.png');
                             $thumbnailKey = 'thumbnail_image_one';
-
+                
                             $banner->thumbnail_image = (
                                 isset($decodedData[$thumbnailKey]) &&
                                 !empty($decodedData[$thumbnailKey]) &&
                                 file_exists(public_path($relativePath))
                             ) ? asset($relativePath) : $defaultImage;
-
+                
                             unset($banner->datas);
                         }
-
+                
                         $section['section_type'] = 'banner';
                         $section['type'] = 'banner';
                         $section['design'] = 'banner_one';
                         $section['section_content'] = $banners;
                     }
                 }
+                
 
                 // Banner Two
                 if ($section['status'] == 1) {
@@ -574,108 +576,117 @@ class PageController extends Controller
                 }
 
                 // BestVehicle
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[bestVehicle') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-
-                        // Ensure $limit is cast to an integer
-                        $limit = (int)($matches[1] ?? 10);  // Explicitly cast to integer
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+                
+                    if (is_string($content) && strpos($content, '[bestVehicle') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                
+                        $limit = (int)($matches[1] ?? 10);
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
+                
                         $best_vehicles = DB::table('sections')
                             ->join('section_datas', function ($join) use ($lang_id) {
                                 $join->on('sections.id', '=', 'section_datas.section_id')
-                                    ->where('section_datas.language_id', '=', $lang_id);
+                                     ->where('section_datas.language_id', '=', $lang_id);
                             })
                             ->select('sections.id', 'section_datas.datas')
                             ->where('sections.name', 'Best Vehicle')
                             ->orderBy('sections.id', $order)
-                            ->limit($limit)  // Ensure $limit is an integer
+                            ->limit($limit)
                             ->get();
-
+                
                         foreach ($best_vehicles as &$best_vehicle) {
                             $decodedData = json_decode($best_vehicle->datas, true);
-
+                            $decodedData = is_array($decodedData) ? $decodedData : [];
+                
                             $vehicleId = $decodedData['vehicle_id'] ?? null;
                             $best_vehicle->vehicle_id = $vehicleId;
-
+                
                             if ($vehicleId) {
                                 $vehicle = VehicleInfo::where("language_id", $lang_id)->find($vehicleId);
-
+                
                                 $best_vehicle->vehicle_name = $vehicle->name ?? null;
-
+                
                                 $imagePath = $vehicle->vehicle_image ?? null;
                                 $best_vehicle->vehicle_image_url = $imagePath ? asset('storage/' . $imagePath) : null;
                             } else {
                                 $best_vehicle->vehicle_name = null;
                                 $best_vehicle->vehicle_image_url = null;
                             }
-
+                
                             $best_vehicle->label_1 = $decodedData['label_1'] ?? null;
                             $best_vehicle->dis_1   = $decodedData['dis_1'] ?? null;
-
+                
                             $best_vehicle->label_2 = $decodedData['label_2'] ?? null;
                             $best_vehicle->dis_2   = $decodedData['dis_2'] ?? null;
-
+                
                             $best_vehicle->label_3 = $decodedData['label_3'] ?? null;
                             $best_vehicle->dis_3   = $decodedData['dis_3'] ?? null;
-
+                
                             $best_vehicle->label_4 = $decodedData['label_4'] ?? null;
                             $best_vehicle->dis_4   = $decodedData['dis_4'] ?? null;
-
+                
                             $best_vehicle->label_5 = $decodedData['label_5'] ?? null;
                             $best_vehicle->dis_5   = $decodedData['dis_5'] ?? null;
-
+                
                             $best_vehicle->label_6 = $decodedData['label_6'] ?? null;
                             $best_vehicle->dis_6   = $decodedData['dis_6'] ?? null;
-
+                
                             unset($best_vehicle->content);
                         }
-
+                
                         $section['section_type'] = 'best_vehicle';
                         $section['type'] = 'best_vehicle';
                         $section['design'] = 'best_vehicle';
                         $section['section_content'] = $best_vehicles;
                     }
                 }
+                
+                        // Brands section
+                        if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                        $content = $section['section_content'] ?? '';
 
-                // Brands section
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[brand') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-                        $limit = $matches[1] ?? 10;
-                        $viewAll = $matches[2] ?? 'no';
-                        $order = $matches[3] ?? 'asc';
+                        if (is_string($content) && strpos($content, '[brand') !== false) {
+                            preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                            $limit = (int)($matches[1] ?? 10);
+                            $viewAll = $matches[2] ?? 'no';
+                            $order = $matches[3] ?? 'asc';
 
-                        $brands = DB::table('brands')
-                            ->select('id', 'brand_image', 'brand_icon', 'brand_name', 'status')
-                            ->where('language_id', $lang_id)
-                            ->where('status', 1)
-                            ->whereNull('deleted_at')
-                            ->orderBy('created_at', $order)
-                            ->limit((int) $limit)
-                            ->get()
-                            ->map(function ($brand) {
-                                $brand->brand_image = asset('storage/' . $brand->brand_image); // Convert to URL format
-                                $brand->brand_icon = asset('storage/' . $brand->brand_icon);
-                                return $brand;
-                            });
+                            $brands = DB::table('brands')
+                                ->select('id', 'brand_image', 'brand_icon', 'brand_name', 'status')
+                                ->where('language_id', $lang_id)
+                                ->where('status', 1)
+                                ->whereNull('deleted_at')
+                                ->orderBy('created_at', $order)
+                                ->limit($limit)
+                                ->get()
+                                ->map(function ($brand) {
+                                    $brand->brand_image = asset('storage/' . $brand->brand_image);
+                                    $brand->brand_icon = asset('storage/' . $brand->brand_icon);
+                                    return $brand;
+                                });
 
-                        $section['section_type'] = 'brands';
-                        $section['design'] = 'brand_one';
-                        $section['section_content'] = $brands;
+                            $section['section_type'] = 'brands';
+                            $section['design'] = 'brand_one';
+                            $section['section_content'] = $brands;
+                        }
                     }
-                }
+
 
                 // Category section
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[category ') !== false) {
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    if (
+                        isset($section['section_content']) &&
+                        is_string($section['section_content']) &&
+                        strpos($section['section_content'], '[category ') !== false
+                    ) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
                         $limit = $matches[1] ?? 6;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
+                
                         $category = Cartype::select('name', 'icon', 'id')
                             ->limit((int) $limit)
                             ->where('language_id', $lang_id)
@@ -683,66 +694,73 @@ class PageController extends Controller
                             ->whereNull('deleted_at')
                             ->get()
                             ->map(function ($cartype) use ($lang_id) {
-                                // Actual vehicle count based on type and language
                                 $cartype->car_count = VehicleInfo::where('type_id', $cartype->id)
                                     ->where('language_id', $lang_id)
                                     ->count();
-
+                
                                 $cartype->image_url = $cartype->icon
                                     ? asset('storage/' . ltrim($cartype->icon, '/'))
                                     : asset('images/default.png');
-
+                
                                 return $cartype;
                             });
-
+                
                         $section['section_type'] = 'featured_category';
                         $section['design'] = 'category_one';
                         $section['section_content'] = $category;
                     }
                 }
+                
 
                 // FAQ Section
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[faq') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+                
+                    if (is_string($content) && strpos($content, '[faq') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = $matches[1] ?? 10;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
-                        $faqs = DB::table('faqs')->select('id', 'question', 'answer', 'status')->where('status', 1)
+                
+                        $faqs = DB::table('faqs')
+                            ->select('id', 'question', 'answer', 'status')
+                            ->where('status', 1)
                             ->whereNull('deleted_at')
                             ->where('language_id', $lang_id)
                             ->orderBy('created_at', $order)
                             ->limit((int) $limit)
                             ->get();
-
+                
                         $section['section_type'] = 'faq';
                         $section['design'] = 'faq_one';
                         $section['section_content'] = $faqs;
                     }
                 }
+                
 
                 // How It Works
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[how_it_work') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+                
+                    if (is_string($content) && strpos($content, '[how_it_work') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = $matches[1] ?? 10;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
+                
                         $how_it_works = DB::table('general_settings')->select('id', 'key', 'value', 'group_id')
                             ->where(['group_id' => 10])
                             ->where('language_id', $lang_id)
                             ->orderBy('created_at', $order)
                             ->limit((int) $limit)
                             ->get();
-
-
+                
                         $section['section_type'] = 'how_it_works';
                         $section['design'] = 'how_it_works_one';
                         $section['section_content'] = $how_it_works;
                     }
                 }
+                
 
                 // Vechile
                 if ($section['status'] == 1) {
@@ -882,90 +900,99 @@ class PageController extends Controller
                 }
 
                 // Car Type
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[car_type ') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
-                        $limit = $matches[1] ?? 10;
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+                
+                    if (is_string($content) && strpos($content, '[car_type ') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
+                        $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $viewAll = $matches[2] ?? 'no';
-
+                
                         $cartypes = Cartype::select('name', 'icon', 'id')
                             ->where('language_id', $lang_id)
                             ->where('status', 1)
                             ->whereNull('deleted_at')
-                            ->limit((int) $limit)
+                            ->limit($limit)
                             ->get()
                             ->map(function ($cartype) use ($lang_id) {
-                                // Actual vehicle count based on type and language
                                 $cartype->car_count = VehicleInfo::where('type_id', $cartype->id)
                                     ->where('language_id', $lang_id)
                                     ->count();
-
+                
                                 $cartype->image_url = $cartype->icon
                                     ? asset('storage/' . ltrim($cartype->icon, '/'))
                                     : asset('images/default.png');
-
+                
                                 return $cartype;
                             });
-
+                
+                        // Set values only if it's confirmed to be an array
                         $section['section_type'] = 'car_type';
                         $section['design'] = 'car_type_one';
                         $section['section_content'] = $cartypes;
                     }
                 }
+                
 
                 //Testimonial
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[testimonial') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
-                        $limit = $matches[1] ?? 10;
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+                
+                    if (is_string($content) && strpos($content, '[testimonial') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
+                        $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $viewAll = $matches[2] ?? 'no';
-
+                
                         $testimonials = DB::table('testimonials')->select('customer_name', 'image', 'ratings', 'review', 'location')
-                            ->limit((int) $limit)
+                            ->limit($limit)
                             ->where('language_id', $lang_id)
                             ->where('status', 1)
                             ->whereNull('deleted_at')
                             ->get();
-
+                
                         foreach ($testimonials as &$testimonial) {
                             $testimonial->image = asset('storage/' . $testimonial->image);
                         }
-
+                
                         $section['section_type'] = 'testimonial';
                         $section['design'] = 'testimonial_one';
                         $section['section_content'] = $testimonials;
                     }
-                }
+                }   
 
                 // AD Card Section
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[ad_card') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-                        $limit = $matches[1] ?? 10;
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+                
+                    if (is_string($content) && strpos($content, '[ad_card') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                
+                        $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
+                
                         $how_it_works = DB::table('general_settings')->select('key', 'value')
                             ->where(['group_id' => 15])
                             ->orderBy('created_at', $order)
-                            ->limit((int) $limit)
+                            ->limit($limit)
                             ->get();
-
+                
                         $section['section_type'] = 'ad_card_section';
                         $section['design'] = 'ad_card_section_one';
                         $section['section_content'] = $how_it_works;
                     }
-                }
+                }              
 
                 // Why Choose us Section
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && strpos($section['section_content'], '[why_us') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-                        $limit = $matches[1] ?? 10;
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+                
+                    if (is_string($content) && strpos($content, '[why_us') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
-                        // Instead of fetching banners, provide static content
+                
                         $section['section_type'] = 'why_us_section';
                         $section['type'] = 'why_us_section';
                         $section['design'] = 'why_us_one';
@@ -974,38 +1001,37 @@ class PageController extends Controller
                             "description" => "Find the best vehicles and services easily."
                         ];
                     }
-                }
+                }               
 
                 //Blog Section
-                if ($section['status'] == 1) {
-                    if (
-                        isset($section['section_content']) &&
-                        is_string($section['section_content']) &&
-                        strpos($section['section_content'], '[blog') !== false
-                    ) {
-                        preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+                
+                    if (is_string($content) && strpos($content, '[blog') !== false) {
+                        preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
                         $type = $matches[1] ?? 'all';
                         $limit = $matches[2] ?? 10;
                         $viewAll = $matches[3] ?? 'no';
-
-                        $blogss = DB::table('blog_posts')->select('id', 'title', 'image', 'slug', 'category', 'description', 'updated_at')
+                
+                        $blogss = DB::table('blog_posts')
+                            ->select('id', 'title', 'image', 'slug', 'category', 'description', 'updated_at')
                             ->when($type === 'all', fn($query) => $query)
                             ->limit((int) $limit)
                             ->where('language_id', $lang_id)
                             ->where('status', 1)
                             ->whereNull('deleted_at')
                             ->get();
-
+                
                         $blogs = [];
-
+                
                         foreach ($blogss as $blog) {
-                            $category = BlogCategory::where('id', $blog->category)->first();
+                            $category = BlogCategory::find($blog->category);
                             $blogs[] = [
                                 'id' => $blog->id,
                                 'title' => $blog->title,
                                 'slug' => $blog->slug ?? Str::slug($blog->title),
                                 'image' => uploadedAsset($blog->image),
-                                'category' => $category ? $category->name : '',
+                                'category' => $category?->name ?? '',
                                 'description' => $blog->description,
                                 'updated_at' => \Carbon\Carbon::parse($blog->updated_at)->format('F j, Y'),
                                 'author' => [
@@ -1014,22 +1040,24 @@ class PageController extends Controller
                                 ],
                             ];
                         }
-
+                
                         $section['section_type'] = 'blog';
                         $section['design'] = 'blog_one';
                         $section['section_content'] = $blogs;
                     }
                 }
-
+        
                 // Search Section
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && is_string($section['section_content']) && strpos($section['section_content'], '[search') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+                
+                    if (is_string($content) && strpos($content, '[search') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = $matches[1] ?? 10;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
-                        // Instead of fetching banners, provide static content
+                
+                        // Provide static content
                         $section['section_type'] = 'search_section';
                         $section['type'] = 'search_section';
                         $section['design'] = 'search_one';
@@ -1039,53 +1067,57 @@ class PageController extends Controller
                         ];
                     }
                 }
-
+                
                 // Marquee Section
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && is_string($section['section_content']) && strpos($section['section_content'], '[marquee') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+                
+                    if (is_string($content) && strpos($content, '[marquee') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = $matches[1] ?? 10;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
+                
                         $page = Page::select("keywords")->where("slug", $slug)->where("language_id", $lang_id)->first();
-
+                
                         if (!$page) {
                             $basePage = Page::select("keywords", "id")->where('slug', $slug)->whereNull('parent_id')->first();
-
+                
                             if ($basePage) {
                                 $page = Page::select("keywords")->where('parent_id', $basePage->id)->where('language_id', $lang_id)->first();
                             }
                         }
-
+                
                         $keywordsJsonArray = [];
+                
                         if ($page && isset($page->keywords)) {
                             $keywords = array_map('trim', explode(',', $page->keywords));
                             foreach ($keywords as $keyword) {
                                 $keywordsJsonArray[] = ['text' => $keyword];
                             }
                         }
-
+                
                         $section['section_type'] = 'marquee_section';
                         $section['type'] = 'marquee_section';
                         $section['design'] = 'marquee_one';
                         $section['section_content'] = $keywordsJsonArray;
                     }
-                }
+                }                
 
                 // All Category section
                 if (
-                    $section['status'] == 1 &&
+                    is_array($section) &&
+                    ($section['status'] ?? 0) == 1 &&
                     isset($section['section_content']) &&
-                    is_string($section['section_content']) && // ✅ Check it's a string
+                    is_string($section['section_content']) &&
                     strpos($section['section_content'], '[all_category ') !== false
                 ) {
                     preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
-
+                
                     $limit = $matches[1] ?? 12;
                     $viewAll = $matches[2] ?? 'no';
                     $order = $matches[3] ?? 'asc';
-
+                
                     $allCategory = Cartype::select('name', 'id')
                         ->limit((int) $limit)
                         ->where('status', 1)
@@ -1093,25 +1125,27 @@ class PageController extends Controller
                         ->whereNull('deleted_at')
                         ->get()
                         ->map(fn($cartype) => ['id' => $cartype->id, 'name' => $cartype->name]);
-
+                
                     $section['section_type'] = 'all_category';
                     $section['design'] = 'category_two';
                     $section['section_content'] = $allCategory;
-                }
+                }                
 
                 // Facts Section
-                if ($section['status'] == 1) {
-                    if (isset($section['section_content']) && is_string($section['section_content']) && strpos($section['section_content'], '[facts') !== false) {
-                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+                
+                    if (is_string($content) && strpos($content, '[facts') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = $matches[1] ?? 10;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
+                
                         $userCount = User::count(); // Get total users
                         $vehicleCount = VehicleInfo::count(); // Get total vehicles
                         $locationCount = Location::count(); // Get total locations
                         $totalKm = 1976; // Keeping total_km static
-
+                
                         // Set facts content dynamically
                         $section['facts_content'] = [
                             ["key" => "happy_customers", "value" => $userCount],
@@ -1124,6 +1158,7 @@ class PageController extends Controller
                         $section['design'] = 'facts_one';
                     }
                 }
+                
 
                 if (isset($section['section_content']) && is_string($section['section_content'])) {
                     if (preg_match('/\[[^\]]+\]/', $section['section_content']) === 0) {
