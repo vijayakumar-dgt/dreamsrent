@@ -44,7 +44,7 @@
                         </div>
                         <div class="col-lg-6">
                             <form id="contactForm">
-                                @csrf
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <div class="row">
                                     <h1>{{ __('web.home.get_in_touch') }}</h1>
                                     <div class="col-md-12">
