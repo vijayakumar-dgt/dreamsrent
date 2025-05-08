@@ -326,6 +326,11 @@ class UserLoginRegisterController extends Controller
                 [$request->username, $companyName],
                 $template->description ?? ''
             );
+            $redirectTo = session('intended_url', route('home'));
+            session()->forget('intended_url');
+            if (session()->has('intended_booking')) {
+                $redirectTo = route('user.booking.redirect');
+            }
             return response()->json([
                 'status' => true,
                 'code' => 200,
@@ -333,7 +338,7 @@ class UserLoginRegisterController extends Controller
                 'name' => $request->username,
                 'email_subject' => $subject,
                 'email_content' => $content,
-                'redirect_url' => route('home'),
+                'redirect_url' => $redirectTo,
                 'email' => $request->email,
                 'message' => __('web.auth.registration_success'),
             ]);
