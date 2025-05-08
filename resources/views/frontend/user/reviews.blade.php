@@ -1,40 +1,49 @@
 @extends($layout)
 
 @push('styles')
-    <!-- Datatable CSS -->
-    <link rel="stylesheet" href="{{ asset('frontend/assets/plugins/datatables/datatables.min.css') }}">
+<!-- Datatable CSS -->
+<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/datatables/datatables.min.css') }}">
 @endpush
 
 @section('content')
-    <!-- Breadcrumb Section -->
-    <div class="breadcrumb-bar">
-        <div class="container">
-            <div class="row align-items-center text-center">
-                <div class="col-md-12 col-12">
-                    <h2 class="breadcrumb-title">{{ __('web.user.user_reviews') }}</h2>
-                    <nav aria-label="breadcrumb" class="page-breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="/">{{ __('web.home.home') }}</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('web.user.user_reviews') }}</li>
-                        </ol>
-                    </nav>
-                </div>
+<!-- Breadcrumb Section -->
+<div class="breadcrumb-bar">
+    <div class="container">
+        <div class="row align-items-center text-center">
+            <div class="col-md-12 col-12">
+                <h2 class="breadcrumb-title">{{ __('web.user.user_reviews') }}</h2>
+                <nav aria-label="breadcrumb" class="page-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">{{ __('web.home.home') }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ __('web.user.user_reviews') }}</li>
+                    </ol>
+                </nav>
             </div>
         </div>
     </div>
-    <!-- /Breadcrumb Section -->
+</div>
+<!-- /Breadcrumb Section -->
 
-    @include('frontend.user.nav_menu')
+@include('frontend.user.nav_menu')
 
-    <!-- Page Content -->
-    <div class="content">
-        <div class="container">
-            <!-- Sort By -->
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="sorting-info">
-                        <div class="row">
-                            <div class="col-md-12">
+<!-- Page Content -->
+<div class="content">
+    <div class="container">
+        
+        <div class="row">
+            <!-- Reviews -->
+            <div class="col-lg-12 d-flex">
+                <div class="card flex-fill mb-0">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <div class="col-md-5">
+                                <div class="skeleton label-skeleton label-loader"></div>
+                                <h5 class="d-none real-label">
+                                    {{ __('web.user.all_reviews') }}
+                                    <span id="totalReviewsCount" class="badge bg-success">0</span>
+                                </h5>
+                            </div>
+                            <div class="col-md-7 text-md-end">
                                 <div class="filter-group">
                                     <div class="skeleton label-skeleton label-loader me-2"></div>
                                     <div class="sort-week sort d-none real-label">
@@ -84,159 +93,140 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /Sort By -->
-
-            <div class="row">
-                <!-- Reviews -->
-                <div class="col-lg-12 d-flex">
-                    <div class="card flex-fill mb-0">
-                        <div class="card-header">
-                            <div class="row align-items-center">
-                                <div class="col-md-5">
-                                    <div class="skeleton label-skeleton label-loader"></div>
-                                    <h5 class="d-none real-label">
-                                        {{ __('web.user.all_reviews') }}
-                                        <span id="totalReviewsCount" class="badge bg-success">0</span>
-                                    </h5>
-                                </div>
-                                <div class="col-md-7 text-md-end">
-                                    <div class="table-search">
-                                        <div id="tablefilter" class="me-0"></div>
-                                    </div>
+                            <div class="col-md-7 text-md-end">
+                                <div class="table-search">
+                                    <div id="tablefilter" class="me-0"></div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <div class="custom-datatable-filter table-responsive table-loader">
-                                <table class="table table-bordered">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            @for ($i = 0; $i < 5; $i++)
-                                                <th>
-                                                    <div class="skeleton data-skeleton label-loader"></div>
-                                                </th>
+                    </div>
+                    <div class="card-body">
+                        <div class="custom-datatable-filter table-responsive table-loader">
+                            <table class="table table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        @for ($i = 0; $i < 5; $i++)
+                                            <th>
+                                            <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
                                             @endfor
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @for ($i = 0; $i < 4; $i++)
-                                            <tr>
-                                                @for ($j = 0; $j < 5; $j++)
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                @endfor
-                                            </tr>
-                                        @endfor
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="table-responsive dashboard-table d-none real-table">
-                                <table class="table" id="reviewsTable">
-                                    <thead class="thead-light">
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for ($i = 0; $i < 4; $i++)
                                         <tr>
-                                            <th>{{ __('web.user.vehicle_name') }}</th>
-                                            <th>{{ __('web.user.review') }}</th>
-                                            <th>{{ __('web.user.ratings') }}</th>
-                                            <th>{{ __('web.common.action') }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                            <div class="table-footer">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div id="tablelength"></div>
-                                    </div>
-                                    <div class="col-md-6 text-md-end">
-                                        <div id="tablepage"></div>
-                                    </div>
+                                        @for ($j = 0; $j < 5; $j++)
+                                            <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            @endfor
+                                            </tr>
+                                            @endfor
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-responsive dashboard-table d-none real-table">
+                            <table class="table" id="reviewsTable">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>{{ __('web.user.vehicle_name') }}</th>
+                                        <th>{{ __('web.user.review') }}</th>
+                                        <th>{{ __('web.user.ratings') }}</th>
+                                        <th>{{ __('web.common.action') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="table-footer">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div id="tablelength"></div>
+                                </div>
+                                <div class="col-md-6 text-md-end">
+                                    <div id="tablepage"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- /Reviews -->
             </div>
+            <!-- /Reviews -->
         </div>
     </div>
-    <!-- /Page Content -->
+</div>
+<!-- /Page Content -->
 
-    <!-- Delete Modal -->
-    <div class="modal new-modal fade" id="delete_modal" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <form id="reviewDeleteForm">
-                    @csrf
-                    <input type="hidden" name="delete_id" id="delete_id">
-                    <div class="modal-body">
-                        <div class="delete-action">
-                            <div class="delete-header">
-                                <h4>{{ __('web.user.delete_reviews') }}</h4>
-                                <p>{{ __('web.user.are_you_sure') }}</p>
-                            </div>
-                            <div class="modal-btn">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <button type="submit" class="btn btn-secondary w-100">
-                                            {{ __('web.common.delete') }}
-                                        </button>
-                                    </div>
-                                    <div class="col-6">
-                                        <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary w-100">
-                                            {{ __('web.common.cancel') }}
-                                        </a>
-                                    </div>
+<!-- Delete Modal -->
+<div class="modal new-modal fade" id="delete_modal" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="reviewDeleteForm">
+                @csrf
+                <input type="hidden" name="delete_id" id="delete_id">
+                <div class="modal-body">
+                    <div class="delete-action">
+                        <div class="delete-header">
+                            <h4>{{ __('web.user.delete_reviews') }}</h4>
+                            <p>{{ __('web.user.are_you_sure') }}</p>
+                        </div>
+                        <div class="modal-btn">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button type="submit" class="btn btn-secondary w-100">
+                                        {{ __('web.common.delete') }}
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary w-100">
+                                        {{ __('web.common.cancel') }}
+                                    </a>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Delete Modal -->
+
+<!-- Custom Date Modal -->
+<div class="modal new-modal fade" id="custom_date" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ __('web.common.custom_date') }}</h4>
+                <button type="button" class="close-btn" data-bs-dismiss="modal"><span>×</span></button>
+            </div>
+            <div class="modal-body">
+                <form action="#">
+                    <div class="modal-form-group">
+                        <label>{{ __('web.common.start_date') }} <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="custom_from_date">
+                    </div>
+                    <div class="modal-form-group">
+                        <label>{{ __('web.common.end_date') }} <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="custom_to_date">
+                    </div>
+                    <span class="text-danger error-text" id="custom_date_error"></span>
+                    <div class="modal-btn modal-btn-sm text-end">
+                        <a href="javascript:void(0);" id="apply-custom-filter" class="btn btn-primary">
+                            {{ __('web.common.apply') }}
+                        </a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <!-- /Delete Modal -->
-
-    <!-- Custom Date Modal -->
-    <div class="modal new-modal fade" id="custom_date" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">{{ __('web.common.custom_date') }}</h4>
-                    <button type="button" class="close-btn" data-bs-dismiss="modal"><span>×</span></button>
-                </div>
-                <div class="modal-body">
-                    <form action="#">
-                        <div class="modal-form-group">
-                            <label>{{ __('web.common.start_date') }} <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="custom_from_date">
-                        </div>
-                        <div class="modal-form-group">
-                            <label>{{ __('web.common.end_date') }} <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" id="custom_to_date">
-                        </div>
-                        <span class="text-danger error-text" id="custom_date_error"></span>
-                        <div class="modal-btn modal-btn-sm text-end">
-                            <a href="javascript:void(0);" id="apply-custom-filter" class="btn btn-primary">
-                                {{ __('web.common.apply') }}
-                            </a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Custom Date Modal -->
+</div>
+<!-- /Custom Date Modal -->
 @endsection
 
 @push('scripts')
-    <!-- Datatable JS -->
-    <script src="{{ asset('frontend/assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/plugins/datatables/datatables.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/custom/user/reviews.js') }}"></script>
+<!-- Datatable JS -->
+<script src="{{ asset('frontend/assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('frontend/assets/plugins/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('frontend/assets/js/custom/user/reviews.js') }}"></script>
 @endpush
