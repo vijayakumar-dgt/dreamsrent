@@ -127,7 +127,7 @@
                 <div class="col-lg-8">
                     <div class="detail-product">
                         <div class="pro-info">
-                            <div class="pro-badge">
+                            <div class="">
                                 <span class="badge-km d-none"><i class="fa-solid fa-person-walking"></i>4.2 Km Away</span>
                                 <a href="javascript:void(0);" class="fav-icon"><i class="fa-regular fa-heart"></i></a>
                             </div>
