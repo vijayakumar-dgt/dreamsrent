@@ -246,10 +246,15 @@ const setElementContent = (selector, content = "") => $(selector).html(content);
 const setImageSrc = (selector, src = "") => $(selector).attr("src", src);
 
 const renderButtons = data => {
+    let now = moment();
+    let start = moment(data.start_datetime);
+    let end = moment(data.end_datetime);
+    let showStartRideButton = now.isBetween(start, end, null, '[]'); // inclusive
+    
     switch (data.status) {
         case 4:
             return `<a href="javascript:void(0);" id="cancel_booking" data-id="${data.id}" class="btn btn-secondary">${_l('web.common.cancel')} ${_l('web.user.booking')}</a>
-                    <a href="javascript:void(0);" id="start_ride" data-id="${data.id}" class="btn btn-primary">${_l('web.user.start_ride')}</a>`;
+                    ${showStartRideButton ? `<a href="javascript:void(0);" id="start_ride" data-id="${data.id}" class="btn btn-primary">${_l('web.user.start_ride')}</a>` : ""}`;
         case 1:
             return `<button class="btn btn-light" data-bs-dismiss="modal">${_l('web.common.close')}</button>`;
         default:

@@ -706,6 +706,7 @@ return [
     'new_pass_must_be_diff' => 'يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمة المرور الحالية.',
     'no_data_found' => 'لم يتم العثور على بيانات',
     'not_available' => 'غير متوفر',
+    'not_yet' => 'ليس بعد',
     'account_deleted' => 'تم حذف حسابك.',
     'notify_me_when' => 'أبلغني عندما',
     'special_offers_discounts' => 'العروض والخصومات الخاصة',

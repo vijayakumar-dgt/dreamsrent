@@ -705,6 +705,7 @@ return [
         'new_pass_must_be_diff' => 'The new password and current password must be different.',
         'no_data_found' => 'No data found',
         'not_available' => 'Not Available',
+        'not_yet' => 'Not Yet',
         'account_deleted' => 'Your account has been deleted.',
         'notify_me_when' => 'Notify me when',
         'special_offers_discounts' => 'Special Offers & Discounts',

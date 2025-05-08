@@ -4,6 +4,10 @@
     let rtl = $('body').data('dir');
     let pl;
     let dl;
+    let pd;
+    let pt;
+    let rd;
+    let rt;
     let viewType = "grid";
     let page = 1;
     let pageLength = 12;
@@ -43,10 +47,13 @@
         }).get();
 
         let pickupdate = $("#pickupdate").val();
-        let pickuptime = $("#pickuptime").val()+":00" || "00:00:00"; // Default to midnight if empty
+        let pickuptime = $("#pickuptime").val() ? $("#pickuptime").val() + ":00" : ""; // Default to midnight if empty
         let returndate = $("#returndate").val();
-        let returntime = $("#returntime").val()+":59" || "23:59:59"; // Default to end of the day if empty
-
+        let returntime = $("#returntime").val() ? $("#returntime").val() + ":59" : ""; // Default to end of the day if empty
+        pd = pickupdate;
+        pt = pickuptime;
+        rd = returndate;
+        rt = returntime;
         pickupdate = formatDate(pickupdate);
         returndate = formatDate(returndate);
         let pickupdatetime = pickupdate + " " + pickuptime;
@@ -252,7 +259,7 @@
         }
         const vehicleImages = vehicle.multiple_vehicle_images.map(img =>
               `<div class="slide-images">
-                    <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}">
+                    <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">
                         <img src="${img}" class="img-fluid" alt="${ucfirst(vehicle.name ?? "")}">
                     </a>
                 </div>`
@@ -271,7 +278,7 @@
                     </div>
                 </div>`
               : `<div class="blog-img">
-                    <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}">
+                    <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">
                         <img src="${vehicle.multiple_vehicle_images[0]}" class="img-fluid" alt="${ucfirst(vehicle.name ?? "")}">
                     </a>
                     <div class="fav-item justify-content-end">
@@ -312,7 +319,7 @@
                                     <div class="card-body">
                                         <div class="blog-list-head d-flex">
                                             <div class="blog-list-title">
-                                                <h3><a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}">${ucfirst(vehicle.name)}</a></h3>
+                                                <h3><a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">${ucfirst(vehicle.name)}</a></h3>
                                                 <h6>${_l('web.common.category')} : <span>${ucfirst(vehicle.brand ?? "")}</span></h6>
                                             </div>
                                             <div class="blog-list-rate">
@@ -352,7 +359,7 @@
                                                 </div>
                                             </div>
                                             <div class="listing-button">
-                                                <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}" class="btn btn-order"><span><i class="feather-calendar me-2"></i></span>${_l('web.home.rent_now')}</a>
+                                                <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}" class="btn btn-order"><span><i class="feather-calendar me-2"></i></span>${_l('web.home.rent_now')}</a>
                                             </div>
                                         </div>
                                     </div>
@@ -398,7 +405,7 @@
 
         const vehicleImages = vehicle.multiple_vehicle_images.map(img =>
             `<div class="slide-images">
-                <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}">
+                <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">
                     <img src="${img}" class="img-fluid" alt="${vehicleName}">
                 </a>
             </div>`
@@ -414,7 +421,7 @@
                     <span class="featured-text">${vehicle.brand ?? "" }</span>
                 </div>`
             : `<div class="listing-img">
-                    <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}">
+                    <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">
                         <img src="${vehicle.multiple_vehicle_images[0]}" class="img-fluid" alt="${vehicleName}">
                     </a>
                     <div class="fav-item justify-content-end">
@@ -442,7 +449,7 @@
                  <a href="javascript:void(0)" class="author-img">
                     <img src="${vehicle.avatar_image ?? '/frontend/assets/img/profiles/avatar-03.jpg'}" alt="author">
                 </a>
-                <h3 class="listing-title"><a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}">${vehicleName}</a></h3>
+                <h3 class="listing-title"><a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">${vehicleName}</a></h3>
                     <div class="list-rating">
                         ${(() => {
                             const filledStars = Math.floor(vehicleRating);
@@ -468,7 +475,7 @@
                     <div class="listing-price"><h6>${currency}${price_value} <span> / ${ucfirst(price_type)}</span></h6></div>
                 </div>
                 <div class="listing-button">
-                    <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}" class="btn btn-order ${allowBooking != 1 ? 'disabled' : ''}">
+                    <a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}" class="btn btn-order ${allowBooking != 1 ? 'disabled' : ''}">
                         <span><i class="feather-calendar me-2"></i></span>${_l('web.home.rent_now')}
                     </a>
                 </div>
@@ -586,6 +593,8 @@ $(document).ready(function () {
         $input.val(initialPickupName);
 
         $suggestions.html(`<li data-id="${initialPickupId}" class="selected">${initialPickupName}</li>`);
+        // hide the suggestions
+        $suggestions.hide();
     }
     $input.on("keyup", function () {
         let query = $(this).val().trim().toLowerCase();
