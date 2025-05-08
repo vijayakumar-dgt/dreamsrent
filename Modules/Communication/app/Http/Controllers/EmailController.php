@@ -11,34 +11,36 @@ use Modules\Communication\Helpers\MailConfigurator;
 
 class EmailController extends Controller
 {
-    public function sendEmail(Request $request): JsonResponse
+    public function sendEmail(Request $request) : JsonResponse
     {
-        // ✅ Validate input to enforce correct types
-        $validated = $request->validate([
-            'to_email' => 'required|array',
-            'to_email.*' => 'email',
-            'subject' => 'required|string',
-            'content' => 'required|string',
-            'attachment' => 'nullable|string',
-        ]);
-
         MailConfigurator::configureMail();
 
-        $tomail = $validated['to_email'];
+        $tomail = $request->input('to_email');
+        $subject = $request->input('subject');
+        $content = $request->input('content');
+        $attachment = $request->input('attachment'); // Attachment path
+
         $data = [
-            'message' => $validated['content'],
-            'subject' => $validated['subject'],
-            'attachment' => $validated['attachment'] ?? null,
+            'message' => $content,
+            'subject' => $subject,
+            'attachment' => $attachment,
         ];
 
-        foreach ($tomail as $email) {
-            Mail::to($email)->send(new Samplemail($data));
+        if (empty($tomail)) {
+            return response()->json([
+                'code' => 400,
+                'message' => 'Recipient email is required.',
+            ], 400);
         }
 
-        return response()->json([
-            'code' => 200,
-            'message' => __('Email sent successfully.'),
-            'data' => [],
-        ], 200);
+        if (is_array($tomail)) {
+            foreach ($tomail as $email) {
+                Mail::to($email)->send(new Samplemail($data));
+            }
+        } else {
+            Mail::to($tomail)->send(new Samplemail($data));
+        }
+
+        return response()->json(['code' => 200, 'message' => __('Email sent successfully.'), 'data' => []], 200);
     }
 }
