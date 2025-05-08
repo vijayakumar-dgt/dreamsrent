@@ -270,7 +270,8 @@
                                                 '${value.category.id}',
                                                 '${value.priority}',
                                                 '${value.status}',
-                                                ${JSON.stringify(value.reply_description)}
+                                                ${JSON.stringify(value.reply_description)},
+                                                '${value.description}'
                                             ); showTicketHistory(${value.id});">
                                                 <i class="feather-edit me-1"></i>${_l('web.common.view_reply')}
                                             </a>
@@ -377,9 +378,9 @@ function showTicketHistory(ticketId) {
     $(".ticket_histroy").html(historyHtml);
 }
 
-function populateEditForm(ticketId, assigneeId, categoryId, priority, status, reply) {
+function populateEditForm(ticketId, assigneeId, categoryId, priority, status, reply, description) {
     $('#editTicketstatus').attr('data-ticket-id', ticketId);
-    $('#ticketid').val(ticketId);
+    $('#ticketid').val(ticketId);    
 
     $('#assignStaff').val(assigneeId).change();
 
@@ -390,6 +391,9 @@ function populateEditForm(ticketId, assigneeId, categoryId, priority, status, re
     $('#status').val(status).change();
 
     $('#reply').val(reply);
+    let plainText = $('<div>').html(description).text();
+    console.log(plainText);
+    $('.description').text(plainText);
 }
 
 function deleteTicket(id){

@@ -127,7 +127,7 @@
                                 <!-- Category -->
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="category" class="form-label">{{__('web.common.category')}} <span class="text-danger">*</span></label>
+                                        <label for="category" class="form-label">{{__('web.user.subject')}} <span class="text-danger">*</span></label>
                                         <select class="form-control select" id="category" name="category">
                                             <option value="">{{__('web.common.select')}}</option>
                                             @foreach($category as $categorys)
@@ -214,6 +214,8 @@
                                 <div class="modal-body pb-1">
                                     <div class="row">
                                         <input type="hidden" name="ticketid" id="ticketid">
+                                        <label class="form-label">{{__('web.user.description')}}</label>
+                                        <p class="description mb-3" id="description"></p>
                                         <!-- Hidden Status Field -->
                                         <div class="col-md-6 d-none">
                                             <div class="mb-3">
