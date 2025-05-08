@@ -4,7 +4,6 @@
     (async () => {
         await loadTranslationFile('web', 'home');
         initLocationSearch();
-        fetchNotifications();
     })();
 
     function initLocationSearch() {
@@ -97,45 +96,4 @@
         });
     });
     
-    function fetchNotifications() {
-        $.ajax({
-            type: "GET",
-            url: "/user/get-notifications",
-            dataType: "json",
-            success: function (response) {
-                $(".notification-list").html(response.html);
-                if(response.count > 0){
-                    $("#newNotificationBadge").removeClass("d-none");
-                    $(".has-notification").removeClass("d-none");
-                }else{
-                    $("#newNotificationBadge").addClass("d-none");
-                    $(".has-notification").addClass("d-none");
-                }
-            },
-            error: function (error) {
-                console.error(error);
-            }
-        });
-    }
-    $(document).on("click", "#markAllAsRead", function () {
-        $.ajax({
-            type: "POST",
-            url: "/user/mark-all-notifications-as-read",
-            data: {
-                _token: $('meta[name="csrf-token"]').attr("content")
-            },
-            dataType: "json",
-            success: function (response) {
-                if(response.code === 200){
-                  showToast(response.status, response.message);
-                  fetchNotifications();
-                }else{
-                  showToast(response.status, response.message);
-                }
-            },
-            error: function (error) {
-                console.error(error);
-            }
-        });
-    }); 
 })();
