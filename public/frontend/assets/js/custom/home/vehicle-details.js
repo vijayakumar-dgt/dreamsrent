@@ -310,11 +310,12 @@ if ($(".bookingpickupdate").length > 0) {
     }).on("dp.change", function (e) {
         const pickupDate = e.date;
         const returnDate = $(".bookingreturndate").data("DateTimePicker").date();
-
+        
         if (pickupDate && pickupDate.isSame(moment(), "day")) {
             $(".booking_timepicker").data("DateTimePicker").minDate(moment());
         } else {
             $(".booking_timepicker").data("DateTimePicker").minDate(false);
+            
         }
 
         if (pickupDate) {
@@ -342,7 +343,6 @@ if ($(".booking_timepicker").length > 0) {
             previous: "fas fa-angle-left",
         },
         stepping: 15, // Set interval to 15 minutes
-        minDate: moment(), // Ensure no past times can be selected
     }).on("dp.change", function (e) {
         const pickupTime = e.date;
         const pickupDate = $(".bookingpickupdate").data("DateTimePicker").date();
@@ -380,9 +380,9 @@ if ($(".bookingreturndate").length > 0) {
     }).on("dp.change", function (e) {
         const returnDate = e.date;
         const pickupDate = $(".bookingpickupdate").data("DateTimePicker").date();
-
+        
         if (!pickupDate || !returnDate) return;
-
+        
         const returnOnly = returnDate.clone().startOf("day");
         const pickupOnly = pickupDate.clone().startOf("day");
 
@@ -395,7 +395,9 @@ if ($(".bookingreturndate").length > 0) {
                 const minReturnTime = moment(pickupTime).add(1, "hour");
                 $(".booking_return_timepicker").data("DateTimePicker").minDate(minReturnTime);
             }
+            
         } else if (returnOnly.isSame(moment(), "day")) {
+            
             $(".booking_return_timepicker").data("DateTimePicker").minDate(moment().add(1, "hour"));
         } else {
             $(".booking_return_timepicker").data("DateTimePicker").minDate(false);
@@ -414,13 +416,12 @@ if ($(".booking_return_timepicker").length > 0) {
             previous: "fas fa-angle-left",
         },
         stepping: 15, // 15-minute interval
-        minDate: moment(), // Ensure return time cannot be in the past
     }).on("dp.change", function (e) {
         const returnTime = e.date;
         const pickupTime = $(".booking_timepicker").data("DateTimePicker").date();
         const pickupDate = $(".bookingpickupdate").data("DateTimePicker").date();
         const returnDate = $(".bookingreturndate").data("DateTimePicker").date();
-
+      
         if (
             pickupDate &&
             returnDate &&
@@ -802,7 +803,6 @@ function fetchVehicleDetails() {
 }
 
 function populateVehicleDetails(vehicle) {
-    console.log(vehicle.num_doors);
     $(".vehicle_name").text(vehicle.name ?? "");
     $(".vehicle_type").text(vehicle.car_type ?? "");
     $(".vehicle_year").text(vehicle.year ?? "");
@@ -882,8 +882,40 @@ function renderPriceDetails(vehicle) {
     });
 
     $(".price_options").html(priceOptions);
-    $(".price-rate-option").on("change", handlePriceChange);
-    $(".price-rate-option:checked").trigger("change");
+    let has_pickup_date =  $("#has_pickup_date").val();
+    if(!has_pickup_date){
+        $(".price-rate-option").on("change", handlePriceChange);
+        $(".price-rate-option:checked").trigger("change");
+        setTimeout(() => {
+            let $picker = $(".bookingpickupdate");
+            $picker.trigger("dp.change");
+            let $booking_timepicker = $(".booking_timepicker");
+            $booking_timepicker.data("DateTimePicker").minDate(moment());
+            let $bookingreturndate = $(".bookingreturndate");
+            $bookingreturndate.trigger("dp.change");
+            $(".bookingpickupdate").trigger("focus");
+            $(".bookingpickupdate").trigger("blur");
+            $(".bookingreturndate").trigger("focus");
+            $(".bookingreturndate").trigger("blur");
+        }, 500);
+    }else{
+        setTimeout(function () {
+            let $picker = $(".bookingpickupdate");
+            let $booking_timepicker = $(".booking_timepicker");
+            let pickup_time = $booking_timepicker.data("DateTimePicker").date();
+            $picker.trigger("dp.change");
+            setTimeout(function () {
+                $booking_timepicker.data("DateTimePicker").date(pickup_time);
+                $booking_timepicker.trigger("dp.change");
+            }, 100);
+            $(".bookingpickupdate").trigger("focus");
+            $(".bookingpickupdate").trigger("blur");
+            $(".bookingreturndate").trigger("focus");
+            $(".bookingreturndate").trigger("blur");
+
+        }, 500);
+        
+    }
 }
 
 function handlePriceChange() {

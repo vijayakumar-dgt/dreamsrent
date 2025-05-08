@@ -790,6 +790,7 @@
                                                 </div>
                                             </li>
                                         </div>
+                                        <input type="hidden" id="has_pickup_date" value="{{request()->has('pd') ? request()->pd : ''}}">
                                         <li class="column-group-main">
                                             <div class="input-block m-0">
                                                 <label>{{__('web.home.pickup_date')}}</label>
@@ -798,7 +799,7 @@
                                                 <div class="input-block  me-lg-2">
                                                     <div class="group-img">
                                                         <div class="form-wrap">
-                                                            <input type="text" name="pickup_date" id="pickup_date" class="form-control bookingpickupdate" placeholder="dd-mm-yyyy">
+                                                            <input type="text" name="pickup_date" id="pickup_date" class="form-control bookingpickupdate" placeholder="dd-mm-yyyy" value="{{ request()->has('pd') ? request()->pd : '' }}">
                                                             <span class="form-icon">
                                                                 <i class="fa-regular fa-calendar-days"></i>
                                                             </span>
@@ -808,7 +809,7 @@
                                                 <div class="input-block">
                                                     <div class="group-img">
                                                         <div class="form-wrap">
-                                                            <input type="text" name="pickup_time" id="pickup_time" class="form-control booking_timepicker" placeholder="hh:mm">
+                                                            <input type="text" name="pickup_time" id="pickup_time" class="form-control booking_timepicker" placeholder="hh:mm" value="{{ request()->has('pt') ? request()->pt : '' }}">
                                                             <span class="form-icon">
                                                                 <i class="fa-regular fa-clock"></i>
                                                             </span>
@@ -824,7 +825,7 @@
                                                 <div class="input-block me-lg-2">
                                                     <div class="group-img">
                                                         <div class="form-wrap">
-                                                            <input type="text" id="return_date" name="return_date" class="form-control bookingreturndate" placeholder="00-00-0000" readonly>
+                                                            <input type="text" id="return_date" name="return_date" class="form-control bookingreturndate" placeholder="00-00-0000" readonly value="{{ request()->has('rd') ? request()->rd : '' }}">
                                                             <span class="form-icon">
                                                                 <i class="fa-regular fa-calendar-days"></i>
                                                             </span>
@@ -834,7 +835,7 @@
                                                 <div class="input-block">
                                                     <div class="group-img">
                                                         <div class="form-wrap">
-                                                            <input type="text" name="return_time" id="return_time" class="form-control booking_return_timepicker" placeholder="00:00" readonly>
+                                                            <input type="text" name="return_time" id="return_time" class="form-control booking_return_timepicker" placeholder="00:00" readonly value="{{ request()->has('rt') ? request()->rt : '' }}">
                                                             <span class="form-icon">
                                                                 <i class="fa-regular fa-clock"></i>
                                                             </span>

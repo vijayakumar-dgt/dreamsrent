@@ -202,7 +202,7 @@
     }
 
     function updateLastChangedInfo(data) {
-        const lastPasswordChanged = data.last_password_changed_at || '';
+        const lastPasswordChanged = data.last_password_changed_at || _l('web.user.not_yet');
         const lastDeletedAt = data.deleted_at || _l('web.user.not_available');
         const lastDeviceManagement = (data.devices?.[0]?.date) || _l('web.user.not_available');
 
