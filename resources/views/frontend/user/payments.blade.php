@@ -98,21 +98,21 @@
                                     <tr>
                                         @for ($i = 0; $i < 7; $i++)
                                             <th>
-                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            <div class="skeleton data-skeleton label-loader"></div>
                                             </th>
-                                        @endfor
+                                            @endfor
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @for ($i = 0; $i < 5; $i++)
                                         <tr>
-                                            @for ($j = 0; $j < 7; $j++)
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
+                                        @for ($j = 0; $j < 7; $j++)
+                                            <td>
+                                            <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
                                             @endfor
-                                        </tr>
-                                    @endfor
+                                            </tr>
+                                            @endfor
                                 </tbody>
                             </table>
                         </div>
