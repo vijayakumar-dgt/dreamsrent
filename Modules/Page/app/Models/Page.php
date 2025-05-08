@@ -3,10 +3,8 @@
 namespace Modules\Page\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\Page\Database\Factories\PageFactory;
 /**
  * @property int|null $theme_id
  * @property int|null $parent_id

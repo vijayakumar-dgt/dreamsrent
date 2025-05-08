@@ -8,7 +8,7 @@
                 <h2 class="breadcrumb-title">{{ __('web.user.user_dashboard') }}</h2>
                 <nav aria-label="breadcrumb" class="page-breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">{{ __('web.home.home') }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('web.home.home') }}</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{ __('web.user.user_dashboard') }}</li>
                     </ol>
                 </nav>
@@ -202,5 +202,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('frontend/assets/js/custom/user/dashboard.js?v=1.1') }}"></script>
+<script src="{{ asset('frontend/assets/js/custom/user/dashboard.js') }}"></script>
 @endpush

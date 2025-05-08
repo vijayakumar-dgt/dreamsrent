@@ -5,8 +5,6 @@ namespace Modules\CarInfo\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\CarInfo\Database\Factories\CarColorFactory;
-
 class CarColor extends Model
 {
     use SoftDeletes;
@@ -18,8 +16,4 @@ class CarColor extends Model
 
     protected $fillable = ["name", "language_id", "value", "status"];
 
-    // protected static function newFactory(): CarColorFactory
-    // {
-    //     // return CarColorFactory::new();
-    // }
 }
