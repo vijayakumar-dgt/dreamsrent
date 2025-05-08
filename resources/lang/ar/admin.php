@@ -634,7 +634,6 @@ return [
     'signature_characters' => 'يجب أن يتكون التوقيع من 10 أحرف على الأقل',
     'signature_name' => 'الرجاء إدخال اسم التوقيع',
     'enter_url' => 'الرجاء إدخال الرابط',
-    'enter_valid_url' => 'الرجاء إدخال رابط صحيح',
     'url_least_characters' => 'يجب أن يتكون الرابط من 10 أحرف على الأقل',
     'url_most_characters' => 'يجب أن يتكون الرابط من 255 حرفًا على الأكثر',
     'failed_storage_setting' => 'فشل في تحديث إعدادات التخزين',
