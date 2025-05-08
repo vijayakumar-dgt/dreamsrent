@@ -823,7 +823,7 @@
                                                     <div class="input-block me-lg-2">
                                                         <div class="group-img">
                                                             <div class="form-wrap">
-                                                                <input type="text" id="return_date" name="return_date" class="form-control bookingreturndate" placeholder="00-00-0000" readonly value="{{ request()->has('rd') ? request()->rd : '' }}">
+                                                                <input type="text" id="return_date" name="return_date" class="form-control bookingreturndate" placeholder="00-00-0000" value="{{ request()->has('rd') ? request()->rd : '' }}">
                                                                 <span class="form-icon">
                                                                     <i class="fa-regular fa-calendar-days"></i>
                                                                 </span>
@@ -833,7 +833,7 @@
                                                     <div class="input-block">
                                                         <div class="group-img">
                                                             <div class="form-wrap">
-                                                                <input type="text" name="return_time" id="return_time" class="form-control booking_return_timepicker" placeholder="00:00" readonly value="{{ request()->has('rt') ? request()->rt : '' }}">
+                                                                <input type="text" name="return_time" id="return_time" class="form-control booking_return_timepicker" placeholder="00:00" value="{{ request()->has('rt') ? request()->rt : '' }}">
                                                                 <span class="form-icon">
                                                                     <i class="fa-regular fa-clock"></i>
                                                                 </span>

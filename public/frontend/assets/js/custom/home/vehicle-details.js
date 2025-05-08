@@ -314,18 +314,18 @@ if ($(".bookingpickupdate").length > 0) {
         if (pickupDate && pickupDate.isSame(moment(), "day")) {
             $(".booking_timepicker").data("DateTimePicker").minDate(moment());
         } else {
-            $(".booking_timepicker").data("DateTimePicker").minDate(false);
-            
+            $(".booking_timepicker").data("DateTimePicker").minDate(false);     
         }
 
         if (pickupDate) {
             const pickupOnly = pickupDate.clone().startOf("day");
+            $(".bookingreturndate").data("DateTimePicker").date(null);
             $(".bookingreturndate").data("DateTimePicker").minDate(pickupOnly);
         }
 
         if (returnDate) {
             const returnOnly = returnDate.clone().startOf("day");
-            $(".bookingpickupdate").data("DateTimePicker").maxDate(returnOnly);
+            // $(".bookingpickupdate").data("DateTimePicker").maxDate(returnOnly);
         } else {
             $(".bookingpickupdate").data("DateTimePicker").maxDate(false);
         }
@@ -386,7 +386,7 @@ if ($(".bookingreturndate").length > 0) {
         const returnOnly = returnDate.clone().startOf("day");
         const pickupOnly = pickupDate.clone().startOf("day");
 
-        $(".bookingpickupdate").data("DateTimePicker").maxDate(returnOnly);
+        // $(".bookingpickupdate").data("DateTimePicker").maxDate(returnOnly);
         $(".bookingreturndate").data("DateTimePicker").minDate(pickupOnly);
 
         if (returnOnly.isSame(pickupOnly, "day")) {
@@ -951,8 +951,8 @@ function handlePriceChange() {
             break;
     }
 
-    $("#return_date").val(returnDateTime.format("DD-MM-YYYY"));
-    $("#return_time").val(returnDateTime.format("HH:mm"));
+    // $("#return_date").val(returnDateTime.format("DD-MM-YYYY"));
+    // $("#return_time").val(returnDateTime.format("HH:mm"));
 
     if (selectedPriceType === "daily") {
         let pickupDateTime = moment($("#pickup_date").val(), "DD-MM-YYYY");
@@ -1457,8 +1457,8 @@ $(document).ready(function () {
                     return;
             }
 
-            $("#return_date").val(returnDateTime.format("DD-MM-YYYY"));
-            $("#return_time").val(returnDateTime.format("HH:mm"));
+            // $("#return_date").val(returnDateTime.format("DD-MM-YYYY"));
+            // $("#return_time").val(returnDateTime.format("HH:mm"));
 
             $("#final_price_rate").val(dailyPrice.toFixed(2)); // Update price
         }
