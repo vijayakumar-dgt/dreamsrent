@@ -46,7 +46,7 @@
                                             <div class="post-author-img">
                                                 @php
                                                     $imagePath = 'storage/' . $blogPost->profile_image;
-                                                    $defaultImage = asset('assets/img/default-profile.png');
+                                                    $defaultImage = asset('/backend/assets/img/default-profile.png');
                                                 @endphp
                                                 <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="author">
                                             </div>
@@ -78,7 +78,7 @@
                 <div class="rightsidebar">
                     <div class="card">
                         <h4>
-                            <img src="assets/img/icons/details-icon.svg" alt="details-icon"> {{__('web.blog.filter')}}
+                            <img src="/backend/assets/img/icons/details-icon.svg" alt="details-icon"> {{__('web.blog.filter')}}
                         </h4>
                         <div class="filter-content looking-input input-block mb-0">
                             <input type="text" id="blogSearch" class="form-control" placeholder="To Search type and hit enter">
@@ -86,7 +86,7 @@
                     </div>
                     <div class="card">
                         <h4>
-                            <img src="assets/img/icons/category-icon.svg" alt="details-icon"> {{__('web.blog.categories')}}
+                            <img src="/backend/assets/img/icons/category-icon.svg" alt="details-icon"> {{__('web.blog.categories')}}
                         </h4>
                         <ul class="blogcategories-list">
                             @foreach($categories as $category)
@@ -114,7 +114,7 @@
                                 <a href="/blog-details/{{$latest->id}}">
                                     @php
                                         $imagePath = 'storage/' . $latest->image;
-                                        $defaultImage = asset('assets/img/default-profile.png');
+                                        $defaultImage = asset('/backend/assets/img/default-profile.png');
                                     @endphp
                                     <img class="img-fluid" src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Post Image">
                                 </a>

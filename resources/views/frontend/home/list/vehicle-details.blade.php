@@ -663,7 +663,7 @@
             </div>
             <div class="col-lg-4 theiaStickySidebar">
                 <div class="review-sec mt-0">
-                    <form id="validateVehicleBook" autocomplete="off" method="POST" action="{{ route('booking.checkout', ['slug' => $slug]) }}">
+                    <form id="validateVehicleBook"  method="POST" action="{{ route('booking.checkout', ['slug' => $slug]) }}">
                         @csrf
 
                         <div class="review-header">

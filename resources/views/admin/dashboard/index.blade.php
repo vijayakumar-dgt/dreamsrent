@@ -284,7 +284,7 @@
                                                     <img src="{{ uploadedAsset($imagePath, 'profile') }}" alt="img" class="rounded-circle">
                                                 </a>
                                                 <div class="flex-grow-1 ms-2">
-                                                    <h6 class="fs-14 fw-semibold mb-1"><a href="javascript:void(0);">{{$user->name}}</a></h6>
+                                                    <h6 class="fs-14 fw-semibold mb-1"><a href="javascript:void(0);">{{ucfirst($user->name)}}</a></h6>
                                                 </div>
                                             </div>
                                         </td>

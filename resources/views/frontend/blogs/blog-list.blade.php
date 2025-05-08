@@ -31,7 +31,7 @@
                 <div class="rightsidebar">
                     <div class="card">
                         <h4>
-                            <img src="assets/img/icons/details-icon.svg" alt="details-icon">
+                            <img src="/backend/assets/img/icons/details-icon.svg" alt="details-icon">
                             {{ __('web.blog.filter') }}
                         </h4>
                         <div class="filter-content looking-input input-block mb-0">
@@ -40,7 +40,7 @@
                     </div>
                     <div class="card">
                         <h4>
-                            <img src="assets/img/icons/category-icon.svg" alt="details-icon">
+                            <img src="/backend/assets/img/icons/category-icon.svg" alt="details-icon">
                             {{ __('web.blog.categories') }}
                         </h4>
                         <ul class="blogcategories-list">
@@ -84,7 +84,7 @@
                                         <a href="/blog-details/{{ $latest->slug }}">
                                             @php
                                                 $imagePath = 'storage/' . $latest->image;
-                                                $defaultImage = asset('assets/img/default-profile.png');
+                                                $defaultImage = asset('/backend/assets/img/default-profile.png');
                                             @endphp
                                             <img class="img-fluid" src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Post Image">
                                         </a>
