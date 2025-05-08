@@ -264,7 +264,7 @@ $(document).ready(function () {
                                     data-next="${nextId}"
                                     data-previous="${prevId}"
                                     maxlength="1"
-                                    autocomplete="off">
+                                    >
                             `;
                         }
                         inputsHtml += "</div>";

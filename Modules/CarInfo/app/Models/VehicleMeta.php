@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\CarInfo\Database\Factories\VehicleMetaFactory;
 /**
  * @property int $id
  * @property int $vehicle_id
@@ -27,9 +26,4 @@ class VehicleMeta extends Model
         'key',
         'value',
     ];
-
-    // protected static function newFactory(): VehicleMetaFactory
-    // {
-    //     // return VehicleMetaFactory::new();
-    // }
 }

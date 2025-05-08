@@ -189,9 +189,8 @@
                 });
             }
         });
-    
-    
     });
+
     function menuTable() {
         $.ajax({
             url: "/admin/menus/list",
@@ -328,9 +327,37 @@
             },
         });
     }
+
+    $("#deleteMenu").on('submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            url:"/admin/menus/delete",
+            type:"POST",
+            data: {
+                id: $('#delete_id').val()
+            },
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if(response.code === 200){
+                    showToast('success', response.message);
+                    $("#delete_menu").modal('hide');
+                    menuTable();
+                }
+            },
+            error: function(res) {
+                if(res.responseJSON.code === 500){
+                    showToast('error', res.responseJSON.message);
+                } else {
+                    showToast('error', _l('admin.common.default_delete_error'));
+                }
+            }
+        });
+    });
     
 })();
-
 
 function editMenu(id, name, permalink, status, languageId, menu_type) {
     $(".form-control").removeClass("is-invalid is-valid");
@@ -350,38 +377,8 @@ function menuManagement(id, name, permalink, status, languageId) {
     window.location.href = "/admin/menu-management";
 }
 
-
 function deleteMenu(id){
     $("#delete_id").val(id);
 }
-
-$("#deleteMenu").on('submit', function(e){
-    e.preventDefault();
-    $.ajax({
-        url:"/admin/menus/delete",
-        type:"POST",
-        data: {
-            id: $('#delete_id').val()
-        },
-        headers: {
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(response) {
-            if(response.code === 200){
-                showToast('success', response.message);
-                $("#delete_menu").modal('hide');
-                menuTable();
-            }
-        },
-        error: function(res) {
-            if(res.responseJSON.code === 500){
-                showToast('error', res.responseJSON.message);
-            } else {
-                showToast('error', _l('admin.common.default_delete_error'));
-            }
-        }
-    });
-});
 
 

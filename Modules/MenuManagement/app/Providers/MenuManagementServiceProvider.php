@@ -43,7 +43,7 @@ class MenuManagementServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        // $this->commands([]);
+        
     }
 
     /**
@@ -51,10 +51,7 @@ class MenuManagementServiceProvider extends ServiceProvider
      */
     protected function registerCommandSchedules(): void
     {
-        // $this->app->booted(function () {
-        //     $schedule = $this->app->make(Schedule::class);
-        //     $schedule->command('inspire')->hourly();
-        // });
+       
     }
 
     /**

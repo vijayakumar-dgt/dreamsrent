@@ -5,7 +5,6 @@ namespace Modules\CarInfo\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\CarInfo\Database\Factories\FeatureFactory;
 
 class Feature extends Model
 {
@@ -16,8 +15,4 @@ class Feature extends Model
      */
     protected $fillable = [];
 
-    // protected static function newFactory(): FeatureFactory
-    // {
-    //     // return FeatureFactory::new();
-    // }
 }

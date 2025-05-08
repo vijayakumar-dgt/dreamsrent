@@ -212,7 +212,9 @@
 
                     $.each(data, function(index, value) {
                         let subjectName = value.category ? value.category.name : _l('web.user.no_subject');
-                        let assigneeName = value.assignee ? value.assignee.name : _l('web.user.unassigned');
+                        let assigneeName = value.assignee && value.assignee.user_detail
+                        ? value.assignee.user_detail.first_name + ' ' + value.assignee.user_detail.last_name
+                        : (value.assignee ? value.assignee.name : _l('web.user.unassigned'));
                         let createdDate = new Date(value.created_at).toLocaleDateString();
                         let assigneeImage = value.assignee?.user_detail?.profile_image
                         ? "/storage/" + value.assignee.user_detail.profile_image
@@ -268,7 +270,8 @@
                                                 '${value.category.id}',
                                                 '${value.priority}',
                                                 '${value.status}',
-                                                ${JSON.stringify(value.reply_description)}
+                                                ${JSON.stringify(value.reply_description)},
+                                                '${value.description}'
                                             ); showTicketHistory(${value.id});">
                                                 <i class="feather-edit me-1"></i>${_l('web.common.view_reply')}
                                             </a>
@@ -299,7 +302,7 @@
                 // Initialize DataTable
                 if (response.data.length > 0) {
                     $('#ticketTable').DataTable({
-                        ordering: true,
+                        ordering: false,
                         searching: false,
                         pageLength: 10,
                         lengthChange: false,
@@ -375,9 +378,9 @@ function showTicketHistory(ticketId) {
     $(".ticket_histroy").html(historyHtml);
 }
 
-function populateEditForm(ticketId, assigneeId, categoryId, priority, status, reply) {
+function populateEditForm(ticketId, assigneeId, categoryId, priority, status, reply, description) {
     $('#editTicketstatus').attr('data-ticket-id', ticketId);
-    $('#ticketid').val(ticketId);
+    $('#ticketid').val(ticketId);    
 
     $('#assignStaff').val(assigneeId).change();
 
@@ -388,6 +391,11 @@ function populateEditForm(ticketId, assigneeId, categoryId, priority, status, re
     $('#status').val(status).change();
 
     $('#reply').val(reply);
+    let plainText = $('<div>').html(description).text();
+
+    plainText = plainText.charAt(0).toUpperCase() + plainText.slice(1);
+    
+    $('.description').text(plainText);
 }
 
 function deleteTicket(id){

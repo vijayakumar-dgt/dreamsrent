@@ -9,7 +9,7 @@
                 <h2 class="breadcrumb-title">{{ __('web.user.user_settings') }}</h2>
                 <nav aria-label="breadcrumb" class="page-breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">{{ __('web.home.home') }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('web.home.home') }}</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{ __('web.user.user_settings') }}</li>
                     </ol>
                 </nav>
@@ -181,52 +181,65 @@
 <!-- /Page Content -->
 
 <!-- Change-password -->
-<div class="modal fade addmodal" id="change_password">
+<div class="modal fade" id="change_password" tabindex="-1" aria-labelledby="changePasswordLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
             <form action="" id="changePasswordForm">
                 @csrf
                 <div class="modal-header">
-                    <h4 class="mb-0">{{ __('web.user.change_password') }}</h4>
-                    <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti ti-x fs-16"></i>
-                    </button>
+                    <h5 class="modal-title" id="changePasswordLabel">{{ __('web.user.change_password') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body">
+                    <!-- Current Password -->
                     <div class="mb-3">
-                        <label class="form-label">{{ __('web.user.current_password') }} <span class="text-danger">*</span></label>
-                        <div class="pass-group">
-                            <input type="password" class="pass-inputs form-control" name="current_password" id="current_password">
-                            <span class="ti toggle-passwords ti-eye-off"></span>
-                            <span class="current_password_error text-danger error-text" id="current_password_error"></span>
-                            <span class="password-success text-success" id="passwordSuccess"></span>
+                        <label for="current_password" class="form-label">
+                            {{ __('web.user.current_password') }} <span class="text-danger">*</span>
+                        </label>
+                        <div class="position-relative">
+                            <input type="password" class="form-control" name="current_password" id="current_password">
+                            <span class="ti toggle-passwords ti-eye-off position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer"></span>
                         </div>
+                        <span class="text-danger error-text" id="current_password_error"></span>
+                        <span class="text-success" id="passwordSuccess"></span>
                     </div>
-                    <div class="input-block mb-3">
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('web.user.new_password') }} <span class="text-danger">*</span></label>
-                            <div class="pass-group" id="passwordInput">
-                                <input type="password" class="form-control pass-input" name="new_password" id="new_password">
-                                <span class="ti toggle-password ti-eye-off"></span>
-                                <span class="new_password_error text-danger error-text" id="new_password_error"></span>
-                            </div>
-                        </div>
-                    </div>
+
+                    <!-- New Password -->
                     <div class="mb-3">
-                        <label class="form-label">{{ __('web.user.confirm_password') }} <span class="text-danger">*</span></label>
-                        <div class="pass-group">
-                            <input type="password" class="pass-inputa form-control" name="confirm_password" id="confirm_password">
-                            <span class="ti toggle-passworda ti-eye-off"></span>
-                            <span class="confirm_password_error text-danger error-text" id="confirm_password_error"></span>
+                        <label for="new_password" class="form-label">
+                            {{ __('web.user.new_password') }} <span class="text-danger">*</span>
+                        </label>
+                        <div class="position-relative">
+                            <input type="password" class="form-control" name="new_password" id="new_password">
+                            <span class="ti toggle-password ti-eye-off position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer"></span>
                         </div>
+                        <span class="text-danger error-text" id="new_password_error"></span>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">
+                            {{ __('web.user.confirm_password') }} <span class="text-danger">*</span>
+                        </label>
+                        <div class="position-relative">
+                            <input type="password" class="form-control" name="confirm_password" id="confirm_password">
+                            <span class="ti toggle-passworda ti-eye-off position-absolute top-50 end-0 translate-middle-y me-3 cursor-pointer"></span>
+                        </div>
+                        <span class="text-danger error-text" id="confirm_password_error"></span>
+                    </div>
+
+                    <div class="modal-footer d-flex justify-content-end">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">
+                            {{ __('web.common.cancel') }}
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-sm submitbtn">
+                            {{ __('web.user.save_changes') }}
+                        </button>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('web.common.cancel') }}</button>
-                        <button class="btn btn-primary submitbtn">{{ __('web.user.save_changes') }}</button>
-                    </div>
-                </div>
+
+
             </form>
         </div>
     </div>
@@ -234,20 +247,19 @@
 <!-- /Change-password -->
 
 <!-- deviceManagement -->
-<div class="modal fade addmodal" id="device_management">
+<div class="modal fade" id="device_management" tabindex="-1" aria-labelledby="deviceManagementLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <form action="" id="deviceManagement">
                 @csrf
                 <div class="modal-header">
-                    <h4 class="mb-0">{{ __('web.user.device_management') }}</h4>
-                    <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti ti-x fs-16"></i>
-                    </button>
+                    <h5 class="modal-title" id="deviceManagementLabel">{{ __('web.user.device_management') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body">
-                    <div class="custom-datatable-filter table-responsive brandstable security-table">
-                        <table class="table" id="userDevicesTable">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="userDevicesTable">
                             <thead class="thead-light">
                                 <tr>
                                     <th>{{ strtoupper(__('web.user.device')) }}</th>
@@ -259,12 +271,14 @@
                             <tbody></tbody>
                         </table>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('web.common.close') }}</button>
+
+                    <div class="modal-footer d-flex justify-content-end mt-1">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">
+                            {{ __('web.common.close') }}
+                        </button>
                     </div>
                 </div>
+
             </form>
         </div>
     </div>

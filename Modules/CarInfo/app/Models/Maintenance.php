@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\CarInfo\Database\Factories\MaintananceFactory;
 /**
  * @property int $id
  * @property int $vehicle_id

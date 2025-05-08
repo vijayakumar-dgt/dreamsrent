@@ -3,8 +3,6 @@
 namespace Modules\CarInfo\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
-// use Modules\CarInfo\Database\Factories\LocationWorkingDayFactory;
 /**
  * @property int $id
  * @property int $location_id
@@ -20,8 +18,4 @@ class LocationWorkingDay extends Model
      */
     protected $fillable = [];
 
-    // protected static function newFactory(): LocationWorkingDayFactory
-    // {
-    //     // return LocationWorkingDayFactory::new();
-    // }
 }

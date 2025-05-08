@@ -1014,7 +1014,6 @@ class CarInfoController extends Controller
             "recommended"
         );
 
-        // $adminID = Auth::guard('web')->user()->id;
 
         // Apply filters if provided
         if (!is_null($request->name)) {

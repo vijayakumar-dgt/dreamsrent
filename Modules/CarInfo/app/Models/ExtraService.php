@@ -5,8 +5,6 @@ namespace Modules\CarInfo\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// use Modules\CarInfo\Database\Factories\ExtraServiceFactory;
-
 /**
  *  @property int $id
  *  @property string $name
@@ -31,8 +29,4 @@ class ExtraService extends Model
      */
     protected $fillable = ["name", "language_id", "icon", "description", "image"];
 
-    // protected static function newFactory(): ExtraServiceFactory
-    // {
-    //     // return ExtraServiceFactory::new();
-    // }
 }
