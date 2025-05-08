@@ -85,77 +85,95 @@
                 </div>
             </div>
             <!-- /Sort By -->
-    <div class="row">
-        <!-- All Bookings -->
-        <div class="col-lg-12 d-flex" id="booking_list">
-            <div class="card flex-fill mb-0">
-                <div class="card-header">
-                    <div class="row align-items-center">
-                        <div class="col-md-5">
-                            <h5>{{__('web.user.all_bookings')}} <span id="totalBookingCount" class="badge bg-success">{{ $totalBookingCount }}</span></h5>
+            <div class="row">
+                <!-- All Bookings -->
+                <div class="col-lg-12 d-flex" id="booking_list">
+                    <div class="card flex-fill mb-0">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col-md-5">
+                                    <h5>{{__('web.user.all_bookings')}} <span id="totalBookingCount" class="badge bg-success">{{ $totalBookingCount }}</span></h5>
+                                </div>
+                                <div class="col-md-7 text-md-end">
+                                    <div class="table-search">
+                                        <div id="tablefilter"></div>
+                                        <a href="/vehicles" class="btn btn-add mb-0"><i class="feather-plus-circle"></i>{{__('web.user.add_booking')}}</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-7 text-md-end">
-                            <div class="table-search">
-                                <div id="tablefilter"></div>
-                                <a href="/vehicles" class="btn btn-add mb-0"><i class="feather-plus-circle"></i>{{__('web.user.add_booking')}}</a>
+                        <div class="card-body">
+                            <div class="custom-datatable-filter table-responsive table-loader d-none">
+                                <table class="table table-bordered" id="booking-loader-table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>
+                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
+                                            <th>
+                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
+                                            <th>
+                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
+                                            <th>
+                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
+                                            <th>
+                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
+                                            <th>
+                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
+                                            <th>
+                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
+                                            <th>
+                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
+                                            <th>
+                                                <div class="skeleton data-skeleton label-loader"></div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive dashboard-table d-none real-table">
+                                <table class="table" id="bookingTable">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="booking-headers">{{__('web.user.booking_id')}}</th>
+                                            <th>{{__('web.user.vehicle_name')}}</th>
+                                            <th>{{__('web.common.rental_type')}}</th>
+                                            <th>{{__('web.user.pickup_del_location')}}</th>
+                                            <th>{{ __('web.user.drop_location') }}</th>
+                                            <th>{{__('web.user.booked_on')}}</th>
+                                            <th>{{__('web.common.total')}}</th>
+                                            <th>{{__('web.common.status')}}</th>
+                                            <th>{{__('web.common.action')}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="custom-datatable-filter table-responsive table-loader d-none">
-                        <table class="table table-bordered" id="booking-loader-table">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th><div class="skeleton data-skeleton label-loader"></div></th>
-                                    <th><div class="skeleton data-skeleton label-loader"></div></th>
-                                    <th><div class="skeleton data-skeleton label-loader"></div></th>
-                                    <th><div class="skeleton data-skeleton label-loader"></div></th>
-                                    <th><div class="skeleton data-skeleton label-loader"></div></th>
-                                    <th><div class="skeleton data-skeleton label-loader"></div></th>
-                                    <th><div class="skeleton data-skeleton label-loader"></div></th>
-                                    <th><div class="skeleton data-skeleton label-loader"></div></th>
-                                    <th><div class="skeleton data-skeleton label-loader"></div></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                    <div class="table-responsive dashboard-table d-none real-table">
-                        <table class="table" id="bookingTable">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th class="booking-headers">{{__('web.user.booking_id')}}</th>
-                                    <th>{{__('web.user.vehicle_name')}}</th>
-                                    <th>{{__('web.common.rental_type')}}</th>
-                                    <th>{{__('web.user.pickup_del_location')}}</th>
-                                    <th>{{ __('web.user.drop_location') }}</th>
-                                    <th>{{__('web.user.booked_on')}}</th>
-                                    <th>{{__('web.common.total')}}</th>
-                                    <th>{{__('web.common.status')}}</th>
-                                    <th>{{__('web.common.action')}}</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                <!-- /All Bookings -->
+                <!-- Full Calendar -->
+                <div class="row d-none" id="calendar_view">
+                    <div class="col-lg-12">
+                        <div class="card calendar-card mb-0">
+                            <div class="card-body">
+                                <div id="fullcalendar"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <!-- /Full Calendar -->
             </div>
-        </div>
-        <!-- /All Bookings -->
-        <!-- Full Calendar -->
-        <div class="row d-none" id="calendar_view">
-            <div class="col-lg-12">
-                <div class="card calendar-card mb-0">
-                    <div class="card-body">
-                        <div id="fullcalendar"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /Full Calendar -->
-    </div>
-    <!-- /Dashboard -->
+            <!-- /Dashboard -->
         </div>
     </div>
     <!-- View Booking Details -->
@@ -183,10 +201,18 @@
                     </div>
                     <div class="booking-group">
                         <div class="booking-wrapper">
-                            <div class="booking-title">
-                                <h6>{{__('web.user.booking')}} {{__('web.user.details')}}</h6>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">{{ __('web.user.booking') }} {{ __('web.user.details') }}</h5>
+                                <div>
+                                    <a href="javascript:void(0);" data-bs-target="#cancel_ride" data-bs-toggle="modal" data-bs-dismiss="modal" class="btn btn-sm btn-dark me-2">
+                                        {{ __('web.user.cancel_booking') }}
+                                    </a>
+                                    <a href="javascript:void(0);" data-bs-target="#start_rides" data-bs-toggle="modal" data-bs-dismiss="modal" class="btn btn-sm btn-warning text-white">
+                                        {{ __('web.user.start_ride') }}
+                                    </a>
+                                </div>
                             </div>
-                            <div class="row">
+                            <div class="row text-start mb-3">
                                 <div class="col-lg-4 col-md-6">
                                     <div class="booking-view">
                                         <h6>{{__('web.user.booking')}} {{__('web.user.type')}}</h6>
@@ -273,14 +299,6 @@
                             </div>
                         </div>
                         <div class="cancel-reason-section"></div>
-                    </div>
-                    <div class="modal-btn modal-btn-sm text-end modal_footer">
-                        <a href="javascript:void(0);" data-bs-target="#cancel_ride" data-bs-toggle="modal" data-bs-dismiss="modal" class="btn btn-secondary">
-                            {{__('web.user.cancel_booking')}}
-                        </a>
-                        <a href="javascript:void(0);" data-bs-target="#start_rides" data-bs-toggle="modal" data-bs-dismiss="modal" class="btn btn-primary">
-                            {{__('web.user.start_ride')}}
-                        </a>
                     </div>
                 </div>
             </div>
@@ -424,7 +442,7 @@
     <!-- Datatable JS -->
     <script src="{{ asset('frontend/assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/plugins/datatables/datatables.min.js') }}"></script>
-    
+
     <!-- Fullcalendar JS -->
     <script src="{{ asset('frontend/assets/js/moment.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/plugins/fullcalendar/index.global.min.js') }}"></script>
