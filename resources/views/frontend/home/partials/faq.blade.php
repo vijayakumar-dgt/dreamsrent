@@ -10,7 +10,7 @@
             @foreach($section['section_content'] as $faq)
                 <div class="faq-card bg-white" data-aos="fade-down">
                     <h4 class="faq-title">
-                        <a class="@if($loop->first == false) collapsed @endif" data-bs-toggle="collapse" href="#faq-{{ $faq->id ?? $loop->index }}" aria-expanded="@if($loop->first) true @else false @endif">
+                        <a class="@if($loop->first == false) collapsed @endif" data-bs-toggle="collapse" href="#faq-{{ $faq->id ?? $loop->index }}" aria-expanded="{{ $loop->first ? 'true' : 'false' }}">
                             {{ ucfirst($faq->question ?? "") }}
                         </a>
                     </h4>

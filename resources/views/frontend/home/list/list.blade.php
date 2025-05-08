@@ -169,7 +169,7 @@
                                 <div class="listing-content">
                                     <div class="listing-features d-flex align-items-end justify-content-between">
                                         <div class="list-rating-skeleton">
-                                            <h3 class="listing-title-skeleton skeleton"></h3>
+                                            <p class="listing-title-skeleton skeleton"></p>
                                             <div class="list-rating-icons">
                                                 @for ($j = 0; $j < 5; $j++)
                                                     <span class="star-skeleton skeleton"></span>
