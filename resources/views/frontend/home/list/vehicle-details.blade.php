@@ -990,7 +990,7 @@
                             <h5><a>{{ $data['author_name'] ?? "" }}</a></h5>
                         </div>
                     </div>
-                    <ul class="booking-list">
+                    <ul class="booking-list mb-0">
                         <li>
                             {{__('web.user.email')}}
                             <span>{{ $data['author_email'] ?? "" }}</span>

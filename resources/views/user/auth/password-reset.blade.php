@@ -31,12 +31,6 @@
             <div class="loginbox">
                 <div class="login-auth">
                     <div class="login-auth-wrap">
-                        <div class="sign-group">
-                            <a href="{{ route('home') }}" class="btn sign-up">
-                                <span><i class="fe feather-corner-down-left" aria-hidden="true"></i></span> 
-                                {{ __('web.common.back_to_home') }}
-                            </a>
-                        </div>
                         <h1>{{ __('web.auth.reset_password_title') }}</h1>
                         <p class="account-subtitle">{{ __('web.auth.reset_password_description') }}</p>
                         <form action="" id="changePasswordForm">

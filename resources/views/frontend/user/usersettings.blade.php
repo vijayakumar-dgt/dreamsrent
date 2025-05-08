@@ -43,7 +43,6 @@
                         <div class="profile-info-grid">
                             <div class="profile-info-header">
                                 <h5>{{ __('web.user.basic_information') }}</h5>
-                                <p>{{ __('web.user.user_information') }}</p>
                             </div>
                             <div class="profile-inner">
                                 <div class="profile-info-pic">
@@ -104,7 +103,6 @@
                         <div class="profile-info-grid">
                             <div class="profile-info-header">
                                 <h5>{{ __('web.user.address_information') }}</h5>
-                                <p>{{ __('web.user.user_address_information') }}</p>
                             </div>
                             <div class="profile-inner">
                                 <div class="row">

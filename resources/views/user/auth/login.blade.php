@@ -31,12 +31,6 @@
             <div class="loginbox">
                 <div class="login-auth">
                     <div class="login-auth-wrap">
-                        <div class="sign-group d-none">
-                            <a href="{{ route('home') }}" class="btn sign-up">
-                                <span><i class="fe feather-corner-down-left" aria-hidden="true"></i></span>
-                                {{ __('web.common.back_to_home') }}
-                            </a>
-                        </div>
                         <h1>{{ __('web.auth.sign_in') }}</h1>
                         <p class="account-subtitle">{{ __('web.auth.email_confirmation_subtitle') }}</p>
                         <form id="userLoginForm">
