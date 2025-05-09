@@ -2,19 +2,40 @@
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg header-nav">
             <div class="navbar-header">
-                <a id="mobile_btn" href="javascript:void(0);">
+                <button type="button" class="btn border-0" id="mobile_btn">
                     <span class="bar-icon">
                         <span></span>
                         <span></span>
                         <span></span>
                     </span>
-                </a>
+                </button>
                 <a href="{{ route('home') }}" class="navbar-brand logo">
                     <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" class="img-fluid" alt="Logo">
                 </a>
                 <a href="{{ route('home') }}" class="navbar-brand logo-small">
                     <img src="{{ $smallLogo ?? asset('frontend/assets/img/logo-small.png') }}" class="img-fluid" alt="Logo">
                 </a>
+                <div class="navbar-brand dropdown has-arrow flag-nav flag-nav1 nav-item-box flag-resposnive">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
+                        role="button">
+                        <img src="{{ asset('/backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
+                            alt="Language" class="img-fluid">
+                    </a>
+                    <ul class="dropdown-menu flag-menu p-2">
+                        @if ($allLanguages)
+                        @foreach ($allLanguages as $language)
+                        <li>
+                            <button type="button" class="dropdown-item change-user-language"
+                                data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
+                                <img src="{{ asset('/backend/assets/img/flags/' . $language->code . '.svg') }}"
+                                    alt="" height="16">
+                                {{ $language->name }}
+                            </button>
+                        </li>
+                        @endforeach
+                        @endif
+                    </ul>
+                </div>
             </div>
             <div class="main-menu-wrapper">
                 <div class="menu-header">

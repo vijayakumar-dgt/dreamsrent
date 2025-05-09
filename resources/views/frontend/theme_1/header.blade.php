@@ -129,10 +129,6 @@
                                 <button type="button" class="clear-noti has-notification d-none btn border-0" id="markAllAsRead">
                                     {{ __('web.user.clear_all') }}
                                 </button>
-                                {{-- <a href="javascript:void(0)" class="clear-noti has-notification d-none"
-                                    id="markAllAsRead">
-                                    {{ __('web.user.clear_all') }}
-                                </a> --}}
                             </div>
                             <div class="noti-content">
                                 <ul class="notification-list">
