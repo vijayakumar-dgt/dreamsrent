@@ -272,9 +272,9 @@
                     </div>
                     <div class="fav-item justify-content-end">
                         <span class="img-count"><i class="feather-image"></i>04</span>
-                       ${vehicle.authenticated ? ` <a href="javascript:void(0)" class="fav-icon wishlist-icon ${vehicle.wishlist ? 'selected' : ''}" data-id="${vehicle.id}">
+                       ${vehicle.authenticated ? ` <button type="button" class="fav-icon wishlist-icon ${vehicle.wishlist ? 'selected' : ''}" data-id="${vehicle.id}">
                             <i class="feather-heart"></i>
-                        </a>` : ''}
+                        </button>` : ''}
                     </div>
                 </div>`
               : `<div class="blog-img">
@@ -282,9 +282,9 @@
                         <img src="${vehicle.multiple_vehicle_images[0]}" class="img-fluid" alt="${ucfirst(vehicle.name ?? "")}">
                     </a>
                     <div class="fav-item justify-content-end">
-                      ${vehicle.authenticated ? `<a href="javascript:void(0)" class="fav-icon wishlist-icon ${vehicle.wishlist ? 'selected' : ''}" data-id="${vehicle.id}">
+                      ${vehicle.authenticated ? `<button type="button" class="fav-icon wishlist-icon ${vehicle.wishlist ? 'selected' : ''}" data-id="${vehicle.id}">
                             <i class="feather-heart"></i>
-                        </a>` : ''}
+                        </button>` : ''}
                     </div>
                 </div>`;
 
@@ -416,7 +416,7 @@
                     <div class="img-slider owl-carousel">${vehicleImages}</div>
                     <div class="fav-item justify-content-end">
                         <span class="img-count"><i class="feather-image"></i>${vehicle.multiple_vehicle_images.length}</span>
-                       ${vehicle.authenticated ? `<a href="javascript:void(0)" class="fav-icon wishlist-icon ${vehicle.wishlist ? 'selected' : ''}" data-id="${vehicle.id}"><i class="feather-heart"></i></a>` : ''}
+                       ${vehicle.authenticated ? `<button type="button" class="fav-icon wishlist-icon ${vehicle.wishlist ? 'selected' : ''}" data-id="${vehicle.id}"><i class="feather-heart"></i></button>` : ''}
                     </div>
                     <span class="featured-text">${vehicle.brand ?? "" }</span>
                 </div>`
@@ -425,7 +425,7 @@
                         <img src="${vehicle.multiple_vehicle_images[0]}" class="img-fluid" alt="${vehicleName}">
                     </a>
                     <div class="fav-item justify-content-end">
-                      ${vehicle.authenticated ? `<a href="javascript:void(0)" class="fav-icon wishlist-icon ${vehicle.wishlist ? 'selected' : ''}" data-id="${vehicle.id}"><i class="feather-heart"></i></a>` : ''}
+                      ${vehicle.authenticated ? `<button type="button" class="fav-icon wishlist-icon ${vehicle.wishlist ? 'selected' : ''}" data-id="${vehicle.id}"><i class="feather-heart"></i></button>` : ''}
                     </div>
                     <span class="featured-text">${ucfirst(vehicle.brand ?? "")}</span>
                 </div>`;
@@ -446,9 +446,9 @@
             <div class="listing-content">
                 <div class="listing-features d-flex align-items-end justify-content-between">
                  <div class="list-rating">
-                 <a href="javascript:void(0)" class="author-img">
+                 <button type="button" class="author-img btn border-0">
                     <img src="${vehicle.avatar_image ?? '/frontend/assets/img/profiles/avatar-03.jpg'}" alt="author">
-                </a>
+                </button>
                 <h3 class="listing-title"><a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">${vehicleName}</a></h3>
                     <div class="list-rating">
                         ${(() => {
