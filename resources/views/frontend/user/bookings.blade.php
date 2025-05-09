@@ -58,23 +58,23 @@
                                                 <span class="datefilter_text">{{__('web.common.filter_by')}}</span> <i class="fas fa-chevron-down"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item datefilter active" href="javascript:void(0);" data-id="">{{__('web.common.filter_by')}}</a>
-                                                <a class="dropdown-item datefilter" href="javascript:void(0);" data-id="this_week">{{__('web.common.this_week')}}</a>
-                                                <a class="dropdown-item datefilter" href="javascript:void(0);" data-id="this_month">{{__('web.common.this_month')}}</a>
-                                                <a class="dropdown-item datefilter" href="javascript:void(0);" data-id="last30">{{ __('web.user.last_days', ['count' => 30]) }}</a>
-                                                <a class="dropdown-item datefilter" href="javascript:void(0);" data-id="custom" data-bs-toggle="modal" data-bs-target="#custom_date">{{__('web.common.custom')}}</a>
+                                                <button type="button" class="dropdown-item datefilter active" data-id="">{{__('web.common.filter_by')}}</button>
+                                                <button type="button" class="dropdown-item datefilter" data-id="this_week">{{__('web.common.this_week')}}</button>
+                                                <button type="button" class="dropdown-item datefilter" data-id="this_month">{{__('web.common.this_month')}}</button>
+                                                <button type="button" class="dropdown-item datefilter" data-id="last30">{{ __('web.user.last_days', ['count' => 30]) }}</button>
+                                                <button type="button" class="dropdown-item datefilter" data-id="custom" data-bs-toggle="modal" data-bs-target="#custom_date">{{__('web.common.custom')}}</button>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="sort-relevance sort" id="sort_filter">
                                         <div class="dropdown dropdown-action">
-                                            <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <span class="sortfilter_text">{{__('web.common.sort_by_asc')}}</span><i class="fas fa-chevron-down"></i>
-                                            </a>
+                                            </button>
                                             <div class="dropdown-menu dropdown-menu-end">
-                                                <a class="dropdown-item active sort-filter" data-id="asc" href="javascript:void(0);">{{__('web.common.sort_by_asc')}}</a>
-                                                <a class="dropdown-item sort-filter" data-id="desc" href="javascript:void(0);">{{__('web.common.sort_by_desc')}}</a>
-                                                <a class="dropdown-item sort-filter" data-id="alphabet" href="javascript:void(0);">{{__('web.common.sort_by_alpha')}}</a>
+                                                <button type="button" class="dropdown-item active sort-filter" data-id="asc">{{__('web.common.sort_by_asc')}}</button>
+                                                <button type="button" class="dropdown-item sort-filter" data-id="desc">{{__('web.common.sort_by_desc')}}</button>
+                                                <button type="button" class="dropdown-item sort-filter" data-id="alphabet">{{__('web.common.sort_by_alpha')}}</button>
                                             </div>
                                         </div>
                                     </div>
