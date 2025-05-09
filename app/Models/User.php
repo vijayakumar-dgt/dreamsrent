@@ -34,7 +34,9 @@ use App\Models\UserDetail;
  * @property int|null $google_auth_enabled
  * @property string|null $full_name
  * @property string|null $username
- *
+ * @property int|null $booking_confirmation
+ * @property int|null $desktop_notifications
+ * @property int|null $email_notifications
  */
 
 class User extends Authenticatable
