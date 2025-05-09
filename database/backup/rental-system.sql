@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 09, 2025 at 07:47 AM
+-- Generation Time: May 09, 2025 at 10:10 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49615,7 +49615,7 @@ CREATE TABLE `features` (
 CREATE TABLE `general_settings` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `key` varchar(255) NOT NULL,
-  `value` text DEFAULT NULL,
+  `value` longtext DEFAULT NULL,
   `group_id` bigint(20) UNSIGNED DEFAULT NULL,
   `language_id` bigint(20) UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -55405,6 +55405,9 @@ CREATE TABLE `users` (
   `password` varchar(255) DEFAULT NULL,
   `last_password_changed_at` timestamp NULL DEFAULT NULL,
   `google_auth_enabled` tinyint(1) NOT NULL DEFAULT 0,
+  `booking_confirmation` tinyint(1) NOT NULL DEFAULT 0,
+  `desktop_notifications` tinyint(1) NOT NULL DEFAULT 0,
+  `email_notifications` tinyint(1) NOT NULL DEFAULT 0,
   `remember_token` varchar(100) DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
