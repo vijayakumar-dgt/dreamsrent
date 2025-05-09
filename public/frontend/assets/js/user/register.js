@@ -214,17 +214,29 @@ $(document).ready(function () {
                 success: function (response) {
                     if (response.register_status == 0) {
                         $("#userRegisterForm")[0].reset();
-                        $(".form-control").removeClass("is-invalid is-valid");
-                        if (response.redirect_url) {
-                            window.location.href = response.redirect_url;
-                        }
+                        $(".form-control").removeClass("is-invalid is-valid");                   
+                      
+                    
                         const userName = response.email;
                         const emailData = {
                             subject: response.email_subject,
                             content: response.email_content,
                         };
-
-                      
+                    
+                        sendEmail(userName, emailData)
+                            .then(() => {
+                               
+                                if (response.redirect_url) {
+                                    window.location.href = response.redirect_url;
+                                    return; 
+                                }
+                            })
+                            .catch(() => {
+                                if (response.redirect_url) {
+                                    window.location.href = response.redirect_url;
+                                    return; 
+                                }
+                            });
                     } else if (response.register_status === "1") {
                         $("#register-modal").modal("hide");
 
