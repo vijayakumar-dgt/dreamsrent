@@ -17,6 +17,7 @@
                                         class="{{ $loop->first ? 'active' : '' }}" 
                                         {{ $loop->first ? 'aria-current=true' : '' }} 
                                         data-bs-toggle="tab" 
+                                        role="tab"
                                         href="#tab_{{ $brand->id ?? '' }}">
                                         <span>
                                             <img src="{{ uploadedAsset($brand->brand_icon) }}" alt="{{ ucfirst($brand->brand_name ?? '') }}" class="home-brand-img">
