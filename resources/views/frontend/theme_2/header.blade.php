@@ -42,9 +42,7 @@
                     <a href="{{ route('home') }}" class="menu-logo">
                         <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" class="img-fluid" alt="Logo">
                     </a>
-                    <a id="menu_close" class="menu-close" href="javascript:void(0);">
-                        <i class="fas fa-times"></i>
-                    </a>
+                    <button type="button" id="menu_close" class="menu-close btn border-0"><i class="fas fa-times"></i></button>
                 </div>
                 <ul class="main-nav">
                     @if ($headers)
@@ -98,10 +96,12 @@
                             @if ($allLanguages)
                                 @foreach ($allLanguages as $language)
                                     <li>
-                                        <a href="javascript:void(0);" class="dropdown-item change-user-language" data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
-                                            <img src="{{ asset('/backend/assets/img/flags/' . $language->code . '.svg') }}" alt="" height="16">
+                                        <button class="dropdown-item change-user-language"
+                                            data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
+                                            <img src="{{ asset('/backend/assets/img/flags/' . $language->code . '.svg') }}"
+                                                alt="" height="16">
                                             {{ $language->name }}
-                                        </a>
+                                        </button>
                                     </li>
                                 @endforeach
                             @endif
@@ -121,9 +121,9 @@
                         <div class="dropdown-menu notifications">
                             <div class="topnav-dropdown-header">
                                 <span class="notification-title">{{ __('web.user.notifications') }}</span>
-                                <a href="javascript:void(0)" class="clear-noti has-notification d-none" id="markAllAsRead">
+                                <button type="button" class="clear-noti has-notification d-none btn border-0" id="markAllAsRead">
                                     {{ __('web.user.clear_all') }}
-                                </a>
+                                </button>
                             </div>
                             <div class="noti-content">
                                 <ul class="notification-list">
