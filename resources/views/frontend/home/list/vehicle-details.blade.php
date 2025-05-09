@@ -129,7 +129,7 @@
                     <div class="detail-product">
                         <div class="pro-info">
                             <div class="">
-                                <button type="button" class="fav-icon"><i class="fa-regular fa-heart"></i></button>
+                                <a href="javascript:void(0);" class="fav-icon"><i class="fa-regular fa-heart"></i></a>
                             </div>
                         </div>
                         <div class="slider detail-bigimg">
@@ -940,7 +940,7 @@
                         </div>
                         <label class="custom_check w-100">
                             <input type="checkbox" name="terms" id="terms" value="1">
-                            <span class="checkmark"></span> {{ __('web.home.enquire_aggree_with') }} <a href="/pages/terms-conditions">{{ __('web.home.terms_of_service') }}</a> & <button type="button">{{ __('web.home.privacy_policy') }}</button>
+                            <span class="checkmark"></span> {{ __('web.home.enquire_aggree_with') }} <a href="/pages/terms-conditions">{{ __('web.home.terms_of_service') }}</a> & <button type="button" class="border-0 bg-white" >{{ __('web.home.privacy_policy') }}</button>
                         </label>
                         <span class="error-text text-danger" id="terms_error"></span>
                         <div class="modal-btn modal-btn-sm">
