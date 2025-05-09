@@ -37,8 +37,7 @@ class TicketController extends Controller
 
     public function userTicketStore(Request $request): JsonResponse
     {
-        try {
-            // Get user from either 'admin' or 'web' guard
+        try {           
             $user = Auth::guard('admin')->check() ? Auth::guard('admin')->user() : Auth::guard('web')->user();
 
             if (!$user) {
@@ -52,7 +51,8 @@ class TicketController extends Controller
                 'category' => 'required|integer|exists:ticket_categories,id',
                 'priority' => 'required|string|in:Low,Medium,High',
                 'description' => 'required|string|max:1000',
-                'document.*' => 'nullable|file|mimes:pdf,txt,doc,docx|max:51200'
+                'document' => 'array|max:10',
+                'document.*' => 'nullable|file|mimes:pdf,txt,doc,docx|max:10240',
             ]);
 
             if ($validator->fails()) {
@@ -70,10 +70,13 @@ class TicketController extends Controller
 
             // Handle file uploads
             $filePaths = [];
-            $file = $request->file('document');
-            if ($file instanceof \Illuminate\Http\UploadedFile) {
-                $filePath = $file->store('tickets', 'public');
-                $filePaths[] = $filePath;
+
+            if ($request->hasFile('document')) {
+                foreach ($request->file('document') as $file) {
+                    if ($file && $file->isValid()) {
+                        $filePaths[] = $file->store('tickets', 'public');
+                    }
+                }
             }
 
             // Create ticket

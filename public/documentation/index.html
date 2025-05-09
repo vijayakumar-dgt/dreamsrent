@@ -110,11 +110,29 @@
 
 						<li class="menu-item-separator"></li>
 							<li class="menu-item">
+								<a href="#requirements" class=" menu-link">
+									<span class="feather-icon"><i data-feather="book-open"></i></span>
+									<span class="condense">Requirements</span>
+								</a>
+							</li>
+							<li class="menu-item">
+								<a href="#database" class=" menu-link">
+									<span class="feather-icon"><i data-feather="database"></i></span>
+									<span class="condense">Database</span>
+								</a>
+							</li>
+							<li class="menu-item">
+								<a href="#files" class=" menu-link">
+									<span class="feather-icon"><i data-feather="file"></i></span>
+									<span class="condense">Files</span>
+								</a>
+							</li>
+							<li class="menu-item">
 								<a href="#local_server" class=" menu-link">
 									<span class="feather-icon"><i data-feather="pie-chart"></i></span>
 									<span class="condense">Installation</span>
 								</a>
-							</li>
+							</li>						
 							<li class="menu-item">
 								<a href="#installer" class=" menu-link">
 									<span class="feather-icon"><i data-feather="aperture"></i></span>
@@ -763,6 +781,139 @@
 								</div>
 							</div>
 						</section>
+						<!-- Requirements -->
+						<section class="section-block hentry" id="requirements">
+							<div class="custom-card">
+								<div class="card-header">
+									<h4 class="card-title">Requirements<a class="anchor-link ms-2" href="#requirements"><i class="fa-solid fa-hashtag"></i></a></h4>
+									<div class="header-tools">
+										<a href="#" class="card-maximize">
+											<span class="feather-icon" title="Full Screen"><i data-feather="maximize"></i></span></a>
+									</div>
+								</div>
+								<div class="card-body">
+									<div class="server">
+										<div class="p-3 border rounded mb-3">
+											<p class="fw-semibold mb-3">Server Requirements</p>
+											<ul class="ps-3">
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> PHP 8.4x</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> Operating System : Linux or Windows</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i>Shared, VPS or Dedicated Server</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i>MySql: 5.7+</p></li>
+											</ul>
+										</div>
+
+										<div class="p-3 border rounded mb-3">
+											<p class="fw-semibold mb-0">Required Upgrades</p>
+											<p> Those settings to upload 1GB file, you need to change them besides on your needs and your server specifications. </p>
+											<ul class="ps-3">
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> allow_url_fopen = on</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i>max_execution_time = 300</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i>max_input_time = 300</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i>post_max_size = 100M</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i>memory_limit = 100M</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i>upload_max_filesize = 100M</p></li>
+											</ul>
+										</div>
+
+										<div class="p-3 border rounded mb-0">
+											<p class="fw-semibold mb-0">PHP Extensions</p>
+											<ul class="ps-3">
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> BCMath</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> bz2</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> curl</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> fileinfo</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> gd</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> intl</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> mbstring</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> mysqli</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> openssl</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> pdo_mysql</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> sodium</p></li>
+												<li class="m-0"><p class="d-flex align-items-center mb-1"> <i class="fa-solid fa-circle fs-10 me-2"></i> zip</p></li>
+											</ul>
+										</div>
+										
+									</div>
+								</div>
+						</section>
+
+						<!-- Database -->
+						<section class="section-block hentry" id="database">
+							<div class="custom-card">
+								<div class="card-header">
+									<h4 class="card-title">Database<a class="anchor-link ms-2" href="#database"><i class="fa-solid fa-hashtag"></i></a></h4>
+									<div class="header-tools">
+										<a href="#" class="card-maximize">
+											<span class="feather-icon" title="Full Screen"><i data-feather="maximize"></i></span></a>
+									</div>
+								</div>
+								<div class="card-body">
+									<div class="server">
+										<p class="fw-semibold mb-3">Login to your server and click MYSQL DATABASE</p>
+										<div class="text-center mb-5 custom-img-list">
+											<img src="assets/img/database/database1.PNG" alt="verfication" class="img-fluid">
+										</div>
+										
+										<p class="fw-semibold mb-3">Enter database name and click create</p>
+										<div class="text-center mb-5 custom-img-list">
+											<img src="assets/img/database/database2.PNG" alt="verfication" class="img-fluid">
+										</div>
+										
+										<p class="fw-semibold mb-3">Enter your details and click create</p>
+										<div class="text-center mb-5 custom-img-list">
+											<img src="assets/img/database/database3.PNG" alt="verfication" class="img-fluid">
+										</div>
+										
+										<p class="fw-semibold mb-3">Choose database name and database user then click add</p>
+										<div class="text-center mb-5 custom-img-list">
+											<img src="assets/img/database/database4.PNG" alt="verfication" class="img-fluid">
+										</div>
+										
+										<p class="fw-semibold mb-3">Choose All privileges then click make changes</p>
+										<div class="text-center mb-0 custom-img-list">
+											<img src="assets/img/database/database5.PNG" alt="verfication" class="img-fluid mb-0">
+										</div>
+										
+									</div>
+								</div>
+						</section>
+
+						<!-- Files -->
+						<section class="section-block hentry" id="files">
+							<div class="custom-card">
+								<div class="card-header">
+									<h4 class="card-title">Files<a class="anchor-link ms-2" href="#files"><i class="fa-solid fa-hashtag"></i></a></h4>
+									<div class="header-tools">
+										<a href="#" class="card-maximize">
+											<span class="feather-icon" title="Full Screen"><i data-feather="maximize"></i></span></a>
+									</div>
+								</div>
+								<div class="card-body">
+									<div class="server">
+										<p class="fw-semibold mb-3">Go to your server file manager</p>
+										<div class="text-center mb-5 custom-img-list">
+											<img src="assets/img/files/file1.png" alt="Go to server file manager" class="img-fluid">
+										</div>
+									
+										<p class="fw-semibold mb-3">Open your directory then click on upload</p>
+										<div class="text-center mb-5 custom-img-list">
+											<img src="assets/img/files/file2.png" alt="Open directory and upload" class="img-fluid">
+										</div>
+									
+										<p class="fw-semibold mb-3">Click select file then choose the file</p>
+										<div class="text-center mb-5 custom-img-list">
+											<img src="assets/img/files/file3.png" alt="Select and choose file" class="img-fluid">
+										</div>
+									
+										<p class="fw-semibold mb-0">Click extract file(s) then open your website URL</p>
+										<div class="text-center mb-0 custom-img-list">
+											<img src="assets/img/files/file4.png" alt="Extract files and open website" class="img-fluid">
+										</div>
+									</div>									
+								</div>
+						</section>
+
 
 						<!-- Installation -->
 						<section class="section-block hentry" id="local_server">
@@ -836,7 +987,7 @@
 								</div>
 							</div>
 						</section>
-
+						
 						<!-- Installer -->
 						<section class="section-block hentry" id="installer">
 							<div class="custom-card">

@@ -3002,3 +3002,12 @@ span.note{
 	padding: 10px;
 	overflow-x: auto;
 }
+.fa-circle{
+  font-size: 5px;
+}
+.custom-img-list img{
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  border-radius: 5px;
+}
