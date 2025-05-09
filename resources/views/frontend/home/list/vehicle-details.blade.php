@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/plugins/intltelinput/css/intlTelInput.css') }}">
     @endpush
     @section('content')
+    
     <!-- Skeleton Container -->
     <div class="container skeleton-container">
         <div class="vehl_dets_skeleton">
