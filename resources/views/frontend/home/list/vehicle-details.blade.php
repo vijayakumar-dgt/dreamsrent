@@ -129,7 +129,7 @@
                     <div class="detail-product">
                         <div class="pro-info">
                             <div class="">
-                                <a href="javascript:void(0);" class="fav-icon"><i class="fa-regular fa-heart"></i></a>
+                                <button type="button" class="fav-icon"><i class="fa-regular fa-heart"></i></button>
                             </div>
                         </div>
                         <div class="slider detail-bigimg">

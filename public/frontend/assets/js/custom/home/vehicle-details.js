@@ -567,13 +567,13 @@ function renderReviews(reviews) {
                         <div class="review-reply">
                             ${
                                 $("#auth_user_id").val() != ""
-                                    ? `<a class="btn review_reply_btn" href="javascript:void(0);" data-id="${
+                                    ? `<button type="button" class="btn review_reply_btn" data-id="${
                                           review.id
                                       }">
                                 <i class="fa-solid fa-reply"></i>${_l(
                                     "web.home.reply"
                                 )}
-                            </a>`
+                            </button>`
                                     : `<a class="btn" href="/login" data-id="${
                                           review.id
                                       }">
@@ -1005,7 +1005,7 @@ function renderDescription(vehicle) {
                 <div class="visible-text">${escapeHtml(visibleWords)}...</div>
                 <div class="read-more">
                     <div class="more-text" style="display: none;">${escapeHtml(hiddenWords)}</div>
-                    <a href="javascript:void(0);" class="more-link">${_l("web.home.show_more")}</a>
+                    <button type="button" class="border-0 bg-white  more-link">${_l("web.home.show_more")}</button>
                 </div>`;
         } else {
             html += `<div class="visible-text">${escapeHtml(plainText)}</div>`;
@@ -1239,13 +1239,13 @@ function createVehicleCard(vehicle) {
                 </span>
                 ${
                     vehicle.authenticated
-                        ? `<a href="javascript:void(0);" data-id="${
+                        ? `<button type="button" data-id="${
                               vehicle.id
-                          }" class="fav-icon wishlist-icon ${
+                          }" class="fav-icon border-0 wishlist-icon ${
                               vehicle.wishlist ? "selected" : ""
                           }">
                     <i class="fa-regular fa-heart"></i>
-                </a>`
+                </button>`
                         : ""
                 }
             </div>
