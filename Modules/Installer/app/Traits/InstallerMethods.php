@@ -219,9 +219,9 @@ trait InstallerMethods
      */
     private function importDatabase($database_path)
     {
-        // dd($database_path);
+        
         if (File::exists($database_path)) {
-            // dd($database_path);
+            
             try {
                 DB::unprepared(File::get($database_path));
                 Log::info("Database imported successfully from '{$database_path}'.");

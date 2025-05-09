@@ -1985,7 +1985,7 @@ class PageController extends Controller
             $sectionContent = $pageContent && isset($pageContent[0]->section_content) ? $pageContent[0]->section_content : [];
             $seo_title = $page->page_title;
 
-            // dd($data);
+            
 
             return view('frontend.pages.page', compact('page', 'data', 'sectionContent', 'content_sections', 'seo_title'));
         } else {
