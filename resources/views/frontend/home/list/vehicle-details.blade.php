@@ -129,7 +129,7 @@
                     <div class="detail-product">
                         <div class="pro-info">
                             <div class="">
-                                <a href="javascript:void(0);" class="fav-icon"><i class="fa-regular fa-heart"></i></a>
+                                <button type="button" class="fav-icon"><i class="fa-regular fa-heart"></i></button>
                             </div>
                         </div>
                         <div class="slider detail-bigimg">
@@ -742,7 +742,7 @@
                                                             {{ __('web.home.book') }}
                                                         </a>
                                                         @endauth
-                                                        <a href="javascript:void(0);" id="enquire_us" data-bs-toggle="modal" data-bs-target="#enquiry" class="btn btn-theme {{ $allowEnquiries != 1 ? 'btn-disabled' : '' }}">{{__('web.home.enquire_us')}}</a>
+                                                        <button type="button" id="enquire_us" data-bs-toggle="modal" data-bs-target="#enquiry" class="btn btn-theme {{ $allowEnquiries != 1 ? 'btn-disabled' : '' }}">{{__('web.home.enquire_us')}}</button>
                                                     </div>
                                                 </div>
                                             </li>
@@ -850,7 +850,7 @@
                                                 <div class="input-block mb-0">
                                                     <div class="search-btn">
                                                         <a href="#" class="btn btn-primary check-available w-100">Book</a>
-                                                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#enquiry" class="btn btn-theme">Enquire Us</a>
+                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#enquiry" class="btn btn-theme">Enquire Us</button>
                                                     </div>
                                                 </div>
                                             </li>
@@ -940,7 +940,7 @@
                         </div>
                         <label class="custom_check w-100">
                             <input type="checkbox" name="terms" id="terms" value="1">
-                            <span class="checkmark"></span> {{ __('web.home.enquire_aggree_with') }} <a href="/pages/terms-conditions">{{ __('web.home.terms_of_service') }}</a> & <a href="javascript:void(0);">{{ __('web.home.privacy_policy') }}</a>
+                            <span class="checkmark"></span> {{ __('web.home.enquire_aggree_with') }} <a href="/pages/terms-conditions">{{ __('web.home.terms_of_service') }}</a> & <button type="button">{{ __('web.home.privacy_policy') }}</button>
                         </label>
                         <span class="error-text text-danger" id="terms_error"></span>
                         <div class="modal-btn modal-btn-sm">
