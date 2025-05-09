@@ -339,7 +339,7 @@
                   success:function(response){
 
                     let description = response.data.description;
-                    let regex = /{([^}]*)}/g;
+                    let regex = /{([a-zA-Z0-9_]+)}/g;
 
 
                     description = description.replace(regex, (match, placeholder) => {
