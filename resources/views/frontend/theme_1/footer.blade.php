@@ -64,15 +64,6 @@
                                 </div>
                                 <span class="text-danger error-text" id="subscriber_email_error"></span>
                             </div>
-                            <div class="footer-social-widget d-none">
-                                <ul class="nav-social">
-                                    <li><a href="javascript:void(0)"><i class="fa-brands fa-facebook-f fa-facebook fi-icon"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="fab fa-instagram fi-icon"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="fab fa-behance fi-icon"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="fab fa-twitter fi-icon"></i></a></li>
-                                    <li><a href="javascript:void(0)"><i class="fab fa-linkedin fi-icon"></i></a></li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </div>

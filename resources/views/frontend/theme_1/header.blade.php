@@ -2,13 +2,11 @@
         <div class="container-fluid">
             <nav class="navbar navbar-expand-lg header-nav">
                 <div class="navbar-header">
-                    <a id="mobile_btn" href="javascript:void(0);">
-                        <span class="bar-icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </span>
-                    </a>
+                    <button type="button" class="btn border-0" id="mobile_btn"><span class="bar-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span></button>
                     <a href="{{ route('home') }}" class="navbar-brand logo">
                         <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" class="img-fluid" alt="Logo">
                     </a>
@@ -26,12 +24,12 @@
                             @if ($allLanguages)
                             @foreach ($allLanguages as $language)
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item change-user-language"
+                                <button type="button" class="dropdown-item change-user-language"
                                     data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
                                     <img src="{{ asset('/backend/assets/img/flags/' . $language->code . '.svg') }}"
                                         alt="" height="16">
                                     {{ $language->name }}
-                                </a>
+                                </button>
                             </li>
                             @endforeach
                             @endif
@@ -44,9 +42,7 @@
                             <img src="{{ $logo ?? asset('frontend/assets/img/logo.svg') }}" class="img-fluid"
                                 alt="Logo">
                         </a>
-                        <a id="menu_close" class="menu-close" href="javascript:void(0);">
-                            <i class="fas fa-times"></i>
-                        </a>
+                        <button type="button" id="menu_close" class="menu-close btn border-0"><i class="fas fa-times"></i></button>
                     </div>
                     <ul class="main-nav">
                         @if ($headers)
@@ -105,12 +101,12 @@
                                 @if ($allLanguages)
                                 @foreach ($allLanguages as $language)
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item change-user-language"
+                                    <button class="dropdown-item change-user-language"
                                         data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
                                         <img src="{{ asset('/backend/assets/img/flags/' . $language->code . '.svg') }}"
                                             alt="" height="16">
                                         {{ $language->name }}
-                                    </a>
+                                    </button>
                                 </li>
                                 @endforeach
                                 @endif
@@ -130,10 +126,13 @@
                         <div class="dropdown-menu notifications">
                             <div class="topnav-dropdown-header">
                                 <span class="notification-title">{{ __('web.user.notifications') }}</span>
-                                <a href="javascript:void(0)" class="clear-noti has-notification d-none"
+                                <button type="button" class="clear-noti has-notification d-none btn border-0" id="markAllAsRead">
+                                    {{ __('web.user.clear_all') }}
+                                </button>
+                                {{-- <a href="javascript:void(0)" class="clear-noti has-notification d-none"
                                     id="markAllAsRead">
                                     {{ __('web.user.clear_all') }}
-                                </a>
+                                </a> --}}
                             </div>
                             <div class="noti-content">
                                 <ul class="notification-list">
@@ -141,7 +140,7 @@
                                 </ul>
                             </div>
                             <div class="topnav-dropdown-footer has-notification">
-                                <a href="/user/notifications">{{ __('web.user.view_all_notifications') }}</a>
+                                <a href="{{ route('user.notifications')}}">{{ __('web.user.view_all_notifications') }}</a>
                             </div>
                         </div>
                     </li>
