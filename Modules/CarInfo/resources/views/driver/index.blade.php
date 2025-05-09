@@ -22,12 +22,12 @@
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
 					<div class="mb-2 me-2 d-none">
 						<div class="skeleton label-skeleton label-loader"></div>
-						<a href="javascript:void(0);" class="btn btn-white d-flex align-items-center d-none real-label"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</a>
+						<button type="button" class="btn btn-white d-flex align-items-center d-none real-label"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</button>
 					</div>
 					<div class="me-2 mb-2 d-none">
 						<div class="skeleton label-skeleton label-loader"></div>
 						<div class="dropdown d-none real-label">
-							<a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center">
+							<button type="button" class="btn btn-dark d-inline-flex align-items-center">
 								<i class="ti ti-upload me-1"></i>{{ __('admin.common.export') }}
 							</a>
 						</div>
@@ -35,7 +35,7 @@
 					<div class="mb-2">
 						@if (hasPermission($permissions, 'drivers', 'create'))
 						<div class="skeleton label-skeleton label-loader"></div>
-						<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_driver_modal" id="add_driver" class="btn btn-primary d-flex align-items-center d-none real-label"><i class="ti ti-plus me-2"></i>{{ __('admin.manage.add_new_driver') }}</a>
+						<button type="button" data-bs-toggle="modal" data-bs-target="#add_driver_modal" id="add_driver" class="btn btn-primary d-flex align-items-center d-none real-label"><i class="ti ti-plus me-2"></i>{{ __('admin.manage.add_new_driver') }}</button>
 						@endif
 					</div>
 				</div>
@@ -48,24 +48,24 @@
 					<input type="hidden" name="sort_by_status" id="sort_by_status">
 					<div class="skeleton label-skeleton label-loader me-2"></div>
 					<div class="dropdown me-2 d-none real-label">
-						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }} : <span class="ms-1" id="current_sort">{{ __('admin.common.latest') }}</span>
-						</a>
+						</button>
 						<ul class="dropdown-menu dropdown-menu-end p-2 sort_by_list">
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="latest">{{ __('admin.common.latest') }}</a>
+								<button type="button" class="dropdown-item rounded-1" data-sort="latest">{{ __('admin.common.latest') }}</button>
 							</li>
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="ascending">{{ __('admin.common.ascending') }}</a>
+								<button type="button" class="dropdown-item rounded-1" data-sort="ascending">{{ __('admin.common.ascending') }}</button>
 							</li>
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="descending">{{ __('admin.common.descending') }}</a>
+								<button type="button" class="dropdown-item rounded-1" data-sort="descending">{{ __('admin.common.descending') }}</button>
 							</li>
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="last month">{{ __('admin.common.last_month') }}</a>
+								<button type="button" class="dropdown-item rounded-1" data-sort="last month">{{ __('admin.common.last_month') }}</button>
 							</li>
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="last 7 days">{{ __('admin.common.last_7_days') }}</a>
+								<button type="button" class="dropdown-item rounded-1" data-sort="last 7 days">{{ __('admin.common.last_7_days') }}</button>
 							</li>
 						</ul>
 					</div>
@@ -80,15 +80,15 @@
 					</div>
 					<div class="skeleton label-skeleton label-loader"></div>
 					<div class="dropdown me-2 d-none real-input">
-						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-badge me-1"></i> <span class="ms-1" id="current_sort_status">{{ __('admin.common.status') }}</span>
-						</a>
+						</button>
 						<ul class="dropdown-menu  dropdown-menu-end p-2" id="statusList">
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="1">{{ __('admin.common.active') }}</a>
+								<button type="button" class="dropdown-item rounded-1" data-sort="1">{{ __('admin.common.active') }}</button>
 							</li>
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="0">{{ __('admin.common.inactive') }}</a>
+								<button type="button" class="dropdown-item rounded-1" data-sort="0">{{ __('admin.common.inactive') }}</button>
 							</li>
 						</ul>
 					</div>
@@ -96,15 +96,15 @@
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 					<div class="skeleton label-skeleton label-loader me-2"></div>
 					<div class="dropdown me-2 d-none real-label">
-						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-edit me-1"></i> {{ __('admin.common.bulk_actions') }}
-						</a>
+						</button>
 						<ul class="dropdown-menu dropdown-menu-end p-2">
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1 bulk_status_change" data-status="1">{{ __('admin.common.active') }}</a>
+								<button type="button" class="dropdown-item rounded-1 bulk_status_change" data-status="1">{{ __('admin.common.active') }}</button>
 							</li>
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1 bulk_status_change" data-status="0">{{ __('admin.common.inactive') }}</a>
+								<button type="button" class="dropdown-item rounded-1 bulk_status_change" data-status="0">{{ __('admin.common.inactive') }}</button>
 							</li>
 						</ul>
 					</div>
@@ -392,7 +392,7 @@
 					</div>
 					<div class="modal-footer">
 						<div class="d-flex justify-content-center">
-							<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+							<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 							<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
 						</div>
 					</div>
@@ -545,7 +545,7 @@
 								</label>
 							</div>
 							<div class="d-flex justify-content-center">
-								<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+								<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 								<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.save_changes') }}</button>
 							</div>
 						</div>
@@ -570,7 +570,7 @@
 						<h4 class="mb-1">{{ __('admin.manage.delete_driver') }}</h4>
 						<p class="mb-3">{{ __('admin.manage.delete_driver_confirmation') }}</p>
 						<div class="d-flex justify-content-center">
-							<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+							<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</a>
 						</div>
 					</div>

@@ -625,7 +625,7 @@ function initTable(sortByDate = '') {
                 render: function (data, type, row) {
                 return `
                     <div class="d-flex align-items-center">
-                        <a href="javascript:void(0);" class="avatar rounded-circle me-2 flex-shrink-0">
+                        <a href="/admin/customer-details/${row.encrypted_id}" class="avatar rounded-circle me-2 flex-shrink-0">
                             <img src="${row.profile_image}" class="rounded-circle" alt="img">
                         </a>
                         <div>
@@ -640,9 +640,9 @@ function initTable(sortByDate = '') {
                     return `
                         ${row.language_name ? 
                         `<div class="d-flex align-items-center">
-                            <a href="javascript:void(0);" class="avatar avatar-xxs rounded-circle me-1 flex-shrink-0">
+                            <span class="avatar avatar-xxs rounded-circle me-1 flex-shrink-0">
                                 <img src="${row.language_flag}" class="rounded-circle" alt="img">
-                            </a>
+                            </span>
                             <p class="text-gray-9">${row.language_name}</p>
                         </div>` : '-' }`;
                 },
@@ -688,11 +688,11 @@ function initTable(sortByDate = '') {
                                 </li>
                                 ${ hasPermission(permissions, 'customers', 'edit') ? 
                                 `<li>
-                                    <a class="dropdown-item rounded-1 edit-customer" href="javascript:void(0);" data-id="${row.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                    <button type="button" class="dropdown-item rounded-1 edit-customer" data-id="${row.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</button>
                                 </li>`:''}
                                 ${ hasPermission(permissions, 'customers', 'delete') ? 
                                 `<li>
-                                    <a class="dropdown-item rounded-1 delete-customer" href="javascript:void(0);" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                    <button type="button" class="dropdown-item rounded-1 delete-customer" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                                 </li>`:''}
                             </ul>
                         </div>`;

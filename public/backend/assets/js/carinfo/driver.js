@@ -551,11 +551,11 @@ function initTable(sortByDate = '') {
                             <ul class="dropdown-menu dropdown-menu-end p-2">
                               ${ hasPermission(permissions, 'drivers', 'edit') ?
                                 `<li>
-                                    <a class="dropdown-item rounded-1 edit-driver" href="javascript:void(0);" data-id="${row.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                    <button type="button" class="dropdown-item rounded-1 edit-driver" data-id="${row.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</button>
                                 </li>`:''}
                                  ${ hasPermission(permissions, 'drivers', 'delete') ?
                                 `<li>
-                                    <a class="dropdown-item rounded-1 delete-driver" href="javascript:void(0);" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                    <button type="button" class="dropdown-item rounded-1 delete-driver" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                                 </li>`:''}
                             </ul>
                         </div>`;
