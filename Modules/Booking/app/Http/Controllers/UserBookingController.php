@@ -516,11 +516,11 @@ class UserBookingController extends Controller
                 if ($appAdmin?->email) {
                     sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
                 }
-
-                if ($authUser?->email) {
+            }     
+                if (userNotificationsEnabled() && $authUser?->email) {
                     sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
                 }
-            }
+            
 
             return response()->json([
                 'code' => 200,
@@ -923,11 +923,11 @@ class UserBookingController extends Controller
                 if ($appAdmin) {
                     sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
                 }
-
-                if ($authUser && $authUser->email) {
-                    sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
-                }
             }
+            if (userNotificationsEnabled() && $authUser && $authUser->email) {
+                sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
+            }
+            
 
             return response()->json([
                 'code' => 200,
@@ -982,10 +982,9 @@ class UserBookingController extends Controller
                         if ($appAdmin) {
                             sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
                         }
-
-                        if ($authUser && $authUser->email) {
-                            sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
-                        }
+                    }
+                    if (userNotificationsEnabled() &&$authUser && $authUser->email) {
+                        sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
                     }
                     return redirect()->route('payment.success.page', ['transaction_id' => $response['id']]);
                 }
@@ -1076,10 +1075,9 @@ class UserBookingController extends Controller
                 if ($appAdmin) {
                     sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
                 }
-
-                if ($authUser) {
-                    sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
-                }
+            }
+            if (userNotificationsEnabled() && $authUser) {
+                sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
             }
             return redirect()->route('payment.success.page', ['transaction_id' => $sessionId]);
         } catch (\Exception $e) {

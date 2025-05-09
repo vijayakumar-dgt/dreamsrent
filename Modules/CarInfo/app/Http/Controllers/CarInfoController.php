@@ -1431,7 +1431,7 @@ class CarInfoController extends Controller
                 'seo_title' => $vehicle->vehicle_metatitle,
                 'seo_key' => $vehicle->vehicle_metakeywords,
                 'seo_description' => $vehicle->vehicle_metadesc,
-                'authenticated' => $user ? true : false,
+                'authenticated' => Auth::guard('web')->check(),
                 'created_at' => $vehicle->created_at,
                 'status' => $vehicle->status,
             ];
@@ -1781,7 +1781,7 @@ class CarInfoController extends Controller
                 'seo_description' => $vehicle->vehicle_metadesc,
                 'is_featured' => (bool) rand(0, 1),
                 'is_top_rated' => (bool) rand(0, 1),
-                'authenticated' => $user ? true : false,
+                'authenticated' => Auth::guard('web')->check(),
                 'description' => $vehicle->description,
                 'extraservice' => $vehicle->extraservices->map(function (VehicleExtraService $extraservice) {
                     return [

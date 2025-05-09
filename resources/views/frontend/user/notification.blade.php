@@ -45,36 +45,12 @@
 							<ul class="nav">
 								<li>
 									<label class="custom_check">
-										<input type="checkbox" name="offers" checked="">
-										<span class="checkmark"></span>
-										{{__('web.user.special_offers_discounts')}}
-									</label>
-								</li>
-								<li>
-									<label class="custom_check">
-										<input type="checkbox" name="booking" checked="">
+										<input type="checkbox" name="booking" id="booking" @if($user && $user->booking_confirmation == 1) checked @endif>
 										<span class="checkmark"></span>
 										{{__('web.user.booking_confirmation')}}
 									</label>
 								</li>
-								<li>
-									<label class="custom_check">
-										<input type="checkbox" name="car_added" checked="">
-										<span class="checkmark"></span>
-										{{__('web.user.new_car_added')}}
-									</label>
-								</li>
 							</ul>
-						</div>
-						<div class="notification-status d-none">
-							<div class="notification-status-content">
-								<h5>{{__('web.user.mobile_push_notifications')}}</h5>
-								<p>{{__('web.user.receive_push')}}</p>
-							</div>
-							<div class="status-toggle">
-								<input id="mobile_notifications" class="check" type="checkbox" checked="">
-								<label for="mobile_notifications" class="checktoggle">checkbox</label>
-							</div>
 						</div>
 						<div class="notification-status">
 							<div class="notification-status-content">
@@ -82,7 +58,7 @@
 								<p>{{__('web.user.receive_desktop')}}</p>
 							</div>
 							<div class="status-toggle">
-								<input id="desktop_notifications" class="check" type="checkbox" checked="">
+								<input id="desktop_notifications" class="check" type="checkbox" @if($user && $user->desktop_notifications == 1) checked @endif>
 								<label for="desktop_notifications" class="checktoggle">checkbox</label>
 							</div>
 						</div>
@@ -92,9 +68,12 @@
 								<p>{{__('web.user.receive_email')}}</p>
 							</div>
 							<div class="status-toggle">
-								<input id="email_notifications" class="check" type="checkbox" checked="">
+								<input id="email_notifications" class="check" type="checkbox" @if($user && $user->email_notifications == 1) checked @endif>
 								<label for="email_notifications" class="checktoggle">checkbox</label>
 							</div>
+						</div>
+						<div class="profile-submit-btn">
+							<button type="submit" class="btn btn-primary submitbtn">{{ __('web.user.save_changes') }}</button>
 						</div>
 					</div>
 				</div>
@@ -105,3 +84,6 @@
 </div>
 <!-- /Page Content -->
 @endsection
+@push('scripts')
+<script src="{{ asset('frontend/assets/js/user/notifications.js') }}"></script>
+@endpush
