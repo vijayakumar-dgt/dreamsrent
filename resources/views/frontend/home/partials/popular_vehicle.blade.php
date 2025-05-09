@@ -10,15 +10,17 @@
             <div class="row justify-content-center">
                 <div class="col-lg-12" data-aos="fade-down">
                     <div class="listing-tabs-group">
-                        <ul class="nav listing-buttons gap-3" data-bs-tabs="tabs">
+                        <ul class="nav listing-buttons gap-3" role="tablist">
                             @foreach($vehicleBrand as $brand)
-                                <li>
+                                <li role="presentation">
                                     <a 
                                         class="{{ $loop->first ? 'active' : '' }}" 
-                                        {{ $loop->first ? 'aria-current=true' : '' }} 
-                                        data-bs-toggle="tab" 
+                                        {{ $loop->first ? 'aria-selected=true' : 'aria-selected=false' }} 
                                         role="tab"
-                                        href="#tab_{{ $brand->id ?? '' }}">
+                                        data-bs-toggle="tab" 
+                                        href="#tab_{{ $brand->id ?? '' }}" 
+                                        id="tab_{{ $brand->id ?? '' }}-tab"
+                                        aria-controls="tab_{{ $brand->id ?? '' }}">
                                         <span>
                                             <img src="{{ uploadedAsset($brand->brand_icon) }}" alt="{{ ucfirst($brand->brand_name ?? '') }}" class="home-brand-img">
                                         </span>
@@ -26,7 +28,7 @@
                                     </a>
                                 </li>
                             @endforeach
-                        </ul>
+                        </ul>                        
                     </div>
                 </div>
             </div>
