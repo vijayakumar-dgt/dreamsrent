@@ -1209,7 +1209,7 @@ function createExtraService(vehicle) {
             .join("");
         html += `<div class="pb-0 extra-service">
                     <div class="review-header">
-                        <h4>Extra Service</h4>
+                        <h4>${_l('web.user.extra_services')}</h4>
                     </div>
                     <div class="lisiting-service">
                         <div class="row">
