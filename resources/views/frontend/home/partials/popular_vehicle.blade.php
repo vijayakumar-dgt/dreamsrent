@@ -55,9 +55,7 @@
                                     <div class="fav-item justify-content-end">
                                         <span class="img-count"><i class="feather-image"></i>{{ count($vehicle['multiple_vehicle_images']) }}</span>
                                         @if(Auth::guard('web')->check())
-                                        <a href="javascript:void(0)" class="fav-icon wishlist-icon {{ $vehicle['wishlist'] ? 'selected' : '' }}" data-id="{{ $vehicle['id'] }}">
-                                            <i class="feather-heart"></i>
-                                        </a>
+                                        <button type="button" class="fav-icon wishlist-icon {{ $vehicle['wishlist'] ? 'selected' : '' }}" data-id="{{ $vehicle['id'] }}"><i class="feather-heart"></i></button>
                                         @endif
                                     </div>
                                     <span class="featured-text">{{ ucfirst($vehicle['brand'] ?? "") }}</span>
@@ -65,9 +63,9 @@
                                 <div class="listing-content">
                                     <div class="listing-features d-flex align-items-end justify-content-between">
                                         <div class="list-rating">
-                                            <a href="javascript:void(0)" class="author-img">
+                                            <button type="button" class="author-img btn border-0">
                                                 <img src="{{ $vehicle['avatar_image'] ?? '' }}" alt="author">
-                                            </a>
+                                            </button>
                                             <h3 class="listing-title">
                                                 <a href="/vehicle-details/{{ $vehicle['slug'] }}">{{ ucfirst($vehicle['name'] ?? "") }}</a>
                                             </h3>

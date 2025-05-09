@@ -8,13 +8,13 @@
             <!-- Breadcrumb -->
             <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
                 <div class="my-auto mb-2">
-                    <h2 class="mb-1">{{ __('admin.general_settings.payment') }}</h2>
+                    <h2 class="mb-1">{{ __('admin.general_settings.settings') }}</h2>
                     <nav>
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
                                 <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('admin.general_settings.payment') }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('admin.general_settings.settings') }}</li>
                         </ol>
                     </nav>
                 </div>
