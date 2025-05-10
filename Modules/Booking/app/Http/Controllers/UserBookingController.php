@@ -384,7 +384,7 @@ class UserBookingController extends Controller
         $startDatetime = $startDatetimeObj ? $startDatetimeObj->format('Y-m-d H:i:s') : null;
         $endDatetime = $endDatetimeObj ? $endDatetimeObj->format('Y-m-d H:i:s') : null;
 
-        $noOfDays = Carbon::parse($startDatetime)->diffInDays(Carbon::parse($endDatetime)) + 1;
+        $noOfDays = Carbon::parse($startDatetime)->diffInDays(Carbon::parse($endDatetime));
 
         $pickup_location_id = null;
         $return_location_id = null;
@@ -516,11 +516,11 @@ class UserBookingController extends Controller
                 if ($appAdmin?->email) {
                     sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
                 }
-
-                if ($authUser?->email) {
+            }     
+                if (userNotificationsEnabled() && $authUser?->email) {
                     sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
                 }
-            }
+            
 
             return response()->json([
                 'code' => 200,
@@ -660,24 +660,12 @@ class UserBookingController extends Controller
                 'message' => __('web.home.booking_created'),
             ]);
 
-            // Handle PayPal URL error
-            if (
-                isset($response['links']) &&
-                is_array($response['links']) &&
-                isset($response['links'][1]) &&
-                is_array($response['links'][1]) &&
-                isset($response['links'][1]['href'])
-            ) {                
-                return response()->json([
-                    'code' => 500,
-                    'message' => __('web.home.failed_to_create_paypal_link')
-                ]);
-            }
+            $approve_paypal_url = $response['links'][1]['href'];
 
             return response()->json([
                 'code' => 200,
                 'message' => __('web.home.order_created_successfully'),
-                'paypal_url' => $response['links'][1]['href']
+                'paypal_url' => $approve_paypal_url
             ]);
         }
 
@@ -935,11 +923,11 @@ class UserBookingController extends Controller
                 if ($appAdmin) {
                     sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
                 }
-
-                if ($authUser && $authUser->email) {
-                    sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
-                }
             }
+            if (userNotificationsEnabled() && $authUser && $authUser->email) {
+                sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
+            }
+            
 
             return response()->json([
                 'code' => 200,
@@ -965,7 +953,7 @@ class UserBookingController extends Controller
                     Booking::where('transaction_id', $response['id'])->update([
                         'payment_status' => 2,
                         'booking_status' => 4,
-                    ]);                    
+                    ]);
                     $booking = Booking::where('transaction_id', $response['id'])->first();
                     $authUser = Auth::guard('web')->user();
                     $vehicle = VehicleInfo::where('id', $request->vehicle_id)->first();
@@ -994,10 +982,9 @@ class UserBookingController extends Controller
                         if ($appAdmin) {
                             sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
                         }
-
-                        if ($authUser && $authUser->email) {
-                            sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
-                        }
+                    }
+                    if (userNotificationsEnabled() &&$authUser && $authUser->email) {
+                        sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
                     }
                     return redirect()->route('payment.success.page', ['transaction_id' => $response['id']]);
                 }
@@ -1026,7 +1013,7 @@ class UserBookingController extends Controller
             $token = $request->get('token') ?? '';
             if (is_string($token)) {
                 $response = $this->provider->capturePaymentOrder($token);
-            } 
+            }
             Booking::where('transaction_id', $request->token)
                 ->update([
                     'payment_status' => 3,
@@ -1056,9 +1043,9 @@ class UserBookingController extends Controller
             $sessionId = $request->get('session_id');
 
             Booking::where('transaction_id', $sessionId)->update([
-                        'payment_status' => 2,
-                        'booking_status' => 4,
-                    ]);               
+                'payment_status' => 2,
+                'booking_status' => 4,
+            ]);
             $booking = Booking::where('transaction_id', $sessionId)->first();
             $authUser = Auth::guard('web')->user();
             $vehicle = VehicleInfo::where('id', $request->vehicle_id)->first();
@@ -1088,10 +1075,9 @@ class UserBookingController extends Controller
                 if ($appAdmin) {
                     sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
                 }
-
-                if ($authUser) {
-                    sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
-                }
+            }
+            if (userNotificationsEnabled() && $authUser) {
+                sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
             }
             return redirect()->route('payment.success.page', ['transaction_id' => $sessionId]);
         } catch (\Exception $e) {

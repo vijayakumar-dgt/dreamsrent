@@ -229,6 +229,7 @@ Route::group(['middleware' => ['setLocaleUser', 'checkInstallerStatus']], functi
         Route::get('reviews', 'reviews')->name('user.reviews');
         Route::get('payments', 'payments')->name('user.payments');
         Route::post('ajax-transactions', 'ajaxTransactions')->name('user.ajax-transactions');
+        Route::post('update-notification-settings', 'updateNotificationSettings')->name('user.update-notification-settings');
     });
     Route::post('/user/store_enquiry', [UserController::class, 'storeEnquiry'])->name('user.store-enquiry');
 

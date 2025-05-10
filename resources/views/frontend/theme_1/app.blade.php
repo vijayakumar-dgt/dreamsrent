@@ -14,7 +14,6 @@
 	<meta property="og:description" content="{{ isset($og_description) ? $og_description : '' }}">
 	<meta property="og:image" content="{{ isset($og_image) ? asset($og_image) : asset('frontend/assets/img/logo.svg') }}">
 	<meta property="og:url" content="{{ url()->current() }}">
-	<meta name="keywords" content="{{ isset($meta_keywords) ? $meta_keywords : '' }}">
 
 	<!-- Favicon -->
 	<link rel="shortcut icon" href="{{ isset($favicon) ? asset($favicon) : asset('frontend/assets/img/favicon.png') }}">

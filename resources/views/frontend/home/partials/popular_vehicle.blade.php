@@ -10,14 +10,17 @@
             <div class="row justify-content-center">
                 <div class="col-lg-12" data-aos="fade-down">
                     <div class="listing-tabs-group">
-                        <ul class="nav listing-buttons gap-3" data-bs-tabs="tabs">
+                        <ul class="nav listing-buttons gap-3" role="tablist">
                             @foreach($vehicleBrand as $brand)
-                                <li>
+                                <li role="presentation">
                                     <a 
                                         class="{{ $loop->first ? 'active' : '' }}" 
-                                        {{ $loop->first ? 'aria-current=true' : '' }} 
+                                        {{ $loop->first ? 'aria-selected=true' : 'aria-selected=false' }} 
+                                        role="tab"
                                         data-bs-toggle="tab" 
-                                        href="#tab_{{ $brand->id ?? '' }}">
+                                        href="#tab_{{ $brand->id ?? '' }}" 
+                                        id="tab_{{ $brand->id ?? '' }}-tab"
+                                        aria-controls="tab_{{ $brand->id ?? '' }}">
                                         <span>
                                             <img src="{{ uploadedAsset($brand->brand_icon) }}" alt="{{ ucfirst($brand->brand_name ?? '') }}" class="home-brand-img">
                                         </span>
@@ -25,7 +28,7 @@
                                     </a>
                                 </li>
                             @endforeach
-                        </ul>
+                        </ul>                        
                     </div>
                 </div>
             </div>
@@ -55,9 +58,7 @@
                                     <div class="fav-item justify-content-end">
                                         <span class="img-count"><i class="feather-image"></i>{{ count($vehicle['multiple_vehicle_images']) }}</span>
                                         @if(Auth::guard('web')->check())
-                                        <a href="javascript:void(0)" class="fav-icon wishlist-icon {{ $vehicle['wishlist'] ? 'selected' : '' }}" data-id="{{ $vehicle['id'] }}">
-                                            <i class="feather-heart"></i>
-                                        </a>
+                                        <button type="button" class="fav-icon wishlist-icon {{ $vehicle['wishlist'] ? 'selected' : '' }}" data-id="{{ $vehicle['id'] }}"><i class="feather-heart"></i></button>
                                         @endif
                                     </div>
                                     <span class="featured-text">{{ ucfirst($vehicle['brand'] ?? "") }}</span>
@@ -65,9 +66,9 @@
                                 <div class="listing-content">
                                     <div class="listing-features d-flex align-items-end justify-content-between">
                                         <div class="list-rating">
-                                            <a href="javascript:void(0)" class="author-img">
+                                            <button type="button" class="author-img btn border-0">
                                                 <img src="{{ $vehicle['avatar_image'] ?? '' }}" alt="author">
-                                            </a>
+                                            </button>
                                             <h3 class="listing-title">
                                                 <a href="/vehicle-details/{{ $vehicle['slug'] }}">{{ ucfirst($vehicle['name'] ?? "") }}</a>
                                             </h3>

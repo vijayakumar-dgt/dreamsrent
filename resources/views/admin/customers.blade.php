@@ -22,20 +22,20 @@
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
                     <div class="mb-2 me-2 d-none">
                         <div class="skeleton label-skeleton label-loader"></div>
-                        <a href="javascript:void(0);" class="btn btn-white d-flex align-items-center d-none real-label"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</a>
+                        <button type="button" class="btn btn-white d-flex align-items-center d-none real-label"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</button>
                     </div>
                     <div class="mb-2 me-2 d-none">
                         <div class="dropdown">
                             <div class="skeleton label-skeleton label-loader"></div>
-                            <a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center d-none real-label">
+                            <button type="button" class="btn btn-dark d-inline-flex align-items-center d-none real-label">
                                 <i class="ti ti-upload me-1"></i>{{ __('admin.common.export') }}
-                            </a>
+                            </button>
                         </div>
                     </div>
                     <div class="mb-2">
                         @if (hasPermission($permissions, 'customers', 'create'))
                         <div class="skeleton label-skeleton label-loader"></div>
-                        <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center d-none real-label" id="add_customer" data-bs-toggle="modal" data-bs-target="#add_customer_modal"><i class="ti ti-plus me-2"></i>{{ __('admin.manage.add_new_customer') }}</a>
+                        <button type="button" class="btn btn-primary d-flex align-items-center d-none real-label" id="add_customer" data-bs-toggle="modal" data-bs-target="#add_customer_modal"><i class="ti ti-plus me-2"></i>{{ __('admin.manage.add_new_customer') }}</button>
                         @endif
                     </div>
                 </div>
@@ -48,24 +48,24 @@
                     <input type="hidden" name="sort_by_status" id="sort_by_status">
                     <div class="skeleton label-skeleton label-loader me-2"></div>
                     <div class="dropdown me-2 d-none real-label">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                             <i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }} : <span class="ms-1" id="current_sort">{{ __('admin.common.latest') }}</span>
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2 sort_by_list">
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="latest">{{ __('admin.common.latest') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="latest">{{ __('admin.common.latest') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="ascending">{{ __('admin.common.ascending') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="ascending">{{ __('admin.common.ascending') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="descending">{{ __('admin.common.descending') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="descending">{{ __('admin.common.descending') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="last month">{{ __('admin.common.last_month') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="last month">{{ __('admin.common.last_month') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="last 7 days">{{ __('admin.common.last_7_days') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="last 7 days">{{ __('admin.common.last_7_days') }}</button>
                             </li>
                         </ul>
                     </div>
@@ -89,13 +89,13 @@
                     @if (hasPermission($permissions, 'customers', 'delete'))
                     <div class="dropdown me-2">
                         <div class="skeleton label-skeleton label-loader"></div>
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center d-none real-label" data-bs-toggle="dropdown">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center d-none real-label" data-bs-toggle="dropdown">
                             <i class="ti ti-edit-circle me-1"></i>{{ __('admin.common.bulk_actions') }}
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2" id="bulk_actions">
                             @if (hasPermission($permissions, 'customers', 'delete'))
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" id="bulk_delete">{{ __('admin.common.delete') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" id="bulk_delete">{{ __('admin.common.delete') }}</button>
                             </li>
                             @endif
                         </ul>
@@ -117,9 +117,9 @@
                 <div class="filterbox mb-3 d-flex align-items-center">
                     <h6 class="me-3">{{ __('admin.common.filters') }}</h6>
                     <div class="dropdown me-2">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                             {{ __('admin.common.language') }}
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-lg p-2" id="language_list">
                             <li>
                                 <div class="top-search m-2">
@@ -144,8 +144,8 @@
                             </div>
                         </ul>
                     </div>
-                    <a href="javascript:void(0);" class="me-2 text-purple links" id="apply_filter">{{ __('admin.common.apply') }}</a>
-                    <a href="javascript:void(0);" class="text-danger links" id="reset_filter">{{ __('admin.common.clear_all') }}</a>
+                    <button type="button" class="text-purple links border-0 bg-transparent" id="apply_filter">{{ __('admin.common.apply') }}</button>
+                    <button type="button" class="text-danger links border-0 bg-transparent" id="reset_filter">{{ __('admin.common.clear_all') }}</a>
                 </div>
             </div>
             <div class="custom-datatable-filter table-responsive table-loader">
@@ -303,7 +303,7 @@
                     <div class="modal-body pb-1 customer-modal-scroll">
                         <div class="row">
                             <div class="mb-3">
-                                <label class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
+                                <label for="image" class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
                                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                                     <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
                                         <img src="" class="img-fluid rounded d-none" id="imagePreview" alt="img">
@@ -326,28 +326,28 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.username') }}<span class="text-danger"> *</span></label>
+                                    <label for="username" class="form-label">{{ __('admin.common.username') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control" name="username" id="username">
                                     <span class="text-danger error-text" id="username_error"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger"> *</span></label>
+                                    <label for="first_name" class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control" name="first_name" id="first_name">
                                     <span class="text-danger error-text" id="first_name_error"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger"> *</span></label>
+                                    <label for="last_name" class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control" name="last_name" id="last_name">
                                     <span class="text-danger error-text" id="last_name_error"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.date_of_birth') }}<span class="text-danger"> *</span></label>
+                                    <label for="dob" class="form-label">{{ __('admin.common.date_of_birth') }}<span class="text-danger"> *</span></label>
                                     <div class="input-icon-end position-relative">
                                         <input type="text" class="form-control dob" name="dob" id="dob" placeholder="dd-mm-yyyy">
                                         <span class="input-icon-addon">
@@ -359,19 +359,19 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.gender') }}<span class="text-danger"> *</span></label>
-                                        <select class="form-control select" id="gender" name="gender" data-placeholder="{{ __('admin.common.select') }}">
-                                            <option value="">{{ __('admin.common.select') }}</option>
-                                            <option value="male">{{ __('admin.common.male') }}</option>
-                                            <option value="female">{{ __('admin.common.female') }}</option>
-                                            <option value="other">{{ __('admin.common.other') }}</option>
-                                        </select>
-                                        <span class="text-danger error-text" id="gender_error"></span>
+                                    <label for="gender" class="form-label">{{ __('admin.common.gender') }}<span class="text-danger"> *</span></label>
+                                    <select class="form-control select" id="gender" name="gender" data-placeholder="{{ __('admin.common.select') }}">
+                                        <option value="">{{ __('admin.common.select') }}</option>
+                                        <option value="male">{{ __('admin.common.male') }}</option>
+                                        <option value="female">{{ __('admin.common.female') }}</option>
+                                        <option value="other">{{ __('admin.common.other') }}</option>
+                                    </select>
+                                    <span class="text-danger error-text" id="gender_error"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.language') }}<span class="text-danger"> *</span></label>
+                                    <label for="language" class="form-label">{{ __('admin.common.language') }}<span class="text-danger"> *</span></label>
                                     <select class="form-control language" id="language" name="language" data-placeholder="{{ __('admin.common.select') }}">
                                         <option value="">{{ __('admin.common.select') }}</option>
                                         @if (!empty($languages))
@@ -385,7 +385,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
+                                    <label for="phone_number" class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control customer_phone_number" id="phone_number" name="phone_number">
                                     <input type="hidden" id="international_phone_number" name="international_phone_number">
                                     <span id="phone_number_error" class="text-danger error-text"></span>
@@ -393,14 +393,14 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
+                                    <label for="email" class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
                                     <input class="form-control" type="text" name="email" id="email">
                                     <span id="email_error" class="text-danger error-text"></span>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.address') }}<span class="text-danger"> *</span></label>
+                                    <label for="address" class="form-label">{{ __('admin.common.address') }}<span class="text-danger"> *</span></label>
                                     <input class="form-control" type="text" name="address" id="address">
                                     <span id="address_error" class="text-danger error-text"></span>
                                 </div>
@@ -408,28 +408,28 @@
                             <h6 class="fs-16 fw-medium mb-2">{{ __('admin.manage.licence_details') }}</h6>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.manage.card_number') }}<span class="text-danger"> *</span></label>
+                                    <label for="card_number" class="form-label">{{ __('admin.manage.card_number') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control" name="card_number" id="card_number">
                                     <span id="card_number_error" class="text-danger error-text"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.manage.date_of_issue') }}<span class="text-danger"> *</span></label>
+                                    <label for="date_of_issue" class="form-label">{{ __('admin.manage.date_of_issue') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control date_of_issue" name="date_of_issue" id="date_of_issue" placeholder="dd-mm-yyyy">
                                     <span id="date_of_issue_error" class="text-danger error-text"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.manage.valid_date') }}<span class="text-danger"> *</span></label>
+                                    <label for="valid_date" class="form-label">{{ __('admin.manage.valid_date') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control valid_date" name="valid_date" id="valid_date" placeholder="dd-mm-yyyy">
                                     <span id="valid_date_error" class="text-danger error-text"></span>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.documents') }}</label><span class="text-danger"> *</span></label>
+                                    <label for="documents" class="form-label">{{ __('admin.common.documents') }}</label><span class="text-danger"> *</span></label>
                                     <div class="document-upload text-center br-3 mb-3">
                                         <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
                                         <p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span></p>
@@ -443,7 +443,7 @@
                     </div>
                     <div class="modal-footer">
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                             <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
                         </div>
                     </div>
@@ -468,7 +468,7 @@
                     <div class="modal-body pb-1">
                         <div class="row">
                             <div class="mb-3">
-                                <label class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
+                                <label for="edit_image" class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
                                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                                     <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
                                         <img src="" class="img-fluid rounded d-none" id="editImagePreview" alt="img">
@@ -491,28 +491,28 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.username') }}<span class="text-danger"> *</span></label>
+                                    <label for="edit_username" class="form-label">{{ __('admin.common.username') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control" name="username" id="edit_username">
                                     <span class="text-danger error-text" id="edit_username_error"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger"> *</span></label>
+                                    <label for="edit_first_name" class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control" name="first_name" id="edit_first_name">
                                     <span class="text-danger error-text" id="edit_first_name_error"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger"> *</span></label>
+                                    <label for="edit_last_name" class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control" name="last_name" id="edit_last_name">
                                     <span class="text-danger error-text" id="edit_last_name_error"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.date_of_birth') }}<span class="text-danger"> *</span></label>
+                                    <label for="edit_dob" class="form-label">{{ __('admin.common.date_of_birth') }}<span class="text-danger"> *</span></label>
                                     <div class="input-icon-end position-relative">
                                         <input type="text" class="form-control dob" name="dob" id="edit_dob" placeholder="dd-mm-yyyy">
                                         <span class="input-icon-addon">
@@ -524,19 +524,19 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.gender') }}<span class="text-danger"> *</span></label>
-                                        <select class="form-control select" id="edit_gender" name="gender" data-placeholder="{{ __('admin.common.select') }}">
-                                            <option value="">{{ __('admin.common.select') }}</option>
-                                            <option value="male">{{ __('admin.common.male') }}</option>
-                                            <option value="female">{{ __('admin.common.female') }}</option>
-                                            <option value="other">{{ __('admin.common.other') }}</option>
-                                        </select>
-                                        <span class="text-danger error-text" id="edit_gender_error"></span>
+                                    <label for="edit_gender" class="form-label">{{ __('admin.common.gender') }}<span class="text-danger"> *</span></label>
+                                    <select class="form-control select" id="edit_gender" name="gender" data-placeholder="{{ __('admin.common.select') }}">
+                                        <option value="">{{ __('admin.common.select') }}</option>
+                                        <option value="male">{{ __('admin.common.male') }}</option>
+                                        <option value="female">{{ __('admin.common.female') }}</option>
+                                        <option value="other">{{ __('admin.common.other') }}</option>
+                                    </select>
+                                    <span class="text-danger error-text" id="edit_gender_error"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.language') }}<span class="text-danger"> *</span></label>
+                                    <label for="edit_language" class="form-label">{{ __('admin.common.language') }}<span class="text-danger"> *</span></label>
                                     <select class="form-control edit_language" id="edit_language" name="language" data-placeholder="{{ __('admin.common.select') }}">
                                         <option value="">{{ __('admin.common.select') }}</option>
                                         @if (!empty($languages))
@@ -550,7 +550,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
+                                    <label for="edit_phone_number" class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control edit_customer_phone_number" id="edit_phone_number" name="phone_number">
                                     <input type="hidden" id="edit_international_phone_number" name="international_phone_number">
                                     <span id="edit_phone_number_error" class="text-danger error-text"></span>
@@ -558,14 +558,14 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
+                                    <label for="edit_email" class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
                                     <input class="form-control" type="text" name="email" id="edit_email">
                                     <span id="edit_email_error" class="text-danger error-text"></span>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.address') }}<span class="text-danger"> *</span></label>
+                                    <label for="edit_address" class="form-label">{{ __('admin.common.address') }}<span class="text-danger"> *</span></label>
                                     <input class="form-control" type="text" name="address" id="edit_address">
                                     <span id="edit_address_error" class="text-danger error-text"></span>
                                 </div>
@@ -573,28 +573,28 @@
                             <h6 class="fs-16 fw-medium mb-2">{{ __('admin.manage.licence_details') }}</h6>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.manage.card_number') }}<span class="text-danger"> *</span></label>
+                                    <label for="edit_card_number" class="form-label">{{ __('admin.manage.card_number') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control" name="card_number" id="edit_card_number">
                                     <span id="edit_card_number_error" class="text-danger error-text"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.manage.date_of_issue') }}<span class="text-danger"> *</span></label>
+                                    <label for="edit_date_of_issue" class="form-label">{{ __('admin.manage.date_of_issue') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control date_of_issue" name="date_of_issue" id="edit_date_of_issue" placeholder="dd-mm-yyyy">
                                     <span id="edit_date_of_issue_error" class="text-danger error-text"></span>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.manage.valid_date') }}<span class="text-danger"> *</span></label>
+                                    <label for="edit_valid_date" class="form-label">{{ __('admin.manage.valid_date') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control valid_date" name="valid_date" id="edit_valid_date" placeholder="dd-mm-yyyy">
                                     <span id="edit_valid_date_error" class="text-danger error-text"></span>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.documents') }}</label><span class="text-danger"> *</span></label>
+                                    <label for="edit_documents" class="form-label">{{ __('admin.common.documents') }}</label><span class="text-danger"> *</span></label>
                                     <div class="document-upload text-center br-3 mb-3">
                                         <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
                                         <p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span></p>
@@ -613,7 +613,7 @@
                     </div>
                     <div class="modal-footer">
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                             <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.save_changes') }}</button>
                         </div>
                     </div>
@@ -636,8 +636,8 @@
                         <h4 class="mb-1">{{ __('admin.manage.delete_customer') }}</h4>
                         <p class="mb-3">{{ __('admin.manage.delete_customer_confirmation') }}</p>
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-                            <button type="submit" class="btn btn-primary">{{ __('admin.common.delete') }}</button>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+                            <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
                         </div>
                     </div>
                 </form>

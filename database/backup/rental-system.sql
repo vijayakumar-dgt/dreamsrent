@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 29, 2025 at 06:05 PM
+-- Generation Time: May 09, 2025 at 10:10 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `dreamsrent-installer`
+-- Database: `rental-installer`
 --
 
 -- --------------------------------------------------------
@@ -483,6 +483,22 @@ CREATE TABLE `checklists` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `checklists`
+--
+
+INSERT INTO `checklists` (`id`, `name`, `description`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Body Condition', 'Look for dents, scratches, rust, or paint damage.', 1, '2025-02-26 03:57:10', '2025-02-26 03:57:10', NULL),
+(2, 'Glass & Mirrors', 'Ensure no cracks, chips, or broken glass.', 1, '2025-02-26 03:57:10', '2025-02-26 03:57:10', NULL),
+(3, 'Lights', 'Inspect the headlights, taillights, and interior lighting.', 1, '2025-02-26 03:57:10', '2025-02-26 03:57:10', NULL),
+(4, 'Tires & Wheels', 'Check the tire pressure, alignment, and condition of the wheels.', 1, '2025-02-26 03:57:10', '2025-02-26 03:57:10', NULL),
+(5, 'Engine Oil, Coolant, & Brake Fluids', 'Inspect the engine oil, coolant, and brake fluids for leaks.', 1, '2025-02-26 03:57:10', '2025-02-26 03:57:10', NULL),
+(6, 'Battery', 'Ensure the battery is fully charged and in good condition.', 1, '2025-02-26 03:57:10', '2025-02-26 03:57:10', NULL),
+(7, 'Seats & Seatbelts', 'Check the condition of the seats, seatbelts, and headrests.', 1, '2025-02-26 03:57:10', '2025-02-26 03:57:10', NULL),
+(8, 'AC & Heater', 'Inspect the AC system and heater for proper operation.', 1, '2025-02-26 03:57:10', '2025-02-26 03:57:10', NULL),
+(9, 'Brakes & Suspension', 'Check the condition of the brakes and suspension system.', 1, '2025-02-26 03:57:10', '2025-02-26 03:57:10', NULL),
+(10, 'Exhaust System', 'Inspect the exhaust system for proper operation.', 1, '2025-02-26 03:57:10', '2025-02-26 03:57:10', NULL);
 
 -- --------------------------------------------------------
 
@@ -49489,13 +49505,16 @@ CREATE TABLE `email_templates` (
 --
 
 INSERT INTO `email_templates` (`id`, `title`, `notification_type`, `description`, `subject`, `sms_content`, `notification_content`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(2, 'Welcome Email', 1, '<p>{company_name} test<br></p>', 'Exciting News: Your Service Request Has Been Completed!', 'text sms', NULL, 1, '2025-04-08 01:40:06', '2025-04-08 01:40:29', '2025-04-07 07:11:26'),
-(3, 'Email Welcome', 1, '<p>Hi&nbsp;<span style=\"color: rgb(0, 128, 255);\">{user_name}</span>,<br>Welcome to {company_name}!</p><p>We’re thrilled to have you as part of our community and are excited to support you in finding the perfect car rental solution. Thank you for choosing us – we truly appreciate your trust and confidence.</p><p>At&nbsp;{company_name}<span class=\"text-info\"></span>, our mission is to make your experience as smooth and efficient as possible. Whether you’re looking for the perfect vehicle or need assistance with booking, we’re here to help you every step of the way. If you have any questions or need help, our dedicated support team is always ready to assist you. Feel free to reach out at any time – we’re committed to ensuring you have the best experience possible</p><p>Thank you again for choosing {company_name}. We’re excited to be part of your journey and look forward to supporting you throughout your rental experience.</p><p>Best<br>The&nbsp;{company_name}&nbsp;<span class=\"text-info\"></span>Team</p>', 'Welcome aboard – Let’s get started!', 'Welcome aboard – Let’s get started!', NULL, 1, '2025-04-08 01:41:36', '2025-04-09 15:26:04', NULL),
+(2, 'Welcome Email', 1, '<p>{company_name} test<br></p>', 'Your Service Request Has Been Completed!', 'text sms', NULL, 1, '2025-04-08 01:40:06', '2025-04-08 01:40:29', '2025-04-07 07:11:26'),
+(3, 'Email Welcomee', 1, '<p>Hi&nbsp;<span style=\"color: rgb(0, 128, 255);\">{user_name}</span>,<br>Welcome to {company_name}!</p><p>We’re thrilled to have you as part of our community and are excited to support you in finding the perfect car rental solution. Thank you for choosing us – we truly appreciate your trust and confidence.</p><p>At&nbsp;{company_name}<span class=\"text-info\"></span>, our mission is to make your experience as smooth and efficient as possible. Whether you’re looking for the perfect vehicle or need assistance with booking, we’re here to help you every step of the way. If you have any questions or need help, our dedicated support team is always ready to assist you. Feel free to reach out at any time – we’re committed to ensuring you have the best experience possible</p><p>Thank you again for choosing {company_name}. We’re excited to be part of your journey and look forward to supporting you throughout your rental experience.</p><p>Best<br>The&nbsp;{company_name}&nbsp;<span class=\"text-info\"></span>Team</p>', 'Welcome aboard – Let’s get started!', 'Welcome aboard – Let’s get started!', 'fdv', 1, '2025-04-08 01:41:36', '2025-04-29 10:49:36', NULL),
+(4, 'Booking  confirmation User', 2, '<p>Hi&nbsp;<span style=\"color: rgb(0, 128, 255);\">{user_name}</span>,<br>Welcome to {company_name}!</p><p>We’re thrilled to have you as part of our community and are excited to support you in finding the perfect car rental solution. Thank you for choosing us – we truly appreciate your trust and confidence.</p><p>At&nbsp;{company_name}<span class=\"text-info\"></span>, our mission is to make your experience as smooth and efficient as possible. Whether you’re looking for the perfect vehicle or need assistance with booking, we’re here to help you every step of the way. If you have any questions or need help, our dedicated support team is always ready to assist you. Feel free to reach out at any time – we’re committed to ensuring you have the best experience possible</p><p>Thank you again for choosing {company_name}. We’re excited to be part of your journey and look forward to supporting you throughout your rental experience.</p><p>Best<br>The&nbsp;{company_name}&nbsp;<span class=\"text-info\"></span>Team</p>', 'Your Service Request Has Been Completed!', 'Booking  confirmation', 'Booking  confirmation', 1, '2025-04-09 15:47:34', '2025-04-25 17:19:25', NULL),
 (5, 'Newsletter', 3, 'You have successfully subscribed to our newsletter.', 'Reg - Newsletter', 'You have successfully subscribed to our newsletter.', 'notification_content', 1, '2025-04-10 12:29:41', '2025-04-10 12:29:41', NULL),
-(7, 'Booking Confirmation to user', 2, '<p>Hello&nbsp;{user_name} vehicle ({vehicle_name}) has been booked successfully.</p>', 'Vehicle Booking Confirmation', 'Hello {user_name} vehicle ({vehicle_name}) has been booked successfully.', 'Hello {user_name} vehicle ({vehicle_name}) has been booked successfully.', 1, '2025-04-10 07:23:17', '2025-04-10 10:17:47', NULL),
+(7, 'Booking Confirmation to user', 10, '<p>Hello {user_name} vehicle ({vehicle_name}) has been booked successfully.</p>', 'Vehicle Booking Confirmation', 'Hello {user_name} vehicle ({vehicle_name}) has been booked successfully.', 'Hello {user_name} vehicle ({vehicle_name}) has been booked successfully.', 1, '2025-04-10 07:23:17', '2025-04-25 17:19:09', NULL),
 (8, 'Booking Confirmation to admin', 4, '<p>{user_name} has booked vehicle<br></p>', 'New Vehicle Booking', '{user_name} has booked vehicle', '{user_name} has booked vehicle', 1, '2025-04-10 10:22:15', '2025-04-10 10:22:15', NULL),
-(9, 'Booking Cancelled to user', 6, '<p>Hello&nbsp;{user_name}, your reservation #{reservation_id} has been cancelled successfully.</p>', 'Booking cancelled', 'Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.', 'Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.', 1, '2025-04-10 11:06:04', '2025-04-10 11:06:04', NULL),
-(10, 'Booking cancelled to admin', 5, '<p>Hello Admin, #{reservation_id} reservation has been cancelled.</p>', 'Booking cancelled', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 1, '2025-04-10 11:07:18', '2025-04-10 11:07:18', NULL);
+(9, 'Booking Cancelled to user', 5, '<p>Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.</p>', 'Booking cancelled', 'Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.', 'Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.', 1, '2025-04-10 11:06:04', '2025-04-10 11:06:04', NULL),
+(10, 'Booking cancelled to adminn', 6, '<p>Hello Admin, #{reservation_id} reservation has been cancelled.</p>', 'Booking cancelled', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 1, '2025-04-10 11:07:18', '2025-04-29 09:47:20', NULL),
+(11, 'Login Otp', 8, '<p>Your OTP Verification for login</p>', 'OTP Verification for login', 'Your OTP Verification for login', 'Your OTP Verification for login', 1, '2025-05-08 23:49:29', '2025-05-08 23:49:29', NULL),
+(12, 'Forgot Otp', 9, '<p>Your OTP Verification for Forgot password</p>', 'OTP Verification for Forgot password', 'Your OTP Verification for Forgot password', 'Your OTP Verification for Forgot password', 1, '2025-05-08 23:51:10', '2025-05-08 23:51:10', NULL);
 
 -- --------------------------------------------------------
 
@@ -49596,7 +49615,7 @@ CREATE TABLE `features` (
 CREATE TABLE `general_settings` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `key` varchar(255) NOT NULL,
-  `value` text DEFAULT NULL,
+  `value` longtext DEFAULT NULL,
   `group_id` bigint(20) UNSIGNED DEFAULT NULL,
   `language_id` bigint(20) UNSIGNED DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -50215,7 +50234,9 @@ INSERT INTO `notification_types` (`id`, `title`, `slug`, `tags`, `status`, `crea
 (4, 'Booking Confirmation to Admin', 'booking-confirmation-to-admin', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, '2025-04-10 14:04:55', '2025-04-10 14:04:55'),
 (5, 'Booking cancelled to admin', 'booking-cancelled-to-admin', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, '2025-04-10 16:31:30', '2025-04-10 16:31:30'),
 (6, 'Booking cancelled to user', 'booking-cancelled-to-user', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, '2025-04-10 16:33:10', '2025-04-10 16:33:10'),
-(7, 'Test Mail', 'test_mail', '[\"user_name\",\"company_name\",\"company_email\",\"company_phone\"]', 1, '2025-04-10 16:33:10', '2025-04-10 16:33:10');
+(7, 'Test Mail', 'test_mail', '[\"user_name\",\"company_name\",\"company_email\",\"company_phone\"]', 1, '2025-04-10 16:33:10', '2025-04-10 16:33:10'),
+(8, 'Login Otp', 'login-otp', '[\"user_name\",\"company_name\",\"company_email\",\"company_phone\"]', 1, NULL, NULL),
+(9, 'Forgot Otp', 'forgot-otp', '[\"user_name\",\"company_name\",\"company_email\",\"company_phone\"]', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -55384,6 +55405,9 @@ CREATE TABLE `users` (
   `password` varchar(255) DEFAULT NULL,
   `last_password_changed_at` timestamp NULL DEFAULT NULL,
   `google_auth_enabled` tinyint(1) NOT NULL DEFAULT 0,
+  `booking_confirmation` tinyint(1) NOT NULL DEFAULT 0,
+  `desktop_notifications` tinyint(1) NOT NULL DEFAULT 0,
+  `email_notifications` tinyint(1) NOT NULL DEFAULT 0,
   `remember_token` varchar(100) DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -56500,7 +56524,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `checklists`
 --
 ALTER TABLE `checklists`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `cities`
@@ -56590,7 +56614,7 @@ ALTER TABLE `driving_types`
 -- AUTO_INCREMENT for table `email_templates`
 --
 ALTER TABLE `email_templates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `enquiries`
@@ -56746,7 +56770,7 @@ ALTER TABLE `notification_tags`
 -- AUTO_INCREMENT for table `notification_types`
 --
 ALTER TABLE `notification_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `otp_settings`

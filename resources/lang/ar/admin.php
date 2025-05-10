@@ -2193,7 +2193,6 @@ return [
     'updated_successful' => 'تم التحديث بنجاح',
     'on' => 'على',
     'pricing' => 'الاسعار',
-    'price' => 'السعر',
     'color' => 'اللون',
     'year' => 'السنة',
     'available' => 'متوفر',

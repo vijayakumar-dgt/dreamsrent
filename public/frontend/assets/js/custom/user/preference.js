@@ -61,6 +61,9 @@
 
                 if (resp.code === 200) {
                     showToast('success', resp.message);
+                    setTimeout(() => {
+                        location.reload();
+                    },3000);
                 }
             } catch (error) {
                 $(".error-text").text("");

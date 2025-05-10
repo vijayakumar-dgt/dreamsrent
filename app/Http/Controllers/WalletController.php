@@ -212,7 +212,7 @@ class WalletController extends Controller
 
     public function paymentFailed(Request $request): JsonResponse
     {
-        dd('Error in the payment');
+        
     }
 
     public function walletHistoryList(Request $request): JsonResponse

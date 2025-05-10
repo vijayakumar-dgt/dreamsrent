@@ -333,6 +333,14 @@ function rentalNotificationEnabled(): int
     }
     return 0;
 }
+function userNotificationsEnabled(): bool
+{
+    $user = Auth::guard('web')->user();
+    if ($user && $user->booking_confirmation == 1 && $user->email_notifications == 1) {
+        return true;
+    }
+    return false;
+}
 /**
  * Send a notification to the given email based on the provided slug and data.
  *

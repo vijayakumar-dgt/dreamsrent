@@ -606,9 +606,34 @@ class UserController extends Controller
     public function usernotification(): View
     {
         $seo_title = __('web.user.notifications');
-        return view('frontend.user.notification', compact('seo_title'));
+        $user = Auth::guard('web')->user();
+        return view('frontend.user.notification', compact('seo_title', 'user'));
     }
 
+    public function updateNotificationSettings(Request $request): JsonResponse
+    {
+        try {
+            $user = Auth::guard('web')->user();
+            if ($user instanceof User) {
+                $user->booking_confirmation = $request->booking_confirmation == "1" ? 1 : 0;
+                $user->desktop_notifications = $request->desktop_notifications == "1" ? 1 : 0;
+                $user->email_notifications = $request->email_notifications == "1" ? 1 : 0;
+                $user->save();
+            }
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'message' => __('web.common.default_update_success'),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 500,
+                'message' => __('web.common.default_update_error'),
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
     public function usersecurity(): View
     {
         $seo_title = __('web.user.security');

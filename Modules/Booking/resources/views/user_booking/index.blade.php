@@ -285,10 +285,10 @@
                                                     </span>
                                                     <div class="adon-name">
                                                         <h6>{{ $service->extraService->name }}</h6>
-                                                        <a href="javascript:void(0);" class="d-inline-flex align-items-center adon-info-btn">
+                                                        <button type="button" class="d-inline-flex align-items-center adon-info-btn border-0 bg-white">
                                                             <i class="bx bx-info-circle me-2"></i> {{ __('web.home.more_information') }}
                                                             <i class="bx bx-chevron-down ms-2 arrow-icon"></i>
-                                                        </a>
+                                                        </button>
                                                     </div>
                                                 </div>
                                                 <span class="adon-price">{{ $currencySymbol }}{{ number_format($service->price, 2) }}</span>

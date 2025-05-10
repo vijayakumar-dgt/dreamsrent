@@ -3,6 +3,7 @@
     await loadTranslationFile("web", "user,common,home");
     fetchVehicleDetails();
     fetchRecommendedVehicles();
+    let _pricing_type;
     $(document).ready(function () {
         listReviews();
         $("#reviewForm").validate({
@@ -319,7 +320,9 @@ if ($(".bookingpickupdate").length > 0) {
 
         if (pickupDate) {
             const pickupOnly = pickupDate.clone().startOf("day");
-            $(".bookingreturndate").data("DateTimePicker").date(null);
+            if(_pricing_type == "daily"){
+                $(".bookingreturndate").data("DateTimePicker").date(null);
+            }
             $(".bookingreturndate").data("DateTimePicker").minDate(pickupOnly);
         }
 
@@ -564,13 +567,13 @@ function renderReviews(reviews) {
                         <div class="review-reply">
                             ${
                                 $("#auth_user_id").val() != ""
-                                    ? `<a class="btn review_reply_btn" href="javascript:void(0);" data-id="${
+                                    ? `<button type="button" class="btn review_reply_btn" data-id="${
                                           review.id
                                       }">
                                 <i class="fa-solid fa-reply"></i>${_l(
                                     "web.home.reply"
                                 )}
-                            </a>`
+                            </button>`
                                     : `<a class="btn" href="/login" data-id="${
                                           review.id
                                       }">
@@ -879,6 +882,10 @@ function renderPriceDetails(vehicle) {
                                 }</span>
                             </span>
                          </label>`;
+            
+        if(index === 0){
+            _pricing_type = priceType;
+        }
     });
 
     $(".price_options").html(priceOptions);
@@ -929,7 +936,9 @@ function handlePriceChange() {
 
     let returnDateTime = moment(currentDateTime);
     let duration = 1;
-
+    _pricing_type = selectedPriceType;
+    let $bookingpickupdate = $(".bookingpickupdate");
+    $bookingpickupdate.trigger("dp.change");
     // Reset readonly first
     $("#return_date, #return_time").prop("readonly", false);
 
@@ -950,9 +959,12 @@ function handlePriceChange() {
             $("#return_date, #return_time").prop("readonly", true);
             break;
     }
-
-    // $("#return_date").val(returnDateTime.format("DD-MM-YYYY"));
-    // $("#return_time").val(returnDateTime.format("HH:mm"));
+    if(_pricing_type != "daily"){
+        console.log('not daily');
+        
+        $("#return_date").val(returnDateTime.format("DD-MM-YYYY"));
+        $("#return_time").val(returnDateTime.format("HH:mm"));    
+    }
 
     if (selectedPriceType === "daily") {
         let pickupDateTime = moment($("#pickup_date").val(), "DD-MM-YYYY");
@@ -971,44 +983,58 @@ function handlePriceChange() {
 
 function renderDescription(vehicle) {
     const descriptionSection = $(".description_section");
-    const descriptionList = descriptionSection.find(".description-list");
-
-    descriptionList.empty(); 
-    descriptionSection.hide();
+    descriptionSection.empty().hide();
 
     if (vehicle.description && vehicle.description.trim() !== "") {
-        const maxLength = 500;
-        const description = vehicle.description.trim();
+        const maxWords = 50; // Number of words to show before truncation
+        // Convert HTML to text first
+        const plainText = $("<div>").html(vehicle.description.trim()).text();
+        const words = plainText.split(/\s+/).filter(word => word.length > 0);
+        
+        let html = `
+            <div class="review-header">
+                <h4>${_l("web.home.desc_of_listing")}</h4>
+            </div>
+            <div class="description-list">`;
 
-        if ($("<div>").html(description).text().length > maxLength) {
-            
-            const plainText = $("<div>").html(description).text();
-            const visibleText = plainText.substring(0, maxLength);
+        if (words.length > maxWords) {
+            const visibleWords = words.slice(0, maxWords).join(' ');
+            const hiddenWords = words.slice(maxWords).join(' ');
 
-            
-            const html = `
-                <div class="visible-text">${visibleText}...</div>
+            html += `
+                <div class="visible-text">${escapeHtml(visibleWords)}...</div>
                 <div class="read-more">
-                    <div class="more-text mt-2" style="display: none;">${description}</div>
-                    <a href="javascript:void(0);" class="more-link">${_l("web.home.show_more")}</a>
+                    <div class="more-text" style="display: none;">${escapeHtml(hiddenWords)}</div>
+                    <button type="button" class="border-0 bg-white  more-link">${_l("web.home.show_more")}</button>
                 </div>`;
-
-            descriptionList.html(html);
         } else {
-            descriptionList.html(`<div class="visible-text">${description}</div>`);
+            html += `<div class="visible-text">${escapeHtml(plainText)}</div>`;
         }
 
-        descriptionSection.show();
+        html += `</div>`;
+        descriptionSection.html(html).show();
 
-        descriptionList.find(".more-link").off("click").on("click", function () {
+        // Click handler
+        descriptionSection.find(".more-link").off("click").on("click", function() {
             const moreText = $(this).siblings(".more-text");
             const isVisible = moreText.is(":visible");
-
+            
             moreText.slideToggle(200);
             $(this).text(isVisible ? _l("web.home.show_more") : _l("web.home.show_less"));
         });
     }
 }
+
+// Helper function to escape HTML
+function escapeHtml(unsafe) {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+}
+
 
 function renderFeatures(vehicle) {
     const featureSection = $(".feature_section");
@@ -1183,7 +1209,7 @@ function createExtraService(vehicle) {
             .join("");
         html += `<div class="pb-0 extra-service">
                     <div class="review-header">
-                        <h4>Extra Service</h4>
+                        <h4>${_l('web.user.extra_services')}</h4>
                     </div>
                     <div class="lisiting-service">
                         <div class="row">
@@ -1213,13 +1239,13 @@ function createVehicleCard(vehicle) {
                 </span>
                 ${
                     vehicle.authenticated
-                        ? `<a href="javascript:void(0);" data-id="${
+                        ? `<button type="button" data-id="${
                               vehicle.id
-                          }" class="fav-icon wishlist-icon ${
+                          }" class="fav-icon border-0 wishlist-icon ${
                               vehicle.wishlist ? "selected" : ""
                           }">
                     <i class="fa-regular fa-heart"></i>
-                </a>`
+                </button>`
                         : ""
                 }
             </div>
@@ -1456,10 +1482,10 @@ $(document).ready(function () {
                 default:
                     return;
             }
-
-            // $("#return_date").val(returnDateTime.format("DD-MM-YYYY"));
-            // $("#return_time").val(returnDateTime.format("HH:mm"));
-
+            if(_pricing_type != 'daily'){
+                $("#return_date").val(returnDateTime.format("DD-MM-YYYY"));
+                $("#return_time").val(returnDateTime.format("HH:mm"));
+            }
             $("#final_price_rate").val(dailyPrice.toFixed(2)); // Update price
         }
     }

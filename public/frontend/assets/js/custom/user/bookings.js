@@ -250,12 +250,29 @@ const renderButtons = data => {
     let start = moment(data.start_datetime);
     let end = moment(data.end_datetime);
     let showStartRideButton = now.isBetween(start, end, null, '[]'); // inclusive
-    
+    let html = '';
     switch (data.status) {
         case 4:
-            return `<a href="javascript:void(0);" id="cancel_booking" data-id="${data.id}" class="btn btn-sm btn-secondary">${_l('web.common.cancel')} ${_l('web.user.booking')}</a>
-                    ${showStartRideButton ? `<a href="javascript:void(0);" id="start_ride" data-id="${data.id}" class="btn btn-sm btn-primary">${_l('web.user.start_ride')}</a>` : ""}`;
+            html += `<a href="javascript:void(0);" id="cancel_booking" data-id="${data.id}" class="btn  me-2 btn-sm btn-secondary">
+                        ${_l('web.common.cancel')} ${_l('web.user.booking')}
+                    </a>`;
+            if (showStartRideButton) {
+                html += `<a href="javascript:void(0);" id="start_ride" data-id="${data.id}" class="btn  btn-sm btn-primary">
+                            ${_l('web.user.start_ride')}
+                        </a>`;
+            }
+            break;
+        case 1:
+            html += `<a href="javascript:void(0);" id="complete_booking" data-id="${data.id}" class="btn btn-sm btn-primary">
+                        ${_l('web.user.complete_ride')}
+                     </a>`;
+            break;
+    
+        default:
+            html = '';
+            break;
     }
+    $(".modal_footer").html(html);    
 };
 
 // Fetch & Show Booking Details

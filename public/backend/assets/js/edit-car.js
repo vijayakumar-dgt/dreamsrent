@@ -45,7 +45,7 @@
     let DamageCounter = 0; // Ensure global unique IDs
 
     function adddamage(damage) {
-        let uniqueID = "damage_" + DamageCounter++;
+        let uniqueID = `damage_${crypto.randomUUID()}`;
 
         let currentDate = new Date(
             damage.created_at || Date.now()

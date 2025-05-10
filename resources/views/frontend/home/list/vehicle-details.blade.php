@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/plugins/intltelinput/css/intlTelInput.css') }}">
     @endpush
     @section('content')
+    
     <!-- Skeleton Container -->
     <div class="container skeleton-container">
         <div class="vehl_dets_skeleton">
@@ -78,7 +79,7 @@
                             <li>
                                 <div class="car-brand">
                                     <span>
-                                        <img src="/frontend/assets/img/icons/car-icon.svg" alt="img">
+                                        <img src="{{asset('frontend/assets/img/icons/car-icon.svg')}}" alt="img">
                                     </span>
                                     <div class="vehicle_type"></div>
                                 </div>
@@ -128,33 +129,14 @@
                     <div class="detail-product">
                         <div class="pro-info">
                             <div class="">
-                                <span class="badge-km d-none"><i class="fa-solid fa-person-walking"></i>4.2 Km Away</span>
-                                <a href="javascript:void(0);" class="fav-icon"><i class="fa-regular fa-heart"></i></a>
+                                <button type="button" class="fav-icon"><i class="fa-regular fa-heart"></i></button>
                             </div>
                         </div>
                         <div class="slider detail-bigimg">
-                            <div class="product-img">
-                                <img src="/frontend/assets/img/cars/slider-01.jpg" alt="Slider">
-                            </div>
-                            <div class="product-img">
-                                <img src="/frontend/assets/img/cars/slider-02.jpg" alt="Slider">
-                            </div>
-                            <div class="product-img">
-                                <img src="/frontend/assets/img/cars/slider-03.jpg" alt="Slider">
-                            </div>
-                            <div class="product-img">
-                                <img src="/frontend/assets/img/cars/slider-04.jpg" alt="Slider">
-                            </div>
-                            <div class="product-img">
-                                <img src="/frontend/assets/img/cars/slider-05.jpg" alt="Slider">
-                            </div>
+                            
                         </div>
                         <div class="slider slider-nav-thumbnails">
-                            <div><img src="/frontend/assets/img/cars/slider-thum-01.jpg" alt="product image"></div>
-                            <div><img src="/frontend/assets/img/cars/slider-thum-02.jpg" alt="product image"></div>
-                            <div><img src="/frontend/assets/img/cars/slider-thum-03.jpg" alt="product image"></div>
-                            <div><img src="/frontend/assets/img/cars/slider-thum-04.jpg" alt="product image"></div>
-                            <div><img src="/frontend/assets/img/cars/slider-thum-05.jpg" alt="product image"></div>
+                            
                         </div>
                     </div>
                     <!-- Extra Services -->
@@ -162,74 +144,7 @@
                         <div class="review-header">
                             <h4>{{ __('web.user.extra_services') }}</h4>
                         </div>
-                        <div class="lisiting-service">
-                            <div class="row">
-                                <div class="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
-                                    <div class="service-img">
-                                        <img src="/frontend/assets/img/icons/service-01.svg" class="avatar" alt="Icon">
-                                    </div>
-                                    <div class="service-info">
-                                        <p>GPS Navigation Systems</p>
-                                    </div>
-                                </div>
-                                <div class="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
-                                    <div class="service-img">
-                                        <img src="/frontend/assets/img/icons/service-02.svg" alt="Icon">
-                                    </div>
-                                    <div class="service-info">
-                                        <p>Wi-Fi Hotspot</p>
-                                    </div>
-                                </div>
-                                <div class="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
-                                    <div class="service-img">
-                                        <img src="/frontend/assets/img/icons/service-03.svg" alt="Icon">
-                                    </div>
-                                    <div class="service-info">
-                                        <p>Child Safety Seats</p>
-                                    </div>
-                                </div>
-                                <div class="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
-                                    <div class="service-img">
-                                        <img src="/frontend/assets/img/icons/service-04.svg" alt="Icon">
-                                    </div>
-                                    <div class="service-info">
-                                        <p>Fuel Options</p>
-                                    </div>
-                                </div>
-                                <div class="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
-                                    <div class="service-img">
-                                        <img src="/frontend/assets/img/icons/service-05.svg" alt="Icon">
-                                    </div>
-                                    <div class="service-info">
-                                        <p>Roadside Assistance</p>
-                                    </div>
-                                </div>
-                                <div class="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
-                                    <div class="service-img">
-                                        <img src="/frontend/assets/img/icons/service-06.svg" alt="Icon">
-                                    </div>
-                                    <div class="service-info">
-                                        <p>Satellite Radio</p>
-                                    </div>
-                                </div>
-                                <div class="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
-                                    <div class="service-img">
-                                        <img src="/frontend/assets/img/icons/service-07.svg" alt="Icon">
-                                    </div>
-                                    <div class="service-info">
-                                        <p>Additional Accessories</p>
-                                    </div>
-                                </div>
-                                <div class="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
-                                    <div class="service-img">
-                                        <img src="/frontend/assets/img/icons/service-08.svg" alt="Icon">
-                                    </div>
-                                    <div class="service-info">
-                                        <p>Express Check-in/out</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                     <!-- /Extra Services -->
                     <!-- Listing Section -->
@@ -252,25 +167,25 @@
                                 <div class="row">
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                         <div class="feature-img">
-                                            <img src="/frontend/assets/img/specification/specification-icon-1.svg" alt="Icon">
+                                            <img src="{{asset('frontend/assets/img/specification/specification-icon-1.svg')}}" alt="Icon">
                                         </div>
                                         <div class="featues-info">
                                             <span>{{__('web.home.body')}} </span>
-                                            <h6 class="vehicle_type"> Sedan</h6>
+                                            <h6 class="vehicle_type"> </h6>
                                         </div>
                                     </div>
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                         <div class="feature-img">
-                                            <img src="/frontend/assets/img/specification/specification-icon-2.svg" alt="Icon">
+                                            <img src="{{asset('frontend/assets/img/specification/specification-icon-2.svg')}}" alt="Icon">
                                         </div>
                                         <div class="featues-info">
                                             <span>{{__('web.home.make')}} </span>
-                                            <h6 class="vehicle_brand"> Nisssan</h6>
+                                            <h6 class="vehicle_brand"> </h6>
                                         </div>
                                     </div>
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                         <div class="feature-img">
-                                            <img src="/frontend/assets/img/specification/specification-icon-3.svg" alt="Icon">
+                                            <img src="{{asset('frontend/assets/img/specification/specification-icon-3.svg')}}" alt="Icon">
                                         </div>
                                         <div class="featues-info">
                                             <span>{{__('web.home.transmission')}} </span>
@@ -279,36 +194,36 @@
                                     </div>
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                         <div class="feature-img">
-                                            <img src="/frontend/assets/img/specification/specification-icon-4.svg" alt="Icon">
+                                            <img src="{{asset('frontend/assets/img/specification/specification-icon-4.svg')}}" alt="Icon">
                                         </div>
                                         <div class="featues-info">
                                             <span>{{ __('web.home.fuel_type') }}</span>
-                                            <h6 class="vehicle_fuel"> Diesel</h6>
+                                            <h6 class="vehicle_fuel"></h6>
                                         </div>
                                     </div>
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                         <div class="feature-img">
-                                            <img src="/frontend/assets/img/specification/specification-icon-5.svg" alt="Icon">
+                                            <img src="{{asset('frontend/assets/img/specification/specification-icon-5.svg')}}" alt="Icon">
                                         </div>
                                         <div class="featues-info">
                                             <span>{{__('web.home.mileage')}} </span>
-                                            <h6 class="vehicle_mileage">16 Km</h6>
+                                            <h6 class="vehicle_mileage"></h6>
                                         </div>
                                     </div>
 
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                         <div class="feature-img">
-                                            <img src="/frontend/assets/img/specification/specification-icon-7.svg" alt="Icon">
+                                            <img src="{{asset('frontend/assets/img/specification/specification-icon-7.svg')}}" alt="Icon">
                                         </div>
                                         <div class="featues-info">
                                             <span>{{ __('web.home.year') }}</span>
-                                            <h6 class="vehicle_year"> 2018</h6>
+                                            <h6 class="vehicle_year"> </h6>
                                         </div>
                                     </div>
 
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                         <div class="feature-img">
-                                            <img src="/frontend/assets/img/specification/specification-icon-9.svg" alt="Icon">
+                                            <img src="{{asset('frontend/assets/img/specification/specification-icon-9.svg')}}" alt="Icon">
                                         </div>
                                         <div class="featues-info">
                                             <span>{{ __('web.home.vin') }} </span>
@@ -317,7 +232,7 @@
                                     </div>
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                         <div class="feature-img">
-                                            <img src="/frontend/assets/img/specification/specification-icon-10.svg" alt="Icon">
+                                            <img src="{{asset('frontend/assets/img/specification/specification-icon-10.svg')}}" alt="Icon">
                                         </div>
                                         <div class="featues-info">
                                             <span>Door </span>
@@ -366,38 +281,7 @@
                         <div class="review-header">
                             <h4>{{ __('web.home.gallery') }}</h4>
                         </div>
-                        <div class="gallery-list">
-                            <ul>
-                                <li>
-                                    <div class="gallery-widget">
-                                        <a href="/frontend/assets/img/gallery/gallery-big-01.jpg" data-fancybox="gallery1">
-                                            <img class="img-fluid" alt="Image" src="/frontend/assets/img/gallery/gallery-thumb-01.jpg">
-                                        </a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="gallery-widget">
-                                        <a href="/frontend/assets/img/gallery/gallery-big-02.jpg" data-fancybox="gallery1">
-                                            <img class="img-fluid" alt="Image" src="/frontend/assets/img/gallery/gallery-thumb-02.jpg">
-                                        </a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="gallery-widget">
-                                        <a href="/frontend/assets/img/gallery/gallery-big-03.jpg" data-fancybox="gallery1">
-                                            <img class="img-fluid" alt="Image" src="/frontend/assets/img/gallery/gallery-thumb-03.jpg">
-                                        </a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="gallery-widget">
-                                        <a href="/frontend/assets/img/gallery/gallery-big-04.jpg" data-fancybox="gallery1">
-                                            <img class="img-fluid" alt="Image" src="/frontend/assets/img/gallery/gallery-thumb-04.jpg">
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                        
                     </div>
                     <!-- /Gallery -->
                     <!-- Video -->
@@ -406,8 +290,8 @@
                             <h4>{{ __('web.home.video') }}</h4>
                         </div>
                         <div class="short-video">
-                            <img class="img-fluid" alt="Image" src="/frontend/assets/img/video-img.jpg" id="video_thumb">
-                            <a href="https://www.youtube.com/embed/ExJZAegsOis" data-fancybox="video" class="video-icon" id="video">
+                            <img class="img-fluid" alt="Image" src="{{asset('frontend/assets/img/video-img.jpg')}}" id="video_thumb">
+                            <a href="#" data-fancybox="video" class="video-icon" id="video">
                                 <i class="bx bx-play"></i>
                             </a>
                         </div>
@@ -465,14 +349,14 @@
                                     <h6>{{ __('web.home.cancel_charges') }}</h6>
                                     <p>{{ __('web.home.cancel_policy_content') }}</p>
                                 </div>
-                                <a href="/pages/privacy-policy">{{ __('web.home.know_more') }}</a>
+                                <a href="{{url('pages/privacy-policy')}}">{{ __('web.home.know_more') }}</a>
                             </div>
                             <div class="policy-item">
                                 <div class="policy-info">
                                     <h6>{{__('web.home.policy')}}</h6>
                                     <p>{{__('web.home.consent')}}</p>
                                 </div>
-                                <a href="/pages/privacy-policy">{{ __('web.home.view_details') }}</a>
+                                <a href="{{url('pages/privacy-policy')}}">{{ __('web.home.view_details') }}</a>
                             </div>
                         </div>
                     </div>
@@ -858,7 +742,7 @@
                                                             {{ __('web.home.book') }}
                                                         </a>
                                                         @endauth
-                                                        <a href="javascript:void(0);" id="enquire_us" data-bs-toggle="modal" data-bs-target="#enquiry" class="btn btn-theme {{ $allowEnquiries != 1 ? 'btn-disabled' : '' }}">{{__('web.home.enquire_us')}}</a>
+                                                        <button type="button" id="enquire_us" data-bs-toggle="modal" data-bs-target="#enquiry" class="btn btn-theme {{ $allowEnquiries != 1 ? 'btn-disabled' : '' }}">{{__('web.home.enquire_us')}}</button>
                                                     </div>
                                                 </div>
                                             </li>
@@ -966,7 +850,7 @@
                                                 <div class="input-block mb-0">
                                                     <div class="search-btn">
                                                         <a href="#" class="btn btn-primary check-available w-100">Book</a>
-                                                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#enquiry" class="btn btn-theme">Enquire Us</a>
+                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#enquiry" class="btn btn-theme">Enquire Us</button>
                                                     </div>
                                                 </div>
                                             </li>
@@ -1056,7 +940,7 @@
                         </div>
                         <label class="custom_check w-100">
                             <input type="checkbox" name="terms" id="terms" value="1">
-                            <span class="checkmark"></span> {{ __('web.home.enquire_aggree_with') }} <a href="/pages/terms-conditions">{{ __('web.home.terms_of_service') }}</a> & <a href="javascript:void(0);">{{ __('web.home.privacy_policy') }}</a>
+                            <span class="checkmark"></span> {{ __('web.home.enquire_aggree_with') }} <a href="/pages/terms-conditions">{{ __('web.home.terms_of_service') }}</a> & <button type="button" class="border-0 bg-white" >{{ __('web.home.privacy_policy') }}</button>
                         </label>
                         <span class="error-text text-danger" id="terms_error"></span>
                         <div class="modal-btn modal-btn-sm">
@@ -1074,14 +958,14 @@
     @push('scripts')
 
     <!-- Slick JS -->
-    <script src="/frontend/assets/plugins/slick/slick.js"></script>
+    <script src="{{asset('frontend/assets/plugins/slick/slick.js')}}"></script>
 
     <!-- Sticky Sidebar JS -->
-    <script src="/frontend/assets/plugins/theia-sticky-sidebar/ResizeSensor.js"></script>
-    <script src="/frontend/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js"></script>
+    <script src="{{asset('frontend/assets/plugins/theia-sticky-sidebar/ResizeSensor.js')}}"></script>
+    <script src="{{asset('frontend/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js')}}"></script>
 
     <!-- Fancybox JS -->
-    <script src="/frontend/assets/plugins/fancybox/fancybox.umd.js"></script>
+    <script src="{{asset('frontend/assets/plugins/fancybox/fancybox.umd.js')}}"></script>
     <script src="{{ asset('backend/assets/plugins/intltelinput/js/intlTelInput.js') }}"></script>
     <script src="{{ asset('/frontend/assets/js/custom/home/vehicle-details.js') }}"></script>
     @endpush

@@ -13,17 +13,17 @@
                         <p data-aos="fade-down">{{ $section['section_label'] }}</p>
                         <div class="download-btn">
                             <div class="app-avilable" data-aos="fade-down">
-                                <a href="javascript:void(0)"><img src="/frontend/assets/img/play-store.svg" alt="PlayStore"></a>
+                                <button type="button" class="btn border-0"><img src="{{asset('frontend/assets/img/play-store.svg')}}" alt="PlayStore"></button>
                             </div>
                             <div class="app-avilable" data-aos="fade-down">
-                                <a href="javascript:void(0)"><img src="/frontend/assets/img/apple.svg" alt="AppStore"></a>
+                                <button type="button" class="btn border-0"><img src="{{asset('frontend/assets/img/apple.svg')}}" alt="AppStore"></button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-5 d-none d-lg-block">
                     <div class="car-holder">
-                        <img class="app-car img-fluid" src="/frontend/assets/img/app-car.png" alt="App Available"  data-aos="fade-down">
+                        <img class="app-car img-fluid" src="{{asset('frontend/assets/img/app-car.png')}}" alt="App Available"  data-aos="fade-down">
                     </div>
                 </div>
             </div>

@@ -124,9 +124,14 @@ class UserLoginRegisterController extends Controller
         $subject = 'OTP Verification for login';
         $content = 'Your OTP Verification for login';
         if ($settings['otp_type'] === 'email') {
-            $notificationType = 2;
-            $subject = 'OTP Verification for login';
-            $content = 'Your OTP Verification for login';
+            $notificationType = ($type === 'forgot') ? 9 : 8;
+        
+            $template = EmailTemplate::select('subject', 'description')
+                ->where('notification_type', $notificationType)
+                ->first();
+        
+            $subject = $template?->subject ?: 'OTP Verification';
+            $content = $template?->description ?: 'Your OTP Verification';
         } elseif ($settings['otp_type'] === 'sms') {
             $notificationType = 2;
             $template = EmailTemplate::select('subject', 'content')

@@ -15,17 +15,15 @@
                         <div class="rental-car-item">
                             <div class="listing-item mb-0">
                                 <div class="listing-img">
-                                    <a href="/vehicle-details/{{ $vehicle['slug'] }}">
+                                    <a href="{{route('vehicleDetails', $vehicle['slug']) }}">
                                         <img src="{{ $vehicle['vehicle_image'] }}" class="img-fluid"
                                             alt="{{ ucfirst($vehicle['name']) }}">
                                     </a>
                                     <div class="fav-item justify-content-end">
                                         @if(Auth::guard('web')->check())
-                                        <a href="javascript:void(0)"
-                                            class="fav-icon wishlist-icon {{ $vehicle['wishlist'] ? 'selected' : '' }}"
-                                            data-id="{{ $vehicle['id'] }}">
-                                            <i class="feather-heart"></i>
-                                        </a>
+                                        <button class="fav-icon wishlist-icon {{ $vehicle['wishlist'] ? 'selected' : '' }}"
+                                        data-id="{{ $vehicle['id'] }}">
+                                        <i class="feather-heart"></i></button>
                                         @endif
                                     </div>
                                 </div>
@@ -59,8 +57,7 @@
                                                         {{ __('web.common.reviews') }}</span>
                                         </div>
                                         <h3 class="listing-title">
-                                            <a
-                                                href="/vehicle-details/{{ $vehicle['slug'] }}">{{ ucfirst($vehicle['name']) }}</a>
+                                            <a href="{{route('vehicleDetails', $vehicle['slug']) }}">{{ ucfirst($vehicle['name']) }}</a>
                                         </h3>
                                     </div>
                                     <div class="listing-details-group">
@@ -100,7 +97,7 @@
                                         </ul>
                                     </div>
                                     <div class="listing-button">
-                                        <a href="/vehicle-details/{{ $vehicle['slug'] }}" class="btn btn-order"><span><i
+                                        <a href="{{route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-order"><span><i
                                                     class="feather-calendar me-2"></i></span>{{ __('web.home.rent_now')  }}</a>
                                     </div>
                                 </div>
@@ -113,7 +110,7 @@
             </div>
             <!-- View More -->
             <div class="view-all text-center" data-aos="fade-down">
-                <a href="/vehicles" class="btn btn-view d-inline-flex align-items-center">{{ __('web.home.view_all_cars') }}
+                <a href="{{ route('list') }}" class="btn btn-view d-inline-flex align-items-center">{{ __('web.home.view_all_cars') }}
                     <span><i class="feather-arrow-right ms-2"></i></span></a>
             </div>
             <!-- View More -->

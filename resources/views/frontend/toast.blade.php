@@ -5,9 +5,7 @@
                 <strong class="me-auto">{{ __('web.common.toast') }}</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body">
-                Your,toast message here.
-            </div>
+            <div class="toast-body"></div>
         </div>
         <div id="secondaryToast" class="toast colored-toast bg-secondary-transparent" role="alert" aria-live="assertive"
             aria-atomic="true">
@@ -15,9 +13,7 @@
                 <strong class="me-auto">{{ __('web.common.toast') }}</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body">
-                Your,toast message here.
-            </div>
+            <div class="toast-body"></div>
         </div>
         <div id="warningToast" class="toast colored-toast bg-warning-transparent" role="alert" aria-live="assertive"
             aria-atomic="true">
@@ -25,9 +21,7 @@
                 <strong class="me-auto">{{ __('web.common.warning') }}!</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body">
-                Your,toast message here.
-            </div>
+            <div class="toast-body"></div>
         </div>
         <div id="infoToast" class="toast colored-toast bg-info-transparent" role="alert" aria-live="assertive"
             aria-atomic="true">
@@ -35,9 +29,7 @@
                 <strong class="me-auto">{{ __('web.common.information') }}!</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body">
-                Your,toast message here.
-            </div>
+            <div class="toast-body"></div>
         </div>
         <div id="successToast" class="toast colored-toast bg-success-transparent" role="alert" aria-live="assertive"
             aria-atomic="true">
@@ -45,9 +37,7 @@
                 <strong class="me-auto">{{ __('web.common.success') }}!</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body">
-                Your,toast message here.
-            </div>
+            <div class="toast-body"></div>
         </div>
         <div id="dangerToast" class="toast colored-toast bg-danger-transparent" role="alert" aria-live="assertive"
             aria-atomic="true">
@@ -55,8 +45,6 @@
                 <strong class="me-auto">{{ __('web.common.error') }}!</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body">
-                Your,toast message here.
-            </div>
+            <div class="toast-body"></div>
         </div>
     </div>

@@ -4,18 +4,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Dreams Rent | Register</title>
+    <title>{{ isset($seo_title) ? $seo_title : config('app.name') }} | Register</title>
+
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('frontend/assets/img/favicon.png') }}">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}">
+
     <!-- Fontawesome CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/all.min.css') }}">
+
     <!-- Toastr CSS -->
     <link href="{{ asset('frontend/assets/plugins/toastr/toatr.css') }}" rel="stylesheet">
+
     <!-- Fearther CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/feather.css') }}">
+
     <!-- Main CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
 </head>
@@ -131,19 +137,24 @@
        
     </div>
     <!-- /Main Wrapper -->
+
     <!-- jQuery -->
     <script src="{{ asset('frontend/assets/js/jquery-3.7.1.min.js') }}"></script>
+
     <!-- jQuery validation -->
     <script src="{{ asset('backend/assets/js/jquery/jquery-validation.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/jquery/jquery-validation-additional-methods.min.js') }}"></script>
+
     <!-- Toastr JS -->
     <script src="{{ asset('backend/assets/plugins/toastr/toastr.min.js') }}"></script>
+
     <!-- Bootstrap Core JS -->
     <script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>
+    
+    <!-- Custom JS -->
     <script src="{{ asset('frontend/assets/js/custom/lang_script.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/custom/custom-script.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/user/register.js') }}"></script>
-    <!-- Custom JS -->
     <script src="{{ asset('frontend/assets/js/script.js') }}"></script>
 </body>
 </html>

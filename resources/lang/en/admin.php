@@ -2207,7 +2207,6 @@ return array(
     'pricing' => 'Pricing',
     'color' => 'Color',
     'year' => 'Year',
-    'price' => 'Price',
     'available' => 'Available',
     'insurances' => 'Insurances',
     'total_price' => 'Total Price',

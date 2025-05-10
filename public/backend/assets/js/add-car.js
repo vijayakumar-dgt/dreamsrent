@@ -862,7 +862,7 @@
                 $("#price_btn").text("Create New");
                 editingId = null;
             } else {
-                let uniqueId = "season_" + new Date().getTime();
+                let uniqueId = `season_${crypto.randomUUID()}`;
                 let newSeasonalPricing = `
                 <div id="${uniqueId}" class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-1">
                     <div>
@@ -1020,7 +1020,7 @@
                 $("#tarrif_btn").text("Create Tariff");
                 editingTariffId = null;
             } else {
-                let uniqueId = "tariff_" + new Date().getTime();
+                let uniqueId = `tariff_${crypto.randomUUID()}`;
 
                 let newTariff = `
             <div id="${uniqueId}" class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-1">
@@ -1589,7 +1589,7 @@
                 editingDamageId = null;
                 showToast("success", "Damage updated successfully!");
             } else {
-                let uniqueId = "damage_" + new Date().getTime();
+                let uniqueId = `damage_${crypto.randomUUID()}`;
                 let reader = new FileReader();
 
                 reader.onload = function (e) {
@@ -1737,7 +1737,7 @@
                 editingFAQ = null; // Reset after editing
             } else {
                 // Add new FAQ
-                let uniqueID = "faq_" + faqCounter++; // Unique ID for each FAQ
+                let uniqueID = `faq_${crypto.randomUUID()}`;
                 let faqItem = `
             <div class="accordion-item" id="faq_item_${uniqueID}">
                 <h2 class="accordion-header d-flex align-items-center justify-content-between">
@@ -2578,10 +2578,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     "#insurance_price_type"
                 ).value;
 
-                // Generate a unique ID for this insurance entry
-                const uniqueId = `insurance_${Date.now()}_${Math.floor(
-                    Math.random() * 1000
-                )}`;
+                const uniqueId = `insurance_${crypto.randomUUID()}`;
 
                 const newInsuranceDiv = document.createElement("div");
                 newInsuranceDiv.className =
