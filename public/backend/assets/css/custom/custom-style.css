@@ -478,7 +478,7 @@
     left: 0;
     width: 100%;
     background: rgb(32 31 29);
-    padding: 5px;
+    padding: 12px;
     text-align: center;
     color: white;
     z-index: 9999;
@@ -488,7 +488,7 @@
     justify-content: center !important;
     gap: 10px;
     font-size: 14px;
-    border-radius: 4px;
+    border-radius: 0;
     flex-wrap: wrap;
   }
 
