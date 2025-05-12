@@ -802,9 +802,6 @@ return array(
     'type_your_content_here' => 'Type your content here',
     'edit_bank_account' => 'Edit Bank Account',
     'edit_template' => 'Edit Template',
-    'sitemap_empty' => 'Sitemap is empty',
-    'folder_permission_error' => 'Folder permission error',
-    'failed_to_generate_sitemap' => 'Failed to generate sitemap',
   ),
   'main' =>
   array(
