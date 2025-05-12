@@ -99,24 +99,32 @@
 
     function getInsuranceInfo() {
         let vehicleId = $("#vehicle_id").val();
-
+    
         $.ajax({
             url: "/admin/get-insurance-info",
             type: "GET",
             data: { vehicle_id: vehicleId },
             success: function (response) {
-                if (response.success) {
-                    $("#insurance_car_append").html(""); // Clear previous entries
+                $("#insurance_car_append").html(""); // Clear previous entries
+    
+                if (response.success && response.data.length > 0) {
                     response.data.forEach((insurances) => {
                         addinsurances(insurances);
                     });
                 } else {
-                    showToast("error", "No insurance data found.");
+                    $("#insurance_car_append").html(`
+                        <div class="text-center text-muted py-3">
+                            ${_l("admin.rentals.no_data_available") || "No insurance data available."}
+                        </div>
+                    `);
                 }
             },
-            error: function (xhr, status, error) {},
+            error: function (xhr, status, error) {
+                showToast("error", "An error occurred while fetching insurance data.");
+            },
         });
     }
+    
 
     function addinsurances(insurances) {
         const appendContainer = document.getElementById("insurance_car_append");
@@ -185,23 +193,33 @@
 
     function getSeasonalInfo() {
         let vehicleId = $("#vehicle_id").val();
-
+    
         $.ajax({
             url: "/admin/get-seasonal-info",
             type: "GET",
             data: { vehicle_id: vehicleId },
             success: function (response) {
-                if (response.success) {
-                    $("#seasonal_append").html("");
+                $("#seasonal_append").html(""); // Clear previous content
+    
+                if (response.success && response.data.length > 0) {
                     response.data.forEach((season) => {
                         addSeasonalPricing(season);
                     });
                 } else {
+                    $("#seasonal_append").html(`
+                        <div class="text-center text-muted py-3">
+                            ${_l("admin.rentals.no_data_available") || "No seasonal data available."}
+                        </div>
+                    `);
                 }
             },
-            error: function (xhr, status, error) {},
+            error: function (xhr, status, error) {
+                // Optional: show error message
+                showToast("error", "An error occurred while fetching seasonal data.");
+            },
         });
     }
+    
 
     function addSeasonalPricing(season) {
         let uniqueId = "season_" + season.id;
@@ -293,24 +311,33 @@
 
     function getTrraifInfo() {
         let vehicleId = $("#vehicle_id").val();
-
+    
         $.ajax({
             url: "/admin/get-tarrif-info",
             type: "GET",
             data: { vehicle_id: vehicleId },
             success: function (response) {
-                if (response.success) {
-                    $("#tariff_append").html("");
+                $("#tariff_append").html(""); // Clear existing content
+    
+                if (response.success && response.data.length > 0) {
                     response.data.forEach((tarrif) => {
                         addTarrifPricing(tarrif);
                     });
                 } else {
-                    showToast("error", "No tarrif data found.");
+                    $("#tariff_append").html(`
+                        <div class="text-center text-muted py-3">
+                            ${_l("admin.rentals.no_data_available") || "No data available."}
+                        </div>
+                    `);
                 }
             },
-            error: function (xhr, status, error) {},
+            error: function (xhr, status, error) {
+                // Optional: Show a generic error message
+                showToast("error", "An error occurred while fetching tariff data.");
+            },
         });
     }
+    
 
     function addTarrifPricing(tarrif) {
         let uniqueId = "tariff_" + new Date().getTime();

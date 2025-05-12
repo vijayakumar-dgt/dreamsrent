@@ -1026,6 +1026,7 @@ return array(
   'rentals' =>
   array(
     'rentals' => 'Rentals',
+    'no_data_available' => 'No data available.',
     'maintenance' => 'Maintenance',
     'add_new_maintenance' => 'Add New Maintenance',
     'create_maintenance' => 'Create Maintenance',

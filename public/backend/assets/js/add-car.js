@@ -238,14 +238,18 @@
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox"
                                     ${value.popular == 1 ? "checked" : ""}
-                                    onchange="togglePopular(${value.id}, this.checked)">
+                                    onchange="togglePopular(${
+                                        value.id
+                                    }, this.checked)">
                             </div>
                         </td>
                          <td>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox"
                                     ${value.recommended == 1 ? "checked" : ""}
-                                    onchange="toggleRecommended(${value.id}, this.checked)">
+                                    onchange="toggleRecommended(${
+                                        value.id
+                                    }, this.checked)">
                             </div>
                         </td>
                             <td class="text-start">
@@ -500,28 +504,28 @@
         $("#carBasicInfoForm").validate({
             rules: {
                 vehicle_image: {
-                    required: true,
+                    required: false,
                 },
                 title: {
-                    required: true,
+                    required: false,
                     minlength: 3,
                     maxlength: 50,
                 },
                 perma_link: {
                     required: false,
-                    url: true,
+                    url: false,
                 },
                 vehicle_type_id: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_brand_id: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_model_id: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_category_id: {
-                    required: true,
+                    required: false,
                 },
                 plate_number: {
                     required: false,
@@ -530,7 +534,7 @@
                     required: false,
                 },
                 main_location_id: {
-                    required: true,
+                    required: false,
                 },
                 other_location: {
                     required: false,
@@ -542,13 +546,13 @@
                     required: false,
                 },
                 vehicle_color_id: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_year: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_passenger: {
-                    required: true,
+                    required: false,
                 },
             },
             messages: {
@@ -804,6 +808,7 @@
         let deletingId = null;
 
         $("#price_btn").on("click", function () {
+            $(".noDataS").html(""); // Clear previous entries
             let seasonName = $("#s_name").val();
             let startDate = $("#s_strdate").val();
             let endDate = $("#s_enddate").val();
@@ -967,6 +972,7 @@
         let deletingTariffId = null;
 
         $("#tarrif_btn").on("click", function () {
+            $(".noDataT").html(""); // Clear previous entries
             let tariffName = $("#t_name").val();
             let dailyPrice = $("#t_price").val();
             let fromDays = $("#t_fromday").val();
@@ -1400,45 +1406,56 @@
 
         let selectedImages = new Map();
         const allowedImageExtensions = ["jpg", "jpeg", "png"];
-        
+
         $("#car_images").on("change", function (event) {
             let files = event.target.files;
             let maxFileSize = 50 * 1024 * 1024;
             let imageListContainer = $("#car_images_append");
             let validFiles = [];
             let pending = files.length;
-        
+
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
                 let ext = file.name.split(".").pop().toLowerCase();
-        
+
                 if (!allowedImageExtensions.includes(ext)) {
-                    showToast("error", `Only image files (${allowedImageExtensions.join(", ")}) are allowed.`);
+                    showToast(
+                        "error",
+                        `Only image files (${allowedImageExtensions.join(
+                            ", "
+                        )}) are allowed.`
+                    );
                     pending--;
                     continue;
                 }
-        
+
                 if (file.size > maxFileSize) {
-                    showToast("error", `File "${file.name}" exceeds the 50MB size limit.`);
+                    showToast(
+                        "error",
+                        `File "${file.name}" exceeds the 50MB size limit.`
+                    );
                     pending--;
                     continue;
                 }
-        
+
                 if (selectedImages.has(file.name)) {
-                    showToast("error", `Image "${file.name}" is already selected.`);
+                    showToast(
+                        "error",
+                        `Image "${file.name}" is already selected.`
+                    );
                     pending--;
                     continue;
                 }
-        
+
                 let imageUrl = URL.createObjectURL(file);
                 let img = new Image();
                 img.src = imageUrl;
-        
+
                 img.onload = function () {
                     if (this.width === 690 && this.height === 420) {
                         selectedImages.set(file.name, file);
                         validFiles.push(file);
-        
+
                         imageListContainer.append(`
                             <div class="uploaded-img" data-file="${file.name}">
                                 <img src="${imageUrl}" alt="img">
@@ -1446,14 +1463,17 @@
                             </div>
                         `);
                     } else {
-                        showToast("error", `Image "${file.name}" must be 690x420 pixels.`);
+                        showToast(
+                            "error",
+                            `Image "${file.name}" must be 690x420 pixels.`
+                        );
                         URL.revokeObjectURL(imageUrl);
                     }
-        
+
                     pending--;
                     if (pending === 0) updateImageInput(validFiles);
                 };
-        
+
                 img.onerror = function () {
                     showToast("error", `Failed to load "${file.name}".`);
                     URL.revokeObjectURL(imageUrl);
@@ -1462,7 +1482,7 @@
                 };
             }
         });
-    
+
         function updateImageInput(validFiles) {
             let dt = new DataTransfer();
             validFiles.forEach((file) => dt.items.add(file));
@@ -2568,6 +2588,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Check if the element exists before adding the event listener
     if (inBtn) {
         inBtn.addEventListener("click", function () {
+            $(".noDataI").html(""); // Clear previous entries
             const selectedInsurances = document.querySelectorAll(
                 "#set_value .delivery-add input[type='checkbox']:checked"
             );
@@ -2666,21 +2687,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-
 function togglePopular(vehicleId, isChecked) {
     $.ajax({
         url: "/admin/set-popular",
         type: "GET",
         data: {
             id: vehicleId,
-            popular: isChecked ? 1 : 0
+            popular: isChecked ? 1 : 0,
         },
         success: function (response) {
             showToast("success", "Popular status updated.");
         },
         error: function (xhr, status, error) {
             showToast("error", "Something went wrong.");
-        }
+        },
     });
 }
 function toggleRecommended(vehicleId, isChecked) {
@@ -2689,13 +2709,13 @@ function toggleRecommended(vehicleId, isChecked) {
         type: "GET",
         data: {
             id: vehicleId,
-            recommended: isChecked ? 1 : 0
+            recommended: isChecked ? 1 : 0,
         },
         success: function (response) {
             showToast("success", "Recommended status updated.");
         },
         error: function (xhr, status, error) {
             showToast("error", "Something went wrong.");
-        }
+        },
     });
 }

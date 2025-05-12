@@ -634,8 +634,8 @@ class CarInfoController extends Controller
             $vehiclePrice['weekly'] = $request->weekly_price;
         }
 
-        if ($request->has('montly_price')) {
-            $vehiclePrice['monthly'] = $request->montly_price;
+        if ($request->has('monthly_price')) {
+            $vehiclePrice['monthly'] = $request->monthly_price;
         }
 
         if ($request->has('yearly_price')) {
