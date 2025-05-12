@@ -170,9 +170,18 @@
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label class="form-label">{{ __('admin.finance_accounts.payment_method') }}</label>
-                                                        <select class="select" name="payment_method">
+                                                         <select class="select" name="payment_method">
                                                             @foreach($payments as $payment)
-                                                            <option value="{{ Str::before($payment->key, '_') }}">{{ Str::before($payment->key, '_') }}</option>
+                                                            <?php
+                                                            $paymentKey = Illuminate\Support\Str::before($payment->key, '_');
+                                                            if($paymentKey == 'payment') {
+                                                                $payment = 'Bank Transfer';
+                                                            }
+                                                            else{
+                                                                $payment = ucfirst($paymentKey);
+                                                            }
+                                                            ?>
+                                                            <option value="{{ $payment }}">{{ $payment }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
