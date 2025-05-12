@@ -5,16 +5,10 @@
     $(document).ready(function () {
         $("#rentalSettingForm").validate({
             rules: {
-                minAdvanceReservation: { required: true },
-                maxAdvanceReservation: { required: true },
-                cancellationBuffer: { required: true },
-                rescheduleBuffer: { required: true }
+               
             },
             messages: {
-                minAdvanceReservation: { required: _l('admin.general_settings.select_option') },
-                maxAdvanceReservation: { required:_l('admin.general_settings.select_option') },
-                cancellationBuffer: { required: _l('admin.general_settings.select_option') },
-                rescheduleBuffer: { required: _l('admin.general_settings.select_option') }
+               
             },
             errorPlacement: function (error, element) {
                 $("#" + element.attr("id") + "Error").text(error.text()).removeClass("d-none");

@@ -56,6 +56,7 @@ class SitemapController extends Controller
             $sitemap = new SitemapUrl();
             $sitemap->url = request()->url;
             $sitemap->save();
+            
             $this->generateSitemap();
             return response()->json([
                 'status' => 'success',
@@ -77,7 +78,7 @@ class SitemapController extends Controller
         try {
             $urls = SitemapUrl::all();
             if ($urls->isEmpty()) {
-                return '';
+                return false;
             }
 
             $sitemap = Sitemap::create();
@@ -94,14 +95,18 @@ class SitemapController extends Controller
             }
 
             $sitemapFolder = public_path('sitemaps');
-            if (!file_exists($sitemapFolder) && !mkdir($sitemapFolder, 0777, true) && !is_dir($sitemapFolder)) {
-                return '';
+            if (!file_exists($sitemapFolder)) {
+                if (!mkdir($sitemapFolder, 0777, true) && !is_dir($sitemapFolder)) {
+                    return false;
+                }
             }
+
             $relativePath = 'sitemaps/sitemap-' . now()->format('YmdHis') . '.xml';
             $fullPath = public_path($relativePath);
+            
             $sitemap->writeToFile($fullPath);
             if (!file_exists($fullPath)) {
-                return '';
+                return false;
             }
             $latestUrl = SitemapUrl::latest()->first();
             if ($latestUrl) {
@@ -110,7 +115,7 @@ class SitemapController extends Controller
 
             return $relativePath;
         } catch (\Throwable $e) {
-            return '';
+            return false;
         }
     }
 

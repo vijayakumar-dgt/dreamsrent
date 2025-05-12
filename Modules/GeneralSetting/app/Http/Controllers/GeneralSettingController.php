@@ -102,10 +102,6 @@ class GeneralSettingController extends Controller
     public function storeRentalSettings(Request $request): JsonResponse
     {
         $rules = [
-            'minAdvanceReservation' => 'required|string|in:1 Day,2 Days,3 Days,1 Week',
-            'maxAdvanceReservation' => 'required|string|in:1 Day,2 Days,3 Days,1 Week,2 Weeks,1 Month',
-            'cancellationBuffer' => 'required|string',
-            'rescheduleBuffer' => 'required|string',
             'faq' => 'nullable|boolean',
             'damages' => 'nullable|boolean',
             'extraService' => 'nullable|boolean',
@@ -113,14 +109,9 @@ class GeneralSettingController extends Controller
             'enquiries' => 'nullable|boolean',
             'reservation' => 'nullable|boolean',
             'seasonalPricing' => 'nullable|boolean',
-            'pricing' => 'nullable|boolean',
         ];
 
         $messages = [
-            'minAdvanceReservation.required' => __('The minimum advance reservation field is required.'),
-            'minAdvanceReservation.in' => __('Invalid minimum advance reservation value.'),
-            'maxAdvanceReservation.required' => __('The maximum advance reservation field is required.'),
-            'maxAdvanceReservation.in' => __('Invalid maximum advance reservation value.'),
             'cancellationBuffer.required' => __('The cancellation buffer field is required.'),
             'cancellationBuffer.in' => __('Invalid cancellation buffer value.'),
             'rescheduleBuffer.required' => __('The reschedule buffer field is required.'),
