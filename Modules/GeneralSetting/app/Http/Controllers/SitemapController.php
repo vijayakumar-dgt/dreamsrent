@@ -11,6 +11,7 @@ use Spatie\Sitemap\Tags\Url;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 
 use function PHPUnit\Framework\fileExists;
 
@@ -51,23 +52,69 @@ class SitemapController extends Controller
                 'message' => __('admin.general_settings.invalid'),
             ], 422);
         }
-
+        DB::beginTransaction();
         try {
             $sitemap = new SitemapUrl();
             $sitemap->url = request()->url;
             $sitemap->save();
+            DB::commit();
             
-            $this->generateSitemap();
+            $urls = SitemapUrl::all();
+            if ($urls->isEmpty()) {
+                return response()->json([
+                    'status' => 'error',
+                    'code' => 422,
+                    'message' => __('admin.general_settings.sitemap_empty'),
+                ]);
+            }
+
+            $sitemap = Sitemap::create();
+            foreach ($urls as $url) {
+                $url = $url->url;
+                if ($url) {
+                    $sitemap->add(
+                        Url::create($url)
+                            ->setLastModificationDate(now())
+                            ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+                            ->setPriority(0.8)
+                    );
+                }
+            }
+
+            $sitemapFolder = public_path('sitemaps');
+            if (!file_exists($sitemapFolder)) {
+                if (!mkdir($sitemapFolder, 0777, true) && !is_dir($sitemapFolder)) {
+                    return response()->json([
+                        'status' => 'error',
+                        'code' => 422,
+                        'message' => __('admin.general_settings.folder_permission_error'),
+                    ]);
+                }
+            }
+
+            $relativePath = 'sitemaps/sitemap-' . now()->format('YmdHis') . '.xml';
+            $fullPath = public_path($relativePath);
+            
+            $sitemap->writeToFile($fullPath);
+            if (!file_exists($fullPath)) {
+                
+            }
+            $latestUrl = SitemapUrl::latest()->first();
+            if ($latestUrl) {
+                $latestUrl->update(['sitemap_path' => $relativePath]);
+            }
+            
             return response()->json([
                 'status' => 'success',
                 'code' => 200,
                 'message' =>  __('admin.general_settings.sitemap_success'),
             ]);
         } catch (\Throwable $th) {
+            DB::rollBack();
             return response()->json([
                 'status' => 'error',
                 'code' => 422,
-                'message' => __('admin.general_settings.retrived_error'),
+                'message' => __('admin.general_settings.failed_to_generate_sitemap'),
                 'error' => $th->getMessage()
             ], 422);
         }
