@@ -98,7 +98,7 @@
 										<div class="col-xl-9">
 											<div class="d-flex align-items-center flex-wrap row-gap-3 upload-pic">
 												<div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 border rounded-circle frames">
-													<img src="/backend/assets/img/car/car-02.jpg" class="img-fluid rounded-circle" alt="brands">
+													<img src="/backend/assets/img/car/default-car.png" class="img-fluid rounded-circle" alt="brands">
 													<a href="javascript:void(0);" id="delImg" class="upload-img-trash trash-end btn btn-sm rounded-circle">
 														<i class="ti ti-trash fs-12"></i>
 													</a>

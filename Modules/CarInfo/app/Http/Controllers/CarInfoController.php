@@ -106,7 +106,7 @@ class CarInfoController extends Controller
         } else {
             $authId = current_user();
             $language_id = $authId->language_id ?? null;
-            $language = $language_id; // Or however you associate default language
+            $language = $language_id;
             $languageId = $language;
         }
 
@@ -153,7 +153,6 @@ class CarInfoController extends Controller
             $q->where('language_id', $languageId);
         })->first();
 
-
         if (!$query && $languageId) {
             $baseVehicle = VehicleInfo::where('slug', $slug)->whereNull('parent_id')->first();
             if ($baseVehicle) {
@@ -161,8 +160,6 @@ class CarInfoController extends Controller
                     ->where('language_id', $languageId)
                     ->first();
 
-
-                // If still not found, create an empty Page instance pre-filled with what we know
                 if (!$query) {
                     $query = new VehicleInfo([
                         'language_id' => $languageId,
@@ -172,8 +169,6 @@ class CarInfoController extends Controller
             }
         }
 
-
-        // If no page and no basePage, create a fresh one
         if (!$query) {
             $baseVehicle = VehicleInfo::where('slug', $slug)->first();
 
@@ -288,7 +283,6 @@ class CarInfoController extends Controller
 
         $vehiclePriceJson = json_encode([$vehiclePrice]);
 
-
         $slug = Str::slug($request->title);
         $vehicleImagePath = null;
         if ($request->hasFile('vehicle_image')) {
@@ -347,7 +341,7 @@ class CarInfoController extends Controller
             if (is_array($images)) {
                 foreach ($images as $image) {
                     $fileName = uploadFile($image, 'vehicles');
-                    $imagePaths[] = 'vehicles/' . $fileName;
+                    $imagePaths[] = '/' . $fileName;
                 }
             }
 

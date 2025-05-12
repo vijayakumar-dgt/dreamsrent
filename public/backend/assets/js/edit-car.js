@@ -512,7 +512,7 @@
         let fileItem = $(`
         <div class="d-flex align-items-center justify-content-between bg-white border br-5 gap-3 flex-wrap p-20 mb-2 file-item" data-file="${fileName}">
             <div class="d-flex align-items-center">
-                <span><img src="/assets/img/icons/pdf-icon.svg" alt="File Icon" width="30"></span>
+                <span><img src="/backend/assets/img/icons/pdf-icon.svg" alt="File Icon" width="30"></span>
                 <div class="ms-2">
                     <h6 class="fs-14 fw-medium">Douments</h6>
                     <p class="fs-13">${fileSizeText} MB</p>
@@ -561,7 +561,7 @@
         let fileItem = $(`
         <div class="d-flex align-items-center justify-content-between bg-white border br-5 gap-3 flex-wrap p-20 mb-2 file-item" data-file="${fileName}">
             <div class="d-flex align-items-center">
-                <span><img src="/assets/img/icons/pdf-icon.svg" alt="File Icon" width="30"></span>
+                <span><img src="/backend/assets/img/icons/pdf-icon.svg" alt="File Icon" width="30"></span>
                 <div class="ms-2">
                     <h6 class="fs-14 fw-medium">Douments</h6>
                     <p class="fs-13">${fileSizeText} MB</p>
@@ -1419,9 +1419,11 @@
             let fileExtension = fileName.split(".").pop().toLowerCase();
             let iconPath = ''; // 🛠️ Declare it here first
             if (fileExtension === "doc" || fileExtension === "docx") {
-                iconPath = "/assets/img/icons/pdf-icon.svg";
+                iconPath = "/backend/assets/img/icons/pdf-icon.svg";
+            }   else if (fileExtension === "txt") {
+                iconPath = "/backend/assets/img/icons/txt.svg";
             } else if (fileExtension === "pdf") {
-                iconPath = "/assets/img/icons/pdf-icon.svg";
+                iconPath = "/backend/assets/img/icons/pdf-icon.svg";
             }
 
             return iconPath;
@@ -1527,9 +1529,11 @@
             let fileExtension = fileName.split(".").pop().toLowerCase();
             let iconPath = ''; // 🛠️ Declare it here first
             if (fileExtension === "doc" || fileExtension === "docx") {
-                iconPath = "/assets/img/icons/pdf-icon.svg";
+                iconPath = "/backend/assets/img/icons/pdf-icon.svg";
+            }  else if (fileExtension === "txt") {
+                iconPath = "/backend/assets/img/icons/txt.svg";
             } else if (fileExtension === "pdf") {
-                iconPath = "/assets/img/icons/pdf-icon.svg";
+                iconPath = "/backend/assets/img/icons/pdf-icon.svg";
             }
 
             return iconPath;
@@ -1580,35 +1584,47 @@
         let selectedImages = new Map();
         const allowedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
         const maxFileSize = 50 * 1024 * 1024;
-
+        
         $("#car_images").on("change", function (event) {
             let files = event.target.files;
             let imageListContainer = $("#car_images_append");
             let validFiles = [];
             let remainingChecks = files.length;
-
+        
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
                 let ext = file.name.split(".").pop().toLowerCase();
-
-                if (
-                    !allowedImageExtensions.includes(ext) ||
-                    file.size > maxFileSize ||
-                    selectedImages.has(file.name)
-                ) {
+        
+                // Invalid file type
+                if (!allowedImageExtensions.includes(ext)) {
+                    showToast("error", `File "${file.name}" is not a valid image.`);
                     remainingChecks--;
                     continue;
                 }
-
+        
+                // File size too large
+                if (file.size > maxFileSize) {
+                    showToast("error", `File "${file.name}" exceeds the 50MB size limit.`);
+                    remainingChecks--;
+                    continue;
+                }
+        
+                // Duplicate file
+                if (selectedImages.has(file.name)) {
+                    showToast("error", `File "${file.name}" is already selected.`);
+                    remainingChecks--;
+                    continue;
+                }
+        
                 let imageUrl = URL.createObjectURL(file);
                 let img = new Image();
                 img.src = imageUrl;
-
+        
                 img.onload = function () {
                     if (this.width === 690 && this.height === 420) {
                         selectedImages.set(file.name, file);
                         validFiles.push(file);
-
+        
                         imageListContainer.append(`
                             <div class="uploaded-img" data-file="${file.name}">
                                 <img src="${imageUrl}" alt="img">
@@ -1616,20 +1632,23 @@
                             </div>
                         `);
                     } else {
+                        showToast("error", `Image "${file.name}" must be exactly 690x420 pixels.`);
                         URL.revokeObjectURL(imageUrl);
                     }
-
+        
                     remainingChecks--;
                     if (remainingChecks === 0) updateImageInput(validFiles);
                 };
-
+        
                 img.onerror = function () {
+                    showToast("error", `Could not load image "${file.name}".`);
                     URL.revokeObjectURL(imageUrl);
                     remainingChecks--;
                     if (remainingChecks === 0) updateImageInput(validFiles);
                 };
             }
         });
+        
 
         function updateImageInput(
             validFiles = Array.from(selectedImages.values())
@@ -2077,15 +2096,15 @@
         $("#carSeoForm").validate({
             rules: {
                 seo_title: {
-                    required: true,
+                    required: false,
                     maxlength: 255,
                 },
                 seo_key: {
-                    required: true,
+                    required: false,
                     maxlength: 255,
                 },
                 seo_description: {
-                    required: true,
+                    required: false,
                     maxlength: 255,
                 },
             },

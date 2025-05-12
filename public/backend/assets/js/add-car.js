@@ -1133,11 +1133,11 @@
         $("#carDocumentForm").validate({
             rules: {
                 "car_document[]": {
-                    required: true,
+                    required: false,
                     extension: "pdf|txt|doc|docx",
                 },
                 "policy_document[]": {
-                    required: true,
+                    required: false,
                     extension: "pdf|txt|doc|docx",
                 },
                 "car_images[]": {
@@ -1269,6 +1269,8 @@
             let iconPath = ""; // 🛠️ Declare it here first
             if (fileExtension === "doc" || fileExtension === "docx") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg";
+            } else if (fileExtension === "txt") {
+                iconPath = "/backend/assets/img/icons/txt.svg";
             } else if (fileExtension === "pdf") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg";
             }
@@ -1373,11 +1375,12 @@
         function policyGetFileTypeIcon(fileName) {
             let fileExtension = fileName.split(".").pop().toLowerCase();
             let iconPath = ""; // 🛠️ Declare it here first
-
             if (fileExtension === "doc" || fileExtension === "docx") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg"; // 📝 maybe a Word icon instead?
             } else if (fileExtension === "pdf") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg";
+            } else if (fileExtension === "txt") {
+                iconPath = "/backend/assets/img/icons/txt.svg";
             } else {
                 iconPath = "/backend/assets/img/icons/default-file-icon.svg"; // ⚙️ default for unknown files
             }
@@ -1396,37 +1399,46 @@
         });
 
         let selectedImages = new Map();
-        const allowedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
-
+        const allowedImageExtensions = ["jpg", "jpeg", "png"];
+        
         $("#car_images").on("change", function (event) {
             let files = event.target.files;
             let maxFileSize = 50 * 1024 * 1024;
             let imageListContainer = $("#car_images_append");
             let validFiles = [];
             let pending = files.length;
-
+        
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
                 let ext = file.name.split(".").pop().toLowerCase();
-
-                if (
-                    !allowedImageExtensions.includes(ext) ||
-                    file.size > maxFileSize ||
-                    selectedImages.has(file.name)
-                ) {
+        
+                if (!allowedImageExtensions.includes(ext)) {
+                    showToast("error", `Only image files (${allowedImageExtensions.join(", ")}) are allowed.`);
                     pending--;
                     continue;
                 }
-
+        
+                if (file.size > maxFileSize) {
+                    showToast("error", `File "${file.name}" exceeds the 50MB size limit.`);
+                    pending--;
+                    continue;
+                }
+        
+                if (selectedImages.has(file.name)) {
+                    showToast("error", `Image "${file.name}" is already selected.`);
+                    pending--;
+                    continue;
+                }
+        
                 let imageUrl = URL.createObjectURL(file);
                 let img = new Image();
                 img.src = imageUrl;
-
+        
                 img.onload = function () {
                     if (this.width === 690 && this.height === 420) {
                         selectedImages.set(file.name, file);
                         validFiles.push(file);
-
+        
                         imageListContainer.append(`
                             <div class="uploaded-img" data-file="${file.name}">
                                 <img src="${imageUrl}" alt="img">
@@ -1434,21 +1446,23 @@
                             </div>
                         `);
                     } else {
+                        showToast("error", `Image "${file.name}" must be 690x420 pixels.`);
                         URL.revokeObjectURL(imageUrl);
                     }
-
+        
                     pending--;
                     if (pending === 0) updateImageInput(validFiles);
                 };
-
+        
                 img.onerror = function () {
+                    showToast("error", `Failed to load "${file.name}".`);
                     URL.revokeObjectURL(imageUrl);
                     pending--;
                     if (pending === 0) updateImageInput(validFiles);
                 };
             }
         });
-
+    
         function updateImageInput(validFiles) {
             let dt = new DataTransfer();
             validFiles.forEach((file) => dt.items.add(file));
@@ -1825,15 +1839,15 @@
         $("#carSeoForm").validate({
             rules: {
                 seo_title: {
-                    required: true,
+                    required: false,
                     maxlength: 255,
                 },
                 seo_key: {
-                    required: true,
+                    required: false,
                     maxlength: 255,
                 },
                 seo_description: {
-                    required: true,
+                    required: false,
                     maxlength: 255,
                 },
             },
