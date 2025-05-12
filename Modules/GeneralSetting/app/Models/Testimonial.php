@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int|null $ratings
  * @property string|null $status
  * @property string|null $testimonial_image
+ * @property string|null $created_date
+ * @property string|null $created_at
  */
 class Testimonial extends Model
 {

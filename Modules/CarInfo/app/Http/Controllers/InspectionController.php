@@ -13,6 +13,8 @@ use Modules\CarInfo\Models\VehicleInfo;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 
+use function PHPUnit\Framework\isNull;
+
 class InspectionController extends Controller
 {
     /**
@@ -123,7 +125,11 @@ class InspectionController extends Controller
 
     public function getInspections(Request $request): JsonResponse
     {
-        $inspections = Inspection::with(['car', 'inspector']);
+        $inspections = Inspection::with([
+                'car', 
+                'inspector',
+                'inspector.userDetails:id,user_id,first_name,last_name,profile_image',
+            ]);
 
         if ($request->has('search') && $request->search != null) {
             $search = $request->search;
@@ -144,9 +150,19 @@ class InspectionController extends Controller
 
         $inspections = $inspections->orderBy('id', 'desc')->get()->map(function ($inspection) {
             $inspection->inspectiondate = formatDateTime($inspection->inspection_date, false);
-
-
-
+            if ($inspection->inspector) {
+                $inspection->inspector->name = ucwords($inspection->inspector->name); 
+                if ($inspection->inspector->userDetails) {
+                    $inspection->inspector->name = $inspection->inspector->userDetails->first_name 
+                        ? ucwords($inspection->inspector->userDetails->first_name . ' ' . $inspection->inspector->userDetails->last_name) 
+                        : ucwords($inspection->inspector->name);
+                    $inspection->inspector->profile_image = uploadedAsset($inspection->inspector->userDetails->profile_image ?? null, 'profile');
+                }
+            }
+            if ($inspection->car) {
+                $inspection->car->vehicle_image = uploadedAsset($inspection->car->vehicle_image ?? null, 'default');
+            }
+            unset($inspection->inspector->userDetails);
             return $inspection;
         });
 
