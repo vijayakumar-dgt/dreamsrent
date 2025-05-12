@@ -2088,11 +2088,12 @@ class CarInfoController extends Controller
         }
     }
 
-    public function setPopular(Request $request)
+    public function setPopular(Request $request): JsonResponse
     {
+        /** @var VehicleInfo $vehicle */
         $vehicle = VehicleInfo::find($request->id);
 
-        if (!$vehicle) {
+        if ($vehicle == null) {
             return response()->json(['error' => 'Vehicle not found'], 404);
         }
 
@@ -2104,9 +2105,10 @@ class CarInfoController extends Controller
 
     public function setRecommended(Request $request)
     {
+        /** @var VehicleInfo $vehicle */
         $vehicle = VehicleInfo::find($request->id);
 
-        if (!$vehicle) {
+        if ($vehicle == null) {
             return response()->json(['error' => 'Vehicle not found'], 404);
         }
 
@@ -2116,7 +2118,7 @@ class CarInfoController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function setStatus(Request $request)
+    public function setStatus(Request $request): JsonResponse
     {
         $vehicle = VehicleInfo::find($request->vehicle_id);
 

@@ -121,8 +121,8 @@ $(document).ready(function() {
                         let data = response.data;
                         $.each(data, function (index, language) {
                             html += `<tr>
-                                        <td>${language.default}</td>
-                                        <td>
+                                        <td class="lang-label">${language.default}</td>
+                                        <td class="lang-input">
                                             <input type="text" dir="${code === 'ar' ? 'rtl' : 'ltr'}"
                                                    data-tab="${tab}" data-code="${code}" data-module="${module}"
                                                    class="form-control text-end translate" data-key="${language.key}"
