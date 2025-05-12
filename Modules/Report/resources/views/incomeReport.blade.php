@@ -288,7 +288,7 @@
                                         <td>
                                             <p class="text-gray-9">{{$symbol}}{{ number_format($booking->final_price, 2) }}</p>
                                         </td>
-                                        <td>{{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</td>
+                                        <td>{{ formatDateTime($booking->booking_date, false) }}</td>
                                         <td>
                                             @php
                                             $isPaid =

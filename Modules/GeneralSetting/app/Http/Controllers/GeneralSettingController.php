@@ -1177,12 +1177,12 @@ class GeneralSettingController extends Controller
                 'os' => $device->os,
                 'ip_address' => $device->ip_address,
                 'location' => $device->location,
-                'date'     => Carbon::parse($device->created_at)->format('d M Y, h:i A')
+                'date'     => formatDateTime($device->created_at)
             ];
         });
         $response    = [
             'user' => Auth::user(),
-            'last_password_changed_at' => $authUser->last_password_changed_at ? Carbon::parse($authUser->last_password_changed_at)->format('d M Y, h:i A') : "null",
+            'last_password_changed_at' => $authUser->last_password_changed_at ? formatDateTime($authUser->last_password_changed_at) : "null",
             'devices' => $userDevices
         ];
         return response()->json([

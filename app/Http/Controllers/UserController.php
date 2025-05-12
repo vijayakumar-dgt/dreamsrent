@@ -710,14 +710,14 @@ class UserController extends Controller
                     'os' => $device->os,
                     'ip_address' => $device->ip_address,
                     'location' => $device->location,
-                    'date'     => Carbon::parse($device->created_at ?? '')->format('d M Y, h:i A')
+                    'date'     => formatDateTime($device->created_at),
                 ];
             });
             $user = Auth::guard('web')->user();
         $response    = [
             'user' => Auth::guard('web')->user(),
             'last_password_changed_at' => Auth::guard('web')->check() && $user && $user->last_password_changed_at
-                ? Carbon::parse($user->last_password_changed_at)->format('d M Y, h:i A')
+                ? formatDateTime($user->last_password_changed_at)
                 : "",
             'devices' => $userDevices
         ];

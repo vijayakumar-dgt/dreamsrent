@@ -392,7 +392,7 @@
                                     </div>
                                 </td>
                                 <td><a href="javascript:void(0);" title="${testimonial.review}">${reviewText}</a></td>
-                                <td>${new Date(testimonial.created_at).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: '2-digit' })}</td>
+                                <td>${testimonial.created_date}</td>
 
                              ${hasPermission(permissions, 'testimonials', 'edit') || hasPermission(permissions, 'testimonials', 'delete') ?
 
