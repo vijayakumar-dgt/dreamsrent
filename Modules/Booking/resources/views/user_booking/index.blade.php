@@ -74,7 +74,7 @@
                                 <div class="booking-info-body">
                                     <ul class="booking-radio-btns">
 
-                                    <li class="disabled pe-none cursor-not-allowed">
+                                        <li class="disabled pe-none cursor-not-allowed">
                                             <label class="booking_custom_check">
                                                 <input type="radio" name="rent_type" id="location_pickup"
                                                     {{ request('rent_value') == 'self_pickup' ? 'checked' : '' }} value="self_pickup">
@@ -654,14 +654,19 @@
                                     <div class="payment-method-types">
                                         <h5>{{__('web.user.choose_your_payment_method')}}</h5>
                                         <ul>
+                                            @if ($paypalStatus == 1)
                                             <li>
                                                 <label class="payment_custom_check">
                                                     <input type="radio" name="payment_type" id="paypal" value="paypal">
                                                     <span class="payment_checkmark">
-                                                        <span class="checked-title"><img src="/backend/assets/img/icons/payment-method-01.svg" alt="Img"></span>
+                                                        <span class="checked-title">
+                                                            <img src="/backend/assets/img/icons/payment-method-01.svg" alt="Img">
+                                                        </span>
                                                     </span>
                                                 </label>
                                             </li>
+                                            @endif
+                                            @if ($stripeStatus == 1)
                                             <li>
                                                 <label class="payment_custom_check">
                                                     <input type="radio" name="payment_type" id="stripe" value="stripe">
@@ -670,6 +675,8 @@
                                                     </span>
                                                 </label>
                                             </li>
+                                            @endif
+                                            @if ($stripeStatus == 1)
                                             <li>
                                                 <label class="payment_custom_check">
                                                     <input type="radio" name="payment_type" id="cod" value="cod">
@@ -678,6 +685,7 @@
                                                     </span>
                                                 </label>
                                             </li>
+                                            @endif
                                             @auth
                                             <li>
                                                 <label class="payment_custom_check">

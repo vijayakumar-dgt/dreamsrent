@@ -37,15 +37,22 @@ use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Current;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Config;
 
 class UserBookingController extends Controller
 {
     private $provider;
+
     public function __construct()
     {
-        $this->provider = new PayPalClient();
-        $this->provider->getAccessToken();
-    }
+        if (empty(env('PAYPAL_SANDBOX_CLIENT_ID')) || empty(env('PAYPAL_SANDBOX_CLIENT_SECRET'))) {
+            $this->provider = null;
+            Log::warning("PayPal credentials are missing in .env");
+        } else {
+            $this->provider = new PayPalClient();
+            $this->provider->getAccessToken();
+        }
+    }    
 
     public function redirectToBooking(Request $request): View|RedirectResponse
     {
@@ -215,7 +222,16 @@ class UserBookingController extends Controller
         $user = Auth::guard('web')->user();
         $seo_title = "User Booking";
 
-        return view('booking::user_booking.index', compact("slug", "user", "vehicleId", "vehicle", "vehicleImageUrl", "mainLocation", "filteredPrices", "extraServices", "extraServiceCount", "vehicleInsurance", "countries", "driverInfo", "driverInfo_ride", "driverInfo_price", "allLocation", "dlocation", "rlocation", 'finalRate', 'calculatedTaxes', 'totalTax', 'grandTotal', "seo_title", "plocation", "prlocation", "currencySymbol"))
+        $paypalSetting = GeneralSetting::where("key", "paypal_status")->first();
+        $paypalStatus = ($paypalSetting && $paypalSetting->value == 1) ? 1 : 0;
+
+        $stripeSetting = GeneralSetting::where("key", "stripe_status")->first();
+        $stripeStatus = ($stripeSetting && $stripeSetting->value == 1) ? 1 : 0;
+
+        $codSetting = GeneralSetting::where("key", "cod_status")->first();
+        $codStatus = ($codSetting && $codSetting->value == 1) ? 1 : 0;
+
+        return view('booking::user_booking.index', compact("slug", "user", "vehicleId", "vehicle", "vehicleImageUrl", "mainLocation", "filteredPrices", "extraServices", "extraServiceCount", "vehicleInsurance", "countries", "driverInfo", "driverInfo_ride", "driverInfo_price", "allLocation", "dlocation", "rlocation", 'finalRate', 'calculatedTaxes', 'totalTax', 'grandTotal', "seo_title", "plocation", "prlocation", "currencySymbol", "paypalStatus", "stripeStatus", "codStatus"))
             ->with($request->all());
     }
 
@@ -516,11 +532,11 @@ class UserBookingController extends Controller
                 if ($appAdmin?->email) {
                     sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
                 }
-            }     
-                if (userNotificationsEnabled() && $authUser?->email) {
-                    sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
-                }
-            
+            }
+            if (userNotificationsEnabled() && $authUser?->email) {
+                sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
+            }
+
 
             return response()->json([
                 'code' => 200,
@@ -532,6 +548,12 @@ class UserBookingController extends Controller
         }
 
         if ($request->payment_type == "paypal") {
+            if (!$this->provider) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'PayPal is currently unavailable. Please choose another payment method.',
+                ], 503);
+            }
             $order['intent'] = 'CAPTURE';
 
             $currency_details = "USD"; // Fix currency
@@ -574,9 +596,9 @@ class UserBookingController extends Controller
 
             if (!is_array($response) || !array_key_exists('id', $response)) {
                 return response()->json([
-                    'code' => 500,
-                    'message' => __('web.home.paypal_order_failed'), // Fixed typo in "failed"
-                ]);
+                    'success' => false,
+                    'message' => 'PayPal is currently unavailable. Please choose another payment method.',
+                ], 503);
             }
 
             $data = [
@@ -671,7 +693,14 @@ class UserBookingController extends Controller
 
         if ($request->payment_type == "stripe") {
             $stripeSecret = config('services.stripe.secret') ?? '';
+            if (empty($stripeSecret)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Stripe is currently unavailable. Please choose another payment method.',
+                ], 503);
+            }
             Stripe::setApiKey(is_string($stripeSecret) ? $stripeSecret : '');
+
             $purchase_units = [];
             $currency_details = "USD"; // Fix currency
 
@@ -927,7 +956,7 @@ class UserBookingController extends Controller
             if (userNotificationsEnabled() && $authUser && $authUser->email) {
                 sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
             }
-            
+
 
             return response()->json([
                 'code' => 200,
@@ -983,7 +1012,7 @@ class UserBookingController extends Controller
                             sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
                         }
                     }
-                    if (userNotificationsEnabled() &&$authUser && $authUser->email) {
+                    if (userNotificationsEnabled() && $authUser && $authUser->email) {
                         sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
                     }
                     return redirect()->route('payment.success.page', ['transaction_id' => $response['id']]);

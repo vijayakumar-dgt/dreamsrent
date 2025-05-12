@@ -2036,7 +2036,7 @@ class CarInfoController extends Controller
     {
         $vehicleId = $request->input('delete_id');
 
-        $vehicle = VehicleInfo::firstOrFail($vehicleId);
+        $vehicle = VehicleInfo::where('id', $vehicleId);
 
         if ($vehicle != null) {
             $vehicle->delete();

@@ -2306,9 +2306,9 @@
             },
             success: function (response) {
                 if (response.success) {
+                    initTable();
                     $("#status-modal").modal("hide");
                     showToast("success", "Vehicle status updated.");
-                    initTable();
                 } else {
                     showToast("error", "Failed to update status.");
                 }

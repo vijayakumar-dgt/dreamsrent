@@ -400,7 +400,7 @@
 
                     <div class="d-flex justify-content-center mt-4">
                         <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
-                        <button type="submit" class="btn btn-primary submitbtn">Update Status</button>
+                        <button type="submit" class="btn btn-primary">Update Status</button>
                     </div>
                 </div>
             </form>
