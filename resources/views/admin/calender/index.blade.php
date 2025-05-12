@@ -259,7 +259,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="border-bottom mb-3">
+                <div class="border-bottom mb-3 extraInfo">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <p>Extra Service</p>
+                        <p id="extraService"></p>
+                    </div>
                     <div class="d-flex align-items-center justify-content-between">
                         <p>Tax</p>
                         <p id="taxValue"></p>

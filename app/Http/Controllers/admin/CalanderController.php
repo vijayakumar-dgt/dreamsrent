@@ -130,13 +130,9 @@ class CalanderController extends Controller
             $vehicleType = Cartype::select('name')->where("id", $vehicleTypeId)->first();
         }
 
-        $pickupLocation = $booking->delivery_location
-            ? $booking->delivery_location
-            : Location::where('id', $booking->pickup_location)->value('name');
+        $pickupLocation = Location::where('id', $booking->pickup_location)->value('name');
 
-        $returnLocation = $booking->delivery_return_location
-            ? $booking->delivery_return_location
-            : Location::where('id', $booking->return_location)->value('name');
+        $returnLocation = Location::where('id', $booking->return_location)->value('name');
 
         if (!empty($booking->driver_id)) {
             $driverDetails = Driver::select('driver_name', 'image', 'phone_number')
