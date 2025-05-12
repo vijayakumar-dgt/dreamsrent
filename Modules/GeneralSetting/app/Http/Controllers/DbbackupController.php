@@ -76,7 +76,7 @@ class DbbackupController extends Controller
                 return [
                     'id' => $backup->id,
                     'name' => $backup->name,
-                    'created_on' => $backup->created_at ? $backup->created_at->format('d M Y') : null,
+                    'created_on' => $backup->created_at ? formatDateTime($backup->created_at) : null,
                     'download_url' => "{$baseUrl}/{$backup->name}",
                 ];
             });
@@ -107,7 +107,7 @@ class DbbackupController extends Controller
                 return [
                     'id' => $backup->id,
                     'name' => $backup->name,
-                    'created_on' => $backup->created_at ? $backup->created_at->format('d M Y') : null,
+                    'created_on' => $backup->created_at ? formatDateTime($backup->created_at) : null,
                     'download_url' => "{$baseUrl}/{$backup->name}",
                 ];
             });
