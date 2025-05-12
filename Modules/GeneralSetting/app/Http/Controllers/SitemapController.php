@@ -97,13 +97,29 @@ class SitemapController extends Controller
             if (!file_exists($sitemapFolder) && !mkdir($sitemapFolder, 0777, true) && !is_dir($sitemapFolder)) {
                 return '';
             }
-            $relativePath = 'sitemaps/sitemap-' . now()->format('YmdHis') . '.xml';
+            $lastBeforeSitemap = SitemapUrl::orderByDesc('id')->skip(1)->first();
+           
+            if ($lastBeforeSitemap && $lastBeforeSitemap->sitemap_path) {
+                $oldPath = public_path($lastBeforeSitemap->sitemap_path);
+                if (file_exists($oldPath)) {
+                    // Generate a clean new name with timestamp
+                    $newFilename = 'sitemaps/sitemap-' . date('Y-m-d-H-i-s') . '-' . rand(1000, 9999) . '.xml';
+                    $newFullPath = public_path($newFilename);
+
+                    // Rename the old sitemap file
+                    if (rename($oldPath, $newFullPath)) {
+                        $lastBeforeSitemap->sitemap_path = $newFilename;
+                        $lastBeforeSitemap->save();
+                    }
+                }
+            }
+            $relativePath = 'sitemaps/sitemap.xml';
             $fullPath = public_path($relativePath);
             $sitemap->writeToFile($fullPath);
             if (!file_exists($fullPath)) {
                 return '';
             }
-            $latestUrl = SitemapUrl::latest()->first();
+            $latestUrl = SitemapUrl::orderByDesc('id')->first();
             if ($latestUrl) {
                 $latestUrl->update(['sitemap_path' => $relativePath]);
             }
