@@ -1609,6 +1609,7 @@ return array(
     'brand_icon_dimension' => 'Icon dimensions must be between 10x10 and 25x25 pixels (inclusive).',
     'edit_vehicle' => 'Edit Vehicle',
     'add_vehicle' => 'Add Vehicle',
+    'view_review' => 'View Review',
   ),
   'user_management' =>
   array(

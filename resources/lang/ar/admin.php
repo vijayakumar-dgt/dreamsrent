@@ -1586,6 +1586,7 @@ return [
     'brand_icon_dimension' => 'الايقونة يجب ان تكون بالاقل 10x10 والاكبر 25x25 بكسل.',
     'edit_vehicle' => 'تعديل السيارة',
     'add_vehicle' => 'إضافة سيارة',
+    'view_review' => 'عرض المراجعة',
   ],
   'user_management' =>
   [

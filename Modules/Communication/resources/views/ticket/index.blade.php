@@ -302,7 +302,7 @@
 
     <!-- Edit Status ticket -->
     <div class="modal fade" id="edit_ticket">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="mb-0">{{ __('admin.support.update_ticket') }}</h5>
@@ -315,7 +315,7 @@
                         <div class="row">
                             <input type="hidden" name="ticketid" id="ticketid">
                             <!-- Assign Staff -->
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label" for="assignStaff">
                                         {{ __('admin.support.assign_staff') }} <span class="text-danger">*</span>
