@@ -103,13 +103,12 @@
                                                </td>
                                                <td>
                                                    <div class="form-check form-check-md form-switch">
-                                                       <input class="form-check-input form-label" data-field="status" data-id="${language.id}" type="checkbox" role="switch" ${language.status == 1 ? 'checked' : ''}>
+                                                       <input class="form-check-input form-label" data-field="status" data-id="${language.id}" type="checkbox" role="switch" ${language.status == 1 ? 'checked' : ''} ${language.lang_code == 'en' ? 'disabled' : ''}>
                                                    </div>
                                                </td>
                                                <td>
                                                    <div class="d-flex align-items-center">
                                                        <a href="/admin/settings/language?code=${language.lang_code}&type=web" class="btn btn-white me-1">Web</a>
-                                                       <a href="/admin/settings/language?code=${language.lang_code}&type=app" class="btn btn-white me-1">App</a>
                                                        <a href="/admin/settings/language?code=${language.lang_code}&type=admin" class="btn btn-white">Admin</a>
                                                    </div>
                                                </td>

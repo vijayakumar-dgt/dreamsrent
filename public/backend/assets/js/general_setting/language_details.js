@@ -131,7 +131,7 @@ $(document).ready(function() {
                                     </tr>`;
                         });
                     } else {
-                        html = `<tr><td colspan="2" class="text-center">${_l('admin.common.no_data_found')}</td></tr>`;
+                        html = `<tr><td colspan="3" class="text-center">${_l('admin.common.no_data_found')}</td><td></td></tr>`;
                     }
 
 
