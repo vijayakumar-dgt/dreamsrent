@@ -233,7 +233,7 @@
                                                 ?>
                                                 <h6 class="fs-14 fw-semibold">{{$returnLocation->name ?? ''}}</h6>
                                             </div>
-                                            <p class="fs-13 text-default">{{ \Carbon\Carbon::parse($reservation->start_datetime)->format('d M Y, H:i A') }}</p>
+                                            <p class="fs-13 text-default">{{ formatDateTime($reservation->start_datetime, false)}}</p>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center gap-3">
@@ -511,12 +511,12 @@
                                             <td>{{$invoice->email}}</td>
                                             <td>
                                                 <div>
-                                                    <p class="mb-0">{{ \Carbon\Carbon::parse($invoice->created_at)->format('d M Y') }}</p>
+                                                   <p class="mb-0">{{ formatDateTime($invoice->created_at, false)}}</p>
                                                 </div>
                                             </td>
                                             <td>
                                                 <div>
-                                                    <p class="mb-0">{{ \Carbon\Carbon::parse($invoice->to_date)->format('d M Y') }}</p>
+                                                    <p class="mb-0">{{ formatDateTime($invoice->to_date, false) }}</p>
                                                 </div>
                                             </td>
                                             <td>${{$invoice->grand_total}}</td>
