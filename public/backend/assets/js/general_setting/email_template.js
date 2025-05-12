@@ -188,7 +188,7 @@
                      {
                          data: "created_at",
                          render:function(data,type,row){
-                             let parsedDate = moment(row.created_at,'YYYY-MM-DD').format('DD MMM YYYY');
+                             let parsedDate = row.formated_date
                              return `<p class="text-gray-9">${parsedDate}</p>`;
                          }
                      },

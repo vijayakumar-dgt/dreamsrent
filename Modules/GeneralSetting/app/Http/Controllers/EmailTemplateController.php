@@ -128,7 +128,19 @@ class EmailTemplateController extends Controller
             });
         }
         $emailTemplates = $emailTemplates->orderBy('id', 'desc');
-        $emailTemplates = $emailTemplates->skip($offset)->take($pageLength)->get();
+        $emailTemplates = $emailTemplates->skip($offset)->take($pageLength)->get()->map(function ($emailTemplate) {
+            return [
+                'id' => $emailTemplate->id,
+                'title' => $emailTemplate->title,
+                'notification_type' => $emailTemplate->notification_type,
+                'subject' => $emailTemplate->subject,
+                'sms_content' => $emailTemplate->sms_content,
+                'notification_content' => $emailTemplate->notification_content,
+                'description' => $emailTemplate->description,
+                'status' => $emailTemplate->status,
+                'formated_date' => formatDateTime($emailTemplate->created_at)
+            ];
+        });
         $totalRecords = $filteredRecords = EmailTemplate::count();
         return response()->json([
             'draw' => $request->draw,
