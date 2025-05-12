@@ -326,7 +326,7 @@
 
                                         <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="img"></a>
                                     <div>
-                                        <h6 class="fs-14 fw-semibold">{{$booking->name ?? ''}}</h6>
+                                         <h6 class="fs-14 fw-semibold">{{ucfirst($booking->name) ?? ''}}</h6>
                                     </div>
                                 </div>
                             </td>
@@ -337,7 +337,7 @@
                                 <p class="text-gray-9">{{$booking->payment_type ?? '-'}}</p>
                             </td>
                             <td>
-                                <p class="text-gray-9">{{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</p>
+                                <p class="text-gray-9">{{ formatDateTime($booking->booking_date, false) }}</p>
                             </td>
                             <td>
                                 @php
