@@ -1741,6 +1741,9 @@ class CarInfoController extends Controller
                     ->where("vehicle_id", $vehicle->id)
                     ->exists();
             }
+            $rentalSettings = GeneralSetting::where('group_id',20)->pluck('value', 'key');
+            $faqEnabled = $rentalSettings['faq'] ?? false;
+            $extraServiceEnabled = $rentalSettings['extraService'] ?? false;
             $data = [
                 'id' => $vehicle->id,
                 'name' => $vehicle->name,
@@ -1778,7 +1781,7 @@ class CarInfoController extends Controller
                 'is_top_rated' => (bool) rand(0, 1),
                 'authenticated' => Auth::guard('web')->check(),
                 'description' => $vehicle->description,
-                'extraservice' => $vehicle->extraservices->map(function (VehicleExtraService $extraservice) {
+                'extraservice' => $extraServiceEnabled ? $vehicle->extraservices->map(function (VehicleExtraService $extraservice) {
                     return [
                         'extra_service_id' => $extraservice->extra_service_id,
                         'value' => $extraservice->value,
@@ -1788,7 +1791,7 @@ class CarInfoController extends Controller
                         'description' => optional($extraservice->extraService)->description,
                         'image' => url('/storage/' . optional($extraservice->extraService)->image), // Convert image to full URL
                     ];
-                }),
+                }) : null,
                 'tariff' => $vehicle->tariffs->map(function (VehicleTarrif $tariff) {
                     return [
                         'tariff_title' => $tariff->tariff_title,
@@ -1810,12 +1813,12 @@ class CarInfoController extends Controller
                         'seasonal_late_fee' => $seasonal->seasonal_late_fee,
                     ];
                 }),
-                'faqs' => $vehicle->faqs->map(function (VehicleFaq $faq) {
+                'faqs' => $faqEnabled ? $vehicle->faqs->map(function (VehicleFaq $faq) {
                     return [
                         'question' => $faq->question,
                         'answer' => $faq->answer,
                     ];
-                }),
+                }) : [], 
                 'damages' => $vehicle->damages->map(function (VehicleDamage $damage) {
                     return [
                         'damage_type' => $damage->damage_type,
