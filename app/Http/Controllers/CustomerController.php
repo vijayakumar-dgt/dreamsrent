@@ -282,10 +282,10 @@ class CustomerController extends Controller
                         $query->orderBy('users.created_at', 'desc');
                         break;
                     case 'ascending':
-                        $query->orderBy('users.id', 'asc');
+                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) asc");
                         break;
                     case 'descending':
-                        $query->orderBy('users.id', 'desc');
+                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) desc");
                         break;
                     case 'last month':
                         $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();

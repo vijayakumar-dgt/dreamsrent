@@ -85,7 +85,9 @@ class ContactController extends Controller
                 ->map(function ($contact) {
                     $contact->name = ucwords($contact->name);
                     $url = uploadedAsset($contact->image, 'profile');
+                    $contact->created_date = formatDateTime($contact->created_at, false);
                     $contact->image = $url;
+                    unset($contact->created_at);
                     return $contact;
                 });
             return response()->json([

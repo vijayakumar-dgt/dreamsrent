@@ -158,7 +158,11 @@ class MenuManagementController extends Controller
             // If no ID is provided, return all menus for the default language
             $menus = Menu::where('language_id', $defaultLanguageId)
                         ->orderBy('created_at', 'desc')
-                        ->get();
+                        ->get()->map(function ($menu) {
+                            $menu->created_date = formatDateTime($menu->created_at, false);
+                            unset($menu->created_at);
+                            return $menu;
+                        });
 
             return response()->json([
                 'code' => 200,
