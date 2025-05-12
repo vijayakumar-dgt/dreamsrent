@@ -217,11 +217,6 @@
     
                 if (response.data && response.data.length > 0) {
                     $.each(response.data, function(index, value) {
-                        let createdDate = new Date(value.created_at).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "2-digit",
-                        });
     
                         tableBody += `
                         <tr>
@@ -232,7 +227,7 @@
                                 <p class="text-gray-9">${value.menu_type.charAt(0).toUpperCase() + value.menu_type.slice(1)}</p>
                             </td>
                             <td>
-                                <p class="text-gray-9">${createdDate}</p>
+                                <p class="text-gray-9">${value.created_date}</p>
                             </td>
                             <td>
                                 <span class="badge badge-${value.status === 1 ? 'soft-success' : 'soft-danger'} d-inline-flex align-items-center badge-sm">

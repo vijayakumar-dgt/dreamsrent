@@ -143,9 +143,7 @@ class InspectionController extends Controller
         }
 
         $inspections = $inspections->orderBy('id', 'desc')->get()->map(function ($inspection) {
-            $inspection->inspectiondate = $inspection->inspection_date
-                ? Carbon::parse($inspection->inspection_date)->format('d M Y')
-                : null;
+            $inspection->inspectiondate = formatDateTime($inspection->inspection_date, false);
 
 
 

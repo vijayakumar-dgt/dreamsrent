@@ -235,10 +235,10 @@ class DriverController extends Controller
                         $query->orderBy('drivers.created_at', 'desc');
                         break;
                     case 'ascending':
-                        $query->orderBy('drivers.id', 'asc');
+                        $query->orderBy('drivers.driver_name', 'asc');
                         break;
                     case 'descending':
-                        $query->orderBy('drivers.id', 'desc');
+                        $query->orderBy('drivers.driver_name', 'desc');
                         break;
                     case 'last month':
                         $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();

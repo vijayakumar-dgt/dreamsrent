@@ -150,12 +150,12 @@
                             <td>{{$invoice->email}}</td>
                             <td>
                                 <div>
-                                    <p class="mb-0">{{ \Carbon\Carbon::parse($invoice->created_at)->format('d M Y') }}</p>
+                                    <p class="mb-0">{{ formatDateTime($invoice->created_at, false) }}</p>
                                 </div>
                             </td>
                             <td>
                                 <div>
-                                    <p class="mb-0">{{ \Carbon\Carbon::parse($invoice->to_date)->format('d M Y') }}</p>
+                                    <p class="mb-0">{{ formatDateTime($invoice->to_date, false) }}</p>
                                 </div>
                             </td>
                             <td>${{$invoice->grand_total}}</td>

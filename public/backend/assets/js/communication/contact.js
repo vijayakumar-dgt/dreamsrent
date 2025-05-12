@@ -58,7 +58,7 @@ function contactTable(sortBy = "latest", searchQuery = "") {
                         </td>
                         <td><p class="text-gray-9">${value.phone_number}</p></td>
                         <td><p class="text-gray-9">${value.email}</p></td>
-                        <td><p class="text-gray-9">${value.created_at ? new Date(value.created_at).toLocaleDateString() : '-'}</p></td>
+                        <td><p class="text-gray-9">${value.created_date}</p></td>
                         <td>
                             <span class="avatar avatar-md bg-light rounded-circle tooltip-trigger"
                                   data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"

@@ -41,7 +41,7 @@ let currentLang = ""; // Add this at the top
                         tableBody += `<tr>
                                 <td>${value.page_title}</td>
                                 <td>${value.slug}</td>
-                                <td>${value.slug}</td>
+                                <td>${value.updated_date}</td>
                                 <td>
                                     <span class="badge ${
                                         value.status == 1

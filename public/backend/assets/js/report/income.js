@@ -103,6 +103,25 @@ function updateChartData(filter) {
         return inPeriod && isValidBooking(booking);
     });
 
+    // Group by date and sum the income
+    let groupedData = {};
+    filteredData.forEach((booking) => {
+        let date = new Date(booking.booking_date);
+        let formattedDate = `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`; // Example: 28 Feb
+        if (!groupedData[formattedDate]) {
+            groupedData[formattedDate] = 0;
+        }
+        groupedData[formattedDate] += booking.vehicle_total_price || 0;
+    });
+
+    // Extract categories (dates) and income data
+    let categories = Object.keys(groupedData);
+    let incomeData = Object.values(groupedData);
+
+    // Calculate total income for the filtered period
+    let totalIncome = incomeData.reduce((sum, income) => sum + income, 0);
+
+    // Calculate the previous period income
     let previousPeriodData = bookingData.filter((booking) => {
         let bookingDate = new Date(booking.booking_date);
 
@@ -117,21 +136,16 @@ function updateChartData(filter) {
         return inPreviousPeriod && isValidBooking(booking);
     });
 
-    if (filteredData.length === 0) {
-        console.warn("No data available for the selected filter:", filter);
-    }
+    let previousTotalIncome = previousPeriodData.map(b => b.vehicle_total_price || 0)
+        .reduce((sum, income) => sum + income, 0);
 
-    let incomeData = filteredData.map(b => b.vehicle_total_price || 0);
-    let categories = filteredData.map(b => new Date(b.booking_date).toLocaleDateString() || "N/A");
-
-    let totalIncome = incomeData.reduce((sum, income) => sum + income, 0);
-    let previousTotalIncome = previousPeriodData.map(b => b.vehicle_total_price || 0).reduce((sum, income) => sum + income, 0);
-
+    // Calculate percentage change
     let percentageChange = 0;
     if (previousTotalIncome > 0) {
         percentageChange = ((totalIncome - previousTotalIncome) / previousTotalIncome) * 100;
     }
 
+    // Update chart with grouped data
     if (chart) {
         chart.updateOptions({
             series: [{ name: "Income", data: incomeData }],
@@ -141,6 +155,7 @@ function updateChartData(filter) {
         console.error("Chart is not initialized.");
     }
 
+    // Update UI elements
     document.querySelector(".dropdown-toggle-chat").innerHTML = `<i class="ti ti-calendar me-1"></i> ${filter}`;
 
     document.querySelector(".income-summary p").textContent = `Income ${filter}`;

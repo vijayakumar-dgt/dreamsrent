@@ -81,7 +81,7 @@
                                                     <option value="">{{ __('admin.general_settings.select') }}</option>
                                                     @if(!empty($dateformats) && count($dateformats) > 0)
                                                         @foreach($dateformats as $dateformat)
-                                                            <option value="{{ $dateformat->id }}">{{ $dateformat->name }}</option>
+                                                            <option value="{{ $dateformat->id }}">{{ $dateformat->title }}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>

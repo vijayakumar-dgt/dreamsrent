@@ -1005,7 +1005,8 @@ class CarInfoController extends Controller
             "vehicle_metakeywords",
             "features",
             "popular",
-            "recommended"
+            "recommended",
+            "status"
         );
 
 
@@ -1101,7 +1102,7 @@ class CarInfoController extends Controller
 
             $damageCount = VehicleDamage::where('vehicle_id', $vehicle->id)->count();
             $vehicle->damage_count = $damageCount;
-            $vehicle->status = 1;
+            $vehicle->status = $vehicle->status;
 
             return $vehicle;
         });
@@ -1274,7 +1275,7 @@ class CarInfoController extends Controller
             $query->where('status', $request->status);
         }
 
-        $sortBy = $request->sort_by ?? 'ascending';
+        $sortBy = $request->sort_by ?? 'desc';
 
         switch ($sortBy) {
             case 'latest':
@@ -1331,7 +1332,7 @@ class CarInfoController extends Controller
 
         $perPage = $request->paginate ?? 1;
 
-        $vehicles = $query->where("language_id", $lang_id)->paginate($perPage);
+        $vehicles = $query->where("language_id", $lang_id)->where('status', 1)->paginate($perPage);
 
         $data = $vehicles->map(function (VehicleInfo $vehicle): array {
             $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
@@ -2106,6 +2107,20 @@ class CarInfoController extends Controller
         }
 
         $vehicle->recommended = $request->recommended ? 1 : 0;
+        $vehicle->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function setStatus(Request $request)
+    {
+        $vehicle = VehicleInfo::find($request->vehicle_id);
+
+        if (!$vehicle) {
+            return response()->json(['error' => 'Vehicle not found'], 404);
+        }
+
+        $vehicle->status = $request->status ? 1 : 0;
         $vehicle->save();
 
         return response()->json(['success' => true]);

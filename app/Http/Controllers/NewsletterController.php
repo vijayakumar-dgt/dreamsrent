@@ -55,9 +55,13 @@ class NewsletterController extends Controller
                 'content' => $template->description ?? 'You have been subscribed to our newsletter.',
             ];
 
-            $request = new Request($data);
-            $emailController = new EmailController();
-            $emailController->sendEmail($request);
+            try {
+                $request = new Request($data);
+                $emailController = new EmailController();
+                $emailController->sendEmail($request);
+            } catch (\Exception $e) {
+                
+            }
 
             return response()->json([
                 'status' => 'success',
