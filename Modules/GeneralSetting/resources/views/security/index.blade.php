@@ -179,8 +179,10 @@
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.general_settings.current_password') }}<span class="text-danger">*</span></label>
                         <div class="pass-group">
-                            <input type="password" class="pass-inputs form-control" name="current_password" id="current_password">
-                            <span class="ti toggle-passwords ti-eye-off"></span>
+                            <div class="position-relative">
+                                <input type="password" class="form-control" name="current_password" id="current_password">
+                                <span class="ti toggle-passwords ti-eye-off position-absolute top-50 translate-middle-y cursor-pointer"></span>
+                            </div>
                             <span class="current_password_error text-danger error-text" id="current_password_error"></span>
                             <span class="password-success text-success" id="passwordSuccess"></span>
                         </div>
@@ -189,8 +191,10 @@
                         <div class="mb-3">
                             <label class="form-label">{{ __('admin.general_settings.new_password') }}<span class="text-danger">*</span></label>
                             <div class="pass-group" id="passwordInput">
-                                <input type="password" class="form-control pass-input" name="new_password" id="new_password">
-                                <span class="ti toggle-password ti-eye-off"></span>
+                                <div class="position-relative">
+                                    <input type="password" class="form-control pass-input" name="new_password" id="new_password">
+                                    <span class="ti toggle-password ti-eye-off position-absolute top-35 translate-middle-y cursor-pointer"></span>
+                                </div>
                                 <span class="new_password_error text-danger error-text" id="new_password_error"></span>
                             </div>
                         </div>
@@ -206,8 +210,10 @@
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.general_settings.confirm_password') }} <span class="text-danger">*</span></label>
                         <div class="pass-group">
-                            <input type="password" class="pass-inputa form-control" name="confirm_password" id="confirm_password">
-                            <span class="ti toggle-passworda ti-eye-off"></span>
+                            <div class="position-relative">
+                                <input type="password" class="pass-inputa form-control" name="confirm_password" id="confirm_password">
+                                <span class="ti toggle-passworda ti-eye-off position-absolute top-35 translate-middle-y cursor-pointer"></span>
+                            </div>
                             <span class="confirm_password_error text-danger error-text" id="confirm_password_error"></span>
                         </div>
                     </div>

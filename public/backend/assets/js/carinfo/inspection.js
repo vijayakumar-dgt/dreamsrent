@@ -292,12 +292,12 @@ function initTable(statusFilter = null){
                     
                     tableBody += `<tr>
                                     <td>
-                                        <div class="d-flex align-items-center file-name-icon">
-                                            <a href="#" class="avatar avatar-lg border">
-                                                <img src="${value.car.vehicle_image}" class="img-fluid" alt="${_l('admin.common.image')}">
+                                        <div class="d-flex align-items-center">
+                                            <a href="#" class="avatar me-2 flex-shrink-0">
+                                                <img src="${value.car.vehicle_image}" alt="${_l('admin.common.image')}">
                                             </a>
-                                            <div class="ms-2">
-                                                <h6 class="fw-medium"><a href="#">${value.car ? value.car.name : '-'}</a></h6>
+                                            <div>
+                                                <a href="#" class="fw-semibold d-block">${value.car ? value.car.name : '-'}</a>
                                             </div>
                                         </div>
                                     </td>
