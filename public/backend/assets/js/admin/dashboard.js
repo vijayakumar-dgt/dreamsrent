@@ -134,82 +134,65 @@ document.querySelectorAll(".dropdown-item-chat").forEach(item => {
 
 function updateChartData(filter) {
     let today = new Date();
-    let lastWeek = new Date();
-    lastWeek.setDate(today.getDate() - 7);
-    let previousWeek = new Date();
-    previousWeek.setDate(today.getDate() - 14);
+    let dayOfWeek = today.getDay();
+
+    let startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - dayOfWeek);
+    let endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+    let startOfLastWeek = new Date(startOfWeek);
+    startOfLastWeek.setDate(startOfLastWeek.getDate() - 7);
+    let endOfLastWeek = new Date(startOfLastWeek);
+    endOfLastWeek.setDate(startOfLastWeek.getDate() + 6);
 
     let thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     let previousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
 
-    // --- Filter Data Based on the Selected Period ---
+    const formatDate = (date) => {
+        return `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`;
+    };
+
+    const generateDateRange = (start, end) => {
+        let dateArray = [];
+        let currentDate = new Date(start);
+        while (currentDate <= end) {
+            dateArray.push(formatDate(new Date(currentDate)));
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        return dateArray;
+    };
+
     let filteredData = bookingData.filter((booking) => {
         let bookingDate = new Date(booking.booking_date);
 
-        if (filter === "This Week") return bookingDate >= lastWeek;
-        if (filter === "Last Week")
-            return bookingDate < lastWeek && bookingDate >= previousWeek;
+        if (filter === "This Week") return bookingDate >= startOfWeek && bookingDate <= endOfWeek;
+        if (filter === "Last Week") return bookingDate >= startOfLastWeek && bookingDate <= endOfLastWeek;
         if (filter === "This Month") return bookingDate >= thisMonth;
 
         return true;
     });
 
-    // --- Grouping Data by Date and Summing the Income ---
     let groupedData = {};
     filteredData.forEach((booking) => {
-        let date = new Date(booking.booking_date);
-        let formattedDate = `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`; // Example: 26 Feb
-        if (!groupedData[formattedDate]) {
-            groupedData[formattedDate] = 0;
+        let date = formatDate(new Date(booking.booking_date));
+        if (!groupedData[date]) {
+            groupedData[date] = 0;
         }
-        groupedData[formattedDate] += booking.vehicle_total_price || 0;
+        groupedData[date] += booking.vehicle_total_price || 0;
     });
 
-    // Extracting categories (dates) and income data for the chart
-    let categories = Object.keys(groupedData);
-    let incomeData = Object.values(groupedData);
-
-    // --- Previous Period Data Calculation ---
-    let previousPeriodData = bookingData.filter((booking) => {
-        let bookingDate = new Date(booking.booking_date);
-
-        if (filter === "This Week") {
-            return bookingDate < lastWeek && bookingDate >= previousWeek;
-        }
-        if (filter === "Last Week") {
-            let weekBeforePrevious = new Date(previousWeek);
-            weekBeforePrevious.setDate(previousWeek.getDate() - 7);
-            return bookingDate < previousWeek && bookingDate >= weekBeforePrevious;
-        }
-        if (filter === "This Month") {
-            return bookingDate < thisMonth && bookingDate >= previousMonth;
-        }
-
-        return false;
-    });
-
-    // Group previous period data by date and sum the values
-    let previousGroupedData = {};
-    previousPeriodData.forEach((booking) => {
-        let date = new Date(booking.booking_date);
-        let formattedDate = `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`;
-        if (!previousGroupedData[formattedDate]) {
-            previousGroupedData[formattedDate] = 0;
-        }
-        previousGroupedData[formattedDate] += booking.vehicle_total_price || 0;
-    });
-
-    // Sum of the income for the current and previous periods
-    let totalIncome = incomeData.reduce((sum, income) => sum + income, 0);
-    let previousTotalIncome = Object.values(previousGroupedData).reduce((sum, income) => sum + income, 0);
-
-    // Calculate the percentage change
-    let percentageChange = 0;
-    if (previousTotalIncome > 0) {
-        percentageChange = ((totalIncome - previousTotalIncome) / previousTotalIncome) * 100;
+    let dateRange = [];
+    if (filter === "This Week") dateRange = generateDateRange(startOfWeek, endOfWeek);
+    if (filter === "Last Week") dateRange = generateDateRange(startOfLastWeek, endOfLastWeek);
+    if (filter === "This Month") {
+        let endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        dateRange = generateDateRange(thisMonth, endOfMonth);
     }
 
-    // --- Chart Update ---
+    let categories = dateRange;
+    let incomeData = categories.map(date => groupedData[date] ?? 0);
+
     if (chart) {
         chart.updateOptions({
             series: [{ name: "Income", data: incomeData }],
@@ -219,20 +202,21 @@ function updateChartData(filter) {
         console.error("Chart is not initialized.");
     }
 
-    // --- UI Updates ---
     const incomeText = document.querySelector(".income-summary p");
     const incomeAmount = document.querySelector(".income-summary h5");
     if (incomeText) {
         incomeText.textContent = `Income ${filter}`;
     }
+
+    const totalIncome = incomeData.reduce((sum, income) => sum + income, 0);
+
     if (incomeAmount) {
         incomeAmount.innerHTML = `
             $${totalIncome.toLocaleString()} 
-            <span class="${percentageChange >= 0 ? 'text-success' : 'text-danger'} fs-13 fw-semibold">
-                ${percentageChange.toFixed(2)}%
-            </span>
+            <span class="fs-13 fw-semibold">0%</span>
         `;
     }
+    
     const dropdownToggleChat = document.querySelector(".dropdown-toggle-chat");
     if (dropdownToggleChat) {
         dropdownToggleChat.innerHTML = `<i class="ti ti-calendar me-1"></i> ${filter ?? ''}`;
