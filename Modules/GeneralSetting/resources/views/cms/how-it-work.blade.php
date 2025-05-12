@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <form id="howItWorkForm">
-                        <div class="card h-100">
+                        <div class="card mb-0">
                             <!-- Card Header -->
                             <div class="card-header">
                                 <div class="skeleton header-skeleton label-loader"></div>
@@ -49,7 +49,7 @@
                                     </select>
                                     <span class="text-danger" id="language_error"></span>
                                 </div>
-                                <div class="mb-3">
+                                <div class="mb-0">
                                     <div class="skeleton label-skeleton label-loader"></div>
                                     <label for="howitwork_description" class="form-label d-none real-label">{{__('admin.general_settings.description')}}</label>
 

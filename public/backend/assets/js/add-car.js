@@ -222,9 +222,9 @@
                             </td>
                             <td>
                             <div class="d-flex align-items-start">
-								<p class="avatar me-2 flex-shrink-0">
+								<div class="avatar me-2 flex-shrink-0">
 									<img src="${value.vehicle_image}" class="rounded-3" alt="">
-								</p>
+								</div>
 								<div class="text-start">
 									<h6><p class="fs-14 fw-semibold">${ucfirst(value.name)}</p></h6>
 									<p>${value.car_type ? value.car_type.name : ""}</p>
