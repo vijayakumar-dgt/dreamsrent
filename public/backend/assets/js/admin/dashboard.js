@@ -79,7 +79,7 @@ if (Array.isArray(bookingData) && bookingData.length > 0) {
 
 var optionsIncome = {
     series: [{ name: "Income", data: incomeData }],
-    chart: { type: "bar", height: 350 },
+    chart: { type: "bar", height: 280 },
     plotOptions: {
         bar: { columnWidth: "50%", borderRadius: 5 },
     },
@@ -142,6 +142,7 @@ function updateChartData(filter) {
     let thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     let previousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
 
+    // --- Filter Data Based on the Selected Period ---
     let filteredData = bookingData.filter((booking) => {
         let bookingDate = new Date(booking.booking_date);
 
@@ -150,36 +151,65 @@ function updateChartData(filter) {
             return bookingDate < lastWeek && bookingDate >= previousWeek;
         if (filter === "This Month") return bookingDate >= thisMonth;
 
-        return true; 
+        return true;
     });
 
+    // --- Grouping Data by Date and Summing the Income ---
+    let groupedData = {};
+    filteredData.forEach((booking) => {
+        let date = new Date(booking.booking_date);
+        let formattedDate = `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`; // Example: 26 Feb
+        if (!groupedData[formattedDate]) {
+            groupedData[formattedDate] = 0;
+        }
+        groupedData[formattedDate] += booking.vehicle_total_price || 0;
+    });
+
+    // Extracting categories (dates) and income data for the chart
+    let categories = Object.keys(groupedData);
+    let incomeData = Object.values(groupedData);
+
+    // --- Previous Period Data Calculation ---
     let previousPeriodData = bookingData.filter((booking) => {
         let bookingDate = new Date(booking.booking_date);
 
-        if (filter === "This Week") return bookingDate < lastWeek && bookingDate >= previousWeek;
-        if (filter === "Last Week") return bookingDate < previousWeek && bookingDate >= new Date(previousWeek.setDate(previousWeek.getDate() - 7));
-        if (filter === "This Month") return bookingDate < thisMonth && bookingDate >= previousMonth;
+        if (filter === "This Week") {
+            return bookingDate < lastWeek && bookingDate >= previousWeek;
+        }
+        if (filter === "Last Week") {
+            let weekBeforePrevious = new Date(previousWeek);
+            weekBeforePrevious.setDate(previousWeek.getDate() - 7);
+            return bookingDate < previousWeek && bookingDate >= weekBeforePrevious;
+        }
+        if (filter === "This Month") {
+            return bookingDate < thisMonth && bookingDate >= previousMonth;
+        }
 
         return false;
     });
 
-    if (filteredData.length === 0) {
-        console.warn("No data available for the selected filter:", filter);
-    }
+    // Group previous period data by date and sum the values
+    let previousGroupedData = {};
+    previousPeriodData.forEach((booking) => {
+        let date = new Date(booking.booking_date);
+        let formattedDate = `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`;
+        if (!previousGroupedData[formattedDate]) {
+            previousGroupedData[formattedDate] = 0;
+        }
+        previousGroupedData[formattedDate] += booking.vehicle_total_price || 0;
+    });
 
-    let incomeData = filteredData.map(b => b.vehicle_total_price || 0); 
-    let categories = filteredData.map(b => new Date(b.booking_date).toLocaleDateString() || "N/A");
-
-    
+    // Sum of the income for the current and previous periods
     let totalIncome = incomeData.reduce((sum, income) => sum + income, 0);
+    let previousTotalIncome = Object.values(previousGroupedData).reduce((sum, income) => sum + income, 0);
 
-    let previousTotalIncome = previousPeriodData.map(b => b.vehicle_total_price || 0).reduce((sum, income) => sum + income, 0);
-
+    // Calculate the percentage change
     let percentageChange = 0;
     if (previousTotalIncome > 0) {
         percentageChange = ((totalIncome - previousTotalIncome) / previousTotalIncome) * 100;
     }
 
+    // --- Chart Update ---
     if (chart) {
         chart.updateOptions({
             series: [{ name: "Income", data: incomeData }],
@@ -189,14 +219,12 @@ function updateChartData(filter) {
         console.error("Chart is not initialized.");
     }
 
-
+    // --- UI Updates ---
     const incomeText = document.querySelector(".income-summary p");
     const incomeAmount = document.querySelector(".income-summary h5");
-    
     if (incomeText) {
         incomeText.textContent = `Income ${filter}`;
     }
-    
     if (incomeAmount) {
         incomeAmount.innerHTML = `
             $${totalIncome.toLocaleString()} 
@@ -205,14 +233,11 @@ function updateChartData(filter) {
             </span>
         `;
     }
-    
-    
     const dropdownToggleChat = document.querySelector(".dropdown-toggle-chat");
     if (dropdownToggleChat) {
         dropdownToggleChat.innerHTML = `<i class="ti ti-calendar me-1"></i> ${filter ?? ''}`;
     }
-    }
-
+}
 
 document.addEventListener("DOMContentLoaded", function () {
     updateChartData("This Week");
