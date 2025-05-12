@@ -181,7 +181,7 @@
                                                                 $payment = ucfirst($paymentKey);
                                                             }
                                                             ?>
-                                                            <option value="{{ $payment }}">{{ $payment }}</option>
+                                                            <option value="{{ $paymentKey }}">{{ $payment }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
