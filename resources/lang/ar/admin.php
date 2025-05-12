@@ -800,7 +800,9 @@ return [
     'type_your_content_here' => 'اكتب محتوىك هنا',
     'edit_bank_account' => 'تحرير حساب بنكي',
     'edit_template' => 'تحرير قالب',
-
+    'sitemap_empty' => 'الخريطة الموقعة فارغة',
+    'folder_permission_error' => 'خطأ في صلاحيات المجلد',
+    'failed_to_generate_sitemap' => 'فشل في توليد الخريطة الموقعة',
   ],
   'main' =>
   [

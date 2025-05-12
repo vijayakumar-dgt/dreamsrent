@@ -546,7 +546,7 @@ class LanguageController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'code'    => 422,
-                'message' =>  __('admin.general_settings.language_not_found'),
+                'message' =>  __('admin.general_settings.cannot_delete_default_language'),
             ], 422);
         }
 
