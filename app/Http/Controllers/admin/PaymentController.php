@@ -96,10 +96,11 @@ class PaymentController extends Controller
                     'payment_status' => $booking->payment_status,
                 ];
             });
-
+            $currencySymbol = getDefaultCurrencySymbol();
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.common.default_retrieve_success'),
+                'currency_symbol' => $currencySymbol,
                 'data' => $data,
             ], 200);
         } catch (\Exception $e) {

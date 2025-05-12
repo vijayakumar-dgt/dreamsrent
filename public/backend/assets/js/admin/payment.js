@@ -98,7 +98,7 @@ function initTable() {
                                 }</a></h6>
                             </div>
                             </td>
-                            <td>${value.amount}</td>
+                            <td>${response.currency_symbol ?? '$'}${value.amount}</td>
                             <td>${value.payment_type}</td>
                             <td>${value.created_at}</td>
                             <td>
