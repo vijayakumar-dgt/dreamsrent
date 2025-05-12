@@ -327,9 +327,6 @@
                                     </a>
                                     <ul class="dropdown-menu  dropdown-menu-end p-2">
                                         <li>
-                                            <a href="javascript:void(0);" class="dropdown-item dropdown-item-chat rounded-1">{{ __('admin.dashboard.this_month') }}</a>
-                                        </li>
-                                        <li>
                                             <a href="javascript:void(0);" class="dropdown-item dropdown-item-chat rounded-1">{{ __('admin.dashboard.this_week') }}</a>
                                         </li>
                                         <li>
