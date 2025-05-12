@@ -59,7 +59,7 @@ class CustomerController extends Controller
                 'email',
                 Rule::unique('users', 'email')->ignore($id)->whereNull('deleted_at'),
             ],
-            'address' => ['required', 'max:150'],
+            'address' => ['max:150'],
             'card_number' => [
                 'required',
                 Rule::unique('user_details', 'card_number')->ignore($id, 'user_id')->whereNull('deleted_at'),

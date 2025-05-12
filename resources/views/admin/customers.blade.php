@@ -400,7 +400,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="address" class="form-label">{{ __('admin.common.address') }}<span class="text-danger"> *</span></label>
+                                    <label for="address" class="form-label">{{ __('admin.common.address') }}</label>
                                     <input class="form-control" type="text" name="address" id="address">
                                     <span id="address_error" class="text-danger error-text"></span>
                                 </div>
@@ -429,7 +429,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="documents" class="form-label">{{ __('admin.common.documents') }}</label><span class="text-danger"> *</span></label>
+                                    <label for="documents" class="form-label">{{ __('admin.common.documents') }}</label></label>
                                     <div class="document-upload text-center br-3 mb-3">
                                         <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
                                         <p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span></p>
@@ -565,7 +565,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="edit_address" class="form-label">{{ __('admin.common.address') }}<span class="text-danger"> *</span></label>
+                                    <label for="edit_address" class="form-label">{{ __('admin.common.address') }}</label>
                                     <input class="form-control" type="text" name="address" id="edit_address">
                                     <span id="edit_address_error" class="text-danger error-text"></span>
                                 </div>
@@ -594,7 +594,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="edit_documents" class="form-label">{{ __('admin.common.documents') }}</label><span class="text-danger"> *</span></label>
+                                    <label for="edit_documents" class="form-label">{{ __('admin.common.documents') }}</label></label>
                                     <div class="document-upload text-center br-3 mb-3">
                                         <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
                                         <p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span></p>

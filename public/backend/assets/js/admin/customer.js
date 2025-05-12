@@ -119,7 +119,6 @@ $(document).ready(function() {
                 email: true,
             },
             address: {
-                required: true,
                 maxlength: 150
             },
             card_number: {
@@ -317,7 +316,6 @@ $(document).ready(function() {
                 email: true,
             },
             address: {
-                required: true,
                 maxlength: 150
             },
             card_number: {
