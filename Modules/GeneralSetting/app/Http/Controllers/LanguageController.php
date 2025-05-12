@@ -60,7 +60,7 @@ class LanguageController extends Controller
             }
 
             $defaultLang = 'en';
-            $langDefaultFiles = ['admin.php', 'app.php', 'web.php'];
+            $langDefaultFiles = ['admin.php','web.php'];
 
             foreach ($langDefaultFiles as $file) {
                 $sourcePath = base_path("resources/lang/{$defaultLang}/{$file}");
@@ -110,7 +110,7 @@ class LanguageController extends Controller
         }
 
         $languages = $languages->with('transLang')->get();
-        $langDefaultFiles = ['admin.php', 'app.php', 'web.php'];
+        $langDefaultFiles = ['admin.php', 'web.php'];
         $responseArray = [];
         $defaultLang = 'en';
         $totalKeys = 0;
@@ -261,7 +261,7 @@ class LanguageController extends Controller
 
     public function language(Request $request): View
     {
-        $langDefaultFiles = ['admin', 'app', 'web'];
+        $langDefaultFiles = ['admin', 'web'];
 
         if (!in_array($request->type, $langDefaultFiles)) {
             return abort(404);
@@ -279,7 +279,7 @@ class LanguageController extends Controller
 
     public function getLanguageModules(Request $request): JsonResponse
     {
-        $validTabs = ['admin', 'app', 'web'];
+        $validTabs = ['admin', 'web'];
         $tab = $request->tab;
 
         if (!in_array($tab, $validTabs)) {
@@ -361,7 +361,7 @@ class LanguageController extends Controller
         $tab = $request->tab;
         $module = $request->module;
         $keyword = $request->keyword;
-        if (!in_array($tab, ['admin', 'app', 'web'])) {
+        if (!in_array($tab, ['admin', 'web'])) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 422,
@@ -539,7 +539,7 @@ class LanguageController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'code'    => 422,
-                'message' =>  __('admin.general_settings.language_not_found'),
+                'message' =>  __('admin.general_settings.cannot_delete_default_language'),
             ], 422);
         }
         if ($language->default == 1) {

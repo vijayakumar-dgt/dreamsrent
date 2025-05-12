@@ -744,7 +744,7 @@ return [
     'description_not_empty' => 'يجب ألا تكون الوصف فارغة',
     'subject_required' => 'الموضوع مطلوب',
     'sms_required' => 'رسالة SMS مطلوبة',
-    'language_not_found' => 'اللغة غير موجودة',
+    'cannot_delete_default_language' => 'لا يمكن حذف اللغة الافتراضية',
     'module_fetched_success' => 'تم جلب الوحدة بنجاح',
     'invalid_tab' => 'تم تقديم تبويب غير صالح',
     'language_deleted' => 'تم حذف اللغة بنجاح',

@@ -746,7 +746,7 @@ return array(
     'subject_required' => 'Subject is required',
     'sms_required' => 'SMS is required',
     'description_not_empty' => 'Description should not be empty',
-    'language_not_found' => 'Language not found',
+    'cannot_delete_default_language' => 'Cannot delete default language',
     'module_fetched_success' => 'Module fetched successfully',
     'invalid_tab' => 'Invalid Tab Provided',
     'language_deleted' => 'Language deleted successfully',
