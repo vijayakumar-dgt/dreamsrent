@@ -913,7 +913,7 @@
                                 <input type="text" name="insurance_price_total" id="insurance_price_total" value="" hidden>
                                 <input type="text" name="driver_price_total" id="driver_price_total" value="" hidden>
                                 <input type="text" name="vehicle_price" id="vehicle_price" value="{{ old('price_rate', request('price_rate')) }}" hidden>
-                                <input type="text" name="vehicle_price_total" id="vehicle_price_total" value="{{ number_format($grandTotal, 2) }}" hidden>
+                                <input type="text" name="vehicle_price_total" id="vehicle_price_total" value="{{ $final_price_rate }}" hidden>
                                 <input type="text" name="total_price" id="total_price" value="{{ number_format($grandTotal, 2) }}" hidden>
                                 <input type="text" name="currency" id="currency" value="{{ $currencySymbol }}" hidden>
                                 <span>{{ $currencySymbol }}{{ number_format($grandTotal, 2) }}</span>

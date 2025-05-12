@@ -175,6 +175,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                 } else {
                                     $(".driverInfo").addClass("d-none");
                                 }
+                                console.log(booking.tax_val);
+                                $("#taxValue").html(
+                                    `$${booking.tax_val}`
+                                );
                                 $("#final_price").html(
                                     `$${booking.final_price}`
                                 );
