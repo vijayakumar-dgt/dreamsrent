@@ -139,7 +139,7 @@
                                     </div>
                                     <span class="d-flex align-items-center fs-16">
                                         <i class="ti ti-calendar me-1"></i>
-                                        {{ \Carbon\Carbon::parse($blogPost->created_at)->format('d M Y') }}
+                                         {{ formatDateTime($blogPost->created_at, false) }}
                                     </span>
                                 </div>
                                 <h5><a href="/admin/content/blog-details/{{$blogPost->slug}}">{{$blogPost->title}}</a></h5>
