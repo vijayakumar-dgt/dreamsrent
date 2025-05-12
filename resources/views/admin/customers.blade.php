@@ -460,7 +460,7 @@
                 <input type="hidden" name="id" id="id">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="mb-0">{{ __('admin.manage.create_customer') }}</h5>
+                        <h5 class="mb-0">{{ __('admin.manage.edit_customer') }}</h5>
                         <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
                             <i class="ti ti-x fs-16"></i>
                         </button>
