@@ -196,12 +196,16 @@
                                                         <label class="form-label">{{ __('admin.finance_accounts.payment_method') }}</label>
                                                         <select class="select" name="payment_method">
                                                             @foreach($payments as $payment)
-                                                            <option value="{{ Str::before($payment->key, '_') }}"
-                                                                @if(old('payment_method', $invoice->payment_method) == Str::before($payment->key, '_'))
-                                                                selected
-                                                                @endif>
-                                                                {{ Str::before($payment->key, '_') }}
-                                                            </option>
+                                                                    <?php
+                                                                        $paymentKey = Illuminate\Support\Str::before($payment->key, '_');
+                                                                        $displayName = $paymentKey === 'payment' ? 'Bank Transfer' : ucfirst($paymentKey);
+                                                                    ?>
+                                                                <option value="{{ $paymentKey }}"
+                                                                    @if(old('payment_method', $invoice->payment_method) == $paymentKey)
+                                                                         selected
+                                                                    @endif>
+                                                                    {{ $displayName }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
