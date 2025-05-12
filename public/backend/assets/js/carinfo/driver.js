@@ -564,7 +564,7 @@ function initTable(sortByDate = '') {
 
             },
         ],
-        order: [[0, "asc"]],
+        order: [[1, "asc"]],
         ordering: true,
         searching: false,
         pageLength: 10,

@@ -253,16 +253,7 @@
                                     }, this.checked)">
                             </div>
                         </td>
-                            <td class="text-start">
-                                <h6 class="fs-14 fw-normal">${
-                                    formatDateTime(value.created_at)
-                                        .formattedDate
-                                }</h6>
-                                <p class="fs-13">${
-                                    formatDateTime(value.created_at)
-                                        .formattedTime
-                                }</p>
-                            </td>
+                        <td class="text-start">${value.created_date}</td>
                           <td>
                             <span class="badge ${value.status == 1 ? "badge-success-transparent" : "badge-danger-transparent"} d-inline-flex align-items-center badge-sm cursor-pointer"
                                 data-id="${value.id}" data-status="${value.status}" data-bs-toggle="modal" data-bs-target="#status-modal">

@@ -1084,7 +1084,7 @@ class CarInfoController extends Controller
         }
 
         $vehicles = $query->where("language_id", $languageId)->get()->map(function ($vehicle) {
-            $vehicle->vehicle_image = url('/storage/' . $vehicle->vehicle_image);
+            $vehicle->vehicle_image = uploadedAsset($vehicle->vehicle_image);
 
             $vehicleMetas = VehicleMeta::where('vehicle_id', $vehicle->id)
                 ->where('key', 'vehicle_image')
@@ -1092,7 +1092,7 @@ class CarInfoController extends Controller
 
             if ($vehicleMetas) {
                 $images = $vehicleMetas->value ? json_decode($vehicleMetas->value) : [];
-                $vehicle->multiple_vehicle_images = array_map(fn($img) => url('storage/vehicles/' . basename($img)), $images);
+                $vehicle->multiple_vehicle_images = array_map(fn($img) => uploadedAsset(basename($img)), $images);
             } else {
                 $vehicle->multiple_vehicle_images = [];
             }
@@ -1103,6 +1103,7 @@ class CarInfoController extends Controller
             $damageCount = VehicleDamage::where('vehicle_id', $vehicle->id)->count();
             $vehicle->damage_count = $damageCount;
             $vehicle->status = $vehicle->status;
+            $vehicle->created_date = formatDateTime($vehicle->created_at);
 
             return $vehicle;
         });
@@ -1355,7 +1356,7 @@ class CarInfoController extends Controller
             if (!empty($vehicle->vehicle_image)) {
                 array_unshift($multipleImages, $vehicle->vehicle_image);
             }
-            $multipleImages = array_map(fn($img) => url('storage/vehicles/' . basename($img)), $multipleImages);
+            $multipleImages = array_map(fn($img) => uploadedAsset(basename($img), 'default2'), $multipleImages);
 
             /** @var \App\Models\User $auth */
             $auth = current_user();

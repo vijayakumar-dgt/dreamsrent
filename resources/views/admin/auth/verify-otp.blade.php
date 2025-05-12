@@ -1,4 +1,5 @@
 @extends('admin.auth.layouts.app')
+@section('meta_title', __('Verify OTP') . ' || ' . $companyName)
 @push('styles')
    <style>
          .resend_otp_btn.disabled {

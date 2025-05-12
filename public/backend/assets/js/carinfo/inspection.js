@@ -291,9 +291,9 @@ function initTable(statusFilter = null){
                     let repair_status = formatRepairStatus(value.repair_status);
                     
                     tableBody += `<tr>
-                                    <td><h6 class="fw-medium"><a href="#">${value.car ? value.car.name : ''}</a></h6></td>
-                                    <td><h6 class="fw-medium"><a href="#">${value.inspectiondate}</a></h6></td>
-                                    <td><h6 class="fw-medium"><a href="#">${value.inspector ? value.inspector.name : ''}</a></h6></td>
+                                    <td><h6 class="fw-semibold d-block"><a href="#">${value.car ? value.car.name : ''}</a></h6></td>
+                                    <td><p class="text-gray-9 mb-0">${value.inspectiondate}</p></td>
+                                    <td><h6 class="fw-semibold d-block"><a href="#">${value.inspector ? value.inspector.name : ''}</a></h6></td>
                                     <td>${inspection_status} </td>
                                     <td>${repair_status} </td>
                                  ${ hasPermission(permissions, 'inspections', 'edit') || hasPermission(permissions, 'inspections', 'delete') ? 

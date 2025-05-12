@@ -206,7 +206,7 @@
                             <th>{{ strtoupper(__('admin.rentals.review_date')) }}</th>
                             <th>{{ strtoupper(__('admin.rentals.ratings')) }}</th>
                             <th>{{ strtoupper(__('admin.rentals.review')) }}</th>
-                            @if (hasPermission($permissions, 'reviews', 'delete'))
+                            @if (hasPermission($permissions, 'reviews', 'delete') || hasPermission($permissions, 'reviews', 'view'))
                             <th>{{ strtoupper(__('admin.common.action')) }}</th>
                             @endif
                         </tr>
@@ -222,7 +222,7 @@
     </div>
     <!-- /Page Wrapper -->
 
-    <!-- Delete Maintenance -->
+    <!-- Delete Review -->
     <div class="modal fade" id="delete_review">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
@@ -243,7 +243,25 @@
             </div>
         </div>
     </div>
-    <!-- /Delete Maintenance -->
+    <!-- /Delete Review -->
+
+    <!-- View Review -->
+    <div class="modal fade" id="view_review">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="mb-0">{{ __('admin.rentals.view_review') }}</h5>
+                    <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ti ti-x fs-16"></i>
+                    </button>
+                </div>
+                <div class="modal-body pb-1">
+                    <p class="mb-3" id="review_text"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /View Review -->
 @endsection
 
 @push('scripts')
