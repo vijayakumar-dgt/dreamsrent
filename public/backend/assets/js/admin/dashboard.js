@@ -223,6 +223,7 @@ function updateChartData(filter) {
     }
 }
 
+
 document.addEventListener("DOMContentLoaded", function () {
     updateChartData("This Week");
 });
