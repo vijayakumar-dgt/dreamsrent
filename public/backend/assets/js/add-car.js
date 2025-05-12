@@ -17,6 +17,7 @@
             ],
         });
     });
+    
 
     $(document).ready(function () {
         $("#selectall_feature").on("change", function () {
@@ -262,18 +263,13 @@
                                         .formattedTime
                                 }</p>
                             </td>
-                            <td> <span class="badge ${
-                                value.status == 1
-                                    ? `badge-success-transparent`
-                                    : `badge-danger-transparent`
-                            } d-inline-flex align-items-center badge-sm">
-                                    <i class="ti ti-point-filled me-1"></i>${
-                                        value.status == 1
-                                            ? _l("admin.common.active")
-                                            : _l("admin.common.inactive")
-                                    }
-                                </span>
-                            </td>
+                          <td>
+                            <span class="badge ${value.status == 1 ? "badge-success-transparent" : "badge-danger-transparent"} d-inline-flex align-items-center badge-sm cursor-pointer"
+                                data-id="${value.id}" data-status="${value.status}" data-bs-toggle="modal" data-bs-target="#status-modal">
+                                <i class="ti ti-point-filled me-1"></i>
+                                ${value.status == 1 ? _l("admin.common.active") : _l("admin.common.inactive")}
+                            </span>
+                        </td>
              ${
                  hasPermission(permissions, "vehicles", "edit") ||
                  hasPermission(permissions, "vehicles", "delete")
@@ -2281,6 +2277,49 @@
             }
         });
     });
+
+    $(document).on("click", "[data-bs-target='#status-modal']", function () {
+        const vehicleId = $(this).data("id");
+        const status = $(this).data("status");
+    
+        $("#status_vehicle_id").val(vehicleId);
+        $("#vehicle_status").val(status).trigger("change"); // Important for Select2
+    });
+    
+
+
+    $("#statusVehicleForm").on("submit", function (e) {
+        e.preventDefault();
+    
+        let vehicleId = $("#status_vehicle_id").val();
+        let status = $("#vehicle_status").val();
+    
+        $.ajax({
+            url: "/admin/set-status", 
+            method: "GET",
+            data: {
+                vehicle_id: vehicleId,
+                status: status
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.success) {
+                    $("#status-modal").modal("hide");
+                    showToast("success", "Vehicle status updated.");
+                    initTable();
+                } else {
+                    showToast("error", "Failed to update status.");
+                }
+            },
+            error: function () {
+                showToast("error", "An error occurred.");
+            }
+        });
+    });
+    
+
 })();
 
 let editingDamageID = null; // Track the item being edited
@@ -2713,6 +2752,24 @@ function toggleRecommended(vehicleId, isChecked) {
         },
         success: function (response) {
             showToast("success", "Recommended status updated.");
+        },
+        error: function (xhr, status, error) {
+            showToast("error", "Something went wrong.");
+        },
+    });
+}
+
+function toggleStatus(vehicleId, isChecked) {
+    $.ajax({
+        url: "/admin/set-status",
+        type: "GET",
+        data: {
+            id: vehicleId,
+            status: isChecked ? 1 : 0,
+        },
+        success: function (response) {
+            showToast("success", "Vehicle status updated.");
+            initTable();
         },
         error: function (xhr, status, error) {
             showToast("error", "Something went wrong.");
