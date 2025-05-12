@@ -211,6 +211,17 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
+
+        $bookingsRes = Booking::selectRaw(
+            'DATE(start_datetime) as date,
+                 TIME_FORMAT(booking_date, "%H:00") as time,
+                 COUNT(*) as count'
+        )
+            ->groupBy('date', 'time')
+            ->orderBy('date')
+            ->orderBy('time')
+            ->get();
+
             // Extract unique dates (x-axis) and times (y-axis)
             $dates = $bookingsRes->pluck('date')->unique()->values();
             $times = $bookingsRes->pluck('time')->unique()->sort()->values();
