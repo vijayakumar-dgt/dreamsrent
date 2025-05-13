@@ -351,12 +351,12 @@
                                 </div>
                                 <a href="{{url('pages/privacy-policy')}}">{{ __('web.home.know_more') }}</a>
                             </div>
-                            <div class="policy-item">
+                            <div class="policy-item d-none" id="policy-section">
                                 <div class="policy-info">
                                     <h6>{{__('web.home.policy')}}</h6>
                                     <p>{{__('web.home.consent')}}</p>
                                 </div>
-                                <a href="{{url('pages/privacy-policy')}}">{{ __('web.home.view_details') }}</a>
+                                <button type="button" class="btn btn-light border-0 view-policies">{{ __('web.home.view_details') }}</a>
                             </div>
                         </div>
                     </div>
