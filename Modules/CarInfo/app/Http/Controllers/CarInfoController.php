@@ -94,6 +94,8 @@ class CarInfoController extends Controller
 
         $authUser = current_user();
 
+        dd($insurances);
+
         return view('carinfo::vehicle.add', compact('carTypes', 'Brands', 'CarModel', 'Category', 'Location', 'CarColor', 'CarFuel', 'Transmission', 'SafetyFeature', 'DamageTypes', 'ExtraServices', 'ExtraServiceInfo', 'insurances', 'priceType', 'authUser'));
     }
     public function vehicleedit(string $slug, Request $request): View
