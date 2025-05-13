@@ -163,15 +163,21 @@
                             <ul class="dropdown-menu dropdown-menu-end p-2">
                               ${hasPermission(permissions, 'vehicle_attributes', 'edit') ?
                                 ` <li>
-                                    <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editDoorType(${row.id});">
+                                    <button 
+                                        class="dropdown-item rounded-1 border-0 bg-white edit-door-type" 
+                                        data-id="${row.id}">
                                         <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
-                                    </a>
+                                    </button>
                                 </li>`: ''}
                                  ${hasPermission(permissions, 'vehicle_attributes', 'delete') ?
                                 `<li>
-                                    <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteDoorType(${row.id});" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                                    <button 
+                                        class="dropdown-item rounded-1 border-0 bg-white delete-door-type" 
+                                        data-id="${row.id}" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#delete-modal">
                                         <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
-                                    </a>
+                                    </button>
                                 </li>`: ''}
                             </ul>
                         </div>`;
@@ -290,6 +296,10 @@
 
 })();
 
+$(document).on("click", ".edit-door-type", function () {
+    const id = $(this).data("id");
+    editDoorType(id);
+});
 
 function editDoorType(id) {
     $.ajax({
