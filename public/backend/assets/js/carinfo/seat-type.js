@@ -174,11 +174,12 @@
                                                  "edit"
                                              )
                                                  ? `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editSeatType(${
-                                                    value.id
-                                                });"><i class="ti ti-edit me-1"></i>${_l(
-                                                       "admin.common.edit"
-                                                   )}</a>
+                                                <button 
+                                                    type="button" 
+                                                    class="dropdown-item rounded-1 border-0 bg-white edit-seat-type" 
+                                                    data-id="${value.id}">
+                                                    <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
+                                                </button>
                                             </li>`
                                                  : ""
                                          }
@@ -189,11 +190,14 @@
                                                       "delete"
                                                   )
                                                       ? `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="delateSeatType(${
-                                                    value.id
-                                                });" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l(
-                                                            "admin.common.delete"
-                                                        )}</a>
+                                                <button 
+                                                    type="button" 
+                                                    class="dropdown-item rounded-1 border-0 bg-white delete-seat-type" 
+                                                    data-id="${value.id}" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#delete-modal">
+                                                    <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                                </button>
                                             </li>`
                                                       : ""
                                               }
@@ -540,6 +544,12 @@
         });
     });
 })();
+
+$(document).on("click", ".edit-seat-type", function () {
+    const id = $(this).data("id");
+    editSeatType(id);
+});
+
 function editSeatType(id) {
     $.ajax({
         type: "GET",
@@ -567,6 +577,11 @@ function editSeatType(id) {
         },
     });
 }
+
+$(document).on("click", ".delete-seat-type", function () {
+    const id = $(this).data("id");
+    $("#delete_id").val(id);
+});
 
 function delateSeatType(id) {
     $("#delete_id").val(id);
