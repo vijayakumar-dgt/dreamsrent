@@ -14,6 +14,10 @@
 
             editTestimonial(id, name, image, review, ratings, status);
         });
+         $(document).on('click', '.delete-testimonial-btn', function () {
+        const id = $(this).data('id');
+        $("#delete_id").val(id);
+    });
         $("#search").on("keyup", function (e) {
             clearTimeout(window.searchTimer);
             window.searchTimer = setTimeout(function () {
@@ -507,13 +511,16 @@
                                                       "delete"
                                                   )
                                                       ? `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteTestimonial(${
-                                                    testimonial.id
-                                                })" data-bs-toggle="modal" data-bs-target="#delete_testimonials">
-                                                    <i class="ti ti-trash me-1"></i>${_l(
-                                                        "admin.common.delete"
-                                                    )}
-                                                </a>
+                                                <button 
+                                                    type="button" 
+                                                    class="dropdown-item rounded-1 delete-testimonial-btn" 
+                                                    data-id="${testimonial.id}" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#delete_testimonials"
+                                                >
+                                                    <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                                </button>
+
                                             </li>`
                                                       : ""
                                               }
