@@ -239,12 +239,22 @@ $(document).ready(function() {
                                         ${ hasPermission(permissions, 'vehicle_attributes', 'edit') ? 
 
                                             `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(${row.id});" onclick="editType(${row.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                               <button 
+                                                    class="dropdown-item rounded-1 border-0 bg-white edit-type" 
+                                                    data-id="${row.id}">
+                                                    <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
+                                                </button>
                                             </li>` : ''}
                                     ${ hasPermission(permissions, 'vehicle_attributes', 'delete') ? 
                                         
                                             `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(${row.id});" onclick="deleteType(${row.id});" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                               <button 
+                                                    class="dropdown-item rounded-1 border-0 bg-white delete-type" 
+                                                    data-id="${row.id}" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#delete-modal">
+                                                    <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
+                                                </button>
                                             </li>` : ''}
                                         </ul>
                                     </div>`;
@@ -324,6 +334,11 @@ $(document).on('click', '.dataTables_paginate a', function() {
     $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
 });
 
+$(document).on("click", ".edit-type", function () {
+    const id = $(this).data("id");
+    editType(id);
+});
+
 function editType(id){
     $("#icon").val('');
     $.ajax({
@@ -381,7 +396,12 @@ $(document).on("click", "#add_new_type", function(){
     }
 });
 
-function deleteType(id){
+$(document).on("click", ".delete-type", function () {
+    const id = $(this).data("id");
+    deleteType(id);
+});
+
+function deleteType(id) {
     $("#delete_id").val(id);
 }
 
