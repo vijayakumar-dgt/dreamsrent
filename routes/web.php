@@ -194,6 +194,7 @@ Route::group(['middleware' => ['setLocaleUser', 'checkInstallerStatus']], functi
         Route::get('/user/reset-password', [UserLoginRegisterController::class, 'resetPassword'])->name('user-reset-password');
         Route::post('/user/check-current-password-reset', [UserController::class, 'checkCurrentPassword']);
         Route::post('/user/reset-password-update', [UserLoginRegisterController::class, 'resetPasswordUpdate']);
+        Route::post('/user/delete-account', [UserController::class, 'deleteAccount'])->name('user.delete-account');
 
         Route::post('/user/register', [UserLoginRegisterController::class, 'register'])->name('user-registersave');
         Route::post('/user/login', [UserLoginRegisterController::class, 'login'])->name('user-logincheck');

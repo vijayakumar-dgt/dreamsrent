@@ -119,7 +119,6 @@ $(document).ready(function() {
                 email: true,
             },
             address: {
-                required: true,
                 maxlength: 150
             },
             card_number: {
@@ -317,7 +316,6 @@ $(document).ready(function() {
                 email: true,
             },
             address: {
-                required: true,
                 maxlength: 150
             },
             card_number: {
@@ -655,10 +653,10 @@ function initTable(sortByDate = '') {
                         return `
                             <div class="d-flex align-items-center">
                                 <span class="table-icon me-2"><i class="ti ti-file-text"></i></span>
-                                <a href="${docUrl}" target="_blank" class="text-info">Show Document</a>
+                                <a href="${docUrl}" target="_blank" class="text-info">${_l('admin.common.show_documents')}</a>
                             </div>`;
                     } else {
-                        return `<span class="text-muted">No Documents</span>`;
+                        return `<span class="text-muted">${_l('admin.common.no_documents')}</span>`;
                     }
                 },
             },
@@ -667,7 +665,7 @@ function initTable(sortByDate = '') {
                     return `
                         <div class="d-flex align-items-center">
                             <span class="table-icon me-2"><i class="ti ti-car"></i></span>
-                            <a href="/admin/customer-details/${row.encrypted_id}/recent-rents" target="_blank" class="text-info">Recent Rents</a>
+                            <a href="/admin/customer-details/${row.encrypted_id}/recent-rents" target="_blank" class="text-info">${_l('admin.manage.recent_rents')}</a>
                         </div>`;
                 },
             },

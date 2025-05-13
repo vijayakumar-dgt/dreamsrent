@@ -102,10 +102,6 @@ class GeneralSettingController extends Controller
     public function storeRentalSettings(Request $request): JsonResponse
     {
         $rules = [
-            'minAdvanceReservation' => 'required|string|in:1 Day,2 Days,3 Days,1 Week',
-            'maxAdvanceReservation' => 'required|string|in:1 Day,2 Days,3 Days,1 Week,2 Weeks,1 Month',
-            'cancellationBuffer' => 'required|string',
-            'rescheduleBuffer' => 'required|string',
             'faq' => 'nullable|boolean',
             'damages' => 'nullable|boolean',
             'extraService' => 'nullable|boolean',
@@ -113,14 +109,9 @@ class GeneralSettingController extends Controller
             'enquiries' => 'nullable|boolean',
             'reservation' => 'nullable|boolean',
             'seasonalPricing' => 'nullable|boolean',
-            'pricing' => 'nullable|boolean',
         ];
 
         $messages = [
-            'minAdvanceReservation.required' => __('The minimum advance reservation field is required.'),
-            'minAdvanceReservation.in' => __('Invalid minimum advance reservation value.'),
-            'maxAdvanceReservation.required' => __('The maximum advance reservation field is required.'),
-            'maxAdvanceReservation.in' => __('Invalid maximum advance reservation value.'),
             'cancellationBuffer.required' => __('The cancellation buffer field is required.'),
             'cancellationBuffer.in' => __('Invalid cancellation buffer value.'),
             'rescheduleBuffer.required' => __('The reschedule buffer field is required.'),
@@ -954,7 +945,7 @@ class GeneralSettingController extends Controller
 
         try {
             $settings = GeneralSetting::where('group_id', $request->group_id)->get()->map(function ($setting) {
-                if ($setting->key == 'logo_image' || $setting->key == 'favicon_image' || $setting->key == 'small_image' || $setting->key == 'dark_logo') {
+                if ($setting->key == 'logo_image' || $setting->key == 'favicon_image' || $setting->key == 'small_image' || $setting->key == 'dark_logo' || $setting->key == 'invoice_logo') {
                     $setting->value = uploadedAsset($setting->value, 'default2');
                 }
                 return $setting;
@@ -1186,12 +1177,12 @@ class GeneralSettingController extends Controller
                 'os' => $device->os,
                 'ip_address' => $device->ip_address,
                 'location' => $device->location,
-                'date'     => Carbon::parse($device->created_at)->format('d M Y, h:i A')
+                'date'     => formatDateTime($device->created_at)
             ];
         });
         $response    = [
             'user' => Auth::user(),
-            'last_password_changed_at' => $authUser->last_password_changed_at ? Carbon::parse($authUser->last_password_changed_at)->format('d M Y, h:i A') : "null",
+            'last_password_changed_at' => $authUser->last_password_changed_at ? formatDateTime($authUser->last_password_changed_at) : "null",
             'devices' => $userDevices
         ];
         return response()->json([

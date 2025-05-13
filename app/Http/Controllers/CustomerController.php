@@ -59,7 +59,7 @@ class CustomerController extends Controller
                 'email',
                 Rule::unique('users', 'email')->ignore($id)->whereNull('deleted_at'),
             ],
-            'address' => ['required', 'max:150'],
+            'address' => ['max:150'],
             'card_number' => [
                 'required',
                 Rule::unique('user_details', 'card_number')->ignore($id, 'user_id')->whereNull('deleted_at'),
@@ -282,10 +282,10 @@ class CustomerController extends Controller
                         $query->orderBy('users.created_at', 'desc');
                         break;
                     case 'ascending':
-                        $query->orderBy('users.id', 'asc');
+                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) asc");
                         break;
                     case 'descending':
-                        $query->orderBy('users.id', 'desc');
+                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) desc");
                         break;
                     case 'last month':
                         $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
@@ -320,6 +320,7 @@ class CustomerController extends Controller
                     : uploadedAsset(null, 'profile');
                 $user->language_flag = url('/backend/assets/img/flags/' . $user->language_code . '.svg');
                 $user->encrypted_id = customEncrypt($user->id, User::$userSecretKey);
+                $user->username = $user->username ? ucwords($user->username) : '';
 
                 /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserDocument> $documents */
                 $documents = $user->documents;

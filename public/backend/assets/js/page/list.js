@@ -41,7 +41,7 @@ let currentLang = ""; // Add this at the top
                         tableBody += `<tr>
                                 <td>${value.page_title}</td>
                                 <td>${value.slug}</td>
-                                <td>${value.slug}</td>
+                                <td>${value.updated_date}</td>
                                 <td>
                                     <span class="badge ${
                                         value.status == 1
@@ -75,9 +75,11 @@ let currentLang = ""; // Add this at the top
                                                         "edit"
                                                     )
                                                         ? `<li>
-                                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="console.log('Slug:', this.getAttribute('data-slug')); editPageSeaction(this.getAttribute('data-slug'));" data-slug="${value.slug}">
-                                                            <i class="ti ti-edit me-1"></i>Edit
-                                                        </a>
+                                                        <button 
+                                                                class="dropdown-item border-0 bg-white rounded-1 edit-page" 
+                                                                data-slug="${value.slug}">
+                                                                <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
+                                                            </button>
                                                     </li>`
                                                         : ""
                                                 }
@@ -88,9 +90,16 @@ let currentLang = ""; // Add this at the top
                                                         "delete"
                                                     ) && value.read !== "static"
                                                         ? `<li>
-                                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="delateSeatType(${value.id});" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                                                            <i class="ti ti-trash me-1"></i>Delete
-                                                        </a>
+                                                            <button 
+                                                                type="button" 
+                                                                class="dropdown-item rounded-1 delete-seat-type-btn" 
+                                                                data-id="${value.id}" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#delete-modal"
+                                                            >
+                                                                <i class="ti ti-trash me-1"></i>Delete
+                                                            </button>
+
                                                     </li>`
                                                         : ""
                                                 }
@@ -208,7 +217,9 @@ function filterSort(element, sortType) {
     initTable($("#search").val().trim(), currentStatus, currentSortType); // Keep search & status
 }
 
-function editPageSeaction(pageSlug) {
+$(document).on("click", ".edit-page", function () {
+    let pageSlug = $(this).data("slug");
+
     if (pageSlug.startsWith("pages/")) {
         pageSlug = pageSlug.replace("pages/", "");
     }
@@ -225,8 +236,9 @@ function editPageSeaction(pageSlug) {
             }
         },
         error: function (xhr, status, error) {
-            console.error("An error occurred:", error);
+            showToast("error", "Failed to check page.");
         },
     });
-}
+});
+
 

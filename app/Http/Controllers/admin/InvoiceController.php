@@ -26,7 +26,7 @@ class InvoiceController extends Controller
             ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image')
-            ->where('invoices.deleted_at', null)->get();
+            ->where('invoices.deleted_at', null)->orderby('invoices.id', 'desc')->get();
 
         return view("admin.invoice.index", compact('invoices'));
     }

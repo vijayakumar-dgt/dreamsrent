@@ -424,6 +424,9 @@ function getProfileImage(): ?string
     if ($user && $user->userDetail) {
         $asset = uploadedAsset($user->userDetail->profile_image ?? '', 'profile');
         return $asset;
+    } else {
+        $defaultImage = uploadedAsset('', 'profile');
+        return $defaultImage;
     }
 
     return null;

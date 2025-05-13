@@ -395,8 +395,7 @@ class PageController extends Controller
                 'slug' => $page->slug,
                 'page_content' => $page->page_content,
                 'status' => $page->status,
-                // Add a check if created_at is not null before calling format
-                'created_at' => $page->created_at ? $page->created_at->format('Y-m-d H:i:s') : null,
+                'updated_date' => formatDateTime($page->updated_at, false),
             ];
         }
 

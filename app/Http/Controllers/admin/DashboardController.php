@@ -192,26 +192,31 @@ class DashboardController extends Controller
         $drivers = DB::table('drivers')
             ->leftJoin('bookings', 'drivers.id', '=', 'bookings.driver_id')
             ->select(
-                'drivers.*',
-                DB::raw('(SELECT COUNT(*) FROM bookings WHERE bookings.driver_id = drivers.id) as total_bookings'),
-                DB::raw("(
-            SELECT COUNT(*)
-            FROM bookings
-            WHERE bookings.driver_id = drivers.id
-            AND bookings.start_datetime <= '$now'
-            AND bookings.end_datetime >= '$now'
+                'drivers.id',
+                'drivers.driver_name',
+                'drivers.email',
+                'drivers.phone_number',
+                'drivers.image',
+                DB::raw('COUNT(bookings.id) as total_bookings'),
+                DB::raw("SUM(
+            CASE 
+                WHEN bookings.start_datetime <= '$now' AND bookings.end_datetime >= '$now' 
+                THEN 1 
+                ELSE 0 
+            END
         ) as currently_in_ride")
             )
+            ->groupBy('drivers.id', 'drivers.driver_name', 'drivers.email', 'drivers.phone_number', 'drivers.image')
             ->orderBy('drivers.id', 'desc')
             ->limit(5)
             ->get();
 
 
-            $bookingsRes = Booking::selectRaw(
-                'DATE(start_datetime) as date,
+        $bookingsRes = Booking::selectRaw(
+            'DATE(start_datetime) as date,
                  TIME_FORMAT(booking_date, "%H:00") as time,
                  COUNT(*) as count'
-            )
+        )
             ->groupBy('date', 'time')
             ->orderBy('date')
             ->orderBy('time')

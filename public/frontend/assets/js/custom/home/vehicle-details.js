@@ -4,6 +4,7 @@
     fetchVehicleDetails();
     fetchRecommendedVehicles();
     let _pricing_type;
+    let _vehicleDetails;
     $(document).ready(function () {
         listReviews();
         $("#reviewForm").validate({
@@ -794,6 +795,7 @@ function fetchVehicleDetails() {
         success: function (response) {
             if (response.code === 200 && response.data) {
                 populateVehicleDetails(response.data);
+                _vehicleDetails = response.data;
             }
         },
         complete: function () {
@@ -822,6 +824,7 @@ function populateVehicleDetails(vehicle) {
     let ratingHtml = renderStars(vehicle.rating || 0);
     $(".headratings").html(ratingHtml);
     $("#vin").text(vehicle.vin ?? "");
+
     renderDescription(vehicle);
     createExtraService(vehicle);
     renderFeatures(vehicle);
@@ -863,7 +866,9 @@ function renderStars(rating) {
 function renderPriceDetails(vehicle) {
     let currency = vehicle.currency;
     let priceOptions = "";
-
+    if(vehicle.multiple_vehicle_policy && vehicle.multiple_vehicle_policy.length > 0){
+        $("#policy-section").removeClass("d-none");
+    }
     $.each(vehicle.price, function (index, value) {
         let priceType = Object.keys(value)[0];
         let amount = value[priceType];
@@ -925,6 +930,16 @@ function renderPriceDetails(vehicle) {
     }
 }
 
+$(document).on('click', '.view-policies', function () {
+    let policies = _vehicleDetails && _vehicleDetails.multiple_vehicle_policy ? _vehicleDetails.multiple_vehicle_policy : [];
+    if (policies.length > 0) {
+        $.each(policies, function (index, policy) {
+            window.open(policy, '_blank');
+        });
+    }
+});
+
+
 function handlePriceChange() {
     let selectedPriceType = $(this).data("price-type");
     let selectedAmount = parseFloat($(this).val()) || 0;
@@ -960,7 +975,6 @@ function handlePriceChange() {
             break;
     }
     if(_pricing_type != "daily"){
-        console.log('not daily');
         
         $("#return_date").val(returnDateTime.format("DD-MM-YYYY"));
         $("#return_time").val(returnDateTime.format("HH:mm"));    
@@ -1361,7 +1375,7 @@ $(document).on("click", ".wishlist-icon", function () {
             }
         },
         error: function (error) {
-            console.log(error);
+            
         },
     });
 });

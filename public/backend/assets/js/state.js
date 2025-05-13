@@ -96,10 +96,28 @@
             },
         });
 
+        $(document).on("click", "#edit-state", function(){
+            let id = $(this).data('id');
+            editState(id);
+        });
+
+        $(document).on("click", "#delete-state", function(){
+            let id = $(this).data('id');
+            delateState(id);
+        });
+
+        $(document).on("keyup", "#search", function () {
+            setTimeout(function () {
+                initTable();
+            }, 500);
+        });
         function initTable() {
             $.ajax({
                 url: "/admin/state/datatable",
                 type: "GET",
+                data: {
+                    search: $("#search").val(),
+                },
                 beforeSend: function () {
                     $(".table-loader").show();
                     $(".real-table, .table-footer").addClass("d-none");
@@ -156,16 +174,12 @@
                                                 ${ hasPermission(permissions, 'cms_locations', 'edit') ?
 
                                                 `<li>
-                                                    <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editState(${
-                                                        value.id
-                                                    });"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                                    <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="edit-state"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</button>
                                                 </li>`:''}
                                                 ${ hasPermission(permissions, 'cms_locations', 'delete') ?
 
                                                 `<li>
-                                                    <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="delateState(${
-                                                        value.id
-                                                    });" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                                    <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="delete-state" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                                                 </li>`:''}
                                             </ul>
                                         </div>

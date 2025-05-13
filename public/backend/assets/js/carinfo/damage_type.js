@@ -129,12 +129,22 @@
                                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                                     ${ hasPermission(permissions, 'vehicle_attributes', 'edit') ? 
                                                         `<li>
-                                                            <a class="dropdown-item rounded-1" href="javascript:void(${value.id});" onclick="editDamageType(${value.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                                            <button 
+                                                                class="dropdown-item rounded-1 edit-damage-type" 
+                                                                data-id="${value.id}">
+                                                                <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
+                                                            </button>
                                                         </li>`:''
                                                     }
                                                     ${ hasPermission(permissions, 'vehicle_attributes', 'delete') ? 
                                                     ` <li>
-                                                            <a class="dropdown-item rounded-1" href="javascript:void(${value.id});" onclick="deleteDamageType(${value.id});" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                                           <button 
+                                                                class="dropdown-item rounded-1 delete-damage-type" 
+                                                                data-id="${value.id}" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#delete-modal">
+                                                                <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
+                                                            </button>
                                                         </li>` : ''
                                                     }
                                                     </ul>
@@ -201,34 +211,48 @@
         }
     
     
-        $("#deleteDamageType").on('submit', function(e){
+        $("#deleteDamageType").on("submit", function (e) {
             e.preventDefault();
-            $("#deleteDamageType .submitbtn").html(`<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.deleting')}..`);
-            $("#deleteDamageType .submitbtn").attr('disabled', true);
+        
+            const $submitBtn = $("#deleteDamageType .submitbtn");
+            const deleteId = $("#delete_id").val();
+        
+            // Loading state
+            $submitBtn.html(`
+                <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> 
+                ${_l('admin.common.deleting')}...
+            `).prop("disabled", true);
+        
             $.ajax({
-                type:"POST",
-                url:"/admin/delete_damage_type",
-                data:$("#deleteDamageType").serialize(),
-                success:function(response){
-                    if(response.code === 200){
-                        showToast("success", response.message);
-                        $("#delete-modal").modal('hide');
-                        initTable();
-                    }else{
-                        showToast("error", response.message);
-                        $("#delete-modal").modal('hide');
-                    }
-                    $("#deleteDamageType .submitbtn").text(_l('admin.common.yes_delete'));
-                    $("#deleteDamageType .submitbtn").attr('disabled', false);
+                type: "POST",
+                url: "/admin/delete_damage_type",
+                data: { delete_id: deleteId },
+                headers: {
+                    "Accept": "application/json",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
                 },
-                error:function(error){
-                  showToast("error", error.responseJSON.message);
-                  $("#delete-modal").modal('hide');   
-                  $("#deleteDamageType .submitbtn").text(_l('admin.common.yes_delete'));
-                  $("#deleteDamageType .submitbtn").attr('disabled', false);
+                success: function (response) {
+                    if (response.code === 200) {
+                        showToast("success", response.message);
+                        $("#delete-modal").modal("hide");
+                        initTable(); // or $('#yourTable').DataTable().ajax.reload();
+                    } else {
+                        showToast("error", response.message || _l('admin.common.default_delete_error'));
+                        $("#delete-modal").modal("hide");
+                    }
+                },
+                error: function (error) {
+                    const msg = error.responseJSON?.message || _l('admin.common.default_delete_error');
+                    showToast("error", msg);
+                    $("#delete-modal").modal("hide");
+                },
+                complete: function () {
+                    $submitBtn
+                        .text(_l('admin.common.yes_delete'))
+                        .prop("disabled", false);
                 }
             });
-        });
+        });        
     });
     
 })();
@@ -243,33 +267,60 @@ $(document).on('click', '#add_new_damage_type', function () {
     $(".form-control").removeClass("is-invalid is-valid");
 });
 
-function editDamageType(id){
+// Event delegation for edit button
+$(document).on("click", ".edit-damage-type", function () {
+    const id = $(this).data("id");
+    editDamageType(id);
+});
+
+// Function definition
+function editDamageType(id) {
     $.ajax({
-        type:"GET",
-        url:"/admin/get_damage_type/"+id,
-        success:function(response){
-         if(response.code === 200){
-             let data = response.data;
-             $("#add_damage_type #damage_type").val(data.damage_type);
-             $("#add_damage_type #id").val(data.id);
-             $("#add_damage_type #language_id").val(data.language_id);
-             if(data.status === 1){
-                 $("#add_damage_type #status").prop('checked', true);
-             }else{
-                 $("#add_damage_type #status").prop('checked', false);
-             }
-             $("#add_damage_type .modal-title").text(_l('admin.rentals.edit_damage_type'));
-             $("#add_damage_type .submitbtn").text(_l('admin.common.save_changes'));
-             $("#status_div").removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
-             $("#add_damage_type").modal('show');
-             $(".error-text").text("");
-             $(".form-control").removeClass("is-invalid is-valid");
-         }
-         
+        type: "GET",
+        url: "/admin/get_damage_type/" + id,
+        success: function (response) {
+            if (response.code === 200) {
+                const data = response.data;
+
+                $("#add_damage_type #damage_type").val(data.damage_type);
+                $("#add_damage_type #id").val(data.id);
+                $("#add_damage_type #language_id").val(data.language_id);
+
+                $("#add_damage_type #status").prop("checked", data.status === 1);
+
+                $("#add_damage_type .modal-title").text(_l('admin.rentals.edit_damage_type'));
+                $("#add_damage_type .submitbtn").text(_l('admin.common.save_changes'));
+
+                $("#status_div")
+                    .removeClass("d-none")
+                    .parent()
+                    .removeClass("justify-content-end")
+                    .addClass("justify-content-between");
+
+                $("#add_damage_type").modal("show");
+
+                $(".error-text").text("");
+                $(".form-control").removeClass("is-invalid is-valid");
+            } else {
+                showToast("error", response.message || _l("admin.common.fetch_error"));
+            }
+        },
+        error: function () {
+            showToast("error", _l("admin.common.fetch_error"));
         }
-     });
+    });
 }
 
-function deleteDamageType(id){
+// Delegated click handler
+$(document).on("click", ".delete-damage-type", function () {
+    const iid = $(this).data("id");
+    deleteDamageType(iid);
+});
+
+// Sets the ID in the hidden input
+function deleteDamageType(id) {
+    console.log(id);
     $("#delete_id").val(id);
 }
+
+

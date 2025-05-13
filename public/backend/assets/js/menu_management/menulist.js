@@ -4,6 +4,25 @@
     const permissions = await loadUserPermissions();
 
     $(document).ready(function () {
+        $(document).on('click', '.edit-menu-btn', function () {
+            const id = $(this).data('id');
+            const name = $(this).data('name');
+            const permalink = $(this).data('permalink');
+            const status = $(this).data('status');
+            const languageId = $(this).data('language-id');
+            const menuType = $(this).data('menu-type');
+
+            editMenu(id, name, permalink, status, languageId, menuType);
+        });
+         $(document).on('click', '.delete-menu-btn', function () {
+            const id = $(this).data('id');
+            deleteMenu(id);
+        });
+        $(document).on('click', '.menu-management-btn', function () {
+            const id = $(this).data('id');
+            const name = $(this).data('name');
+            menuManagement(id, name);
+        });
         menuTable();
         $("#addMenu").validate({
             rules: {
@@ -217,11 +236,6 @@
     
                 if (response.data && response.data.length > 0) {
                     $.each(response.data, function(index, value) {
-                        let createdDate = new Date(value.created_at).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "2-digit",
-                        });
     
                         tableBody += `
                         <tr>
@@ -232,7 +246,7 @@
                                 <p class="text-gray-9">${value.menu_type.charAt(0).toUpperCase() + value.menu_type.slice(1)}</p>
                             </td>
                             <td>
-                                <p class="text-gray-9">${createdDate}</p>
+                                <p class="text-gray-9">${value.created_date}</p>
                             </td>
                             <td>
                                 <span class="badge badge-${value.status === 1 ? 'soft-success' : 'soft-danger'} d-inline-flex align-items-center badge-sm">
@@ -250,26 +264,47 @@
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                          ${hasPermission(permissions, 'menu_management', 'edit')  ?
                                        `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);"
-                                            onclick="editMenu(${value.id}, '${value.name}', '${value.permenantlink}', ${value.status}, ${value.language_id}, '${value.menu_type}')">
+                                            <button 
+                                                type="button" 
+                                                class="dropdown-item rounded-1 edit-menu-btn" 
+                                                data-id="${value.id}" 
+                                                data-name="${value.name}" 
+                                                data-permalink="${value.permenantlink}" 
+                                                data-status="${value.status}" 
+                                                data-language-id="${value.language_id}" 
+                                                data-menu-type="${value.menu_type}"
+                                            >
                                                 <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
-                                            </a>
+                                            </button>
+
                                         </li>`:''}
                                              ${hasPermission(permissions, 'menu_management', 'delete')  ?
     
                                        ` <li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);"
-                                            onclick="deleteMenu(${value.id})" data-bs-toggle="modal" data-bs-target="#delete_menu">
+                                            <button 
+                                                type="button" 
+                                                class="dropdown-item rounded-1 delete-menu-btn" 
+                                                data-id="${value.id}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#delete_menu"
+                                            >
                                                 <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
-                                            </a>
+                                            </button>
                                         </li>`:''}
                                              ${hasPermission(permissions, 'menu_management', 'edit')  ?
     
                                         `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);"
-                                                onclick="menuManagement(${value.id}, '${value.name}', '${value.permenantlink}', ${value.status}, ${value.language_id})">
+                                            <button 
+                                                type="button" 
+                                                class="dropdown-item rounded-1 menu-management-btn" 
+                                                data-id="${value.id}" 
+                                                data-name="${value.name}" 
+                                                data-permalink="${value.permenantlink}" 
+                                                data-status="${value.status}" 
+                                                data-language-id="${value.language_id}"
+                                            >
                                                 <i class="ti ti-menu-2 me-1"></i>${_l('admin.cms.menu_management')}
-                                            </a>
+                                            </button>
                                         </li>`:''}
                                     </ul>
                                 </div>

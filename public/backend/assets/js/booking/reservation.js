@@ -206,7 +206,7 @@ function bookingList(sort_by_date = '') {
             }},
             { data: 'user_name', render: function(data, type, row) {
                 return `<div class="d-flex align-items-center">
-                            <a href="company-details.html" class="avatar avatar-rounded me-2 flex-shrink-0"><img src="${row.customer_image}" alt=""></a>
+                            <a href="#" class="avatar avatar-rounded me-2 flex-shrink-0"><img src="${row.customer_image}" alt=""></a>
                             <div>
                                 <h6 class="mb-1 fs-14"><a href="#">${row.customer_full_name ? row.customer_full_name : row.user_name}</a></h6>
                                 <span class="badge bg-secondary-transparent rounded-pill">Client</span>
@@ -291,10 +291,9 @@ function bookingList(sort_by_date = '') {
                                 <a class="dropdown-item rounded-1" href="/admin/edit-reservation/${row.encrypted_id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                             </li>` : ''
                             }
-
-                              ${hasPermission(permissions, 'reservations', 'delete') ?
+                            ${hasPermission(permissions, 'reservations', 'delete') ?
                             `<li>
-                                <a class="dropdown-item rounded-1 deleteReservation" href="javascript:void(0);" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                <button type="button" class="dropdown-item rounded-1 deleteReservation" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                             </li>`:''}
                         </ul>
                     </div>
@@ -381,8 +380,6 @@ $(document).on('click', '.deleteReservation', function() {
     $("#delete_id").val(id);
 });
 
-
 })();
-
 
 })(jQuery);

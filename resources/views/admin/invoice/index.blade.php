@@ -22,7 +22,9 @@
                 <div>
                     @if (hasPermission($permissions, 'invoices', 'create'))
                     <div class="skeleton label-skeleton label-loader"></div>
-                    <a href="/admin/add-invoice" class="btn btn-primary d-inline-flex align-items-center d-none real-label"><i class="ti ti-plus me-1"></i>{{ __('admin.finance_accounts.add_invoice') }}</a>
+                    <a href="{{ route('admin.addInvoice') }}" class="btn btn-primary d-inline-flex align-items-center d-none real-label">
+                        <i class="ti ti-plus me-1"></i>{{ __('admin.finance_accounts.add_invoice') }}
+                    </a>
                 @endif
                 </div>
             </div>
@@ -150,12 +152,12 @@
                             <td>{{$invoice->email}}</td>
                             <td>
                                 <div>
-                                    <p class="mb-0">{{ \Carbon\Carbon::parse($invoice->created_at)->format('d M Y') }}</p>
+                                    <p class="mb-0">{{ formatDateTime($invoice->created_at, false) }}</p>
                                 </div>
                             </td>
                             <td>
                                 <div>
-                                    <p class="mb-0">{{ \Carbon\Carbon::parse($invoice->to_date)->format('d M Y') }}</p>
+                                    <p class="mb-0">{{ formatDateTime($invoice->to_date, false) }}</p>
                                 </div>
                             </td>
                             <td>${{$invoice->grand_total}}</td>
@@ -191,7 +193,7 @@
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                         @if (hasPermission($permissions, 'invoices', 'edit'))
                                         <li>
-                                            <a class="dropdown-item rounded-1 edit-invoice-btn" href="edit-invoice/{{$invoice->id}}" data-id="{{$invoice->id}}">
+                                           <a class="dropdown-item rounded-1 edit-invoice-btn" href="{{ route('invoices.edit', $invoice->id) }}" data-id="{{$invoice->id}}">
                                                 <i class="ti ti-edit me-1"></i>{{ __('admin.common.edit') }}
                                             </a>
                                         </li>

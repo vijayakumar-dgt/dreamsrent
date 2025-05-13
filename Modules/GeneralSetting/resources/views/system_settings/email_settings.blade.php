@@ -62,10 +62,10 @@
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             @if (hasPermission($permissions, 'system_settings', 'edit'))
-                                            <a href="javascript:coid(0);" class="fw-medium text-gray-9 d-flex align-items-center mb-0 configure-btn" data-bs-toggle="modal" data-bs-target="#phpmailersettings">
+                                            <button type="button" class="fw-medium text-gray-9 d-flex align-items-center mb-0 configure-btn border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#phpmailersettings">
                                                 <i class="ti ti-settings me-1"></i>
                                                 {{ __('admin.general_settings.configure') }}
-                                            </a>
+                                            </button>
                                             @endif
                                             @if (hasPermission($permissions, 'system_settings', 'edit'))
                                             <div class="form-check form-switch">
@@ -99,10 +99,10 @@
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             @if (hasPermission($permissions, 'system_settings', 'edit'))
-                                            <a href="javascript:coid(0);" class="fw-medium text-gray-9 d-flex align-items-center mb-0 configure-btn" data-bs-toggle="modal" data-bs-target="#smtpsettings">
+                                            <button type="button" class="fw-medium text-gray-9 d-flex align-items-center mb-0 configure-btn border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#smtpsettings">
                                                 <i class="ti ti-settings me-1"></i>
                                                 {{ __('admin.general_settings.configure') }}
-                                            </a>
+                                            </button>
                                             @endif
                                             @if (hasPermission($permissions, 'system_settings', 'edit'))
                                             <div class="form-check form-switch">
@@ -136,10 +136,10 @@
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             @if (hasPermission($permissions, 'system_settings', 'edit'))
-                                            <a href="javascript:coid(0);" class="fw-medium text-gray-9 d-flex align-items-center mb-0 configure-btn" data-bs-toggle="modal" data-bs-target="#sendgrid">
+                                            <button type="button" class="fw-medium text-gray-9 d-flex align-items-center mb-0 configure-btn border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#sendgrid">
                                                 <i class="ti ti-settings me-1"></i>
                                                 {{ __('admin.general_settings.configure') }}
-                                            </a>
+                                            </button>
                                             @endif
                                             @if (hasPermission($permissions, 'system_settings', 'edit'))
                                             <div class="form-check form-switch">

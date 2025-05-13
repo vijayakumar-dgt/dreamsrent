@@ -241,76 +241,6 @@
 	</div>
 	<!-- /Page Wrapper -->
 
-	<!-- Add Driver -->
-	<div class="modal fade addmodal" id="add_enquiry_modal">
-		<div class="modal-dialog modal-dialog-centered modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="mb-0 modal-title">{{ __('admin.bookings.create_enquiry') }}</h4>
-					<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-						<i class="ti ti-x fs-16"></i>
-					</button>
-				</div>
-				<form id="enquiryForm">
-					@csrf
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-md-6">
-								<div class="mb-3">
-									<label class="form-label">Assigned Cars<span class="text-danger"> *</span></label>
-									<select class="select select2" id="assigned_cars" name="assigned_cars[]" data-placeholder="Select" multiple>
-										@if ($cars)
-											@foreach ($cars as $car)
-												<option value="{{ $car->id }}">{{ $car->name }}</option>
-											@endforeach
-										@endif
-									</select>
-									<span class="text-danger error-text" id="assigned_cars_error"></span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="mb-3">
-									<label class="form-label">Customer Name<span class="text-danger"> *</span></label>
-									<input type="text" class="form-control" name="customer_name" id="customer_name">
-									<span id="customer_name_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="mb-3">
-									<label class="form-label">Email<span class="text-danger"> *</span></label>
-									<input type="text" class="form-control" name="email" id="email">
-									<span id="email_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="mb-3">
-									<label class="form-label">Phone Number<span class="text-danger"> *</span></label>
-									<input type="text" class="form-control driver_phone_number" name="phone_number" id="phone_number">
-									<input type="hidden" id="international_phone_number" name="international_phone_number">
-									<span id="phone_number_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="mb-3">
-									<label class="form-label">Enquiry Details<span class="text-danger"> *</span></label>
-									<textarea class="form-control" name="enquiry_details" id="enquiry_details"></textarea>
-									<span id="enquiry_details_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<div class="d-flex justify-content-center">
-							<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
-							<button type="submit" class="btn btn-primary submitbtn">Create New</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	<!-- /Add Driver -->
-
 	<!-- Edit Driver -->
 	<div class="modal fade addmodal" id="edit_enquiry_modal">
 		<div class="modal-dialog modal-dialog-centered modal-lg">
@@ -322,7 +252,7 @@
 					</button>
 				</div>
 				<form id="editEnquiryForm">
-					@csrf
+					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-md-6">
@@ -390,8 +320,32 @@
 			</div>
 		</div>
 	</div>
-</div>
-<!-- /Delete Brand -->
+	
+	<!-- Delete Driver -->
+	<div class="modal fade deletemodal" id="delete-modal">
+		<div class="modal-dialog modal-dialog-centered modal-sm"> 
+			<div class="modal-content">
+				<form id="enquiryDeleteForm"> 
+					<input type="hidden" name="_token" value="{{ csrf_token() }}">
+					<input type="hidden" name="delete_id" id="delete_id">
+					<div class="modal-body text-center">
+						<span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
+							<i class="ti ti-trash-x fs-26"></i>
+						</span>
+						<h4 class="mb-1">{{ __('admin.bookings.delete_enquiry') }}</h4>
+						<p class="mb-3">{{ __('admin.bookings.delete_enquiry_confirmation') }}</p>
+						<div class="d-flex justify-content-center"> 
+							<a href="javascript:void(0);" class="btn btn-light me-3"
+								data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+							<button type="submit" class="btn btn-primary">{{ __('admin.common.delete') }}</button>
+						</div> 
+					</div>
+				</form>
+			</div> 
+		</div> 
+	</div> 
+
+	<!-- /Delete Brand -->
 @endsection
 
 @push('scripts')

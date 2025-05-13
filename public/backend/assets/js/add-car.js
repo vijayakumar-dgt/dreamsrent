@@ -17,6 +17,7 @@
             ],
         });
     });
+    
 
     $(document).ready(function () {
         $("#selectall_feature").on("change", function () {
@@ -238,38 +239,28 @@
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox"
                                     ${value.popular == 1 ? "checked" : ""}
-                                    onchange="togglePopular(${value.id}, this.checked)">
+                                    onchange="togglePopular(${
+                                        value.id
+                                    }, this.checked)">
                             </div>
                         </td>
                          <td>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox"
                                     ${value.recommended == 1 ? "checked" : ""}
-                                    onchange="toggleRecommended(${value.id}, this.checked)">
+                                    onchange="toggleRecommended(${
+                                        value.id
+                                    }, this.checked)">
                             </div>
                         </td>
-                            <td class="text-start">
-                                <h6 class="fs-14 fw-normal">${
-                                    formatDateTime(value.created_at)
-                                        .formattedDate
-                                }</h6>
-                                <p class="fs-13">${
-                                    formatDateTime(value.created_at)
-                                        .formattedTime
-                                }</p>
-                            </td>
-                            <td> <span class="badge ${
-                                value.status == 1
-                                    ? `badge-success-transparent`
-                                    : `badge-danger-transparent`
-                            } d-inline-flex align-items-center badge-sm">
-                                    <i class="ti ti-point-filled me-1"></i>${
-                                        value.status == 1
-                                            ? _l("admin.common.active")
-                                            : _l("admin.common.inactive")
-                                    }
-                                </span>
-                            </td>
+                        <td class="text-start">${value.created_date}</td>
+                          <td>
+                            <span class="badge ${value.status == 1 ? "badge-success-transparent" : "badge-danger-transparent"} d-inline-flex align-items-center badge-sm cursor-pointer"
+                                data-id="${value.id}" data-status="${value.status}" data-bs-toggle="modal" data-bs-target="#status-modal">
+                                <i class="ti ti-point-filled me-1"></i>
+                                ${value.status == 1 ? _l("admin.common.active") : _l("admin.common.inactive")}
+                            </span>
+                        </td>
              ${
                  hasPermission(permissions, "vehicles", "edit") ||
                  hasPermission(permissions, "vehicles", "delete")
@@ -286,13 +277,9 @@
                                                   "edit"
                                               )
                                                   ? `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editVechileList('${
-                                                value.slug
-                                            }')">
-                                                <i class="ti ti-edit me-1"></i>${_l(
-                                                    "admin.common.edit"
-                                                )}
-                                            </a>
+                                            <button class="dropdown-item edit-vehicles rounded-1 border-0 bg-white" data-id="${value.slug}">
+                                                <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
+                                            </button>
                                         </li>`
                                                   : ""
                                           }
@@ -303,13 +290,13 @@
                                                        "delete"
                                                    )
                                                        ? `<li>
-                                           <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteVehicleList(${
-                                               value.id
-                                           });" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                                                <i class="ti ti-trash me-1"></i>${_l(
-                                                    "admin.common.delete"
-                                                )}
-                                            </a>
+                                           <button 
+                                                class="dropdown-item border-0 bg-white rounded-1 delete-vehicle" 
+                                                data-id="${value.id}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#delete-modal">
+                                                <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                            </button>
                                         </li>`
                                                        : ""
                                                }
@@ -545,7 +532,7 @@
                     required: true,
                 },
                 vehicle_year: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_passenger: {
                     required: true,
@@ -804,6 +791,7 @@
         let deletingId = null;
 
         $("#price_btn").on("click", function () {
+            $(".noDataS").html(""); // Clear previous entries
             let seasonName = $("#s_name").val();
             let startDate = $("#s_strdate").val();
             let endDate = $("#s_enddate").val();
@@ -967,6 +955,7 @@
         let deletingTariffId = null;
 
         $("#tarrif_btn").on("click", function () {
+            $(".noDataT").html(""); // Clear previous entries
             let tariffName = $("#t_name").val();
             let dailyPrice = $("#t_price").val();
             let fromDays = $("#t_fromday").val();
@@ -1133,11 +1122,11 @@
         $("#carDocumentForm").validate({
             rules: {
                 "car_document[]": {
-                    required: true,
+                    required: false,
                     extension: "pdf|txt|doc|docx",
                 },
                 "policy_document[]": {
-                    required: true,
+                    required: false,
                     extension: "pdf|txt|doc|docx",
                 },
                 "car_images[]": {
@@ -1269,6 +1258,8 @@
             let iconPath = ""; // 🛠️ Declare it here first
             if (fileExtension === "doc" || fileExtension === "docx") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg";
+            } else if (fileExtension === "txt") {
+                iconPath = "/backend/assets/img/icons/txt.svg";
             } else if (fileExtension === "pdf") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg";
             }
@@ -1373,11 +1364,12 @@
         function policyGetFileTypeIcon(fileName) {
             let fileExtension = fileName.split(".").pop().toLowerCase();
             let iconPath = ""; // 🛠️ Declare it here first
-
             if (fileExtension === "doc" || fileExtension === "docx") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg"; // 📝 maybe a Word icon instead?
             } else if (fileExtension === "pdf") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg";
+            } else if (fileExtension === "txt") {
+                iconPath = "/backend/assets/img/icons/txt.svg";
             } else {
                 iconPath = "/backend/assets/img/icons/default-file-icon.svg"; // ⚙️ default for unknown files
             }
@@ -1396,7 +1388,7 @@
         });
 
         let selectedImages = new Map();
-        const allowedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+        const allowedImageExtensions = ["jpg", "jpeg", "png"];
 
         $("#car_images").on("change", function (event) {
             let files = event.target.files;
@@ -1409,11 +1401,31 @@
                 let file = files[i];
                 let ext = file.name.split(".").pop().toLowerCase();
 
-                if (
-                    !allowedImageExtensions.includes(ext) ||
-                    file.size > maxFileSize ||
-                    selectedImages.has(file.name)
-                ) {
+                if (!allowedImageExtensions.includes(ext)) {
+                    showToast(
+                        "error",
+                        `Only image files (${allowedImageExtensions.join(
+                            ", "
+                        )}) are allowed.`
+                    );
+                    pending--;
+                    continue;
+                }
+
+                if (file.size > maxFileSize) {
+                    showToast(
+                        "error",
+                        `File "${file.name}" exceeds the 50MB size limit.`
+                    );
+                    pending--;
+                    continue;
+                }
+
+                if (selectedImages.has(file.name)) {
+                    showToast(
+                        "error",
+                        `Image "${file.name}" is already selected.`
+                    );
                     pending--;
                     continue;
                 }
@@ -1434,6 +1446,10 @@
                             </div>
                         `);
                     } else {
+                        showToast(
+                            "error",
+                            `Image "${file.name}" must be 690x420 pixels.`
+                        );
                         URL.revokeObjectURL(imageUrl);
                     }
 
@@ -1442,6 +1458,7 @@
                 };
 
                 img.onerror = function () {
+                    showToast("error", `Failed to load "${file.name}".`);
                     URL.revokeObjectURL(imageUrl);
                     pending--;
                     if (pending === 0) updateImageInput(validFiles);
@@ -1825,15 +1842,15 @@
         $("#carSeoForm").validate({
             rules: {
                 seo_title: {
-                    required: true,
+                    required: false,
                     maxlength: 255,
                 },
                 seo_key: {
-                    required: true,
+                    required: false,
                     maxlength: 255,
                 },
                 seo_description: {
-                    required: true,
+                    required: false,
                     maxlength: 255,
                 },
             },
@@ -2247,6 +2264,49 @@
             }
         });
     });
+
+    $(document).on("click", "[data-bs-target='#status-modal']", function () {
+        const vehicleId = $(this).data("id");
+        const status = $(this).data("status");
+    
+        $("#status_vehicle_id").val(vehicleId);
+        $("#vehicle_status").val(status).trigger("change"); // Important for Select2
+    });
+    
+
+
+    $("#statusVehicleForm").on("submit", function (e) {
+        e.preventDefault();
+    
+        let vehicleId = $("#status_vehicle_id").val();
+        let status = $("#vehicle_status").val();
+    
+        $.ajax({
+            url: "/admin/set-status", 
+            method: "GET",
+            data: {
+                vehicle_id: vehicleId,
+                status: status
+            },
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.success) {
+                    initTable();
+                    $("#status-modal").modal("hide");
+                    showToast("success", "Vehicle status updated.");
+                } else {
+                    showToast("error", "Failed to update status.");
+                }
+            },
+            error: function () {
+                showToast("error", "An error occurred.");
+            }
+        });
+    });
+    
+
 })();
 
 let editingDamageID = null; // Track the item being edited
@@ -2275,6 +2335,11 @@ function editDamage(damageID) {
     editingDamageID = damageID;
 }
 
+$(document).on("click", ".edit-vehicles", function () {
+    const vehicleSlug = $(this).data("id");
+    editVechileList(vehicleSlug);
+});
+
 function editVechileList(vehicleSlug) {
     $.ajax({
         url: "/admin/check-vehicle",
@@ -2287,9 +2352,12 @@ function editVechileList(vehicleSlug) {
                 showToast("error", "Vehicle not found.");
             }
         },
-        error: function (xhr, status, error) {},
+        error: function (xhr, status, error) {
+            showToast("error", "Something went wrong while checking the vehicle.");
+        },
     });
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const saveBtn = document.getElementById("service_save_btn");
@@ -2544,9 +2612,15 @@ $(document).on("click", ".change-language", function () {
     });
 });
 
+$(document).on("click", ".delete-vehicle", function () {
+    const vehicleId = $(this).data("id");
+    deleteVehicleList(vehicleId);
+});
+
 function deleteVehicleList(vehicleId) {
     $("#delete_id").val(vehicleId);
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const inBtn = document.getElementById("in_btn");
@@ -2554,6 +2628,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Check if the element exists before adding the event listener
     if (inBtn) {
         inBtn.addEventListener("click", function () {
+            $(".noDataI").html(""); // Clear previous entries
             const selectedInsurances = document.querySelectorAll(
                 "#set_value .delivery-add input[type='checkbox']:checked"
             );
@@ -2652,21 +2727,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-
 function togglePopular(vehicleId, isChecked) {
     $.ajax({
         url: "/admin/set-popular",
         type: "GET",
         data: {
             id: vehicleId,
-            popular: isChecked ? 1 : 0
+            popular: isChecked ? 1 : 0,
         },
         success: function (response) {
             showToast("success", "Popular status updated.");
         },
         error: function (xhr, status, error) {
             showToast("error", "Something went wrong.");
-        }
+        },
     });
 }
 function toggleRecommended(vehicleId, isChecked) {
@@ -2675,13 +2749,31 @@ function toggleRecommended(vehicleId, isChecked) {
         type: "GET",
         data: {
             id: vehicleId,
-            recommended: isChecked ? 1 : 0
+            recommended: isChecked ? 1 : 0,
         },
         success: function (response) {
             showToast("success", "Recommended status updated.");
         },
         error: function (xhr, status, error) {
             showToast("error", "Something went wrong.");
-        }
+        },
+    });
+}
+
+function toggleStatus(vehicleId, isChecked) {
+    $.ajax({
+        url: "/admin/set-status",
+        type: "GET",
+        data: {
+            id: vehicleId,
+            status: isChecked ? 1 : 0,
+        },
+        success: function (response) {
+            showToast("success", "Vehicle status updated.");
+            initTable();
+        },
+        error: function (xhr, status, error) {
+            showToast("error", "Something went wrong.");
+        },
     });
 }

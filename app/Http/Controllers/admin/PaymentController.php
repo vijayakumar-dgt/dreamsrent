@@ -92,14 +92,15 @@ class PaymentController extends Controller
                     'name' => $userInfo ? "{$userInfo->first_name} {$userInfo->last_name}" : "N/A",
                     'amount' => $booking->final_price,
                     'payment_type' => ucfirst(str_replace('_', ' ', (string)$booking->payment_type)),
-                    'created_at' => $createdAt?->format('d M Y'),
+                    'created_at' => formatDateTime($createdAt, false),
                     'payment_status' => $booking->payment_status,
                 ];
             });
-
+            $currencySymbol = getDefaultCurrencySymbol();
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.common.default_retrieve_success'),
+                'currency_symbol' => $currencySymbol,
                 'data' => $data,
             ], 200);
         } catch (\Exception $e) {

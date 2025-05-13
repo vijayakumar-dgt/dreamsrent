@@ -264,15 +264,11 @@
                                         <ul class="dropdown-menu dropdown-menu-end p-2">
                                             ${ hasPermission(permissions, 'locations', 'edit') ? 
                                             `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(${
-                                                    value.id
-                                                });" id="edit-location-btn" data-id="${value.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                                <button class="dropdown-item bg-white border-0 rounded-1" id="edit-location-btn" data-id="${value.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</button>
                                             </li>`:''}
                                             ${ hasPermission(permissions, 'locations', 'delete') ? 
                                             `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(${
-                                                    value.id
-                                                });" id="delete-location-btn" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                                <button class="dropdown-item bg-white border-0 rounded-1" id="delete-location-btn" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                                             </li>`:''}
                                         </ul>
                                     </div>

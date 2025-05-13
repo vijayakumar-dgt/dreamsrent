@@ -165,11 +165,11 @@
                                         <ul class="dropdown-menu dropdown-menu-end p-2">
                                           ${hasPermission(permissions, 'vehicle_attributes', 'edit') ?
                                             `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editSteeringType(${value.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                                <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="edit-steering-type"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</button>
                                             </li>`:''}
                                               ${hasPermission(permissions, 'vehicle_attributes', 'delete') ?
                                             `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="delateSteeringType(${value.id});" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                                <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="delete-steering-type" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                                             </li>`:''}
                                         </ul>
                                     </div>
@@ -420,6 +420,15 @@
         });
     });
     
+    $(document).on('click','#edit-steering-type', function() {
+         let id = $(this).data('id');
+         editSteeringType(id);
+    });
+
+    $(document).on('click', '#delete-steering-type', function() {
+        let id = $(this).data('id');
+        delateSteeringType(id);
+    });
 })();
 
 function editSteeringType(id) {

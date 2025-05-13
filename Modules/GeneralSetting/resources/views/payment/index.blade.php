@@ -459,7 +459,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-xl-4 d-flex d-none">
+                                    <div class="col-xl-4 d-flex">
                                         <div class="card flex-fill">
                                             <div class="card-body">
                                                 <div>
@@ -467,9 +467,6 @@
                                                         <div class="skeleton label-skeleton label-loader payImg"></div>
                                                         <span class="d-none real-label"><img src="/backend/assets/img/icons/cash-delivery-icon.svg" alt="image"></span>
                                                         <div class="skeleton label-skeleton label-loader payIcon"></div>
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_cod">
-                                                            <i class="ti ti-settings"></i>
-                                                        </a>
                                                     </div>
                                                     <div class="skeleton label-skeleton label-loader payDis w-100"></div>
                                                     <div class="skeleton label-skeleton label-loader payDis w-50"></div>
@@ -485,6 +482,35 @@
                                                     <div class="skeleton label-skeleton label-loader payCheck"></div>
                                                     <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
                                                         <input class="form-check-input form-label m-0 checkStatus" name="cod_status" id="cod_status" type="checkbox" role="switch">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-4 d-flex">
+                                        <div class="card flex-fill">
+                                            <div class="card-body">
+                                                <div>
+                                                    <div class="payment-content">
+                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
+                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/payment-method-04.svg" alt="image"></span>
+                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
+                                                    </div>
+                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
+                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
+                                                    <p class="fs-13 d-none real-label">Indicating that goods must be paid for at the time of delivery.</p>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
+                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 walletIn d-none real-label">
+                                                        <i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} 
+                                                    </span>
+                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
+                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
+                                                        <input class="form-check-input form-label m-0 checkStatus" name="wallet_status" id="wallet_status" type="checkbox" role="switch">
                                                     </div>
                                                 </div>
                                             </div>

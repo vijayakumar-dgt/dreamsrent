@@ -121,8 +121,8 @@ $(document).ready(function() {
                         let data = response.data;
                         $.each(data, function (index, language) {
                             html += `<tr>
-                                        <td>${language.default}</td>
-                                        <td>
+                                        <td class="lang-label">${language.default}</td>
+                                        <td class="lang-input">
                                             <input type="text" dir="${code === 'ar' ? 'rtl' : 'ltr'}"
                                                    data-tab="${tab}" data-code="${code}" data-module="${module}"
                                                    class="form-control text-end translate" data-key="${language.key}"
@@ -131,7 +131,7 @@ $(document).ready(function() {
                                     </tr>`;
                         });
                     } else {
-                        html = `<tr><td colspan="2" class="text-center">${_l('admin.common.no_data_found')}</td></tr>`;
+                        html = `<tr><td colspan="3" class="text-center">${_l('admin.common.no_data_found')}</td><td></td></tr>`;
                     }
 
 

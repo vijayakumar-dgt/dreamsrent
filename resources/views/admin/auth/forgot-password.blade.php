@@ -1,5 +1,5 @@
 @extends('admin.auth.layouts.app')
-
+@section('meta_title', __('Forgot Password') . ' || ' . $companyName)
 @section('content')
 <div class="container-fuild">
     <div class="w-100 overflow-hidden position-relative flex-wrap d-block vh-100">

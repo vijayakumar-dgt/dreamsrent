@@ -297,7 +297,7 @@
                             <th>{{ strtoupper(__('admin.bookings.pickup_details')) }}</th>
                             <th>{{ strtoupper(__('admin.bookings.drop_off_details')) }}</th>
                             <th>{{ strtoupper(__('admin.common.status')) }}</th>
-                            @if (hasPermission($permissions, 'reservations', 'edit') || hasPermission($permissions, 'reservations', 'delete') || hasPermission($permissions, 'reservations', 'view'))
+                            @if (hasPermission($permissions, 'quotations', 'edit') || hasPermission($permissions, 'quotations', 'delete') || hasPermission($permissions, 'quotations', 'view'))
                             <th>{{ strtoupper(__('admin.common.action')) }}</th>
                             @endif
                         </tr>
@@ -316,14 +316,14 @@
     <div class="modal fade" id="delete_modal">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
-                <form id="reservation_delete_form">
+                <form id="quotation_delete_form">
                     <input type="hidden" name="delete_id" id="delete_id">
                     <div class="modal-body text-center">
                         <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
                             <i class="ti ti-trash-x fs-26"></i>
                         </span>
-                        <h4 class="mb-1">{{ __('admin.bookings.delete_reservation') }}</h4>
-                        <p class="mb-3">{{ __('admin.bookings.delete_reservation_confirmation') }}</p>
+                        <h4 class="mb-1">{{ __('admin.bookings.delete_quotation') }}</h4>
+                        <p class="mb-3">{{ __('admin.bookings.delete_quotation_confirmation') }}</p>
                         <div class="d-flex justify-content-center">
                             <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
                             <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</a>

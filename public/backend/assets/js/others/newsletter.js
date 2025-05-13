@@ -2,6 +2,12 @@
     "use strict";
     await loadTranslationFile('admin', 'common, others');
     const permissions = await loadUserPermissions();
+    $(document).ready(function () {
+        $(document).on('click', '.delete-newsletter-btn', function () {
+            const id = $(this).data('id');
+            deleteNewsletter(id);
+        });
+    });
 
     initTable();
 
@@ -70,7 +76,15 @@
                                 <ul class="dropdown-menu dropdown-menu-end p-2">
                                  ${hasPermission(permissions, 'newsletters', 'delete') ?
                                    `<li>
-                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteNewsletter(${row.id});" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                   <button 
+                                        type="button" 
+                                        class="dropdown-item rounded-1 delete-newsletter-btn" 
+                                        data-id="${row.id}" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#delete_modal"
+                                    >
+                                        <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
+                                    </button>
                                     </li>`:''}
                                 </ul>
                             </div>`;

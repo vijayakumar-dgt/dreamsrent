@@ -241,14 +241,6 @@ document.addEventListener("DOMContentLoaded", function () {
         $(this).valid();
     });
 
-    function removeImage() {
-        const preview = document.getElementById('profile_photo_preview');
-        const fileInput = document.getElementById('profile_photo');
-
-        preview.src = '/assets/img/default-profile.png';
-        fileInput.value = '';
-        $('#profile_photo_error').text('');
-    }
     function fetchCountries() {
         $.ajax({
             type: "GET",
@@ -465,6 +457,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+
+    // $(document).on('click', '#profile_photo_btn', function () {
+    //     $('#profile_photo').click();
+    // });
 
 })();
 

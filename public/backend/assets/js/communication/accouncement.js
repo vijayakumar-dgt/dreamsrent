@@ -5,6 +5,10 @@
 
 
     $(document).ready(function() {
+        $(document).on('click', '.delete-announcement-btn', function () {
+            const id = $(this).data('id');
+            deleteAnnouncement(id);
+        });
         $(document).ready(function() {
             $('#description').summernote({
                 height: 300, // Editor height
@@ -325,7 +329,15 @@
                                    ${hasPermission(permissions, 'announcements', 'delete') ?
     
                                             `<li>
-                                                <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_announcement_modal" onclick="deleteAnnouncement(${value.id});"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                            <button 
+                                                type="button" 
+                                                class="dropdown-item delete-announcement-btn" 
+                                                data-id="${value.id}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#delete_announcement_modal"
+                                            >
+                                                <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
+                                            </button>
                                             </li>`:''}
                                         </ul>
                                     </div>

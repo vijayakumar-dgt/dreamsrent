@@ -746,7 +746,7 @@ return array(
     'subject_required' => 'Subject is required',
     'sms_required' => 'SMS is required',
     'description_not_empty' => 'Description should not be empty',
-    'language_not_found' => 'Language not found',
+    'cannot_delete_default_language' => 'Cannot delete default language',
     'module_fetched_success' => 'Module fetched successfully',
     'invalid_tab' => 'Invalid Tab Provided',
     'language_deleted' => 'Language deleted successfully',
@@ -934,6 +934,11 @@ return array(
     'add_reservation' => 'Add Reservation',
     'add_quotation' => 'Add Quotation',
     'edit_quotation' => 'Edit Quotation',
+    'delete_quotation' => 'Delete Quotation',
+    'delete_quotation_confirmation' => 'Are you sure you want to delete quotation?',
+    'quotation_create_success' => 'Quotation created successfully.',
+    'quotation_update_success' => 'Quotation updated successfully.',
+    'quotation_delete_success' => 'Quotation deleted successfully.',
   ),
   'manage' =>
   array(
@@ -1026,6 +1031,7 @@ return array(
   'rentals' =>
   array(
     'rentals' => 'Rentals',
+    'no_data_available' => 'No data available.',
     'maintenance' => 'Maintenance',
     'add_new_maintenance' => 'Add New Maintenance',
     'create_maintenance' => 'Create Maintenance',
@@ -1605,6 +1611,7 @@ return array(
     'brand_icon_dimension' => 'Icon dimensions must be between 10x10 and 25x25 pixels (inclusive).',
     'edit_vehicle' => 'Edit Vehicle',
     'add_vehicle' => 'Add Vehicle',
+    'view_review' => 'View Review',
   ),
   'user_management' =>
   array(

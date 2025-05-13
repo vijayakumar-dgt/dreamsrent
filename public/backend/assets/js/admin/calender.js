@@ -112,22 +112,45 @@ document.addEventListener("DOMContentLoaded", function () {
                                 }
 
                                 const statusMap = {
-                                    1: { text: "In Progress", class: "badge-soft-warning" },
-                                    2: { text: "Confirmed", class: "badge-soft-primary" },
-                                    3: { text: "Rejected", class: "badge-soft-danger" },
-                                    4: { text: "Booked", class: "badge-soft-info" },
-                                    5: { text: "Completed", class: "badge-soft-success" },
-                                    6: { text: "Cancelled", class: "badge-soft-secondary" }
+                                    1: {
+                                        text: "In Progress",
+                                        class: "badge-soft-warning",
+                                    },
+                                    2: {
+                                        text: "Confirmed",
+                                        class: "badge-soft-primary",
+                                    },
+                                    3: {
+                                        text: "Rejected",
+                                        class: "badge-soft-danger",
+                                    },
+                                    4: {
+                                        text: "Booked",
+                                        class: "badge-soft-info",
+                                    },
+                                    5: {
+                                        text: "Completed",
+                                        class: "badge-soft-success",
+                                    },
+                                    6: {
+                                        text: "Cancelled",
+                                        class: "badge-soft-secondary",
+                                    },
                                 };
-                                
+
                                 const bookingStatus = booking.booking_status;
-                                const statusInfo = statusMap[bookingStatus] || { text: "Unknown", class: "badge-soft-dark" };
+                                const statusInfo = statusMap[bookingStatus] || {
+                                    text: "Unknown",
+                                    class: "badge-soft-dark",
+                                };
 
                                 $("#book_status").text(statusInfo.text);
 
                                 $("#book_status")
-                                    .removeClass("badge-soft-success badge-soft-warning badge-soft-primary badge-soft-danger badge-soft-info badge-soft-secondary badge-soft-dark")
-                                    .addClass(statusInfo.class);                                
+                                    .removeClass(
+                                        "badge-soft-success badge-soft-warning badge-soft-primary badge-soft-danger badge-soft-info badge-soft-secondary badge-soft-dark"
+                                    )
+                                    .addClass(statusInfo.class);
 
                                 $("#car_img").attr(
                                     "src",
@@ -175,6 +198,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                 } else {
                                     $(".driverInfo").addClass("d-none");
                                 }
+                                $("#taxValue").html(`$${booking.tax_val}`);
+                                $("#extraService").html(
+                                    `$${booking.total_extra_service_price}`
+                                );
                                 $("#final_price").html(
                                     `$${booking.final_price}`
                                 );
@@ -233,25 +260,25 @@ document.addEventListener("DOMContentLoaded", function () {
     document
         .getElementById("applyFilter")
         .addEventListener("click", function () {
-            selectedVehicles = [];
-            selectedCustomers = [];
-            selectedDrivers = [];
-            selectedCartypes = [];
+            const selectedVehicles = [];
+            const selectedCustomers = [];
+            const selectedDrivers = [];
+            const selectedCartypes = [];
 
             document
-                .querySelectorAll("#selectedVehcile:checked")
+                .querySelectorAll(".selectedVehicle:checked")
                 .forEach((el) => selectedVehicles.push(el.value));
             document
-                .querySelectorAll("#selectedCustomer:checked")
+                .querySelectorAll(".selectedCustomer:checked")
                 .forEach((el) => selectedCustomers.push(el.value));
             document
-                .querySelectorAll("#selectedDriver:checked")
+                .querySelectorAll(".selectedDriver:checked")
                 .forEach((el) => selectedDrivers.push(el.value));
             document
-                .querySelectorAll("#selectedCartype:checked")
+                .querySelectorAll(".selectedCartype:checked")
                 .forEach((el) => selectedCartypes.push(el.value));
 
-            loadCalendar();
+            loadCalendar(); // or whatever function uses these arrays
         });
 
     document
@@ -645,7 +672,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     _l("admin.bookings.duration_must_be_atleast_one_hour")
                 );
                 $(".summary_rental_period").text("-");
-                $("#vehicle_list_main_container").addClass('d-none');
+                $("#vehicle_list_main_container").addClass("d-none");
                 return;
             } else {
                 $("#end_date, #end_time").removeClass("is-invalid");
@@ -711,7 +738,7 @@ document.addEventListener("DOMContentLoaded", function () {
             pickup_location_val &&
             return_location_val
         ) {
-            $("#vehicle_list_main_container").removeClass('d-none');
+            $("#vehicle_list_main_container").removeClass("d-none");
             lastPage = false;
             currentPage = 1;
             getVehicles();
@@ -781,7 +808,7 @@ document.addEventListener("DOMContentLoaded", function () {
             $(".form-control, .select2-container").removeClass(
                 "is-invalid is-valid"
             );
-            $("#vehicle_list_main_container").addClass('d-none');
+            $("#vehicle_list_main_container").addClass("d-none");
             return;
         } else {
             startDate = todayDateTime.format("DD-MM-YYYY");

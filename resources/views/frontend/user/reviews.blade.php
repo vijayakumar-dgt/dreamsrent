@@ -223,6 +223,22 @@
     </div>
 </div>
 <!-- /Custom Date Modal -->
+
+<!-- View review -->
+<div class="modal new-modal fade" id="view_review" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ __('web.common.view') }}</h4>
+                <button type="button" class="close-btn" data-bs-dismiss="modal"><span>×</span></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3" id="review_text"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /View Review -->
 @endsection
 
 @push('scripts')

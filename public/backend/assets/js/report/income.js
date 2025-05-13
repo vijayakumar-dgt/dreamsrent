@@ -76,56 +76,88 @@ document.querySelectorAll(".dropdown-item-chat").forEach(item => {
 
 function updateChartData(filter) {
     let today = new Date();
-    let lastWeek = new Date();
-    lastWeek.setDate(today.getDate() - 7);
-    let previousWeek = new Date();
-    previousWeek.setDate(today.getDate() - 14);
+    let dayOfWeek = today.getDay(); 
+
+    let startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - dayOfWeek);
+    let endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+    let startOfLastWeek = new Date(startOfWeek);
+    startOfLastWeek.setDate(startOfLastWeek.getDate() - 7);
+    let endOfLastWeek = new Date(startOfLastWeek);
+    endOfLastWeek.setDate(startOfLastWeek.getDate() + 6);
 
     let thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     let previousMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
 
-    function isValidBooking(booking) {
-        if (booking.booking_by === 'admin') {
-            return booking.payment_status === null || booking.payment_status === 2;
-        } else {
-            return booking.payment_status === 2;
+    const formatDate = (date) => `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`;
+
+    const generateDateRange = (start, end) => {
+        let dateArray = [];
+        let currentDate = new Date(start);
+        while (currentDate <= end) {
+            dateArray.push(formatDate(new Date(currentDate)));
+            currentDate.setDate(currentDate.getDate() + 1);
         }
-    }
+        return dateArray;
+    };
 
     let filteredData = bookingData.filter((booking) => {
         let bookingDate = new Date(booking.booking_date);
 
-        let inPeriod = false;
-        if (filter === "This Week") inPeriod = bookingDate >= lastWeek;
-        else if (filter === "Last Week") inPeriod = bookingDate < lastWeek && bookingDate >= previousWeek;
-        else if (filter === "This Month") inPeriod = bookingDate >= thisMonth;
+        if (filter === "This Week") return bookingDate >= startOfWeek && bookingDate <= endOfWeek;
+        if (filter === "Last Week") return bookingDate >= startOfLastWeek && bookingDate <= endOfLastWeek;
+        if (filter === "This Month") return bookingDate >= thisMonth;
 
-        return inPeriod && isValidBooking(booking);
+        return true;
     });
+
+    let groupedData = {};
+    filteredData.forEach((booking) => {
+        let date = formatDate(new Date(booking.booking_date));
+        if (!groupedData[date]) {
+            groupedData[date] = 0;
+        }
+        groupedData[date] += booking.vehicle_total_price || 0;
+    });
+
+    let dateRange = [];
+    if (filter === "This Week") dateRange = generateDateRange(startOfWeek, endOfWeek);
+    if (filter === "Last Week") dateRange = generateDateRange(startOfLastWeek, endOfLastWeek);
+    if (filter === "This Month") {
+        let endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        dateRange = generateDateRange(thisMonth, endOfMonth);
+    }
+
+    let categories = dateRange;
+    let incomeData = categories.map(date => groupedData[date] ?? 0);
+
+    let totalIncome = incomeData.reduce((sum, income) => sum + income, 0);
 
     let previousPeriodData = bookingData.filter((booking) => {
         let bookingDate = new Date(booking.booking_date);
 
-        let inPreviousPeriod = false;
-        if (filter === "This Week") inPreviousPeriod = bookingDate < lastWeek && bookingDate >= previousWeek;
-        else if (filter === "Last Week") {
-            let weekBeforePrevious = new Date(previousWeek);
-            weekBeforePrevious.setDate(previousWeek.getDate() - 7);
-            inPreviousPeriod = bookingDate < previousWeek && bookingDate >= weekBeforePrevious;
-        } else if (filter === "This Month") inPreviousPeriod = bookingDate < thisMonth && bookingDate >= previousMonth;
+        if (filter === "This Week") {
+            return bookingDate >= startOfLastWeek && bookingDate <= endOfLastWeek;
+        }
+        if (filter === "Last Week") {
+            let weekBeforePrevious = new Date(startOfLastWeek);
+            weekBeforePrevious.setDate(startOfLastWeek.getDate() - 7);
+            let endOfWeekBeforePrevious = new Date(weekBeforePrevious);
+            endOfWeekBeforePrevious.setDate(weekBeforePrevious.getDate() + 6);
+            return bookingDate >= weekBeforePrevious && bookingDate <= endOfWeekBeforePrevious;
+        }
+        if (filter === "This Month") {
+            return bookingDate < thisMonth && bookingDate >= previousMonth;
+        }
 
-        return inPreviousPeriod && isValidBooking(booking);
+        return false;
     });
 
-    if (filteredData.length === 0) {
-        console.warn("No data available for the selected filter:", filter);
-    }
-
-    let incomeData = filteredData.map(b => b.vehicle_total_price || 0);
-    let categories = filteredData.map(b => new Date(b.booking_date).toLocaleDateString() || "N/A");
-
-    let totalIncome = incomeData.reduce((sum, income) => sum + income, 0);
-    let previousTotalIncome = previousPeriodData.map(b => b.vehicle_total_price || 0).reduce((sum, income) => sum + income, 0);
+    let previousTotalIncome = previousPeriodData
+        .map(b => b.vehicle_total_price || 0)
+        .reduce((sum, income) => sum + income, 0);
 
     let percentageChange = 0;
     if (previousTotalIncome > 0) {
@@ -141,15 +173,25 @@ function updateChartData(filter) {
         console.error("Chart is not initialized.");
     }
 
-    document.querySelector(".dropdown-toggle-chat").innerHTML = `<i class="ti ti-calendar me-1"></i> ${filter}`;
+    const incomeText = document.querySelector(".income-summary p");
+    const incomeAmount = document.querySelector(".income-summary h5");
+    if (incomeText) {
+        incomeText.textContent = `Income ${filter}`;
+    }
 
-    document.querySelector(".income-summary p").textContent = `Income ${filter}`;
-    document.querySelector(".income-summary h5").innerHTML = `
-        $${totalIncome.toLocaleString()} 
-        <span class="${percentageChange >= 0 ? 'text-success' : 'text-danger'} fs-13 fw-semibold">
-            ${percentageChange >= 0 ? '+' : '-'}${Math.abs(percentageChange).toFixed(2)}%
-        </span>
-    `;
+    if (incomeAmount) {
+        incomeAmount.innerHTML = `
+            $${totalIncome.toLocaleString()} 
+            <span class="${percentageChange >= 0 ? 'text-success' : 'text-danger'} fs-13 fw-semibold">
+                ${percentageChange >= 0 ? '+' : '-'}${Math.abs(percentageChange).toFixed(2)}%
+            </span>
+        `;
+    }
+    
+    const dropdownToggleChat = document.querySelector(".dropdown-toggle-chat");
+    if (dropdownToggleChat) {
+        dropdownToggleChat.innerHTML = `<i class="ti ti-calendar me-1"></i> ${filter ?? ''}`;
+    }
 }
 
 

@@ -3,7 +3,7 @@
     await loadTranslationFile('admin', 'common, finance_accounts');
 
     $('#linkReservationTable').DataTable({
-        ordering: true,
+        ordering: false,
         searching: false,
         pageLength: 10,
         lengthChange: false,

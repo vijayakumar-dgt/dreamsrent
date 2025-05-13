@@ -152,12 +152,9 @@
                             <a class="dropdown-item" href="{{ route('user.usersettings') }}">
                                 <i class="feather-settings"></i> {{ __('web.common.settings') }}
                             </a>
-                            <a class="dropdown-item" href="{{ route('user.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <a class="dropdown-item" href="{{ route('user.logout') }}">
                                 <i class="feather-power"></i> {{ __('web.common.logout') }}
                             </a>
-                            <form id="logout-form" action="{{ route('user.logout') }}" method="GET" class="d-none">
-                                @csrf
-                            </form>
                         </div>
                     </li>
                     <!-- /User Menu -->

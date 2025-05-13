@@ -40,7 +40,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
         Route::get('add-quotations', [QuotationController::class, 'create'])->name('quotations.create')->middleware('permission');
         Route::post('store-quotations', [QuotationController::class, 'store'])->name('quotations.store');
         Route::get('edit-quotations/{id}', [QuotationController::class, 'edit'])->name('quotations.edit')->middleware('permission');
-        Route::post('delete-quotations', [BookingController::class, 'delete'])->name('quotations.delete');
+        Route::post('delete-quotation', [QuotationController::class, 'delete'])->name('quotations.delete');
         Route::post('quotations-list', [QuotationController::class, 'bookingList'])->name('quotations.list');
         Route::post('get-quotations-details', [BookingController::class, 'getBookingDetails']);
         Route::get('quotations-details/{id}', [QuotationController::class, 'reservationViewDetails'])->name('quotations.details');

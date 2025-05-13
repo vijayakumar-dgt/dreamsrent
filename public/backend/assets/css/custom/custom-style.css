@@ -1011,3 +1011,12 @@
 .calTop {
   margin-top: -5rem;
 }
+#languageSetupTable tbody tr .lang-label,
+#languageSetupTable tbody tr .lang-input {
+   width: 50%;
+   text-align: left;
+   padding-left: 20px;
+   word-break: break-word;     /* Allows long words to break */
+   white-space: normal;        /* Allows text wrapping */
+   vertical-align: top;
+}

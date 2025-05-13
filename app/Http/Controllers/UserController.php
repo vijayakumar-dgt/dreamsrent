@@ -710,14 +710,14 @@ class UserController extends Controller
                     'os' => $device->os,
                     'ip_address' => $device->ip_address,
                     'location' => $device->location,
-                    'date'     => Carbon::parse($device->created_at ?? '')->format('d M Y, h:i A')
+                    'date'     => formatDateTime($device->created_at),
                 ];
             });
             $user = Auth::guard('web')->user();
         $response    = [
             'user' => Auth::guard('web')->user(),
             'last_password_changed_at' => Auth::guard('web')->check() && $user && $user->last_password_changed_at
-                ? Carbon::parse($user->last_password_changed_at)->format('d M Y, h:i A')
+                ? formatDateTime($user->last_password_changed_at)
                 : "",
             'devices' => $userDevices
         ];
@@ -991,5 +991,16 @@ class UserController extends Controller
             'code'   => 200,
             'message' => __('web.user.all_notofocations_deleted')
         ], 200);
+    }
+
+    public function deleteAccount(Request $request): JsonResponse
+    {
+        /** @var \App\Models\User|null $user */
+        $user = Auth::guard('web')->user();
+        if (!$user) {
+            return response()->json(['success' => false, 'message' =>   __('admin.general_settings.user_not_found')], 404);
+        }
+        $user->delete();
+        return response()->json(['success' => true, 'message' =>  __('web.user.account_deleted_successfully')]);
     }
 }

@@ -15,9 +15,9 @@
             $("#changePasswordForm #id").val('');
             $("#changePasswordForm .submitbtn").text(_l('admin.common.save_changes'));
             $("#changePasswordForm .submitbtn").prop('disabled', false);
-            $("#current_password").removeClass("is-invalid");
-            $("#current_password_error").text("");
-            $("#passwordSuccess").text("");
+            $("#passwordSuccess, .error-text").text("");
+            $('.form-control').removeClass('is-invalid is-valid');
+            $('.form-control').siblings('span').removeClass('me-3');
         }
         $(document).on('click','.changePhoneNumberBtn', function(){
             resetPhoneNumberForm();
@@ -27,7 +27,9 @@
             $("#changePhoneNumberForm #id").val('');
             $("#changePhoneNumberForm .submitbtn").text(_l('admin.general_settings.save_changes'));
             $("#changePhoneNumberForm .submitbtn").prop('disabled', false);
-            $("#phone_current_password_error").text("");
+            $("#phone_current_password_error, .error-text").text("");
+            $('.form-control').removeClass('is-invalid is-valid');
+            $('.form-control').siblings('span').removeClass('me-3');
         }
         function checkCurrentPassword(elementId){
             return new Promise((resolve, reject) => {
@@ -105,14 +107,17 @@
             },
             highlight: function (element) {
                 $(element).addClass("is-invalid").removeClass("is-valid");
+                $('#' + element.id).siblings('span').addClass('me-3');
             },
             unhighlight: function (element) {
                 $(element).removeClass("is-invalid").addClass("is-valid");
                 var errorId = element.id + "_error";
                 $("#" + errorId).text("");
+                $('#' + element.id).siblings('span').addClass('me-3');
             },
             onkeyup: function(element) {
                 $(element).valid();
+                $('#' + element.id).siblings('span').removeClass('me-3');
             },
             onchange: function(element) {
                 $(element).valid();
@@ -161,7 +166,6 @@
                 });
             }
         });
-
 
         if ($('#passwordInput').length > 0) {
             "use strict";
@@ -282,14 +286,17 @@
             },
             highlight: function (element) {
                 $(element).addClass("is-invalid").removeClass("is-valid");
+                $('#' + element.id).siblings('span').addClass('me-3');
             },
             unhighlight: function (element) {
                 $(element).removeClass("is-invalid").addClass("is-valid");
                 var errorId = element.id + "_error";
                 $("#" + errorId).text("");
+                $('#' + element.id).siblings('span').addClass('me-3');
             },
             onkeyup: function(element) {
                 $(element).valid();
+                $('#' + element.id).siblings('span').removeClass('me-3');
             },
             onchange: function(element) {
                 $(element).valid();

@@ -234,27 +234,26 @@
             }
         });
     }
-})();
 
-function confirmDelete() {
-    const userId = $('#deleteUserId').val();
-
-    $.ajax({
-        url: `/admin/delete-account/${userId}`,
-        type: 'POST',
-        contentType: 'application/json',
-        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        success: (data) => {
-            if (data.success) {
-                showToast('success', _l('web.user.account_deleted'));
-                setTimeout(() => window.location.href = '/user-logout', 1500);
-            } else {
-                showToast('error', data.message || 'An error occurred while deleting your account.');
+    $(document).on('click', '.delete_account_btn', function () {
+        $.ajax({
+            url: `/user/delete-account`,
+            type: 'POST',
+            contentType: 'application/json',
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            success: (data) => {
+                if (data.success) {
+                    $("#delete_account").modal('hide');
+                    showToast('success', _l('web.user.account_deleted'));
+                    setTimeout(() => window.location.href = '/user-logout', 1500);
+                } else {
+                    showToast('error', data.message || 'An error occurred while deleting your account.');
+                }
+            },
+            error: (xhr) => {
+                showToast('error', 'Failed to delete your account. Please try again later.');
             }
-        },
-        error: (xhr) => {
-            console.error('Error:', xhr.responseText);
-            showToast('error', 'Failed to delete your account. Please try again later.');
-        }
+        });
     });
-}
+    
+})();

@@ -89,8 +89,8 @@
                 },
                 { data: "comments",
                     render: function (data, type, row) {
-                        return row.comments.length > 100
-                            ? row.comments.substring(0, 100) + "..."
+                        return row.comments.length > 50
+                            ? row.comments.substring(0, 50) + "..."
                             : row.comments;
                     },
                 },
@@ -101,15 +101,18 @@
                                         <i class="ti ti-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
+                                        <li>
+                                            <button type="button" class="dropdown-item rounded-1 view_review" data-review="${row.comments}" data-bs-toggle="modal" data-bs-target="#view_review"><i class="ti ti-eye me-1"></i>${_l('admin.common.view')}</button>
+                                        </li>
                                         ${ hasPermission(permissions, 'reviews', 'delete') ? 
                                             `<li>
-                                                <a class="dropdown-item rounded-1 delete_review" href="javascript:void(0);" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_review"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                                <button type="button" class="dropdown-item rounded-1 delete_review" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_review"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                                             </li>` : ''
                                         }
                                     </ul>
                                 </div>`;
                     },
-                    visible: hasPermission(permissions, 'reviews', 'delete')
+                    visible: hasPermission(permissions, 'reviews', 'delete') || hasPermission(permissions, 'reviews', 'view'),
                 }
             ],
             ordering: true,
@@ -204,6 +207,11 @@
                 }
             }
         });
+    });
+
+    $(document).on('click', '.view_review', function () {
+        let review = $(this).data('review');
+        $('#review_text').text(review);
     });
 
 }) ();

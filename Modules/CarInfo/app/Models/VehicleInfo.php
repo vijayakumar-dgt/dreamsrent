@@ -61,6 +61,8 @@ use Modules\CarInfo\Models\VehicleTarrif;
  * @property string $name
  * @property string|null $image
  * @property string|null $encrypted_id
+ * @property string|null $created_date
+ * @property bool $popular
  */
 class VehicleInfo extends Model
 {

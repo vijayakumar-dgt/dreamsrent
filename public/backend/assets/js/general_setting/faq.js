@@ -4,6 +4,26 @@
     const permissions = await loadUserPermissions();
 
     $(document).ready(function () {
+        $(document).on('click', '.edit-faq-btn', function () {
+            const id = $(this).data('id');
+            const question = $(this).data('question');
+            const answer = $(this).data('answer');
+            const status = $(this).data('status');
+            const languageId = $(this).data('language-id');
+
+            $('#editFaqQuestion').val(question);
+            $('#editFaqAnswer').val(answer);
+            $('#editFaqStatus').prop('checked', status == 1);
+            $('#id').val(id);
+            $('#editFaqLanguage').val(languageId).trigger('change');
+
+            $('#edit_FAQ').modal('show');
+        });
+        $(document).on('click', '.delete-faq-btn', function () {
+            const id = $(this).data('id');
+            $("#delete_id").val(id);
+        });
+
         $('#add_FAQ').on('show.bs.modal', function () {
             $('#addFaq')[0].reset();
             $('.text-danger').text('');
@@ -246,18 +266,32 @@
                                                       ${hasPermission(permissions, 'faq', 'edit') ?
 
                                         `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);"
-                                            onclick="editFAQ(${value.id}, '${value.question}', '${value.answer}', ${value.status}, ${value.language_id})">
+                                           <button 
+                                                type="button" 
+                                                class="dropdown-item rounded-1 edit-faq-btn" 
+                                                data-id="${value.id}" 
+                                                data-question="${value.question}" 
+                                                data-answer="${value.answer}" 
+                                                data-status="${value.status}" 
+                                                data-language-id="${value.language_id}"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#edit_FAQ"
+                                            >
                                                 <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
-                                            </a>
+                                            </button>
                                         </li>`:''}
                                                           ${hasPermission(permissions, 'faq', 'delete') ?
 
                                         `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);"
-                                            data-bs-toggle="modal" onclick="deleteFAQ(${value.id})" data-bs-target="#delete_FAQ">
+                                            <button 
+                                                type="button" 
+                                                class="dropdown-item rounded-1 delete-faq-btn" 
+                                                data-id="${value.id}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#delete_FAQ"
+                                            >
                                                 <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
-                                            </a>
+                                            </button>
                                         </li>`:''}
                                     </ul>
                                 </div>

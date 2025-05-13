@@ -744,7 +744,7 @@ return [
     'description_not_empty' => 'يجب ألا تكون الوصف فارغة',
     'subject_required' => 'الموضوع مطلوب',
     'sms_required' => 'رسالة SMS مطلوبة',
-    'language_not_found' => 'اللغة غير موجودة',
+    'cannot_delete_default_language' => 'لا يمكن حذف اللغة الافتراضية',
     'module_fetched_success' => 'تم جلب الوحدة بنجاح',
     'invalid_tab' => 'تم تقديم تبويب غير صالح',
     'language_deleted' => 'تم حذف اللغة بنجاح',
@@ -800,7 +800,6 @@ return [
     'type_your_content_here' => 'اكتب محتوىك هنا',
     'edit_bank_account' => 'تحرير حساب بنكي',
     'edit_template' => 'تحرير قالب',
-
   ],
   'main' =>
   [
@@ -923,6 +922,11 @@ return [
     'add_reservation' => 'إضافة حجز',
     'add_quotation' => 'إضافة عرض',
     'edit_quotation' => 'تعديل العرض',
+    'delete_quotation' => 'حذف العرض',
+    'delete_quotation_confirmation' => 'هل تريد حذف العرض؟',
+    'quotation_create_success' => 'تم إنشاء العرض بنجاح.',
+    'quotation_update_success' => 'تم تحديث العرض بنجاح.',
+    'quotation_delete_success' => 'تم حذف العرض بنجاح.',
   ],
   'manage' =>
   [
@@ -1584,6 +1588,7 @@ return [
     'brand_icon_dimension' => 'الايقونة يجب ان تكون بالاقل 10x10 والاكبر 25x25 بكسل.',
     'edit_vehicle' => 'تعديل السيارة',
     'add_vehicle' => 'إضافة سيارة',
+    'view_review' => 'عرض المراجعة',
   ],
   'user_management' =>
   [

@@ -98,7 +98,11 @@ class TestimonialController extends Controller
                 $query->whereIn('ratings', $request->ratings);
             }
 
-            $testimonials = $query->get();
+            $testimonials = $query->get()->map(function ($testimonial) {
+                $testimonial->created_date = formatDateTime($testimonial->created_at, false);
+                unset($testimonial->created_at);
+                return $testimonial;
+            });
 
             return response()->json([
                 'success' => true,

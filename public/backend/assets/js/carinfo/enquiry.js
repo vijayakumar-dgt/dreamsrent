@@ -372,29 +372,25 @@ function initTable() {
                                 <ul class="dropdown-menu dropdown-menu-end p-2 shadow-sm">
                                     ${hasPermission(permissions, 'enquiries', 'edit') ? `
                                         <li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);"
+                                            <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="edit-enquiry"
                                             data-bs-toggle="modal" data-bs-target="#edit_enquiry_modal"
-                                            onclick="populateEditEnquiry(
-                                                ${value.id},
-                                                '${value.car_name}',
-                                                '${value.customer_name}',
-                                                '${value.email}',
-                                                '${value.phone}',
-                                                '${value.enquiry_date}',
-                                                '${value.enquiry_details}',
-                                                '${value.status}'
-                                            );">
-                                                <i class="ti ti-eye me-1"></i>${_l('admin.common.view')}
-                                            </a>
+                                            data-car-name="${value.car_name}"
+                                            data-customer-name="${value.customer_name}"
+                                            data-email="${value.email}"
+                                            data-phone="${value.phone}"
+                                            data-enquiry-date="${value.enquiry_date}"
+                                            data-enquiry-details="${value.enquiry_details}"
+                                            data-status="${value.status}">
+                                                <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
+                                            </button>
                                         </li>` : ''}
 
                                     ${hasPermission(permissions, 'enquiries', 'delete') ? `
                                         <li>
-                                            <a class="dropdown-item rounded-1 text-danger" href="javascript:void(0);"
-                                            data-bs-toggle="modal" data-bs-target="#delete-modal"
-                                            onclick="deleteEnquiry(${value.id});">
+                                            <button type="button" class="dropdown-item rounded-1 text-danger" data-id="${value.id}" id="delete-enquiry"
+                                            data-bs-toggle="modal" data-bs-target="#delete-modal">
                                                 <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
-                                            </a>
+                                            </button>
                                         </li>` : ''}
                                 </ul>
                             </div>
@@ -507,6 +503,22 @@ $("#enquiryDeleteForm").on('submit', function(e){
 });
 
 }) ();
+$(document).on('click', '#edit-enquiry', function(){
+    let id = $(this).data('id');
+    let car_name = $(this).data('car-name');
+    let customer_name = $(this).data('customer-name');
+    let email = $(this).data('email');
+    let phone = $(this).data('phone');
+    let enquiry_date = $(this).data('enquiry-date');
+    let enquiry_details = $(this).data('enquiry-details');
+    let status = $(this).data('status');
+    populateEditEnquiry(id,car_name, customer_name, email, phone, enquiry_date, enquiry_details, status);
+});
+
+$(document).on('click', '#delete-enquiry', function(){
+    let id = $(this).data('id');
+    deleteEnquiry(id);
+})
 function populateEditEnquiry(id, carId, customerName, email, phone, enquiryDate, enquiryDetails, status) {
 
     $('#edit_enquiry_modal .assigned_cars').text(carId);

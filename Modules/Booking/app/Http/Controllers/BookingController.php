@@ -677,7 +677,6 @@ class BookingController extends Controller
 
             // Pagination
             $totalRecords = Booking::join('users', 'users.id', '=', 'bookings.customer_id')
-                ->whereNull('users.deleted_at')
                 ->where('bookings.booking_by', '!=', 'quotation')
                 ->count();
             $filteredRecords = $query->count();

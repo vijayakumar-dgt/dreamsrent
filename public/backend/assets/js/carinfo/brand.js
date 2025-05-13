@@ -282,12 +282,24 @@ function initTable() {
                                 <ul class="dropdown-menu dropdown-menu-end p-2">
                                     ${ hasPermission(permissions, 'vehicle_attributes', 'edit') ? 
                                         `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editBrand(${row.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                            <button 
+                                                type="button" 
+                                                class="dropdown-item rounded-1 edit-brand" 
+                                                data-id="${row.id}">
+                                                <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
+                                            </button>
                                         </li>` : ''
                                     }
                                     ${ hasPermission(permissions, 'vehicle_attributes', 'delete') ? 
                                         `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteBrand(${row.id});" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                            <button 
+                                                type="button" 
+                                                class="dropdown-item rounded-1 delete-brand"
+                                                data-id="${row.id}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#delete-modal">
+                                                <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
+                                            </button>
                                         </li>` : ''
                                     }
                                 </ul>
@@ -405,9 +417,19 @@ $("#brandDeleteForm").on('submit', function(e){
 
 }) ();
 
+$(document).on("click", ".delete-brand", function () {
+    const id = $(this).data("id");
+    deleteBrand(id);
+});
+
 function deleteBrand(id){
     $("#delete_id").val(id);
 }
+
+$(document).on("click", ".edit-brand", function () {
+    const id = $(this).data("id");
+    editBrand(id);
+});
 
 function editBrand(id){
     $.ajax({

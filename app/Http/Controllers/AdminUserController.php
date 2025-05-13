@@ -94,8 +94,7 @@ class AdminUserController extends Controller
             ], 422);
         }
 
-        $successMsg = empty($id) ?
-            __('admin.user_management.user_create_success') : __('admin.user_management.user_update_success');
+        $successMsg = empty($id) ? __('admin.user_management.user_create_success') : __('admin.user_management.user_update_success');
         $errorMsg = empty($id) ?  __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
@@ -222,10 +221,10 @@ class AdminUserController extends Controller
                         $query->orderBy('users.created_at', 'desc');
                         break;
                     case 'ascending':
-                        $query->orderBy('users.id', 'asc');
+                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) asc");
                         break;
                     case 'descending':
-                        $query->orderBy('users.id', 'desc');
+                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) desc");
                         break;
                     case 'last month':
                         $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
@@ -241,9 +240,7 @@ class AdminUserController extends Controller
             }
 
             if ($columnName === 'full_name') {
-                $query
-                    ->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name))
-                 {$orderDir}");
+                $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)){$orderDir}");
             } else {
                 $query->orderBy($columnName, $orderDir);
             }
@@ -259,6 +256,8 @@ class AdminUserController extends Controller
             $users->map(function ($user) {
                 $profileImage = is_string($user->profile_image) ? $user->profile_image : '';
                 $user->profile_image = uploadedAsset($profileImage, 'profile');
+                $user->username = $user->username ? ucwords($user->username) : '';
+                $user->full_name = $user->full_name ? ucwords($user->full_name) : '';
 
                 return $user;
             });

@@ -297,6 +297,7 @@ class QuotationController extends Controller
             $query = Booking::select(
                 'bookings.id',
                 'bookings.reservation_id',
+                'bookings.booking_date',
                 'vehicle_info.name as vehicle_name',
                 'vehicle_info.vehicle_image',
                 DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
@@ -389,8 +390,7 @@ class QuotationController extends Controller
 
             // Pagination
             $totalRecords = Booking::join('users', 'users.id', '=', 'bookings.customer_id')
-                ->whereNull('users.deleted_at')
-                ->where('bookings.booking_by', '!=', 'quotation')
+                ->where('bookings.booking_by', '=', 'quotation')
                 ->count();
             $filteredRecords = $query->count();
 
@@ -590,4 +590,26 @@ class QuotationController extends Controller
 
         return view('booking::quotations.view_details', compact('booking', 'bookingHistories'));
     }
+
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->id;
+            Booking::where('id', $id)->delete();
+            BookingDetail::where('booking_id', $id)->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'code'   => 200,
+                'message' => __('admin.bookings.quotation_delete_success')
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 500,
+                'message' => __('admin.common.default_delete_error'),
+            ], 500);
+        }
+    }
+
 }

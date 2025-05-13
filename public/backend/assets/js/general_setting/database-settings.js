@@ -49,9 +49,9 @@ function DbBackUpTable() {
                                     </li>
                                     ${ hasPermission(permissions, 'other_settings', 'delete') ?
                                         `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_backup" onclick="deleteBackup(${backup.id})">
+                                            <button type="button" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_backup" data-id="${backup.id}" id="delete-backup">
                                                 <i class="ti ti-trash me-1"></i>${_l('admin.general_settings.delete')}
-                                            </a>
+                                            </button>
                                         </li>` : ''
                                     }
                                 </ul>
@@ -108,7 +108,10 @@ $("#deleteDbBackup").on('submit', function(e){
 function restoreBackup(filename) {
     alert("Restore function for " + filename + " will be implemented here.");
 }
-
+$(document).on("click", '#delete-backup', function(){
+   let id = $(this).data('id');
+   deleteBackup(id);
+});
 function deleteBackup(id){
     $("#delete_id").val(id);
 }

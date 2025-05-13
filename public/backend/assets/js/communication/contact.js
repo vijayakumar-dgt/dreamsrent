@@ -4,6 +4,10 @@
     const permissions = await loadUserPermissions();
 
 $(document).ready(function () {
+    $(document).on('click', '.delete-contact-btn', function () {
+        const id = $(this).data('id');
+        deleteContact(id);
+    });
     contactTable();
 
     $(".sort-dropdown .dropdown-item").on("click", function () {
@@ -58,7 +62,7 @@ function contactTable(sortBy = "latest", searchQuery = "") {
                         </td>
                         <td><p class="text-gray-9">${value.phone_number}</p></td>
                         <td><p class="text-gray-9">${value.email}</p></td>
-                        <td><p class="text-gray-9">${value.created_at ? new Date(value.created_at).toLocaleDateString() : '-'}</p></td>
+                        <td><p class="text-gray-9">${value.created_date}</p></td>
                         <td>
                             <span class="avatar avatar-md bg-light rounded-circle tooltip-trigger"
                                   data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"
@@ -75,10 +79,16 @@ function contactTable(sortBy = "latest", searchQuery = "") {
                                 <ul class="dropdown-menu dropdown-menu-end p-2">
                                     ${hasPermission(permissions, 'contact_messages', 'delete') ?
                                     `<li>
-                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal"
-                                           data-bs-target="#delete_contact" onclick="deleteContact(${value.id});">
-                                            <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
-                                        </a>
+                                        <button 
+                                            type="button" 
+                                            class="dropdown-item rounded-1 delete-contact-btn" 
+                                            data-id="${value.id}" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#delete_contact"
+                                        >
+                                            <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
+                                        </button>
+
                                     </li>` : ''}
                                 </ul>
                             </div>

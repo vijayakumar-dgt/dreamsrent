@@ -106,7 +106,7 @@ class CarInfoController extends Controller
         } else {
             $authId = current_user();
             $language_id = $authId->language_id ?? null;
-            $language = $language_id; // Or however you associate default language
+            $language = $language_id;
             $languageId = $language;
         }
 
@@ -153,7 +153,6 @@ class CarInfoController extends Controller
             $q->where('language_id', $languageId);
         })->first();
 
-
         if (!$query && $languageId) {
             $baseVehicle = VehicleInfo::where('slug', $slug)->whereNull('parent_id')->first();
             if ($baseVehicle) {
@@ -161,8 +160,6 @@ class CarInfoController extends Controller
                     ->where('language_id', $languageId)
                     ->first();
 
-
-                // If still not found, create an empty Page instance pre-filled with what we know
                 if (!$query) {
                     $query = new VehicleInfo([
                         'language_id' => $languageId,
@@ -172,8 +169,6 @@ class CarInfoController extends Controller
             }
         }
 
-
-        // If no page and no basePage, create a fresh one
         if (!$query) {
             $baseVehicle = VehicleInfo::where('slug', $slug)->first();
 
@@ -288,7 +283,6 @@ class CarInfoController extends Controller
 
         $vehiclePriceJson = json_encode([$vehiclePrice]);
 
-
         $slug = Str::slug($request->title);
         $vehicleImagePath = null;
         if ($request->hasFile('vehicle_image')) {
@@ -347,7 +341,7 @@ class CarInfoController extends Controller
             if (is_array($images)) {
                 foreach ($images as $image) {
                     $fileName = uploadFile($image, 'vehicles');
-                    $imagePaths[] = 'vehicles/' . $fileName;
+                    $imagePaths[] = '/' . $fileName;
                 }
             }
 
@@ -640,8 +634,8 @@ class CarInfoController extends Controller
             $vehiclePrice['weekly'] = $request->weekly_price;
         }
 
-        if ($request->has('montly_price')) {
-            $vehiclePrice['monthly'] = $request->montly_price;
+        if ($request->has('monthly_price')) {
+            $vehiclePrice['monthly'] = $request->monthly_price;
         }
 
         if ($request->has('yearly_price')) {
@@ -1011,7 +1005,8 @@ class CarInfoController extends Controller
             "vehicle_metakeywords",
             "features",
             "popular",
-            "recommended"
+            "recommended",
+            "status"
         );
 
 
@@ -1089,7 +1084,7 @@ class CarInfoController extends Controller
         }
 
         $vehicles = $query->where("language_id", $languageId)->get()->map(function ($vehicle) {
-            $vehicle->vehicle_image = url('/storage/' . $vehicle->vehicle_image);
+            $vehicle->vehicle_image = uploadedAsset($vehicle->vehicle_image);
 
             $vehicleMetas = VehicleMeta::where('vehicle_id', $vehicle->id)
                 ->where('key', 'vehicle_image')
@@ -1107,7 +1102,8 @@ class CarInfoController extends Controller
 
             $damageCount = VehicleDamage::where('vehicle_id', $vehicle->id)->count();
             $vehicle->damage_count = $damageCount;
-            $vehicle->status = 1;
+            $vehicle->status = $vehicle->status;
+            $vehicle->created_date = formatDateTime($vehicle->created_at);
 
             return $vehicle;
         });
@@ -1280,7 +1276,7 @@ class CarInfoController extends Controller
             $query->where('status', $request->status);
         }
 
-        $sortBy = $request->sort_by ?? 'ascending';
+        $sortBy = $request->sort_by ?? 'desc';
 
         switch ($sortBy) {
             case 'latest':
@@ -1337,7 +1333,7 @@ class CarInfoController extends Controller
 
         $perPage = $request->paginate ?? 1;
 
-        $vehicles = $query->where("language_id", $lang_id)->paginate($perPage);
+        $vehicles = $query->where("language_id", $lang_id)->where('status', 1)->paginate($perPage);
 
         $data = $vehicles->map(function (VehicleInfo $vehicle): array {
             $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
@@ -1746,6 +1742,9 @@ class CarInfoController extends Controller
                     ->where("vehicle_id", $vehicle->id)
                     ->exists();
             }
+            $rentalSettings = GeneralSetting::where('group_id',20)->pluck('value', 'key');
+            $faqEnabled = $rentalSettings['faq'] ?? false;
+            $extraServiceEnabled = $rentalSettings['extraService'] ?? false;
             $data = [
                 'id' => $vehicle->id,
                 'name' => $vehicle->name,
@@ -1783,7 +1782,7 @@ class CarInfoController extends Controller
                 'is_top_rated' => (bool) rand(0, 1),
                 'authenticated' => Auth::guard('web')->check(),
                 'description' => $vehicle->description,
-                'extraservice' => $vehicle->extraservices->map(function (VehicleExtraService $extraservice) {
+                'extraservice' => $extraServiceEnabled ? $vehicle->extraservices->map(function (VehicleExtraService $extraservice) {
                     return [
                         'extra_service_id' => $extraservice->extra_service_id,
                         'value' => $extraservice->value,
@@ -1793,7 +1792,7 @@ class CarInfoController extends Controller
                         'description' => optional($extraservice->extraService)->description,
                         'image' => url('/storage/' . optional($extraservice->extraService)->image), // Convert image to full URL
                     ];
-                }),
+                }) : null,
                 'tariff' => $vehicle->tariffs->map(function (VehicleTarrif $tariff) {
                     return [
                         'tariff_title' => $tariff->tariff_title,
@@ -1815,12 +1814,12 @@ class CarInfoController extends Controller
                         'seasonal_late_fee' => $seasonal->seasonal_late_fee,
                     ];
                 }),
-                'faqs' => $vehicle->faqs->map(function (VehicleFaq $faq) {
+                'faqs' => $faqEnabled ? $vehicle->faqs->map(function (VehicleFaq $faq) {
                     return [
                         'question' => $faq->question,
                         'answer' => $faq->answer,
                     ];
-                }),
+                }) : [], 
                 'damages' => $vehicle->damages->map(function (VehicleDamage $damage) {
                     return [
                         'damage_type' => $damage->damage_type,
@@ -2041,7 +2040,7 @@ class CarInfoController extends Controller
     {
         $vehicleId = $request->input('delete_id');
 
-        $vehicle = VehicleInfo::firstOrFail($vehicleId);
+        $vehicle = VehicleInfo::where('id', $vehicleId);
 
         if ($vehicle != null) {
             $vehicle->delete();
@@ -2089,11 +2088,12 @@ class CarInfoController extends Controller
         }
     }
 
-    public function setPopular(Request $request)
+    public function setPopular(Request $request): JsonResponse
     {
+        /** @var VehicleInfo $vehicle */
         $vehicle = VehicleInfo::find($request->id);
 
-        if (!$vehicle) {
+        if ($vehicle == null) {
             return response()->json(['error' => 'Vehicle not found'], 404);
         }
 
@@ -2105,13 +2105,28 @@ class CarInfoController extends Controller
 
     public function setRecommended(Request $request)
     {
+        /** @var VehicleInfo $vehicle */
         $vehicle = VehicleInfo::find($request->id);
+
+        if ($vehicle == null) {
+            return response()->json(['error' => 'Vehicle not found'], 404);
+        }
+
+        $vehicle->recommended = $request->recommended ? 1 : 0;
+        $vehicle->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function setStatus(Request $request): JsonResponse
+    {
+        $vehicle = VehicleInfo::find($request->vehicle_id);
 
         if (!$vehicle) {
             return response()->json(['error' => 'Vehicle not found'], 404);
         }
 
-        $vehicle->recommended = $request->recommended ? 1 : 0;
+        $vehicle->status = $request->status ? 1 : 0;
         $vehicle->save();
 
         return response()->json(['success' => true]);

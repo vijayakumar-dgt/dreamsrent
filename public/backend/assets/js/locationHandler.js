@@ -93,10 +93,28 @@
         });
     });
 
+    $(document).on("keyup", "#search", function () {
+        setTimeout(function () {
+            initTable();
+        }, 500);
+    });
+
+    $(document).on("click", "#edit-country", function () {
+        let id = $(this).data("id");
+        editCountry(id); 
+    });
+
+    $(document).on("click", "#delete-country", function () {
+        let id = $(this).data("id");
+        delateCountry(id);
+    });
     function initTable() {
         $.ajax({
             url: "/admin/country/datatable",
             type: "GET",
+            data:{
+                search: $("#search").val(),
+            },
             beforeSend: function () {
                 $(".table-loader").show();
                 $(".real-table, .table-footer").addClass("d-none");
@@ -143,11 +161,11 @@
                                            ${ hasPermission(permissions, 'cms_locations', 'edit') ?
 
                                             `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editCountry(${value.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                                <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="edit-country"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</button>
                                             </li>`:''}
                                               ${ hasPermission(permissions, 'cms_locations', 'delete') ?
                                             `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="delateCountry(${value.id});" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                                <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="delete-country" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                                             </li>`:''}
                                         </ul>
                                     </div>
@@ -212,6 +230,35 @@
         });
     }
 
+    $("#delateCountry").on("submit", function (e) {
+    e.preventDefault();
+    $.ajax({
+        url: "/admin/country/delete",
+        type: "POST",
+        data: {
+            id: $("#delete_id").val(),
+        },
+        headers: {
+            Accept: "application/json",
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        success: function (response) {
+            if (response.code === 200) {
+                showToast('success', response.message);
+                $("#delete-modal").modal("hide");
+                initTable();
+            }
+        },
+        error: function (res) {
+            if (res.responseJSON.code === 500) {
+                showToast('success', res.responseJSON.message);
+            } else {
+                showToast('error', "An error occurred while deleting door type.");
+            }
+        },
+    });
+});
+
 })();
 
 
@@ -246,34 +293,7 @@ function delateCountry(id) {
     $("#delete_id").val(id);
 }
 
-$("#delateCountry").on("submit", function (e) {
-    e.preventDefault();
-    $.ajax({
-        url: "/admin/country/delete",
-        type: "POST",
-        data: {
-            id: $("#delete_id").val(),
-        },
-        headers: {
-            Accept: "application/json",
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        success: function (response) {
-            if (response.code === 200) {
-                showToast('success', response.message);
-                $("#delete-modal").modal("hide");
-                initTable();
-            }
-        },
-        error: function (res) {
-            if (res.responseJSON.code === 500) {
-                showToast('success', res.responseJSON.message);
-            } else {
-                showToast('error', "An error occurred while deleting door type.");
-            }
-        },
-    });
-});
+
 
 $("#add_country").on("click", function () {
     $(".modal-title").text(_l('admin.cms.create_country'));
@@ -285,144 +305,6 @@ $("#add_country").on("click", function () {
     $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
 });
 
-$(document).ready(function () {
-    $("#select-all").on("change", function () {
-        $('.form-check-input[type="checkbox"]').prop(
-            "checked",
-            $(this).prop("checked")
-        );
-    });
 
-    $("#bulkDeleteBtn").on("click", function () {
-        var selectedIds = [];
 
-        $('.form-check-input[type="checkbox"]:checked').each(function () {
-            var id = $(this).closest(".form-check").data("id");
-            if (id) {
-                selectedIds.push(id);
-            }
-        });
-
-        if (selectedIds.length === 0) {
-            showToast('error', "Please select at least one item to delete.");
-            return;
-        }
-
-        $.ajax({
-            url: "/admin/country/delete-bulk",
-            type: "POST",
-            data: {
-                _token: $('meta[name="csrf-token"]').attr("content"),
-                ids: selectedIds,
-            },
-            success: function (response) {
-                if (response.success) {
-                    showToast('success', "Selected items deleted successfully.");
-                    initTable();
-                }
-            },
-            error: function () {
-                showToast('error', "Something went wrong. Please try again.");
-            },
-        });
-    });
-});
-
-//Bulk PDF
-$(document).ready(function () {
-    $("#select-all").on("change", function () {
-        $('.form-check-input[type="checkbox"]').prop(
-            "checked",
-            $(this).prop("checked")
-        );
-    });
-
-    $('#bulkPdfBtn').on('click', function () {
-        var selectedIds = [];
-
-        $('.form-check-input[type="checkbox"]:checked').each(function () {
-            var id = $(this).closest('.form-check').data('id');
-            if (id) {
-                selectedIds.push(id);
-            }
-        });
-
-        if (selectedIds.length === 0) {
-            showToast('error', 'Please select at least one item to export.');
-            return;
-        }
-
-        $.ajax({
-            url: '/admin/seat-type/pdf-bulk',
-            type: 'POST',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                ids: selectedIds,
-            },
-            xhrFields: {
-                responseType: 'blob'
-            },
-            success: function (response, status, xhr) {
-                var blob = new Blob([response], { type: 'application/pdf' });
-                var link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = 'Car_Seats.pdf';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                showToast('success', 'PDF Generated Successfully.');
-                $('.form-check-input[type="checkbox"]').prop('checked', false);
-            },
-            error: function (xhr) {
-                showToast('error', 'Something went wrong. Please try again.');
-            }
-        });
-    });
-
-    $('#bulkExcelBtn').on('click', function () {
-        var selectedIds = [];
-
-        $('.form-check-input[type="checkbox"]:checked').each(function () {
-            var id = $(this).closest('.form-check').data('id');
-            if (id) {
-                selectedIds.push(id);
-            }
-        });
-
-        if (selectedIds.length === 0) {
-            showToast('error', 'Please select at least one item to export.');
-            return;
-        }
-
-        $.ajax({
-            url: '/admin/country/excel-bulk',
-            type: 'POST',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                ids: selectedIds,
-            },
-            xhrFields: {
-                responseType: 'blob' // Expecting binary data (Excel file)
-            },
-            success: function (response, status, xhr) {
-                var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                var link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = 'country.xlsx';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-                showToast('success', 'Excel downloaded successfully.');
-
-                // **Uncheck all selected checkboxes after success**
-                $('.form-check-input[type="checkbox"]').prop('checked', false);
-            },
-            error: function (xhr) {
-                showToast('error', 'Something went wrong. Please try again.');
-            }
-        });
-    });
-
-});
 
