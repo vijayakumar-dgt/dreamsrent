@@ -5,6 +5,26 @@ let ticketData = [];
     const permissions = await loadUserPermissions();
 
 $(document).ready(function () {
+     $(document).on('click', '.edit-ticket-btn', function () {
+        var button = $(this);
+
+        var ticketId = button.data('ticket-id');
+        var assigneeId = button.data('assignee-id');
+        var categoryId = button.data('category-id');
+        var priority = button.data('priority');
+        var status = button.data('status');
+        var reply = button.data('reply');
+
+        populateEditForm(ticketId, assigneeId, categoryId, priority, status, reply);
+    });
+     $(document).on('click', '.ticket-history-btn', function () {
+        const ticketId = $(this).data('ticket-id');
+        showTicketHistory(ticketId);
+    });
+      $(document).on('click', '.delete-ticket-btn', function () {
+        var ticketId = $(this).data('id');
+        $("#delete_id").val(ticketId);
+    });
     $('.summernote').summernote({
         height: 150,
         placeholder: 'Type your Description here...',
@@ -257,32 +277,43 @@ function ticketTable() {
                                 <ul class="dropdown-menu dropdown-menu-end p-2">
                                 ${ hasPermission(permissions, 'tickets', 'edit') ?
                                     `<li>
-                                    <a class="dropdown-item rounded-1" href="javascript:void(0);"
-                                        data-bs-toggle="modal" data-bs-target="#edit_ticket"
-                                        onclick="populateEditForm(
-                                            ${ticket.id},
-                                            '${ticket.assignee_id}',
-                                            '${ticket.category.id}',
-                                            '${ticket.priority}',
-                                            '${ticket.status}',
-                                            ${JSON.stringify(ticket.reply_description)}
-                                        );">
+                                        <button 
+                                            type="button" 
+                                            class="dropdown-item rounded-1 edit-ticket-btn" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#edit_ticket"
+                                            data-ticket-id="${ticket.id}"
+                                            data-assignee-id="${ticket.assignee_id}"
+                                            data-category-id="${ticket.category.id}"
+                                            data-priority="${ticket.priority}"
+                                            data-status="${ticket.status}"
+                                            data-reply='${JSON.stringify(ticket.reply_description)}'
+                                        >
                                             <i class="ti ti-edit me-1"></i>${_l('admin.common.assign')}
-                                        </a>
-
+                                        </button>
                                     </li>` : ''}
                                     ${ hasPermission(permissions, 'tickets', 'delete') ?
                                     `<li>
-                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_ticket" onclick="deleteTicket(${ticket.id});">
+                                       <button 
+                                            type="button" 
+                                            class="dropdown-item rounded-1 delete-ticket-btn" 
+                                            data-id="${ticket.id}" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#delete_ticket"
+                                        >
                                             <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
-                                        </a>
+                                        </button>
+
                                     </li>` : ''}
                                    ${ticket.assignee_id ? `
                                     <li>
-                                        <a class="dropdown-item rounded-1" href="javascript:void(0);"
-                                        onclick="showTicketHistory(${ticket.id});">
+                                        <button 
+                                            type="button" 
+                                            class="dropdown-item rounded-1 ticket-history-btn" 
+                                            data-ticket-id="${ticket.id}"
+                                        >
                                             <i class="ti ti-eye me-1"></i> ${_l('admin.common.history')}
-                                        </a>
+                                        </button>
                                     </li>` : ''}
                                 </ul>
                             </div>
@@ -356,9 +387,9 @@ function showTicketHistory(ticketId) {
     let historyHtml = "";
 
     ticket.ticket_histories.forEach(history => {
-        let userImage =history.user && history.user.user_detail && history.user.user_detail.profile_image
-        ? '/storage/' + history.user.user_detail.profile_image
-        : '/backend/assets/img/profiles/avatar-20.jpg';
+        let userImage = history.user && history.user.user_detail && history.user.user_detail.profile_image
+            ? '/storage/' + history.user.user_detail.profile_image
+            : '/backend/assets/img/profiles/avatar-20.jpg';
 
         let userName = history.user ? history.user.name : "Unknown User";
         let createdAt = new Date(history.created_at).toLocaleString();
