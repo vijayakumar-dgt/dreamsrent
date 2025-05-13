@@ -208,11 +208,9 @@
                                                   "edit"
                                               )
                                                   ? `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editfuelType(${
-                                                    value.id
-                                                });"><i class="ti ti-edit me-1"></i>${_l(
+                                                <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="edit-fuel-type"><i class="ti ti-edit me-1"></i>${_l(
                                                         "admin.common.edit"
-                                                    )}</a>
+                                                    )}</button>
                                             </li>`
                                                   : ""
                                           }
@@ -223,11 +221,9 @@
                                                      "delete"
                                                  )
                                                      ? `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="delatefuelType(${
-                                                    value.id
-                                                });" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l(
+                                                <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="delete-fuel-type" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l(
                                                            "admin.common.delete"
-                                                       )}</a>
+                                                       )}</button>
                                             </li>`
                                                      : ""
                                              }
@@ -561,6 +557,16 @@
                 },
             });
         });
+    });
+
+    $(document).on("click", "#edit-fuel-type", function(){
+        let id = $(this).data("id");
+        editfuelType(id);
+    });
+
+    $(document).on("click", "#delete-fuel-type", function(){
+        let id = $(this).data("id");
+        delatefuelType(id);
     });
 })();
 
