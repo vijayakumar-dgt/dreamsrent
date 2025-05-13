@@ -89,7 +89,12 @@ class StateController extends Controller
         $orderBy = $request->order_by ?? 'desc';
 
         try {
-            $data = State::with('country')->orderBy('id', $orderBy)->get();
+            $data = State::with('country')
+                ->when($request->search, function ($query) use ($request) {
+                    $query->where('name', 'LIKE', "%{$request->search}%");
+                })
+                ->orderBy('id', $orderBy)
+                ->get();
 
             return response()->json([
                 'code' => 200,

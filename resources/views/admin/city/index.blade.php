@@ -38,7 +38,7 @@
 							<span class="input-icon">
 								<i class="ti ti-search"></i>
 							</span>
-							<input type="text" class="form-control" placeholder="{{ __('admin.common.search') }}">
+							<input type="text" class="form-control" id="search" placeholder="{{ __('admin.common.search') }}">
 						</div>
 					</div>
 				</div>
@@ -147,7 +147,7 @@
 							<span id="name_error" class="text-danger error-text"></span>
 						</div>
 						<div class="mb-3">
-							<label class="form-label">{{ __('admin.general_settings.state') }}<span class="text-danger"> *</span></label>
+							<label class="form-label">{{ __('admin.common.state') }}<span class="text-danger"> *</span></label>
 							<select class="form-control select2" name="state_id" id="state_id">
 								<option value="">{{ __('admin.general_settings.select_state') }}</option>
 								@foreach ($state_ids as $state)

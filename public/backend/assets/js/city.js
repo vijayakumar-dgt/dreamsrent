@@ -97,7 +97,12 @@
                 });
             },
         });
-
+ 
+        $(document).on("keyup", "#search", function () {
+            setTimeout(function () {
+                initTable();
+            }, 500);
+        });
         function initTable() {
             $("#cityTable").DataTable({
                 serverSide: true,
@@ -106,6 +111,9 @@
                 ajax: {
                     url: "/admin/city/datatable",
                     type: "GET",
+                    data: function (d) {
+                        d.search = $("#search").val();
+                    },
                     beforeSend: function () {
                         $(".table-loader").show();
                         $(".real-table, .table-footer").addClass("d-none");
@@ -157,10 +165,10 @@
                         render: function (data, type, row) {
                             let actions = '';
                             if (hasPermission(permissions, 'cms_locations', 'edit')) {
-                                actions += `<li><a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editCity(${row.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a></li>`;
+                                actions += `<li><button type="button" class="dropdown-item rounded-1" data-id="${row.id}" id="edit-city" ><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</button></li>`;
                             }
                             if (hasPermission(permissions, 'cms_locations', 'delete')) {
-                                actions += `<li><a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="delateCity(${row.id});" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a></li>`;
+                                actions += `<li><button type="button" class="dropdown-item rounded-1" data-id="${row.id}" id="delete-city" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button></li>`;
                             }
 
                             if (actions !== '') {
@@ -263,6 +271,14 @@
 
 })();
 
+$(document).on('click', '#edit-city', function(){
+   let id = $(this).data('id');
+   editCity(id);
+});
+$(document).on('click', '#delete-city', function(){
+   let id = $(this).data('id');
+   delateCity(id);
+});
 function editCity(id) {
     $.ajax({
         type: "GET",
