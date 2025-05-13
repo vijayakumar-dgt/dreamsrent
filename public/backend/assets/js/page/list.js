@@ -90,9 +90,16 @@ let currentLang = ""; // Add this at the top
                                                         "delete"
                                                     ) && value.read !== "static"
                                                         ? `<li>
-                                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="delateSeatType(${value.id});" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                                                            <i class="ti ti-trash me-1"></i>Delete
-                                                        </a>
+                                                            <button 
+                                                                type="button" 
+                                                                class="dropdown-item rounded-1 delete-seat-type-btn" 
+                                                                data-id="${value.id}" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#delete-modal"
+                                                            >
+                                                                <i class="ti ti-trash me-1"></i>Delete
+                                                            </button>
+
                                                     </li>`
                                                         : ""
                                                 }

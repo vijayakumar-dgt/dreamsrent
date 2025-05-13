@@ -4,6 +4,18 @@
        const permissions = await loadUserPermissions();
 
 $(document).ready(function() {
+    $(document).on('click', '.edit-insurance-btn', function () {
+        const id = $(this).data('id');
+        editInsurance(id);
+    });
+    $(document).on('click', '.delete-insurance-btn', function () {
+        const id = $(this).data('id');
+        deleteInsurance(id);
+    });
+    $(document).on('click', '.view-benefits-btn', function () {
+        const benefits = $(this).data('benefits');
+        getBenefits(benefits);
+    });
     initTable();
     $("#insuranceForm").validate({
         rules: {
@@ -163,11 +175,16 @@ function initTable(){
             { data: "insurance_benefits_count", render: function(data, type, row) {
                 return `<div class="d-flex align-items-center">
                             ${data} ${data > 1 ? _l('admin.common.benefits') : _l('admin.common.benefit')}
-                            <a href="#" class="btn btn-xs btn-info-light fs-14 extlinkbtn py-0 px-1 ms-1"
-                               onclick='getBenefits(${JSON.stringify(row.insurance_benefits)})'
-                               data-bs-toggle="modal" data-bs-target="#view-benifits">
-                               <i class="ti ti-external-link"></i>
-                            </a>
+                           <button 
+                                type="button"
+                                class="btn btn-xs btn-info-light fs-14 extlinkbtn py-0 px-1 ms-1 view-benefits-btn"
+                                data-benefits='${JSON.stringify(row.insurance_benefits)}'
+                                data-bs-toggle="modal" 
+                                data-bs-target="#view-benifits"
+                            >
+                                <i class="ti ti-external-link"></i>
+                            </button>
+
                         </div>`;
             }},
             { data: "status", render: function(data) {
@@ -186,17 +203,27 @@ function initTable(){
                         ${ hasPermission(permissions, 'rental_settings', 'edit') ?
 
                             `<li>
-                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editInsurance(${data})">
+                               <button 
+                                    type="button" 
+                                    class="dropdown-item rounded-1 edit-insurance-btn" 
+                                    data-id="${data}"
+                                >
                                     <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
-                                </a>
+                                </button>
+
                             </li>`:''}
                          ${ hasPermission(permissions, 'rental_settings', 'delete') ?
 
                             `<li>
-                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteInsurance(${data})"
-                                   data-bs-toggle="modal" data-bs-target="#delete-modal">
+                                <button 
+                                    type="button" 
+                                    class="dropdown-item rounded-1 delete-insurance-btn" 
+                                    data-id="${data}" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#delete-modal"
+                                >
                                     <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
-                                </a>
+                                </button>
                             </li>`:''}
                         </ul>
                     </div>`;
