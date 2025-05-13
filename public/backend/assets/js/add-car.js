@@ -277,13 +277,9 @@
                                                   "edit"
                                               )
                                                   ? `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editVechileList('${
-                                                value.slug
-                                            }')">
-                                                <i class="ti ti-edit me-1"></i>${_l(
-                                                    "admin.common.edit"
-                                                )}
-                                            </a>
+                                            <button class="dropdown-item edit-vehicles rounded-1 border-0 bg-white" data-id="${value.slug}">
+                                                <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
+                                            </button>
                                         </li>`
                                                   : ""
                                           }
@@ -294,13 +290,13 @@
                                                        "delete"
                                                    )
                                                        ? `<li>
-                                           <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteVehicleList(${
-                                               value.id
-                                           });" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                                                <i class="ti ti-trash me-1"></i>${_l(
-                                                    "admin.common.delete"
-                                                )}
-                                            </a>
+                                           <button 
+                                                class="dropdown-item border-0 bg-white rounded-1 delete-vehicle" 
+                                                data-id="${value.id}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#delete-modal">
+                                                <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                            </button>
                                         </li>`
                                                        : ""
                                                }
@@ -2339,6 +2335,11 @@ function editDamage(damageID) {
     editingDamageID = damageID;
 }
 
+$(document).on("click", ".edit-vehicles", function () {
+    const vehicleSlug = $(this).data("id");
+    editVechileList(vehicleSlug);
+});
+
 function editVechileList(vehicleSlug) {
     $.ajax({
         url: "/admin/check-vehicle",
@@ -2351,9 +2352,12 @@ function editVechileList(vehicleSlug) {
                 showToast("error", "Vehicle not found.");
             }
         },
-        error: function (xhr, status, error) {},
+        error: function (xhr, status, error) {
+            showToast("error", "Something went wrong while checking the vehicle.");
+        },
     });
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const saveBtn = document.getElementById("service_save_btn");
@@ -2608,9 +2612,15 @@ $(document).on("click", ".change-language", function () {
     });
 });
 
+$(document).on("click", ".delete-vehicle", function () {
+    const vehicleId = $(this).data("id");
+    deleteVehicleList(vehicleId);
+});
+
 function deleteVehicleList(vehicleId) {
     $("#delete_id").val(vehicleId);
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const inBtn = document.getElementById("in_btn");
