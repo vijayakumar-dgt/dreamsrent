@@ -686,7 +686,7 @@
                                                 </label>
                                             </li>
                                             @endif
-                                            @auth
+                                            @if ($walletStatus == 1)
                                             <li>
                                                 <label class="payment_custom_check">
                                                     <input type="radio" name="payment_type" id="wallet" value="wallet">
@@ -697,7 +697,7 @@
                                                     </span>
                                                 </label>
                                             </li>
-                                            @endauth
+                                            @endif
                                         </ul>
                                     </div>
 

@@ -231,7 +231,10 @@ class UserBookingController extends Controller
         $codSetting = GeneralSetting::where("key", "cod_status")->first();
         $codStatus = ($codSetting && $codSetting->value == 1) ? 1 : 0;
 
-        return view('booking::user_booking.index', compact("slug", "user", "vehicleId", "vehicle", "vehicleImageUrl", "mainLocation", "filteredPrices", "extraServices", "extraServiceCount", "vehicleInsurance", "countries", "driverInfo", "driverInfo_ride", "driverInfo_price", "allLocation", "dlocation", "rlocation", 'finalRate', 'calculatedTaxes', 'totalTax', 'grandTotal', "seo_title", "plocation", "prlocation", "currencySymbol", "paypalStatus", "stripeStatus", "codStatus"))
+        $walletSetting = GeneralSetting::where("key", "wallet_status")->first();
+        $walletStatus = ($walletSetting && $walletSetting->value == 1) ? 1 : 0;
+
+        return view('booking::user_booking.index', compact("slug", "user", "vehicleId", "vehicle", "vehicleImageUrl", "mainLocation", "filteredPrices", "extraServices", "extraServiceCount", "vehicleInsurance", "countries", "driverInfo", "driverInfo_ride", "driverInfo_price", "allLocation", "dlocation", "rlocation", 'finalRate', 'calculatedTaxes', 'totalTax', 'grandTotal', "seo_title", "plocation", "prlocation", "currencySymbol", "paypalStatus", "stripeStatus", "codStatus", "walletStatus"))
             ->with($request->all());
     }
 
