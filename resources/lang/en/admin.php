@@ -934,6 +934,11 @@ return array(
     'add_reservation' => 'Add Reservation',
     'add_quotation' => 'Add Quotation',
     'edit_quotation' => 'Edit Quotation',
+    'delete_quotation' => 'Delete Quotation',
+    'delete_quotation_confirmation' => 'Are you sure you want to delete quotation?',
+    'quotation_create_success' => 'Quotation created successfully.',
+    'quotation_update_success' => 'Quotation updated successfully.',
+    'quotation_delete_success' => 'Quotation deleted successfully.',
   ),
   'manage' =>
   array(

@@ -229,14 +229,14 @@ function initTable(sort_by_date = '') {
                              ${ hasPermission(permissions, 'maintenance', 'edit') ? 
 
                                 `<li>
-                                    <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editMaintenance(${data});">
+                                    <button type="button" class="dropdown-item rounded-1 edit-maintenance" data-id="${data}">
                                         <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
                                     </a>
                                 </li>`:''}
                              ${ hasPermission(permissions, 'maintenance', 'delete') ? 
 
                                 `<li>
-                                    <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteMaintenance(${data});" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                                    <a class="dropdown-item rounded-1 delete-maintenance" data-id="${data}" data-bs-toggle="modal" data-bs-target="#delete-modal">
                                         <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
                                     </a>
                                 </li>`:''}
@@ -363,6 +363,11 @@ $('#status').on('change', function () {
     $(this).valid();
 });
 
+$(document).on('click', '.delete-maintenance', function() {
+    let id = $(this).data('id');
+    $("#delete_id").val(id);
+});
+
 $("#maintenanceDeleteForm").on('submit', function(e){
     e.preventDefault();
     $.ajax({
@@ -392,13 +397,12 @@ $("#maintenanceDeleteForm").on('submit', function(e){
     });
 });
 
-}) ();
-
-function editMaintenance(id){
+$(document).on('click', '.edit-maintenance', function() {
+    let id = $(this).data('id');
     $.ajax({
-       type:"GET",
-       url:"/admin/maintenance/edit/"+id,
-       success: function(response) {
+        type:"GET",
+        url:"/admin/maintenance/edit/"+id,
+        success: function(response) {
             $(".error-text").text("");
             $(".form-control, .select2-container").removeClass("is-invalid is-valid");
             if(response.code === 200){
@@ -410,20 +414,12 @@ function editMaintenance(id){
                 $("#status").val(data.status).trigger('change');
                 $("#vehicle_id").val(data.vehicle_id).trigger('change');
                 $("#id").val(data.id);
-
                 $("#maintenance_modal .modal-title").text(_l('admin.rentals.edit_maintenance'));
                 $(".submitbtn").text(_l('admin.common.save_changes'));
-
                 $("#maintenance_modal").modal('show');
             }
-       }
+        }
     });
-}
+});
 
-function deleteMaintenance(id){
-    $("#delete_id").val(id);
-}
-
-function capitalizeFirstLetter(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
+}) ();

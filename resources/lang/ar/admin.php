@@ -922,6 +922,11 @@ return [
     'add_reservation' => 'إضافة حجز',
     'add_quotation' => 'إضافة عرض',
     'edit_quotation' => 'تعديل العرض',
+    'delete_quotation' => 'حذف العرض',
+    'delete_quotation_confirmation' => 'هل تريد حذف العرض؟',
+    'quotation_create_success' => 'تم إنشاء العرض بنجاح.',
+    'quotation_update_success' => 'تم تحديث العرض بنجاح.',
+    'quotation_delete_success' => 'تم حذف العرض بنجاح.',
   ],
   'manage' =>
   [

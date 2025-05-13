@@ -94,8 +94,7 @@ class AdminUserController extends Controller
             ], 422);
         }
 
-        $successMsg = empty($id) ?
-            __('admin.user_management.user_create_success') : __('admin.user_management.user_update_success');
+        $successMsg = empty($id) ? __('admin.user_management.user_create_success') : __('admin.user_management.user_update_success');
         $errorMsg = empty($id) ?  __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {

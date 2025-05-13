@@ -284,7 +284,7 @@ function bookingList(sort_by_date = '') {
                             <li>
                                 <a class="dropdown-item rounded-1" href="/admin/quotations-details/${row.encrypted_id}"><i class="ti ti-eye me-1"></i>${_l('admin.common.view_details')}</a>
                             </li>
-                            ${(row.booking_status != 6 && row.booking_by != 'user') && hasPermission(permissions, 'reservations', 'edit') ?
+                            ${(row.booking_status != 6 && row.booking_by != 'user') && hasPermission(permissions, 'quotations', 'edit') ?
                             `<li>
                                 <a class="dropdown-item rounded-1" href="/admin/edit-quotations/${row.encrypted_id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                             </li>` : ''
@@ -294,11 +294,15 @@ function bookingList(sort_by_date = '') {
                                 <a class="dropdown-item rounded-1" href="/admin/edit-reservation/${row.encrypted_id}"><i class="ti ti-calendar me-1"></i>${_l('admin.common.covert')}</a>
                             </li>` : ''
                             }
+                            ${hasPermission(permissions, 'quotations', 'delete') ?
+                            `<li>
+                                <button type="button" class="dropdown-item rounded-1 delete-quotation" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                            </li>`:''}
                         </ul>
                     </div>
                 `;
             },
-            visible: hasPermission(permissions, 'reservations', 'edit') || hasPermission(permissions, 'reservations', 'view') || hasPermission(permissions, 'reservations', 'delete')
+            visible: hasPermission(permissions, 'quotations', 'edit') || hasPermission(permissions, 'quotations', 'view') || hasPermission(permissions, 'quotations', 'delete')
         }
         ],
         order: [[0, 'desc']],
@@ -345,10 +349,15 @@ $(document).on('click', '.dataTables_paginate a', function() {
     $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
 });
 
-$("#reservation_delete_form").on('submit', function(e){
+$(document).on('click', '.delete-quotation', function() {
+    let id = $(this).data('id');
+    $('#delete_id').val(id);
+});
+
+$("#quotation_delete_form").on('submit', function(e){
     e.preventDefault();
     $.ajax({
-        url:"/admin/delete-reservation",
+        url:"/admin/delete-quotation",
         type:"POST",
         data: {
             id: $('#delete_id').val()
@@ -375,7 +384,3 @@ $("#reservation_delete_form").on('submit', function(e){
 });
 
 })();
-
-function deleteReservation(id){
-    $("#delete_id").val(id);
-}
