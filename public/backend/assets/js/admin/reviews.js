@@ -102,11 +102,11 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                         <li>
-                                            <a class="dropdown-item rounded-1 view_review" href="javascript:void(0);" data-review="${row.comments}" data-bs-toggle="modal" data-bs-target="#view_review"><i class="ti ti-eye me-1"></i>${_l('admin.common.view')}</a>
+                                            <button type="button" class="dropdown-item rounded-1 view_review" data-review="${row.comments}" data-bs-toggle="modal" data-bs-target="#view_review"><i class="ti ti-eye me-1"></i>${_l('admin.common.view')}</button>
                                         </li>
                                         ${ hasPermission(permissions, 'reviews', 'delete') ? 
                                             `<li>
-                                                <a class="dropdown-item rounded-1 delete_review" href="javascript:void(0);" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_review"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                                <button type="button" class="dropdown-item rounded-1 delete_review" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_review"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                                             </li>` : ''
                                         }
                                     </ul>

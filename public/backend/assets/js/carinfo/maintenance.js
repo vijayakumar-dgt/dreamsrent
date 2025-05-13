@@ -231,14 +231,14 @@ function initTable(sort_by_date = '') {
                                 `<li>
                                     <button type="button" class="dropdown-item rounded-1 edit-maintenance" data-id="${data}">
                                         <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
-                                    </a>
+                                    </button>
                                 </li>`:''}
                              ${ hasPermission(permissions, 'maintenance', 'delete') ? 
 
                                 `<li>
-                                    <a class="dropdown-item rounded-1 delete-maintenance" data-id="${data}" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                                    <button type="button" class="dropdown-item rounded-1 delete-maintenance" data-id="${data}" data-bs-toggle="modal" data-bs-target="#delete-modal">
                                         <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
-                                    </a>
+                                    </button>
                                 </li>`:''}
                             </ul>
                         </div>`;

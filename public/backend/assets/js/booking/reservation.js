@@ -291,10 +291,9 @@ function bookingList(sort_by_date = '') {
                                 <a class="dropdown-item rounded-1" href="/admin/edit-reservation/${row.encrypted_id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                             </li>` : ''
                             }
-
-                              ${hasPermission(permissions, 'reservations', 'delete') ?
+                            ${hasPermission(permissions, 'reservations', 'delete') ?
                             `<li>
-                                <button type="button" class="dropdown-item rounded-1 deleteReservation" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                <button type="button" class="dropdown-item rounded-1 deleteReservation" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                             </li>`:''}
                         </ul>
                     </div>

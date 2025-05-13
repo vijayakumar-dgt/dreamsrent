@@ -78,12 +78,12 @@ const fetchReviews = (sort_by = '') => {
                             <i class="fas fa-ellipsis-vertical"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item d-none" href="javascript:void(0);">
+                            <button type="button" class="dropdown-item view_review" data-review="${row.comments}" data-bs-toggle="modal" data-bs-target="#view_review">
                                 <i class="feather-eye"></i> ${_l('web.user.view')}
-                            </a>
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="deleteReview(${row.id});" data-bs-toggle="modal" data-bs-target="#delete_modal">
+                            </button>
+                            <button type="button" class="dropdown-item delete_review" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal">
                                 <i class="feather-trash-2"></i> ${_l('web.common.delete')}
-                            </a>
+                            </button>
                         </div>
                     </div>`
             }
@@ -136,6 +136,16 @@ $("#reviewDeleteForm").on('submit', async e => {
 });
 
 const deleteReview = id => $("#delete_id").val(id);
+
+$(document).on('click', '.delete_review', function () {
+    let reviewId = $(this).data('id');
+    deleteReview(reviewId);
+});
+
+$(document).on('click', '.view_review', function () {
+    let review = $(this).data('review');
+    $('#review_text').text(review);
+});
 
 $(document).on('click', '#apply-custom-filter', () => {
     const from = $("#custom_from_date").val(), to = $("#custom_to_date").val();

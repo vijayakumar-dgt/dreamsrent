@@ -296,7 +296,7 @@ function bookingList(sort_by_date = '') {
                             }
                             ${hasPermission(permissions, 'quotations', 'delete') ?
                             `<li>
-                                <button type="button" class="dropdown-item rounded-1 delete-quotation" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                <button type="button" class="dropdown-item rounded-1 delete-quotation" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                             </li>`:''}
                         </ul>
                     </div>
