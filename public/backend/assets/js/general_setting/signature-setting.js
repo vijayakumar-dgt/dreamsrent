@@ -5,6 +5,19 @@
 
 
     $(document).ready(function() {
+        $(document).on('click', '.edit-signature-btn', function () {
+            const id = $(this).data('id');
+            const name = $(this).data('name');
+            const image = $(this).data('image');
+            const status = $(this).data('status');
+            const isDefault = $(this).data('is-default');
+            
+            editSignature(id, name, image, status, isDefault);
+        });
+        $(document).on('click', '.delete-signature-btn', function () {
+            const id = $(this).data('id');
+            deleteSignature(id);
+        });
         signatureTable();
         $("#addSignatureForm").validate({
             rules: {
@@ -233,17 +246,30 @@
                                  ${ hasPermission(permissions, 'app_settings', 'edit') ?
 
                                         `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);"
-                                            onclick="editSignature(${value.id}, '${value.signature_name}', '${value.signature_image}', ${value.status}, ${value.is_default})">
+                                           <button 
+                                                type="button" 
+                                                class="dropdown-item rounded-1 edit-signature-btn" 
+                                                data-id="${value.id}" 
+                                                data-name="${value.signature_name}" 
+                                                data-image="${value.signature_image}" 
+                                                data-status="${value.status}" 
+                                                data-is-default="${value.is_default}"
+                                            >
                                                 <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
-                                            </a>
+                                            </button>
                                         </li>`:''}
                                           ${ hasPermission(permissions, 'app_settings', 'delete') ?
 
                                         `<li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal" onclick="deleteSignature(${value.id})" data-bs-target="#delete_signature">
+                                           <button 
+                                                type="button" 
+                                                class="dropdown-item rounded-1 delete-signature-btn" 
+                                                data-id="${value.id}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#delete_signature"
+                                            >
                                                 <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
-                                            </a>
+                                            </button>
                                         </li>`:''}
                                     </ul>
                                 </div>
