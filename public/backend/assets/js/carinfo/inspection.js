@@ -323,12 +323,12 @@ function initTable(statusFilter = null){
                                          ${ hasPermission(permissions, 'inspections', 'edit') ? 
 
                                                 `<li>
-                                                    <a class="dropdown-item rounded-1" data-vehicle-id="${value.id}" data-vehicle-text="${value.car ? value.car.name : ''}" href="javascript:void(${value.id});" onclick="editInspection(${value.id});"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                                    <button type="button" class="dropdown-item rounded-1" data-vehicle-id="${value.id}" data-vehicle-text="${value.car ? value.car.name : ''}" data-id="${value.id}" id="editInspection"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</button>
                                                 </li>`:''}
                                           ${ hasPermission(permissions, 'inspections', 'delete') ? 
 
                                                 `<li>
-                                                    <a class="dropdown-item rounded-1" href="javascript:void(${value.id});" onclick="deleteInspection(${value.id});" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                                    <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="deletebtn" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                                                 </li>`:''}
                                             </ul>
                                         </div>
@@ -386,6 +386,10 @@ function initTable(statusFilter = null){
         }
     });
 }
+$(document).on('click', '#deletebtn', function(){
+    let id = $(this).data('id');
+    $("#deleteInspection #delete_id").val(id);
+});
 
 $("#deleteInspection").on('submit', function(e){
     e.preventDefault();
@@ -436,6 +440,10 @@ $(document).on('click','#add_new_inspection', function(){
     $('#checklist_id').val(null).trigger('change');
 });
 
+$(document).on('click','#editInspection', function() {
+    let id = $(this).data('id');
+    editInspection(id);
+});
 function editInspection(id){
     $.ajax({
         type:"GET",
@@ -486,10 +494,6 @@ function editInspection(id){
             showToast('error', error.responseJSON.message);
         }
      });
-}
-
-function deleteInspection(id){
-    $("#delete_id").val(id);
 }
 
 
