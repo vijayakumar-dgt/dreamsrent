@@ -328,7 +328,7 @@ function ticketTable() {
 
             if (response.data.length > 0) {
                 $("#adminTicketTable").DataTable({
-                    ordering: true,
+                    ordering: false,
                     searching: false,
                     pageLength: 10,
                     lengthChange: false,
