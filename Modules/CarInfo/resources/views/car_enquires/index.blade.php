@@ -321,11 +321,11 @@
 		</div>
 	</div>
 	
-<!-- Delete Driver -->
+	<!-- Delete Driver -->
 	<div class="modal fade deletemodal" id="delete-modal">
-		<div class="modal-dialog modal-dialog-centered modal-sm">
+		<div class="modal-dialog modal-dialog-centered modal-sm"> 
 			<div class="modal-content">
-				<form id="enquiryDeleteForm">
+				<form id="enquiryDeleteForm"> 
 					@csrf
 					<input type="hidden" name="delete_id" id="delete_id">
 					<div class="modal-body text-center">
@@ -334,15 +334,17 @@
 						</span>
 						<h4 class="mb-1">{{ __('admin.bookings.delete_enquiry') }}</h4>
 						<p class="mb-3">{{ __('admin.bookings.delete_enquiry_confirmation') }}</p>
-						<div class="d-flex justify-content-center">
-							<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-							<button type="submit" class="btn btn-primary">{{ __('admin.common.delete') }}</a>
-						</div>
+						<div class="d-flex justify-content-center"> 
+							<a href="javascript:void(0);" class="btn btn-light me-3"
+								data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+							<button type="submit" class="btn btn-primary">{{ __('admin.common.delete') }}</button>
+						</div> 
 					</div>
 				</form>
-			</div>
-		</div>
-	</div>
+			</div> 
+		</div> 
+	</div> 
+
 	<!-- /Delete Brand -->
 @endsection
 
