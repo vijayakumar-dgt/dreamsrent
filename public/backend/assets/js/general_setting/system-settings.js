@@ -2,7 +2,10 @@
     "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
     const permissions = await loadUserPermissions();
-
+    $(document).on('click', '.delete-backup-btn', function () {
+        const id = $(this).data('id');
+        deleteSystemBackup(id);
+    });
     DbBackUpTable();
 
 function DbBackUpTable() {
@@ -47,9 +50,16 @@ function DbBackUpTable() {
                                     ${ hasPermission(permissions, 'other_settings', 'delete') ?
 
                                     `<li>
-                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_backup" onclick="deleteSystemBackup(${backup.id})">
+                                       <button 
+                                            type="button" 
+                                            class="dropdown-item rounded-1 delete-backup-btn" 
+                                            data-id="${backup.id}" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#delete_backup"
+                                        >
                                             <i class="ti ti-trash me-1"></i>${_l('admin.general_settings.delete')}
-                                        </a>
+                                        </button>
+
                                     </li>`:''}
                                 </ul>
                             </div>
