@@ -67,7 +67,7 @@
                         @foreach ($Vehicles as $Vehicle)
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
-                                <input class="form-check-input m-0 me-2" value="{{ $Vehicle->id }}" id="selectedVehcile" type="checkbox">{{ $Vehicle->name }}
+                                <input class="form-check-input m-0 me-2 selectedVehcile" value="{{ $Vehicle->id }}" type="checkbox">{{ $Vehicle->name }}
                             </label>
                         </li>
                         @endForeach
@@ -91,7 +91,7 @@
                         @foreach ($customerss as $customer)
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
-                                <input class="form-check-input m-0 me-2" value="{{ $customer->id }}" id="selectedCustomer" type="checkbox">{{ $customer->name }}
+                                <input class="form-check-input m-0 me-2 selectedCustomer" value="{{ $customer->id }}"  type="checkbox">{{ $customer->name }}
                             </label>
                         </li>
                         @endForeach
@@ -115,7 +115,7 @@
                         @foreach ($drivers as $driver)
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
-                                <input class="form-check-input m-0 me-2" value="{{ $driver->id }}" id="selectedDriver" type="checkbox">{{ $driver->driver_name }}
+                                <input class="form-check-input m-0 me-2 selectedDriver" value="{{ $driver->id }}" type="checkbox">{{ $driver->driver_name }}
                             </label>
                         </li>
                         @endForeach
@@ -139,7 +139,7 @@
                         @foreach ($cartypes as $cartype)
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
-                                <input class="form-check-input m-0 me-2" value="{{ $cartype->id }}" id="selectedCartype" type="checkbox">{{ $cartype->name }}
+                                <input class="form-check-input m-0 me-2 selectedCartype" value="{{ $cartype->id }}"  type="checkbox">{{ $cartype->name }}
                             </label>
                         </li>
                         @endForeach
@@ -181,7 +181,7 @@
                                         <img id="car_img" src="/backend/assets/img/car/car-01.jpg" alt="">
                                     </span>
                                     <div>
-                                        <h6 id="car_title" class="fs-14 mb-1"></h6>
+                                        <h6 id="car_title" class="fs-14 mb-1">Car</h6>
                                         <p id="car_type"></p>
                                     </div>
                                 </div>
@@ -239,7 +239,7 @@
                                 <img id="customer_img" src="/backend/assets/img/default-profile.png" alt="">
                             </span>
                             <div>
-                                <h6 class="fs-14 fw-medium mb-1" id="customer_name"></h6>
+                                <h6 class="fs-14 fw-medium mb-1" id="customer_name">Jhon</h6>
                                 <p id="customer_num"></p>
                             </div>
                         </div>
@@ -253,7 +253,7 @@
                                 <img id="driver_img" src="/backend/assets/img/customer/customer-01.jpg" alt="">
                             </span>
                             <div>
-                                <h6 class="fs-14 fw-medium mb-1" id="driver_name"></h6>
+                                <h6 class="fs-14 fw-medium mb-1" id="driver_name">John</h6>
                                 <p id="driver_num"></p>
                             </div>
                         </div>
@@ -271,7 +271,7 @@
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
                     <h6>Total Price</h6>
-                    <h6 id="final_price"></h6>
+                    <h6 id="final_price">00</h6>
                 </div>
             </div>
         </div>
@@ -489,7 +489,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="collapse" id="filtercollapse">
+                                                <div class="collapse">
                                                     <div class="filterbox mb-3 px-3">
                                                         <div class="row align-items-center">
                                                             <form id="filterForm">
@@ -510,8 +510,7 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </li>
-                                                                                <div class="custom-scroll">
-                                                                                </div>
+                                                                                <div class="custom-scroll"></div>
                                                                             </ul>
                                                                         </div>
                                                                         <div class="dropdown me-2">
@@ -529,8 +528,7 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </li>
-                                                                                <div class="custom-scroll">
-                                                                                </div>
+                                                                                <div class="custom-scroll"></div>
                                                                             </ul>
                                                                         </div>
                                                                         <div class="dropdown me-2">
@@ -549,8 +547,7 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </li>
-                                                                                <div class="custom-scroll">
-                                                                                </div>
+                                                                                <div class="custom-scroll"></div>
                                                                             </ul>
                                                                         </div>
                                                                         <div class="dropdown">
@@ -569,8 +566,7 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </li>
-                                                                                <div class="custom-scroll">
-                                                                                </div>
+                                                                                <div class="custom-scroll"></div>
                                                                             </ul>
                                                                         </div>
                                                                     </div>
@@ -591,7 +587,6 @@
                                                     <div class="skeleton card-sm-skeleton card-loader mb-2"></div>
                                                 </div>
                                                 <div id="vehicle_list_container" class="car-select d-none">
-
                                                 </div>
                                             </div>
                                         </div>
