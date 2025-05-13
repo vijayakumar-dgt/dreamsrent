@@ -118,10 +118,10 @@ function initTable(){
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                         <li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editPricingType(${value.id});"><i class="ti ti-edit me-1"></i>Edit</a>
+                                            <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="edit-pricing-type"><i class="ti ti-edit me-1"></i>Edit</button>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deletePricingType(${value.id});" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>Delete</a>
+                                            <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="delete-pricing-type" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>Delete</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -173,6 +173,16 @@ function initTable(){
 
 $(document).on('click', '.dataTables_paginate a', function() {
     $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+});
+
+$(document).on('click','#edit-pricing-type', function() {
+    let id = $(this).data('id');
+    editPricingType(id);
+});
+
+$(document).on('click', '#delete-pricing-type', function() {
+    let id = $(this).data('id');
+    deletePricingType(id);
 });
 
 function editPricingType(id){
