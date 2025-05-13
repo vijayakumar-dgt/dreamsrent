@@ -75,9 +75,11 @@ let currentLang = ""; // Add this at the top
                                                         "edit"
                                                     )
                                                         ? `<li>
-                                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="console.log('Slug:', this.getAttribute('data-slug')); editPageSeaction(this.getAttribute('data-slug'));" data-slug="${value.slug}">
-                                                            <i class="ti ti-edit me-1"></i>Edit
-                                                        </a>
+                                                        <button 
+                                                                class="dropdown-item border-0 bg-white rounded-1 edit-page" 
+                                                                data-slug="${value.slug}">
+                                                                <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
+                                                            </button>
                                                     </li>`
                                                         : ""
                                                 }
@@ -208,7 +210,9 @@ function filterSort(element, sortType) {
     initTable($("#search").val().trim(), currentStatus, currentSortType); // Keep search & status
 }
 
-function editPageSeaction(pageSlug) {
+$(document).on("click", ".edit-page", function () {
+    let pageSlug = $(this).data("slug");
+
     if (pageSlug.startsWith("pages/")) {
         pageSlug = pageSlug.replace("pages/", "");
     }
@@ -225,8 +229,9 @@ function editPageSeaction(pageSlug) {
             }
         },
         error: function (xhr, status, error) {
-            console.error("An error occurred:", error);
+            showToast("error", "Failed to check page.");
         },
     });
-}
+});
+
 
