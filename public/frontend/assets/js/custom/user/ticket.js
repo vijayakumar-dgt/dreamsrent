@@ -3,6 +3,26 @@
     "use strict";
     await loadTranslationFile('web', 'user,common');
     $(document).ready(function() {
+        $(document).on('click', '.view-reply-btn', function () {
+            const ticketId = $(this).data('id');
+            const assigneeId = $(this).data('assignee-id');
+            const categoryId = $(this).data('category-id');
+            const priority = $(this).data('priority');
+            const status = $(this).data('status');
+            const reply = $(this).data('reply');
+            const description = $(this).data('description');
+
+            populateEditForm(ticketId, assigneeId, categoryId, priority, status, reply, description);
+            showTicketHistory(ticketId);
+        });
+        $(document).on('click', '.delete-ticket-btn', function () {
+            const ticketId = $(this).data('id');
+            deleteTicket(ticketId);
+        });
+        $(document).on('click', '.show-ticket-history', function () {
+            const ticketId = $(this).data('id');
+            showTicketHistory(ticketId);
+        });
         TicketTable();
         $(".table-loader, .input-loader, .label-loader").hide();
         $('.real-table, .real-label, .real-input').removeClass('d-none');
@@ -262,28 +282,41 @@
                                             <i class="fas fa-ellipsis-vertical"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
-                                           <a class="dropdown-item rounded-1" href="javascript:void(0);"
-                                            data-bs-toggle="modal" data-bs-target="#edit_ticket"
-                                            onclick="populateEditForm(
-                                                ${value.id},
-                                                '${value.assignee_id}',
-                                                '${value.category.id}',
-                                                '${value.priority}',
-                                                '${value.status}',
-                                                ${JSON.stringify(value.reply_description)},
-                                                '${value.description}'
-                                            ); showTicketHistory(${value.id});">
+                                           <button 
+                                                type="button" 
+                                                class="dropdown-item rounded-1 view-reply-btn" 
+                                                data-id="${value.id}" 
+                                                data-assignee-id="${value.assignee_id}" 
+                                                data-category-id="${value.category.id}" 
+                                                data-priority="${value.priority}" 
+                                                data-status="${value.status}" 
+                                                data-reply='${JSON.stringify(value.reply_description)}' 
+                                                data-description="${value.description.replace(/"/g, '&quot;')}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#edit_ticket"
+                                            >
                                                 <i class="feather-edit me-1"></i>${_l('web.common.view_reply')}
-                                            </a>
-                                            <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete_ticket" onclick="deleteTicket(${value.id});">
+                                            </button>
+
+                                            <button 
+                                                type="button" 
+                                                class="dropdown-item delete-ticket-btn" 
+                                                data-id="${value.id}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#delete_ticket"
+                                            >
                                                 <i class="feather-trash-2"></i> ${_l('web.common.delete')}
-                                            </a>
-                                            <a class="dropdown-item rounded-1 d-none" href="javascript:void(0);"
-                                                data-bs-toggle="modal"
+                                            </button>
+
+                                            <button 
+                                                type="button" 
+                                                class="dropdown-item rounded-1 d-none show-ticket-history" 
+                                                data-id="${value.id}" 
+                                                data-bs-toggle="modal" 
                                                 data-bs-target="#histroy_ticket"
-                                                onclick="showTicketHistory(${value.id});">
+                                            >
                                                 <i class="feather-eye me-1"></i> ${_l('web.user.history')}
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 </td>
