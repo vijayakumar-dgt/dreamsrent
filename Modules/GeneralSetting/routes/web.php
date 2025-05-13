@@ -217,7 +217,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
         Route::post('copyright/list', [FaqController::class, 'copyrightList'])->name('admin.copyrightList');
 
         //testimoials
-        Route::get('testimoials', [TestimonialController::class, 'testimoials'])->name('admin.testimoials')->middleware('permission');
+        Route::get('testimonials', [TestimonialController::class, 'testimoials'])->name('admin.testimoials')->middleware('permission');
         Route::post('testimonials/store', [TestimonialController::class, 'testimoialStore'])->name('admin.testimoialsStore');
         Route::get('testimonials/list', [TestimonialController::class, 'testimoiallist'])->name('admin.testimoialslist');
         Route::post('testimonials/update', [TestimonialController::class, 'updateTestimonial'])->name('admin.testimoialsupdate');

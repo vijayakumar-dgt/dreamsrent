@@ -19,7 +19,6 @@
         $('.search-button').on('click', function() {
             applyFilters();
         });
-        loadTestimonialsSettings();
         $("#addTestimonials").validate({
             rules: {
                 testimonial_image: {
