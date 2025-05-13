@@ -186,16 +186,12 @@
                                                                                   ${hasPermission(permissions, 'finance_settings', 'edit') ?
 
                                            ` <li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editBank(${
-                                                    value.id
-                                                });"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                                <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="edit-bank"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</button>
                                             </li>`:''}
                                                                                       ${hasPermission(permissions, 'finance_settings', 'delete') ?
 
                                             `<li>
-                                                <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="delateBank(${
-                                                    value.id
-                                                });" data-bs-toggle="modal" data-bs-target="#delete_bank"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                                <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="delete-bank" data-bs-toggle="modal" data-bs-target="#delete_bank"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                                             </li>`:''}
                                         </ul>
                                     </div>
@@ -269,11 +265,48 @@
         });
     }
 
-
+    $("#delateBank").on("submit", function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "/admin/settings/bank/delete",
+            type: "POST",
+            data: {
+                id: $("#delete_id").val(),
+            },
+            headers: {
+                Accept: "application/json",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    showToast("success", response.message);
+                    $("#delete_bank").modal("hide");
+                    initTable();
+                }
+            },
+            error: function (res) {
+                if (res.responseJSON.code === 500) {
+                    showToast('error', res.responseJSON.message);
+                } else {
+                    showToast('error', _l('admin.general_settings.retrieve_error'));
+                }
+            },
+        });
+    });
 })();
 
 $(document).on("click", ".dataTables_paginate a", function () {
     $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+});
+
+$(document).on("click", "#edit-bank", function(){
+    let id = $(this).data('id');
+    editBank(id);
+});
+
+$(document).on('click', '#delete-bank', function(){
+    let id = $(this).data('id');
+    delateBank(id);
 });
 
 function editBank(id) {
@@ -305,34 +338,7 @@ function delateBank(id) {
     $("#delete_id").val(id);
 }
 
-$("#delateBank").on("submit", function (e) {
-    e.preventDefault();
-    $.ajax({
-        url: "/admin/settings/bank/delete",
-        type: "POST",
-        data: {
-            id: $("#delete_id").val(),
-        },
-        headers: {
-            Accept: "application/json",
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        success: function (response) {
-            if (response.code === 200) {
-                showToast("success", response.message);
-                $("#delete_bank").modal("hide");
-                initTable();
-            }
-        },
-        error: function (res) {
-            if (res.responseJSON.code === 500) {
-                showToast('error', res.responseJSON.message);
-            } else {
-                showToast('error', _l('admin.general_settings.retrieve_error'));
-            }
-        },
-    });
-});
+
 
 $("#bank_clear").on("click", function () {
     $(".modal-title").text( _l('admin.general_settings.add_bank_account'),);
