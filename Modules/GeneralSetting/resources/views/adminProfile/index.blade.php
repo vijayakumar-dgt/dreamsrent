@@ -159,20 +159,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <h6 class="fw-bold mb-3 d-none">Delete Account</h6>
-                                <div class="row align-items-center d-none">
-                                    <div class="col-md-6">
-                                        <p class="text-gray-9 fw-medium mb-0">Delete Account</p>
-                                        <span class="fs-13">Your account will be permanently deleted</span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="text-end">
-                                            <a href="javascript:void(0);" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_account" data-user-id="1" onclick="setUserId(this)">
-                                                Delete My Account
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                             </div>
                             <div class="card-footer">
                                 <div class="d-flex justify-content-end">
@@ -192,71 +179,7 @@
     </div>
     <!-- /Page Wrapper -->
     
-    <!-- Delete Account -->
-    <div class="modal fade addmodal" id="delete_account">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="mb-0">Delete Account</h4>
-                    <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti ti-x fs-16"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="deleteUserId" />
-
-                    <div class="mb-3">
-                        <p class="text-gray-9 fw-medium mb-0">Why Are You Deleting Your Account?</p>
-                        <span class="fs-13">We’re sorry to see you go! Please let us know your reason for deleting your account.</span>
-                    </div>
-
-                    <label class="d-flex align-items-center mb-3 form-check-label">
-                        <input class="form-check-input me-2" type="radio" name="deleteReason" value="No longer using the service">
-                        <div>
-                            <p class="text-gray-9 fw-medium mb-0">No longer using the service</p>
-                            <span class="fs-13">I no longer need this service and won’t be using it in the future.</span>
-                        </div>
-                    </label>
-
-                    <label class="d-flex align-items-center mb-3 form-check-label">
-                        <input class="form-check-input me-2" type="radio" name="deleteReason" value="Privacy concerns">
-                        <div>
-                            <p class="text-gray-9 fw-medium mb-0">Privacy concerns</p>
-                            <span class="fs-13">I am concerned about how my data is handled and want to remove it.</span>
-                        </div>
-                    </label>
-
-                    <label class="d-flex align-items-center mb-3 form-check-label">
-                        <input class="form-check-input me-2" type="radio" name="deleteReason" value="Poor user experience">
-                        <div>
-                            <p class="text-gray-9 fw-medium mb-0">Poor user experience</p>
-                            <span class="fs-13">I’ve had difficulty using the platform, and it didn’t meet my expectations.</span>
-                        </div>
-                    </label>
-
-                    <label class="d-flex align-items-center mb-3 form-check-label">
-                        <input class="form-check-input me-2" type="radio" name="deleteReason" value="Other">
-                        <div>
-                            <p class="text-gray-9 fw-medium mb-0">Other (Please specify)</p>
-                        </div>
-                    </label>
-
-                    <div class="mb-0">
-                        <label class="form-label">Reason<span class="text-danger ms-1">*</span></label>
-                        <textarea class="form-control" rows="3" id="deleteReasonText"></textarea>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
-                        <a href="javascript:void(0);" class="btn btn-primary" onclick="confirmDelete()">Confirm & Delete</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Delete Account -->
+    
 @endsection
 @push('scripts')
 <script src="{{ asset('backend/assets/js/general_setting/adminprofile.js') }}"></script>
