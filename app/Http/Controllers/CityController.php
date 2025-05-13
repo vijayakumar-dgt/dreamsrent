@@ -90,7 +90,7 @@ class CityController extends Controller
         try {
             $length = $request->input('length');
             $start = $request->input('start');
-            $search = $request->input('search.value');
+            $search = $request->input('search');
             $orderByColumnIndex = $request->input('order.0.column');
             $orderByColumn = $request->input("columns.$orderByColumnIndex.data") ?? 'name';
             $orderDirection = $request->input('order.0.dir') ?? 'asc';

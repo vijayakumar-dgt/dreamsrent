@@ -36,7 +36,7 @@
 							<span class="input-icon">
 								<i class="ti ti-search"></i>
 							</span>
-							<input type="text" class="form-control" placeholder="{{ __('admin.common.search') }}">
+							<input type="text" class="form-control" id="search" placeholder="{{ __('admin.common.search') }}">
 						</div>
 					</div>
 				</div>
