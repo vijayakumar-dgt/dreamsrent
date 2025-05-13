@@ -252,7 +252,7 @@
 					</button>
 				</div>
 				<form id="editEnquiryForm">
-					@csrf
+					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-md-6">
@@ -326,7 +326,7 @@
 		<div class="modal-dialog modal-dialog-centered modal-sm"> 
 			<div class="modal-content">
 				<form id="enquiryDeleteForm"> 
-					@csrf
+					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<input type="hidden" name="delete_id" id="delete_id">
 					<div class="modal-body text-center">
 						<span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
