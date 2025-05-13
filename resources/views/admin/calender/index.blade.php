@@ -166,7 +166,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="d-inline-flex align-items-center">Booking Details<a href="javascript:void(0);" class="ms-2"></h4>
+                <h4 class="d-inline-flex align-items-center">Booking Details</h4>
                 <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <i class="ti ti-x"></i>
                 </button>
@@ -189,14 +189,14 @@
                             <div class="col-3">
                                 <div>
                                     <h6 class="fs-14 mb-1">Price</h6>
-                                    <p class="fs-14 text-gray-9" id="car_price">$1200 <span class="text-gray-5 fw-normal">day/</span></p>
+                                    <p class="fs-14 text-gray-9" id="car_price"> <span class="text-gray-5 fw-normal"></span></p>
                                 </div>
                             </div>
                             <div class="col-3">
                                 <div>
                                     <h6 class="fs-14 mb-1">Status</h6>
                                     <span class="badge badge-soft-success d-inline-flex align-items-center badge-sm" id="book_status">
-                                        <i class="ti ti-point-filled me-1"></i>Completed
+                                        <i class="ti ti-point-filled me-1"></i>
                                     </span>
                                 </div>
                             </div>
@@ -856,7 +856,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Drivers <span class="text-danger">*</span></label>
                                 <div class="d-flex align-items-center mt-2">
-                                    <a href="#" class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0"><img src="/backend/assets/img/default-profile.png" class="edit_driver_img" alt=""></a>
+                                    <a class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0"><img src="/backend/assets/img/default-profile.png" class="edit_driver_img" alt=""></a>
                                     <div>
                                         <a class="d-block fw-semibold edit_driver_name" href="#">Reuben Keen</a>
                                     </div>
