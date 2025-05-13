@@ -297,6 +297,7 @@ class QuotationController extends Controller
             $query = Booking::select(
                 'bookings.id',
                 'bookings.reservation_id',
+                'bookings.booking_date',
                 'vehicle_info.name as vehicle_name',
                 'vehicle_info.vehicle_image',
                 DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
