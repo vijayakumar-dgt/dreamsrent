@@ -84,12 +84,11 @@
                                 <table class="table" id="signatureTable">
                                     <thead>
                                         <tr>
-                                            <th>{{ __('admin.general_settings.signatures_name') }}</th>
-                                            <th>{{ __('admin.general_settings.signatures') }}</th>
-                                            <th>{{ __('admin.common.status') }}</th>
+                                            <th>{{ strtoupper(__('admin.general_settings.signatures_name')) }}</th>
+                                            <th>{{ strtoupper(__('admin.general_settings.signatures')) }}</th>
+                                            <th>{{ strtoupper(__('admin.common.status')) }}</th>
                                             @if (hasPermission($permissions, 'app_settings', 'edit') || hasPermission($permissions, 'app_settings', 'delete'))
-
-                                            <th>{{ __('admin.common.action') }}</th>
+                                            <th>{{ strtoupper(__('admin.common.action')) }}</th>
                                             @endif
                                         </tr>
                                     </thead>
@@ -121,9 +120,6 @@
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
                                             <img id="profile_photo_preview" src="/backend/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
-                                            <a href="javascript:void(0);" class="uploadimgtrash btn btn-sm rounded-circle" onclick="removeImage()">
-                                                <i class="ti ti-trash fs-12"></i>
-                                            </a>
                                         </div>
                                         <div class="profile-upload">
                                             <div class="profile-uploader d-flex align-items-center">

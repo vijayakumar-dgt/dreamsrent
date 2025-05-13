@@ -155,9 +155,6 @@
                             <a class="dropdown-item" href="{{ route('user.logout') }}">
                                 <i class="feather-power"></i> {{ __('web.common.logout') }}
                             </a>
-                            <form id="logout-form" action="{{ route('user.logout') }}" method="GET" class="d-none">
-                                @csrf
-                            </form>
                         </div>
                     </li>
                     <!-- /User Menu -->

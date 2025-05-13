@@ -298,14 +298,14 @@
                     <div class="modal-btn">
                         <div class="row">
                             <div class="col-6">
-                                <a href="javascript:void(0);" onclick="confirmDelete()" class="btn btn-secondary w-100">
+                                <button type="button" class="btn btn-secondary w-100 delete_account_btn">
                                     {{ __('web.common.delete') }}
                                 </a>
                             </div>
                             <div class="col-6">
-                                <a href="javascript:void(0);" data-bs-dismiss="modal" class="btn btn-primary w-100">
+                                <button type="button" data-bs-dismiss="modal" class="btn btn-primary w-100">
                                     {{ __('web.common.cancel') }}
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>

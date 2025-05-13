@@ -279,7 +279,7 @@
                 } else {
                     tableBody += `
                     <tr>
-                        <td colspan="4" class="text-center">${_l('admin.general_settings.no_data')}</td>
+                        <td colspan="4" class="text-center">${_l('admin.common.empty_table')}</td>
                     </tr>`;
                     $('.table-footer').empty();
                 }

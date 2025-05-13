@@ -161,7 +161,7 @@ $(document).ready(function() {
         submitHandler: function(form) {
             let formData = new FormData(form);
             if ($('#tax_group_id').val() != '') {
-                formData.set('status', $("#status").is(":checked") ? 1 : 0);
+                formData.set('status', $("#group_status").is(":checked") ? 1 : 0);
                 formData.set('id', $("#tax_group_id").val());
             }
 
@@ -244,11 +244,15 @@ function loadTaxRates(){
                                 <ul class="dropdown-menu dropdown-menu-end p-2">
                                   ${hasPermission(permissions, 'finance_settings', 'edit') ?
                                     `<li>
-                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editTaxRate(${value.id})"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                        <button type="button" class="dropdown-item rounded-1 edit_tax_rate" data-id="${value.id}">
+                                            <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
+                                        </button>
                                     </li>`:''}
                                       ${hasPermission(permissions, 'finance_settings', 'delete') ?
                                     `<li>
-                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteTaxRate(${value.id})" data-bs-toggle="modal" data-bs-target="#delete_tax_rate"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                        <button type="button" class="dropdown-item rounded-1 delete_tax_rate_btn" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete_tax_rate">
+                                            <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
+                                        </button>
                                     </li>`:''}
                                 </ul>
                             </div>
@@ -353,11 +357,15 @@ function loadTaxGroups(){
                                 <ul class="dropdown-menu dropdown-menu-end p-2">
                                 ${hasPermission(permissions, 'finance_settings', 'edit') ?
                                     `<li>
-                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="editTaxGroup(${value.id})"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
+                                        <button type="button" class="dropdown-item rounded-1 edit_tax_group" data-id="${value.id}">
+                                            <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
+                                        </button>
                                     </li>`:''}
                                     ${hasPermission(permissions, 'finance_settings', 'delete') ?
                                     `<li>
-                                        <a class="dropdown-item rounded-1" href="javascript:void(0);" onclick="deleteTaxGroup(${value.id})" data-bs-toggle="modal" data-bs-target="#delete_tax_group"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                        <button type="button" class="dropdown-item rounded-1 delete_tax_group" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete_tax_group">
+                                            <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
+                                        </button>
                                     </li>`:''}
                                 </ul>
                             </div>
@@ -470,6 +478,11 @@ $("#tax_rate").on("input", function () {
     $(this).val($(this).val().replace(/[^0-9.]/g, "").replace(/(\..*)\./g, "$1"));
 });
 
+$(document).on('click', '.delete_tax_rate_btn', function () {
+    let id = $(this).data('id');
+    $('#delete_tax_rate_id').val(id);
+});
+
 $("#delete_tax_rate_form").on('submit', function(e){
     e.preventDefault();
     $.ajax({
@@ -500,6 +513,36 @@ $("#delete_tax_rate_form").on('submit', function(e){
     });
 });
 
+$(document).on('click', '.edit_tax_rate', function () {
+    let id = $(this).data('id');
+    $.ajax({
+        url:"/admin/settings/tax-rate/edit/"+id,
+        type:"GET",
+        success:function(response){
+            $(".error-text").text("");
+            $(".form-control, .form-check-input, .select2-container").removeClass("is-invalid is-valid");
+            if (response.code === 200) {
+                $('#id').val(response.data.id);
+                $('#tax_name').val(response.data.tax_name);
+                $('#tax_rate').val(response.data.tax_rate);
+                $('#status').prop("checked", response.data.status == 1 ? true : false);
+                $("#tax_rate_modal").modal('show');
+
+                $("#tax_rate_modal .modal-title").text(_l('admin.general_settings.edit_tax_rate'));
+                $(".submitBtn").text(_l('admin.common.save_changes'));
+                $('#tax_rate_form .statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
+            }
+        },
+        error:function(error){
+            if (error.responseJSON.code === 500) {
+                showToast('error', error.responseJSON.message);
+            } else {
+                showToast('error', _l('admin.common.default_retrieve_error'));
+            }
+        }
+    });
+});
+
 $(document).on('click', '.second-table .dataTables_paginate a', function() {
     $(".second-table .table-footer").find(".dataTables_paginate").removeClass("d-none");
 });
@@ -513,6 +556,12 @@ $("#add_tax_group").on('click', function() {
     $(".error-text").text("");
     $(".form-control, .form-check-input, .select2-container").removeClass("is-invalid is-valid");
     $('#tax_group_form .statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
+});
+
+$(document).on('click', '.delete_tax_group', function () {
+    let id = $(this).data('id');
+    $('#delete_tax_group').modal('show');
+    $('#delete_tax_group_id').val(id);
 });
 
 $("#delete_tax_group_form").on('submit', function(e){
@@ -544,44 +593,8 @@ $("#delete_tax_group_form").on('submit', function(e){
     });
 });
 
-}) ();
-
-function editTaxRate(id){
-    $.ajax({
-        url:"/admin/settings/tax-rate/edit/"+id,
-        type:"GET",
-        success:function(response){
-            $(".error-text").text("");
-            $(".form-control, .form-check-input, .select2-container").removeClass("is-invalid is-valid");
-            if (response.code === 200) {
-                $('#id').val(response.data.id);
-                $('#tax_name').val(response.data.tax_name);
-                $('#tax_rate').val(response.data.tax_rate);
-                $('#status').prop("checked", response.data.status == 1 ? true : false);
-                $("#tax_rate_modal").modal('show');
-
-                $("#tax_rate_modal .modal-title").text(_l('admin.general_settings.edit_tax_rate'));
-                $(".submitBtn").text(_l('admin.common.save_changes'));
-                $('#tax_rate_form .statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
-            }
-        },
-        error:function(error){
-            if (error.responseJSON.code === 500) {
-                showToast('error', error.responseJSON.message);
-            } else {
-                showToast('error', _l('admin.common.default_retrieve_error'));
-            }
-        }
-    });
-}
-
-function deleteTaxRate(id){
-    $('#delete_tax_rate').modal('show');
-    $('#delete_tax_rate_id').val(id);
-}
-
-function editTaxGroup(id){
-
+$(document).on('click', '.edit_tax_group', function () {
+    let id = $(this).data('id');
     $.ajax({
         url:"/admin/settings/tax-group/edit/"+id,
         type:"GET",
@@ -608,9 +621,6 @@ function editTaxGroup(id){
             }
         }
     });
-}
+});
 
-function deleteTaxGroup(id){
-    $('#delete_tax_group').modal('show');
-    $('#delete_tax_group_id').val(id);
-}
+}) ();

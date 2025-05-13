@@ -992,4 +992,15 @@ class UserController extends Controller
             'message' => __('web.user.all_notofocations_deleted')
         ], 200);
     }
+
+    public function deleteAccount(Request $request): JsonResponse
+    {
+        /** @var \App\Models\User|null $user */
+        $user = Auth::guard('web')->user();
+        if (!$user) {
+            return response()->json(['success' => false, 'message' =>   __('admin.general_settings.user_not_found')], 404);
+        }
+        $user->delete();
+        return response()->json(['success' => true, 'message' =>  __('web.user.account_deleted_successfully')]);
+    }
 }
