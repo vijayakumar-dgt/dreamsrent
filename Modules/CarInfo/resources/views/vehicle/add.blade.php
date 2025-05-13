@@ -1202,7 +1202,7 @@
 						<input type="hidden" id="insurance_id" value="{{ $insurance->id }}">
 						<div>
 							<h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">
-								{{ $insurance->rentals }}
+								{{ $insurance->insurance_name }}
 							</h6>
 							<input type="hidden" id="insurance_name" value="{{ $insurance->insurance_name }}">
 							<input type="hidden" id="insurance_price_type" value="{{ $insurance->priceType->pricing_type }}">
@@ -1234,7 +1234,7 @@
 				<div class="modal-footer">
 					<div class="d-flex justify-content-center">
 						<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-						<button type="button" class="btn btn-primary" id="in_btn">{{ __('admin.rentals.create_new') }}</button>
+						<button type="button" class="btn btn-primary" id="in_btn">{{ __('admin.general_settings.add') }}</button>
 					</div>
 				</div>
 			</form>
@@ -1283,7 +1283,7 @@
 			<div class="modal-footer">
 				<div class="d-flex justify-content-center">
 					<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-					<button type="button" class="btn btn-primary" id="save_update">{{ __('admin.rentals.create_new') }}</button>
+					<button type="button" class="btn btn-primary" id="save_update">{{ __('admin.common.update') }}</button>
 				</div>
 			</div>
 		</div>
