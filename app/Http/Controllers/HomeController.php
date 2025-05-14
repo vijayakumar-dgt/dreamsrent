@@ -196,6 +196,7 @@ class HomeController extends Controller
         $data['author_profile'] = $appAdminDetails ? uploadedAsset($appAdminDetails->profile_image, 'profile') : '';
         $data['author_email'] = $appAdmin->email ?? "";
         $data['author_phone'] = $appAdminDetails->mobile_number ?? "";
+        $data['author_name']  = getCurrentUserFullname($appAdmin->id);
         return view(
             'frontend.home.list.vehicle-details',
             compact("data", "allowEnquiries", "allowBooking", "slug", "mainLocation", 'vehicle', "bookingCount", "vehicleCount", "lastUpdateFormatted", "vehicleDetail", "seo_title", "seo_description", "meta_keywords", "og_image", "allLocation")

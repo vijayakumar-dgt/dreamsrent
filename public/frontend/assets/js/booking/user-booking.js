@@ -193,7 +193,7 @@
             "web.home.no_extra_service_added_to_this_vehicle"
         )}</li>`;
         let noInsuranceMessage = `<li class="no-insurance-message">${_l(
-            "webkitURL.home.no_insurance_available"
+            "web.home.no_insurance_available"
         )}</li>`;
 
        
