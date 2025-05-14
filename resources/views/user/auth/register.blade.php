@@ -51,6 +51,20 @@
                                 <span id="username_error" class="text-danger error-text"></span>
                             </div>
                             <div class="input-block">
+                                <label class="form-label" for="first_name">
+                                    {{ __('web.auth.first_name') }} <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" placeholder="">
+                                <span id="first_name_error" class="text-danger error-text"></span>
+                            </div>
+                            <div class="input-block">
+                                <label class="form-label" for="last_name">
+                                    {{ __('web.auth.last_name') }} <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" placeholder="">
+                                <span id="last_name_error" class="text-danger error-text"></span>
+                            </div>
+                            <div class="input-block">
                                 <label class="form-label" for="email">
                                     {{ __('web.auth.email') }} <span class="text-danger">*</span>
                                 </label>
@@ -69,25 +83,8 @@
                             </div>
                             <button type="submit" class="btn btn-outline-light w-100 btn-size mt-1">
                                 {{ __('web.auth.sign_up') }}
-                            </button>
-                            <div class="login-or d-none">
-                                <span class="or-line"></span>
-                                <span class="span-or">{{ __('web.auth.or_create_with_email') }}</span>
-                            </div>
-                            <!-- Social Login -->
-                            <div class="social-login d-none">
-                                <a href="#" class="d-flex align-items-center justify-content-center input-block btn google-login w-100">
-                                    <span><img src="/frontend/assets/img/icons/google.svg" class="img-fluid" alt="Google"></span>
-                                    {{ __('web.auth.login_with_google') }}
-                                </a>
-                            </div>
-                            <div class="social-login d-none">
-                                <a href="#" class="d-flex align-items-center justify-content-center input-block btn google-login w-100">
-                                    <span><img src="/frontend/assets/img/icons/facebook.svg" class="img-fluid" alt="Facebook"></span>
-                                    {{ __('web.auth.login_with_facebook') }}
-                                </a>
-                            </div>
-                            <!-- /Social Login -->
+                            </button>                           
+                           
                             <div class="text-center dont-have">
                                 {{ __('web.auth.already_have_account') }}
                                 <a href="{{ route('user-login') }}">{{ __('web.auth.sign_in') }}</a>
