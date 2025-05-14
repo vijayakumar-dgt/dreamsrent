@@ -50,8 +50,20 @@
                         showToast('error', response.message);
                     }
                 })
-                .fail(() => {
-                    showToast('error', _l('web.user.something_went_wrong'));
+               .fail((xhr) => {
+                    let errorMessage = _l('web.user.something_went_wrong');
+                    if (xhr?.responseJSON?.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    } else if (xhr?.responseText) {
+                        try {
+                            const parsed = JSON.parse(xhr.responseText);
+                            if (parsed.message) {
+                                errorMessage = parsed.message;
+                            }
+                        } catch (e) {
+                        }
+                    }
+                    showToast('error', errorMessage);
                 });
         });
     });

@@ -3,23 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\WalletHistory;
-use Srmklive\PayPal\Services\PayPal as PayPalClient;
 use Illuminate\Http\Request;
-use Stripe\Stripe;
-use Stripe\Checkout\Session;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
+use Stripe\Checkout\Session;
+use Stripe\Stripe;
 
 class WalletController extends Controller
 {
-    protected PayPalClient $provider;
+    /**
+     * @var PayPalClient|null
+     */
+    protected ?PayPalClient $provider;
 
     public function __construct()
     {
-        $this->provider = new PayPalClient();
-        $this->provider->setApiCredentials(config('paypal'));
+        if (empty(env('PAYPAL_SANDBOX_CLIENT_ID')) || empty(env('PAYPAL_SANDBOX_CLIENT_SECRET'))) {
+            $this->provider = null;
+        } else {
+            $this->provider = new PayPalClient();
+
+            if ($this->provider) {
+                $this->provider->getAccessToken();
+            }
+        }
     }
 
     public function wallet(Request $request): View
@@ -48,6 +58,12 @@ class WalletController extends Controller
 
         if ($paymentType === "Paypal") {
             try {
+                if (!$this->provider) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'PayPal is currently unavailable. Please choose another payment method.',
+                    ], 422);
+                }
                 $this->provider->getAccessToken();
 
                 $order = [
