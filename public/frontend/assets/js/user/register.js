@@ -154,6 +154,16 @@ $(document).ready(function () {
                 minlength: 3,
                 pattern: /^[A-Za-z]+$/
             },
+            first_name: {
+                required: true,
+                minlength: 3,
+                pattern: /^[A-Za-z]+$/
+            },
+            last_name: {
+                required: true,
+                minlength: 3,
+                pattern: /^[A-Za-z]+$/
+            },
             email: {
                 required: true,
                 email: true
@@ -168,6 +178,16 @@ $(document).ready(function () {
                 required: _l("web.auth.username_required"),
                 minlength: _l("web.auth.username_minlength"),
                 pattern: _l("web.auth.username_alphabets")
+            },
+            first_name: {
+                required: _l("web.auth.first_name_required"),
+                minlength: _l("web.auth.first_name_minlength"),
+                pattern: _l("web.auth.first_name_alphabets")
+            },
+            last_name: {
+                required: _l("web.auth.last_name_required"),
+                minlength: _l("web.auth.last_name_minlength"),
+                pattern: _l("web.auth.last_name_alphabets")
             },
             email: {
                 required: _l("web.auth.email_required"),

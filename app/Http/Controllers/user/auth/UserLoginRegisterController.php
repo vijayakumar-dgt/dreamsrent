@@ -287,6 +287,8 @@ class UserLoginRegisterController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|regex:/^[A-Za-z]+$/|min:3|max:50',
+            'first_name' => 'required|regex:/^[A-Za-z]+$/|min:3|max:50',
+            'last_name' => 'required|regex:/^[A-Za-z]+$/|min:3|max:50',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
         ], [
@@ -316,7 +318,11 @@ class UserLoginRegisterController extends Controller
                 'password' => Hash::make($request->password),
                 'user_type' => 3,
             ]);
-            UserDetail::create(['user_id' => $user->id]);
+            UserDetail::create([
+                'user_id' => $user->id,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+            ]);
             Auth::login($user);
             session(['user_id' => $user->id]);
             $notificationType = 1;

@@ -111,11 +111,11 @@
                 </div>
             </form>
             <!-- Ticket History -->
-            <div class="mb-3 mt-4">
+            <div class="p-3">
                 <div class="skeleton label-skeleton label-loader"></div>
-                <h6 class="mb-2 d-none real-label">{{ __('admin.support.ticket_history') }}</h6>
+                <h6 class="d-none real-label">{{ __('admin.support.ticket_history') }}</h6>
                 <div class="skeleton textarea-skeleton input-loader"></div>
-                <div class="ticket_histroy p-3 d-none real-label"></div>
+                <div class="ticket_histroy  d-none real-label"></div>
             </div>
         </div>
         <!-- /Ticket Details -->

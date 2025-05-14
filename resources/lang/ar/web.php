@@ -59,6 +59,17 @@ return [
         'failed_to_send_welcome_email' => 'فشل في ارسال بريد الترحيب. يرجى المحاولة مرة اخرى.',
         'registration_success' => 'تسجيل الدخول بنجاح!',
         'otp_sent_success' => 'تم ارسال OTP بنجاح.',
+         'first_name' => 'الاسم الأول',
+         'last_name' => 'اسم العائلة',
+         'first_name_required' => 'الاسم الأول مطلوب.',
+         'first_name_minlength' => 'يجب أن يحتوي الاسم الأول على 3 أحرف على الأقل.',
+         'first_name_maxlength' => 'يجب ألا يزيد الاسم الأول عن 50 حرفًا.',
+         'first_name_alphabets' => 'يمكن أن يحتوي الاسم الأول على أحرف فقط.',
+         'last_name_required' => 'اسم العائلة مطلوب.',
+         'last_name_minlength' => 'يجب أن يحتوي اسم العائلة على 3 أحرف على الأقل.',
+         'last_name_maxlength' => 'يجب ألا يزيد اسم العائلة عن 50 حرفًا.',
+         'last_name_alphabets' => 'يمكن أن يحتوي اسم العائلة على أحرف فقط.',
+
     ],
 
 

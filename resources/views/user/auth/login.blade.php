@@ -71,25 +71,8 @@
                             </div>
                             <button type="submit" class="btn btn-outline-light w-100 btn-size mt-1">
                                 {{ __('web.auth.sign_in') }}
-                            </button>
-                            <div class="login-or d-none">
-                                <span class="or-line"></span>
-                                <span class="span-or-log">{{ __('web.auth.or_login_with_email') }}</span>
-                            </div>
-                            <!-- Social Login -->
-                            <div class="social-login d-none">
-                                <a href="#" class="d-flex align-items-center justify-content-center input-block btn google-login w-100">
-                                    <span><img src="{{ asset('frontend/assets/img/icons/google.svg') }}" class="img-fluid" alt="Google"></span>
-                                    {{ __('web.auth.login_with_google') }}
-                                </a>
-                            </div>
-                            <div class="social-login d-none">
-                                <a href="#" class="d-flex align-items-center justify-content-center input-block btn google-login w-100">
-                                    <span><img src="{{ asset('frontend/assets/img/icons/facebook.svg') }}" class="img-fluid" alt="Facebook"></span>
-                                    {{ __('web.auth.login_with_facebook') }}
-                                </a>
-                            </div>
-                            <!-- /Social Login -->
+                            </button>                          
+                            
                             <div class="text-center dont-have">
                                 {{ __('web.auth.dont_have_account') }}
                                 <a href="{{ route('user-register') }}">{{ __('web.auth.register') }}</a>
