@@ -25,8 +25,12 @@ class InvoiceController extends Controller
         $invoices = Invoice::with('items')
             ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
-            ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image')
-            ->where('invoices.deleted_at', null)->orderby('invoices.id', 'desc')->get();
+            ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image', 'user_details.first_name', 'user_details.last_name')
+            ->where('invoices.deleted_at', null)->orderby('invoices.id', 'desc')
+            ->get()->map(function ($invoice) {
+                $invoice->full_name = $invoice->first_name ? ($invoice->first_name . ' ' . $invoice->last_name) : '';
+                return $invoice;
+            });
 
         return view("admin.invoice.index", compact('invoices'));
     }
@@ -37,7 +41,15 @@ class InvoiceController extends Controller
         $languageId = $authId->language_id ?? null;
         $cars = VehicleInfo::where('status', 1)->where('deleted_at', null)->where('language_id', $languageId)->get();
         $currencies = Currency::where('status', 1)->where('deleted_at', null)->get();
-        $users = User::where('status', 1)->where('deleted_at', null)->get();
+        $users = User::select('users.id', 'users.name', 'user_details.first_name', 'user_details.last_name')
+            ->where('users.user_type', 3)
+            ->where('users.status', 1)
+            ->where('users.deleted_at', null)
+            ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
+            ->get()->map(function ($user) {
+            $user->full_name = $user->first_name ? ucwords($user->first_name . ' ' . $user->last_name) : '';
+            return $user;
+        });
         $currentUser = Auth::user();
         $payments = GeneralSetting::where('group_id', 13)->where('value', 1)->get();
         $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();
@@ -158,7 +170,15 @@ class InvoiceController extends Controller
 
         $cars = VehicleInfo::where('status', 1)->where('deleted_at', null)->get();
         $currencies = Currency::where('status', 1)->where('deleted_at', null)->get();
-        $users = User::where('status', 1)->where('deleted_at', null)->get();
+        $users = User::select('users.id', 'users.name', 'user_details.first_name', 'user_details.last_name')
+            ->where('users.user_type', 3)
+            ->where('users.status', 1)
+            ->where('users.deleted_at', null)
+            ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
+            ->get()->map(function ($user) {
+            $user->full_name = $user->first_name ? ucwords($user->first_name . ' ' . $user->last_name) : '';
+            return $user;
+        });
         $currentUser = Auth::user();
         $payments = GeneralSetting::where('group_id', 13)->where('value', 1)->get();
         $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();

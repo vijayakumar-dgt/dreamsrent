@@ -207,7 +207,7 @@ function bookingList(sort_by_date = '') {
                             <a href="company-details.html" class="avatar avatar-rounded me-2 flex-shrink-0"><img src="${row.customer_image}" alt=""></a>
                             <div>
                                 <h6 class="mb-1 fs-14"><a href="#">${row.customer_full_name ? row.customer_full_name : row.user_name}</a></h6>
-                                <span class="badge bg-secondary-transparent rounded-pill">Client</span>
+                                <span class="badge bg-secondary-transparent rounded-pill">${_l('admin.common.client')}</span>
                             </div>
                         </div>
                 `;

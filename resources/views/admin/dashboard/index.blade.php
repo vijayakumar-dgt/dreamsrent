@@ -27,7 +27,7 @@
                         <div class="card-body">
                             <div class="row align-items-center row-gap-3">
                                 <div class="col-sm-7">
-                                    <h4>{{ __('admin.dashboard.welcome') }}, {{$current_user->name}} </h4>
+                                    <h4>{{ __('admin.dashboard.welcome') }}, {{ getCurrentUserFullname() ?? '' }} </h4>
                                     <p>{{count($carTypes)}}+ {{ __('admin.dashboard.budget_friendly_cars_available_for_the_rents') }}</p>
                                     <div class="d-flex align-items-center flex-wrap gap-4 mb-3">
                                         <div>
@@ -504,7 +504,7 @@
                                                         <img src="{{ uploadedAsset($imagePath, 'profile') }}" alt="profile image">
                                                     </a>
                                                     <div>
-                                                        <h6 class="fs-14"><a href="javascript:;">{{$invoice->name}}</a></h6>
+                                                        <h6 class="fs-14"><a href="javascript:;">{{$invoice->full_name}}</a></h6>
                                                     </div>
                                                 </div>
                                             </td>

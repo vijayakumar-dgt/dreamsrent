@@ -372,7 +372,6 @@ Template Name: Dreams rent - Bootstrap Admin Template
 	$('ul.tabs li').on('click', function(){
 		var $this = $(this);
 		var $theTab = $(this).attr('id');
-		console.log($theTab);
 		if($this.hasClass('active')){
 		  // do nothing
 		} else{

@@ -170,7 +170,7 @@
                             href="#expense" aria-selected="false">{{__('admin.reports.expense')}}</a>
                     </li>
                 </ul>
-                <div class="tab-content">
+                <div class="tab-content pb-3">
                     <div class="tab-pane show active" id="income" role="tabpanel">
                         <!-- Table Header -->
                         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
@@ -304,8 +304,8 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <div class="mt-3">
-                                {{ $bookingsCount->links('vendor.pagination.bootstrap-5') }}
+                            <div class="p-3">
+                                {{ $bookingsCount->links('vendor.pagination.custom-bootstrap-5') }}
                             </div>
                         </div>
                     </div>
