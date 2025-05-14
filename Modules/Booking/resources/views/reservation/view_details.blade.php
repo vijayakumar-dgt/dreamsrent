@@ -95,7 +95,7 @@
                                                     </span>
                                                     <div>
                                                         <h6 class="fs-14 fw-medium mb-1">
-                                                            {{ ucfirst($booking->customer_full_name ?: $booking->customer_user_name) }}
+                                                            {{ ucfirst($booking->customer_full_name ?? $booking->customer_user_name) }}
                                                         </h6>
                                                         <p>{{ $booking->customer_phone_number }}</p>
                                                     </div>

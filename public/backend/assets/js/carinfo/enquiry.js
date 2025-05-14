@@ -387,7 +387,7 @@ function initTable() {
 
                                     ${hasPermission(permissions, 'enquiries', 'delete') ? `
                                         <li>
-                                            <button type="button" class="dropdown-item rounded-1 text-danger" data-id="${value.id}" id="delete-enquiry"
+                                            <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="delete-enquiry"
                                             data-bs-toggle="modal" data-bs-target="#delete-modal">
                                                 <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
                                             </button>

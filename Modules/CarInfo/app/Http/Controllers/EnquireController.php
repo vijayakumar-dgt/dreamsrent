@@ -112,10 +112,10 @@ class EnquireController extends Controller
                     $sortBy = $request->input('sort_by');
                     switch ($sortBy) {
                         case 'ascending':
-                            $query->orderBy('enquiries.enquiry_date', 'asc');
+                            $query->orderBy('vehicle_info.name', 'asc');
                             break;
                         case 'descending':
-                            $query->orderBy('enquiries.enquiry_date', 'desc');
+                            $query->orderBy('vehicle_info.name', 'desc');
                             break;
                         case 'last_7_days':
                             $query->where('enquiries.enquiry_date', '>=', now()->subDays(7));

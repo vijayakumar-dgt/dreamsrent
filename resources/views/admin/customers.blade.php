@@ -324,21 +324,14 @@
                                 </div>
                                 <span class="text-danger error-text" id="image_error"></span>
                             </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label for="username" class="form-label">{{ __('admin.common.username') }}<span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" name="username" id="username">
-                                    <span class="text-danger error-text" id="username_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="first_name" class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control" name="first_name" id="first_name">
                                     <span class="text-danger error-text" id="first_name_error"></span>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="last_name" class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control" name="last_name" id="last_name">
@@ -489,21 +482,14 @@
                                 </div>
                                 <span class="text-danger error-text" id="edit_image_error"></span>
                             </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label for="edit_username" class="form-label">{{ __('admin.common.username') }}<span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" name="username" id="edit_username">
-                                    <span class="text-danger error-text" id="edit_username_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="edit_first_name" class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control" name="first_name" id="edit_first_name">
                                     <span class="text-danger error-text" id="edit_first_name_error"></span>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="edit_last_name" class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control" name="last_name" id="edit_last_name">

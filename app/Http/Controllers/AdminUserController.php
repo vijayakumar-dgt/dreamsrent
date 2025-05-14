@@ -33,11 +33,6 @@ class AdminUserController extends Controller
         $id = $request->id ?? '';
 
         $validator = Validator::make($request->all(), [
-            'username' => [
-                'required',
-                'max:100',
-                Rule::unique('users', 'name')->ignore($id)->whereNull('deleted_at'),
-            ],
             'first_name' => [
                 'required',
                 'min:3',
@@ -101,7 +96,6 @@ class AdminUserController extends Controller
             DB::beginTransaction();
 
             $userData = [
-                'name' => $request->username,
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
                 'role_id' => $request->role_id,
@@ -179,7 +173,6 @@ class AdminUserController extends Controller
 
             $query = User::select(
                 'users.id',
-                'users.name as username',
                 DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
                 'users.email',
                 'users.phone_number',
@@ -195,8 +188,7 @@ class AdminUserController extends Controller
             if ($request->has('search') && !empty($request->search)) {
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {
-                    $q->where('users.name', 'LIKE', "%{$search}%")
-                        ->orWhere('users.email', 'LIKE', "%{$search}%")
+                    $q->orWhere('users.email', 'LIKE', "%{$search}%")
                         ->orWhere('users.phone_number', 'LIKE', "%{$search}%")
                         ->orWhere('user_details.first_name', 'LIKE', "%{$search}%")
                         ->orWhere('user_details.last_name', 'LIKE', "%{$search}%");
@@ -221,10 +213,10 @@ class AdminUserController extends Controller
                         $query->orderBy('users.created_at', 'desc');
                         break;
                     case 'ascending':
-                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) asc");
+                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) asc");
                         break;
                     case 'descending':
-                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) desc");
+                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) desc");
                         break;
                     case 'last month':
                         $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
@@ -240,7 +232,7 @@ class AdminUserController extends Controller
             }
 
             if ($columnName === 'full_name') {
-                $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)){$orderDir}");
+                $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)){$orderDir}");
             } else {
                 $query->orderBy($columnName, $orderDir);
             }
@@ -256,7 +248,6 @@ class AdminUserController extends Controller
             $users->map(function ($user) {
                 $profileImage = is_string($user->profile_image) ? $user->profile_image : '';
                 $user->profile_image = uploadedAsset($profileImage, 'profile');
-                $user->username = $user->username ? ucwords($user->username) : '';
                 $user->full_name = $user->full_name ? ucwords($user->full_name) : '';
 
                 return $user;
@@ -283,7 +274,6 @@ class AdminUserController extends Controller
 
         $data = User::select(
             'users.id',
-            'users.name as username',
             'users.email',
             'users.phone_number',
             'users.role_id',

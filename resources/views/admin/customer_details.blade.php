@@ -22,7 +22,7 @@
                                         <img src="{{ $customer->profile_image }}" alt="img">
                                     </span>
                                     <div>
-                                        <h6 class="mb-1">{{ $customer->customer_full_name ?? $customer->username }}</h6>
+                                        <h6 class="mb-1">{{ $customer->customer_full_name ?? '' }}</h6>
                                         <div class="d-flex align-items-center">
                                             <p class="mb-0 me-2">{{ __('admin.common.added_on') }} : {{ $customer->added_on }}</p>
                                         </div>

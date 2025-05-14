@@ -46,10 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         $("#userForm").validate({
             rules: {
-                username: {
-                    required: true,
-                    maxlength: 50,
-                },
                 first_name: {
                     required: true,
                     maxlength: 30,
@@ -87,10 +83,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             },
             messages:{
-                username: {
-                    required: _l('admin.common.username_required'),
-                    maxlength: _l('admin.common.username_maxlength'),
-                },
                 first_name: {
                     required: _l('admin.common.first_name_required'),
                     minlength: _l('admin.common.first_name_minlength', {min: 3}),
@@ -211,10 +203,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         $("#editUserForm").validate({
             rules: {
-                username: {
-                    required: true,
-                    maxlength: 50,
-                },
                 first_name: {
                     required: true,
                     maxlength: 30,
@@ -243,10 +231,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
             },
             messages:{
-                username: {
-                    required: _l('admin.common.username_required'),
-                    maxlength: _l('admin.common.username_maxlength'),
-                },
                 first_name: {
                     required: _l('admin.common.first_name_required'),
                     minlength: _l('admin.common.first_name_minlength', {min: 3}),
@@ -478,7 +462,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
                                 <img src="${row.profile_image}" class="rounded-circle" alt="">
                             </a>
-                            <h6><a href="javascript:void(0);" class="fs-14 fw-semibold">${row.full_name ? row.full_name : row.username}</a></h6>
+                            <h6><a href="javascript:void(0);" class="fs-14 fw-semibold">${row.full_name ? row.full_name : ''}</a></h6>
                         </div>`;
                 }},
                 { data: "phone_number" },
@@ -634,7 +618,6 @@ $(document).on('click', '.editUser', function() {
                 let data = response.data;
 
                 $("#id").val(data.id);
-                $('#edit_username').val(data.username);
                 $("#edit_first_name").val(data.first_name);
                 $("#edit_last_name").val(data.last_name);
                 $("#edit_email").val(data.email);

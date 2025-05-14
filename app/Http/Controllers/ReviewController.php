@@ -496,7 +496,6 @@ class ReviewController extends Controller
                 'vehicle_info.name as vehicle_name',
                 'vehicle_info.vehicle_image',
                 'reviews.created_at',
-                'users.name as username',
                 'user_details.profile_image',
                 DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
             )
@@ -536,10 +535,10 @@ class ReviewController extends Controller
                         $query->orderBy('reviews.created_at', 'desc');
                         break;
                     case 'ascending':
-                        $query->orderBy('reviews.id', 'asc');
+                        $query->orderBy('vehicle_info.name', 'asc');
                         break;
                     case 'descending':
-                        $query->orderBy('reviews.id', 'desc');
+                        $query->orderBy('vehicle_info.name', 'desc');
                         break;
                     case 'last month':
                         $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
@@ -558,7 +557,7 @@ class ReviewController extends Controller
                 $query->orderByRaw("LOWER(CONCAT_WS(' ', vehicle_info.name)) {$orderDir}");
             } elseif ($columnName === 'customer_full_name') {
                 $query
-                    ->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) {$orderDir}");
+                    ->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) {$orderDir}");
             } elseif ($columnName === 'review_date') {
                 $query->orderBy('reviews.created_at', $orderDir);
             } else {

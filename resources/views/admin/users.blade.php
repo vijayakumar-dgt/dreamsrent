@@ -315,13 +315,6 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.username') }}<span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" name="username" id="username" autocomplete="off">
-                                    <span class="text-danger error-text" id="username_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
                                     <label class="form-label">{{ __('admin.user_management.role') }}<span class="text-danger"> *</span></label>
                                     <select class="form-control role" name="role_id" id="role_id" data-placeholder="{{ __('admin.common.select') }}">
                                         <option value="">{{ __('admin.common.select') }}</option>
@@ -336,17 +329,17 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
-                                    <input class="form-control" type="text" name="email" id="email">
-                                    <span id="email_error" class="text-danger error-text"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control user_phone_number" id="phone_number" name="phone_number">
                                     <input type="hidden" id="international_phone_number" name="international_phone_number">
                                     <span id="phone_number_error" class="text-danger error-text"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
+                                    <input class="form-control" type="text" name="email" id="email">
+                                    <span id="email_error" class="text-danger error-text"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -435,13 +428,6 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.username') }}<span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" name="username" id="edit_username" autocomplete="off">
-                                    <span class="text-danger error-text" id="edit_username_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
                                     <label class="form-label">{{ __('admin.user_management.role') }}<span class="text-danger"> *</span></label>
                                     <select class="form-control edit_role" name="role_id" id="edit_role_id" data-placeholder="{{ __('admin.common.select') }}">
                                         <option value="">{{ __('admin.common.select') }}</option>
@@ -456,17 +442,17 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
-                                    <input class="form-control" type="text" name="email" id="edit_email">
-                                    <span id="edit_email_error" class="text-danger error-text"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control edit_user_phone_number" id="edit_phone_number" name="phone_number">
                                     <input type="hidden" id="edit_international_phone_number" name="international_phone_number">
                                     <span id="edit_phone_number_error" class="text-danger error-text"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
+                                    <input class="form-control" type="text" name="email" id="edit_email">
+                                    <span id="edit_email_error" class="text-danger error-text"></span>
                                 </div>
                             </div>
                         </div>

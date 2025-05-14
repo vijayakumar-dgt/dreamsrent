@@ -59,7 +59,7 @@
                         return `<div class="d-flex align-items-center">
                                     <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0"><img class="rounded-circle" src="${row.profile_image}" alt=""></a>
                                     <div>
-                                        <a href="javascript:void(0);" class="fw-semibold d-block">${row.customer_full_name ?? row.username}</a>
+                                        <a href="javascript:void(0);" class="fw-semibold d-block">${row.customer_full_name ?? ''}</a>
                                     </div>
                                 </div>`;
                     } 

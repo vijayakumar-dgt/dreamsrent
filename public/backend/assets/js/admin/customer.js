@@ -81,10 +81,6 @@ $(document).ready(function() {
     
     $("#customerForm").validate({
         rules: {
-            username: {
-                required: true,
-                maxlength: 50,
-            },
             first_name: {
                 required: true,
                 maxlength: 30,
@@ -139,10 +135,6 @@ $(document).ready(function() {
             },
         },
         messages:{
-            username: {
-                required: _l('admin.common.username_required'),
-                maxlength: _l('admin.common.username_maxlength'),
-            },
             first_name: {
                 required: _l('admin.common.first_name_required'),
                 minlength: _l('admin.common.first_name_minlength', {min: 3}),
@@ -279,10 +271,6 @@ $(document).ready(function() {
 
     $("#editCustomerForm").validate({
         rules: {
-            username: {
-                required: true,
-                maxlength: 50,
-            },
             first_name: {
                 required: true,
                 maxlength: 30,
@@ -335,10 +323,6 @@ $(document).ready(function() {
             },
         },
         messages:{
-            username: {
-                required: _l('admin.common.username_required'),
-                maxlength: _l('admin.common.username_maxlength'),
-            },
             first_name: {
                 required: _l('admin.common.first_name_required'),
                 minlength: _l('admin.common.first_name_minlength', {min: 3}),
@@ -627,7 +611,7 @@ function initTable(sortByDate = '') {
                             <img src="${row.profile_image}" class="rounded-circle" alt="img">
                         </a>
                         <div>
-                            <h6 class="fs-14 fw-semibold"><a href="/admin/customer-details/${row.encrypted_id}">${row.customer_full_name ? row.customer_full_name : row.username}</a></h6>
+                            <h6 class="fs-14 fw-semibold"><a href="/admin/customer-details/${row.encrypted_id}">${row.customer_full_name ? row.customer_full_name : ''}</a></h6>
                             <p>${row.phone_number ?? ''}</p>
                         </div>
                     </div>`;
@@ -872,7 +856,6 @@ $(document).on('click', '.edit-customer', function() {
                  let data = response.data;
  
                  $("#id").val(data.id);
-                 $('#edit_username').val(data.username);
                  $('#edit_dob').val(data.dob);
                  $('#edit_language').val(data.language_id).trigger('change');
                  $("#edit_first_name").val(data.first_name);

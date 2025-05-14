@@ -38,11 +38,6 @@ class CustomerController extends Controller
         $id = $request->id ?? '';
 
         $validator = Validator::make($request->all(), [
-            'username' => [
-                'required',
-                'max:100',
-                Rule::unique('users', 'name')->ignore($id)->whereNull('deleted_at'),
-            ],
             'first_name' => [
                 'required',
                 'min:3',
@@ -110,7 +105,6 @@ class CustomerController extends Controller
             DB::beginTransaction();
 
             $userData = [
-                'name' => $request->username,
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
                 'user_type' => 3,
@@ -227,7 +221,6 @@ class CustomerController extends Controller
             $query = User::with(['documents:id,user_id,document'])
                 ->select(
                     'users.id',
-                    'users.name as username',
                     DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
                     'users.email',
                     'users.phone_number',
@@ -247,8 +240,7 @@ class CustomerController extends Controller
             if ($request->has('search') && !empty($request->search)) {
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {
-                    $q->where('users.name', 'LIKE', "%{$search}%")
-                        ->orWhere('users.email', 'LIKE', "%{$search}%")
+                    $q->orWhere('users.email', 'LIKE', "%{$search}%")
                         ->orWhere('users.phone_number', 'LIKE', "%{$search}%")
                         ->orWhere('user_details.first_name', 'LIKE', "%{$search}%")
                         ->orWhere('user_details.last_name', 'LIKE', "%{$search}%");
@@ -282,10 +274,10 @@ class CustomerController extends Controller
                         $query->orderBy('users.created_at', 'desc');
                         break;
                     case 'ascending':
-                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) asc");
+                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) asc");
                         break;
                     case 'descending':
-                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) desc");
+                        $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) desc");
                         break;
                     case 'last month':
                         $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
@@ -301,7 +293,7 @@ class CustomerController extends Controller
             }
 
             if ($columnName === 'customer_full_name') {
-                $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name, users.name)) {$orderDir}");
+                $query->orderByRaw("LOWER(CONCAT_WS(' ', user_details.first_name, user_details.last_name)) {$orderDir}");
             } else {
                 $query->orderBy($columnName, $orderDir);
             }
@@ -358,7 +350,6 @@ class CustomerController extends Controller
         $data = User::with(['documents:id,user_id,document'])
             ->select(
                 'users.id',
-                'users.name as username',
                 'users.email',
                 'users.phone_number',
                 'users.status',
@@ -408,7 +399,6 @@ class CustomerController extends Controller
         $customer = User::with(['documents:id,user_id,document'])
             ->select(
                 'users.id',
-                'users.name as username',
                 'users.email',
                 'users.phone_number',
                 'users.status',
