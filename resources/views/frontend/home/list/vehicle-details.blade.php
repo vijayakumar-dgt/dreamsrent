@@ -919,7 +919,7 @@
                         </div>
                         <div class="modal-form-group">
                             <label>{{ __('web.home.name') }} <em class="text-danger">*</em></label>
-                            <input type="text" class="form-control" name="enquiry_name" id="enquiry_name" placeholder="{{__('web.blog.full_name')}}" value="{{ getCurrentUserFullname(Auth::guard('web')->user()->id) ?? '' }}">
+                            <input type="text" class="form-control" name="enquiry_name" id="enquiry_name" placeholder="{{__('web.blog.full_name')}}" @auth value="{{ getCurrentUserFullname(Auth::guard('web')->user()->id) ?? '' }}" @endauth>
                             <span class="error-text text-danger" id="enquiry_name_error"></span>
                         </div>
                         <div class="modal-form-group">
