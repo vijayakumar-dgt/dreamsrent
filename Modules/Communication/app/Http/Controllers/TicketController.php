@@ -20,9 +20,24 @@ class TicketController extends Controller
     public function index(): View
     {
         $category = TicketCategory::all();
-        $users = User::whereIn('user_type', [1, 2])->get();
+
+        $users = User::whereIn('user_type', [1, 2])
+            ->with('userDetail') // eager load the related user details
+            ->get()
+            ->map(function ($user) {
+                $fullName = $user->name;
+
+                if ($user->userDetail && $user->userDetail->first_name && $user->userDetail->last_name) {
+                    $fullName = $user->userDetail->first_name . ' ' . $user->userDetail->last_name;
+                }
+
+                $user->full_name = ucwords($fullName);
+                return $user;
+            });
+
         return view('communication::ticket.index', compact('category', 'users'));
     }
+
     public function ticketDetails(): View
     {
         $category = TicketCategory::all();

@@ -323,7 +323,7 @@
                                     <select class="select form-control" id="assignStaff" name="assign_staff" data-placeholder="{{ __('admin.common.select') }}">
                                         <option value="">{{ __('admin.common.select') }}</option>
                                         @foreach($users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                            <option value="{{ $user->id }}">{{ $user->full_name }}</option>
                                         @endforeach
                                     </select>
                                     <span class="text-danger error-message" id="assignStaffError"></span>
