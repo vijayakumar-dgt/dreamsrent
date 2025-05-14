@@ -47,7 +47,8 @@ class UserBookings extends JsonResource
            'cancel_by'      => $resource->cancelledUser ? $resource->cancelledUser->name : '',
            'no_of_passengers' => $resource->no_of_passengers,
            'customer'       => $resource->customer ? $resource->customer  : null,
-           'customer_detail' => $resource->customerDetail ? $resource->customerDetail : null
+           'customer_detail' => $resource->customerDetail ? $resource->customerDetail : null,
+           'booking_user_info' => $resource->userInfo ? $resource->userInfo : null
         ];
     }
 
