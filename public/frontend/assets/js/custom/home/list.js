@@ -307,7 +307,7 @@
                                 </li>
                                 <li>
                                     <span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="${_l('web.home.persons')}"></span>
-                                    <p>${vehicle.passenger_capacity ?? 0} ${_l('web.user.persons')}</p>
+                                    <p>${vehicle.passenger_capacity ?? 0} ${_l('web.home.persons')}</p>
                                 </li>
                                 <li>
                                     <span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${vehicle.year ?? ""}"></span>
