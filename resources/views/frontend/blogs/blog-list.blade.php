@@ -95,7 +95,7 @@
                                         </h5>
                                         <div class="article-date">
                                             <i class="fa-solid fa-calendar-day"></i>
-                                            <span>{{ \Carbon\Carbon::parse($latest->created_at)->format('d M Y') }}</span>
+                                            <span>{{ formatDateTime($latest->created_at) }}</span>
                                         </div>
                                     </div>
                                 </div>
