@@ -964,8 +964,11 @@
 }
 
 .logo-large-size {
-  width: 8.5rem !important;
-  height: 6rem !important;
+  width: 8.5rem;
+  height: 4rem;
+}
+.logo-large-size img {
+  max-height: 50px;
 }
 .move-cal{
   width: 220px !important;

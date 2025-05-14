@@ -37,7 +37,7 @@
                                     <div class="row mb-3">
                                         <div class="col-md-8">
                                             <div class="skeleton label-skeleton label-loader"></div>
-                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.time_zone') }}<span class="text-danger">*</span></p>
+                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.time_zone') }} <span class="text-danger">*</span></p>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="skeleton input-skeleton input-loader"></div>
@@ -72,7 +72,7 @@
                                     <div class="row mb-3">
                                         <div class="col-md-8">
                                             <div class="skeleton label-skeleton label-loader"></div>
-                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.date_format') }}<span class="text-danger">*</span></p>
+                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.date_format') }} <span class="text-danger">*</span></p>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="skeleton input-skeleton input-loader"></div>
@@ -112,7 +112,7 @@
                                     <div class="row mb-3">
                                         <div class="col-md-8">
                                             <div class="skeleton label-skeleton label-loader"></div>
-                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.default_language') }}<span class="text-danger">*</span></p>
+                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.default_language') }} <span class="text-danger">*</span></p>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="skeleton input-skeleton input-loader"></div>
@@ -131,10 +131,10 @@
                                     </div>
                                     <div class="localization-list">
                                         <div class="skeleton label-skeleton label-loader"></div>
-                                        <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.language_switcher') }}<span class="text-danger">*</span></p>
+                                        <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.language_switcher') }} <span class="text-danger">*</span></p>
                                         <div>
                                             <div class="form-check form-check-md form-switch me-2 d-none real-input">
-                                                <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="language_switcher" id="language_switcher" checked>
+                                                <input class="form-check-input form-label" type="checkbox" role="switch" name="language_switcher" id="language_switcher" checked>
                                             </div>
                                             <div class="skeleton input-skeleton input-loader"></div>
                                             <span class="text-danger error-text" id="language_switcher_error"></span>
@@ -213,7 +213,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mb-3">
+                                    <div class="row">
                                         <div class="col-md-8">
                                             <div class="skeleton label-skeleton label-loader"></div>
                                             <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.thousand_seperator') }} <span class="text-danger">*</span></p>
@@ -235,7 +235,7 @@
                                         <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.currency_switcher') }} <span class="text-danger">*</span></p>
                                         <div>
                                             <div class="form-check form-check-md form-switch me-2 d-none real-input">
-                                                <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="currency_switcher" id="currency_switcher" checked>
+                                                <input class="form-check-input form-label" type="checkbox" role="switch" name="currency_switcher" id="currency_switcher" checked>
                                             </div>
                                             <span class="text-danger error-text" id="currency_switcher_error"></span>
                                         </div>

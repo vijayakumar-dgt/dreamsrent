@@ -30,7 +30,7 @@
                             <div class="card-header">
                                 <h5 class="fw-bold">{{ __('admin.general_settings.website_settings') }}</h5>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body pb-0">
                                 <h6 class="fw-bold mb-3">{{ __('admin.general_settings.prefixes') }}</h6>
                                 <div class="row">
                                     <div class="col-md-3">

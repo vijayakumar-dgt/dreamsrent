@@ -19636,13 +19636,12 @@ span.flatpickr-weekday {
   box-shadow: 0px 4px 54px 0px rgba(224, 224, 224, 0.2509803922);
 }
 .chat-wrapper .chat-users-wrap .chat-user-list {
-  padding: 20px;
   display: flex;
   display: -webkit-flex;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  padding: 20px;
+  padding: 16px;
   margin-bottom: 8px;
   background-color: var(--white);
   box-shadow: 0px 1px 5px 1px rgb(243, 243, 243);

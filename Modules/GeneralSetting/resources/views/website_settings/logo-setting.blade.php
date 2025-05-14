@@ -42,7 +42,7 @@
                                         <div class="skeleton image-skeleton image-loader"></div>
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex align-items-center">
-                                                <span class="avatar avatar-xxl logo-large-size border rounded d-flex align-items-center justify-content-center p-2 me-2 d-none real-label">
+                                                <span class="logo-large-size border rounded d-flex align-items-center justify-content-center p-3 me-2 d-none real-label">
                                                     <img src="" alt="Logo" id="logo_photo_preview" class="real-input">
                                                 </span>
                                             </div>
@@ -71,7 +71,7 @@
                                         <div class="skeleton image-skeleton image-loader"></div>
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex align-items-center">
-                                                <span class="avatar avatar-xxl logo-large-size border rounded d-flex align-items-center justify-content-center p-2 me-2 d-none real-label">
+                                                <span class="logo-large-size border rounded d-flex align-items-center justify-content-center p-3 me-2 d-none real-label">
                                                     <img src="" alt="Logo" id="favicon_photo_preview" class="real-input">
                                                 </span>
                                             </div>
@@ -100,7 +100,7 @@
                                         <div class="skeleton image-skeleton image-loader"></div>
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex align-items-center">
-                                                <span class="avatar avatar-xxl logo-large-size border rounded d-flex align-items-center justify-content-center p-2 me-2 d-none real-label">
+                                                <span class="logo-large-size border rounded d-flex align-items-center justify-content-center p-3 me-2 d-none real-label">
                                                     <img src="" alt="Logo" id="small_icon_photo_preview" class="real-input">
                                                 </span>
                                             </div>
@@ -129,7 +129,7 @@
                                         <div class="skeleton image-skeleton image-loader"></div>
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex align-items-center">
-                                                <span class="avatar avatar-xxl logo-large-size border rounded d-flex align-items-center justify-content-center p-2 me-2 d-none real-label">
+                                                <span class="logo-large-size border rounded d-flex align-items-center justify-content-center p-3 me-2 d-none real-label">
                                                     <img src="" alt="Logo" id="dark_logo_preview" class="real-input">
                                                 </span>
                                             </div>

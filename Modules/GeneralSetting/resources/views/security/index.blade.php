@@ -33,9 +33,9 @@
                                 <div class="card mb-3">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-xl-4">
+                                            <div class="col-xl-5">
                                                 <div>
-                                                    <h6 class="fs-14 fw-medium">{{ __('admin.common.password') }}</h6>
+                                                    <h6 class="fs-14 fw-medium mb-1">{{ __('admin.common.password') }}</h6>
                                                     <p class="fs-13">{{ __('admin.general_settings.set_unique_password') }}</p>
                                                 </div>
                                             </div>
@@ -44,7 +44,7 @@
                                                     <p class="last_changed"></p>
                                                 </div>
                                             </div>
-                                            <div class="col-xl-4">
+                                            <div class="col-xl-3">
                                                 <div class="d-flex justify-content-end">
                                                     <a href="javascript:void(0);" class="btn btn-dark changePasswordBtn" data-bs-toggle="modal" data-bs-target="#change_password">{{ __('admin.common.change') }}</a>
                                                 </div>
@@ -79,9 +79,9 @@
                                 <div class="card mb-3">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-xl-4">
+                                            <div class="col-xl-5">
                                                 <div>
-                                                    <h6 class="fs-14 fw-medium">{{ __('admin.general_settings.phonenumber_verification') }}</h6>
+                                                    <h6 class="fs-14 fw-medium mb-1">{{ __('admin.general_settings.phonenumber_verification') }}</h6>
                                                     <p class="fs-13">{{ __('admin.general_settings.connect_google') }}</p>
                                                 </div>
                                             </div>
@@ -90,7 +90,7 @@
                                                     <p><i class="ti ti-circle-check-filled text-success me-1"></i>{{ __('admin.general_settings.verified_mobilenumber') }}<span class="verified_phonetxt"></span></p>
                                                 </div>
                                             </div>
-                                            <div class="col-xl-4">
+                                            <div class="col-xl-3">
                                                 <div class="d-flex justify-content-end">
                                                     <a href="javascript:void(0);" class="btn btn-dark changePhoneNumberBtn" data-bs-toggle="modal" data-bs-target="#change_phonenumber">{{ __('admin.common.change') }}</a>
                                                 </div>
@@ -101,9 +101,9 @@
                                 <div class="card mb-3">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-xl-4">
+                                            <div class="col-xl-5">
                                                 <div>
-                                                    <h6 class="fs-14 fw-medium">{{ __('admin.general_settings.email_verification') }}</h6>
+                                                    <h6 class="fs-14 fw-medium mb-1">{{ __('admin.general_settings.email_verification') }}</h6>
                                                     <p class="fs-13">{{ __('admin.general_settings.email_associated_account') }}</p>
                                                 </div>
                                             </div>
@@ -112,7 +112,7 @@
                                                     <p><i class="ti ti-circle-check-filled text-success me-1"></i>{{ __('admin.general_settings.verify_email') }}<span class="verified_emailtxt"></span></p>
                                                 </div>
                                             </div>
-                                            <div class="col-xl-4">
+                                            <div class="col-xl-3">
                                                 <div class="d-flex justify-content-end">
                                                     <a href="javascript:void(0);" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#change_email">{{ __('admin.common.change') }}</a>
                                                 </div>
@@ -120,13 +120,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card">
+                                <div class="card mb-0">
                                     <div class="card-body">
                                         <div class="mb-3">
                                             <div class="row">
                                                 <div class="col-xl-6">
                                                     <div>
-                                                        <h6 class="fs-14 fw-medium">{{ __('admin.general_settings.browsers_devices') }}</h6>
+                                                        <h6 class="fs-14 fw-medium mb-1">{{ __('admin.general_settings.browsers_devices') }}</h6>
                                                         <p class="fs-13">{{ __('admin.general_settings.browsers_devices_account') }}</p>
                                                     </div>
                                                 </div>
@@ -138,7 +138,7 @@
                                             </div>
                                         </div>
                                         <div class="custom-datatable-filter table-responsive brandstable security-table">
-                                            <table class="table datatable" id="userDevicesTable">
+                                            <table class="table mb-0" id="userDevicesTable">
                                                 <thead class="thead-light">
                                                     <tr>
                                                         <th>{{ __('admin.general_settings.device') }}</th>

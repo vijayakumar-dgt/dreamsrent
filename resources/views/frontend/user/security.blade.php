@@ -40,21 +40,6 @@
                         <h4>{{ __('web.user.security') }}</h4>
                     </div>
                     <div class="row">
-                        <div class="col-lg-4 col-md-6 d-none">
-                            <div class="security-grid flex-fill">
-                                <div class="security-heading">
-                                    <h5>Google Authenticator</h5>
-                                    <div class="status-toggle">
-                                        <input id="google_authenticator" class="check" type="checkbox" checked>
-                                        <label for="google_authenticator" class="checktoggle">checkbox</label>
-                                    </div>
-                                </div>
-                                <div class="security-content">
-                                    <p>Google Authenticator adds an extra layer of security to your online accounts by adding a second step of verification when you sign in.</p>
-                                    <span class="badge badge-light-success">Connected</span>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-lg-4 col-md-6 d-flex">
                             <div class="security-grid flex-fill">
                                 <div class="security-heading">
@@ -70,51 +55,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6 d-none">
-                            <div class="security-grid flex-fill">
-                                <div class="security-heading">
-                                    <h5>Two Factor</h5>
-                                    <div class="status-toggle">
-                                        <input id="two_factor" class="check" type="checkbox" checked>
-                                        <label for="two_factor" class="checktoggle">checkbox</label>
-                                    </div>
-                                </div>
-                                <div class="security-content">
-                                    <p>Receive codes via SMS or email every time you login</p>
-                                </div>
-                                <div class="security-btn security-btn-info">
-                                    <a href="javascript:void(0)" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_two_factor">Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 d-none">
-                            <div class="security-grid flex-fill">
-                                <div class="security-heading">
-                                    <h5>Phone Number Verification</h5>
-                                </div>
-                                <div class="security-content">
-                                    <p class="text-success-light">Verified Mobile Number : 7261937185</p>
-                                </div>
-                                <div class="security-btn">
-                                    <a href="javascript:void(0)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#change_phone_number">Change</a>
-                                    <a href="javascript:void(0)" class="btn btn-remove">Remove</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 d-none">
-                            <div class="security-grid flex-fill">
-                                <div class="security-heading">
-                                    <h5>Email Verification</h5>
-                                </div>
-                                <div class="security-content">
-                                    <p class="text-success-light">Verified Email : info@example.com</p>
-                                </div>
-                                <div class="security-btn">
-                                    <a href="javascript:void(0)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#change_email">Change</a>
-                                    <a href="javascript:void(0)" class="btn btn-remove">Remove</a>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-lg-4 col-md-6 d-flex">
                             <div class="security-grid flex-fill">
                                 <div class="security-heading">
@@ -127,32 +67,6 @@
                                     <a href="javascript:void(0)" class="btn btn-secondary device_management" data-bs-toggle="modal" data-bs-target="#device_management">
                                         {{ __('web.user.manage') }}
                                     </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 d-none">
-                            <div class="security-grid flex-fill">
-                                <div class="security-heading">
-                                    <h5>{{ __('web.user.account_activity') }}</h5>
-                                </div>
-                                <div class="security-content">
-                                    <p>Last Changed 04 Nov 2023, 04:30 PM</p>
-                                </div>
-                                <div class="security-btn">
-                                    <a href="javascript:void(0)" class="btn btn-secondary">View</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 d-none">
-                            <div class="security-grid flex-fill">
-                                <div class="security-heading">
-                                    <h5>Deactive Account</h5>
-                                </div>
-                                <div class="security-content">
-                                    <p>Last Changed 16 Nov 2023, 02:00 PM</p>
-                                </div>
-                                <div class="security-btn">
-                                    <a href="javascript:void(0)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#deactive_account">Deactive</a>
                                 </div>
                             </div>
                         </div>

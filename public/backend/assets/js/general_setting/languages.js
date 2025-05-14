@@ -64,7 +64,7 @@
                                html += `<tr>
                                                <td>
                                                    <div class="d-flex align-items-center">
-                                                       <img src="${language.lang_img}" alt="img" class="avatar avatar-md rounded-circle">&nbsp;
+                                                       <img src="${language.lang_img}" alt="img" class="avatar avatar-sm rounded-circle">&nbsp;
                                                        <p class="fw-semibold">${language.language_name}</p>
                                                    </div>
                                                </td>
