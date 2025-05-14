@@ -163,7 +163,7 @@ class HomeController extends Controller
 
         $lastUpdate = VehicleInfo::where('id', $vehicle->id)->value('updated_at');
 
-        $lastUpdateFormatted = $lastUpdate ? \Carbon\Carbon::parse($lastUpdate)->format('d, M Y') : 'N/A';
+        $lastUpdateFormatted = formatDateTime($lastUpdate);
 
         $allowBooking = GeneralSetting::where('group_id', 20)
             ->where('key', 'booking')->value('value') ?? 1;
