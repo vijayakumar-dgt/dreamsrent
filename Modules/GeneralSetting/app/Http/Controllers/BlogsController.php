@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Modules\GeneralSetting\Models\BlogComment;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\Support\Str;
@@ -132,7 +133,9 @@ class BlogsController extends Controller
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where('blog_posts.language_id', $languageId)
             ->where('blog_posts.deleted_at', null)
-            ->select('blog_posts.*', 'users.name', 'user_details.profile_image')
+            ->select('blog_posts.*', 'users.name',
+             DB::raw('CONCAT(user_details.first_name," ",user_details.last_name) as full_name'),
+             'user_details.profile_image')
             ->orderBy('blog_posts.id', 'desc')
             ->get();
         $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->get();

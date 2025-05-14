@@ -138,3 +138,6 @@
 </div>
 <!-- /Blog Grid-->
 @endsection
+@push('scripts')
+        <script src="{{ asset('frontend/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>
+@endpush
