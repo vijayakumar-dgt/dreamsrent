@@ -135,7 +135,7 @@
                                             @endphp
                                             <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image" class="avatar avatar-sm rounded-circle me-1">
                                         </a>
-                                        <a href="javascript:void(0);" class="fs-16">{{$blogPost->name}}</a>
+                                        <a href="javascript:void(0);" class="fs-16">{{$blogPost->full_name}}</a>
                                     </div>
                                     <span class="d-flex align-items-center fs-16">
                                         <i class="ti ti-calendar me-1"></i>
