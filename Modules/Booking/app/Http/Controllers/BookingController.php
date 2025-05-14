@@ -45,7 +45,7 @@ class BookingController extends Controller
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 3, 'users.status' => 1])
             ->get()->map(function ($customer) {
-                $customer->full_name = $customer->full_name ?? $customer->username;
+                $customer->full_name = ucwords($customer->full_name) ?? $customer->username;
                 return $customer;
             });
 
@@ -70,7 +70,7 @@ class BookingController extends Controller
                 ->first();
 
             if ($customer) {
-                $customer->full_name = $customer->full_name ?? $customer->username;
+                $customer->full_name = ucwords($customer->full_name) ?? $customer->username;
                 $customer->profile_image = uploadedAsset(is_string($customer->profile_image) ? $customer->profile_image : null, 'profile');
             }
 
@@ -553,7 +553,7 @@ class BookingController extends Controller
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 3, 'users.status' => 1])
             ->get()->map(function ($customer) {
-                $customer->full_name = $customer->full_name ?? $customer->username;
+                $customer->full_name = ucwords($customer->full_name) ?? $customer->username;
                 return $customer;
             });
         $bookingId = customDecrypt($id, Booking::$reservationSecretKey);
@@ -711,6 +711,7 @@ class BookingController extends Controller
                 $booking->booking_status_text = is_numeric($booking->booking_status)
                     ? Booking::getStatusLabel((int) $booking->booking_status)
                     : null;
+                $booking->customer_full_name = ucwords($booking->customer_full_name);
 
                 return $booking;
             });

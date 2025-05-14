@@ -58,24 +58,7 @@ class ReportController extends Controller
             $percentageChange = $thisWeekIncome > 0 ? 100 : 0;
             $sign = $thisWeekIncome > 0 ? '+' : '0'; // If last week was 0, show +100% increase
         }
-
-        // Fetch GeneralSetting for currency
-        $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();
-
-        if ($generalSettings !== null) {
-            // Proceed with the currency fetching if generalSettings is found
-            $currency = DB::table('currencies')->where('id', $generalSettings->value)->select('symbol')->first();
-            if ($currency !== null && isset($currency->symbol)) {
-                $symbol = $currency->symbol;
-            } else {
-                \Log::warning("Currency or symbol not found for currency ID: " . $generalSettings->value);
-                $symbol = 'USD';  // Fallback to a default value
-            }
-        } else {
-            // Handle the case where generalSettings is not found, set a default value for symbol
-            \Log::warning("GeneralSetting not found for group_id=5 and key='currency'. Using default symbol.");
-            $symbol = 'USD'; // Fallback to a default value
-        }
+        $symbol = getDefaultCurrencySymbol();
 
         $bookings->groupBy(function ($booking) {
             return Carbon::parse($booking->booking_date)->format('Y-m-d'); // Group by date
@@ -182,20 +165,7 @@ class ReportController extends Controller
         $icon = $percentageCarChange >= 0 ? 'ti ti-arrow-wave-right-up' : 'ti ti-arrow-wave-right-down';
         $percentageCarChangeFormatted = $signCar . abs($percentageCarChange) . '%';
 
-        // Currency symbol
-        $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();
-
-        if ($generalSettings !== null) {
-            $currency = DB::table('currencies')->where('id', $generalSettings->value)->select('symbol')->first();
-            $symbol = $currency->symbol ?? 'USD';
-
-            if (!$currency) {
-                \Log::warning("Currency or symbol not found for currency ID: " . $generalSettings->value);
-            }
-        } else {
-            \Log::warning("GeneralSetting not found for group_id=5 and key='currency'. Using default symbol.");
-            $symbol = 'USD';
-        }
+        $symbol = getDefaultCurrencySymbol();
 
         return view('report::earningReport', compact(
             'symbol',

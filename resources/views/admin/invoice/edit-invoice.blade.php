@@ -107,7 +107,7 @@
                                                     <select class="select form-control" name="customer_id">
                                                         <option>{{ __('admin.finance_accounts.select_customer') }}</option>
                                                         @foreach($users as $user)
-                                                        <option value="{{ $user->id }}" {{ $user->id == $invoice->customer_id ? 'selected' : '' }}>{{ $user->name }}</option>
+                                                        <option value="{{ $user->id }}" {{ $user->id == $invoice->customer_id ? 'selected' : '' }}>{{ $user->full_name }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>

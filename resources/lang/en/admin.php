@@ -2151,6 +2151,7 @@ return array(
     'id' => 'ID',
     'edit_profile' => 'Edit Profile',
     'logout' => 'Logout',
+    'client' => 'Client',
   ),
   'page' => [
     'pages' => 'Pages',

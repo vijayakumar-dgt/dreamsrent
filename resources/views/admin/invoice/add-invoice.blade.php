@@ -94,7 +94,7 @@
                                             <div class="col-md-12">
                                                 <div class="mb-3">
                                                     <label class="form-label">{{ __('admin.common.from') }}</label>
-                                                    <input type="text" class="form-control" name="biller" value='{{$currentUser->name}}' readonly>
+                                                    <input type="text" class="form-control" name="biller" value='{{ getCurrentUserFullname() ?? '' }}' readonly>
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
@@ -106,7 +106,7 @@
                                                     <select class="select" name="customer_id">
                                                         <option>{{ __('admin.finance_accounts.select_customer') }}</option>
                                                         @foreach($users as $user)
-                                                        <option value="{{$user->id}}">{{$user->name}}</option>
+                                                        <option value="{{$user->id}}">{{$user->full_name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>

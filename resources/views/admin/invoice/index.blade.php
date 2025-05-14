@@ -138,14 +138,10 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <a href="#" class="avatar avatar-rounded me-2 flex-shrink-0">
-                                        @php
-                                        $imagePath = 'storage/' . $invoice->profile_image;
-                                        $defaultImage = asset('backend/assets/img/default-profile.png');
-                                        @endphp
-                                        <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="profile image">
+                                        <img src="{{ uploadedAsset($invoice->profile_image, 'profile') }}" alt="profile image">
                                     </a>
                                     <div>
-                                        <h6 class="fs-14"><a href="javascript:;">{{$invoice->name}}</a></h6>
+                                        <h6 class="fs-14"><a href="#">{{$invoice->full_name}}</a></h6>
                                     </div>
                                 </div>
                             </td>

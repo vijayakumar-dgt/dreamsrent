@@ -246,8 +246,11 @@ class DashboardController extends Controller
             $invoices = Invoice::with('items')
             ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
-            ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image')
-            ->where('invoices.deleted_at', null)->limit(5)->get();
+            ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image', 'user_details.first_name', 'user_details.last_name')
+            ->where('invoices.deleted_at', null)->limit(5)->get()->map(function ($invoice) {
+                $invoice->full_name = !empty($invoice->first_name) ? ucwords($invoice->first_name . ' ' . $invoice->last_name) : '';
+                return $invoice;
+            });
 
         return view('admin.dashboard.index', compact(
             'current_user',

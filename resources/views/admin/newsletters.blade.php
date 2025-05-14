@@ -51,7 +51,7 @@
 								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="last month">{{ __('admin.common.last_month') }}</a>
 							</li>
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="last 7 days">{{ __('admin.common.last_days', ['no' => 7]) }}</a>
+								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="last 7 days">{{ __('admin.common.last_7_days') }}</a>
 							</li>
 						</ul>
 					</div> 

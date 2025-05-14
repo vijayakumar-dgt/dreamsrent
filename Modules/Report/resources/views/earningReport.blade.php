@@ -359,8 +359,8 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div class="mt-3">
-                    {{ $bookingCount->links('vendor.pagination.bootstrap-5') }}
+                <div class="p-3">
+                    {{ $bookingCount->links('vendor.pagination.custom-bootstrap-5') }}
                 </div>
             </div>
         </div>
