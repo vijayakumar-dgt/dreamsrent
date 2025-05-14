@@ -251,7 +251,15 @@ function ticketTable() {
                                 <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
                                     <img src="${userImage}" class="rounded-circle" alt="">
                                 </a>
-                                <h6><a href="javascript:void(0);" class="fs-14 fw-semibold">${ticket.user?.name || "Unknown"}</a></h6>
+                                <h6>
+                                    <a href="javascript:void(0);" class="fs-14 fw-semibold">
+                                        ${
+                                        ticket.user?.user_detail?.first_name && ticket.user?.user_detail?.last_name
+                                            ? `${ticket.user.user_detail.first_name} ${ticket.user.user_detail.last_name}`
+                                            : (ticket.user?.name || "Unknown")
+                                        }
+                                    </a>
+                                </h6>
                             </div>
                         </td>
                         <td><p class="text-gray-9">${ticket.category.name}</p></td>
@@ -264,7 +272,15 @@ function ticketTable() {
                                 <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
                                     <img src="${assigneeImage}" class="rounded-circle" alt="">
                                 </a>
-                                <h6><a href="javascript:void(0);" class="fs-14 fw-semibold">${ticket.assignee?.name || `${_l('admin.support.unassigned')}`}</a></h6>
+                                <h6>
+                                    <a href="javascript:void(0);" class="fs-14 fw-semibold">
+                                        ${
+                                        ticket.assignee?.user_detail?.first_name && ticket.assignee?.user_detail?.last_name
+                                            ? `${ticket.assignee.user_detail.first_name} ${ticket.assignee.user_detail.last_name}`
+                                            : (ticket.assignee?.name || `${_l('admin.support.unassigned')}`)
+                                        }
+                                    </a>
+                                </h6>
                             </div>
                         </td>
                         <td>${statusBadge}</td>
@@ -391,7 +407,10 @@ function showTicketHistory(ticketId) {
             ? '/storage/' + history.user.user_detail.profile_image
             : '/backend/assets/img/profiles/avatar-20.jpg';
 
-        let userName = history.user ? history.user.name : "Unknown User";
+        let userName = history.user?.user_detail?.first_name && history.user?.user_detail?.last_name
+            ? `${history.user.user_detail.first_name} ${history.user.user_detail.last_name}`
+            : (history.user?.name || "Unknown User");
+
         let createdAt = new Date(history.created_at).toLocaleString();
 
         historyHtml += `

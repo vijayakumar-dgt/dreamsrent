@@ -205,7 +205,9 @@ function ticketDetails() {
                     ? history.user.profile_image
                     : "/backend/assets/img/profiles/avatar-20.jpg";
 
-                let userName = history.user ? history.user.name : "Unknown User";
+               let userName = history.user?.user_detail?.first_name && history.user?.user_detail?.last_name
+                                ? `${history.user.user_detail.first_name} ${history.user.user_detail.last_name}`
+                                : (history.user?.name || "Unknown User");
                 let createdAt = new Date(history.created_at).toLocaleString();
 
                 historyHtml += `
