@@ -54,13 +54,13 @@
                                     @if(!empty($users) && count($users) > 0)
                                         @foreach($users as $user)
                                             <div class="chat-list">
-                                                <a href="javascript:void(0);" class="chat-user-list userprofile" data-userid="{{ $user->id }}" data-username="{{ ucfirst($user->name) }}" data-avatar="{{ uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default','profile') }}">
+                                                <a href="javascript:void(0);" class="chat-user-list userprofile" data-userid="{{ $user->id }}" data-username="{{ getCurrentUserFullname($user->id) }}" data-avatar="{{ uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default','profile') }}">
                                                     <div class="avatar avatar-lg  me-2">
                                                         <img src="{{ uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default','profile') }}"  class="rounded-circle avatarimg" alt="image">
                                                     </div>
                                                     <div class="chat-user-info">
                                                         <div class="chat-user-msg">
-                                                            <h6>{{ ucfirst($user->name) }}</h6>
+                                                            <h6>{{ getCurrentUserFullname($user->id) }}</h6>
                                                         </div>
                                                         <div class="chat-user-time">
                                                         </div>    

@@ -174,8 +174,9 @@ class InspectionController extends Controller
     }
 
 
-    public function getInspection(int $id): JsonResponse
+    public function getInspection(int|string $id): JsonResponse
     {
+        $id = (int) $id;
         try {
             $inspection = Inspection::with('car', 'inspector')
                             ->find($id);

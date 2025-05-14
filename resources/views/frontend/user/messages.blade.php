@@ -50,7 +50,7 @@
                                         </div>
                                         <div class="media-body chat-custom flex-grow-1">
                                             <div>
-                                                <div class="user-name">{{ $receiver->name }}</div>
+                                                <div class="user-name">{{ getCurrentUserFullname($receiver->id) }}</div>
                                                 <div class="user-last-chat">
                                                     {{ $lastMessage ? Str::limit($lastMessage->message, 20) : '' }}
                                                 </div>
@@ -79,7 +79,7 @@
                                         </div>
                                     </div>
                                     <div class="media-body flex-grow-1">
-                                        <div class="user-name">{{ $receiver->name }}</div>
+                                        <div class="user-name">{{ getCurrentUserFullname($receiver->id) }}</div>
                                     </div>
                                 </div>
                             </div>
