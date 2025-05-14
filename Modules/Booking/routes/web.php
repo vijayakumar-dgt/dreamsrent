@@ -26,6 +26,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
         Route::post('store-reservation', [BookingController::class, 'store'])->name('reservation.store');
         Route::get('edit-reservation/{id}', [BookingController::class, 'edit'])->name('reservation.edit')->middleware('permission');
         Route::post('delete-reservation', [BookingController::class, 'delete'])->name('reservation.delete');
+        Route::post('complete-reservation', [BookingController::class, 'complete'])->name('reservation.complete');
         Route::post('reservation-list', [BookingController::class, 'bookingList'])->name('reservation.list');
         Route::post('get-reservation-details', [BookingController::class, 'getBookingDetails']);
         Route::get('reservation-details/{id}', [BookingController::class, 'reservationViewDetails'])->name('reservation.details')->middleware('permission');

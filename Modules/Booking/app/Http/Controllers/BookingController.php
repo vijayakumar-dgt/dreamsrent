@@ -581,6 +581,26 @@ class BookingController extends Controller
         }
     }
 
+    public function complete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->id;
+            Booking::where('id', $id)->update(['booking_status' => 5]);
+
+            return response()->json([
+                'status' => 'success',
+                'code'   => 200,
+                'message' => __('admin.bookings.reservation_complete_success')
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 500,
+                'message' => __('admin.common.default_delete_error'),
+            ], 500);
+        }
+    }
+
     public function bookingList(Request $request): JsonResponse
     {
         try {

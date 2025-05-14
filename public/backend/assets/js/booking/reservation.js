@@ -295,6 +295,10 @@ function bookingList(sort_by_date = '') {
                             `<li>
                                 <button type="button" class="dropdown-item rounded-1 deleteReservation" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                             </li>`:''}
+                            ${(hasPermission(permissions, 'reservations', 'delete') && row.booking_status != 5) ?
+                                `<li>
+                                    <button type="button" class="dropdown-item rounded-1 completeReservation" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#complete_modal"><i class="ti ti-check me-1"></i>${_l('admin.common.booking_complete')}</button>
+                                </li>`:''}
                         </ul>
                     </div>
                 `;
@@ -375,9 +379,43 @@ $("#reservation_delete_form").on('submit', function(e){
     });
 });
 
+$("#reservation_complete_form").on('submit', function(e){
+    e.preventDefault();
+    $.ajax({
+        url:"/admin/complete-reservation",
+        type:"POST",
+        data: {
+            id: $('#compelete_id').val()
+        },
+        headers: {
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            if(response.code === 200){
+                showToast('success', response.message);
+                $("#complete_modal").modal('hide');
+                $('#reservationTable').DataTable().ajax.reload();
+            }
+        },
+        error: function(res) {
+            if(res.responseJSON.code === 500){
+                showToast('error', res.responseJSON.message);
+            } else {
+                showToast('error', _l('admin.common.default_delete_error'));
+            }
+        }
+    });
+});
+
 $(document).on('click', '.deleteReservation', function() {
     let id = $(this).data('id');
     $("#delete_id").val(id);
+});
+
+$(document).on('click', '.completeReservation', function() {
+    let id = $(this).data('id');
+    $("#compelete_id").val(id);
 });
 
 })();
