@@ -2,6 +2,7 @@
 
 use App\Models\Notification;
 use App\Models\User;
+use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
@@ -454,3 +455,25 @@ if (!function_exists('getBaseUrl')) {
         return request()->getSchemeAndHttpHost();
     }
 }
+
+function getCurrentUserFullname($userId = null)
+{
+    if ($userId) {
+        $user = User::find($userId);
+        $userDetails = UserDetail::where('user_id', $userId)->first();
+        $fullName = $user->name;
+
+        if ($userDetails && $userDetails->first_name && $userDetails->last_name) {
+            $fullName = $userDetails->first_name . ' ' . $userDetails->last_name;
+        }
+
+        return ucwords($fullName);
+    }
+
+    $fullName = (current_user()->userDetail->first_name ?? null)
+        ? current_user()->userDetail->first_name . ' ' . current_user()->userDetail->last_name
+        : current_user()->name;
+
+    return ucwords($fullName);
+}
+

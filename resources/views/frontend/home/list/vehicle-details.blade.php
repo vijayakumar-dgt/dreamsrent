@@ -919,7 +919,7 @@
                         </div>
                         <div class="modal-form-group">
                             <label>{{ __('web.home.name') }} <em class="text-danger">*</em></label>
-                            <input type="text" class="form-control" name="enquiry_name" id="enquiry_name" placeholder="{{__('web.blog.full_name')}}" value="{{ Auth::guard('web')->user()->name ?? '' }}">
+                            <input type="text" class="form-control" name="enquiry_name" id="enquiry_name" placeholder="{{__('web.blog.full_name')}}" value="{{ getCurrentUserFullname(Auth::guard('web')->user()->id) ?? '' }}">
                             <span class="error-text text-danger" id="enquiry_name_error"></span>
                         </div>
                         <div class="modal-form-group">
@@ -929,7 +929,7 @@
                         </div>
                         <div class="modal-form-group">
                             <label>{{ __('web.home.phone_number') }} <em class="text-danger">*</em></label>
-                            <input type="text" class="form-control" name="enquiry_phone" id="enquiry_phone" placeholder="{{__('web.home.enter_phone_number')}}" value="{{ Auth::guard('web')->user()->phone ?? '' }}">
+                            <input type="text" class="form-control" name="enquiry_phone" id="enquiry_phone" placeholder="{{__('web.home.enter_phone_number')}}" value="{{ Auth::guard('web')->user()->phone_number ?? '' }}">
                             <input type="hidden" name="international_phone_number" id="international_phone_number" class="international_phone_number">
                             <span class="error-text text-danger" id="enquiry_phone_error"></span>
                         </div>

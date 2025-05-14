@@ -1742,8 +1742,7 @@ class CarInfoController extends Controller
                     ->where("vehicle_id", $vehicle->id)
                     ->exists();
             }
-            $rentalSettings = GeneralSetting::where('group_id',20)->pluck('value', 'key');
-            $faqEnabled = $rentalSettings['faq'] ?? false;
+            $faqEnabled = GeneralSetting::where('group_id',20)->where('key','faq')->first()->value;
             $extraServiceEnabled = $rentalSettings['extraService'] ?? false;
             $data = [
                 'id' => $vehicle->id,

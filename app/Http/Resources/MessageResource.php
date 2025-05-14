@@ -31,9 +31,9 @@ class MessageResource extends JsonResource
            'is_sender' => $resource->sender_id == $authUserId,
            'sender_id' => $resource->sender_id,
            'receiver_id' => $resource->receiver_id,
-           'sender_username' => $resource->sender->name ?? "",
+           'sender_username' => getCurrentUserFullname($resource->sender_id),
            'sender_avatar' => $this->getAvatar($resource->sender_id),
-           'receiver_username' => $resource->receiver->name ?? "",
+           'receiver_username' => getCurrentUserFullname($resource->receiver_id),
            'receiver_avatar' => $this->getAvatar($resource->receiver_id),
            'admin_avatar' => $this->getAdminAvatar(),
         ];
