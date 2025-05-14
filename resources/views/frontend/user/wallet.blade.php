@@ -154,7 +154,7 @@
     <!-- /Page Content -->
 
     <!-- Add Payment Modal -->
-    <div class="modal new-modal multi-step fade" id="add_payment" data-keyboard="false" data-backdrop="static">
+    <div class="modal new-modal " id="add_payment" data-bs-backdrop="false" data-bs-keyboard="true">
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content">
                 <div class="modal-header">
@@ -209,7 +209,7 @@
                             </div>
                         </div>
                         <div class="modal-btn">
-                            <button type="submit" class="btn btn-secondary w-100" data-bs-target="#order_success" data-bs-toggle="modal" data-bs-dismiss="modal">Add to Wallet</button>
+                            <button type="submit" class="btn btn-secondary w-100" >Add to Wallet</button>
                             <a class="btn btn-outline-cancel" data-bs-dismiss="modal">Cancel</a>
                         </div>
                     </form>
