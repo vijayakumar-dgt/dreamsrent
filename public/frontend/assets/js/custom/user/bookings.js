@@ -299,10 +299,11 @@ $(document).on('click', '.view_booking', e => {
         setElementContent(".bk-extra-service", data.extra_services);
 
         $modal.find(".modal_footer").html(renderButtons(data));
-        setElementContent(".user-name", data.customer?.name);
-        setElementContent(".user-email", data.customer?.email);
-        setElementContent(".user-phone", data.customer?.phone_number);
-        setElementContent(".user-address", data.customer_detail?.address);
+        let _fullname = data.booking_user_info?.first_name + " " + data.booking_user_info?.last_name;
+        setElementContent(".user-name", _fullname);
+        setElementContent(".user-email", data.booking_user_info?.email);
+        setElementContent(".user-phone", data.booking_user_info?.phone_number);
+        setElementContent(".user-address", data.booking_user_info?.address);
         setElementContent(".user-passengers", data.no_of_passengers);
 
         if (data.status == 6) {
