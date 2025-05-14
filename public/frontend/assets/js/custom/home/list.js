@@ -306,8 +306,8 @@
                                     <p>${vehicle.num_doors ?? 0}</p>
                                 </li>
                                 <li>
-                                    <span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="Persons"></span>
-                                    <p>${vehicle.passenger_capacity ?? 0} Persons</p>
+                                    <span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="${_l('web.home.persons')}"></span>
+                                    <p>${vehicle.passenger_capacity ?? 0} ${_l('web.user.persons')}</p>
                                 </li>
                                 <li>
                                     <span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${vehicle.year ?? ""}"></span>
@@ -433,13 +433,13 @@
         const featureList = `
             <ul>
                 <li><span><img src="/frontend/assets/img/icons/car-parts-01.svg" alt="${ucfirst(vehicle.transmission ?? "")}"></span><p>${ucfirst(vehicle.transmission ?? "")}</p></li>
-                <li><span><img src="/frontend/assets/img/icons/car-parts-02.svg" alt="${vehicle.mileage ? Math.ceil(vehicle.mileage) : 0} miles"></span><p>${vehicle.mileage ? Math.ceil(vehicle.mileage) : 0} miles</p></li>
+                <li><span><img src="/frontend/assets/img/icons/car-parts-02.svg" alt="${vehicle.mileage ? Math.ceil(vehicle.mileage) : 0} ${_l('web.home.miles')}"></span><p>${vehicle.mileage ? Math.ceil(vehicle.mileage) : 0} ${_l('web.home.miles')}</p></li>
                 <li><span><img src="/frontend/assets/img/icons/car-parts-03.svg" alt="${ucfirst(vehicle.fuel_type ?? "")}"></span><p>${ucfirst(vehicle.fuel_type ?? "")}</p></li>
             </ul>
             <ul>
                 <li><span><img src="/frontend/assets/img/icons/door-icon.svg" alt="Power"></span><p>${vehicle.num_doors ?? 0}</p></li>
                 <li><span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${vehicle.year ?? ""}"></span><p>${vehicle.year ?? ""}</p></li>
-                <li><span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="Persons"></span><p>${vehicle.passenger_capacity ?? 0} Persons</p></li>
+                <li><span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="${_l('web.home.persons')}"></span><p>${vehicle.passenger_capacity ?? 0} ${_l('web.home.persons')}</p></li>
             </ul>`;
         const vehicleRating = vehicle.rating ?? 0;
         const listingContent = `

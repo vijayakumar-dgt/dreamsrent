@@ -390,6 +390,7 @@ return [
     'average' => 'متوسط',
     'below_average' => 'اقل من المتوسط',
     'poor' => 'ضعيف',
+    'miles' => 'ميلات',
    ],
    'common' => [
     'back_to_home' => 'العودة إلى الصفحة الرئيسية',
