@@ -198,7 +198,7 @@
             </div>
             <!-- Custom Data Table -->
             <div class="custom-datatable-filter table-responsive d-none real-table">
-                <table class="table quotations-table" id="reviewsTable">
+                <table class="table" id="reviewsTable">
                     <thead class="thead-light">
                         <tr>
                             <th>{{ strtoupper(__('admin.common.vehicle')) }}</th>

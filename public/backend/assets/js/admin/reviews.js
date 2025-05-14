@@ -44,7 +44,7 @@
             columns: [
                 { data: "vehicle_name",
                     render: function (data, type, row) {
-                        return `<div class="d-flex align-items-center file-name-icon">
+                        return `<div class="d-flex align-items-center">
                                     <a href="#" class="avatar avatar-lg border">
                                         <img src="${row.vehicle_image}" class="img-fluid" alt="${_l('admin.common.image')}">
                                     </a>
