@@ -82,8 +82,11 @@ class ReportController extends Controller
     {
         $bookings = Booking::join('users', 'bookings.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
-            ->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image')
-            ->get();
+            ->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image', 'user_details.first_name', 'user_details.last_name')
+            ->get()->map(function ($booking) {
+                $booking->full_name = $booking->first_name ? ucwords($booking->first_name . ' ' . $booking->last_name) : $booking->name;
+                return $booking;
+            });
 
         $bookingCount = Booking::join('users', 'bookings.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')

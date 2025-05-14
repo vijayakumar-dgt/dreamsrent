@@ -733,6 +733,13 @@ class GeneralSettingController extends Controller
                 );
             }
 
+            if ($request->is_remove_image == 1) {
+                GeneralSetting::where('key', 'maintenance_image')->update([
+                        'value' => '',
+                    ]
+                );
+            }
+
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
@@ -945,7 +952,7 @@ class GeneralSettingController extends Controller
 
         try {
             $settings = GeneralSetting::where('group_id', $request->group_id)->get()->map(function ($setting) {
-                if ($setting->key == 'logo_image' || $setting->key == 'favicon_image' || $setting->key == 'small_image' || $setting->key == 'dark_logo' || $setting->key == 'invoice_logo') {
+                if ($setting->key == 'logo_image' || $setting->key == 'favicon_image' || $setting->key == 'small_image' || $setting->key == 'dark_logo' || $setting->key == 'invoice_logo' || $setting->key == 'maintenance_image') {
                     $setting->value = uploadedAsset($setting->value, 'default2');
                 }
                 return $setting;

@@ -312,7 +312,6 @@ class CustomerController extends Controller
                     : uploadedAsset(null, 'profile');
                 $user->language_flag = url('/backend/assets/img/flags/' . $user->language_code . '.svg');
                 $user->encrypted_id = customEncrypt($user->id, User::$userSecretKey);
-                $user->username = $user->username ? ucwords($user->username) : '';
 
                 /** @var \Illuminate\Database\Eloquent\Collection<int, \App\Models\UserDocument> $documents */
                 $documents = $user->documents;
@@ -323,6 +322,8 @@ class CustomerController extends Controller
 
                 if ($user->customer_full_name == ' ') {
                     $user->customer_full_name = '';
+                } else {
+                    $user->customer_full_name = ucwords($user->customer_full_name);
                 }
 
                 return $user;
