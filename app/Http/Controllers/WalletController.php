@@ -226,9 +226,9 @@ class WalletController extends Controller
         }
     }
 
-    public function paymentFailed(Request $request): JsonResponse
-    {
-       return redirect()->route('user.wallet');        
+    public function paymentFailed(Request $request): View
+    {       
+        return view("booking::user_booking.fail_page" );   
     }
 
     public function walletHistoryList(Request $request): JsonResponse
