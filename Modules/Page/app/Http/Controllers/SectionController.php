@@ -10,6 +10,7 @@ use Modules\Page\Models\Section;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Modules\Page\Models\Page;
 
 class SectionController extends Controller
 {
@@ -255,6 +256,27 @@ class SectionController extends Controller
             return response()->json(['code' => 200, 'message' => __('admin.cms.section_update_success')], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => __('admin.common.default_update_error'), 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->id;
+
+            Page::where('id', $id)->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'code'   => 200,
+                'message' => 'Page deleted successfully.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 500,
+                'message' => 'An error occured while deleting page!'
+            ], 500);
         }
     }
 }

@@ -92,10 +92,11 @@ let currentLang = ""; // Add this at the top
                                                         ? `<li>
                                                             <button 
                                                                 type="button" 
+                                                                id="delete-page"
                                                                 class="dropdown-item rounded-1 delete-seat-type-btn" 
                                                                 data-id="${value.id}" 
                                                                 data-bs-toggle="modal" 
-                                                                data-bs-target="#delete-modal"
+                                                                data-bs-target="#delete_page"
                                                             >
                                                                 <i class="ti ti-trash me-1"></i>Delete
                                                             </button>
@@ -184,6 +185,41 @@ let currentLang = ""; // Add this at the top
     $(document).on('click', '.dataTables_paginate a', function () {
         $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
     });
+
+
+    $("#deletePage").on("submit", function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "/admin/page/delete",
+            type: "POST",
+            data: {
+                id: $("#delete_id").val(),
+            },
+            headers: {
+                Accept: "application/json",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    showToast("success", response.message);
+                    $("#delete_page").modal("hide");
+                    initTable();
+                }
+            },
+            error: function (res) {
+                if (res.responseJSON.code === 500) {
+                    showToast("success", res.responseJSON.message);
+                } else {
+                    showToast("error", _l("admin.common.default_delete_error"));
+                }
+            },
+        });
+    });
+
+    $(document).on("click", "#delete-page", function(){
+        let id = $(this).data("id");
+        deletePage(id);
+    });
     
 })();
 
@@ -241,4 +277,6 @@ $(document).on("click", ".edit-page", function () {
     });
 });
 
-
+function deletePage(id) {
+    $("#delete_id").val(id);
+}
