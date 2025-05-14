@@ -42,14 +42,7 @@
                         <h1>{{ __('web.auth.sign_up') }}</h1>
                         <p class="account-subtitle">{{ __('web.auth.email_confirmation_subtitle') }}</p>
                         <form id="userRegisterForm">
-                            @csrf
-                            <div class="input-block">
-                                <label class="form-label" for="username">
-                                    {{ __('web.auth.username') }} <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" class="form-control" id="username" name="username" placeholder="">
-                                <span id="username_error" class="text-danger error-text"></span>
-                            </div>
+                            @csrf                           
                             <div class="input-block">
                                 <label class="form-label" for="first_name">
                                     {{ __('web.auth.first_name') }} <span class="text-danger">*</span>

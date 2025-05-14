@@ -148,12 +148,7 @@ $(document).ready(function () {
 
 
     $("#userRegisterForm").validate({
-        rules: {
-            username: {
-                required: true,
-                minlength: 3,
-                pattern: /^[A-Za-z]+$/
-            },
+        rules: {           
             first_name: {
                 required: true,
                 minlength: 3,
@@ -173,12 +168,7 @@ $(document).ready(function () {
                 minlength: 6
             }
         },
-        messages: {
-            username: {
-                required: _l("web.auth.username_required"),
-                minlength: _l("web.auth.username_minlength"),
-                pattern: _l("web.auth.username_alphabets")
-            },
+        messages: {            
             first_name: {
                 required: _l("web.auth.first_name_required"),
                 minlength: _l("web.auth.first_name_minlength"),
