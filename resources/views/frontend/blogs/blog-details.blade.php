@@ -18,7 +18,7 @@
                         <a href="javascript:void(0)"><span>{{ $blogPosts->full_name ?? $blogPosts->customer }}</span></a>
                     </div>
                 </li>
-                <li class="date-icon"><i class="fa-solid fa-calendar-days custom-cal"></i> {{ \Carbon\Carbon::parse($blogPosts->created_at)->format('d M Y') }}</li>
+                <li class="date-icon"><i class="fa-solid fa-calendar-days custom-cal"></i> {{ formatDateTime($blogPosts->created_at) }}</li>
             </ul>
         </div>
     </div>
@@ -79,11 +79,11 @@
                     <div class="review-header-group">
                         <div class="review-widget-header">
                             <span class="review-widget-img">
-                                <img class="img-fluid" src="{{ asset('assets/img/default-profile.png') }}" alt="Post Image">
+                                <img class="img-fluid" src="{{ uploadedAsset('default','profile') }}" alt="Post Image">
                             </span>
                             <div class="review-design">
                                 <h6>{{ $review->name }}</h6>
-                                <p>{{ \Carbon\Carbon::parse($review->created_at)->format('d M Y') }}</p>
+                                <p>{{ formatDateTime($review->created_at) }}</p>
                             </div>
                         </div>
                     </div>

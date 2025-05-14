@@ -26,7 +26,7 @@
                                 </li>
                                 <li class="date-icon ms-3">
                                     <i class="fa-solid fa-calendar-days custom-calendar"></i>
-                                    <span>{{ \Carbon\Carbon::parse($blogPost->created_at)->format('d M Y') }}</span>
+                                    <span>{{ formatDateTime($blogPost->created_at) }}</span>
                                 </li>
                             </ul>
                             <p class="blog-category mb-0 mx-2">
