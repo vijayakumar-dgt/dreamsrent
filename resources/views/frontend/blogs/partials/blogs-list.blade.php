@@ -20,7 +20,7 @@
                                             <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Post Image">
                                         </div>
                                         <a href="javascript:void(0)">
-                                            <span>{{ $blogPost->customer }}</span>
+                                            <span>{{ $blogPost->full_name ?? $blogPost->customer }}</span>
                                         </a>
                                     </div>
                                 </li>
