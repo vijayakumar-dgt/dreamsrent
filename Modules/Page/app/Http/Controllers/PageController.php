@@ -1032,7 +1032,7 @@ class PageController extends Controller
                                 'image' => uploadedAsset($blog->image),
                                 'category' => $category?->name ?? '',
                                 'description' => $blog->description,
-                                'updated_at' => \Carbon\Carbon::parse($blog->updated_at)->format('F j, Y'),
+                                'updated_at' => formatDateTime($blog->updated_at),
                                 'author' => [
                                     'name' => getCurrentUserFullName($appAdmin->id),
                                     'avatar' => uploadedAsset($appAdmin->userDetails->profile_image,'profile'),
