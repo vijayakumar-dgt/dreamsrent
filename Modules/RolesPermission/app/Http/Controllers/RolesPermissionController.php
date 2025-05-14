@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -151,6 +152,7 @@ class RolesPermissionController extends Controller
     {
         $id = $request->id;
         $data = Role::find($id);
+        Cache::forget('permissions_' . $id);
 
         return response()->json([
             'status' => 'success',
@@ -164,6 +166,7 @@ class RolesPermissionController extends Controller
         try {
             $id = $request->id;
             Role::where('id', $id)->delete();
+            Cache::forget('permissions_' . $id);
 
             return response()->json([
                 'status' => 'success',
@@ -226,6 +229,7 @@ class RolesPermissionController extends Controller
                     ]
                 );
             }
+            Cache::forget('permissions_' . $roleId);
 
             return response()->json([
                 'code' => 200,

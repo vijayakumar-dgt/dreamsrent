@@ -22,6 +22,7 @@ use Modules\RolesPermission\Models\Module as ModuleModel;
 use Modules\RolesPermission\Models\Permission;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Cache;
 
 if (!function_exists('clearCache')) {
     function clearCache(): bool
@@ -271,20 +272,24 @@ if (!function_exists('getUserPermissions')) {
             return collect();
         }
 
-        return Permission::where('permissions.role_id', $user->role_id)
-            ->whereHas('role', function ($query) {
-                $query->where('status', 1);
-            })
-            ->select(
-                'permissions.module_id',
-                'permissions.create',
-                'permissions.edit',
-                'permissions.view',
-                'permissions.delete',
-                'permissions.allow_all'
-            )
-            ->with(['module:id,module_slug'])
-            ->get();
+        $cacheKey = 'permissions_' . $user->role_id;
+
+        return Cache::remember($cacheKey, 86400, function () use ($user) {
+            return Permission::where('permissions.role_id', $user->role_id)
+                ->whereHas('role', function ($query) {
+                    $query->where('status', 1);
+                })
+                ->select(
+                    'permissions.module_id',
+                    'permissions.create',
+                    'permissions.edit',
+                    'permissions.view',
+                    'permissions.delete',
+                    'permissions.allow_all'
+                )
+                ->with(['module:id,module_slug'])
+                ->get();
+        });
     }
 }
 
