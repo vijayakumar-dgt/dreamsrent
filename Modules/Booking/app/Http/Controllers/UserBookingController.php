@@ -375,8 +375,7 @@ class UserBookingController extends Controller
         return view("booking::user_booking.success_page", compact("transaction_id", "booking", "vehicleId", "vehicle", "vehicleImageUrl", "dLocation", "rLocation", "mainLocation", "vehicleExtraServicesWithPrice", "vehicleInsurance", "driverInfo", "driverInfo_ride", "driverInfo_price", "bookingInfo", "currencySymbol", "startDateTime", "endDateTime"));
     }
 
-
-    public function paymentFail(int $transaction_id): View
+    public function paymentFail(string $transaction_id): View
     {
         $booking = Booking::where('transaction_id', $transaction_id)->first();
 
