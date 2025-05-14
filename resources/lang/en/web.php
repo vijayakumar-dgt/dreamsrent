@@ -387,6 +387,7 @@ return [
         'average' => 'Average',
         'below_average' => 'Below Average',
         'poor' => 'Poor',
+        'miles' => 'Miles',
     ],
     'common' => [
         'back_to_home' => 'Back to Home',
