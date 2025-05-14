@@ -268,6 +268,10 @@
                         <p>Tax</p>
                         <p id="taxValue"></p>
                     </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <p>Vehicle Price</p>
+                        <p id="totalValue"></p>
+                    </div>
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
                     <h6>Total Price</h6>

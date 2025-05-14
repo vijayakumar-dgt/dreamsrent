@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 $("#car_title").text(booking.vehicle.name);
                                 $("#car_type").text(vehicleType.name);
                                 $("#car_price").html(
-                                    `$${booking.vehicle_total_price}<span class="text-gray-5 fw-normal">/${booking.rental_type}</span>`
+                                    `$${booking.vehicle_price}<span class="text-gray-5 fw-normal">/${booking.rental_type}</span>`
                                 );
                                 $("#start_date_time").text(
                                     booking.start_datetime
@@ -198,6 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                 } else {
                                     $(".driverInfo").addClass("d-none");
                                 }
+                                $("#totalValue").html(`$${booking.vehicle_total_price}`);
                                 $("#taxValue").html(`$${booking.tax_val}`);
                                 $("#extraService").html(
                                     `$${booking.total_extra_service_price}`
