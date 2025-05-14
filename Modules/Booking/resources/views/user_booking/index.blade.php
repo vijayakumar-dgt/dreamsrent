@@ -390,7 +390,7 @@
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="input-block date-widget">
-                                                    <label class="form-label">{{__('web.home.upload_documents')}} <span class="text-danger"> *</span></label>
+                                                    <label class="form-label">{{__('web.home.upload_documents')}}</label>
                                                     <div class="upload-div">
                                                         <input type="file" name="driver_file" id="driver_file">
                                                         <div class="upload-photo-drag">
