@@ -602,7 +602,7 @@
                                         <div class="col-md-4">
                                             <div class="input-block">
                                                 <label class="form-label">{{ __('web.home.email_address') }}<span class="text-danger"> *</span></label>
-                                                <input type="email" name="email" id="email" value="{{ $user->email ? $user->email : '' }}" class="form-control" maxlength="30" placeholder="{{__('web.home.email_placeholder')}}">
+                                                <input type="email" name="email" id="email" value="{{ $user->email ? $user->email : '' }}" class="form-control" maxlength="60" placeholder="{{__('web.home.email_placeholder')}}">
                                                 <span class="invalid-feedback" id="email_error"></span>
                                             </div>
                                         </div>

@@ -288,6 +288,8 @@ class UserBookingController extends Controller
     public function paymentSuccess(string $transaction_id): View
     {
         $booking = Booking::where('transaction_id', $transaction_id)->first();
+        $startDateTime = formatDateTime($booking->start_datetime);
+        $endDateTime = formatDateTime($booking->end_datetime);
 
         if (!$booking) {
             abort(404, 'Booking not found.');
@@ -370,8 +372,7 @@ class UserBookingController extends Controller
 
         $currencySymbol = $currency->symbol ?? "$";
 
-
-        return view("booking::user_booking.success_page", compact("transaction_id", "booking", "vehicleId", "vehicle", "vehicleImageUrl", "dLocation", "rLocation", "mainLocation", "vehicleExtraServicesWithPrice", "vehicleInsurance", "driverInfo", "driverInfo_ride", "driverInfo_price", "bookingInfo", "currencySymbol"));
+        return view("booking::user_booking.success_page", compact("transaction_id", "booking", "vehicleId", "vehicle", "vehicleImageUrl", "dLocation", "rLocation", "mainLocation", "vehicleExtraServicesWithPrice", "vehicleInsurance", "driverInfo", "driverInfo_ride", "driverInfo_price", "bookingInfo", "currencySymbol", "startDateTime", "endDateTime"));
     }
 
 
@@ -403,7 +404,9 @@ class UserBookingController extends Controller
         $startDatetime = $startDatetimeObj ? $startDatetimeObj->format('Y-m-d H:i:s') : null;
         $endDatetime = $endDatetimeObj ? $endDatetimeObj->format('Y-m-d H:i:s') : null;
 
-        $noOfDays = Carbon::parse($startDatetime)->diffInDays(Carbon::parse($endDatetime));
+        $diffInDays = $startDatetimeObj->floatDiffInDays($endDatetimeObj); // Get exact difference with decimals
+
+        $noOfDays = $diffInDays <= 1 ? 2 : ceil($diffInDays);
 
         $pickup_location_id = null;
         $return_location_id = null;

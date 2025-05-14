@@ -132,9 +132,6 @@
                             <h6>{{__('web.home.location_and_time')}}</h6>
                         </div>
                         <div class="book-body">
-                            @php
-                            use Carbon\Carbon;
-                            @endphp
                             <ul class="location-lists">
                                 <li>
                                     <h6>{{__('web.home.booking_type')}}</h6>
@@ -147,12 +144,12 @@
                                 <li>
                                     <h6>{{ __('web.home.pickup_location') }}</h6>
                                     <p>{{ $dLocation->name }}</p>
-                                    <p>{{ $booking->start_datetime ? Carbon::parse($booking->start_datetime)->format('m/d/Y H:i') : 'N/A' }}</p>
+                                    <p>{{ $startDateTime }}</p>
                                 </li>
                                 <li>
                                     <h6>{{ __('web.home.return_location') }}</h6>
                                     <p>{{ $rLocation->name }}</p>
-                                    <p>{{ $booking->end_datetime ? Carbon::parse($booking->end_datetime)->format('m/d/Y H:i') : 'N/A' }}</p>
+                                    <p>{{ $endDateTime }}</p>
                                 </li>
                             </ul>
                         </div>
