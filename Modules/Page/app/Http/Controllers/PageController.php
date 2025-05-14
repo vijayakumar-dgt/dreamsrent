@@ -1022,7 +1022,7 @@ class PageController extends Controller
                             ->get();
 
                         $blogs = [];
-
+                        $appAdmin = User::where('user_type', 1)->first();
                         foreach ($blogss as $blog) {
                             $category = BlogCategory::find($blog->category);
                             $blogs[] = [
@@ -1034,8 +1034,8 @@ class PageController extends Controller
                                 'description' => $blog->description,
                                 'updated_at' => \Carbon\Carbon::parse($blog->updated_at)->format('F j, Y'),
                                 'author' => [
-                                    'name' => 'Admin',
-                                    'avatar' => 'https://www.w3schools.com/howto/img_avatar.png',
+                                    'name' => getCurrentUserFullName($appAdmin->id),
+                                    'avatar' => uploadedAsset($appAdmin->userDetails->profile_image,'profile'),
                                 ],
                             ];
                         }

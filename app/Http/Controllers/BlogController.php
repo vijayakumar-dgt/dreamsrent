@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Modules\GeneralSetting\Models\BlogReviews;
 use Illuminate\View\View;
 
@@ -46,6 +47,7 @@ class BlogController extends Controller
             ->select(
                 'blog_posts.*',
                 'users.name as customer',
+                DB::raw('CONCAT(user_details.first_name, " ", user_details.last_name) as full_name'),
                 'user_details.profile_image',
                 'blog_categories.name as category',
                 'blog_tags.name as tag'
@@ -114,7 +116,8 @@ class BlogController extends Controller
             ->select(
                 'blog_posts.*',
                 'users.name as customer',
-                'user_details.profile_image',
+                DB::raw('CONCAT(user_details.first_name, " ", user_details.last_name) as full_name'),
+                'user_details.profile_image as profile_image',
                 'blog_categories.name as category',
                 'blog_tags.name as tag'
             )
@@ -165,6 +168,7 @@ class BlogController extends Controller
                 'blog_categories.name as category',
                 'blog_tags.name as tag',
                 'users.name as customer',
+                DB::raw('CONCAT(user_details.first_name," ",user_details.last_name) as full_name'),
                 'user_details.profile_image'
             )
             ->where('blog_posts.slug', $id)

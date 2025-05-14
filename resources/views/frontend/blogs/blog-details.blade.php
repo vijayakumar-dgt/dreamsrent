@@ -15,7 +15,7 @@
                             @endphp
                             <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Post Image">
                         </div>
-                        <a href="javascript:void(0)"><span>{{ $blogPosts->customer }}</span></a>
+                        <a href="javascript:void(0)"><span>{{ $blogPosts->full_name ?? $blogPosts->customer }}</span></a>
                     </div>
                 </li>
                 <li class="date-icon"><i class="fa-solid fa-calendar-days custom-cal"></i> {{ \Carbon\Carbon::parse($blogPosts->created_at)->format('d M Y') }}</li>

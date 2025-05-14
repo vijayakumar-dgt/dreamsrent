@@ -48,10 +48,10 @@
                                                     $imagePath = 'storage/' . $blogPost->profile_image;
                                                     $defaultImage = asset('/backend/assets/img/default-profile.png');
                                                 @endphp
-                                                <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="author">
+                                                <img src="{{ uploadedAsset($blogPost->profile_image,'profile') }}" alt="author">
                                             </div>
                                             <a href="javascript:void(0)">
-                                                <span><a href="javascript:void(0)"><span>{{$blogPost->customer}}</span></a></span>
+                                                <span><a href="javascript:void(0)"><span>{{$blogPost->full_name ?? $blogPost->customer}}</span></a></span>
                                             </a>
                                         </div>
                                     </li>
@@ -111,7 +111,7 @@
                         @foreach($latestblogs as $latest)
                         <div class="article">
                             <div class="article-blog">
-                                <a href="/blog-details/{{$latest->id}}">
+                                <a href="/blog-details/{{$latest->slug}}">
                                     @php
                                         $imagePath = 'storage/' . $latest->image;
                                         $defaultImage = asset('/backend/assets/img/default-profile.png');
@@ -121,7 +121,7 @@
                             </div>
                             <div class="article-content">
                                 <h5>
-                                    <a href="/blog-details/{{$latest->id}}">{{$latest->title}}</a>
+                                    <a href="/blog-details/{{$latest->slug}}">{{$latest->title}}</a>
                                 </h5>
                                 <div class="article-date">
                                     <i class="fa-solid fa-calendar-days"></i>
