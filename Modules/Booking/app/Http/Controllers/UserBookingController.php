@@ -47,12 +47,11 @@ class UserBookingController extends Controller
     {
         if (empty(env('PAYPAL_SANDBOX_CLIENT_ID')) || empty(env('PAYPAL_SANDBOX_CLIENT_SECRET'))) {
             $this->provider = null;
-            Log::warning("PayPal credentials are missing in .env");
         } else {
             $this->provider = new PayPalClient();
             $this->provider->getAccessToken();
         }
-    }    
+    }
 
     public function redirectToBooking(Request $request): View|RedirectResponse
     {
@@ -66,6 +65,7 @@ class UserBookingController extends Controller
         }
         return redirect()->route('home');
     }
+
     public function index(Request $request, string $slug): View|RedirectResponse
     {
         if (!Auth::guard('web')->check()) {

@@ -349,11 +349,11 @@
                 driver_age: {
                     required: true,
                     number: true,
-                    min: 20, // Ensure the driver is at least 20 years old
+                    min: 20,
                 },
                 driver_file: {
-                    required: true,
-                    extension: "jpg|jpeg|png", // Only allow images
+                    required: false,
+                    extension: "jpg|jpeg|png",
                 },
                 driver_licence: {
                     required: true,
