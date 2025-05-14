@@ -78,7 +78,7 @@ class UserBookingController extends Controller
             ]);
             return redirect()->route('user-login');
         }
-        $vehicle = VehicleInfo::select('id', 'name', 'vehicle_image', 'main_location_id', 'other_location_id', 'vehicle_price', 'passenger_capacity')
+        $vehicle = VehicleInfo::select('id', 'name','slug', 'vehicle_image', 'main_location_id', 'other_location_id', 'vehicle_price', 'passenger_capacity')
             ->where('slug', $slug)
             ->first();
 

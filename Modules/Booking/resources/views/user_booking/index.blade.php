@@ -733,7 +733,7 @@
                                             <div class="care-more-info">
                                                 <h5>{{ $vehicle->name }}</h5>
                                                 <p>{{ old('delivery_return_location', request('delivery_return_location')) }}</p>
-                                                <a href="">{{__('web.home.view_vehicle_details')}}</a>
+                                                <a href="{{ route('vehicleDetails',$vehicle->slug) }}" target="_blank">{{__('web.home.view_vehicle_details')}}</a>
                                             </div>
                                         </div>
                                         <div class="booking-vehicle-rates">
