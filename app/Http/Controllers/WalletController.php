@@ -228,7 +228,7 @@ class WalletController extends Controller
 
     public function paymentFailed(Request $request): JsonResponse
     {
-        
+       return redirect()->route('user.wallet');        
     }
 
     public function walletHistoryList(Request $request): JsonResponse
