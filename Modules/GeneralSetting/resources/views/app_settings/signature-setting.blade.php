@@ -138,7 +138,7 @@
                                 </div>
                                 <!-- Default Checkbox -->
                                 <div class="mb-3">
-                                    <label class="form-check-label form-label mb-3" for="is_default">
+                                    <label class="form-check-label form-label" for="is_default">
                                         <input class="form-check-input form-label" type="checkbox" id="is_default" name="is_default" value="1" checked>
                                         {{ __('admin.general_settings.mark_as_default') }}
                                     </label>
@@ -155,7 +155,7 @@
                         <div class="modal-footer">
                             <div class="d-flex justify-content-center">
                                 <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-                                <button type="submit" class="btn btn-primary">{{ __('admin.common.create_new') }}</button>
+                                <button type="submit" class="btn btn-primary add_btn">{{ __('admin.common.create_new') }}</button>
                             </div>
                         </div>
                     </div>
@@ -179,7 +179,7 @@
                                     <label class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 p-2 flex-shrink-0 text-dark frames">
-                                            <img id="edit_signature_preview" src="backend/assets/img/icons/sign.svg" class="img-fluid rounded object-fit-contain" alt="img">
+                                            <img id="edit_signature_preview" src="" class="img-fluid rounded object-fit-contain" alt="img">
                                         </div>
                                         <div class="profile-upload">
                                             <div class="profile-uploader d-flex align-items-center">
@@ -195,12 +195,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-check mb-3">
-                                    <input type="checkbox" id="edit_signature_default" name="is_default" class="form-check-input" value="1">
-                                    <label for="edit_signature_default" class="form-check-label form-label">{{ __('admin.general_settings.mark_as_default') }}</label>
+                                <div class="mb-3">
+                                    <label class="form-check-label form-label" for="edit_signature_default">
+                                        <input class="form-check-input form-label" type="checkbox" id="edit_signature_default" name="is_default" value="1">
+                                        {{ __('admin.general_settings.mark_as_default') }}
+                                    </label>
+                                    <span id="edit_signature_default_error" class="text-danger error-text"></span>
                                 </div>
                                 <div class="mb-0">
-                                    <label class="form-label">{{ __('admin.general_settings.signatures_name') }} <span class="text-danger">*</span></label>
+                                    <label class="form-label">{{ __('admin.general_settings.signatures_name') }}<span class="text-danger"> *</span></label>
                                     <input type="text" id="edit_signature_name" name="signature_name" class="form-control">
                                     <span id="edit_signature_name_error" class="error-text text-danger"></span>
                                 </div>
@@ -213,7 +216,7 @@
                             </div>
                             <div class="d-flex justify-content-center">
                                 <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-                                <button type="submit" class="btn btn-primary">{{ __('admin.common.delete') }}</button>
+                                <button type="submit" class="btn btn-primary edit_btn">{{ __('admin.common.save_changes') }}</button>
                             </div>
                         </div>
                     </div>

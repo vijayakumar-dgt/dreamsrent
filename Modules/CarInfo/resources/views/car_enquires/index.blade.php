@@ -214,7 +214,7 @@
 				</table>
 			</div>
 			<!-- Custom Data Table -->
-			<div class="custom-datatable-filter table-responsive brandstable d-none real-table">
+			<div class="custom-datatable-filter table-responsive d-none real-table">
 				<table class="table" id="enquiryTable">
 					<thead class="thead-light">
 						<tr>

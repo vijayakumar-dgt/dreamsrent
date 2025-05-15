@@ -385,14 +385,17 @@
             },
             highlight: function (element) {
                 $(element).addClass("is-invalid").removeClass("is-valid");
+                $('#' + element.id).siblings('span').addClass('me-3');
             },
             unhighlight: function (element) {
                 $(element).removeClass("is-invalid").addClass("is-valid");
                 var errorId = element.id + "_error";
                 $("#" + errorId).text("");
+                $('#' + element.id).siblings('span').addClass('me-3');
             },
             onkeyup: function(element) {
                 $(element).valid();
+                $('#' + element.id).siblings('span').removeClass('me-3');
             },
             onchange: function(element) {
                 $(element).valid();

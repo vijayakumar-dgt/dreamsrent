@@ -202,7 +202,7 @@
                 <div class="modal-body">
                     <div>
                         <input type="hidden" id="edit_category_id">
-                        <label class="form-label">{{__('admin.blog.category')}}<span class="text-danger">*</span></label>
+                        <label class="form-label">{{__('admin.blog.category')}}<span class="text-danger"> *</span></label>
                         <input type="text" class="form-control" id="edit_category_name">
                     </div>
                 </div>

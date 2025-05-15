@@ -124,8 +124,8 @@
                 </table>
             </div>
             <!-- Real Table (hidden initially) -->
-            <div class="custom-datatable-filter d-none real-table">
-                <table id="faqTable" class="table datatable">
+            <div class="custom-datatable-filter table-responsive d-none real-table">
+                <table id="faqTable" class="table">
                     <thead class="thead-light">
                         <tr>
                             <th>{{ strtoupper(__('admin.general_settings.question')) }}</th>

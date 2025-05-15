@@ -2,12 +2,13 @@
     "use strict";
     await loadTranslationFile('admin', 'blog, common');
 
-    $('#blogCommentTable').DataTable({
+    let blogCommentTable = $('#blogCommentTable').DataTable({
         ordering: true,
-        searching: false,
+        searching: true,
         pageLength: 10,
         lengthChange: false,
         "drawCallback": function () {
+            $(".dataTables_filter").hide();
             $(".dataTables_info").addClass('d-none');
             $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
 
@@ -23,13 +24,13 @@
             $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
         },
         language: {
-            emptyTable: _l("admin.common.no_matching_records"),
+            emptyTable: _l("admin.common.empty_table"),
             info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
             infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
             infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
             lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
             search: _l("admin.common.search") + ":",
-            zeroRecords: _l("admin.common.empty_table"),
+            zeroRecords: _l("admin.common.no_matching_records"),
             paginate: {
                 first: _l("admin.common.first"),
                 last: _l("admin.common.last"),
@@ -48,6 +49,10 @@
         }
     });
 
+    $('#tableSearch').on('keyup', function () {
+        blogCommentTable.search(this.value).draw();
+    });
+
 })();
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -60,66 +65,44 @@ document.addEventListener('DOMContentLoaded', function () {
             const selected = this.textContent.trim();
             filterText.textContent = selected;
 
-            tableRows.forEach(row => row.style.display = '');
+            const table = $('#blogCommentTable').DataTable();
 
             switch (selected) {
-                case 'Ascending':
-                    sortTable(1, true);
+                case _l('admin.blog.ascending'):
+                    table.order([1, 'asc']).draw();
                     break;
-                case 'Desending':
-                    sortTable(1, false);
+                case _l('admin.blog.descending'):
+                    table.order([1, 'desc']).draw();
                     break;
-                case 'Last Month':
-                    filterByDateRange(30);
+                case _l('admin.blog.last_month'):
+                    filterByDateRange(30, table);
                     break;
-                case 'Last 7 Days':
-                    filterByDateRange(7);
+                case _l('admin.blog.last_7_days'):
+                    filterByDateRange(7, table);
                     break;
-                case 'Latest':
+                case _l('admin.blog.latest'):
                 default:
-                    sortTable(1, false);
+                    table.order([1, 'desc']).draw();
                     break;
             }
         });
     });
 
-    function sortTable(columnIndex, ascending = true) {
-        const rowsArray = Array.from(tableRows);
-        rowsArray.sort((a, b) => {
-            const dateA = new Date(a.children[columnIndex].textContent.trim());
-            const dateB = new Date(b.children[columnIndex].textContent.trim());
-            return ascending ? dateA - dateB : dateB - dateA;
-        });
+    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        if (!window.customDateFilterDays) return true;
 
-        const tbody = document.querySelector('.custom-blog-table tbody');
-        tbody.innerHTML = '';
-        rowsArray.forEach(row => tbody.appendChild(row));
-    }
-
-    function filterByDateRange(days) {
+        const dateText = data[1]; // second column
+        const rowDate = new Date(dateText);
         const now = new Date();
         const pastDate = new Date();
-        pastDate.setDate(now.getDate() - days);
+        pastDate.setDate(now.getDate() - window.customDateFilterDays);
 
-        tableRows.forEach(row => {
-            const dateText = row.children[1].textContent.trim();
-            const rowDate = new Date(dateText);
-            row.style.display = (rowDate >= pastDate && rowDate <= now) ? '' : 'none';
-        });
-    }
-});
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    const searchInput = document.getElementById('tableSearch');
-    const tableRows = document.querySelectorAll('.custom-blog-table tbody tr');
-
-    searchInput.addEventListener('keyup', function () {
-        const query = this.value.toLowerCase();
-
-        tableRows.forEach(row => {
-            const textContent = row.textContent.toLowerCase();
-            row.style.display = textContent.includes(query) ? '' : 'none';
-        });
+        return rowDate >= pastDate && rowDate <= now;
     });
+
+    function filterByDateRange(days, table) {
+        window.customDateFilterDays = days;
+        table.draw();
+    }
+    
 });

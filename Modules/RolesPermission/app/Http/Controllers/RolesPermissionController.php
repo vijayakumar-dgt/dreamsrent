@@ -193,6 +193,11 @@ class RolesPermissionController extends Controller
         }
 
         $role = Role::select('id', 'role_name')->where('id', $roleId)->first();
+
+        if(!$role) {
+            abort(404);
+        }
+
         $modules = ModuleModel::select('id', 'module_name', 'module_slug', 'parent_id')
             ->with([
                 'childModules' => function ($q) {
