@@ -482,3 +482,94 @@ function getCurrentUserFullname($userId = null)
     return ucwords($fullName);
 }
 
+/**
+ * Send a notification to the given email based on the provided slug and data.
+ * @param string $slug
+ * @param string|array $email
+ * @return void
+ */
+function sendNewsletterEmail(string|array $email, string $slug, array $notifyData): void
+{
+    $notificationType = NotificationType::where('slug', $slug)->first();
+    if (!$notificationType) {
+        return;
+    }
+    $placeholders = json_decode($notificationType->getAttribute('tags'), true);
+    $template = EmailTemplate::where('notification_type', $notificationType->id)
+        ->where('status', 1)
+        ->first();
+
+    $notifyData = getCommonSettingData($notifyData);
+
+    $replaced = function ($text) use ($placeholders, $notifyData) {
+        if (!$placeholders || !is_array($placeholders)) {
+            return $text;
+        }
+
+        foreach ($placeholders as $tag) {
+            $search = '{' . $tag . '}';
+            $replace = $notifyData[$tag] ?? '';
+            $text = str_replace($search, $replace, $text);
+        }
+
+        return $text;
+    };
+
+    if (!$email) {
+        return;
+    }
+
+    $subject = $template->subject ?? 'Reg - Newsletter';
+    $content = $template->description ?? 'You have successfully subscribed to our newsletter.';
+
+    if ($slug == 'test_mail') {
+        $subject = $template->subject ?? 'Reg - Admin Test Mail';
+        $content = $template->description ?? "Hello $notifyData[user_name],<br><br>
+        This is a test email to confirm that the email configuration for admin notifications is working correctly.<br><br>
+        If you have received this email, everything is set up properly on your end. No further action is required.<br><br>
+        Regards,<br>
+        System Administrator";
+    }
+
+    $parsedTemplate = [
+        'subject'     => $replaced($subject),
+        'content' => $replaced($content),
+    ];
+
+    $payload = [
+        'to_email' => $email,
+        'subject' => $parsedTemplate['subject'],
+        'content' => $parsedTemplate['content'],
+    ];
+
+    $emailPayload   = new Request($payload);
+    $emailController = new EmailController();
+    $emailController->sendEmail($emailPayload);
+}
+
+function getCommonSettingData(?array $notifyData): array
+{
+    $generalData = GeneralSetting::where('group_id', 1)->pluck('value', 'key');
+
+    if ($generalData) {
+        foreach ($generalData as $key => $value) {
+            if ($key == 'organization_name') {
+                $notifyData['company_name'] = $value;
+            }
+            if ($key == 'company_email') {
+                $notifyData['company_email'] = $value;
+            }
+            if ($key == 'company_phone') {
+                $notifyData['company_phone'] = $value;
+            }
+            if ($key == 'company_address_line') {
+                $notifyData['company_address'] = $value;
+            }
+            if ($key == 'company_postal_code') {
+                $notifyData['company_postal_code'] = $value;
+            }
+        }
+    }
+
+    return $notifyData;
+}

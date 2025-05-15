@@ -76,7 +76,7 @@ class EmailTemplateController extends Controller
         }
 
         try {
-            $successMessage =  __('admin.general_settings.email_template_success');
+            $successMessage =  __('admin.general_settings.email_templated_success');
 
             if ($request->has('id') && $request->id != '') {
                 /** @var \Modules\GeneralSetting\Models\EmailTemplate $emailTemplate */

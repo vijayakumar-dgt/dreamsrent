@@ -76,7 +76,7 @@ $(document).ready(function() {
                 },
                 beforeSend: function () {
                     $('.submitBtn').attr('disabled', true).html(`
-                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> Saving..
+                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..
                     `);
                 },
                 success:function(resp){
@@ -376,7 +376,7 @@ $(document).ready(function() {
                 success:function(resp){
                     $(".error-text").text("");
                     $(".form-control").removeClass("is-invalid is-valid");
-                    $(".submitBtn").removeAttr("disabled").html(_l('admin.common.submit'));
+                    $(".submitBtn").removeAttr("disabled").html(_l('admin.common.send'));
                     if (resp.code === 200) {
                         showToast('success', resp.message);
                         $("#testmail").modal('hide');
@@ -385,7 +385,7 @@ $(document).ready(function() {
                 error:function(error){
                     $(".error-text").text("");
                     $(".form-control").removeClass("is-invalid is-valid");
-                    $(".submitBtn").removeAttr("disabled").html(_l('admin.common.submit'));
+                    $(".submitBtn").removeAttr("disabled").html(_l('admin.common.send'));
                     if (error.responseJSON.code === 422) {
                         $.each(error.responseJSON.errors, function(key, val) {
                             $("#" + key).addClass("is-invalid");

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Modules\Communication\Http\Controllers\EmailController;
 use Modules\GeneralSetting\Models\CommunicationSetting;
 use Modules\GeneralSetting\Models\EmailTemplate;
+use Modules\GeneralSetting\Models\GeneralSetting;
 
 class CommunicationSettingController extends Controller
 {
@@ -265,31 +266,15 @@ class CommunicationSettingController extends Controller
         try {
             $user = Auth::guard('admin')->user();
             $userId = $user->id ?? null;
-            $name = $user->name ?? '';
 
             $userDetail = UserDetail::where('user_id', $userId)->first();
-            if ($userDetail) {
-                $name = $userDetail->first_name . ' ' . $userDetail->last_name;
-            }
-            $name = $name;
+            $name = ($userDetail && $userDetail->first_name) ? $userDetail->first_name . ' ' . $userDetail->last_name : 'Admin';
 
-            $template = EmailTemplate::select('subject', 'description')
-                ->where('notification_type', 7)
-                ->first();
-
-            $data = [
-                'subject' => $template->subject ?? 'Reg - Admin Test Mail',
-                'content' => $template->description ?? "Hello $name,<br><br>
-                This is a test email to confirm that the email configuration for admin notifications is working correctly.<br><br>
-                If you have received this email, everything is set up properly on your end. No further action is required.<br><br>
-                Regards,<br>
-                System Administrator",
-                'to_email' => $request->email_address
+            $notifyData = [
+                'user_name' => $name,
             ];
 
-            $requestData = new Request($data);
-            $emailController = new EmailController();
-            $emailController->sendEmail($requestData);
+            sendNewsletterEmail($request->email_address, 'test_mail', $notifyData);
 
             return response()->json([
                 'code' => 200,
