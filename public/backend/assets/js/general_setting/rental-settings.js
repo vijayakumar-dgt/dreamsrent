@@ -23,12 +23,9 @@
             submitHandler: function (form) {
                 let rentalData = new FormData(form);
 
-
                 $("#rentalSettingForm input[type='checkbox']").each(function () {
                     rentalData.set($(this).attr("name"), $(this).is(":checked") ? "1" : "0");
                 });
-
-
 
                 $.ajax({
                     type: "POST",
@@ -52,7 +49,6 @@
                         if (resp.code === 200) {
                             loadRentalSettings();
                             showToast("success", resp.message);
-
                         }
                     },
                     error: function (error) {
@@ -114,8 +110,8 @@
                     showToast('error', _l('admin.common.default_retrieve_error'));
                 },
                 complete: function () {
-                    $(".label-loader, .input-loader").hide();
-                    $(".real-label, .real-input").removeClass("d-none");
+                    $(".label-loader, .input-loader, .card-loader").hide();
+                    $(".real-label, .real-input, .real-card").removeClass("d-none");
                 }
             });
         }

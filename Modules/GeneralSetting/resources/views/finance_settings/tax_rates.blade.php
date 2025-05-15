@@ -37,95 +37,16 @@
                                         <div>
                                             <div>
                                                 @if (hasPermission($permissions, 'finance_settings', 'create'))
-
-
-                                                <div class="skeleton button-skeleton button-loader"></div>
-                                                <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center d-none real-button" id="add_tax_rate" data-bs-toggle="modal" data-bs-target="#tax_rate_modal"><i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new_tax_rate') }}</a>
+                                                <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center" id="add_tax_rate" data-bs-toggle="modal" data-bs-target="#tax_rate_modal"><i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new_tax_rate') }}</a>
                                             @endif
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- /Table Header -->
-                                    <div class="custom-datatable-filter table-responsive table-loader">
-                                        <table class="table table-bordered">
-                                            <thead class="thead-light">
-                                                <tr>
-                                                    <th class="text-center">
-                                                        <div class="skeleton th-skeleton th-loader"></div>
-                                                    </th>
-                                                    <th>
-                                                        <div class="skeleton th-skeleton th-loader"></div>
-                                                    </th>
-                                                    <th>
-                                                        <div class="skeleton th-skeleton th-loader"></div>
-                                                    </th>
-                                                    <th>
-                                                        <div class="skeleton th-skeleton th-loader"></div>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div class="custom-datatable-filter table-responsive position-relative vh-10 table-loader">
+                                        @include('admin.content-loader')
                                     </div>
                                     <!-- Custom Data Table -->
-                                    <div class="custom-datatable-filter table-responsive brandstable country-table d-none real-table">
+                                    <div class="custom-datatable-filter table-responsive d-none real-table">
                                         <table class="table" id="taxRateTable">
                                             <thead class="thead-light">
                                                 <tr>
@@ -151,94 +72,17 @@
                                         <div>
                                             <div>
                                                 @if (hasPermission($permissions, 'finance_settings', 'create'))
-
-                                                <div class="skeleton button-skeleton button-loader"></div>
-                                                <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center d-none real-button" id="add_tax_group" data-bs-toggle="modal" data-bs-target="#tax_group_modal"><i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new_tax_group') }}</a>
+                                                <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center" id="add_tax_group" data-bs-toggle="modal" data-bs-target="#tax_group_modal"><i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new_tax_group') }}</a>
                                                 @endif
                                             </div>
                                         </div>
                                     </div>
                                     <!-- /Table Header -->
-                                    <div class="custom-datatable-filter table-responsive table-loader">
-                                        <table class="table table-bordered">
-                                            <thead class="thead-light">
-                                                <tr>
-                                                    <th class="text-center">
-                                                        <div class="skeleton th-skeleton th-loader"></div>
-                                                    </th>
-                                                    <th>
-                                                        <div class="skeleton th-skeleton th-loader"></div>
-                                                    </th>
-                                                    <th>
-                                                        <div class="skeleton th-skeleton th-loader"></div>
-                                                    </th>
-                                                    <th>
-                                                        <div class="skeleton th-skeleton th-loader"></div>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div class="custom-datatable-filter table-responsive position-relative vh-10 table-loader">
+                                        @include('admin.content-loader')
                                     </div>
                                     <!-- Custom Data Table -->
-                                    <div class="custom-datatable-filter table-responsive brandstable country-table d-none real-table">
+                                    <div class="custom-datatable-filter table-responsive d-none real-table">
                                         <table class="table" id="taxGroupTable">
                                             <thead class="thead-light">
                                                 <tr>

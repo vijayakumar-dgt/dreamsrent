@@ -28,17 +28,15 @@
                         <div class="card-header">
                             <h5 class="fw-bold">{{ __('admin.general_settings.website_settings') }}</h5>
                         </div>
-                        <div class="card-body pb-0">
+                        @include('admin.general_settings_loader')
+                        <div class="card-body pb-0 d-none real-card">
                             <h6 class="fw-bold mb-3">{{ __('admin.general_settings.theme_settings') }}</h6>
                             <div class="row gx-3">
                                 <div class="col-md-4">
-                                    <div class="card card-loader position-relative vh-25">
-                                        @include('admin.content-loader')
-                                    </div>
-                                    <div class="card d-none d-none real-card">
+                                    <div class="card">
                                         <div class="card-body p-2">
                                             <a href="javascript:void(0);">
-                                                <img src="/backend/assets/img/theme-01.svg" alt="theme" class="theme-img" data-id="theme_01">
+                                                <img src="{{ asset('backend/assets/img/theme-01.svg') }}" alt="theme" class="theme-img" data-id="theme_01">
                                             </a>
                                             <div class="d-flex justify-content-between align-items-center mt-2">
                                                 <label class="form-check-label" for="theme_01" data-id="theme_01">
@@ -52,13 +50,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="card card-loader position-relative vh-25">
-                                        @include('admin.content-loader')
-                                    </div>
-                                    <div class="card d-none real-card">
+                                    <div class="card">
                                         <div class="card-body p-2">
                                             <a href="javascript:void(0);">
-                                                <img src="/backend/assets/img/theme-02.svg" alt="theme" class="theme-img" data-id="theme_02">
+                                                <img src="{{ asset('backend/assets/img/theme-02.svg') }}" alt="theme" class="theme-img" data-id="theme_02">
                                             </a>
                                             <div class="d-flex justify-content-between align-items-center mt-2">
                                                 <label class="form-check-label" for="theme_02" data-id="theme_02">

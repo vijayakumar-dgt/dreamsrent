@@ -29,7 +29,8 @@
                         <div class="card-header">
                             <h5>{{ __('admin.general_settings.other_settings') }}</h5>
                         </div>
-                        <div class="card-body pb-0">
+                        @include('admin.general_settings_loader')
+                        <div class="card-body pb-0 d-none real-card">
                             <div>
                                 <h6 class="fw-bold mb-3">{{ __('admin.general_settings.storage') }}</h6>
                                 <div class="row">
@@ -43,14 +44,12 @@
                                                             <img src="/backend/assets/img/icons/storage-icon-03.svg" class="w-auto h-auto" alt="Local Storage Icon">
                                                         </span>
                                                         <div>
-                                                            <div class="skeleton label-skeleton label-loader"></div>
-                                                            <h6 class="fw-medium fs-14 mb-0 d-none real-label">{{ __('admin.general_settings.local_storage') }}</h6>
+                                                            <h6 class="fw-medium fs-14 mb-0">{{ __('admin.general_settings.local_storage') }}</h6>
                                                         </div>
                                                     </div>
                                                     <div class="d-flex align-items-center">
                                                         @if (hasPermission($permissions, 'other_settings', 'edit'))
-                                                        <div class="skeleton input-skeleton input-loader"></div>
-                                                        <div class="form-check form-check-md form-switch d-none real-label">
+                                                        <div class="form-check form-check-md form-switch">
                                                             <input class="form-check-input me-2" id="local_storage" name="local_storage" type="checkbox" role="switch">
                                                         </div>
                                                         @endif
@@ -69,18 +68,15 @@
                                                             <img src="/backend/assets/img/icons/aws.svg" class="w-auto h-auto" alt="AWS Icon">
                                                         </span>
                                                         <div>
-                                                            <div class="skeleton label-skeleton label-loader"></div>
-                                                            <h6 class="fw-medium fs-14 mb-0 d-none real-label">{{ __('admin.general_settings.aws') }}</h6>
+                                                            <h6 class="fw-medium fs-14 mb-0">{{ __('admin.general_settings.aws') }}</h6>
                                                         </div>
                                                     </div>
                                                     @if (hasPermission($permissions, 'other_settings', 'edit'))
                                                     <div class="d-flex align-items-center">
-                                                        <div class="skeleton label-skeleton label-loader me-2"></div>
-                                                        <a href="#" class="btn btn-icon btn-sm me-2 d-none real-label" data-bs-toggle="modal" data-bs-target="#aws_settings">
+                                                        <a href="#" class="btn btn-icon btn-sm me-2" data-bs-toggle="modal" data-bs-target="#aws_settings">
                                                             <i class="ti ti-settings fs-20"></i>
                                                         </a>
-                                                        <div class="skeleton input-skeleton input-loader"></div>
-                                                        <div class="form-check form-check-md form-switch d-none real-label">
+                                                        <div class="form-check form-check-md form-switch">
                                                             <input class="form-check-input me-2" id="aws_storage" name="aws_storage" type="checkbox" role="switch">
                                                         </div>
                                                     </div>
