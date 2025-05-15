@@ -33,11 +33,15 @@
 	<!-- Datatable CSS -->
     <link rel="stylesheet" href="{{ asset('backend/assets/plugins/datatables/dataTables.bootstrap5.min.css') }}">
 
+	@if (!Route::is(['admin.permissions', 'admin.customer-recent-rents', 'admin.customer-details', 'admin.newsletters']))
 	<!-- Daterangepikcer CSS -->
 	<link rel="stylesheet" href="{{ asset('backend/assets/plugins/daterangepicker/daterangepicker.css') }}">
+	@endif
 
+	@if (Route::is(['admin.addPage', 'admin.editPage']))
 	<!-- Dragula CSS -->
 	<link rel="stylesheet" href="{{asset('backend/assets/plugins/dragula/css/dragula.min.css')}}">
+	@endif
 
 	<!-- summernote CSS -->
 	<link rel="stylesheet" href="{{ asset('backend/assets/plugins/summernote/summernote-bs5.min.css') }}">
