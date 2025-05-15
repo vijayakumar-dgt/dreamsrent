@@ -61,7 +61,7 @@
                                     <div class="card-footer">
                                         <div class="d-flex align-items-center justify-content-start">
                                             <div class="skeleton button-skeleton label-loader me-2"></div>
-                                            <a href="javascript:void(0);" class="btn btn-light me-2 d-none real-label">{{__('admin.common.cancel')}}</a>
+                                            <a href="{{ route('admin.menu') }}" class="btn btn-light me-2 d-none real-label">{{__('admin.common.cancel')}}</a>
                                             <div class="skeleton button-skeleton label-loader"></div>
                                             <button type="submit" class="btn btn-primary d-none real-label">{{__('admin.common.save_changes')}}</button>
                                         </div>

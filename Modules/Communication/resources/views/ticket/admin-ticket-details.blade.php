@@ -104,7 +104,7 @@
                     <!-- Action Buttons -->
                     <div class="d-flex align-items-center justify-content-end">
                         <div class="skeleton button-skeleton label-loader me-3"></div>
-                        <a href="javascript:void(0);" class="btn btn-light me-3 d-none real-label">{{ __('admin.common.cancel') }}</a>
+                        <a href="{{ route('communication.ticket') }}" class="btn btn-light me-3 d-none real-label">{{ __('admin.common.cancel') }}</a>
                         <div class="skeleton button-skeleton label-loader"></div>
                         <button type="submit" class="btn btn-primary d-none real-label send_reply_btn">{{ __('admin.support.send_reply') }}</button>
                     </div>

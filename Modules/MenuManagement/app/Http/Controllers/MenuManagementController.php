@@ -128,18 +128,48 @@ class MenuManagementController extends Controller
     public function menuList(Request $request): JsonResponse
     {
         try {
-            $langCode = app()->getLocale();  // Fixed: Removed unnecessary null coalescing operator
-            $defaultLanguageId = $request->language_id;
+            $langCode = app()->getLocale();
+            $defaultLanguageId = $request->language_id ?? getLanguageId($langCode);
+            
+            $query = Menu::where('language_id', $defaultLanguageId);
 
-            if (!$defaultLanguageId) {
-                $defaultLanguageId = getLanguageId($langCode);
+            // Search functionality
+            if ($request->has('search') && !empty($request->search)) {
+                $searchTerm = $request->search;
+                $query->where(function($q) use ($searchTerm) {
+                    $q->where('name', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('menu_type', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('permenantlink', 'like', '%'.$searchTerm.'%');
+                });
             }
 
-            // Check if 'id' is passed in the request
+            // Sorting functionality
+            if ($request->has('sort')) {
+                switch ($request->sort) {
+                    case 'ascending':
+                        $query->orderBy('name', 'asc');
+                        break;
+                    case 'descending':
+                        $query->orderBy('name', 'desc');
+                        break;
+                    case 'last month':
+                        $query->where('created_at', '>=', now()->subMonth());
+                        break;
+                    case 'last 7 days':
+                        $query->where('created_at', '>=', now()->subDays(7));
+                        break;
+                    case 'latest':
+                    default:
+                        $query->orderBy('created_at', 'desc');
+                        break;
+                }
+            } else {
+                $query->orderBy('created_at', 'desc');
+            }
+
+            // Single menu retrieval
             if ($request->has('id')) {
-                $menu = Menu::where('id', $request->id)
-                            ->where('language_id', $defaultLanguageId)
-                            ->first();
+                $menu = $query->where('id', $request->id)->first();
 
                 if (!$menu) {
                     return response()->json([
@@ -155,14 +185,12 @@ class MenuManagementController extends Controller
                 ], 200);
             }
 
-            // If no ID is provided, return all menus for the default language
-            $menus = Menu::where('language_id', $defaultLanguageId)
-                        ->orderBy('created_at', 'desc')
-                        ->get()->map(function ($menu) {
-                            $menu->created_date = formatDateTime($menu->created_at, false);
-                            unset($menu->created_at);
-                            return $menu;
-                        });
+            // Get all menus
+            $menus = $query->get()->map(function ($menu) {
+                $menu->created_date = formatDateTime($menu->created_at, false);
+                unset($menu->created_at);
+                return $menu;
+            });
 
             return response()->json([
                 'code' => 200,

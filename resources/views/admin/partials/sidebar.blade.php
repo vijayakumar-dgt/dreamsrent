@@ -220,7 +220,7 @@
                         </li>
                         @endif
                         @if (hasPermission($permissions, 'menu_management', 'view'))
-                        <li class="{{ request()->routeIs('admin.menu') ? 'active' : '' }}">
+                        <li class="{{ request()->routeIs('admin.menu','admin.menuManagement') ? 'active' : '' }}">
                             <a href="{{ route('admin.menu') }}">
                                 <i class="ti ti-menu-2"></i><span>{{ __('admin.cms.menu_management') }}</span>
                             </a>
@@ -316,7 +316,7 @@
                         </li>
                         @endif
                         @if (hasPermission($permissions, 'tickets', 'view'))
-                        <li class="{{ request()->routeIs('communication.ticket') ? 'active' : '' }}">
+                       <li class="{{ request()->routeIs('communication.ticket', 'communication.ticket-details') ? 'active' : '' }}">
                             <a href="{{ route('communication.ticket') }}">
                                 <i class="ti ti-ticket"></i><span>{{ __('admin.support.tickets') }}</span>
                             </a>
