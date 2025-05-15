@@ -29,19 +29,15 @@
                         <div class="card h-100">
                             <!-- Card Header -->
                             <div class="card-header">
-                                <div class="skeleton header-skeleton label-loader"></div>
-                                <h5 class="fw-bold d-none real-label">{{ __('admin.general_settings.website_settings') }}</h5>
+                                <h5 class="fw-bold">{{ __('admin.general_settings.website_settings') }}</h5>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
-                                <div class="skeleton section-title-skeleton label-loader"></div>
-                                <h6 class="fw-bold mb-3 d-none real-label">{{__('admin.general_settings.copyright')}}</h6>
+                                <h6 class="fw-bold mb-3">{{__('admin.general_settings.copyright')}}</h6>
                                 <input type="hidden" name="group_id" id="group_id" class="form-control" value="20">
                                 <div class="mb-3">
-                                    <div class="skeleton label-skeleton label-loader"></div>
-                                    <label class="form-label d-none real-label" for="language">{{__('admin.general_settings.language')}} <span class="text-danger">*</span></label>
-                                    <div class="skeleton select-skeleton input-loader"></div>
-                                    <select class="form-select d-none real-label" id="language" name="language">
+                                    <label class="form-label" for="language">{{__('admin.general_settings.language')}} <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="language" name="language">
                                         @foreach($languages as $language)
                                             <option value="{{ $language->language_id }}">
                                                 {{ $language->transLang->name ?? 'N/A' }}
@@ -51,9 +47,7 @@
                                     <span class="text-danger" id="language_error"></span>
                                 </div>
                                 <div class="mb-3">
-                                    <div class="skeleton label-skeleton label-loader"></div>
-                                    <label for="copy_right_description" class="form-label d-none real-label">{{__('admin.general_settings.description')}}</label>
-                                    <div class="skeleton input-skeleton input-loader"></div>
+                                    <label for="copy_right_description" class="form-label">{{__('admin.general_settings.description')}}</label>
                                     <div class="d-none real-label">
                                         <textarea id="copy_right_description" name="copy_right_description" class="form-control summernote"></textarea>
                                     </div>
@@ -63,11 +57,9 @@
                             <!-- Card Footer -->
                             <div class="card-footer">
                                 <div class="d-flex justify-content-end">
-                                    <div class="skeleton button-skeleton label-loader me-3"></div>
-                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3 d-none real-label" >{{__('admin.general_settings.cancel')}}</a>
-                                    <div class="skeleton button-skeleton label-loader"></div>
+                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3" >{{__('admin.general_settings.cancel')}}</a>
                                     @if (hasPermission($permissions, 'copyright', 'edit'))
-                                    <button type="submit" class="btn btn-primary d-none real-label submitbtn">{{__('admin.general_settings.save_changes')}}</button>
+                                    <button type="submit" class="btn btn-primary submitbtn">{{__('admin.general_settings.save_changes')}}</button>
                                     @endif
                                 </div>
                             </div>
