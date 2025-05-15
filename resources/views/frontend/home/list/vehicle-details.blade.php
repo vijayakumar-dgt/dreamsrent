@@ -1,7 +1,7 @@
     @extends($layout)
     @push('styles')
     <!-- Fancybox CSS -->
-    <link rel="stylesheet" href="/frontend/assets/plugins/fancybox/fancybox.css">
+    <link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fancybox/fancybox.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/plugins/intltelinput/css/intlTelInput.css') }}">
     @endpush
     @section('content')

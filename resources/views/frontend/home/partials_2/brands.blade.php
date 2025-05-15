@@ -15,7 +15,7 @@
                 @endif
             </div>
             <div class="brand-img text-center">
-                <img src="/frontend/assets/img/bg/brand.png" alt="img" class="img-fluid">
+                <img src="{{ asset('/frontend/assets/img/bg/brand.png') }}" alt="img" class="img-fluid">
             </div>
         </div>
     </section>

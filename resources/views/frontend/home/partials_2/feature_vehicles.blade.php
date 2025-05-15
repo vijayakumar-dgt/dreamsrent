@@ -29,13 +29,13 @@
                         </div>
                     </div>
                     <div class="spec-list">
-                        <span><img src="/frontend/assets/img/icons/spec-01.svg"
+                        <span><img src="{{ asset('/frontend/assets/img/icons/spec-01.svg') }}"
                                 alt="img">{{ ucfirst($content['transmission']) }}</span>
-                        <span><img src="/frontend/assets/img/icons/spec-03.svg"
+                        <span><img src="{{ asset('/frontend/assets/img/icons/spec-03.svg') }}"
                                 alt="img">{{ round($content['mileage']) }}</span>
-                        <span><img src="/frontend/assets/img/icons/spec-05.svg"
+                        <span><img src="{{ asset('/frontend/assets/img/icons/spec-05.svg') }}"
                                 alt="img">{{ ucfirst($content['fuel_type']) }}</span>
-                        <span><img src="/frontend/assets/img/icons/spec-05.svg"
+                        <span><img src="{{ asset('/frontend/assets/img/icons/spec-05.svg') }}"
                                 alt="img">{{ $content['passenger_capacity'] }} {{ __('web.home.persons') }}</span>
                     </div>
                     <a href="/vehicle-details/{{ $content['slug'] }}"

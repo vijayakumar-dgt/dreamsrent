@@ -43,22 +43,22 @@
             </div>
             <div class="client-slider owl-carousel">
                 <div>
-                    <img src="/frontend/assets/img/clients/client-01.svg" alt="img">
+                    <img src="{{ asset('/frontend/assets/img/clients/client-01.svg') }}" alt="img">
                 </div>
                 <div>
-                    <img src="/frontend/assets/img/clients/client-02.svg" alt="img">
+                    <img src="{{ asset('/frontend/assets/img/clients/client-02.svg') }}" alt="img">
                 </div>
                 <div>
-                    <img src="/frontend/assets/img/clients/client-03.svg" alt="img">
+                    <img src="{{ asset('/frontend/assets/img/clients/client-03.svg') }}" alt="img">
                 </div>
                 <div>
-                    <img src="/frontend/assets/img/clients/client-04.svg" alt="img">
+                    <img src="{{ asset('/frontend/assets/img/clients/client-04.svg') }}" alt="img">
                 </div>
                 <div>
-                    <img src="/frontend/assets/img/clients/client-05.svg" alt="img">
+                    <img src="{{ asset('/frontend/assets/img/clients/client-05.svg') }}" alt="img">
                 </div>
                 <div>
-                    <img src="/frontend/assets/img/clients/client-06.svg" alt="img">
+                    <img src="{{ asset('/frontend/assets/img/clients/client-06.svg') }}" alt="img">
                 </div>
             </div>
         </div>
