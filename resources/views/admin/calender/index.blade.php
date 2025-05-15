@@ -478,7 +478,7 @@
                                                     <div class="col-lg-12">
                                                         <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
                                                             <div class="dropdown me-2">
-                                                                <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="filtercollapse">
+                                                                <a href="#vehiclefiltercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="filtercollapse">
                                                                     <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }} <span class="count text-center ms-2 fs-12">0</span>
                                                                 </a>
                                                             </div>
@@ -493,7 +493,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="collapse">
+                                                <div class="collapse" id="vehiclefiltercollapse">
                                                     <div class="filterbox mb-3 px-3">
                                                         <div class="row align-items-center">
                                                             <form id="filterForm">
@@ -586,9 +586,11 @@
                                                     </div>
                                                 </div>
                                                 <div class="list-loader">
-                                                    <div class="skeleton card-sm-skeleton card-loader mb-2"></div>
-                                                    <div class="skeleton card-sm-skeleton card-loader mb-2"></div>
-                                                    <div class="skeleton card-sm-skeleton card-loader mb-2"></div>
+                                                    <div class="card pb-3 border-0">
+                                                        <div class="card-body">
+                                                            @include('admin.content-loader')
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div id="vehicle_list_container" class="car-select d-none">
                                                 </div>

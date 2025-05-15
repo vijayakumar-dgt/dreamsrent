@@ -42,19 +42,20 @@
                                                 <h4 class="d-flex align-items-center"><i class="ti ti-info-circle me-2 text-secondary fs-24"></i>{{ __('admin.bookings.basic_info') }}</h4>
                                             </div>
                                         </div>
-                                        <div>
-                                            <div class="mb-3">
-                                                <h5 class="mb-1">{{ __('admin.common.date') }} & {{ __('admin.bookings.time_of_travel') }}</h5>
-                                                <p>{{ __('admin.bookings.add_information_for_date_of_travel') }}</p>
-                                            </div>
-                                            <div class="border-bottom mb-3 pb-3">
-                                                <div class="row gx-3">
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <div class="skeleton label-skeleton label-loader"></div>
-                                                            <label class="form-label d-none real-label">{{ __('admin.common.tariff') }}</label>
-                                                            <div class="skeleton input-skeleton input-loader"></div>
-                                                            <div class="d-none real-input">
+                                        <div class="custom-datatable-filter table-responsive position-relative vh-50 mb-3 table-loader">
+                                            @include('admin.content-loader')
+                                        </div>
+                                        <div class="real-table d-none">
+                                            <div>
+                                                <div class="mb-3">
+                                                    <h5 class="mb-1">{{ __('admin.common.date') }} & {{ __('admin.bookings.time_of_travel') }}</h5>
+                                                    <p>{{ __('admin.bookings.add_information_for_date_of_travel') }}</p>
+                                                </div>
+                                                <div class="border-bottom mb-3 pb-3">
+                                                    <div class="row gx-3">
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">{{ __('admin.common.tariff') }}</label>
                                                                 <select class="form-control select" name="tariff" id="tariff">
                                                                     <option value="">{{ __('admin.common.select') }}</option>
                                                                     @if ($priceTypes)
@@ -63,16 +64,12 @@
                                                                     @endforeach
                                                                     @endif
                                                                 </select>
+                                                                <span class="text-danger error-text" id="tariff_error"></span>
                                                             </div>
-                                                            <span class="text-danger error-text" id="tariff_error"></span>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <div class="skeleton label-skeleton label-loader"></div>
-                                                            <label class="form-label d-none real-label">{{ __('admin.bookings.driving_type') }}</label>
-                                                            <div class="skeleton input-skeleton input-loader"></div>
-                                                            <div class="d-none real-label">
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">{{ __('admin.bookings.driving_type') }}</label>
                                                                 <select class="form-control select" name="driving_type" id="driving_type" data-placeholder="{{ __('admin.common.select') }}">
                                                                     <option value="">{{ __('admin.common.select') }}</option>
                                                                     @if ($drivingTypes)
@@ -81,95 +78,81 @@
                                                                     @endforeach
                                                                     @endif
                                                                 </select>
+                                                                <span class="error-text text-danger" id="driving_type_error"></span>
                                                             </div>
-                                                            <span class="error-text text-danger" id="driving_type_error"></span>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">{{ __('admin.bookings.no_of_passengers') }}</label>
+                                                                <input type="text" class="form-control " name="no_of_passengers" id="no_of_passengers">
+                                                                <span class="text-danger error-text" id="no_of_passengers_error"></span>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <div class="skeleton label-skeleton label-loader"></div>
-                                                            <label class="form-label d-none real-label">{{ __('admin.bookings.no_of_passengers') }}</label>
-                                                            <div class="skeleton input-skeleton input-loader"></div>
-                                                            <input type="text" class="form-control d-none real-input" name="no_of_passengers" id="no_of_passengers">
-                                                            <span class="text-danger error-text" id="no_of_passengers_error"></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row gx-3">
-                                                    <div class="col-xl-6">
-                                                        <div class="row gx-3">
-                                                            <div class="col-md-7">
-                                                                <div class="mb-3">
-                                                                    <div class="skeleton label-skeleton label-loader"></div>
-                                                                    <label class="form-label d-none real-label">{{ __('admin.common.start_date') }}<span class="text-danger"> *</span> </label>
-                                                                    <div class="skeleton input-skeleton input-loader"></div>
-                                                                    <div class="input-icon-end position-relative d-none real-input">
-                                                                        <input type="text" class="form-control start_date" name="start_date" id="start_date" placeholder="dd/mm/yyyy">
-                                                                        <span class="input-icon-addon">
-                                                                            <i class="ti ti-calendar"></i>
-                                                                        </span>
+                                                    <div class="row gx-3">
+                                                        <div class="col-xl-6">
+                                                            <div class="row gx-3">
+                                                                <div class="col-md-7">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">{{ __('admin.common.start_date') }}<span class="text-danger"> *</span> </label>
+                                                                        <div class="input-icon-end position-relative">
+                                                                            <input type="text" class="form-control start_date" name="start_date" id="start_date" placeholder="dd/mm/yyyy">
+                                                                            <span class="input-icon-addon">
+                                                                                <i class="ti ti-calendar"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                        <span class="error-text text-danger" id="start_date_error"></span>
                                                                     </div>
-                                                                    <span class="error-text text-danger" id="start_date_error"></span>
+                                                                </div>
+                                                                <div class="col-md-5">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">{{ __('admin.common.start_time') }}<span class="text-danger"> *</span> </label>
+                                                                        <div class="d-flex align-items-center ">
+                                                                            <div class="input-icon-end position-relative flex-fill">
+                                                                                <input type="text" class="form-control start_time" name="start_time" id="start_time">
+                                                                                <span class="input-icon-addon">
+                                                                                    <i class="ti ti-clock"></i>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <span class="error-text text-danger" id="start_time_error"></span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-5">
-                                                                <div class="mb-3">
-                                                                    <div class="skeleton label-skeleton label-loader"></div>
-                                                                    <label class="form-label d-none real-label">{{ __('admin.common.start_time') }}<span class="text-danger"> *</span> </label>
-                                                                    <div class="skeleton input-skeleton input-loader"></div>
-                                                                    <div class="d-flex align-items-center d-none real-input">
-                                                                        <div class="input-icon-end position-relative flex-fill">
-                                                                            <input type="text" class="form-control start_time" name="start_time" id="start_time">
+                                                        </div>
+                                                        <div class="col-xl-6">
+                                                            <div class="row gx-3">
+                                                                <div class="col-md-8">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">{{ __('admin.common.end_date') }}<span class="text-danger"> *</span> </label>
+                                                                        <div class="input-icon-end position-relative ">
+                                                                            <input type="text" class="form-control end_date" name="end_date" id="end_date" placeholder="dd/mm/yyyy">
+                                                                            <span class="input-icon-addon">
+                                                                                <i class="ti ti-calendar"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                        <span class="error-text text-danger" id="end_date_error"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">{{ __('admin.common.end_time') }}<span class="text-danger"> *</span> </label>
+                                                                        <div class="input-icon-end position-relative ">
+                                                                            <input type="text" class="form-control end_time" name="end_time" id="end_time">
                                                                             <span class="input-icon-addon">
                                                                                 <i class="ti ti-clock"></i>
                                                                             </span>
                                                                         </div>
+                                                                        <span class="error-text text-danger" id="end_time_error"></span>
                                                                     </div>
-                                                                    <span class="error-text text-danger" id="start_time_error"></span>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-xl-6">
-                                                        <div class="row gx-3">
-                                                            <div class="col-md-8">
-                                                                <div class="mb-3">
-                                                                    <div class="skeleton label-skeleton label-loader"></div>
-                                                                    <label class="form-label d-none real-label">{{ __('admin.common.end_date') }}<span class="text-danger"> *</span> </label>
-                                                                    <div class="skeleton input-skeleton input-loader"></div>
-                                                                    <div class="input-icon-end position-relative d-none real-input">
-                                                                        <input type="text" class="form-control end_date" name="end_date" id="end_date" placeholder="dd/mm/yyyy">
-                                                                        <span class="input-icon-addon">
-                                                                            <i class="ti ti-calendar"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                    <span class="error-text text-danger" id="end_date_error"></span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <div class="mb-3">
-                                                                    <div class="skeleton label-skeleton label-loader"></div>
-                                                                    <label class="form-label d-none real-label">{{ __('admin.common.end_time') }}<span class="text-danger"> *</span> </label>
-                                                                    <div class="skeleton input-skeleton input-loader"></div>
-                                                                    <div class="input-icon-end position-relative d-none real-input">
-                                                                        <input type="text" class="form-control end_time" name="end_time" id="end_time">
-                                                                        <span class="input-icon-addon">
-                                                                            <i class="ti ti-clock"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                    <span class="error-text text-danger" id="end_time_error"></span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row gx-3">
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <div class="skeleton label-skeleton label-loader"></div>
-                                                            <label class="form-label d-none real-label">{{ __('admin.bookings.pickup_location') }}<span class="text-danger"> *</span></label>
-                                                            <div class="skeleton input-skeleton input-loader"></div>
-                                                            <div class="d-none real-input">
+                                                    <div class="row gx-3">
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">{{ __('admin.bookings.pickup_location') }}<span class="text-danger"> *</span></label>
                                                                 <select class="form-control select2" name="pickup_location" id="pickup_location" data-placeholder="{{ __('admin.common.select') }}">
                                                                     <option value="">{{ __('admin.common.select') }}</option>
                                                                     @if ($locations)
@@ -178,16 +161,12 @@
                                                                     @endforeach
                                                                     @endif
                                                                 </select>
+                                                                <span class="error-text text-danger" id="pickup_location_error"></span>
                                                             </div>
-                                                            <span class="error-text text-danger" id="pickup_location_error"></span>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <div class="skeleton label-skeleton label-loader"></div>
-                                                            <label class="form-label d-none real-label">{{ __('admin.bookings.return_location') }}<span class="text-danger"> *</span></label>
-                                                            <div class="skeleton input-skeleton input-loader"></div>
-                                                            <div class="d-none real-input">
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">{{ __('admin.bookings.return_location') }}<span class="text-danger"> *</span></label>
                                                                 <select class="form-control select2" name="return_location" id="return_location" data-placeholder="{{ __('admin.common.select') }}">
                                                                     <option value="">{{ __('admin.common.select') }}</option>
                                                                     @if ($locations)
@@ -196,170 +175,165 @@
                                                                     @endforeach
                                                                     @endif
                                                                 </select>
+                                                                <span class="error-text text-danger" id="return_location_error"></span>
                                                             </div>
-                                                            <span class="error-text text-danger" id="return_location_error"></span>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label class="form-label">{{ __('admin.bookings.security_deposit') }}</label>
+                                                                <input type="text" class="form-control " name="security_deposit" id="security_deposit">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <div class="skeleton label-skeleton label-loader"></div>
-                                                            <label class="form-label d-none real-label">{{ __('admin.bookings.security_deposit') }}</label>
-                                                            <div class="skeleton input-skeleton input-loader"></div>
-                                                            <input type="text" class="form-control d-none real-input" name="security_deposit" id="security_deposit">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="skeleton label-skeleton label-loader"></div>
-                                                <div class="d-none real-label">
                                                     <input class="form-check-input me-1" type="checkbox" id="return_same_location">
                                                     <label for="return_same_location">{{ __('admin.bookings.return_same_location') }}</label>
                                                 </div>
-                                            </div>
-                                            <div id="vehicle_list_main_container" class="d-none">
-                                                <div class="row align-items-center">
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <h5 class="mb-1">{{ __('admin.bookings.select_vehicle') }}</h5>
-                                                            <p>{{ __('admin.bookings.select_vehicle_for_your_rental') }}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-8">
-                                                        <div class="d-flex align-items-center justify-content-end flex-wrap row-gap-3 mb-3">
-                                                            <div class="dropdown me-2">
-                                                                <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="filtercollapse">
-                                                                    <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }} <span class="count text-center ms-2 fs-12">0</span>
-                                                                </a>
+                                                <div id="vehicle_list_main_container" class="d-none">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <h5 class="mb-1">{{ __('admin.bookings.select_vehicle') }}</h5>
+                                                                <p>{{ __('admin.bookings.select_vehicle_for_your_rental') }}</p>
                                                             </div>
-                                                            <div class="top-search me-2">
-                                                                <div class="top-search-group">
-                                                                    <span class="input-icon">
-                                                                        <i class="ti ti-search"></i>
-                                                                    </span>
-                                                                    <input type="text" class="form-control" name="overall_search" id="overall_search" placeholder="{{  __('admin.common.search')}}">
+                                                        </div>
+                                                        <div class="col-lg-8">
+                                                            <div class="d-flex align-items-center justify-content-end flex-wrap row-gap-3 mb-3">
+                                                                <div class="dropdown me-2">
+                                                                    <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="filtercollapse">
+                                                                        <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }} <span class="count text-center ms-2 fs-12">0</span>
+                                                                    </a>
                                                                 </div>
-                                                            </div>
-                                                            <div class="d-none">
-                                                                <a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center">
-                                                                    <i class="ti ti-plus me-1"></i>{{ __('admin.common_add_new') }}
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="collapse" id="filtercollapse">
-                                                    <div class="filterbox mb-3 px-3">
-                                                        <div class="row align-items-center">
-                                                            <form id="filterForm">
-                                                                <div class="col-lg-10">
-                                                                    <div class=" d-flex align-items-center flex-wrap row-gap-3">
-                                                                        <div class="dropdown me-2">
-                                                                            <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                                                                                {{ __('admin.bookings.select_brand') }}
-                                                                            </a>
-                                                                            <ul class="dropdown-menu dropdown-menu-lg p-2" id="brandList">
-                                                                                <li>
-                                                                                    <div class="top-search m-2">
-                                                                                        <div class="top-search-group">
-                                                                                            <span class="input-icon">
-                                                                                                <i class="ti ti-search"></i>
-                                                                                            </span>
-                                                                                            <input type="text" class="form-control" id="brand_search" name="brand_search" placeholder="{{ __('admin.common.search') }}">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </li>
-                                                                                <div class="custom-scroll">
-                                                                                </div>
-                                                                            </ul>
-                                                                        </div>
-                                                                        <div class="dropdown me-2">
-                                                                            <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                                                                                {{ __('admin.bookings.select_type') }}
-                                                                            </a>
-                                                                            <ul class="dropdown-menu dropdown-menu-lg p-2" id="typeList">
-                                                                                <li>
-                                                                                    <div class="top-search m-2">
-                                                                                        <div class="top-search-group">
-                                                                                            <span class="input-icon">
-                                                                                                <i class="ti ti-search"></i>
-                                                                                            </span>
-                                                                                            <input type="text" class="form-control" name="type_search" id="type_search" placeholder="{{ __('admin.common.search') }}">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </li>
-                                                                                <div class="custom-scroll">
-                                                                                </div>
-                                                                            </ul>
-                                                                        </div>
-                                                                        <div class="dropdown me-2">
-                                                                            <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                                                                                <i class="ti ti-badge me-1"></i>
-                                                                                {{ __('admin.bookings.select_model') }}
-                                                                            </a>
-                                                                            <ul class="dropdown-menu dropdown-menu-lg p-2" id="modelList">
-                                                                                <li>
-                                                                                    <div class="top-search m-2">
-                                                                                        <div class="top-search-group">
-                                                                                            <span class="input-icon">
-                                                                                                <i class="ti ti-search"></i>
-                                                                                            </span>
-                                                                                            <input type="text" class="form-control" name="model_search" id="model_search" placeholder="{{ __('admin.common.search') }}">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </li>
-                                                                                <div class="custom-scroll">
-                                                                                </div>
-                                                                            </ul>
-                                                                        </div>
-                                                                        <div class="dropdown">
-                                                                            <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                                                                                <i class="ti ti-badge me-1"></i>
-                                                                                {{ __('admin.bookings.select_color') }}
-                                                                            </a>
-                                                                            <ul class="dropdown-menu dropdown-menu-lg p-2" id="colorList">
-                                                                                <li>
-                                                                                    <div class="top-search m-2">
-                                                                                        <div class="top-search-group">
-                                                                                            <span class="input-icon">
-                                                                                                <i class="ti ti-search"></i>
-                                                                                            </span>
-                                                                                            <input type="text" class="form-control" name="color_search" id="color_search" placeholder="{{ __('admin.common.search') }}">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </li>
-                                                                                <div class="custom-scroll">
-                                                                                </div>
-                                                                            </ul>
-                                                                        </div>
+                                                                <div class="top-search me-2">
+                                                                    <div class="top-search-group">
+                                                                        <span class="input-icon">
+                                                                            <i class="ti ti-search"></i>
+                                                                        </span>
+                                                                        <input type="text" class="form-control" name="overall_search" id="overall_search" placeholder="{{  __('admin.common.search')}}">
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-lg-2">
-                                                                    <div class="d-flex align-items-center justify-content-end">
-                                                                        <a href="javascript:void(0);" class="me-3 text-purple links" id="apply_filter">{{ __('admin.common.apply') }}</a>
-                                                                        <a href="javascript:void(0);" class="text-danger links" id="reset_filter">{{ __('admin.common.clear') }}</a>
-                                                                    </div>
+                                                                <div class="d-none">
+                                                                    <a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center">
+                                                                        <i class="ti ti-plus me-1"></i>{{ __('admin.common_add_new') }}
+                                                                    </a>
                                                                 </div>
-                                                            </form>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="list-loader">
-                                                    <div class="skeleton card-sm-skeleton card-loader mb-2"></div>
-                                                    <div class="skeleton card-sm-skeleton card-loader mb-2"></div>
-                                                    <div class="skeleton card-sm-skeleton card-loader mb-2"></div>
-                                                </div>
-                                                <div id="vehicle_list_container" class="car-select d-none">
+                                                    <div class="collapse" id="filtercollapse">
+                                                        <div class="filterbox mb-3 px-3">
+                                                            <div class="row align-items-center">
+                                                                <form id="filterForm">
+                                                                    <div class="col-lg-10">
+                                                                        <div class=" d-flex align-items-center flex-wrap row-gap-3">
+                                                                            <div class="dropdown me-2">
+                                                                                <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                                                                    {{ __('admin.bookings.select_brand') }}
+                                                                                </a>
+                                                                                <ul class="dropdown-menu dropdown-menu-lg p-2" id="brandList">
+                                                                                    <li>
+                                                                                        <div class="top-search m-2">
+                                                                                            <div class="top-search-group">
+                                                                                                <span class="input-icon">
+                                                                                                    <i class="ti ti-search"></i>
+                                                                                                </span>
+                                                                                                <input type="text" class="form-control" id="brand_search" name="brand_search" placeholder="{{ __('admin.common.search') }}">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </li>
+                                                                                    <div class="custom-scroll">
+                                                                                    </div>
+                                                                                </ul>
+                                                                            </div>
+                                                                            <div class="dropdown me-2">
+                                                                                <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                                                                    {{ __('admin.bookings.select_type') }}
+                                                                                </a>
+                                                                                <ul class="dropdown-menu dropdown-menu-lg p-2" id="typeList">
+                                                                                    <li>
+                                                                                        <div class="top-search m-2">
+                                                                                            <div class="top-search-group">
+                                                                                                <span class="input-icon">
+                                                                                                    <i class="ti ti-search"></i>
+                                                                                                </span>
+                                                                                                <input type="text" class="form-control" name="type_search" id="type_search" placeholder="{{ __('admin.common.search') }}">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </li>
+                                                                                    <div class="custom-scroll">
+                                                                                    </div>
+                                                                                </ul>
+                                                                            </div>
+                                                                            <div class="dropdown me-2">
+                                                                                <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                                                                    <i class="ti ti-badge me-1"></i>
+                                                                                    {{ __('admin.bookings.select_model') }}
+                                                                                </a>
+                                                                                <ul class="dropdown-menu dropdown-menu-lg p-2" id="modelList">
+                                                                                    <li>
+                                                                                        <div class="top-search m-2">
+                                                                                            <div class="top-search-group">
+                                                                                                <span class="input-icon">
+                                                                                                    <i class="ti ti-search"></i>
+                                                                                                </span>
+                                                                                                <input type="text" class="form-control" name="model_search" id="model_search" placeholder="{{ __('admin.common.search') }}">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </li>
+                                                                                    <div class="custom-scroll">
+                                                                                    </div>
+                                                                                </ul>
+                                                                            </div>
+                                                                            <div class="dropdown">
+                                                                                <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                                                                    <i class="ti ti-badge me-1"></i>
+                                                                                    {{ __('admin.bookings.select_color') }}
+                                                                                </a>
+                                                                                <ul class="dropdown-menu dropdown-menu-lg p-2" id="colorList">
+                                                                                    <li>
+                                                                                        <div class="top-search m-2">
+                                                                                            <div class="top-search-group">
+                                                                                                <span class="input-icon">
+                                                                                                    <i class="ti ti-search"></i>
+                                                                                                </span>
+                                                                                                <input type="text" class="form-control" name="color_search" id="color_search" placeholder="{{ __('admin.common.search') }}">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </li>
+                                                                                    <div class="custom-scroll">
+                                                                                    </div>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-2">
+                                                                        <div class="d-flex align-items-center justify-content-end">
+                                                                            <a href="javascript:void(0);" class="me-3 text-purple links" id="apply_filter">{{ __('admin.common.apply') }}</a>
+                                                                            <a href="javascript:void(0);" class="text-danger links" id="reset_filter">{{ __('admin.common.clear') }}</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="list-loader">
+                                                        <div class="card pb-3 border-0">
+                                                            <div class="card-body">
+                                                                @include('admin.content-loader')
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div id="vehicle_list_container" class="car-select d-none">
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="card-footer px-0 pb-0">
-                                            <div class="d-flex align-items-center justify-content-end flex-wrap row-gap-3">
-                                                <div class="field-btns">
-                                                    <div class="skeleton label-skeleton label-loader me-2"></div>
-                                                    <a class="btn btn-light me-2 d-none real-label" href="{{ route('reservation.index') }}"><i class="ti ti-chevron-left me-1"></i>{{ __('admin.common.cancel') }}</a>
-                                                </div>
-                                                <div class="field-btns">
-                                                    <div class="skeleton label-skeleton label-loader"></div>
-                                                    <button class="btn btn-primary d-none real-label" id="basic_info_btn" type="button">{{ __('admin.bookings.add_customer') }}<i class="ti ti-chevron-right ms-1"></i></button>
+                                            <div class="card-footer px-0 pb-0">
+                                                <div class="d-flex align-items-center justify-content-end flex-wrap row-gap-3">
+                                                    <div class="field-btns">
+                                                        <a class="btn btn-light me-2" href="{{ route('reservation.index') }}"><i class="ti ti-chevron-left me-1"></i>{{ __('admin.common.cancel') }}</a>
+                                                    </div>
+                                                    <div class="field-btns">
+                                                        <button class="btn btn-primary" id="basic_info_btn" type="button">{{ __('admin.bookings.add_customer') }}<i class="ti ti-chevron-right ms-1"></i></button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
