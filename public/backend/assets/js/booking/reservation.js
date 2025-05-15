@@ -295,7 +295,7 @@ function bookingList(sort_by_date = '') {
                             `<li>
                                 <button type="button" class="dropdown-item rounded-1 deleteReservation" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                             </li>`:''}
-                            ${(hasPermission(permissions, 'reservations', 'delete') && row.booking_status != 5) ?
+                            ${(hasPermission(permissions, 'reservations', 'edit') && (row.booking_status == 1 || row.booking_status == 2 || row.booking_by == 4)) ?
                                 `<li>
                                     <button type="button" class="dropdown-item rounded-1 completeReservation" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#complete_modal"><i class="ti ti-check me-1"></i>${_l('admin.common.booking_complete')}</button>
                                 </li>`:''}
