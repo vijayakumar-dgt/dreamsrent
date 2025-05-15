@@ -32,8 +32,8 @@
                             <h6 class="fw-bold mb-3">{{ __('admin.general_settings.theme_settings') }}</h6>
                             <div class="row gx-3">
                                 <div class="col-md-4">
-                                    <div class="card card-loader">
-                                        <div class="skeleton card-long-skeleton"></div>
+                                    <div class="card card-loader position-relative vh-25">
+                                        @include('admin.content-loader')
                                     </div>
                                     <div class="card d-none d-none real-card">
                                         <div class="card-body p-2">
@@ -52,8 +52,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="card card-loader">
-                                        <div class="skeleton card-long-skeleton"></div>
+                                    <div class="card card-loader position-relative vh-25">
+                                        @include('admin.content-loader')
                                     </div>
                                     <div class="card d-none real-card">
                                         <div class="card-body p-2">
