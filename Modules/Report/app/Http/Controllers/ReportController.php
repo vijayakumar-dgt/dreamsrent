@@ -24,7 +24,7 @@ class ReportController extends Controller
         $bookings = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
             ->get();
         $bookingsCount = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
-            ->paginate(10);
+            ->orderby('bookings.id', 'desc')->paginate(10);
         $totalIncome = $bookings->filter(function ($booking) {
             if ($booking->booking_by === 'admin') {
                 return is_null($booking->payment_status) || $booking->payment_status == 2;
