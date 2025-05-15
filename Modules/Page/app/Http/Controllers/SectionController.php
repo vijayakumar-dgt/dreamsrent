@@ -81,7 +81,7 @@ class SectionController extends Controller
             ], 400);
         }
 
-        $allowedNames = ['Banner One', 'Banner Two', 'Best Vehicle'];
+        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle'];
 
         $sections = Section::orderBy($sortBy, $orderBy)
             ->where('status', 1)
@@ -168,6 +168,13 @@ class SectionController extends Controller
             $rules['dis_5'] = 'required|max:100';
             $rules['label_6'] = 'required|max:50';
             $rules['dis_6'] = 'required|max:100';
+        } elseif ($request->section_id == 26) {
+            $rules['why_label_1'] = 'required|max:50';
+            $rules['why_dis_1']   = 'required|max:100';
+            $rules['why_label_2'] = 'required|max:50';
+            $rules['why_dis_2']   = 'required|max:100';
+            $rules['why_label_3'] = 'required|max:50';
+            $rules['why_dis_3']   = 'required|max:100';
         } else {
             return response()->json(['message' => 'Invalid section ID'], 400);
         }
@@ -234,6 +241,34 @@ class SectionController extends Controller
                 'dis_5' => $request->dis_5,
                 'label_6' => $request->label_6,
                 'dis_6' => $request->dis_6,
+            ];
+        } elseif ($request->section_id == 26) {
+            $thumbnail1 = $thumbnail2 = $thumbnail3 = null;
+
+            if ($request->hasFile('why_icon_1') && $request->file('why_icon_1')->isValid()) {
+                $thumbnail1 = uploadFile($request->file('why_icon_1'), 'why_icon_1');
+            }
+
+            if ($request->hasFile('why_icon_2') && $request->file('why_icon_2')->isValid()) {
+                $thumbnail2 = uploadFile($request->file('why_icon_2'), 'why_icon_2');
+            }
+
+            if ($request->hasFile('why_icon_3') && $request->file('why_icon_3')->isValid()) {
+                $thumbnail3 = uploadFile($request->file('why_icon_3'), 'why_icon_3');
+            }
+
+            $data = [
+                'why_label_1' => $request->why_label_1,
+                'why_dis_1'   => $request->why_dis_1,
+                'why_icon_1'  => $thumbnail1 ?? ($existingData['why_icon_1'] ?? null),
+
+                'why_label_2' => $request->why_label_2,
+                'why_dis_2'   => $request->why_dis_2,
+                'why_icon_2'  => $thumbnail2 ?? ($existingData['why_icon_2'] ?? null),
+
+                'why_label_3' => $request->why_label_3,
+                'why_dis_3'   => $request->why_dis_3,
+                'why_icon_3'  => $thumbnail3 ?? ($existingData['why_icon_3'] ?? null),
             ];
         }
 
