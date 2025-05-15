@@ -59,43 +59,8 @@
 			</div>
 			<!-- /Table Header -->
 
-			<div class="custom-datatable-filter table-responsive table-loader">
-				<table class="table">
-					<thead>
-						<tr>
-							<th><div class="skeleton th-skeleton th-loader"></div></th>
-							<th><div class="skeleton th-skeleton th-loader"></div></th>
-							<th><div class="skeleton th-skeleton th-loader"></div></th>
-							<th><div class="skeleton th-skeleton th-loader"></div></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-						</tr>
-						<tr>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-						</tr>
-						<tr>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-						</tr>
-						<tr>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-							<td><div class="skeleton data-skeleton data-loader"></div></td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
+				@include('admin.content-loader')
 			</div>
 
 

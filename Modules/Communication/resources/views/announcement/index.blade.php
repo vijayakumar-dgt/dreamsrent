@@ -34,8 +34,7 @@
 					</div>
 					<div class="mb-2">
 						@if (hasPermission($permissions, 'announcements', 'create'))
-						<div class="skeleton label-skeleton label-loader"></div>
-						<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_announcement_modal" id="add_announcement" class="btn btn-primary d-flex align-items-center d-none real-label">
+						<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_announcement_modal" id="add_announcement" class="btn btn-primary d-flex align-items-center">
 							<i class="ti ti-plus me-2"></i>{{ __('admin.support.add_new_announcement') }}
 						</a>
 						@endif
@@ -47,8 +46,7 @@
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
 				<div class="d-flex align-items-center flex-wrap row-gap-3">
-					<div class="skeleton label-skeleton label-loader me-2"></div>
-					<div class="dropdown me-2 d-none real-label">
+					<div class="dropdown me-2">
 						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }} : {{ __('admin.common.latest') }}
 						</a>
@@ -78,8 +76,7 @@
 							<input type="text" class="form-control date-range bookingrange" placeholder="dd/mm/yyyy - dd/mm/yyyy">
 						</div>
 					</div>
-					<div class="skeleton label-skeleton label-loader"></div>
-					<div class="dropdown d-none real-label">
+					<div class="dropdown">
 						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-badge me-1"></i> {{ __('admin.common.status') }}
 						</a>
@@ -94,8 +91,7 @@
 					</div>
 				</div>
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
-					<div class="skeleton label-skeleton label-loader"></div>
-					<div class="top-search me-2 d-none real-label">
+					<div class="top-search me-2">
 						<div class="top-search-group">
 							<span class="input-icon">
 								<i class="ti ti-search"></i>
@@ -107,64 +103,8 @@
 			</div>
 			<!-- /Table Header -->
 
-			<div class="custom-datatable-filter table-responsive table-loader">
-				<table class="table">
-					<thead>
-						<tr>
-							<th>
-								<div class="skeleton th-skeleton th-loader"></div>
-							</th>
-							<th>
-								<div class="skeleton th-skeleton th-loader"></div>
-							</th>
-							<th>
-								<div class="skeleton th-skeleton th-loader"></div>
-							</th>
-							<th>
-								<div class="skeleton th-skeleton th-loader"></div>
-							</th>
-							<th>
-								<div class="skeleton th-skeleton th-loader"></div>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
+				@include('admin.content-loader')
 			</div>
 
 			<!-- Custom Data Table -->
