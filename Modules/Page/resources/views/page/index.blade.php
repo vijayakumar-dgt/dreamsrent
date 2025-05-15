@@ -19,8 +19,7 @@
                     </ol>
                 </nav>
             </div>
-            <div class="skeleton label-skeleton label-loader me-2"></div>
-            <div class="d-flex my-xl-auto right-content align-items-center flex-wrap  d-none real-label">
+            <div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
                 <div class="mb-2">
                     <div>
                         @if (hasPermission($permissions, 'page', 'create'))
@@ -36,8 +35,7 @@
         <!-- Table Header -->
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
             <div class="d-flex align-items-center flex-wrap row-gap-3">
-                <div class="skeleton label-skeleton label-loader me-2"></div>
-                <div class="dropdown me-2 d-none real-label">
+                <div class="dropdown me-2">
                     <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                         <i class="ti ti-filter me-1"></i> {{ __('admin.page.sort_by') }}: <span id="sortLabel">{{ __('admin.page.latest') }}</span>
                     </a>
@@ -69,8 +67,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="skeleton label-skeleton label-loader me-2"></div>
-                <div class="dropdown me-2 d-none real-label">
+                <div class="dropdown me-2">
                     <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                         <i class="ti ti-badge me-1"></i> {{ __('admin.page.status') }}
                     </a>
@@ -87,8 +84,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="skeleton label-skeleton label-loader me-2"></div>
-                <div class="d-none real-label">
+                <div class="">
                     <select class="form-select select" id="language_id" name="language_id" onchange="filterlang()">
                         <option value="">{{ __('admin.page.select') }}</option>
                         @foreach($languages as $language)
@@ -99,8 +95,7 @@
                     </select>
                 </div>
             </div>
-            <div class="skeleton label-skeleton label-loader me-2"></div>
-            <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3 d-none real-label">
+            <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                 <div class="top-search me-2">
                     <div class="top-search-group">
                         <span class="input-icon">
@@ -113,115 +108,8 @@
         </div>
         <!-- /Table Header -->
         <input type="hidden" name="lang_id" id="lang_id" value="{{ $authUser->language_id }}">
-        <div class="custom-datatable-filter table-responsive table-loader">
-            <table class="table table-bordered">
-                <thead class="thead-light">
-                    <tr>
-                        <th class="text-center">
-                            <div class="skeleton th-skeleton th-loader"></div>
-                        </th>
-                        <th>
-                            <div class="skeleton th-skeleton th-loader"></div>
-                        </th>
-                        <th>
-                            <div class="skeleton th-skeleton th-loader"></div>
-                        </th>
-                        <th>
-                            <div class="skeleton th-skeleton th-loader"></div>
-                        </th>
-                        <th>
-                            <div class="skeleton th-skeleton th-loader"></div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
+           @include('admin.content-loader')
         </div>
         <!-- Custom Data Table -->
         <div class="custom-datatable-filter table-responsive d-none real-table">
