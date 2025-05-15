@@ -57,15 +57,19 @@
             <div class="blogdetails-pagination">
                 <ul>
                     <li>
-                        <a href="/blog-details/{{ $otherBlogs[0]->slug ?? '#' }}" class="prev-link"><i class="fas fa-regular fa-arrow-left"></i> {{ __('web.blog.previous_post') }}</a>
-                        <a href="/blog-details/{{ $otherBlogs[0]->slug ?? '#' }}">
-                            <h3>{{ ucfirst($otherBlogs[0]->title) ?? '' }}</h3>
+                        <a href="{{ route('blogs.detail', $otherBlogs[0]->slug ?? '#') }}" class="prev-link">
+                            <i class="fas fa-regular fa-arrow-left"></i> {{ __('web.blog.previous_post') }}
+                        </a>
+                        <a href="{{ route('blogs.detail', $otherBlogs[0]->slug ?? '#') }}">
+                            <h3>{{ ucfirst($otherBlogs[0]->title ?? '') }}</h3>
                         </a>
                     </li>
                     <li>
-                        <a href="/blog-details/{{ $otherBlogs[1]->slug ?? '#' }}" class="next-link">{{ __('web.blog.next_post') }} <i class="fas fa-regular fa-arrow-right"></i></a>
-                        <a href="/blog-details/{{ $otherBlogs[1]->slug ?? '#' }}">
-                            <h3>{{ $otherBlogs[1]->title ?? '' }}</h3>
+                        <a href="{{ route('blogs.detail', $otherBlogs[1]->slug ?? '#') }}" class="next-link">
+                            {{ __('web.blog.next_post') }} <i class="fas fa-regular fa-arrow-right"></i>
+                        </a>
+                        <a href="{{ route('blogs.detail', $otherBlogs[1]->slug ?? '#') }}">
+                            <h3>{{ ucfirst($otherBlogs[1]->title ?? '') }}</h3>
                         </a>
                     </li>
                 </ul>

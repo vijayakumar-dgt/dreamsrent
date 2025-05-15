@@ -81,7 +81,7 @@
                             @foreach($latestblogs as $latest)
                                 <div class="article">
                                     <div class="article-blog">
-                                        <a href="/blog-details/{{ $latest->slug }}">
+                                        <a href="{{ route('blogs.detail', $latest->slug) }}">
                                             @php
                                                 $imagePath = 'storage/' . $latest->image;
                                                 $defaultImage = asset('/backend/assets/img/default-profile.png');
@@ -91,7 +91,7 @@
                                     </div>
                                     <div class="article-content">
                                         <h5>
-                                            <a href="/blog-details/{{ $latest->slug }}">{{ ucfirst($latest->title) }}</a>
+                                            <a href="{{ route('blogs.detail', $latest->slug) }}">{{ ucfirst($latest->title) }}</a>
                                         </h5>
                                         <div class="article-date">
                                             <i class="fa-solid fa-calendar-day"></i>
