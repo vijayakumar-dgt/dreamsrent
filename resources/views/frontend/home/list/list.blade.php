@@ -153,7 +153,7 @@
         <div class="container">
             <div class="row">
                 @include('frontend.home.list.filter')
-                <div class="col-lg-9 grid_loader_div d-none">
+                <div class="col-lg-9 grid_loader_div">
                     <div class="row">
                         @for ($i = 0; $i < 3; $i++)
                             <div class="col-xxl-4 col-lg-6 col-md-6 col-12 grid-list-skeleton">

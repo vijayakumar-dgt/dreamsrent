@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 09, 2025 at 10:10 AM
+-- Generation Time: May 15, 2025 at 06:39 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -71,6 +71,15 @@ CREATE TABLE `announcement_types` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `announcement_types`
+--
+
+INSERT INTO `announcement_types` (`id`, `name`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Promotional Offers', 1, '2025-05-13 17:47:50', '2025-05-13 17:47:50', NULL),
+(2, 'New Vehicle Launch', 1, '2025-05-13 17:48:26', '2025-05-13 17:48:26', NULL),
+(3, 'Safety Reminders', 1, '2025-05-13 17:48:26', '2025-05-13 17:48:26', NULL);
 
 -- --------------------------------------------------------
 
@@ -55394,7 +55403,7 @@ INSERT INTO `transmissions` (`id`, `language_id`, `name`, `status`, `created_at`
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
   `user_type` int(11) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `phone_number` varchar(20) DEFAULT NULL,
@@ -56416,7 +56425,7 @@ ALTER TABLE `announcements`
 -- AUTO_INCREMENT for table `announcement_types`
 --
 ALTER TABLE `announcement_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `banks`
