@@ -136,7 +136,6 @@
             </div>
         </div>
         @include('frontend.toast')
-        <!-- Footer -->
     </div>
     <!-- /Main Wrapper -->
 
