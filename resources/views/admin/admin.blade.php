@@ -30,12 +30,15 @@
 	<!-- Tabler Icon CSS -->
 	<link rel="stylesheet" href="{{ asset('backend/assets/plugins/tabler-icons/tabler-icons.min.css') }}">
 
+	@if (!Route::is(['admin.permissions', 'admin.customer-recent-rents', 'admin.customer-details']))
 	<!-- Datatable CSS -->
     <link rel="stylesheet" href="{{ asset('backend/assets/plugins/datatables/dataTables.bootstrap5.min.css') }}">
+	@endif
 
 	@if (!Route::is(['admin.permissions', 'admin.customer-recent-rents', 'admin.customer-details', 'admin.newsletters']))
 	<!-- Daterangepikcer CSS -->
 	<link rel="stylesheet" href="{{ asset('backend/assets/plugins/daterangepicker/daterangepicker.css') }}">
+	<link rel="stylesheet" href="{{ asset('backend/assets/css/bootstrap-datetimepicker.min.css') }}">
 	@endif
 
 	@if (Route::is(['admin.addPage', 'admin.editPage']))
@@ -45,8 +48,6 @@
 
 	<!-- summernote CSS -->
 	<link rel="stylesheet" href="{{ asset('backend/assets/plugins/summernote/summernote-bs5.min.css') }}">
-
-	<link rel="stylesheet" href="{{ asset('backend/assets/css/bootstrap-datetimepicker.min.css') }}">
 
 	<!-- Fontawesome CSS -->
 	<link rel="stylesheet" href="{{ asset('backend/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
@@ -123,8 +124,8 @@
 	<script src="{{asset('backend/assets/plugins/dragula/js/draggable-cards.js') }}"></script>
 	@endif
 
-	<!-- Datatable JS -->
 	@if (!Route::is(['admin.permissions', 'admin.customer-recent-rents', 'admin.customer-details']))
+	<!-- Datatable JS -->
 	<script src="{{ asset('backend/assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 	<script src="{{ asset('backend/assets/plugins/datatables/dataTables.bootstrap5.min.js') }}"></script>
 	@endif
