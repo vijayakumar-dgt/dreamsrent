@@ -24,8 +24,6 @@
             showTicketHistory(ticketId);
         });
         TicketTable();
-        $(".table-loader, .input-loader, .label-loader").hide();
-        $('.real-table, .real-label, .real-input').removeClass('d-none');
         $('.summernote').summernote({
             height: 150, // Set the height of the editor
             placeholder: _l('web.user.description_placeholder'),
@@ -219,6 +217,10 @@
         $.ajax({
             url: "/ticket/list",
             type: "GET",
+            beforeSend: () => {
+                $(".table-loader").removeClass("d-none");
+                $(".real-table").addClass("d-none");
+             },
             success: function(response) {
                 ticketData = response.data;
                 let tableBody = "";
@@ -364,10 +366,10 @@
                     showToast('error', "An error occurred while retrieving ticket data!");
                 }
             },
-            complete: function() {
-                $(".table-loader, .input-loader, .label-loader").hide();
-                $('.real-table, .real-label, .real-input').removeClass('d-none');
-            },
+           complete: () => {
+               $(".table-loader").addClass("d-none");
+               $(".real-table").removeClass("d-none");
+           }
         });
     }
 

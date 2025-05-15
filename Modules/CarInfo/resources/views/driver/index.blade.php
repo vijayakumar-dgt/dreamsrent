@@ -34,8 +34,7 @@
 					</div>
 					<div class="mb-2">
 						@if (hasPermission($permissions, 'drivers', 'create'))
-						<div class="skeleton label-skeleton label-loader"></div>
-						<button type="button" data-bs-toggle="modal" data-bs-target="#add_driver_modal" id="add_driver" class="btn btn-primary d-flex align-items-center d-none real-label"><i class="ti ti-plus me-2"></i>{{ __('admin.manage.add_new_driver') }}</button>
+						<button type="button" data-bs-toggle="modal" data-bs-target="#add_driver_modal" id="add_driver" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.manage.add_new_driver') }}</button>
 						@endif
 					</div>
 				</div>
@@ -46,8 +45,7 @@
 				<div class="d-flex align-items-center flex-wrap row-gap-3">
 					<input type="hidden" name="sort_by_input" id="sort_by_input">
 					<input type="hidden" name="sort_by_status" id="sort_by_status">
-					<div class="skeleton label-skeleton label-loader me-2"></div>
-					<div class="dropdown me-2 d-none real-label">
+					<div class="dropdown me-2">
 						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }} : <span class="ms-1" id="current_sort">{{ __('admin.common.latest') }}</span>
 						</button>
@@ -69,8 +67,7 @@
 							</li>
 						</ul>
 					</div>
-					<div class="skeleton label-skeleton label-loader me-2"></div>
-					<div class="me-2 d-none real-input">
+					<div class="me-2">
 						<div class="input-icon-start position-relative topdatepicker">
 							<span class="input-icon-addon">
 								<i class="ti ti-calendar"></i>
@@ -78,8 +75,7 @@
 							<input type="text" class="form-control date-range bookingrange" name="sort_by_date" id="sort_by_date" value="" placeholder="dd/mm/yyyy - dd/mm/yyyy">
 						</div>
 					</div>
-					<div class="skeleton label-skeleton label-loader"></div>
-					<div class="dropdown me-2 d-none real-input">
+					<div class="dropdown me-2">
 						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-badge me-1"></i> <span class="ms-1" id="current_sort_status">{{ __('admin.common.status') }}</span>
 						</button>
@@ -94,8 +90,7 @@
 					</div>
 				</div>
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
-					<div class="skeleton label-skeleton label-loader me-2"></div>
-					<div class="dropdown me-2 d-none real-label">
+					<div class="dropdown me-2">
 						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-edit me-1"></i> {{ __('admin.common.bulk_actions') }}
 						</button>
@@ -108,8 +103,7 @@
 							</li>
 						</ul>
 					</div>
-					<div class="skeleton label-skeleton label-loader"></div>
-					<div class="top-search d-none real-input">
+					<div class="top-search">
 						<div class="top-search-group">
 							<span class="input-icon">
 								<i class="ti ti-search"></i>
@@ -120,115 +114,8 @@
 				</div>
 			</div>
 			<!-- /Table Header -->
-			<div class="custom-datatable-filter table-responsive table-loader">
-				<table class="table table-bordered">
-					<thead class="thead-light">
-						<tr>
-							<th>
-								<div class="skeleton th-skeleton th-loader"></div>
-							</th>
-							<th>
-								<div class="skeleton th-skeleton th-loader"></div>
-							</th>
-							<th>
-								<div class="skeleton th-skeleton th-loader"></div>
-							</th>
-							<th>
-								<div class="skeleton th-skeleton th-loader"></div>
-							</th>
-							<th>
-								<div class="skeleton th-skeleton th-loader"></div>
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-							<td>
-								<div class="skeleton data-skeleton data-loader"></div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
+				@include('admin.content-loader')
 			</div>
 			<!-- Custom Data Table -->
 			<div class="custom-datatable-filter table-responsive brandstable real-table d-none">

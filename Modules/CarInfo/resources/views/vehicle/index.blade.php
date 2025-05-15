@@ -7,10 +7,8 @@
     <div class="content me-4">
         <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
             <div class="my-auto mb-2">
-                <div class="skeleton label-skeleton label-loader"></div>
-                <h4 class="mb-1 d-none real-label">{{__('admin.rentals.all_vehicle')}}</h4>
-                <div class="skeleton label-skeleton label-loader w-50"></div>
-                <nav class=" d-none real-label">
+                <h4 class="mb-1">{{__('admin.rentals.all_vehicle')}}</h4>
+                <nav class="l">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item">
                             <a href="/admin">{{ __('admin.rentals.home') }}</a>
@@ -22,16 +20,14 @@
             <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
                 <div class="mb-2">
                     @if (hasPermission($permissions, 'vehicles', 'create'))
-                    <div class="skeleton label-skeleton label-loader"></div>
-                    <a href="{{ route('vehicle.vehicleadd') }}" class="btn btn-primary d-flex align-items-center d-none real-label"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_vehicle') }}</a>
+                    <a href="{{ route('vehicle.vehicleadd') }}" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_vehicle') }}</a>
                     @endif
                 </div>
             </div>
         </div>
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
             <div class="d-flex align-items-center flex-wrap row-gap-3">
-                <div class="skeleton label-skeleton label-loader me-2"></div>
-                <div class="dropdown me-2 d-none real-label">
+                <div class="dropdown me-2">
                     <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                         <i class="ti ti-filter me-1"></i> {{ __('admin.page.sort_by') }}: <span id="sortLabel">{{ __('admin.page.latest') }}</span>
                     </a>
@@ -64,8 +60,7 @@
                     </ul>
                 </div>
                 <div class="me-2">
-                    <div class="skeleton label-skeleton label-loader"></div>
-                    <div class="input-icon-start position-relative topdatepicker  d-none real-label">
+                    <div class="input-icon-start position-relative topdatepicker">
                         <span class="input-icon-addon">
                             <i class="ti ti-calendar"></i>
                         </span>
@@ -73,16 +68,14 @@
                     </div>
                 </div>
                 <div class="dropdown">
-                    <div class="skeleton label-skeleton label-loader"></div>
-                    <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center  d-none real-label" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
+                    <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
                         <i class="ti ti-filter me-1"></i> {{ __('admin.rentals.filter') }}
                     </a>
                 </div>
             </div>
             <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                 <div class="dropdown me-2">
-                    <div class="skeleton label-skeleton label-loader"></div>
-                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center  d-none real-label" data-bs-toggle="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                         <i class="ti ti-edit-circle me-1"></i> {{ __('admin.rentals.bulk_actions') }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end p-2">
@@ -94,8 +87,7 @@
                     </ul>
                 </div>
                 <div class="top-search me-2">
-                    <div class="skeleton label-skeleton label-loader"></div>
-                    <div class="top-search-group  d-none real-label">
+                    <div class="top-search-group">
                         <span class="input-icon">
                             <i class="ti ti-search"></i>
                         </span>
@@ -221,138 +213,9 @@
                 <tbody>
                 </tbody>
             </table>
-            <table id="loader-table" class="table table-striped table-bordered">
-                <thead class="table-dark">
-                    <tr>
-                        <th>
-                            <div class="skeleton label-skeleton label-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </th>
-                        <th>
-                            <div class="skeleton label-skeleton label-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </th>
-                        <th>
-                            <div class="skeleton label-skeleton label-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </th>
-                        <th>
-                            <div class="skeleton label-skeleton label-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                        <td>
-                            <div class="skeleton data-skeleton data-loader"></div>
-                            <p class="d-none real-data"></p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div id="loader-table" class="position-relative vh-10">
+                @include('admin.content-loader')
+            </div>
         </div>
         <div class="table-footer  d-none real-label"></div>
     </div>

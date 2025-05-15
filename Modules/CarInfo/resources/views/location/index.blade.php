@@ -19,8 +19,7 @@
                         </ol>
                     </nav>
                 </div>
-                <div class="skeleton label-skeleton label-loader"></div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap d-none real-label">
+                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
                     @if (hasPermission($permissions, 'locations', 'create'))
                     <div class="mb-2">
                         <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_location" class="btn btn-primary d-flex align-items-center" id="add_new_location"><i class="ti ti-plus me-2"></i> {{ __('admin.manage.add_new_location') }}</a>
@@ -31,8 +30,7 @@
             <!-- /Breadcrumb -->
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
-                <div class="skeleton label-skeleton label-loader"></div>
-                <div class="d-flex align-items-center flex-wrap row-gap-3 d-none real-label">
+                <div class="d-flex align-items-center flex-wrap row-gap-3">
                     <div class="top-search">
                         <div class="top-search-group">
                             <span class="input-icon">
@@ -43,8 +41,7 @@
                     </div>
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
-                    <div class="skeleton label-skeleton label-loader"></div>
-                    <div class="dropdown d-none real-label">
+                    <div class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                             <i class="ti ti-badge me-1"></i> <span class="statuslabel"> {{ __('admin.common.status') }}</span>
                         </a>
@@ -60,120 +57,13 @@
                 </div>
             </div>
             <!-- /Table Header -->
-            <div class="custom-datatable-filter table-responsive table-loader">
-                <table class="table table-bordered">
-                    <thead class="thead-light">
-                        <tr>
-                            <th class="text-center">
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
-                            <th>
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
-                            <th>
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
-                            <th>
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
-                            <th>
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
+                @include('admin.content-loader')
             </div>
             <!-- Custom Data Table -->
             <div class="custom-datatable-filter table-responsive brandstable d-none real-table">
                 <table class="table" id="locationTable">
-                    <thead class="thead-light">
+                    <thesad class="thead-light">
                         <tr>
                             <th>{{ strtoupper(__('admin.manage.location_title')) }}</th>
                             <th>{{ strtoupper(__('admin.common.address')) }}</th>
@@ -184,7 +74,7 @@
                             <th>{{ strtoupper(__('admin.common.action')) }}</th>
                             @endif
                         </tr>
-                    </thead>
+                    </thesad>
                     <tbody>
                     </tbody>
                 </table>

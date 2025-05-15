@@ -61,7 +61,10 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive dashboard-table">
+                                <div class="table-responsive table-loader position-relative vh-10">
+                                    @include('frontend.content-loader')
+                                </div>
+                                <div class="table-responsive dashboard-table d-none real-table">
                                     <table id="ticketTable" class="table">
                                         <thead class="thead-light">
                                             <tr>
@@ -75,15 +78,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @for ($i = 0; $i < 5; $i++)
-                                                <tr>
-                                                    @for ($j = 0; $j < 7; $j++)
-                                                        <td>
-                                                            <div class="skeleton data-skeleton data-loader"></div>
-                                                        </td>
-                                                    @endfor
-                                                </tr>
-                                            @endfor
+                                            
                                         </tbody>
                                     </table>
                                 </div>
