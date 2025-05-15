@@ -3,6 +3,9 @@
     await loadTranslationFile('admin', 'cms,common');
 
     $(document).ready(function () {
+          $('#language').on('change', function () {
+            loadHowItWorksSettings($(this).val());
+        });
         $('.summernote').summernote({
             height: 300,
             placeholder: _l('admin.cms.enter_your_description'),

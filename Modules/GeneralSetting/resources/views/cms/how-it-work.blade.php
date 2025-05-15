@@ -40,7 +40,7 @@
                                     <div class="skeleton label-skeleton label-loader"></div>
                                     <label class="form-label d-none real-label" for="language">{{__('admin.general_settings.language')}} <span class="text-danger">*</span></label>
                                     <div class="skeleton select-skeleton input-loader"></div>
-                                    <select class="form-select d-none real-label" id="language" name="language" onchange="loadHowItWorksSettings(this.value)">
+                                    <select class="form-select d-none real-label" id="language" name="language" >
                                         @foreach($languages as $language)
                                             <option value="{{ $language->language_id }}">
                                                 {{ $language->transLang->name ?? 'N/A' }}
