@@ -198,16 +198,17 @@
                             <ul class="location-lists">
                                 <li>
                                     <h6>{{__('web.home.driver_type')}}</h6>
-                                    <p>Self Driver</p>
+                                    <p>
+                                        {{ $booking->driver_id ? 'Driver: ' . ($driverInfo->driver_name ?? 'N/A') : 'Self Pickup' }}
+                                    </p>
                                 </li>
                             </ul>
                             <div class="driver-info">
                                 <span>
                                 </span>
                                 <div class="driver-name">
-                                    <h6>{{ $bookingInfo->first_name}} {{ $bookingInfo->last_name }}</h6>
-                                    <p>{{ $bookingInfo->phone_number }}</p>
-
+                                    <h6>{{ $driverInfo->driver_name ?? 'N/A' }}</h6>
+                                    <p>{{ $driverInfo->phone_number ?? 'N/A' }}</p>
                                 </div>
                             </div>
                         </div>

@@ -495,6 +495,8 @@
                 },
                 phone_number: {
                     required: true,
+                    minlength: 10,
+                    maxlength: 15,
                 },
                 trems: {
                     required: true,
@@ -525,6 +527,8 @@
                 pincode: {
                     required: _l("web.home.pincode_required"),
                     digits: _l("web.home.pincode_digits"),
+                    minlength: _l("web.home.min_length_10"),
+                    maxlength: _l("web.home.max_length_15"),
                 },
                 email: {
                     required: _l("web.home.email_required"),

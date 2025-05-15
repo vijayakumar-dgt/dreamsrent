@@ -429,11 +429,11 @@
                                             <li>
                                                 <div class="driver-profile-info">
                                                     <span class="driver-profile" id="driver_profile">
-                                                        <img src="/assets/img/drivers/driver_img.png" alt="Img">
+                                                        <img src="{{ $driverInfo_image }}" alt="Img">
                                                     </span>
                                                     <div class="driver-name">
                                                         <h5>{{ $driverInfo->driver_name }}</h5>
-                                                        <input type="hidden" id="driver_id" name="driver_id" value="{{ $driverInfo->id }}" disabled>
+                                                        <input type="hidden" id="driver_id" name="driver_id" value="{{ $driverInfo->id }}">
                                                         <input type="hidden" id="driver_name" value="{{ $driverInfo->driver_name }}">
                                                         <ul>
                                                             <li>{{__('web.home.no_of_rides_completed')}} : {{ $driverInfo_ride }}</li>
@@ -854,7 +854,7 @@
                                                         @if(!empty($driverInfo->driver_name))
                                                         <div class="acting-driver-info">
                                                             <span class="driver-profile">
-                                                                <img src="/assets/img/drivers/driver_img.png" alt="Img">
+                                                                <img src="{{ $driverInfo_image }}" alt="Img">
                                                             </span>
                                                             <div class="driver-name">
                                                                 <h5 id="driver_name_display">{{ $driverInfo->driver_name }}</h5>
