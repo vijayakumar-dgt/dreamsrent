@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 15, 2025 at 06:39 AM
+-- Generation Time: May 15, 2025 at 02:42 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49523,7 +49523,8 @@ INSERT INTO `email_templates` (`id`, `title`, `notification_type`, `description`
 (9, 'Booking Cancelled to user', 5, '<p>Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.</p>', 'Booking cancelled', 'Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.', 'Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.', 1, '2025-04-10 11:06:04', '2025-04-10 11:06:04', NULL),
 (10, 'Booking cancelled to adminn', 6, '<p>Hello Admin, #{reservation_id} reservation has been cancelled.</p>', 'Booking cancelled', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 1, '2025-04-10 11:07:18', '2025-04-29 09:47:20', NULL),
 (11, 'Login Otp', 8, '<p>Your OTP Verification for login</p>', 'OTP Verification for login', 'Your OTP Verification for login', 'Your OTP Verification for login', 1, '2025-05-08 23:49:29', '2025-05-08 23:49:29', NULL),
-(12, 'Forgot Otp', 9, '<p>Your OTP Verification for Forgot password</p>', 'OTP Verification for Forgot password', 'Your OTP Verification for Forgot password', 'Your OTP Verification for Forgot password', 1, '2025-05-08 23:51:10', '2025-05-08 23:51:10', NULL);
+(12, 'Forgot Otp', 9, '<p>Your OTP Verification for Forgot password</p>', 'OTP Verification for Forgot password', 'Your OTP Verification for Forgot password', 'Your OTP Verification for Forgot password', 1, '2025-05-08 23:51:10', '2025-05-08 23:51:10', NULL),
+(13, 'Test Mail', 7, '<p>Hello {user_name},<br><br>\r\n        This is a test email to confirm that the email configuration for admin notifications is working correctly.<br><br>\r\n        If you have received this email, everything is set up properly on your end. No further action is required.<br><br>\r\n        Regards,</p><p>{company_name}<br>\r\n        System Administrator\"</p>', 'Reg - Test Mail', 'This is a test email to confirm that the email configuration for admin notifications is working correctly.', 'This is a test email to confirm that the email configuration for admin notifications is working correctly.', 1, '2025-05-15 13:52:57', '2025-05-15 13:52:57', NULL);
 
 -- --------------------------------------------------------
 
@@ -50239,7 +50240,7 @@ CREATE TABLE `notification_types` (
 INSERT INTO `notification_types` (`id`, `title`, `slug`, `tags`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Welcome Email', NULL, NULL, 1, NULL, NULL),
 (2, 'Booking Confirmation to user', 'booking-confirmation-to-user', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, NULL, NULL),
-(3, 'Newsletter', 'newsletter', '[\"user_name\",\"company_name\",\"company_email\",\"company_phone\"]', 1, NULL, NULL),
+(3, 'Newsletter', 'newsletter', '[\"owner_name\",\"company_name\",\"company_email\",\"company_phone\",\"company_address\", \"company_postal_code\"]', 1, NULL, NULL),
 (4, 'Booking Confirmation to Admin', 'booking-confirmation-to-admin', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, '2025-04-10 14:04:55', '2025-04-10 14:04:55'),
 (5, 'Booking cancelled to admin', 'booking-cancelled-to-admin', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, '2025-04-10 16:31:30', '2025-04-10 16:31:30'),
 (6, 'Booking cancelled to user', 'booking-cancelled-to-user', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, '2025-04-10 16:33:10', '2025-04-10 16:33:10'),
@@ -56623,7 +56624,7 @@ ALTER TABLE `driving_types`
 -- AUTO_INCREMENT for table `email_templates`
 --
 ALTER TABLE `email_templates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `enquiries`
