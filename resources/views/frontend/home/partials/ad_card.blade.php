@@ -1,10 +1,10 @@
     <div class="container">
         <div class="user-app-group">
             <div class="app-left">
-                <img src="/frontend/assets/img/bg/app-left.png" class="img-fluid" alt="App Available">
+                <img src="{{ asset('/frontend/assets/img/bg/app-left.png') }}" class="img-fluid" alt="App Available">
             </div>
             <div class="app-right">
-                <img src="/frontend/assets/img/bg/app-right.png" class="img-fluid" alt="App Available">
+                <img src="{{ asset('/frontend/assets/img/bg/app-right.png') }}" class="img-fluid" alt="App Available">
             </div>
             <div class="row">
                 <div class="col-lg-7">
