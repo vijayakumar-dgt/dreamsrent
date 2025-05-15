@@ -334,7 +334,7 @@
                 <div class="modal-body">
                     <div class="order-success-info">
                         <span class="order-success-icon">
-                            <img src="/frontend/assets/img/icons/check-icon.svg" alt="Icon">
+                            <img src="{{ asset('frontend/assets/img/icons/check-icon.svg') }}" alt="Icon">
                         </span>
                         <h4>{{__('web.common.successful')}}</h4>
                         <p>{{__('web.common.your_ride_completed')}}</p>
@@ -355,7 +355,7 @@
                 <div class="modal-body">
                     <div class="order-success-info">
                         <span class="order-success-icon">
-                            <img src="/frontend/assets/img/icons/check-icon.svg" alt="Icon">
+                            <img src="{{ asset('frontend/assets/img/icons/check-icon.svg') }}" alt="Icon">
                         </span>
                         <h4>{{__('web.common.successful')}}</h4>
                         <p>{{__('web.common.ride_started')}}</p>

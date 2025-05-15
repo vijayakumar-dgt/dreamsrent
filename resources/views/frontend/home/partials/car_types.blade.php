@@ -25,7 +25,7 @@
         </div>
         <!-- View More -->
         <div class="view-all text-center" data-aos="fade-down">
-            <a href="/vehicles" class="btn btn-view d-inline-flex align-items-center">{{ __('web.home.view_all_cars') }}<i class="feather-arrow-right ms-2"></i></a>
+            <a href="{{ route('list') }}" class="btn btn-view d-inline-flex align-items-center">{{ __('web.home.view_all_cars') }}<i class="feather-arrow-right ms-2"></i></a>
         </div>
         <!-- View More -->
         </div>
