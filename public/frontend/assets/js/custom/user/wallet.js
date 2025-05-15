@@ -69,9 +69,16 @@
     });
 
     function initializeWalletTable() {
-        $.get("/user/wallet-list")
-            .done((response) => {
-                const currencySymbol = response.currency_symbol || '$';
+        $.ajax({
+           type: "GET",
+           url: "/user/wallet-list",
+           dataType: "json",
+           beforeSend: () => {
+               $(".table-loader").removeClass("d-none");
+               $(".real-table").addClass("d-none");
+           },
+           success: (response) => {
+               const currencySymbol = response.currency_symbol || '$';
                 $(".total_credit").text(`${currencySymbol}${parseFloat(response.total_credit).toFixed(2)}`);
                 $(".total_debit").text(`${currencySymbol}${parseFloat(response.total_debit).toFixed(2)}`);
                 $(".available_balance").text(`${currencySymbol}${parseFloat(response.total_balance).toFixed(2)}`);
@@ -128,14 +135,15 @@
                 } else {
                     $('.table-footer').empty();
                 }
-            })
-            .fail((error) => {
-                const errorMessage = error.responseJSON?.error || _l('web.user.errot_occured_while_retrieving_wallet_history');
+           },
+           error: (error) => {
+               const errorMessage = error.responseJSON?.error || _l('web.user.errot_occured_while_retrieving_wallet_history');
                 showToast('error', errorMessage);
-            })
-            .always(() => {
-                $(".table-loader, .input-loader, .label-loader").hide();
-                $('.real-table, .real-label, .real-input').removeClass('d-none');
-            });
+           },
+           complete: () => {
+               $(".table-loader").addClass("d-none");
+               $(".real-table").removeClass("d-none");
+           }
+        });
     }
 })();

@@ -129,29 +129,8 @@
                         </div>
                     </div>
                     <div class="card-body p-0">
-                        <div class="custom-datatable-filter table-responsive table-loader d-none">
-                            <table class="table table-bordered" id="loader-table">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                        <div class="custom-datatable-filter table-responsive table-loader vh-50">
+                            @include('frontend.content-loader')
                         </div>
                         <div class="table-responsive dashboard-table dashboard-table-info d-none real-table">
                             <table class="table" id="bookingTable">
@@ -183,9 +162,9 @@
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive dashboard-table dashboard-table-info">
-                            <table class="table trans-table-loader">
-                                <tbody id="transaction-skeleton-loader-body"></tbody>
-                            </table>
+                            <div class="trans-table-loader vh-50">
+                                @include('frontend.content-loader')
+                            </div>
                             <table class="table d-none trans-real-table" id="transactionTable">
                                 <tbody></tbody>
                             </table>

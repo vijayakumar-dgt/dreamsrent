@@ -7,48 +7,8 @@
     @section('content')
     
     <!-- Skeleton Container -->
-    <div class="container skeleton-container">
-        <div class="vehl_dets_skeleton">
-            <!-- Header -->
-            <div class="vehl_dets_banner skeleton"></div>
-            <!-- Vehicle Info -->
-            <div class="vehl_dets_info">
-                <div class="vehl_dets_badge skeleton"></div>
-                <div class="vehl_dets_title skeleton"></div>
-                <div class="vehl_dets_meta skeleton"></div>
-            </div>
-            <!-- Main Content -->
-            <div class="vehl_dets_main">
-                <!-- Left Side (Image, Gallery, and Additional Skeleton) -->
-                <div class="vehl_dets_left">
-                    <div class="vehl_dets_image skeleton"></div>
-                    <div class="vehl_dets_gallery">
-                        <div class="vehl_dets_gallery_item skeleton"></div>
-                        <div class="vehl_dets_gallery_item skeleton"></div>
-                        <div class="vehl_dets_gallery_item skeleton"></div>
-                        <div class="vehl_dets_gallery_item skeleton"></div>
-                    </div>
-                    <div class="vehl_dets_text skeleton"></div>
-                    <div class="vehl_dets_text skeleton"></div>
-                    <div class="vehl_dets_text skeleton"></div>
-                    <div class="vehl_dets_text skeleton"></div>
-                </div>
-                <!-- Right Side (Pricing & Booking) -->
-                <div class="vehl_dets_sidebar">
-                    <div class="vehl_dets_pricing">
-                        <div class="vehl_dets_price skeleton"></div>
-                        <div class="vehl_dets_price skeleton"></div>
-                        <div class="vehl_dets_price skeleton"></div>
-                        <div class="vehl_dets_price skeleton"></div>
-                    </div>
-                    <div class="vehl_dets_delivery skeleton"></div>
-                    <div class="vehl_dets_location skeleton"></div>
-                    <div class="vehl_dets_date skeleton"></div>
-                    <div class="vehl_dets_button skeleton"></div>
-                    <div class="vehl_dets_enquire skeleton"></div>
-                </div>
-            </div>
-        </div>
+    <div class="container skeleton-container position-relative vh-50">
+        
     </div>
     <!-- /Skeleton Container -->
     <!-- Breadscrumb Section -->

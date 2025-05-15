@@ -26,12 +26,13 @@ const fetchUserBookings = (callback = null) => {
         _token: $('meta[name="csrf-token"]').attr("content")
     },
     beforeSend: () => {
-        $("#booking-loader-table tbody").empty();
-        for (let i = 0; i < 7; i++) {
-            $("#booking-loader-table thead tr").clone().appendTo("#booking-loader-table tbody");    
+        if(callback){
+            $(".calendar-loader").removeClass("d-none");
+            $(".real-calendar").addClass("d-none");
+        }else{
+            $(".table-loader").removeClass("d-none");
+            $(".real-table").addClass("d-none");
         }
-        $(".table-loader").removeClass("d-none");
-        $(".real-table").addClass("d-none");
     },
     success: (response) => {
         if (callback) return callback(response);
@@ -77,9 +78,14 @@ const fetchUserBookings = (callback = null) => {
         $(".booking-headers").trigger("click");
         $("#totalBookingCount").html(response.data.length || 0);
     },
-    complete: () => {
-        $(".table-loader").addClass("d-none");
-        $(".real-table").removeClass("d-none");
+    complete: () => { 
+       if(callback){
+            $(".calendar-loader").addClass("d-none");
+            $(".real-calendar").removeClass("d-none");
+        }else{
+            $(".table-loader").addClass("d-none");
+            $(".real-table").removeClass("d-none");
+        }
     },
     error: console.log
     });

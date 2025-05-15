@@ -153,88 +153,13 @@
         <div class="container">
             <div class="row">
                 @include('frontend.home.list.filter')
-                <div class="col-lg-9 grid_loader_div">
-                    <div class="row">
-                        @for ($i = 0; $i < 3; $i++)
-                            <div class="col-xxl-4 col-lg-6 col-md-6 col-12 grid-list-skeleton">
-                                <div class="listing-item">
-                                    <div class="listing-img">
-                                        <div class="img-slider-skeleton skeleton"></div>
-                                        <div class="fav-item justify-content-end">
-                                            <span class="img-count-skeleton skeleton"></span>
-                                            <span class="fav-icon-skeleton skeleton"></span>
-                                        </div>
-                                        <span class="featured-text-skeleton skeleton"></span>
-                                    </div>
-                                    <div class="listing-content">
-                                        <div class="listing-features d-flex align-items-end justify-content-between">
-                                            <div class="list-rating-skeleton">
-                                                <p class="listing-title-skeleton skeleton"></p>
-                                                <div class="list-rating-icons">
-                                                    @for ($j = 0; $j < 5; $j++)
-                                                        <span class="star-skeleton skeleton"></span>
-                                                    @endfor
-                                                    <span class="reviews-skeleton skeleton"></span>
-                                                </div>
-                                            </div>
-                                            <div class="list-km-skeleton skeleton"></div>
-                                        </div>
-                                        <div class="listing-details-group">
-                                            @for ($k = 0; $k < 2; $k++)
-                                                <ul>
-                                                    @for ($l = 0; $l < 3; $l++)
-                                                        <li class="skeleton-detail skeleton"></li>
-                                                    @endfor
-                                                </ul>
-                                            @endfor
-                                        </div>
-                                        <div class="listing-location-detailsx">
-                                            <div class="input-skeleton skeleton"></div>
-                                        </div>
-                                        <div class="listing-location-detailsx mt-3">
-                                            <div class="input-skeleton skeleton"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endfor
-                    </div>
+                <div class="col-lg-9 grid_loader_div position-relative">
+                    @include('frontend.content-loader')
                 </div>
-                <div class="col-xl-9 col-lg-8 col-sm-12 col-12 d-none list_loader_div">
-                    <div class="row">
-                        @for ($i = 0; $i < 3; $i++)
-                            <div class="list_view-container">
-                                <div class="list_view-img-slider-skeleton list_view-skeleton"></div>
-                                <div class="list_view-content">
-                                    <div>
-                                        <div class="list_view-title-rating">
-                                            <div class="list_view-title-skeleton list_view-skeleton"></div>
-                                            <div class="list_view-rating-skeleton d-flex">
-                                                @for ($j = 0; $j < 5; $j++)
-                                                    <span class="list_view-skeleton"></span>
-                                                @endfor
-                                                <span class="list_view-reviews-skeleton list_view-skeleton"></span>
-                                            </div>
-                                        </div>
-                                        <ul class="list_view-details-group-skeleton">
-                                            @for ($k = 0; $k < 4; $k++)
-                                                <li class="list_view-skeleton"></li>
-                                            @endfor
-                                        </ul>
-                                    </div>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="d-flex align-items-center">
-                                            <span class="list_view-author-img-skeleton list_view-skeleton"></span>
-                                            <span class="list_view-location-skeleton list_view-skeleton ml-2"></span>
-                                        </div>
-                                        <span class="list_view-btn-skeleton list_view-skeleton"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        @endfor
-                    </div>
+                <div class="col-xl-9 col-lg-8 col-sm-12 col-12 d-none list_loader_div position-relative">
+                    @include('frontend.content-loader') 
                 </div>
-                <div class="col-lg-9 listCardDiv d-none">
+                <div class="col-lg-9 listCardDiv position-relative d-none">
                     <div class="row">
                     </div>
                 </div>

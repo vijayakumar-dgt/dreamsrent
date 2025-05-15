@@ -92,29 +92,8 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="custom-datatable-filter table-responsive table-loader">
-                                <table class="table table-bordered">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            @for ($i = 0; $i < 7; $i++)
-                                                <th>
-                                                    <div class="skeleton data-skeleton label-loader"></div>
-                                                </th>
-                                            @endfor
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @for ($i = 0; $i < 5; $i++)
-                                            <tr>
-                                                @for ($j = 0; $j < 7; $j++)
-                                                    <td>
-                                                        <div class="skeleton data-skeleton data-loader"></div>
-                                                    </td>
-                                                @endfor
-                                            </tr>
-                                        @endfor
-                                    </tbody>
-                                </table>
+                            <div class="custom-datatable-filter table-responsive table-loader vh-10">
+                               @include('frontend.content-loader')
                             </div>
                             <div class="table-responsive dashboard-table d-none real-table">
                                 <table class="table" id="bookingTable">

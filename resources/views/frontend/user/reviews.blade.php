@@ -38,16 +38,14 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-md-5">
-                                <div class="skeleton label-skeleton label-loader"></div>
-                                <h5 class="d-none real-label">
+                                <h5>
                                     {{ __('web.user.all_reviews') }}
                                     <span id="totalReviewsCount" class="badge bg-success">0</span>
                                 </h5>
                             </div>
                             <div class="col-md-7 text-md-end">
                                 <div class="filter-group">
-                                    <div class="skeleton label-skeleton label-loader me-2"></div>
-                                    <div class="sort-week sort d-none real-label">
+                                    <div class="sort-week sort">
                                         <div class="dropdown dropdown-action">
                                             <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <span class="datefilter_text">{{ __('web.common.filter_by') }}</span>
@@ -72,8 +70,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="skeleton label-skeleton label-loader"></div>
-                                    <div class="sort-relevance sort d-none real-label">
+                                   
+                                    <div class="sort-relevance sort">
                                         <div class="dropdown dropdown-action">
                                             <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <span class="sortfilter_text">{{ __('web.common.sort_by_asc') }}</span>
@@ -102,29 +100,8 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="custom-datatable-filter table-responsive table-loader">
-                            <table class="table table-bordered">
-                                <thead class="thead-light">
-                                    <tr>
-                                        @for ($i = 0; $i < 5; $i++)
-                                            <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                            </th>
-                                            @endfor
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for ($i = 0; $i < 4; $i++)
-                                        <tr>
-                                        @for ($j = 0; $j < 5; $j++)
-                                            <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            @endfor
-                                            </tr>
-                                            @endfor
-                                </tbody>
-                            </table>
+                        <div class="custom-datatable-filter table-responsive table-loader vh-10">
+                            @include('frontend.content-loader')
                         </div>
                         <div class="table-responsive dashboard-table d-none real-table">
                             <table class="table" id="reviewsTable">

@@ -40,8 +40,7 @@
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                     <input type="hidden" name="sort_by_input" id="sort_by_input">
                     <input type="hidden" name="sort_by_status" id="sort_by_status">
-                    <div class="skeleton label-skeleton label-loader me-2"></div>
-                    <div class="dropdown me-2 d-none real-label">
+                    <div class="dropdown me-2">
                         <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                             <i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }} : <span class="ms-1" id="current_sort">{{ __('admin.common.latest') }}</span>
                         </a>
@@ -63,8 +62,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="skeleton label-skeleton label-loader me-2"></div>
-                    <div class="me-2 d-none real-input">
+                    <div class="me-2">
                         <div class="input-icon-start position-relative topdatepicker">
                             <span class="input-icon-addon">
                                 <i class="ti ti-calendar"></i>
@@ -74,8 +72,7 @@
                     </div>
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
-                    <div class="skeleton label-skeleton label-loader me-2"></div>
-                    <div class="top-search d-none real-label">
+                    <div class="top-search">
                         <div class="top-search-group">
                             <span class="input-icon">
                                 <i class="ti ti-search"></i>
@@ -86,115 +83,8 @@
                 </div>
             </div>
             <!-- /Table Header -->
-            <div class="custom-datatable-filter table-responsive table-loader">
-                <table class="table table-bordered">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
-                            <th>
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
-                            <th>
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
-                            <th>
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
-                            <th>
-                                <div class="skeleton th-skeleton th-loader"></div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                            <td>
-                                <div class="skeleton data-skeleton data-loader"></div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
+                @include('admin.content-loader')
             </div>
             <!-- Custom Data Table -->
             <div class="custom-datatable-filter table-responsive d-none real-table">
