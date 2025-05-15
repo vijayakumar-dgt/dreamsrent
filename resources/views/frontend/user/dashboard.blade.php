@@ -41,7 +41,7 @@
                         </div>
                         <div class="widget-icon">
                             <span>
-                                <img src="/frontend/assets/img/icons/book-icon.svg" alt="icon">
+                                <img src="{{ asset('frontend/assets/img/icons/book-icon.svg') }}" alt="icon">
                             </span>
                         </div>
                     </div>
@@ -60,11 +60,11 @@
                         </div>
                         <div class="widget-icon">
                             <span class="bg-warning">
-                                <img src="/frontend/assets/img/icons/balance-icon.svg" alt="icon">
+                                <img src="{{ asset('frontend/assets/img/icons/balance-icon.svg') }}" alt="icon">
                             </span>
                         </div>
                     </div>
-                    <a href="/user/wallet" class="view-link">{{ __('web.user.view_balance') }} <i class="feather-arrow-right"></i></a>
+                    <a href="{{ route('user.wallet') }}" class="view-link">{{ __('web.user.view_balance') }} <i class="feather-arrow-right"></i></a>
                 </div>
             </div>
             <!-- /Widget Item -->
@@ -79,11 +79,11 @@
                         </div>
                         <div class="widget-icon">
                             <span class="bg-success">
-                                <img src="/frontend/assets/img/icons/transaction-icon.svg" alt="icon">
+                                <img src="{{ asset('frontend/assets/img/icons/transaction-icon.svg') }}" alt="icon">
                             </span>
                         </div>
                     </div>
-                    <a href="/user/payments" class="view-link">{{ __('web.user.view_all_transactions') }} <i class="feather-arrow-right"></i></a>
+                    <a href="{{ route('user.payments') }}" class="view-link">{{ __('web.user.view_all_transactions') }} <i class="feather-arrow-right"></i></a>
                 </div>
             </div>
             <!-- /Widget Item -->
@@ -98,7 +98,7 @@
                         </div>
                         <div class="widget-icon">
                             <span class="bg-danger">
-                                <img src="/frontend/assets/img/icons/cars-icon.svg" alt="icon">
+                                <img src="{{ asset('frontend/assets/img/icons/cars-icon.svg') }}" alt="icon">
                             </span>
                         </div>
                     </div>

@@ -57,21 +57,7 @@
                                 <button type="submit" class="btn btn-dark w-100 submitbtn" disabled>Login</button>
                             </div>
                           </form> 
-                           <div class="mb-0">
-                                <h6 class="fs-16 mb-1">{{ __('Login Info') }}:</h6>
-                                <div class="p-3 border d-flex flex-wrap align-items-center justify-content-between">
-                                    <div>
-                                        <span class="d-block"><strong>{{ __('Email') }} </strong>: demoadmin@example.com</span>
-                                        <span class="d-block"><strong>{{ __('Password') }} </strong>: 12345678</span>
-                                    </div>
-                                    <div>
-                                        <a class="btn btn-primary copy-login-details" data-email="demoadmin@example.com"
-                                            data-password="12345678">
-                                            <i class="far fa-copy"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>                        
+                                                 
                         </div>                         
                     </div>
             </div>

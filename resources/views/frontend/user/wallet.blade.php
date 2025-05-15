@@ -175,12 +175,12 @@
                                     <label class="custom_radio text-center">
                                         <input type="radio" name="payment_one" id="paypal" value="wallet_one" checked>
                                         <span class="checkmark d-block mx-auto"></span>
-                                        <img src="/frontend/assets/img/icons/payment-1.svg" alt="Icon" class="img-fluid mt-2">
+                                        <img src="{{ asset('frontend/assets/img/icons/payment-1.svg') }}" alt="Icon" class="img-fluid mt-2">
                                     </label>
                                     <label class="custom_radio text-center">
                                         <input type="radio" name="payment_one" id="stripe" value="wallet_one">
                                         <span class="checkmark d-block mx-auto"></span>
-                                        <img src="/frontend/assets/img/icons/payment-2.svg" alt="Icon" class="img-fluid mt-2">
+                                        <img src="{{ asset('frontend/assets/img/icons/payment-2.svg') }}" alt="Icon" class="img-fluid mt-2">
                                     </label>
                                 </div>
                             </div>
@@ -194,7 +194,7 @@
                                                         <label class="custom_radio">
                                                             <input type="radio" name="payment_two" value="wallet_two">
                                                             <span class="checkmark"></span>
-                                                            <img src="/frontend/assets/img/icons/wallet-01.svg" alt="Icon">
+                                                            <img src="{{ asset('frontend/assets/img/icons/wallet-01.svg') }}" alt="Icon">
                                                         </label>
                                                     </td>
                                                     <td>

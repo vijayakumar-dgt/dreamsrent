@@ -77,20 +77,7 @@
                                 {{ __('web.auth.dont_have_account') }}
                                 <a href="{{ route('user-register') }}">{{ __('web.auth.register') }}</a>
                             </div>
-                            <div class="mt-3">
-                                <h6 class="fs-16 mb-1">{{ __('web.auth.demo_user_info') }}:</h6>
-                                <div class="p-3 border d-flex flex-wrap align-items-center justify-content-between">
-                                    <div>
-                                        <span class="d-block"><strong>{{ __('web.auth.email') }}:</strong> demouser@example.com</span>
-                                        <span class="d-block"><strong>{{ __('web.auth.password') }}:</strong> 12345678</span>
-                                    </div>
-                                    <div>
-                                        <a class="btn btn-primary copy-login-details" data-email="demouser@example.com" data-password="12345678">
-                                            <i class="far fa-copy"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                         
                         </form>
                     </div>
                 </div>
