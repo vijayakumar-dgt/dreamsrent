@@ -648,9 +648,11 @@
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             beforeSend: function () {
-                $(".list-loader").show();
-                $(".card-loader").show();
-                $("#vehicle_list_container").addClass("d-none");
+                if (isLoadMore == false) {
+                    $('.list-loader').show();
+                    $('.card-loader').show();
+                    $('#vehicle_list_container').addClass('d-none');
+                }
             },
             success: function (result) {
                 if (result.data && result.data.data.length > 0) {

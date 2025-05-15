@@ -947,9 +947,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             beforeSend: function () {
-                $(".list-loader").show();
-                $(".card-loader").show();
-                $("#vehicle_list_container").addClass("d-none");
+                if (isLoadMore == false) {
+                    $('.list-loader').show();
+                    $('.card-loader').show();
+                    $('#vehicle_list_container').addClass('d-none');
+                }
             },
             success: function (result) {
                 if (result.data && result.data.data.length > 0) {
@@ -1067,10 +1069,8 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             complete: function () {
                 isFetching = false;
-                $(".list-loader, .label-loader, .card-loader").hide();
-                $(
-                    "#vehicle_list_container, .real-label, .real-input"
-                ).removeClass("d-none");
+                $(".list-loader, .label-loader, .card-loader, .table-loader").hide();
+                $('#vehicle_list_container, .real-table, .real-label, .real-input').removeClass('d-none');
             },
         });
     }
