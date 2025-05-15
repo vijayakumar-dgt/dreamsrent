@@ -245,7 +245,7 @@ function ticketTable() {
 
 
                     tableBody += `<tr>
-                        <td><a href="">#${ticket.ticket_id}</a></td>
+                        <td><p >#${ticket.ticket_id}</p></td>
                         <td>
                             <div class="d-flex align-items-center">
                                 <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
@@ -308,7 +308,18 @@ function ticketTable() {
                                             <i class="ti ti-edit me-1"></i>${_l('admin.common.assign')}
                                         </button>
                                     </li>` : ''}
-                                    ${ hasPermission(permissions, 'tickets', 'delete') ?
+                                   
+                                   ${ticket.assignee_id ? `
+                                    <li>
+                                        <button 
+                                            type="button" 
+                                            class="dropdown-item rounded-1 ticket-history-btn" 
+                                            data-ticket-id="${ticket.id}"
+                                        >
+                                            <i class="ti ti-eye me-1"></i> ${_l('admin.common.history')}
+                                        </button>
+                                    </li>` : ''}
+                                     ${ hasPermission(permissions, 'tickets', 'delete') ?
                                     `<li>
                                        <button 
                                             type="button" 
@@ -320,16 +331,6 @@ function ticketTable() {
                                             <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
                                         </button>
 
-                                    </li>` : ''}
-                                   ${ticket.assignee_id ? `
-                                    <li>
-                                        <button 
-                                            type="button" 
-                                            class="dropdown-item rounded-1 ticket-history-btn" 
-                                            data-ticket-id="${ticket.id}"
-                                        >
-                                            <i class="ti ti-eye me-1"></i> ${_l('admin.common.history')}
-                                        </button>
                                     </li>` : ''}
                                 </ul>
                             </div>

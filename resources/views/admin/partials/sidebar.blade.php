@@ -316,7 +316,7 @@
                         </li>
                         @endif
                         @if (hasPermission($permissions, 'tickets', 'view'))
-                        <li class="{{ request()->routeIs('communication.ticket') ? 'active' : '' }}">
+                       <li class="{{ request()->routeIs('communication.ticket', 'communication.ticket-details') ? 'active' : '' }}">
                             <a href="{{ route('communication.ticket') }}">
                                 <i class="ti ti-ticket"></i><span>{{ __('admin.support.tickets') }}</span>
                             </a>

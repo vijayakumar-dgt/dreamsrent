@@ -99,6 +99,7 @@ $("#editTickets").validate({
                     $("#editTickets")[0].reset();
                     $('.summernote').summernote('code', '');
                     ticketDetails();
+                    window.location.href = '/admin/ticket';
                 }
             },
             error: function (error) {
@@ -201,9 +202,9 @@ function ticketDetails() {
             let historyHtml = "";
 
             ticket.ticket_histories.forEach(history => {
-                let userImage = history.user && history.user.profile_image
-                    ? history.user.profile_image
-                    : "/backend/assets/img/profiles/avatar-20.jpg";
+                let userImage =  history.user && history.user.user_detail && history.user.user_detail.profile_image
+                                    ? '/storage/' + history.user.user_detail.profile_image
+                                    : '/backend/assets/img/profiles/avatar-20.jpg';
 
                let userName = history.user?.user_detail?.first_name && history.user?.user_detail?.last_name
                                 ? `${history.user.user_detail.first_name} ${history.user.user_detail.last_name}`
