@@ -1199,3 +1199,10 @@
 	-ms-border-radius: 100%;
 	border-radius: 100%
 }
+
+.grid_loader_div .bg-white div {
+  top: 6% !important;
+}
+.list_loader_div .bg-white div {
+  top: 6% !important;
+}
