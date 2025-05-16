@@ -23,7 +23,7 @@
                                 <span id="error" class="text-danger"></span>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Email / Username <span class="text-danger">*</span></label>
+                                <label class="form-label">Email <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <input type="email" name="email" class="form-control" value="{{ old('email') }}" id="email">
                                     <span class="input-group-text border-start-0">
