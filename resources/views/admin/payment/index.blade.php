@@ -65,12 +65,14 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-lg p-2 filyerPaymentType">
                             @foreach ($GetPayments as $payment)
+                            @if ($payment)
                             <li>
                                 <label class="dropdown-item d-flex align-items-center rounded-1">
                                     <input class="form-check-input m-0 me-2" type="checkbox" value="{{ $payment }}">
                                     {{ strtoupper(str_replace('_', ' ', $payment)) }}
                                 </label>
                             </li>
+                            @endif
                             @endforeach
                         </ul>
 

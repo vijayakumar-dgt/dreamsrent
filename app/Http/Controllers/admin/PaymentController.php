@@ -97,7 +97,7 @@ class PaymentController extends Controller
 
                 return [
                     'id' => $booking->reservation_id,
-                    'name' => $userInfo ? "{$userInfo->first_name} {$userInfo->last_name}" : "-",
+                    'name' => $userInfo ? ucfirst($userInfo->first_name) . " " . ucfirst($userInfo->last_name) : "-",
                     'profile_image' => $booking->customerDetail->profile_image ? uploadedAsset($booking->customerDetail->profile_image) : uploadedAsset('', 'profile'),
                     'amount' => $booking->final_price,
                     'payment_type' => $paymentType,
