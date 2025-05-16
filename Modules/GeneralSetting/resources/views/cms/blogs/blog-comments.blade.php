@@ -59,8 +59,11 @@
                 </div>
             </div>
             <!-- /Table Header -->
+            <div class="custom-datatable-filter table-responsive position-relative vh-10 table-loader">
+                @include('admin.content-loader')
+            </div>
             <!-- Custom Data Table -->
-            <div class="custom-datatable-filter table-responsive">
+            <div class="custom-datatable-filter table-responsive d-none real-table">
                 <table class="table custom-blog-table" id="blogCommentTable">
                     <thead class="thead-light">
                         <tr>

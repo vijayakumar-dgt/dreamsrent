@@ -206,7 +206,7 @@
                 <li>
                     <ul>
                         @if (hasPermission($permissions, 'page', 'view'))
-                        <li class="{{ request()->routeIs('admin.pageIndex') ? 'active' : '' }}">
+                        <li class="{{ request()->routeIs(['admin.pageIndex', 'admin.addPage', 'admin.editPage']) ? 'active' : '' }}">
                             <a href="{{ route('admin.pageIndex') }}">
                                 <i class="ti ti-file-invoice"></i><span>{{ __('admin.cms.pages') }}</span>
                             </a>

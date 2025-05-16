@@ -55,6 +55,7 @@ class AppServiceProvider extends ServiceProvider
         $allLanguages = Language::select(
             'languages.id',
             'languages.rtl',
+            'languages.language_id',
             'translation_languages.code',
             'translation_languages.name'
         )

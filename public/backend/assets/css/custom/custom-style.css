@@ -1130,6 +1130,9 @@
 	}
 }
 /* Preloader */
+.vh-60{
+  min-height: 60vh !important;  
+}
 .vh-50{
   min-height: 50vh !important;  
 }
