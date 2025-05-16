@@ -31,8 +31,9 @@
                             <div class="card-header">
                                 <h5 class="fw-bold">{{ __('admin.general_settings.website_settings') }}</h5>
                             </div>
+                            @include('admin.general_settings_loader')
                             <!-- Card Body -->
-                            <div class="card-body">
+                            <div class="card-body d-none real-card">
                                 <h6 class="fw-bold mb-3">{{__('admin.general_settings.copyright')}}</h6>
                                 <input type="hidden" name="group_id" id="group_id" class="form-control" value="20">
                                 <div class="mb-3">
@@ -55,7 +56,7 @@
                                 </div>
                             </div>
                             <!-- Card Footer -->
-                            <div class="card-footer">
+                            <div class="card-footer d-none real-card">
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('dashboard') }}" class="btn btn-light me-3" >{{__('admin.general_settings.cancel')}}</a>
                                     @if (hasPermission($permissions, 'copyright', 'edit'))

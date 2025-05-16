@@ -31,7 +31,8 @@
                             <div class="card-header">
                                 <h5 class="fw-bold">{{ __('admin.general_settings.website_settings') }}</h5>
                             </div>
-                            <div class="card-body">
+                            @include('admin.general_settings_loader')
+                            <div class="card-body d-none real-card">
                                 <h6 class="fw-bold mb-3">{{ __('admin.general_settings.seo_setup_settings') }}</h6>
                                 <input type="hidden" name="group_id" id="group_id" class="form-control" value="6">
                                 <!-- Meta Title -->
@@ -98,7 +99,7 @@
                                     <span id="ogkeywords_error" class="text-danger error-text"></span>
                                 </div>
                             </div>
-                            <div class="card-footer">
+                            <div class="card-footer d-none real-card">
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('dashboard') }}" class="btn btn-light me-3" >{{ __('admin.common.cancel') }}</a>
                                     @if (hasPermission($permissions, 'website_settings', 'edit'))

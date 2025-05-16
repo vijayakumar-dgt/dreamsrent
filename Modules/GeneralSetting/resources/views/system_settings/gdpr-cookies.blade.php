@@ -30,18 +30,17 @@
                             <div class="card-header">
                                 <h5>{{ __('admin.general_settings.system_settings') }}</h5>
                             </div>
-                            <div class="card-body">
+                            @include('admin.general_settings_loader')
+                            <div class="card-body d-none real-card">
                                 <div class="sms-gateway">
                                     <h6 class="fw-bold mb-3">{{ __('admin.general_settings.gdpr_cookies') }}</h6>
                                     <input type="hidden" name="group_id" id="group_id" class="form-control" value="7">
                                         <div class="row mb-3 align-items-center">
                                         <div class="col-xl-4 d-flex">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <h6 class="fw-medium fs-14 d-none real-label">{{ __('admin.general_settings.language') }} <span class="text-danger">*</span></h6>
+                                            <h6 class="fw-medium fs-14">{{ __('admin.general_settings.language') }} <span class="text-danger">*</span></h6>
                                         </div>
                                         <div class="col-xl-8">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-label">
+                                            <div class="">
                                             <select class="form-select" id="language" name="language" onchange="loadCookiesSettings(this.value)">
                                                 @foreach($languages as $language)
                                                     <option value="{{ $language->language_id }}">
@@ -56,14 +55,12 @@
                                     <!-- Cookies Content Text -->
                                     <div class="row mb-3 align-items-center">
                                         <div class="col-xl-4 d-flex">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <h6 class="fw-medium fs-14 d-none real-label">{{ __('admin.general_settings.cookies_content_text') }}  <span class="text-danger">*</span></h6>
+                                            <h6 class="fw-medium fs-14">{{ __('admin.general_settings.cookies_content_text') }}  <span class="text-danger">*</span></h6>
                                         </div>
                                         <div class="col-xl-8">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-label">
+                                            <div class="">
                                             <textarea id="cookiesContentText" name="cookiesContentText" class="form-control summernote"></textarea>
-                                            <p class="mt-2 d-none real-label">{{ __('admin.general_settings.maximum_60_words') }}</p>
+                                            <p class="mt-2">{{ __('admin.general_settings.maximum_60_words') }}</p>
                                             </div>
                                             <span id="cookiesContentText_error" class="text-danger error-text"></span>
                                         </div>
@@ -71,12 +68,10 @@
                                     <!-- Cookies Position -->
                                     <div class="row mb-3 align-items-center">
                                         <div class="col-xl-4 d-flex">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <h6 class="fw-medium fs-14 d-none real-label">{{ __('admin.general_settings.cookies_position') }}<span class="text-danger">*</span></h6>
+                                            <h6 class="fw-medium fs-14">{{ __('admin.general_settings.cookies_position') }}<span class="text-danger">*</span></h6>
                                         </div>
                                         <div class="col-xl-6">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-label">
+                                            <div class="">
                                                 <select id="cookiesPosition" name="cookiesPosition" class="form-control select">
                                                     <option value="">{{ __('admin.general_settings.select') }}</option>
                                                     <option value="right">{{ __('admin.general_settings.right') }}</option>
@@ -89,36 +84,30 @@
                                     <!-- Agree Button Text -->
                                     <div class="row mb-3 align-items-center">
                                         <div class="col-xl-4 d-flex">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <h6 class="fw-medium fs-14 d-none real-label">{{ __('admin.general_settings.agree_button_text') }} <span class="text-danger">*</span></h6>
+                                            <h6 class="fw-medium fs-14">{{ __('admin.general_settings.agree_button_text') }} <span class="text-danger">*</span></h6>
                                         </div>
                                         <div class="col-xl-6">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <input type="text" id="agreeButtonText" name="agreeButtonText" class="form-control d-none real-label">
+                                            <input type="text" id="agreeButtonText" name="agreeButtonText" class="form-control">
                                             <span id="agreeButtonText_error" class="text-danger error-text"></span>
                                         </div>
                                     </div>
                                     <!-- Decline Button Text -->
                                     <div class="row mb-3 align-items-center">
                                         <div class="col-xl-4 d-flex">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <h6 class="fw-medium fs-14 d-none real-label">{{ __('admin.general_settings.decline_button_text') }} <span class="text-danger">*</span></h6>
+                                            <h6 class="fw-medium fs-14">{{ __('admin.general_settings.decline_button_text') }} <span class="text-danger">*</span></h6>
                                         </div>
                                         <div class="col-xl-6">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <input type="text" id="declineButtonText" name="declineButtonText" class="form-control d-none real-label">
+                                            <input type="text" id="declineButtonText" name="declineButtonText" class="form-control">
                                             <span id="declineButtonText_error" class="text-danger error-text"></span>
                                         </div>
                                     </div>
                                     <!-- Show Decline Button -->
                                     <div class="row mb-3 align-items-center">
                                         <div class="col-xl-4 d-flex">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <h6 class="fw-medium fs-14 d-none real-label">{{ __('admin.general_settings.show_decline_button') }} <span class="text-danger">*</span></h6>
+                                            <h6 class="fw-medium fs-14">{{ __('admin.general_settings.show_decline_button') }} <span class="text-danger">*</span></h6>
                                         </div>
                                         <div class="col-xl-6">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="form-check form-check-md form-switch d-none real-label">
+                                            <div class="form-check form-check-md form-switch">
                                                 <input class="form-check-input" type="checkbox" id="showDeclineButton" name="showDeclineButton" role="switch" value="1" checked>
                                             </div>
                                             <span id="showDeclineButton_error" class="text-danger error-text"></span>
@@ -127,24 +116,20 @@
                                     <!-- Links for Cookies Page -->
                                     <div class="row mb-3 align-items-center">
                                         <div class="col-xl-4 d-flex">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <h6 class="fw-medium fs-14 d-none real-label">{{ __('admin.general_settings.links_for_cookies_page') }}  <span class="text-danger">*</span></h6>
+                                            <h6 class="fw-medium fs-14">{{ __('admin.general_settings.links_for_cookies_page') }}  <span class="text-danger">*</span></h6>
                                         </div>
                                         <div class="col-xl-6">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <input type="text" id="cookiesPageLink" name="cookiesPageLink" class="form-control d-none real-label">
+                                            <input type="text" id="cookiesPageLink" name="cookiesPageLink" class="form-control">
                                             <span id="cookiesPageLink_error" class="text-danger error-text"></span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-footer">
+                            <div class="card-footer d-none real-card">
                                 <div class="d-flex justify-content-end">
-                                    <div class="skeleton label-skeleton label-loader me-2"></div>
-                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3 d-none real-label" >{{ __('admin.general_settings.cancel') }}</a>
-                                    <div class="skeleton label-skeleton label-loader"></div>
+                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3" >{{ __('admin.general_settings.cancel') }}</a>
                                     @if (hasPermission($permissions, 'system_settings', 'edit'))
-                                    <button type="submit" class="btn btn-primary d-none real-label">{{ __('admin.general_settings.save_changes') }}</button>
+                                    <button type="submit" class="btn btn-primary">{{ __('admin.general_settings.save_changes') }}</button>
                                     @endif
                                 </div>
                             </div>
