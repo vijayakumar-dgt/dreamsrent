@@ -139,11 +139,11 @@
 
                     <!-- User Menu -->
                     <li class="nav-item dropdown has-arrow logged-item">
-                        <a href="#" class="dropdown-toggle user-drop-down nav-link" data-bs-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                             <span class="user-img">
                                 <img class="rounded-circle header_profile_image" src="{{ getProfileImage() }}" alt="Profile">
                             </span>
-                            <span class="user-text">{{ Auth::guard('web')->user()->username }}</span>
+                            <span class="user-text">{{ getCurrentUserFullname() }}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
                             <a class="dropdown-item" href="{{ route('user.dashboard') }}">

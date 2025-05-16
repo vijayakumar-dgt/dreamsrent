@@ -20,14 +20,20 @@ class PaymentController extends Controller
 
     public function paymentList(Request $request): JsonResponse
     {
-        $sortby = $request->sortby ?? 'latest';
-        $search = $request->search ?? null;
+        $start = $request->input('start', 0);
+        $length = $request->input('length', 10);
+        $search = $request->input('search', null);
+        $sortColumnIndex = $request->input('order.0.column', 0);
+        $sortDirection = $request->input('order.0.dir', 'desc');
+        $columns = ['id', 'name', 'final_price', 'payment_type', 'created_at', 'payment_status'];
+        $sortColumn = $columns[$sortColumnIndex] ?? 'id';
+
         $paymentStatuses = $request->payment_status ?? [];
         $paymentTypes = $request->payment_type ?? [];
-        $bookingBy = $request->booking_by ?? 'user';
 
         try {
-            $query = Booking::with('userInfo');
+            $query = Booking::with(['userInfo', 'customerDetail:user_id,profile_image'])
+                ->where('booking_by', 'user');
 
             if (!empty($paymentTypes)) {
                 $query->whereIn('payment_type', $paymentTypes);
@@ -37,9 +43,10 @@ class PaymentController extends Controller
                 $query->where(function ($q) use ($search) {
                     $q->whereHas('userInfo', function ($sub) use ($search) {
                         $sub->where('first_name', 'LIKE', "%{$search}%")
-                            ->orWhere('last_name', 'LIKE', "%{$search}%");
+                            ->orWhere('last_name', 'LIKE', "%{$search}%")
+                            ->orWhere('reservation_id', 'LIKE', "%{$search}%");
                     })
-                        ->orWhere('payment_type', 'LIKE', "%{$search}%");
+                    ->orWhere('payment_type', 'LIKE', "%{$search}%");
                 });
             }
 
@@ -47,61 +54,64 @@ class PaymentController extends Controller
                 $query->whereIn('payment_status', $paymentStatuses);
             }
 
-            if (!empty($bookingBy)) {
-                $query->where('booking_by', $bookingBy);
+            $totalData = $query->count();
+
+            if ($request->has('sortby') && !empty($request->sortby)) {
+                switch (strtolower($request->sortby)) {
+                    case 'latest':
+                        $query->orderBy('created_at', 'desc');
+                        break;
+                    case 'asc':
+                        $query->orderBy('id', 'asc');
+                        break;
+                    case 'desc':
+                        $query->orderBy('id', 'desc');
+                        break;
+                    case 'last_month':
+                        $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
+                        $endDate = \Carbon\Carbon::now()->subMonth()->endOfMonth();
+                        $query->whereBetween('created_at', [$startDate, $endDate]);
+                        break;
+                    case 'last_7_days':
+                        $startDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
+                        $endDate = \Carbon\Carbon::now()->endOfDay();
+                        $query->whereBetween('created_at', [$startDate, $endDate]);
+                        break;
+                }
             }
 
-            switch ($sortby) {
-                case 'asc':
-                    $query->orderBy('id', 'asc');
-                    break;
+            $query->orderBy($sortColumn === 'name' ? 'id' : $sortColumn, $sortDirection);
 
-                case 'desc':
-                    $query->orderBy('id', 'desc');
-                    break;
-
-                case 'last_month':
-                    $query->whereBetween('created_at', [
-                        now()->subMonth()->startOfMonth(),
-                        now()->subMonth()->endOfMonth(),
-                    ])->orderBy('created_at', 'desc');
-                    break;
-
-                case 'last_7_days':
-                    $query->where('created_at', '>=', now()->subDays(7))
-                        ->orderBy('created_at', 'desc');
-                    break;
-
-                case 'latest':
-                default:
-                    $query->orderBy('created_at', 'desc');
-                    break;
-            }
-
-            $bookings = $query->get();
+            $bookings = $query->skip($start)->take($length)->get();
 
             $data = $bookings->map(function (Booking $booking): array {
-                /** @var \Modules\Booking\Models\BookingUserInfo|null $userInfo */
                 $userInfo = $booking->userInfo;
-
-                /** @var \Carbon\CarbonInterface|null $createdAt */
                 $createdAt = $booking->created_at;
+                $paymentType = '';
+
+                if ($booking->payment_type == 'cod') {
+                    $paymentType = strtoupper(str_replace('_', ' ', (string)$booking->payment_type));
+                } else {
+                    $paymentType = ucfirst(str_replace('_', ' ', (string)$booking->payment_type));
+                }
 
                 return [
                     'id' => $booking->reservation_id,
-                    'name' => $userInfo ? "{$userInfo->first_name} {$userInfo->last_name}" : "N/A",
+                    'name' => $userInfo ? "{$userInfo->first_name} {$userInfo->last_name}" : "-",
+                    'profile_image' => $booking->customerDetail->profile_image ? uploadedAsset($booking->customerDetail->profile_image) : uploadedAsset('', 'default'),
                     'amount' => $booking->final_price,
-                    'payment_type' => ucfirst(str_replace('_', ' ', (string)$booking->payment_type)),
+                    'payment_type' => $paymentType,
                     'created_at' => formatDateTime($createdAt, false),
                     'payment_status' => $booking->payment_status,
                 ];
             });
-            $currencySymbol = getDefaultCurrencySymbol();
+
             return response()->json([
-                'code' => 200,
-                'message' => __('admin.common.default_retrieve_success'),
-                'currency_symbol' => $currencySymbol,
+                'draw' => intval($request->input('draw')),
+                'recordsTotal' => $totalData,
+                'recordsFiltered' => $totalData,
                 'data' => $data,
+                'currency_symbol' => getDefaultCurrencySymbol(),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -111,4 +121,5 @@ class PaymentController extends Controller
             ], 500);
         }
     }
+
 }
