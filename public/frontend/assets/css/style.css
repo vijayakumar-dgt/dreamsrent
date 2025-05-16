@@ -17990,7 +17990,11 @@ iframe {
 }
 
 .detail-product .slider-nav-thumbnails .slick-track .slick-slide.slick-active {
-	width: 25% !important;
+	width: 100% ;
+}
+
+.detail-product .slick-slide.slick-active{
+	border-radius: 10px !important;
 }
 
 .detail-product .slick-slide.slick-cloned {
@@ -18005,7 +18009,7 @@ iframe {
 
 .detail-product .slick-slide img {
 	width: 100%;
-	border-radius: 10px;
+	border-radius: 10px !important;
 }
 
 .detail-bigimg {
