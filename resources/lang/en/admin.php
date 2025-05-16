@@ -1680,6 +1680,7 @@ return array(
     'section' => 'Section',
     'menu_management' => 'Menu Management',
     'cms' => 'CMS',
+    'icon' => 'Icon',
     'blogs' => 'Blogs',
     'all_blogs' => 'All Blogs',
     'blog_tags' => 'Blog Tags',

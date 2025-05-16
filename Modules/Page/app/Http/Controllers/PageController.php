@@ -992,13 +992,40 @@ class PageController extends Controller
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
-                        $section['section_type'] = 'why_us_section';
-                        $section['type'] = 'why_us_section';
-                        $section['design'] = 'why_us_one';
-                        $section['section_content'] = [
-                            "title" => "Why Choose Us Section",
-                            "description" => "Find the best vehicles and services easily."
-                        ];
+                        $whyus = DB::table('sections')
+                            ->join('section_datas', function ($join) use ($lang_id) {
+                                $join->on('sections.id', '=', 'section_datas.section_id')
+                                    ->where('section_datas.language_id', '=', $lang_id);
+                            })
+                            ->select('sections.id', 'section_datas.datas')
+                            ->where('sections.name', 'Why Choose Us')
+                            ->orderBy('sections.id', $order)
+                            ->limit($limit)
+                            ->get();
+
+                        if ($whyus->isNotEmpty()) {
+                            $first = $whyus[0];
+                            $data = json_decode($first->datas, true);
+
+                            $items = [];
+
+                            foreach ([1, 2, 3] as $i) {
+                                if (!empty($data["why_label_$i"]) || !empty($data["why_dis_$i"]) || !empty($data["why_icon_$i"])) {
+                                    $items[] = [
+                                        'why_label' => $data["why_label_$i"] ?? '',
+                                        'why_dis'   => $data["why_dis_$i"] ?? '',
+                                        'why_icon'  => !empty($data["why_icon_$i"]) ? asset('storage/' . $data["why_icon_$i"]) : '',
+                                    ];
+                                }
+                            }
+
+                            $section['section_type'] = 'why_us_section';
+                            $section['type'] = 'why_us_section';
+                            $section['design'] = 'why_us_one';
+                            $section['section_content'] = [
+                                "items" => $items,
+                            ];
+                        }
                     }
                 }
 
@@ -1035,7 +1062,7 @@ class PageController extends Controller
                                 'updated_at' => formatDateTime($blog->updated_at),
                                 'author' => [
                                     'name' => getCurrentUserFullName($appAdmin->id),
-                                    'avatar' => uploadedAsset($appAdmin->userDetails->profile_image,'profile'),
+                                    'avatar' => uploadedAsset($appAdmin->userDetails->profile_image, 'profile'),
                                 ],
                             ];
                         }
@@ -1260,7 +1287,7 @@ class PageController extends Controller
                 $page = Page::where('parent_id', $basePage->id)->where('language_id', $lang_id)->first();
             }
         }
-        
+
         $pageContentSections = json_decode($page->page_content ?? '[]', true) ?? [];
 
         if (empty($pageContentSections) || !collect((array)$pageContentSections)->contains(fn($section) => $section['status'] == 1)) {
@@ -1984,7 +2011,7 @@ class PageController extends Controller
             $sectionContent = $pageContent && isset($pageContent[0]->section_content) ? $pageContent[0]->section_content : [];
             $seo_title = $page->page_title;
 
-            
+
 
             return view('frontend.pages.page', compact('page', 'data', 'sectionContent', 'content_sections', 'seo_title'));
         } else {
