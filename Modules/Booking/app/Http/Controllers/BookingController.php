@@ -410,6 +410,7 @@ class BookingController extends Controller
                 'no_of_days' => $request->no_of_days ?? null,
                 'vehicle_total_price' => $request->vehicle_total_price ?? null,
                 'booking_date' => now(),
+                'payment_type' => 'cod'
             ];
             $details = [
                 'vehicle_price_type' => $request->vehicle_price_type,

@@ -125,7 +125,7 @@ $(document).ready(function () {
     $('.filterbox .links.text-danger').on('click', function () {
         $('input[name="priority[]"], input[name="status[]"]').prop('checked', false);
         $('input[name="search"]').val('');
-        $('#current_sort').attr('data-sort', 'latest').text("{{ __('admin.common.latest') }}");
+        $('#current_sort').attr('data-sort', 'latest').text(_l('admin.common.latest'));
         updateFilterCount();
         ticketTable();
     });
