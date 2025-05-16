@@ -275,7 +275,7 @@
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.description') }} 1</label>
-                                    <input type="text" name="why_dis_1" id="why_dis_1" class="form-control" placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
+                                    <input type="text" name="why_dis_1" id="why_dis_1" class="form-control" placeholder="{{ __('admin.cms.enter_description') }}" maxlength="200">
                                     <div class="invalid-feedback" id="why_dis_1_error"></div>
                                 </div>
                             </div>
@@ -302,7 +302,7 @@
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.description') }} 2</label>
-                                    <input type="text" name="why_dis_2" id="why_dis_2" class="form-control" placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
+                                    <input type="text" name="why_dis_2" id="why_dis_2" class="form-control" placeholder="{{ __('admin.cms.enter_description') }}" maxlength="200">
                                     <div class="invalid-feedback" id="why_dis_2_error"></div>
                                 </div>
                             </div>
@@ -330,7 +330,7 @@
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.description') }} 3</label>
-                                    <input type="text" name="why_dis_3" id="why_dis_3" class="form-control" placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
+                                    <input type="text" name="why_dis_3" id="why_dis_3" class="form-control" placeholder="{{ __('admin.cms.enter_description') }}" maxlength="200">
                                     <div class="invalid-feedback" id="why_dis_3_error"></div>
                                 </div>
                             </div>
