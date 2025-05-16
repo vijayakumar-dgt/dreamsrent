@@ -101,8 +101,8 @@
                                     <img src="{{ $userDetails && $userDetails->profile_image ? $userDetails->profile_image : uploadedAsset('','profile') }}" alt="">
                                 </span>
                                 <div>
-                                    <h6 class="fw-semibold mb-1"> {{ $userDetails->first_name ?? 'Andrew Simmonds' }} </h6>
-                                    <p class="fs-13"> {{ $userDetails->email ?? 'andrew@yopmail.com' }} </p>
+                                    <h6 class="fw-semibold mb-1"> {{ getCurrentUserFullname() }} </h6>
+                                    <p class="fs-13"> {{ $userDetails->email ?? '-' }} </p>
                                 </div>
                             </div>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('admin.profile-settings') }}">
