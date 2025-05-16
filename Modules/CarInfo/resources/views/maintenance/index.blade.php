@@ -77,7 +77,7 @@
 					</div>                    
 					<div class="dropdown">
 						<a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
-							<i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }} <span class="badge badge-xs rounded-pill bg-danger ms-2">0</span>
+							<i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
 						</a>
 					</div>
 				</div>

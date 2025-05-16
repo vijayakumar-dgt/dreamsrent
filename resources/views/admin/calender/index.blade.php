@@ -41,7 +41,7 @@
             <div class="col-md-2">
                 <div class="text-end mb-3">
                     <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
-                        <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}<span class="badge badge-xs rounded-pill bg-danger ms-2">0</span>
+                        <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
                     </a>
                 </div>
             </div>
@@ -64,6 +64,7 @@
                                 </div>
                             </div>
                         </li>
+                        <div class="custom-scroll">
                         @foreach ($Vehicles as $Vehicle)
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
@@ -71,6 +72,7 @@
                             </label>
                         </li>
                         @endForeach
+                        </div>
                     </ul>
                 </div>
                 <div class="dropdown me-2">
@@ -88,6 +90,7 @@
                                 </div>
                             </div>
                         </li>
+                        <div class="custom-scroll">
                         @foreach ($customerss as $customer)
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
@@ -95,6 +98,7 @@
                             </label>
                         </li>
                         @endForeach
+                        </div>
                     </ul>
                 </div>
                 <div class="dropdown me-2">
@@ -112,6 +116,7 @@
                                 </div>
                             </div>
                         </li>
+                        <div class="custom-scroll">
                         @foreach ($drivers as $driver)
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
@@ -119,6 +124,7 @@
                             </label>
                         </li>
                         @endForeach
+                        </div>
                     </ul>
                 </div>
                 <div class="dropdown me-2">
@@ -136,6 +142,7 @@
                                 </div>
                             </div>
                         </li>
+                        <div class="custom-scroll">
                         @foreach ($cartypes as $cartype)
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
@@ -143,6 +150,7 @@
                             </label>
                         </li>
                         @endForeach
+                        </div>
                     </ul>
                 </div>
                 <a href="javascript:void(0);" class="me-2 text-purple links" id="applyFilter">{{ __('admin.common.apply') }}</a>
@@ -479,7 +487,7 @@
                                                         <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
                                                             <div class="dropdown me-2">
                                                                 <a href="#vehiclefiltercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="filtercollapse">
-                                                                    <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }} <span class="count text-center ms-2 fs-12">0</span>
+                                                                    <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
                                                                 </a>
                                                             </div>
                                                             <div class="top-search me-2">
