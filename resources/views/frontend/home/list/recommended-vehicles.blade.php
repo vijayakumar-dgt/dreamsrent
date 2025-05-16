@@ -4,11 +4,11 @@
                 <div class="details-slider-heading">
                     <h3>{{ __('web.home.you_maybe_interested_in') }}</h3>
                 </div>
-                <div class="owl-carousel rental-deal-slider details-car owl-theme">
+                <div class="owl-carousel rental-deal-slider details-car owl-theme text-center">
                     @if(!empty($data) && count($data) > 0)
                         @foreach($data as $vehicle)
                             <!-- owl carousel item -->
-                            <div class="rental-car-item">
+                            <div class="rental-car-item m-auto">
                                 <div class="listing-item pb-0">
                                     <div class="listing-img">
                                         <a href="/vehicle-details/{{ $vehicle['slug'] }}">

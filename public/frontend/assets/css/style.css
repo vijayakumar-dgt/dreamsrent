@@ -28851,3 +28851,7 @@ a#category-filter.active {
     max-width: 30px;
     max-height: 30px;
 }
+
+.rental-deal-slider .owl-stage , .popular-cartype-slider .owl-stage , .rental-deal-slider .owl-stage{
+	margin: auto;
+}
