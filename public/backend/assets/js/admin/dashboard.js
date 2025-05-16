@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 if (typeof bookingData === "undefined" || !Array.isArray(bookingData)) {
-    console.error("Error: bookingData is not defined or is not an array.");
 }
 
 var incomeData = [];
@@ -74,7 +73,6 @@ if (Array.isArray(bookingData) && bookingData.length > 0) {
         }
     });
 } else {
-    console.warn("No booking data available.");
 }
 
 var optionsIncome = {
@@ -101,7 +99,6 @@ if (typeof ApexCharts !== "undefined") {
     );
     chart.render();
 } else {
-    console.error("ApexCharts is not loaded.");
 }
 
 document.querySelectorAll(".dropdown-item-chat").forEach((item) => {
@@ -199,7 +196,6 @@ function updateChartData(filter) {
             xaxis: { categories: categories },
         });
     } else {
-        console.error("Chart is not initialized.");
     }
 
     const incomeText = document.querySelector(".income-summary p");
