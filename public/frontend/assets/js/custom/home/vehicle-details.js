@@ -1296,7 +1296,6 @@ function reinitializeSleek() {
         $(".detail-bigimg").slick({
             slidesToShow: 1,
             slidesToScroll: 1,
-            infinite: true,
             rtl: isRtl,
             arrows: true,
             fade: true,
@@ -1307,8 +1306,7 @@ function reinitializeSleek() {
     if ($(".slider-nav-thumbnails").length > 0) {
         $(".slider-nav-thumbnails").slick({
             slidesToShow: 4,
-            slidesToScroll: 1,
-            infinite: true,
+            slidesToScroll: 4,
             rtl: isRtl,
             asNavFor: ".detail-bigimg",
             dots: false,
@@ -1344,7 +1342,7 @@ function reInitializeCarousel(className){
                 items: 2
             },
             1000: {
-                items: 3
+                items: 4
             }
         }
     });
