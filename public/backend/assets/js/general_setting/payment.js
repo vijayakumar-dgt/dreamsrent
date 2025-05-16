@@ -1442,8 +1442,8 @@ function initList() {
                 });
             }
             $(".table-loader").hide();
-            $(".label-loader, .input-loader").hide();
-            $(".real-label, .real-table, .real-data").removeClass("d-none");
+            $(".label-loader, .input-loader, .card-loader").hide();
+            $(".real-label, .real-table, .real-data, .real-card").removeClass("d-none");
         },
         error: function (error) {
             if (error.responseJSON && error.responseJSON.code === 500) {

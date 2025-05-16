@@ -28,7 +28,8 @@
                             <div class="card-header">
                                 <h5 class="fw-bold">{{ __('admin.general_settings.website_settings') }}</h5>
                             </div>
-                            <div class="card-body">
+                            @include('admin.general_settings_loader')
+                            <div class="card-body d-none real-card">
                                 <!-- Company Settings Section -->
                                 <div class="localization-content mb-3">
                                     <h6 class="fw-bold mb-3">{{ __('admin.general_settings.company_settings') }}</h6>
@@ -180,7 +181,7 @@
                                 </div>
                             </div>
                             <!-- Footer Section -->
-                            <div class="card-footer">
+                            <div class="card-footer d-none real-card">
                                 <div class="d-flex align-items-center justify-content-end">
                                     <a href="{{ route('dashboard') }}" class="btn btn-light me-2">{{ __('admin.general_settings.cancel') }}</a>
                                     @if (hasPermission($permissions, 'website_settings', 'edit'))

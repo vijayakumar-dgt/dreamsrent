@@ -29,7 +29,8 @@
                         <div class="card-header">
                             <h5 class="fw-bold">{{ __('admin.general_settings.app_settings') }}</h5>
                         </div>
-                        <form id="invoiceSettingForm">
+                        @include('admin.general_settings_loader')
+                        <form id="invoiceSettingForm" class="d-none real-card">
                             <div class="card-body">
                                 <h6 class="fw-bold mb-3">{{ __('admin.general_settings.invoice_settings') }}</h6>
                                 <div class="row">
@@ -37,21 +38,18 @@
                                         <div class="mb-3">
                                             <label for="invoice_logo" class="form-label">{{ __('admin.general_settings.invoice_logo') }} <span class="text-danger">*</span></label>
                                             <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
-                                                <div class="skeleton image-skeleton image-loader"></div>
-                                                <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames d-none real-label">
+                                                <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
                                                     <img id="profile_photo_preview" src="{{ uploadedAsset('', 'default2')}}" class="img-fluid" alt="Profile Photo">
                                                 </div>
                                                 <div class="profile-upload">
-                                                    <div class="skeleton button-skeleton label-loader"></div>
-                                                    <div class="profile-uploader d-flex align-items-center d-none real-label">
+                                                    <div class="profile-uploader d-flex align-items-center">
                                                         <div class="drag-upload-btn btn btn-md btn-dark">
                                                             <i class="ti ti-photo-up fs-14"></i>
                                                             {{ __('admin.common.change') }}
                                                             <input type="file" class="form-control image-sign" id="invoice_logo" name="invoice_logo" accept="image/*" onchange="previewImage(event)">
                                                         </div>
                                                     </div>
-                                                    <div class="skeleton text-skeleton label-loader"></div>
-                                                    <div class="mt-2 d-none real-label">
+                                                    <div class="mt-2">
                                                         <p class="fs-14">{{ __('admin.common.recommended_size_is') }} 500px x 500px</p>
                                                     </div>
                                                 </div>
@@ -62,13 +60,11 @@
                                 <!-- Invoice Prefix -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
-                                        <div class="skeleton label-skeleton label-loader"></div>
-                                        <label for="invoice_prefix" class="form-label d-none real-label">{{ __('admin.general_settings.invoice_prefix') }} <span class="text-danger">*</span></label>
+                                        <label for="invoice_prefix" class="form-label">{{ __('admin.general_settings.invoice_prefix') }} <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
                                         <div class="mb-3">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <input type="text" class="form-control d-none real-label" id="invoice_prefix" name="invoice_prefix" placeholder="INV-">
+                                            <input type="text" class="form-control" id="invoice_prefix" name="invoice_prefix" placeholder="INV-">
                                             <span class="text-danger" id="invoice_prefix_error"></span>
                                         </div>
                                     </div>
@@ -76,12 +72,10 @@
                                 <!-- Invoice Due -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
-                                        <div class="skeleton label-skeleton label-loader"></div>
-                                        <label for="invoice_due" class="form-label d-none real-label">{{ __('admin.general_settings.invoice_due') }} <span class="text-danger">*</span></label>
+                                        <label for="invoice_due" class="form-label">{{ __('admin.general_settings.invoice_due') }} <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
-                                        <div class="skeleton input-skeleton input-loader mb-3"></div>
-                                        <div class="d-none real-label">
+                                        <div class="">
                                             <div class="mb-3 d-flex align-items-center">
                                                 <select class="form-select" id="invoice_due" name="invoice_due">
                                                     <option value="">{{ __('admin.common.select') }}</option>
@@ -97,12 +91,10 @@
                                 <!-- Invoice Round Off -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
-                                        <div class="skeleton label-skeleton label-loader"></div>
-                                        <label for="invoice_round_off" class="form-label d-none real-label">{{ __('admin.general_settings.invoice_round_off') }} <span class="text-danger">*</span></label>
+                                        <label for="invoice_round_off" class="form-label">{{ __('admin.general_settings.invoice_round_off') }} <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
-                                        <div class="skeleton input-skeleton input-loader mb-3"></div>
-                                        <div class="d-none real-label">
+                                        <div class="">
                                             <div class="mb-3 d-flex align-items-center">
                                                 <select class="form-select" id="invoice_round_off" name="invoice_round_off">
                                                     <option value="">{{ __('admin.common.select') }}</option>
@@ -122,12 +114,10 @@
                                 <!-- Show Company Details -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
-                                        <div class="skeleton label-skeleton label-loader"></div>
-                                        <label for="show_company_details" class="form-label d-none real-label">{{ __('admin.general_settings.show_company_details') }} <span class="text-danger">*</span></label>
+                                        <label for="show_company_details" class="form-label">{{ __('admin.general_settings.show_company_details') }} <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-6 col-sm-12">
-                                        <div class="skeleton input-skeleton input-loader mb-3"></div>
-                                        <div class="d-none real-label">
+                                        <div class="">
                                             <div class="form-check form-check-md form-switch">
                                                 <input class="form-check-input" type="checkbox" id="show_company_details" name="show_company_details" role="switch" checked>
                                             </div>
@@ -137,12 +127,10 @@
                                 <!-- Invoice Terms -->
                                 <div class="row align-items-center">
                                     <div class="col-md-4 col-sm-12">
-                                        <div class="skeleton label-skeleton label-loader"></div>
-                                        <label for="invoice_terms" class="form-label d-none real-label">{{ __('admin.general_settings.invoice_terms') }} <span class="text-danger">*</span></label>
+                                        <label for="invoice_terms" class="form-label">{{ __('admin.general_settings.invoice_terms') }} <span class="text-danger">*</span></label>
                                     </div>
                                     <div class="col-md-8 col-sm-12">
-                                        <div class="skeleton input-skeleton input-loader"></div>
-                                        <div class="d-none real-label">
+                                        <div class="">
                                             <div class="mt-3">
                                             <textarea class="form-control" id="invoice_terms" name="invoice_terms" rows="3" placeholder="Enter invoice terms here..."></textarea>
                                             <p>Maximum 60 words</p>
@@ -155,11 +143,9 @@
                             <!-- Form Footer -->
                             <div class="card-footer">
                                 <div class="d-flex justify-content-end">
-                                    <div class="skeleton label-skeleton label-loader me-3"></div>
-                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3 d-none real-label" >{{ __('admin.general_settings.cancel') }}</a>
+                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3" >{{ __('admin.general_settings.cancel') }}</a>
                                     @if (hasPermission($permissions, 'app_settings', 'edit'))
-                                    <div class="skeleton label-skeleton label-loader"></div>
-                                    <button type="submit" class="btn btn-primary d-none real-label">{{ __('admin.general_settings.save_changes') }}</button>
+                                    <button type="submit" class="btn btn-primary">{{ __('admin.general_settings.save_changes') }}</button>
                                     @endif
                                 </div>
                             </div>

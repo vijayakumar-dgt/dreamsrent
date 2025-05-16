@@ -501,8 +501,8 @@
                     }
                 },
                 complete: function () {
-                    $(".table-loader").hide();
-                    $(".real-table").removeClass('d-none');
+                    $(".table-loader, .card-loader").hide();
+                    $(".real-table, .real-card").removeClass('d-none');
                 }
             });
         }
