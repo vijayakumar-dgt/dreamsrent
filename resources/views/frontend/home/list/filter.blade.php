@@ -1,4 +1,4 @@
-    <div class="col-xl-3 col-lg-4 col-sm-12 col-12 theiaStickySidebar">
+    <div class="col-lg-3 col-sm-12 col-12 theiaStickySidebar">
         <div class="sidebar-form">
             <div class="sidebar-heading">
                 <h6 class = "mb-3">{{ __('web.home.what_are_you_looking_for') }}</h6>
