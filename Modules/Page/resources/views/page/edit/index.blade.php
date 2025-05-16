@@ -56,13 +56,6 @@
                                             <span class="invalid-feedback" id="slug_error"></span>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.page.keywords') }}</label>
-                                            <input class="input-tags form-control" name="keyword" id="keyword" value="{{ $query->keywords }}" placeholder="{{ __('admin.page.keywords_placeholder') }}" type="text">
-                                            <span class="invalid-feedback" id="keyword_error"></span>
-                                        </div>
-                                    </div>
                                     <div class="textareasContainer" id="draggable-left"></div>
                                     <div class="col-md-12 text-end">
                                         <button type="button" id="addTextarea" class="btn btn-primary rounded-0 mb-2 border-1 btn-md">{{ __('admin.page.add_section') }}</button>
