@@ -515,7 +515,6 @@ class PageController extends Controller
                     }
                 }
 
-
                 // Banner Two
                 if ($section['status'] == 1) {
                     if (isset($section['section_content']) && strpos($section['section_content'], '[banner_two') !== false) {
@@ -1010,11 +1009,29 @@ class PageController extends Controller
                             $items = [];
 
                             foreach ([1, 2, 3] as $i) {
-                                if (!empty($data["why_label_$i"]) || !empty($data["why_dis_$i"]) || !empty($data["why_icon_$i"])) {
+                                $label = $data["why_label_$i"] ?? '';
+                                $description = $data["why_dis_$i"] ?? '';
+                                $icon = $data["why_icon_$i"] ?? null;
+
+                                // Fallbacks for missing icons using asset image paths
+                                if (empty($icon)) {
+                                    if ($i === 1) {
+                                        $icon = asset('/frontend/assets/img/icons/bx-selection.svg');
+                                    } elseif ($i === 2) {
+                                        $icon = asset('/frontend/assets/img/icons/bx-crown.svg');
+                                    } elseif ($i === 3) {
+                                        $icon = asset('/frontend/assets/img/icons/bx-user-check.svg');
+                                    }
+                                } else {
+                                    $icon = asset('storage/' . $icon);
+                                }
+
+                                // Only add if any of the fields are filled
+                                if (!empty($label) || !empty($description) || !empty($icon)) {
                                     $items[] = [
-                                        'why_label' => $data["why_label_$i"] ?? '',
-                                        'why_dis'   => $data["why_dis_$i"] ?? '',
-                                        'why_icon'  => !empty($data["why_icon_$i"]) ? asset('storage/' . $data["why_icon_$i"]) : '',
+                                        'why_label' => $label,
+                                        'why_dis'   => $description,
+                                        'why_icon'  => $icon,
                                     ];
                                 }
                             }
@@ -1231,7 +1248,6 @@ class PageController extends Controller
                 ->get();
 
             $content_sections = collect((array) $data['content_sections']);
-
             if (request()->has('is_mobile') && request()->get('is_mobile') === "yes") {
                 return response()->json(['code' => "200", 'message' => __('Page details retrieved successfully.'), 'data' => $data], 200);
             } else {
