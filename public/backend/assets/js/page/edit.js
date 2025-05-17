@@ -364,7 +364,7 @@
             },
             success: function (response) {
                 if (response.code === 200) {
-                    var sectionHtml = '<div class="row p-1">';
+                    var sectionHtml = '<div class="row">';
 
                     // Get theme_id from the response
                     let themeId = response.theme?.theme_id || 1; // Default to 1 if not provided
@@ -377,7 +377,7 @@
 
                     sectionHtml += `
                     <div class="col-md-6">
-                        <div class="card mb-3 draggable-card shadow-sm border-0 rounded-0" draggable="true" data-value="[${bannerValue}]">
+                        <div class="card mb-3 draggable-card shadow-sm rounded-0" draggable="true" data-value="[${bannerValue}]">
                             <div class="py-2 text-center">
                                 <p class="fs-14 fw-bold mb-0">${bannerText}</p>
                             </div>
@@ -396,7 +396,7 @@
                             ) {
                                 sectionHtml += `
                                 <div class="col-md-6">
-                                    <div class="card mb-3 draggable-card shadow-sm border-0 rounded-0" draggable="true" data-value="${value}">
+                                    <div class="card mb-3 draggable-card shadow-sm rounded-0" draggable="true" data-value="${value}">
                                         <div class="py-2 text-center">
                                             <p class="fs-14 fw-bold mb-0">${section.name}</p>
                                         </div>

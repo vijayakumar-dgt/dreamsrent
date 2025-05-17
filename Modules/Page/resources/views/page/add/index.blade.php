@@ -118,36 +118,38 @@
                         <div class="card-header">
                             <h5>{{ __('admin.page.section_list') }}</h5>
                         </div>
-                        <div class="d-flex align-items-center justify-content-center setSection">
-                            <button class="btn btn-primary w-100">{{ __('admin.page.screen_one') }}</button>
-                            <button class="btn btn-dark w-100">{{ __('admin.page.screen_two') }}</button>
-                        </div>
-                        <div id="cardContainer" class="section-list d-none real-table"></div>
-                        <div class="custom-datatable-filter table-responsive table-loader">
-                            <table class="table">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th class="text-center">
-                                            <div class="skeleton th-skeleton th-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton th-skeleton th-loader"></div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for($i = 0; $i < 5; $i++)
+                        <div class="card-body pb-0">
+                            <div class="d-flex align-items-center justify-content-center setSection mb-3">
+                                <button class="btn btn-primary w-100">{{ __('admin.page.screen_one') }}</button>
+                                <button class="btn btn-dark w-100">{{ __('admin.page.screen_two') }}</button>
+                            </div>
+                            <div id="cardContainer" class="section-list d-none real-table"></div>
+                            <div class="custom-datatable-filter table-responsive table-loader">
+                                <table class="table">
+                                    <thead class="thead-light">
                                         <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
+                                            <th class="text-center">
+                                                <div class="skeleton th-skeleton th-loader"></div>
+                                            </th>
+                                            <th>
+                                                <div class="skeleton th-skeleton th-loader"></div>
+                                            </th>
                                         </tr>
-                                    @endfor
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @for($i = 0; $i < 5; $i++)
+                                            <tr>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            </tr>
+                                        @endfor
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

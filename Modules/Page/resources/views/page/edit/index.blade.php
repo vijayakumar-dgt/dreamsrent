@@ -171,41 +171,43 @@
                         <div class="card-header">
                             <h5>{{ __('admin.page.section_list') }}</h5>
                         </div>
-                        <input type="hidden" name="theme_id" id="theme_id" value="{{ $query->theme_id }}">
-                        @php $themeId = $query->theme_id ?? 1; @endphp
-                        <div class="d-flex align-items-center justify-content-center setSection">
-                            @if ($themeId == 1)
-                            <button class="btn btn-primary rounded-0 w-100">{{ __('admin.page.screen_one') }}</button>
-                            @elseif ($themeId == 2)
-                            <button class="btn btn-primary rounded-0 w-100">{{ __('admin.page.screen_two') }}</button>
-                            @endif
-                        </div>
-                        <div id="cardContainer" class="section-list d-none real-table"></div>
-                        <div class="custom-datatable-filter table-responsive table-loader">
-                            <table class="table">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th class="text-center">
-                                            <div class="skeleton th-skeleton th-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton th-skeleton th-loader"></div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for ($i = 0; $i < 5; $i++)
+                        <div class="card-body pb-0">
+                            <input type="hidden" name="theme_id" id="theme_id" value="{{ $query->theme_id }}">
+                            @php $themeId = $query->theme_id ?? 1; @endphp
+                            <div class="d-flex align-items-center justify-content-center setSection mb-3">
+                                @if ($themeId == 1)
+                                <button class="btn btn-primary rounded-0 w-100">{{ __('admin.page.screen_one') }}</button>
+                                @elseif ($themeId == 2)
+                                <button class="btn btn-primary rounded-0 w-100">{{ __('admin.page.screen_two') }}</button>
+                                @endif
+                            </div>
+                            <div id="cardContainer" class="section-list d-none real-table"></div>
+                            <div class="custom-datatable-filter table-responsive table-loader">
+                                <table class="table">
+                                    <thead class="thead-light">
                                         <tr>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
-                                        <td>
-                                            <div class="skeleton data-skeleton data-loader"></div>
-                                        </td>
+                                            <th class="text-center">
+                                                <div class="skeleton th-skeleton th-loader"></div>
+                                            </th>
+                                            <th>
+                                                <div class="skeleton th-skeleton th-loader"></div>
+                                            </th>
                                         </tr>
-                                    @endfor
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @for ($i = 0; $i < 5; $i++)
+                                            <tr>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            <td>
+                                                <div class="skeleton data-skeleton data-loader"></div>
+                                            </td>
+                                            </tr>
+                                        @endfor
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
