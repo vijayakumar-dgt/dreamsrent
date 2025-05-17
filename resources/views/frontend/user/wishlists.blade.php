@@ -27,11 +27,9 @@
             </div>
             <!-- /Content Header -->
             <div class="row">
-                <!-- Wishlist Skeleton -->
                 <div class="col-md-12 data-loader position-relative vh-10">
                     @include('frontend.content-loader')
                 </div>
-                <!-- /Wishlist Skeleton -->
                 <!-- Real Wishlist -->
                 <div class="col-md-12 d-none real-table">
                     <div class="wishlist-wrap">

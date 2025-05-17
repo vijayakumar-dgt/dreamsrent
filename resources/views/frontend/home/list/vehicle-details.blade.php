@@ -6,11 +6,9 @@
     @endpush
     @section('content')
     
-    <!-- Skeleton Container -->
     <div class="container skeleton-container position-relative vh-50">
         
     </div>
-    <!-- /Skeleton Container -->
     <!-- Breadscrumb Section -->
     <div class="breadcrumb-bar d-none real-data">
         <div class="container">
