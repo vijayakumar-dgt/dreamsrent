@@ -21,13 +21,11 @@
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
                     <div class="mb-2 me-2 d-none">
-                        <div class="skeleton label-skeleton label-loader"></div>
-                        <a href="javascript:void(0);" class="btn btn-white d-flex align-items-center d-none real-label"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</a>
+                        <a href="javascript:void(0);" class="btn btn-white d-flex align-items-center"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</a>
                     </div>
                     <div class="mb-2 me-2 d-none">
                         <div class="dropdown">
-                            <div class="skeleton label-skeleton label-loader"></div>
-                            <a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center d-none real-label">
+                            <a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center">
                                 <i class="ti ti-upload me-1"></i>{{ __('admin.common.export') }}
                             </a>
                         </div>
