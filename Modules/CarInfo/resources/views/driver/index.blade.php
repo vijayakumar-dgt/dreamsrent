@@ -21,12 +21,10 @@
 				</div>
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
 					<div class="mb-2 me-2 d-none">
-						<div class="skeleton label-skeleton label-loader"></div>
-						<button type="button" class="btn btn-white d-flex align-items-center d-none real-label"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</button>
+						<button type="button" class="btn btn-white d-flex align-items-center"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</button>
 					</div>
 					<div class="me-2 mb-2 d-none">
-						<div class="skeleton label-skeleton label-loader"></div>
-						<div class="dropdown d-none real-label">
+						<div class="dropdown">
 							<button type="button" class="btn btn-dark d-inline-flex align-items-center">
 								<i class="ti ti-upload me-1"></i>{{ __('admin.common.export') }}
 							</a>
