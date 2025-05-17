@@ -92,7 +92,6 @@
                     <a href="javascript:void(0);" id="clearFilters" class="text-danger links">{{__('admin.general_settings.clear_all')}}</a>
                 </div>
             </div>
-            <!-- Skeleton Loader Table -->
             <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
                 @include('admin.content-loader')
             </div>

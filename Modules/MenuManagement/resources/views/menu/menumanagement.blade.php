@@ -40,7 +40,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Skeleton for header -->
                                 <form id="menuManagement">
                                     <div class="card-body">
                                         <div class="edit-menu-header">
