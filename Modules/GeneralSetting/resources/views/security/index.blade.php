@@ -27,7 +27,8 @@
                         <div class="card-header">
                             <h5>{{ __('admin.general_settings.account_settings') }}</h5>
                         </div>
-                        <div class="card-body">
+                        @include('admin.general_settings_loader')
+                        <div class="card-body d-none real-card">
                             <div class="security-content">
                                 <h6 class="mb-3">{{ __('admin.general_settings.security') }}</h6>
                                 <div class="card mb-3">

@@ -41,7 +41,7 @@
                         </div>
                         <div class="widget-icon">
                             <span>
-                                <img src="/frontend/assets/img/icons/book-icon.svg" alt="icon">
+                                <img src="{{ asset('frontend/assets/img/icons/book-icon.svg') }}" alt="icon">
                             </span>
                         </div>
                     </div>
@@ -60,11 +60,11 @@
                         </div>
                         <div class="widget-icon">
                             <span class="bg-warning">
-                                <img src="/frontend/assets/img/icons/balance-icon.svg" alt="icon">
+                                <img src="{{ asset('frontend/assets/img/icons/balance-icon.svg') }}" alt="icon">
                             </span>
                         </div>
                     </div>
-                    <a href="/user/wallet" class="view-link">{{ __('web.user.view_balance') }} <i class="feather-arrow-right"></i></a>
+                    <a href="{{ route('user.wallet') }}" class="view-link">{{ __('web.user.view_balance') }} <i class="feather-arrow-right"></i></a>
                 </div>
             </div>
             <!-- /Widget Item -->
@@ -79,11 +79,11 @@
                         </div>
                         <div class="widget-icon">
                             <span class="bg-success">
-                                <img src="/frontend/assets/img/icons/transaction-icon.svg" alt="icon">
+                                <img src="{{ asset('frontend/assets/img/icons/transaction-icon.svg') }}" alt="icon">
                             </span>
                         </div>
                     </div>
-                    <a href="/user/payments" class="view-link">{{ __('web.user.view_all_transactions') }} <i class="feather-arrow-right"></i></a>
+                    <a href="{{ route('user.payments') }}" class="view-link">{{ __('web.user.view_all_transactions') }} <i class="feather-arrow-right"></i></a>
                 </div>
             </div>
             <!-- /Widget Item -->
@@ -98,7 +98,7 @@
                         </div>
                         <div class="widget-icon">
                             <span class="bg-danger">
-                                <img src="/frontend/assets/img/icons/cars-icon.svg" alt="icon">
+                                <img src="{{ asset('frontend/assets/img/icons/cars-icon.svg') }}" alt="icon">
                             </span>
                         </div>
                     </div>
@@ -129,29 +129,8 @@
                         </div>
                     </div>
                     <div class="card-body p-0">
-                        <div class="custom-datatable-filter table-responsive table-loader d-none">
-                            <table class="table table-bordered" id="loader-table">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                        <th>
-                                            <div class="skeleton data-skeleton label-loader"></div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                        <div class="custom-datatable-filter table-responsive table-loader vh-50">
+                            @include('frontend.content-loader')
                         </div>
                         <div class="table-responsive dashboard-table dashboard-table-info d-none real-table">
                             <table class="table" id="bookingTable">
@@ -183,9 +162,9 @@
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive dashboard-table dashboard-table-info">
-                            <table class="table trans-table-loader">
-                                <tbody id="transaction-skeleton-loader-body"></tbody>
-                            </table>
+                            <div class="trans-table-loader vh-50">
+                                @include('frontend.content-loader')
+                            </div>
                             <table class="table d-none trans-real-table" id="transactionTable">
                                 <tbody></tbody>
                             </table>

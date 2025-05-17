@@ -10,6 +10,7 @@ use Modules\Page\Models\Section;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Modules\Page\Models\Page;
 
 class SectionController extends Controller
 {
@@ -80,7 +81,7 @@ class SectionController extends Controller
             ], 400);
         }
 
-        $allowedNames = ['Banner One', 'Banner Two', 'Best Vehicle'];
+        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle'];
 
         $sections = Section::orderBy($sortBy, $orderBy)
             ->where('status', 1)
@@ -167,6 +168,13 @@ class SectionController extends Controller
             $rules['dis_5'] = 'required|max:100';
             $rules['label_6'] = 'required|max:50';
             $rules['dis_6'] = 'required|max:100';
+        } elseif ($request->section_id == 26) {
+            $rules['why_label_1'] = 'required|max:50';
+            $rules['why_dis_1']   = 'required|max:200';
+            $rules['why_label_2'] = 'required|max:50';
+            $rules['why_dis_2']   = 'required|max:200';
+            $rules['why_label_3'] = 'required|max:50';
+            $rules['why_dis_3']   = 'required|max:200';
         } else {
             return response()->json(['message' => 'Invalid section ID'], 400);
         }
@@ -234,6 +242,34 @@ class SectionController extends Controller
                 'label_6' => $request->label_6,
                 'dis_6' => $request->dis_6,
             ];
+        } elseif ($request->section_id == 26) {
+            $thumbnail1 = $thumbnail2 = $thumbnail3 = null;
+
+            if ($request->hasFile('why_icon_1') && $request->file('why_icon_1')->isValid()) {
+                $thumbnail1 = uploadFile($request->file('why_icon_1'), 'why_icon_1');
+            }
+
+            if ($request->hasFile('why_icon_2') && $request->file('why_icon_2')->isValid()) {
+                $thumbnail2 = uploadFile($request->file('why_icon_2'), 'why_icon_2');
+            }
+
+            if ($request->hasFile('why_icon_3') && $request->file('why_icon_3')->isValid()) {
+                $thumbnail3 = uploadFile($request->file('why_icon_3'), 'why_icon_3');
+            }
+
+            $data = [
+                'why_label_1' => $request->why_label_1,
+                'why_dis_1'   => $request->why_dis_1,
+                'why_icon_1'  => $thumbnail1 ?? ($existingData['why_icon_1'] ?? null),
+
+                'why_label_2' => $request->why_label_2,
+                'why_dis_2'   => $request->why_dis_2,
+                'why_icon_2'  => $thumbnail2 ?? ($existingData['why_icon_2'] ?? null),
+
+                'why_label_3' => $request->why_label_3,
+                'why_dis_3'   => $request->why_dis_3,
+                'why_icon_3'  => $thumbnail3 ?? ($existingData['why_icon_3'] ?? null),
+            ];
         }
 
         try {
@@ -255,6 +291,27 @@ class SectionController extends Controller
             return response()->json(['code' => 200, 'message' => __('admin.cms.section_update_success')], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => __('admin.common.default_update_error'), 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $id = $request->id;
+
+            Page::where('id', $id)->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'code'   => 200,
+                'message' => 'Page deleted successfully.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'code'   => 500,
+                'message' => 'An error occured while deleting page!'
+            ], 500);
         }
     }
 }

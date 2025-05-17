@@ -319,14 +319,9 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <a href="" class="avatar avatar-rounded me-2 flex-shrink-0">
-                                        @php
-                                        $imagePath = 'storage/' . $booking->profile_image;
-                                        $defaultImage = asset('backend/assets/img/default-profile.png');
-                                        @endphp
-
-                                        <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="img"></a>
+                                        <img src="{{ uploadedAsset($booking->profile_image, 'profile') }}" alt="img"></a>
                                     <div>
-                                         <h6 class="fs-14 fw-semibold">{{ucfirst($booking->name) ?? ''}}</h6>
+                                         <h6 class="fs-14 fw-semibold">{{$booking->full_name}}</h6>
                                     </div>
                                 </div>
                             </td>
@@ -334,7 +329,7 @@
                                 <p class="text-gray-9">{{$symbol}}{{$booking->final_price}}</p>
                             </td>
                             <td>
-                                <p class="text-gray-9">{{$booking->payment_type ?? '-'}}</p>
+                                <p class="text-gray-9">{{ucfirst($booking->payment_type) ?? '-'}}</p>
                             </td>
                             <td>
                                 <p class="text-gray-9">{{ formatDateTime($booking->booking_date, false) }}</p>

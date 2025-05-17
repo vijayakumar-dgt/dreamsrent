@@ -49,80 +49,8 @@
                                     </div>
                                 </div>
                                 <!-- /Table Header -->
-                                <!-- Custom Data Table --> 
-                                <div class="custom-datatable-filter table-responsive table-loader">
-                                    <table class="table table-bordered">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th>
-                                                    <div class="skeleton data-skeleton label-loader"></div>
-                                                </th>
-                                                <th>
-                                                    <div class="skeleton data-skeleton label-loader"></div>
-                                                </th>
-                                                <th>
-                                                    <div class="skeleton data-skeleton label-loader"></div>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                                <td>
-                                                    <div class="skeleton data-skeleton data-loader"></div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="custom-datatable-filter table-responsive position-relative vh-10 table-loader">
+                                    @include('admin.content-loader')
                                 </div>
                                 <div class="custom-datatable-filter table-responsive d-none real-table">
                                     <table class="table" id="sitemapTable">
@@ -131,7 +59,6 @@
                                                 <th>{{ __('admin.general_settings.url') }}</th>
                                                 <th>{{ __('admin.general_settings.file_name') }}</th>
                                                 @if (hasPermission($permissions, 'other_settings', 'edit') || hasPermission($permissions, 'other_settings', 'delete'))
-
                                                 <th>{{ __('admin.common.action') }}</th>
                                                 @endif
                                             </tr>

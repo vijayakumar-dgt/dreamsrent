@@ -3,6 +3,9 @@
     await loadTranslationFile('admin', 'cms,common');
 
     $(document).ready(function () {
+         $('#language').on('change', function () {
+            loadCopyRightSettings($(this).val());
+        });
         $('.summernote').summernote({
             height: 300,
             placeholder: _l('admin.cms.enter_your_description'),
@@ -139,8 +142,8 @@
                 showToast('error', _l('admin.common.default_retrieve_error'));
             },
             complete: function() {
-                $(".label-loader, .input-loader").hide();
-                $('.real-label, .real-input').removeClass('d-none');
+                $(".label-loader, .input-loader, .card-loader").hide();
+                $('.real-label, .real-input, .real-card').removeClass('d-none');
             }
         });
     }

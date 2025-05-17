@@ -64,6 +64,9 @@
 		@endif
 		@include('frontend.toast')
 	</div>
+	@if(!request()->routeIs('home'))
+	@include('frontend.preloader')
+	@endif
 	<!-- scrollToTop start -->
 	<div class="progress-wrap active-progress">
 		<svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">

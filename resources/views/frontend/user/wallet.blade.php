@@ -101,7 +101,10 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive dashboard-table">
+                            <div class="table-responsive table-loader position-relative vh-10">
+                                 @include('frontend.content-loader')
+                            </div>
+                            <div class="table-responsive dashboard-table d-none real-table">
                                 <table id="walletTable" class="table">
                                     <thead class="thead-light">
                                         <tr>
@@ -113,15 +116,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @for ($i = 0; $i < 3; $i++)
-                                        <tr>
-                                            @for ($j = 0; $j < 5; $j++)
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            @endfor
-                                        </tr>
-                                        @endfor
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -175,12 +170,12 @@
                                     <label class="custom_radio text-center">
                                         <input type="radio" name="payment_one" id="paypal" value="wallet_one" checked>
                                         <span class="checkmark d-block mx-auto"></span>
-                                        <img src="/frontend/assets/img/icons/payment-1.svg" alt="Icon" class="img-fluid mt-2">
+                                        <img src="{{ asset('frontend/assets/img/icons/payment-1.svg') }}" alt="Icon" class="img-fluid mt-2">
                                     </label>
                                     <label class="custom_radio text-center">
                                         <input type="radio" name="payment_one" id="stripe" value="wallet_one">
                                         <span class="checkmark d-block mx-auto"></span>
-                                        <img src="/frontend/assets/img/icons/payment-2.svg" alt="Icon" class="img-fluid mt-2">
+                                        <img src="{{ asset('frontend/assets/img/icons/payment-2.svg') }}" alt="Icon" class="img-fluid mt-2">
                                     </label>
                                 </div>
                             </div>
@@ -194,7 +189,7 @@
                                                         <label class="custom_radio">
                                                             <input type="radio" name="payment_two" value="wallet_two">
                                                             <span class="checkmark"></span>
-                                                            <img src="/frontend/assets/img/icons/wallet-01.svg" alt="Icon">
+                                                            <img src="{{ asset('frontend/assets/img/icons/wallet-01.svg') }}" alt="Icon">
                                                         </label>
                                                     </td>
                                                     <td>

@@ -10,7 +10,7 @@
             const name = $(this).data('name');
             const image = $(this).data('image');
             const status = $(this).data('status');
-            const isDefault = $(this).data('is-default');
+            const isDefault = $(this).data('is_default');
             
             editSignature(id, name, image, status, isDefault);
         });
@@ -75,18 +75,17 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     beforeSend: function () {
-                        $('.btn-primary').attr('disabled', true).html(`
+                        $('.add_btn').attr('disabled', true).html(`
                             <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..
                         `);
                     },
                     complete: function () {
-                        $('.btn-primary').attr('disabled', false).html(_l('admin.common.save_changes'));
+                        $('.add_btn').attr('disabled', false).html(_l('admin.common.create_new'));
                     },
                     success: function (resp) {
                         if (resp.code === 200) {
                             showToast('success', resp.message);
                             $('#addSignatureForm')[0].reset();
-
                             $('#add_signatures').modal('hide');
                             signatureTable();
                         }
@@ -167,12 +166,12 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     beforeSend: function () {
-                        $('.btn-primary').attr('disabled', true).html(`
+                        $('.edit_btn').attr('disabled', true).html(`
                             <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..
                         `);
                     },
                     complete: function () {
-                        $('.btn-primary').attr('disabled', false).html(_l('admin.common.save_changes'));
+                        $('.edit_btn').attr('disabled', false).html(_l('admin.common.save_changes'));
                     },
                     success: function (resp) {
                         if (resp.code === 200) {
@@ -253,8 +252,7 @@
                                                 data-name="${value.signature_name}" 
                                                 data-image="${value.signature_image}" 
                                                 data-status="${value.status}" 
-                                                data-is-default="${value.is_default}"
-                                            >
+                                                data-is_default="${value.is_default}">
                                                 <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
                                             </button>
                                         </li>`:''}
@@ -365,7 +363,6 @@ function editSignature(id, name, image, status, isDefault) {
     $('#edit_signature_preview').attr('src', `${image}`);
     $('#edit_signature_status').prop('checked', status === 1);
     $('#edit_signature_default').prop('checked', isDefault === 1);
-
 
     $('#edit_signature').modal('show');
 }

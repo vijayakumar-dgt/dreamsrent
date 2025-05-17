@@ -146,9 +146,7 @@ class SignatureSettingsController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get()
                 ->map(function ($signature) {
-                    $signature->signature_image = $signature->signature_image
-                        ? asset('storage/' . $signature->signature_image)
-                        : null;
+                    $signature->signature_image = uploadedAsset($signature->signature_image ?? '', 'default');
 
                     return $signature;
                 });

@@ -17,7 +17,9 @@
             },
             complete: function () {
                 $(".table-loader, .input-loader, .label-loader").hide();
-                $(".real-table, .real-label, .real-input").removeClass("d-none");
+                $(".real-table, .real-label, .real-input").removeClass(
+                    "d-none"
+                );
                 if ($("#sectionTable").length === 0) {
                     $(".table-footer").addClass("d-none");
                 } else {
@@ -45,22 +47,28 @@
                                     } d-inline-flex align-items-center badge-sm">
                                         <i class="ti ti-point-filled me-1"></i>${
                                             value.status == 1
-                                                ? `${_l('admin.common.active')}`
-                                                : `${_l('admin.common.inactive')}`
+                                                ? `${_l("admin.common.active")}`
+                                                : `${_l(
+                                                      "admin.common.inactive"
+                                                  )}`
                                         }
                                     </span>
                                 </td>
-                 ${hasPermission(permissions, 'section', 'edit')  ?
-
-                                `<td>
+                 ${
+                     hasPermission(permissions, "section", "edit")
+                         ? `<td>
                                 <div class="dropdown">
                                     <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="ti ti-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
-                                            ${hasPermission(permissions, 'section', 'edit') ?
-
-                                        `<li>
+                                            ${
+                                                hasPermission(
+                                                    permissions,
+                                                    "section",
+                                                    "edit"
+                                                )
+                                                    ? `<li>
                                             <a class="dropdown-item rounded-1 section_data"
                                                 href="#"
                                                 data-bs-toggle="modal"
@@ -83,26 +91,69 @@
                                                     value.line_two ?? ""
                                                 }"
                                                 data-thumbnail_image_one="${
-                                                    value.thumbnail_image_one ?? ""
+                                                    value.thumbnail_image_one ??
+                                                    ""
                                                 }"
                                                 data-thumbnail_image_two="${
-                                                    value.thumbnail_image_two ?? ""
+                                                    value.thumbnail_image_two ??
+                                                    ""
                                                 }"
                                                 data-line_one="${
                                                     value.line_one ?? ""
+                                                }"
+                                                data-why_label_1="${
+                                                    value.why_label_1 ?? ""
+                                                }"
+                                                data-why_dis_1="${
+                                                    value.why_dis_1 ?? ""
+                                                }"
+                                                data-why_label_2="${
+                                                    value.why_label_2 ?? ""
+                                                }"
+                                                data-why_dis_2="${
+                                                    value.why_dis_2 ?? ""
+                                                }"
+                                                data-why_label_3="${
+                                                    value.why_label_3 ?? ""
+                                                }"
+                                                data-why_dis_3="${
+                                                    value.why_dis_3 ?? ""
+                                                }"
+                                                data-why_icon_1="${
+                                                    value.why_icon_1
+                                                        ? `/storage/${value.why_icon_1}`
+                                                        : ""
+                                                }"
+                                                data-why_icon_2="${
+                                                    value.why_icon_2
+                                                        ? `/storage/${value.why_icon_2}`
+                                                        : ""
+                                                }"
+                                                data-why_icon_3="${
+                                                    value.why_icon_3
+                                                        ? `/storage/${value.why_icon_3}`
+                                                        : ""
                                                 }">
-                                                <i class="ti ti-pencil me-1"></i>${_l('admin.common.edit')}
+                                                <i class="ti ti-pencil me-1"></i>${_l(
+                                                    "admin.common.edit"
+                                                )}
                                             </a>
-                                        </li>`:''}
+                                        </li>`
+                                                    : ""
+                                            }
                                     </ul>
                                 </div>
-                            </td>`:''}
+                            </td>`
+                         : ""
+                 }
                             </tr>`;
                     });
                 } else {
                     tableBody += `
                             <tr>
-                                <td colspan="6" class="text-center">${_l('admin.common.empty_table')}</td></td>
+                                <td colspan="6" class="text-center">${_l(
+                                    "admin.common.empty_table"
+                                )}</td></td>
                             </tr>`;
                     $(".table-footer").empty();
                 }
@@ -114,27 +165,69 @@
                         searching: false,
                         pageLength: 10,
                         lengthChange: false,
-                        "drawCallback": function () {
-                            $(".dataTables_info").addClass('d-none');
-                            $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
+                        drawCallback: function () {
+                            $(".dataTables_info").addClass("d-none");
+                            $(
+                                ".dataTables_wrapper .dataTables_paginate"
+                            ).addClass("d-none");
 
-                            var tableWrapper = $(this).closest('.dataTables_wrapper');
-                            var info = tableWrapper.find('.dataTables_info');
-                            var pagination = tableWrapper.find('.dataTables_paginate');
+                            var tableWrapper = $(this).closest(
+                                ".dataTables_wrapper"
+                            );
+                            var info = tableWrapper.find(".dataTables_info");
+                            var pagination = tableWrapper.find(
+                                ".dataTables_paginate"
+                            );
 
-                            $('.table-footer').empty()
-                                .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
-                                    .append($('<div class="datatable-info"></div>').append(info.clone(true)))
-                                    .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
+                            $(".table-footer")
+                                .empty()
+                                .append(
+                                    $(
+                                        '<div class="d-flex justify-content-between align-items-center w-100"></div>'
+                                    )
+                                        .append(
+                                            $(
+                                                '<div class="datatable-info"></div>'
+                                            ).append(info.clone(true))
+                                        )
+                                        .append(
+                                            $(
+                                                '<div class="datatable-pagination"></div>'
+                                            ).append(pagination.clone(true))
+                                        )
                                 );
-                            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+                            $(".table-footer")
+                                .find(".dataTables_paginate")
+                                .removeClass("d-none");
                         },
                         language: {
                             emptyTable: _l("admin.common.empty_table"),
-                            info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
-                            infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
-                            infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
-                            lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
+                            info:
+                                _l("admin.common.showing") +
+                                " _START_ " +
+                                _l("admin.common.to") +
+                                " _END_ " +
+                                _l("admin.common.of") +
+                                " _TOTAL_ " +
+                                _l("admin.common.entries"),
+                            infoEmpty:
+                                _l("admin.common.showing") +
+                                " 0 " +
+                                _l("admin.common.to") +
+                                " 0 " +
+                                _l("admin.common.of") +
+                                " 0 " +
+                                _l("admin.common.entries"),
+                            infoFiltered:
+                                "(" +
+                                _l("admin.common.filtered_from") +
+                                " _MAX_ " +
+                                _l("admin.common.total_entries") +
+                                ")",
+                            lengthMenu:
+                                _l("admin.common.show") +
+                                " _MENU_ " +
+                                _l("admin.common.entries"),
                             search: _l("admin.common.search") + ":",
                             zeroRecords: _l("admin.common.no_matching_records"),
                             paginate: {
@@ -149,9 +242,12 @@
             },
             error: function (error) {
                 if (error.responseJSON.code === 500) {
-                    showToast('error', error.responseJSON.message);
+                    showToast("error", error.responseJSON.message);
                 } else {
-                    showToast('error', _l('admin.common.default_retrieve_error'));
+                    showToast(
+                        "error",
+                        _l("admin.common.default_retrieve_error")
+                    );
                 }
             },
         });
@@ -171,15 +267,21 @@
                 cache: false,
                 headers: {
                     Accept: "application/json",
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
                 },
                 beforeSend: function () {
-                    $('.banner_one').attr('disabled', true).html(`
-                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..
+                    $(".banner_one").attr("disabled", true).html(`
+                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
+                            "admin.common.saving"
+                        )}..
                     `);
                 },
                 complete: function () {
-                    $('.banner_one').attr('disabled', false).html(_l('admin.common.save_changes'));
+                    $(".banner_one")
+                        .attr("disabled", false)
+                        .html(_l("admin.common.save_changes"));
                 },
             })
                 .done((response, statusText, xhr) => {
@@ -192,7 +294,6 @@
                         initTable();
                     } else {
                         showToast("success", response.message);
-
                     }
                 })
                 .fail((error) => {
@@ -212,13 +313,14 @@
     });
 })();
 
-
 $(document).on("click", ".section_data", function (e) {
     e.preventDefault();
 
     var ID = $(this).data("id");
 
-    $("#section_id_1, #section_id_2, #section_id_3").addClass("d-none");
+    $("#section_id_1, #section_id_2, #section_id_3, #section_id_4").addClass(
+        "d-none"
+    );
 
     if (ID == 1) {
         $("#section_id_1").removeClass("d-none");
@@ -231,11 +333,12 @@ $(document).on("click", ".section_data", function (e) {
         let thumbnailImageUrl = $(this).data("thumbnail_image_one");
 
         if (thumbnailImageUrl) {
-            $("#thumbnail_preview_one").attr("src", thumbnailImageUrl).removeClass("d-none");
+            $("#thumbnail_preview_one")
+                .attr("src", thumbnailImageUrl)
+                .removeClass("d-none");
         } else {
             $("#thumbnail_preview_one").addClass("d-none");
         }
-
     } else if (ID == 29) {
         $("#section_id_2").removeClass("d-none");
         $("#section_id").val(ID);
@@ -245,18 +348,45 @@ $(document).on("click", ".section_data", function (e) {
         let thumbnailImageUrl = $(this).data("thumbnail_image_two");
 
         if (thumbnailImageUrl) {
-            $("#thumbnail_preview_two").attr("src", thumbnailImageUrl).removeClass("d-none");
+            $("#thumbnail_preview_two")
+                .attr("src", thumbnailImageUrl)
+                .removeClass("d-none");
         } else {
             $("#thumbnail_preview_two").addClass("d-none");
         }
-
     } else if (ID == 42) {
         $("#section_id_3").removeClass("d-none");
         $("#section_id").val(ID);
+    } else if (ID == 26) {
+        $("#section_id_4").removeClass("d-none");
+        $("#section_id").val(ID);
+
+        const trigger = $(this);
+
+        $("#why_label_1").val(trigger.data("why_label_1"));
+        $("#why_dis_1").val(trigger.data("why_dis_1"));
+        $("#why_label_2").val(trigger.data("why_label_2"));
+        $("#why_dis_2").val(trigger.data("why_dis_2"));
+        $("#why_label_3").val(trigger.data("why_label_3"));
+        $("#why_dis_3").val(trigger.data("why_dis_3"));
+
+        const icon1 = trigger.data("why_icon_1");
+        const icon2 = trigger.data("why_icon_2");
+        const icon3 = trigger.data("why_icon_3");
+
+        if (icon1) {
+            $("#preview_why_icon_1").attr("src", icon1).removeClass("d-none");
+        }
+
+        if (icon2) {
+            $("#preview_why_icon_2").attr("src", icon2).removeClass("d-none");
+        }
+
+        if (icon3) {
+            $("#preview_why_icon_3").attr("src", icon3).removeClass("d-none");
+        }
     }
 });
-
-
 
 function previewThumbnailOne(input) {
     if (input.files && input.files[0]) {
@@ -276,3 +406,58 @@ function previewThumbnailTwo(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+function validateAndPreview(inputId, previewId) {
+    const input = $("#" + inputId)[0];
+    const file = input.files[0];
+    const preview = $("#" + previewId);
+    preview.addClass("d-none");
+    preview.attr("src", "#");
+
+    if (!file) return;
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/svg+xml"];
+    if (!allowedTypes.includes(file.type)) {
+        showToast("error", "Only JPG, PNG, or SVG files are allowed.");
+        input.value = "";
+        return;
+    }
+
+    const objectURL = URL.createObjectURL(file);
+
+    // SVG preview without dimension check
+    if (file.type === "image/svg+xml") {
+        preview.attr("src", objectURL).removeClass("d-none");
+        return;
+    }
+
+    const img = new Image();
+    img.onload = function () {
+        if (this.width !== 40 || this.height !== 40) {
+            showToast("error", "Image must be exactly 40x40 pixels.");
+            input.value = "";
+            preview.addClass("d-none");
+        } else {
+            preview.attr("src", objectURL).removeClass("d-none");
+        }
+    };
+    img.onerror = function () {
+        showToast("error", "Invalid image file.");
+        input.value = "";
+        preview.addClass("d-none");
+    };
+
+    img.src = objectURL;
+}
+
+$("#why_icon_1").on("change", function () {
+    validateAndPreview("why_icon_1", "preview_why_icon_1");
+});
+
+$("#why_icon_2").on("change", function () {
+    validateAndPreview("why_icon_2", "preview_why_icon_2");
+});
+
+$("#why_icon_3").on("change", function () {
+    validateAndPreview("why_icon_3", "preview_why_icon_3");
+});

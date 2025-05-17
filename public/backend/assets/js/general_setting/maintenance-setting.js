@@ -115,9 +115,8 @@
                         settings.forEach(setting => {
                             const element = $('#' + setting.key);
 
-                            if (setting.key === 'maintenance_image' && setting.value) {
-                                const imageUrl = `/storage/${setting.value}`;
-                                $('#profile_photo_preview').attr('src', imageUrl).show();
+                            if (setting.key === 'maintenance_image') {
+                                $('#profile_photo_preview').attr('src', setting.value).show();
                             }
 
                             else if (setting.key === 'maintenance_description') {
@@ -138,13 +137,51 @@
                     showToast('error', _l('admin.common.default_retrieve_error'));
                 },
                 complete: function() {
-                    $(".label-loader, .input-loader").hide();
-                    $('.real-label, .real-input').removeClass('d-none');
+                    $(".label-loader, .input-loader, .card-loader").hide();
+                    $('.real-label, .real-input, .real-card').removeClass('d-none');
                 }
             });
         }
     });
 
+    $(document).on('click', '.remove-maintenance-image', function() {
+        const preview = document.getElementById('profile_photo_preview');
+        preview.src = $(this).data('default_image');
+        $('#maintenance_image').val('');
+        $('#is_remove_image').val(1);
+    });
+
+    $("#maintenance_image").on("change", function (event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        const preview = $("#profile_photo_preview");
+        $('#is_remove_image').val(0);
+
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('error',_l('admin.general_settings.image_5mb'));
+                $(this).val("");
+                return;
+            }
+            reader.onload = function (e) {
+                const img = new Image();
+                img.src = e.target.result;
+
+                img.onload = function () {
+                    if (img.width === 500 && img.height === 500) {
+                        preview.attr("src", e.target.result).show();
+                        $(".frames").removeClass("d-none");
+                    } else {
+                        showToast('error', _l('admin.general_settings.image_dimension'));
+                        const preview = document.getElementById('profile_photo_preview');
+                        preview.src = $('.remove-maintenance-image').data('default_image');
+                    }
+                };
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
 
 })();
 
@@ -162,10 +199,9 @@ function previewImage(event) {
     }
 }
 
-function removeImage() {
-    const preview = document.getElementById('profile_photo_preview');
-    const fileInput = document.getElementById('profile_photo');
+// function removeImage() {
+//     const preview = document.getElementById('profile_photo_preview');
 
-    preview.src = '/backend/assets/img/settings/company-logo-01.jpg';
-    fileInput.value = '';
-}
+//     preview.src = ;
+//     fileInput.value = '';
+// }

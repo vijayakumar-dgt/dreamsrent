@@ -40,43 +40,8 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="custom-datatable-filter table-responsive table-loader">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th><div class="skeleton th-skeleton th-loader"></div></th>
-                                                <th><div class="skeleton th-skeleton th-loader"></div></th>
-                                                <th><div class="skeleton th-skeleton th-loader"></div></th>
-                                                <th><div class="skeleton th-skeleton th-loader"></div></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            </tr>
-                                            <tr>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            </tr>
-                                            <tr>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            </tr>
-                                            <tr>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                                <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="custom-datatable-filter table-responsive position-relative vh-10 table-loader">
+                                    @include('admin.content-loader')
                                 </div>
                                 <!-- Custom Data Table -->
                                 <div class="custom-datatable-filter table-responsive brandstable country-table d-none real-table">

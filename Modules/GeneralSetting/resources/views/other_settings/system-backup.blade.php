@@ -32,42 +32,11 @@
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h6 class="mb-3">{{ __('admin.general_settings.system_backup') }}</h6>
                                 @if (hasPermission($permissions, 'other_settings', 'create'))
-                                <div class="skeleton label-skeleton label-loader"></div>
-                                <a href="javascript:void(0);" class="btn btn-primary d-none real-label" data-bs-toggle="modal" data-bs-target="#generate">{{ __('admin.general_settings.generate_backup') }}</a>
+                                <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#generate">{{ __('admin.general_settings.generate_backup') }}</a>
                                 @endif
                             </div>
-                            <div class="custom-datatable-filter table-responsive table-loader">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="custom-datatable-filter table-responsive position-relative vh-10 table-loader">
+                                @include('admin.content-loader')
                             </div>
                             <div class="custom-datatable-filter table-responsive d-none real-table">
                                 <table class="table">

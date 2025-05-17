@@ -735,9 +735,11 @@ function getVehicles(filterData = {}, isLoadMore = false) {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         beforeSend: function () {
-            $('.list-loader').show();
-            $('.card-loader').show();
-            $('#vehicle_list_container').addClass('d-none');
+            if (isLoadMore == false) {
+                $('.list-loader').show();
+                $('.card-loader').show();
+                $('#vehicle_list_container').addClass('d-none');
+            }
         },
         success: function (result) {
             if (result.data && result.data.data.length > 0) {
@@ -832,8 +834,8 @@ function getVehicles(filterData = {}, isLoadMore = false) {
         },
         complete: function () {
             isFetching = false;
-            $(".list-loader, .card-loader").hide();
-            $('#vehicle_list_container').removeClass('d-none');
+            $(".list-loader, .card-loader, .table-loader").hide();
+            $('#vehicle_list_container, .real-table').removeClass('d-none');
         }
     });
 }

@@ -1078,7 +1078,7 @@
    */
   function Sortable(el, options) {
     if (!(el && el.nodeType && el.nodeType === 1)) {
-      throw "Sortable: `el` must be an HTMLElement, not ".concat({}.toString.call(el));
+      return;
     }
     this.el = el; // root element
     this.options = options = _extends({}, options);

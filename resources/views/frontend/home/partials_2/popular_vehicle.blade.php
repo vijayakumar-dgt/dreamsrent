@@ -77,21 +77,21 @@
                             <div class="listing-details-group">
                                 <ul>
                                     <li>
-                                        <img src="/frontend/assets/img/icons/car-parts-01.svg"
+                                        <img src="{{ asset('/frontend/assets/img/icons/car-parts-01.svg') }}"
                                             alt="{{ $content['transmission'] ?? '' }}">
                                         <p>{{ $content['transmission'] ?? "" }}</p>
                                     </li>
                                     <li>
-                                        <img src="/frontend/assets/img/icons/car-parts-02.svg"
+                                        <img src="{{ asset('/frontend/assets/img/icons/car-parts-02.svg') }}"
                                             alt="{{ $content['mileage'] ? round($content['mileage']) : '' }} KM">
                                         <p>{{ $content['mileage'] ? round($content['mileage']) : "" }} KM</p>
                                     </li>
                                     <li>
-                                        <img src="/frontend/assets/img/icons/car-parts-03.svg" alt="">
+                                        <img src="{{ asset('/frontend/assets/img/icons/car-parts-03.svg') }}" alt="">
                                         <p>{{ ucfirst($content['fuel_type'] ?? "") }}</p>
                                     </li>
                                     <li>
-                                        <img src="/frontend/assets/img/icons/car-parts-05.svg"
+                                        <img src="{{ asset('/frontend/assets/img/icons/car-parts-05.svg') }}"
                                             alt="{{ $content['year'] ?? '' }}">
                                         <p>{{ $content['year'] ?? "" }}</p>
                                     </li>

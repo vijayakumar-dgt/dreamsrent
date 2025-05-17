@@ -28,22 +28,19 @@
                         <div class="card-header">
                             <h5>{{ __('admin.general_settings.system_settings') }}</h5>
                         </div>
-                        <div class="card-body pb-0">
+                        @include('admin.general_settings_loader')
+                        <div class="card-body pb-0 d-none real-card">
                             <div class="d-flex align-items-center justify-content-between">
                                 <h6 class="mb-3">{{ __('admin.general_settings.email_settings') }}</h6>
                                 @if (hasPermission($permissions, 'system_settings', 'create'))
-                                <div class="skeleton button-skeleton button-loader mb-3"></div>
-                                <a href="#" class="btn btn-primary mb-3 d-none real-button" id="send_test_email_btn" data-bs-toggle="modal" data-bs-target="#testmail">
+                                <a href="#" class="btn btn-primary mb-3" id="send_test_email_btn" data-bs-toggle="modal" data-bs-target="#testmail">
                                     <i class="ti ti-send me-1"></i>{{ __('admin.general_settings.send_test_email') }}
                                 </a>
                                 @endif
                             </div>
                             <div class="row">
                                 <div class="col-md-6 d-flex">
-                                    <div class="card flex-fill card-loader">
-                                        <div class="skeleton card-skeleton"></div>
-                                    </div>
-                                    <div class="card flex-fill d-none real-card">
+                                    <div class="card flex-fill">
                                         <div class="card-body">
                                         <div class="border-bottom mb-3">
                                             <div class="d-flex align-items-center justify-content-between mb-3">
@@ -77,10 +74,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 d-flex">
-                                    <div class="card flex-fill card-loader">
-                                        <div class="skeleton card-skeleton"></div>
-                                    </div>
-                                    <div class="card flex-fill d-none real-card">
+                                    <div class="card flex-fill">
                                         <div class="card-body">
                                         <div class="border-bottom mb-3">
                                             <div class="d-flex align-items-center justify-content-between mb-3">
@@ -114,10 +108,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6 d-flex">
-                                    <div class="card flex-fill card-loader">
-                                        <div class="skeleton card-skeleton"></div>
-                                    </div>
-                                    <div class="card flex-fill d-none real-card">
+                                    <div class="card flex-fill">
                                         <div class="card-body">
                                         <div class="border-bottom mb-3">
                                             <div class="d-flex align-items-center justify-content-between mb-3">

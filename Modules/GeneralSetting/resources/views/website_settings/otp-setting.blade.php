@@ -30,15 +30,14 @@
                             <div class="card-header">
                                 <h5 class="fw-bold">{{ __('admin.general_settings.website_settings') }}</h5>
                             </div>
-                            <div class="card-body">
+                            @include('admin.general_settings_loader')
+                            <div class="card-body d-none real-card">
                                 <h6 class="fw-bold mb-3">{{ __('admin.general_settings.otp_settings') }}</h6>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <label class="form-label d-none real-label" for="otp_type">{{ __('admin.general_settings.otp_type') }}<span class="text-danger"> *</span></label>
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <select class="form-control d-none real-input" name="otp_type" id="otp_type" >
+                                            <label class="form-label" for="otp_type">{{ __('admin.general_settings.otp_type') }}<span class="text-danger"> *</span></label>
+                                            <select class="form-control" name="otp_type" id="otp_type" >
                                                 <option value="sms">{{ __('SMS') }}</option>
                                                 <option value="email">{{ __('Email') }}</option>
                                             </select>
@@ -47,10 +46,8 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <label class="form-label d-none real-label" for="otp_digit_limit">{{ __('admin.general_settings.otp_digit_limit') }}<span class="text-danger"> *</span></label>
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <select class="form-control d-none real-input" name="otp_digit_limit" id="otp_digit_limit">
+                                            <label class="form-label" for="otp_digit_limit">{{ __('admin.general_settings.otp_digit_limit') }}<span class="text-danger"> *</span></label>
+                                            <select class="form-control" name="otp_digit_limit" id="otp_digit_limit">
                                                 <option value="4">4</option>
                                                 <option value="5">5</option>
                                                 <option value="6">6</option>
@@ -60,10 +57,8 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <label class="form-label d-none real-label" for="otp_expire_time">{{ __('admin.general_settings.otp_expire_time') }}<span class="text-danger"> *</span></label>
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <select class="form-control d-none real-input" name="otp_expire_time" id="otp_expire_time">
+                                            <label class="form-label" for="otp_expire_time">{{ __('admin.general_settings.otp_expire_time') }}<span class="text-danger"> *</span></label>
+                                            <select class="form-control" name="otp_expire_time" id="otp_expire_time">
                                                 <option value="5 mins">5 mins</option>
                                                 <option value="2 mins">2 mins</option>
                                                 <option value="10 mins">10 mins</option>
@@ -73,8 +68,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-check form-check-md form-switch me-2">
-                                            <div class="skeleton toggle-skeleton input-loader"></div>
-                                            <label class="form-check-label form-label mt-0 mb-0 d-none real-label" for="login">
+                                            <label class="form-check-label form-label mt-0 mb-0" for="login">
                                                 {{ __('admin.general_settings.login') }}
                                             </label>
                                             <input id="login" name="login" class="form-check-input form-label me-2" type="checkbox" role="switch" checked>
@@ -83,8 +77,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-check form-check-md form-switch me-2">
-                                            <div class="skeleton toggle-skeleton input-loader"></div>
-                                            <label class="form-check-label form-label mt-0 mb-0 d-none real-label">{{ __('admin.general_settings.register') }}
+                                            <label class="form-check-label form-label mt-0 mb-0">{{ __('admin.general_settings.register') }}
                                                 <input id="register" name="register" class="form-check-input form-label me-2" type="checkbox" role="switch" checked>
                                             </label>
                                             <span id="register_error" class="text-danger error-text"></span>
@@ -92,13 +85,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-footer">
+                            <div class="card-footer d-none real-card">
                                 <div class="d-flex justify-content-end">
-                                    <div class="skeleton label-skeleton label-loader me-2"></div>
-                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3 d-none real-label" >{{ __('admin.common.cancel') }}</a>
+                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3" >{{ __('admin.common.cancel') }}</a>
                                     @if (hasPermission($permissions, 'website_settings', 'edit'))
-                                    <div class="skeleton label-skeleton label-loader"></div>
-                                    <button type="submit" class="btn btn-primary submitBtn d-none real-label">{{ __('admin.common.save_changes') }}</button>
+                                    <button type="submit" class="btn btn-primary submitBtn">{{ __('admin.common.save_changes') }}</button>
                                     @endif
                                 </div>
                             </div>

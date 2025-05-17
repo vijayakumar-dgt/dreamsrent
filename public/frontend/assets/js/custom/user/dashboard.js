@@ -30,14 +30,6 @@
     }
 
     function showBookingLoader() {
-        const $tbody = $("#loader-table tbody");
-        $tbody.empty();
-
-        const $templateRow = $("#loader-table thead tr");
-        for (let i = 0; i < 7; i++) {
-            $templateRow.clone().appendTo($tbody);
-        }
-
         $(".table-loader").removeClass("d-none");
         $(".real-table").addClass("d-none");
     }

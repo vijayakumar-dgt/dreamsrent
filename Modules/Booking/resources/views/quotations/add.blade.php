@@ -311,12 +311,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="list-loader">
-                                                    <div class="skeleton card-sm-skeleton card-loader mb-2"></div>
-                                                    <div class="skeleton card-sm-skeleton card-loader mb-2"></div>
-                                                    <div class="skeleton card-sm-skeleton card-loader mb-2"></div>
+                                                    <div class="card pb-3 border-0">
+                                                        <div class="card-body">
+                                                            @include('admin.content-loader')
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div id="vehicle_list_container" class="car-select d-none">
-
                                                 </div>
                                             </div>
                                         </div>

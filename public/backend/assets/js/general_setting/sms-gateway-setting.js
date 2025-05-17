@@ -386,14 +386,16 @@ $(document).ready(function() {
                         }
                     });
                 }
-                $(".label-loader, .input-loader").hide();
-                $('.real-label, .real-input').removeClass('d-none');
             },
             error: function (xhr) {
                 if (xhr.responseJSON.code === 404) {
                     toastr.error(xhr.responseJSON.message);
                 }
             },
+            complete: function () {
+               $(".label-loader, .input-loader, .card-loader").hide();
+               $('.real-label, .real-input, .real-card').removeClass('d-none');
+            }
         });
     }
 

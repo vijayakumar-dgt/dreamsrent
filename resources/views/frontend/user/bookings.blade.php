@@ -103,41 +103,8 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="custom-datatable-filter table-responsive table-loader d-none">
-                                <table class="table table-bordered" id="booking-loader-table">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th>
-                                                <div class="skeleton data-skeleton label-loader"></div>
-                                            </th>
-                                            <th>
-                                                <div class="skeleton data-skeleton label-loader"></div>
-                                            </th>
-                                            <th>
-                                                <div class="skeleton data-skeleton label-loader"></div>
-                                            </th>
-                                            <th>
-                                                <div class="skeleton data-skeleton label-loader"></div>
-                                            </th>
-                                            <th>
-                                                <div class="skeleton data-skeleton label-loader"></div>
-                                            </th>
-                                            <th>
-                                                <div class="skeleton data-skeleton label-loader"></div>
-                                            </th>
-                                            <th>
-                                                <div class="skeleton data-skeleton label-loader"></div>
-                                            </th>
-                                            <th>
-                                                <div class="skeleton data-skeleton label-loader"></div>
-                                            </th>
-                                            <th>
-                                                <div class="skeleton data-skeleton label-loader"></div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
+                            <div class="custom-datatable-filter table-responsive table-loader vh-10">
+                                @include('frontend.content-loader')
                             </div>
                             <div class="table-responsive dashboard-table d-none real-table">
                                 <table class="table" id="bookingTable">
@@ -162,10 +129,17 @@
                 </div>
                 <!-- /All Bookings -->
                 <!-- Full Calendar -->
-                <div class="row d-none" id="calendar_view">
+                <div class="row">
+                     <div class="card calendar-loader position-relative d-none">
+                           <div class="card-body vh-15">
+                               @include('frontend.content-loader')
+                           </div>
+                     </div>
+                </div>
+                <div class="row d-none real-calendar" id="calendar_view">
                     <div class="col-lg-12">
-                        <div class="card calendar-card mb-0">
-                            <div class="card-body">
+                        <div class="card calendar-card mb-0 ">
+                            <div class="card-body vh-15">
                                 <div id="fullcalendar"></div>
                             </div>
                         </div>
@@ -334,7 +308,7 @@
                 <div class="modal-body">
                     <div class="order-success-info">
                         <span class="order-success-icon">
-                            <img src="/frontend/assets/img/icons/check-icon.svg" alt="Icon">
+                            <img src="{{ asset('frontend/assets/img/icons/check-icon.svg') }}" alt="Icon">
                         </span>
                         <h4>{{__('web.common.successful')}}</h4>
                         <p>{{__('web.common.your_ride_completed')}}</p>
@@ -355,7 +329,7 @@
                 <div class="modal-body">
                     <div class="order-success-info">
                         <span class="order-success-icon">
-                            <img src="/frontend/assets/img/icons/check-icon.svg" alt="Icon">
+                            <img src="{{ asset('frontend/assets/img/icons/check-icon.svg') }}" alt="Icon">
                         </span>
                         <h4>{{__('web.common.successful')}}</h4>
                         <p>{{__('web.common.ride_started')}}</p>

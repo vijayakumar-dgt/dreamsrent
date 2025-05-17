@@ -3,9 +3,9 @@
             <div class="row align-items-center">
                 <div class="col-lg-7">
                     <div class="rental-img">
-                        <img src="/frontend/assets/img/about/rent-car.png" alt="img" class="img-fluid">
+                        <img src="{{ asset('/frontend/assets/img/about/rent-car.png') }}" alt="img" class="img-fluid">
                         <div class="grid-img">
-                            <img src="/frontend/assets/img/about/car-grid.png" alt="img" class="img-fluid">
+                            <img src="{{ asset('/frontend/assets/img/about/car-grid.png') }}" alt="img" class="img-fluid">
                         </div>
                     </div>
                 </div>

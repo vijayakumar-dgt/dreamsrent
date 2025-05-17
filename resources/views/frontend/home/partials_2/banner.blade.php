@@ -97,6 +97,6 @@
             @endif
         </div>
         <div class="banner-bgs">
-            <img src="/frontend/assets/img/bg/banner-bg-01.png" class="bg-01 img-fluid" alt="img">
+            <img src="{{ asset('/frontend/assets/img/bg/banner-bg-01.png') }}" class="bg-01 img-fluid" alt="img">
         </div>
     </section>

@@ -28,19 +28,15 @@
                         <div class="card mb-0">
                             <!-- Card Header -->
                             <div class="card-header">
-                                <div class="skeleton header-skeleton label-loader"></div>
-                                <h5 class="fw-bold d-none real-label">{{__('admin.general_settings.cms')}}</h5>
+                                <h5 class="fw-bold">{{__('admin.general_settings.cms')}}</h5>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
-                                <div class="skeleton section-title-skeleton label-loader"></div>
-                                <h6 class="fw-bold mb-3 d-none real-label">{{__('admin.general_settings.how_it_works')}}</h6>
+                                <h6 class="fw-bold mb-3">{{__('admin.general_settings.how_it_works')}}</h6>
                                 <input type="hidden" name="group_id" id="group_id" class="form-control" value="10">
                                 <div class="mb-3">
-                                    <div class="skeleton label-skeleton label-loader"></div>
-                                    <label class="form-label d-none real-label" for="language">{{__('admin.general_settings.language')}} <span class="text-danger">*</span></label>
-                                    <div class="skeleton select-skeleton input-loader"></div>
-                                    <select class="form-select d-none real-label" id="language" name="language" onchange="loadHowItWorksSettings(this.value)">
+                                    <label class="form-label" for="language">{{__('admin.general_settings.language')}} <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="language" name="language" >
                                         @foreach($languages as $language)
                                             <option value="{{ $language->language_id }}">
                                                 {{ $language->transLang->name ?? 'N/A' }}
@@ -50,21 +46,17 @@
                                     <span class="text-danger" id="language_error"></span>
                                 </div>
                                 <div class="mb-0">
-                                    <div class="skeleton label-skeleton label-loader"></div>
-                                    <label for="howitwork_description" class="form-label d-none real-label">{{__('admin.general_settings.description')}}</label>
-
-                                    <div class="skeleton textarea-skeleton input-loader"></div>
-                                    <textarea id="howitwork_description" name="howitwork_description" class="form-control summernote d-none real-label"></textarea>
+                                    <label for="howitwork_description" class="form-label">{{__('admin.general_settings.description')}}</label>
+                                    <textarea id="howitwork_description" name="howitwork_description" class="form-control summernote"></textarea>
                                     <span id="howitwork_description_error" class="text-danger error-text"></span>
                                 </div>
                             </div>
                             <div class="card-footer">
                                 <div class="d-flex justify-content-end">
-                                    <div class="skeleton button-skeleton label-loader me-3"></div>
-                                    <a href="javascript:void(0);" class="btn btn-light me-3 d-none real-label" data-bs-dismiss="modal">{{__('admin.general_settings.cancel')}}</a>
-                                    <div class="skeleton button-skeleton label-loader"></div>
+                                    <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.general_settings.cancel')}}</a>
+                                    
                                     @if (hasPermission($permissions, 'how_it_work', 'edit'))
-                                    <button type="submit" class="btn btn-primary d-none real-label submitbtn">{{__('admin.general_settings.save_changes')}}</button>
+                                    <button type="submit" class="btn btn-primary  submitbtn">{{__('admin.general_settings.save_changes')}}</button>
                                     @endif
                                 </div>
                             </div>

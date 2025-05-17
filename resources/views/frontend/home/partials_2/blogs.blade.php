@@ -57,11 +57,11 @@
                         </div>
                         <div class="col-md-6">
                             <div class="subscribe-img">
-                                <img src="/frontend/assets/img/about/web-app.png" alt="img" class="img-fluid">
+                                <img src="{{ asset('/frontend/assets/img/about/web-app.png') }}" alt="img" class="img-fluid">
                             </div>
                         </div>
                     </div>
-                    <img src="/frontend/assets/img/bg/app-bg.svg" alt="icon" class="app-bg-01">
+                    <img src="{{ asset('/frontend/assets/img/bg/app-bg.svg') }}" alt="icon" class="app-bg-01">
                 </div>
             @endif
         </div>

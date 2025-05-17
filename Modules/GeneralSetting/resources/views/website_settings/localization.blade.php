@@ -29,20 +29,18 @@
                         <div class="card-header">
                             <h5>{{ __('admin.general_settings.website_settings') }}</h5>
                         </div>
-                        <div class="card-body">
+                        @include('admin.general_settings_loader')
+                        <div class="card-body d-none real-card">
                             <div class="localization-content mb-3">
                                 <div>
-                                    <div class="skeleton label-skeleton label-loader"></div>
-                                    <h6 class="mb-3 d-none real-label">{{ __('admin.general_settings.localization') }}</h6>
+                                    <h6 class="mb-3">{{ __('admin.general_settings.localization') }}</h6>
                                     <div class="row mb-3">
                                         <div class="col-md-8">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.time_zone') }} <span class="text-danger">*</span></p>
+                                            <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.time_zone') }} <span class="text-danger">*</span></p>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-input">
-                                                <select class="form-control d-none real-input" id="timezone" name="timezone">
+                                            <div class="">
+                                                <select class="form-control" id="timezone" name="timezone">
                                                     <option value="">{{ __('admin.general_settings.select') }}</option>
                                                 </select>
                                                 <span class="text-danger error-text" id="timezone_error"></span>
@@ -51,13 +49,11 @@
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-8">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.start_weekon') }} <span class="text-danger">*</span></p>
+                                            <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.start_weekon') }} <span class="text-danger">*</span></p>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-input">
-                                                <select class="select d-none real-input" name="week_start_day" id="week_start_day">
+                                            <div class="">
+                                                <select class="select" name="week_start_day" id="week_start_day">
                                                     <option value="">{{ __('admin.general_settings.select') }}</option>
                                                     @if(!empty($weekdays) && count($weekdays) > 0)
                                                         @foreach($weekdays as $weekday)
@@ -71,12 +67,10 @@
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-8">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.date_format') }} <span class="text-danger">*</span></p>
+                                            <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.date_format') }} <span class="text-danger">*</span></p>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-input">
+                                            <div class="">
                                                 <select class="select" name="date_format" id="date_format">
                                                     <option value="">{{ __('admin.general_settings.select') }}</option>
                                                     @if(!empty($dateformats) && count($dateformats) > 0)
@@ -91,12 +85,10 @@
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-8">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.time_format') }} <span class="text-danger">*</span></p>
+                                            <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.time_format') }} <span class="text-danger">*</span></p>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-input">
+                                            <div class="">
                                                 <select class="select" name="time_format" id="time_format">
                                                     <option value="">{{ __('admin.general_settings.select') }}</option>
                                                     @if(!empty($timeformats) && count($timeformats) > 0)
@@ -111,12 +103,10 @@
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-8">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.default_language') }} <span class="text-danger">*</span></p>
+                                            <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.default_language') }} <span class="text-danger">*</span></p>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-input">
+                                            <div class="">
                                                 <select class="select" name="default_language" id="default_language">
                                                     <option value="">{{ __('admin.general_settings.select') }}</option>
                                                     @if(!empty($languages) && count($languages) > 0)
@@ -130,13 +120,11 @@
                                         </div>
                                     </div>
                                     <div class="localization-list">
-                                        <div class="skeleton label-skeleton label-loader"></div>
-                                        <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.language_switcher') }} <span class="text-danger">*</span></p>
+                                        <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.language_switcher') }} <span class="text-danger">*</span></p>
                                         <div>
                                             <div class="form-check form-check-md form-switch me-2 d-none real-input">
                                                 <input class="form-check-input form-label" type="checkbox" role="switch" name="language_switcher" id="language_switcher" checked>
                                             </div>
-                                            <div class="skeleton input-skeleton input-loader"></div>
                                             <span class="text-danger error-text" id="language_switcher_error"></span>
                                         </div>
                                     </div>
@@ -144,16 +132,13 @@
                             </div>
                             <div class="localization-content border-0">
                                 <div>
-                                    <div class="skeleton label-skeleton label-loader"></div>
-                                    <h6 class="mb-3 d-none real-label">{{ __('admin.general_settings.currency_information') }}</h6>
+                                    <h6 class="mb-3">{{ __('admin.general_settings.currency_information') }}</h6>
                                     <div class="row mb-3">
                                         <div class="col-md-8">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.currency') }} <span class="text-danger">*</span></p>
+                                            <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.currency') }} <span class="text-danger">*</span></p>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-input">
+                                            <div class="">
                                                 <select class="select" name="currency" id="currency">
                                                     <option value="">{{ __('admin.general_settings.select') }}</option>
                                                     @if(!empty($currencies) && count($currencies) > 0)
@@ -168,12 +153,10 @@
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-8">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.currency_symbol') }} <span class="text-danger">*</span></p>
+                                            <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.currency_symbol') }} <span class="text-danger">*</span></p>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-input">
+                                            <div class="">
                                                 <select class="select" id="currency_symbol" name="currency_symbol">
                                                     <option value="">{{ __('admin.general_settings.select') }}</option>
                                                 </select>
@@ -183,12 +166,10 @@
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-8">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.currency_position') }} <span class="text-danger">*</span></p>
+                                            <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.currency_position') }} <span class="text-danger">*</span></p>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-input">
+                                            <div class="">
                                                 <select class="select" id="currency_position" name="currency_position">
                                                     <option value="">{{ __('admin.general_settings.select') }}</option>
                                                 </select>
@@ -198,12 +179,10 @@
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-md-8">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.decimal_seperator') }} <span class="text-danger">*</span></p>
+                                            <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.decimal_seperator') }} <span class="text-danger">*</span></p>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-input">
+                                            <div class="">
                                                 <select class="select" name="decimal_seperator" id="decimal_seperator">
                                                     <option value="">{{ __('admin.general_settings.select') }}</option>
                                                     <option value=".">.</option>
@@ -215,12 +194,10 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-8">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.thousand_seperator') }} <span class="text-danger">*</span></p>
+                                            <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.thousand_seperator') }} <span class="text-danger">*</span></p>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-input">
+                                            <div class="">
                                                 <select class="select" name="thousand_seperator" id="thousand_seperator">
                                                     <option value="">{{ __('admin.general_settings.select') }}</option>
                                                     <option value=".">.</option>
@@ -231,8 +208,7 @@
                                         </div>
                                     </div>
                                     <div class="localization-list d-none">
-                                        <div class="skeleton label-skeleton label-loader"></div>
-                                        <p class="text-gray-9 fw-medium d-none real-label">{{ __('admin.general_settings.currency_switcher') }} <span class="text-danger">*</span></p>
+                                        <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.currency_switcher') }} <span class="text-danger">*</span></p>
                                         <div>
                                             <div class="form-check form-check-md form-switch me-2 d-none real-input">
                                                 <input class="form-check-input form-label" type="checkbox" role="switch" name="currency_switcher" id="currency_switcher" checked>
@@ -243,13 +219,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer">
+                        <div class="card-footer d-none real-card">
                             <div class="d-flex align-items-center justify-content-end">
-                                <div class="skeleton label-skeleton label-loader"></div>
-                                <a href="{{ route('dashboard') }}" class="btn btn-light me-3 d-none real-label" >{{ __('admin.general_settings.cancel') }}</a>                        
+                                <a href="{{ route('dashboard') }}" class="btn btn-light me-3" >{{ __('admin.general_settings.cancel') }}</a>                        
                                 @if (hasPermission($permissions, 'website_settings', 'edit'))
-                                <div class="skeleton label-skeleton label-loader"></div>
-                                <button type="submit" class="btn btn-primary submitbtn d-none real-label">{{ __('admin.general_settings.save_changes') }}</button>
+                                <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.general_settings.save_changes') }}</button>
                                 @endif
                             </div>
                         </div>

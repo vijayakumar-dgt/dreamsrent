@@ -58,8 +58,11 @@
                 </div>
             </div>
             <!-- /Table Header -->
+            <div class="custom-datatable-filter table-responsive position-relative vh-10 table-loader">
+                @include('admin.content-loader')
+            </div>
             <!-- Custom Data Table -->
-            <div class="custom-datatable-filter table-responsive">
+            <div class="custom-datatable-filter table-responsive d-none real-table">
                 <table class="table blogCategoryTable">
                     <thead class="thead-light">
                         <tr>
@@ -202,7 +205,7 @@
                 <div class="modal-body">
                     <div>
                         <input type="hidden" id="edit_category_id">
-                        <label class="form-label">{{__('admin.blog.category')}}<span class="text-danger">*</span></label>
+                        <label class="form-label">{{__('admin.blog.category')}}<span class="text-danger"> *</span></label>
                         <input type="text" class="form-control" id="edit_category_name">
                     </div>
                 </div>

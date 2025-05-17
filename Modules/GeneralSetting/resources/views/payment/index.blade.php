@@ -28,35 +28,29 @@
                         <div class="card-header">
                             <h5>{{ __('admin.general_settings.finance_settings') }}</h5>
                         </div>
-                        <div class="card-body pb-0">
+                        @include('admin.general_settings_loader')
+                        <div class="card-body pb-0 d-none real-card">
                             <div class="payment-section">
-                                <div class="skeleton label-skeleton label-loader"></div>
-                                <h6 class="mb-3 d-none real-label">{{ __('admin.general_settings.payment_method') }}</h6>
+                                <h6 class="mb-3">{{ __('admin.general_settings.payment_method') }}</h6>
                                 <div class="row">
                                     <div class="col-xl-4 d-flex">
                                         <div class="card flex-fill">
                                             <div class="card-body">
                                                 <div>
                                                     <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/paypal-name.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
+                                                        <span class=""><img src="/backend/assets/img/icons/paypal-name.svg" alt="image"></span>
                                                         @if (hasPermission($permissions, 'finance_settings', 'edit'))
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_paypal"><i class="ti ti-settings"></i></a>
+                                                        <a href="javascript:void(0);" class="" data-bs-toggle="modal" data-bs-target="#add_paypal"><i class="ti ti-settings"></i></a>
                                                         @endif
                                                     </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">{{ __('admin.general_settings.paypal_description') }} </p>
+                                                    <p class="fs-13">{{ __('admin.general_settings.paypal_description') }} </p>
                                                 </div>
                                             </div>
                                             <div class="card-footer">
                                                 <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 paypalIn d-none real-label"><i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} </span>
+                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 paypalIn"><i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} </span>
                                                     @if (hasPermission($permissions, 'finance_settings', 'edit'))
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
+                                                    <div class="form-check form-check-sm form-switch p-0 m-0">
                                                         <input class="form-check-input form-label m-0 checkStatus" name="paypal_status" id="paypal_status" type="checkbox" role="switch">
                                                     </div>
                                                     @endif
@@ -69,418 +63,42 @@
                                             <div class="card-body">
                                                 <div>
                                                     <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/stripe-icon.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
+                                                        <span class=""><img src="/backend/assets/img/icons/stripe-icon.svg" alt="image"></span>
                                                         @if (hasPermission($permissions, 'finance_settings', 'edit'))
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_stripe"><i class="ti ti-settings"></i></a>
+                                                        <a href="javascript:void(0);" class="" data-bs-toggle="modal" data-bs-target="#add_stripe"><i class="ti ti-settings"></i></a>
                                                         @endif
                                                     </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">{{ __('admin.general_settings.api_cards') }} </p>
+                                                    <p class="fs-13">{{ __('admin.general_settings.api_cards') }} </p>
                                                 </div>
                                             </div>
                                             <div class="card-footer">
                                                 <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 stripeIn d-none real-label"><i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} </span>
+                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 stripeIn"><i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} </span>
                                                     @if (hasPermission($permissions, 'finance_settings', 'edit'))
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
+                                                    <div class="form-check form-check-sm form-switch p-0 m-0">
                                                         <input class="form-check-input form-label m-0 checkStatus" name="stripe_status" id="stripe_status" type="checkbox" role="switch">
                                                     </div>
                                                     @endif
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-xl-4 d-flex d-none">
-                                        <div class="card flex-fill">
-                                            <div class="card-body">
-                                                <div>
-                                                    <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/brain-tree.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_braintree"><i class="ti ti-settings"></i></a>
-                                                    </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">{{ __('admin.general_settings.braintree_description') }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 braintreeIn d-none real-label"><i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} </span>
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
-                                                        <input class="form-check-input form-label m-0 checkStatus" name="braintree_status" id="braintree_status" type="checkbox" role="switch">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 d-flex d-none">
-                                        <div class="card flex-fill">
-                                            <div class="card-body">
-                                                <div>
-                                                    <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/Razorpay-icon.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_razorpay"><i class="ti ti-settings"></i></a>
-                                                    </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">Razorpay is an India's all in one payment solution.</p>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 razorpayIn d-none real-label"><i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} </span>
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
-                                                        <input class="form-check-input form-label m-0 checkStatus" name="razorpay_status" id="razorpay_status" type="checkbox" role="switch">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 d-flex d-none">
-                                        <div class="card flex-fill">
-                                            <div class="card-body">
-                                                <div>
-                                                    <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/2checkout-icon.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_2checkout">
-                                                            <i class="ti ti-settings"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">Works stably and reliably and features are valuable</p>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 checkoutIn d-none real-label">
-                                                        <i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} 
-                                                    </span>
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
-                                                        <input class="form-check-input form-label m-0 checkStatus" name="twocheckout_status" id="twocheckout_status" type="checkbox" role="switch">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 d-flex d-none">
-                                        <div class="card flex-fill">
-                                            <div class="card-body">
-                                                <div>
-                                                    <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/skrill-icon.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_skrill">
-                                                            <i class="ti ti-settings"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">Allows send international money transfers and payments quickly</p>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 skrillIn d-none real-label">
-                                                        <i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} 
-                                                    </span>
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
-                                                        <input class="form-check-input form-label m-0 checkStatus" name="skrill_status" id="skrill_status" type="checkbox" role="switch">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 d-flex d-none">
-                                        <div class="card flex-fill">
-                                            <div class="card-body">
-                                                <div>
-                                                    <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/payu-icon.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_payu">
-                                                            <i class="ti ti-settings"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">Provide payment solution to individuals to make payments</p>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 payuIn d-none real-label">
-                                                        <i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} 
-                                                    </span>
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
-                                                        <input class="form-check-input form-label m-0 checkStatus" name="payu_status" id="payu_status" type="checkbox" role="switch">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 d-flex d-none">
-                                        <div class="card flex-fill">
-                                            <div class="card-body">
-                                                <div>
-                                                    <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/apple-pay-icon.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_applepay">
-                                                            <i class="ti ti-settings"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">Replaces your physical cards and cash with private and secure</p>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 applepayIn d-none real-label">
-                                                        <i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} 
-                                                    </span>
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
-                                                        <input class="form-check-input form-label m-0 checkStatus" name="apple_status" id="apple_status" type="checkbox" role="switch">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 d-flex d-none">
-                                        <div class="card flex-fill">
-                                            <div class="card-body">
-                                                <div>
-                                                    <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/payonner-icon.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_payoneer">
-                                                            <i class="ti ti-settings"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">Fast, Low-Cost Solution for your International Business.</p>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 payonnerIn d-none real-label">
-                                                        <i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} 
-                                                    </span>
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
-                                                        <input class="form-check-input form-label m-0 checkStatus" name="payonner_status" id="payonner_status" type="checkbox" role="switch">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 d-flex d-none">
-                                        <div class="card flex-fill">
-                                            <div class="card-body">
-                                                <div>
-                                                    <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/payonner-icon.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_payoneer">
-                                                            <i class="ti ti-settings"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">Fast, Low-Cost Solution for your International Business.</p>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 payonnerIn d-none real-label">
-                                                        <i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} 
-                                                    </span>
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
-                                                        <input class="form-check-input form-label m-0 checkStatus" name="payonner_status" id="payonner_status" type="checkbox" role="switch">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 d-flex d-none" >
-                                        <div class="card flex-fill">
-                                            <div class="card-body">
-                                                <div>
-                                                    <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/mercad-pago-icon.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_mercadopago">
-                                                            <i class="ti ti-settings"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">Online payment platform that enables to send & receive money.</p>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 mercadIn d-none real-label">
-                                                        <i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} 
-                                                    </span>
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
-                                                        <input class="form-check-input form-label m-0 checkStatus" name="mercad_status" id="mercad_status" type="checkbox" role="switch">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 d-flex d-none" >
-                                        <div class="card flex-fill">
-                                            <div class="card-body">
-                                                <div>
-                                                    <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/payment-icon.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_payment">
-                                                            <i class="ti ti-settings"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">Paytm is a leading Indian digital payments & financial services platform.</p>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 paymentIn d-none real-label">
-                                                        <i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} 
-                                                    </span>
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
-                                                        <input class="form-check-input form-label m-0 checkStatus" name="payment_status" id="payment_status" type="checkbox" role="switch">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 d-flex d-none">
-                                        <div class="card flex-fill">
-                                            <div class="card-body">
-                                                <div>
-                                                    <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/pytorch-icon.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_pytorch">
-                                                            <i class="ti ti-settings"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">PyTorch, a network through which your customers transfer funds</p>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 pytorchIn d-none real-label">
-                                                        <i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} 
-                                                    </span>
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
-                                                        <input class="form-check-input form-label m-0 checkStatus" name="pytorch_status" id="pytorch_status" type="checkbox" role="switch">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 d-flex d-none">
-                                        <div class="card flex-fill">
-                                            <div class="card-body">
-                                                <div>
-                                                    <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/bank-transfer-icon.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
-                                                        <a href="javascript:void(0);" class="d-none real-label" data-bs-toggle="modal" data-bs-target="#add_bank">
-                                                            <i class="ti ti-settings"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">Direct transfer of funds from one bank account into another.</p>
-                                                </div>
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 bankIn d-none real-label">
-                                                        <i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} 
-                                                    </span>
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
-                                                        <input class="form-check-input form-label m-0 checkStatus" name="bank_status" id="bank_status" type="checkbox" role="switch">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </div> 
                                     <div class="col-xl-4 d-flex">
                                         <div class="card flex-fill">
                                             <div class="card-body">
                                                 <div>
                                                     <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/cash-delivery-icon.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
+                                                        <span class=""><img src="/backend/assets/img/icons/cash-delivery-icon.svg" alt="image"></span>
                                                     </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">Indicating that goods must be paid for at the time of delivery.</p>
+                                                    <p class="fs-13">Indicating that goods must be paid for at the time of delivery.</p>
                                                 </div>
                                             </div>
                                             <div class="card-footer">
                                                 <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 codIn d-none real-label">
+                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 codIn">
                                                         <i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} 
                                                     </span>
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
+                                                    <div class="form-check form-check-sm form-switch p-0 m-0">
                                                         <input class="form-check-input form-label m-0 checkStatus" name="cod_status" id="cod_status" type="checkbox" role="switch">
                                                     </div>
                                                 </div>
@@ -493,23 +111,17 @@
                                             <div class="card-body">
                                                 <div>
                                                     <div class="payment-content">
-                                                        <div class="skeleton label-skeleton label-loader payImg"></div>
-                                                        <span class="d-none real-label"><img src="/backend/assets/img/icons/payment-method-04.svg" alt="image"></span>
-                                                        <div class="skeleton label-skeleton label-loader payIcon"></div>
+                                                        <span class=""><img src="/backend/assets/img/icons/payment-method-04.svg" alt="image"></span>
                                                     </div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-100"></div>
-                                                    <div class="skeleton label-skeleton label-loader payDis w-50"></div>
-                                                    <p class="fs-13 d-none real-label">Indicating that goods must be paid for at the time of delivery.</p>
+                                                    <p class="fs-13">Indicating that goods must be paid for at the time of delivery.</p>
                                                 </div>
                                             </div>
                                             <div class="card-footer">
                                                 <div class="d-flex align-items-center justify-content-between">
-                                                    <div class="skeleton label-skeleton label-loader payStatus"></div>
-                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 walletIn d-none real-label">
+                                                    <span class="badge badge-outline d-inline-flex align-items-center text-gray-9 walletIn">
                                                         <i class="ti ti-point-filled text-dark me-1"></i>{{ __('admin.general_settings.not_connected') }} 
                                                     </span>
-                                                    <div class="skeleton label-skeleton label-loader payCheck"></div>
-                                                    <div class="form-check form-check-sm form-switch p-0 m-0 d-none real-label">
+                                                    <div class="form-check form-check-sm form-switch p-0 m-0">
                                                         <input class="form-check-input form-label m-0 checkStatus" name="wallet_status" id="wallet_status" type="checkbox" role="switch">
                                                     </div>
                                                 </div>

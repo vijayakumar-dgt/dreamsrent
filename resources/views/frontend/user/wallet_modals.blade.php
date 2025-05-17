@@ -23,7 +23,7 @@
                                 <div class="form-icon">
                                     <input type="text" class="form-control" placeholder="Enter CVV Number">
                                     <span class="cus-icon">
-                                        <img src="/frontend/assets/img/icons/lock-icon.svg" alt="Icon">
+                                        <img src="{{ asset('frontend/assets/img/icons/lock-icon.svg') }}" alt="Icon">
                                     </span>
                                 </div>
                             </div>
@@ -34,7 +34,7 @@
                                 <div class="form-icon">
                                     <input type="text" class="form-control" placeholder="DD/MM/YYYY">
                                     <span class="cus-icon">
-                                        <img src="/frontend/assets/img/icons/calendar-icon.svg" alt="Icon">
+                                        <img src="{{ asset('frontend/assets/img/icons/calendar-icon.svg') }}" alt="Icon">
                                     </span>
                                 </div>
                             </div>
@@ -79,7 +79,7 @@
                                     <label class="custom_radio text-center">
                                         <input type="radio" name="payment_one" id="{{ $id }}" value="wallet_one" {{ $loop->first ? 'checked' : '' }}>
                                         <span class="checkmark d-block mx-auto"></span>
-                                        <img src="/frontend/assets/img/icons/{{ $icon }}" alt="Icon" class="img-fluid mt-2">
+                                        <img src="{{ asset('frontend/assets/img/icons/{{ $icon }}') }}" alt="Icon" class="img-fluid mt-2">
                                     </label>
                                 @endforeach
                             </div>

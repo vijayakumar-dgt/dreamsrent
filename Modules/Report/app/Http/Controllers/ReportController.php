@@ -24,7 +24,7 @@ class ReportController extends Controller
         $bookings = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
             ->get();
         $bookingsCount = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
-            ->paginate(10);
+            ->orderby('bookings.id', 'desc')->paginate(10);
         $totalIncome = $bookings->filter(function ($booking) {
             if ($booking->booking_by === 'admin') {
                 return is_null($booking->payment_status) || $booking->payment_status == 2;
@@ -82,8 +82,11 @@ class ReportController extends Controller
     {
         $bookings = Booking::join('users', 'bookings.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
-            ->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image')
-            ->get();
+            ->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image', 'user_details.first_name', 'user_details.last_name')
+            ->get()->map(function ($booking) {
+                $booking->full_name = $booking->first_name ? ucwords($booking->first_name . ' ' . $booking->last_name) : $booking->name;
+                return $booking;
+            });
 
         $bookingCount = Booking::join('users', 'bookings.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')

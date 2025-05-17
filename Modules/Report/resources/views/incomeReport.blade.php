@@ -176,8 +176,8 @@
                         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                             <div class="d-flex align-items-center flex-wrap row-gap-3">
                                 <div class="dropdown me-2">
-                                    <a href="javascript:void(0);" class="dropdown-toggle dropdown-toggle-chat btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="incomeSortDropdown">
-                                        <i class="ti ti-filter me-1"></i> {{__('admin.common.sort_by')}} : <span id="selectedFilter">{{__('admin.common.latest')}}</span>
+                                    <a href="javascript:void(0);" class="dropdown-toggle dropdown-toggle-chat btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="selectedFilter">
+                                        <i class="ti ti-filter me-1"></i> {{__('admin.common.sort_by')}} : <span >{{__('admin.common.latest')}}</span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                         <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-filter="latest">{{__('admin.common.latest')}}</a></li>

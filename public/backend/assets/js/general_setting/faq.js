@@ -243,28 +243,30 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <a href="javascript:void(0);" class="fw-semibold">${value.question}</a>
+                                        <a href="javascript:void(0);" class="fw-semibold">
+                                            ${value.question.length > 50 ? value.question.substring(0, 50) + "..." : value.question}
+                                        </a>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <p class="text-gray-9 text-truncate">${value.answer}</p>
+                                <p class="text-gray-9 text-truncate">
+                                    ${value.answer.length > 50 ? value.answer.substring(0, 50) + "..." : value.answer}
+                                </p>
                             </td>
                             <td>
                                 <span class="badge badge-${value.status === 1 ? 'soft-success' : 'soft-danger'}">
                                     <i class="ti ti-point-filled"></i> ${value.status === 1 ? `${_l('admin.cms.published')}` : `${_l('admin.cms.unpublished')}`}
                                 </span>
                             </td>
-                                                     ${hasPermission(permissions, 'faq', 'edit') || hasPermission(permissions, 'faq', 'delete') ?
-
+                            ${hasPermission(permissions, 'faq', 'edit') || hasPermission(permissions, 'faq', 'delete') ?
                             `<td>
                                 <div class="dropdown">
                                     <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown">
                                         <i class="ti ti-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                      ${hasPermission(permissions, 'faq', 'edit') ?
-
+                                        ${hasPermission(permissions, 'faq', 'edit') ?
                                         `<li>
                                            <button 
                                                 type="button" 
@@ -275,13 +277,11 @@
                                                 data-status="${value.status}" 
                                                 data-language-id="${value.language_id}"
                                                 data-bs-toggle="modal" 
-                                                data-bs-target="#edit_FAQ"
-                                            >
+                                                data-bs-target="#edit_FAQ">
                                                 <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
                                             </button>
                                         </li>`:''}
-                                                          ${hasPermission(permissions, 'faq', 'delete') ?
-
+                                        ${hasPermission(permissions, 'faq', 'delete') ?
                                         `<li>
                                             <button 
                                                 type="button" 
@@ -299,12 +299,11 @@
                         </tr>`;
                     });
                 } else {
-                    tableBody = `<tr><td colspan="4" class="text-center">${_l('admin.cms.empty_table')}</td></tr>`;
+                    tableBody = `<tr><td colspan="4" class="text-center">${_l('admin.common.empty_table')}</td></tr>`;
                     $('.table-footer').empty();
                 }
 
                 $("#faqTable tbody").html(tableBody);
-
 
                 if (response.data.length > 0) {
                     $('#faqTable').DataTable({
@@ -364,7 +363,6 @@
             faqTable({ sort_by: sortBy });
         });
 
-
         $('.filter-option').on('click', function() {
             $('.filter-option').removeClass('active');
             $(this).addClass('active');
@@ -372,13 +370,11 @@
             faqTable({ status: status });
         });
 
-
         $('#applyFilters').on('click', function() {
             let selectedStatus = $('.filter-option.active').data('status') ?? ''; // Get active status filter
             let selectedSort = $('.sort-option.active').data('sort') ?? 'desc'; // Get active sorting option
             faqTable({ status: selectedStatus, sort_by: selectedSort });
         });
-
 
         $('#clearFilters').on('click', function() {
             $('.filter-option, .sort-option').removeClass('active');
@@ -388,9 +384,6 @@
         $('#language_id').on('change', function () {
             faqTable();
         });
-
-
-
         faqTable();
     });
 
@@ -424,7 +417,6 @@
         });
     });
 
-
 })();
 
 function editFAQ(id, question, answer,status, languageId) {
@@ -436,7 +428,6 @@ function editFAQ(id, question, answer,status, languageId) {
 
     $('#edit_FAQ').modal('show');
 }
-
 
 function deleteFAQ(id){
     $("#delete_id").val(id);

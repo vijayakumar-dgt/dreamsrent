@@ -78,7 +78,7 @@ class UserBookingController extends Controller
             ]);
             return redirect()->route('user-login');
         }
-        $vehicle = VehicleInfo::select('id', 'name','slug', 'vehicle_image', 'main_location_id', 'other_location_id', 'vehicle_price', 'passenger_capacity')
+        $vehicle = VehicleInfo::select('id', 'name', 'slug', 'vehicle_image', 'main_location_id', 'other_location_id', 'vehicle_price', 'passenger_capacity')
             ->where('slug', $slug)
             ->first();
 
@@ -190,8 +190,18 @@ class UserBookingController extends Controller
 
         $countries = Country::get();
 
-        $driverInfo = Driver::select("id", "driver_name")->where("assigned_cars", $vehicleId)->first();
-        $driverInfo_ride = 35;
+        $driverInfo = Driver::select("id", "driver_name", "image")
+            ->where("assigned_cars", $vehicleId)
+            ->first();
+
+        $driverInfo_image = $driverInfo?->image
+            ? asset('storage/' . $driverInfo->image)
+            : asset('storage/backend/assets/img/default-profile.png');
+
+        $driverInfo_ride = $driverInfo
+            ? Booking::where("driver_id", $driverInfo->id)->count()
+            : 0;
+
         $driverInfo_price = 0;
 
         $finalRate = is_numeric($request->final_price_rate) ? (float) $request->final_price_rate : 0.0;
@@ -234,7 +244,7 @@ class UserBookingController extends Controller
         $walletSetting = GeneralSetting::where("key", "wallet_status")->first();
         $walletStatus = ($walletSetting && $walletSetting->value == 1) ? 1 : 0;
 
-        return view('booking::user_booking.index', compact("slug", "user", "vehicleId", "vehicle", "vehicleImageUrl", "mainLocation", "filteredPrices", "extraServices", "extraServiceCount", "vehicleInsurance", "countries", "driverInfo", "driverInfo_ride", "driverInfo_price", "allLocation", "dlocation", "rlocation", 'finalRate', 'calculatedTaxes', 'totalTax', 'grandTotal', "seo_title", "plocation", "prlocation", "currencySymbol", "paypalStatus", "stripeStatus", "codStatus", "walletStatus"))
+        return view('booking::user_booking.index', compact("slug", "user", "vehicleId", "vehicle", "vehicleImageUrl", "mainLocation", "filteredPrices", "extraServices", "extraServiceCount", "vehicleInsurance", "countries", "driverInfo", "driverInfo_ride", "driverInfo_price", "driverInfo_image", "allLocation", "dlocation", "rlocation", 'finalRate', 'calculatedTaxes', 'totalTax', 'grandTotal', "seo_title", "plocation", "prlocation", "currencySymbol", "paypalStatus", "stripeStatus", "codStatus", "walletStatus"))
             ->with($request->all());
     }
 
@@ -372,7 +382,34 @@ class UserBookingController extends Controller
 
         $currencySymbol = $currency->symbol ?? "$";
 
-        return view("booking::user_booking.success_page", compact("transaction_id", "booking", "vehicleId", "vehicle", "vehicleImageUrl", "dLocation", "rLocation", "mainLocation", "vehicleExtraServicesWithPrice", "vehicleInsurance", "driverInfo", "driverInfo_ride", "driverInfo_price", "bookingInfo", "currencySymbol", "startDateTime", "endDateTime"));
+        $driverInfo = null;
+
+        if (!is_null($booking->driver_id)) {
+            $driverInfo = Driver::select("id", "driver_name", "phone_number")
+                ->where("id", $booking->driver_id)
+                ->first();
+        }
+        
+        if (is_null($driverInfo)) {
+            $bookingUserInfo = BookingUserInfo::select("driver_first_name", "driver_last_name", "driver_mobile_number")
+                ->where("booking_id", $booking->id)
+                ->first();
+        
+            if ($bookingUserInfo) {
+                $driverInfo = (object)[
+                    'id' => null,
+                    'driver_name' => trim($bookingUserInfo->driver_first_name . ' ' . $bookingUserInfo->driver_last_name),
+                    'phone_number' => $bookingUserInfo->driver_mobile_number,
+                ];
+            }
+        }
+
+        return view("booking::user_booking.success_page", compact(
+            "transaction_id", "booking", "vehicleId", "vehicle", "vehicleImageUrl",
+            "dLocation", "rLocation", "mainLocation", "vehicleExtraServicesWithPrice",
+            "vehicleInsurance", "driverInfo", "driverInfo_ride", "driverInfo_price",
+            "bookingInfo", "currencySymbol", "startDateTime", "endDateTime"
+        ));
     }
 
     public function paymentFail(string $transaction_id): View

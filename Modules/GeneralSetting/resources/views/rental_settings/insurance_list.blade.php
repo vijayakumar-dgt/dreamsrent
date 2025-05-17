@@ -32,8 +32,7 @@
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h6 class="mb-3">{{ __('admin.common.insurance') }}</h6>
                                 <div class="d-flex align-items-center">
-                                    <div class="skeleton label-skeleton label-loader me-2"></div>
-                                    <div class="top-search me-2 d-none real-label">
+                                    <div class="top-search me-2">
                                         <div class="top-search-group">
                                             <span class="input-icon">
                                                 <i class="ti ti-search"></i>
@@ -42,104 +41,14 @@
                                         </div>
                                     </div>
                                     @if (hasPermission($permissions, 'rental_settings', 'create'))
-                                    <div class="skeleton label-skeleton label-loader"></div>
-                                    <a href="javascript:void(0);" class="btn btn-primary d-none real-label" id="add_insurance" data-bs-toggle="modal" data-bs-target="#insurance_modal"><i class="ti ti-plus me-1"></i>{{ __('admin.general_settings.add_new_insurance') }}</a>
+                                    <a href="javascript:void(0);" class="btn btn-primary" id="add_insurance" data-bs-toggle="modal" data-bs-target="#insurance_modal"><i class="ti ti-plus me-1"></i>{{ __('admin.general_settings.add_new_insurance') }}</a>
                                     @endif
                                 </div>
                             </div>
-                            <div class="custom-datatable-filter table-responsive table-loader">
-                                <table class="table table-bordered">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th class="text-center">
-                                                <div class="skeleton th-skeleton th-loader"></div>
-                                            </th>
-                                            <th>
-                                                <div class="skeleton th-skeleton th-loader"></div>
-                                            </th>
-                                            <th>
-                                                <div class="skeleton th-skeleton th-loader"></div>
-                                            </th>
-                                            <th>
-                                                <div class="skeleton th-skeleton th-loader"></div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                            <td>
-                                                <div class="skeleton data-skeleton data-loader"></div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="custom-datatable-filter table-responsive position-relative vh-10 table-loader">
+                                @include('admin.content-loader')
                             </div>
-                            <div class="custom-datatable-filter d-none real-table">
+                            <div class="custom-datatable-filter table-responsive d-none real-table">
                                 <table class="table" id="insuranceTable">
                                     <thead class="thead-light">
                                         <tr>

@@ -31,35 +31,35 @@
                     maxlength: 255,
                 },
                 keyword: {
-                    required: true,
+                    required: false,
                 },
                 description: {
-                    required: true,
+                    required: false,
                     minlength: 10,
                 },
                 mete_title: {
-                    required: true,
+                    required: false,
                     minlength: 3,
                     maxlength: 255,
                 },
                 meta_key: {
-                    required: true,
+                    required: false,
                 },
                 meta_description: {
-                    required: true,
+                    required: false,
                     minlength: 10,
                 },
                 canonical_url: {
-                    required: true,
+                    required: false,
                     url: true,
                 },
                 og_title: {
-                    required: true,
+                    required: false,
                     minlength: 3,
                     maxlength: 255,
                 },
                 og_description: {
-                    required: true,
+                    required: false,
                     minlength: 10,
                 },
             },

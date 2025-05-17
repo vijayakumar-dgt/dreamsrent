@@ -3,7 +3,7 @@
             <div class="col-lg-12 col-md-12 d-lg-flex" id="blogs-filter-item-{{ $blogPost->id }}" data-category="{{ $blogPost->category }}">
                 <div class="blog grid-blog">
                     <div class="blog-image-list custom-blog-list-img">
-                        <a href="/blog-details/{{$blogPost->slug}}">
+                        <a href="{{ route('blogs.detail', $blogPost->slug) }}">
                             <img class="img-fluid" src="{{ asset('storage/' . $blogPost->image) }}" alt="Post Image">
                         </a>
                     </div>
@@ -36,10 +36,10 @@
                             </p>
                         </div>
                         <h3 id="blog-title-{{ $blogPost->id }}">
-                            <a href="/blog-details/{{$blogPost->slug}}">{{ ucfirst($blogPost->title) }}</a>
+                            <a href="{{ route('blogs.detail', $blogPost->slug) }}">{{ ucfirst($blogPost->title) }}</a>
                         </h3>
                         <p id="blog-description-{{ $blogPost->id }}" class="mt-3">{{ Str::limit(strip_tags($blogPost->description), 250, '...') }}</p>
-                        <a href="/blog-details/{{$blogPost->slug}}" class="viewlink mt-4 btn btn-primary justify-content-center">
+                        <a href="{{ route('blogs.detail', $blogPost->slug) }}" class="viewlink mt-4 btn btn-primary justify-content-center">
                             {{ __('web.blog.read_more') }} <i class="feather-arrow-right ms-2"></i>
                         </a>
                     </div>

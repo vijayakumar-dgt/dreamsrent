@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 09, 2025 at 10:10 AM
+-- Generation Time: May 16, 2025 at 01:47 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -71,6 +71,15 @@ CREATE TABLE `announcement_types` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `announcement_types`
+--
+
+INSERT INTO `announcement_types` (`id`, `name`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Promotional Offers', 1, '2025-05-13 17:47:50', '2025-05-13 17:47:50', NULL),
+(2, 'New Vehicle Launch', 1, '2025-05-13 17:48:26', '2025-05-13 17:48:26', NULL),
+(3, 'Safety Reminders', 1, '2025-05-13 17:48:26', '2025-05-13 17:48:26', NULL);
 
 -- --------------------------------------------------------
 
@@ -49514,7 +49523,8 @@ INSERT INTO `email_templates` (`id`, `title`, `notification_type`, `description`
 (9, 'Booking Cancelled to user', 5, '<p>Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.</p>', 'Booking cancelled', 'Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.', 'Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.', 1, '2025-04-10 11:06:04', '2025-04-10 11:06:04', NULL),
 (10, 'Booking cancelled to adminn', 6, '<p>Hello Admin, #{reservation_id} reservation has been cancelled.</p>', 'Booking cancelled', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 1, '2025-04-10 11:07:18', '2025-04-29 09:47:20', NULL),
 (11, 'Login Otp', 8, '<p>Your OTP Verification for login</p>', 'OTP Verification for login', 'Your OTP Verification for login', 'Your OTP Verification for login', 1, '2025-05-08 23:49:29', '2025-05-08 23:49:29', NULL),
-(12, 'Forgot Otp', 9, '<p>Your OTP Verification for Forgot password</p>', 'OTP Verification for Forgot password', 'Your OTP Verification for Forgot password', 'Your OTP Verification for Forgot password', 1, '2025-05-08 23:51:10', '2025-05-08 23:51:10', NULL);
+(12, 'Forgot Otp', 9, '<p>Your OTP Verification for Forgot password</p>', 'OTP Verification for Forgot password', 'Your OTP Verification for Forgot password', 'Your OTP Verification for Forgot password', 1, '2025-05-08 23:51:10', '2025-05-08 23:51:10', NULL),
+(13, 'Test Mail', 7, '<p>Hello {user_name},<br><br>\r\n        This is a test email to confirm that the email configuration for admin notifications is working correctly.<br><br>\r\n        If you have received this email, everything is set up properly on your end. No further action is required.<br><br>\r\n        Regards,</p><p>{company_name}<br>\r\n        System Administrator\"</p>', 'Reg - Test Mail', 'This is a test email to confirm that the email configuration for admin notifications is working correctly.', 'This is a test email to confirm that the email configuration for admin notifications is working correctly.', 1, '2025-05-15 13:52:57', '2025-05-15 13:52:57', NULL);
 
 -- --------------------------------------------------------
 
@@ -50230,7 +50240,7 @@ CREATE TABLE `notification_types` (
 INSERT INTO `notification_types` (`id`, `title`, `slug`, `tags`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Welcome Email', NULL, NULL, 1, NULL, NULL),
 (2, 'Booking Confirmation to user', 'booking-confirmation-to-user', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, NULL, NULL),
-(3, 'Newsletter', 'newsletter', '[\"user_name\",\"company_name\",\"company_email\",\"company_phone\"]', 1, NULL, NULL),
+(3, 'Newsletter', 'newsletter', '[\"owner_name\",\"company_name\",\"company_email\",\"company_phone\",\"company_address\", \"company_postal_code\"]', 1, NULL, NULL),
 (4, 'Booking Confirmation to Admin', 'booking-confirmation-to-admin', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, '2025-04-10 14:04:55', '2025-04-10 14:04:55'),
 (5, 'Booking cancelled to admin', 'booking-cancelled-to-admin', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, '2025-04-10 16:31:30', '2025-04-10 16:31:30'),
 (6, 'Booking cancelled to user', 'booking-cancelled-to-user', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, '2025-04-10 16:33:10', '2025-04-10 16:33:10'),
@@ -50554,13 +50564,14 @@ CREATE TABLE `section_datas` (
 --
 
 INSERT INTO `section_datas` (`id`, `language_id`, `section_id`, `datas`, `created_at`, `update_at`) VALUES
-(1, 1, 1, '{\"label_one\":\"100% Trusted car rental platform in the World\",\"line_one\":\"Find Your Best\",\"line_two\":\"Dream Car for Rental\",\"description_one\":\"Experience the ultimate in comfort, performance, and sophistication with our luxury car rentals. From sleek sedans and stylish coupes to spacious SUVs and elegant convertibles, we offer a range of premium vehicles to suit your preferences and lifestyle.\"}', '2025-04-23 07:31:48', '2025-04-23 07:31:48'),
-(2, 2, 1, '{\"label_one\":\"\\u0645\\u0646\\u0635\\u0629 \\u062a\\u0623\\u062c\\u064a\\u0631 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u0648\\u062b\\u0648\\u0642\\u0629 \\u0628\\u0646\\u0633\\u0628\\u0629 100% \\u0641\\u064a \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645\",\"line_one\":\"\\u0627\\u0628\\u062d\\u062b \\u0639\\u0646 \\u0623\\u0641\\u0636\\u0644 \\u0645\\u0627 \\u0644\\u062f\\u064a\\u0643\",\"line_two\":\"\\u062f\\u0631\\u064a\\u0645 \\u0643\\u0627\\u0631 \\u0644\\u0644\\u062a\\u0623\\u062c\\u064a\\u0631\",\"description_one\":\"\\u0627\\u0633\\u062a\\u0645\\u062a\\u0639 \\u0628\\u0623\\u0642\\u0635\\u0649 \\u062f\\u0631\\u062c\\u0627\\u062a \\u0627\\u0644\\u0631\\u0627\\u062d\\u0629 \\u0648\\u0627\\u0644\\u0623\\u062f\\u0627\\u0621 \\u0648\\u0627\\u0644\\u0631\\u0642\\u064a \\u0645\\u0639 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a\\u0646\\u0627 \\u0627\\u0644\\u0641\\u0627\\u062e\\u0631\\u0629 \\u0644\\u0644\\u0625\\u064a\\u062c\\u0627\\u0631. \\u0645\\u0646 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0633\\u064a\\u062f\\u0627\\u0646 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629 \\u0648\\u0627\\u0644\\u0643\\u0648\\u0628\\u064a\\u0647 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629 \\u0625\\u0644\\u0649 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u062f\\u0641\\u0639 \\u0627\\u0644\\u0631\\u0628\\u0627\\u0639\\u064a \\u0627\\u0644\\u0641\\u0633\\u064a\\u062d\\u0629 \\u0648\\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u0643\\u0634\\u0648\\u0641\\u0629 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629\\u060c \\u0646\\u0642\\u062f\\u0645 \\u0644\\u0643 \\u0645\\u062c\\u0645\\u0648\\u0639\\u0629 \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0641\\u0627\\u062e\\u0631\\u0629 \\u0627\\u0644\\u062a\\u064a \\u062a\\u0646\\u0627\\u0633\\u0628 \\u062a\\u0641\\u0636\\u064a\\u0644\\u0627\\u062a\\u0643 \\u0648\\u0623\\u0633\\u0644\\u0648\\u0628 \\u062d\\u064a\\u0627\\u062a\\u0643.\",\"\"}', '2025-04-25 10:21:16', '2025-04-25 10:21:16'),
+(1, 1, 1, '{\"label_one\":\"100% Trusted car rental platform in the World\",\"line_one\":\"Find Your Best\",\"line_two\":\"Dream Car for Rental\",\"description_one\":\"Experience the ultimate in comfort, performance, and sophistication with our luxury car rentals. From sleek sedans and stylish coupes to spacious SUVs and elegant convertibles, we offer a range of premium vehicles to suit your preferences and lifestyle.\",\"thumbnail_image_one\":\"thumbnail_image_banner_one\\/1272318f-5c6c-4055-842c-f46f6c166a76_1746505538.png\"}', '2025-05-06 04:25:38', '2025-05-06 04:25:38'),
+(2, 2, 1, '{\"label_one\":\"\\u0645\\u0646\\u0635\\u0629 \\u062a\\u0623\\u062c\\u064a\\u0631 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u0648\\u062b\\u0648\\u0642\\u0629 \\u0628\\u0646\\u0633\\u0628\\u0629 100% \\u0641\\u064a \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645\",\"line_one\":\"\\u0627\\u0628\\u062d\\u062b \\u0639\\u0646 \\u0623\\u0641\\u0636\\u0644 \\u0645\\u0627 \\u0644\\u062f\\u064a\\u0643\",\"line_two\":\"\\u062f\\u0631\\u064a\\u0645 \\u0643\\u0627\\u0631 \\u0644\\u0644\\u062a\\u0623\\u062c\\u064a\\u0631\",\"description_one\":\"\\u0627\\u0633\\u062a\\u0645\\u062a\\u0639 \\u0628\\u0623\\u0642\\u0635\\u0649 \\u062f\\u0631\\u062c\\u0627\\u062a \\u0627\\u0644\\u0631\\u0627\\u062d\\u0629 \\u0648\\u0627\\u0644\\u0623\\u062f\\u0627\\u0621 \\u0648\\u0627\\u0644\\u0631\\u0642\\u064a \\u0645\\u0639 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a\\u0646\\u0627 \\u0627\\u0644\\u0641\\u0627\\u062e\\u0631\\u0629 \\u0644\\u0644\\u0625\\u064a\\u062c\\u0627\\u0631. \\u0645\\u0646 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0633\\u064a\\u062f\\u0627\\u0646 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629 \\u0648\\u0627\\u0644\\u0643\\u0648\\u0628\\u064a\\u0647 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629 \\u0625\\u0644\\u0649 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u062f\\u0641\\u0639 \\u0627\\u0644\\u0631\\u0628\\u0627\\u0639\\u064a \\u0627\\u0644\\u0641\\u0633\\u064a\\u062d\\u0629 \\u0648\\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u0643\\u0634\\u0648\\u0641\\u0629 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629\\u060c \\u0646\\u0642\\u062f\\u0645 \\u0644\\u0643 \\u0645\\u062c\\u0645\\u0648\\u0639\\u0629 \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0641\\u0627\\u062e\\u0631\\u0629 \\u0627\\u0644\\u062a\\u064a \\u062a\\u0646\\u0627\\u0633\\u0628 \\u062a\\u0641\\u0636\\u064a\\u0644\\u0627\\u062a\\u0643 \\u0648\\u0623\\u0633\\u0644\\u0648\\u0628 \\u062d\\u064a\\u0627\\u062a\\u0643.\",\"thumbnail_image_one\":\"thumbnail_image_banner_one\\/c4ac357d-ba7f-42e4-9e3e-6e7f784c78ec_1744436030.png\"}', '2025-04-12 06:55:37', '2025-04-12 06:55:37'),
 (3, 1, 42, '{\"vehicle_id\":\"54\",\"label_1\":\"Best Deal\",\"dis_1\":\"Dreams Rent offers a fleet of high-quality\",\"label_2\":\"Doorstep Delivery\",\"dis_2\":\"Dreams Rent offers a fleet of high-quality\",\"label_3\":\"Low Security Deposit\",\"dis_3\":\"Dreams Rent offers a fleet of high-quality\",\"label_4\":\"Latest Cars\",\"dis_4\":\"Dreams Rent offers a fleet of high-quality\",\"label_5\":\"Customer Support\",\"dis_5\":\"Dreams Rent offers a fleet of high-quality\",\"label_6\":\"No Hidden Charges\",\"dis_6\":\"Dreams Rent offers a fleet of high-quality\"}', '2025-04-12 07:49:52', '2025-04-12 07:49:52'),
-(4, 1, 29, '{\"label_two\":\"qewuoueoueoiuqoieuoiwqueoiuoiuoiUOIUOU\",\"description_two\":\"OUOIUWOIUWOIEUWQOIEUQOIEUOIWQUEOIQUEOWQE\",\"thumbnail_image_two\":\"thumbnail_image_banner_two\\/c13dfb85-7194-47ee-a11c-2e211ab144b0_1744436159.png\"}', '2025-04-12 05:35:59', '2025-04-12 05:35:59'),
+(4, 1, 29, '{\"label_two\":\"Explore our Verified & Professional Car\",\"description_two\":\"Modern design sports cruisers for those who crave adventure & grandeur Cars for relaxing with your loved ones.\",\"thumbnail_image_two\":\"thumbnail_image_banner_two\\/c13dfb85-7194-47ee-a11c-2e211ab144b0_1744436159.png\"}', '2025-04-29 05:34:52', '2025-04-29 05:34:52'),
 (5, 2, 29, '{\"label_two\":\"\\u0627\\u0633\\u062a\\u0643\\u0634\\u0641 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a\\u0646\\u0627 \\u0627\\u0644\\u0645\\u0639\\u062a\\u0645\\u062f\\u0629 \\u0648\\u0627\\u0644\\u0627\\u062d\\u062a\\u0631\\u0627\\u0641\\u064a\\u0629\",\"description_two\":\"\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0631\\u064a\\u0627\\u0636\\u064a\\u0629 \\u0628\\u062a\\u0635\\u0645\\u064a\\u0645 \\u0639\\u0635\\u0631\\u064a \\u0644\\u0623\\u0648\\u0644\\u0626\\u0643 \\u0627\\u0644\\u0630\\u064a\\u0646 \\u064a\\u062a\\u0648\\u0642\\u0648\\u0646 \\u0625\\u0644\\u0649 \\u0627\\u0644\\u0645\\u063a\\u0627\\u0645\\u0631\\u0629 \\u0648\\u0627\\u0644\\u0639\\u0638\\u0645\\u0629 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0644\\u0644\\u0627\\u0633\\u062a\\u0631\\u062e\\u0627\\u0621 \\u0645\\u0639 \\u0623\\u062d\\u0628\\u0627\\u0626\\u0643.\",\"thumbnail_image_two\":\"thumbnail_image_banner_two\\/93fb4577-7c9d-4918-81af-306f6422be94_1744436137.png\"}', '2025-04-12 06:56:46', '2025-04-12 06:56:46'),
 (6, 2, 42, '{\"vehicle_id\":\"61\",\"label_1\":\"\\u0623\\u0641\\u0636\\u0644 \\u0635\\u0641\\u0642\\u0629\",\"dis_1\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_2\":\"\\u0644\\u0627 \\u062a\\u0648\\u062c\\u062f \\u0631\\u0633\\u0648\\u0645 \\u062e\\u0641\\u064a\\u0629\",\"dis_2\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_3\":\"\\u0623\\u0641\\u0636\\u0644 \\u0635\\u0641\\u0642\\u0629\",\"dis_3\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_4\":\"\\u0644\\u0627 \\u062a\\u0648\\u062c\\u062f \\u0631\\u0633\\u0648\\u0645 \\u062e\\u0641\\u064a\\u0629\",\"dis_4\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_5\":\"\\u0644\\u0627 \\u062a\\u0648\\u062c\\u062f \\u0631\\u0633\\u0648\\u0645 \\u062e\\u0641\\u064a\\u0629\",\"dis_5\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_6\":\"\\u0623\\u0641\\u0636\\u0644 \\u0635\\u0641\\u0642\\u0629\",\"dis_6\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\"}', '2025-04-12 06:58:51', '2025-04-12 06:58:51'),
-(7, 1, 1, '{\"label_one\":\"100% Trusted car rental platform in the World\",\"line_one\":\"Find Your Best\",\"line_two\":\"Dream Car for Rental\",\"description_one\":\"Experience the ultimate in comfort, performance, and sophistication with our luxury car rentals. From sleek sedans and stylish coupes to spacious SUVs and elegant convertibles, we offer a range of premium vehicles to suit your preferences and lifestyle.\",\"thumbnail_image_one\":\"\"}', '2025-04-25 10:21:52', '2025-04-25 10:21:52');
+(7, 1, 1, '{\"label_one\":\"100% Trusted car rental platform in the World\",\"line_one\":\"Find Your Best\",\"line_two\":\"Dream Car for Rental\",\"description_one\":\"Experience the ultimate in comfort, performance, and sophistication with our luxury car rentals. From sleek sedans and stylish coupes to spacious SUVs and elegant convertibles, we offer a range of premium vehicles to suit your preferences and lifestyle.\",\"thumbnail_image_one\":\"thumbnail_image_banner_one\\/1272318f-5c6c-4055-842c-f46f6c166a76_1746505538.png\"}', '2025-05-06 04:25:38', '2025-05-06 04:25:38'),
+(8, 1, 26, '{\"why_label_1\":\"Easy & Fast Booking\",\"why_dis_1\":\"Completely carinate e business testing process whereas fully researched customer service. Globally extensive content with quality.\",\"why_icon_1\":\"\",\"why_label_2\":\"Many Pickup Location\",\"why_dis_2\":\"Enthusiastically magnetic initiatives with cross-platform sources. Dynamically target testing procedures through effective.\",\"why_icon_2\":\"\",\"why_label_3\":\"Customer Satisfaction\",\"why_dis_3\":\"Globally user centric method interactive. Seamlessly revolutionize unique portals orporate collaboration.\",\"why_icon_3\":\"\"}', '2025-05-16 11:41:06', '2025-05-16 11:41:06');
 
 -- --------------------------------------------------------
 
@@ -55394,7 +55405,7 @@ INSERT INTO `transmissions` (`id`, `language_id`, `name`, `status`, `created_at`
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
   `user_type` int(11) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `phone_number` varchar(20) DEFAULT NULL,
@@ -56416,7 +56427,7 @@ ALTER TABLE `announcements`
 -- AUTO_INCREMENT for table `announcement_types`
 --
 ALTER TABLE `announcement_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `banks`
@@ -56614,7 +56625,7 @@ ALTER TABLE `driving_types`
 -- AUTO_INCREMENT for table `email_templates`
 --
 ALTER TABLE `email_templates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `enquiries`
@@ -56848,7 +56859,7 @@ ALTER TABLE `sections`
 -- AUTO_INCREMENT for table `section_datas`
 --
 ALTER TABLE `section_datas`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `signature_settings`

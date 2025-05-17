@@ -49,7 +49,7 @@
                                     <div class="img-slider owl-carousel">
                                         @foreach($vehicle['multiple_vehicle_images'] as $image)
                                         <div class="slide-images">
-                                            <a href="/vehicle-details/{{ $vehicle['slug'] }}">
+                                            <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">
                                                 <img src="{{ $image }}" class="img-fluid" alt="{{ ucfirst($vehicle['name'] ?? '') }}">
                                             </a>
                                         </div>
@@ -70,7 +70,7 @@
                                                 <img src="{{ $vehicle['avatar_image'] ?? '' }}" alt="author">
                                             </button>
                                             <h3 class="listing-title">
-                                                <a href="/vehicle-details/{{ $vehicle['slug'] }}">{{ ucfirst($vehicle['name'] ?? "") }}</a>
+                                                <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">{{ ucfirst($vehicle['name'] ?? "") }}</a>
                                             </h3>
                                             <div class="list-rating">
                                                 @php
@@ -139,7 +139,7 @@
                                         @endforeach
                                     </div>
                                     <div class="listing-button">
-                                        <a href="/vehicle-details/{{ $vehicle['slug'] }}" class="btn btn-order"><span><i class="feather-calendar me-2"></i></span>{{ __('web.home.rent_now') }}</a>
+                                        <a href="{{ route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-order"><span><i class="feather-calendar me-2"></i></span>{{ __('web.home.rent_now') }}</a>
                                     </div>
                                 </div>
                                 <div class="feature-text">

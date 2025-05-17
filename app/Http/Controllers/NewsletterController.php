@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\NewsletterSubscriber;
+use App\Models\UserDetail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Modules\Communication\Http\Controllers\EmailController;
 use Modules\GeneralSetting\Models\EmailTemplate;
+use Modules\GeneralSetting\Models\GeneralSetting;
 use Spatie\Sitemap\Tags\News;
 
 class NewsletterController extends Controller
@@ -44,21 +47,13 @@ class NewsletterController extends Controller
                 'email' => $request->subscriber_email
             ]);
 
-            $notificationType = 3;
-            $template = EmailTemplate::select('subject', 'description')
-                ->where('notification_type', $notificationType)
-                ->first();
-
-            $data = [
-                'to_email' => $request->subscriber_email,
-                'subject' => $template->subject ?? 'Reg - Newsletter',
-                'content' => $template->description ?? 'You have been subscribed to our newsletter.',
-            ];
-
             try {
-                $request = new Request($data);
-                $emailController = new EmailController();
-                $emailController->sendEmail($request);
+                $ownerName = GeneralSetting::where('key', 'owner_name')->value('value');
+                $notifyData = [
+                    'owner_name' => $ownerName ?? 'Admin',
+                ];
+                sendNewsletterEmail($request->subscriber_email, 'newsletter', $notifyData);
+
             } catch (\Exception $e) {
                 
             }
@@ -193,21 +188,17 @@ class NewsletterController extends Controller
         try {
             $email = $request->email;
 
-            $notificationType = 3;
-            $template = EmailTemplate::select('subject', 'description')
-                ->where('notification_type', $notificationType)
-                ->first();
+            $user = Auth::guard('admin')->user();
+            $userId = $user->id ?? null;
 
-            $data = [
-                'subject' => $template->subject ?? 'Reg - Newsletter',
-                'content' => $template->description ?? 'You have successfully subscribed to our newsletter.',
-                'to_email' => $email
+            $userDetail = UserDetail::where('user_id', $userId)->first();
+            $name = ($userDetail && $userDetail->first_name) ? $userDetail->first_name . ' ' . $userDetail->last_name : 'Admin';
+
+            $notifyData = [
+                'user_name' => $name,
             ];
 
-            $requestData = new Request($data);
-
-            $emailController = new EmailController();
-            $emailController->sendEmail($requestData);
+            sendNewsletterEmail($email, 'newsletter', $notifyData);
 
             return response()->json([
                 'status' => 'success',

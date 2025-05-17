@@ -19,6 +19,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
         Route::get('sections', [SectionController::class, 'indexSection'])->name('admin.indexSection')->middleware('permission');
         Route::get('section-list', [SectionController::class, 'indexListSection'])->name('admin.section.index');
         Route::post('section-store', [SectionController::class, 'store']);
+        Route::post('page/delete', [SectionController::class, 'delete'])->name('page.delete');
     });
 
     Route::get('edit/check-vehicle', [PageController::class, 'getPageInfo'])->name('get.page');

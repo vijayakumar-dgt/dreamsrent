@@ -33,7 +33,7 @@
                             <h6 class="fw-bold mb-3">{{ __('admin.general_settings.signatures') }}</h6>
                             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                                 <div class="d-flex align-items-center flex-wrap row-gap-3">
-                                    <div class="top-search me-2 d-none real-label">
+                                    <div class="top-search me-2">
                                         <div class="top-search-group">
                                             <span class="input-icon">
                                                 <i class="ti ti-search"></i>
@@ -41,43 +41,18 @@
                                             <input type="text" class="form-control" id="signatureSearch" placeholder="{{ __('admin.common.search') }}">
                                         </div>
                                     </div>
-                                    <div class="skeleton label-skeleton label-loader me-2"></div>
                                 </div>
                                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                                     @if (hasPermission($permissions, 'app_settings', 'create'))
-                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_signatures" class="btn btn-primary d-none real-label">
+                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_signatures" class="btn btn-primary">
                                         <i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new_signature') }}
                                     </a>
-                                    <div class="skeleton label-skeleton label-loader"></div>
                                     @endif
                                 </div>
                             </div>
                             <!-- Skeleton Loader Table -->
-                            <div class="custom-datatable-filter table-responsive table-loader">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        </tr>
-                                        <tr>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
+                                @include('admin.content-loader')
                             </div>
                             <!-- Real Table (hidden initially) -->
                             <div class="custom-datatable-filter d-none real-table">
@@ -138,7 +113,7 @@
                                 </div>
                                 <!-- Default Checkbox -->
                                 <div class="mb-3">
-                                    <label class="form-check-label form-label mb-3" for="is_default">
+                                    <label class="form-check-label form-label" for="is_default">
                                         <input class="form-check-input form-label" type="checkbox" id="is_default" name="is_default" value="1" checked>
                                         {{ __('admin.general_settings.mark_as_default') }}
                                     </label>
@@ -155,7 +130,7 @@
                         <div class="modal-footer">
                             <div class="d-flex justify-content-center">
                                 <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-                                <button type="submit" class="btn btn-primary">{{ __('admin.common.create_new') }}</button>
+                                <button type="submit" class="btn btn-primary add_btn">{{ __('admin.common.create_new') }}</button>
                             </div>
                         </div>
                     </div>
@@ -179,7 +154,7 @@
                                     <label class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 p-2 flex-shrink-0 text-dark frames">
-                                            <img id="edit_signature_preview" src="backend/assets/img/icons/sign.svg" class="img-fluid rounded object-fit-contain" alt="img">
+                                            <img id="edit_signature_preview" src="" class="img-fluid rounded object-fit-contain" alt="img">
                                         </div>
                                         <div class="profile-upload">
                                             <div class="profile-uploader d-flex align-items-center">
@@ -195,12 +170,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-check mb-3">
-                                    <input type="checkbox" id="edit_signature_default" name="is_default" class="form-check-input" value="1">
-                                    <label for="edit_signature_default" class="form-check-label form-label">{{ __('admin.general_settings.mark_as_default') }}</label>
+                                <div class="mb-3">
+                                    <label class="form-check-label form-label" for="edit_signature_default">
+                                        <input class="form-check-input form-label" type="checkbox" id="edit_signature_default" name="is_default" value="1">
+                                        {{ __('admin.general_settings.mark_as_default') }}
+                                    </label>
+                                    <span id="edit_signature_default_error" class="text-danger error-text"></span>
                                 </div>
                                 <div class="mb-0">
-                                    <label class="form-label">{{ __('admin.general_settings.signatures_name') }} <span class="text-danger">*</span></label>
+                                    <label class="form-label">{{ __('admin.general_settings.signatures_name') }}<span class="text-danger"> *</span></label>
                                     <input type="text" id="edit_signature_name" name="signature_name" class="form-control">
                                     <span id="edit_signature_name_error" class="error-text text-danger"></span>
                                 </div>
@@ -213,7 +191,7 @@
                             </div>
                             <div class="d-flex justify-content-center">
                                 <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-                                <button type="submit" class="btn btn-primary">{{ __('admin.common.delete') }}</button>
+                                <button type="submit" class="btn btn-primary edit_btn">{{ __('admin.common.save_changes') }}</button>
                             </div>
                         </div>
                     </div>

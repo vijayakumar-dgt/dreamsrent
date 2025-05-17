@@ -178,29 +178,6 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    $(".status-filter").on("change", function () {
-        filterTableByStatus();
-    });
-
-    function filterTableByStatus() {
-        let selectedStatuses = $(".status-filter:checked").map(function () {
-            return $(this).val().toLowerCase();
-        }).get();
-
-        $("#earningTable tbody tr").each(function () {
-            let rowStatus = $(this).find("td:last-child span").text().trim().toLowerCase();
-
-            if (selectedStatuses.length === 0 || selectedStatuses.includes(rowStatus)) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    }
-});
-
-$(document).ready(function () {
-    // Initialize Date Range Picker
     $(".bookingrange").daterangepicker({
         autoUpdateInput: false,
         locale: {
@@ -208,19 +185,16 @@ $(document).ready(function () {
         }
     });
 
-    // Update input field when a date is selected
     $(".bookingrange").on("apply.daterangepicker", function (ev, picker) {
         $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
         filterTable();
     });
 
-    // Clear filter when "Clear" is clicked
     $(".bookingrange").on("cancel.daterangepicker", function (ev, picker) {
         $(this).val('');
         filterTable();
     });
 
-    // Apply filter when status or payment type checkboxes are changed
     $(".status-filter, .payment-filter").on("change", function () {
         filterTable();
     });
@@ -244,13 +218,20 @@ $(document).ready(function () {
         }
 
         $("#earningTable tbody tr").each(function () {
-            let rowStatus = $(this).find("td:last-child span").text().trim().toLowerCase();
-            let rowPayment = $(this).find("td:nth-child(3)").text().trim().toLowerCase();
-            let rowDate = moment($(this).find("td:nth-child(4)").text().trim(), "DD MMM YYYY");
+            let rowPayment = $(this).find("td:nth-child(3) p").text().trim().toLowerCase();
+            let rowDateText = $(this).find("td:nth-child(4) p").text().trim();
+            let rowStatus = $(this).find("td:nth-child(5) span").text().trim().toLowerCase();
+
+            let rowDate = moment(rowDateText, "DD/MM/YYYY");
+
+            if (!rowDate.isValid()) {
+                rowDate = moment(rowDateText, "DD MMM YYYY");
+            }
+
 
             let statusMatch = selectedStatuses.length === 0 || selectedStatuses.includes(rowStatus);
             let paymentMatch = selectedPayments.length === 0 || selectedPayments.includes(rowPayment);
-            let dateMatch = (!startDate || !endDate) || rowDate.isBetween(startDate, endDate, null, '[]');
+            let dateMatch = (!startDate || !endDate) || (rowDate.isValid() && rowDate.isBetween(startDate, endDate, null, '[]'));
 
             if (statusMatch && paymentMatch && dateMatch) {
                 $(this).show();
@@ -262,7 +243,6 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    // Print table
     $(".btn-print").on("click", function () {
         let printContent = $("#earningTable").clone();
         let newWindow = window.open("", "", "width=800,height=600");

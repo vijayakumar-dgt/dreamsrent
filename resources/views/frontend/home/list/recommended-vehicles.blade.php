@@ -4,11 +4,11 @@
                 <div class="details-slider-heading">
                     <h3>{{ __('web.home.you_maybe_interested_in') }}</h3>
                 </div>
-                <div class="owl-carousel rental-deal-slider details-car owl-theme">
+                <div class="owl-carousel rental-deal-slider details-car owl-theme text-center">
                     @if(!empty($data) && count($data) > 0)
                         @foreach($data as $vehicle)
                             <!-- owl carousel item -->
-                            <div class="rental-car-item">
+                            <div class="rental-car-item m-auto">
                                 <div class="listing-item pb-0">
                                     <div class="listing-img">
                                         <a href="/vehicle-details/{{ $vehicle['slug'] }}">
@@ -49,35 +49,35 @@
                                                 </div>
                                             </div>
                                             <div class="list-km d-none">
-                                                <span class="km-count"><img src="/frontend/assets/img/icons/map-pin.svg" alt="author">4.5m</span>
+                                                <span class="km-count"><img src="{{ asset('/frontend/assets/img/icons/map-pin.svg') }}" alt="author">4.5m</span>
                                             </div>
                                         </div>
                                         <div class="listing-details-group">
                                             <ul>
                                                 <li>
-                                                    <span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="Manual"></span>
+                                                    <span><img src="{{ asset('/frontend/assets/img/icons/car-parts-01.svg') }}" alt="Manual"></span>
                                                     <p>{{ $vehicle['transmission'] ?? "-" }}</p>
                                                 </li>
                                                 <li>
-                                                    <span><img src="/frontend/assets/img/icons/car-parts-02.svg" alt="18 KM"></span>
+                                                    <span><img src="{{ asset('/frontend/assets/img/icons/car-parts-02.svg') }}" alt="18 KM"></span>
                                                     <p>{{ round($vehicle['mileage']) }} KM</p>
                                                 </li>
                                                 <li>
-                                                    <span><img src="/frontend/assets/img/icons/car-parts-03.svg" alt="Diesel"></span>
+                                                    <span><img src="{{ asset('/frontend/assets/img/icons/car-parts-03.svg') }}" alt="Diesel"></span>
                                                     <p>{{ $vehicle['fuel_type'] }}</p>
                                                 </li>
                                             </ul>
                                             <ul>
                                                 <li>
-                                                    <span><img src="/frontend/assets/img/icons/door-icon.svg" alt="Power"></span>
+                                                    <span><img src="{{ asset('/frontend/assets/img/icons/door-icon.svg') }}" alt="Power"></span>
                                                     <p>{{ $vehicle['num_airbags'] ? $vehicle['num_airbags'] : "" }}</p>
                                                 </li>
                                                 <li>
-                                                    <span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="2018"></span>
+                                                    <span><img src="{{ asset('/frontend/assets/img/icons/car-parts-05.svg') }}" alt="2018"></span>
                                                     <p>{{ $vehicle['year'] }}</p>
                                                 </li>
                                                 <li>
-                                                    <span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="Persons"></span>
+                                                    <span><img src="{{ asset('/frontend/assets/img/icons/car-parts-06.svg') }}" alt="Persons"></span>
                                                     <p>{{ $vehicle['passenger_capacity'] }} {{ __('web.user.persons') }}</p>
                                                 </li>
                                             </ul>

@@ -35,8 +35,7 @@
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap gap-2">
                     <!-- Sort Dropdown -->
-                    <div class="skeleton label-skeleton label-loader"></div>
-                    <div class="dropdown d-none real-label">
+                    <div class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                             <i class="ti ti-filter me-1"></i> {{ __('admin.general_settings.sort_by') }} : {{ __('admin.general_settings.latest') }}
                         </a>
@@ -49,15 +48,13 @@
                         </ul>
                     </div>
                     <!-- Filter Collapse -->
-                    <div class="skeleton label-skeleton label-loader"></div>
-                    <div class="dropdown d-none real-label">
+                    <div class="dropdown">
                         <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
-                            <i class="ti ti-filter me-1"></i> {{ __('admin.general_settings.filter') }}<span class="badge badge-xs rounded-pill bg-danger ms-2">0</span>
+                            <i class="ti ti-filter me-1"></i> {{ __('admin.general_settings.filter') }}
                         </a>
                     </div>
                     <!-- Language Select -->
-                    <div class="skeleton label-skeleton label-loader"></div>
-                    <div class="d-none real-label">
+                    <div class="">
                         <select class="form-select" id="language_id" name="language_id">
                             @foreach($languages as $language)
                                 <option value="{{ $language->language_id }}">
@@ -68,7 +65,7 @@
                     </div>
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
-                    <div class="top-search me-2 d-none real-label">
+                    <div class="top-search me-2">
                         <div class="top-search-group">
                             <span class="input-icon">
                                 <i class="ti ti-search"></i>
@@ -76,7 +73,6 @@
                             <input type="text" class="form-control" placeholder="{{ __('admin.common.search') }}">
                         </div>
                     </div>
-                    <div class="skeleton label-skeleton label-loader"></div>
                 </div>
             </div>
             <!-- /Table Header -->
@@ -97,35 +93,12 @@
                 </div>
             </div>
             <!-- Skeleton Loader Table -->
-            <div class="custom-datatable-filter table-responsive table-loader">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                            <th><div class="skeleton th-skeleton th-loader"></div></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                        </tr>
-                        <tr>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                            <td><div class="skeleton data-skeleton data-loader"></div></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
+                @include('admin.content-loader')
             </div>
             <!-- Real Table (hidden initially) -->
-            <div class="custom-datatable-filter d-none real-table">
-                <table id="faqTable" class="table datatable">
+            <div class="custom-datatable-filter table-responsive d-none real-table">
+                <table id="faqTable" class="table">
                     <thead class="thead-light">
                         <tr>
                             <th>{{ strtoupper(__('admin.general_settings.question')) }}</th>

@@ -61,131 +61,133 @@ $(".clearFilter").on("click", function () {
 });
 
 function initTable() {
-    $(".table-loader").show();
-    $(".input-loader").show();
-    $(".real-table, .real-data").addClass("d-none");
-    $.ajax({
-        url: "/admin/payments-info",
-        type: "POST",
-        data: {
-            search: currentSearch,
-            sortby: currentSortby,
-            payment_status: selectedStatuses,
-            payment_type: selectedPaymentTypes,
+    $("#paymentInfoData").DataTable({
+        processing: false,
+        serverSide: true,
+        destroy: true,
+        ajax: {
+            url: "/admin/payments-info",
+            type: "POST",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            data: function (d) {
+                d.search = currentSearch;
+                d.sortby = currentSortby;
+                d.payment_status = selectedStatuses;
+                d.payment_type = selectedPaymentTypes;
+            },
+            error: function (error) {
+                if (error.responseJSON?.code === 500) {
+                    showToast('error', error.responseJSON.message);
+                } else {
+                    showToast('error', _l('admin.common.default_retrieve_error'));
+                }
+            },
+            beforeSend: function () {
+                $(".table-loader").show();
+                $(".real-table, .table-footer").addClass("d-none");
+            },
+            complete: function () {
+                $(".table-loader").show();
+                $(".input-loader").show();
+                $(".real-table, .real-data").addClass("d-none");
+                $(".table-loader, .input-loader, .label-loader").hide();
+                $(".real-table, .real-label, .real-input").removeClass("d-none");
+
+                if ($("#paymentInfoData").DataTable().rows().count() === 0) {
+                    $(".table-footer").addClass("d-none");
+                } else {
+                    $(".table-footer").removeClass("d-none");
+                }
+            },
         },
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        columns: [
+            { data: "id" },
+            { data: "name",
+                render: function (data, type, row) {
+                    return `
+                        <div class="d-flex align-items-center">
+                            <a href="#" class="avatar me-2 flex-shrink-0">
+                                <img src="${row.profile_image}" class="rounded-circle" alt="">
+                            </a>
+                            <h6><a href="#" class="fs-14 fw-semibold">${row.name}</a></h6>
+                        </div>`;
+                }                
+            },
+            { 
+                data: "final_price",
+                render: function (data, type, row) {
+                    return (row.currency_symbol ?? '$') + row.amount;
+                }
+            },
+            { data: "payment_type" },
+            { data: "created_at" },
+            { 
+                data: "payment_status",
+                render: function (data) {
+                    let badgeClass, label;
+                    switch (data) {
+                        case 1:
+                            badgeClass = "badge-info-transparent";
+                            label = _l("admin.finance_accounts.open");
+                            break;
+                        case 2:
+                            badgeClass = "badge-success-transparent";
+                            label = _l("admin.finance_accounts.completed");
+                            break;
+                        case 3:
+                            badgeClass = "badge-warning-transparent";
+                            label = _l("admin.finance_accounts.pending");
+                            break;
+                        default:
+                            badgeClass = "badge-danger-transparent";
+                            label = _l("admin.finance_accounts.closed");
+                    }
+                    return `<span class="badge ${badgeClass} d-inline-flex align-items-center badge-sm">
+                                <i class="ti ti-point-filled me-1"></i>${label}
+                            </span>`;
+                }
+            }
+        ],
+        order: [[1, "desc"]],
+        ordering: false,
+        searching: false,
+        pageLength: 10,
+        lengthChange: false,
+        responsive: false,
+        autoWidth: false,
+        language: {
+            emptyTable: _l("admin.common.empty_table"),
+            info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
+            infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
+            infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
+            lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
+            search: _l("admin.common.search") + ":",
+            zeroRecords: _l("admin.common.no_matching_records"),
+            paginate: {
+                first: _l("admin.common.first"),
+                last: _l("admin.common.last"),
+                next: _l("admin.common.next"),
+                previous: _l("admin.common.previous"),
+            },
         },
-        success: function (response) {
-            let tableBody = "";
-            if ($.fn.DataTable.isDataTable("#paymentInfoData")) {
-                $("#paymentInfoData").DataTable().destroy();
-            }
+        drawCallback: function () {
+            $(".dataTables_info").addClass("d-none");
+            $(".dataTables_wrapper .dataTables_paginate").addClass("d-none");
 
-            if (response.code === 200 && response.data.length > 0) {
-                let data = response.data;
+            var tableWrapper = $(this).closest(".dataTables_wrapper");
+            var info = tableWrapper.find(".dataTables_info");
+            var pagination = tableWrapper.find(".dataTables_paginate");
 
-                $.each(data, function (index, value) {
-                    tableBody += `<tr>
-                            <td>${value.id}</td>
-                            <td>
-                            <div class="d-flex align-items-center">
-                                <a href="customer-details.html" class="avatar me-2 flex-shrink-0">
-                                    <img src="/backend/assets/img/profiles/avatar-20.jpg" class="rounded-circle" alt="">
-                                </a>
-                                <h6><a href="customer-details.html" class="fs-14 fw-semibold">${
-                                    value.name
-                                }</a></h6>
-                            </div>
-                            </td>
-                            <td>${response.currency_symbol ?? '$'}${value.amount}</td>
-                            <td>${value.payment_type}</td>
-                            <td>${value.created_at}</td>
-                            <td>
-    <span class="badge
-        ${
-            value.payment_status == 1
-                ? "badge-info-transparent"
-                : value.payment_status == 2
-                ? "badge-success-transparent"
-                : value.payment_status == 3
-                ? "badge-warning-transparent"
-                : "badge-danger-transparent"
-        }
-        d-inline-flex align-items-center badge-sm">
-        <i class="ti ti-point-filled me-1"></i>
-        ${
-            value.payment_status == 1
-                ? `${_l("admin.finance_accounts.open")}`
-                : value.payment_status == 2
-                ? `${_l("admin.finance_accounts.completed")}`
-                : value.payment_status == 3
-                ? `${_l("admin.finance_accounts.pending")}`
-                : `${_l("admin.finance_accounts.closed")}`
-        }
-    </span>
-</td>
-                        </tr>`;
-                });
-            } else {
-                tableBody += `
-                        <tr>
-                            <td colspan="8" class="text-center">${_l("admin.common.empty_table")}</td></td>
-                        </tr>`;
-                $(".table-footer").empty();
-            }
-
-            $("#paymentInfoData tbody").html(tableBody);
-            if (response.data.length > 0) {
-                $("#paymentInfoData").DataTable({
-                    ordering: true,
-                    searching: false,
-                    pageLength: 10,
-                    lengthChange: false,
-                    "drawCallback": function () {
-                        $(".dataTables_info").addClass('d-none');
-                        $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
-
-                        var tableWrapper = $(this).closest('.dataTables_wrapper');
-                        var info = tableWrapper.find('.dataTables_info');
-                        var pagination = tableWrapper.find('.dataTables_paginate');
-
-                        $('.table-footer').empty()
-                            .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
-                                .append($('<div class="datatable-info"></div>').append(info.clone(true)))
-                                .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
-                            );
-                        $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
-                    },
-                    language: {
-                        emptyTable: _l("admin.common.empty_table"),
-                        info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
-                        infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
-                        infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
-                        lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
-                        search: _l("admin.common.search") + ":",
-                        zeroRecords: _l("admin.common.no_matching_records"),
-                        paginate: {
-                            first: _l("admin.common.first"),
-                            last: _l("admin.common.last"),
-                            next: _l("admin.common.next"),
-                            previous: _l("admin.common.previous"),
-                        },
-                    },
-                });
-            }
-        },
-        error: function (error) {
-            if (error.responseJSON.code === 500) {
-                showToast('error', error.responseJSON.message);
-            } else {
-                showToast('error', _l('admin.common.default_retrieve_error'));
-            }
-        },
-        complete: function () {
-            $(".table-loader").hide();
-            $(".label-loader, .input-loader").hide();
-            $(".real-label, .real-table, .real-data").removeClass("d-none");
+            $(".table-footer")
+                .empty()
+                .append(
+                    $('<div class="d-flex justify-content-between align-items-center w-100"></div>')
+                        .append($('<div class="datatable-info"></div>').append(info.clone(true)))
+                        .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
+                );
+            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
         },
     });
 }

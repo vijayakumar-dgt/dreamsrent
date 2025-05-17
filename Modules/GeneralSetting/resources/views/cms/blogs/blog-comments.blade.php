@@ -56,40 +56,14 @@
                             <input type="text" class="form-control" id="tableSearch" placeholder="{{__('admin.blog.search')}}">
                         </div>
                     </div>
-                    <div class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle coloumn btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                            <i class="ti ti-layout-board me-1"></i> {{__('admin.blog.columns')}}
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-lg p-2">
-                            <ul>
-                                <li>
-                                    <div class="dropdown-item d-flex align-items-center justify-content-between rounded-1">
-                                        <span class="d-inline-flex align-items-center"><i class="ti ti-grip-vertical me-1"></i>{{__('admin.blog.REVIEW')}}</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="dropdown-item d-flex align-items-center justify-content-between rounded-1">
-                                        <span><i class="ti ti-grip-vertical me-1"></i>{{__('admin.blog.CREATED_DATE')}} </span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="dropdown-item d-flex align-items-center justify-content-between rounded-1">
-                                        <span><i class="ti ti-grip-vertical me-1"></i>{{__('admin.blog.BLOG')}}</span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="dropdown-item d-flex align-items-center justify-content-between rounded-1">
-                                        <span><i class="ti ti-grip-vertical me-1"></i>{{__('admin.blog.CUSTOMER')}}</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
             </div>
             <!-- /Table Header -->
+            <div class="custom-datatable-filter table-responsive position-relative vh-10 table-loader">
+                @include('admin.content-loader')
+            </div>
             <!-- Custom Data Table -->
-            <div class="custom-datatable-filter table-responsive">
+            <div class="custom-datatable-filter table-responsive d-none real-table">
                 <table class="table custom-blog-table" id="blogCommentTable">
                     <thead class="thead-light">
                         <tr>
@@ -108,7 +82,7 @@
 
                             </td>
                             <td>
-                                <p class="text-gray-9">{{ \Carbon\Carbon::parse($comment->comment_date)->format('d M Y') }}</p>
+                                <p class="text-gray-9">{{ formatDateTime($comment->created_at, false) }}</p>
 
                             </td>
                             <td>
@@ -123,17 +97,11 @@
                             </td>
                         </tr>
                         @endforeach
-                        @elseif(count($comments) == 0)
-                        <tr>
-                            <td></td>
-                            <td colspan="4" class="text-center">{{ __('admin.blog.no_data_found') }}</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
                         @endif
                     </tbody>
                 </table>
             </div>
+            <div class="table-footer"></div>
         </div>
         @include('admin.partials.footer')
     </div>

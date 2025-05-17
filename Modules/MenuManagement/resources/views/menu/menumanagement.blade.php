@@ -18,10 +18,8 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-md-3">
-                            <div class="skeleton label-skeleton label-loader"></div>
-                            <label class="form-label fw-normal d-none real-label">{{__('admin.cms.select_menu_you_want_to_edit')}}</label>
-                            <div class="skeleton input-skeleton input-loader"></div>
-                            <select class="select d-none real-label" id="menu_name" name="menu_name">
+                            <label class="form-label fw-normal">{{__('admin.cms.select_menu_you_want_to_edit')}}</label>
+                            <select class="select" id="menu_name" name="menu_name">
                                 @foreach($menus as $menu)
                                     <option value="{{ $menu->id }}">{{ $menu->name }}</option>
                                 @endforeach
@@ -43,27 +41,21 @@
                                     </div>
                                 </div>
                                 <!-- Skeleton for header -->
-                                <div class="card-header skeleton label-loader"></div>
                                 <form id="menuManagement">
                                     <div class="card-body">
                                         <div class="edit-menu-header">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <h5 class="mb-2 d-none real-label">{{__('admin.cms.menu_structure')}}</h5>
-                                            <div class="skeleton text-skeleton label-loader"></div>
-                                            <p class="text-gray-9 d-none real-label">{{__('admin.cms.menu_structure_description')}}</p>
+                                            <h5 class="mb-2">{{__('admin.cms.menu_structure')}}</h5>
+                                            <p class="text-gray-9">{{__('admin.cms.menu_structure_description')}}</p>
                                         </div>
                                         <div class="edit-menu-list">
-                                            <div class="skeleton list-skeleton input-loader"></div>
-                                            <ol class="list-group sortable-list list-group-numbered d-none real-label" id="simple-list">
+                                            <ol class="list-group sortable-list list-group-numbered" id="simple-list">
                                             </ol>
                                         </div>
                                     </div>
                                     <div class="card-footer">
                                         <div class="d-flex align-items-center justify-content-start">
-                                            <div class="skeleton button-skeleton label-loader me-2"></div>
-                                            <a href="javascript:void(0);" class="btn btn-light me-2 d-none real-label">{{__('admin.common.cancel')}}</a>
-                                            <div class="skeleton button-skeleton label-loader"></div>
-                                            <button type="submit" class="btn btn-primary d-none real-label">{{__('admin.common.save_changes')}}</button>
+                                            <a href="{{ route('admin.menu') }}" class="btn btn-light me-2">{{__('admin.common.cancel')}}</a>
+                                            <button type="submit" class="btn btn-primary">{{__('admin.common.save_changes')}}</button>
                                         </div>
                                     </div>
                                 </form>
@@ -81,8 +73,7 @@
                                         </h2>
                                         <div id="collapserightone" class="accordion-collapse collapse show" data-bs-parent="#accordionright">
                                             <div class="accordion-body p-0">
-                                                <div class="skeleton input-skeleton input-loader"></div>
-                                                <ul id="page-list" class="d-none real-label">
+                                                <ul id="page-list" class="">
                                                     @foreach($pages as $page)
                                                         <li>
                                                             <label class="dropdown-item d-flex align-items-center rounded-1">
@@ -92,8 +83,7 @@
                                                         </li>
                                                     @endforeach
                                                 </ul>
-                                                <div class="skeleton text-skeleton label-loader"></div>
-                                                <div class="menu-rightfooter border border-top d-none real-label">
+                                                <div class="menu-rightfooter border border-top">
                                                     <div class="d-flex align-items-center justify-content-between">
                                                         <label class="dropdown-item d-flex align-items-center rounded-1">
                                                             <input id="select-all" class="form-check-input m-0 me-2" type="checkbox">
@@ -117,21 +107,16 @@
                                         <div id="collapserighttwo" class="accordion-collapse collapse show" data-bs-parent="#accordionright2">
                                             <div class="accordion-body">
                                                 <div class="mb-3">
-                                                    <div class="skeleton label-skeleton label-loader"></div>
-                                                    <label for="customUrl" class="form-label d-none real-label">{{__('admin.cms.url')}} <span class="text-danger">*</span></label>
-                                                    <div class="skeleton input-skeleton input-loader"></div>
-                                                    <input type="text" id="customUrl" class="form-control d-none real-label" value="http://">
+                                                    <label for="customUrl" class="form-label">{{__('admin.cms.url')}} <span class="text-danger">*</span></label>
+                                                    <input type="text" id="customUrl" class="form-control" value="http://">
                                                 </div>
                                                 <div class="mb-2">
-                                                    <div class="skeleton label-skeleton label-loader"></div>
-                                                    <label for="customLabel" class="form-label d-none real-label">{{__('admin.cms.label')}}</label>
-                                                    <div class="skeleton input-skeleton input-loader"></div>
-                                                    <input type="text" id="customLabel" class="form-control d-none real-label" placeholder="Enter Label">
+                                                    <label for="customLabel" class="form-label">{{__('admin.cms.label')}}</label>
+                                                    <input type="text" id="customLabel" class="form-control" placeholder="Enter Label">
                                                 </div>
                                                 <div class="menu-rightfooter border border-top">
                                                     <div class="d-flex align-items-center justify-content-end">
-                                                        <div class="skeleton button-skeleton label-loader"></div>
-                                                        <a href="javascript:void(0);" class="p-2 add-custom-menu d-none real-label">{{__('admin.cms.add_to_menu')}}</a>
+                                                        <a href="javascript:void(0);" class="p-2 add-custom-menu">{{__('admin.cms.add_to_menu')}}</a>
                                                     </div>
                                                 </div>
                                             </div>

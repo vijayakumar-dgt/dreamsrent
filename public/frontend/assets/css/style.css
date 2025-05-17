@@ -17990,7 +17990,11 @@ iframe {
 }
 
 .detail-product .slider-nav-thumbnails .slick-track .slick-slide.slick-active {
-	width: 25% !important;
+	width: 100% ;
+}
+
+.detail-product .slick-slide.slick-active{
+	border-radius: 10px !important;
 }
 
 .detail-product .slick-slide.slick-cloned {
@@ -18005,7 +18009,7 @@ iframe {
 
 .detail-product .slick-slide img {
 	width: 100%;
-	border-radius: 10px;
+	border-radius: 10px !important;
 }
 
 .detail-bigimg {
@@ -28650,7 +28654,7 @@ input.form-control.rounded-pill:focus {
 .image-sign {
 	position: absolute;
 	width: 100%;
-	height: 100%;
+	height: 100% !important;
 	inset: 0;
 	opacity: 0;
 	z-index: 1;
@@ -28846,4 +28850,8 @@ a#category-filter.active {
 .home-brand-img {
     max-width: 30px;
     max-height: 30px;
+}
+
+.rental-deal-slider .owl-stage , .popular-cartype-slider .owl-stage , .rental-deal-slider .owl-stage{
+	margin: auto;
 }

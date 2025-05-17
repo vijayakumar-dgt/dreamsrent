@@ -29,7 +29,8 @@
                         <div class="card-header">
                             <h5>{{ __('admin.general_settings.system_settings') }}</h5>
                         </div>
-                        <div class="card-body pb-0">
+                        @include('admin.general_settings_loader')
+                        <div class="card-body pb-0 d-none real-card">
                             <div class="sms-gateway">
                                 <h6 class="mb-3">{{ __('admin.general_settings.sms_gateway') }}</h6>
                                 <div class="row">

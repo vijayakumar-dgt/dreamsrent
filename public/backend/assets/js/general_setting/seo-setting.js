@@ -143,12 +143,9 @@
                         settings.forEach(setting => {
                             const element = $('#' + setting.key);
 
-
                             if (setting.key === 'metaImage' && setting.value) {
-                                const imageUrl = `/storage/${setting.value}`;
-                                $('#profile_photo_preview').attr('src', imageUrl).show();
+                                $('#profile_photo_preview').attr('src', setting.value).show();
                             }
-
 
                             else if (setting.key === 'siteDescription') {
                                 $('#siteDescription').val(setting.value);
@@ -189,8 +186,8 @@
                     showToast('error', xhr.responseJSON.message);
                 },
                 complete: function() {
-                    $(".label-loader, .input-loader").hide();
-                    $('.real-label, .real-input').removeClass('d-none');
+                    $(".label-loader, .input-loader, .card-loader").hide();
+                    $('.real-label, .real-input, .real-card').removeClass('d-none');
                 }
             });
         }

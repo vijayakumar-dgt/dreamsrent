@@ -29,33 +29,28 @@
                         @csrf
                         <div class="card profile-setting-section h-100">
                             <div class="card-header">
-                                <div class="skeleton header-skeleton label-loader"></div>
-                                <h5 class="fw-bold d-none real-label">{{ __('admin.general_settings.account_settings') }}</h5>
+                                <h5 class="fw-bold">{{ __('admin.general_settings.account_settings') }}</h5>
                             </div>
-                            <div class="card-body">
-                                <div class="skeleton section-title-skeleton label-loader"></div>
-                                <h6 class="fw-bold mb-3 d-none real-label">{{ __('admin.general_settings.basic_information') }}</h6>
+                            @include('admin.general_settings_loader')
+                            <div class="card-body d-none real-card">
+                                <h6 class="fw-bold mb-3 ">{{ __('admin.general_settings.basic_information') }}</h6>
                                 <div class="row border-bottom mb-3">
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <label class="form-label d-none real-label">{{ __('admin.general_settings.profile_photo') }}</label>
+                                            <label class="form-label">{{ __('admin.general_settings.profile_photo') }}</label>
                                             <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
-                                                <div class="skeleton image-skeleton image-loader"></div>
-                                                <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames d-none real-label">
+                                                <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
                                                     <img id="profile_photo_preview" src="" class="img-fluid" alt="Profile Photo">
                                                 </div>
                                                 <div class="profile-upload">
-                                                    <div class="skeleton button-skeleton label-loader"></div>
-                                                    <div class="profile-uploader d-flex align-items-center d-none real-label">
+                                                    <div class="profile-uploader d-flex align-items-center">
                                                         <div class="drag-upload-btn btn btn-md btn-dark">
                                                             <i class="ti ti-photo-up fs-14"></i>
                                                             {{ __('admin.common.change') }}
                                                             <input type="file" class="form-control image-sign" id="profile_photo" name="profile_photo" accept="image/*" onchange="validateImageSize(this, event)">
                                                         </div>
                                                     </div>
-                                                    <div class="skeleton text-skeleton label-loader"></div>
-                                                    <div class="mt-2 d-none real-label">
+                                                    <div class="mt-2">
                                                         <p class="fs-14">{{ __('admin.common.recommended_size_is') }}500px x 500px</p>
                                                     </div>
                                                 </div>
@@ -66,37 +61,29 @@
                                     <input type="hidden" class="form-control" id="id" name="id" value="1">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <label class="form-label d-none real-label">{{ __('admin.common.first_name') }}<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control d-none real-label" id="first_name" name="first_name" maxlength="30">
-                                            <div class="skeleton input-skeleton input-loader"></div>
+                                            <label class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger ms-1">*</span></label>
+                                            <input type="text" class="form-control" id="first_name" name="first_name" maxlength="30">
                                             <span id="first_name_error" class="text-danger error-text"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <label class="form-label d-none real-label">{{ __('admin.common.last_name') }}<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control d-none real-label" id="last_name" name="last_name" maxlength="30">
-                                            <div class="skeleton input-skeleton input-loader"></div>
+                                            <label class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger ms-1">*</span></label>
+                                            <input type="text" class="form-control" id="last_name" name="last_name" maxlength="30">
                                             <span id="last_name_error" class="text-danger error-text"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <label class="form-label d-none real-label">{{ __('admin.general_settings.email_address') }}<span class="text-danger ms-1">*</span></label>
-                                            <input type="email" class="form-control d-none real-label" id="email" name="email">
-                                            <div class="skeleton input-skeleton input-loader"></div>
+                                            <label class="form-label">{{ __('admin.general_settings.email_address') }}<span class="text-danger ms-1">*</span></label>
+                                            <input type="email" class="form-control" id="email" name="email">
                                             <span id="email_error" class="text-danger error-text"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <label class="form-label d-none real-label">{{ __('admin.common.phone_number') }}<span class="text-danger ms-1">*</span></label>
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-label">
+                                            <label class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger ms-1">*</span></label>
+                                            <div class="">
                                                 <input type="text" class="form-control admin_phone" id="admin_phone" name="phone" maxlength="15">
                                                 <input type="hidden" id="international_phone_number" name="international_phone_number">
                                             </div>
@@ -104,24 +91,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="skeleton section-title-skeleton label-loader"></div>
-                                <h6 class="fw-bold mb-3 d-none real-label">{{ __('admin.general_settings.address_information') }}</h6>
+                                <h6 class="fw-bold mb-3">{{ __('admin.general_settings.address_information') }}</h6>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <label class="form-label d-none real-label">{{ __('admin.general_settings.address_line') }}</label>
-                                            <input type="text" class="form-control d-none real-label" id="address_line" name="address_line" maxlength="50">
-                                            <div class="skeleton input-skeleton input-loader"></div>
+                                            <label class="form-label">{{ __('admin.general_settings.address_line') }}</label>
+                                            <input type="text" class="form-control" id="address_line" name="address_line" maxlength="50">
                                             <span id="address_line_error" class="text-danger error-text"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <label class="form-label d-none real-label">{{ __('admin.common.country') }}<span class="text-danger">*</span></label>
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-label">
+                                            <label class="form-label">{{ __('admin.common.country') }}<span class="text-danger">*</span></label>
+                                            <div class="">
                                                 <select name="country" class="form-control select2" id="country"></select>
                                             </div>
                                             <span id="country_error" class="text-danger error-text"></span>
@@ -129,10 +111,8 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <label class="form-label d-none real-label">{{ __('admin.common.state') }} <span class="text-danger">*</span></label>
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-label">
+                                            <label class="form-label">{{ __('admin.common.state') }} <span class="text-danger">*</span></label>
+                                            <div class="">
                                                 <select name="state" class="form-control select2" id="state"></select>
                                             </div>
                                             <span id="state_error" class="text-danger error-text"></span>
@@ -140,10 +120,8 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div>
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <label class="form-label d-none real-label">{{ __('admin.common.city') }} <span class="text-danger">*</span></label>
-                                            <div class="skeleton input-skeleton input-loader"></div>
-                                            <div class="d-none real-label">
+                                            <label class="form-label">{{ __('admin.common.city') }} <span class="text-danger">*</span></label>
+                                            <div class="">
                                                 <select name="city" id="city" class="form-control select2"></select>
                                             </div>
                                             <span id="city_error" class="text-danger error-text"></span>
@@ -151,22 +129,18 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div>
-                                            <div class="skeleton label-skeleton label-loader"></div>
-                                            <label class="form-label d-none real-label">{{ __('admin.common.postal_code') }}</label>
-                                            <input type="text" class="form-control d-none real-label" id="postal_code" name="postal_code" maxlength="6">
-                                            <div class="skeleton input-skeleton input-loader"></div>
+                                            <label class="form-label">{{ __('admin.common.postal_code') }}</label>
+                                            <input type="text" class="form-control" id="postal_code" name="postal_code" maxlength="6">
                                             <span id="postal_code_error" class="text-danger error-text"></span>
                                         </div>
                                     </div>
                                 </div>
                                 
                             </div>
-                            <div class="card-footer">
+                            <div class="card-footer d-none real-card">
                                 <div class="d-flex justify-content-end">
-                                    <div class="skeleton button-skeleton label-loader me-3"></div>
-                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3 d-none real-label">{{ __('admin.general_settings.cancel') }}</a>
-                                    <div class="skeleton button-skeleton label-loader"></div>
-                                    <button type="submit" class="btn btn-primary d-none real-label">{{ __('admin.general_settings.save_changes') }}</button>
+                                    <a href="{{ route('dashboard') }}" class="btn btn-light me-3">{{ __('admin.general_settings.cancel') }}</a>
+                                    <button type="submit" class="btn btn-primary">{{ __('admin.general_settings.save_changes') }}</button>
                                 </div>
                             </div>
                         </div>

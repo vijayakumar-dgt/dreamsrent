@@ -2,149 +2,149 @@
     "use strict";
     await loadTranslationFile('admin', 'general_settings,common');
 
-document.addEventListener('DOMContentLoaded', () => {
-    const localStorageSwitch = document.getElementById('local_storage');
-    const awsStorageSwitch = document.getElementById('aws_storage');
+    document.addEventListener('DOMContentLoaded', () => {
+        const localStorageSwitch = document.getElementById('local_storage');
+        const awsStorageSwitch = document.getElementById('aws_storage');
 
-    localStorageSwitch.addEventListener('change', (e) => {
-        updateStorageSettings('local_storage', e.target.checked);
-    });
+        localStorageSwitch.addEventListener('change', (e) => {
+            updateStorageSettings('local_storage', e.target.checked);
+        });
 
-    awsStorageSwitch.addEventListener('change', (e) => {
-        updateStorageSettings('aws_storage', e.target.checked);
-    });
+        awsStorageSwitch.addEventListener('change', (e) => {
+            updateStorageSettings('aws_storage', e.target.checked);
+        });
 
-    function updateStorageSettings(type, isEnabled) {
-        const payload = {
-            storage_type: type,
-            status: isEnabled ? 1 : 0
-        };
+        function updateStorageSettings(type, isEnabled) {
+            const payload = {
+                storage_type: type,
+                status: isEnabled ? 1 : 0
+            };
 
-        fetch('/admin/settings/storageupdate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify(payload)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-
-                loadStorageSettings();
-
-            } else {
-                console.error(data.message || _l('admin.general_setting.fail_storage_setting'));
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
-});
-$(document).ready(function() {
-    $("#awsSettingForm").validate({
-        rules: {
-            aws_access_key: {
-                required: true,
-                minlength: 10
-            },
-            aws_secret_key: {
-                required: true,
-                minlength: 10
-            },
-            aws_bucket_name: {
-                required: true
-            },
-            aws_region: {
-                required: true
-            },
-            aws_base_url: {
-                required: true,
-                url: true
-            }
-        },
-        messages: {
-            aws_access_key: {
-                required: _l('admin.general_settings.enter_aws_access_key'),
-                minlength: _l('admin.general_settings.enter_aws_access_key_characters'),
-            },
-            aws_secret_key: {
-                required:_l('admin.general_settings.enter_aws_secret_key'),
-                minlength: _l('admin.general_settings.enter_aws_access_key_characters'),
-            },
-            aws_bucket_name: {
-                required: _l('admin.general_settings.enter_aws_bucket_name'),
-            },
-            aws_region: {
-                required: _l('admin.general_settings.enter_aws_region'),
-            },
-            aws_base_url: {
-                required: _l('admin.general_settings.enter_aws_base_url'),
-                url: _l('admin.general_settings.enter_valid_url'),
-            }
-        },
-        errorPlacement: function(error, element) {
-            var errorId = element.attr("id") + "_error";
-            $("#" + errorId).text(error.text());
-        },
-        highlight: function(element) {
-            $(element).addClass("is-invalid").removeClass("is-valid");
-        },
-        unhighlight: function(element) {
-            $(element).removeClass("is-invalid").addClass("is-valid");
-            var errorId = element.id + "_error";
-            $("#" + errorId).text("");
-        },
-        onkeyup: function(element) {
-            $(element).valid();
-        },
-        onchange: function(element) {
-            $(element).valid();
-        },
-        submitHandler: function(form) {
-            let awsData = new FormData(form);
-            $(".btn-primary").text(_l('admin.general_settings.please_wait'),).prop('disabled', true);
-
-            $.ajax({
-                type: "POST",
-                url: "/admin/settings/aws/store",
-                data: awsData,
-                processData: false,
-                contentType: false,
+            fetch('/admin/settings/storageupdate', {
+                method: 'POST',
                 headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                success: function(resp) {
-                    if (resp.code === 200) {
-                        loadStorageSettings();
-                        showToast('success', resp.message);
-                        $("#aws_settings").modal('hide'); // Close modal if needed
-                        $(".btn-primary").text(_l('admin.common.submit')).prop('disabled', false);
-                    }
-                },
-                error: function(error) {
-                    $(".error-text").text("");
-                    $(".form-control").removeClass("is-invalid is-valid");
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
 
-                    if (error.responseJSON.code === 422) {
-                        $.each(error.responseJSON.errors, function(key, val) {
-                            $("#" + key).addClass("is-invalid");
-                            $("#" + key + "_error").text(val[0]);
-                        });
-                    } else {
-                       showToast('error', error.responseJSON.message);
-                    }
+                    loadStorageSettings();
 
-                    $(".btn-primary").text(_l('admin.common.submit')).prop('disabled', false);
+                } else {
+                    console.error(data.message || _l('admin.general_setting.fail_storage_setting'));
                 }
-            });
+            })
+            .catch(error => console.error('Error:', error));
         }
     });
-});
 
+    $(document).ready(function() {
+        $("#awsSettingForm").validate({
+            rules: {
+                aws_access_key: {
+                    required: true,
+                    minlength: 10
+                },
+                aws_secret_key: {
+                    required: true,
+                    minlength: 10
+                },
+                aws_bucket_name: {
+                    required: true
+                },
+                aws_region: {
+                    required: true
+                },
+                aws_base_url: {
+                    required: true,
+                    url: true
+                }
+            },
+            messages: {
+                aws_access_key: {
+                    required: _l('admin.general_settings.enter_aws_access_key'),
+                    minlength: _l('admin.general_settings.enter_aws_access_key_characters'),
+                },
+                aws_secret_key: {
+                    required:_l('admin.general_settings.enter_aws_secret_key'),
+                    minlength: _l('admin.general_settings.enter_aws_access_key_characters'),
+                },
+                aws_bucket_name: {
+                    required: _l('admin.general_settings.enter_aws_bucket_name'),
+                },
+                aws_region: {
+                    required: _l('admin.general_settings.enter_aws_region'),
+                },
+                aws_base_url: {
+                    required: _l('admin.general_settings.enter_aws_base_url'),
+                    url: _l('admin.general_settings.enter_valid_url'),
+                }
+            },
+            errorPlacement: function(error, element) {
+                var errorId = element.attr("id") + "_error";
+                $("#" + errorId).text(error.text());
+            },
+            highlight: function(element) {
+                $(element).addClass("is-invalid").removeClass("is-valid");
+            },
+            unhighlight: function(element) {
+                $(element).removeClass("is-invalid").addClass("is-valid");
+                var errorId = element.id + "_error";
+                $("#" + errorId).text("");
+            },
+            onkeyup: function(element) {
+                $(element).valid();
+            },
+            onchange: function(element) {
+                $(element).valid();
+            },
+            submitHandler: function(form) {
+                let awsData = new FormData(form);
+                $(".btn-primary").text(_l('admin.general_settings.please_wait'),).prop('disabled', true);
 
-loadStorageSettings();
+                $.ajax({
+                    type: "POST",
+                    url: "/admin/settings/aws/store",
+                    data: awsData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(resp) {
+                        if (resp.code === 200) {
+                            loadStorageSettings();
+                            showToast('success', resp.message);
+                            $("#aws_settings").modal('hide'); // Close modal if needed
+                            $(".btn-primary").text(_l('admin.common.submit')).prop('disabled', false);
+                        }
+                    },
+                    error: function(error) {
+                        $(".error-text").text("");
+                        $(".form-control").removeClass("is-invalid is-valid");
+
+                        if (error.responseJSON.code === 422) {
+                            $.each(error.responseJSON.errors, function(key, val) {
+                                $("#" + key).addClass("is-invalid");
+                                $("#" + key + "_error").text(val[0]);
+                            });
+                        } else {
+                        showToast('error', error.responseJSON.message);
+                        }
+
+                        $(".btn-primary").text(_l('admin.common.submit')).prop('disabled', false);
+                    }
+                });
+            }
+        });
+    });
+
+    loadStorageSettings();
 
     function loadStorageSettings() {
         $.ajax({
@@ -194,8 +194,8 @@ loadStorageSettings();
             error: function(xhr) {
                 showToast('error', xhr.responseJSON.message);
             }, complete: function() {
-                $(".label-loader, .input-loader").hide();
-                $('.real-label, .real-input').removeClass('d-none');
+                $(".label-loader, .input-loader, .card-loader").hide();
+                $('.real-label, .real-input, .real-card').removeClass('d-none');
             }
         });
     }

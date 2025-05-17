@@ -26,12 +26,13 @@ const fetchUserBookings = (callback = null) => {
         _token: $('meta[name="csrf-token"]').attr("content")
     },
     beforeSend: () => {
-        $("#booking-loader-table tbody").empty();
-        for (let i = 0; i < 7; i++) {
-            $("#booking-loader-table thead tr").clone().appendTo("#booking-loader-table tbody");    
+        if(callback){
+            $(".calendar-loader").removeClass("d-none");
+            $(".real-calendar").addClass("d-none");
+        }else{
+            $(".table-loader").removeClass("d-none");
+            $(".real-table").addClass("d-none");
         }
-        $(".table-loader").removeClass("d-none");
-        $(".real-table").addClass("d-none");
     },
     success: (response) => {
         if (callback) return callback(response);
@@ -77,9 +78,14 @@ const fetchUserBookings = (callback = null) => {
         $(".booking-headers").trigger("click");
         $("#totalBookingCount").html(response.data.length || 0);
     },
-    complete: () => {
-        $(".table-loader").addClass("d-none");
-        $(".real-table").removeClass("d-none");
+    complete: () => { 
+       if(callback){
+            $(".calendar-loader").addClass("d-none");
+            $(".real-calendar").removeClass("d-none");
+        }else{
+            $(".table-loader").addClass("d-none");
+            $(".real-table").removeClass("d-none");
+        }
     },
     error: console.log
     });
@@ -299,10 +305,11 @@ $(document).on('click', '.view_booking', e => {
         setElementContent(".bk-extra-service", data.extra_services);
 
         $modal.find(".modal_footer").html(renderButtons(data));
-        setElementContent(".user-name", data.customer?.name);
-        setElementContent(".user-email", data.customer?.email);
-        setElementContent(".user-phone", data.customer?.phone_number);
-        setElementContent(".user-address", data.customer_detail?.address);
+        let _fullname = data.booking_user_info?.first_name + " " + data.booking_user_info?.last_name;
+        setElementContent(".user-name", _fullname);
+        setElementContent(".user-email", data.booking_user_info?.email);
+        setElementContent(".user-phone", data.booking_user_info?.phone_number);
+        setElementContent(".user-address", data.booking_user_info?.address);
         setElementContent(".user-passengers", data.no_of_passengers);
 
         if (data.status == 6) {
