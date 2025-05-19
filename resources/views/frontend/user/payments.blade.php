@@ -99,7 +99,7 @@
                                 <table class="table" id="bookingTable">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th>{{__('web.user.booking_id')}}</th>
+                                            <th class="payment-header">{{__('web.user.booking_id')}}</th>
                                             <th>{{__('web.user.vehicle_name')}}</th>
                                             <th>{{__('web.user.paid_on')}}</th>
                                             <th>{{__('web.common.total')}}</th>
@@ -110,16 +110,6 @@
                                     <tbody>
                                     </tbody>
                                 </table>
-                            </div>
-                            <div class="table-footer">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div id="tablelength"></div>
-                                    </div>
-                                    <div class="col-md-6 text-md-end">
-                                        <div id="tablepage"></div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

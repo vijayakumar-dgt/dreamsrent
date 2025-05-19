@@ -735,6 +735,7 @@ return [
         'maxlength_50' => 'Maxlength 50 characters',
         'last_login_at' => 'Last Login At',
         'device_not_found' => 'Device not found',
+        'add_to_wallet' => 'Add to Wallet',
     ],
     'blog' => [
         'blog_list' => 'Blog List',

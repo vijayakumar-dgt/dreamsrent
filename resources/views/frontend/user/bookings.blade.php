@@ -97,7 +97,7 @@
                                 <div class="col-md-7 text-md-end">
                                     <div class="table-search">
                                         <div id="tablefilter"></div>
-                                        <a href="/vehicles" class="btn btn-add mb-0"><i class="feather-plus-circle"></i>{{__('web.user.add_booking')}}</a>
+                                        <a href={{ route('list') }}><i class="feather-plus-circle"></i>{{__('web.user.add_booking')}}</a>
                                     </div>
                                 </div>
                             </div>

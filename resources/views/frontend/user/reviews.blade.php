@@ -112,16 +112,6 @@
                                 <tbody></tbody>
                             </table>
                         </div>
-                        <div class="table-footer">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div id="tablelength"></div>
-                                </div>
-                                <div class="col-md-6 text-md-end">
-                                    <div id="tablepage"></div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
