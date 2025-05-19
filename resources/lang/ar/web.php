@@ -68,6 +68,7 @@
     'last_name_minlength' => 'يجب أن يحتوي اسم العائلة على 3 أحرف على الأقل.',
     'last_name_maxlength' => 'يجب ألا يزيد اسم العائلة عن 50 حرفًا.',
     'last_name_alphabets' => 'يمكن أن يحتوي اسم العائلة على أحرف فقط.',
+    'email_otp_verification' => 'التحقق من البريد الإلكتروني OTP',
   ),
   'home' => 
   array (

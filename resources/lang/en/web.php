@@ -69,6 +69,7 @@ return [
         'last_name_minlength' => 'Last Name must be at least 3 characters long.',
         'last_name_maxlength' => 'Last Name must be at most 50 characters long.',
         'last_name_alphabets' => 'Last Name can only contain alphabets',
+        'email_otp_verification' => 'Email OTP Verification',
     ],
     'home' => [
         'signin' => 'Sign In',

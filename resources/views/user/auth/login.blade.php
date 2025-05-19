@@ -58,9 +58,9 @@
                             </div>
                             <div class="input-block d-flex justify-content-between">
                                 <a class="forgot-link" href="{{ route('user-forgot-password') }}">{{ __('web.auth.forgot_password') }}</a>
-                                <a class="form-check-label text-decoration-underline" id="login_otp" href="javascript:void(0);">
+                               <button type="button" class="form-check-label text-decoration-underline btn btn-link p-0" id="login_otp">
                                     {{ __('web.auth.sign_in_with_otp') }}
-                                </a>
+                               </button>
                             </div>
                             <div class="input-block m-0">
                                 <label class="custom_check d-inline-flex">
@@ -100,14 +100,15 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center justify-content-end pb-0 border-0">
-                        <a href="javascript:void(0);" data-bs-dismiss="modal" aria-label="Close" id="close-otp-modal">
+                       <button type="button" data-bs-dismiss="modal" aria-label="Close" id="close-otp-modal" class="btn p-0 border-0 bg-transparent">
                             <i class="ti ti-circle-x-filled fs-20"></i>
-                        </a>
+                       </button>
+
                     </div>
                     <div class="modal-body p-4">
                         <form action="#" class="digit-group">
                             <div class="text-center mb-3">
-                                <h3 class="mb-2">{{ __('Email OTP Verification') }}</h3>
+                                 <h3 class="mb-2">{{ __('web.auth.email_otp_verification') }}</h3>
                                 <p id="otp-email-message" class="fs-14">{{ __('web.auth.otp_sent_to_email') }}</p>
                             </div>
                             <div class="text-center otp-input">
@@ -121,7 +122,12 @@
                                         </p>
                                     </div>
                                     <div class="mb-3 d-flex justify-content-center">
-                                        <p>{{ __('web.auth.didnt_get_otp') }} <a href="javascript:void(0);" class="resendEmailOtp text-primary">{{ __('web.auth.resend_otp') }}</a></p>
+                                        <p>
+                                            {{ __('web.auth.didnt_get_otp') }}
+                                            <button type="button" class="resendEmailOtp text-primary btn btn-link p-0 align-baseline">
+                                                {{ __('web.auth.resend_otp') }}
+                                            </button>
+                                        </p>
                                     </div>
                                     <div>
                                         <button type="button" id="verify-email-otp-btn" class="verify-email-otp-btn btn btn-lg btn-primary w-100">
