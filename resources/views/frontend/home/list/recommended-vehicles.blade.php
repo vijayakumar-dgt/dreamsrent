@@ -9,7 +9,7 @@
                         @foreach($data as $vehicle)
                             <!-- owl carousel item -->
                             <div class="rental-car-item m-auto">
-                                <div class="listing-item pb-0">
+                                <div class="listing-item">
                                     <div class="listing-img">
                                         <a href="/vehicle-details/{{ $vehicle['slug'] }}">
                                             <img src="{{ $vehicle['vehicle_image'] }}" class="img-fluid" alt="Audi">

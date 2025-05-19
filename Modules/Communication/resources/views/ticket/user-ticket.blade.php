@@ -54,7 +54,7 @@
                                         <h5>{{ __('web.user.tickets') }}</h5>
                                     </div>
                                     <div class="col-md-7 d-flex justify-content-end align-items-center">
-                                        <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center me-3" data-bs-toggle="modal" data-bs-target="#add_ticket">
+                                        <a href="javascript:void(0);" class="btn btn-primary btn-sm d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_ticket">
                                             <i class="ti ti-plus me-2"></i>{{ __('web.user.add_new_ticket') }}
                                         </a>
                                     </div>

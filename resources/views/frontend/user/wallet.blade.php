@@ -37,34 +37,36 @@
                     <div class="card wallet-card flex-fill">
                         <div class="card-body">
                             <div class="balance-info">
-                                <div class="balance-grid">
-                                    <div class="balance-content">
-                                        <h6>{{ __('web.user.available_balance') }}</h6>
-                                        <h4 class="available_balance">$0.00</h4>
-                                    </div>
-                                    <div class="refersh-icon d-none">
-                                        <a href="javascript:void(0);">
-                                            <i class="fas fa-arrows-rotate"></i>
-                                        </a>
-                                    </div>
-                                </div>
                                 <div class="balance-list">
                                     <div class="row">
-                                        <div class="col-lg-4 col-md-6 d-flex">
+                                        <div class="col-lg-3 col-md-6">
+                                            <div class="balance-grid mb-0">
+                                                <div class="balance-content">
+                                                    <h6 class="mb-1">{{ __('web.user.available_balance') }}</h6>
+                                                    <h4 class="available_balance">$0.00</h4>
+                                                </div>
+                                                <div class="refersh-icon d-none">
+                                                    <a href="javascript:void(0);">
+                                                        <i class="fas fa-arrows-rotate"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-6 d-flex">
                                             <div class="balance-inner credit-info">
-                                                <h6 class="total_credit">$0.00</h6>
+                                                <h4 class="total_credit mb-1">$0.00</h4>
                                                 <p>{{ __('web.user.total_credit') }}</p>
                                             </div>
                                         </div>
-                                        <div class="col-lg-4 col-md-6 d-flex">
+                                        <div class="col-lg-3 col-md-6 d-flex">
                                             <div class="balance-inner debit-info">
-                                                <h6 class="total_debit">$0.00</h6>
+                                                <h4 class="total_debit mb-1">$0.00</h4>
                                                 <p>{{ __('web.user.total_debit') }}</p>
                                             </div>
                                         </div>
-                                        <div class="col-lg-4 col-md-6 d-flex">
+                                        <div class="col-lg-3 col-md-6 d-flex">
                                             <div class="balance-inner transaction-info">
-                                                <h6 class="available_balance">$0.00</h6>
+                                                <h4 class="available_balance mb-1">$0.00</h4>
                                                 <p>{{ __('web.user.total_transaction') }}</p>
                                             </div>
                                         </div>
@@ -87,11 +89,11 @@
             <!-- Wallet Table -->
             <div class="row">
                 <div class="col-lg-12 d-flex">
-                    <div class="card book-card flex-fill mb-0">
+                    <div class="card mb-0">
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-md-5">
-                                    <h4>{{ __('web.user.wallet_usage_history') }}</h4>
+                                    <h5>{{ __('web.user.wallet_usage_history') }}</h5>
                                 </div>
                                 <div class="col-md-7 text-md-end">
                                     <div class="table-search">

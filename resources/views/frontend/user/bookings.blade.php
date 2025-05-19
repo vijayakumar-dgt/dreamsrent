@@ -54,9 +54,9 @@
                                 <div class="filter-group">
                                     <div class="sort-week sort">
                                         <div class="dropdown dropdown-action">
-                                            <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <span class="datefilter_text">{{__('web.common.filter_by')}}</span> <i class="fas fa-chevron-down"></i>
-                                            </a>
+                                            </button>
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <button type="button" class="dropdown-item datefilter active" data-id="">{{__('web.common.filter_by')}}</button>
                                                 <button type="button" class="dropdown-item datefilter" data-id="this_week">{{__('web.common.this_week')}}</button>
@@ -68,7 +68,7 @@
                                     </div>
                                     <div class="sort-relevance sort" id="sort_filter">
                                         <div class="dropdown dropdown-action">
-                                            <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <span class="sortfilter_text">{{__('web.common.sort_by_asc')}}</span><i class="fas fa-chevron-down"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-end">

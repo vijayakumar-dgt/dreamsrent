@@ -22981,7 +22981,6 @@ iframe {
 	border-radius: 5px;
 	border: 1px solid #dbdbdb;
 	background: #F5F5F5;
-	padding: 12px;
 	min-width: 120px;
 	color: #111;
 	font-size: 14px;
@@ -22998,6 +22997,7 @@ iframe {
 
 .sort .dropdown .dropdown-toggle i {
 	margin-left: 10px;
+	font-size: 12px;
 }
 
 .sort .dropdown .dropdown-toggle::after {
