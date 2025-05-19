@@ -90,14 +90,14 @@
                     <tbody>
                         @foreach($invoices as $invoice)
                         <tr>
-                            <td><a href="#" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
+                            <td><a href="javascript:void(0);" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <a href="#" class="avatar avatar-rounded me-2 flex-shrink-0">
+                                    <a href="javascript:void(0);" class="avatar avatar-rounded me-2 flex-shrink-0">
                                         <img src="{{ uploadedAsset($invoice->profile_image, 'profile') }}" alt="profile image">
                                     </a>
                                     <div>
-                                        <h6 class="fs-14"><a href="#">{{$invoice->full_name}}</a></h6>
+                                        <h6 class="fs-14"><a href="javascript:void(0);">{{$invoice->full_name}}</a></h6>
                                     </div>
                                 </div>
                             </td>
