@@ -216,7 +216,7 @@ class CarTypeController extends Controller
             return [
                 'id' => $cartype->id,
                 'name' => $cartype->name,
-                'icon' => $cartype->icon != "" && file_exists(public_path('storage/' . $cartype->icon)) ? uploadedAsset($cartype->icon) : null,
+                'icon' => uploadedAsset($cartype->icon ?? '', 'default'),
                 'status' => $cartype->status,
             ];
         });
