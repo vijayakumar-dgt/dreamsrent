@@ -14,7 +14,6 @@ use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
-use Modules\GeneralSetting\Models\BlogComment;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\Support\Str;
 
@@ -157,7 +156,7 @@ class BlogsController extends Controller
         /** @var \App\Models\User|null $authId */
         $authId = current_user();
         $languageId = $authId ? $authId->language_id : null;
-        $languages = Language::with('transLang')->get();
+        $languages = Language::with('transLang')->where('deleted_at', NULL)->get();
         $tags = BlogTag::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
         $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
         return view('generalsetting::cms.blogs.add-blog', compact('languages', 'tags', 'categories'));
@@ -202,7 +201,7 @@ class BlogsController extends Controller
         $authId = current_user();
         $languageId = $authId ? $authId->language_id : null;
         $blog = BlogPost::findOrFail($id);
-        $languages = Language::with('transLang')->get();
+        $languages = Language::with('transLang')->where('deleted_at', NULL)->get();
         $tags = BlogTag::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
         $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->where('status', '1')->get();
         return view('generalsetting::cms.blogs.edit-blog', compact('blog', 'languages', 'tags', 'categories'));

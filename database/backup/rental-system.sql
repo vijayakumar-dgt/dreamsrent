@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2025 at 01:47 PM
+-- Generation Time: May 19, 2025 at 12:11 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49569,22 +49569,6 @@ CREATE TABLE `extra_services` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `failed_jobs`
---
-
-CREATE TABLE `failed_jobs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` varchar(255) NOT NULL,
-  `connection` text NOT NULL,
-  `queue` text NOT NULL,
-  `payload` longtext NOT NULL,
-  `exception` longtext NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `faqs`
 --
 
@@ -49879,41 +49863,6 @@ CREATE TABLE `invoice_items` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jobs`
---
-
-CREATE TABLE `jobs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `queue` varchar(255) NOT NULL,
-  `payload` longtext NOT NULL,
-  `attempts` tinyint(3) UNSIGNED NOT NULL,
-  `reserved_at` int(10) UNSIGNED DEFAULT NULL,
-  `available_at` int(10) UNSIGNED NOT NULL,
-  `created_at` int(10) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `job_batches`
---
-
-CREATE TABLE `job_batches` (
-  `id` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `total_jobs` int(11) NOT NULL,
-  `pending_jobs` int(11) NOT NULL,
-  `failed_jobs` int(11) NOT NULL,
-  `failed_job_ids` longtext NOT NULL,
-  `options` mediumtext DEFAULT NULL,
-  `cancelled_at` int(11) DEFAULT NULL,
-  `created_at` int(11) NOT NULL,
-  `finished_at` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `languages`
 --
 
@@ -49935,32 +49884,6 @@ CREATE TABLE `languages` (
 INSERT INTO `languages` (`id`, `language_id`, `rtl`, `default`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (9, 1, 0, 1, 1, '2025-03-14 10:35:10', '2025-04-12 16:05:14', NULL),
 (11, 2, 1, 0, 1, '2025-04-07 16:58:18', '2025-04-12 10:57:09', NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `language_code`
---
-
-CREATE TABLE `language_code` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `code` varchar(255) NOT NULL,
-  `direction` varchar(255) NOT NULL DEFAULT 'ltr',
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `is_default` tinyint(1) NOT NULL DEFAULT 0,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `language_code`
---
-
-INSERT INTO `language_code` (`id`, `name`, `code`, `direction`, `status`, `is_default`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'English', 'en', 'LTR', 1, 1, NULL, '2024-10-24 13:18:39', '2025-01-24 23:01:38'),
-(2, 'Arabic', 'ar', 'RTL', 1, 0, NULL, '2024-10-25 02:38:15', '2025-01-24 23:01:38');
 
 -- --------------------------------------------------------
 
@@ -50411,22 +50334,6 @@ CREATE TABLE `review_messages` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `review_reactions`
---
-
-CREATE TABLE `review_reactions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `review_id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `is_like` tinyint(4) NOT NULL DEFAULT 0,
-  `is_dislike` tinyint(4) NOT NULL DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -55523,18 +55430,6 @@ CREATE TABLE `vehicle_extra_services` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `vehicle_extra_services`
---
-
-INSERT INTO `vehicle_extra_services` (`id`, `vehicle_id`, `extra_service_id`, `value`, `price`, `created_at`, `updated_at`) VALUES
-(12, 2, 1, 'per_day', 5.00, '2025-04-25 10:02:46', '2025-04-25 10:02:46'),
-(14, 3, 1, 'per_day', 4.00, '2025-04-25 11:06:20', '2025-04-25 11:06:20'),
-(16, 5, 1, 'per_day', 500.00, '2025-04-25 11:12:11', '2025-04-25 11:12:11'),
-(17, 6, 1, 'per_day', 4.00, '2025-04-25 11:36:04', '2025-04-25 11:36:04'),
-(18, 4, 1, 'per_day', 180.00, '2025-04-25 11:41:07', '2025-04-25 11:41:07'),
-(19, 1, 1, 'per_day', 20.00, '2025-04-25 12:11:44', '2025-04-25 12:11:44');
-
 -- --------------------------------------------------------
 
 --
@@ -55959,13 +55854,6 @@ ALTER TABLE `extra_services`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `failed_jobs`
---
-ALTER TABLE `failed_jobs`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
-
---
 -- Indexes for table `faqs`
 --
 ALTER TABLE `faqs`
@@ -56022,28 +55910,9 @@ ALTER TABLE `invoice_items`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `jobs`
---
-ALTER TABLE `jobs`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `jobs_queue_index` (`queue`);
-
---
--- Indexes for table `job_batches`
---
-ALTER TABLE `job_batches`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `languages`
 --
 ALTER TABLE `languages`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `language_code`
---
-ALTER TABLE `language_code`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -56152,12 +56021,6 @@ ALTER TABLE `reviews`
 -- Indexes for table `review_messages`
 --
 ALTER TABLE `review_messages`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `review_reactions`
---
-ALTER TABLE `review_reactions`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -56640,12 +56503,6 @@ ALTER TABLE `extra_services`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `failed_jobs`
---
-ALTER TABLE `failed_jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `faqs`
 --
 ALTER TABLE `faqs`
@@ -56700,22 +56557,10 @@ ALTER TABLE `invoice_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `jobs`
---
-ALTER TABLE `jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `languages`
 --
 ALTER TABLE `languages`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- AUTO_INCREMENT for table `language_code`
---
-ALTER TABLE `language_code`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `locations`
@@ -56817,12 +56662,6 @@ ALTER TABLE `reviews`
 -- AUTO_INCREMENT for table `review_messages`
 --
 ALTER TABLE `review_messages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `review_reactions`
---
-ALTER TABLE `review_reactions`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
@@ -56991,7 +56830,7 @@ ALTER TABLE `vehicle_damages`
 -- AUTO_INCREMENT for table `vehicle_extra_services`
 --
 ALTER TABLE `vehicle_extra_services`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `vehicle_faqs`

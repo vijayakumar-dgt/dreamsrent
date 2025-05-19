@@ -155,6 +155,7 @@ class DashboardController extends Controller
         $users = DB::table('users')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->orderBy('users.id', 'desc')
+            ->where('users.deleted_at', NULL)
             ->limit(5)
             ->get()->map(function ($user) {
                 $user->name = !empty($user->first_name) ? ucwords($user->first_name . ' ' . $user->last_name) : ucwords($user->name); 

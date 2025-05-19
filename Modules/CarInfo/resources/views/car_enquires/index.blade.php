@@ -36,14 +36,7 @@
 							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 active-sort" data-value="last_7_days">{{ __('admin.common.last_7_days') }}</a></li>
 							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 active-sort" data-value="last_month">{{ __('admin.common.last_month') }}</a></li>
 						</ul>
-					</div>
-					<!-- Date Range Picker -->
-					<div class="me-2 d-none">
-						<div class="input-icon-start position-relative topdatepicker">
-							<span class="input-icon-addon"><i class="ti ti-calendar"></i></span>
-							<input type="text" class="form-control date-range enquirerange" name="sort_by_date" id="sort_by_date" value="" placeholder="dd/mm/yyyy - dd/mm/yyyy">
-						</div>
-					</div>
+					</div>					
 					<!-- Status Dropdown -->
 					<div class="dropdown">
 						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">

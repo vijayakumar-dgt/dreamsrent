@@ -33,7 +33,8 @@ class Invoice extends Authenticatable
         'updated_at',
         'deleted_at',
         'from_date',
-        'to_date'
+        'to_date',
+        'language_id'
     ];
 
     /**
