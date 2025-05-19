@@ -66,7 +66,6 @@
                                     </div>
                                     <div class="localization-content border-0">
                                         <div>
-                                            <div class="skeleton label-skeleton label-loader mb-3"></div>
                                             <h6 class="mb-3 ">{{ __('admin.general_settings.vehicles') }}</h6>
                                             <div class="localization-list">
                                                 <p class="text-gray-9 fw-medium ">{{ __('admin.general_settings.seasonal_pricing') }}</p>
@@ -80,7 +79,6 @@
                                             <div class="localization-list">
                                                 <p class="text-gray-9 fw-medium ">{{ __('admin.general_settings.faq') }}</p>
                                                 <div>
-                                                    <div class="skeleton toggle-skeleton input-loader"></div>
                                                     <div class="form-check form-check-md form-switch">
                                                         <input id="faq" name="faq" class="form-check-input form-label" type="checkbox" role="switch" checked>
                                                     </div>
@@ -110,7 +108,6 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="d-flex justify-content-end">
-                                        <div class="skeleton label-skeleton label-loader me-2"></div>
                                         <a href="{{ route('dashboard') }}" class="btn btn-light me-3 " >{{ __('admin.general_settings.cancel') }}</a>
                                         @if (hasPermission($permissions, 'rental_settings', 'edit'))
                                         <button type="submit" class="btn btn-primary submitBtn">{{ __('admin.general_settings.save_changes') }}</button>

@@ -14,15 +14,19 @@
     $(document).ready(() => {
         initializeWalletTable();
 
-        $(".wallet-btn a").on("click", () => {
+       $(".open-wallet-modal").on("click", function () {
+            const walletAmountInput = document.getElementById("wallet_amount");
             const walletAmount = walletAmountInput.value;
 
             if (walletAmount && parseFloat(walletAmount) >= 50) {
                 $("#add_payment input[name='wallet_amount']").val(walletAmount);
+                const modal = new bootstrap.Modal(document.getElementById("add_payment"));
+                modal.show();
             } else {
                 showToast('error', _l('web.user.amount_must_be_greater_than_50'));
             }
         });
+
 
         addWalletForm.on("submit", (event) => {
             event.preventDefault();
