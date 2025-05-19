@@ -20,17 +20,7 @@
 						</ol>
 					</nav>
 				</div>
-				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-					<div class="mb-2 me-2 d-none">
-						<a href="javascript:void(0);" class="btn btn-white d-flex align-items-center"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</a>
-					</div>
-					<div class="me-2 mb-2 d-none">
-						<div class="dropdown">
-							<a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center">
-								<i class="ti ti-upload me-1"></i>{{ __('admin.common.export') }}
-							</a>
-						</div>
-					</div>
+				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">					
 					<div class="mb-2">
 						@if (hasPermission($permissions, 'vehicle_attributes', 'create'))
 							<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#brand_modal" id="add_brand" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_brand') }}</a>

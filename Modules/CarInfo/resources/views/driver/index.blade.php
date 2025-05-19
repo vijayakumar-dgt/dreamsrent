@@ -20,16 +20,7 @@
 					</nav>
 				</div>
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-					<div class="mb-2 me-2 d-none">
-						<button type="button" class="btn btn-white d-flex align-items-center"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</button>
-					</div>
-					<div class="me-2 mb-2 d-none">
-						<div class="dropdown">
-							<button type="button" class="btn btn-dark d-inline-flex align-items-center">
-								<i class="ti ti-upload me-1"></i>{{ __('admin.common.export') }}
-							</a>
-						</div>
-					</div>
+					
 					<div class="mb-2">
 						@if (hasPermission($permissions, 'drivers', 'create'))
 						<button type="button" data-bs-toggle="modal" data-bs-target="#add_driver_modal" id="add_driver" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.manage.add_new_driver') }}</button>
