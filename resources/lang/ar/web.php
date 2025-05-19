@@ -761,5 +761,8 @@
     'blogs_title' => 'المدونات | دريمز رينت',
     'no_blog_found' => 'لم يتم العثور على مدونة',
     'no_data_found' => 'لم يتم العثور على بيانات',
+    'all_fields_are_required' => 'جميع الحقول مطلوبة',
+    'review_added_successfully' => 'تمت إضافة المراجعة بنجاح',
+    'something_went_wrong' => 'حدث خطأ ما',
   ),
 );

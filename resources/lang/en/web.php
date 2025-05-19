@@ -758,5 +758,8 @@ return [
         'blogs_title' => 'Blogs | Dreams Rent',
         'no_blog_found' => 'No Blog Found',
         'no_data_found' => 'No Data Found',
+        'all_fields_are_required' => 'All fields are required.',
+        'review_added_successfully' => 'Review added successfully',
+        'something_went_wrong' => 'Something went wrong. Please try again.',
     ]
 ];
