@@ -13,5 +13,4 @@ class CarFuel extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = ["fuel_type", "language_id", "status"];
-
 }

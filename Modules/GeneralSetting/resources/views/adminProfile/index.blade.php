@@ -151,8 +151,7 @@
         </div>
         @include('admin.partials.footer')
     </div>
-    <!-- /Page Wrapper -->
-    
+    <!-- /Page Wrapper -->  
     
 @endsection
 @push('scripts')

@@ -22,8 +22,10 @@
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
 					<div class="mb-2">
 						@if (hasPermission($permissions, 'vehicle_attributes', 'create'))
-						<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#car_color_modal" id="add_car_color" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_vehicle_color') }}</a>
-					@endif
+						<button type="button" data-bs-toggle="modal" data-bs-target="#car_color_modal" id="add_car_color" class="btn btn-primary d-flex align-items-center">
+							<i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_vehicle_color') }}
+						</button>
+						@endif
 					</div>
 				</div>
 			</div>
@@ -43,15 +45,19 @@
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 					<input type="hidden" id="sort_by_status">
 					<div class="dropdown">
-						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-badge me-1"></i> <span class="ms-1" id="current_sort_status">{{ __('admin.common.status') }}</span>
-						</a>
-						<ul class="dropdown-menu  dropdown-menu-end p-2" id="status_filter">
+						</button>
+						<ul class="dropdown-menu dropdown-menu-end p-2" id="status_filter">
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1 statusfilter" data-status="1">{{ __('admin.common.active') }}</a>
+								<button type="button" class="dropdown-item rounded-1 statusfilter" data-status="1">
+									{{ __('admin.common.active') }}
+								</button>
 							</li>
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1 statusfilter" data-status="0">{{ __('admin.common.inactive') }}</a>
+								<button type="button" class="dropdown-item rounded-1 statusfilter" data-status="0">
+									{{ __('admin.common.inactive') }}
+								</button>
 							</li>
 						</ul>
 					</div>
@@ -74,9 +80,7 @@
 							@endif
 						</tr>
 					</thead>
-					<tbody>
-
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 			<!-- Custom Data Table -->
@@ -158,5 +162,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('backend/assets/js/carinfo/car-color.js') }}"></script>
+<script src="{{ asset('backend/assets/js/vehicleinfo/vehicle-color.js') }}"></script>
 @endpush

@@ -1,5 +1,7 @@
-<?php return array (
-  'auth' => 
+<?php
+
+return array (
+  'auth' =>
   array (
     'sign_in' => 'تسجيل الدخول',
     'email_confirmation_subtitle' => 'سنرسل رمز تأكيد إلى بريدك الإلكتروني.',
@@ -68,8 +70,9 @@
     'last_name_minlength' => 'يجب أن يحتوي اسم العائلة على 3 أحرف على الأقل.',
     'last_name_maxlength' => 'يجب ألا يزيد اسم العائلة عن 50 حرفًا.',
     'last_name_alphabets' => 'يمكن أن يحتوي اسم العائلة على أحرف فقط.',
+    'email_otp_verification' => 'التحقق من البريد الإلكتروني OTP',
   ),
-  'home' => 
+  'home' =>
   array (
     'signin' => 'تسجيل الدخول',
     'signup' => 'إنشاء حساب',
@@ -389,7 +392,7 @@
     'poor' => 'ضعيف',
     'miles' => 'ميلات',
   ),
-  'common' => 
+  'common' =>
   array (
     'back_to_home' => 'العودة إلى الصفحة الرئيسية',
     'search' => 'بحث',
@@ -483,7 +486,7 @@
     'notice' => 'إشعار',
     'view_reply' => 'عرض والرد',
   ),
-  'user' => 
+  'user' =>
   array (
     'user_dashboard' => 'لوحة تحكم المستخدم',
     'dashboard' => 'لوحة التحكم',
@@ -737,8 +740,9 @@
     'maxlength_50' => 'الحد الادنى لعدد الحروف هو 50',
     'last_login_at' => 'آخر تسجيل دخول في',
     'device_not_found' => 'الجهاز غير موجود',
+    'add_to_wallet' => 'اضافة الى المحفظة',
   ),
-  'blog' => 
+  'blog' =>
   array (
     'blog_list' => 'قائمة المدونات',
     'blogs' => 'مدونات',
@@ -760,5 +764,8 @@
     'blogs_title' => 'المدونات | دريمز رينت',
     'no_blog_found' => 'لم يتم العثور على مدونة',
     'no_data_found' => 'لم يتم العثور على بيانات',
+    'all_fields_are_required' => 'جميع الحقول مطلوبة',
+    'review_added_successfully' => 'تمت إضافة المراجعة بنجاح',
+    'something_went_wrong' => 'حدث خطأ ما',
   ),
 );

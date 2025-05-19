@@ -154,5 +154,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('backend/assets/js/carinfo/tag.js') }}"></script>
+<script src="{{ asset('backend/assets/js/vehicleinfo/tag.js') }}"></script>
 @endpush

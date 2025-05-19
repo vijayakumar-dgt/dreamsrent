@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'general_settings' => 
+  'general_settings' =>
   array (
     'settings_configuration' => 'الإعدادات والتكوين',
     'account_settings' => 'إعدادات الحساب',
@@ -743,7 +743,7 @@ return array (
     'edit_bank_account' => 'تحرير حساب بنكي',
     'edit_template' => 'تحرير قالب',
   ),
-  'main' => 
+  'main' =>
   array (
     'dashboard' => 'لوحة التحكم',
     'main' => 'الرئيسية',
@@ -782,7 +782,7 @@ return array (
     'invoice_amount' => 'قيمة الفاتورة',
     'drivers' => 'السائقون',
   ),
-  'bookings' => 
+  'bookings' =>
   array (
     'bookings' => 'الحجوزات',
     'cancel_booking' => 'إلغاء الحجز',
@@ -883,8 +883,10 @@ return array (
     'booking_details' => 'تفاصيل الحجز',
     'vehicle_price' => 'سعر المركبة',
     'create_booking' => 'انشاء حجز',
+    'comment_required' => 'التعليق مطلوب.',
+    'status_required' => 'مطلوب تحديد الحالة.',
   ),
-  'manage' => 
+  'manage' =>
   array (
     'manage' => 'إدارة',
     'drivers' => 'السائقين',
@@ -970,7 +972,7 @@ return array (
     'location_update_success' => 'تم تحديث الموقع بنجاح.',
     'location_delete_success' => 'تم حذف الموقع بنجاح.',
   ),
-  'rentals' => 
+  'rentals' =>
   array (
     'rentals' => 'الإيجارات',
     'maintenance' => 'الصيانة',
@@ -1522,7 +1524,7 @@ return array (
     'cylinder_type_maxlength' => 'يجب ألا يتجاوز نوع الأسطوانة 30 حرفًا.',
     'checklist_required' => 'قائمة التحقق مطلوبة.',
   ),
-  'user_management' => 
+  'user_management' =>
   array (
     'user_management' => 'إدارة المستخدمين',
     'roles_permissions' => 'الأدوار والصلاحيات',
@@ -1553,7 +1555,7 @@ return array (
     'user_update_success' => 'تم تحديث المستخدم بنجاح.',
     'user_delete_success' => 'تم حذف المستخدم بنجاح.',
   ),
-  'reports' => 
+  'reports' =>
   array (
     'earnings' => 'الإيرادات',
     'earning_report' => 'تقرير الإيرادات',
@@ -1590,7 +1592,7 @@ return array (
     'earnings_breakdown' => 'تقسيم الإيرادات',
     'payment_method' => 'طريقة الدفع',
   ),
-  'finance_accounts' => 
+  'finance_accounts' =>
   array (
     'finance_accounts' => 'المالية والحسابات',
     'payments' => 'المدفوعات',
@@ -1659,7 +1661,7 @@ return array (
     'grand_total_required' => 'الإجمالي الكلي مطلوب.',
     'grand_total_numeric' => 'يجب أن يكون الإجمالي الكلي رقماً.',
   ),
-  'others' => 
+  'others' =>
   array (
     'others' => 'أخرى',
     'messages' => 'الرسائل',
@@ -1677,7 +1679,7 @@ return array (
     'type_your_message' => 'اكتب رسالتك',
     'message_sent_success' => 'تم ارسال الرسالة بنجاح.',
   ),
-  'cms' => 
+  'cms' =>
   array (
     'page' => 'الصفحة',
     'pages' => 'الصفحات',
@@ -1807,7 +1809,7 @@ return array (
     'city_delete_success' => 'تم حذف المدينة بنجاح.',
     'icon' => 'رمز',
   ),
-  'support' => 
+  'support' =>
   array (
     'ticket_assignment_failed_due_to_status' => 'لا يمكن تعيين هذه التذكرة لأنها قيد المعالجة أو مغلقة بالفعل.',
     'support' => 'الدعم',
@@ -1869,7 +1871,7 @@ return array (
     'invalid_status_transition' => 'الانتقال إلى الحالة غير صالح.',
     'reply_allowed_only_in_status_3' => 'الرد مسموح فقط في حالة قيد المعالجة.',
   ),
-  'common' => 
+  'common' =>
   array (
     'assign' => 'تعيين',
     'type' => 'النوع',
@@ -2160,7 +2162,7 @@ return array (
     'booking_complete' => 'اكتمل الحجز',
     'tariffs' => 'التعريفات',
   ),
-  'page' => 
+  'page' =>
   array (
     'pages' => 'الصفحات',
     'seo_settings' => 'إعدادات السيو',
@@ -2234,7 +2236,7 @@ return array (
     'new_page_created' => 'تم إنشاء الصفحة الجديدة بنجاح!',
     'page_slug' => 'مُعرّف الصفحة',
   ),
-  'dashboard' => 
+  'dashboard' =>
   array (
     'dashboard' => 'لوحة التحكم',
     'admin_dashboard' => 'الرئيسية',
@@ -2284,7 +2286,7 @@ return array (
     'INVOICE_AMOUNT' => 'مبلغ الفاتورة',
     'STATUS' => 'حالة',
   ),
-  'blog' => 
+  'blog' =>
   array (
     'blogs' => 'مدونات',
     'home' => 'بيت',

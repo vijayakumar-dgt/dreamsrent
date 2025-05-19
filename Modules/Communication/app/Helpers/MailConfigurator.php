@@ -72,7 +72,7 @@ class MailConfigurator
             ->where('type', 'smtp')
             ->where('key', 'smtp_host')
             ->value('value');
-            
+
 
         if (!$getmail || !$getpassword || !$gethost) {
             throw new \Exception("SMTP settings are incomplete.");

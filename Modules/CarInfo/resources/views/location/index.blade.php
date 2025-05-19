@@ -361,5 +361,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('backend/assets/js/carinfo/location.js') }}"></script>
+<script src="{{ asset('backend/assets/js/vehicleinfo/location.js') }}"></script>
 @endpush

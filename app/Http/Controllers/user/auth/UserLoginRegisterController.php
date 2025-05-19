@@ -125,11 +125,11 @@ class UserLoginRegisterController extends Controller
         $content = 'Your OTP Verification for login';
         if ($settings['otp_type'] === 'email') {
             $notificationType = ($type === 'forgot') ? 9 : 8;
-        
+
             $template = EmailTemplate::select('subject', 'description')
                 ->where('notification_type', $notificationType)
                 ->first();
-        
+
             $subject = $template?->subject ?: 'OTP Verification';
             $content = $template?->description ?: 'Your OTP Verification';
         } elseif ($settings['otp_type'] === 'sms') {
@@ -285,7 +285,7 @@ class UserLoginRegisterController extends Controller
     }
     public function register(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [            
+        $validator = Validator::make($request->all(), [
             'first_name' => 'required|regex:/^[A-Za-z]+$/|min:3|max:50',
             'last_name' => 'required|regex:/^[A-Za-z]+$/|min:3|max:50',
             'email' => 'required|email|unique:users,email',
@@ -311,7 +311,7 @@ class UserLoginRegisterController extends Controller
         }
         $regStatus = DB::table('general_settings')->where('key', 'register')->value('value');
         if ($regStatus === "0") {
-            $user = User::create([                
+            $user = User::create([
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'user_type' => 3,

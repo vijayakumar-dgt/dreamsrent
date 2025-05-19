@@ -15,5 +15,4 @@ class CarColor extends Model
     protected $table = "car_colors";
 
     protected $fillable = ["name", "language_id", "value", "status"];
-
 }

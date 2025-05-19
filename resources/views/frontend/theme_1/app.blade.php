@@ -101,7 +101,7 @@
 		@endif
 	</div>
 	@if(!request()->routeIs('home'))
-	@include('frontend.preloader')
+	    @include('frontend.preloader')
 	@endif
 	<div class="progress-wrap active-progress">
 		<svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">

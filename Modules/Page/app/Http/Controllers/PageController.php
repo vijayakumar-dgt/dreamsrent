@@ -2008,7 +2008,6 @@ class PageController extends Controller
         }
 
         if ($page) {
-
             $data = [
                 'page_title' => $page->page_title,
                 'slug' => $page->slug,

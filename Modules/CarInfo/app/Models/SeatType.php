@@ -15,5 +15,4 @@ class SeatType extends Model
     protected $table = "seat_types";
 
     protected $fillable = ["seat_type", "status"];
-
 }

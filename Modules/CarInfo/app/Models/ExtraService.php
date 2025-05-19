@@ -28,5 +28,4 @@ class ExtraService extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = ["name", "language_id", "icon", "description", "image"];
-
 }

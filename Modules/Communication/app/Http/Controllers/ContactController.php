@@ -120,7 +120,7 @@ class ContactController extends Controller
                     'message' => 'Invalid contact ID format.'
                 ], 400);
             }
-            
+
             $id = (int) $idInput;
             $contact = Contact::find($id);
 

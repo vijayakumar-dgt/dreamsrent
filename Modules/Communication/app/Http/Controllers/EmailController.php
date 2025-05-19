@@ -11,7 +11,7 @@ use Modules\Communication\Helpers\MailConfigurator;
 
 class EmailController extends Controller
 {
-    public function sendEmail(Request $request) : JsonResponse
+    public function sendEmail(Request $request): JsonResponse
     {
         MailConfigurator::configureMail();
 

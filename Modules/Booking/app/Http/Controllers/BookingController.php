@@ -115,14 +115,14 @@ class BookingController extends Controller
 
             if (!empty($startDate) && is_string($startDate)) {
                 $dateTimeString = $startDate;
-            
+
                 if (!empty($startTime) && is_string($startTime)) {
                     $dateTimeString .= ' ' . $startTime;
                     $startDateCarbon = Carbon::createFromFormat('d-m-Y H:i', $dateTimeString);
                 } else {
                     $startDateCarbon = Carbon::createFromFormat('d-m-Y', $dateTimeString);
                 }
-            
+
                 if ($startDateCarbon instanceof Carbon) {
                     $startDateTime = $startDateCarbon->format('Y-m-d H:i:s');
                 }
@@ -135,14 +135,14 @@ class BookingController extends Controller
 
             if (!empty($endDate) && is_string($endDate)) {
                 $dateTimeString = $endDate;
-            
+
                 if (!empty($endTime) && is_string($endTime)) {
                     $dateTimeString .= ' ' . $endTime;
                     $endDateCarbon = Carbon::createFromFormat('d-m-Y H:i', $dateTimeString);
                 } else {
                     $endDateCarbon = Carbon::createFromFormat('d-m-Y', $dateTimeString);
                 }
-            
+
                 if ($endDateCarbon instanceof Carbon) {
                     $endDateTime = $endDateCarbon->format('Y-m-d H:i:s');
                 }
@@ -152,7 +152,7 @@ class BookingController extends Controller
                     $endDateFormat = $endDateCarbonOnly->format('Y-m-d');
                 }
             }
-            
+
             $vehicles = VehicleInfo::select(
                 'vehicle_info.id',
                 'vehicle_info.vehicle_image as image',
@@ -200,16 +200,16 @@ class BookingController extends Controller
                 ->when($search, function ($query) use ($search, $tariff) {
 
                     $search = (string) $search;
-                    $tariff = (string) $tariff;  
-                    $path   = '$[0].' . $tariff; 
+                    $tariff = (string) $tariff;
+                    $path   = '$[0].' . $tariff;
 
                     $query->where(function ($q) use ($search) {
-                        $q->where('vehicle_info.year',  'LIKE', "%{$search}%")
+                        $q->where('vehicle_info.year', 'LIKE', "%{$search}%")
                         ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%")
                         ->orWhere('brands.brand_name', 'LIKE', "%{$search}%")
                         ->orWhere('car_models.model_name', 'LIKE', "%{$search}%")
-                        ->orWhere('cartypes.name',      'LIKE', "%{$search}%")
-                        ->orWhere('car_colors.name',    'LIKE', "%{$search}%");
+                        ->orWhere('cartypes.name', 'LIKE', "%{$search}%")
+                        ->orWhere('car_colors.name', 'LIKE', "%{$search}%");
                     });
 
                     if (filled($tariff)) {
@@ -507,10 +507,9 @@ class BookingController extends Controller
                         sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
                     }
                 }
-                if(userNotificationsEnabled() && $customer && $customer->email){
+                if (userNotificationsEnabled() && $customer && $customer->email) {
                         sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
                 }
-               
             } else {
                 $data['updated_by'] = Auth::guard('admin')->id();
 
@@ -1072,7 +1071,6 @@ class BookingController extends Controller
             ];
             if ($booking instanceof \Illuminate\Database\Eloquent\Collection) {
                 foreach ($booking as $singleBooking) {
-
                     BookingHistory::create([
                         'booking_id' => $singleBooking->id,
                         'action'     => 'cancel',

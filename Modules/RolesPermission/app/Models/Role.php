@@ -5,7 +5,6 @@ namespace Modules\RolesPermission\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 /**
  * @property string $encrypted_role_id
  * @property \Carbon\Carbon $created_at

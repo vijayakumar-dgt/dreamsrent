@@ -21,7 +21,7 @@ async function fetchWishlists() {
             const html = data.data.map(createWishlistCard).join('');
             document.querySelector(".listview-car").innerHTML = html;
         } else {
-            document.querySelector(".listview-car").innerHTML = `<p class="text-center">${_l('web.user.no_wishlist_found')}</p>`;
+            document.querySelector(".listview-car").innerHTML = `<p class="text-center">${_l('web.common.empty_table')}</p>`;
         }
     } catch (error) {
         console.error("Error fetching wishlists:", error);

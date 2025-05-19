@@ -236,7 +236,8 @@ enum InstallerInfo: string
         }
 
         // Check purchase code exists and matches
-        if (!array_key_exists('purchase_code', $licenseData) ||
+        if (
+            !array_key_exists('purchase_code', $licenseData) ||
             !is_string($licenseData['purchase_code']) ||
             $licenseData['purchase_code'] !== $purchaseCode
         ) {
@@ -247,7 +248,8 @@ enum InstallerInfo: string
         }
 
         // Check isLocal flag if it exists
-        if (array_key_exists('isLocal', $licenseData) &&
+        if (
+            array_key_exists('isLocal', $licenseData) &&
             $licenseData['isLocal'] === false
         ) {
             return [

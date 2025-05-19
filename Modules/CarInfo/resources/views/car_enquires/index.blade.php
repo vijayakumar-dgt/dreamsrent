@@ -36,14 +36,7 @@
 							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 active-sort" data-value="last_7_days">{{ __('admin.common.last_7_days') }}</a></li>
 							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 active-sort" data-value="last_month">{{ __('admin.common.last_month') }}</a></li>
 						</ul>
-					</div>
-					<!-- Date Range Picker -->
-					<div class="me-2 d-none">
-						<div class="input-icon-start position-relative topdatepicker">
-							<span class="input-icon-addon"><i class="ti ti-calendar"></i></span>
-							<input type="text" class="form-control date-range enquirerange" name="sort_by_date" id="sort_by_date" value="" placeholder="dd/mm/yyyy - dd/mm/yyyy">
-						</div>
-					</div>
+					</div>					
 					<!-- Status Dropdown -->
 					<div class="dropdown">
 						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
@@ -88,8 +81,7 @@
 							@endif
 						</tr>
 					</thead>
-					<tbody>
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 			<!-- Custom Data Table -->
@@ -104,7 +96,7 @@
 		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="mb-0 modal-title">Edit Enquiry</h4>
+					<h4 class="mb-0 modal-title">{{ __('admin.bookings.edit_enquiry') }}</h4>
 					<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
 						<i class="ti ti-x fs-16"></i>
 					</button>
@@ -152,10 +144,10 @@
 								<div class="mb-3">
 									<label class="form-label">{{ __('admin.common.status') }}<span class="text-danger"> *</span></label>
 									<select id="status" name="status" class="select form-control">
-										<option value="">Select</option>
-										<option value="1">Not Opened</option>
-										<option value="2">Opened</option>
-										<option value="3">Closed</option>
+										<option value="">{{ __('admin.common.select') }}</option>
+										<option value="1">{{ __('admin.common.not_opened') }}</option>
+										<option value="2">{{ __('admin.common.opened') }}</option>
+										<option value="3">{{ __('admin.common.closed') }}</option>
 									</select>
 									<span id="status_error" class="text-danger error-text"></span>
 								</div>
@@ -202,10 +194,9 @@
 			</div> 
 		</div> 
 	</div> 
-
 	<!-- /Delete Brand -->
 @endsection
 
 @push('scripts')
-<script src="{{ asset('backend/assets/js/carinfo/enquiry.js') }}"></script>
+<script src="{{ asset('backend/assets/js/vehicleinfo/enquiry.js') }}"></script>
 @endpush

@@ -24,23 +24,23 @@ class CommunicationServiceProvider extends ServiceProvider
     protected function registerConfig(): void
     {
         $relativeConfigPath = config('modules.paths.generator.config.path');
-        
+
         // Ensure the path is a non-empty string
-        if (!is_string($relativeConfigPath)){
+        if (!is_string($relativeConfigPath)) {
             return;
         }
-    
+
         $configPath = module_path($this->name, $relativeConfigPath);
-        
+
         // module_path() always returns string, so we only need to check if it's a valid directory
         if (!is_dir($configPath)) {
             return;
         }
-    
+
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($configPath, RecursiveDirectoryIterator::SKIP_DOTS)
         );
-    
+
         /** @var SplFileInfo $file */
         foreach ($iterator as $file) {
             if ($file->isFile() && $file->getExtension() === 'php') {
@@ -48,7 +48,7 @@ class CommunicationServiceProvider extends ServiceProvider
                 $pathKey = str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
                 $configKey = $this->nameLower . '.' . $pathKey;
                 $key = ($relativePath === 'config.php') ? $this->nameLower : $configKey;
-    
+
                 $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
                 $this->mergeConfigFrom($file->getPathname(), $key);
             }
@@ -83,7 +83,7 @@ class CommunicationServiceProvider extends ServiceProvider
     {
         $paths = [];
         $viewPaths = config('view.paths', []);
-        
+
         if (!is_array($viewPaths)) {
             return $paths;
         }
