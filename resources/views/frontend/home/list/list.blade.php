@@ -13,7 +13,7 @@
                     <nav aria-label="breadcrumb" class="page-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('web.home.home') }}</a></li>
-                            <li class="breadcrumb-item"><a href="/vehicles">{{ __('web.common.vehicles') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('list') }}">{{ __('web.common.vehicles') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('web.home.car_listings') }}</li>
                         </ol>
                     </nav>							

@@ -124,16 +124,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="table-footer">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div id="tablelength"></div>
-                                    </div>
-                                    <div class="col-md-6 text-md-end">
-                                        <div id="tablepage"></div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -183,33 +173,10 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="add-payment-table-info d-none">
-                                <div class="wallet-table add-payment-table">
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <label class="custom_radio">
-                                                            <input type="radio" name="payment_two" value="wallet_two">
-                                                            <span class="checkmark"></span>
-                                                            <img src="{{ asset('frontend/assets/img/icons/wallet-01.svg') }}" alt="Icon">
-                                                        </label>
-                                                    </td>
-                                                    <td>
-                                                        <h6>3210 **** **** **12</h6>
-                                                        <p>Card Number</p>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="modal-btn">
-                            <button type="submit" class="btn btn-secondary w-100" >Add to Wallet</button>
-                            <a class="btn btn-outline-cancel" data-bs-dismiss="modal">Cancel</a>
+                            <button type="submit" class="btn btn-secondary w-100" >{{ __('web.user.add_to_wallet') }}</button>
+                            <a class="btn btn-outline-cancel" data-bs-dismiss="modal">{{ __('web.common.cancel') }}</a>
                         </div>
                     </form>
                 </div>

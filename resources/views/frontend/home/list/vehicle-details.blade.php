@@ -18,7 +18,7 @@
                     <nav aria-label="breadcrumb" class="page-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('home') }}">{{__('web.home.home')}}</a></li>
-                            <li class="breadcrumb-item"><a href="/vehicles">{{__('web.common.vehicles')}}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('list') }}">{{__('web.common.vehicles')}}</a></li>
                             <li class="breadcrumb-item active vehicle_name" aria-current="page"></li>
                         </ol>
                     </nav>
@@ -256,45 +256,7 @@
                     </div>
                     <!-- /Video -->
                     <!-- FAQ -->
-                    <div class="review-sec faq-feature faq_section">
-                        <div class="review-header">
-                            <h4>{{ __('web.home.faqs') }}</h4>
-                        </div>
-                        <div class="faq-info">
-                            <div class="faq-card">
-                                <h4 class="faq-title">
-                                    <a class="collapsed" data-bs-toggle="collapse" href="#faqOne" aria-expanded="false">How old do I need to be to rent a car?</a>
-                                </h4>
-                                <div id="faqOne" class="card-collapse collapse">
-                                    <p>We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles. You can browse our selection online or contact us for assistance in choosing the right vehicle for you</p>
-                                </div>
-                            </div>
-                            <div class="faq-card">
-                                <h4 class="faq-title">
-                                    <a class="collapsed" data-bs-toggle="collapse" href="#faqTwo" aria-expanded="false">What documents do I need to rent a car?</a>
-                                </h4>
-                                <div id="faqTwo" class="card-collapse collapse">
-                                    <p>We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles. You can browse our selection online or contact us for assistance in choosing the right vehicle for you</p>
-                                </div>
-                            </div>
-                            <div class="faq-card">
-                                <h4 class="faq-title">
-                                    <a class="collapsed" data-bs-toggle="collapse" href="#faqThree" aria-expanded="false">What types of vehicles are available for rent?</a>
-                                </h4>
-                                <div id="faqThree" class="card-collapse collapse">
-                                    <p>We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles. You can browse our selection online or contact us for assistance in choosing the right vehicle for you</p>
-                                </div>
-                            </div>
-                            <div class="faq-card">
-                                <h4 class="faq-title">
-                                    <a class="collapsed" data-bs-toggle="collapse" href="#faqFour" aria-expanded="false">Can I rent a car with a debit card?</a>
-                                </h4>
-                                <div id="faqFour" class="card-collapse collapse">
-                                    <p>We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles. You can browse our selection online or contact us for assistance in choosing the right vehicle for you</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="review-sec faq-feature faq_section"></div>
                     <!-- /FAQ -->
                     <!-- Policies -->
                     <div class="review-sec">
@@ -378,8 +340,8 @@
                         </div>
                     </div>
                     <!-- /Reviews -->
-                    <!-- Leave a Reply -->
                     @if (current_user() != null)
+                    <!-- Leave a Reply -->
                     <div class="review-sec leave-reply-form mb-0">
                         <div class="review-header">
                             <h4>{{ __('web.home.leave_reply') }}</h4>
@@ -498,8 +460,8 @@
                             </div>
                         </div>
                     </div>
-                    @endif
                     <!-- /Leave a Reply -->
+                    @endif
                 </div>
                 <div class="col-lg-4 theiaStickySidebar">
                     <div class="review-sec mt-0">
@@ -706,114 +668,6 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <div class="tab-pane fade" id="pickup">
-                                        <ul>
-                                            <li class="column-group-main">
-                                                <div class="input-block">
-                                                    <label>Delivery Location</label>
-                                                    <div class="group-img">
-                                                        <select class="select">
-                                                            <option>Newyork Office - 78, 10th street Laplace USA</option>
-                                                            <option>Newyork Office - 12, 5th street USA</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="column-group-main">
-                                                <div class="input-block">
-                                                    <label class="custom_check d-inline-flex location-check m-0"><span>Return to same location</span>
-                                                        <input type="checkbox" name="remeber">
-                                                        <span class="checkmark"></span>
-                                                    </label>
-                                                </div>
-                                            </li>
-                                            <li class="column-group-main">
-                                                <div class="input-block">
-                                                    <label>Delivery Location</label>
-                                                    <div class="group-img">
-                                                        <select class="select">
-                                                            <option>Newyork Office - 78, 10th street Laplace USA</option>
-                                                            <option>Newyork Office - 12, 5th street USA</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="column-group-main">
-                                                <div class="input-block">
-                                                    <label>Return Location</label>
-                                                    <div class="group-img">
-                                                        <div class="form-wrap">
-                                                            <input type="text" class="form-control" placeholder="78, 10th street Laplace USA">
-                                                            <span class="form-icon">
-                                                                <i class="fa-solid fa-location-crosshairs"></i>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="column-group-main">
-                                                <div class="input-block m-0">
-                                                    <label>Pickup Date</label>
-                                                </div>
-                                                <div class="input-block-wrapp sidebar-form">
-                                                    <div class="input-block  me-lg-2">
-                                                        <div class="group-img">
-                                                            <div class="form-wrap">
-                                                                <input type="text" class="form-control datetimepicker" placeholder="04/11/2023">
-                                                                <span class="form-icon">
-                                                                    <i class="fa-regular fa-calendar-days"></i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="input-block">
-                                                        <div class="group-img">
-                                                            <div class="form-wrap">
-                                                                <input type="text" class="form-control timepicker" placeholder="11:00 AM">
-                                                                <span class="form-icon">
-                                                                    <i class="fa-regular fa-clock"></i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="column-group-main">
-                                                <div class="input-block m-0"> <label>Return Date</label>
-                                                </div>
-                                                <div class="input-block-wrapp sidebar-form">
-                                                    <div class="input-block me-2">
-                                                        <div class="group-img">
-                                                            <div class="form-wrap">
-                                                                <input type="text" class="form-control datetimepicker" placeholder="04/11/2023">
-                                                                <span class="form-icon">
-                                                                    <i class="fa-regular fa-calendar-days"></i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="input-block">
-                                                        <div class="group-img">
-                                                            <div class="form-wrap">
-                                                                <input type="text" class="form-control timepicker" placeholder="11:00 AM">
-                                                                <span class="form-icon">
-                                                                    <i class="fa-regular fa-clock"></i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="column-group-last">
-                                                <div class="input-block mb-0">
-                                                    <div class="search-btn">
-                                                        <a href="#" class="btn btn-primary check-available w-100">Book</a>
-                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#enquiry" class="btn btn-theme">Enquire Us</button>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -898,7 +752,7 @@
                         </div>
                         <label class="custom_check w-100">
                             <input type="checkbox" name="terms" id="terms" value="1">
-                            <span class="checkmark"></span> {{ __('web.home.enquire_aggree_with') }} <a href="/pages/terms-conditions">{{ __('web.home.terms_of_service') }}</a> & <button type="button" class="border-0 bg-white" >{{ __('web.home.privacy_policy') }}</button>
+                            <span class="checkmark"></span> {{ __('web.home.enquire_aggree_with') }} <a href="{{ route('pages', 'terms-conditions') }}">{{ __('web.home.terms_of_service') }}</a> & <button type="button" class="border-0 bg-white" >{{ __('web.home.privacy_policy') }}</button>
                         </label>
                         <span class="error-text text-danger" id="terms_error"></span>
                         <div class="modal-btn modal-btn-sm">
