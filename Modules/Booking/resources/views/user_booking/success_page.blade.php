@@ -33,23 +33,23 @@
                     <div class="booking-wizard-lists">
                         <ul>
                             <li class="active activated">
-                                <span><img src="/backend/assets/img/icons/booking-head-icon-01.svg" alt="Booking Icon"></span>
+                                <span><img src="{{ asset('backend/assets/img/icons/booking-head-icon-01.svg') }}" alt="Booking Icon"></span>
                                 <h6>{{__('web.home.location_and_time')}}</h6>
                             </li>
                             <li class="active activated">
-                                <span><img src="/backend/assets/img/icons/booking-head-icon-02.svg" alt="Booking Icon"></span>
+                                <span><img src="{{ asset('backend/assets/img/icons/booking-head-icon-02.svg') }}" alt="Booking Icon"></span>
                                 <h6>{{__('web.user.extra_services')}}</h6>
                             </li>
                             <li class="active activated">
-                                <span><img src="/backend/assets/img/icons/booking-head-icon-03.svg" alt="Booking Icon"></span>
+                                <span><img src="{{ asset('backend/assets/img/icons/booking-head-icon-03.svg') }}" alt="Booking Icon"></span>
                                 <h6>{{__('web.user.details')}}</h6>
                             </li>
                             <li class="active activated">
-                                <span><img src="/backend/assets/img/icons/booking-head-icon-04.svg" alt="Booking Icon"></span>
+                                <span><img src="{{ asset('backend/assets/img/icons/booking-head-icon-04.svg') }}" alt="Booking Icon"></span>
                                 <h6>{{__('web.home.checkout')}}</h6>
                             </li>
                             <li class="active">
-                                <span><img src="/backend/assets/img/icons/booking-head-icon-05.svg" alt="Booking Icon"></span>
+                                <span><img src="{{ asset('backend/assets/img/icons/booking-head-icon-05.svg') }}" alt="Booking Icon"></span>
                                 <h6>{{__('web.home.booking_confirmed')}}</h6>
                             </li>
                         </ul>
@@ -81,7 +81,6 @@
                 </div>
             </div>
             <div class="row">
-
                 <!-- Car Pricing -->
                 <div class="col-lg-6 col-md-6 d-flex">
                     <div class="book-card flex-fill">
@@ -199,7 +198,7 @@
                                 <li>
                                     <h6>{{__('web.home.driver_type')}}</h6>
                                     <p>
-                                        {{ $booking->driver_id ? 'Driver: ' . ($driverInfo->driver_name ?? 'N/A') : 'Self Pickup' }}
+                                        {{ $booking->driver_id ? __('web.home.driver') . ': ' . ($driverInfo->driver_name ?? 'N/A') : __('web.home.self_pickup') }}
                                     </p>
                                 </li>
                             </ul>
