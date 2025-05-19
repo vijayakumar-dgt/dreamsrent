@@ -41,15 +41,15 @@
                                     </div>
                                     <div class="d-flex align-items-center gap-3 flex-wrap">
                                         @if (hasPermission($permissions, 'reservations', 'view') && isAccessMenu('reservation'))
-                                        <a href="/admin/reservations" class="btn btn-primary d-flex align-items-center"><i class="ti ti-eye me-1"></i>{{ __('admin.dashboard.reservations') }}</a>
+                                        <a href="{{route('reservation.index')}}" class="btn btn-primary d-flex align-items-center"><i class="ti ti-eye me-1"></i>{{ __('admin.dashboard.reservations') }}</a>
                                         @endif
                                         @if (hasPermission($permissions, 'vehicles', 'create'))
-                                        <a href="/admin/vehicleadd" class="btn btn-dark d-flex align-items-center"><i class="ti ti-plus me-1"></i>{{ __('admin.dashboard.add_new_car') }}</a>
+                                        <a href="{{ route('vehicle.vehicleadd') }}" class="btn btn-dark d-flex align-items-center"><i class="ti ti-plus me-1"></i>{{ __('admin.dashboard.add_new_car') }}</a>
                                         @endif
                                     </div>
                                 </div>
                                 <div class="col-sm-5">
-                                    <img src="backend/assets/img/icons/car.svg" alt="img">
+                                    <img src="{{asset('/backend/assets/img/icons/car.svg')}}" alt="img">
                                 </div>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                                 <h5>{{ __('admin.dashboard.newly_added_cars') }}</h5>
-                                <a href="/admin/vehiclelist" class="text-decoration-underline fw-medium">{{ __('admin.dashboard.view_all') }}</a>
+                                <a href="{{ route('vehicle.list') }}" class="text-decoration-underline fw-medium">{{ __('admin.dashboard.view_all') }}</a>
                             </div>
                             @if(count($carTypes) != 0)
                             <div class="mb-2">
@@ -194,7 +194,7 @@
                         <div class="card-body pb-1">
                             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
                                 <h5>{{ __('admin.dashboard.recent_reservations') }}</h5>
-                                <a href="/admin/reservations" class="text-decoration-underline fw-medium">{{ __('admin.dashboard.view_all') }}</a>
+                                <a href="{{route('reservation.index')}}" class="text-decoration-underline fw-medium">{{ __('admin.dashboard.view_all') }}</a>
                             </div>
                             <div class="table-responsive">
                                 <table class="table custom-table1">
@@ -203,7 +203,7 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="javascript:;" class="avatar flex-shrink-0">
+                                                <a href="javascript:void(0);" class="avatar flex-shrink-0">
                                                     @php
                                                     $imagePath = $reservation->vehicle_image ?? "";
                                                     @endphp
@@ -217,7 +217,7 @@
                                                 ?>
                                                 <div class="flex-grow-1 ms-2">
                                                     <p class="d-flex align-items-center fs-13 text-default mb-1">{{number_format($reservation->day_count, 0)}} {{ __('admin.dashboard.days') }}<i class="ti ti-circle-filled text-primary fs-5 mx-1"></i>{{$reservation->driving_name}}</p>
-                                                    <h6 class="fs-14 fw-semibold mb-1"><a href="javascript:;">{{$reservation->name}}</a></h6>
+                                                    <h6 class="fs-14 fw-semibold mb-1"><a href="javascript:void(0);">{{$reservation->name}}</a></h6>
                                                 </div>
                                             </div>
                                         </td>
@@ -269,7 +269,7 @@
                         <div class="card-body pb-1">
                             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
                                 <h5>{{ __('admin.common.customers') }}</h5>
-                                <a href="/admin/customers" class="text-decoration-underline fw-medium">{{ __('admin.dashboard.view_all') }}</a>
+                                <a href="{{ route('admin.customers') }}" class="text-decoration-underline fw-medium">{{ __('admin.dashboard.view_all') }}</a>
                             </div>
                             <div class="table-responsive">
                                 <table class="table custom-table1">
@@ -310,15 +310,11 @@
                     <div class="card flex-fill earnings-chart">
                         <div class="card-header border-0 pb-0">
                             <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-                                <h5>{{ __('admin.dashboard.income_expenses') }}</h5>
+                                <h5>{{ __('admin.dashboard.income') }}</h5>
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex align-items-center me-4">
                                         <span class="chart-color bg-primary me-1"></span>
                                         <p class="fs-13">{{ __('admin.dashboard.income') }}</p>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <span class="chart-color bg-primary-300 me-1"></span>
-                                        <p class="fs-13">{{ __('admin.dashboard.expense') }}</p>
                                     </div>
                                 </div>
                                 <div class="dropdown me-2">
@@ -340,10 +336,6 @@
                                     <p class="mb-0 text-gray-5">{{ __('admin.dashboard.income_this_week') }}</p>
                                     <h5>{{$symbol}} <span class="text-success fs-13 fw-semibold">0%</span></h5>
                                 </div>
-                                <div class="border rounded p-2">
-                                    <p class="mb-0 text-gray-5">{{ __('admin.dashboard.expenses_this_week') }}</p>
-                                    <h5>{{$symbol}}0<span class="text-danger fs-13 fw-semibold"> 0%</span></h5>
-                                </div>
                             </div>
                         </div>
                         <div class="card-body py-0">
@@ -362,7 +354,7 @@
                         <div class="card-body pb-1">
                             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
                                 <h5>{{ __('admin.dashboard.maintenance') }}</h5>
-                                <a href="/admin/maintenance" class="text-decoration-underline fw-medium">{{ __('admin.dashboard.view_all') }}</a>
+                                <a href="{{ route('maintenance.index') }}" class="text-decoration-underline fw-medium">{{ __('admin.dashboard.view_all') }}</a>
                             </div>
                             <div class="table-responsive">
                                 <table class="table custom-table1">
@@ -378,7 +370,7 @@
                                                     <img src="{{ uploadedAsset($imagePath, 'default') }}" alt="img">
                                                 </a>
                                                 <div class="flex-grow-1 ms-2">
-                                                    <h6 class="fs-14 fw-semibold mb-1"><a href="javascript;:">{{$maintenance->name}}</a></h6>
+                                                    <h6 class="fs-14 fw-semibold mb-1"><a href="javascript:void(0);">{{$maintenance->name}}</a></h6>
                                                     <p class="fs-13 text-default">{{$maintenance->model_name}}</p>
                                                 </div>
                                             </div>
@@ -408,7 +400,7 @@
                         <div class="card-body pb-0">
                             <div class="d-flex align-items-center justify-content-between flex-wrap gap-1 mb-3">
                                 <h5 class="mb-1">{{ __('admin.dashboard.reservation_statistics') }}</h5>
-                                <a href="/admin/reservations" class="text-decoration-underline fw-medium mb-1">{{ __('admin.dashboard.view_all') }}</a>
+                                <a href="{{ route('reservation.index') }}" class="text-decoration-underline fw-medium mb-1">{{ __('admin.dashboard.view_all') }}</a>
                             </div>
                             <div id="statistics_chart"></div>
                         </div>
@@ -423,7 +415,7 @@
                         <div class="card-body pb-1">
                             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
                                 <h5>{{ __('admin.dashboard.drivers') }}</h5>
-                                <a href="admin/drivers" class="text-decoration-underline fw-medium">{{ __('admin.dashboard.view_all') }}</a>
+                                <a href="{{ route('driver.index') }}" class="text-decoration-underline fw-medium">{{ __('admin.dashboard.view_all') }}</a>
                             </div>
                             <div class="table-responsive">
                                 <table class="table custom-table1">
@@ -475,7 +467,7 @@
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-between flex-wrap gap-1 mb-3">
                                 <h5 class="mb-1">{{ __('admin.dashboard.recent_invoices') }}</h5>
-                                <a href="admin/invoices" class="text-decoration-underline fw-medium mb-1">{{ __('admin.dashboard.view_all') }}</a>
+                                <a href="{{ route('admin.invoice') }}" class="text-decoration-underline fw-medium mb-1">{{ __('admin.dashboard.view_all') }}</a>
                             </div>
                             <div class="custom-table table-responsive">
                                 <table class="table">
@@ -494,17 +486,17 @@
                                         @if(count($invoices) != 0)
                                         @foreach($invoices as $invoice)
                                         <tr>
-                                            <td><a href="javascript:;" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
+                                            <td><a href="javascript:void(0);" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <a href="javascript:;" class="avatar avatar-rounded me-2 flex-shrink-0">
+                                                    <a href="javascript:void(0);" class="avatar avatar-rounded me-2 flex-shrink-0">
                                                         @php
                                                         $imagePath = $invoice->profile_image ?? "";
                                                         @endphp
                                                         <img src="{{ uploadedAsset($imagePath, 'profile') }}" alt="profile image">
                                                     </a>
                                                     <div>
-                                                        <h6 class="fs-14"><a href="javascript:;">{{$invoice->full_name}}</a></h6>
+                                                        <h6 class="fs-14"><a href="javascript:void(0);">{{$invoice->full_name}}</a></h6>
                                                     </div>
                                                 </div>
                                             </td>

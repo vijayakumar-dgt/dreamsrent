@@ -1,6 +1,6 @@
 @extends('admin.admin')
 
-@section('meta_title', __('admin.reports.income_vs_expense') . ' || ' . $companyName)
+@section('meta_title', __('admin.reports.income') . ' || ' . $companyName)
 
 @section('content')
     <div class="page-wrapper">
@@ -8,11 +8,11 @@
             <!-- Breadcrumb -->
             <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
                 <div class="my-auto mb-2">
-                    <h4 class="mb-1">{{__('admin.reports.income_vs_expense')}}</h4>
+                    <h4 class="mb-1">{{__('admin.reports.income')}}</h4>
                     <nav>
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
-                                <a href="/admin">{{__('admin.common.home')}}</a>
+                                <a href="{{ route('dashboard') }}">{{__('admin.common.home')}}</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">{{__('admin.common.reports')}}</li>
                         </ol>
@@ -94,7 +94,7 @@
                                     </div>
                                     <div>
                                         <p class="mb-0">{{__('admin.reports.profit_margin')}}</p>
-                                        <h6 class="fw-semibold">54%</h6>
+                                        <h6 class="fw-semibold">0%</h6>
                                     </div>
                                 </div>
                                 <span class="avatar avatar-md bg-info rounded-circle">
@@ -114,15 +114,11 @@
                     <div class="card flex-fill earnings-chart">
                         <div class="card-header border-0 pb-0">
                             <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-                                <h5>{{__('admin.reports.income')}} & {{__('admin.reports.expense')}}</h5>
+                                <h5>{{__('admin.reports.income')}} </h5>
                                 <div class="d-flex align-items-center">
                                     <div class="d-flex align-items-center me-4">
                                         <span class="chart-color bg-primary me-1"></span>
                                         <p class="fs-13">{{__('admin.reports.income')}}</p>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <span class="chart-color bg-primary-300 me-1"></span>
-                                        <p class="fs-13">{{__('admin.reports.expense')}}</p>
                                     </div>
                                 </div>
                                 <div class="dropdown me-2">
@@ -145,10 +141,6 @@
                                     <h5>{{$symbol}} <span class="text-success fs-13 fw-semibold">0%</span></h5>
                                 </div>
 
-                                <div class="border rounded p-2">
-                                    <p class="mb-0 text-gray-5">{{__('admin.reports.expense')}} {{__('admin.reports.this_week')}}</p>
-                                    <h5>{{$symbol}}0<span class="text-danger fs-13 fw-semibold"> 0%</span></h5>
-                                </div>
                             </div>
                         </div>
                         <div class="card-body py-0">
@@ -164,10 +156,6 @@
                     <li class="nav-item">
                         <a class="nav-link active" data-bs-toggle="tab" role="tab" aria-current="page"
                             href="#income" aria-selected="true">{{__('admin.reports.income')}}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" role="tab" aria-current="page"
-                            href="#expense" aria-selected="false">{{__('admin.reports.expense')}}</a>
                     </li>
                 </ul>
                 <div class="tab-content pb-3">
@@ -307,189 +295,6 @@
                             <div class="p-3">
                                 {{ $bookingsCount->links('vendor.pagination.custom-bootstrap-5') }}
                             </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="expense" role="tabpanel">
-                        <!-- Table Header -->
-                        <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
-                            <div class="d-flex align-items-center flex-wrap row-gap-3">
-                                <div class="dropdown me-2">
-                                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                        <i class="ti ti-filter me-1"></i> {{__('admin.common.sort_by')}} : {{__('admin.common.latest')}}
-                                    </a>
-                                    <ul class="dropdown-menu  dropdown-menu-end p-2">
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item rounded-1">{{__('admin.common.latest')}}</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item rounded-1">{{__('admin.common.ascending')}}</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item rounded-1">{{__('admin.common.descending')}}</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item rounded-1">{{__('admin.common.last_month')}}</a>
-                                        </li>
-                                        <li>
-                                            <a href="javascript:void(0);" class="dropdown-item rounded-1">{{__('admin.common.last_7_days')}}</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="me-2">
-                                    <div class="input-icon-start position-relative topdatepicker">
-                                        <span class="input-icon-addon">
-                                            <i class="ti ti-calendar"></i>
-                                        </span>
-                                        <input type="text" class="form-control date-range bookingrange" placeholder="dd/mm/yyyy - dd/mm/yyyy">
-                                    </div>
-                                </div>
-                                <div class="dropdown">
-                                    <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
-                                        <i class="ti ti-filter me-1"></i> {{__('admin.common.filter')}}
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
-                                <div class="top-search me-2">
-                                    <div class="top-search-group">
-                                        <span class="input-icon">
-                                            <i class="ti ti-search"></i>
-                                        </span>
-                                        <input type="text" class="form-control" placeholder="{{__('admin.common.search')}}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /Table Header -->
-                        <div class="collapse" id="filtercollapse">
-                            <div class="filterbox mb-3 d-flex align-items-center">
-                                <h6 class="me-3">{{__('admin.common.filters')}}</h6>
-                                <div class="dropdown me-2">
-                                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                                        {{__('admin.reports.category')}}
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-lg p-2">
-                                        <li>
-                                            <div class="top-search m-2">
-                                                <div class="top-search-group">
-                                                    <span class="input-icon">
-                                                        <i class="ti ti-search"></i>
-                                                    </span>
-                                                    <input type="text" class="form-control" placeholder="{{__('admin.common.search')}}">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2" type="checkbox">Vehicle Repairs
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2" type="checkbox">Fuel & Maintenance
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2" type="checkbox">Staff Salaries
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2" type="checkbox">Office Rent
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2" type="checkbox">Marketing
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2" type="checkbox">Insurance
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2" type="checkbox">Website Hosting
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2" type="checkbox">Cleaning Supplies
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2" type="checkbox">Car Loan Payment
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2" type="checkbox">Software Subscription
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown me-2">
-                                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                                        {{__('admin.common.status')}}
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-lg p-2">
-                                        <li>
-                                            <div class="top-search m-2">
-                                                <div class="top-search-group">
-                                                    <span class="input-icon">
-                                                        <i class="ti ti-search"></i>
-                                                    </span>
-                                                    <input type="text" class="form-control" placeholder="{{__('admin.common.search')}}">
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2" type="checkbox">{{__('admin.reports.completed')}}
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2" type="checkbox">{{__('admin.reports.confirmed')}}
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2" type="checkbox">{{__('admin.reports.in_rental')}}
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                                <input class="form-check-input m-0 me-2" type="checkbox">{{__('admin.reports.rejected')}}
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <a href="javascript:void(0);" class="me-2 text-purple links">{{__('admin.common.apply')}}</a>
-                                <a href="javascript:void(0);" class="text-danger links">{{__('admin.common.clear_all')}}</a>
-                            </div>
-                        </div>
-                        <!-- Custom Data Table -->
-                        <div class="custom-datatable-filter table-responsive expensetable">
-                            <table class="table datatable">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th>{{ strtoupper(__('admin.reports.invoice_no')) }}</th>
-                                        <th>{{ strtoupper(__('admin.reports.category')) }}</th>
-                                        <th>{{ strtoupper(__('admin.reports.vehicle_related')) }}</th>
-                                        <th>{{ strtoupper(__('admin.reports.rental_fees')) }}</th>
-                                        <th>{{ strtoupper(__('admin.reports.miscellaneous')) }}</th>
-                                        <th>{{ strtoupper(__('admin.reports.total_expenses')) }}</th>
-                                        <th>{{ strtoupper(__('admin.common.date')) }}</th>
-                                        <th>{{ strtoupper(__('admin.common.status')) }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
