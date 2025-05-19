@@ -880,6 +880,9 @@ return array(
     'quotation_create_success' => 'Quotation created successfully.',
     'quotation_update_success' => 'Quotation updated successfully.',
     'quotation_delete_success' => 'Quotation deleted successfully.',
+    'booking_details' => 'Booking Details',
+    'vehicle_price' => 'Vehicle Price',
+    'create_booking' => 'Create Booking',
   ),
   'manage' =>
   array(

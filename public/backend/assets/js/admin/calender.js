@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     $(".driverInfo").addClass("d-none");
                                 }
                                 $("#totalValue").html(`$${booking.vehicle_total_price}`);
-                                $("#taxValue").html(`$${booking.tax_val}`);
+                                $("#taxValue").html(`$${booking.tax_val ?? 0}`);
                                 $("#extraService").html(
                                     `$${booking.total_extra_service_price}`
                                 );
@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     `$${booking.final_price}`
                                 );
 
-                                $("#event_modal").modal("show");
+                                $("#booking_details_modal").modal("show");
                             }
                         },
                         error: function () {
@@ -1675,6 +1675,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var total_extra_service_price = 0;
         var total_extra_service = 0;
         var extraServiceName = "";
+        var isExtraService;
         if ($(".vehicle_extra_service").length > 0) {
             $(".vehicle_extra_service").each(function () {
                 isExtraService = $(this).is(":checked");
@@ -2220,7 +2221,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     $("#insurance_list_container").html(`
                     <div class="row">
                         <span class="text-center mb-3">${_l(
-                            "admin.common.no_insurance_found"
+                            "admin.bookings.no_insurance_found"
                         )}</span>
                     </div>
                 `);
@@ -2556,7 +2557,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                             `$${booking.final_price}`
                                         );
 
-                                        $("#event_modal").modal("show");
+                                        $("#booking_details_modal").modal("show");
                                     }
                                 },
                                 error: function () {
