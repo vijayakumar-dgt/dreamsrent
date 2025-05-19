@@ -389,12 +389,12 @@ class UserBookingController extends Controller
                 ->where("id", $booking->driver_id)
                 ->first();
         }
-        
+
         if (is_null($driverInfo)) {
             $bookingUserInfo = BookingUserInfo::select("driver_first_name", "driver_last_name", "driver_mobile_number")
                 ->where("booking_id", $booking->id)
                 ->first();
-        
+
             if ($bookingUserInfo) {
                 $driverInfo = (object)[
                     'id' => null,
@@ -405,10 +405,23 @@ class UserBookingController extends Controller
         }
 
         return view("booking::user_booking.success_page", compact(
-            "transaction_id", "booking", "vehicleId", "vehicle", "vehicleImageUrl",
-            "dLocation", "rLocation", "mainLocation", "vehicleExtraServicesWithPrice",
-            "vehicleInsurance", "driverInfo", "driverInfo_ride", "driverInfo_price",
-            "bookingInfo", "currencySymbol", "startDateTime", "endDateTime"
+            "transaction_id",
+            "booking",
+            "vehicleId",
+            "vehicle",
+            "vehicleImageUrl",
+            "dLocation",
+            "rLocation",
+            "mainLocation",
+            "vehicleExtraServicesWithPrice",
+            "vehicleInsurance",
+            "driverInfo",
+            "driverInfo_ride",
+            "driverInfo_price",
+            "bookingInfo",
+            "currencySymbol",
+            "startDateTime",
+            "endDateTime"
         ));
     }
 

@@ -80,7 +80,8 @@ function purchaseVerificationHashed(string $filepath, bool $isLocal = false): ar
         )->json();
 
         // Strict type validation of the response
-        if (!is_array($response)
+        if (
+            !is_array($response)
             || !array_key_exists('success', $response)
             || !is_bool($response['success'])
             || !array_key_exists('message', $response)

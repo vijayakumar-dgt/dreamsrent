@@ -52,9 +52,9 @@ class InvoiceController extends Controller
             ->where('users.deleted_at', null)
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->get()->map(function ($user) {
-            $user->full_name = $user->first_name ? ucwords($user->first_name . ' ' . $user->last_name) : '';
-            return $user;
-        });
+                $user->full_name = $user->first_name ? ucwords($user->first_name . ' ' . $user->last_name) : '';
+                return $user;
+            });
         $currentUser = Auth::user();
         $payments = GeneralSetting::where('group_id', 13)->where('value', 1)->get();
         $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();
@@ -75,7 +75,7 @@ class InvoiceController extends Controller
         ->whereDate('start_datetime', '>=', Carbon::today())
         ->orderBy('start_datetime', 'asc')->get();
 
-        $languages = Language::with('transLang')->where('deleted_at', NULL)->get();
+        $languages = Language::with('transLang')->where('deleted_at', null)->get();
 
         return view(
             "admin.invoice.add-invoice",
@@ -184,9 +184,9 @@ class InvoiceController extends Controller
             ->where('users.deleted_at', null)
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->get()->map(function ($user) {
-            $user->full_name = $user->first_name ? ucwords($user->first_name . ' ' . $user->last_name) : '';
-            return $user;
-        });
+                $user->full_name = $user->first_name ? ucwords($user->first_name . ' ' . $user->last_name) : '';
+                return $user;
+            });
         $currentUser = Auth::user();
         $payments = GeneralSetting::where('group_id', 13)->where('value', 1)->get();
         $generalSettings = GeneralSetting::where('group_id', 5)->where('key', 'currency')->first();
@@ -207,7 +207,7 @@ class InvoiceController extends Controller
         ->whereDate('start_datetime', '>=', Carbon::today())
         ->orderBy('start_datetime', 'asc')->get();
 
-        $languages = Language::with('transLang')->where('deleted_at', NULL)->get();
+        $languages = Language::with('transLang')->where('deleted_at', null)->get();
 
         return view(
             "admin.invoice.edit-invoice",
@@ -257,7 +257,6 @@ class InvoiceController extends Controller
             $invoice->items()->delete();
 
             foreach ($items as $item) {
-
                 $invoice->items()->create([
                     'description' => $item['description'] ?? 0,
                     'qty'         => $item['qty'] ?? 0,

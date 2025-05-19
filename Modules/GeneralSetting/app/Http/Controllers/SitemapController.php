@@ -98,7 +98,7 @@ class SitemapController extends Controller
                 return '';
             }
             $lastBeforeSitemap = SitemapUrl::orderByDesc('id')->skip(1)->first();
-           
+
             if ($lastBeforeSitemap && $lastBeforeSitemap->sitemap_path) {
                 $oldPath = public_path($lastBeforeSitemap->sitemap_path);
                 if (file_exists($oldPath)) {

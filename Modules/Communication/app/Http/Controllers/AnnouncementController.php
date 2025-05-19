@@ -99,7 +99,8 @@ class AnnouncementController extends Controller
                 })
                 ->when($request->input('title'), function ($query, $title) {
                     $titleString = is_string($title) ? $title : '';
-                    $query->where('announcements.announcement_title', 'like', '%' . $titleString . '%');                })
+                    $query->where('announcements.announcement_title', 'like', '%' . $titleString . '%');
+                })
                 ->orderBy('announcements.created_at', 'desc')
                 ->get();
 

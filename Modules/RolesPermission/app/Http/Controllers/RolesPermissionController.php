@@ -194,7 +194,7 @@ class RolesPermissionController extends Controller
 
         $role = Role::select('id', 'role_name')->where('id', $roleId)->first();
 
-        if(!$role) {
+        if (!$role) {
             abort(404);
         }
 

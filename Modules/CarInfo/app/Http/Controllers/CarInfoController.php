@@ -1742,7 +1742,7 @@ class CarInfoController extends Controller
                     ->where("vehicle_id", $vehicle->id)
                     ->exists();
             }
-            $faqEnabled = GeneralSetting::where('group_id',20)->where('key','faq')->first()->value;
+            $faqEnabled = GeneralSetting::where('group_id', 20)->where('key', 'faq')->first()->value;
             $extraServiceEnabled = $rentalSettings['extraService'] ?? false;
             $data = [
                 'id' => $vehicle->id,
@@ -1818,7 +1818,7 @@ class CarInfoController extends Controller
                         'question' => $faq->question,
                         'answer' => $faq->answer,
                     ];
-                }) : [], 
+                }) : [],
                 'damages' => $vehicle->damages->map(function (VehicleDamage $damage) {
                     return [
                         'damage_type' => $damage->damage_type,

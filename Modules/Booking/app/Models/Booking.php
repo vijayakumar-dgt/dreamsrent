@@ -66,7 +66,7 @@ use Modules\Booking\Models\BookingUserInfo;
  * @property mixed $extra_service_formatted
  * @property mixed $insurance_formatted
  * @property mixed $insurance_benefits_formatted
- * 
+ *
  *
  */
 

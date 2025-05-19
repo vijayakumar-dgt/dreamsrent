@@ -39,10 +39,10 @@ class QuotationController extends Controller
         $drivingTypes = DB::table('driving_types')->get();
          /** @var \Illuminate\Support\Collection<int, \stdClass> $customers */
          $customers = User::select(
-            'users.id',
-            'users.name as username',
-            DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
-        )
+             'users.id',
+             'users.name as username',
+             DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as full_name"),
+         )
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 3, 'users.status' => 1])
             ->get()->map(function ($customer) {
@@ -611,5 +611,4 @@ class QuotationController extends Controller
             ], 500);
         }
     }
-
 }
