@@ -66,7 +66,7 @@ class InstallerController extends Controller
                 ->withInput()
                 ->withErrors(['errors' => 'Your server does not meet the minimum requirements.']);
         }
-    
+
         try {
             $validated = $request->validate([
                 'host' => 'required|ip',
@@ -77,7 +77,7 @@ class InstallerController extends Controller
                 'reset_database' => 'nullable|string',
                 'fresh_install' => 'nullable|boolean',
             ]);
-    
+
             $databaseDetails = [
                 'host' => $validated['host'],
                 'port' => is_numeric($validated['port']) ? (int)$validated['port'] : $validated['port'],
@@ -86,9 +86,9 @@ class InstallerController extends Controller
                 'password' => $validated['password'] ?? '',
                 'reset_database' => $validated['reset_database'] ?? null,
             ];
-    
+
             $databaseCreate = $this->createDatabaseConnection($databaseDetails);
-    
+
             if ($databaseCreate !== true) {
                 if ($databaseCreate === 'not-found') {
                     return response()->json([
@@ -106,7 +106,7 @@ class InstallerController extends Controller
                     'message' => $databaseCreate
                 ], 200);
             }
-    
+
             $deleteDummyData = false;
             if ($request->boolean('fresh_install')) {
                 $deleteDummyData = true;
@@ -115,14 +115,14 @@ class InstallerController extends Controller
             } else {
                 $migration = $this->importDatabase(InstallerInfo::getDummyDatabaseFilePath());
             }
-    
+
             if ($migration !== true) {
                 return response()->json([
                     'success' => false,
                     'message' => $migration
                 ], 200);
             }
-    
+
             // Create properly typed config array
             $envConfig = [
                 'host' => $validated['host'],
@@ -132,15 +132,15 @@ class InstallerController extends Controller
                 'password' => $validated['password'] ?? '',
             ];
             $this->changeEnvDatabaseConfig($envConfig);
-    
+
             if ($deleteDummyData) {
                 $this->removeDummyFiles();
             }
-    
+
             Cache::forget('fresh_install');
             session()->put('step-3-complete', true);
             Configuration::updateStep(1);
-    
+
             return response()->json([
                 'success' => true,
                 'message' => 'Successfully setup the database'
@@ -211,13 +211,13 @@ class InstallerController extends Controller
                 'password' => 'required|string|same:confirm_password|min:8',
                 'confirm_password' => 'required|string|min:8'
             ]);
-    
+
             // Ensure password is a string before hashing
             $password = $validated['password'];
             if (!is_string($password)) {
                 throw new \InvalidArgumentException('Password must be a string');
             }
-    
+
             $admin = User::updateOrCreate(
                 ['email' => $validated['email']],
                 [
@@ -227,20 +227,19 @@ class InstallerController extends Controller
                     'role_id' => 1,
                 ]
             );
-    
+
             UserDetail::updateOrCreate(['user_id' => $admin->id]);
-    
+
             Configuration::updateStep(2);
             session()->put('step-4-complete', true);
-    
+
             return response()->json([
                 'success' => true,
                 'message' => 'Admin Account Successfully Created'
             ], 200);
-    
         } catch (\Exception $e) {
             Log::error($e->getMessage(), ['trace' => $e->getTraceAsString()]);
-    
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to Create Admin Account',
@@ -372,7 +371,7 @@ class InstallerController extends Controller
                 if (is_array($statuses) && json_last_error() === JSON_ERROR_NONE) {
                     $statuses['Installer'] = false;
                     $updatedContent = json_encode($statuses, JSON_PRETTY_PRINT);
-                    
+
                     if ($updatedContent !== false) {
                         file_put_contents($filePath, $updatedContent);
                     }

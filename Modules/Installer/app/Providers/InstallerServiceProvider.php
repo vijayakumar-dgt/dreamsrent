@@ -44,7 +44,6 @@ class InstallerServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        
     }
 
     /**
@@ -52,7 +51,6 @@ class InstallerServiceProvider extends ServiceProvider
      */
     protected function registerCommandSchedules(): void
     {
-        
     }
 
     /**
@@ -77,7 +75,7 @@ class InstallerServiceProvider extends ServiceProvider
     protected function registerConfig(): void
     {
         $relativeConfigPath = config('modules.paths.generator.config.path');
-        
+
         if (!is_string($relativeConfigPath)) {
             return;
         }
@@ -112,7 +110,7 @@ class InstallerServiceProvider extends ServiceProvider
     public function registerViews(): void
     {
         $viewPath = resource_path('views/modules/' . $this->nameLower);
-        $sourcePath = module_path($this->name, 'resources/views');       
+        $sourcePath = module_path($this->name, 'resources/views');
 
         $this->publishes([$sourcePath => $viewPath], ['views', $this->nameLower . '-module-views']);
 

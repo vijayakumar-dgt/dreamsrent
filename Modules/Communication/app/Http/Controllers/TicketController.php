@@ -52,7 +52,7 @@ class TicketController extends Controller
 
     public function userTicketStore(Request $request): JsonResponse
     {
-        try {           
+        try {
             $user = Auth::guard('admin')->check() ? Auth::guard('admin')->user() : Auth::guard('web')->user();
 
             if (!$user) {
@@ -124,14 +124,14 @@ class TicketController extends Controller
     {
         try {
             $user = current_user();
-    
+
             if (!$user instanceof \App\Models\User) {
                 return response()->json([
                     'code' => 401,
                     'message' => 'Unauthenticated'
                 ], 401);
             }
-    
+
             $ticketId = $request->input('ticketId');
             $priorityFilters = $request->input('priority', []);
             $statusFilters = $request->input('status', []);
@@ -139,7 +139,7 @@ class TicketController extends Controller
             $searchTermInput = $request->input('search', '');
             // Ensure search term is always a string
             $searchTerm = is_string($searchTermInput) ? $searchTermInput : '';
-    
+
             $withRelations = [
                 'user:id,name,email',
                 'user.userDetail:id,user_id,first_name,last_name,profile_image',
@@ -150,10 +150,10 @@ class TicketController extends Controller
                 'ticketHistories.user:id,name,email',
                 'ticketHistories.user.userDetail:id,user_id,first_name,last_name,profile_image',
             ];
-    
-    
+
+
             $query = Ticket::query()->with($withRelations);
-    
+
             // Apply user-specific filters
             if ($user->user_type == 1) {
                 // Admin can see all tickets
@@ -179,17 +179,17 @@ class TicketController extends Controller
                     'user' => $user
                 ], 403);
             }
-    
+
             // Apply priority filters
             if (!empty($priorityFilters)) {
                 $query->whereIn('priority', $priorityFilters);
             }
-    
+
             // Apply status filters
             if (!empty($statusFilters)) {
                 $query->whereIn('status', $statusFilters);
             }
-    
+
             // Apply search filter
             if (!empty($searchTerm)) {
                 $query->where(function ($q) use ($searchTerm) {
@@ -202,7 +202,7 @@ class TicketController extends Controller
                       });
                 });
             }
-    
+
             // Apply sorting
             switch ($sortBy) {
                 case 'ascending':
@@ -221,9 +221,9 @@ class TicketController extends Controller
                     $query->latest();
                     break;
             }
-    
+
             $tickets = $query->get();
-    
+
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.common.default_retrieve_success'),
@@ -242,30 +242,30 @@ class TicketController extends Controller
     {
         try {
             $user = Auth::guard('admin')->check() ? Auth::guard('admin')->user() : Auth::guard('web')->user();
-    
+
             if (!$user) {
                 return response()->json([
                     'code' => 401,
                     'message' => 'Unauthenticated'
                 ], 401);
             }
-    
+
             $validator = Validator::make($request->all(), [
                 'ticketid' => 'required|exists:tickets,id',
                 'assign_staff' => 'required|exists:users,id',
                 'reply' => 'nullable|string|max:3000'
             ]);
-    
+
             if ($validator->fails()) {
                 return response()->json([
                     'code' => 422,
                     'errors' => $validator->errors()
                 ], 422);
             }
-            
+
             /** @var \Modules\Communication\Models\Ticket $ticket */
             $ticket = Ticket::findOrFail($request->input('ticketid'));
-    
+
             // Only assign if the ticket is still open and not yet assigned
             if ($user->user_type == 1) {
                 if ($ticket->status != 1) {
@@ -274,7 +274,7 @@ class TicketController extends Controller
                         'message' => __('admin.support.ticket_assignment_failed_due_to_status')
                     ], 400);
                 }
-    
+
                 // Make sure assign_staff is properly validated and cast to int
                 $assignStaff = $request->input('assign_staff');
                 if (is_numeric($assignStaff)) {
@@ -287,16 +287,16 @@ class TicketController extends Controller
                     ], 400);
                 }
             }
-    
+
             $ticket->updated_by = $user->id;
             $ticket->save();
-    
+
             if ($request->filled('reply')) {
                 $reply = $request->input('reply', '');
                 if (!is_string($reply)) {
                     $reply = '';
                 }
-                
+
                 TicketHistory::create([
                     'ticket_id' => $ticket->id,
                     'user_id' => $user->id,
@@ -305,7 +305,7 @@ class TicketController extends Controller
                     'updated_by' => $user->id,
                 ]);
             }
-    
+
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.support.ticket_update_success'),
@@ -319,19 +319,19 @@ class TicketController extends Controller
             ], 500);
         }
     }
-    
+
     public function ticketUpdate(Request $request): JsonResponse
     {
         try {
             $user = Auth::guard('admin')->check() ? Auth::guard('admin')->user() : Auth::guard('web')->user();
-    
+
             if (!$user) {
                 return response()->json([
                     'code' => 401,
                     'message' => 'Unauthenticated'
                 ], 401);
             }
-    
+
             $validator = Validator::make($request->all(), [
                 'ticketid' => 'required|exists:tickets,id',
                 'status' => 'required|in:1,2,3,4',
@@ -347,17 +347,17 @@ class TicketController extends Controller
             ], [
                 'reply.required' => __('admin.support.reply_required'),
             ]);
-    
+
             if ($validator->fails()) {
                 return response()->json([
                     'code' => 422,
                     'errors' => $validator->errors()
                 ], 422);
             }
-            
+
             /** @var \Modules\Communication\Models\Ticket $ticket */
             $ticket = Ticket::findOrFail($request->input('ticketid'));
-            
+
             $requestStatus = $request->input('status');
             if (!is_numeric($requestStatus)) {
                 return response()->json([
@@ -365,31 +365,31 @@ class TicketController extends Controller
                     'message' => 'Invalid status format'
                 ], 400);
             }
-            
+
             $newStatus = (int)$requestStatus;
             $currentStatus = (int)$ticket->status;
             $statusChanged = ($currentStatus !== $newStatus);
-    
+
             if ($statusChanged) {
                 $allowedTransitions = [
                     1 => [2],
                     2 => [3],
                     3 => [4],
                 ];
-    
+
                 if (!isset($allowedTransitions[$currentStatus]) || !in_array($newStatus, $allowedTransitions[$currentStatus])) {
                     return response()->json([
                         'code' => 403,
                         'message' => __('admin.support.invalid_status_transition')
                     ], 403);
                 }
-    
+
                 $ticket->status = $newStatus;
             }
-    
+
             $ticket->updated_by = $user->id;
             $ticket->save();
-    
+
             $finalStatus = (int)$ticket->status;
             if ($finalStatus !== 3) {
                 return response()->json([
@@ -397,12 +397,12 @@ class TicketController extends Controller
                     'message' => __('admin.support.reply_allowed_only_in_status_3')
                 ], 403);
             }
-    
+
             $reply = $request->input('reply', '');
             if (!is_string($reply)) {
                 $reply = '';
             }
-            
+
             TicketHistory::create([
                 'ticket_id' => $ticket->id,
                 'user_id' => $user->id,
@@ -410,7 +410,7 @@ class TicketController extends Controller
                 'created_by' => $user->id,
                 'updated_by' => $user->id,
             ]);
-    
+
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.support.ticket_update_success'),
@@ -424,7 +424,7 @@ class TicketController extends Controller
             ], 500);
         }
     }
-    
+
     public function delete(Request $request): JsonResponse
     {
         try {
@@ -436,10 +436,10 @@ class TicketController extends Controller
                     'message' => 'Invalid ticket ID format'
                 ], 400);
             }
-            
+
             /** @var \Modules\Communication\Models\Ticket|null $ticket */
             $ticket = Ticket::find($id);
-    
+
             if (!$ticket) {
                 return response()->json([
                     'code'    => 404,
@@ -447,9 +447,9 @@ class TicketController extends Controller
                     'message' => 'Contact not found.'
                 ], 404);
             }
-    
+
             $ticket->delete();
-    
+
             return response()->json([
                 'code'    => 200,
                 'success' => true,

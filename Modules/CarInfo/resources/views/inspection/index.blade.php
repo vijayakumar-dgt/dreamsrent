@@ -238,11 +238,11 @@
                     <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
                         <i class="ti ti-trash-x fs-26"></i>
                     </span>
-                    <h4 class="mb-1">Delete Inspection</h4>
-                    <p class="mb-3">Are you sure you want to delete inspection?</p>
+                    <h4 class="mb-1">{{ __('admin.rentals.delete_inspection') }}</h4>
+                    <p class="mb-3">{{ __('admin.rentals.delete_inspection_confirmation') }}</p>
                     <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
-                        <button type="submit" class="btn btn-primary submitbtn">Yes, Delete</button>
+                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                        <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.yes_delete') }}</button>
                     </div>
                 </div>
                 </form>
@@ -253,5 +253,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('backend/assets/js/carinfo/inspection.js') }}"></script>
+<script src="{{ asset('backend/assets/js/vehicleinfo/inspection.js') }}"></script>
 @endpush

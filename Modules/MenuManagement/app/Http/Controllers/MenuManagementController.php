@@ -130,16 +130,16 @@ class MenuManagementController extends Controller
         try {
             $langCode = app()->getLocale();
             $defaultLanguageId = $request->language_id ?? getLanguageId($langCode);
-            
+
             $query = Menu::where('language_id', $defaultLanguageId);
 
             // Search functionality
             if ($request->has('search') && !empty($request->search)) {
                 $searchTerm = $request->search;
-                $query->where(function($q) use ($searchTerm) {
-                    $q->where('name', 'like', '%'.$searchTerm.'%')
-                    ->orWhere('menu_type', 'like', '%'.$searchTerm.'%')
-                    ->orWhere('permenantlink', 'like', '%'.$searchTerm.'%');
+                $query->where(function ($q) use ($searchTerm) {
+                    $q->where('name', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('menu_type', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('permenantlink', 'like', '%' . $searchTerm . '%');
                 });
             }
 

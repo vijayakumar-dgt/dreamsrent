@@ -44,7 +44,6 @@ class CommunicationServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        
     }
 
     /**
@@ -52,7 +51,6 @@ class CommunicationServiceProvider extends ServiceProvider
      */
     protected function registerCommandSchedules(): void
     {
-        
     }
 
     /**
@@ -77,39 +75,39 @@ class CommunicationServiceProvider extends ServiceProvider
    /**
  * Register config.
  */
-protected function registerConfig(): void
-{
-    $relativeConfigPath = config('modules.paths.generator.config.path');
-    
-    // Single check for both type and non-empty string
-    if (!is_string($relativeConfigPath) || trim($relativeConfigPath) === '') {
-        return;
-    }
+    protected function registerConfig(): void
+    {
+        $relativeConfigPath = config('modules.paths.generator.config.path');
 
-    $configPath = module_path($this->name, $relativeConfigPath);
-    
-    // Verify path exists and is a directory
-    if (!is_dir($configPath)) {
-        return;
-    }
+        // Single check for both type and non-empty string
+        if (!is_string($relativeConfigPath) || trim($relativeConfigPath) === '') {
+            return;
+        }
 
-    $iterator = new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator($configPath, RecursiveDirectoryIterator::SKIP_DOTS)
-    );
+        $configPath = module_path($this->name, $relativeConfigPath);
 
-    /** @var SplFileInfo $file */
-    foreach ($iterator as $file) {
-        if ($file->isFile() && $file->getExtension() === 'php') {
-            $relativePath = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
-            $pathKey = str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
-            $configKey = $this->nameLower . '.' . $pathKey;
-            $key = ($relativePath === 'config.php') ? $this->nameLower : $configKey;
+        // Verify path exists and is a directory
+        if (!is_dir($configPath)) {
+            return;
+        }
 
-            $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
-            $this->mergeConfigFrom($file->getPathname(), $key);
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($configPath, RecursiveDirectoryIterator::SKIP_DOTS)
+        );
+
+        /** @var SplFileInfo $file */
+        foreach ($iterator as $file) {
+            if ($file->isFile() && $file->getExtension() === 'php') {
+                $relativePath = str_replace($configPath . DIRECTORY_SEPARATOR, '', $file->getPathname());
+                $pathKey = str_replace([DIRECTORY_SEPARATOR, '.php'], ['.', ''], $relativePath);
+                $configKey = $this->nameLower . '.' . $pathKey;
+                $key = ($relativePath === 'config.php') ? $this->nameLower : $configKey;
+
+                $this->publishes([$file->getPathname() => config_path($relativePath)], 'config');
+                $this->mergeConfigFrom($file->getPathname(), $key);
+            }
         }
     }
-}
 
     /**
      * Register views.
@@ -127,7 +125,7 @@ protected function registerConfig(): void
         $rawComponentPath = config('modules.paths.generator.component-class.path');
         $componentPath = is_string($rawComponentPath) ? $rawComponentPath : null;
         $componentNamespace = $this->module_namespace(
-            $this->name, 
+            $this->name,
             $this->app_path($componentPath)
         );
         Blade::componentNamespace($componentNamespace, $this->nameLower);
@@ -154,12 +152,12 @@ protected function registerConfig(): void
         // Ensure view paths is an array before iterating
         $rawPaths = config('view.paths');
         $viewPaths = is_array($rawPaths) ? $rawPaths : [];
-        
+
         foreach ($viewPaths as $path) {
             if (!is_string($path)) {
                 continue;
             }
-            
+
             $modulePath = $path . '/modules/' . $this->nameLower;
             if (is_dir($modulePath)) {
                 $paths[] = $modulePath;

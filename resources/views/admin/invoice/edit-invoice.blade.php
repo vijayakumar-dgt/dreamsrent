@@ -7,7 +7,7 @@
     <div class="page-wrapper">
         <div class="content me-4">
             <div class="mb-3">
-                <a href="/admin/invoices" class="d-inline-flex align-items-center fw-medium"><i class="ti ti-arrow-narrow-left me-2"></i>{{ __('admin.common.back_to_list') }}</a>
+                <a href="{{ route('admin.invoice') }}" class="d-inline-flex align-items-center fw-medium"><i class="ti ti-arrow-narrow-left me-2"></i>{{ __('admin.common.back_to_list') }}</a>
             </div>
             <div class="filterbox mb-3 d-flex align-items-center invoice-title">
                 <h4 class="me-3"><i class="ti ti-menu-2 me-2"></i>{{ __('admin.finance_accounts.edit_invoice') }}</h4>
@@ -102,7 +102,7 @@
                                                 <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between">
                                                         <label class="form-label">{{ ucfirst(__('admin.common.to')) }}</label>
-                                                        <a href="admin/customers" class="text-info d-block mb-1">{{ __('admin.common.add_new') }}</a>
+                                                        <a href="{{ route('admin.customers') }}" class="text-info d-block mb-1">{{ __('admin.common.add_new') }}</a>
                                                     </div>
                                                     <select class="select form-control" name="customer_id">
                                                         <option>{{ __('admin.finance_accounts.select_customer') }}</option>
@@ -272,7 +272,7 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-end align-items-center">
-                            <a href="/admin/invoices" class="btn btn-light me-2">{{ __('admin.common.cancel') }}</a>
+                            <a href="{{ route('admin.invoice') }}" class="btn btn-light me-2">{{ __('admin.common.cancel') }}</a>
                             <button type="submit" class="btn btn-primary">{{ __('admin.common.save')}} & {{ __('admin.common.send') }}</button>
                         </div>
                     </div>
@@ -315,7 +315,7 @@
                                     data-price="{{ $booking->price ?? 0 }}"
                                     data-tax="{{ $booking->tax ?? 0 }}">
                                     <td>
-                                        <a href="javascript:;" class="text-info d-block mb-1">#{{$booking->reservation_id}}</a>
+                                        <a href="javascript:void(0);" class="text-info d-block mb-1">#{{$booking->reservation_id}}</a>
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">

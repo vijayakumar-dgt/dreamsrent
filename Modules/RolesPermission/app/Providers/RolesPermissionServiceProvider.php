@@ -43,7 +43,6 @@ class RolesPermissionServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        
     }
 
     /**

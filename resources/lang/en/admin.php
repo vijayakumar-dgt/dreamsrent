@@ -3,8 +3,8 @@
 return array(
   'general_settings' =>
   array(
-    'privacy_policy' => 'Privacy Policy', 
-    'terms_of_use' => 'Terms of Use',   
+    'privacy_policy' => 'Privacy Policy',
+    'terms_of_use' => 'Terms of Use',
     'settings_configuration' => 'Settings & Configuration',
     'account_settings' => 'Account Settings',
     'basic_information' => 'Basic Information',
@@ -261,7 +261,7 @@ return array(
     'seo_setup_site_meta' => 'SEO Setup - Site Meta',
     'meta_title' => 'Meta Title',
     'meta_image' => 'Meta Image',
-    'site_description' => 'Site Description',   
+    'site_description' => 'Site Description',
     'keywords' => 'Keywords',
     'seo_setup_og_meta' => 'SEO Setup - OG Meta',
     'otp_type' => 'OTP Type',
@@ -883,6 +883,8 @@ return array(
     'booking_details' => 'Booking Details',
     'vehicle_price' => 'Vehicle Price',
     'create_booking' => 'Create Booking',
+    'comment_required' => 'Comment is required.',
+    'status_required' => 'Status is required.',
   ),
   'manage' =>
   array(
@@ -1342,7 +1344,7 @@ return array(
     'seo_description_required' => 'The SEO description field is required.',
     'seo_description_maxlength' => 'The SEO description cannot exceed 255 characters.',
     'edit_pricing_title' => 'Edit Pricing',
-    'extra_features' => 'Extra Features',    
+    'extra_features' => 'Extra Features',
     'add_damage_title' => 'Add New Damage',
     'damage_image_label' => 'Damage Image',
     'damage_location_label' => 'Damage Location',
@@ -1419,7 +1421,7 @@ return array(
     'seasonal_late_fee' => 'Late Fee',
     'insurance_price' => 'Price',
     'insurance_benefits' => 'Benefits',
-    'insurance_price_type' => 'Price Type',    
+    'insurance_price_type' => 'Price Type',
     'add_new_fuel_type' => 'Add New Fuel Type',
     'create_fuel_type' => 'Create Fuel Type',
     'edit_fuel_type' => 'Edit Fuel Type',
@@ -2362,8 +2364,8 @@ return array(
     'blog_tag_updated!' => 'Blog Tag Updated!',
     'blog_tag_deleted!' => 'Blog Tag Deleted!',
     'please_enter_the_name' => 'Please Enter The Name',
-    'no_blog_found' => 'No Blog Found',
-    'no_data_found' => 'No Data Found',
+    'no_blog_found' => 'No Data Available',
+    'no_data_found' => 'No Data Available',
     'image_dimensions_must_be_exactly_735_310_pixels' => 'Image dimensions must be exactly 735 x 310 pixels',
     'blog_details' => 'Blog Details',
   ],

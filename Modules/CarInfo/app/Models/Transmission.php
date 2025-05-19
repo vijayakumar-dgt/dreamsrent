@@ -15,5 +15,4 @@ class Transmission extends Model
     protected $table = "transmissions";
 
     protected $fillable = ["name", "status", "language_id"];
-
 }

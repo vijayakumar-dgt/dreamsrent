@@ -156,5 +156,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('backend/assets/js/carinfo/cylinder.js') }}"></script>
+<script src="{{ asset('backend/assets/js/vehicleinfo/cylinder.js') }}"></script>
 @endpush

@@ -17,7 +17,6 @@ use Modules\CarInfo\Http\Controllers\CarFuelController;
 use Modules\CarInfo\Http\Controllers\CarSeatController;
 use Modules\CarInfo\Http\Controllers\CarSteeringController;
 use Modules\CarInfo\Http\Controllers\CarTransmissionContollerController;
-use Modules\CarInfo\Http\Controllers\PricingTypeController;
 use Modules\CarInfo\Models\CarSteering;
 use Modules\CarInfo\Http\Controllers\SeasonController;
 use Modules\CarInfo\Http\Controllers\CategoryController;
@@ -149,12 +148,6 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
         Route::get('get_seasons', [SeasonController::class, 'getSeasons'])->name('get_seasons');
         Route::get('get_season/{id}', [SeasonController::class, 'getSeason'])->name('get_season');
         Route::post('delete_season', [SeasonController::class, 'delete'])->name('delete_season');
-        // Pricing Types
-        Route::get('pricing-types', [PricingTypeController::class, 'index'])->name('pricingType.index');
-        Route::post('pricing-type/save', [PricingTypeController::class, 'store'])->name('pricingType.store');
-        Route::get('pricing-type/list', [PricingTypeController::class, 'list'])->name('pricingType.list');
-        Route::get('pricing-type/edit/{id}', [PricingTypeController::class, 'edit'])->name('pricingType.edit');
-        Route::post('pricing-type/delete', [PricingTypeController::class, 'delete'])->name('pricingType.delete');
         //Car category
         Route::get('category', [CategoryController::class, 'index'])->name('category.index')->middleware('permission');
         Route::post('category/store', [CategoryController::class, 'store'])->name('category.store');

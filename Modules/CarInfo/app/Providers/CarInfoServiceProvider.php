@@ -42,7 +42,6 @@ class CarInfoServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        
     }
 
     /**
@@ -50,7 +49,6 @@ class CarInfoServiceProvider extends ServiceProvider
      */
     protected function registerCommandSchedules(): void
     {
-    
     }
 
     /**

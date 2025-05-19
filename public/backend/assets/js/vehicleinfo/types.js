@@ -97,7 +97,6 @@ $(document).ready(function() {
                 } else {
                     showToast("error", error.responseJSON.message);
                 }
-                // table.ajax.reload();
                 $("#add_type .submitbtn").text(_l('admin.common.create_new'));
                 $("#add_type .submitbtn").prop('disabled', false);
                }
@@ -132,7 +131,7 @@ $(document).ready(function() {
         reader.readAsDataURL(file);
     
         return $(element).data("valid-dimension") !== false;
-    }, "Image dimensions must be between 80x80 and 100x100 pixels (inclusive).");
+    }, _l('admin.rentals.icon_dimension'));
 
     $(document).on('keyup', 'input[name=search]',function(){
         table.ajax.reload();
@@ -200,68 +199,64 @@ $(document).ready(function() {
             autoWidth: false,
             responsive: false,
             aoColumns:[
-                 
-                 {
-                     data: "name",
-                     render:function(data,type,row){
-                        return `<h6 class="fw-medium"><a href="#">${row.name}</a></h6>`;
-                     },
-                     className: 'text-start'
-                 },
-                 {
-                     data: "icon",
-                     render:function(data,type,row){
-                        return `<div class="d-flex align-items-center file-name-icon">
-                                    <a href="#" class="avatar avatar-lg border">
-                                        <img src="${row.icon}" class="img-fluid" width="40" height="40">
-                                    </a>
-                                </div>`;
-                     },
-                     className: 'text-start'
-                 },
-                 {
-                     data: "status",
-                     render:function(data,type,row){
-                        return `<span class="badge ${row.status == 1 ? `badge-success-transparent` : `badge-danger-transparent`}  d-inline-flex align-items-center badge-sm">
-                                        <i class="ti ti-point-filled me-1"></i>${row.status == 1 ? `${_l('admin.common.active')}` : `${_l('admin.common.inactive')}` }
-                                </span>`;
-                     },
-                     className: 'text-start'
-                 },
-                 {
-                     data: null,
-                     render: function(data, type, row){
-                         return `<div class="dropdown">
-                                        <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="ti ti-dots-vertical"></i>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end p-2">
-                                        ${ hasPermission(permissions, 'vehicle_attributes', 'edit') ? 
-
-                                            `<li>
-                                               <button 
-                                                    class="dropdown-item rounded-1 border-0 bg-white edit-type" 
-                                                    data-id="${row.id}">
-                                                    <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
-                                                </button>
-                                            </li>` : ''}
+                {
+                    data: "name",
+                    render:function(data,type,row){
+                    return `<h6 class="fw-medium"><a href="#">${row.name}</a></h6>`;
+                    },
+                    className: 'text-start'
+                },
+                {
+                    data: "icon",
+                    render:function(data,type,row){
+                    return `<div class="d-flex align-items-center file-name-icon">
+                                <a href="#" class="avatar avatar-lg border">
+                                    <img src="${row.icon}" class="img-fluid" width="40" height="40">
+                                </a>
+                            </div>`;
+                    },
+                    className: 'text-start'
+                },
+                {
+                    data: "status",
+                    render:function(data,type,row){
+                    return `<span class="badge ${row.status == 1 ? `badge-success-transparent` : `badge-danger-transparent`}  d-inline-flex align-items-center badge-sm">
+                                <i class="ti ti-point-filled me-1"></i>${row.status == 1 ? `${_l('admin.common.active')}` : `${_l('admin.common.inactive')}` }
+                            </span>`;
+                    },
+                    className: 'text-start'
+                },
+                {
+                    data: null,
+                    render: function(data, type, row){
+                        return `<div class="dropdown">
+                                    <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="ti ti-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end p-2">
+                                    ${ hasPermission(permissions, 'vehicle_attributes', 'edit') ? 
+                                        `<li>
+                                            <button 
+                                                class="dropdown-item rounded-1 border-0 bg-white edit-type" 
+                                                data-id="${row.id}">
+                                                <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
+                                            </button>
+                                        </li>` : ''}
                                     ${ hasPermission(permissions, 'vehicle_attributes', 'delete') ? 
-                                        
-                                            `<li>
-                                               <button 
-                                                    class="dropdown-item rounded-1 border-0 bg-white delete-type" 
-                                                    data-id="${row.id}" 
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#delete-modal">
-                                                    <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
-                                                </button>
-                                            </li>` : ''}
-                                        </ul>
-                                    </div>`;
-                     },
+                                        `<li>
+                                            <button 
+                                                class="dropdown-item rounded-1 border-0 bg-white delete-type" 
+                                                data-id="${row.id}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#delete-modal">
+                                                <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
+                                            </button>
+                                        </li>` : ''}
+                                    </ul>
+                                </div>`;
+                    },
                     visible: hasPermission(permissions, 'vehicle_attributes', 'edit') || hasPermission(permissions, 'vehicle_attributes', 'delete'),
-                     className: 'text-start'
-                 }
+                }
             ],
             "drawCallback": function() {
                 $(".dataTables_info").addClass('d-none');
@@ -272,8 +267,8 @@ $(document).ready(function() {
                 
                 $('.table-footer').empty()
                     .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
-                        .append($('<div class="datatable-info"></div>').append(info.clone(true)))
-                        .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
+                    .append($('<div class="datatable-info"></div>').append(info.clone(true)))
+                    .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
                 );
                 $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
             },
@@ -307,7 +302,6 @@ $(document).ready(function() {
                 if(response.code === 200){
                     showToast("success", response.message);
                     $("#delete-modal").modal('hide');
-                    // initTable();
                     table.ajax.reload();
                 }else{
                     showToast("error", response.message);
@@ -324,11 +318,9 @@ $(document).ready(function() {
             }
         });
     });
-
     
 });
 }) ();
-
 
 $(document).on('click', '.dataTables_paginate a', function() {
     $(".table-footer").find(".dataTables_paginate").removeClass("d-none");

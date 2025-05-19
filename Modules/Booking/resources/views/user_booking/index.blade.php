@@ -32,23 +32,23 @@
                     <div class="booking-wizard-lists">
                         <ul>
                             <li class="active" id="firstBar">
-                                <span><img src="/backend/assets/img/icons/booking-head-icon-01.svg" alt="Booking Icon"></span>
+                                <span><img src="{{ asset('backend/assets/img/icons/booking-head-icon-01.svg') }}" alt="Booking Icon"></span>
                                 <h6>{{__('web.home.location_and_time')}}</h6>
                             </li>
                             <li id="secondBar">
-                                <span><img src="/backend/assets/img/icons/booking-head-icon-02.svg" alt="Booking Icon"></span>
+                                <span><img src="{{ asset('backend/assets/img/icons/booking-head-icon-02.svg') }}" alt="Booking Icon"></span>
                                 <h6>{{__('web.user.extra_services')}}</h6>
                             </li>
                             <li id="thirdBar">
-                                <span><img src="/backend/assets/img/icons/booking-head-icon-03.svg" alt="Booking Icon"></span>
+                                <span><img src="{{ asset('backend/assets/img/icons/booking-head-icon-03.svg') }}" alt="Booking Icon"></span>
                                 <h6>{{__('web.user.details')}}</h6>
                             </li>
                             <li id="fourthbar">
-                                <span><img src="/backend/assets/img/icons/booking-head-icon-04.svg" alt="Booking Icon"></span>
+                                <span><img src="{{ asset('backend/assets/img/icons/booking-head-icon-04.svg') }}" alt="Booking Icon"></span>
                                 <h6>{{__('web.home.checkout')}}</h6>
                             </li>
                             <li id="fifthBar">
-                                <span><img src="/backend/assets/img/icons/booking-head-icon-05.svg" alt="Booking Icon"></span>
+                                <span><img src="{{ asset('backend/assets/img/icons/booking-head-icon-05.svg') }}" alt="Booking Icon"></span>
                                 <h6>{{__('web.home.booking_confirmed')}}</h6>
                             </li>
                         </ul>
@@ -56,12 +56,10 @@
                 </div>
             </div>
         </div>
-
+       <!-- Booking Information -->
         <div class="booking-detail-info">
             <div class="row">
-
-
-
+                <!-- Location and Time -->
                 <div class="col-lg-8" id="first-field">
                     <div class="booking-information-main">
                         <form id="bookLocationForm">
@@ -175,7 +173,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="booking-information-card booking-type-card">
                                 <div class="booking-info-head">
                                     <span><i class="bx bxs-location-plus"></i></span>
@@ -209,7 +206,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="col-md-6">
                                                 <div class="input-block time-widget">
                                                     <label class="form-label">{{__('web.home.start_time')}}</label>
@@ -222,7 +218,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="col-md-6">
                                                 <div class="input-block date-widget">
                                                     <label class="form-label">{{ __('web.home.return_date') }}</label>
@@ -235,7 +230,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="col-md-6">
                                                 <div class="input-block time-widget">
                                                     <label class="form-label">{{__('web.home.return_time')}}</label>
@@ -259,9 +253,8 @@
                         </form>
                     </div>
                 </div>
-
-
-
+                <!-- /Location and Time -->
+                <!-- Extra Services -->
                 <div class="col-lg-8 d-none" id="second-field">
                     <div class="booking-information-main">
                         <form id="bookExtraDetailsForm">
@@ -493,9 +486,8 @@
                         </form>
                     </div>
                 </div>
-
-
-
+                <!-- /Extra Services -->
+                <!-- Billing Information -->
                 <div class="col-lg-8 d-none" id="third-field">
                     <div class="booking-information-main">
                         <form id="bookUserInfoForm">
@@ -638,8 +630,8 @@
                         </form>
                     </div>
                 </div>
-
-
+                <!-- /Billing Information -->
+                <!-- Payment Information -->
                 <div class="col-lg-8 d-none" id="fourth-field">
                     <div class="booking-information-main">
                         <form id="bookPaymentForm">
@@ -660,7 +652,7 @@
                                                     <input type="radio" name="payment_type" id="paypal" value="paypal">
                                                     <span class="payment_checkmark">
                                                         <span class="checked-title">
-                                                            <img src="/backend/assets/img/icons/payment-method-01.svg" alt="Img">
+                                                            <img src="{{ asset('backend/assets/img/icons/payment-method-01.svg') }}" alt="Img">
                                                         </span>
                                                     </span>
                                                 </label>
@@ -671,7 +663,7 @@
                                                 <label class="payment_custom_check">
                                                     <input type="radio" name="payment_type" id="stripe" value="stripe">
                                                     <span class="payment_checkmark">
-                                                        <span class="checked-title"><img src="/backend/assets/img/icons/payment-method-02.svg" alt="Img"></span>
+                                                        <span class="checked-title"><img src="{{ asset('backend/assets/img/icons/payment-method-02.svg') }}" alt="Img"></span>
                                                     </span>
                                                 </label>
                                             </li>
@@ -681,7 +673,7 @@
                                                 <label class="payment_custom_check">
                                                     <input type="radio" name="payment_type" id="cod" value="cod">
                                                     <span class="payment_checkmark">
-                                                        <span class="checked-title"><img src="/backend/assets/img/icons/cash-delivery-icon.svg" alt="Img"></span>
+                                                        <span class="checked-title"><img src="{{ asset('backend/assets/img/icons/cash-delivery-icon.svg') }}" alt="Img"></span>
                                                     </span>
                                                 </label>
                                             </li>
@@ -692,7 +684,7 @@
                                                     <input type="radio" name="payment_type" id="wallet" value="wallet">
                                                     <span class="payment_checkmark">
                                                         <span class="checked-title">
-                                                            <img src="/backend/assets/img/icons/payment-method-04.svg" alt="Img">
+                                                            <img src="{{ asset('backend/assets/img/icons/payment-method-04.svg') }}" alt="Img">
                                                         </span>
                                                     </span>
                                                 </label>
@@ -700,10 +692,8 @@
                                             @endif
                                         </ul>
                                     </div>
-
                                 </div>
                             </div>
-
                             <div class="booking-info-btns d-flex justify-content-end">
                                 <a class="btn btn-secondary backUserInfo scrolUp">{{__('web.home.back_to_billing_info')}}</a>
                                 <button class="btn btn-primary continue-book-btn" id="sumbit_btn" type="submit">Pay $4700 & Place Reservation</button>
@@ -711,10 +701,11 @@
                         </form>
                     </div>
                 </div>
-
-
+                <!-- /Payment Information -->
+                
                 <div class="col-lg-4">
                     <div class="booking-sidebar">
+                        <!-- Sidebar Booking Details -->
                         <div class="booking-sidebar-card">
                             <div class="accordion-item border-0 mb-4">
                                 <div class="accordion-header">
@@ -766,7 +757,8 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!-- /Sidebar Booking Details -->
+                        <!-- Sidebar Location and Time -->
                         <div class="booking-sidebar-card d-none" id="location-card">
                             <div class="accordion-item border-0 mb-4">
                                 <div class="accordion-header p-3 d-flex align-center justify-content-between">
@@ -810,7 +802,8 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!-- /Sidebar Location and Time -->
+                        <!-- Sidebar Extra Services -->
                         <div class="booking-sidebar-card d-none" id="extra-card">
                             <div class="accordion-item border-0 mb-4">
                                 <div class="accordion-header d-flex align-center justify-content-between p-3">
@@ -879,7 +872,8 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!-- /Sidebar Extra Services -->
+                        <!-- Sidebar Coupon -->
                         <div class="booking-sidebar-card d-none">
                             <div class="accordion-item border-0 mb-4">
                                 <div class="accordion-header">
@@ -905,7 +899,8 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!-- /Sidebar Coupon -->
+                        <!-- Sidebar Total Rate -->
                         <div class="total-rate-card">
                             <div class="vehicle-total-price">
                                 <h5>{{__('web.home.estimated_total')}}</h5>
@@ -919,6 +914,7 @@
                                 <span>{{ $currencySymbol }}{{ number_format($grandTotal, 2) }}</span>
                             </div>
                         </div>
+                        <!-- /Sidebar Total Rate -->
                     </div>
                 </div>
             </div>

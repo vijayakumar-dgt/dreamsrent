@@ -3,6 +3,7 @@
 namespace Modules\CarInfo\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
 /**
  * @property int $id
  * @property int $location_id
@@ -17,5 +18,4 @@ class LocationWorkingDay extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [];
-
 }

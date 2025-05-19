@@ -61,7 +61,7 @@ return [
         'otp_sent_success' => 'OTP sent successfully.',
         'first_name' => 'First Name',
         'last_name' => 'Last Name',
-        'first_name_required' => 'First Name is required.', 
+        'first_name_required' => 'First Name is required.',
         'first_name_minlength' => 'First Name must be at least 3 characters long.',
         'first_name_maxlength' => 'First Name must be at most 50 characters long.',
         'first_name_alphabets' => 'First Name can only contain alphabets',
@@ -69,6 +69,7 @@ return [
         'last_name_minlength' => 'Last Name must be at least 3 characters long.',
         'last_name_maxlength' => 'Last Name must be at most 50 characters long.',
         'last_name_alphabets' => 'Last Name can only contain alphabets',
+        'email_otp_verification' => 'Email OTP Verification',
     ],
     'home' => [
         'signin' => 'Sign In',
@@ -218,7 +219,7 @@ return [
         'value_for_money' => 'Value for Money',
         'facilities' => 'Facilities',
         'cleanliness' => 'Cleanliness',
-        'leave_reply' => 'Leave a Reply',       
+        'leave_reply' => 'Leave a Reply',
         'send_reply' => 'Send Reply',
         'pricing' => 'Pricing',
         'delivery' => 'Delivery',
@@ -735,6 +736,7 @@ return [
         'maxlength_50' => 'Maxlength 50 characters',
         'last_login_at' => 'Last Login At',
         'device_not_found' => 'Device not found',
+        'add_to_wallet' => 'Add to Wallet',
     ],
     'blog' => [
         'blog_list' => 'Blog List',
@@ -757,5 +759,8 @@ return [
         'blogs_title' => 'Blogs | Dreams Rent',
         'no_blog_found' => 'No Blog Found',
         'no_data_found' => 'No Data Found',
+        'all_fields_are_required' => 'All fields are required.',
+        'review_added_successfully' => 'Review added successfully',
+        'something_went_wrong' => 'Something went wrong. Please try again.',
     ]
 ];

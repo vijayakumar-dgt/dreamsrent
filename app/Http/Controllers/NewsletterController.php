@@ -53,9 +53,7 @@ class NewsletterController extends Controller
                     'owner_name' => $ownerName ?? 'Admin',
                 ];
                 sendNewsletterEmail($request->subscriber_email, 'newsletter', $notifyData);
-
             } catch (\Exception $e) {
-                
             }
 
             return response()->json([

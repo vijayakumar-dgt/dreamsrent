@@ -35,127 +35,6 @@ $(document).ready(function() {
 
     initTable();
 
-    $("#enquiryForm").validate({
-        rules: {
-            "assigned_cars[]": {
-                required: true,
-            },
-            customer_name: {
-                required: true,
-                maxlength: 100,
-                pattern: /^[a-zA-Z\s]+$/
-            },
-            email: {
-                required: true,
-                email: true,
-            },
-            phone_number: {
-                required: true,
-                digits: true,
-                minlength: 10,
-                maxlength: 15
-            },
-            enquiry_details: {
-                required: true,
-                maxlength: 500
-            },
-            "documents[]": {
-                extension: "jpeg|jpg|png|pdf",
-                filesize: 2048,
-            },
-        },
-        messages: {
-            "assigned_cars[]": {
-                required: "Please select at least one car.",
-            },
-            customer_name: {
-                required: "Customer name is required.",
-                maxlength: "Customer name should not exceed 100 characters.",
-                pattern: "Customer name should only contain alphabetic characters.",
-            },
-            email: {
-                required: "Email is required.",
-                email: "Please enter a valid email address.",
-            },
-            phone_number: {
-                required: "Phone number is required.",
-                digits: "Phone number should only contain digits.",
-                minlength: "Phone number should be at least 10 digits.",
-                maxlength: "Phone number should not exceed 15 digits.",
-            },
-            enquiry_details: {
-                required: "Enquiry details are required.",
-                maxlength: "Enquiry details should not exceed 500 characters.",
-            },
-        },
-        errorPlacement: function (error, element) {
-            if (element.hasClass("select2-hidden-accessible")) {
-                var errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
-            } else {
-                var errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
-            }
-        },
-        highlight: function (element) {
-            if ($(element).hasClass("select2-hidden-accessible")) {
-                $(element).next(".select2-container").addClass("is-invalid").removeClass('is-valid');
-            }
-            $(element).addClass("is-invalid").removeClass("is-valid");
-        },
-        unhighlight: function (element) {
-            if ($(element).hasClass("select2-hidden-accessible")) {
-                $(element).next(".select2-container").removeClass("is-invalid").addClass('is-valid');
-            }
-            $(element).removeClass("is-invalid").addClass("is-valid");
-            var errorId = element.id + "_error";
-            $("#" + errorId).text("");
-        },
-        onkeyup: function(element) {
-            $(element).valid();
-        },
-        onchange: function(element) {
-            $(element).valid();
-        },
-        submitHandler: function(form) {
-            let formData = new FormData(form);
-
-            $.ajax({
-                type: "POST",
-                url: "/admin/enquiry/save",
-                data: formData,
-                enctype: "multipart/form-data",
-                processData: false,
-                contentType: false,
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(resp) {
-                    $(".error-text").text("");
-                    $(".form-control").removeClass("is-invalid is-valid");
-                    if (resp.code === 200) {
-                        showToast('success', resp.message);
-                        $("#add_enquiry_modal").modal('hide');
-                        initTable();
-                    }
-                },
-                error: function(error) {
-                    $(".error-text").text("");
-                    $(".form-control").removeClass("is-invalid is-valid");
-                    if (error.responseJSON.code === 422) {
-                        $.each(error.responseJSON.errors, function(key, val) {
-                            $("#" + key).addClass("is-invalid");
-                            $("#" + key + "_error").text(val[0]);
-                        });
-                    } else {
-                        showToast('error', error.responseJSON.message);
-                    }
-                }
-            });
-        }
-    });
-
     $("#editEnquiryForm").validate({
         rules: {
             comment: {
@@ -167,10 +46,10 @@ $(document).ready(function() {
         },
         messages: {
             comment: {
-                required: "Comment is required.",
+                required: _l('admin.bookings.comment_required'),
             },
             status: {
-                required: "Status is required.",
+                required: _l('admin.bookings.status_required'),
             },
         },
         errorPlacement: function (error, element) {

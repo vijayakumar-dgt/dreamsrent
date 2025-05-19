@@ -43,7 +43,6 @@ class MenuManagementServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        
     }
 
     /**
@@ -51,7 +50,6 @@ class MenuManagementServiceProvider extends ServiceProvider
      */
     protected function registerCommandSchedules(): void
     {
-       
     }
 
     /**

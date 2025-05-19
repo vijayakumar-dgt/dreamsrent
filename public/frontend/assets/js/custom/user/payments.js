@@ -28,9 +28,10 @@
             });
 
             const table = $('#bookingTable').DataTable({
+                ordering: true,
                 searching: false,
-                ordering: false,
-                sort: false,
+                pageLength: 10,
+                lengthChange: false,
                 language: {
                     emptyTable: _l("web.common.empty_table"),
                     info: `${_l("web.common.showing")} _START_ ${_l("web.common.to")} _END_ ${_l("web.common.of")} _TOTAL_ ${_l("web.common.entries")}`,
@@ -61,6 +62,7 @@
             }
 
             table.draw();
+            $(".payment-header").trigger("click");
         } catch (error) {
             console.error(error);
         } finally {

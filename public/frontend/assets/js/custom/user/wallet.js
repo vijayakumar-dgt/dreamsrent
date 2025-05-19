@@ -109,7 +109,7 @@
                             </td>
                         </tr>`).join('')
                     : `<tr>
-                        <td colspan="5" class="text-center">${_l('web.user.no_wallet_transaction_available')}</td>
+                        <td colspan="5" class="text-center">${_l('web.common.empty_table')}</td>
                     </tr>`;
 
                 walletTableElement.find("tbody").html(tableBody);
