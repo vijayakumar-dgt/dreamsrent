@@ -35,7 +35,7 @@
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                     <div class="dropdown me-2">
                         <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                            <i class="ti ti-filter me-1 sort"></i>  <span class="ms-1" id="current_sort"></span>
+                            <i class="ti ti-filter me-1"></i>  <span class="ms-1 sort" id="current_sort"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end p-2 sort_by_list">
                             <li>

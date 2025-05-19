@@ -742,6 +742,15 @@ Template Name: Dreams rent - Bootstrap Admin Template
 		});
 	}
 	
+  const tableWrapper = '.table-responsive';
+
+  $(document).on('show.bs.dropdown', tableWrapper, function () {
+    $(this).css('overflow', 'visible');
+  });
+
+  $(document).on('hide.bs.dropdown', tableWrapper, function () {
+    $(this).css('overflow', 'auto');
+  });
 	
 })();
 

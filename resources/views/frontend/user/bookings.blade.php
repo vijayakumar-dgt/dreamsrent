@@ -129,13 +129,12 @@
                 </div>
                 <!-- /All Bookings -->
                 <!-- Full Calendar -->
-                <div class="row">
-                     <div class="card calendar-loader position-relative d-none">
-                           <div class="card-body vh-15">
-                               @include('frontend.content-loader')
-                           </div>
-                     </div>
+                <div class="card calendar-loader position-relative d-none">
+                    <div class="card-body vh-15">
+                        @include('frontend.content-loader')
+                    </div>
                 </div>
+                
                 <div class="row d-none real-calendar" id="calendar_view">
                     <div class="col-lg-12">
                         <div class="card calendar-card mb-0 ">
