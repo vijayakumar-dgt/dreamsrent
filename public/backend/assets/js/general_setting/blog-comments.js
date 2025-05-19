@@ -41,7 +41,7 @@
         initComplete: function () {
             $(".table-loader, .input-loader, .label-loader").hide();
             $(".real-table, .real-label, .real-input").removeClass("d-none");
-            if ($("#blogCommentTable").length === 0) {
+            if ($("#blogCommentTable").DataTable().rows().count() == 0) {
                 $(".table-footer").addClass("d-none");
             } else {
                 $(".table-footer").removeClass("d-none");

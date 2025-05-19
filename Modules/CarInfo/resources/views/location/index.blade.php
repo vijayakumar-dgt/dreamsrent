@@ -63,7 +63,7 @@
             <!-- Custom Data Table -->
             <div class="custom-datatable-filter table-responsive brandstable d-none real-table">
                 <table class="table" id="locationTable">
-                    <thesad class="thead-light">
+                    <thead class="thead-light">
                         <tr>
                             <th>{{ strtoupper(__('admin.manage.location_title')) }}</th>
                             <th>{{ strtoupper(__('admin.common.address')) }}</th>
@@ -74,7 +74,7 @@
                             <th>{{ strtoupper(__('admin.common.action')) }}</th>
                             @endif
                         </tr>
-                    </thesad>
+                    </thead>
                     <tbody>
                     </tbody>
                 </table>

@@ -114,6 +114,7 @@
                                 </div>
                             </div>
                         </li>
+                        <div class="custom-scroll">
                         @foreach ($vechileName as $value)
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
@@ -121,6 +122,7 @@
                             </label>
                         </li>
                         @endforeach
+                        </div>
                     </ul>
                 </div>
                 <div class="dropdown me-2">
@@ -138,6 +140,7 @@
                                 </div>
                             </div>
                         </li>
+                        <div class="custom-scroll">
                         @foreach ($vechileType as $value)
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
@@ -145,6 +148,7 @@
                             </label>
                         </li>
                         @endforeach
+                        </div>
                     </ul>
                 </div>
                 <div class="dropdown me-3">
@@ -162,6 +166,7 @@
                                 </div>
                             </div>
                         </li>
+                        <div class="custom-scroll">
                         @foreach ($vechileLocation as $value)
                         <li>
                             <label class="dropdown-item d-flex align-items-center rounded-1">
@@ -169,6 +174,7 @@
                             </label>
                         </li>
                         @endforeach
+                        </div>
                     </ul>
                 </div>
                 <div class="dropdown me-3">

@@ -153,8 +153,8 @@ function loadLogoSettings() {
             showToast('error', xhr.responseJSON.message);
         },
         complete: function() {
-            $(".label-loader, .input-loader").hide();
-            $('.real-label, .real-input').removeClass('d-none');
+            $(".label-loader, .input-loader, .card-loader").hide();
+            $('.real-label, .real-input, .real-card').removeClass('d-none');
         }
     });
 }

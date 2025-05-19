@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ isset($seo_title) ? $seo_title : config('app.name') }} | ForgotPassword</title>
+    <title>{{ isset($seo_title) ? $seo_title : config('app.name') }} | {{ __('web.auth.forgot_password_title') }}</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('frontend/assets/img/favicon.png') }}">

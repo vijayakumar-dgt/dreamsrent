@@ -24,13 +24,13 @@
                 $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
             },
             language: {
-                emptyTable: _l("admin.common.no_matching_records"),
+                emptyTable: _l("admin.common.empty_table"),
                 info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
                 infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
                 infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
                 lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
                 search: _l("admin.common.search") + ":",
-                zeroRecords: _l("admin.common.empty_table"),
+                zeroRecords: _l("admin.common.no_matching_records"),
                 paginate: {
                     first: _l("admin.common.first"),
                     last: _l("admin.common.last"),
@@ -41,7 +41,7 @@
             initComplete: function () {
                 $(".table-loader, .input-loader, .label-loader").hide();
                 $(".real-table, .real-label, .real-input").removeClass("d-none");
-                if ($(".blogCategoryTable").length === 0) {
+                if ($(".blogCategoryTable").DataTable().rows().count() === 0) {
                     $(".table-footer").addClass("d-none");
                 } else {
                     $(".table-footer").removeClass("d-none");

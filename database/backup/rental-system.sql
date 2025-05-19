@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 15, 2025 at 02:42 PM
+-- Generation Time: May 19, 2025 at 12:11 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49569,22 +49569,6 @@ CREATE TABLE `extra_services` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `failed_jobs`
---
-
-CREATE TABLE `failed_jobs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` varchar(255) NOT NULL,
-  `connection` text NOT NULL,
-  `queue` text NOT NULL,
-  `payload` longtext NOT NULL,
-  `exception` longtext NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `faqs`
 --
 
@@ -49879,41 +49863,6 @@ CREATE TABLE `invoice_items` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jobs`
---
-
-CREATE TABLE `jobs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `queue` varchar(255) NOT NULL,
-  `payload` longtext NOT NULL,
-  `attempts` tinyint(3) UNSIGNED NOT NULL,
-  `reserved_at` int(10) UNSIGNED DEFAULT NULL,
-  `available_at` int(10) UNSIGNED NOT NULL,
-  `created_at` int(10) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `job_batches`
---
-
-CREATE TABLE `job_batches` (
-  `id` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `total_jobs` int(11) NOT NULL,
-  `pending_jobs` int(11) NOT NULL,
-  `failed_jobs` int(11) NOT NULL,
-  `failed_job_ids` longtext NOT NULL,
-  `options` mediumtext DEFAULT NULL,
-  `cancelled_at` int(11) DEFAULT NULL,
-  `created_at` int(11) NOT NULL,
-  `finished_at` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `languages`
 --
 
@@ -49935,32 +49884,6 @@ CREATE TABLE `languages` (
 INSERT INTO `languages` (`id`, `language_id`, `rtl`, `default`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (9, 1, 0, 1, 1, '2025-03-14 10:35:10', '2025-04-12 16:05:14', NULL),
 (11, 2, 1, 0, 1, '2025-04-07 16:58:18', '2025-04-12 10:57:09', NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `language_code`
---
-
-CREATE TABLE `language_code` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `code` varchar(255) NOT NULL,
-  `direction` varchar(255) NOT NULL DEFAULT 'ltr',
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `is_default` tinyint(1) NOT NULL DEFAULT 0,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `language_code`
---
-
-INSERT INTO `language_code` (`id`, `name`, `code`, `direction`, `status`, `is_default`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'English', 'en', 'LTR', 1, 1, NULL, '2024-10-24 13:18:39', '2025-01-24 23:01:38'),
-(2, 'Arabic', 'ar', 'RTL', 1, 0, NULL, '2024-10-25 02:38:15', '2025-01-24 23:01:38');
 
 -- --------------------------------------------------------
 
@@ -50416,22 +50339,6 @@ CREATE TABLE `review_messages` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `review_reactions`
---
-
-CREATE TABLE `review_reactions` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `review_id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `is_like` tinyint(4) NOT NULL DEFAULT 0,
-  `is_dislike` tinyint(4) NOT NULL DEFAULT 0,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `roles`
 --
 
@@ -50564,13 +50471,14 @@ CREATE TABLE `section_datas` (
 --
 
 INSERT INTO `section_datas` (`id`, `language_id`, `section_id`, `datas`, `created_at`, `update_at`) VALUES
-(1, 1, 1, '{\"label_one\":\"100% Trusted car rental platform in the World\",\"line_one\":\"Find Your Best\",\"line_two\":\"Dream Car for Rental\",\"description_one\":\"Experience the ultimate in comfort, performance, and sophistication with our luxury car rentals. From sleek sedans and stylish coupes to spacious SUVs and elegant convertibles, we offer a range of premium vehicles to suit your preferences and lifestyle.\"}', '2025-04-23 07:31:48', '2025-04-23 07:31:48'),
-(2, 2, 1, '{\"label_one\":\"\\u0645\\u0646\\u0635\\u0629 \\u062a\\u0623\\u062c\\u064a\\u0631 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u0648\\u062b\\u0648\\u0642\\u0629 \\u0628\\u0646\\u0633\\u0628\\u0629 100% \\u0641\\u064a \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645\",\"line_one\":\"\\u0627\\u0628\\u062d\\u062b \\u0639\\u0646 \\u0623\\u0641\\u0636\\u0644 \\u0645\\u0627 \\u0644\\u062f\\u064a\\u0643\",\"line_two\":\"\\u062f\\u0631\\u064a\\u0645 \\u0643\\u0627\\u0631 \\u0644\\u0644\\u062a\\u0623\\u062c\\u064a\\u0631\",\"description_one\":\"\\u0627\\u0633\\u062a\\u0645\\u062a\\u0639 \\u0628\\u0623\\u0642\\u0635\\u0649 \\u062f\\u0631\\u062c\\u0627\\u062a \\u0627\\u0644\\u0631\\u0627\\u062d\\u0629 \\u0648\\u0627\\u0644\\u0623\\u062f\\u0627\\u0621 \\u0648\\u0627\\u0644\\u0631\\u0642\\u064a \\u0645\\u0639 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a\\u0646\\u0627 \\u0627\\u0644\\u0641\\u0627\\u062e\\u0631\\u0629 \\u0644\\u0644\\u0625\\u064a\\u062c\\u0627\\u0631. \\u0645\\u0646 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0633\\u064a\\u062f\\u0627\\u0646 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629 \\u0648\\u0627\\u0644\\u0643\\u0648\\u0628\\u064a\\u0647 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629 \\u0625\\u0644\\u0649 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u062f\\u0641\\u0639 \\u0627\\u0644\\u0631\\u0628\\u0627\\u0639\\u064a \\u0627\\u0644\\u0641\\u0633\\u064a\\u062d\\u0629 \\u0648\\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u0643\\u0634\\u0648\\u0641\\u0629 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629\\u060c \\u0646\\u0642\\u062f\\u0645 \\u0644\\u0643 \\u0645\\u062c\\u0645\\u0648\\u0639\\u0629 \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0641\\u0627\\u062e\\u0631\\u0629 \\u0627\\u0644\\u062a\\u064a \\u062a\\u0646\\u0627\\u0633\\u0628 \\u062a\\u0641\\u0636\\u064a\\u0644\\u0627\\u062a\\u0643 \\u0648\\u0623\\u0633\\u0644\\u0648\\u0628 \\u062d\\u064a\\u0627\\u062a\\u0643.\",\"\"}', '2025-04-25 10:21:16', '2025-04-25 10:21:16'),
+(1, 1, 1, '{\"label_one\":\"100% Trusted car rental platform in the World\",\"line_one\":\"Find Your Best\",\"line_two\":\"Dream Car for Rental\",\"description_one\":\"Experience the ultimate in comfort, performance, and sophistication with our luxury car rentals. From sleek sedans and stylish coupes to spacious SUVs and elegant convertibles, we offer a range of premium vehicles to suit your preferences and lifestyle.\",\"thumbnail_image_one\":\"thumbnail_image_banner_one\\/1272318f-5c6c-4055-842c-f46f6c166a76_1746505538.png\"}', '2025-05-06 04:25:38', '2025-05-06 04:25:38'),
+(2, 2, 1, '{\"label_one\":\"\\u0645\\u0646\\u0635\\u0629 \\u062a\\u0623\\u062c\\u064a\\u0631 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u0648\\u062b\\u0648\\u0642\\u0629 \\u0628\\u0646\\u0633\\u0628\\u0629 100% \\u0641\\u064a \\u0627\\u0644\\u0639\\u0627\\u0644\\u0645\",\"line_one\":\"\\u0627\\u0628\\u062d\\u062b \\u0639\\u0646 \\u0623\\u0641\\u0636\\u0644 \\u0645\\u0627 \\u0644\\u062f\\u064a\\u0643\",\"line_two\":\"\\u062f\\u0631\\u064a\\u0645 \\u0643\\u0627\\u0631 \\u0644\\u0644\\u062a\\u0623\\u062c\\u064a\\u0631\",\"description_one\":\"\\u0627\\u0633\\u062a\\u0645\\u062a\\u0639 \\u0628\\u0623\\u0642\\u0635\\u0649 \\u062f\\u0631\\u062c\\u0627\\u062a \\u0627\\u0644\\u0631\\u0627\\u062d\\u0629 \\u0648\\u0627\\u0644\\u0623\\u062f\\u0627\\u0621 \\u0648\\u0627\\u0644\\u0631\\u0642\\u064a \\u0645\\u0639 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a\\u0646\\u0627 \\u0627\\u0644\\u0641\\u0627\\u062e\\u0631\\u0629 \\u0644\\u0644\\u0625\\u064a\\u062c\\u0627\\u0631. \\u0645\\u0646 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0633\\u064a\\u062f\\u0627\\u0646 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629 \\u0648\\u0627\\u0644\\u0643\\u0648\\u0628\\u064a\\u0647 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629 \\u0625\\u0644\\u0649 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u062f\\u0641\\u0639 \\u0627\\u0644\\u0631\\u0628\\u0627\\u0639\\u064a \\u0627\\u0644\\u0641\\u0633\\u064a\\u062d\\u0629 \\u0648\\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0645\\u0643\\u0634\\u0648\\u0641\\u0629 \\u0627\\u0644\\u0623\\u0646\\u064a\\u0642\\u0629\\u060c \\u0646\\u0642\\u062f\\u0645 \\u0644\\u0643 \\u0645\\u062c\\u0645\\u0648\\u0639\\u0629 \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0627\\u0644\\u0641\\u0627\\u062e\\u0631\\u0629 \\u0627\\u0644\\u062a\\u064a \\u062a\\u0646\\u0627\\u0633\\u0628 \\u062a\\u0641\\u0636\\u064a\\u0644\\u0627\\u062a\\u0643 \\u0648\\u0623\\u0633\\u0644\\u0648\\u0628 \\u062d\\u064a\\u0627\\u062a\\u0643.\",\"thumbnail_image_one\":\"thumbnail_image_banner_one\\/c4ac357d-ba7f-42e4-9e3e-6e7f784c78ec_1744436030.png\"}', '2025-04-12 06:55:37', '2025-04-12 06:55:37'),
 (3, 1, 42, '{\"vehicle_id\":\"54\",\"label_1\":\"Best Deal\",\"dis_1\":\"Dreams Rent offers a fleet of high-quality\",\"label_2\":\"Doorstep Delivery\",\"dis_2\":\"Dreams Rent offers a fleet of high-quality\",\"label_3\":\"Low Security Deposit\",\"dis_3\":\"Dreams Rent offers a fleet of high-quality\",\"label_4\":\"Latest Cars\",\"dis_4\":\"Dreams Rent offers a fleet of high-quality\",\"label_5\":\"Customer Support\",\"dis_5\":\"Dreams Rent offers a fleet of high-quality\",\"label_6\":\"No Hidden Charges\",\"dis_6\":\"Dreams Rent offers a fleet of high-quality\"}', '2025-04-12 07:49:52', '2025-04-12 07:49:52'),
-(4, 1, 29, '{\"label_two\":\"qewuoueoueoiuqoieuoiwqueoiuoiuoiUOIUOU\",\"description_two\":\"OUOIUWOIUWOIEUWQOIEUQOIEUOIWQUEOIQUEOWQE\",\"thumbnail_image_two\":\"thumbnail_image_banner_two\\/c13dfb85-7194-47ee-a11c-2e211ab144b0_1744436159.png\"}', '2025-04-12 05:35:59', '2025-04-12 05:35:59'),
+(4, 1, 29, '{\"label_two\":\"Explore our Verified & Professional Car\",\"description_two\":\"Modern design sports cruisers for those who crave adventure & grandeur Cars for relaxing with your loved ones.\",\"thumbnail_image_two\":\"thumbnail_image_banner_two\\/c13dfb85-7194-47ee-a11c-2e211ab144b0_1744436159.png\"}', '2025-04-29 05:34:52', '2025-04-29 05:34:52'),
 (5, 2, 29, '{\"label_two\":\"\\u0627\\u0633\\u062a\\u0643\\u0634\\u0641 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a\\u0646\\u0627 \\u0627\\u0644\\u0645\\u0639\\u062a\\u0645\\u062f\\u0629 \\u0648\\u0627\\u0644\\u0627\\u062d\\u062a\\u0631\\u0627\\u0641\\u064a\\u0629\",\"description_two\":\"\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0631\\u064a\\u0627\\u0636\\u064a\\u0629 \\u0628\\u062a\\u0635\\u0645\\u064a\\u0645 \\u0639\\u0635\\u0631\\u064a \\u0644\\u0623\\u0648\\u0644\\u0626\\u0643 \\u0627\\u0644\\u0630\\u064a\\u0646 \\u064a\\u062a\\u0648\\u0642\\u0648\\u0646 \\u0625\\u0644\\u0649 \\u0627\\u0644\\u0645\\u063a\\u0627\\u0645\\u0631\\u0629 \\u0648\\u0627\\u0644\\u0639\\u0638\\u0645\\u0629 \\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0644\\u0644\\u0627\\u0633\\u062a\\u0631\\u062e\\u0627\\u0621 \\u0645\\u0639 \\u0623\\u062d\\u0628\\u0627\\u0626\\u0643.\",\"thumbnail_image_two\":\"thumbnail_image_banner_two\\/93fb4577-7c9d-4918-81af-306f6422be94_1744436137.png\"}', '2025-04-12 06:56:46', '2025-04-12 06:56:46'),
 (6, 2, 42, '{\"vehicle_id\":\"61\",\"label_1\":\"\\u0623\\u0641\\u0636\\u0644 \\u0635\\u0641\\u0642\\u0629\",\"dis_1\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_2\":\"\\u0644\\u0627 \\u062a\\u0648\\u062c\\u062f \\u0631\\u0633\\u0648\\u0645 \\u062e\\u0641\\u064a\\u0629\",\"dis_2\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_3\":\"\\u0623\\u0641\\u0636\\u0644 \\u0635\\u0641\\u0642\\u0629\",\"dis_3\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_4\":\"\\u0644\\u0627 \\u062a\\u0648\\u062c\\u062f \\u0631\\u0633\\u0648\\u0645 \\u062e\\u0641\\u064a\\u0629\",\"dis_4\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_5\":\"\\u0644\\u0627 \\u062a\\u0648\\u062c\\u062f \\u0631\\u0633\\u0648\\u0645 \\u062e\\u0641\\u064a\\u0629\",\"dis_5\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\",\"label_6\":\"\\u0623\\u0641\\u0636\\u0644 \\u0635\\u0641\\u0642\\u0629\",\"dis_6\":\"\\u062a\\u0642\\u062f\\u0645 \\u0634\\u0631\\u0643\\u0629 \\u062f\\u0631\\u064a\\u0645\\u0632 \\u0631\\u064a\\u0646\\u062a \\u0623\\u0633\\u0637\\u0648\\u0644\\u0627\\u064b \\u0645\\u0646 \\u0627\\u0644\\u0633\\u064a\\u0627\\u0631\\u0627\\u062a \\u0639\\u0627\\u0644\\u064a\\u0629 \\u0627\\u0644\\u062c\\u0648\\u062f\\u0629\"}', '2025-04-12 06:58:51', '2025-04-12 06:58:51'),
-(7, 1, 1, '{\"label_one\":\"100% Trusted car rental platform in the World\",\"line_one\":\"Find Your Best\",\"line_two\":\"Dream Car for Rental\",\"description_one\":\"Experience the ultimate in comfort, performance, and sophistication with our luxury car rentals. From sleek sedans and stylish coupes to spacious SUVs and elegant convertibles, we offer a range of premium vehicles to suit your preferences and lifestyle.\",\"thumbnail_image_one\":\"\"}', '2025-04-25 10:21:52', '2025-04-25 10:21:52');
+(7, 1, 1, '{\"label_one\":\"100% Trusted car rental platform in the World\",\"line_one\":\"Find Your Best\",\"line_two\":\"Dream Car for Rental\",\"description_one\":\"Experience the ultimate in comfort, performance, and sophistication with our luxury car rentals. From sleek sedans and stylish coupes to spacious SUVs and elegant convertibles, we offer a range of premium vehicles to suit your preferences and lifestyle.\",\"thumbnail_image_one\":\"thumbnail_image_banner_one\\/1272318f-5c6c-4055-842c-f46f6c166a76_1746505538.png\"}', '2025-05-06 04:25:38', '2025-05-06 04:25:38'),
+(8, 1, 26, '{\"why_label_1\":\"Easy & Fast Booking\",\"why_dis_1\":\"Completely carinate e business testing process whereas fully researched customer service. Globally extensive content with quality.\",\"why_icon_1\":\"\",\"why_label_2\":\"Many Pickup Location\",\"why_dis_2\":\"Enthusiastically magnetic initiatives with cross-platform sources. Dynamically target testing procedures through effective.\",\"why_icon_2\":\"\",\"why_label_3\":\"Customer Satisfaction\",\"why_dis_3\":\"Globally user centric method interactive. Seamlessly revolutionize unique portals orporate collaboration.\",\"why_icon_3\":\"\"}', '2025-05-16 11:41:06', '2025-05-16 11:41:06');
 
 -- --------------------------------------------------------
 
@@ -55522,18 +55430,6 @@ CREATE TABLE `vehicle_extra_services` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `vehicle_extra_services`
---
-
-INSERT INTO `vehicle_extra_services` (`id`, `vehicle_id`, `extra_service_id`, `value`, `price`, `created_at`, `updated_at`) VALUES
-(12, 2, 1, 'per_day', 5.00, '2025-04-25 10:02:46', '2025-04-25 10:02:46'),
-(14, 3, 1, 'per_day', 4.00, '2025-04-25 11:06:20', '2025-04-25 11:06:20'),
-(16, 5, 1, 'per_day', 500.00, '2025-04-25 11:12:11', '2025-04-25 11:12:11'),
-(17, 6, 1, 'per_day', 4.00, '2025-04-25 11:36:04', '2025-04-25 11:36:04'),
-(18, 4, 1, 'per_day', 180.00, '2025-04-25 11:41:07', '2025-04-25 11:41:07'),
-(19, 1, 1, 'per_day', 20.00, '2025-04-25 12:11:44', '2025-04-25 12:11:44');
-
 -- --------------------------------------------------------
 
 --
@@ -55958,13 +55854,6 @@ ALTER TABLE `extra_services`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `failed_jobs`
---
-ALTER TABLE `failed_jobs`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
-
---
 -- Indexes for table `faqs`
 --
 ALTER TABLE `faqs`
@@ -56021,28 +55910,9 @@ ALTER TABLE `invoice_items`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `jobs`
---
-ALTER TABLE `jobs`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `jobs_queue_index` (`queue`);
-
---
--- Indexes for table `job_batches`
---
-ALTER TABLE `job_batches`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `languages`
 --
 ALTER TABLE `languages`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `language_code`
---
-ALTER TABLE `language_code`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -56151,12 +56021,6 @@ ALTER TABLE `reviews`
 -- Indexes for table `review_messages`
 --
 ALTER TABLE `review_messages`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `review_reactions`
---
-ALTER TABLE `review_reactions`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -56639,12 +56503,6 @@ ALTER TABLE `extra_services`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `failed_jobs`
---
-ALTER TABLE `failed_jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `faqs`
 --
 ALTER TABLE `faqs`
@@ -56699,22 +56557,10 @@ ALTER TABLE `invoice_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `jobs`
---
-ALTER TABLE `jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `languages`
 --
 ALTER TABLE `languages`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- AUTO_INCREMENT for table `language_code`
---
-ALTER TABLE `language_code`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `locations`
@@ -56819,12 +56665,6 @@ ALTER TABLE `review_messages`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `review_reactions`
---
-ALTER TABLE `review_reactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
@@ -56858,7 +56698,7 @@ ALTER TABLE `sections`
 -- AUTO_INCREMENT for table `section_datas`
 --
 ALTER TABLE `section_datas`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `signature_settings`
@@ -56990,7 +56830,7 @@ ALTER TABLE `vehicle_damages`
 -- AUTO_INCREMENT for table `vehicle_extra_services`
 --
 ALTER TABLE `vehicle_extra_services`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `vehicle_faqs`

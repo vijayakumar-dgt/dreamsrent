@@ -480,7 +480,8 @@
 
     function updateFaqCount() {
         const count = $(".car_faq_append .accordion-item").length;
-        $("#faq_count_display").text(count); // Assuming you have an element with this ID
+        console.log(count);
+        $("#faq_count").text(count); // Assuming you have an element with this ID
     }
 
     function getDocumentsInfo() {

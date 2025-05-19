@@ -100,6 +100,39 @@
                                                 }"
                                                 data-line_one="${
                                                     value.line_one ?? ""
+                                                }"
+                                                data-why_label_1="${
+                                                    value.why_label_1 ?? ""
+                                                }"
+                                                data-why_dis_1="${
+                                                    value.why_dis_1 ?? ""
+                                                }"
+                                                data-why_label_2="${
+                                                    value.why_label_2 ?? ""
+                                                }"
+                                                data-why_dis_2="${
+                                                    value.why_dis_2 ?? ""
+                                                }"
+                                                data-why_label_3="${
+                                                    value.why_label_3 ?? ""
+                                                }"
+                                                data-why_dis_3="${
+                                                    value.why_dis_3 ?? ""
+                                                }"
+                                                data-why_icon_1="${
+                                                    value.why_icon_1
+                                                        ? `/storage/${value.why_icon_1}`
+                                                        : ""
+                                                }"
+                                                data-why_icon_2="${
+                                                    value.why_icon_2
+                                                        ? `/storage/${value.why_icon_2}`
+                                                        : ""
+                                                }"
+                                                data-why_icon_3="${
+                                                    value.why_icon_3
+                                                        ? `/storage/${value.why_icon_3}`
+                                                        : ""
                                                 }">
                                                 <i class="ti ti-pencil me-1"></i>${_l(
                                                     "admin.common.edit"
@@ -327,7 +360,31 @@ $(document).on("click", ".section_data", function (e) {
     } else if (ID == 26) {
         $("#section_id_4").removeClass("d-none");
         $("#section_id").val(ID);
-        $("#why_label_1").val($(this).data("why_label_1"));
+
+        const trigger = $(this);
+
+        $("#why_label_1").val(trigger.data("why_label_1"));
+        $("#why_dis_1").val(trigger.data("why_dis_1"));
+        $("#why_label_2").val(trigger.data("why_label_2"));
+        $("#why_dis_2").val(trigger.data("why_dis_2"));
+        $("#why_label_3").val(trigger.data("why_label_3"));
+        $("#why_dis_3").val(trigger.data("why_dis_3"));
+
+        const icon1 = trigger.data("why_icon_1");
+        const icon2 = trigger.data("why_icon_2");
+        const icon3 = trigger.data("why_icon_3");
+
+        if (icon1) {
+            $("#preview_why_icon_1").attr("src", icon1).removeClass("d-none");
+        }
+
+        if (icon2) {
+            $("#preview_why_icon_2").attr("src", icon2).removeClass("d-none");
+        }
+
+        if (icon3) {
+            $("#preview_why_icon_3").attr("src", icon3).removeClass("d-none");
+        }
     }
 });
 
@@ -351,26 +408,26 @@ function previewThumbnailTwo(input) {
 }
 
 function validateAndPreview(inputId, previewId) {
-    const input = $('#' + inputId)[0];
+    const input = $("#" + inputId)[0];
     const file = input.files[0];
-    const preview = $('#' + previewId);
-    preview.addClass('d-none');
-    preview.attr('src', '#');
+    const preview = $("#" + previewId);
+    preview.addClass("d-none");
+    preview.attr("src", "#");
 
     if (!file) return;
 
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/svg+xml'];
+    const allowedTypes = ["image/jpeg", "image/png", "image/svg+xml"];
     if (!allowedTypes.includes(file.type)) {
         showToast("error", "Only JPG, PNG, or SVG files are allowed.");
-        input.value = '';
+        input.value = "";
         return;
     }
 
     const objectURL = URL.createObjectURL(file);
 
     // SVG preview without dimension check
-    if (file.type === 'image/svg+xml') {
-        preview.attr('src', objectURL).removeClass('d-none');
+    if (file.type === "image/svg+xml") {
+        preview.attr("src", objectURL).removeClass("d-none");
         return;
     }
 
@@ -378,29 +435,29 @@ function validateAndPreview(inputId, previewId) {
     img.onload = function () {
         if (this.width !== 40 || this.height !== 40) {
             showToast("error", "Image must be exactly 40x40 pixels.");
-            input.value = '';
-            preview.addClass('d-none');
+            input.value = "";
+            preview.addClass("d-none");
         } else {
-            preview.attr('src', objectURL).removeClass('d-none');
+            preview.attr("src", objectURL).removeClass("d-none");
         }
     };
     img.onerror = function () {
         showToast("error", "Invalid image file.");
-        input.value = '';
-        preview.addClass('d-none');
+        input.value = "";
+        preview.addClass("d-none");
     };
 
     img.src = objectURL;
 }
 
-$('#why_icon_1').on('change', function () {
-    validateAndPreview('why_icon_1', 'preview_why_icon_1');
+$("#why_icon_1").on("change", function () {
+    validateAndPreview("why_icon_1", "preview_why_icon_1");
 });
 
-$('#why_icon_2').on('change', function () {
-    validateAndPreview('why_icon_2', 'preview_why_icon_2');
+$("#why_icon_2").on("change", function () {
+    validateAndPreview("why_icon_2", "preview_why_icon_2");
 });
 
-$('#why_icon_3').on('change', function () {
-    validateAndPreview('why_icon_3', 'preview_why_icon_3');
+$("#why_icon_3").on("change", function () {
+    validateAndPreview("why_icon_3", "preview_why_icon_3");
 });

@@ -411,14 +411,14 @@ Template Name: Dreams rent - Bootstrap Admin Template
 
 
 	  /* card with fullscreen */
-	  let DIV_CARD = ".card";
+	  let divCard = ".card";
 	  let cardFullscreenBtn = document.querySelectorAll(
 		'[data-bs-toggle="card-fullscreen"]'
 	  );
 	  cardFullscreenBtn.forEach((ele) => {
 		ele.addEventListener("click", function (e) {
 		  let $this = this;
-		  let card = $this.closest(DIV_CARD);
+		  let card = $this.closest(divCard);
 		  card.classList.toggle("card-fullscreen");
 		  card.classList.remove("card-collapsed");
 		  e.preventDefault();
@@ -428,7 +428,7 @@ Template Name: Dreams rent - Bootstrap Admin Template
 	  /* card with fullscreen */
 
 	    /* card with close button */
-  		let DIV_CARD_CLOSE = ".card";
+  		let divCardClose = ".card";
 		let cardRemoveBtn = document.querySelectorAll(
 			'[data-bs-toggle="card-remove"]'
 		);
@@ -436,7 +436,7 @@ Template Name: Dreams rent - Bootstrap Admin Template
 			ele.addEventListener("click", function (e) {
 			e.preventDefault();
 			let $this = this;
-			let card = $this.closest(DIV_CARD_CLOSE);
+			let card = $this.closest(divCardClose);
 			card.remove();
 			return false;
 			});
@@ -742,32 +742,20 @@ Template Name: Dreams rent - Bootstrap Admin Template
 		});
 	}
 	
-	
-})();
+ 	const tableWrapper = '.table-responsive';
 
-	$(document).ready(function () {
-		/*---------------------------------------------------------*/
-		$(".wizard-next-btn").on('click', function () { // Function Runs On NEXT Button Click
-			$(this).closest('fieldset').next().fadeIn('slow');
-			$(this).closest('fieldset').css({
-				'display': 'none'
-			});
-
-		});
-		$(".wizard-prev-btn").on('click', function () { // Function Runs On NEXT Button Click
-			$(this).closest('fieldset').prev().fadeIn('slow');
-			$(this).closest('fieldset').css({
-				'display': 'none'
-			});
-
-		});
+	$(document).on('show.bs.dropdown', tableWrapper, function () {
+		$(this).css('overflow', 'visible');
 	});
 
-!function($) {
-	"use strict";
+	$(document).on('hide.bs.dropdown', tableWrapper, function () {
+		$(this).css('overflow', 'auto');
+	});
+    /** Preloader */
 	$(window).on("load", function() {
 		$('[data-loader="circle-side"]').fadeOut(), $("#preloader").delay(350).fadeOut("slow"), $("body").delay(350).css({
 			overflow: "visible"
-		})
-	})
-}(window.jQuery);
+		});
+	});
+	
+})();

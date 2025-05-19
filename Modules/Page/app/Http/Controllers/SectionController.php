@@ -170,11 +170,11 @@ class SectionController extends Controller
             $rules['dis_6'] = 'required|max:100';
         } elseif ($request->section_id == 26) {
             $rules['why_label_1'] = 'required|max:50';
-            $rules['why_dis_1']   = 'required|max:100';
+            $rules['why_dis_1']   = 'required|max:200';
             $rules['why_label_2'] = 'required|max:50';
-            $rules['why_dis_2']   = 'required|max:100';
+            $rules['why_dis_2']   = 'required|max:200';
             $rules['why_label_3'] = 'required|max:50';
-            $rules['why_dis_3']   = 'required|max:100';
+            $rules['why_dis_3']   = 'required|max:200';
         } else {
             return response()->json(['message' => 'Invalid section ID'], 400);
         }

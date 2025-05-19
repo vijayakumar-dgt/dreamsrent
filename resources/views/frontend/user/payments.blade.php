@@ -37,16 +37,16 @@
                     <div class="card flex-fill mb-0">
                         <div class="card-header">
                             <div class="row align-items-center">
-                                <div class="col-md-5">
+                                <div class="col">
                                     <h5>{{__('web.user.all_payments')}}</h5>
                                 </div>
-                                <div class="col-md-7 text-md-end">
+                                <div class="col-auto d-flex">
                                     <div class="filter-group">
                                         <div class="sort-week sort">
                                             <div class="dropdown dropdown-action">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                     <span class="datefilter_text">{{__('web.common.filter_by')}}</span> <i class="fas fa-chevron-down"></i>
-                                                </a>
+                                                </button>
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <a class="dropdown-item datefilter active" href="javascript:void(0);" data-id="">
                                                         {{__('web.common.filter_by')}}
@@ -68,9 +68,9 @@
                                         </div>
                                         <div class="sort-relevance sort" id="sort_filter">
                                             <div class="dropdown dropdown-action">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                     <span class="sortfilter_text">{{__('web.common.sort_by_asc')}}</span><i class="fas fa-chevron-down"></i>
-                                                </a>
+                                                </button>
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <a class="dropdown-item active sort-filter" data-id="asc" href="javascript:void(0);">
                                                         {{__('web.common.sort_by_asc')}}

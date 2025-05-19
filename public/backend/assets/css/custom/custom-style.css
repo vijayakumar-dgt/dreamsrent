@@ -5,99 +5,6 @@
   border-color: #03C95A;
 }
 
-/* Skeleton Base Styling */
-.skeleton {
-  background: linear-gradient(
-    100deg,
-    #dcdcdc 10%,  /* Light Silver */
-    #f7f7f7 30%,  /* Frosted White */
-    #dcdcdc 50%
-  );
-  background-size: 300% 100%;
-  border-radius: 8px;  /* Slightly larger radius for premium feel */
-  animation: luxuryShimmer 3s ease-in-out infinite;
-}
-
-/* Label Skeleton Loader */
-.label-skeleton {
-  width: 150px;
-  height: 25px;
-  margin-bottom: 5px;
-}
-
-.th-skeleton {
-  width: 150px;
-  height: 25px;
-  margin: auto;
-}
-
-.button-skeleton {
-  width: auto;
-  min-width: 135px;
-  max-width: 100%;
-  height: 35px;
-  position: relative;
-  top: 0;
-  left: 0;
-}
-
-.card-skeleton {
-  width: 100%;
-  height: 100%;
-  min-height: 170px;
-  position: relative;
-  top: 0;
-  left: 0;
-}
-
-.card-long-skeleton {
-  width: 100%;
-  height: 100%;
-  min-height: 270px;
-  position: relative;
-  top: 0;
-  left: 0;
-}
-
-.card-sm-skeleton {
-  width: auto;
-  min-width: 150px;
-  max-width: 100%;
-  height: 40px;
-  /* margin-bottom: 10px; */
-}
-
-/* Input Skeleton Loader */
-.input-skeleton {
-  width: 100%;
-  height: 38px;
-}
-
-/* Location Skeleton */
-.location-skeleton {
-  height: 9.2rem;
-}
-
-/* Table Data Loader */
-.data-skeleton {
-  width: 90%;
-  height: 25px;
-  margin: auto;
-}
-
-@keyframes luxuryShimmer {
-  0% {
-    background-position: -300% 0;
-  }
-  50% {
-    background-position: 0% 0;
-  }
-  100% {
-    background-position: 300% 0;
-  }
-}
-
-
 .payImg {
   height: 2.5rem;
   width: 7rem;
@@ -121,104 +28,7 @@
   height: 1.3rem;
   width: 2.5rem;
 }
-.grid-list-skeleton .img-slider-skeleton {
-  width: 100%;
-  height: 170px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
 
-.grid-list-skeleton .img-count-skeleton,
-.grid-list-skeleton .fav-icon-skeleton {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.grid-list-skeleton .featured-text-skeleton {
-  width: 80px;
-  height: 20px;
-  margin-top: 10px;
-  border-radius: 4px;
-}
-
-.grid-list-skeleton .author-img-skeleton {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 10px;
-}
-
-.grid-list-skeleton .listing-title-skeleton {
-  width: 70%;
-  height: 20px;
-  margin: 10px 0;
-}
-
-.grid-list-skeleton .star-skeleton {
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 5px;
-}
-
-.grid-list-skeleton .reviews-skeleton {
-  width: 100px;
-  height: 15px;
-  margin-left: 10px;
-}
-
-.grid-list-skeleton .list-km-skeleton {
-  width: 50px;
-  height: 20px;
-}
-
-.grid-list-skeleton .skeleton-detail {
-  width: 100%;
-  height: 15px;
-  margin: 5px 0;
-}
-
-.grid-list-skeleton .listing-price-skeleton {
-  width: 100px;
-  height: 20px;
-  margin: 10px 0;
-}
-
-.grid-list-skeleton .btn-skeleton {
-  width: 120px;
-  height: 40px;
-  margin-top: 10px;
-  border-radius: 4px;
-}
-
-.grid-list-skeleton .feature-text-skeleton {
-  width: 60px;
-  height: 20px;
-  margin-top: 10px;
-  border-radius: 4px;
-}
-
-/* List View Skeleton Start*/
-.list_view-skeleton {
-  background: linear-gradient(
-    100deg,
-    #dcdcdc 10%,  /* Light Silver */
-    #f7f7f7 30%,  /* Frosted White */
-    #dcdcdc 50%
-  );
-  background-size: 300% 100%;
-  border-radius: 8px;  /* Slightly larger radius for premium feel */
-  animation: luxuryShimmer 3s ease-in-out infinite;
-}
-
-@keyframes listViewShimmer {
-  0% { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
-}
 .list_view-container {
   display: flex;
   gap: 15px;
@@ -226,13 +36,6 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   margin-bottom: 15px;
-}
-
-.list_view-img-slider-skeleton {
-  width: 200px;
-  height: 150px;
-  border-radius: 8px;
-  flex-shrink: 0;
 }
 
 .list_view-content {
@@ -247,80 +50,6 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-}
-
-.list_view-title-skeleton {
-  width: 70%;
-  height: 20px;
-}
-
-.list_view-rating-skeleton span {
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 5px;
-}
-
-.list_view-reviews-skeleton {
-  width: 100px;
-  height: 15px;
-}
-
-.list_view-price-skeleton {
-  width: 80px;
-  height: 20px;
-  margin: 10px 0;
-}
-
-.list_view-details-group-skeleton li {
-  width: 100%;
-  height: 15px;
-  margin: 5px 0;
-}
-
-.list_view-author-img-skeleton {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 10px;
-}
-
-.list_view-location-skeleton {
-  width: 150px;
-  height: 15px;
-}
-
-.list_view-btn-skeleton {
-  width: 120px;
-  height: 40px;
-  margin-top: 10px;
-  border-radius: 4px;
-}
-/* List View Skeleton End */
-
-/* Vehicle Details Skeleton Start */
-/* Skeleton Animation */
-@keyframes vehl_dets_shimmer {
-  0% { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
-}
-
-/* Common Skeleton Style */
-.vehl_dets_skeleton .skeleton {
-  background: linear-gradient(100deg, #dcdcdc 10%, #f7f7f7 30%, #dcdcdc 50%);
-  background-size: 300% 100%;
-  border-radius: 8px;
-  animation: vehl_dets_shimmer 3s ease-in-out infinite;
-}
-
-/* Skeleton Layout */
-.vehl_dets_skeleton {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 20px;
-  padding: 20px;
 }
 
 /* Header */
@@ -383,55 +112,7 @@
   border-radius: 8px;
 }
 
-/* Additional Dummy Skeleton Lines */
-.vehl_dets_text {
-  height: 20px;
-  width: 100%;
-  border-radius: 8px;
-}
 
-/* Right Side (Pricing & Booking 4 columns) */
-.vehl_dets_sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  grid-column: span 4;
-}
-
-.vehl_dets_pricing {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.vehl_dets_price {
-  height: 20px;
-  width: 100%;
-  border-radius: 8px;
-}
-
-.vehl_dets_delivery,
-.vehl_dets_location,
-.vehl_dets_date {
-  height: 40px;
-  width: 100%;
-  border-radius: 8px;
-}
-
-.vehl_dets_button {
-  height: 40px;
-  width: 100%;
-  border-radius: 8px;
-  margin-top: 10px;
-}
-
-.vehl_dets_enquire {
-  height: 40px;
-  width: 100%;
-  border-radius: 8px;
-  margin-top: 5px;
-}
-/* Vehicle Details Skeleton End */
 /* Fancy Box GalleryStart*/
 .gallery-list ul {
   display: flex;
@@ -682,46 +363,6 @@
   opacity: 1;
   transform: translateY(0);
 }
-
-
-.user_trans-table-avatar .skeleton {
-    height: 80px;
-    width: 80px;
-    border-radius: 50%;
-  }
-
-  .user_trans-avatar-img.skeleton {
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
-  }
-
-  .user_trans-table-head-name .user_trans-skeleton-text {
-    height: 14px;
-    margin-bottom: 5px;
-    width: 60%;
-    border-radius: 4px;
-  }
-
-  .user_trans-skeleton-status {
-    height: 20px;
-    width: 120px;
-    border-radius: 5px;
-  }
-
-  .user_trans-skeleton-text {
-    height: 14px;
-    margin-bottom: 5px;
-    width: 100%;
-    border-radius: 4px;
-  }
-
-  .user_trans-status-box .user_trans-skeleton-text {
-    width: 80%;
-    height: 16px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-  }
 
   /* Scoped to the add_inspection modal only */
 #add_inspection .select2-container {
@@ -1130,6 +771,9 @@
 	}
 }
 /* Preloader */
+.vh-60{
+  min-height: 60vh !important;  
+}
 .vh-50{
   min-height: 50vh !important;  
 }
@@ -1151,7 +795,6 @@
 	height: 100%;
 	bottom: 0;
 	background-color: #fff;
-	z-index: 99999999999 !important
 }
 [data-loader="content-circle-side"] {
 	position: absolute;
@@ -1195,4 +838,11 @@
 	-moz-border-radius: 100%;
 	-ms-border-radius: 100%;
 	border-radius: 100%
+}
+
+.grid_loader_div .bg-white div {
+  top: 6% !important;
+}
+.list_loader_div .bg-white div {
+  top: 6% !important;
 }

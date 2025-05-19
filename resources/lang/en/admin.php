@@ -3,6 +3,8 @@
 return array(
   'general_settings' =>
   array(
+    'privacy_policy' => 'Privacy Policy', 
+    'terms_of_use' => 'Terms of Use',   
     'settings_configuration' => 'Settings & Configuration',
     'account_settings' => 'Account Settings',
     'basic_information' => 'Basic Information',
@@ -878,6 +880,9 @@ return array(
     'quotation_create_success' => 'Quotation created successfully.',
     'quotation_update_success' => 'Quotation updated successfully.',
     'quotation_delete_success' => 'Quotation deleted successfully.',
+    'booking_details' => 'Booking Details',
+    'vehicle_price' => 'Vehicle Price',
+    'create_booking' => 'Create Booking',
   ),
   'manage' =>
   array(
@@ -1680,6 +1685,7 @@ return array(
     'section' => 'Section',
     'menu_management' => 'Menu Management',
     'cms' => 'CMS',
+    'icon' => 'Icon',
     'blogs' => 'Blogs',
     'all_blogs' => 'All Blogs',
     'blog_tags' => 'Blog Tags',
@@ -1919,7 +1925,10 @@ return array(
     'view' => 'View',
     'export' => 'Export',
     'search' => 'Search',
+    'last_days' => 'Last :no Days',
     'latest' => 'Latest',
+    'tarrifs' => 'Tariffs',
+    'tariff' => 'Tariff',
     'ascending' => 'Ascending',
     'descending' => 'Descending',
     'last_month' => 'Last Month',

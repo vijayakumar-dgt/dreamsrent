@@ -371,8 +371,8 @@ function profile_list() {
             $(".btn-primary").text('Save Changes').prop('disabled', false);
         },
         complete: function() {
-            $(".label-loader, .input-loader").hide();
-            $('.real-label, .real-input').removeClass('d-none');
+            $(".label-loader, .input-loader, .card-loader").addClass("d-none");
+            $('.real-label, .real-input, .real-card').removeClass('d-none');
         }
     });
 }

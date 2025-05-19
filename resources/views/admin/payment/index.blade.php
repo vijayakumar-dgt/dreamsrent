@@ -38,7 +38,7 @@
                     </div>
                     <div class="dropdown">
                         <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
-                            <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}<span class="badge badge-xs rounded-pill bg-danger ms-2">0</span>
+                            <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
                         </a>
                     </div>
                 </div>
@@ -65,12 +65,14 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-lg p-2 filyerPaymentType">
                             @foreach ($GetPayments as $payment)
+                            @if ($payment)
                             <li>
                                 <label class="dropdown-item d-flex align-items-center rounded-1">
                                     <input class="form-check-input m-0 me-2" type="checkbox" value="{{ $payment }}">
                                     {{ strtoupper(str_replace('_', ' ', $payment)) }}
                                 </label>
                             </li>
+                            @endif
                             @endforeach
                         </ul>
 

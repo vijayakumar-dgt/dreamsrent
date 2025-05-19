@@ -22991,7 +22991,6 @@ iframe {
 	border-radius: 5px;
 	border: 1px solid #dbdbdb;
 	background: #F5F5F5;
-	padding: 12px;
 	min-width: 120px;
 	color: #111;
 	font-size: 14px;
@@ -23008,6 +23007,7 @@ iframe {
 
 .sort .dropdown .dropdown-toggle i {
 	margin-right: 10px;
+	font-size: 12px;
 }
 
 .sort .dropdown .dropdown-toggle::after {
@@ -24692,7 +24692,7 @@ input.form-control.rounded-pill:focus {
 }
 
 .dashboard-section .dashboard-menu ul li:last-child {
-	margin-right: 0;
+	margin-left: 0;
 }
 
 @media (max-width: 991.96px) {
@@ -28219,15 +28219,23 @@ input.form-control.rounded-pill:focus {
 	.fc .fc-toolbar-title {
 		font-size: 20px;
 	}
-
 	.flag-resposnive {
-		display: block !important;
+		display: none !important;
+	}
+	.flag-menu{
+		right: -132px !important;
 	}
 }
 
 @media (max-width: 767.96px) {
 	.fc .fc-toolbar-title {
 		font-size: 18px;
+	}
+}
+
+@media (max-width:576px) {
+	.flag-resposnive {
+		display: block !important;
 	}
 }
 
@@ -28656,7 +28664,7 @@ input.form-control.rounded-pill:focus {
 .image-sign {
 	position: absolute;
 	width: 100%;
-	height: 100%;
+	height: 100% !important;
 	inset: 0;
 	opacity: 0;
 	z-index: 1;
@@ -28852,4 +28860,8 @@ a#category-filter.active {
 .home-brand-img {
     max-width: 30px;
     max-height: 30px;
+}
+
+.rental-deal-slider .owl-stage , .popular-cartype-slider .owl-stage , .rental-deal-slider .owl-stage{
+	margin: auto;
 }

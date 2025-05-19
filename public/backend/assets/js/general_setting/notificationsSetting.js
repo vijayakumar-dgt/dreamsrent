@@ -137,6 +137,10 @@ $(document).ready(function() {
             },
             error: function(xhr) {
                 showToast('error', _l('admin.common.default_retrieve_error'));
+            },
+            complete: function() {
+              $(".card-loader").addClass("d-none");
+              $('.real-card').removeClass('d-none');
             }
         });
     }

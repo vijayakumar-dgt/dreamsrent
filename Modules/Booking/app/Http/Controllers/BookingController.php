@@ -198,18 +198,28 @@ class BookingController extends Controller
                 })
 
                 ->when($search, function ($query) use ($search, $tariff) {
+
                     $search = (string) $search;
-                    $tariff = (string) $tariff;
-                    return $query->where(function ($q) use ($search, $tariff) {
-                        $q->where('vehicle_info.year', 'LIKE', "%{$search}%")
-                            ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%")
-                            ->orWhere('brands.brand_name', 'LIKE', "%{$search}%")
-                            ->orWhere('car_models.model_name', 'LIKE', "%{$search}%")
-                            ->orWhere('cartypes.name', 'LIKE', "%{$search}%")
-                            ->orWhere('car_colors.name', 'LIKE', "%{$search}%")
-                            ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, '$[0].$tariff')) LIKE ?", ["%{$search}%"]);
+                    $tariff = (string) $tariff;  
+                    $path   = '$[0].' . $tariff; 
+
+                    $query->where(function ($q) use ($search) {
+                        $q->where('vehicle_info.year',  'LIKE', "%{$search}%")
+                        ->orWhere('vehicle_info.name', 'LIKE', "%{$search}%")
+                        ->orWhere('brands.brand_name', 'LIKE', "%{$search}%")
+                        ->orWhere('car_models.model_name', 'LIKE', "%{$search}%")
+                        ->orWhere('cartypes.name',      'LIKE', "%{$search}%")
+                        ->orWhere('car_colors.name',    'LIKE', "%{$search}%");
                     });
+
+                    if (filled($tariff)) {
+                        $query->orWhereRaw(
+                            "JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, ?)) LIKE ?",
+                            [$path, "%{$search}%"]
+                        );
+                    }
                 })
+
 
                 ->when($tariff, function ($query) use ($tariff, $startDateTime, $endDateTime) {
                     $noOfDays = 1;
@@ -332,6 +342,7 @@ class BookingController extends Controller
                 'data' => $vehicles,
             ], 200);
         } catch (\Exception $e) {
+            dd($e);
             return response()->json([
                 'code' => 500,
                 'message' => __('admin.common.default_retrieve_error'),
@@ -410,6 +421,7 @@ class BookingController extends Controller
                 'no_of_days' => $request->no_of_days ?? null,
                 'vehicle_total_price' => $request->vehicle_total_price ?? null,
                 'booking_date' => now(),
+                'payment_type' => 'cod'
             ];
             $details = [
                 'vehicle_price_type' => $request->vehicle_price_type,

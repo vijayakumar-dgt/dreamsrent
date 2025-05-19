@@ -50,7 +50,7 @@
                     <!-- Filter Collapse -->
                     <div class="dropdown">
                         <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
-                            <i class="ti ti-filter me-1"></i> {{ __('admin.general_settings.filter') }}<span class="badge badge-xs rounded-pill bg-danger ms-2">0</span>
+                            <i class="ti ti-filter me-1"></i> {{ __('admin.general_settings.filter') }}
                         </a>
                     </div>
                     <!-- Language Select -->
@@ -92,7 +92,6 @@
                     <a href="javascript:void(0);" id="clearFilters" class="text-danger links">{{__('admin.general_settings.clear_all')}}</a>
                 </div>
             </div>
-            <!-- Skeleton Loader Table -->
             <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
                 @include('admin.content-loader')
             </div>

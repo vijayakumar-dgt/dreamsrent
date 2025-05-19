@@ -31,7 +31,8 @@
                             <div class="card-header">
                                 <h5 class="fw-bold">{{ __('admin.general_settings.account_settings') }}</h5>
                             </div>
-                            <div class="card-body">
+                            @include('admin.general_settings_loader')
+                            <div class="card-body d-none real-card">
                                 <h6 class="fw-bold mb-3 ">{{ __('admin.general_settings.basic_information') }}</h6>
                                 <div class="row border-bottom mb-3">
                                     <div class="col-md-12">
@@ -136,7 +137,7 @@
                                 </div>
                                 
                             </div>
-                            <div class="card-footer">
+                            <div class="card-footer d-none real-card">
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('dashboard') }}" class="btn btn-light me-3">{{ __('admin.general_settings.cancel') }}</a>
                                     <button type="submit" class="btn btn-primary">{{ __('admin.general_settings.save_changes') }}</button>

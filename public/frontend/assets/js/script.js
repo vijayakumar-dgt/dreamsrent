@@ -262,7 +262,7 @@ Version      : 1.0
 
 	if($('.popular-cartype-slider').length > 0) {
 		$('.popular-cartype-slider').owlCarousel({
-			loop:true,
+			loop:false,
 			margin:24,
 			nav:true,
 			dots: false,
@@ -294,7 +294,7 @@ Version      : 1.0
 	
 	if($('.rental-deal-slider').length > 0) {
 		$('.rental-deal-slider').owlCarousel({
-			loop:true,
+			loop:false,
 			margin:24,
 			nav:true,
 			dots: false,
@@ -1526,15 +1526,58 @@ Version      : 1.0
 			scrollerInner.appendChild(duplicatedItem);
 		  });
 		});
-	  });
+	});
 
-})(jQuery);
-
-!function($) {
-	"use strict";
+	/** Preloader */
 	$(window).on("load", function() {
 		$('[data-loader="circle-side"]').fadeOut(), $("#preloader").delay(350).fadeOut("slow"), $("body").delay(350).css({
 			overflow: "visible"
 		})
 	})
-}(window.jQuery);
+
+	/** Reinitialize Carousel */
+	function reInitializeCarousel(className) {
+		let isRtl = $('body').data('dir') === 'rtl';
+
+		$(className).each(function () {
+			const $carousel = $(this);
+
+			// Destroy if already initialized to avoid duplicates
+			if ($carousel.hasClass('owl-loaded')) {
+				$carousel.trigger('destroy.owl.carousel');
+				$carousel.removeClass('owl-loaded');
+				$carousel.find('.owl-stage-outer').children().unwrap(); // unwrap structure added by Owl
+			}
+
+			$carousel.owlCarousel({
+				loop: false, // enable loop for nav + autoplay
+				margin: 24,
+				nav: true,
+				dots: true,
+				rtl: isRtl,
+				smartSpeed: 2000,
+				autoplay: true, // auto loop through slides
+				autoplayTimeout: 5000, // 5 seconds between autoplay
+				autoplayHoverPause: true, // pause on hover
+				navText: [
+					'<i class="fa-solid fa-chevron-left"></i>',
+					'<i class="fa-solid fa-chevron-right"></i>'
+				],
+				responsive: {
+					0: {
+						items: 1
+					},
+					550: {
+						items: 1
+					},
+					768: {
+						items: 2
+					},
+					1000: {
+						items: 4
+					}
+				}
+			});
+		});
+	}
+})(jQuery);
