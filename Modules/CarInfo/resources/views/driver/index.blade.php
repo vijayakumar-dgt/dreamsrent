@@ -19,8 +19,7 @@
 						</ol>
 					</nav>
 				</div>
-				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-					
+				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">	
 					<div class="mb-2">
 						@if (hasPermission($permissions, 'drivers', 'create'))
 						<button type="button" data-bs-toggle="modal" data-bs-target="#add_driver_modal" id="add_driver" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.manage.add_new_driver') }}</button>
@@ -127,7 +126,6 @@
 						</tr>
 					</thead>
 					<tbody>
-
 					</tbody>
 				</table>
 			</div>
