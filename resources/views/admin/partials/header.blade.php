@@ -75,17 +75,17 @@
                                 <div class="d-flex align-items-center">
                                     <a href="javascript:void(0);" class="link-primary text-decoration-underline me-3 d-none has-notification" id="markAllAsRead">{{__('web.user.mark_all_as_read')}}</a>
                                 </div>
-                                <a href="/admin/notifications" class="btn btn-primary btn-sm d-inline-flex align-items-center">{{ __('web.user.view_all_notifications') }}<i class="ti ti-chevron-right ms-1"></i></a>
+                                <a href="{{ route('admin.notifications') }}" class="btn btn-primary btn-sm d-inline-flex align-items-center">{{ __('web.user.view_all_notifications') }}<i class="ti ti-chevron-right ms-1"></i></a>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <a href="/admin/messages" class="btn btn-menubar position-relative">
+                        <a href="{{ route('admin.messages') }}" class="btn btn-menubar position-relative">
                             <i class="ti ti-message"></i>
                         </a>
                     </div>
                     <div>
-                        <a href="/admin/income-report" class="btn btn-menubar">
+                        <a href="{{ route('admin.income-report') }}" class="btn btn-menubar">
                             <i class="ti ti-chart-bar"></i>
                         </a>
                     </div>
@@ -111,7 +111,7 @@
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('payment.payment') }}">
                                 <i class="ti ti-credit-card"></i>{{ __('admin.finance_accounts.payments') }}
                             </a>
-                            <a class="dropdown-item d-flex align-items-center" href="/admin/notifications">
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('admin.notifications') }}">
                                 <i class="ti ti-bell"></i>{{ __('web.user.notifications') }}
                             </a>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('admin.security-settings') }}">
