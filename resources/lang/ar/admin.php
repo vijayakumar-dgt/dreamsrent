@@ -880,6 +880,9 @@ return array (
     'complete_booking' => 'الحجز الكامل',
     'complete_reservation_confirmation' => 'هل أنت متأكد أنك تريد إكمال هذا الحجز؟',
     'reservation_complete_success' => 'تم الحجز بنجاح.',
+    'booking_details' => 'تفاصيل الحجز',
+    'vehicle_price' => 'سعر المركبة',
+    'create_booking' => 'انشاء حجز',
   ),
   'manage' => 
   array (

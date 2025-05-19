@@ -1447,27 +1447,24 @@ Version      : 1.0
 
 	if($('[data-fancybox]').length > 0) {
 		Fancybox.bind('[data-fancybox]', {});  
-   }  
+    }  
 
-  $(window).scroll(function () {
-	  var sticky = $('.header-four'),
-		  scroll = $(window).scrollTop();
-	  if (scroll >= 150) sticky.addClass('header-fixed');
-	  else sticky.removeClass('header-fixed');
-	  var stickyone = $('.header-four'),
-		  scroll = $(window).scrollTop();
-	  if (scroll >= 150) stickyone.addClass('header-fixed');
-	  else stickyone.removeClass('header-fixed');
-  });
+	$(window).scroll(function () {
+		var sticky = $('.header-four'),
+			scroll = $(window).scrollTop();
+		if (scroll >= 150) sticky.addClass('header-fixed');
+		else sticky.removeClass('header-fixed');
+		var stickyone = $('.header-four'),
+			scroll = $(window).scrollTop();
+		if (scroll >= 150) stickyone.addClass('header-fixed');
+		else stickyone.removeClass('header-fixed');
+	});
 
-
-})(jQuery);
-
-!function($) {
-	"use strict";
+	/** Preloader */
 	$(window).on("load", function() {
 		$('[data-loader="circle-side"]').fadeOut(), $("#preloader").delay(350).fadeOut("slow"), $("body").delay(350).css({
 			overflow: "visible"
-		})
-	})
-}(window.jQuery);
+		});
+	});
+
+})(jQuery);

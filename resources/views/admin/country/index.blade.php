@@ -77,15 +77,11 @@
 							@endif
 						</tr>
 					</thead>
-					<tbody>			
-
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 			<!-- Custom Data Table -->
-
 			<div class="table-footer d-none"></div>			
-
 		</div>	
 		@include('admin.partials.footer')
 	</div>
