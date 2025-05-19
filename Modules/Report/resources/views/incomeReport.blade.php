@@ -473,7 +473,7 @@
                             </div>
                         </div>
                         <!-- Custom Data Table -->
-                        <div class="custom-datatable-filter table-responsive expensetable">
+                        <div class="custom-datatable-filter table-responsive">
                             <table class="table datatable">
                                 <thead class="thead-light">
                                     <tr>

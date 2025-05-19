@@ -18950,11 +18950,6 @@ span.flatpickr-weekday {
   background: var(--gray-200);
 }
 
-.expensetable tbody tr td {
-  padding-top: 26px !important;
-  padding-bottom: 26px !important;
-}
-
 .avatar-badge-end {
   inset-block-end: 0 !important;
   inset-block-start: auto !important;
