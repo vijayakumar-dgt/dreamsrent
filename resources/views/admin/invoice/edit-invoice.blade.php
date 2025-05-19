@@ -191,6 +191,21 @@
                                         <div class="me-lg-4">
                                             <h5 class="mb-3">{{ __('admin.finance_accounts.others') }}</h5>
                                             <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{__('admin.blog.language')}} <span class="text-danger">*</span></label>
+                                                    <select class="select" name="language_id">
+                                                        @foreach($languages as $language)
+                                                                <option value="{{ $language->language_id }}"
+                                                                    @if(old('language_id', $invoice->language_id) == $language->language_id)
+                                                                         selected
+                                                                    @endif>
+                                                                    {{ $language->transLang->name ?? 'N/A' }}
+                                                                </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label class="form-label">{{ __('admin.finance_accounts.payment_method') }}</label>
@@ -239,11 +254,11 @@
                                                     </div>
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
                                                         <span>{{ __('admin.finance_accounts.discount')}} (0%)</span>
-                                                        <h6 class="text-danger fs-14 fw-medium">$0.00</h6>
+                                                        <h6 class="text-danger fs-14 fw-medium">{{$symbol}}0.00</h6>
                                                     </div>
                                                     <div class="d-flex align-items-center justify-content-between mb-3">
                                                         <span>{{ __('admin.finance_accounts.tax')}} (0%)</span>
-                                                        <h6>$0.00</h6>
+                                                        <h6>{{$symbol}}0.00</h6>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex align-items-center justify-content-between">

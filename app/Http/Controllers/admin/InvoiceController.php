@@ -17,15 +17,20 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use Modules\GeneralSetting\Models\Language;
 
 class InvoiceController extends Controller
 {
     public function index(): View
     {
+         /** @var \App\Models\User|null $authId */
+         $authId = current_user();
+         $languageId = $authId ? $authId->language_id : null;
         $invoices = Invoice::with('items')
             ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image', 'user_details.first_name', 'user_details.last_name')
+            ->where('invoices.language_id', $languageId)
             ->where('invoices.deleted_at', null)->orderby('invoices.id', 'desc')
             ->get()->map(function ($invoice) {
                 $invoice->full_name = $invoice->first_name ? ($invoice->first_name . ' ' . $invoice->last_name) : '';
@@ -70,9 +75,11 @@ class InvoiceController extends Controller
         ->whereDate('start_datetime', '>=', Carbon::today())
         ->orderBy('start_datetime', 'asc')->get();
 
+        $languages = Language::with('transLang')->where('deleted_at', NULL)->get();
+
         return view(
             "admin.invoice.add-invoice",
-            compact('cars', 'currencies', 'users', 'currentUser', 'payments', 'symbol', 'bookings')
+            compact('cars', 'currencies', 'users', 'currentUser', 'payments', 'symbol', 'bookings', 'languages')
         );
     }
 
@@ -139,6 +146,7 @@ class InvoiceController extends Controller
                 'from_date' => Carbon::parse($request->from_date),
                 'to_date' => Carbon::parse($request->to_date),
                 'created_at' => Carbon::now(),
+                'language_id' => $request->language_id,
             ]);
 
             foreach ($request->items as $item) {
@@ -199,10 +207,11 @@ class InvoiceController extends Controller
         ->whereDate('start_datetime', '>=', Carbon::today())
         ->orderBy('start_datetime', 'asc')->get();
 
+        $languages = Language::with('transLang')->where('deleted_at', NULL)->get();
 
         return view(
             "admin.invoice.edit-invoice",
-            compact('cars', 'currencies', 'users', 'currentUser', 'payments', 'symbol', 'invoice', 'bookings')
+            compact('cars', 'currencies', 'users', 'currentUser', 'payments', 'symbol', 'invoice', 'bookings', 'languages')
         );
     }
 
@@ -234,6 +243,7 @@ class InvoiceController extends Controller
                 'currency_id' => $request->currency_id,
                 'status' => $request->status,
                 'payment_method' => $request->payment_method,
+                'language_id' => $request->language_id,
                 'terms' => $request->terms,
                 'notes' => $request->notes,
                 'subtotal' => $request->subtotal,
@@ -247,7 +257,6 @@ class InvoiceController extends Controller
             $invoice->items()->delete();
 
             foreach ($items as $item) {
-                Log::info("Creating item: ", $item);
 
                 $invoice->items()->create([
                     'description' => $item['description'] ?? 0,
