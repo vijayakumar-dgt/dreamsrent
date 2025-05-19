@@ -25,7 +25,7 @@
 						<button type="button" data-bs-toggle="modal" data-bs-target="#car_color_modal" id="add_car_color" class="btn btn-primary d-flex align-items-center">
 							<i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_vehicle_color') }}
 						</button>
-					@endif
+						@endif
 					</div>
 				</div>
 			</div>
@@ -44,23 +44,23 @@
 				</div>
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 					<input type="hidden" id="sort_by_status">
-				<div class="dropdown">
-					<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-						<i class="ti ti-badge me-1"></i> <span class="ms-1" id="current_sort_status">{{ __('admin.common.status') }}</span>
-					</button>
-					<ul class="dropdown-menu dropdown-menu-end p-2" id="status_filter">
-						<li>
-							<button type="button" class="dropdown-item rounded-1 statusfilter" data-status="1">
-								{{ __('admin.common.active') }}
-							</button>
-						</li>
-						<li>
-							<button type="button" class="dropdown-item rounded-1 statusfilter" data-status="0">
-								{{ __('admin.common.inactive') }}
-							</button>
-						</li>
-					</ul>
-				</div>
+					<div class="dropdown">
+						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+							<i class="ti ti-badge me-1"></i> <span class="ms-1" id="current_sort_status">{{ __('admin.common.status') }}</span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-end p-2" id="status_filter">
+							<li>
+								<button type="button" class="dropdown-item rounded-1 statusfilter" data-status="1">
+									{{ __('admin.common.active') }}
+								</button>
+							</li>
+							<li>
+								<button type="button" class="dropdown-item rounded-1 statusfilter" data-status="0">
+									{{ __('admin.common.inactive') }}
+								</button>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 			<!-- /Table Header -->
@@ -80,9 +80,7 @@
 							@endif
 						</tr>
 					</thead>
-					<tbody>
-
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 			<!-- Custom Data Table -->
@@ -164,5 +162,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('backend/assets/js/carinfo/car-color.js') }}"></script>
+<script src="{{ asset('backend/assets/js/vehicleinfo/vehicle-color.js') }}"></script>
 @endpush

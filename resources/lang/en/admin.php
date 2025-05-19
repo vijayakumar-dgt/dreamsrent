@@ -883,6 +883,8 @@ return array(
     'booking_details' => 'Booking Details',
     'vehicle_price' => 'Vehicle Price',
     'create_booking' => 'Create Booking',
+    'comment_required' => 'Comment is required.',
+    'status_required' => 'Status is required.',
   ),
   'manage' =>
   array(

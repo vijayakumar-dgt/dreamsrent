@@ -6,7 +6,6 @@
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-
 			<!-- Breadcrumb -->
 			<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
 				<div class="my-auto mb-2">
@@ -66,11 +65,9 @@
 				</div>
 			</div>
 			<!-- /Table Header -->
-
 			<div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
 				@include('admin.content-loader')
 			</div>
-
 			<!-- Custom Data Table -->
 			<div class="custom-datatable-filter table-responsive d-none real-table">
 				<table class="table" id="brandTable">
@@ -83,15 +80,11 @@
 							@endif
 						</tr>
 					</thead>
-					<tbody>
-
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 			<!-- Custom Data Table -->
-
 			<div class="table-footer d-none"></div>
-
 		</div>
 		@include('admin.partials.footer')
 	</div>
@@ -217,5 +210,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('backend/assets/js/carinfo/brand.js') }}"></script>
+<script src="{{ asset('backend/assets/js/vehicleinfo/brand.js') }}"></script>
 @endpush

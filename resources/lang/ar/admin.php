@@ -883,6 +883,8 @@ return array (
     'booking_details' => 'تفاصيل الحجز',
     'vehicle_price' => 'سعر المركبة',
     'create_booking' => 'انشاء حجز',
+    'comment_required' => 'التعليق مطلوب.',
+    'status_required' => 'مطلوب تحديد الحالة.',
   ),
   'manage' => 
   array (

@@ -69,7 +69,6 @@ class CarColorController extends Controller
         }
     }
 
-
     public function list(Request $request): JsonResponse
     {
         $orderBy = $request->order_by ?? 'desc';
@@ -90,7 +89,6 @@ class CarColorController extends Controller
             if ($status !== null && $status !== '') {
                 $query->where('status', $status); // Assumes 'status' column exists in categories table
             }
-
 
             $data = $query->get();
 
