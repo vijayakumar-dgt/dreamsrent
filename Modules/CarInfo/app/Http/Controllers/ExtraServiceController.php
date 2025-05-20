@@ -55,7 +55,7 @@ class ExtraServiceController extends Controller
             ],
         ], [
             'name.required' => __('admin.rentals.name_required'),
-            'name.unique' => __('admin.rentals.name_unique'),
+            'name.unique' => __('admin.manage.name_unique'),
             'name.max' => __('admin.rentals.name_maxlength'),
             'name.min' => __('admin.rentals.name_minlength'),
             'icon.mimes' => __('admin.rentals.icon_extension'),

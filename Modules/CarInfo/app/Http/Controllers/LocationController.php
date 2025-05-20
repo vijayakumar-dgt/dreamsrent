@@ -161,7 +161,7 @@ class LocationController extends Controller
             ], 401);
         }
         $language_id = $authUser->language_id;
-        $query = Location::orderBy('id', 'desc')->where("language_id", $language_id)->with('workingDays');
+        $query = Location::orderBy('name', 'asc')->where("language_id", $language_id)->with('workingDays');
 
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
