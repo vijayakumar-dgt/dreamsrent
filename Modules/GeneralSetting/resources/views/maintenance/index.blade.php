@@ -39,7 +39,7 @@
                                     <label for="maintenance_image" class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
-                                            <img id="profile_photo_preview" src="" class="img-fluid" alt="Profile Photo">
+                                            <img src="" id="profile_photo_preview" class="img-fluid" alt="Profile Photo">
                                             <a href="javascript:void(0);" class="uploadimgtrash btn btn-sm rounded-circle remove-maintenance-image" data-default_image="{{ uploadedAsset('', 'default2')}}">
                                                 <i class="ti ti-trash fs-12"></i>
                                             </a>

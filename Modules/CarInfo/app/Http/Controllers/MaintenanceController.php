@@ -182,10 +182,10 @@ class MaintenanceController extends Controller
                         $query->orderBy('maintenances.created_at', 'desc');
                         break;
                     case 'ascending':
-                        $query->orderBy('maintenances.created_at', 'asc');
+                        $query->orderBy('v.name', 'asc');
                         break;
                     case 'descending':
-                        $query->orderBy('maintenances.created_at', 'desc');
+                        $query->orderBy('v.name', 'desc');
                         break;
                     case 'last month':
                         $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();

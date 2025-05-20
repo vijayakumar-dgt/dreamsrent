@@ -461,9 +461,12 @@
                     } else {
                         $vehicleSelect.val(vehicleId).trigger('change');
                     }
-    
+                    let formatedDate; //format DD-MM-YYYY
+                    if(data.inspection_date){
+                        formatedDate = moment(data.inspection_date).format('DD-MM-YYYY');
+                    }
                     $("#add_inspection #id").val(data.id);
-                    $("#add_inspection #inspection_date").val(data.inspection_date);
+                    $("#add_inspection #inspection_date").val(formatedDate);
                     $("#add_inspection #inspection_by").val(data.inspector_id).trigger('change');
                     $("#add_inspection #odometer").val(data.odometer);
                     $("#add_inspection #fuel").val(data.fuel);
@@ -571,5 +574,3 @@
         return repair_status;
     }
 }) ();
-
-

@@ -154,7 +154,7 @@
 									<label class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
 									<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 										<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-											<img id="imagePreview" src="" class="img-fluid rounded d-none">
+											<img src="" id="imagePreview" class="img-fluid rounded d-none">
 											<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
 										</div>
 										<div class="profile-upload">
@@ -295,7 +295,7 @@
 									<label class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
 									<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 										<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-											<img id="editImagePreview" src="" class="img-fluid rounded d-none">
+											<img src="" id="editImagePreview" class="img-fluid rounded d-none">
 											<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
 										</div>
 										<div class="profile-upload">
