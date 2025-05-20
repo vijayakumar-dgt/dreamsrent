@@ -15,44 +15,44 @@
 				<div class="add-wizard car-steps">
 					<ul class="nav d-flex align-items-center flex-wrap gap-3">
 						<li class="nav-item active" id="firstBar">
-							<a href="javascript:void(0);" class="nav-link d-flex align-items-center">
+							<button type="button" class="nav-link d-flex align-items-center">
 								<i class="ti ti-info-circle me-1"></i>{{ __('admin.rentals.basic') }}
-							</a>
+							</button>
 						</li>
 						<li class="nav-item" id="secondBar">
-							<a href="javascript:void(0);" class="nav-link d-flex align-items-center">
+							<button type="button" class="nav-link d-flex align-items-center">
 								<i class="ti ti-flame me-1"></i>{{ __('admin.rentals.features') }}
-							</a>
+							</button>
 						</li>
 						<li class="nav-item" id="thirdBar">
-							<a href="javascript:void(0);" class="nav-link d-flex align-items-center">
+							<button type="button" class="nav-link d-flex align-items-center">
 								<i class="ti ti-files me-1"></i>{{ __('admin.rentals.pricing') }}
-							</a>
+							</button>
 						</li>
 						<li class="nav-item" id="forthBar">
-							<a href="javascript:void(0);" class="nav-link d-flex align-items-center">
+							<button type="button" class="nav-link d-flex align-items-center">
 								<i class="ti ti-float-center me-1"></i>{{ __('admin.rentals.extra_services') }}
-							</a>
+							</button>
 						</li>
 						<li class="nav-item" id="fifthBar">
-							<a href="javascript:void(0);" class="nav-link d-flex align-items-center">
+							<button type="button" class="nav-link d-flex align-items-center">
 								<i class="ti ti-file-invoice me-1"></i>{{ __('admin.rentals.uploads') }}
-							</a>
+							</button>
 						</li>
 						<li class="nav-item" id="sixthBar">
-							<a href="javascript:void(0);" class="nav-link d-flex align-items-center">
+							<button type="button" class="nav-link d-flex align-items-center">
 								<i class="ti ti-id me-1"></i>{{ __('admin.rentals.damages') }}
-							</a>
+							</button>
 						</li>
 						<li class="nav-item" id="seventhBar">
-							<a href="javascript:void(0);" class="nav-link d-flex align-items-center">
+							<button type="button" class="nav-link d-flex align-items-center">
 								<i class="ti ti-question-mark me-1"></i>{{ __('admin.rentals.faq') }}
-							</a>
+							</button>
 						</li>
 						<li class="nav-item" id="eightBar">
-							<a href="javascript:void(0);" class="nav-link d-flex align-items-center">
+							<button type="button" class="nav-link d-flex align-items-center">
 								<i class="ti ti-seo me-1"></i>{{ __('admin.rentals.seo') }}
-							</a>
+							</button>
 						</li>
 					</ul>
 					<fieldset id="first-field">
@@ -99,9 +99,9 @@
 										<div class="d-flex align-items-center flex-wrap row-gap-3 upload-pic">
 											<div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 border rounded-circle frames">
 												<img src="/backend/assets/img/car/default-car.png" class="img-fluid rounded-circle" alt="brands">
-												<a href="javascript:void(0);" id="delImg" class="upload-img-trash trash-end btn btn-sm rounded-circle">
+												<button type="button" id="delImg" class="upload-img-trash trash-end btn btn-sm rounded-circle">
 													<i class="ti ti-trash fs-12"></i>
-												</a>
+												</button>
 											</div>
 											<div>
 												<div class="drag-upload-btn btn btn-md btn-dark d-inline-flex align-items-center mb-2">
@@ -1282,7 +1282,7 @@
 			</div>
 			<div class="modal-footer">
 				<div class="d-flex justify-content-center">
-					<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+					<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 					<button type="button" class="btn btn-primary" id="save_update">{{ __('admin.common.update') }}</button>
 				</div>
 			</div>
