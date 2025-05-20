@@ -215,11 +215,6 @@
                                                                         <input type="text" class="form-control" name="overall_search" id="overall_search" placeholder="{{  __('admin.common.search')}}">
                                                                     </div>
                                                                 </div>
-                                                                <div class="d-none">
-                                                                    <a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center">
-                                                                        <i class="ti ti-plus me-1"></i>{{ __('admin.common_add_new') }}
-                                                                    </a>
-                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -230,9 +225,9 @@
                                                                     <div class="col-lg-10">
                                                                         <div class=" d-flex align-items-center flex-wrap row-gap-3">
                                                                             <div class="dropdown me-2">
-                                                                                <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                                                                <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                                                                     {{ __('admin.bookings.select_brand') }}
-                                                                                </a>
+                                                                                </button>
                                                                                 <ul class="dropdown-menu dropdown-menu-lg p-2" id="brandList">
                                                                                     <li>
                                                                                         <div class="top-search m-2">
@@ -249,9 +244,9 @@
                                                                                 </ul>
                                                                             </div>
                                                                             <div class="dropdown me-2">
-                                                                                <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                                                                <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                                                                                     {{ __('admin.bookings.select_type') }}
-                                                                                </a>
+                                                                                </button>
                                                                                 <ul class="dropdown-menu dropdown-menu-lg p-2" id="typeList">
                                                                                     <li>
                                                                                         <div class="top-search m-2">
@@ -268,10 +263,10 @@
                                                                                 </ul>
                                                                             </div>
                                                                             <div class="dropdown me-2">
-                                                                                <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                                                                <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                                                                                     <i class="ti ti-badge me-1"></i>
                                                                                     {{ __('admin.bookings.select_model') }}
-                                                                                </a>
+                                                                                </button>
                                                                                 <ul class="dropdown-menu dropdown-menu-lg p-2" id="modelList">
                                                                                     <li>
                                                                                         <div class="top-search m-2">
@@ -288,10 +283,10 @@
                                                                                 </ul>
                                                                             </div>
                                                                             <div class="dropdown">
-                                                                                <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                                                                <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                                                                                     <i class="ti ti-badge me-1"></i>
                                                                                     {{ __('admin.bookings.select_color') }}
-                                                                                </a>
+                                                                                </button>
                                                                                 <ul class="dropdown-menu dropdown-menu-lg p-2" id="colorList">
                                                                                     <li>
                                                                                         <div class="top-search m-2">
@@ -311,8 +306,8 @@
                                                                     </div>
                                                                     <div class="col-lg-2">
                                                                         <div class="d-flex align-items-center justify-content-end">
-                                                                            <a href="javascript:void(0);" class="me-3 text-purple links" id="apply_filter">{{ __('admin.common.apply') }}</a>
-                                                                            <a href="javascript:void(0);" class="text-danger links" id="reset_filter">{{ __('admin.common.clear') }}</a>
+                                                                            <button type="button" class="text-purple links border-0 bg-transparent" id="apply_filter">{{ __('admin.common.apply') }}</button>
+                                                                            <button type="button" class="text-danger links border-0 bg-transparent" id="reset_filter">{{ __('admin.common.clear') }}</button>
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -377,7 +372,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#booking_cancel_modal" class="btn btn-danger w-100"><i class="ti ti-x me-1"></i>{{ __('admin.bookings.cancel_booking') }}</a>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#booking_cancel_modal" class="btn btn-danger w-100">
+                                <i class="ti ti-x me-1"></i>{{ __('admin.bookings.cancel_booking') }}
+                            </button>
                         </div>
                     </div>
                 </fieldset>
@@ -432,11 +429,6 @@
                                                         </select>
                                                         <span class="error-text text-danger" id="customer_id_error"></span>
                                                     </div>
-                                                    <div class="ms-4 d-none">
-                                                        <a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center">
-                                                            <i class="ti ti-plus me-1"></i>{{ __('admin.common.add_new') }}
-                                                        </a>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <div id="customer_details_list">
@@ -455,11 +447,6 @@
                                                             <option value="">{{ __('admin.common.select') }}</option>
                                                         </select>
                                                         <span class="error-text text-danger" id="driver_id_error"></span>
-                                                    </div>
-                                                    <div class="ms-4 d-none">
-                                                        <a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center">
-                                                            <i class="ti ti-plus me-1"></i>{{ __('admin.common.add_new') }}
-                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -488,9 +475,9 @@
                                 <div class="card-body" id="customer_summary">
                                 </div>
                             </div>
-                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#booking_cancel_modal" class="btn btn-danger w-100">
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#booking_cancel_modal" class="btn btn-danger w-100">
                                 <i class="ti ti-x me-1"></i>{{ __('admin.bookings.cancel_booking') }}
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </fieldset>
@@ -558,7 +545,9 @@
                                 <div class="card-body" id="extra_service_summary">
                                 </div>
                             </div>
-                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#booking_cancel_modal" class="btn btn-danger w-100"><i class="ti ti-x me-1"></i>{{ __('admin.bookings.cancel_booking') }}</a>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#booking_cancel_modal" class="btn btn-danger w-100">
+                                <i class="ti ti-x me-1"></i>{{ __('admin.bookings.cancel_booking') }}
+                            </button>
                         </div>
                     </div>
                 </fieldset>
@@ -628,7 +617,9 @@
                                 <div class="card-body" id="billing_summary">
                                 </div>
                             </div>
-                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#booking_cancel_modal" class="btn btn-danger w-100"><i class="ti ti-x me-1"></i>{{ __('admin.bookings.cancel_booking') }}</a>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#booking_cancel_modal" class="btn btn-danger w-100">
+                                <i class="ti ti-x me-1"></i>{{ __('admin.bookings.cancel_booking') }}
+                            </button>
                         </div>
                     </div>
                 </fieldset>
@@ -673,9 +664,11 @@
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.manage.drivers') }}<span class="text-danger"> *</span></label>
                                     <div class="d-flex align-items-center mt-2">
-                                        <a href="#" class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0"><img src="/backend/assets/img/default-profile.png" class="edit_driver_img" alt=""></a>
+                                        <div class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0">
+                                            <img src="{{ uploadedAsset('', 'profile') }}" class="edit_driver_img" alt="{{ __('admin.common.image')}}">
+                                        </div>
                                         <div>
-                                            <a class="d-block fw-semibold edit_driver_name" href="#"></a>
+                                            <div class="d-block fw-semibold edit_driver_name text-black"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -690,7 +683,7 @@
                     </div>
                     <div class="modal-footer">
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                             <button type="submit" class="btn btn-primary driver_price_btn">{{ __('admin.common.save_changes') }}</button>
                         </div>
                     </div>
@@ -724,7 +717,7 @@
                     </div>
                     <div class="modal-footer">
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.close') }}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.close') }}</button>
                             <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.bookings.cancel_booking') }}</button>
                         </div>
                     </div>

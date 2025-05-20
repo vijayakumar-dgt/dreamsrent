@@ -337,11 +337,10 @@
                                     <button type="button" class="dropdown-item rounded-1 completeReservation" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#complete_modal"><i class="ti ti-check me-1"></i>${_l('admin.common.booking_complete')}</button>
                                 </li>`:''}
                             </ul>
-                        </div>
-                    `;
-                },
-                visible: hasPermission(permissions, 'reservations', 'edit') || hasPermission(permissions, 'reservations', 'view') || hasPermission(permissions, 'reservations', 'delete')
-            }
+                        </div>`;
+                    },
+                    visible: hasPermission(permissions, 'reservations', 'edit') || hasPermission(permissions, 'reservations', 'view') || hasPermission(permissions, 'reservations', 'delete')
+                }
             ],
             order: [[0, 'desc']],
             ordering: true,
