@@ -1099,6 +1099,7 @@ return array(
     'damage_type_updated' => 'Damage type updated successfully.',
     'damage_type_deleted' => 'Damage type deleted successfully.',
     'damage_type_not_found' => 'Damage type not found.',
+    'damage_type_unique'    => 'Damage type already exists.',
     'cylinder_type_minlength' => 'Cylinder type should be at least 3 characters.',
     'cylinder_type_maxlength' => 'Cylinder type should not exceed 30 characters.',
     'cylinder_type_unique' => 'Cylinder type already exists.',

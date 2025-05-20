@@ -268,7 +268,7 @@
                 {
                     data: "name",
                     render:function(data,type,row){
-                    return `<h6 class="fw-medium"><a href="#">${row.name}</a></h6>`;
+                    return `<h6 class="fw-medium">${row.name}</h6>`;
                     },
                     className: 'text-start'
                 },
@@ -276,9 +276,9 @@
                     data: "icon",
                     render:function(data,type,row){
                     return `<div class="d-flex align-items-center file-name-icon">
-                                <a href="#" class="avatar avatar-lg border">
+                                <div  class="avatar avatar-lg border">
                                     <img src="${row.icon}" class="img-fluid" width="40" height="40">
-                                </a>
+                                </div>
                             </div>`;
                     },
                     className: 'text-start'

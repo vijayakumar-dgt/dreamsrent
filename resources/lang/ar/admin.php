@@ -1098,6 +1098,7 @@ return array (
     'damage_type_updated' => 'تم تحديث نوع الضرر بنجاح.',
     'damage_type_deleted' => 'تم حذف نوع الضرر بنجاح.',
     'damage_type_not_found' => 'نوع الضرر غير موجود.',
+    'damage_type_unique' => 'نوع الضرر موجود بالفعل.',
     'cylinder_type_unique' => 'نوع الأسطوانة موجود بالفعل.',
     'cylinder_type_added' => 'تم إضافة نوع الأسطوانة بنجاح.',
     'cylinder_type_updated' => 'تم تحديث نوع الأسطوانة بنجاح.',
