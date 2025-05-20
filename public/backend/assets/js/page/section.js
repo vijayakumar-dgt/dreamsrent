@@ -5,6 +5,145 @@
 
     $(document).ready(function () {
         initTable();
+
+        $("#addBannerOneForm").submit(function (event) {
+            event.preventDefault();
+
+            var formData = new FormData(this);
+            $.ajax({
+                url: "/admin/section-store",
+                method: "POST",
+                data: formData,
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                cache: false,
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                beforeSend: function () {
+                    $(".banner_one").attr("disabled", true).html(`
+                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
+                            "admin.common.saving"
+                        )}..
+                    `);
+                },
+                complete: function () {
+                    $(".banner_one")
+                        .attr("disabled", false)
+                        .html(_l("admin.common.save_changes"));
+                },
+            })
+                .done((response, statusText, xhr) => {
+                    $(".error-text").text("");
+                    $(".form-control").removeClass("is-invalid");
+                    if (response.code === 200) {
+                        showToast("success", response.message);
+
+                        $("#add_banner_sec").modal("hide");
+                        initTable();
+                    } else {
+                        showToast("success", response.message);
+                    }
+                })
+                .fail((error) => {
+                    $(".error-text").text("");
+                    $(".form-control").removeClass("is-invalid");
+
+                    if (error.status == 422) {
+                        $.each(error.responseJSON, function (key, val) {
+                            $("#" + key).addClass("is-invalid");
+                            $("#" + key + "_error").text(val[0]);
+                        });
+                    } else {
+                        showToast("error", error.responseJSON.message);
+                    }
+                });
+        });
+
+        $(document).on("click", ".section_data", function (e) {
+            e.preventDefault();
+
+            var ID = $(this).data("id");
+
+            $(
+                "#section_id_1, #section_id_2, #section_id_3, #section_id_4"
+            ).addClass("d-none");
+
+            if (ID == 1) {
+                $("#section_id_1").removeClass("d-none");
+                $("#section_id").val(ID);
+                $("#description_one").val($(this).data("description_one"));
+                $("#label_one").val($(this).data("label_one"));
+                $("#line_two").val($(this).data("line_two"));
+                $("#line_one").val($(this).data("line_one"));
+
+                let thumbnailImageUrl = $(this).data("thumbnail_image_one");
+
+                if (thumbnailImageUrl) {
+                    $("#thumbnail_preview_one")
+                        .attr("src", thumbnailImageUrl)
+                        .removeClass("d-none");
+                } else {
+                    $("#thumbnail_preview_one").addClass("d-none");
+                }
+            } else if (ID == 29) {
+                $("#section_id_2").removeClass("d-none");
+                $("#section_id").val(ID);
+                $("#description_two").val($(this).data("description_two"));
+                $("#label_two").val($(this).data("label_two"));
+
+                let thumbnailImageUrl = $(this).data("thumbnail_image_two");
+
+                if (thumbnailImageUrl) {
+                    $("#thumbnail_preview_two")
+                        .attr("src", thumbnailImageUrl)
+                        .removeClass("d-none");
+                } else {
+                    $("#thumbnail_preview_two").addClass("d-none");
+                }
+            } else if (ID == 42) {
+                $("#section_id_3").removeClass("d-none");
+                $("#section_id").val(ID);
+            } else if (ID == 26) {
+                $("#section_id_4").removeClass("d-none");
+                $("#section_id").val(ID);
+
+                const trigger = $(this);
+
+                $("#why_label_1").val(trigger.data("why_label_1"));
+                $("#why_dis_1").val(trigger.data("why_dis_1"));
+                $("#why_label_2").val(trigger.data("why_label_2"));
+                $("#why_dis_2").val(trigger.data("why_dis_2"));
+                $("#why_label_3").val(trigger.data("why_label_3"));
+                $("#why_dis_3").val(trigger.data("why_dis_3"));
+
+                const icon1 = trigger.data("why_icon_1");
+                const icon2 = trigger.data("why_icon_2");
+                const icon3 = trigger.data("why_icon_3");
+
+                if (icon1) {
+                    $("#preview_why_icon_1")
+                        .attr("src", icon1)
+                        .removeClass("d-none");
+                }
+
+                if (icon2) {
+                    $("#preview_why_icon_2")
+                        .attr("src", icon2)
+                        .removeClass("d-none");
+                }
+
+                if (icon3) {
+                    $("#preview_why_icon_3")
+                        .attr("src", icon3)
+                        .removeClass("d-none");
+                }
+            }
+        });
     });
 
     function initTable() {
@@ -252,142 +391,8 @@
             },
         });
     }
-    $(document).ready(function () {
-        $("#addBannerOneForm").submit(function (event) {
-            event.preventDefault();
 
-            var formData = new FormData(this);
-            $.ajax({
-                url: "/admin/section-store",
-                method: "POST",
-                data: formData,
-                dataType: "json",
-                contentType: false,
-                processData: false,
-                cache: false,
-                headers: {
-                    Accept: "application/json",
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
-                    ),
-                },
-                beforeSend: function () {
-                    $(".banner_one").attr("disabled", true).html(`
-                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                            "admin.common.saving"
-                        )}..
-                    `);
-                },
-                complete: function () {
-                    $(".banner_one")
-                        .attr("disabled", false)
-                        .html(_l("admin.common.save_changes"));
-                },
-            })
-                .done((response, statusText, xhr) => {
-                    $(".error-text").text("");
-                    $(".form-control").removeClass("is-invalid");
-                    if (response.code === 200) {
-                        showToast("success", response.message);
-
-                        $("#add_banner_sec").modal("hide");
-                        initTable();
-                    } else {
-                        showToast("success", response.message);
-                    }
-                })
-                .fail((error) => {
-                    $(".error-text").text("");
-                    $(".form-control").removeClass("is-invalid");
-
-                    if (error.status == 422) {
-                        $.each(error.responseJSON, function (key, val) {
-                            $("#" + key).addClass("is-invalid");
-                            $("#" + key + "_error").text(val[0]);
-                        });
-                    } else {
-                        showToast("error", error.responseJSON.message);
-                    }
-                });
-        });
-    });
 })();
-
-$(document).on("click", ".section_data", function (e) {
-    e.preventDefault();
-
-    var ID = $(this).data("id");
-
-    $("#section_id_1, #section_id_2, #section_id_3, #section_id_4").addClass(
-        "d-none"
-    );
-
-    if (ID == 1) {
-        $("#section_id_1").removeClass("d-none");
-        $("#section_id").val(ID);
-        $("#description_one").val($(this).data("description_one"));
-        $("#label_one").val($(this).data("label_one"));
-        $("#line_two").val($(this).data("line_two"));
-        $("#line_one").val($(this).data("line_one"));
-
-        let thumbnailImageUrl = $(this).data("thumbnail_image_one");
-
-        if (thumbnailImageUrl) {
-            $("#thumbnail_preview_one")
-                .attr("src", thumbnailImageUrl)
-                .removeClass("d-none");
-        } else {
-            $("#thumbnail_preview_one").addClass("d-none");
-        }
-    } else if (ID == 29) {
-        $("#section_id_2").removeClass("d-none");
-        $("#section_id").val(ID);
-        $("#description_two").val($(this).data("description_two"));
-        $("#label_two").val($(this).data("label_two"));
-
-        let thumbnailImageUrl = $(this).data("thumbnail_image_two");
-
-        if (thumbnailImageUrl) {
-            $("#thumbnail_preview_two")
-                .attr("src", thumbnailImageUrl)
-                .removeClass("d-none");
-        } else {
-            $("#thumbnail_preview_two").addClass("d-none");
-        }
-    } else if (ID == 42) {
-        $("#section_id_3").removeClass("d-none");
-        $("#section_id").val(ID);
-    } else if (ID == 26) {
-        $("#section_id_4").removeClass("d-none");
-        $("#section_id").val(ID);
-
-        const trigger = $(this);
-
-        $("#why_label_1").val(trigger.data("why_label_1"));
-        $("#why_dis_1").val(trigger.data("why_dis_1"));
-        $("#why_label_2").val(trigger.data("why_label_2"));
-        $("#why_dis_2").val(trigger.data("why_dis_2"));
-        $("#why_label_3").val(trigger.data("why_label_3"));
-        $("#why_dis_3").val(trigger.data("why_dis_3"));
-
-        const icon1 = trigger.data("why_icon_1");
-        const icon2 = trigger.data("why_icon_2");
-        const icon3 = trigger.data("why_icon_3");
-
-        if (icon1) {
-            $("#preview_why_icon_1").attr("src", icon1).removeClass("d-none");
-        }
-
-        if (icon2) {
-            $("#preview_why_icon_2").attr("src", icon2).removeClass("d-none");
-        }
-
-        if (icon3) {
-            $("#preview_why_icon_3").attr("src", icon3).removeClass("d-none");
-        }
-    }
-});
-
 function previewThumbnailOne(input) {
     if (input.files && input.files[0]) {
         let reader = new FileReader();
@@ -397,6 +402,7 @@ function previewThumbnailOne(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
 function previewThumbnailTwo(input) {
     if (input.files && input.files[0]) {
         let reader = new FileReader();
@@ -450,14 +456,14 @@ function validateAndPreview(inputId, previewId) {
     img.src = objectURL;
 }
 
-$("#why_icon_1").on("change", function () {
+$(document).on("change", "#why_icon_1", function (e) {
     validateAndPreview("why_icon_1", "preview_why_icon_1");
 });
 
-$("#why_icon_2").on("change", function () {
+$(document).on("change", "#why_icon_2", function (e) {
     validateAndPreview("why_icon_2", "preview_why_icon_2");
 });
 
-$("#why_icon_3").on("change", function () {
+$(document).on("change", "#why_icon_3", function (e) {
     validateAndPreview("why_icon_3", "preview_why_icon_3");
 });
