@@ -47,10 +47,10 @@
                         </button>
                         <ul class="dropdown-menu  dropdown-menu-end p-2">
                             <li>
-                                <button type="button" class="dropdown-item rounded-1" data-label="{{ __('admin.common.active') }}">{{ __('admin.common.active') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-label="{{ __('admin.common.active') }}">{{ __('admin.common.active') }}</button>
                             </li>
                             <li>
-                                <button type="button" class="dropdown-item rounded-1" data-label="{{ __('admin.common.inactive') }}">{{ __('admin.common.inactive') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-label="{{ __('admin.common.inactive') }}">{{ __('admin.common.inactive') }}</button>
                             </li>
                         </ul>
                     </div>
