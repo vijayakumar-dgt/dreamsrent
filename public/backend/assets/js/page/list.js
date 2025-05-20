@@ -1,6 +1,7 @@
-let currentStatus = ""; // Stores selected status
-let currentSortType = ""; // Stores selected sorting type
-let currentLang = ""; // Add this at the top
+let currentStatus = "";
+let currentSortType = "";
+let currentLang = "";
+
 (async () => {
     "use strict";
     await loadTranslationFile("admin", "common, page");

@@ -10,6 +10,7 @@
     })();
 
     const userId = $("#messageinput").data('receiverid');
+    
     let offset = "";
     let isLoading = false;
     let lastOffset = "";
@@ -101,7 +102,9 @@
     });
 
     function listenMqttForNewMessages(customerId) {
+        
         const topic = `dreamsrent/to_user/${customerId}`;
+        
         if (typeof mqtt === 'undefined') {
             showToast('error', 'MQTT not connected! Please refresh the page.');
             return;
@@ -114,7 +117,10 @@
         });
 
         client.on('connect', () => client.subscribe(topic, { qos: 1 }));
-        client.on('message', () => fetchMessages(true, true));
+        client.on('message', () => {
+            offset = "";
+            fetchMessages(true, true);
+        });
     }
 
     $(document).on('keydown', '#messageinput', function (e) {
@@ -153,7 +159,11 @@
                 $messageInput.val('').prop('disabled', true);
                 $("#sendmsg").prop('disabled', true);
             },
-            success: () => fetchMessages(true, true),
+            success: () => {
+                offset = "";
+                lastOffset = "";
+                fetchMessages(true, true);
+            },
             complete: () => {
                 $messageInput.prop('disabled', false);
                 $("#sendmsg").prop('disabled', false);
@@ -161,7 +171,11 @@
                 $("#messageinput").val('');
                 $(".selected_file").text('').addClass('d-none');
             },
-            error: () => fetchMessages(true, true)
+            error: () => {
+                offset = "";
+                lastOffset = "";
+                fetchMessages(true, true);
+            }
         });
     });
 

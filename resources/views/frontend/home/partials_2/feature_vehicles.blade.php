@@ -35,7 +35,7 @@
                                 alt="img">{{ round($content['mileage']) }}</span>
                         <span><img src="{{ asset('/frontend/assets/img/icons/spec-05.svg') }}"
                                 alt="img">{{ ucfirst($content['fuel_type']) }}</span>
-                        <span><img src="{{ asset('/frontend/assets/img/icons/spec-05.svg') }}"
+                        <span><img src="{{ asset('frontend/assets/img/icons/car-parts-06.svg') }}"
                                 alt="img">{{ $content['passenger_capacity'] }} {{ __('web.home.persons') }}</span>
                     </div>
                     <a href="/vehicle-details/{{ $content['slug'] }}"

@@ -11,7 +11,7 @@
                             <div class="rental-car-item m-auto">
                                 <div class="listing-item">
                                     <div class="listing-img">
-                                        <a href="/vehicle-details/{{ $vehicle['slug'] }}">
+                                        <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">
                                             <img src="{{ $vehicle['vehicle_image'] }}" class="img-fluid" alt="Audi">
                                         </a>
                                         <div class="fav-item justify-content-end">
@@ -30,7 +30,7 @@
                                                     <img src="{{ $vehicle['avatar_image'] }}" alt="author">
                                                 </a>
                                                 <h3 class="listing-title">
-                                                    <a href="/vehicle-details/{{ $vehicle['slug'] }}">{{ $vehicle['name'] }}</a>
+                                                    <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">{{ $vehicle['name'] }}</a>
                                                 </h3>
                                                 @php 
                                                     $rating = $vehicle['rating'] ?? 0;
@@ -70,7 +70,7 @@
                                             <ul>
                                                 <li>
                                                     <span><img src="{{ asset('/frontend/assets/img/icons/door-icon.svg') }}" alt="Power"></span>
-                                                    <p>{{ $vehicle['num_airbags'] ? $vehicle['num_airbags'] : "" }}</p>
+                                                    <p>{{ $vehicle['num_doors'] ? $vehicle['num_doors'] : "" }}</p>
                                                 </li>
                                                 <li>
                                                     <span><img src="{{ asset('/frontend/assets/img/icons/car-parts-05.svg') }}" alt="2018"></span>
@@ -96,7 +96,7 @@
                                             </div>
                                         </div>
                                         <div class="listing-button">
-                                            <a href="/vehicle-details/{{ $vehicle['slug'] }}" class="btn btn-order">
+                                            <a href="{{ route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-order">
                                                 <span><i class="feather-calendar me-2"></i></span>{{ __('web.home.rent_now') }}
                                             </a>
                                         </div>

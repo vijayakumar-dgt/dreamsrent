@@ -22,7 +22,9 @@
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
 					<div class="mb-2">
 						@if (hasPermission($permissions, 'vehicle_attributes', 'create'))
-						<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#steering_type_modal" id="add_steering_type" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_steering_type') }}</a>
+						<button type="button" data-bs-toggle="modal" data-bs-target="#steering_type_modal" id="add_steering_type" class="btn btn-primary d-flex align-items-center">
+							<i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_steering_type') }}
+						</button>
 						@endif
 					</div>
 				</div>
@@ -72,9 +74,7 @@
 							@endif
 						</tr>
 					</thead>
-					<tbody>			
-
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 			<!-- Custom Data Table -->

@@ -109,26 +109,6 @@
                                             <span class="invalid-feedback" id="og_description_error"></span>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
-                                        <label class="form-label mb-2">{{ __('admin.page.og_image') }}</label>
-                                        <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
-                                            <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-                                                <i class="ti ti-photo-up fs-14"></i>
-                                            </div>
-                                            <div class="profile-upload">
-                                                <div class="profile-uploader d-flex align-items-center">
-                                                    <div class="drag-upload-btn btn btn-md btn-dark">
-                                                        <i class="ti ti-photo-up fs-14"></i>
-                                                        {{ __('admin.common.upload') }}
-                                                        <input type="file" name="og_image" id="og_image" class="form-control image-sign">
-                                                    </div>
-                                                </div>
-                                                <div class="mt-2">
-                                                    <p class="fs-14"></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

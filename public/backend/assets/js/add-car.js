@@ -532,7 +532,7 @@
                     required: true,
                 },
                 vehicle_year: {
-                    required: false,
+                    required: true,
                 },
                 vehicle_passenger: {
                     required: true,

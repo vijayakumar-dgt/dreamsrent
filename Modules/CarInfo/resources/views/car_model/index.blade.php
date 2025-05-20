@@ -22,7 +22,9 @@
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">					
 					<div class="mb-2">
 						@if (hasPermission($permissions, 'vehicle_attributes', 'create'))
-						<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#car_model_modal" id="add_car_model" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_vehicle_model') }}</a>
+						<button type="button" data-bs-toggle="modal" data-bs-target="#car_model_modal" id="add_car_model" class="btn btn-primary d-flex align-items-center">
+							<i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_vehicle_model') }}
+						</button>
 						@endif
 					</div>
 				</div>

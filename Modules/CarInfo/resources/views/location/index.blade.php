@@ -22,7 +22,7 @@
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
                     @if (hasPermission($permissions, 'locations', 'create'))
                     <div class="mb-2">
-                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_location" class="btn btn-primary d-flex align-items-center" id="add_new_location"><i class="ti ti-plus me-2"></i> {{ __('admin.manage.add_new_location') }}</a>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#add_location" class="btn btn-primary d-flex align-items-center" id="add_new_location"><i class="ti ti-plus me-2"></i> {{ __('admin.manage.add_new_location') }}</button>
                     </div>
                     @endif
                 </div>
@@ -42,15 +42,15 @@
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                     <div class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                             <i class="ti ti-badge me-1"></i> <span class="statuslabel"> {{ __('admin.common.status') }}</span>
-                        </a>
+                        </button>
                         <ul class="dropdown-menu  dropdown-menu-end p-2">
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-label="{{ __('admin.common.active') }}">{{ __('admin.common.active') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-label="{{ __('admin.common.active') }}">{{ __('admin.common.active') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-label="{{ __('admin.common.inactive') }}">{{ __('admin.common.inactive') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-label="{{ __('admin.common.inactive') }}">{{ __('admin.common.inactive') }}</button>
                             </li>
                         </ul>
                     </div>
@@ -75,8 +75,7 @@
                             @endif
                         </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
             <!-- Custom Data Table -->
@@ -324,7 +323,7 @@
                                 </label>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                                 <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
                             </div>
                         </div>
@@ -349,7 +348,7 @@
                         <h4 class="mb-1">{{ __('admin.manage.delete_location') }}</h4>
                         <p class="mb-3">{{ __('admin.manage.delete_location_confirmation') }}</p>
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                             <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.yes_delete') }}</button>
                         </div>
                     </div>

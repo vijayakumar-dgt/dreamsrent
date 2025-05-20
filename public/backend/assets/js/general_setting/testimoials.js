@@ -14,10 +14,10 @@
 
             editTestimonial(id, name, image, review, ratings, status);
         });
-         $(document).on('click', '.delete-testimonial-btn', function () {
-        const id = $(this).data('id');
-        $("#delete_id").val(id);
-    });
+        $(document).on("click", ".delete-testimonial-btn", function () {
+            const id = $(this).data("id");
+            $("#delete_id").val(id);
+        });
         $("#search").on("keyup", function (e) {
             clearTimeout(window.searchTimer);
             window.searchTimer = setTimeout(function () {
@@ -518,7 +518,9 @@
                                                     data-bs-toggle="modal" 
                                                     data-bs-target="#delete_testimonials"
                                                 >
-                                                    <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                                    <i class="ti ti-trash me-1"></i>${_l(
+                                                        "admin.common.delete"
+                                                    )}
                                                 </button>
 
                                             </li>`
@@ -662,13 +664,16 @@
 })();
 
 function editTestimonial(id, customerName, image, review, ratings, status) {
-    $('#edit_testimonial_id').val(id);
-    $('#edit_testimonial_name').val(customerName);
-    $('#edit_testimonial_review').val(review);
-    $('#edit_testimonial_status').prop('checked', status === 1);
-    $('#edit_testimonial_preview').attr('src', image.startsWith("http") ? image : image);
-    $('#edit_testimonial_ratings').val(ratings).trigger('change');
-    $('#edit_testimonial').modal('show');
+    $("#edit_testimonial_id").val(id);
+    $("#edit_testimonial_name").val(customerName);
+    $("#edit_testimonial_review").val(review);
+    $("#edit_testimonial_status").prop("checked", status === 1);
+    $("#edit_testimonial_preview").attr(
+        "src",
+        image.startsWith("http") ? image : image
+    );
+    $("#edit_testimonial_ratings").val(ratings).trigger("change");
+    $("#edit_testimonial").modal("show");
 }
 
 function deleteTestimonial(id) {
