@@ -2947,3 +2947,26 @@ $(document).ready(function () {
         }
     });
 });
+
+$(document).ready(function () {
+    function updateSelectAllCheckbox() {
+        var total = $("input[name='feature_id[]']").length;
+        var checked = $("input[name='feature_id[]']:checked").length;
+
+        if (total > 0 && total === checked) {
+            $("#select-all1").prop("checked", true);
+        } else {
+            $("#select-all1").prop("checked", false);
+        }
+    }
+
+    updateSelectAllCheckbox();
+
+    $(document).on("change", "input[name='feature_id[]']", function () {
+        updateSelectAllCheckbox();
+    });
+
+    $("#select-all1").on("change", function () {
+        $("input[name='feature_id[]']").prop("checked", this.checked);
+    });
+});

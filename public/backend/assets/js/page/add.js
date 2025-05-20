@@ -188,6 +188,104 @@
                 });
             },
         });
+
+        initializeSummernote();
+
+        $("#addTextarea").on("click", function () {
+            const uniqueId = `status_${Date.now()}`;
+
+            const textareaTemplate = `
+            <div class="textarea-item border border-black border-2 p-3 mb-3 mt-3 bg-light">
+                <div class="d-flex align-items-center justify-content-end mt-1">
+                    <label for="${uniqueId}" class="me-2 fw-bold text-black">Status:</label>
+                    <div class="status-toggle modal-status">
+                        <input type="checkbox" name="page_status[]" id="${uniqueId}" value="1" class="check user8" checked>
+                        <label for="${uniqueId}" class="checktoggle"></label>
+                    </div>
+                    <a class="removeTextarea ms-3">
+                        <i class="ti ti-trash fs-20 fw-bold"></i>
+                    </a>
+                </div>
+
+                <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">${_l(
+                            "admin.page.section_title"
+                        )} <span class="text-danger">*</span></label>
+                        <input type="text" name="section_title[]" placeholder="${_l(
+                            "admin.page.enter_title"
+                        )}" class="form-control">
+                        <span class="invalid-feedback"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">${_l(
+                            "admin.page.section_label"
+                        )} <span class="text-danger">*</span></label>
+                        <input type="text" name="section_label[]" placeholder="${_l(
+                            "admin.page.enter_label"
+                        )}" class="form-control">
+                        <span class="invalid-feedback"></span>
+                    </div>
+                </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">${_l(
+                            "admin.page.section_des"
+                        )}</label>
+                        <textarea name="page_content[]" placeholder="${_l(
+                            "admin.page.enter_content"
+                        )}" cols="10" rows="3" class="form-control summer"></textarea>
+                        <span class="invalid-feedback"></span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+            $(".textareasContainer").append(textareaTemplate);
+            initializeSummernote();
+        });
+
+        $(".textareasContainer").on("click", ".removeTextarea", function () {
+            $(this).closest(".textarea-item").remove();
+        });
+
+        let pageId = $("#page_id").val();
+
+        if (pageId) {
+            $.ajax({
+                url: "{{ route('admin.pageContent') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    page_id: pageId,
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $("#page-content").html(response.data.page_content);
+                    } else {
+                        $("#page-content").html("<p>No content available.</p>");
+                    }
+                },
+                error: function () {
+                    $("#page-content").html("<p>Error fetching content.</p>");
+                },
+            });
+        }
+
+        $(document).on("click", ".setSection button", function () {
+            updateThemeSelection(this);
+        });
+
+        $(document).on("dragstart", ".draggable-card", function (event) {
+            event.originalEvent.dataTransfer.setData(
+                "text/plain",
+                $(this).data("value")
+            );
+        });
     });
 
     let themeId = 1;
@@ -204,10 +302,6 @@
 
         fetchSection();
     }
-
-    $(document).on("click", ".setSection button", function () {
-        updateThemeSelection(this);
-    });
 
     function fetchSection() {
         $(".table-loader").show();
@@ -299,13 +393,6 @@
         });
     }
 
-    $(document).on("dragstart", ".draggable-card", function (event) {
-        event.originalEvent.dataTransfer.setData(
-            "text/plain",
-            $(this).data("value")
-        );
-    });
-
     function initializeSummernote() {
         $(".summer").summernote({
             height: 150,
@@ -345,95 +432,4 @@
             },
         });
     }
-
-    $(document).ready(function () {
-        initializeSummernote();
-
-        $("#addTextarea").on("click", function () {
-            const uniqueId = `status_${Date.now()}`;
-
-            const textareaTemplate = `
-            <div class="textarea-item border border-black border-2 p-3 mb-3 mt-3 bg-light">
-                <div class="d-flex align-items-center justify-content-end mt-1">
-                    <label for="${uniqueId}" class="me-2 fw-bold text-black">Status:</label>
-                    <div class="status-toggle modal-status">
-                        <input type="checkbox" name="page_status[]" id="${uniqueId}" value="1" class="check user8" checked>
-                        <label for="${uniqueId}" class="checktoggle"></label>
-                    </div>
-                    <a class="removeTextarea ms-3">
-                        <i class="ti ti-trash fs-20 fw-bold"></i>
-                    </a>
-                </div>
-
-                <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label">${_l(
-                            "admin.page.section_title"
-                        )} <span class="text-danger">*</span></label>
-                        <input type="text" name="section_title[]" placeholder="${_l(
-                            "admin.page.enter_title"
-                        )}" class="form-control">
-                        <span class="invalid-feedback"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label">${_l(
-                            "admin.page.section_label"
-                        )} <span class="text-danger">*</span></label>
-                        <input type="text" name="section_label[]" placeholder="${_l(
-                            "admin.page.enter_label"
-                        )}" class="form-control">
-                        <span class="invalid-feedback"></span>
-                    </div>
-                </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="mb-3">
-                        <label class="form-label">${_l(
-                            "admin.page.section_des"
-                        )}</label>
-                        <textarea name="page_content[]" placeholder="${_l(
-                            "admin.page.enter_content"
-                        )}" cols="10" rows="3" class="form-control summer"></textarea>
-                        <span class="invalid-feedback"></span>
-                    </div>
-                </div>
-            </div>
-        `;
-
-            $(".textareasContainer").append(textareaTemplate);
-            initializeSummernote();
-        });
-
-        $(".textareasContainer").on("click", ".removeTextarea", function () {
-            $(this).closest(".textarea-item").remove();
-        });
-    });
- 
-    $(document).ready(function () {
-        let pageId = $("#page_id").val();
-
-        if (pageId) {
-            $.ajax({
-                url: "{{ route('admin.pageContent') }}",
-                type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    page_id: pageId,
-                },
-                success: function (response) {
-                    if (response.success) {
-                        $("#page-content").html(response.data.page_content);
-                    } else {
-                        $("#page-content").html("<p>No content available.</p>");
-                    }
-                },
-                error: function () {
-                    $("#page-content").html("<p>Error fetching content.</p>");
-                },
-            });
-        }
-    });
 })();

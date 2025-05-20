@@ -1130,12 +1130,12 @@
                     extension: "pdf|txt|doc|docx",
                 },
                 "car_images[]": {
-                    required: true,
+                    required: false,
                     extension: "jpg|jpeg|png",
                 },
                 car_video: {
                     required: false,
-                    url: false,
+                    url: true,
                 },
             },
             messages: {
