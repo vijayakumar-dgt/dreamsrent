@@ -116,8 +116,8 @@
 							</li>
 						</ul>
 					</div>
-					<button type="button" class="me-2 text-purple links" id="apply_filter">{{ __('admin.common.apply') }}</button>
-					<button type="button" class="text-danger links" id="reset_filter">{{ __('admin.common.clear_all') }}</button>
+					<button type="button" class="text-purple links border-0 bg-transparent" id="apply_filter">{{ __('admin.common.apply') }}</button>
+					<button type="button" class="text-danger links border-0 bg-transparent" id="reset_filter">{{ __('admin.common.clear_all') }}</button>
 				</div>
 			</div>
 			<div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
