@@ -1754,7 +1754,7 @@ class CarInfoController extends Controller
                     ->exists();
             }
             $faqEnabled = GeneralSetting::where('group_id', 20)->where('key', 'faq')->first()->value;
-            $extraServiceEnabled = $rentalSettings['extraService'] ?? false;
+            $extraServiceEnabled = GeneralSetting::where('group_id', 20)->where('key', 'extraService')->first()->value;
             $data = [
                 'id' => $vehicle->id,
                 'name' => $vehicle->name,
@@ -1798,7 +1798,7 @@ class CarInfoController extends Controller
                         'value' => $extraservice->value,
                         'price' => $extraservice->price,
                         'name' => optional($extraservice->extraService)->name,
-                        'icon' => url('/storage/' . optional($extraservice->extraService)->icon), // Convert icon to full URL
+                        'icon' => uploadedAsset(optional($extraservice->extraService)->icon), // Convert icon to full URL
                         'description' => optional($extraservice->extraService)->description,
                         'image' => url('/storage/' . optional($extraservice->extraService)->image), // Convert image to full URL
                     ];

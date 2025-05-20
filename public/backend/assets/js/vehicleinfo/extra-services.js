@@ -159,7 +159,7 @@
         };
     
         img.onload = function () {
-            valid = img.width >= 10 && img.width <= 25 && img.height >= 10 && img.height <= 25;
+            valid = img.width >= 100 && img.width <= 100 && img.height >= 100 && img.height <= 100;
             $(element).data("valid-dimension", valid);
             $(element).valid();
         };
