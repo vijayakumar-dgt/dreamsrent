@@ -35,9 +35,8 @@
                                 <i class="ti ti-mail fs-24"></i>
                             </div>
                             <div class="text-center mb-3">
-                                <h4 class="mb-1">Verify Your Email</h4>
-                                <p class="mb-0">We have Sent OTP to {{$email}} to verify your 
-                                    email address and activate your account entering the OTP</p>
+                                <h4 class="mb-1">{{ __('admin.auth.verify_your_email') }}</h4>
+                                <p class="mb-0">{{ __('admin.auth.we_sent_otp_to_email') }} {{$email}} {{ __('admin.auth.verify_your_email_address') }}</p>
                             </div>
                             <div class="text-center otp-input">
                                 <div class="d-flex align-items-center justify-content-center mb-3">
@@ -49,15 +48,15 @@
                                 <span class="otp-error-text text-danger"></span>
                                 <div>
                                     <div class="badge bg-danger-transparent mb-3 countdowndiv">
-                                        <p class="d-flex align-items-center timer"><i class="ti ti-clock me-1"></i>00:55</p>
+                                        <p class="d-flex align-items-center timer"><i class="ti ti-clock me-1"></i>{{ __('admin.auth.otp_time') }}</p>
                                     </div>
                                     <div class="mb-3 d-flex justify-content-center">
-                                        <a href="javascript:void(0);" class="text-secondary text-decoration-underline resend_otp_btn">Resend OTP</a>
+                                        <a href="javascript:void(0);" class="text-secondary text-decoration-underline resend_otp_btn">{{ __('admin.auth.resend_otp') }}</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="mt-3">
-                                <button type="submit" class="btn btn-dark w-100 resetpasswordbtn">Reset Password</button>
+                                <button type="submit" class="btn btn-dark w-100 resetpasswordbtn">{{ __('admin.auth.reset_password') }}</button>
                             </div>
                         </div>
                     </div>

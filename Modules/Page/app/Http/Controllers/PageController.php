@@ -439,13 +439,12 @@ class PageController extends Controller
                 $slug = 'home-screen-two';
             }
         }
-
+          
         if (!$slug) {
             return response()->json(["status" => "error", "message" =>  __('Slug must be specified')]);
         }
-
         $page = Page::where('slug', $slug)->where('theme_id', $themeId)->where('language_id', $lang_id)->first();
-
+          
         if (!$page) {
             $basePage = Page::where('slug', $slug)->whereNull('parent_id')->first();
 

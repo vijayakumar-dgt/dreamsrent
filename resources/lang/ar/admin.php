@@ -2366,4 +2366,27 @@ return array (
     'image_dimensions_must_be_exactly_735_310_pixels' => 'يجب أن تكون أبعاد الصورة 735 × 310 بكسل بالضبط',
     'blog_details' => 'تفاصيل المدونة',
   ),
+  'auth' =>
+  array(
+    'welcome_back' => 'مرحباً بعودتك',
+    'please_enter_details_to_sign_in' => 'الرجاء إدخال التفاصيل لتسجيل الدخول',
+    'remember_me' => 'تذكرني',
+    'forgot_password' => 'هل نسيت كلمة المرور؟',
+    'login_info' => 'معلومات تسجيل الدخول',
+    'forgot_password_info' => 'إذا نسيت كلمة مرورك، سنرسل لك تعليمات لإعادة تعيين كلمة المرور عبر البريد الإلكتروني.',
+    'reset_password' => 'إعادة تعيين كلمة المرور',
+    'sign_in' => 'تسجيل الدخول',
+    'return_to' => 'العودة إلى',
+    'enter_new_password' => 'أدخل كلمة مرور جديدة',
+    'verify_your_email' => 'تحقق من بريدك الإلكتروني',
+    'we_sent_otp_to_email' => 'لقد أرسلنا رمز التحقق إلى',
+    'verify_your_email_address' => 'للتحقق من عنوان بريدك الإلكتروني وتنشيط حسابك عن طريق إدخال رمز التحقق',
+    'otp_time' => '0:55',
+    'resend_otp' => 'إعادة إرسال رمز التحقق',
+    'please_enter_email' => 'الرجاء إدخال البريد الإلكتروني',
+    'please_enter_valid_email' => 'الرجاء إدخال بريد إلكتروني صالح',
+    'we_are_redirecting_you' => 'نحن نوجهك إلى...',
+    'please_enter_password' => 'يرجى إدخال كلمة المرور'
+
+  )
 );

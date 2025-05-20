@@ -1,3 +1,6 @@
+(async () => {
+await loadTranslationFile('admin', 'general_settings, auth');
+
 $(document).ready(function(){
     $(document).ready(function () {
         $('.copy-login-details').on('click', function (event) {
@@ -26,12 +29,12 @@ $(document).ready(function(){
         },
         messages:{
             email: {
-                required: 'Please enter email',
-                email: 'Please enter valid email',
+                required:_l('admin.auth.please_enter_email'),
+                email: _l('admin.auth.please_enter_valid_email'),
             },
             password: {
-                required: 'Please enter password',
-                minlength: 'Password must be at least 6 characters',
+                required: _l('admin.auth.please_enter_password'),
+                minlength:  _l('admin.general_settings.password_min'),
             }
         },
         errorPlacement: function (error, element) {
@@ -70,7 +73,7 @@ $(document).ready(function(){
                         window.location.href = resp.redirect_url;
                     }else{
                         showToast('error', resp.message);
-                        $("#loginForm .submitbtn").text('Login');
+                        $("#loginForm .submitbtn").text( _l('admin.general_settings.login'));
                         $("#loginForm .submitbtn").prop('disabled', false);
                     }
                 },
@@ -85,7 +88,7 @@ $(document).ready(function(){
                     } else {
                            $("#error").text(error.responseJSON.message);
                     }
-                    $("#loginForm .submitbtn").text('Login');
+                    $("#loginForm .submitbtn").text( _l('admin.general_settings.login'));
                     $("#loginForm .submitbtn").prop('disabled', false);
                 }
             });
@@ -103,3 +106,5 @@ $(document).ready(function(){
 
     });
 });
+
+}) ();

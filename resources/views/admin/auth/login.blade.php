@@ -16,14 +16,14 @@
                                 <i class="ti ti-login fs-24"></i>
                             </div>
                             <div class="text-center mb-3">
-                                <h4 class="mb-1">Welcome Back</h4>
-                                <p class="mb-0">Please enter your details to sign in</p>
+                                <h4 class="mb-1">{{ __('admin.auth.welcome_back') }}</h4>
+                                <p class="mb-0">{{ __('admin.auth.please_enter_details_to_sign_in') }}</p>
                             </div>
                             <div class="error d-flex justify-content-center">
                                 <span id="error" class="text-danger"></span>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Email <span class="text-danger">*</span></label>
+                                <label class="form-label">{{ __('admin.common.email') }} <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <input type="email" name="email" class="form-control" value="{{ old('email') }}" id="email">
                                     <span class="input-group-text border-start-0">
@@ -33,7 +33,7 @@
                                 <span id="email_error" class="text-danger error-text"></span>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Password <span class="text-danger">*</span></label>
+                                <label class="form-label">{{ __('admin.common.email') }} <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <input type="password" class="pass-input form-control @error('password') is-invalid @enderror" id="password" name="password">
                                     <span class="input-group-text border-start-0">
@@ -46,23 +46,23 @@
                                 <div class="d-flex align-items-center">
                                     <div class="form-check form-check-md mb-0">
                                         <input class="form-check-input" id="remember_me" type="checkbox" name="remember">
-                                        <label for="remember_me" class="form-check-label mt-0">Remember Me</label>
+                                        <label for="remember_me" class="form-check-label mt-0"> {{ __('admin.auth.remember_me') }} </label>
                                     </div>
                                 </div>
                                 <div class="text-end">
-                                    <a href="{{ route('forgot-password') }}" class="link-default text-decoration-underline">Forgot Password</a>
+                                    <a href="{{ route('forgot-password') }}" class="link-default text-decoration-underline">{{ __('admin.auth.forgot_password') }} </a>
                                 </div>
                             </div>
                             <div class="mt-3 mb-3">
-                                <button type="submit" class="btn btn-dark w-100 submitbtn" disabled>Login</button>
+                                <button type="submit" class="btn btn-dark w-100 submitbtn" disabled>{{ __('admin.general_settings.login') }}</button>
                             </div>
                           </form> 
                            <div class="mb-0">
-                                <h6 class="fs-16 mb-1">{{ __('Login Info') }}:</h6>
+                                <h6 class="fs-16 mb-1">{{ __('admin.auth.login_info') }}:</h6>
                                 <div class="p-3 border d-flex flex-wrap align-items-center justify-content-between">
                                     <div>
-                                        <span class="d-block"><strong>{{ __('Email') }} </strong>: demoadmin@example.com</span>
-                                        <span class="d-block"><strong>{{ __('Password') }} </strong>: 12345678</span>
+                                        <span class="d-block"><strong>{{ __('admin.common.email') }} </strong>: demoadmin@example.com</span>
+                                        <span class="d-block"><strong>{{ __('admin.common.password') }} </strong>: 12345678</span>
                                     </div>
                                     <div>
                                         <a class="btn btn-primary copy-login-details" data-email="demoadmin@example.com"
