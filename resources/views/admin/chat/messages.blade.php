@@ -81,7 +81,7 @@
                         <div class="chat-header">
                             <div class="user-details">
                                 <div class="d-xl-none">
-                                    <a class="text-muted chat-close me-2" href="#">
+                                    <a href="#" class="text-muted chat-close me-2">
                                         <i class="fas fa-arrow-left"></i>
                                     </a>
                                 </div>

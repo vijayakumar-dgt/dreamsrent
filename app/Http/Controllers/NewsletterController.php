@@ -99,10 +99,10 @@ class NewsletterController extends Controller
                         $query->orderBy('newsletter_subscribers.created_at', 'desc');
                         break;
                     case 'ascending':
-                        $query->orderBy('newsletter_subscribers.id', 'asc');
+                        $query->orderBy('newsletter_subscribers.email', 'asc');
                         break;
                     case 'descending':
-                        $query->orderBy('newsletter_subscribers.id', 'desc');
+                        $query->orderBy('newsletter_subscribers.email', 'desc');
                         break;
                     case 'last month':
                         $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();

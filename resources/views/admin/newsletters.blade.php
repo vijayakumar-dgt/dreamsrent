@@ -79,10 +79,10 @@
 									<input class="form-check-input" type="checkbox" id="select-all">
 								</div>
 							</th>
-							<th>{{ ucfirst(__('admin.common.email')) }}</th>
-							<th>{{ ucfirst(__('admin.common.date')) }}</th>
+							<th>{{ strtoupper(__('admin.common.email')) }}</th>
+							<th>{{ strtoupper(__('admin.common.date')) }}</th>
 							@if (hasPermission($permissions, 'newsletters', 'delete'))
-							<th>{{ ucfirst(__('admin.common.action')) }}</th>
+							<th>{{ strtoupper(__('admin.common.action')) }}</th>
 							@endif
 						</tr>
 					</thead>

@@ -69,7 +69,10 @@ class ContactController extends Controller
             $searchInput = $request->get('search', '');
             // Ensure search is always a string
             $search = is_string($searchInput) ? $searchInput : '';
-
+            $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
+            $endDate = \Carbon\Carbon::now()->subMonth()->endOfMonth();
+            $sevanStartDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
+            $sevenEndDate = \Carbon\Carbon::now()->endOfDay();
             $contacts = Contact::query()
                 ->when($search, function ($query) use ($search) {
                     $query->where('name', 'LIKE', '%' . $search . '%')
@@ -79,8 +82,8 @@ class ContactController extends Controller
                 ->when($sortBy === 'latest', fn($query) => $query->orderBy('created_at', 'desc'))
                 ->when($sortBy === 'ascending', fn($query) => $query->orderBy('name', 'asc'))
                 ->when($sortBy === 'descending', fn($query) => $query->orderBy('name', 'desc'))
-                ->when($sortBy === 'last_month', fn($query) => $query->whereBetween('created_at', [now()->subMonth(), now()]))
-                ->when($sortBy === 'last_7_days', fn($query) => $query->whereBetween('created_at', [now()->subDays(7), now()]))
+                ->when($sortBy === 'last_month', fn($query) => $query->whereBetween('created_at', [$startDate, $endDate]))
+                ->when($sortBy === 'last_7_days', fn($query) => $query->whereBetween('created_at', [$sevanStartDate, $sevenEndDate]))
                 ->get()
                 ->map(function ($contact) {
                     $contact->name = ucwords($contact->name);
