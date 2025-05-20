@@ -64,17 +64,17 @@
 								$currentLang = $allLanguages->firstWhere('code', app()->getLocale());
 								@endphp
 								<div class="dropdown flag-dropdown">
-									<a class="dropdown-toggle btn btn-white d-flex align-items-center justify-content-between py-1 px-2" data-bs-toggle="dropdown" href="javascript:void(0);">
+									<button type="button" class="dropdown-toggle btn btn-white d-flex align-items-center justify-content-between py-1 px-2" data-bs-toggle="dropdown" href="javascript:void(0);">
 										<img src="{{ asset('backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
 											alt="Language"
 											class="img-fluid rounded-circle me-2 lang-flag">
 										<span>{{ $currentLang->name ?? 'Language' }}</span>
-									</a>
+									</button>
 									<ul class="dropdown-menu p-2">
 										@if ($allLanguages)
 										@foreach ($allLanguages as $language)
 										<li>
-											<a href="javascript:void(0);"
+											<button type="button"
 												class="dropdown-item d-flex align-items-center change-language"
 												data-id="{{ $language->id }}"
 												data-language_code="{{ $language->code }}">
@@ -82,7 +82,7 @@
 													alt="{{ $language->name }}"
 													class="rounded-circle me-2 lang-flag">
 												{{ $language->name }}
-											</a>
+										    </button>
 										</li>
 										@endforeach
 										@endif
@@ -499,12 +499,12 @@
 									</div>
 									<div class="col-xl-9">
 										<div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-											<a href="#" class="btn btn-dark btn-md d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add-tarrif"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_new_tariff_rate') }}</a>
+											<button type="button" class="btn btn-dark btn-md d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add-tarrif"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_new_tariff_rate') }}</button>
 										</div>
 
 										<div class="card bg-light mb-3">
 											<div class="card-body pb-3" id="tariff_append">
-												<p class="noDataS text-center">No data available</p>
+												<p class="noDataS text-center">{{ __('admin.common.empty_table') }}</p>
 											</div>
 										</div>
 									</div>
@@ -518,13 +518,13 @@
 									</div>
 									<div class="col-xl-9">
 										<div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-											<a href="#" class="btn btn-dark btn-md d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_price"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_new_seasonal_pricing') }}</a>
+											<button type="button" class="btn btn-dark btn-md d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_price"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_new_seasonal_pricing') }}</button>
 										</div>
 										<div class="empty-data bg-light text-center mb-3">
 										</div>
 										<div class="card bg-light mb-3">
 											<div class="card-body pb-3" id="seasonal_append">
-												<p class="noDataT text-center">No data available</p>
+												<p class="noDataT text-center">{{ __('admin.common.empty_table') }}</p>
 											</div>
 										</div>
 									</div>
@@ -538,14 +538,14 @@
 									</div>
 									<div class="col-xl-9">
 										<div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-											<a href="#" class="btn btn-dark btn-md d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#select_insurance"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.select_new_insurance') }}</a>
+											<button type="button" class="btn btn-dark btn-md d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#select_insurance"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.select_new_insurance') }}</button>
 										</div>
 										<div class="empty-data bg-light text-center mb-3">
 											<p class="fw-medium">{{ __('admin.rentals.no_insurance_data') }}</p>
 										</div>
 										<div class="card bg-light mb-3">
 											<div class="card-body pb-3" id="insurance_car_append">
-												<p class="noDataI text-center">No data available</p>
+												<p class="noDataI text-center">{{ __('admin.common.empty_table') }}</p>
 											</div>
 										</div>
 									</div>
@@ -744,7 +744,7 @@
 										<p>{{ __('admin.rentals.damages_description') }}</p>
 									</div>
 									<div class="col-xl-9">
-										<a href="#" class="btn btn-dark btn-md d-inline-flex align-items-center mb-3" data-bs-toggle="modal" data-bs-target="#add-damage" id="damage_car"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_damage_button') }} </a>
+										<button type="button" class="btn btn-dark btn-md d-inline-flex align-items-center mb-3" data-bs-toggle="modal" data-bs-target="#add-damage" id="damage_car"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_damage_button') }} </button>
 										<div class="card border-0 bg-light mb-0">
 											<div class="card-body">
 												<div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
@@ -775,7 +775,7 @@
 										<p>{{ __('admin.rentals.faq_description') }}</p>
 									</div>
 									<div class="col-xl-9">
-										<a href="#" class="btn btn-dark btn-md d-inline-flex align-items-center mb-3" data-bs-toggle="modal" data-bs-target="#add-faq"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_faq_button') }}</a>
+										<button type="button" class="btn btn-dark btn-md d-inline-flex align-items-center mb-3" data-bs-toggle="modal" data-bs-target="#add-faq"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_faq_button') }}</button>
 										<div class="card border-0 bg-light mb-0">
 											<div class="card-body">
 												<h6 class="mb-3">{{ __('admin.rentals.total_faq') }} : <span id="faq_count">00</span></h6>
@@ -891,7 +891,7 @@
 				</div>
 				<div class="modal-footer">
 					<div class="d-flex justify-content-center">
-						<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+						<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 						<button type="button" class="btn btn-primary" id="tarrif_btn">{{ __('admin.rentals.create_tariff') }}</button>
 					</div>
 				</div>
@@ -911,7 +911,7 @@
 					<h4 class="mb-1">{{ __('admin.rentals.delete_tariff') }}</h4>
 					<p class="mb-3">{{ __('admin.rentals.delete_tariff_confirmation') }}</p>
 					<div class="d-flex justify-content-center">
-						<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+						<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 						<button type="button" class="btn btn-primary">{{ __('admin.rentals.confirm_delete_tariff') }}</button>
 					</div>
 				</form>
@@ -987,7 +987,7 @@
 			</div>
 			<div class="modal-footer">
 				<div class="d-flex justify-content-center">
-					<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+					<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 					<button type="button" class="btn btn-primary" id="price_btn">{{ __('admin.rentals.create_new') }}</button>
 				</div>
 			</div>
@@ -1006,7 +1006,7 @@
 					<h4 class="mb-1">{{ __('admin.rentals.delete_pricing') }}</h4>
 					<p class="mb-3">{{ __('admin.rentals.delete_pricing_confirmation') }}</p>
 					<div class="d-flex justify-content-center">
-						<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+						<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 						<button type="button" class="btn btn-primary">{{ __('admin.rentals.confirm_delete_pricing') }}</button>
 					</div>
 				</form>
@@ -1064,7 +1064,7 @@
 			</div>
 			<div class="modal-footer">
 				<div class="d-flex justify-content-center">
-					<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</a>
+					<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
 					<button type="button" class="btn btn-primary" id="service_save_btn">{{ __('admin.rentals.save_changes') }}</button>
 				</div>
 			</div>
@@ -1099,7 +1099,7 @@
 					<div class="mb-3">
 						<label class="form-label">{{ __('admin.rentals.damage_type_label') }} <span class="text-danger">*</span></label>
 						<select class="select" name="dam_type" id="dam_type">
-							<option value="">Select Type</option>
+							<option value="">{{ __('admin.bookings.select_type') }}</option>
 							@foreach($DamageTypes as $DamageTypesValue)
 							<option value="{{ $DamageTypesValue->id }}" class="{{ $DamageTypesValue->id }}">{{ $DamageTypesValue->damage_type }}</option>
 							@endforeach
@@ -1112,7 +1112,7 @@
 				</div>
 				<div class="modal-footer">
 					<div class="d-flex justify-content-center">
-						<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</a>
+						<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
 						<button type="button" class="btn btn-primary" id="damage_btn">{{ __('admin.rentals.create_new') }}</button>
 					</div>
 				</div>
@@ -1131,7 +1131,7 @@
 				<h4 class="mb-1">{{ __('admin.rentals.delete_damage_title') }}</h4>
 				<p class="mb-3">{{ __('admin.rentals.delete_damage_confirmation') }}</p>
 				<div class="d-flex justify-content-center">
-					<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</a>
+					<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
 					<button type="button" class="btn btn-primary" id="dete-damage">{{ __('admin.rentals.yes_delete') }}</button>
 				</div>
 			</div>
@@ -1160,7 +1160,7 @@
 			</div>
 			<div class="modal-footer">
 				<div class="d-flex justify-content-center">
-					<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</a>
+					<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
 					<a class="btn btn-primary" id="faq_btn">{{ __('admin.rentals.create_new') }}</a>
 				</div>
 			</div>
@@ -1178,7 +1178,7 @@
 				<h4 class="mb-1">{{ __('admin.rentals.delete_faq_title') }}</h4>
 				<p class="mb-3">{{ __('admin.rentals.delete_faq_confirmation') }}</p>
 				<div class="d-flex justify-content-center">
-					<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</a>
+					<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
 					<button type="button" class="btn btn-primary" id="dete-faq">{{ __('admin.rentals.yes_delete') }}</button>
 				</div>
 			</div>
@@ -1212,7 +1212,7 @@
 									<input type="hidden" id="insurance_price" value="{{ $insurance->price }}">
 								</p>
 								<p class="fs-13 fw-medium mb-0">
-									Benefits: <span class="text-gray-9">{{ $insurance->insuranceBenefits->count() }}</span>
+									{{ __('admin.common.benefits') }}: <span class="text-gray-9">{{ $insurance->insuranceBenefits->count() }}</span>
 									<input type="hidden" id="insurance_count" value="{{ $insurance->insuranceBenefits->count() }}">
 									@if($insurance->insuranceBenefits->isNotEmpty())
 									<i class="ti ti-info-circle-filled text-gray-5 ms-1"
@@ -1225,7 +1225,7 @@
 							</div>
 						</div>
 						<div class="d-flex align-items-center icon-list delivery-add">
-							<a href="#"><i class="ti ti-plus plus-active"></i><i class="ti ti-check check-active"></i></a>
+							<button type="button"><i class="ti ti-plus plus-active"></i><i class="ti ti-check check-active"></i></button>
 							<input type="checkbox" id="insurance_checked" hidden>
 						</div>
 					</div>
@@ -1233,7 +1233,7 @@
 				</div>
 				<div class="modal-footer">
 					<div class="d-flex justify-content-center">
-						<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+						<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 						<button type="button" class="btn btn-primary" id="in_btn">{{ __('admin.general_settings.add') }}</button>
 					</div>
 				</div>
@@ -1246,7 +1246,7 @@
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="mb-0">Edit Insurance</h4>
+				<h4 class="mb-0">{{ __('admin.general_settings.edit_insurance') }}</h4>
 				<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
 					<i class="ti ti-x fs-16"></i>
 				</button>
@@ -1276,7 +1276,7 @@
 					</div>
 				</div>
 				<div class="mb-3">
-					<label class="form-label">Price <span class="text-danger"> *</span></label>
+					<label class="form-label">{{ __('admin.common.price') }} <span class="text-danger"> *</span></label>
 					<input type="text" class="form-control priceLimit	" id="price" maxlength="5" value="">
 				</div>
 			</div>

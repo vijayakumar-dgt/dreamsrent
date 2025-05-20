@@ -154,8 +154,8 @@
                                                             </div>
                                                             <div class="col-lg-3 d-none">
                                                                 <div class="d-flex align-items-center icon-list justify-content-end">
-                                                                    <a href="#" class="edit-icon me-2"><i class="ti ti-eye"></i></a>
-                                                                    <a href="#" class="edit-icon"><i class="ti ti-download"></i></a>
+                                                                    <button type="button" class="edit-icon me-2"><i class="ti ti-eye"></i></button>
+                                                                    <button type="button" class="edit-icon"><i class="ti ti-download"></i></button>
                                                                 </div>
                                                             </div>
                                                         </div>

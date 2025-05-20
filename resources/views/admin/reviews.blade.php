@@ -21,13 +21,13 @@
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
                     <div class="mb-2 me-2 d-none">
-                        <a href="javascript:void(0);" class="btn btn-white d-flex align-items-center"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</a>
+                        <button type="button" class="btn btn-white d-flex align-items-center"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</button>
                     </div>
                     <div class="mb-2 me-2 d-none">
                         <div class="dropdown">
-                            <a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center">
+                            <button type="button" class="btn btn-dark d-inline-flex align-items-center">
                                 <i class="ti ti-upload me-1"></i>{{ __('admin.common.export') }}
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -39,24 +39,24 @@
                     <input type="hidden" name="sort_by_input" id="sort_by_input">
                     <input type="hidden" name="sort_by_status" id="sort_by_status">
                     <div class="dropdown me-2">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                             <i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }} : <span class="ms-1" id="current_sort">{{ __('admin.common.latest') }}</span>
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2 sort_by_list">
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="latest">{{ __('admin.common.latest') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="latest">{{ __('admin.common.latest') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="ascending">{{ __('admin.common.ascending') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="ascending">{{ __('admin.common.ascending') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="descending">{{ __('admin.common.descending') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="descending">{{ __('admin.common.descending') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="last month">{{ __('admin.common.last_month') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="last month">{{ __('admin.common.last_month') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="last 7 days">{{ __('admin.common.last_7_days') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="last 7 days">{{ __('admin.common.last_7_days') }}</button>
                             </li>
                         </ul>
                     </div>
@@ -99,8 +99,7 @@
                             @endif
                         </tr>
                     </thead>
-                    <tbody>                                              
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
             <!-- Custom Data Table -->
@@ -123,7 +122,7 @@
                         <h4 class="mb-1">{{ __('admin.rentals.delete_review') }}</h4>
                         <p class="mb-3">{{ __('admin.rentals.delete_review_confirmation') }}</p>
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                             <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">{{ __('admin.common.yes_delete') }}</button>
                         </div>
                     </div>
