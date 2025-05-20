@@ -125,8 +125,7 @@
 							@endif
 						</tr>
 					</thead>
-					<tbody>
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 			<!-- Custom Data Table -->

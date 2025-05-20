@@ -23,7 +23,7 @@
                     
                     <div class="mb-2">
                         @if (hasPermission($permissions, 'inspections', 'create'))
-                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_inspection" class="btn btn-primary d-flex align-items-center" id="add_new_inspection"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_inspection') }}</a>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#add_inspection" class="btn btn-primary d-flex align-items-center" id="add_new_inspection"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_inspection') }}</button>
                     @endif
                     </div>
                 </div>
@@ -42,35 +42,33 @@
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">               
                     <div class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                             <i class="ti ti-badge me-1"></i> <span id="status_text"> {{ __('admin.common.status') }}</span>
-                        </a>
+                        </button>
                         <ul class="dropdown-menu  dropdown-menu-end p-2">
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1 statusfilter" data-status="completed">{{ __('admin.rentals.completed') }}</a>
+                                <button type="button" class="dropdown-item rounded-1 statusfilter" data-status="completed">{{ __('admin.rentals.completed') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1 statusfilter" data-status="inprogress">{{ __('admin.rentals.inprogress') }}</a>
+                                <button  type="button" class="dropdown-item rounded-1 statusfilter" data-status="inprogress">{{ __('admin.rentals.inprogress') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1 statusfilter" data-status="pending">{{ __('admin.rentals.pending') }}</a>
+                                <button  type="button" class="dropdown-item rounded-1 statusfilter" data-status="pending">{{ __('admin.rentals.pending') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1 statusfilter" data-status="onhold">{{ __('admin.rentals.onhold') }}</a>
+                                <button  type="button" class="dropdown-item rounded-1 statusfilter" data-status="onhold">{{ __('admin.rentals.onhold') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1 statusfilter" data-status="rejected">{{ __('admin.rentals.rejected') }}</a>
+                                <button  type="button" class="dropdown-item rounded-1 statusfilter" data-status="rejected">{{ __('admin.rentals.rejected') }}</button>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
-
             <!-- Custom Data Table -->
             <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
                 @include('admin.content-loader')
             </div>
-
             <div class="d-none real-table">
                 <div class="custom-datatable-filter table-responsive brandstable">
                     <table class="table datatable" id="inspectionTable">
@@ -86,17 +84,14 @@
                                 @endif
                             </tr>
                         </thead>
-                        <tbody>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
-                <!-- Custom Data Table -->
-        
+                <!-- Custom Data Table -->    
                 <div class="table-footer d-none"></div>	
             </div>
         </div>
         @include('admin.partials.footer')
-
     </div>
     <!-- /Page Wrapper -->
 
@@ -216,7 +211,7 @@
                                 </label>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                                 <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
                             </div>
                         </div>
@@ -241,7 +236,7 @@
                     <h4 class="mb-1">{{ __('admin.rentals.delete_inspection') }}</h4>
                     <p class="mb-3">{{ __('admin.rentals.delete_inspection_confirmation') }}</p>
                     <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                         <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.yes_delete') }}</button>
                     </div>
                 </div>

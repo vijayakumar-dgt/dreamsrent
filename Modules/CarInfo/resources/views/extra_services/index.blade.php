@@ -5,8 +5,7 @@
 @section('content')
     <!-- Page Wrapper -->
     <div class="page-wrapper">
-        <div class="content me-4">
-            
+        <div class="content me-4">        
             <!-- Breadcrumb -->
             <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
                 <div class="my-auto mb-2">
@@ -23,7 +22,7 @@
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
                     <div class="mb-2">
                         @if (hasPermission($permissions, 'extra_service', 'create'))
-                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_extra_service" class="btn btn-primary d-flex align-items-center" id="add_new_extra_service"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_extra_service') }}</a>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#add_extra_service" class="btn btn-primary d-flex align-items-center" id="add_new_extra_service"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_extra_service') }}</button>
                         @endif
                     </div>
                 </div>
@@ -43,15 +42,15 @@
                 </div>
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">               
                     <div class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                             <i class="ti ti-badge me-1"></i><span class="status_label">{{ __('admin.common.status') }}</span>
-                        </a>
+                        </button>
                         <ul class="dropdown-menu  dropdown-menu-end p-2">
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1 status_option" data-label="Active" data-id="1">{{ __('admin.common.active') }}</a>
+                                <button type="button" class="dropdown-item rounded-1 status_option" data-label="Active" data-id="1">{{ __('admin.common.active') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1 status_option" data-label="Inactive" data-id="0">{{ __('admin.common.inactive') }}</a>
+                                <button type="button" class="dropdown-item rounded-1 status_option" data-label="Inactive" data-id="0">{{ __('admin.common.inactive') }}</button>
                             </li>
                         </ul>
                     </div>
@@ -77,13 +76,10 @@
                                 @endif
                             </tr>
                         </thead>
-                        <tbody>
-            
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
                 <!-- Custom Data Table -->
-
                 <div class="table-footer d-none"></div>			
             </div>
         </div>	
@@ -181,7 +177,7 @@
                                 </label>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                                 <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
                             </div>
                         </div>
@@ -205,7 +201,7 @@
                         <h4 class="mb-1">{{ __('admin.rentals.delete_extra_service') }}</h4>
                         <p class="mb-3">{{ __('admin.rentals.delete_extra_service_confirmation') }}</p>
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                             <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.yes_delete') }}</button>
                         </div>
                     </div>
