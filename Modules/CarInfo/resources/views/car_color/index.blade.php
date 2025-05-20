@@ -125,7 +125,7 @@
 								</label>
 							</div>
 							<div class="d-flex justify-content-center">
-								<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+								<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 								<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
 							</div>
 						</div>
@@ -150,8 +150,8 @@
 						<h4 class="mb-1">{{ __('admin.rentals.delete_vehicle_color') }}</h4>
 						<p class="mb-3">{{ __('admin.rentals.delete_vehicle_color_confirmation') }}</p>
 						<div class="d-flex justify-content-center">
-							<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</a>
+							<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
 						</div>
 					</div>
 				</form>
