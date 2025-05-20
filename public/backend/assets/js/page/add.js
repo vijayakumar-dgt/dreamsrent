@@ -5,15 +5,15 @@
     $(document).ready(function () {
         fetchSection();
         $("#page_content").summernote({
-            height: 150, // Editor height
-            minHeight: 150, // Minimum height
-            maxHeight: 500, // Maximum height
-            focus: true, // Set focus on load
+            height: 150,
+            minHeight: 150,
+            maxHeight: 500,
+            focus: true,
             placeholder: "Type your message here...",
             callbacks: {
                 onChange: function (contents) {
-                    $("#page_content").val(contents); // Sync content with textarea
-                    $("#page_content").valid(); // Trigger validation
+                    $("#page_content").val(contents);
+                    $("#page_content").valid();
                 },
             },
         });
@@ -197,15 +197,12 @@
         console.log(selectedText);
         let themeId = selectedText === "First Screen" ? 1 : 2;
 
-        // Set hidden input value
         $("#theme_id").val(themeId);
 
-        // Update button styling
         $(".setSection button").removeClass("btn-primary").addClass("btn-dark");
         $(selectedButton).removeClass("btn-dark").addClass("btn-primary");
 
-        // Call your function
-        fetchSection(); // Make sure this uses the updated themeId
+        fetchSection();
     }
 
     $(document).on("click", ".setSection button", function () {
@@ -222,7 +219,7 @@
             data: {
                 order_by: "asc",
                 sort_by: "id",
-                theme_id: themeId, // Include the selected theme_id
+                theme_id: themeId,
             },
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("admin_token"),
@@ -273,7 +270,7 @@
                         });
                     });
 
-                    sectionHtml += "</div>"; // Close row
+                    sectionHtml += "</div>";
 
                     $("#cardContainer").html(sectionHtml);
                 }
@@ -414,21 +411,21 @@
             $(this).closest(".textarea-item").remove();
         });
     });
-
+ 
     $(document).ready(function () {
-        let pageId = $("#page_id").val(); // Get the page_id from the hidden input
+        let pageId = $("#page_id").val();
 
         if (pageId) {
             $.ajax({
-                url: "{{ route('admin.pageContent') }}", // Use Laravel route
+                url: "{{ route('admin.pageContent') }}",
                 type: "POST",
                 data: {
-                    _token: "{{ csrf_token() }}", // CSRF protection
+                    _token: "{{ csrf_token() }}",
                     page_id: pageId,
                 },
                 success: function (response) {
                     if (response.success) {
-                        $("#page-content").html(response.data.page_content); // Display content
+                        $("#page-content").html(response.data.page_content);
                     } else {
                         $("#page-content").html("<p>No content available.</p>");
                     }
