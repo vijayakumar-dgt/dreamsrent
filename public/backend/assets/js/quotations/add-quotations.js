@@ -374,7 +374,7 @@
                     _l("admin.bookings.duration_must_be_atleast_one_hour")
                 );
                 $(".summary_rental_period").text("-");
-                $("#vehicle_list_main_container").addClass('d-none');
+                $("#vehicle_list_main_container").addClass("d-none");
                 return;
             } else {
                 $("#end_date, #end_time").removeClass("is-invalid");
@@ -440,7 +440,7 @@
             pickup_location_val &&
             return_location_val
         ) {
-            $("#vehicle_list_main_container").removeClass('d-none');
+            $("#vehicle_list_main_container").removeClass("d-none");
             lastPage = false;
             currentPage = 1;
             getVehicles();
@@ -510,7 +510,7 @@
             $(".form-control, .select2-container").removeClass(
                 "is-invalid is-valid"
             );
-            $("#vehicle_list_main_container").addClass('d-none');
+            $("#vehicle_list_main_container").addClass("d-none");
             return;
         } else {
             startDate = todayDateTime.format("DD-MM-YYYY");
@@ -649,9 +649,9 @@
             },
             beforeSend: function () {
                 if (isLoadMore == false) {
-                    $('.list-loader').show();
-                    $('.card-loader').show();
-                    $('#vehicle_list_container').addClass('d-none');
+                    $(".list-loader").show();
+                    $(".card-loader").show();
+                    $("#vehicle_list_container").addClass("d-none");
                 }
             },
             success: function (result) {
@@ -1386,16 +1386,20 @@
                             no_of_days * parseFloat($(this).data("price"));
                         total_extra_service++;
                     } else if ($(this).data("price_type") == "one_time") {
-                        total_extra_service_price += parseFloat($(this).data("price"));
+                        total_extra_service_price += parseFloat(
+                            $(this).data("price")
+                        );
                         total_extra_service++;
                     } else if ($(this).data("price_type") == "percentage") {
                         total_extra_service_price +=
-                            (vehiclePriceRate * parseFloat($(this).data("price"))) / 100;
+                            (vehiclePriceRate *
+                                parseFloat($(this).data("price"))) /
+                            100;
                         total_extra_service++;
                     }
                     extraServiceName += $(this).data("name") + ", ";
                 }
-            });            
+            });
         }
 
         var total_insurance_price = 0;
@@ -2089,8 +2093,14 @@
                             "admin.common.save"
                         )} <i class="ti ti-chevron-right ms-1"></i>`
                     );
+
                 if (error.responseJSON.code === 500) {
                     showToast("error", error.responseJSON.message);
+                } else if (error.responseJSON.code === 400) {
+                    $(".error-text").html("");
+                    $.each(error.responseJSON.errors, function (key, value) {
+                        $("#" + key + "_error").html(value[0]);
+                    });
                 } else {
                     showToast("error", _l("admin.common.default_create_error"));
                 }

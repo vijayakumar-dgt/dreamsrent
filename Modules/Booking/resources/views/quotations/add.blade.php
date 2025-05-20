@@ -577,6 +577,7 @@
                                             </div>
                                             <div class="row" id="insurance_list_container"></div>
                                         </div>
+                                        <div class="row mb-3">
                                         <div class="col-lg-9 col-sm-12">
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -587,17 +588,18 @@
                                                             <option value="percentage">%</option>
                                                             <option value="fixed">Direct</option>
                                                         </select>
-                                                        <span class="error-text text-danger" id="customer_id_error"></span>
+                                                        <span class="error-text text-danger" id="tax_type_error"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label class="form-label">Add Tax Value <span class="text-danger">*</span></label>
                                                         <input type="text" name="tax_val" id="tax_val" class="form-control">
-                                                        <span class="error-text text-danger" id="customer_id_error"></span>
+                                                        <span class="error-text text-danger" id="tax_val_error"></span>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
                                         </div>
                                         <div class="card-footer px-0 pb-0">
                                             <div class="d-flex align-items-center justify-content-end">

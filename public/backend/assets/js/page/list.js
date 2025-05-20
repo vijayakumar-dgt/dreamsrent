@@ -1,7 +1,3 @@
-let currentStatus = "";
-let currentSortType = "";
-let currentLang = "";
-
 (async () => {
     "use strict";
     await loadTranslationFile("admin", "common, page");
@@ -177,7 +173,6 @@ let currentLang = "";
         });
     }
 
-
     $("#search").on("input", function () {
         let searchQuery = $(this).val().trim();
         initTable(searchQuery, currentStatus, currentSortType, currentLang); // Keep current filters
@@ -223,6 +218,10 @@ let currentLang = "";
     });
     
 })();
+
+let currentStatus = "";
+let currentSortType = "";
+let currentLang = "";
 
 function filterlang() {
     const selectedLanguageId = $("#language_id").val();

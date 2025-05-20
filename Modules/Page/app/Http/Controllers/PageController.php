@@ -345,14 +345,12 @@ class PageController extends Controller
 
     public function indexBuilderList(Request $request): JsonResponse
     {
-        $orderBy = $request->input('order_by', 'desc'); // Default to latest
-        $sortBy = $request->input('sort_by', 'created_at'); // Default to created_at
         $search = $request->input('search');
         $status = $request->input('status');
         $sortType = $request->input('sort');
-        $sortLang = $request->input('language_id');
+        $sortLang = $request->input('language_id') ?? $request->input('lang_id');
 
-        $query = Page::orderBy($sortBy, $orderBy);
+        $query = Page::query();
 
         // Apply search filter
         if (!empty($search)) {
@@ -360,14 +358,11 @@ class PageController extends Controller
         }
 
         // Apply status filter
-        if ($status !== null) {
+        if (!is_null($status)) {
             $query->where('status', $status);
         }
 
-        if (empty($sortLang)) {
-            $sortLang = $request->input('lang_id');
-        }
-
+        // Apply language filter
         if (!empty($sortLang)) {
             $query->where('language_id', $sortLang);
         }
@@ -381,6 +376,8 @@ class PageController extends Controller
             $query->whereBetween('created_at', [now()->subMonth(), now()]);
         } elseif ($sortType === 'last_7_days') {
             $query->whereBetween('created_at', [now()->subDays(7), now()]);
+        } else {
+            $query->orderBy('created_at', 'desc');
         }
 
         $pages = $query->get();
@@ -402,9 +399,10 @@ class PageController extends Controller
         return response()->json([
             'status' => 'success',
             'code'   => 200,
-            'data' => $data
+            'data'   => $data,
         ]);
     }
+
 
 
     public function pageBuilderApi(Request $request): View|JsonResponse

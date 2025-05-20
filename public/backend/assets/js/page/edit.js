@@ -1,6 +1,8 @@
 (async () => {
     "use strict";
+
     await loadTranslationFile("admin", "common, page");
+
     $(document).ready(function () {
         $("#editPageForm").validate({
             rules: {
@@ -172,11 +174,9 @@
                 });
             },
         });
-    });
 
-    $(document).ready(function () {
         fetchSection();
-        let pageId = $("#page_id").val(); // Get the page_id from the hidden input
+        let pageId = $("#page_id").val();
 
         if (pageId) {
             $.ajax({
@@ -288,7 +288,109 @@
                 },
             });
         }
+
+        $(document).on("click", ".setSection button", function () {
+            let selectedText = $(this).text().trim();
+            let newThemeId = selectedText === "Screen One" ? 1 : 2;
+            updateThemeSelection(this, newThemeId);
+        });
+
+        $(document).on("dragstart", ".draggable-card", function (event) {
+            event.originalEvent.dataTransfer.setData(
+                "text/plain",
+                $(this).data("value")
+            );
+        });
+
+        initializeSummernote();
+
+        $("#addTextarea").on("click", function () {
+            const uniqueId = `status_${Date.now()}`;
+
+            const textareaTemplate = `
+            <div class="textarea-item border p-3 mb-3 mt-3 bg-light">
+                <div class="d-flex align-items-center justify-content-end mt-1">
+                    <label for="${uniqueId}" class="me-2 fw-bold">${_l(
+                "admin.common.status"
+            )}</label>
+                    <div class="status-toggle modal-status">
+                        <input type="checkbox" name="page_status[]" id="${uniqueId}" value="1" class="check user8" checked>
+                        <label for="${uniqueId}" class="checktoggle"></label>
+                    </div>
+                    <a class="removeTextarea ms-3">
+                        <i class="ti ti-trash fs-20 fw-bold"></i>
+                    </a>
+                </div>
+
+                <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">${_l(
+                            "admin.page.section_title"
+                        )} <span class="text-danger">*</span></label>
+                        <input type="text" name="section_title[]" placeholder="${_l(
+                            "admin.page.enter_title"
+                        )}" class="form-control">
+                        <span class="invalid-feedback"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">${_l(
+                            "admin.page.section_label"
+                        )} <span class="text-danger">*</span></label>
+                        <input type="text" name="section_label[]" placeholder="${_l(
+                            "admin.page.enter_label"
+                        )}" class="form-control">
+                        <span class="invalid-feedback"></span>
+                    </div>
+                </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">${_l(
+                            "admin.page.section_des"
+                        )} </label>
+                        <textarea name="page_content[]" placeholder="${_l(
+                            "admin.page.enter_content"
+                        )}" cols="10" rows="3" class="form-control summer"></textarea>
+                        <span class="invalid-feedback"></span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+            $(".textareasContainer").append(textareaTemplate);
+            initializeSummernote();
+        });
+
+        $(".textareasContainer").on("click", ".removeTextarea", function () {
+            $(this).closest(".textarea-item").remove();
+        });
+
+        $("#language_id").on("change", function () {
+            var langId = $(this).val();
+
+            var pathSegments = window.location.pathname.split("/");
+            var slug = pathSegments[pathSegments.length - 1];
+
+            if (langId && slug) {
+                window.location.href =
+                    "/admin/edit-pages/" + slug + "?language_id=" + langId;
+            }
+        });
     });
+
+    let themeId = $("#theme_id").val();
+
+    function updateThemeSelection(selectedButton, newThemeId) {
+        themeId = newThemeId;
+
+        $(".setSection button").removeClass("btn-primary").addClass("btn-dark"); // Reset all
+        $(selectedButton).removeClass("btn-dark").addClass("btn-primary"); // Highlight selected
+
+        fetchSection(); // Fetch data with updated theme_id
+    }
 
     function initializeSummernote() {
         $(".summer").summernote({
@@ -329,22 +431,6 @@
             },
         });
     }
-
-    let themeId = $("#theme_id").val();
-
-    function updateThemeSelection(selectedButton, newThemeId) {
-        themeId = newThemeId;
-
-        $(".setSection button").removeClass("btn-primary").addClass("btn-dark"); // Reset all
-        $(selectedButton).removeClass("btn-dark").addClass("btn-primary"); // Highlight selected
-
-        fetchSection(); // Fetch data with updated theme_id
-    }
-    $(document).on('click', '.setSection button', function () {
-        let selectedText = $(this).text().trim();
-        let newThemeId = selectedText === "Screen One" ? 1 : 2;
-        updateThemeSelection(this, newThemeId);
-    });
 
     function fetchSection() {
         $(".table-loader").show();
@@ -436,93 +522,4 @@
         });
     }
 
-    $(document).ready(function () {
-        initializeSummernote();
-
-        $("#addTextarea").on("click", function () {
-            const uniqueId = `status_${Date.now()}`;
-
-            const textareaTemplate = `
-            <div class="textarea-item border p-3 mb-3 mt-3 bg-light">
-                <div class="d-flex align-items-center justify-content-end mt-1">
-                    <label for="${uniqueId}" class="me-2 fw-bold">${_l(
-                "admin.common.status"
-            )}</label>
-                    <div class="status-toggle modal-status">
-                        <input type="checkbox" name="page_status[]" id="${uniqueId}" value="1" class="check user8" checked>
-                        <label for="${uniqueId}" class="checktoggle"></label>
-                    </div>
-                    <a class="removeTextarea ms-3">
-                        <i class="ti ti-trash fs-20 fw-bold"></i>
-                    </a>
-                </div>
-
-                <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label">${_l(
-                            "admin.page.section_title"
-                        )} <span class="text-danger">*</span></label>
-                        <input type="text" name="section_title[]" placeholder="${_l(
-                            "admin.page.enter_title"
-                        )}" class="form-control">
-                        <span class="invalid-feedback"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label">${_l(
-                            "admin.page.section_label"
-                        )} <span class="text-danger">*</span></label>
-                        <input type="text" name="section_label[]" placeholder="${_l(
-                            "admin.page.enter_label"
-                        )}" class="form-control">
-                        <span class="invalid-feedback"></span>
-                    </div>
-                </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="mb-3">
-                        <label class="form-label">${_l(
-                            "admin.page.section_des"
-                        )} </label>
-                        <textarea name="page_content[]" placeholder="${_l(
-                            "admin.page.enter_content"
-                        )}" cols="10" rows="3" class="form-control summer"></textarea>
-                        <span class="invalid-feedback"></span>
-                    </div>
-                </div>
-            </div>
-        `;
-
-            $(".textareasContainer").append(textareaTemplate);
-            initializeSummernote();
-        });
-
-        $(".textareasContainer").on("click", ".removeTextarea", function () {
-            $(this).closest(".textarea-item").remove();
-        });
-    });
-
-    $(document).on("dragstart", ".draggable-card", function (event) {
-        event.originalEvent.dataTransfer.setData(
-            "text/plain",
-            $(this).data("value")
-        );
-    });
-
-    $(document).ready(function () {
-        $("#language_id").on("change", function () {
-            var langId = $(this).val();
-
-            // Extract slug from current URL
-            var pathSegments = window.location.pathname.split("/");
-            var slug = pathSegments[pathSegments.length - 1]; // Get the last part (slug)
-
-            if (langId && slug) {
-                window.location.href =
-                    "/admin/edit-pages/" + slug + "?language_id=" + langId;
-            }
-        });
-    });
 })();
