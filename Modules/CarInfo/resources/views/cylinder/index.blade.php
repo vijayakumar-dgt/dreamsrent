@@ -22,15 +22,14 @@
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
                     <div class="mb-2">
                         @if (hasPermission($permissions, 'vehicle_attributes', 'create'))
-                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_cylinder" class="btn btn-primary d-flex align-items-center" id="add_new_cylinder">
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#add_cylinder" class="btn btn-primary d-flex align-items-center" id="add_new_cylinder">
                                 <i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_cylinder') }}
-                            </a>
+                            </button>
                         @endif
                     </div>
                 </div>
             </div>
             <!-- /Breadcrumb -->
-
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
@@ -60,12 +59,10 @@
                 </div>
             </div>
             <!-- /Table Header -->
-
             <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
                 @include('admin.content-loader')
             </div>
             <!-- Custom Data Table -->
-
             <div class="d-none real-table">
                 <div class="custom-datatable-filter table-responsive brandstable">
                     <table class="table" id="cylinderTable">

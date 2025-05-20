@@ -22,7 +22,9 @@
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap">                        
                     <div class="mb-2">
                         @if (hasPermission($permissions, 'vehicle_attributes', 'create'))
-                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_damage_type" class="btn btn-primary d-flex align-items-center" id="add_new_damage_type"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_damage_type') }}</a>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#add_damage_type" class="btn btn-primary d-flex align-items-center" id="add_new_damage_type">
+                            <i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_damage_type') }}
+                        </button>
                         @endif
                     </div>
                 </div>
@@ -72,8 +74,7 @@
                             @endif
                         </tr>
                     </thead>
-                    <tbody>        
-                    </tbody>
+                    <tbody></tbody>
                 </table>	
             </div>
             <div class="table-footer d-none real-table"></div>
