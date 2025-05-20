@@ -91,17 +91,28 @@ class AnnouncementController extends Controller
 
             $announcements = Announcement::select('announcements.*', 'announcement_types.name as type_name')
                 ->join('announcement_types', 'announcements.announcement_type', '=', 'announcement_types.id')
-                ->when($request->input('user_type'), function ($query, $userType) {
-                    $query->where('announcements.user_type', $userType);
+                ->when($request->input('user_type'), fn($q, $userType) => $q->where('announcements.user_type', $userType))
+                ->when($request->input('announcement_type') && $request->announcement_type != 'all', fn($q) => $q->where('announcements.announcement_type', $request->announcement_type))
+                ->when($request->input('status') !== null && $request->status !== 'all', fn($q) => $q->where('announcements.status', $request->status))
+                ->when($request->input('title'), fn($q, $title) => $q->where('announcements.announcement_title', 'like', '%' . $title . '%'))
+                ->when($request->input('sort'), function ($query, $sort) {
+                    switch ($sort) {
+                        case 'ascending':
+                            $query->orderBy('announcements.announcement_title', 'asc');
+                            break;
+                        case 'descending':
+                            $query->orderBy('announcements.announcement_title', 'desc');
+                            break;
+                        case 'last_month':
+                            $query->whereBetween('announcements.created_at', [now()->subMonth(), now()]);
+                            break;
+                        case 'last_7_days':
+                            $query->whereBetween('announcements.created_at', [now()->subDays(7), now()]);
+                            break;
+                        default:
+                            $query->orderBy('announcements.created_at', 'desc');
+                    }
                 })
-                ->when($request->input('announcement_type'), function ($query, $announcementType) {
-                    $query->where('announcements.announcement_type', $announcementType);
-                })
-                ->when($request->input('title'), function ($query, $title) {
-                    $titleString = is_string($title) ? $title : '';
-                    $query->where('announcements.announcement_title', 'like', '%' . $titleString . '%');
-                })
-                ->orderBy('announcements.created_at', 'desc')
                 ->get();
 
             return response()->json([
@@ -128,7 +139,7 @@ class AnnouncementController extends Controller
 
             if (!$enquiry) {
                 return response()->json([
-                    'code'    => 404,
+                    'code' => 404,
                     'success' => false,
                     'message' => 'Announcement not found.'
                 ], 404);
@@ -137,16 +148,16 @@ class AnnouncementController extends Controller
             $enquiry->delete();
 
             return response()->json([
-                'code'    => 200,
+                'code' => 200,
                 'success' => true,
                 'message' => __('admin.support.announcement_delete_success')
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'code'    => 500,
+                'code' => 500,
                 'success' => false,
                 'message' => __('admin.common.default_delete_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }

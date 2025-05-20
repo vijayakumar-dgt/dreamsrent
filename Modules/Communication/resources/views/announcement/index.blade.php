@@ -46,49 +46,40 @@
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
 				<div class="d-flex align-items-center flex-wrap row-gap-3">
+					<!-- Sort Dropdown -->
 					<div class="dropdown me-2">
-						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-							<i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }} : {{ __('admin.common.latest') }}
+						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="sortDropdownBtn">
+							<i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }}: <span id="currentSort">Latest</span>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end p-2">
-							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1">{{ __('admin.common.latest') }}</a>
-							</li>
-							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1">{{ __('admin.common.ascending') }}</a>
-							</li>
-							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1">{{ __('admin.common.descending') }}</a>
-							</li>
-							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1">{{ __('admin.common.last_month') }}</a>
-							</li>
-							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1">{{ __('admin.common.last_7_days') }}</a>
-							</li>
-						</ul>
-					</div>					
-					<div class="dropdown">
-						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-							<i class="ti ti-badge me-1"></i> {{ __('admin.common.status') }}
-						</a>
-						<ul class="dropdown-menu dropdown-menu-end p-2">
-							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1">{{ __('admin.common.active') }}</a>
-							</li>
-							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1">{{ __('admin.common.inactive') }}</a>
-							</li>
+							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-filter" data-sort="latest">{{ __('admin.common.latest') }}</a></li>
+							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-filter" data-sort="ascending">{{ __('admin.common.ascending') }}</a></li>
+							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-filter" data-sort="descending">{{ __('admin.common.descending') }}</a></li>
+							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-filter" data-sort="last_month">{{ __('admin.common.last_month') }}</a></li>
+							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-filter" data-sort="last_7_days">{{ __('admin.common.last_7_days') }}</a></li>
 						</ul>
 					</div>
+					
+					<!-- Status Dropdown -->
+					<div class="dropdown me-2">
+						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="statusDropdownBtn">
+							<i class="ti ti-badge me-1"></i> {{ __('admin.common.status') }}: <span id="currentStatus">All</span>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-end p-2">
+							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 status-filter" data-status="all">{{ __('admin.common.all') }}</a></li>
+							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 status-filter" data-status="1">{{ __('admin.common.active') }}</a></li>
+							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 status-filter" data-status="0">{{ __('admin.common.inactive') }}</a></li>
+						</ul>
+					</div>					
 				</div>
+				
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 					<div class="top-search me-2">
 						<div class="top-search-group">
 							<span class="input-icon">
 								<i class="ti ti-search"></i>
 							</span>
-							<input type="text" class="form-control" placeholder="{{ __('admin.common.search') }}">
+							<input type="text" class="form-control" id="announcementSearch" placeholder="{{ __('admin.common.search') }}">
 						</div>
 					</div>
 				</div>

@@ -26,9 +26,5 @@
     </div>
 @endsection
 @push('scripts')
-     <script src="{{ asset('frontend/assets/js/installer/config.js') }}"></script>   
-
-    <script>
-        
-    </script>
+     <script src="{{ asset('frontend/assets/js/installer/config.js') }}"></script>
 @endpush

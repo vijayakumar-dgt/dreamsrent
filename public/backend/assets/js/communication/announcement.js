@@ -328,12 +328,21 @@
                     });
                 }
             });
-        }
+        }      
 
         function announcementTable() {
+            const sort = $('#sortDropdownBtn').attr('data-sort') || 'latest';
+            const status = $('#statusDropdownBtn').attr('data-status') || 'all';    
+            const search = $('#announcementSearch').val();
+
             $.ajax({
                 url: "/admin/announcement/list",
                 type: "GET",
+                data: {
+                    sort,
+                    status,                    
+                    title: search
+                },
                 beforeSend: function () {
                     $(".table-loader").show();
                     $(".real-table, .table-footer").addClass("d-none");
@@ -341,13 +350,8 @@
                 complete: function () {
                     $(".table-loader, .input-loader, .label-loader").hide();
                     $(".real-table, .real-label, .real-input").removeClass("d-none");
-                    if ($("#announcementTable").length === 0) {
-                        $(".table-footer").addClass("d-none");
-                    } else {
-                        $(".table-footer").removeClass("d-none");
-                    }
                 },
-                success: function(response) {
+                success: function (response) {
                     let tableBody = "";
 
                     if ($.fn.DataTable.isDataTable("#announcementTable")) {
@@ -356,55 +360,35 @@
 
                     if (response.success && response.data.length > 0) {
                         let data = response.data;
-
-                        $.each(data, function(index, value) {
+                        $.each(data, function (index, value) {
                             tableBody += `<tr>
                                 <td>${new Date(value.created_at).toLocaleDateString()}</td>
-                                <td>
-                                    <strong>${value.announcement_title.length > 80 ? value.announcement_title.substring(0, 80) + "..." : value.announcement_title}</strong>
-                                </td>
+                                <td><strong>${value.announcement_title.length > 80 ? value.announcement_title.substring(0, 80) + "..." : value.announcement_title}</strong></td>
                                 <td>${value.type_name}</td>
                                 <td>
                                     <span class="badge ${(value.status == 1) ? 'badge-success-transparent' : 'badge-danger-transparent'} d-inline-flex align-items-center badge-sm">
-                                        <i class="ti ti-point-filled me-1"></i>${(value.status == 1) ? `${_l('admin.support.published')}` : `${_l('admin.support.unpublished')}` }
+                                        <i class="ti ti-point-filled me-1"></i>${(value.status == 1) ? `${_l('admin.support.published')}` : `${_l('admin.support.unpublished')}`}
                                     </span>
                                 </td>
                                 ${hasPermission(permissions, 'announcements', 'edit') || hasPermission(permissions, 'announcements', 'delete') ?
-
                                 `<td>
                                     <div class="dropdown">
-                                        <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown">
                                             <i class="ti ti-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end p-2">
-                                        ${hasPermission(permissions, 'announcements', 'edit') ?
-                                            `<li>
-                                                <a href="javascript:void(0);"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#edit_announcement_modal"
-                                                class="edit_data dropdown-item"
-                                                data-id="${value.id}"
-                                                data-title="${value.announcement_title}"
-                                                data-type="${value.announcement_type}"
-                                                data-user="${value.user_type}"
-                                                data-status="${value.status}">
-                                                <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
-                                                </a>
-                                            </li>`:''}
-                                        ${hasPermission(permissions, 'announcements', 'delete') ?
-                                            `<li>
-                                            <button 
-                                                type="button" 
-                                                class="dropdown-item delete-announcement-btn" 
-                                                data-id="${value.id}" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#delete_announcement_modal" >
-                                                <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
-                                            </button>
-                                            </li>`:''}
+                                            ${hasPermission(permissions, 'announcements', 'edit') ?
+                                `<li><a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit_announcement_modal" class="edit_data dropdown-item"
+                                    data-id="${value.id}" data-title="${value.announcement_title}" data-type="${value.announcement_type}" data-user="${value.user_type}" data-status="${value.status}">
+                                    <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
+                                </a></li>` : ''}
+                                            ${hasPermission(permissions, 'announcements', 'delete') ?
+                                `<li><button type="button" class="dropdown-item delete-announcement-btn" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete_announcement_modal">
+                                    <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
+                                </button></li>` : ''}
                                         </ul>
                                     </div>
-                                </td>`:''}
+                                </td>` : ''}
                             </tr>`;
                         });
 
@@ -416,24 +400,21 @@
 
                     if (response.data.length > 0) {
                         $("#announcementTable").DataTable({
-                            ordering: true,
+                            ordering: false,
                             searching: false,
                             pageLength: 10,
                             lengthChange: false,
-                            drawCallback: function() {
-                                $(".dataTables_info").addClass('d-none');
-                                $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
-
-                                var tableWrapper = $(this).closest('.dataTables_wrapper');
-                                var info = tableWrapper.find('.dataTables_info');
-                                var pagination = tableWrapper.find('.dataTables_paginate');
-
-                                $('.table-footer').empty()
-                                    .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
-                                        .append($('<div class="datatable-info"></div>').append(info.clone(true)))
-                                        .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
-                                    );
-                                $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+                            drawCallback: function () {
+                                $(".dataTables_info, .dataTables_paginate").addClass("d-none");
+                                var info = $('.dataTables_info');
+                                var pagination = $('.dataTables_paginate');
+                                $('.table-footer').html(
+                                    `<div class="d-flex justify-content-between align-items-center w-100">
+                                        <div class="datatable-info">${info.clone(true).html()}</div>
+                                        <div class="datatable-pagination">${pagination.clone(true).html()}</div>
+                                    </div>`
+                                );
+                                $(".table-footer .dataTables_paginate").removeClass("d-none");
                             },
                             language: {
                                 emptyTable: _l("admin.common.empty_table"),
@@ -453,15 +434,32 @@
                         });
                     }
                 },
-                error: function(error) {
-                    if (error.responseJSON && error.responseJSON.code === 500) {
-                        showToast('error', error.responseJSON.message);
-                    } else {
-                        showToast('error', _l('admin.common.default_retrieve_error'));
-                    }
+                error: function (error) {
+                    showToast('error', _l('admin.common.default_retrieve_error'));
                 }
             });
         }
+        $(document).on('click', '.sort-filter', function () {
+            $('.sort-filter').removeClass('active');
+            $(this).addClass('active');
+            $('#currentSort').text($(this).text());
+            $('#sortDropdownBtn').attr('data-sort', $(this).data('sort')); // Add this line
+            announcementTable();
+        });
+
+        $(document).on('click', '.status-filter', function () {
+            $('.status-filter').removeClass('active');
+            $(this).addClass('active');
+            $('#currentStatus').text($(this).text());
+            $('#statusDropdownBtn').attr('data-status', $(this).data('status')); // Add this line
+            announcementTable();
+        });
+
+        $('#announcementSearch').on('input', function () {
+            clearTimeout($.data(this, 'timer'));
+            let wait = setTimeout(announcementTable, 300); // debounce
+            $(this).data('timer', wait);
+        }); 
     
         function deleteAnnouncement(id){
             $("#delete_id").val(id);
