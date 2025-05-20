@@ -352,13 +352,7 @@
         });
     }
 
-    $("#pincode").on("input", function () {
-        $(this).val(
-            $(this)
-                .val()
-                .replace(/[^0-6]/g, "")
-        );
-    });
+   
     
     
     
