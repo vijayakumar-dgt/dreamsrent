@@ -99,7 +99,7 @@
                     @csrf
                     <input type="hidden" name="id" id="id">
                     <input type="hidden" name="language_id" id="language_id">
-                    <div class="modal-body">
+                    <div class="modal-body custom-modal-body">
                         <!-- Image with Preview -->
                         <div class="mb-3">
                             <label for="image" class="form-label">{{ __('admin.common.image') }}</label>
