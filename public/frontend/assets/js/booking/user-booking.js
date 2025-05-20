@@ -498,7 +498,7 @@
                     minlength: 10,
                     maxlength: 15,
                 },
-                trems: {
+                terms: {
                     required: true,
                 },
             },
@@ -537,7 +537,7 @@
                 phone_number: {
                     required: _l("web.home.mobile_number_required"),
                 },
-                trems: {
+                terms: {
                     required: _l("web.home.terms_required"),
                 },
             },
