@@ -2163,6 +2163,10 @@ return array(
     'edit_profile' => 'Edit Profile',
     'logout' => 'Logout',
     'client' => 'Client',
+    'delete_vehicle' => 'Delete Vehicle',
+    'delete_vehicle_confirmation' => 'Are you sure you want to delete vehicle?',
+    'update_status_vehicle' => 'Update the status for this vehicle',
+    'update_status' => 'Update Status',
   ),
   'page' => [
     'pages' => 'Pages',

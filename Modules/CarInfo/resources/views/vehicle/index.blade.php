@@ -28,34 +28,34 @@
         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
             <div class="d-flex align-items-center flex-wrap row-gap-3">
                 <div class="dropdown me-2">
-                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                    <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                         <i class="ti ti-filter me-1"></i> {{ __('admin.page.sort_by') }}: <span id="sortLabel">{{ __('admin.page.latest') }}</span>
-                    </a>
+                    </button>
                     <ul class="dropdown-menu dropdown-menu-end p-2" id="sortFilter">
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1" onclick="filterSort(this, 'latest')">
+                            <button type="button" class="dropdown-item rounded-1" onclick="filterSort(this, 'latest')">
                                 {{ __('admin.page.latest') }}
-                            </a>
+                            </button>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1" onclick="filterSort(this, 'asc')">
+                            <button type="button" class="dropdown-item rounded-1" onclick="filterSort(this, 'asc')">
                                 {{ __('admin.page.ascending') }}
-                            </a>
+                            </button>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1" onclick="filterSort(this, 'desc')">
+                            <button type="button" class="dropdown-item rounded-1" onclick="filterSort(this, 'desc')">
                                 {{ __('admin.page.descending') }}
-                            </a>
+                            </button>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1" onclick="filterSort(this, 'last_month')">
+                            <button type="button" class="dropdown-item rounded-1" onclick="filterSort(this, 'last_month')">
                                 {{ __('admin.page.last_month') }}
-                            </a>
+                            </button>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1" onclick="filterSort(this, 'last_7_days')">
+                            <button type="button" class="dropdown-item rounded-1" onclick="filterSort(this, 'last_7_days')">
                                 {{ __('admin.page.last_7_days') }}
-                            </a>
+                            </button>
                         </li>
                     </ul>
                 </div>
@@ -75,14 +75,14 @@
             </div>
             <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                 <div class="dropdown me-2">
-                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                    <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                         <i class="ti ti-edit-circle me-1"></i> {{ __('admin.rentals.bulk_actions') }}
-                    </a>
+                    </button>
                     <ul class="dropdown-menu dropdown-menu-end p-2">
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1" id="deleteSelectedVehicles">
+                            <button type="button" class="dropdown-item rounded-1" id="deleteSelectedVehicles">
                                 {{ __('admin.rentals.delete') }}
-                            </a>
+                            </button>
                         </li>
                     </ul>
                 </div>
@@ -100,9 +100,9 @@
             <div class="filterbox mb-3 d-flex align-items-center">
                 <h6 class="me-3">{{ __('admin.rentals.filter') }}</h6>
                 <div class="dropdown me-2">
-                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                    <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                         {{ __('admin.rentals.select_cars') }}
-                    </a>
+                    </button>
                     <ul class="dropdown-menu dropdown-menu-lg p-2">
                         <li>
                             <div class="top-search m-2">
@@ -126,9 +126,9 @@
                     </ul>
                 </div>
                 <div class="dropdown me-2">
-                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                    <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                         {{ __('admin.rentals.type') }}
-                    </a>
+                    </button>
                     <ul class="dropdown-menu dropdown-menu-lg p-2">
                         <li>
                             <div class="top-search m-2">
@@ -152,9 +152,9 @@
                     </ul>
                 </div>
                 <div class="dropdown me-3">
-                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                    <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                         {{ __('admin.rentals.location') }}
-                    </a>
+                    </button>
                     <ul class="dropdown-menu dropdown-menu-lg p-2">
                         <li>
                             <div class="top-search m-2">
@@ -178,9 +178,9 @@
                     </ul>
                 </div>
                 <div class="dropdown me-3">
-                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                    <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                         {{ __('admin.rentals.status') }}
-                    </a>
+                    </button>
                     <ul class="dropdown-menu dropdown-menu-md p-2 statusFilter">
                         <li class="dropdown-item">
                             {{ __('admin.rentals.active') }}
@@ -190,8 +190,8 @@
                         </li>
                     </ul>
                 </div>
-                <a href="javascript:void(0);" class="me-2 text-purple links" id="applyFilter">{{ __('admin.rentals.apply') }}</a>
-                <a href="javascript:void(0);" class="text-danger links" id="clearFilter">{{ __('admin.rentals.clear_all') }}</a>
+                <button type="button" class="me-2 text-purple links" id="applyFilter">{{ __('admin.rentals.apply') }}</button>
+                <button type="button" class="text-danger links" id="clearFilter">{{ __('admin.rentals.clear_all') }}</button>
             </div>
         </div>
         <div class="custom-datatable-filter table-responsive brandstable">
@@ -237,11 +237,11 @@
                     <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
                         <i class="ti ti-trash-x fs-26"></i>
                     </span>
-                    <h4 class="mb-1">Delete Vehicle</h4>
-                    <p class="mb-3">Are you sure you want to delete this vehicle?</p>
+                    <h4 class="mb-1">{{ __('admin.common.delete_vehicle') }}</h4>
+                    <p class="mb-3">{{ __('admin.common.delete_vehicle_confirmation') }}</p>
                     <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
-                        <button type="submit" class="btn btn-primary submitbtn">Yes, Delete</button>
+                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+                        <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.yes_delete') }}</button>
                     </div>
                 </div>
             </form>
@@ -260,7 +260,7 @@
                         <i class="ti ti-refresh fs-26"></i>
                     </span>
 
-                    <p class="mb-3">Update the status for this vehicle</p>
+                    <p class="mb-3">{{ __("admin.common.update_status_vehicle")}}</p>
 
                     <select name="vehicle_status" id="vehicle_status" class="form-select select mb-4">
                         <option value="1">{{ __("admin.rentals.active")}}</option>
@@ -268,8 +268,8 @@
                     </select>
 
                     <div class="d-flex justify-content-center mt-4">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
-                        <button type="submit" class="btn btn-primary">Update Status</button>
+                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ __('admin.common.update_status') }}</button>
                     </div>
                 </div>
             </form>

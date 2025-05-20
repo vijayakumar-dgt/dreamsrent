@@ -2161,6 +2161,10 @@ return array (
     'yes_complete' => 'نعم كامل',
     'booking_complete' => 'اكتمل الحجز',
     'tariffs' => 'التعريفات',
+    'delete_vehicle' => 'حذف المركبة',
+    'delete_vehicle_confirmation' => 'هل أنت متأكد أنك تريد حذف المركبة؟',
+    'update_status_vehicle' => 'تحديث حالة هذه المركبة',
+    'update_status' => 'تحديث الحالة',
   ),
   'page' =>
   array (
