@@ -186,9 +186,8 @@
 						<h4 class="mb-1">{{ __('admin.bookings.delete_enquiry') }}</h4>
 						<p class="mb-3">{{ __('admin.bookings.delete_enquiry_confirmation') }}</p>
 						<div class="d-flex justify-content-center"> 
-							<button type="button" class="btn btn-light me-3"
-								data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-							<button type="submit" class="btn btn-primary">{{ __('admin.common.delete') }}</button>
+							<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
 						</div> 
 					</div>
 				</form>
