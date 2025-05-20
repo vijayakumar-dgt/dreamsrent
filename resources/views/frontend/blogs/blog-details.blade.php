@@ -26,117 +26,117 @@
     <!-- Blog Grid-->
     <div class="blog-section">
         <div class="container">
-            <div class="blog-description">
-                {!! $blogPosts->description !!}
-            </div>
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <div class="bloginner-img">
+            <div class="row g-4 g-lg-6">
+                <div class="col-lg-8 mx-auto">
+                    <div class="bloginner-img mt-0">
                         <img src="{{ asset('/storage/' . $blogPosts->image) }}" class="img-fluid" alt="Blog">
                     </div>
-                </div>
-            </div>
-            <div class="share-postsection">
-                <div class="row">
-                    <div class="col-lg-4"></div>
-                    <div class="col-lg-8">
-                        <div class="tag-list">
-                            <ul class="tags">
-                                @php
-                                $tagIds = is_array($blogPosts->tags) ? $blogPosts->tags : json_decode($blogPosts->tags, true);
-                                $tagNames = \Modules\GeneralSetting\Models\BlogTag::whereIn('id', $tagIds)->pluck('name');
-                                @endphp
-                                @foreach($tagNames as $tagName)
-                                <li>{{ ucfirst($tagName) }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+                    <div class="blog-description">
+                        {!! $blogPosts->description !!}
                     </div>
-                </div>
-            </div>
-            <div class="blogdetails-pagination">
-                <ul>
-                    <li>
-                        <a href="{{ route('blogs.detail', $otherBlogs[0]->slug ?? '#') }}" class="prev-link">
-                            <i class="fas fa-regular fa-arrow-left"></i> {{ __('web.blog.previous_post') }}
-                        </a>
-                        <a href="{{ route('blogs.detail', $otherBlogs[0]->slug ?? '#') }}">
-                            <h3>{{ ucfirst($otherBlogs[0]->title ?? '') }}</h3>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('blogs.detail', $otherBlogs[1]->slug ?? '#') }}" class="next-link">
-                            {{ __('web.blog.next_post') }} <i class="fas fa-regular fa-arrow-right"></i>
-                        </a>
-                        <a href="{{ route('blogs.detail', $otherBlogs[1]->slug ?? '#') }}">
-                            <h3>{{ ucfirst($otherBlogs[1]->title ?? '') }}</h3>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="review-sec mb-0">
-                <div class="review-header">
-                    <h4>{{ __('web.blog.reviews') }}<span>({{ $countReview }})</span></h4>
-                </div>
-                @foreach($blogReviews as $review)
-                <div class="review-card">
-                    <div class="review-header-group">
-                        <div class="review-widget-header">
-                            <span class="review-widget-img">
-                                <img class="img-fluid" src="{{ uploadedAsset('default','profile') }}" alt="Post Image">
-                            </span>
-                            <div class="review-design">
-                                <h6>{{ $review->name }}</h6>
-                                <p>{{ formatDateTime($review->created_at) }}</p>
+                    <div class="share-postsection">
+                        <div class="row">
+                            <div class="col-lg-4"></div>
+                            <div class="col-lg-8">
+                                <div class="tag-list">
+                                    <ul class="tags">
+                                        @php
+                                        $tagIds = is_array($blogPosts->tags) ? $blogPosts->tags : json_decode($blogPosts->tags, true);
+                                        $tagNames = \Modules\GeneralSetting\Models\BlogTag::whereIn('id', $tagIds)->pluck('name');
+                                        @endphp
+                                        @foreach($tagNames as $tagName)
+                                        <li>{{ ucfirst($tagName) }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <p>{{ $review->comments }}</p>
-                </div>
-                @endforeach
-            </div>
-            <div class="review-sec mb-0">
-                <div class="review-header">
-                    <h4>{{ __('web.blog.leave_a_reply') }}</h4>
-                </div>
-                <div class="card-body">
-                    <form id="blogReviewForm" action="{{ route('blogs.review.store') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="blog_id" value="{{ $blogPosts->id }}">
-                        <div class="review-list">
-                            <ul>
-                                <li class="review-box feedbackbox mb-0">
-                                    <div class="review-details">
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="input-block">
-                                                    <label>{{ __('web.blog.full_name') }} <span class="text-danger">*</span></label>
-                                                    <input type="text" name="name" class="form-control" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="input-block">
-                                                    <label>{{ __('web.blog.email_address') }} <span class="text-danger">*</span></label>
-                                                    <input type="email" name="email" class="form-control" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="input-block">
-                                                    <label>{{ __('web.blog.comments') }}</label>
-                                                    <textarea rows="4" name="comment" class="form-control" required></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="submit-section">
-                                            <button class="btn btn-primary submit-review" id="blogReviewBtn" type="submit">
-                                                {{ __('web.blog.submit_review') }}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
+                    <div class="blogdetails-pagination">
+                        <ul>
+                            <li>
+                                <a href="{{ route('blogs.detail', $otherBlogs[0]->slug ?? '#') }}" class="prev-link">
+                                    <i class="fas fa-regular fa-arrow-left"></i> {{ __('web.blog.previous_post') }}
+                                </a>
+                                <a href="{{ route('blogs.detail', $otherBlogs[0]->slug ?? '#') }}">
+                                    <h3>{{ ucfirst($otherBlogs[0]->title ?? '') }}</h3>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('blogs.detail', $otherBlogs[1]->slug ?? '#') }}" class="next-link">
+                                    {{ __('web.blog.next_post') }} <i class="fas fa-regular fa-arrow-right"></i>
+                                </a>
+                                <a href="{{ route('blogs.detail', $otherBlogs[1]->slug ?? '#') }}">
+                                    <h3>{{ ucfirst($otherBlogs[1]->title ?? '') }}</h3>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="review-sec mb-0">
+                        <div class="review-header">
+                            <h4>{{ __('web.blog.reviews') }}<span>({{ $countReview }})</span></h4>
                         </div>
-                    </form>
+                        @foreach($blogReviews as $review)
+                        <div class="review-card">
+                            <div class="review-header-group">
+                                <div class="review-widget-header">
+                                    <span class="review-widget-img">
+                                        <img class="img-fluid" src="{{ uploadedAsset('default','profile') }}" alt="Post Image">
+                                    </span>
+                                    <div class="review-design">
+                                        <h6>{{ $review->name }}</h6>
+                                        <p>{{ formatDateTime($review->created_at) }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>{{ $review->comments }}</p>
+                        </div>
+                        @endforeach
+                    </div>
+                    <div class="review-sec mb-0">
+                        <div class="review-header">
+                            <h4>{{ __('web.blog.leave_a_reply') }}</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="blogReviewForm" action="{{ route('blogs.review.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="blog_id" value="{{ $blogPosts->id }}">
+                                <div class="review-list">
+                                    <ul>
+                                        <li class="review-box feedbackbox mb-0">
+                                            <div class="review-details">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="input-block">
+                                                            <label>{{ __('web.blog.full_name') }} <span class="text-danger">*</span></label>
+                                                            <input type="text" name="name" class="form-control" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="input-block">
+                                                            <label>{{ __('web.blog.email_address') }} <span class="text-danger">*</span></label>
+                                                            <input type="email" name="email" class="form-control" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        <div class="input-block">
+                                                            <label>{{ __('web.blog.comments') }}</label>
+                                                            <textarea rows="4" name="comment" class="form-control" required></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="submit-section">
+                                                    <button class="btn btn-primary submit-review" id="blogReviewBtn" type="submit">
+                                                        {{ __('web.blog.submit_review') }}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

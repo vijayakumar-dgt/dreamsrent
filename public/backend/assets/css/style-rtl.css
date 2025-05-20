@@ -17262,6 +17262,9 @@ table.dataTable > thead .sorting_desc_disabled:before {
   font-size: 12px;
   border-radius: 5px;
 }
+.dataTables_paginate .pagination li.previous a {
+  width: auto;
+}
 .dataTables_paginate .pagination li a:hover {
   background: var(--gray-900);
   color: var(--white);
@@ -17281,12 +17284,11 @@ table.dataTable > thead .sorting_desc_disabled:before {
   width: auto;
   margin: 0 10px 0 0;
 }
-.dataTables_paginate .pagination li.previous.disabled a, .dataTables_paginate .pagination li.prev a {
+.dataTables_paginate .pagination li.previous.disabled a, .dataTables_paginate .pagination li.prev a, .dataTables_paginate .pagination li.previous a {
   background-color: transparent;
   border: 0;
   width: auto;
   padding: 0;
-  font-size: 15px;
 }
 .dataTables_paginate .pagination li.previous.disabled a i, .dataTables_paginate .pagination li.prev a i {
   margin-right: 8px;
@@ -17303,7 +17305,6 @@ table.dataTable > thead .sorting_desc_disabled:before {
   border: 0;
   width: auto;
   padding: 0;
-  font-size: 15px;
 }
 .dataTables_paginate .pagination li.next.disabled a i, .dataTables_paginate .pagination li.next a i {
   margin-left: 8px;

@@ -630,13 +630,6 @@
 .theme2-blog {
   height: 310px;
 }
-.theme1-blog{
-   height: 310px !important;
-}
-.theme1-blog img{
-  height: 100% !important;
-  object-fit: cover !important;
-}
 .custom-blog-list-img a{
   width:100%;
   display:block;
