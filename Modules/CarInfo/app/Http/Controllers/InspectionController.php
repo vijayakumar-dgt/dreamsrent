@@ -3,6 +3,7 @@
 namespace Modules\CarInfo\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,11 +23,12 @@ class InspectionController extends Controller
      */
     public function index(): View
     {
-        $cars = DB::table('vehicle_info')->select('id', 'name')->where('deleted_at', null)->orderBy('name', 'asc')->get();
-        $users = DB::table('users')->select('id', 'name')->where('user_type', 2)->orderBy('name', 'asc')->get();
+        $users = User::select('id', 'name')
+            ->where('user_type', 2)
+            ->where('status', 1)
+            ->orderBy('name', 'asc')->get();
         $checklists = Checklist::where('status', true)->orderBy('name', 'asc')->get();
         $data = [
-            'cars' => $cars,
             'users' => $users,
             'checklists' => $checklists
         ];

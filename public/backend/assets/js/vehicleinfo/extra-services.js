@@ -253,7 +253,6 @@
                                     </span>
                                 </td>
                                ${ hasPermission(permissions, 'extra_service', 'edit') || hasPermission(permissions, 'extra_service', 'delete') ? 
-
                                 `<td>
                                     <div class="dropdown">
                                         <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -261,12 +260,10 @@
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end p-2">
                                            ${ hasPermission(permissions, 'extra_service', 'edit') ? 
-
                                             `<li>
                                                 <a class="dropdown-item rounded-1" id="editExtraservice" href="javascript:void(${value.id});" data-id="${value.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
                                             </li>`:''}
                                             ${ hasPermission(permissions, 'extra_service', 'delete') ? 
-
                                             `<li>
                                                 <a class="dropdown-item rounded-1" id="deleteService" href="javascript:void(${value.id});" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
                                             </li>`:''}

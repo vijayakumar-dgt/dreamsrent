@@ -302,16 +302,16 @@
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                     ${ hasPermission(permissions, 'vehicle_attributes', 'edit') ? 
                                         `<li>
-                                            <button 
-                                                class="dropdown-item rounded-1 border-0 bg-white edit-type" 
+                                            <button type="button"
+                                                class="dropdown-item rounded-1 edit-type" 
                                                 data-id="${row.id}">
                                                 <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
                                             </button>
                                         </li>` : ''}
                                     ${ hasPermission(permissions, 'vehicle_attributes', 'delete') ? 
                                         `<li>
-                                            <button 
-                                                class="dropdown-item rounded-1 border-0 bg-white delete-type" 
+                                            <button type="button"
+                                                class="dropdown-item rounded-1 delete-type" 
                                                 data-id="${row.id}" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#delete-modal">

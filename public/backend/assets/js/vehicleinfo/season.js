@@ -5,6 +5,11 @@
 
     $(document).ready(function () {
         initTable();
+        initFormValidation();
+        initEvents();
+    });
+
+    function initFormValidation() {
         $("#seasonForm").validate({
             rules: {
                 name: {
@@ -76,7 +81,7 @@
                 });
             }
         });
-    });
+    }
 
     function initTable() {
         let keyword = $('#keyword').val();
@@ -114,20 +119,23 @@
                                     </span>
                                 </td>
                                 ${hasPermission(permissions, 'vehicle_attributes', 'edit') || hasPermission(permissions, 'vehicle_attributes', 'delete') ?
-
                                 `<td>
-                                        <div class="dropdown">
+                                    <div class="dropdown">
                                         <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="ti ti-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end p-2">
-                                        ${hasPermission(permissions, 'vehicle_attributes', 'edit') ?
-                                        `<li>
-                                            <a class="dropdown-item rounded-1 editSeason" href="javascript:void(${value.id});" data-id="${value.id}"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</a>
-                                        </li>`: ''}
-                                        ${hasPermission(permissions, 'vehicle_attributes', 'delete') ?
-                                        `<li>
-                                            <a class="dropdown-item rounded-1 deleteSeason" href="javascript:void(${value.id});" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</a>
+                                            ${hasPermission(permissions, 'vehicle_attributes', 'edit') ?
+                                            `<li>
+                                                <button type="button" class="dropdown-item rounded-1 editSeason" data-id="${value.id}">
+                                                    <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
+                                                </button>
+                                            </li>`: ''}
+                                            ${hasPermission(permissions, 'vehicle_attributes', 'delete') ?
+                                            `<li>
+                                                <button type="button" class="dropdown-item rounded-1 deleteSeason" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                                                    <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
+                                                </button>
                                             </li>`: ''}
                                         </ul>
                                     </div>
@@ -137,9 +145,9 @@
 
                 } else {
                     tableBody += `
-                                <tr>
-                                    <td colspan="4" class="text-center">${_l('admin.common.empty_table')}</td>
-                                </tr>`;
+                            <tr>
+                                <td colspan="4" class="text-center">${_l('admin.common.empty_table')}</td>
+                            </tr>`;
                     $('.table-footer').empty();
                 }
                 $("#seasonTable tbody").html(tableBody);
@@ -190,93 +198,94 @@
         });
     }
 
-    $(document).on('input','#keyword', function(){
-        initTable(); 
-    });
-
-    $(document).on("click", ".statusfilter", function () {
-        var statusFilter = $(this).data('status');
-        var keyword = $('#keyword').val();
-        $(".statusfilter").removeClass("active");
-        $(this).addClass("active");
-        if (statusFilter == 1) {
-            $("#status_text").text(_l('admin.common.active'));
-        } else if (statusFilter == 0) {
-            $("#status_text").text(_l('admin.common.inactive'));
-        } else {
-            $("#status_text").text(_l('admin.common.status'));
-        }
-        initTable();
-    });
-
-    $(document).on('click', '#add_new_season', function () {
-        $("#add_season .modal-title").text(_l('admin.rentals.create_season'));
-        $("#add_season .submitbtn").text(_l('admin.common.create_new'));
-        $("#seasonForm")[0].reset();
-        $("#seasonForm #id").val('');
-        $(".error-text").text("");
-        $(".form-control").removeClass("is-invalid is-valid");
-        $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
-    });
-    
-    $("#deleteSeason").on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "/admin/delete_season",
-            data: $("#deleteSeason").serialize(),
-            success: function (response) {
-                if (response.code === 200) {
-                    showToast('success', response.message);
-                    $("#delete-modal").modal('hide');
-                    initTable();
-                } else {
-                    showToast('error', response.message);
-                    $("#delete-modal").modal('hide');
-                }
-            },
-            error: function (error) {
-                showToast('error', error.responseJSON.message);
-                $("#delete-modal").modal('hide');
-            }
+    function initEvents() {
+        $(document).on('input','#keyword', function(){
+            initTable(); 
         });
-    });
     
-    $(document).on('click', '.editSeason', function (e) {
-        let id = $(this).data('id');
-        $.ajax({
-            type: "GET",
-            url: "/admin/get_season/" + id,
-            success: function (response) {
-                if (response.code === 200) {
-                    let data = response.data;
-                    $("#add_season #name").val(data.name);
-                    $("#add_season #id").val(data.id);
-                    if (data.status === 1) {
-                        $("#add_season #status").prop('checked', true);
+        $(document).on("click", ".statusfilter", function () {
+            let statusFilter = $(this).data('status');
+            $(".statusfilter").removeClass("active");
+            $(this).addClass("active");
+            if (statusFilter == 1) {
+                $("#status_text").text(_l('admin.common.active'));
+            } else if (statusFilter == 0) {
+                $("#status_text").text(_l('admin.common.inactive'));
+            } else {
+                $("#status_text").text(_l('admin.common.status'));
+            }
+            initTable();
+        });
+    
+        $(document).on('click', '#add_new_season', function () {
+            $("#add_season .modal-title").text(_l('admin.rentals.create_season'));
+            $("#add_season .submitbtn").text(_l('admin.common.create_new'));
+            $("#seasonForm")[0].reset();
+            $("#seasonForm #id").val('');
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid is-valid");
+            $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
+        });
+        
+        $("#deleteSeason").on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "/admin/delete_season",
+                data: $("#deleteSeason").serialize(),
+                success: function (response) {
+                    if (response.code === 200) {
+                        showToast('success', response.message);
+                        $("#delete-modal").modal('hide');
+                        initTable();
                     } else {
-                        $("#add_season #status").prop('checked', false);
+                        showToast('error', response.message);
+                        $("#delete-modal").modal('hide');
                     }
-                    $("#add_season .modal-title").text(_l('admin.rentals.edit_season'));
-                    $("#add_season .submitbtn").text(_l('admin.common.save_changes'));
-                    $("#add_season").modal('show');
-                    $(".error-text").text("");
-                    $(".form-control").removeClass("is-invalid is-valid");
-                    $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
-                } else {
-                    showToast('error', response.message);
+                },
+                error: function (error) {
+                    showToast('error', error.responseJSON.message);
+                    $("#delete-modal").modal('hide');
                 }
-            },
-            error: function (error) {
-                showToast('error', error.responseJSON.message);
-            }
+            });
         });
-    });
-    
-    $(document).on('click', '.deleteSeason', function (e) {
-        let id = $(this).data('id');
-        $("#delete_id").val(id);
-    });
+        
+        $(document).on('click', '.editSeason', function (e) {
+            let id = $(this).data('id');
+            $.ajax({
+                type: "GET",
+                url: "/admin/get_season/" + id,
+                success: function (response) {
+                    if (response.code === 200) {
+                        let data = response.data;
+                        $("#add_season #name").val(data.name);
+                        $("#add_season #id").val(data.id);
+                        if (data.status === 1) {
+                            $("#add_season #status").prop('checked', true);
+                        } else {
+                            $("#add_season #status").prop('checked', false);
+                        }
+                        $("#add_season .modal-title").text(_l('admin.rentals.edit_season'));
+                        $("#add_season .submitbtn").text(_l('admin.common.save_changes'));
+                        $("#add_season").modal('show');
+                        $(".error-text").text("");
+                        $(".form-control").removeClass("is-invalid is-valid");
+                        $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
+                    } else {
+                        showToast('error', response.message);
+                    }
+                },
+                error: function (error) {
+                    showToast('error', error.responseJSON.message);
+                }
+            });
+        });
+        
+        $(document).on('click', '.deleteSeason', function (e) {
+            let id = $(this).data('id');
+            $("#delete_id").val(id);
+        });
+    }
 })();
 
     

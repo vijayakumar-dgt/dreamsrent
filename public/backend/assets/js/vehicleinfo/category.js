@@ -6,6 +6,11 @@
 
     $(document).ready(function () {
         initTable();
+        initFormValidation();
+        initEvents();
+    });
+
+    function initFormValidation() {
         $("#categoryForm").validate({
             rules: {
                 name: {
@@ -71,25 +76,17 @@
                     contentType: false,
                     beforeSend: function () {
                         $(".submitbtn").attr("disabled", true).html(`
-                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                            "admin.common.saving"
-                        )}..
-                    `);
+                            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true">
+                            </span> ${_l("admin.common.saving")}..
+                        `);
                     },
                     complete: function () {
-                        $(".submitbtn")
-                            .attr("disabled", false)
-                            .html(
-                                $("#id").val()
-                                    ? _l("admin.common.save_changes")
-                                    : _l("admin.common.create_new")
-                            );
+                        $(".submitbtn").attr("disabled", false)
+                            .html($("#id").val() ? _l("admin.common.save_changes") : _l("admin.common.create_new"));
                     },
                     success: function (resp) {
                         $(".error-text").text("");
-                        $(".form-control").removeClass(
-                            "is-invalid is-valid"
-                        );
+                        $(".form-control").removeClass("is-invalid is-valid");
                         if (resp.code === 200) {
                             showToast("success", resp.message);
                             $("#category_modal").modal("hide");
@@ -98,12 +95,9 @@
                     },
                     error: function (error) {
                         $(".error-text").text("");
-                        $(".form-control").removeClass(
-                            "is-invalid is-valid"
-                        );
+                        $(".form-control").removeClass("is-invalid is-valid");
                         if (error.responseJSON.code === 422) {
-                            $.each(
-                                error.responseJSON.errors,
+                            $.each(error.responseJSON.errors,
                                 function (key, val) {
                                     $("#" + key).addClass("is-invalid");
                                     $("#" + key + "_error").text(val[0]);
@@ -116,110 +110,104 @@
                 });
             },
         });
-    });
+    }
 
-    $("#search").on("input", function () {
-        let searchQuery = $(this).val().trim();
-        initTable(searchQuery, currentStatus);
-    });
-
-    $(".statusfilter").on("click", function () {
-        $(".statusfilter").removeClass("active");
-        $(this).addClass("active");
-        currentStatus = $(this).data("status");
-        $("#status_text").text($(this).text());
-        let searchQuery = $("#search").val().trim();
-        initTable(searchQuery, currentStatus);
-    });
-
-    $(document).on("click", ".dataTables_paginate a", function () {
-        $(".table-footer")
-            .find(".dataTables_paginate")
-            .removeClass("d-none");
-    });
-
-    $("#deleteCategory").on("submit", function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "/admin/category/delete",
-            type: "POST",
-            data: {
-                id: $("#delete_id").val(),
-            },
-            headers: {
-                Accept: "application/json",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                    "content"
-                ),
-            },
-            success: function (response) {
-                if (response.code === 200) {
-                    showToast("success", response.message);
-                    $("#delete-modal").modal("hide");
-                    initTable();
-                }
-            },
-            error: function (res) {
-                if (res.responseJSON.code === 500) {
-                    showToast("success", res.responseJSON.message);
-                } else {
-                    showToast(
-                        "error",
-                        _l("admin.common.default_delete_error")
-                    );
-                }
-            },
+    function initEvents() {
+        $("#search").on("input", function () {
+            let searchQuery = $(this).val().trim();
+            initTable(searchQuery, currentStatus);
         });
-    });
-
-    $("#add_category").on("click", function () {
-        $(".modal-title").text(_l("admin.rentals.create_category"));
-        $(".submitbtn").text(_l("admin.common.create_new"));
-        $("#categoryForm")[0].reset();
-        $("#id").val("");
-        $(".error-text").text("");
-        $(".form-control").removeClass("is-invalid is-valid");
-        $("#statusDiv")
-            .addClass('d-none')
-            .parent()
-            .removeClass("justify-content-between")
-            .addClass("justify-content-end");
-    });
-
-    $(document).on("click", ".editcategory", function () {
-        let id = $(this).data("id");
-        $.ajax({
-            type: "GET",
-            url: "/admin/category/edit/" + id,
-            success: function (response) {
-                $(".error-text").text("");
-                $(".form-control").removeClass("is-invalid is-valid");
-                if (response.code === 200) {
-                    let data = response.data;
-                    $("#name").val(data.name);
-                    $("#status").prop("checked", data.status === 1);
-                    $("#id").val(data.id);
-                    $("#language_id").val(data.language_id);
     
-                    $("#category_modal .modal-title").text(
-                        _l("admin.rentals.edit_category")
-                    );
-                    $(".submitbtn").text(_l("admin.common.save_changes"));
-                    $("#statusDiv")
-                        .removeClass('d-none')
-                        .parent()
-                        .removeClass("justify-content-end")
-                        .addClass("justify-content-between");
-                    $("#category_modal").modal("show");
-                }
-            },
+        $(".statusfilter").on("click", function () {
+            $(".statusfilter").removeClass("active");
+            $(this).addClass("active");
+            currentStatus = $(this).data("status");
+            $("#status_text").text($(this).text());
+            let searchQuery = $("#search").val().trim();
+            initTable(searchQuery, currentStatus);
         });
-    });
     
-    $(document).on("click", ".delete-category", function () {
-        let id = $(this).data("id");
-        $("#delete_id").val(id);
-    });
+        $(document).on("click", ".dataTables_paginate a", function () {
+            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+        });
+    
+        $("#deleteCategory").on("submit", function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "/admin/category/delete",
+                type: "POST",
+                data: {
+                    id: $("#delete_id").val(),
+                },
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                success: function (response) {
+                    if (response.code === 200) {
+                        showToast("success", response.message);
+                        $("#delete-modal").modal("hide");
+                        initTable();
+                    }
+                },
+                error: function (res) {
+                    if (res.responseJSON.code === 500) {
+                        showToast("success", res.responseJSON.message);
+                    } else {
+                        showToast("error", _l("admin.common.default_delete_error"));
+                    }
+                },
+            });
+        });
+    
+        $("#add_category").on("click", function () {
+            $(".modal-title").text(_l("admin.rentals.create_category"));
+            $(".submitbtn").text(_l("admin.common.create_new"));
+            $("#categoryForm")[0].reset();
+            $("#id").val("");
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid is-valid");
+            $("#statusDiv")
+                .addClass('d-none')
+                .parent()
+                .removeClass("justify-content-between")
+                .addClass("justify-content-end");
+        });
+    
+        $(document).on("click", ".editcategory", function () {
+            let id = $(this).data("id");
+            $.ajax({
+                type: "GET",
+                url: "/admin/category/edit/" + id,
+                success: function (response) {
+                    $(".error-text").text("");
+                    $(".form-control").removeClass("is-invalid is-valid");
+                    if (response.code === 200) {
+                        let data = response.data;
+                        $("#name").val(data.name);
+                        $("#status").prop("checked", data.status === 1);
+                        $("#id").val(data.id);
+                        $("#language_id").val(data.language_id);
+                        $("#category_modal .modal-title").text(_l("admin.rentals.edit_category"));
+                        $(".submitbtn").text(_l("admin.common.save_changes"));
+                        $("#statusDiv")
+                            .removeClass('d-none')
+                            .parent()
+                            .removeClass("justify-content-end")
+                            .addClass("justify-content-between");
+                        $("#category_modal").modal("show");
+                    }
+                },
+            });
+        });
+        
+        $(document).on("click", ".delete-category", function () {
+            let id = $(this).data("id");
+            $("#delete_id").val(id);
+        });
+    }
 
     function initTable(search = "", status = "") {
         $(".table-loader").show();
@@ -263,17 +251,9 @@
                                     : value.name
                             }</td>
                             <td>
-                                <span class="badge ${
-                                    value.status == 1
-                                        ? "badge-success-transparent"
-                                        : "badge-danger-transparent"
-                                } d-inline-flex align-items-center badge-sm">
-                                    <i class="ti ti-point-filled me-1"></i>${
-                                        value.status == 1
-                                            ? `${_l("admin.common.active")}`
-                                            : `${_l(
-                                                    "admin.common.inactive"
-                                                )}`
+                                <span class="badge ${value.status == 1 ? "badge-success-transparent" : "badge-danger-transparent"} d-inline-flex align-items-center badge-sm">
+                                    <i class="ti ti-point-filled me-1"></i>
+                                    ${ value.status == 1 ? `${_l("admin.common.active")}` : `${_l( "admin.common.inactive")}`
                                     }
                                 </span>
                             </td>
