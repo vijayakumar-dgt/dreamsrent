@@ -10,9 +10,6 @@
         setupEventListeners();
     });
 
-    /**
-     * Initialize DataTable with fuel type data
-     */
     function initTable(search = "", status = "") {
         $.ajax({
             url: "/admin/fuel-type/datatable",
@@ -95,9 +92,6 @@
         });
     }
 
-    /**
-     * Configure jQuery validation for the form
-     */
     function setupValidation() {
         $("#fuelTypeForm").validate({
             rules: {
@@ -168,9 +162,6 @@
         });
     }
 
-    /**
-     * Bind event listeners for interaction
-     */
     function setupEventListeners() {
         $("#add_fuel_type").on("click", () => {
             $(".modal-title").text(_l("admin.rentals.create_fuel_type"));
@@ -233,9 +224,6 @@
         });
     }
 
-    /**
-     * Fetch and populate fuel type data for editing
-     */
     function editFuelType(id) {
         $.ajax({
             type: "GET",
@@ -256,9 +244,6 @@
         });
     }
 
-    /**
-     * DataTable footer rendering callback
-     */
     function updateTableFooter() {
         $(".dataTables_info").addClass('d-none');
         $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
@@ -273,9 +258,6 @@
         $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
     }
 
-    /**
-     * Common DataTable language config
-     */
     function getDataTableLang() {
         return {
             emptyTable: _l("admin.common.empty_table"),

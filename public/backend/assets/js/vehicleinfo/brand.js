@@ -10,9 +10,6 @@
         initEvents();
     });
 
-    /**
-     * Initialize validation
-     */
     function initValidation() {
         $("#brandForm").validate({
             rules: {
@@ -130,9 +127,6 @@
         }, _l('admin.common.image_pixel'));
     }
 
-    /**
-     * Handle form submit
-     */
     function handleSubmit(form) {
         const formData = new FormData(form);
         const brandImage = $('#brand_image')[0].files[0];
@@ -184,9 +178,6 @@
         });
     }
 
-    /**
-     * Initialize events
-     */
     function initEvents() {
         $('#brand_image, #brand_icon').on('change', function () {
             const input = this;
@@ -292,9 +283,6 @@
         });
     }
 
-    /**
-     * Initialize DataTable with brand data
-     */
     function initTable() {
         $("#brandTable").DataTable({
             serverSide: true,
