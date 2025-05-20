@@ -24,7 +24,7 @@
 					<div class="mb-2">
 						@if (hasPermission($permissions, 'maintenance', 'create'))
 						<button type="button" data-bs-toggle="modal" data-bs-target="#maintenance_modal" id="add_maintenance" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_maintenance') }}</button>
-					@endif
+						@endif
 					</div>
 				</div>
 			</div>
@@ -89,16 +89,6 @@
 							<i class="ti ti-badge me-1"></i>{{ __('admin.common.status') }}
 						</button>
 						<ul class="dropdown-menu dropdown-menu-lg p-2" id="statusList">
-							<li>
-								<div class="top-search m-2">
-									<div class="top-search-group">
-										<span class="input-icon">
-											<i class="ti ti-search"></i>
-										</span>
-										<input type="text" class="form-control" name="status_search" placeholder="{{ __('admin.common.search') }}">
-									</div>
-								</div>
-							</li>
 							<li>
 								<label class="dropdown-item d-flex align-items-center rounded-1">
 									<input class="form-check-input m-0 me-2 status_checkbox" type="checkbox" value="1">{{ __('admin.common.planned') }}

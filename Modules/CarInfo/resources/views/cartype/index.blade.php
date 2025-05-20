@@ -135,7 +135,7 @@
                                 </label>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <button type="submit" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                                 <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
                             </div>
                         </div>

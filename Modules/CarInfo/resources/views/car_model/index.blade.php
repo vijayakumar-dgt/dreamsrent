@@ -76,8 +76,7 @@
 							@endif
 						</tr>
 					</thead>
-					<tbody>			
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 			<!-- Custom Data Table -->
@@ -87,7 +86,7 @@
 	</div>
 	<!-- /Page Wrapper -->
 
-	<!-- Add/Edit Car Model -->
+	<!-- Add/Edit Vehicle Model -->
 	<div class="modal fade addmodal" id="car_model_modal">
 		<div class="modal-dialog modal-dialog-centered modal-md">
 			<div class="modal-content">
@@ -142,9 +141,9 @@
 			</div>
 		</div>
 	</div>
-	<!-- /Add Car Model -->
+	<!-- /Add/Edit Vehicle Model -->
 
-	<!-- Delete Car Model -->
+	<!-- Delete Vehicle Model -->
 	<div class="modal fade deletemodal" id="delete-modal">
 		<div class="modal-dialog modal-dialog-centered modal-sm">
 			<div class="modal-content">
@@ -166,7 +165,7 @@
 			</div>
 		</div>
 	</div>
-	<!-- /Delete Car model -->
+	<!-- /Delete Vehicle model -->
 @endsection
 
 @push('scripts')
