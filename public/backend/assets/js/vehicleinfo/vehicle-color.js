@@ -158,8 +158,8 @@
                                     : value.name}
                                 </td>
                                 <td>
-                                    <div style="display: flex; align-items: center;">
-                                        <div style="width: 20px; height: 20px; background-color: ${ value.value}; border: 1px solid #000; margin-right: 8px;"></div> 
+                                    <div class="d-inline-flex gap-2 align-items-center">
+                                        <div class="coloredsquare border" style="background-color: ${ value.value};"></div>
                                         <span>${value.value}</span>
                                     </div>
                                 </td>

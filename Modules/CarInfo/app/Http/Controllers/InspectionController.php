@@ -23,10 +23,14 @@ class InspectionController extends Controller
      */
     public function index(): View
     {
-        $users = User::select('id', 'name')
-            ->where('user_type', 2)
-            ->where('status', 1)
-            ->orderBy('name', 'asc')->get();
+        $users = User::select('users.id', 'users.name', 'user_details.first_name', 'user_details.last_name')
+            ->join('user_details', 'user_details.user_id', '=', 'users.id')
+            ->where('users.user_type', 2)
+            ->where('users.status', 1)
+            ->orderBy('user_details.first_name', 'asc')->get()->map(function ($user) {
+                $user->name = $user->first_name ? ucwords($user->first_name . ' ' . $user->last_name) : '';
+                return $user;
+            });
         $checklists = Checklist::where('status', true)->orderBy('name', 'asc')->get();
         $data = [
             'users' => $users,

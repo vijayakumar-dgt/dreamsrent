@@ -211,22 +211,18 @@
 
                     $.each(data, function (index, value) {
                         tableBody += `<tr>
-                            <td><h6 class="fw-medium"><a href="#">${
-                                value.tag
-                            }</a></h6></td>
-                            <td><span class="badge ${
-                                value.status == 1
-                                    ? `badge-success-transparent`
-                                    : `badge-danger-transparent`
-                            }  d-inline-flex align-items-center badge-sm">
-                                <i class="ti ti-point-filled me-1"></i>${
-                                    value.status == 1
-                                        ? `${_l("admin.common.active")}`
-                                        : `${_l("admin.common.inactive")}`
-                                }
-                            </span></td>
-                            ${hasPermission(permissions, "vehicle_attributes", "edit") || hasPermission(permissions, "vehicle_attributes", "delete")
-                                ? `<td>
+                            <td>
+                                <h6 class="fw-medium"><a href="#">${value.tag}</a></h6>
+                            </td>
+                            <td>
+                                <span class="badge ${value.status == 1
+                                    ? `badge-success-transparent` : `badge-danger-transparent` } d-inline-flex align-items-center badge-sm">
+                                    <i class="ti ti-point-filled me-1"></i>
+                                    ${value.status == 1 ? `${_l("admin.common.active")}` : `${_l("admin.common.inactive")}`}
+                                </span>
+                            </td>
+                            ${hasPermission(permissions, "vehicle_attributes", "edit") || hasPermission(permissions, "vehicle_attributes", "delete") ? 
+                            `<td>
                                 <div class="dropdown">
                                     <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="ti ti-dots-vertical"></i>
@@ -236,7 +232,7 @@
                                         `<li>
                                             <button 
                                                 type="button"
-                                                class="dropdown-item rounded-1 border-0 bg-white edit-tag" 
+                                                class="dropdown-item rounded-1 edit-tag" 
                                                 id="editTag"
                                                 data-id="${value.id}">
                                                 <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
@@ -246,7 +242,7 @@
                                         `<li>
                                             <button 
                                                 type="button"
-                                                class="dropdown-item rounded-1 border-0 bg-white delete-tag" 
+                                                class="dropdown-item rounded-1 delete-tag" 
                                                 id="deleteTag"
                                                 data-id="${value.id}" 
                                                 data-bs-toggle="modal" 
@@ -261,8 +257,8 @@
                     });
                 } else {
                     tableBody += `<tr>
-                        <td colspan="4" class="text-center">${_l("admin.common.empty_table")}</td>
-                    </tr>`;
+                                    <td colspan="4" class="text-center">${_l("admin.common.empty_table")}</td>
+                                </tr>`;
                     $(".table-footer").empty();
                 }
 

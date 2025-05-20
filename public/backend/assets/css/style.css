@@ -1,7 +1,6 @@
 @charset "UTF-8";
 /****** Utils ******/
 
-
 @font-face {
     font-family: 'Archivo';
     src: url('/backend/assets/fonts/archivo/Archivo-Black.woff2') format('woff2'),
@@ -167,12 +166,6 @@
     font-style: normal;
     font-display: swap;
 }
-
-
-
-
-
-
 
 :root {
   --white: #fff;
