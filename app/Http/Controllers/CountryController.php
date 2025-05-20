@@ -77,7 +77,11 @@ class CountryController extends Controller
             $data = Country::when($request->search, function ($query) use ($request) {
                 $query->where('name', 'LIKE', "%{$request->search}%");
             })
-            ->orderBy('id', $orderBy)->get();
+                ->when($request->filled('status'), function ($query) use ($request) {
+                    $query->where('status', $request->status);
+                })
+                ->orderBy('id', $orderBy)
+                ->get();
 
             return response()->json([
                 'code' => 200,
