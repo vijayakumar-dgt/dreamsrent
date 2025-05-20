@@ -1,266 +1,229 @@
-(async () => {
-    "use strict";
-  await loadTranslationFile('admin', 'common, general_settings');
-  $(document).ready(function() {
+"use strict";
 
+(async () => {
+  await loadTranslationFile("admin", "common, general_settings");
+
+  $(function () {
     profile_list();
     fetchCountries();
-    $("#country").on('change', function(){
-        let id = $(this).val();
-        if(id){
-            fetchStatesByCountry(id);
-        }else{
-            $("#state").empty();
-            $("#state").append(`<option value="">${_l('admin.common.select')}</option>`);
-            $("#city").empty();
-            $("#city").append(`<option value="">${_l('admin.common.select')}</option>`);
-        }
+
+    $("#country").on("change", function () {
+      const id = $(this).val();
+      if (id) {
+        fetchStatesByCountry(id);
+      } else {
+        resetDropdown("#state");
+        resetDropdown("#city");
+      }
     });
 
-    $("#state").on('change',function(){
-        let id = $(this).val();
-        if(id){
-            fetchCitiesByState(id);
-        }else{
-            $("#city").empty();
-            $("#city").append(`<option value="">${_l('admin.common.select')}</option>`);
-        }
+    $("#state").on("change", function () {
+      const id = $(this).val();
+      if (id) {
+        fetchCitiesByState(id);
+      } else {
+        resetDropdown("#city");
+      }
     });
 
-    $('#changePasswordForm').validate({
-        rules: {
-            current_password: {
-                required: true,
-                minlength: 8,
-                remote: {
-                    url: '/api/admin/check-password',
-                    type: 'post',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('admin_token'),
-                        'Accept': 'application/json'
-                    },
-                    data: {
-                        current_password: function() {
-                            return $('#current_password').val();
-                        },
-                        id: function() {
-                            return $('#id').val();
-                        },
-                    }
-                }
+    $("#changePasswordForm").validate({
+      rules: {
+        current_password: {
+          required: true,
+          minlength: 8,
+          remote: {
+            url: "/api/admin/check-password",
+            type: "post",
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("admin_token"),
+              Accept: "application/json",
             },
-            new_password: {
-                required: true,
-                minlength: 8,
-                notEqualTo: '#current_password'
+            data: {
+              current_password: () => $("#current_password").val(),
+              id: () => $("#id").val(),
             },
-            confirm_password: {
-                required: true,
-                equalTo: '#new_password'
-            }
+          },
         },
-        messages: {
-            current_password: {
-                required: $('#current_password_error').data('required'),
-                minlength: $('#current_password_error').data('min'),
-                remote: $('#current_password_error').data('incorrect')
-            },
-            new_password: {
-                required: $('#new_password_error').data('required'),
-                minlength: $('#new_password_error').data('min'),
-                notEqualTo: $('#new_password_error').data('not_equal')
-            },
-            confirm_password: {
-                required: $('#confirm_password_error').data('required'),
-                equalTo: $('#confirm_password_error').data('equal')
-            }
+        new_password: {
+          required: true,
+          minlength: 8,
+          notEqualTo: "#current_password",
         },
-        errorPlacement: function (error, element) {
-            var errorId = element.attr("id") + "_error";
-            $("#" + errorId).text(error.text());
+        confirm_password: {
+          required: true,
+          equalTo: "#new_password",
         },
-        highlight: function (element) {
-            $(element).addClass("is-invalid").removeClass("is-valid");
-            $('#' + element.id).siblings('span').addClass('me-3');
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid").addClass("is-valid");
-            var errorId = element.id + "_error";
-            $("#" + errorId).text("");
-            $('#' + element.id).siblings('span').addClass('me-3');
-        },
-        onkeyup: function(element) {
-            $(element).valid();
-        },
-        onchange: function(element) {
-            $(element).valid();
-        },
-        submitHandler: function (form) {
-            var url = 'admin/change-password';
-            var btnId = '#change_password';
-            var data = new FormData(form);
-            data.append('id', $('#id').val());
-        }
+      },
+      messages: {
+        current_password: generateMessage("#current_password_error"),
+        new_password: generateMessage("#new_password_error"),
+        confirm_password: generateMessage("#confirm_password_error"),
+      },
+      errorPlacement: placeError,
+      highlight: highlightElement,
+      unhighlight: unhighlightElement,
+      onkeyup: validateOnInput,
+      onchange: validateOnInput,
+      submitHandler: function (form) {
+        const data = new FormData(form);
+        data.append("id", $("#id").val());
+        // API submission logic to be added
+      },
     });
-});
-$(document).ready(function() {
+
     $("#adminProfileForm").validate({
-        rules: {
-            profile_photo: {
-                required: false,
-                accept: "image/*",
-                extension: "jpg|jpeg|png|gif",
-            },
-            first_name: {
-                required: true,
-                maxlength: 30
-            },
-            last_name: {
-                required: true,
-                maxlength: 30
-            },
-            email: {
-                required: true,
-                email: true
-            },
-            admin_phone: {
-                required: true,
-                pattern: /^[0-9]+$/,
-                maxlength: 10
-            },
-            address_line: {
-                required: true,
-                maxlength: 50
-            },
-            country: {
-                required: true,
-            },
-            state: {
-                required: true,
-            },
-            city: {
-                required: true,
-            },
-            postal_code: {
-                required: true,
-                pattern: /^[0-9a-zA-Z]+$/
-            },
-            current_password: {
-                required: false
-            },
-            new_password: {
-                required: false,
-                minlength: 6
-            },
-            confirm_password: {
-                required: false,
-                equalTo: "#new_password"
+      rules: getAdminProfileRules(),
+      messages: getAdminProfileMessages(),
+      errorPlacement: placeError,
+      highlight: highlightElement,
+      unhighlight: unhighlightElement,
+      onkeyup: validateOnInput,
+      onchange: validateOnInput,
+      submitHandler: function (form) {
+        const adminProfileData = new FormData(form);
+        adminProfileData.set("phone", $("#international_phone_number").val());
+
+        $.ajax({
+          type: "POST",
+          url: "/admin/update_profile",
+          data: adminProfileData,
+          processData: false,
+          contentType: false,
+          beforeSend: () => toggleButton(true),
+          complete: () => toggleButton(false),
+          success: function (resp) {
+            if (resp.code === 200) {
+              showToast("success", resp.message);
+              profile_list();
             }
-        },
-        messages: {
-            first_name: {
-                required: _l('admin.general_settings.enter_first_name'),
-                maxlength: _l('admin.general_settings.first_name_max'),
-            },
-            last_name: {
-                required:  _l('admin.general_settings.enter_last_name'),
-                maxlength:  _l('admin.general_settings.last_name_max'),
-            },
-            email: {
-                required:  _l('admin.general_settings.enter_email'),
-                email: _l('admin.general_settings.email_invalid'),
-            },
-            admin_phone: {
-                required:  _l('admin.general_settings.enter_phone_number'),
-                pattern: _l('admin.general_settings.phone_invalid'),
-                maxlength:  _l('admin.general_settings.phone_max'),
-            },
-            address_line: {
-                required:  _l('admin.general_settings.enter_address'),
-                maxlength:  _l('admin.general_settings.address_max'),
-            },
-            postal_code: {
-                required:  _l('admin.general_settings.postal_code_required'),
-                pattern:_l('admin.general_settings.postal_invalid')
-            },
-            new_password: {
-                minlength:_l('admin.general_settings.password_min')
-            },
-            confirm_password: {
-                equalTo: _l('admin.general_settings.password_mismatch')
-            },
-            profile_photo: {
-                accept: _l('admin.general_settings.image_accept'),
-                extension: _l('admin.general_settings.image_extension'),
-                filesize: _l('admin.general_settings.image_size'),
-            }
-        },
-        errorPlacement: function(error, element) {
-            var errorId = element.attr("id") + "_error";
-            $("#" + errorId).text(error.text());
-        },
-        highlight: function(element) {
-            $(element).addClass("is-invalid").removeClass("is-valid");
-        },
-        unhighlight: function(element) {
-            $(element).removeClass("is-invalid").addClass("is-valid");
-            var errorId = element.id + "_error";
-            $("#" + errorId).text("");
-        },
-        onkeyup: function(element) {
-            $(element).valid();
-        },
-        onchange: function(element) {
-            $(element).valid();
-        },
-        submitHandler: function(form) {
-            let adminProfileData = new FormData(form);
-            adminProfileData.set("phone", $('#international_phone_number').val());
-
-            $.ajax({
-                type: "POST",
-                url: "/admin/update_profile",
-                data: adminProfileData,
-                processData: false,
-                contentType: false,
-                beforeSend: function () {
-                    $('.btn-primary').attr('disabled', true).html(`
-                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l('admin.common.saving')}..
-                    `);
-                },
-                complete: function () {
-                    $('.btn-primary').attr('disabled', false).html(_l('admin.common.save_changes'));
-                },
-                success: function(resp) {
-                    if (resp.code === 200) {
-                        showToast('success', resp.message);
-                        profile_list();
-                    }
-                },
-                error: function(error) {
-                    $(".error-text").text("");
-                    $(".form-control").removeClass("is-invalid is-valid");
-
-                    if (error.responseJSON.code === 422) {
-                        $.each(error.responseJSON.errors, function(key, val) {
-                            $("#" + key).addClass("is-invalid");
-                            $("#" + key + "_error").text(val[0]);
-                        });
-                    } else {
-                        showToast('error', error.responseJSON.message);
-                    }
-
-                }
-            });
-        }
+          },
+          error: handleFormError,
+        });
+      },
     });
-});
+  });
 
-$("#admin_phone").on("input", function () {
+  $("#admin_phone").on("input", function () {
     $(this).val($(this).val().replace(/[^0-9]/g, ""));
-});
-
+  });
 })();
+
+function resetDropdown(selector) {
+  $(selector).empty().append(`<option value="">${_l("admin.common.select")}</option>`);
+}
+
+function generateMessage(selector) {
+  return {
+    required: $(selector).data("required"),
+    minlength: $(selector).data("min"),
+    remote: $(selector).data("incorrect"),
+    notEqualTo: $(selector).data("not_equal"),
+    equalTo: $(selector).data("equal"),
+  };
+}
+
+function placeError(error, element) {
+  const errorId = element.attr("id") + "_error";
+  $("#" + errorId).text(error.text());
+}
+
+function highlightElement(element) {
+  $(element).addClass("is-invalid").removeClass("is-valid");
+  $("#" + element.id).siblings("span").addClass("me-3");
+}
+
+function unhighlightElement(element) {
+  $(element).removeClass("is-invalid").addClass("is-valid");
+  const errorId = element.id + "_error";
+  $("#" + errorId).text("");
+  $("#" + element.id).siblings("span").addClass("me-3");
+}
+
+function validateOnInput(element) {
+  $(element).valid();
+}
+
+function toggleButton(disable) {
+  const button = $(".btn-primary");
+  button.prop("disabled", disable).html(
+    disable
+      ? `<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l("admin.common.saving")}..`
+      : _l("admin.common.save_changes")
+  );
+}
+
+function handleFormError(error) {
+  $(".error-text").text("");
+  $(".form-control").removeClass("is-invalid is-valid");
+
+  if (error.responseJSON.code === 422) {
+    $.each(error.responseJSON.errors, function (key, val) {
+      $("#" + key).addClass("is-invalid");
+      $("#" + key + "_error").text(val[0]);
+    });
+  } else {
+    showToast("error", error.responseJSON.message);
+  }
+}
+
+function getAdminProfileRules() {
+  return {
+    profile_photo: {
+      required: false,
+      accept: "image/*",
+      extension: "jpg|jpeg|png|gif",
+    },
+    first_name: { required: true, maxlength: 30 },
+    last_name: { required: true, maxlength: 30 },
+    email: { required: true, email: true },
+    admin_phone: { required: true, pattern: /^[0-9]+$/, maxlength: 10 },
+    address_line: { required: true, maxlength: 50 },
+    country: { required: true },
+    state: { required: true },
+    city: { required: true },
+    postal_code: { required: true, pattern: /^[0-9a-zA-Z]+$/ },
+    current_password: { required: false },
+    new_password: { required: false, minlength: 6 },
+    confirm_password: { required: false, equalTo: "#new_password" },
+  };
+}
+
+function getAdminProfileMessages() {
+  return {
+    first_name: {
+      required: _l("admin.general_settings.enter_first_name"),
+      maxlength: _l("admin.general_settings.first_name_max"),
+    },
+    last_name: {
+      required: _l("admin.general_settings.enter_last_name"),
+      maxlength: _l("admin.general_settings.last_name_max"),
+    },
+    email: {
+      required: _l("admin.general_settings.enter_email"),
+      email: _l("admin.general_settings.email_invalid"),
+    },
+    admin_phone: {
+      required: _l("admin.general_settings.enter_phone_number"),
+      pattern: _l("admin.general_settings.phone_invalid"),
+      maxlength: _l("admin.general_settings.phone_max"),
+    },
+    address_line: {
+      required: _l("admin.general_settings.enter_address"),
+      maxlength: _l("admin.general_settings.address_max"),
+    },
+    postal_code: {
+      required: _l("admin.general_settings.postal_code_required"),
+      pattern: _l("admin.general_settings.postal_invalid"),
+    },
+    new_password: { minlength: _l("admin.general_settings.password_min") },
+    confirm_password: { equalTo: _l("admin.general_settings.password_mismatch") },
+    profile_photo: {
+      accept: _l("admin.general_settings.image_accept"),
+      extension: _l("admin.general_settings.image_extension"),
+      filesize: _l("admin.general_settings.image_size"),
+    },
+  };
+}
 
 let iti;
 document.addEventListener("DOMContentLoaded", function () {

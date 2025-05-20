@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 19, 2025 at 12:11 PM
+-- Generation Time: May 20, 2025 at 05:46 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49839,7 +49839,8 @@ CREATE TABLE `invoices` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   `from_date` datetime NOT NULL,
   `to_date` datetime NOT NULL,
-  `discount` varchar(255) DEFAULT NULL
+  `discount` varchar(255) DEFAULT NULL,
+  `language_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
