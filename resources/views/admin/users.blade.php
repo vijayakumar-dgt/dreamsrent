@@ -13,7 +13,7 @@
                     <nav>
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item">
-                                <a href="javascript:void(0);">{{ __('admin.common.home') }}</a>
+                                <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
                             </li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('admin.common.users') }}</li>
                         </ol>
@@ -22,7 +22,7 @@
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
                     <div class="mb-2">
                         @if (hasPermission($permissions, 'users', 'create'))
-                        <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center" id="add_user" data-bs-toggle="modal" data-bs-target="#add_user_modal"><i class="ti ti-plus me-2"></i>{{ __('admin.user_management.add_new_user') }}</a>
+                        <button href="javascript:void(0);" class="btn btn-primary d-flex align-items-center" id="add_user" data-bs-toggle="modal" data-bs-target="#add_user_modal"><i class="ti ti-plus me-2"></i>{{ __('admin.user_management.add_new_user') }}</button>
                         @endif
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                     </div>
                     <div class="dropdown">
                         <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="filtercollapse">
-                            <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }} <span class="badge badge-xs rounded-pill bg-danger ms-2">0</span>
+                            <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
                         </a>
                     </div>
                 </div>
@@ -76,9 +76,9 @@
                 <div class="filterbox mb-3 d-flex align-items-center">
                     <h6 class="me-3">{{ __('admin.common.filters') }}</h6>
                     <div class="dropdown me-2">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                             {{ __('admin.user_management.roles') }}
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-lg p-2" id="role_list">
                             <li>
                                 <div class="top-search m-2">
@@ -105,19 +105,6 @@
                                     </li>
                                 @endif
                             </div>
-                        </ul>
-                    </div>
-                    <div class="dropdown me-3 d-none">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                            {{ __('admin.common.status') }}
-                        </a>
-                        <ul class="dropdown-menu  dropdown-menu-end p-2" id="status_filter">
-                            <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="1">{{ __('admin.common.active') }}</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="0">{{ __('admin.common.inactive') }}</a>
-                            </li>
                         </ul>
                     </div>
                     <a href="javascript:void(0);" class="me-2 text-purple links" id="apply_filter">{{ __('admin.common.apply') }}</a>
@@ -255,7 +242,7 @@
                     </div>
                     <div class="modal-footer">
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                             <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
                         </div>
                     </div>
@@ -355,7 +342,7 @@
                                 </label>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                                 <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.save_changes') }}</button>
                             </div>
                         </div>
@@ -379,7 +366,7 @@
                         <h4 class="mb-1">{{ __('admin.user_management.delete_user') }}</h4>
                         <p class="mb-3">{{ __('admin.user_management.delete_user_confirmation') }}</p>
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                             <button type="submit" class="btn btn-primary">{{ __('admin.common.delete') }}</button>
                         </div>
                     </div>

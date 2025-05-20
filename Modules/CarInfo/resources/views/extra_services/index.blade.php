@@ -67,7 +67,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th>{{ strtoupper(__('admin.common.name')) }}</th>
-                                <th>{{ strtoupper(__('admin.common.price')) }}</th>
+                                <th>{{ strtoupper(__('admin.common.icon')) }}</th>
                                 <th>{{ strtoupper(__('admin.common.image')) }}</th>
                                 <th>{{ strtoupper(__('admin.common.description')) }}</th>
                                 <th>{{ strtoupper(__('admin.common.status')) }}</th>
