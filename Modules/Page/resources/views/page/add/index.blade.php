@@ -105,15 +105,15 @@
                     <div class="card-header">
                         <h5>{{ __('admin.page.section_list') }}</h5>
                     </div>
-                    <div class="d-flex align-items-center justify-content-center setSection">
-                            <div class="d-flex align-items-center justify-content-center setSection mb-3">
-                        <button class="btn btn-primary w-100">{{ __('admin.page.screen_one') }}</button>
-                        <button class="btn btn-dark w-100">{{ __('admin.page.screen_two') }}</button>
+                    <div class="d-flex align-items-center justify-content-center setSection mb-3">
+                        <button class="btn btn-primary w-100 rounded-0">{{ __('admin.page.screen_one') }}</button>
+                        <button class="btn btn-dark w-100 rounded-0">{{ __('admin.page.screen_two') }}</button>
                     </div>
-                    <div id="cardContainer" class="section-list d-none real-table"></div>
-                    <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
-                        @include('admin.content-loader')
-                            </div>
+                    <div class="d-flex align-items-center justify-content-center setSection">
+                        <div id="cardContainer" class="section-list d-none real-table"></div>
+                        <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
+                            @include('admin.content-loader')
+                        </div>
                     </div>
                 </div>
             </div>

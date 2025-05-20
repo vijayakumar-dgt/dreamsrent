@@ -87,7 +87,8 @@
                         </div>`;
 
                     },
-                    visible: hasPermission(permissions, 'vehicle_attributes', 'edit') || hasPermission(permissions, 'vehicle_attributes', 'delete'),
+                    visible: hasPermission(permissions, 'vehicle_attributes', 'edit') || 
+                             hasPermission(permissions, 'vehicle_attributes', 'delete'),
                 },
             ],
             order: [[0, "asc"]],

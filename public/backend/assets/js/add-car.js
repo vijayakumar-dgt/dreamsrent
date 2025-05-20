@@ -532,7 +532,7 @@
                     required: true,
                 },
                 vehicle_year: {
-                    required: false,
+                    required: true,
                 },
                 vehicle_passenger: {
                     required: true,
@@ -1130,12 +1130,12 @@
                     extension: "pdf|txt|doc|docx",
                 },
                 "car_images[]": {
-                    required: true,
+                    required: false,
                     extension: "jpg|jpeg|png",
                 },
                 car_video: {
                     required: false,
-                    url: false,
+                    url: true,
                 },
             },
             messages: {

@@ -805,15 +805,15 @@
 									</div>
 									<div class="col-xl-9">
 										<div class="mb-3">
-											<label class="form-label">{{ __('admin.rentals.seo_meta_title_label') }} <span class="text-danger">*</span></label>
+											<label class="form-label">{{ __('admin.rentals.seo_meta_title_label') }}</label>
 											<input type="text" name="seo_title" id="seo_title" class="form-control">
 										</div>
 										<div class="mb-3">
-											<label class="form-label">{{ __('admin.rentals.seo_keywords_label') }} <span class="text-danger">*</span></label>
+											<label class="form-label">{{ __('admin.rentals.seo_keywords_label') }}</label>
 											<input type="text" name="seo_key" id="seo_key" class="form-control">
 										</div>
 										<div class="mb-3">
-											<label class="form-label">{{ __('admin.rentals.seo_description_label') }} <span class="text-danger">*</span></label>
+											<label class="form-label">{{ __('admin.rentals.seo_description_label') }}</label>
 											<textarea class="form-control" name="seo_description" id="seo_description" rows="3"></textarea>
 										</div>
 									</div>

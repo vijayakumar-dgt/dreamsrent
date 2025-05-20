@@ -269,18 +269,24 @@ function ticketTable() {
                         </td>
                         <td>
                             <div class="d-flex align-items-center">
-                                <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
-                                    <img src="${assigneeImage}" class="rounded-circle" alt="">
-                                </a>
-                                <h6>
-                                    <a href="javascript:void(0);" class="fs-14 fw-semibold">
-                                        ${
-                                        ticket.assignee?.user_detail?.first_name && ticket.assignee?.user_detail?.last_name
-                                            ? `${ticket.assignee.user_detail.first_name} ${ticket.assignee.user_detail.last_name}`
-                                            : (ticket.assignee?.name || `${_l('admin.support.unassigned')}`)
-                                        }
+                              ${
+                                ticket.assignee
+                                    ? `<a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
+                                            <img src="${assigneeImage}" class="rounded-circle" alt="">
                                     </a>
-                                </h6>
+                                    <h6>
+                                        <a href="javascript:void(0);" class="fs-14 fw-semibold">
+                                            ${
+                                                ticket.assignee.user_detail?.first_name && ticket.assignee.user_detail?.last_name
+                                                    ? `${ticket.assignee.user_detail.first_name} ${ticket.assignee.user_detail.last_name}`
+                                                    : (ticket.assignee.name || '-')
+                                            }
+                                        </a>
+                                    </h6>`
+                                    : `<div class="d-flex justify-content-center w-100">
+                                                <h6 class="text-muted mb-0">-</h6>
+                                        </div>`
+                            }
                             </div>
                         </td>
                         <td>${statusBadge}</td>

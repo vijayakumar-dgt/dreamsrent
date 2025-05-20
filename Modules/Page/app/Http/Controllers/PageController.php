@@ -439,12 +439,12 @@ class PageController extends Controller
                 $slug = 'home-screen-two';
             }
         }
-          
+
         if (!$slug) {
             return response()->json(["status" => "error", "message" =>  __('Slug must be specified')]);
         }
         $page = Page::where('slug', $slug)->where('theme_id', $themeId)->where('language_id', $lang_id)->first();
-          
+
         if (!$page) {
             $basePage = Page::where('slug', $slug)->whereNull('parent_id')->first();
 
@@ -844,16 +844,17 @@ class PageController extends Controller
 
                             $user = User::where('id', $vehicle->created_by)->first();
                             $userDetail = null;
-                            $userProfileImg = null;
+                            $defaultAvatar = asset('/backend/assets/img/default-profile.png');
+                            $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
 
-                            if ($user) {
-                                $userDetail = UserDetail::where("user_id", $user->id)->first();
+                            $avatarImage = $defaultAvatar;
 
-                                $userProfileImg = $userDetail && $userDetail->profile_image
-                                    ? url('/storage/' . $userDetail->profile_image)
-                                    : null;
+                            if ($profileImagePath) {
+                                $fullImagePath = storage_path('app/public/' . $profileImagePath);
+                                if (file_exists($fullImagePath)) {
+                                    $avatarImage = url('/storage/' . $profileImagePath);
+                                }
                             }
-
                             return [
                                 'id' => $vehicle->id,
                                 'name' => $vehicle->name,
@@ -861,7 +862,7 @@ class PageController extends Controller
                                 'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
                                 'multiple_vehicle_images' => $multipleImages,
                                 'has_multiple_image' => count($multipleImages) > 1,
-                                'avatar_image' => $userProfileImg ?? null,
+                                'avatar_image' => $avatarImage,
                                 'brand_id' => $vehicle->brand_id ?? null,
                                 'brand' => $vehicle->brand->brand_name ?? null,
                                 'car_type' => $vehicle->carType->name ?? null,

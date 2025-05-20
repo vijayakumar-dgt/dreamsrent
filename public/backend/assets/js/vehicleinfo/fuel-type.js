@@ -196,7 +196,7 @@
             $("#delete_id").val(id);
         });
 
-        $("#delatefuelType").on("submit", function (e) {
+        $("#deletefuelType").on("submit", function (e) {
             e.preventDefault();
             $.ajax({
                 url: "/admin/fuel-type/delete",

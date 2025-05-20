@@ -613,7 +613,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="input-block m-0">
-                                                <label class="custom_check d-inline-flex location-check m-0 ml-2"><span>{{__('web.home.readed_terms')}}</span> <span class="text-danger"> *</span>
+                                                <label class="custom_check d-inline-flex location-check m-0 ml-2"><span>{{__('web.home.readed_terms')}}</span> <span class="text-danger">*</span>
                                                     <input type="checkbox" name="trems" id="trems">
                                                     <span class="checkmark"></span>
                                                 </label>

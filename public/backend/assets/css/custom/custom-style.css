@@ -833,3 +833,12 @@
 .list_loader_div .bg-white div {
   top: 6% !important;
 }
+.custom-modal-body {
+    overflow-y: scroll;
+    max-height: 540px;
+}
+
+@media (max-width : 991px) {
+  
+
+}

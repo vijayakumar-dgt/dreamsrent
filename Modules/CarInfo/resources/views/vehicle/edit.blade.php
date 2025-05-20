@@ -837,15 +837,15 @@
                                         </div>
                                         <div class="col-xl-9">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.rentals.seo_meta_title_label') }} <span class="text-danger">*</span></label>
+                                                <label class="form-label">{{ __('admin.rentals.seo_meta_title_label') }}</label>
                                                 <input type="text" name="seo_title" id="seo_title" value="{{ $query->vehicle_metatitle }}" class="form-control">
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.rentals.seo_keywords_label') }} <span class="text-danger">*</span></label>
+                                                <label class="form-label">{{ __('admin.rentals.seo_keywords_label') }}</label>
                                                 <input type="text" name="seo_key" value="{{ $query->vehicle_metakeywords }}" id="seo_key" class="form-control">
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.rentals.seo_description_label') }} <span class="text-danger">*</span></label>
+                                                <label class="form-label">{{ __('admin.rentals.seo_description_label') }}</label>
                                                 <textarea class="form-control" name="seo_description" id="seo_description" rows="3">{{ $query->vehicle_metakeywords }}</textarea>
                                             </div>
                                         </div>
@@ -1149,7 +1149,7 @@
                             <input type="hidden" id="insurance_id" value="{{ $insurance->id }}">
                             <div>
                                 <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">
-                                    {{ $insurance->rentals }}
+                                    {{ $insurance->insurance_name }}
                                 </h6>
                                 <input type="hidden" id="insurance_name" value="{{ $insurance->insurance_name }}">
                                 <input type="hidden" id="insurance_price_type" value="{{ $insurance->priceType->pricing_type }}">

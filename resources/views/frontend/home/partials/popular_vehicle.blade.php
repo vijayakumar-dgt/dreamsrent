@@ -113,7 +113,7 @@
                                         <ul>
                                             <li>
                                                 <span><img src="{{ asset('frontend/assets/img/icons/door-icon.svg') }}" alt="{{ $vehicle['year'] ?? '' }}"></span>
-                                                <p>{{ $vehicle['num_airbags'] ?? "" }}</p>
+                                                <p>{{ $vehicle['num_doors'] ?? "" }}</p>
                                             </li>
                                             <li>
                                                 <span><img src="{{ asset('frontend/assets/img/icons/car-parts-05.svg') }}" alt="{{ $vehicle['year'] ?? '' }}"></span>
@@ -121,7 +121,7 @@
                                             </li>
                                             <li>
                                                 <span><img src="{{ asset('frontend/assets/img/icons/car-parts-06.svg') }}" alt="{{ __('web.home.persons') }}"></span>
-                                                <p>{{ $vehicle['num_doors'] ?? 0 }} {{ __('web.home.persons') }}</p>
+                                                <p>{{ $vehicle['passenger_capacity'] ?? 0 }} {{ __('web.home.persons') }}</p>
                                             </li>
                                         </ul>
                                     </div>

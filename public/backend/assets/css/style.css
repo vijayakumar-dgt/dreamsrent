@@ -1,7 +1,179 @@
 @charset "UTF-8";
 /****** Utils ******/
-@import url("https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap");
+
+
+@font-face {
+    font-family: 'Archivo';
+    src: url('/backend/assets/fonts/archivo/Archivo-Black.woff2') format('woff2'),
+        url('/backend/assets/fonts/archivo/Archivo-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Archivo';
+    src: url('/backend/assets/fonts/archivo/Archivo-ExtraBold.woff2') format('woff2'),
+        url('/backend/assets/fonts/archivo/Archivo-ExtraBold.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Archivo';
+    src: url('/backend/assets/fonts/archivo/Archivo-Bold.woff2') format('woff2'),
+        url('/backend/assets/fonts/archivo/Archivo-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Archivo';
+    src: url('/backend/assets/fonts/archivo/Archivo-SemiBold.woff2') format('woff2'),
+        url('/backend/assets/fonts/archivo/Archivo-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Archivo';
+    src: url('/backend/assets/fonts/archivo/Archivo-Medium.woff2') format('woff2'),
+        url('/backend/assets/fonts/archivo/Archivo-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Archivo';
+    src: url('/backend/assets/fonts/archivo/Archivo-Regular.woff2') format('woff2'),
+        url('/backend/assets/fonts/archivo/Archivo-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Archivo';
+    src: url('/backend/assets/fonts/archivo/Archivo-Light.woff2') format('woff2'),
+        url('/backend/assets/fonts/archivo/Archivo-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Archivo';
+    src: url('/backend/assets/fonts/archivo/Archivo-ExtraLight.woff2') format('woff2'),
+        url('/backend/assets/fonts/archivo/Archivo-ExtraLight.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Archivo';
+    src: url('/backend/assets/fonts/archivo/Archivo-Thin.woff2') format('woff2'),
+        url('/backend/assets/fonts/archivo/Archivo-Thin.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* Albert sans fonts */
+
+@font-face {
+    font-family: 'Albert Sans';
+    src: url('/backend/assets/fonts/albertsans/AlbertSans-Black.woff2') format('woff2'),
+        url('/backend/assets/fonts/albertsans/AlbertSans-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Albert Sans';
+    src: url('/backend/assets/fonts/albertsans/AlbertSans-ExtraBold.woff2') format('woff2'),
+        url('/backend/assets/fonts/albertsans/AlbertSans-ExtraBold.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Albert Sans';
+    src: url('/backend/assets/fonts/albertsans/AlbertSans-Bold.woff2') format('woff2'),
+        url('/backend/assets/fonts/albertsans/AlbertSans-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Albert Sans';
+    src: url('/backend/assets/fonts/albertsans/AlbertSans-SemiBold.woff2') format('woff2'),
+        url('/backend/assets/fonts/albertsans/AlbertSans-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Albert Sans';
+    src: url('/backend/assets/fonts/albertsans/AlbertSans-Medium.woff2') format('woff2'),
+        url('/backend/assets/fonts/albertsans/AlbertSans-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Albert Sans';
+    src: url('/backend/assets/fonts/albertsans/AlbertSans-Regular.woff2') format('woff2'),
+        url('/backend/assets/fonts/albertsans/AlbertSans-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Albert Sans';
+    src: url('/backend/assets/fonts/albertsans/AlbertSans-Light.woff2') format('woff2'),
+        url('/backend/assets/fonts/albertsans/AlbertSans-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Albert Sans';
+    src: url('/backend/assets/fonts/albertsans/AlbertSans-ExtraLight.woff2') format('woff2'),
+        url('/backend/assets/fonts/albertsans/AlbertSans-ExtraLight.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'Albert Sans';
+    src: url('/backend/assets/fonts/albertsans/AlbertSans-Thin.woff2') format('woff2'),
+        url('/backend/assets/fonts/albertsans/AlbertSans-Thin.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+
+
+
+
+
 :root {
   --white: #fff;
   --dark: #212529;
