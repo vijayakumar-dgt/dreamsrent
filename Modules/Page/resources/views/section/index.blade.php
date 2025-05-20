@@ -261,7 +261,7 @@
                                     <input type="file" name="why_icon_1" id="why_icon_1" class="form-control" accept=".jpg,.jpeg,.png,.svg">
                                     <div class="invalid-feedback" id="why_icon_1_error"></div>
                                     <div class="mt-2">
-                                        <img id="preview_why_icon_1" src="#" alt="Preview" class="img-thumbnail d-none" style="width: 40px; height: 40px;">
+                                        <img id="preview_why_icon_1" src="#" alt="Preview" class="img-thumbnail d-none sectionImage">
                                     </div>
                                 </div>
 
@@ -287,7 +287,7 @@
                                     <input type="file" name="why_icon_2" id="why_icon_2" class="form-control" accept=".jpg,.jpeg,.png,.svg">
                                     <div class="invalid-feedback" id="why_icon_2_error"></div>
                                     <div class="mt-2">
-                                        <img id="preview_why_icon_2" src="#" alt="Preview" class="img-thumbnail d-none" style="width: 40px; height: 40px;">
+                                        <img id="preview_why_icon_2" src="#" alt="Preview" class="img-thumbnail d-none sectionImage">
                                     </div>
                                 </div>
 
@@ -316,7 +316,7 @@
                                     <input type="file" name="why_icon_3" id="why_icon_3" class="form-control" accept=".jpg,.jpeg,.png,.svg">
                                     <div class="invalid-feedback" id="why_icon_3_error"></div>
                                     <div class="mt-2">
-                                        <img id="preview_why_icon_3" src="#" alt="Preview" class="img-thumbnail d-none" style="width: 40px; height: 40px;">
+                                        <img id="preview_why_icon_3" src="#" alt="Preview" class="img-thumbnail d-none sectionImage">
                                     </div>
                                 </div>
 
@@ -334,7 +334,6 @@
                                     <div class="invalid-feedback" id="why_dis_3_error"></div>
                                 </div>
                             </div>
-
 
                         </div>
                     </div>
