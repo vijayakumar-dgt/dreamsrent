@@ -354,12 +354,25 @@
                             desc = value.description.substring(0, 65) + '...';
                         }
                         tableBody += `<tr>
-                                <td><h6 class="fw-medium"><a href="#">${value.name}</a></h6></td>
-                                <td>${value.icon ? `<img src="${value.icon}" alt="" width="50" height="50">` : ''}</td>
-                                <td>${value.image ? `<img src="${value.image}" alt="" width="50" height="50">` : ''}</td>
+                                <td><h6 class="fw-medium">${value.name}</h6></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar avatar-lg">
+                                            <img src="${value.icon}" class="img-fluid" alt="${_l('admin.common.image')}">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar avatar-lg">
+                                            <img src="${value.image}" class="img-fluid" alt="${_l('admin.common.image')}">
+                                        </div>
+                                    </div>
+                                </td>
                                 <td>${desc}</td>
-                                <td> <span class="badge ${value.status == 1 ? `badge-success-transparent` : `badge-danger-transparent`}  d-inline-flex align-items-center badge-sm">
-                                            <i class="ti ti-point-filled me-1"></i>${value.status == 1 ? `${_l('admin.common.active')}` : `${_l('admin.common.inactive')}` }
+                                <td> 
+                                    <span class="badge ${value.status == 1 ? `badge-success-transparent` : `badge-danger-transparent`}  d-inline-flex align-items-center badge-sm">
+                                        <i class="ti ti-point-filled me-1"></i>${value.status == 1 ? `${_l('admin.common.active')}` : `${_l('admin.common.inactive')}` }
                                     </span>
                                 </td>
                                ${ hasPermission(permissions, 'extra_service', 'edit') || hasPermission(permissions, 'extra_service', 'delete') ? 

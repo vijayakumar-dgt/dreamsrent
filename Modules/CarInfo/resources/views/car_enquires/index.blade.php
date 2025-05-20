@@ -26,27 +26,27 @@
 				<div class="d-flex align-items-center flex-wrap row-gap-3">
 					<!-- Sort By Dropdown -->
 					<div class="dropdown me-2">
-						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }} : <span class="ms-1" id="current_sort">{{ __('admin.common.latest') }}</span>
-						</a>
+						</button>
 						<ul class="dropdown-menu dropdown-menu-end p-2 sort_by_list">
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 active-sort" data-value="latest">{{ __('admin.common.latest') }}</a></li>
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 active-sort" data-value="ascending">{{ __('admin.common.ascending') }}</a></li>
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 active-sort" data-value="descending">{{ __('admin.common.descending') }}</a></li>
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 active-sort" data-value="last_7_days">{{ __('admin.common.last_7_days') }}</a></li>
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 active-sort" data-value="last_month">{{ __('admin.common.last_month') }}</a></li>
+							<li><button type="button" class="dropdown-item rounded-1 active-sort" data-value="latest">{{ __('admin.common.latest') }}</button></li>
+							<li><button type="button" class="dropdown-item rounded-1 active-sort" data-value="ascending">{{ __('admin.common.ascending') }}</button></li>
+							<li><button type="button" class="dropdown-item rounded-1 active-sort" data-value="descending">{{ __('admin.common.descending') }}</button></li>
+							<li><button type="button" class="dropdown-item rounded-1 active-sort" data-value="last_7_days">{{ __('admin.common.last_7_days') }}</button></li>
+							<li><button type="button" class="dropdown-item rounded-1 active-sort" data-value="last_month">{{ __('admin.common.last_month') }}</button></li>
 						</ul>
 					</div>					
 					<!-- Status Dropdown -->
 					<div class="dropdown">
-						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-badge me-1 status"></i> {{ __('admin.common.status') }}: <span class="ms-1" id="current_status">{{ __('admin.common.all') }}</span>
-						</a>
+						</button>
 						<ul class="dropdown-menu dropdown-menu-end p-2">
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 active-status" data-value="">{{ __('admin.common.all') }}</a></li>
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 active-status" data-value="1">{{ __('admin.common.not_opened') }}</a></li>
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 active-status" data-value="2">{{ __('admin.common.opened') }}</a></li>
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 active-status" data-value="3">{{ __('admin.common.closed') }}</a></li>
+							<li><button type="button" class="dropdown-item rounded-1 active-status" data-value="">{{ __('admin.common.all') }}</button></li>
+							<li><button type="button" class="dropdown-item rounded-1 active-status" data-value="1">{{ __('admin.common.not_opened') }}</button></li>
+							<li><button type="button" class="dropdown-item rounded-1 active-status" data-value="2">{{ __('admin.common.opened') }}</button></li>
+							<li><button type="button" class="dropdown-item rounded-1 active-status" data-value="3">{{ __('admin.common.closed') }}</button></li>
 						</ul>
 					</div>
 				</div>
@@ -91,7 +91,7 @@
 	</div>
 	<!-- /Page Wrapper -->
 
-	<!-- Edit Driver -->
+	<!-- Edit Enquiry -->
 	<div class="modal fade addmodal" id="edit_enquiry_modal">
 		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
@@ -162,7 +162,7 @@
 					</div>
 					<div class="modal-footer">
 						<div class="d-flex justify-content-center">
-							<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+							<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 							<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.update') }}</button>
 						</div>
 					</div>
@@ -170,8 +170,9 @@
 			</div>
 		</div>
 	</div>
+	<!-- /Edit Enquiry -->
 	
-	<!-- Delete Driver -->
+	<!-- Delete Enquiry -->
 	<div class="modal fade deletemodal" id="delete-modal">
 		<div class="modal-dialog modal-dialog-centered modal-sm"> 
 			<div class="modal-content">
@@ -185,16 +186,15 @@
 						<h4 class="mb-1">{{ __('admin.bookings.delete_enquiry') }}</h4>
 						<p class="mb-3">{{ __('admin.bookings.delete_enquiry_confirmation') }}</p>
 						<div class="d-flex justify-content-center"> 
-							<a href="javascript:void(0);" class="btn btn-light me-3"
-								data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-							<button type="submit" class="btn btn-primary">{{ __('admin.common.delete') }}</button>
+							<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
 						</div> 
 					</div>
 				</form>
 			</div> 
 		</div> 
 	</div> 
-	<!-- /Delete Brand -->
+	<!-- /Delete Enquiry -->
 @endsection
 
 @push('scripts')

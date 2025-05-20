@@ -157,7 +157,7 @@
             columns: [
                 { data: "model_name",
                     render: function (data, type, row) {
-                        return `<h6 class="fw-medium"><a href="javascript:void(0);">${data}</a></h6>`;
+                        return `<h6 class="fw-medium text-black">${data}</h6>`;
                     }
                 },
                 { data: "brand_name", name: "brand_name" },
@@ -183,8 +183,8 @@
                                     <i class="ti ti-dots-vertical"></i>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end p-2">
-                                ${ hasPermission(permissions, 'vehicle_attributes', 'edit') ? 
-                                ` <li>
+                                    ${ hasPermission(permissions, 'vehicle_attributes', 'edit') ? 
+                                    ` <li>
                                         <button 
                                             type="button" 
                                             class="dropdown-item rounded-1 edit-car-model" 

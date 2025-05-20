@@ -159,9 +159,8 @@
                                 <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="ti ti-dots-vertical"></i>
                                 </button>
-                                
                                 <ul class="dropdown-menu dropdown-menu-end p-2">
-                                ${ hasPermission(permissions, 'vehicle_attributes', 'edit') ? 
+                                    ${ hasPermission(permissions, 'vehicle_attributes', 'edit') ? 
                                     `<li>
                                         <button 
                                             type="button" 
@@ -171,7 +170,7 @@
                                             <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
                                         </button>
                                     </li>`:''}
-                                ${ hasPermission(permissions, 'vehicle_attributes', 'delete') ? 
+                                    ${ hasPermission(permissions, 'vehicle_attributes', 'delete') ? 
                                     `<li>
                                         <button 
                                             type="button" 
@@ -187,8 +186,7 @@
                             </div>`;
                     },
                     visible: hasPermission(permissions, 'vehicle_attributes', 'edit') || hasPermission(permissions, 'vehicle_attributes', 'delete'),
-                },
-                    
+                },    
             ],
             ordering: true,
             searching: false,

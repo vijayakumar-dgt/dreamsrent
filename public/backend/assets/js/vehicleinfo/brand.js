@@ -313,11 +313,11 @@
                 { data: "brand_name",
                     render: function (data, type, row) {
                         return `<div class="d-flex align-items-center file-name-icon">
-                                    <a href="#" class="avatar avatar-lg border">
+                                    <div class="avatar avatar-lg border">
                                         <img src="${row.brand_image}" class="img-fluid" alt="${_l('admin.common.image')}">
-                                    </a>
+                                    </div>
                                     <div class="ms-2">
-                                        <h6 class="fw-medium"><a href="#">${row.brand_name}</a></h6>
+                                        <h6 class="fw-medium text-black">${row.brand_name}</h6>
                                     </div>
                                 </div>`;
                     } 

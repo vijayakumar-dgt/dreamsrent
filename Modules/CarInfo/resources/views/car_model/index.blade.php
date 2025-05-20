@@ -45,15 +45,15 @@
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">  
 					<input type="hidden" id="sort_by_status">             
 					<div class="dropdown">
-						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-badge me-1"></i> <span class="ms-1" id="current_sort_status">{{ __('admin.common.status') }}</span>
-						</a>
+						</button>
 						<ul class="dropdown-menu  dropdown-menu-end p-2" id="status_filter">
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="1">{{ __('admin.common.active') }}</a>
+								<button type="button" class="dropdown-item rounded-1" data-status="1">{{ __('admin.common.active') }}</button>
 							</li>
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="0">{{ __('admin.common.inactive') }}</a>
+								<button type="button" class="dropdown-item rounded-1" data-status="0">{{ __('admin.common.inactive') }}</button>
 							</li>
 						</ul>
 					</div>
@@ -76,8 +76,7 @@
 							@endif
 						</tr>
 					</thead>
-					<tbody>			
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 			<!-- Custom Data Table -->
@@ -87,7 +86,7 @@
 	</div>
 	<!-- /Page Wrapper -->
 
-	<!-- Add/Edit Car Model -->
+	<!-- Add/Edit Vehicle Model -->
 	<div class="modal fade addmodal" id="car_model_modal">
 		<div class="modal-dialog modal-dialog-centered modal-md">
 			<div class="modal-content">
@@ -133,7 +132,7 @@
 								</label>
 							</div>
 							<div class="d-flex justify-content-center">
-								<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+								<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 								<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
 							</div>
 						</div>
@@ -142,9 +141,9 @@
 			</div>
 		</div>
 	</div>
-	<!-- /Add Car Model -->
+	<!-- /Add/Edit Vehicle Model -->
 
-	<!-- Delete Car Model -->
+	<!-- Delete Vehicle Model -->
 	<div class="modal fade deletemodal" id="delete-modal">
 		<div class="modal-dialog modal-dialog-centered modal-sm">
 			<div class="modal-content">
@@ -158,15 +157,15 @@
 						<h4 class="mb-1">{{ __('admin.rentals.delete_vehicle_model') }}</h4>
 						<p class="mb-3">{{ __('admin.rentals.delete_vehicle_model_confirmation') }}</p>
 						<div class="d-flex justify-content-center">
-							<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</a>
+							<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
 						</div>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
-	<!-- /Delete Car model -->
+	<!-- /Delete Vehicle model -->
 @endsection
 
 @push('scripts')

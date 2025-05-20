@@ -349,40 +349,37 @@
                         tableBody += `<tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="#" class="avatar me-2 flex-shrink-0">
+                                                <div class="avatar me-2 flex-shrink-0">
                                                     <img src="${value.car.vehicle_image}" alt="${_l('admin.common.image')}">
-                                                </a>
+                                                </div>
                                                 <div>
-                                                    <a href="#" class="fw-semibold d-block">${value.car ? value.car.name : '-'}</a>
+                                                    <div class="fw-semibold d-block text-black">${value.car ? value.car.name : '-'}</div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td><p class="text-gray-9 mb-0">${value.inspectiondate}</p></td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0"><img class="rounded-circle" src="${value.inspector.profile_image}" alt=""></a>
+                                                <div class="avatar me-2 flex-shrink-0"><img class="rounded-circle" src="${value.inspector.profile_image}" alt="${_l('admin.common.image')}"></div>
                                                 <div>
-                                                    <a href="javascript:void(0);" class="fw-semibold d-block">${value.inspector ? value.inspector.name : ''}</a>
+                                                    <div class="fw-semibold d-block text-black">${value.inspector ? value.inspector.name : ''}</div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>${inspection_status} </td>
                                         <td>${repair_status} </td>
-                                    ${ hasPermission(permissions, 'inspections', 'edit') || hasPermission(permissions, 'inspections', 'delete') ? 
-
+                                        ${ hasPermission(permissions, 'inspections', 'edit') || hasPermission(permissions, 'inspections', 'delete') ? 
                                         `<td>
                                             <div class="dropdown">
                                                 <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="ti ti-dots-vertical"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end p-2">
-                                            ${ hasPermission(permissions, 'inspections', 'edit') ? 
-
+                                                    ${ hasPermission(permissions, 'inspections', 'edit') ? 
                                                     `<li>
                                                         <button type="button" class="dropdown-item rounded-1" data-vehicle-id="${value.id}" data-vehicle-text="${value.car ? value.car.name : ''}" data-id="${value.id}" id="editInspection"><i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}</button>
                                                     </li>`:''}
-                                            ${ hasPermission(permissions, 'inspections', 'delete') ? 
-
+                                                    ${ hasPermission(permissions, 'inspections', 'delete') ? 
                                                     `<li>
                                                         <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="deletebtn" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                                                     </li>`:''}
