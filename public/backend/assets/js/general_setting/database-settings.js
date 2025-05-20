@@ -1,36 +1,40 @@
 (async () => {
     "use strict";
-    await loadTranslationFile('admin', 'general_settings,common');
+    await loadTranslationFile("admin", "general_settings,common");
     const permissions = await loadUserPermissions();
 
     DbBackUpTable();
 
-function DbBackUpTable() {
-    $.ajax({
-        url: '/admin/settings/dbbackups',
-        method: 'GET',
-        dataType: 'json',
-        success: function(response) {
-            let tableBody = $("#backup-list");
-            tableBody.empty();
+    function DbBackUpTable() {
+        $.ajax({
+            url: "/admin/settings/dbbackups",
+            method: "GET",
+            dataType: "json",
+            success: function (response) {
+                let tableBody = $("#backup-list");
+                tableBody.empty();
 
-            if (response.data.length === 0) {
-                tableBody.append(`
+                if (response.data.length === 0) {
+                    tableBody.append(`
                     <tr>
                         <td colspan="3">
-                            <p class="text-gray-9 text-center m-0">${_l('admin.common.empty_table')}</p>
+                            <p class="text-gray-9 text-center m-0">${_l(
+                                "admin.common.empty_table"
+                            )}</p>
                         </td>
                     </tr>
                 `);
-                return;
-            }
+                    return;
+                }
 
-            response.data.forEach(backup => {
-                let row = `
+                response.data.forEach((backup) => {
+                    let row = `
                     <tr>
                         <td>
                             <h6 class="fw-semibold fs-14">
-                                <a href="${backup.download_url}" download>${backup.name}</a>
+                                <a href="${backup.download_url}" download>${
+                        backup.name
+                    }</a>
                             </h6>
                         </td>
                         <td>
@@ -43,76 +47,89 @@ function DbBackUpTable() {
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end p-2">
                                     <li>
-                                        <a class="dropdown-item rounded-1" href="${backup.download_url}" download>
-                                            <i class="ti ti-download me-1"></i>${_l('admin.common.download')}
+                                        <a class="dropdown-item rounded-1" href="${
+                                            backup.download_url
+                                        }" download>
+                                            <i class="ti ti-download me-1"></i>${_l(
+                                                "admin.common.download"
+                                            )}
                                         </a>
                                     </li>
-                                    ${ hasPermission(permissions, 'other_settings', 'delete') ?
-                                        `<li>
-                                            <button type="button" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_backup" data-id="${backup.id}" id="delete-backup">
-                                                <i class="ti ti-trash me-1"></i>${_l('admin.general_settings.delete')}
+                                    ${
+                                        hasPermission(
+                                            permissions,
+                                            "other_settings",
+                                            "delete"
+                                        )
+                                            ? `<li>
+                                            <button type="button" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_backup" data-id="${
+                                                backup.id
+                                            }" id="delete-backup">
+                                                <i class="ti ti-trash me-1"></i>${_l(
+                                                    "admin.general_settings.delete"
+                                                )}
                                             </button>
-                                        </li>` : ''
+                                        </li>`
+                                            : ""
                                     }
                                 </ul>
                             </div>
                         </td>
                     </tr>
                 `;
-                tableBody.append(row);
-            });
-        },
-        complete: function () {
-            $(".table-loader").hide();
-            $(".label-loader, .input-loader").hide();
-            $(".real-label, .real-table, .real-data, .table-footer").removeClass("d-none");
-        },
-        error: function(error) {
-            console.error("Error fetching backups:", error);
-        }
-    });
-}
+                    tableBody.append(row);
+                });
+            },
+            complete: function () {
+                $(".table-loader").hide();
+                $(".label-loader, .input-loader").hide();
+                $(
+                    ".real-label, .real-table, .real-data, .table-footer"
+                ).removeClass("d-none");
+            },
+            error: function (error) {
+                console.error("Error fetching backups:", error);
+            },
+        });
+    }
 
-$("#deleteDbBackup").on('submit', function(e){
-    e.preventDefault();
-    $.ajax({
-        url:"/admin/settings/backups/delete",
-        type:"POST",
-        data: {
-            id: $('#delete_id').val()
-        },
-        headers: {
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(response) {
-            if(response.code === 200){
-                showToast('success', response.message);
-                $("#delete_backup").modal('hide');
-                DbBackUpTable();
-            }
-        },
-        error: function(res) {
-            if(res.responseJSON.code === 500){
-                showToast('error', res.responseJSON.message);
-            } else {
-                showToast('error', _l('admin.general_settings.delete'));
-            }
-        }
+    $("#deleteDbBackup").on("submit", function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "/admin/settings/backups/delete",
+            type: "POST",
+            data: {
+                id: $("#delete_id").val(),
+            },
+            headers: {
+                Accept: "application/json",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    showToast("success", response.message);
+                    $("#delete_backup").modal("hide");
+                    DbBackUpTable();
+                }
+            },
+            error: function (res) {
+                if (res.responseJSON.code === 500) {
+                    showToast("error", res.responseJSON.message);
+                } else {
+                    showToast("error", _l("admin.general_settings.delete"));
+                }
+            },
+        });
     });
-});
-
 })();
-
 
 function restoreBackup(filename) {
     alert("Restore function for " + filename + " will be implemented here.");
 }
-$(document).on("click", '#delete-backup', function(){
-   let id = $(this).data('id');
-   deleteBackup(id);
+$(document).on("click", "#delete-backup", function () {
+    let id = $(this).data("id");
+    deleteBackup(id);
 });
-function deleteBackup(id){
+function deleteBackup(id) {
     $("#delete_id").val(id);
 }
-

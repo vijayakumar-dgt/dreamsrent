@@ -1,65 +1,71 @@
 (async () => {
-"use strict";
-$(document).ready(function () {
-    listAddonModules();
+    "use strict";
+    $(document).ready(function () {
+        listAddonModules();
 
-    $(".install_btn").on("click", function () {
-        let selectedPlugin = $('input[name="selected_plugin"]:checked');
+        $(".install_btn").on("click", function () {
+            let selectedPlugin = $('input[name="selected_plugin"]:checked');
 
-        if (!selectedPlugin.val()) {
-            showToast("error",  _l('admin.general_settings.select_plugin_proceeding'));
-            return;
-        }
+            if (!selectedPlugin.val()) {
+                showToast(
+                    "error",
+                    _l("admin.general_settings.select_plugin_proceeding")
+                );
+                return;
+            }
 
-        let selectedRow = selectedPlugin.closest("tr");
+            let selectedRow = selectedPlugin.closest("tr");
 
+            let moduleName = selectedRow.find(".name").text().trim();
+            let moduleVersion = selectedRow.find(".version").text().trim();
+            let modulePrice = selectedRow
+                .find(".price")
+                .text()
+                .trim()
+                .replace("$", "");
+            let gitLink = selectedPlugin.val();
 
-        let moduleName = selectedRow.find(".name").text().trim();
-        let moduleVersion = selectedRow.find(".version").text().trim();
-        let modulePrice = selectedRow.find(".price").text().trim().replace("$", "");
-        let gitLink = selectedPlugin.val();
+            $("#module_name").val(moduleName);
+            $("#module_version").val(moduleVersion);
+            $("#module_price").val(modulePrice);
+            $("#git_link").val(gitLink);
 
-        $("#module_name").val(moduleName);
-        $("#module_version").val(moduleVersion);
-        $("#module_price").val(modulePrice);
-        $("#git_link").val(gitLink);
+            $("#add_plugin").modal("hide");
 
-        $("#add_plugin").modal("hide");
-
-        $("#purchase_plugin").modal("show");
+            $("#purchase_plugin").modal("show");
+        });
     });
-});
 
-function listAddonModules() {
-    $.ajax({
-        url: "/admin/settings/addon-module-list",
-        type: "POST",
-        dataType: "json",
-        data: {
-            order_by: "asc",
-            sort_by: "id",
-        },
-        headers: {
-            Authorization: "Bearer " + localStorage.getItem("admin_token"),
-            Accept: "application/json",
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        success: function (response) {
-            if (response.code === 200) {
-                let addons = response.data;
-                let tableBody = "";
+    function listAddonModules() {
+        $.ajax({
+            url: "/admin/settings/addon-module-list",
+            type: "POST",
+            dataType: "json",
+            data: {
+                order_by: "asc",
+                sort_by: "id",
+            },
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("admin_token"),
+                Accept: "application/json",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    let addons = response.data;
+                    let tableBody = "";
 
-                if (addons.length === 0) {
-                    $("#addonModuleTable").DataTable().destroy();
-                    tableBody += `
+                    if (addons.length === 0) {
+                        $("#addonModuleTable").DataTable().destroy();
+                        tableBody += `
                         <tr>
                             <td colspan="6" class="text-center">${$(
                                 "#addonModuleTable"
                             ).data("empty")}</td>
                         </tr>`;
-                } else {
-                    addons.forEach((addon, index) => {
-                        tableBody += `
+                    } else {
+                        addons.forEach((addon, index) => {
+                            tableBody += `
                             <tr>
                                 <td>${index + 1}</td>
                                 <td>${addon.name} (${addon.version})</td>
@@ -90,107 +96,110 @@ function listAddonModules() {
                                 </td>
                             </tr>
                         `;
-                    });
-                }
+                        });
+                    }
 
-                $("#addonModuleTable tbody").html(tableBody);
-                $("#loader-table").addClass("d-none");
-                $(".label-loader, .input-loader").hide();
-                $("#addonModuleTable, .real-label, .real-input").removeClass(
-                    "d-none"
-                );
+                    $("#addonModuleTable tbody").html(tableBody);
+                    $("#loader-table").addClass("d-none");
+                    $(".label-loader, .input-loader").hide();
+                    $(
+                        "#addonModuleTable, .real-label, .real-input"
+                    ).removeClass("d-none");
 
-                if (
-                    addons.length != 0 &&
-                    !$.fn.DataTable.isDataTable("#addonModuleTable")
-                ) {
-                    $("#addonModuleTable").DataTable({
-                        ordering: true,
-                        language: datatableLang,
-                    });
+                    if (
+                        addons.length != 0 &&
+                        !$.fn.DataTable.isDataTable("#addonModuleTable")
+                    ) {
+                        $("#addonModuleTable").DataTable({
+                            ordering: true,
+                            language: datatableLang,
+                        });
+                    }
                 }
-            }
-        },
-        error: function (error) {
-            if (error.status === 422) {
-                var errors = error.responseJSON.errors;
-                if (errors) {
-                    $.each(errors, function (key, messages) {
-                        toastr.error(messages[0]);
-                    });
-                } else {
-                    toastr.error( _l('admin.general_settings.retrive_error'));
+            },
+            error: function (error) {
+                if (error.status === 422) {
+                    var errors = error.responseJSON.errors;
+                    if (errors) {
+                        $.each(errors, function (key, messages) {
+                            toastr.error(messages[0]);
+                        });
+                    } else {
+                        toastr.error(
+                            _l("admin.general_settings.retrive_error")
+                        );
+                    }
                 }
-            }
-        },
+            },
+        });
+    }
+
+    function listNewAddonModules() {
+        $.ajax({
+            url: "/admin/settings/new-addon-modules",
+            type: "POST",
+            dataType: "json",
+            data: {
+                order_by: "asc",
+                sort_by: "id",
+            },
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("admin_token"),
+                Accept: "application/json",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+
+            success: function (response) {
+                if (response.code === 200) {
+                }
+            },
+            error: function (error) {
+                if (error.status === 422) {
+                    var errors = error.responseJSON.errors;
+                    if (errors) {
+                        $.each(errors, function (key, messages) {
+                            toastr.error(messages[0]);
+                        });
+                    } else {
+                        toastr.error(
+                            _l("admin.general_settings.retrive_error")
+                        );
+                    }
+                }
+            },
+        });
+    }
+
+    $(document).on("change", ".addon_status", function () {
+        let id = $(this).data("id");
+        let status = $(this).is(":checked") ? 1 : 0;
+
+        var data = {
+            id: id,
+            status: status,
+        };
+
+        $.ajax({
+            url: "/admin/settings/change-addon-status",
+            type: "POST",
+            data: data,
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("admin_token"),
+                Accept: "application/json",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    toastr.success(response.message);
+                    listAddonModules();
+                    location.reload();
+                }
+            },
+            error: function (error) {
+                toastr.error(_l("admin.general_settings.retrive_error"));
+            },
+        });
     });
-}
-
-function listNewAddonModules() {
-    $.ajax({
-        url: "/admin/settings/new-addon-modules",
-        type: "POST",
-        dataType: "json",
-        data: {
-            order_by: "asc",
-            sort_by: "id",
-        },
-        headers: {
-            Authorization: "Bearer " + localStorage.getItem("admin_token"),
-            Accept: "application/json",
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-
-        success: function (response) {
-            if (response.code === 200) {
-            }
-        },
-        error: function (error) {
-            if (error.status === 422) {
-                var errors = error.responseJSON.errors;
-                if (errors) {
-                    $.each(errors, function (key, messages) {
-                        toastr.error(messages[0]);
-                    });
-                } else {
-                    toastr.error( _l('admin.general_settings.retrive_error'));
-                }
-            }
-        },
-    });
-}
-
-$(document).on("change", ".addon_status", function () {
-    let id = $(this).data("id");
-    let status = $(this).is(":checked") ? 1 : 0;
-
-    var data = {
-        id: id,
-        status: status,
-    };
-
-    $.ajax({
-        url: "/admin/settings/change-addon-status",
-        type: "POST",
-        data: data,
-        headers: {
-            Authorization: "Bearer " + localStorage.getItem("admin_token"),
-            Accept: "application/json",
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        success: function (response) {
-            if (response.code === 200) {
-                toastr.success(response.message);
-                listAddonModules();
-                location.reload();
-            }
-        },
-        error: function (error) {
-            toastr.error( _l('admin.general_settings.retrive_error'),);
-        },
-    });
-});
-
 })();
 
 $(document).on("click", "#installed_addon", function () {
@@ -267,7 +276,11 @@ $(document).on("click", ".purchase_confirm_btn", function (event) {
             $(".error-text").text("");
             $(".purchase_confirm_btn")
                 .removeAttr("disabled")
-                .html($(".purchase_confirm_btn").data( _l('admin.general_settings.save')));
+                .html(
+                    $(".purchase_confirm_btn").data(
+                        _l("admin.general_settings.save")
+                    )
+                );
             $(".form-control").removeClass("is-invalid is-valid");
             $(".select2-container").removeClass("is-invalid is-valid");
             $("#purchase_modal").modal("hide");
@@ -281,7 +294,11 @@ $(document).on("click", ".purchase_confirm_btn", function (event) {
             $(".error-text").text("");
             $(".purchase_confirm_btn")
                 .removeAttr("disabled")
-                .html($(".purchase_confirm_btn").data( _l('admin.general_settings.save')));
+                .html(
+                    $(".purchase_confirm_btn").data(
+                        _l("admin.general_settings.save")
+                    )
+                );
             $(".form-control").removeClass("is-invalid is-valid");
             $(".select2-container").removeClass("is-invalid is-valid");
             if (error.responseJSON.code === 422) {
