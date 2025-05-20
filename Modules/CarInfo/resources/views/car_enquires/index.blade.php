@@ -41,7 +41,7 @@
 					<div class="dropdown">
 						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-badge me-1 status"></i> {{ __('admin.common.status') }}: <span class="ms-1" id="current_status">{{ __('admin.common.all') }}</span>
-						</a>
+						</button>
 						<ul class="dropdown-menu dropdown-menu-end p-2">
 							<li><button type="button" class="dropdown-item rounded-1 active-status" data-value="">{{ __('admin.common.all') }}</button></li>
 							<li><button type="button" class="dropdown-item rounded-1 active-status" data-value="1">{{ __('admin.common.not_opened') }}</button></li>
@@ -91,7 +91,7 @@
 	</div>
 	<!-- /Page Wrapper -->
 
-	<!-- Edit Driver -->
+	<!-- Edit Enquiry -->
 	<div class="modal fade addmodal" id="edit_enquiry_modal">
 		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
@@ -170,8 +170,9 @@
 			</div>
 		</div>
 	</div>
+	<!-- /Edit Enquiry -->
 	
-	<!-- Delete Driver -->
+	<!-- Delete Enquiry -->
 	<div class="modal fade deletemodal" id="delete-modal">
 		<div class="modal-dialog modal-dialog-centered modal-sm"> 
 			<div class="modal-content">
@@ -194,7 +195,7 @@
 			</div> 
 		</div> 
 	</div> 
-	<!-- /Delete Brand -->
+	<!-- /Delete Enquiry -->
 @endsection
 
 @push('scripts')

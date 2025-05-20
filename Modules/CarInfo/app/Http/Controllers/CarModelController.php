@@ -160,7 +160,7 @@ class CarModelController extends Controller
 
             // Total Records Count
             $filterTotalRecords = $query->count();
-            $totalRecords = CarModel::where('car_models.language_id', $language_id)->count();
+            $totalRecords = $query->count();
             // Data Fetch
             $data = $query
                 ->skip($start)

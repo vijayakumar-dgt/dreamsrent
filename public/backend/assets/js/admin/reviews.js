@@ -1,14 +1,75 @@
-(function($) {
-"use strict";
-
 (async () => {
     await loadTranslationFile('admin', 'common, rentals');
     const permissions = await loadUserPermissions();
 
     $(document).ready(function () {
         initTable();
-        $("#sort_by_date").val('');
+        initEvents();
     });
+
+    function initEvents() {
+        $("#sort_by_date").val('');
+        
+        $(document).on('click', '.dataTables_paginate a', function() {
+            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+        });
+        
+        $('#search').on('keyup', function() {
+            $('#reviewsTable').DataTable().ajax.reload();
+        });
+
+        $(document).on('click', '.sort_by_list .dropdown-item', function () {
+            let sortBy = $(this).data('sort');
+            $('#sort_by_input').val(sortBy);
+            $('#current_sort').text(sortBy.charAt(0).toUpperCase() + sortBy.slice(1).toLowerCase());
+            $('.sort_by_list .dropdown-item').removeClass('active');
+            $(this).addClass('active');
+            $('#reviewsTable').DataTable().ajax.reload();
+        });
+        
+        $('#sort_by_date').on('change', function() {
+            var sort_by_date = $(this).val();
+            initTable(sort_by_date);
+        });
+
+        $(document).on('click', '.delete_review', function () {
+            $('#delete_id').val($(this).data('id'));
+        });
+
+        $("#reviewDeleteForm").on('submit', function(e){
+            e.preventDefault();
+            $.ajax({
+                url:"/admin/review/delete",
+                type:"POST",
+                data: {
+                    id: $('#delete_id').val()
+                },
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if(response.code === 200){
+                        showToast('success', response.message);
+                        $("#delete_modal").modal('hide');
+                        $("#reviewsTable").DataTable().ajax.reload();
+                    }
+                },
+                error: function(res) {
+                    if(res.responseJSON.code === 500){
+                        showToast('error', res.responseJSON.message);
+                    } else {
+                        showToast('error', _l('admin.common.default_delete_error'));
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '.view_review', function () {
+            let review = $(this).data('review');
+            $('#review_text').text(review);
+        });
+    }
 
     function initTable(sortByDate = '') {
         $("#reviewsTable").DataTable({
@@ -45,11 +106,11 @@
                 { data: "vehicle_name",
                     render: function (data, type, row) {
                         return `<div class="d-flex align-items-center">
-                                    <a href="#" class="avatar avatar-lg border">
+                                    <div class="avatar avatar-lg border">
                                         <img src="${row.vehicle_image}" class="img-fluid" alt="${_l('admin.common.image')}">
-                                    </a>
+                                    </div>
                                     <div class="ms-2">
-                                        <h6 class="fw-medium"><a href="#">${row.vehicle_name}</a></h6>
+                                        <h6 class="fw-medium text-black">${row.vehicle_name}</h6>
                                     </div>
                                 </div>`;
                     } 
@@ -57,9 +118,11 @@
                 { data: "customer_full_name",
                     render: function (data, type, row) {
                         return `<div class="d-flex align-items-center">
-                                    <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0"><img class="rounded-circle" src="${row.profile_image}" alt=""></a>
+                                    <div class="avatar me-2 flex-shrink-0">
+                                        <img class="rounded-circle" src="${row.profile_image}" alt="${_l('admin.common.image')}">
+                                    </div>
                                     <div>
-                                        <a href="javascript:void(0);" class="fw-semibold d-block">${row.customer_full_name ?? ''}</a>
+                                        <div class="fw-semibold d-block text-black">${row.customer_full_name ?? ''}</div>
                                     </div>
                                 </div>`;
                     } 
@@ -153,67 +216,4 @@
             },
         });
     }
-    
-    $(document).on('click', '.dataTables_paginate a', function() {
-        $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
-    });
-    
-    $('#search').on('keyup', function() {
-        $('#reviewsTable').DataTable().ajax.reload();
-    });
-
-    $(document).on('click', '.sort_by_list .dropdown-item', function () {
-        let sortBy = $(this).data('sort');
-        $('#sort_by_input').val(sortBy);
-        $('#current_sort').text(sortBy.charAt(0).toUpperCase() + sortBy.slice(1).toLowerCase());
-        $('.sort_by_list .dropdown-item').removeClass('active');
-        $(this).addClass('active');
-        $('#reviewsTable').DataTable().ajax.reload();
-    });
-    
-    $('#sort_by_date').on('change', function() {
-        var sort_by_date = $(this).val();
-        initTable(sort_by_date);
-    });
-
-    $(document).on('click', '.delete_review', function () {
-        $('#delete_id').val($(this).data('id'));
-    });
-
-    $("#reviewDeleteForm").on('submit', function(e){
-        e.preventDefault();
-        $.ajax({
-            url:"/admin/review/delete",
-            type:"POST",
-            data: {
-                id: $('#delete_id').val()
-            },
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response) {
-                if(response.code === 200){
-                    showToast('success', response.message);
-                    $("#delete_modal").modal('hide');
-                    $("#reviewsTable").DataTable().ajax.reload();
-                }
-            },
-            error: function(res) {
-                if(res.responseJSON.code === 500){
-                    showToast('error', res.responseJSON.message);
-                } else {
-                    showToast('error', _l('admin.common.default_delete_error'));
-                }
-            }
-        });
-    });
-
-    $(document).on('click', '.view_review', function () {
-        let review = $(this).data('review');
-        $('#review_text').text(review);
-    });
-
 }) ();
-
-})(jQuery);

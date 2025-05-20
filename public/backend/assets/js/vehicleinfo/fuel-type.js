@@ -50,15 +50,15 @@
                         const actions = (hasPermission(permissions, "vehicle_attributes", "edit") || hasPermission(permissions, "vehicle_attributes", "delete")) ?
                         `<td>
                             <div class="dropdown">
-                            <button class="btn btn-icon btn-sm" data-bs-toggle="dropdown">
-                                <i class="ti ti-dots-vertical"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end p-2">
-                                ${hasPermission(permissions, "vehicle_attributes", "edit") ?
-                                `<li><button class="dropdown-item rounded-1 edit-fuel-type" data-id="${value.id}"><i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}</button></li>` : ""}
-                                ${hasPermission(permissions, "vehicle_attributes", "delete") ?
-                                `<li><button class="dropdown-item rounded-1 delete-fuel-type" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}</button></li>` : ""}
-                            </ul>
+                                <button class="btn btn-icon btn-sm" data-bs-toggle="dropdown">
+                                    <i class="ti ti-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end p-2">
+                                    ${hasPermission(permissions, "vehicle_attributes", "edit") ?
+                                    `<li><button class="dropdown-item rounded-1 edit-fuel-type" data-id="${value.id}"><i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}</button></li>` : ""}
+                                    ${hasPermission(permissions, "vehicle_attributes", "delete") ?
+                                    `<li><button class="dropdown-item rounded-1 delete-fuel-type" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}</button></li>` : ""}
+                                </ul>
                             </div>
                         </td>` : "<td></td>";
 

@@ -199,9 +199,9 @@
                     render: function(data, type, row) {
                         return `
                             <div class="d-flex align-items-center">
-                                <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0"><img src="${row.vehicle_image}" alt=""></a>
+                                <div class="avatar me-2 flex-shrink-0"><img src="${row.vehicle_image}" alt="${_l('admin.common.image')}"></div>
                                 <div>
-                                    <a class="d-block fw-semibold" href="javascript:void(0);">${row.vehicle_name ? row.vehicle_name : ''}</a>
+                                    <div class="d-block fw-semibold text-black">${row.vehicle_name ? row.vehicle_name : ''}</div>
                                     <span class="fs-13">${row.vehicle_type ? row.vehicle_type : ''}</span>
                                 </div>
                             </div>`;
@@ -238,15 +238,13 @@
                                     <i class="ti ti-dots-vertical"></i>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end p-2">
-                                ${ hasPermission(permissions, 'maintenance', 'edit') ? 
-
+                                    ${ hasPermission(permissions, 'maintenance', 'edit') ? 
                                     `<li>
                                         <button type="button" class="dropdown-item rounded-1 edit-maintenance" data-id="${data}">
                                             <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
                                         </button>
                                     </li>`:''}
-                                ${ hasPermission(permissions, 'maintenance', 'delete') ? 
-
+                                    ${ hasPermission(permissions, 'maintenance', 'delete') ? 
                                     `<li>
                                         <button type="button" class="dropdown-item rounded-1 delete-maintenance" data-id="${data}" data-bs-toggle="modal" data-bs-target="#delete-modal">
                                             <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
@@ -256,7 +254,6 @@
                             </div>`;
                     },
                     visible: hasPermission(permissions, 'maintenance', 'edit') || hasPermission(permissions, 'maintenance', 'delete')
-
                 }
             ],
             order: [[0, "asc"]],
