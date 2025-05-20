@@ -67,15 +67,7 @@
 								<a href="javascript:void(0);" class="dropdown-item rounded-1">{{ __('admin.common.last_7_days') }}</a>
 							</li>
 						</ul>
-					</div>
-					<div class="me-2 d-none">
-						<div class="input-icon-start position-relative topdatepicker">
-							<span class="input-icon-addon">
-								<i class="ti ti-calendar"></i>
-							</span>
-							<input type="text" class="form-control date-range bookingrange" placeholder="dd/mm/yyyy - dd/mm/yyyy">
-						</div>
-					</div>
+					</div>					
 					<div class="dropdown">
 						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-badge me-1"></i> {{ __('admin.common.status') }}

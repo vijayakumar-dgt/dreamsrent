@@ -26,40 +26,9 @@
     </div>
 @endsection
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            $(document).on('submit', '#config_form', async function(e) {
-                e.preventDefault();
-                let config_app_name = $('#config_app_name').val();
-                let submit_btn = $('#submit_btn');
+     <script src="{{ asset('frontend/assets/js/installer/config.js') }}"></script>   
 
-                if ($.trim(config_app_name) === '') {
-                    toastr.warning("App Name is required");
-                } else {
-                    submit_btn.html(
-                        'Saving... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
-                    ).prop('disabled', true);
-                    try {
-                        const res = await makeAjaxRequest({
-                                config_app_name: config_app_name
-                            },
-                            "{{ route('setup.configuration.submit') }}");
-                        if (res.success) {
-                            toastr.success(res.message);
-                            submit_btn.addClass('btn-success').html('Redirecting...');
-                            window.location.href = "{{ route('setup.smtp') }}";
-                        } else {
-                            submit_btn.html('Save Config').prop('disabled', false);
-                            toastr.error(res.message);
-                        }
-                    } catch (error) {
-                        submit_btn.html('Save Config').prop('disabled', false);
-                        $.each(error.errors, function(index, value) {
-                            toastr.error(value);
-                        });
-                    }
-                }
-            });
-        });
+    <script>
+        
     </script>
 @endpush
