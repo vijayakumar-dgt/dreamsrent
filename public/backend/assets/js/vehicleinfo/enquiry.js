@@ -216,7 +216,7 @@
                             </td>
                             <td>${value.customer_name}</td>
                             <td>${value.email}</td>
-                            <td>${value.phone}</td>
+                            <td>${value.phone ?? '-'}</td>
                             <td>${value.enquiry_date}</td>
                             <td>
                                 <span class="avatar avatar-md bg-light rounded-circle tooltip-trigger"
