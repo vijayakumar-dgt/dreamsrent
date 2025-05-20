@@ -30,6 +30,7 @@
 	<!-- Toastr CSS -->
 	<link href="{{ asset('backend/assets/plugins/toastr/toatr.css') }}" rel="stylesheet">
 	
+	
 	<!-- Main CSS -->
 	<link rel="stylesheet" href="{{ asset('backend/assets/css/style.css') }}">
     @stack('styles')
@@ -67,6 +68,9 @@
 	<!-- Custom JS -->
 	<script src="{{ asset('backend/assets/js/script.js') }}"></script>
 	<script src="{{ asset('backend/assets/js/custom/custom-script.js') }}"></script>
+
+	<!-- language JS -->
+	<script src="{{ asset('frontend/assets/js/custom/lang_script.js') }}"></script>
 
     @stack('scripts')
 </body>

@@ -737,6 +737,7 @@ return [
         'last_login_at' => 'Last Login At',
         'device_not_found' => 'Device not found',
         'add_to_wallet' => 'Add to Wallet',
+        'phone_number_required' => 'Phone number is required.',
     ],
     'blog' => [
         'blog_list' => 'Blog List',
