@@ -2,10 +2,15 @@
     "use strict";
     await loadTranslationFile('admin', 'rentals,common');
     const permissions = await loadUserPermissions();
-
+    let currentStatus = "";
 
     $(document).ready(function () {
         initTable();
+        initFormValidation();
+        initEvents();
+    });
+
+    function initFormValidation() {
         $("#steeringTypeForm").validate({
             rules: {
                 steering_type: {
@@ -97,24 +102,76 @@
                 });
             },
         });
-    });
-    
-    
-    let currentStatus = "";
+    }
 
-    $("#search").on("input", function () {
-        let searchQuery = $(this).val().trim();
-        initTable(searchQuery, currentStatus);
-    });
+    function initEvents() {
+        $("#search").on("input", function () {
+            let searchQuery = $(this).val().trim();
+            initTable(searchQuery, currentStatus);
+        });
 
-    $(".statusfilter").on("click", function () {
-        $(".statusfilter").removeClass("active");
-        $(this).addClass("active");
-        currentStatus = $(this).data("status");
-        $("#status_text").text($(this).text());
-        let searchQuery = $("#search").val().trim();
-        initTable(searchQuery, currentStatus);
-    });
+        $(".statusfilter").on("click", function () {
+            $(".statusfilter").removeClass("active");
+            $(this).addClass("active");
+            currentStatus = $(this).data("status");
+            $("#status_text").text($(this).text());
+            let searchQuery = $("#search").val().trim();
+            initTable(searchQuery, currentStatus);
+        });
+        
+        $(document).on('click', '.dataTables_paginate a', function() {
+            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+        });
+        
+        $("#deleteSteeringType").on("submit", function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "/admin/steering-type/delete",
+                type: "POST",
+                data: {
+                    id: $("#delete_id").val(),
+                },
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                success: function (response) {
+                    if (response.code === 200) {
+                        showToast('success', response.message);
+                        $("#delete-modal").modal("hide");
+                        initTable();
+                    }
+                },
+                error: function (res) {
+                    if (res.responseJSON.code === 500) {
+                        showToast('success', res.responseJSON.message);
+                    } else {
+                        showToast('error', _l('admin.common.default_delete_error'));
+                    }
+                },
+            });
+        });
+        
+        $("#add_steering_type").on("click", function () {
+            $(".modal-title").text(_l('admin.rentals.create_steering_type'));
+            $(".submitbtn").text(_l('admin.common.create_new'));
+            $("#steeringTypeForm")[0].reset();
+            $("#id").val("");
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid is-valid");
+            $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
+        });
+        
+        $(document).on('click','#edit-steering-type', function() {
+            let id = $(this).data('id');
+            editSteeringType(id);
+        });
+
+        $(document).on('click', '#delete-steering-type', function() {
+            let id = $(this).data('id');
+            $("#delete_id").val(id);
+        });
+    }
 
     function initTable(search = "", status = "") {
         $(".table-loader").show();
@@ -234,226 +291,27 @@
         });
     }
     
-    $(document).on('click', '.dataTables_paginate a', function() {
-        $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
-    });
-    
-    $("#delateSteeringType").on("submit", function (e) {
-        e.preventDefault();
+    function editSteeringType(id) {
         $.ajax({
-            url: "/admin/steering-type/delete",
-            type: "POST",
-            data: {
-                id: $("#delete_id").val(),
-            },
-            headers: {
-                Accept: "application/json",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
+            type: "GET",
+            url: "/admin/steering-type/edit/" + id,
             success: function (response) {
+                $(".error-text").text("");
+                $(".form-control").removeClass("is-invalid is-valid");
                 if (response.code === 200) {
-                    showToast('success', response.message);
-                    $("#delete-modal").modal("hide");
-                    initTable();
+                    let data = response.data;
+                    $("#steering_type").val(data.steering_type);
+                    $("#status").prop("checked", data.status === 1);
+                    $("#id").val(data.id);
+    
+                    $("#steering_type_modal .modal-title").text(_l('admin.rentals.edit_steering_type'));
+                    $(".submitbtn").text(_l('admin.common.save_changes'));
+                    $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
+                    $("#steering_type_modal").modal("show");
                 }
             },
-            error: function (res) {
-                if (res.responseJSON.code === 500) {
-                    showToast('success', res.responseJSON.message);
-                } else {
-                    showToast('error', _l('admin.common.default_delete_error'));
-                }
-            },
         });
-    });
-    
-    $("#add_steering_type").on("click", function () {
-        $(".modal-title").text(_l('admin.rentals.create_steering_type'));
-        $(".submitbtn").text(_l('admin.common.create_new'));
-        $("#steeringTypeForm")[0].reset();
-        $("#id").val("");
-        $(".error-text").text("");
-        $(".form-control").removeClass("is-invalid is-valid");
-        $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
-    });
-
-    $(document).ready(function () {
-        $("#select-all").on("change", function () {
-            $('.form-check-input[type="checkbox"]').prop(
-                "checked",
-                $(this).prop("checked")
-            );
-        });
-    
-        $("#bulkDeleteBtn").on("click", function () {
-            var selectedIds = [];
-    
-            $('.form-check-input[type="checkbox"]:checked').each(function () {
-                var id = $(this).closest(".form-check").data("id");
-                if (id) {
-                    selectedIds.push(id);
-                }
-            });
-    
-            if (selectedIds.length === 0) {
-                showToast('error', "Please select at least one item to delete.");
-                return;
-            }
-    
-            $.ajax({
-                url: "/admin/steering-type/delete-bulk",
-                type: "POST",
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr("content"),
-                    ids: selectedIds,
-                },
-                success: function (response) {
-                    if (response.success) {
-                        showToast('success', "Selected items deleted successfully.");
-                        initTable();
-                        $('.form-check-input[type="checkbox"]').prop(
-                            "checked",
-                            false
-                        );
-                    }
-                },
-                error: function () {
-                    showToast('error', "Something went wrong. Please try again.");
-                },
-            });
-        });
-    });
-
-    $(document).ready(function () {
-        $("#select-all").on("change", function () {
-            $('.form-check-input[type="checkbox"]').prop(
-                "checked",
-                $(this).prop("checked")
-            );
-        });
-    
-        $("#bulkPdfBtn").on("click", function () {
-            var selectedIds = [];
-    
-            $('.form-check-input[type="checkbox"]:checked').each(function () {
-                var id = $(this).closest(".form-check").data("id");
-                if (id) {
-                    selectedIds.push(id);
-                }
-            });
-    
-            if (selectedIds.length === 0) {
-                showToast('error', "Please select at least one item to export.");
-                return;
-            }
-    
-            $.ajax({
-                url: "/admin/steering-type/pdf-bulk",
-                type: "POST",
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr("content"),
-                    ids: selectedIds,
-                },
-                xhrFields: {
-                    responseType: "blob",
-                },
-                success: function (response, status, xhr) {
-                    var blob = new Blob([response], { type: "application/pdf" });
-                    var link = document.createElement("a");
-                    link.href = window.URL.createObjectURL(blob);
-                    link.download = "Car_fuels.pdf";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    showToast('success', "PDF Generated Successfully.");
-                    $('.form-check-input[type="checkbox"]').prop("checked", false);
-                },
-                error: function (xhr) {
-                    showToast('error', "Something went wrong. Please try again.");
-                },
-            });
-        });
-    
-        $("#bulkExcelBtn").on("click", function () {
-            var selectedIds = [];
-    
-            $('.form-check-input[type="checkbox"]:checked').each(function () {
-                var id = $(this).closest(".form-check").data("id");
-                if (id) {
-                    selectedIds.push(id);
-                }
-            });
-    
-            if (selectedIds.length === 0) {
-                showToast('error', "Please select at least one item to export.");
-                return;
-            }
-    
-            $.ajax({
-                url: "/admin/steering-type/excel-bulk",
-                type: "POST",
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr("content"),
-                    ids: selectedIds,
-                },
-                xhrFields: {
-                    responseType: "blob",
-                },
-                success: function (response, status, xhr) {
-                    var blob = new Blob([response], {
-                        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    });
-                    var link = document.createElement("a");
-                    link.href = window.URL.createObjectURL(blob);
-                    link.download = "Car_fuels.xlsx";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-    
-                    showToast('success', "Excel downloaded successfully.");
-                    $('.form-check-input[type="checkbox"]').prop("checked", false);
-                },
-                error: function (xhr) {
-                    showToast('error', "Something went wrong. Please try again.");
-                },
-            });
-        });
-    });
-    
-    $(document).on('click','#edit-steering-type', function() {
-         let id = $(this).data('id');
-         editSteeringType(id);
-    });
-
-    $(document).on('click', '#delete-steering-type', function() {
-        let id = $(this).data('id');
-        delateSteeringType(id);
-    });
+    }
 })();
 
-function editSteeringType(id) {
-    $.ajax({
-        type: "GET",
-        url: "/admin/steering-type/edit/" + id,
-        success: function (response) {
-            $(".error-text").text("");
-            $(".form-control").removeClass("is-invalid is-valid");
-            if (response.code === 200) {
-                let data = response.data;
-                $("#steering_type").val(data.steering_type);
-                $("#status").prop("checked", data.status === 1);
-                $("#id").val(data.id);
-
-                $("#steering_type_modal .modal-title").text(_l('admin.rentals.edit_steering_type'));
-                $(".submitbtn").text(_l('admin.common.save_changes'));
-                $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
-                $("#steering_type_modal").modal("show");
-            }
-        },
-    });
-}
-
-function delateSteeringType(id) {
-    $("#delete_id").val(id);
-}
 

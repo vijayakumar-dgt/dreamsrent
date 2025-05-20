@@ -2,9 +2,15 @@
     "use strict";
     await loadTranslationFile("admin", "rentals,common");
     const permissions = await loadUserPermissions();
+    let currentStatus = "";
 
     $(document).ready(function () {
         initTable();
+        initFormValidation();
+        initEvents();
+    });
+
+    function initFormValidation() {
         $("#carColorForm").validate({
             rules: {
                 name: {
@@ -73,19 +79,13 @@
                     contentType: false,
                     beforeSend: function () {
                         $(".submitbtn").attr("disabled", true).html(`
-                            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                                "admin.common.saving"
-                            )}..
+                            <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l("admin.common.saving")}..
                         `);
                     },
                     complete: function () {
                         $(".submitbtn")
                             .attr("disabled", false)
-                            .html(
-                                $("#id").val()
-                                    ? _l("admin.common.save_changes")
-                                    : _l("admin.common.create_new")
-                            );
+                            .html($("#id").val()? _l("admin.common.save_changes") : _l("admin.common.create_new"));
                     },
                     success: function (resp) {
                         $(".error-text").text("");
@@ -114,23 +114,7 @@
                 });
             },
         });
-    });
-
-    let currentStatus = "";
-
-    $("#search").on("input", function () {
-        let searchQuery = $(this).val().trim();
-        initTable(searchQuery, currentStatus);
-    });
-
-    $(".statusfilter").on("click", function () {
-        $(".statusfilter").removeClass("active");
-        $(this).addClass("active");
-        currentStatus = $(this).data("status");
-        $("#status_text").text($(this).text());
-        let searchQuery = $("#search").val().trim();
-        initTable(searchQuery, currentStatus);
-    });
+    }
 
     function initTable(search = "", status = "") {
         $(".table-loader").show();
@@ -169,90 +153,52 @@
 
                     $.each(data, function (index, value) {
                         tableBody += `<tr>
-                                <td>${
-                                    value.name.length > 24
-                                        ? value.name.substring(0, 24) + "..."
-                                        : value.name
-                                }</td>
-                               <td>
+                                <td>${value.name.length > 24
+                                    ? value.name.substring(0, 24) + "..."
+                                    : value.name}
+                                </td>
+                                <td>
                                     <div style="display: flex; align-items: center;">
-                                        <div style="width: 20px; height: 20px; background-color: ${
-                                            value.value
-                                        }; border: 1px solid #000; margin-right: 8px;"></div> 
+                                        <div style="width: 20px; height: 20px; background-color: ${ value.value}; border: 1px solid #000; margin-right: 8px;"></div> 
                                         <span>${value.value}</span>
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="badge ${
-                                        value.status == 1
-                                            ? "badge-success-transparent"
-                                            : "badge-danger-transparent"
-                                    } d-inline-flex align-items-center badge-sm">
-                                        <i class="ti ti-point-filled me-1"></i>${
-                                            value.status == 1
-                                                ? `${_l("admin.common.active")}`
-                                                : `${_l(
-                                                      "admin.common.inactive"
-                                                  )}`
-                                        }
+                                    <span class="badge ${ value.status == 1
+                                        ? "badge-success-transparent"
+                                        : "badge-danger-transparent" } d-inline-flex align-items-center badge-sm">
+                                        <i class="ti ti-point-filled me-1"></i>
+                                        ${ value.status == 1 ? `${_l("admin.common.active")}` : `${_l("admin.common.inactive")}`}
                                     </span>
                                 </td>
-                                    ${
-                                        hasPermission(
-                                            permissions,
-                                            "vehicle_attributes",
-                                            "edit"
-                                        ) ||
-                                        hasPermission(
-                                            permissions,
-                                            "vehicle_attributes",
-                                            "delete"
-                                        )
-                                            ? `<td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="ti ti-dots-vertical"></i>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end p-2">
-                                            ${
-                                                hasPermission(
-                                                    permissions,
-                                                    "vehicle_attributes",
-                                                    "edit"
-                                                )
-                                                    ? `<li>
-                                                <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="edit-color"><i class="ti ti-edit me-1"></i>${_l(
-                                                          "admin.common.edit"
-                                                      )}</button>
-                                            </li>`
-                                                    : ""
-                                            }
-                                            ${
-                                                hasPermission(
-                                                    permissions,
-                                                    "vehicle_attributes",
-                                                    "delete"
-                                                )
-                                                    ? `<li>
-                                                <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="delete-color" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l(
-                                                          "admin.common.delete"
-                                                      )}</button>
-                                            </li>`
-                                                    : ""
-                                            }                                        
-                                        </ul>
-                                    </div>
-                                </td>`
-                                            : ""
-                                    }
+                                ${ hasPermission(permissions, "vehicle_attributes", "edit") || hasPermission(permissions, "vehicle_attributes", "delete")
+                                    ? `<td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="ti ti-dots-vertical"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end p-2">
+                                                ${ hasPermission(permissions, "vehicle_attributes", "edit") ? 
+                                                `<li>
+                                                    <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="edit-color">
+                                                        <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
+                                                    </button>
+                                                </li>` : "" }
+                                                ${ hasPermission(permissions, "vehicle_attributes", "delete") ? 
+                                                `<li>
+                                                    <button type="button" class="dropdown-item rounded-1" data-id="${value.id}" id="delete-color" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                                                        <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                                    </button>
+                                                </li>` : "" }                                        
+                                            </ul>
+                                        </div>
+                                    </td>` : "" }
                             </tr>`;
                     });
                 } else {
                     tableBody += `
                             <tr>
-                                <td colspan="5" class="text-center">${_l(
-                                    "admin.common.empty_table"
-                                )}</td>
+                                <td colspan="5" class="text-center">${_l("admin.common.empty_table")}</td>
                             </tr>`;
                     $(".table-footer").empty();
                 }
@@ -264,69 +210,25 @@
                         searching: false,
                         pageLength: 10,
                         lengthChange: false,
-                        drawCallback: function () {
-                            $(".dataTables_info").addClass("d-none");
-                            $(
-                                ".dataTables_wrapper .dataTables_paginate"
-                            ).addClass("d-none");
-
-                            var tableWrapper = $(this).closest(
-                                ".dataTables_wrapper"
+                        drawCallback: function() {
+                            $(".dataTables_info").addClass('d-none');
+                            $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
+                            var tableWrapper = $(this).closest('.dataTables_wrapper');
+                            var info = tableWrapper.find('.dataTables_info');
+                            var pagination = tableWrapper.find('.dataTables_paginate');
+                            $('.table-footer').empty()
+                                .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
+                                .append($('<div class="datatable-info"></div>').append(info.clone(true)))
+                                .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
                             );
-                            var info = tableWrapper.find(".dataTables_info");
-                            var pagination = tableWrapper.find(
-                                ".dataTables_paginate"
-                            );
-
-                            $(".table-footer")
-                                .empty()
-                                .append(
-                                    $(
-                                        '<div class="d-flex justify-content-between align-items-center w-100"></div>'
-                                    )
-                                        .append(
-                                            $(
-                                                '<div class="datatable-info"></div>'
-                                            ).append(info.clone(true))
-                                        )
-                                        .append(
-                                            $(
-                                                '<div class="datatable-pagination"></div>'
-                                            ).append(pagination.clone(true))
-                                        )
-                                );
-                            $(".table-footer")
-                                .find(".dataTables_paginate")
-                                .removeClass("d-none");
+                            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
                         },
                         language: {
                             emptyTable: _l("admin.common.empty_table"),
-                            info:
-                                _l("admin.common.showing") +
-                                " _START_ " +
-                                _l("admin.common.to") +
-                                " _END_ " +
-                                _l("admin.common.of") +
-                                " _TOTAL_ " +
-                                _l("admin.common.entries"),
-                            infoEmpty:
-                                _l("admin.common.showing") +
-                                " 0 " +
-                                _l("admin.common.to") +
-                                " 0 " +
-                                _l("admin.common.of") +
-                                " 0 " +
-                                _l("admin.common.entries"),
-                            infoFiltered:
-                                "(" +
-                                _l("admin.common.filtered_from") +
-                                " _MAX_ " +
-                                _l("admin.common.total_entries") +
-                                ")",
-                            lengthMenu:
-                                _l("admin.common.show") +
-                                " _MENU_ " +
-                                _l("admin.common.entries"),
+                            info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
+                            infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
+                            infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
+                            lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
                             search: _l("admin.common.search") + ":",
                             zeroRecords: _l("admin.common.no_matching_records"),
                             paginate: {
@@ -352,144 +254,100 @@
         });
     }
 
-    $(document).on("click", ".dataTables_paginate a", function () {
-        $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
-    });
-
-    $("#delateCarColorForm").on("submit", function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "/admin/vehicle-color/delete",
-            type: "POST",
-            data: {
-                id: $("#delete_id").val(),
-            },
-            headers: {
-                Accept: "application/json",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            success: function (response) {
-                if (response.code === 200) {
-                    showToast("success", response.message);
-                    $("#delete-modal").modal("hide");
-                    initTable();
-                }
-            },
-            error: function (res) {
-                if (res.responseJSON.code === 500) {
-                    showToast("success", res.responseJSON.message);
-                } else {
-                    showToast("error", _l("admin.common.default_delete_error"));
-                }
-            },
-        });
-    });
-
-    $("#add_car_color").on("click", function () {
-        $(".modal-title").text("Create Car Color");
-        $(".submitbtn").text("Create New");
-        $("#carColorForm")[0].reset();
-        $("#id").val("");
-        $(".error-text").text("");
-        $(".form-control").removeClass("is-invalid is-valid");
-        $("#statusDiv")
-            .addClass('d-none')
-            .parent()
-            .removeClass("justify-content-between")
-            .addClass("justify-content-end");
-    });
-
-    //Bulk Delete
-    $(document).ready(function () {
-        $("#select-all").on("change", function () {
-            $('.form-check-input[type="checkbox"]').prop(
-                "checked",
-                $(this).prop("checked")
-            );
+    function initEvents() {
+        $(document).on("click", ".dataTables_paginate a", function () {
+            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
         });
 
-        $("#bulkDeleteBtn").on("click", function () {
-            var selectedIds = [];
+        $(document).on("click", "#delete-color", function(){
+            let id = $(this).data("id");
+            $("#delete_id").val(id);
+        });
 
-            $('.form-check-input[type="checkbox"]:checked').each(function () {
-                var id = $(this).closest(".form-check").data("id");
-                if (id) {
-                    selectedIds.push(id);
-                }
-            });
-
-            if (selectedIds.length === 0) {
-                showToast(
-                    "error",
-                    "Please select at least one item to delete."
-                );
-                return;
-            }
-
+        $("#delateCarColorForm").on("submit", function (e) {
+            e.preventDefault();
             $.ajax({
-                url: "/admin/vehicle-color/delete-bulk",
+                url: "/admin/vehicle-color/delete",
                 type: "POST",
                 data: {
-                    _token: $('meta[name="csrf-token"]').attr("content"),
-                    ids: selectedIds,
+                    id: $("#delete_id").val(),
+                },
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
                 },
                 success: function (response) {
-                    if (response.success) {
-                        showToast(
-                            "success",
-                            "Selected items deleted successfully."
-                        );
+                    if (response.code === 200) {
+                        showToast("success", response.message);
+                        $("#delete-modal").modal("hide");
                         initTable();
                     }
                 },
-                error: function () {
-                    showToast(
-                        "error",
-                        "Something went wrong. Please try again."
-                    );
+                error: function (res) {
+                    if (res.responseJSON.code === 500) {
+                        showToast("success", res.responseJSON.message);
+                    } else {
+                        showToast("error", _l("admin.common.default_delete_error"));
+                    }
                 },
             });
         });
-    });
 
-    $(document).on("click", "#edit-color", function(){
-        let id = $(this).data("id");
-        editCarColor(id);
-    });
-
-    $(document).on("click", "#delete-color", function(){
-        let id = $(this).data("id");
-        deleteCarColor(id);
-    });
-})();
-function editCarColor(id) {
-    $.ajax({
-        type: "GET",
-        url: "/admin/vehicle-color/edit/" + id,
-        success: function (response) {
+        $("#add_car_color").on("click", function () {
+            $(".modal-title").text("Create Car Color");
+            $(".submitbtn").text("Create New");
+            $("#carColorForm")[0].reset();
+            $("#id").val("");
             $(".error-text").text("");
             $(".form-control").removeClass("is-invalid is-valid");
-            if (response.code === 200) {
-                let data = response.data;
-                $("#name").val(data.name);
-                $("#value").val(data.value);
-                $("#status").prop("checked", data.status === 1);
-                $("#id").val(data.id);
-                $("#language_id").val(data.language_id);
+            $("#statusDiv").addClass('d-none').parent().removeClass("justify-content-between").addClass("justify-content-end");
+        });
 
-                $("#car_color_modal .modal-title").text("Edit Car Color");
-                $(".submitbtn").text("Save Changes");
-                $("#statusDiv")
-                    .removeClass('d-none')
-                    .parent()
-                    .removeClass("justify-content-end")
-                    .addClass("justify-content-between");
-                $("#car_color_modal").modal("show");
-            }
-        },
-    });
-}
+        $(document).on("click", "#edit-color", function(){
+            let id = $(this).data("id");
+            editCarColor(id);
+        });
 
-function deleteCarColor(id) {
-    $("#delete_id").val(id);
-}
+        $("#search").on("input", function () {
+            let searchQuery = $(this).val().trim();
+            initTable(searchQuery, currentStatus);
+        });
+
+        $(".statusfilter").on("click", function () {
+            $(".statusfilter").removeClass("active");
+            $(this).addClass("active");
+            currentStatus = $(this).data("status");
+            $("#status_text").text($(this).text());
+            let searchQuery = $("#search").val().trim();
+            initTable(searchQuery, currentStatus);
+        });
+    }
+    
+    function editCarColor(id) {
+        $.ajax({
+            type: "GET",
+            url: "/admin/vehicle-color/edit/" + id,
+            success: function (response) {
+                $(".error-text").text("");
+                $(".form-control").removeClass("is-invalid is-valid");
+                if (response.code === 200) {
+                    let data = response.data;
+                    $("#name").val(data.name);
+                    $("#value").val(data.value);
+                    $("#status").prop("checked", data.status === 1);
+                    $("#id").val(data.id);
+                    $("#language_id").val(data.language_id);
+    
+                    $("#car_color_modal .modal-title").text("Edit Car Color");
+                    $(".submitbtn").text("Save Changes");
+                    $("#statusDiv")
+                        .removeClass('d-none')
+                        .parent()
+                        .removeClass("justify-content-end")
+                        .addClass("justify-content-between");
+                    $("#car_color_modal").modal("show");
+                }
+            },
+        });
+    }
+})();

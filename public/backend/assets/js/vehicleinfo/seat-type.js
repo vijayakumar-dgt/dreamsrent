@@ -2,10 +2,16 @@
     "use strict";
     await loadTranslationFile("admin", "rentals,common");
     const permissions = await loadUserPermissions();
+    let currentStatus = "";
 
     $(document).ready(function () {
         initTable();
-        $("#seatTypeForm").validate({
+        initFormValidation();
+        initEvents();
+    });
+
+    function initFormValidation() {
+         $("#seatTypeForm").validate({
             rules: {
                 seat_type: {
                     required: true,
@@ -88,24 +94,80 @@
                 });
             },
         });
-    });
+    }
 
-    let currentStatus = "";
+    function initEvents() {
+        $("#search").on("input", function () {
+            let searchQuery = $(this).val().trim();
+            initTable(searchQuery, currentStatus);
+        });
+    
+        $(".statusfilter").on("click", function () {
+            $(".statusfilter").removeClass("active"); // Reset
+            $(this).addClass("active"); // Set current active
+            currentStatus = $(this).data("status"); // Get selected status
+            $("#status_text").text($(this).text()); // Update dropdown label
+            let searchQuery = $("#search").val().trim();
+            initTable(searchQuery, currentStatus);
+        });
 
-    $("#search").on("input", function () {
-        let searchQuery = $(this).val().trim();
-        initTable(searchQuery, currentStatus);
-    });
+        $(document).on("click", ".dataTables_paginate a", function () {
+            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+        });
 
-    // Trigger on clicking status filter
-    $(".statusfilter").on("click", function () {
-        $(".statusfilter").removeClass("active"); // Reset
-        $(this).addClass("active"); // Set current active
-        currentStatus = $(this).data("status"); // Get selected status
-        $("#status_text").text($(this).text()); // Update dropdown label
-        let searchQuery = $("#search").val().trim();
-        initTable(searchQuery, currentStatus);
-    });
+        $("#delateSeatType").on("submit", function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "/admin/seat-type/delete",
+                type: "POST",
+                data: {
+                    id: $("#delete_id").val(),
+                },
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                success: function (response) {
+                    if (response.code === 200) {
+                        showToast("success", response.message);
+                        $("#delete-modal").modal("hide");
+                        initTable();
+                    }
+                },
+                error: function (res) {
+                    if (res.responseJSON.code === 500) {
+                        showToast("success", res.responseJSON.message);
+                    } else {
+                        showToast("error", _l("admin.common.default_delete_error"));
+                    }
+                },
+            });
+        });
+
+        $("#add_seat_type").on("click", function () {
+            $(".modal-title").text(_l("admin.rentals.create_seat_type"));
+            $(".submitbtn").text(_l("admin.common.create_new"));
+            $("#seatTypeForm")[0].reset();
+            $("#id").val("");
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid is-valid");
+            $("#statusDiv")
+                .addClass('d-none')
+                .parent()
+                .removeClass("justify-content-between")
+                .addClass("justify-content-end");
+        });
+
+        $(document).on("click", ".edit-seat-type", function () {
+            const id = $(this).data("id");
+            editSeatType(id);
+        });
+
+        $(document).on("click", ".delete-seat-type", function () {
+            const id = $(this).data("id");
+            $("#delete_id").val(id);
+        });
+    }
 
     function initTable(search = "", status = "") {
         $(".table-loader").show();
@@ -328,261 +390,32 @@
         });
     }
 
-    $(document).on("click", ".dataTables_paginate a", function () {
-        $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
-    });
-
-    $("#delateSeatType").on("submit", function (e) {
-        e.preventDefault();
+    function editSeatType(id) {
         $.ajax({
-            url: "/admin/seat-type/delete",
-            type: "POST",
-            data: {
-                id: $("#delete_id").val(),
-            },
-            headers: {
-                Accept: "application/json",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
+            type: "GET",
+            url: "/admin/seat-type/edit/" + id,
             success: function (response) {
+                $(".error-text").text("");
+                $(".form-control").removeClass("is-invalid is-valid");
                 if (response.code === 200) {
-                    showToast("success", response.message);
-                    $("#delete-modal").modal("hide");
-                    initTable();
+                    let data = response.data;
+                    $("#seat_type").val(data.seat_type);
+                    $("#status").prop("checked", data.status === 1);
+                    $("#id").val(data.id);
+
+                    $("#seat_type_modal .modal-title").text(
+                        _l("admin.rentals.edit_seat_type")
+                    );
+                    $(".submitbtn").text(_l("admin.common.save_changes"));
+                    $("#statusDiv")
+                        .removeClass('d-none')
+                        .parent()
+                        .removeClass("justify-content-end")
+                        .addClass("justify-content-between");
+                    $("#seat_type_modal").modal("show");
                 }
             },
-            error: function (res) {
-                if (res.responseJSON.code === 500) {
-                    showToast("success", res.responseJSON.message);
-                } else {
-                    showToast("error", _l("admin.common.default_delete_error"));
-                }
-            },
         });
-    });
-
-    $("#add_seat_type").on("click", function () {
-        $(".modal-title").text(_l("admin.rentals.create_seat_type"));
-        $(".submitbtn").text(_l("admin.common.create_new"));
-        $("#seatTypeForm")[0].reset();
-        $("#id").val("");
-        $(".error-text").text("");
-        $(".form-control").removeClass("is-invalid is-valid");
-        $("#statusDiv")
-            .addClass('d-none')
-            .parent()
-            .removeClass("justify-content-between")
-            .addClass("justify-content-end");
-    });
-
-    $(document).ready(function () {
-        $("#select-all").on("change", function () {
-            $('.form-check-input[type="checkbox"]').prop(
-                "checked",
-                $(this).prop("checked")
-            );
-        });
-
-        $("#bulkDeleteBtn").on("click", function () {
-            var selectedIds = [];
-
-            $('.form-check-input[type="checkbox"]:checked').each(function () {
-                var id = $(this).closest(".form-check").data("id");
-                if (id) {
-                    selectedIds.push(id);
-                }
-            });
-
-            if (selectedIds.length === 0) {
-                showToast(
-                    "error",
-                    "Please select at least one item to delete."
-                );
-                return;
-            }
-
-            $.ajax({
-                url: "/admin/seat-type/delete-bulk",
-                type: "POST",
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr("content"),
-                    ids: selectedIds,
-                },
-                success: function (response) {
-                    if (response.success) {
-                        showToast(
-                            "success",
-                            "Selected items deleted successfully."
-                        );
-                        initTable();
-                    }
-                },
-                error: function () {
-                    showToast(
-                        "error",
-                        "Something went wrong. Please try again."
-                    );
-                },
-            });
-        });
-    });
-
-    $(document).ready(function () {
-        $("#select-all").on("change", function () {
-            $('.form-check-input[type="checkbox"]').prop(
-                "checked",
-                $(this).prop("checked")
-            );
-        });
-
-        $("#bulkPdfBtn").on("click", function () {
-            var selectedIds = [];
-
-            $('.form-check-input[type="checkbox"]:checked').each(function () {
-                var id = $(this).closest(".form-check").data("id");
-                if (id) {
-                    selectedIds.push(id);
-                }
-            });
-
-            if (selectedIds.length === 0) {
-                showToast(
-                    "error",
-                    "Please select at least one item to export."
-                );
-                return;
-            }
-
-            $.ajax({
-                url: "/admin/seat-type/pdf-bulk",
-                type: "POST",
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr("content"),
-                    ids: selectedIds,
-                },
-                xhrFields: {
-                    responseType: "blob",
-                },
-                success: function (response, status, xhr) {
-                    var blob = new Blob([response], {
-                        type: "application/pdf",
-                    });
-                    var link = document.createElement("a");
-                    link.href = window.URL.createObjectURL(blob);
-                    link.download = "Car_Seats.pdf";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    showToast("success", "PDF Generated Successfully.");
-                    $('.form-check-input[type="checkbox"]').prop(
-                        "checked",
-                        false
-                    );
-                },
-                error: function (xhr) {
-                    showToast(
-                        "error",
-                        "Something went wrong. Please try again."
-                    );
-                },
-            });
-        });
-
-        $("#bulkExcelBtn").on("click", function () {
-            var selectedIds = [];
-
-            $('.form-check-input[type="checkbox"]:checked').each(function () {
-                var id = $(this).closest(".form-check").data("id");
-                if (id) {
-                    selectedIds.push(id);
-                }
-            });
-
-            if (selectedIds.length === 0) {
-                showToast(
-                    "error",
-                    "Please select at least one item to export."
-                );
-                return;
-            }
-
-            $.ajax({
-                url: "/admin/seat-type/excel-bulk",
-                type: "POST",
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr("content"),
-                    ids: selectedIds,
-                },
-                xhrFields: {
-                    responseType: "blob",
-                },
-                success: function (response, status, xhr) {
-                    var blob = new Blob([response], {
-                        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    });
-                    var link = document.createElement("a");
-                    link.href = window.URL.createObjectURL(blob);
-                    link.download = "Car_Seats.xlsx";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-
-                    showToast("success", "Excel downloaded successfully.");
-
-                    $('.form-check-input[type="checkbox"]').prop(
-                        "checked",
-                        false
-                    );
-                },
-                error: function (xhr) {
-                    showToast(
-                        "error",
-                        "Something went wrong. Please try again."
-                    );
-                },
-            });
-        });
-    });
+    }
 })();
 
-$(document).on("click", ".edit-seat-type", function () {
-    const id = $(this).data("id");
-    editSeatType(id);
-});
-
-function editSeatType(id) {
-    $.ajax({
-        type: "GET",
-        url: "/admin/seat-type/edit/" + id,
-        success: function (response) {
-            $(".error-text").text("");
-            $(".form-control").removeClass("is-invalid is-valid");
-            if (response.code === 200) {
-                let data = response.data;
-                $("#seat_type").val(data.seat_type);
-                $("#status").prop("checked", data.status === 1);
-                $("#id").val(data.id);
-
-                $("#seat_type_modal .modal-title").text(
-                    _l("admin.rentals.edit_seat_type")
-                );
-                $(".submitbtn").text(_l("admin.common.save_changes"));
-                $("#statusDiv")
-                    .removeClass('d-none')
-                    .parent()
-                    .removeClass("justify-content-end")
-                    .addClass("justify-content-between");
-                $("#seat_type_modal").modal("show");
-            }
-        },
-    });
-}
-
-$(document).on("click", ".delete-seat-type", function () {
-    const id = $(this).data("id");
-    $("#delete_id").val(id);
-});
-
-function delateSeatType(id) {
-    $("#delete_id").val(id);
-}

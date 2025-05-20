@@ -139,7 +139,7 @@
                         <p class="mb-3">{{ __('admin.rentals.delete_season_confirmation') }}</p>
                         <div class="d-flex justify-content-center">
                             <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-                            <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.delete') }}</button>
+                            <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
                         </div>
                     </div>
                 </form>

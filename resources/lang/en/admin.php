@@ -2369,4 +2369,26 @@ return array(
     'image_dimensions_must_be_exactly_735_310_pixels' => 'Image dimensions must be exactly 735 x 310 pixels',
     'blog_details' => 'Blog Details',
   ],
+  'auth' =>
+  [
+    'welcome_back' => 'Welcome Back',
+    'please_enter_details_to_sign_in' => 'Please enter your details to sign in',
+    'remember_me' => 'Remember Me',
+    'forgot_password' => 'Forgot Password?',
+    'login_info' => 'Login Info',
+    'forgot_password_info' => 'If you forgot your password, well, then we’ll email you instructions to reset your password.',
+    'reset_password' => 'Reset Password',
+    'sign_in' => 'Sign In',
+    'return_to' => 'Return to',
+    'enter_new_password' => 'Enter New Password',
+    'verify_your_email' => 'Verify Your Email',
+    'we_sent_otp_to_email' =>'We have Sent OTP to',
+    'verify_your_email_address' => 'to verify your email address and activate your account entering the OTP',
+    'otp_time' => '0:55',
+    'resend_otp' => 'Resend OTP',
+    'please_enter_email' => 'Please enter email',
+    'please_enter_valid_email' => 'Please enter valid email',
+    'we_are_redirecting_you' => 'We are redirecting you...',
+    'please_enter_password' => 'Please Enter Password',
+  ]
 );

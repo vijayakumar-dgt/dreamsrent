@@ -45,17 +45,14 @@ class DoorTypeController extends Controller
             ], 422);
         }
 
-        $successMsg = "Door type added successfully.";
-        $errorMsg = "An error occured while adding door type!";
+        $successMsg = empty($id) ? __('admin.rentals.door_type_create_success') : __('admin.rentals.door_type_update_success');
+        $errorMsg = empty($id) ?  __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
             if (empty($id)) {
                 DoorType::create($data);
             } else {
-                $successMsg = "Door type updated successfully.";
-                $errorMsg = "An error occured while updating door type!";
                 $data['status'] = $request->status ?? 1;
-
                 DoorType::where('id', $id)->update($data);
             }
 
@@ -115,7 +112,7 @@ class DoorTypeController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
-                'message' => __('An error occurred while retrieving!'),
+                'message' => __('admin.common.default_retrieve_error'),
                 'error' => $e->getMessage(),
             ], 500);
         }
@@ -138,19 +135,18 @@ class DoorTypeController extends Controller
     {
         try {
             $id = $request->id;
-
             DoorType::where('id', $id)->delete();
 
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
-                'message' => 'Door type deleted successfully.'
+                'message' => __('admin.rentals.door_type_delete_success')
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
-                'message' => 'An error occured while deleting door type!'
+                'message' => __('admin.common.default_delete_error')
             ], 500);
         }
     }

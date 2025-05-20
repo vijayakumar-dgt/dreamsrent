@@ -203,7 +203,7 @@ class BrandController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
-                'message' => __('admin.common.default_error'),
+                'message' => __('admin.common.default_retrieve_error'),
                 'error' => $e->getMessage(),
             ], 500);
         }

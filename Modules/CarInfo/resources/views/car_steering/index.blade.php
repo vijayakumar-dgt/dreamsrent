@@ -128,7 +128,7 @@
 	<div class="modal fade deletemodal" id="delete-modal">
 		<div class="modal-dialog modal-dialog-centered modal-sm">
 			<div class="modal-content">
-				<form id="delateSteeringType">
+				<form id="deleteSteeringType">
 					@csrf
 					<input type="hidden" name="delete_id" id="delete_id">
 					<div class="modal-body text-center">

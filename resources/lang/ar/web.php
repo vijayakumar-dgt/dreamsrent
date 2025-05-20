@@ -741,6 +741,7 @@ return array (
     'last_login_at' => 'آخر تسجيل دخول في',
     'device_not_found' => 'الجهاز غير موجود',
     'add_to_wallet' => 'اضافة الى المحفظة',
+    'phone_number_required' => 'رقم الهاتف مطلوب.'
   ),
   'blog' =>
   array (

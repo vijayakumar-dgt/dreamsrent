@@ -17,11 +17,11 @@
                                 <i class="ti ti-lock-star fs-24"></i>
                             </div>
                             <div class="text-center mb-3">
-                                <h4 class="mb-1">Reset Password</h4>
-                                <p class="mb-0">Enter New Password</p>
+                                <h4 class="mb-1">{{ __('admin.auth.reset_password') }}</h4>
+                                <p class="mb-0">{{ __('admin.auth.enter_new_password') }}</p>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">New Password <span class="text-danger">*</span></label>
+                                <label class="form-label">{{ __('admin.general_settings.new_password') }} <span class="text-danger">*</span></label>
                                 <div class="pass-group">
                                     <input type="password" class="pass-input form-control" name="password" id="password">
                                     <span class="ti toggle-password ti-eye-off"></span>
@@ -29,7 +29,7 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                                <label class="form-label">{{ __('admin.general_settings.confirm_password') }} <span class="text-danger">*</span></label>
                                 <div class="pass-group">
                                     <input type="password" class="pass-inputs form-control" name="password_confirmation" id="password_confirmation">
                                     <span class="ti toggle-passwords ti-eye-off"></span>
@@ -38,9 +38,9 @@
                             </div>
                             <span class="password-error-text text-danger"></span>
                             <div class="mt-3">
-                                <button type="submit" class="btn btn-dark w-100 submitbtn">Reset Password</button>
+                                <button type="submit" class="btn btn-dark w-100 submitbtn">{{ __('admin.auth.reset_password') }}</button>
                             </div>
-                            <p class="text-center mt-4">Return to <a href="{{ route('admin-login') }}" class="text-secondary text-decoration-underline">Sign In</a></p>
+                            <p class="text-center mt-4">{{ __('admin.auth.return_to') }} <a href="{{ route('admin-login') }}" class="text-secondary text-decoration-underline">{{ __('admin.auth.sign_in') }}</a></p>
                         </div>
                     </div>
                 </form>

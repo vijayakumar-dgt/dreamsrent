@@ -1,3 +1,6 @@
+(async () => {
+await loadTranslationFile('admin', 'general_settings, auth');
+
 $(document).ready(function(){
     $(".submitbtn").attr("disabled", false);
     $("#resetpasswordForm").validate({
@@ -9,8 +12,8 @@ $(document).ready(function(){
         },
         messages:{
             email: {
-                required: 'Please enter email',
-                email: 'Please enter valid email',
+                required: _l('admin.auth.please_enter_email'),
+                email: _l('admin.auth.please_enter_valid_email'),
             },
         },
         errorPlacement: function (error, element) {
@@ -33,7 +36,7 @@ $(document).ready(function(){
         },
         submitHandler: function(form) {
            let _FormData = new FormData(form);
-           $("#resetpasswordForm .submitbtn").text('Please Wait...');
+           $("#resetpasswordForm .submitbtn").text(_l('admin.general_settings.please_wait'));
            $("#resetpasswordForm .submitbtn").attr("disabled", true);
            $.ajax({
                type:"POST",
@@ -44,7 +47,7 @@ $(document).ready(function(){
                success:function(resp){
                    if (resp.code === 200) {
                        showToast('success', resp.message);
-                       $("#resetpasswordForm .submitbtn").text("We're redirecting you...");
+                       $("#resetpasswordForm .submitbtn").text(_l('admin.auth.we_are_redirecting_you'));
                         setTimeout(() => {
                             
                             window.location.href = '/forgot-password/verify-otp?token='+encodeURIComponent(resp.token);
@@ -57,7 +60,7 @@ $(document).ready(function(){
                             $("#" + key).addClass("is-invalid");
                             $("#" + key + "_error").text(val[0]);
                         });
-                        $("#resetpasswordForm .submitbtn").text('Reset Password');
+                        $("#resetpasswordForm .submitbtn").text(_l('admin.auth.reset_password'));
                         $("#resetpasswordForm .submitbtn").prop('disabled', false);
                    }
                },
@@ -73,7 +76,7 @@ $(document).ready(function(){
                  } else {
                     showToast('error', error.responseJSON.message);
                  }
-                 $("#resetpasswordForm .submitbtn").text('Reset Password');
+                 $("#resetpasswordForm .submitbtn").text(_l('admin.auth.reset_password'));
                  $("#resetpasswordForm .submitbtn").prop('disabled', false);
                }
            });
@@ -88,3 +91,4 @@ $(document).ready(function(){
         }
     });
 });
+}) ();
