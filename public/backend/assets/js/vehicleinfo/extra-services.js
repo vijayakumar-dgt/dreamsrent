@@ -2,46 +2,14 @@
     "use strict";
     await loadTranslationFile('admin', 'rentals,common');
     const permissions = await loadUserPermissions();
-
-    $(document).on("change", "#icon", function () {
-        if (this.files && this.files[0]) {
-            let reader = new FileReader();
-            reader.onload = function (e) {
-                $('#icon_preview').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(this.files[0]);
-            $("#icon_preview").removeClass('d-none');
-            $(".icon_placeholder").hide();
-    
-        }else{
-            $("#icon_preview").addClass('d-none');
-            $(".icon_placeholder").show();
-        }
-    });
-    
-    $(document).on("change", "#image", function () {
-        if(this.files && this.files[0]){
-            let reader = new FileReader();
-            reader.onload = function (e) {
-                $('#image_preview').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(this.files[0]);
-            $("#image_preview").removeClass('d-none');
-            $(".image_placeholder").hide();
-        }else{
-            $("#image_preview").addClass('d-none');
-            $(".image_placeholder").show();
-        }
-    });
-    
-    $.validator.addMethod("filesize", function (value, element, param) {
-        if (element.files.length === 0) return true;
-        return element.files[0].size <= param * 1024;
-    
-    },'file size should be less than {0} bytes');
     
     $(document).ready(function(){
         initTable();
+        initFormValidation();
+        initEvents();
+    });
+
+    function initFormValidation() {
         $("#extraServiceForm").validate({
             rules: {
                 name: {
@@ -145,65 +113,207 @@
                });
             }
         });
-    });
-    $.validator.addMethod("imageDimension", function (value, element) {
-        if (element.files.length === 0) return true;
-    
-        let file = element.files[0];
-        let img = new Image();
-        let valid = false;
-    
-        let reader = new FileReader();
-        reader.onload = function (e) {
-            img.src = e.target.result;
-        };
-    
-        img.onload = function () {
-            valid = img.width >= 100 && img.width <= 100 && img.height >= 100 && img.height <= 100;
-            $(element).data("valid-dimension", valid);
-            $(element).valid();
-        };
-    
-        reader.readAsDataURL(file);
-    
-        return $(element).data("valid-dimension") !== false;
-    }, _l('admin.rentals.extra_service_icon_dimension'));
 
-    $.validator.addMethod("extraImageDimension", function (value, element) {
-        if (element.files.length === 0) return true;
-    
-        let file = element.files[0];
-        let img = new Image();
-        let valid = false;
-    
-        let reader = new FileReader();
-        reader.onload = function (e) {
-            img.src = e.target.result;
-        };
-    
-        img.onload = function () {
-            valid = img.width >= 180 && img.width <= 180 && img.height >= 180 && img.height <= 180;
-            $(element).data("valid-dimension", valid);
-            $(element).valid();
-        };
-    
-        reader.readAsDataURL(file);
-    
-        return $(element).data("valid-dimension") !== false;
-    }, _l('admin.rentals.extra_service_image_dimension'));
+        $.validator.addMethod("filesize", function (value, element, param) {
+            if (element.files.length === 0) return true;
+            return element.files[0].size <= param * 1024;
+        
+        },'file size should be less than {0} bytes');
 
-    $(document).on('click','.status_option',function(){
-        $('.status_option').removeClass('active');
-        $(this).addClass('active');
-        if($(this).hasClass('active')){
-            $(".status_label").text($(this).data('label'));
-        }
-        initTable();
-    });
-    $(document).on('keyup','#keyword',function(){
-       let keyword = $(this).val();
-        initTable();
-    });
+        $.validator.addMethod("imageDimension", function (value, element) {
+            if (element.files.length === 0) return true;
+        
+            let file = element.files[0];
+            let img = new Image();
+            let valid = false;
+        
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                img.src = e.target.result;
+            };
+        
+            img.onload = function () {
+                valid = img.width >= 100 && img.width <= 100 && img.height >= 100 && img.height <= 100;
+                $(element).data("valid-dimension", valid);
+                $(element).valid();
+            };
+        
+            reader.readAsDataURL(file);
+        
+            return $(element).data("valid-dimension") !== false;
+        }, _l('admin.rentals.extra_service_icon_dimension'));
+    
+        $.validator.addMethod("extraImageDimension", function (value, element) {
+            if (element.files.length === 0) return true;
+        
+            let file = element.files[0];
+            let img = new Image();
+            let valid = false;
+        
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                img.src = e.target.result;
+            };
+        
+            img.onload = function () {
+                valid = img.width >= 180 && img.width <= 180 && img.height >= 180 && img.height <= 180;
+                $(element).data("valid-dimension", valid);
+                $(element).valid();
+            };
+        
+            reader.readAsDataURL(file);
+        
+            return $(element).data("valid-dimension") !== false;
+        }, _l('admin.rentals.extra_service_image_dimension'));
+    }
+
+    function initEvents() {
+        $(document).on('click','.status_option',function(){
+            $('.status_option').removeClass('active');
+            $(this).addClass('active');
+            if($(this).hasClass('active')){
+                $(".status_label").text($(this).data('label'));
+            }
+            initTable();
+        });
+    
+        $(document).on('keyup','#keyword',function(){
+           let keyword = $(this).val();
+            initTable();
+        });
+
+        $(document).on('submit', '#deleteExtraService', function(e){
+            e.preventDefault();
+            let serviceFormData = new FormData(this);
+            serviceFormData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+            $.ajax({
+                type:"POST",
+                url:"/admin/delete_extra_service",
+                data: serviceFormData,
+                processData: false,
+                contentType: false,
+                beforeSend: function(){
+                $("#deleteExtraService .submitbtn").attr('disabled', true).html(_l('admin.common.please_wait'))
+                },
+                success:function(response){
+                    if(response.code === 200){
+                        showToast('success', response.message);
+                        $("#delete-modal").modal('hide');
+                        initTable();
+                    }else{
+                        showToast('error', response.message);
+                        $("#delete-modal").modal('hide');
+                    }
+                },
+                error:function(error){
+                    showToast('error', error.responseJSON.message);
+                    $("#delete-modal").modal('hide');
+                },
+                complete: function(){
+                    $("#deleteExtraService .submitbtn").attr('disabled', false).html(_l('admin.common.delete'));
+                }
+            });
+        });
+
+        $(document).on('click', '#add_new_extra_service', function () {
+            $("#add_extra_service .modal-title").text(_l('admin.rentals.create_extra_service'));
+            $("#add_extra_service .submitbtn").text(_l('admin.common.create_new'));
+            $("#extraServiceForm")[0].reset();
+            $("#extraServiceForm #id").val('');
+            $("#extraServiceForm #icon").val('');
+            $("#extraServiceForm #image").val('');
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid is-valid");
+            $(".icon_asterisk").show();
+            $("#icon_preview").addClass('d-none');
+            $(".icon_placeholder").show();
+            $("#image_preview").addClass('d-none');
+            $(".image_placeholder").show();
+            $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
+        });
+
+        $(document).on('click', '#editExtraservice', function(){
+            let id = $(this).data('id');
+            $.ajax({
+                type:"GET",
+                url:"/admin/get_extra_service/"+id,
+                success:function(response){
+                    if(response.code === 200){
+                        let data = response.data;
+                        $("#add_extra_service #name").val(data.name);
+                        $("#add_extra_service #id").val(data.id);
+                        $("#add_extra_service #language_id").val(data.language_id);
+                        if(data.icon && data.icon != null){
+                            $("#icon_preview").attr('src', data.icon).removeClass('d-none');
+                            $(".icon_placeholder").hide();
+                        }else{
+                            $("#icon_preview").addClass('d-none');
+                            $(".icon_placeholder").show();
+                        }
+                        if(data.image && data.image != null){
+                            $("#image_preview").attr('src', data.image).removeClass('d-none');
+                            $(".image_placeholder").hide();
+                        }else{
+                            $("#image_preview").addClass('d-none');
+                            $(".image_placeholder").show();
+                        }
+                        $("#add_extra_service #description").val(data.description);
+                        if(data.status === 1){
+                            $("#add_extra_service #status").prop('checked', true);
+                        }else{
+                            $("#add_extra_service #status").prop('checked', false);
+                        }
+                        $("#add_extra_service .modal-title").text(_l('admin.rentals.edit_extra_service'));
+                        $("#add_extra_service .submitbtn").text(_l('admin.common.save_changes'));
+                        $("#add_extra_service #icon").val('');
+                        $("#add_extra_service #image").val('');
+                        $("#add_extra_service").modal('show');
+                        $(".error-text").text("");
+                        $(".form-control").removeClass("is-invalid is-valid");
+                        $(".icon_asterisk").hide();
+                        $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '#deleteService', function(){
+            let id = $(this).data('id');
+            $("#delete_id").val(id);
+        });
+
+        $(document).on("change", "#icon", function () {
+            if (this.files && this.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#icon_preview').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(this.files[0]);
+                $("#icon_preview").removeClass('d-none');
+                $(".icon_placeholder").hide();
+        
+            } else{
+                $("#icon_preview").addClass('d-none');
+                $(".icon_placeholder").show();
+            }
+        });
+        
+        $(document).on("change", "#image", function () {
+            if(this.files && this.files[0]){
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#image_preview').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(this.files[0]);
+                $("#image_preview").removeClass('d-none');
+                $(".image_placeholder").hide();
+            } else{
+                $("#image_preview").addClass('d-none');
+                $(".image_placeholder").show();
+            }
+        });
+    }
+
     function initTable(){
         let keyword = $("#keyword").val();
         let status;
@@ -324,106 +434,4 @@
             },
         });
     }
-    $(document).on('submit', '#deleteExtraService', function(e){
-        e.preventDefault();
-        let serviceFormData = new FormData(this);
-        serviceFormData.append('_token', $('meta[name="csrf-token"]').attr('content'));
-        $.ajax({
-            type:"POST",
-            url:"/admin/delete_extra_service",
-            data: serviceFormData,
-            processData: false,
-            contentType: false,
-            beforeSend: function(){
-              $("#deleteExtraService .submitbtn").attr('disabled', true).html(_l('admin.common.please_wait'))
-            },
-            success:function(response){
-                if(response.code === 200){
-                    showToast('success', response.message);
-                    $("#delete-modal").modal('hide');
-                    initTable();
-                }else{
-                    showToast('error', response.message);
-                    $("#delete-modal").modal('hide');
-                }
-            },
-            error:function(error){
-                showToast('error', error.responseJSON.message);
-                $("#delete-modal").modal('hide');
-            },
-            complete: function(){
-                $("#deleteExtraService .submitbtn").attr('disabled', false).html(_l('admin.common.delete'));
-            }
-        });
-    });
-
-    $(document).on('click', '#add_new_extra_service', function () {
-        $("#add_extra_service .modal-title").text(_l('admin.rentals.create_extra_service'));
-        $("#add_extra_service .submitbtn").text(_l('admin.common.create_new'));
-        $("#extraServiceForm")[0].reset();
-        $("#extraServiceForm #id").val('');
-        $("#extraServiceForm #icon").val('');
-        $("#extraServiceForm #image").val('');
-        $(".error-text").text("");
-        $(".form-control").removeClass("is-invalid is-valid");
-        $(".icon_asterisk").show();
-        $("#icon_preview").addClass('d-none');
-        $(".icon_placeholder").show();
-        $("#image_preview").addClass('d-none');
-        $(".image_placeholder").show();
-        $('#statusDiv').addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
-    });
-    
 })();
-
-
-$(document).on('click', '#editExtraservice', function(){
-   let id = $(this).data('id');
-   $.ajax({
-        type:"GET",
-        url:"/admin/get_extra_service/"+id,
-        success:function(response){
-        if(response.code === 200){
-            let data = response.data;
-            $("#add_extra_service #name").val(data.name);
-            $("#add_extra_service #id").val(data.id);
-            $("#add_extra_service #language_id").val(data.language_id);
-            if(data.icon && data.icon != null){
-                $("#icon_preview").attr('src', data.icon).removeClass('d-none');
-                $(".icon_placeholder").hide();
-            }else{
-                $("#icon_preview").addClass('d-none');
-                $(".icon_placeholder").show();
-            }
-            if(data.image && data.image != null){
-                $("#image_preview").attr('src', data.image).removeClass('d-none');
-                $(".image_placeholder").hide();
-            }else{
-                $("#image_preview").addClass('d-none');
-                $(".image_placeholder").show();
-            }
-            $("#add_extra_service #description").val(data.description);
-            if(data.status === 1){
-                $("#add_extra_service #status").prop('checked', true);
-            }else{
-                $("#add_extra_service #status").prop('checked', false);
-            }
-            $("#add_extra_service .modal-title").text(_l('admin.rentals.edit_extra_service'));
-            $("#add_extra_service .submitbtn").text(_l('admin.common.save_changes'));
-            $("#add_extra_service #icon").val('');
-            $("#add_extra_service #image").val('');
-            $("#add_extra_service").modal('show');
-            $(".error-text").text("");
-            $(".form-control").removeClass("is-invalid is-valid");
-            $(".icon_asterisk").hide();
-            $('#statusDiv').removeClass('d-none').parent().removeClass('justify-content-end').addClass('justify-content-between');
-        }
-        
-        }
-    });
-});
-
-$(document).on('click', '#deleteService', function(){
-  let id = $(this).data('id');
-  $("#delete_id").val(id);
-});

@@ -14,6 +14,7 @@ use Modules\CarInfo\Models\VehicleInfo;
 use Modules\CarInfo\Models\CarModel;
 use Modules\CarInfo\Models\Driver;
 use Modules\CarInfo\Models\DriverDocument;
+use PhpOffice\PhpSpreadsheet\RichText\Run;
 
 use function PHPUnit\Framework\isArray;
 
@@ -46,7 +47,11 @@ class DriverController extends Controller
             ],
             'gender' => ['required'],
             'phone_number' => ['required'],
-            'email' => ['required', 'email'],
+            'email' => [
+                'required', 
+                'email',
+                Rule::unique('drivers', 'email')->ignore($id)->whereNull('deleted_at'),
+            ],
             'address' => ['required','max:150'],
             'card_number' => [
                 'required',
@@ -73,6 +78,7 @@ class DriverController extends Controller
             'valid_date.required' => __('admin.manage.valid_date_required'),
             'email.required' => __('admin.common.email_required'),
             'email.email' => __('admin.common.email_valid'),
+            'email.unique' => __('admin.common.email_unique'),
         ]);
 
         if ($validator->fails()) {
