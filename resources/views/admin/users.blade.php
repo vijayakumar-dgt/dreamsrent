@@ -33,24 +33,24 @@
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                     <input type="hidden" name="sort_by_input" id="sort_by_input">
                     <div class="dropdown me-2">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                             <i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }} : <span class="ms-1" id="current_sort">{{ __('admin.common.latest') }}</span>
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2 sort_by_list">
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="latest">{{ __('admin.common.latest') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="latest">{{ __('admin.common.latest') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="ascending">{{ __('admin.common.ascending') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="ascending">{{ __('admin.common.ascending') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="descending">{{ __('admin.common.descending') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="descending">{{ __('admin.common.descending') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="last month">{{ __('admin.common.last_month') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="last month">{{ __('admin.common.last_month') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="last 7 days">{{ __('admin.common.last_7_days') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="last 7 days">{{ __('admin.common.last_7_days') }}</button>
                             </li>
                         </ul>
                     </div>
