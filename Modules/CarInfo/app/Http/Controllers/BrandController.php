@@ -77,14 +77,14 @@ class BrandController extends Controller
                 if ($request->hasFile('brand_image')) {
                     $file = $request->file('brand_image');
                     if ($file instanceof UploadedFile) {
-                        $data['brand_image'] = uploadFile($file, 'brands');
+                        $data['brand_image'] = uploadFile($file, 'vehicles/brands');
                     }
                 }
 
                 if ($request->hasFile('brand_icon')) {
                     $file = $request->file('brand_icon');
                     if ($file instanceof UploadedFile) {
-                        $data['brand_icon'] = uploadFile($file, 'brands');
+                        $data['brand_icon'] = uploadFile($file, 'vehicles/brands');
                     }
                 }
 
@@ -107,14 +107,14 @@ class BrandController extends Controller
                 if ($request->hasFile('brand_image')) {
                     $file = $request->file('brand_image');
                     if ($file instanceof UploadedFile) {
-                        $data['brand_image'] = uploadFile($file, 'brands', $oldImage);
+                        $data['brand_image'] = uploadFile($file, 'vehicles/brands', $oldImage);
                     }
                 }
 
                 if ($request->hasFile('brand_icon')) {
                     $file = $request->file('brand_icon');
                     if ($file instanceof UploadedFile) {
-                        $data['brand_icon'] = uploadFile($file, 'brands', $oldIcon);
+                        $data['brand_icon'] = uploadFile($file, 'vehicles/brands', $oldIcon);
                     }
                 }
 

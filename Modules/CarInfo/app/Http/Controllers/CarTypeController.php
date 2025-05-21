@@ -86,9 +86,9 @@ class CarTypeController extends Controller
                 $successMessage = __('admin.rentals.vehicle_type_updated');
             }
 
-            $folderName = 'vehicle_types';
+            $folderName = 'vehicles/types';
             $cartypeIcon = $carType->icon ?? '';
-            $oldIcon = str_replace($folderName . '/', '', $cartypeIcon);
+            $oldIcon = $cartypeIcon ?? '';
 
             if ($request->hasFile('icon')) {
                 $carIcon = $request->file('icon');

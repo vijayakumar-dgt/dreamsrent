@@ -43,8 +43,8 @@ if (!function_exists('uploadFile')) {
         $disk = config('filesystems.default');
 
         if ($file->isValid()) {
-            if (Storage::disk($disk)->exists($path . '/' . $oldFileName)) {
-                Storage::disk($disk)->delete($path . '/' . $oldFileName);
+            if (Storage::disk($disk)->exists($oldFileName)) {
+                Storage::disk($disk)->delete($oldFileName);
             }
             $filename = str_replace(',', '', Str::uuid() . '_' . time() . '.' . $file->getClientOriginalExtension());
             $file->storeAs($path, $filename, $disk);

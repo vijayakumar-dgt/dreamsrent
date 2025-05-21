@@ -95,12 +95,12 @@ class ExtraServiceController extends Controller
                 $extraService->status = $request->status == 'on' ? 1 : 0;
             }
                 $extraService->name = $request->name;
-                $folderName = 'extra_services';
+                $folderName = 'vehicles/extra-service';
                 /** @var string $oldIcon */
-                $oldIcon = str_replace($folderName . '/', '', $extraService->icon ?? '');
+                $oldIcon = $extraService->icon ?? '';
 
                 /** @var string $oldImage */
-                $oldImage = str_replace($folderName . '/', '', $extraService->image ?? '');
+                $oldImage = $extraService->image ?? '';
 
             //check if the file is valid
             if ($request->hasFile('icon')) {
@@ -154,14 +154,10 @@ class ExtraServiceController extends Controller
         //replace image path
         $extraServices->map(function ($extraService) {
             $iconPath = is_string($extraService->icon) ? $extraService->icon : '';
-            $extraService->icon = ($iconPath !== '' && file_exists(public_path('storage/' . $iconPath)))
-                ? uploadedAsset($iconPath)
-                : uploadedAsset('default.png');
+            $extraService->icon = uploadedAsset($iconPath ?? '');
 
              $imagePath = is_string($extraService->image) ? $extraService->image : '';
-                $extraService->image = ($imagePath !== '' && file_exists(public_path('storage/' . $imagePath)))
-                ? uploadedAsset($imagePath)
-                : uploadedAsset('default.png');
+                $extraService->image = uploadedAsset($imagePath ?? '');
         });
 
 
@@ -185,13 +181,9 @@ class ExtraServiceController extends Controller
         $extraService = ExtraService::find($id);
         if ($extraService) {
             $iconPath = is_string($extraService->icon) ? $extraService->icon : '';
-            $extraService->icon = $iconPath !== "" && file_exists(public_path('storage/' . $iconPath))
-                ? uploadedAsset($iconPath)
-                : uploadedAsset('default.png');
+            $extraService->icon = uploadedAsset($iconPath ?? '');
             $imagePath = is_string($extraService->image) ? $extraService->image : '';
-            $extraService->image = $imagePath !== "" && file_exists(public_path('storage/' . $imagePath))
-                ? uploadedAsset($imagePath)
-                : uploadedAsset('default.png');
+            $extraService->image = uploadedAsset($imagePath ?? '');
 
             return response()->json([
                 'status' => 'success',
