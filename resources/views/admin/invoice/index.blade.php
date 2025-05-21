@@ -94,7 +94,7 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <a href="javascript:void(0);" class="avatar avatar-rounded me-2 flex-shrink-0">
-                                        <img src="{{ uploadedAsset($invoice->profile_image, 'profile') }}" alt="profile image">
+                                        <img src="{{ uploadedAsset($invoice->profile_image, 'profile') }}" alt="Image Preview">
                                     </a>
                                     <div>
                                         <h6 class="fs-14"><a href="javascript:void(0);">{{$invoice->full_name}}</a></h6>
