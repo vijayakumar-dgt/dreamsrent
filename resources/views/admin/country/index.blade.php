@@ -22,7 +22,9 @@
 			<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
 				@if (hasPermission($permissions, 'cms_locations', 'create'))
 				<div class="mb-2">
-					<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#country_modal" id="add_country" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.cms.add_country') }}</a>
+					<button type="button" data-bs-toggle="modal" data-bs-target="#country_modal" id="add_country" class="btn btn-primary d-flex align-items-center">
+						<i class="ti ti-plus me-2"></i>{{ __('admin.cms.add_country') }}
+					</button>
 				</div>
 				@endif
 			</div>
@@ -43,27 +45,24 @@
 			</div>
 			<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 				<div class="dropdown">
-					<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+					<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 						<i class="ti ti-badge me-1"></i> {{ __('admin.common.status') }}
-					</a>
+					</button>
 					<ul class="dropdown-menu dropdown-menu-end p-2" id="statusFilter">
 						<li>
-							<a href="javascript:void(0);" class="dropdown-item rounded-1 selectStatus" data-status="1">{{ __('admin.common.active') }}</a>
+							<button type="button" class="dropdown-item rounded-1 selectStatus" data-status="1">{{ __('admin.common.active') }}</button>
 						</li>
 						<li>
-							<a href="javascript:void(0);" class="dropdown-item rounded-1 selectStatus" data-status="0">{{ __('admin.common.inactive') }}</a>
+							<button type="button" class="dropdown-item rounded-1 selectStatus" data-status="0">{{ __('admin.common.inactive') }}</button>
 						</li>
 					</ul>
 				</div>
 			</div>
 		</div>
 		<!-- /Table Header -->
-
 		<div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
 			@include('admin.content-loader')
 		</div>
-
-
 		<!-- Custom Data Table -->
 		<div class="custom-datatable-filter table-responsive brandstable d-none real-table">
 			<table class="table" id="countryTable">
@@ -146,7 +145,7 @@
 					<h4 class="mb-1">{{ __('admin.cms.delete_country') }}</h4>
 					<p class="mb-3">{{ __('admin.cms.country_delete_confirmation') }}</p>
 					<div class="d-flex justify-content-center">
-						<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+						<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 						<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</a>
 					</div>
 				</div>

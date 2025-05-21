@@ -116,12 +116,13 @@
                 initTable();
             }, 500);
         });
-        function initTable() {
+        function initTable(status = '') {
             $.ajax({
                 url: "/admin/state/datatable",
                 type: "GET",
                 data: {
                     search: $("#search").val(),
+                    status: status,
                 },
                 beforeSend: function () {
                     $(".table-loader").show();
@@ -287,7 +288,7 @@
                             },
                             language: {
                                 emptyTable: _l(
-                                    "admin.common.no_matching_records"
+                                    "admin.common.empty_table"
                                 ),
                                 info:
                                     _l("admin.common.showing") +
@@ -339,6 +340,13 @@
                 },
             });
         }
+
+        $(document).on("click", ".selectStatus", function () {
+            let selectedStatus = $(this).data("status");
+            $(".selectStatus").removeClass("active");
+            $(this).addClass("active");
+            initTable(selectedStatus);
+        });
 
         $(document).on("click", ".dataTables_paginate a", function () {
             $(".table-footer")

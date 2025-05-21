@@ -106,6 +106,11 @@ class CityController extends Controller
                     });
             }
 
+            if ($request->has('status') && !empty($request->status) || $request->status == '0') {
+                $status = $request->status;
+                $query->where('status', $status);
+            }
+
             $total = $query->count();
             $cities = $query->orderBy($orderByColumn, $orderDirection)
                 ->skip($start)

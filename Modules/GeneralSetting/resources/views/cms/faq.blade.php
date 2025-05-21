@@ -22,10 +22,9 @@
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
                     <div class="mb-2">
                         @if (hasPermission($permissions, 'faq', 'create'))
-
-                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_FAQ" class="btn btn-primary d-flex align-items-center">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#add_FAQ" class="btn btn-primary d-flex align-items-center">
                             <i class="ti ti-plus me-2"></i>{{__('admin.general_settings.add_faq')}}
-                        </a>
+                        </button>
                         @endif
                     </div>
                 </div>
@@ -36,15 +35,15 @@
                 <div class="d-flex align-items-center flex-wrap gap-2">
                     <!-- Sort Dropdown -->
                     <div class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                             <i class="ti ti-filter me-1"></i> {{ __('admin.general_settings.sort_by') }} : {{ __('admin.general_settings.latest') }}
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2">
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="desc">{{ __('admin.general_settings.latest') }}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="asc">{{ __('admin.general_settings.ascending') }}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="desc">{{ __('admin.general_settings.descending') }}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="last_month">{{ __('admin.general_settings.last_month') }}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="last_7_days">{{ __('admin.general_settings.last_7_days') }}</a></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="desc">{{ __('admin.general_settings.latest') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="asc">{{ __('admin.general_settings.ascending') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="desc">{{ __('admin.general_settings.descending') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="last_month">{{ __('admin.general_settings.last_month') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="last_7_days">{{ __('admin.general_settings.last_7_days') }}</button></li>
                         </ul>
                     </div>
                     <!-- Filter Collapse -->
@@ -70,7 +69,7 @@
                             <span class="input-icon">
                                 <i class="ti ti-search"></i>
                             </span>
-                            <input type="text" class="form-control" placeholder="{{ __('admin.common.search') }}">
+                            <input type="text" class="form-control" name="search" id="search" placeholder="{{ __('admin.common.search') }}">
                         </div>
                     </div>
                 </div>
@@ -80,16 +79,16 @@
                 <div class="filterbox mb-3 d-flex align-items-center">
                     <h6 class="me-3">{{__('admin.general_settings.filters')}}</h6>
                     <div class="dropdown me-3">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                             {{__('admin.general_settings.status')}}
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-lg p-2">
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-status="1">{{__('admin.general_settings.published')}}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-status="0">{{__('admin.general_settings.unpublished')}}</a></li>
+                            <li><button type="button" class="dropdown-item rounded-1 filter-option" data-status="1">{{__('admin.general_settings.published')}}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 filter-option" data-status="0">{{__('admin.general_settings.unpublished')}}</button></li>
                         </ul>
                     </div>
-                    <a href="javascript:void(0);" id="applyFilters" class="me-2 text-purple links">{{__('admin.general_settings.apply_filters')}}</a>
-                    <a href="javascript:void(0);" id="clearFilters" class="text-danger links">{{__('admin.general_settings.clear_all')}}</a>
+                    <button type="button" id="applyFilters" class="text-purple links border-0 bg-transparent">{{__('admin.general_settings.apply_filters')}}</button>
+                    <button type="button" id="clearFilters" class="text-danger links border-0 bg-transparent">{{__('admin.general_settings.clear_all')}}</button>
                 </div>
             </div>
             <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
@@ -159,7 +158,7 @@
                     </div>
                     <div class="modal-footer">
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.general_settings.cancel')}}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.general_settings.cancel')}}</button>
                             <button type="submit" class="btn btn-primary submitbtn">{{__('admin.general_settings.create_new')}}</button>
                         </div>
                     </div>
@@ -218,7 +217,7 @@
                             </div>
                             <!-- Buttons -->
                             <div class="d-flex justify-content-center">
-                                <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.general_settings.cancel')}}</a>
+                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.general_settings.cancel')}}</button>
                                 <button type="submit" class="btn btn-primary savebtn">{{__('admin.general_settings.save_changes')}}</button>
                             </div>
                         </div>
@@ -242,7 +241,7 @@
                         <h4 class="mb-1">{{__('admin.general_settings.delete_faq')}}</h4>
                         <p class="mb-3">{{__('admin.general_settings.delete_confirmation')}}</p>
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.general_settings.cancel')}}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.general_settings.cancel')}}</button>
                             <button type="submit" class="btn btn-primary">{{__('admin.general_settings.yes_delete')}}</button>
                         </div>
                     </div>

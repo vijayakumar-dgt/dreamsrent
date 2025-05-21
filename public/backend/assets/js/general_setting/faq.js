@@ -307,6 +307,12 @@
                 },
             });
         });
+
+        $('#search').on('keyup', function(e) {
+            faqTable({
+                search: $(this).val()
+            });
+        });
     });
 
     function faqTable(filters = {}) {
@@ -539,18 +545,5 @@
                 ).removeClass("d-none");
             },
         });
-    }
-
-    function editFAQ(id, question, answer, status, languageId) {
-        $("#editFaqQuestion").val(question);
-        $("#editFaqAnswer").val(answer);
-        $("#editFaqStatus").prop("checked", status == 1);
-        $("#id").val(id);
-        $("#editFaqLanguage").val(languageId).trigger("change");
-        $("#edit_FAQ").modal("show");
-    }
-
-    function deleteFAQ(id) {
-        $("#delete_id").val(id);
     }
 })();

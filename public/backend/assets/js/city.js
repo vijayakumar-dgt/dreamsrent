@@ -1,10 +1,8 @@
 (async () => {
-
     "use strict";
-
     await loadTranslationFile("admin", "cms,common");
-
     const permissions = await loadUserPermissions();
+    let selectedStatus = "";
 
     $(document).ready(function () {
         initTable();
@@ -174,6 +172,13 @@
                 .addClass("justify-content-end");
             $("#state_id").val("").trigger("change");
         });
+
+        $(document).on("click", ".selectStatus", function () {
+            selectedStatus = $(this).data("status");
+            $(".selectStatus").removeClass("active");
+            $(this).addClass("active");
+            initTable(selectedStatus);
+        });
     });
 
     function initTable() {
@@ -186,6 +191,7 @@
                 type: "GET",
                 data: function (d) {
                     d.search = $("#search").val();
+                    d.status = selectedStatus;
                 },
                 beforeSend: function () {
                     $(".table-loader").show();
@@ -322,7 +328,7 @@
                     .removeClass("d-none");
             },
             language: {
-                emptyTable: _l("admin.common.no_matching_records"),
+                emptyTable: _l("admin.common.empty_table"),
                 info:
                     _l("admin.common.showing") +
                     " _START_ " +

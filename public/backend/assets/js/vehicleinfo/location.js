@@ -121,9 +121,8 @@
                     required: true,
                 },
                 pincode: {
-                    required: true,//max length: 6,
-                    digits: true,
-                    minlength: 6,
+                    required: true,
+                    minlength: 5,
                     maxlength: 6,
                 },
                 "working_days[]": {
@@ -161,6 +160,7 @@
                 },
                 pincode: {
                     required: _l('admin.manage.pincode_required'),
+                    minlength: _l('admin.manage.pincode_minlength'),
                 },
             },
             errorPlacement: (error, element) => {

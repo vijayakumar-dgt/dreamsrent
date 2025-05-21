@@ -42,15 +42,15 @@
 				</div>
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
 					<div class="dropdown">
-						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-badge me-1"></i> {{ __('admin.common.status') }}
-						</a>
-						<ul class="dropdown-menu  dropdown-menu-end p-2">
+						</button>
+						<ul class="dropdown-menu dropdown-menu-end p-2" id="statusFilter">
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1">{{ __('admin.common.active') }}</a>
+								<button type="button" class="dropdown-item rounded-1 selectStatus" data-status="1">{{ __('admin.common.active') }}</button>
 							</li>
 							<li>
-								<a href="javascript:void(0);" class="dropdown-item rounded-1">{{ __('admin.common.inactive') }}</a>
+								<button type="button" class="dropdown-item rounded-1 selectStatus" data-status="0">{{ __('admin.common.inactive') }}</button>
 							</li>
 						</ul>
 					</div>

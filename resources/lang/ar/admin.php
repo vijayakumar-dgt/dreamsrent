@@ -905,6 +905,7 @@ return array (
     'state_required' => 'يرجى اختيار الولاية.',
     'city_required' => 'يرجى اختيار المدينة.',
     'pincode_required' => 'يرجى إدخال الرمز البريدي.',
+    'pincode_minlength' => 'الرمز البريدي يجب ان يكون على الاقل 5 حروف.',
     'end_time_greater' => 'يجب أن يكون وقت الانتهاء أكبر من وقت البدء.',
     'monday' => 'الاثنين',
     'tuesday' => 'الثلاثاء',
@@ -2170,6 +2171,7 @@ return array (
     'update_status_vehicle' => 'تحديث حالة هذه المركبة',
     'update_status' => 'تحديث الحالة',
     'script_tag_not_allowed' => 'السكريبتات لا يمكن استخدامها.',
+    'percentage' => 'نسبة',
   ),
   'page' =>
   array (

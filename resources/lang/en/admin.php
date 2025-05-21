@@ -916,6 +916,7 @@ return array(
     'state_required' => 'Please select state.',
     'city_required' => 'Please select city.',
     'pincode_required' => 'Please enter pincode.',
+    'pincode_minlength' => 'Pincode must be at least 5 characters.',
     'end_time_greater' => 'End time should be greater than start time.',
     'monday' => 'Monday',
     'tuesday' => 'Tuesday',
@@ -2187,6 +2188,7 @@ return array(
     'update_status_vehicle' => 'Update the status for this vehicle',
     'update_status' => 'Update Status',
     'script_tag_not_allowed' => 'Script tags are not allowed.',
+    'percentage' => 'Percentage',
   ),
   'page' => [
     'pages' => 'Pages',

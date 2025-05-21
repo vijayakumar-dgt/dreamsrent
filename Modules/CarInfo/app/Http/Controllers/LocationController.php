@@ -3,6 +3,9 @@
 namespace Modules\CarInfo\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\State;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -254,7 +257,7 @@ class LocationController extends Controller
     public function getCountries(Request $request): JsonResponse
     {
         try {
-            $countries = DB::table('countries')->get(['id', 'name']);
+            $countries = Country::where('status', 1)->get(['id', 'name']);
 
             return response()->json([
                 'code' => 200,
@@ -290,7 +293,7 @@ class LocationController extends Controller
         }
 
         try {
-            $states = DB::table('states')->where('country_id', $countryId)->get(['id', 'country_id', 'name']);
+            $states = State::where('status', 1)->where('country_id', $countryId)->get(['id', 'country_id', 'name']);
 
             return response()->json([
                 'code' => 200,
@@ -326,7 +329,7 @@ class LocationController extends Controller
         }
 
         try {
-            $cities = DB::table('cities')->where('state_id', $stateId)->get(['id', 'state_id', 'name']);
+            $cities = City::where('status', 1)->where('state_id', $stateId)->get(['id', 'state_id', 'name']);
 
             return response()->json([
                 'code' => 200,

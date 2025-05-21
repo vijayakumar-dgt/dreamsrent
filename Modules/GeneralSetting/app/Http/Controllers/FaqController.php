@@ -260,6 +260,10 @@ class FaqController extends Controller
                             return $query->orderBy('order_by', 'desc'); // Default sorting
                     }
                 })
+                ->when($request->search, function ($query) use ($request) {
+                    return $query->where('question', 'like', '%' . $request->search . '%')
+                        ->orWhere('answer', 'like', '%' . $request->search . '%');
+                })
                 ->get();
 
             return response()->json([

@@ -1,31 +1,9 @@
 (async () => {
     "use strict";
-    await loadTranslationFile("admin", "common", "general_settings");
+    await loadTranslationFile("admin", "common, general_settings");
     const permissions = await loadUserPermissions();
 
     $(document).ready(function () {
-         $('.price_type').on('change', function () {
-        const selectedType = $(this).data('price_type');
-        const label = $('#price_label');
-
-        if (selectedType === 'percentage') {
-            label.html(`${_l("admin.common.percentage")}<span class="text-danger"> *</span>`);
-        } else {
-            label.html(`${_l("admin.common.price")}<span class="text-danger"> *</span>`);
-        }
-    });
-        $(document).on("click", ".edit-insurance-btn", function () {
-            const id = $(this).data("id");
-            editInsurance(id);
-        });
-        $(document).on("click", ".delete-insurance-btn", function () {
-            const id = $(this).data("id");
-            deleteInsurance(id);
-        });
-        $(document).on("click", ".view-benefits-btn", function () {
-            const benefits = $(this).data("benefits");
-            getBenefits(benefits);
-        });
         initTable();
         $("#insuranceForm").validate({
             rules: {
@@ -173,6 +151,29 @@
                 });
             },
         });
+    });
+
+    // $('.price_type').on('change', function () {
+    //     const selectedType = $(this).data('price_type');
+    //     const label = $('#price_label');
+
+    //     if (selectedType === 'percentage') {
+    //         label.html(`${_l("admin.common.percentage")}<span class="text-danger"> *</span>`);
+    //     } else {
+    //         label.html(`${_l("admin.common.price")}<span class="text-danger"> *</span>`);
+    //     }
+    // });
+    $(document).on("click", ".edit-insurance-btn", function () {
+        const id = $(this).data("id");
+        editInsurance(id);
+    });
+    $(document).on("click", ".delete-insurance-btn", function () {
+        const id = $(this).data("id");
+        deleteInsurance(id);
+    });
+    $(document).on("click", ".view-benefits-btn", function () {
+        const benefits = $(this).data("benefits");
+        getBenefits(benefits);
     });
 
     $("#search").on("keyup", function (e) {
@@ -457,10 +458,13 @@
 
     $(".price_type").on("change", function () {
         const selectedType = $(this).data("price_type");
+        const label = $('#price_label');
         if (selectedType === "percentage") {
             $("#price").data("maxlen", 3);
+            label.html(`${_l("admin.common.percentage")}<span class="text-danger"> *</span>`);
         } else {
             $("#price").data("maxlen", 5);
+            label.html(`${_l("admin.common.price")}<span class="text-danger"> *</span>`);
         }
     });
 

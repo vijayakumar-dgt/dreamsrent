@@ -93,6 +93,9 @@ class StateController extends Controller
                 ->when($request->search, function ($query) use ($request) {
                     $query->where('name', 'LIKE', "%{$request->search}%");
                 })
+                ->when($request->filled('status'), function ($query) use ($request) {
+                    $query->where('status', $request->status);
+                })
                 ->orderBy('id', $orderBy)
                 ->get();
 
