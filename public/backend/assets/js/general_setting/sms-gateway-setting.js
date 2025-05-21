@@ -4,7 +4,6 @@
 
     $(document).ready(function () {
         loadSMSSetting();
-       
 
         $(document).ready(function () {
             $("#addNexmoForm").validate({
@@ -387,31 +386,34 @@
                     });
                 },
             });
-             $(".gateway-switch").on("change", function () {
-            const gateway = $(this).attr("name");
-            const status = $(this).prop("checked") ? 1 : 0;
+            $(".gateway-switch").on("change", function () {
+                const gateway = $(this).attr("name");
+                const status = $(this).prop("checked") ? 1 : 0;
 
-            $.ajax({
-                url: "/admin/settings/status-update",
-                method: "POST",
-                data: {
-                    gateway: gateway,
-                    status: status,
-                },
-                headers: {
-                    Accept: "application/json",
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
-                    ),
-                },
-                success: function (response) {
-                    loadSMSSetting();
-                },
-                error: function (err) {
-                    showToast("error", _l("admin.common.default_update_error"));
-                },
+                $.ajax({
+                    url: "/admin/settings/status-update",
+                    method: "POST",
+                    data: {
+                        gateway: gateway,
+                        status: status,
+                    },
+                    headers: {
+                        Accept: "application/json",
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                            "content"
+                        ),
+                    },
+                    success: function (response) {
+                        loadSMSSetting();
+                    },
+                    error: function (err) {
+                        showToast(
+                            "error",
+                            _l("admin.common.default_update_error")
+                        );
+                    },
+                });
             });
-        });
         });
 
         function loadSMSSetting() {

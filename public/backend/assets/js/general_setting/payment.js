@@ -1433,86 +1433,87 @@
         });
     });
     $(document).on("change", ".checkStatus", function () {
-    let status = $(this).is(":checked") ? 1 : 0;
-    let key = $(this).attr("name");
+        let status = $(this).is(":checked") ? 1 : 0;
+        let key = $(this).attr("name");
 
-    $.ajax({
-        url: "/admin/settings/updatepaymentStatus",
-        type: "POST",
-        data: {
-            key: key,
-            value: status,
-            group_id: 13,
-        },
-        headers: {
-            Accept: "application/json",
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        success: function (response) {
-            if (response.success) {
-                showToast("success", "Payment status updated successfully!");
-                initList();
-            } else {
-                showToast("error", "Failed to update payment status.");
-            }
-        },
-        error: function () {
-            showToast("error", "Something went wrong! Please try again.");
-        },
+        $.ajax({
+            url: "/admin/settings/updatepaymentStatus",
+            type: "POST",
+            data: {
+                key: key,
+                value: status,
+                group_id: 13,
+            },
+            headers: {
+                Accept: "application/json",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.success) {
+                    showToast(
+                        "success",
+                        "Payment status updated successfully!"
+                    );
+                    initList();
+                } else {
+                    showToast("error", "Failed to update payment status.");
+                }
+            },
+            error: function () {
+                showToast("error", "Something went wrong! Please try again.");
+            },
+        });
     });
-});
 
-function initList() {
-    $.ajax({
-        url: "/admin/settings/payment-list",
-        type: "GET",
-        success: function (response) {
-            if (response.code === 200 && response.data) {
-                response.data.forEach(function (item) {
-                    let element = $("#" + item.key);
+    function initList() {
+        $.ajax({
+            url: "/admin/settings/payment-list",
+            type: "GET",
+            success: function (response) {
+                if (response.code === 200 && response.data) {
+                    response.data.forEach(function (item) {
+                        let element = $("#" + item.key);
 
-                    if (element.length) {
-                        if (element.attr("type") === "checkbox") {
-                            let isChecked = item.value == "1";
-                            element.prop("checked", isChecked);
+                        if (element.length) {
+                            if (element.attr("type") === "checkbox") {
+                                let isChecked = item.value == "1";
+                                element.prop("checked", isChecked);
 
-                            let statusSpan = $(
-                                "." + item.key.replace("_status", "In")
-                            );
-                            if (statusSpan.length) {
-                                if (isChecked) {
-                                    statusSpan.html(
-                                        '<i class="ti ti-point-filled text-success me-1"></i>Connected'
-                                    );
-                                } else {
-                                    statusSpan.html(
-                                        '<i class="ti ti-point-filled text-dark me-1"></i>Not Connected'
-                                    );
+                                let statusSpan = $(
+                                    "." + item.key.replace("_status", "In")
+                                );
+                                if (statusSpan.length) {
+                                    if (isChecked) {
+                                        statusSpan.html(
+                                            '<i class="ti ti-point-filled text-success me-1"></i>Connected'
+                                        );
+                                    } else {
+                                        statusSpan.html(
+                                            '<i class="ti ti-point-filled text-dark me-1"></i>Not Connected'
+                                        );
+                                    }
                                 }
+                            } else {
+                                element.val(item.value);
                             }
-                        } else {
-                            element.val(item.value);
                         }
-                    }
-                });
-            }
-            $(".table-loader").hide();
-            $(".label-loader, .input-loader, .card-loader").hide();
-            $(".real-label, .real-table, .real-data, .real-card").removeClass(
-                "d-none"
-            );
-        },
-        error: function (error) {
-            if (error.responseJSON && error.responseJSON.code === 500) {
-                toastr.error(error.responseJSON.message);
-            } else {
-                toastr.error(
-                    "An error occurred while retrieving payment settings."
-                );
-            }
-        },
-    });
-}
+                    });
+                }
+                $(".table-loader").hide();
+                $(".label-loader, .input-loader, .card-loader").hide();
+                $(
+                    ".real-label, .real-table, .real-data, .real-card"
+                ).removeClass("d-none");
+            },
+            error: function (error) {
+                if (error.responseJSON && error.responseJSON.code === 500) {
+                    toastr.error(error.responseJSON.message);
+                } else {
+                    toastr.error(
+                        "An error occurred while retrieving payment settings."
+                    );
+                }
+            },
+        });
+    }
 })();
-
-
