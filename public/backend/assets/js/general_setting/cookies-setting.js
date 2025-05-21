@@ -1,8 +1,11 @@
 (async () => {
     "use strict";
     await loadTranslationFile("admin", "general_settings,common");
-
+ 
     $(document).ready(function () {
+        $("#language").on("change", function () {
+            loadCookiesSettings($(this).val());
+        });
         $(".summernote").summernote({
             height: 150,
             placeholder: `${_l(
@@ -150,51 +153,51 @@
 
         loadCookiesSettings();
     });
-})();
 
-function loadCookiesSettings(languageId = null) {
-    $.ajax({
-        url: "/admin/settings/cookies/list",
-        type: "POST",
-        data: {
-            group_id: 7,
-            language_id: languageId,
-        },
-        headers: {
-            Accept: "application/json",
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        success: function (response) {
-            if (response.code === 200) {
-                const settings = response.data;
+    function loadCookiesSettings(languageId = null) {
+        $.ajax({
+            url: "/admin/settings/cookies/list",
+            type: "POST",
+            data: {
+                group_id: 7,
+                language_id: languageId,
+            },
+            headers: {
+                Accept: "application/json",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    const settings = response.data;
 
-                Object.keys(settings).forEach(function (key) {
-                    const baseKey = key.split("_")[0]; // strip _1, _2, etc.
-                    const value = settings[key];
+                    Object.keys(settings).forEach(function (key) {
+                        const baseKey = key.split("_")[0]; // strip _1, _2, etc.
+                        const value = settings[key];
 
-                    if (baseKey === "cookiesContentText") {
-                        $("#cookiesContentText").summernote("code", value);
-                    } else {
-                        const element = $("#" + baseKey);
-                        if (element.length) {
-                            if (element.attr("type") === "checkbox") {
-                                element.prop("checked", value === "1");
-                            } else if (element.is("select")) {
-                                element.val(value).trigger("change");
-                            } else {
-                                element.val(value);
+                        if (baseKey === "cookiesContentText") {
+                            $("#cookiesContentText").summernote("code", value);
+                        } else {
+                            const element = $("#" + baseKey);
+                            if (element.length) {
+                                if (element.attr("type") === "checkbox") {
+                                    element.prop("checked", value === "1");
+                                } else if (element.is("select")) {
+                                    element.val(value).trigger("change");
+                                } else {
+                                    element.val(value);
+                                }
                             }
                         }
-                    }
-                });
-            }
-        },
-        error: function (xhr) {
-            showToast("error", _l("admin.common.default_retrieve_error"));
-        },
-        complete: function () {
-            $(".label-loader, .input-loader, .card-loader").hide();
-            $(".real-label, .real-input, .real-card").removeClass("d-none");
-        },
-    });
-}
+                    });
+                }
+            },
+            error: function (xhr) {
+                showToast("error", _l("admin.common.default_retrieve_error"));
+            },
+            complete: function () {
+                $(".label-loader, .input-loader, .card-loader").hide();
+                $(".real-label, .real-input, .real-card").removeClass("d-none");
+            },
+        });
+    }
+})();

@@ -41,7 +41,7 @@
                                         </div>
                                         <div class="col-xl-8">
                                             <div class="">
-                                            <select class="form-select" id="language" name="language" onchange="loadCookiesSettings(this.value)">
+                                            <select class="form-select" id="language" name="language">
                                                 @foreach($languages as $language)
                                                     <option value="{{ $language->language_id }}">
                                                         {{ $language->transLang->name ?? 'N/A' }}

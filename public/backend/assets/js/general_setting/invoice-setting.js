@@ -3,6 +3,9 @@
     await loadTranslationFile("admin", "general_settings,common");
 
     $(document).ready(function () {
+        $("#invoice_logo").on("change", function() {
+            previewImage(this);
+        });
         $("#invoiceSettingForm").validate({
             rules: {
                 invoice_logo: {
@@ -182,25 +185,30 @@
             });
         }
     });
-})();
-
-function previewImage(event) {
-    const reader = new FileReader();
+    
+   function previewImage(input) {
     const preview = document.getElementById("profile_photo_preview");
-
-    reader.onload = function () {
-        preview.src = reader.result;
-    };
-
-    if (event.target.files.length > 0) {
-        reader.readAsDataURL(event.target.files[0]);
+    
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                if (this.width === 500 && this.height === 500) {
+                    preview.src = e.target.result;
+                } else {
+                    // Reset the input and show error
+                    input.value = '';
+                    preview.src = '/backend/assets/img/customer/customer-01.jpg'; // default image
+                    showToast("error", "Image must be exactly 500px × 500px");
+                }
+            };
+            img.src = e.target.result;
+        };
+        
+        reader.readAsDataURL(file);
     }
 }
-
-function removeImage() {
-    const preview = document.getElementById("profile_photo_preview");
-    const fileInput = document.getElementById("profile_photo");
-
-    preview.src = "/backend/assets/img/settings/company-logo-01.jpg";
-    fileInput.value = "";
-}
+})();

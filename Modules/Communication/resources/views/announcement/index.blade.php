@@ -20,23 +20,11 @@
 					</nav>
 				</div>
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
-					<div class="mb-2 me-2 d-none">
-						<a href="javascript:void(0);" class="btn btn-white d-flex align-items-center">
-							<i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}
-						</a>
-					</div>
-					<div class="me-2 mb-2 d-none">
-						<div class="dropdown">
-							<a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center">
-								<i class="ti ti-upload me-1"></i>{{ __('admin.common.export') }}
-							</a>
-						</div>
-					</div>
 					<div class="mb-2">
 						@if (hasPermission($permissions, 'announcements', 'create'))
-						<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_announcement_modal" id="add_announcement" class="btn btn-primary d-flex align-items-center">
+						<button type="button" data-bs-toggle="modal" data-bs-target="#add_announcement_modal" id="add_announcement" class="btn btn-primary d-flex align-items-center">
 							<i class="ti ti-plus me-2"></i>{{ __('admin.support.add_new_announcement') }}
-						</a>
+						</button>
 						@endif
 					</div>
 				</div>
@@ -48,27 +36,27 @@
 				<div class="d-flex align-items-center flex-wrap row-gap-3">
 					<!-- Sort Dropdown -->
 					<div class="dropdown me-2">
-						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="sortDropdownBtn">
+						<button type="button"class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="sortDropdownBtn">
 							<i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }}: <span id="currentSort">Latest</span>
-						</a>
+						</button>
 						<ul class="dropdown-menu dropdown-menu-end p-2">
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-filter" data-sort="latest">{{ __('admin.common.latest') }}</a></li>
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-filter" data-sort="ascending">{{ __('admin.common.ascending') }}</a></li>
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-filter" data-sort="descending">{{ __('admin.common.descending') }}</a></li>
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-filter" data-sort="last_month">{{ __('admin.common.last_month') }}</a></li>
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-filter" data-sort="last_7_days">{{ __('admin.common.last_7_days') }}</a></li>
+							<li><button type="button" class="dropdown-item rounded-1 sort-filter" data-sort="latest">{{ __('admin.common.latest') }}</button></li>
+							<li><button type="button" class="dropdown-item rounded-1 sort-filter" data-sort="ascending">{{ __('admin.common.ascending') }}</button></li>
+							<li><button type="button" class="dropdown-item rounded-1 sort-filter" data-sort="descending">{{ __('admin.common.descending') }}</button></li>
+							<li><button type="button" class="dropdown-item rounded-1 sort-filter" data-sort="last_month">{{ __('admin.common.last_month') }}</button></li>
+							<li><button type="button" class="dropdown-item rounded-1 sort-filter" data-sort="last_7_days">{{ __('admin.common.last_7_days') }}</button></li>
 						</ul>
 					</div>
 					
 					<!-- Status Dropdown -->
 					<div class="dropdown me-2">
-						<a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="statusDropdownBtn">
+						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="statusDropdownBtn">
 							<i class="ti ti-badge me-1"></i> {{ __('admin.common.status') }}: <span id="currentStatus">All</span>
-						</a>
+						</button>
 						<ul class="dropdown-menu dropdown-menu-end p-2">
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 status-filter" data-status="all">{{ __('admin.common.all') }}</a></li>
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 status-filter" data-status="1">{{ __('admin.common.active') }}</a></li>
-							<li><a href="javascript:void(0);" class="dropdown-item rounded-1 status-filter" data-status="0">{{ __('admin.common.inactive') }}</a></li>
+							<li><button type="button" class="dropdown-item rounded-1 status-filter" data-status="all">{{ __('admin.common.all') }}</button></li>
+							<li><button type="button" class="dropdown-item rounded-1 status-filter" data-status="1">{{ __('admin.common.active') }}</button></li>
+							<li><button type="button" class="dropdown-item rounded-1 status-filter" data-status="0">{{ __('admin.common.inactive') }}</button></li>
 						</ul>
 					</div>					
 				</div>
@@ -171,7 +159,7 @@
 					</div>
 					<div class="modal-footer">
 						<div class="d-flex justify-content-center">
-							<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+							<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 							<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
 						</div>
 					</div>
@@ -245,7 +233,7 @@
 								</label>
 							</div>
 							<div class="d-flex justify-content-center">
-								<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+								<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 								<button type="submit" class="btn btn-primary savebtn">{{ __('admin.common.save_changes') }}</button>
 							</div>
 						</div>
@@ -270,7 +258,7 @@
 						<h4 class="mb-1">{{ __('admin.support.delete_announcement') }}</h4>
 						<p class="mb-3">{{ __('admin.support.delete_announcement_confirmation') }}</p>
 						<div class="d-flex justify-content-center">
-							<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+							<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
 							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
 						</div>
 					</div>

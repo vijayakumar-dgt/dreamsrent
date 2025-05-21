@@ -26,15 +26,15 @@
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                     <div class="dropdown sort-dropdown me-2">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center sort-dropdown-toggle" data-bs-toggle="dropdown">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center sort-dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="ti ti-filter me-1 sort"></i> {{ __('admin.common.sort_by_latest') }}
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2">
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="latest">{{ __('admin.common.latest') }}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="ascending">{{ __('admin.common.ascending') }}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="descending">{{ __('admin.common.descending') }}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="last_month">{{ __('admin.common.last_month') }}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option" data-sort="last_7_days">{{ __('admin.common.last_7_days') }}</a></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="latest">{{ __('admin.common.latest') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="ascending">{{ __('admin.common.ascending') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="descending">{{ __('admin.common.descending') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="last_month">{{ __('admin.common.last_month') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option" data-sort="last_7_days">{{ __('admin.common.last_7_days') }}</button></li>
                         </ul>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
                         <h4 class="mb-1">{{ __('admin.support.delete_message') }}</h4>
                         <p class="mb-3">{{ __('admin.support.delete_message_description') }}</p>
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                             <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
                         </div>
                     </form>

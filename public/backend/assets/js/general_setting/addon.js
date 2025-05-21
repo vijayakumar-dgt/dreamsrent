@@ -200,9 +200,7 @@
             },
         });
     });
-})();
-
-$(document).on("click", "#installed_addon", function () {
+    $(document).on("click", "#installed_addon", function () {
     $("#newAddonModuleTable").addClass("d-none");
     $("#addonModuleTable").removeClass("d-none");
     if ($.fn.DataTable.isDataTable("#newAddonModuleTable")) {
@@ -312,3 +310,6 @@ $(document).on("click", ".purchase_confirm_btn", function (event) {
         },
     });
 });
+})();
+
+

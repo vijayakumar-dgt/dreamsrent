@@ -104,10 +104,14 @@ class AnnouncementController extends Controller
                             $query->orderBy('announcements.announcement_title', 'desc');
                             break;
                         case 'last_month':
-                            $query->whereBetween('announcements.created_at', [now()->subMonth(), now()]);
+                            $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
+                            $endDate = \Carbon\Carbon::now()->subMonth()->endOfMonth();
+                            $query->whereBetween('announcements.created_at', [$startDate, $endDate]);
                             break;
                         case 'last_7_days':
-                            $query->whereBetween('announcements.created_at', [now()->subDays(7), now()]);
+                            $sevanStartDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
+                            $sevenEndDate = \Carbon\Carbon::now()->endOfDay();
+                            $query->whereBetween('announcements.created_at', [$sevanStartDate, $sevenEndDate]);
                             break;
                         default:
                             $query->orderBy('announcements.created_at', 'desc');
