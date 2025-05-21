@@ -39,7 +39,8 @@ class BrandController extends Controller
                 'required',
                 'max:30',
                 'min:3',
-                Rule::unique('brands')->ignore($id)->whereNull('deleted_at')
+                Rule::unique('brands')->ignore($id)->whereNull('deleted_at'),
+                'not_regex:/<\/?script\b[^>]*>/i'
             ],
             'brand_image' => 'mimes:jpeg,jpg,png,svg|max:2048',
             'brand_icon' => 'mimes:jpeg,jpg,png,svg|max:2048',
@@ -51,6 +52,7 @@ class BrandController extends Controller
             'brand_name.max' => __('admin.rentals.brand_name_maxlength'),
             'brand_name.min' => __('admin.rentals.brand_name_minlength'),
             'brand_name.unique' => __('admin.rentals.brand_name_unique'),
+            'brand_name.not_regex' => __('admin.common.script_tag_not_allowed'),
             'total_cars.required' => __('admin.rentals.total_vehicles_required'),
             'brand_image.mimes' => __('admin.rentals.brand_image_format'),
             'brand_image.max' => __('admin.rentals.brand_image_size', ['size' => 2]),

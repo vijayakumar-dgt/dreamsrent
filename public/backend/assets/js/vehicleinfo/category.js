@@ -266,14 +266,14 @@
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                         ${hasPermission(permissions, "vehicle_attributes", "edit") ?
                                         `<li>
-                                            <a class="dropdown-item rounded-1 editcategory" href="javascript:void(0);" data-id="${value.id}">
+                                            <button type="button" class="dropdown-item rounded-1 editcategory" data-id="${value.id}">
                                                 <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
-                                            </a>
+                                            </button>
                                         </li>` : "" }
                                         ${ hasPermission(permissions, "vehicle_attributes", "delete") ? 
                                         `<li>
-                                            <a class="dropdown-item rounded-1 delete-category" href="javascript:void(0);" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                                            <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}</a>
+                                            <button type="button" class="dropdown-item rounded-1 delete-category" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                                            <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}</button>
                                         </li>` : "" }
                                     </ul>
                                 </div>
@@ -317,7 +317,7 @@
                             infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
                             lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
                             search: _l("admin.common.search") + ":",
-                            zeroRecords: _l("admin.common.no_matching_records"),
+                            zeroRecords: _l("admin.common.empty_table"),
                             paginate: {
                                 first: _l("admin.common.first"),
                                 last: _l("admin.common.last"),

@@ -1536,6 +1536,8 @@ return array(
     'edit_vehicle' => 'Edit Vehicle',
     'add_vehicle' => 'Add Vehicle',
     'view_review' => 'View Review',
+    'color_code_unique' => 'Color code already exists.',
+    'color_name_unique' => 'Color name already exists.',
   ),
   'user_management' =>
   array(
@@ -2179,6 +2181,7 @@ return array(
     'delete_vehicle_confirmation' => 'Are you sure you want to delete vehicle?',
     'update_status_vehicle' => 'Update the status for this vehicle',
     'update_status' => 'Update Status',
+    'script_tag_not_allowed' => 'Script tags are not allowed.',
   ),
   'page' => [
     'pages' => 'Pages',

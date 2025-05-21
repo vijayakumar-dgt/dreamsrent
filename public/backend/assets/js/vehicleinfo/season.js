@@ -113,7 +113,7 @@
 
                     $.each(data, function (index, value) {
                         tableBody += `<tr>
-                                <td><h6 class="fw-medium"><a href="#">${value.name}</a></h6></td>
+                                <td><h6 class="fw-medium text-black">${value.name}</h6></td>
                                 <td><span class="badge ${value.status == 1 ? `badge-success-transparent` : `badge-danger-transparent`}  d-inline-flex align-items-center badge-sm">
                                             <i class="ti ti-point-filled me-1"></i>${value.status == 1 ? `${_l('admin.common.active')}` : `${_l('admin.common.inactive')}` }
                                     </span>
@@ -177,7 +177,7 @@
                             infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
                             lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
                             search: _l("admin.common.search") + ":",
-                            zeroRecords: _l("admin.common.no_matching_records"),
+                            zeroRecords: _l("admin.common.empty_table"),
                             paginate: {
                                 first: _l("admin.common.first"),
                                 last: _l("admin.common.last"),

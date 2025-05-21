@@ -27,12 +27,14 @@ class CarTransmissionContollerController extends Controller
             'name' => [
                 'required',
                 'max:30',
-                Rule::unique('transmissions')->ignore($id)->whereNull('deleted_at')
+                Rule::unique('transmissions')->ignore($id)->whereNull('deleted_at'),
+                'not_regex:/<\/?script\b[^>]*>/i'
             ],
         ], [
             'name.required' => __('admin.rentals.vehicle_transmission_required'),
             'name.unique' => __('admin.rentals.vehicle_transmission_unique'),
             'name.max' => __('admin.rentals.vehicle_transmission_maxlenght'),
+            'name.not_regex' => __('admin.common.script_tag_not_allowed'),
         ]);
 
         if ($validator->fails()) {
