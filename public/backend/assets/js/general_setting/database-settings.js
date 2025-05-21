@@ -92,7 +92,13 @@
             },
         });
     }
-
+    $(document).on("click", "#delete-backup", function () {
+        let id = $(this).data("id");
+        deleteBackup(id);
+    });
+    function deleteBackup(id) {
+        $("#delete_id").val(id);
+    }
     $("#deleteDbBackup").on("submit", function (e) {
         e.preventDefault();
         $.ajax({
@@ -123,13 +129,4 @@
     });
 })();
 
-function restoreBackup(filename) {
-    alert("Restore function for " + filename + " will be implemented here.");
-}
-$(document).on("click", "#delete-backup", function () {
-    let id = $(this).data("id");
-    deleteBackup(id);
-});
-function deleteBackup(id) {
-    $("#delete_id").val(id);
-}
+

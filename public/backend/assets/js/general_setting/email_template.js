@@ -497,33 +497,33 @@
             $("#view_template").modal("show");
         });
     });
-})();
 
-$(document).on("change", "#notification_type", function () {
-    let value = $(this).val();
-    if (value) {
-        getTags(value);
-    }
-});
-
-function getTags(id) {
-    $.ajax({
-        type: "GET",
-        url: "/admin/settings/get_tags/" + id,
-        success: function (response) {
-            if (response.status === "success") {
-                let tags = response.tags;
-                let placeholders = "";
-                if (tags && tags.length > 0) {
-                    placeholders = tags
-                        .map(
-                            (tag) =>
-                                `<span class="var_placeholder btn btn-light text-info btn-sm" data-placeholder="${tag}">{${tag}}</span>`
-                        )
-                        .join("");
-                }
-                $("#placeholders").html(placeholders);
-            }
-        },
+    $(document).on("change", "#notification_type", function () {
+        let value = $(this).val();
+        if (value) {
+            getTags(value);
+        }
     });
-}
+
+    function getTags(id) {
+        $.ajax({
+            type: "GET",
+            url: "/admin/settings/get_tags/" + id,
+            success: function (response) {
+                if (response.status === "success") {
+                    let tags = response.tags;
+                    let placeholders = "";
+                    if (tags && tags.length > 0) {
+                        placeholders = tags
+                            .map(
+                                (tag) =>
+                                    `<span class="var_placeholder btn btn-light text-info btn-sm" data-placeholder="${tag}">{${tag}}</span>`
+                            )
+                            .join("");
+                    }
+                    $("#placeholders").html(placeholders);
+                }
+            },
+        });
+    }
+})();
