@@ -121,7 +121,7 @@
                                                             $imagePath = 'storage/' . $users->profile_image;
                                                             $defaultImage = asset('backend/assets/img/default-profile.png');
                                                             @endphp
-                                                            <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="profile image">
+                                                            <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image Preview">
                                                         </a>
                                                         <div>
                                                             <h6 class="fs-14"><a href="javascript:void(0);">{{$users->name}}</a></h6>
@@ -325,7 +325,7 @@
                                                 $defaultImage = asset('backend/assets/img/default-profile.png');
                                                 @endphp
 
-                                                <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="profile image">
+                                                <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image Preview">
                                             </a>
                                             <div>
                                                 <h6 class="fs-14"><a href="javascript:void(0);">{{$booking->vehicle}}</a></h6>
@@ -339,7 +339,7 @@
                                                 $defaultImage = asset('backend/assets/img/default-profile.png');
                                                 @endphp
 
-                                                <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="profile image"></a>
+                                                <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image Preview"></a>
                                             <div>
                                                 <h6 class="mb-1 fs-14"><a href="javascript:void(0);">{{$booking->customer}}</a></h6>
 
