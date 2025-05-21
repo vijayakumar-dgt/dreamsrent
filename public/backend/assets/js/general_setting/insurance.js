@@ -216,7 +216,7 @@
                 {
                     data: "price",
                     render: function (data) {
-                        return `$${data}`;
+                        return `${data}`;
                     },
                 },
                 {

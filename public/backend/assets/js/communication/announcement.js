@@ -378,14 +378,14 @@
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end p-2">
                                             ${hasPermission(permissions, 'announcements', 'edit') ?
-                                `<li><a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit_announcement_modal" class="edit_data dropdown-item"
-                                    data-id="${value.id}" data-title="${value.announcement_title}" data-type="${value.announcement_type}" data-user="${value.user_type}" data-status="${value.status}">
-                                    <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
-                                </a></li>` : ''}
+                                            `<li><a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit_announcement_modal" class="edit_data dropdown-item"
+                                                data-id="${value.id}" data-title="${value.announcement_title}" data-type="${value.announcement_type}" data-user="${value.user_type}" data-status="${value.status}">
+                                                <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
+                                            </a></li>` : ''}
                                             ${hasPermission(permissions, 'announcements', 'delete') ?
-                                `<li><button type="button" class="dropdown-item delete-announcement-btn" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete_announcement_modal">
-                                    <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
-                                </button></li>` : ''}
+                                            `<li><button type="button" class="dropdown-item delete-announcement-btn" data-id="${value.id}" data-bs-toggle="modal" data-bs-target="#delete_announcement_modal">
+                                                <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
+                                            </button></li>` : ''}
                                         </ul>
                                     </div>
                                 </td>` : ''}
@@ -423,7 +423,7 @@
                                 infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
                                 lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
                                 search: _l("admin.common.search") + ":",
-                                zeroRecords: _l("admin.common.no_matching_records"),
+                                zeroRecords: _l("admin.common.empty_table"),
                                 paginate: {
                                     first: _l("admin.common.first"),
                                     last: _l("admin.common.last"),
@@ -465,5 +465,4 @@
             $("#delete_id").val(id);
         }
     });
-    
 })();
