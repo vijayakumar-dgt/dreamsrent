@@ -209,7 +209,7 @@ class GeneralSettingController extends Controller
                     $file = $request->file($field);
                     $fullPath = null;
                     if ($file instanceof UploadedFile) {
-                        $fullPath = uploadFile($file, 'logos');
+                        $fullPath = uploadFile($file, 'logo');
                     }
                     $this->updateOrCreateLogoSetting($field, $fullPath, $groupId);
                     $paths[$field] = $fullPath;

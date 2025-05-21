@@ -290,7 +290,7 @@ class CarInfoController extends Controller
         if ($request->hasFile('vehicle_image')) {
             $file = $request->file('vehicle_image');
             if ($file && $file->isValid()) {
-                $vehicleImagePath = uploadFile($file, 'vehicles');
+                $vehicleImagePath = uploadFile($file, 'vehicles/images');
             }
         }
 
@@ -342,7 +342,7 @@ class CarInfoController extends Controller
             $imagePaths = [];
             if (is_array($images)) {
                 foreach ($images as $image) {
-                    $fileName = uploadFile($image, 'vehicles');
+                    $fileName = uploadFile($image, 'vehicles/images');
                     $imagePaths[] = '/' . $fileName;
                 }
             }
@@ -363,8 +363,8 @@ class CarInfoController extends Controller
             $carDocPaths = [];
             if (is_array($carDocs)) {
                 foreach ($carDocs as $doc) {
-                    $fileName = uploadMutipleFile($doc, 'vehicle_doc');
-                    $carDocPaths[] = 'vehicle_doc/' . $fileName;
+                    $fileName = uploadMutipleFile($doc, 'vehicles/document');
+                    $carDocPaths[] = 'vehicles/document' . $fileName;
                 }
             }
 
@@ -384,8 +384,8 @@ class CarInfoController extends Controller
             $policyDocPaths = [];
             if (is_array($policyDocs)) {
                 foreach ($policyDocs as $doc) {
-                    $fileName = uploadMutipleFile($doc, 'vehicle_policy');
-                    $policyDocPaths[] = 'vehicle_policy/' . $fileName;
+                    $fileName = uploadMutipleFile($doc, 'vehicles/policy');
+                    $policyDocPaths[] = 'vehicles/policy' . $fileName;
                 }
             }
 
@@ -558,10 +558,10 @@ class CarInfoController extends Controller
 
                     $uploadedImage = $damage['image'] ?? null;
                     if ($imageFile instanceof \Illuminate\Http\UploadedFile) {
-                        $uploadedImage = $imageFile->store('vehicle_damage', 'public');
+                        $uploadedImage = $imageFile->store('vehicles/damage', 'public');
                     } elseif (!empty($uploadedImage) && strpos($uploadedImage, 'data:image') === 0) {
                         $imageData = explode(',', $uploadedImage)[1];
-                        $imageName = 'vehicle_damage/' . uniqid() . '.png';
+                        $imageName = 'vehicles/damage' . uniqid() . '.png';
                         Storage::disk('public')->put($imageName, base64_decode($imageData));
                         $uploadedImage = $imageName;
                     }
@@ -716,8 +716,8 @@ class CarInfoController extends Controller
             $imagePaths = [];
             if (is_array($images)) {
                 foreach ($images as $image) {
-                    $fileName = uploadMutipleFile($image, 'vehicles');
-                    $imagePaths[] = 'vehicles/' . $fileName;
+                    $fileName = uploadMutipleFile($image, 'vehicles/images');
+                    $imagePaths[] = 'vehicles/images' . $fileName;
                 }
             }
 
@@ -748,8 +748,8 @@ class CarInfoController extends Controller
             $policyDocPaths = [];
             if (is_array($policyDocs)) {
                 foreach ($policyDocs as $doc) {
-                    $fileName = uploadMutipleFile($doc, 'vehicle_policy');
-                    $policyDocPaths[] = 'vehicle_policy/' . $fileName;
+                    $fileName = uploadMutipleFile($doc, 'vehicles/policy');
+                    $policyDocPaths[] = 'vehicles/policy' . $fileName;
                 }
             }
 
@@ -918,10 +918,10 @@ class CarInfoController extends Controller
                     $uploadedImage = $damage['image'] ?? null;
 
                     if ($imageFile) {
-                        $uploadedImage = $imageFile->store('vehicle_damage', 'public');
+                        $uploadedImage = $imageFile->store('vehicles/damages', 'public');
                     } elseif (!empty($uploadedImage) && strpos($uploadedImage, 'data:image') === 0) {
                         $imageData = explode(',', $uploadedImage)[1];
-                        $imageName = 'vehicle_damage/' . uniqid() . '.png';
+                        $imageName = 'vehicles/damages' . uniqid() . '.png';
                         Storage::disk('public')->put($imageName, base64_decode($imageData));
                         $uploadedImage = $imageName;
                     }

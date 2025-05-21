@@ -89,7 +89,7 @@
                     </thead>
                     <tbody>
                         @foreach($invoices as $invoice)
-                        <tr>
+                        <tr data-created="{{ \Carbon\Carbon::parse($invoice->created_at)->format('Y-m-d') }}">
                             <td><a href="javascript:void(0);" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
                             <td>
                                 <div class="d-flex align-items-center">

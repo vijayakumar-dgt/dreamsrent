@@ -1890,6 +1890,7 @@ return array(
   ),
   'common' =>
   array(
+    'percentage ' => 'Percentage ',
     'assign' => 'Assign',
     'tax' => 'Tax Rate',
     'type' => 'Type',

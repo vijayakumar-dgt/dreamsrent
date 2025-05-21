@@ -109,7 +109,7 @@
                             <span class="error-text text-danger" id="price_type_error"></span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">{{ __('admin.common.price') }}<span class="text-danger"> *</span></label>
+                            <label class="form-label" id="price_label">{{ __('admin.common.price') }}<span class="text-danger"> *</span></label>
                             <input type="text" class="form-control" name="price" id="price">
                             <span class="error-text text-danger" id="price_error"></span>
                         </div>
