@@ -103,7 +103,7 @@ class DriverController extends Controller
                             'message' => __('admin.common.file_upload_error')
                         ], 422);
                     }
-                    $data['image'] = uploadFile($file, 'drivers');
+                    $data['image'] = uploadFile($file, 'profile');
                 }
                 $assignedCars = $request->assigned_cars ;
                 if (is_array($assignedCars)) {
@@ -119,7 +119,7 @@ class DriverController extends Controller
 
                 foreach ($documents ?? [] as $file) {
                     // No need to check instanceof, we assume it's a valid UploadedFile
-                    $document = uploadFile($file, 'drivers');
+                    $document = uploadFile($file, 'documents');
                     DriverDocument::create([
                         'driver_id' => $driver->id,
                         'document' => $document,
@@ -134,7 +134,7 @@ class DriverController extends Controller
                     $file = $request->file('image');
                     if ($file && $file->isValid()) {
                         $oldImage = is_string($oldImage) ? $oldImage : '';
-                        $data['image'] = uploadFile($file, 'drivers', $oldImage);
+                        $data['image'] = uploadFile($file, 'profile', $oldImage);
                     }
                 }
 
@@ -149,7 +149,7 @@ class DriverController extends Controller
                 }
                 foreach ($documents ?? [] as $file) {
                     // No need to check instanceof, we assume it's a valid UploadedFile
-                    $document = uploadFile($file, 'drivers');
+                    $document = uploadFile($file, 'documents');
                     DriverDocument::create([
                         'driver_id' => $driver->id,
                         'document' => $document,
@@ -163,8 +163,8 @@ class DriverController extends Controller
                     if ($removedDocument) {
                         $doc = $removedDocument->document;
 
-                        if (is_string($doc) && Storage::disk('public')->exists('drivers/' . $doc)) {
-                            Storage::disk('public')->delete('drivers/' . $doc);
+                        if (is_string($doc) && Storage::disk('public')->exists('documents' . $doc)) {
+                            Storage::disk('public')->delete('documents' . $doc);
                         }
                     }
                     if (DriverDocument::where('id', $docId)->exists()) {
