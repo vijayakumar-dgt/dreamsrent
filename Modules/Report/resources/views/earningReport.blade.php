@@ -319,7 +319,7 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <a href="javascript:void(0);" class="avatar avatar-rounded me-2 flex-shrink-0">
-                                        <img src="{{ uploadedAsset($booking->profile_image, 'profile') }}" alt="img"></a>
+                                        <img src="{{ uploadedAsset($booking->profile_image, 'profile') }}" alt="Image Preview"></a>
                                     <div>
                                          <h6 class="fs-14 fw-semibold">{{$booking->full_name}}</h6>
                                     </div>

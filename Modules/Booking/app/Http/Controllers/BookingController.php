@@ -622,6 +622,7 @@ class BookingController extends Controller
                 'vehicle_info.vehicle_image',
                 DB::raw("CONCAT(user_details.first_name, ' ', user_details.last_name) as customer_full_name"),
                 'user_details.profile_image as customer_image',
+                'users.id as customer_id',
                 'users.name as user_name',
                 'bookings.start_datetime',
                 'bookings.end_datetime',
@@ -1042,7 +1043,6 @@ class BookingController extends Controller
 
     public function cancelBooking(Request $request): JsonResponse
     {
-        DB::beginTransaction();
         try {
             $bookingId = $request->booking_id;
             $booking = Booking::find($bookingId);
@@ -1132,27 +1132,28 @@ class BookingController extends Controller
                     'tototal_amount'  => $booking->final_price ?? ""
                 ];
             }
-            $appAdmin = User::where('user_type', 1)->first();
-            if ($appAdmin && isset($appAdmin->email)) {
-                sendNotification($appAdmin->email, 'booking-cancelled-to-admin', $notifyData ?? []);
+
+            try {
+                $appAdmin = User::where('user_type', 1)->first();
+                if ($appAdmin && isset($appAdmin->email)) {
+                    sendNotification($appAdmin->email, 'booking-cancelled-to-admin', $notifyData ?? []);
+                }
+    
+                if (isset($customer) && isset($notifyData) && !empty($customer->email)) {
+                    sendNotification($customer->email, 'booking-cancelled-to-user', $notifyData);
+                }
+                if (isset($customer) && isset($notifyData) && !empty($customer->email)) {
+                    sendNotification($customer->email, 'booking-cancelled-to-user', $notifyData);
+                }
+            } catch (\Exception $e) {
             }
 
-            if (isset($customer) && isset($notifyData) && !empty($customer->email)) {
-                sendNotification($customer->email, 'booking-cancelled-to-user', $notifyData);
-            }
-            if (isset($customer) && isset($notifyData) && !empty($customer->email)) {
-                sendNotification($customer->email, 'booking-cancelled-to-user', $notifyData);
-            }
-
-
-            DB::commit();
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.bookings.reservation_cancel_success'),
                 'redirect_url' => route('reservation.index'),
             ], 200);
         } catch (\Throwable $e) {
-            DB::rollBack();
             return response()->json([
                 'code' => 500,
                 'message' => __('admin.bookings.reservation_cancel_error'),

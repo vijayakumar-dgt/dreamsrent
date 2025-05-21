@@ -242,7 +242,3 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-<script src="{{ asset('backend/assets/js/quotations/quotations-details.js') }}"></script>
-@endpush

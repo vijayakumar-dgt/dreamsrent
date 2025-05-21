@@ -344,16 +344,16 @@
                 <tr>
                     <td>
                         <div class="d-flex align-items-center file-name-icon">
-                            <a href="#" class="avatar avatar-lg border">
-                                <img src="${location.image_url}" class="img-fluid" alt="brands">
-                            </a>
+                            <div class="avatar avatar-lg border">
+                                <img src="${location.image_url}" class="img-fluid" alt="Image Preview">
+                            </div>
                             <div class="ms-2">
-                                <h6 class="fw-medium"><a href="#">${location.name}</a></h6>
+                                <h6 class="fw-medium text-black">${location.name}</h6>
                             </div>
                         </div>
                     </td>
-                    <td><h6 class="fw-medium"><a href="#">${location.address}</a></h6></td>
-                    <td><h6 class="fw-medium"><a href="#">${location.phone}</a></h6></td>
+                    <td><h6 class="fw-medium text-black">${location.address}</h6></td>
+                    <td><h6 class="fw-medium text-black">${location.phone}</h6></td>
                     <td><div class="working-days">${workingDaysHtml}</div></td>
                     <td>
                         <span class="badge ${statusClass} d-inline-flex align-items-center badge-sm">
@@ -397,7 +397,7 @@
                 infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
                 lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
                 search: _l("admin.common.search") + ":",
-                zeroRecords: _l("admin.common.no_matching_records"),
+                zeroRecords: _l("admin.common.empty_table"),
                 paginate: {
                     first: _l("admin.common.first"),
                     last: _l("admin.common.last"),

@@ -3,6 +3,9 @@
     await loadTranslationFile("admin", "general_settings,common");
 
     $(document).ready(function () {
+        $("#metaImage").on("change", function (event) {
+            previewImage(event);
+        });
         $("#seosetupSettingForm").validate({
             rules: {
                 metaImage: {
@@ -217,46 +220,37 @@
             });
         }
     });
-})();
+    function previewImage(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        const preview = $("#profile_photo_preview");
 
-function previewImage(event) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    const preview = $("#profile_photo_preview");
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                showToast("error", _l("admin.general_settings.image_size_5mb"));
+                $("#metaImage").val("");
+                return;
+            }
 
-    if (file) {
-        if (file.size > 5 * 1024 * 1024) {
-            showToast("error", _l("admin.general_settings.image_size_5mb"));
-            $("#metaImage").val("");
-            return;
-        }
+            reader.onload = function (e) {
+                const img = new Image();
+                img.src = e.target.result;
 
-        reader.onload = function (e) {
-            const img = new Image();
-            img.src = e.target.result;
-
-            img.onload = function () {
-                if (img.width === 500 && img.height === 500) {
-                    preview.attr("src", e.target.result).show();
-                    $(".frames").removeClass("d-none");
-                } else {
-                    showToast(
-                        "error",
-                        _l("admin.general_settings.image_dimension")
-                    );
-                    $("#metaImage").val("");
-                }
+                img.onload = function () {
+                    if (img.width === 500 && img.height === 500) {
+                        preview.attr("src", e.target.result).show();
+                        $(".frames").removeClass("d-none");
+                    } else {
+                        showToast(
+                            "error",
+                            _l("admin.general_settings.image_dimension")
+                        );
+                        $("#metaImage").val("");
+                    }
+                };
             };
-        };
 
-        reader.readAsDataURL(file);
+            reader.readAsDataURL(file);
+        }
     }
-}
-
-function removeImage() {
-    const preview = document.getElementById("profile_photo_preview");
-    const fileInput = document.getElementById("profile_photo");
-
-    preview.src = "/backend/assets/img/settings/company-logo-01.jpg";
-    fileInput.value = "";
-}
+})();

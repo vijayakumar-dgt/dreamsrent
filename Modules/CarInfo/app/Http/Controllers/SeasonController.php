@@ -40,12 +40,14 @@ class SeasonController extends Controller
             'name' => [
                 'required',
                 'max:30',
-                Rule::unique('seasons')->ignore($request->id)->whereNull('deleted_at')
+                Rule::unique('seasons')->ignore($request->id)->whereNull('deleted_at'),
+                'not_regex:/<\/?script\b[^>]*>/i'
             ]
         ], [
             'name.required' => __('admin.rentals.season_name_required'),
             'name.unique' => __('admin.rentals.season_name_unique'),
             'name.max' => __('admin.rentals.season_name_maxlength'),
+            'name.not_regex' => __('admin.common.script_tag_not_allowed'),
         ]);
         if ($validator->fails()) {
             return response()->json([

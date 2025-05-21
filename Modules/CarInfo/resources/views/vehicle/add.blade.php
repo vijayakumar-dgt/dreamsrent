@@ -82,7 +82,7 @@
 													alt="{{ $language->name }}"
 													class="rounded-circle me-2 lang-flag">
 												{{ $language->name }}
-										    </button>
+											</button>
 										</li>
 										@endforeach
 										@endif
@@ -238,7 +238,7 @@
 											<div class="col-lg-4 col-md-6">
 												<div class="mb-3">
 													<label class="form-label">{{ __('admin.rentals.odometer') }}</label>
-													<input name="odometer" id="odometer" maxlength="5" type="text" class="form-control">
+													<input name="odometer" id="odometer" maxlength="5" type="text" class="form-control priceLimit">
 													<span class="invalid-feedback" id="odometer_error"></span>
 												</div>
 											</div>
@@ -282,13 +282,13 @@
 											<div class="col-lg-4 col-md-6">
 												<div class="mb-3">
 													<label class="form-label">{{ __('admin.rentals.mileage') }}</label>
-													<input name="vehicle_mileage" id="vehicle_mileage" maxlength="2" placeholder="{{ __('admin.rentals.mileage_placeholder') }}" type="text" class="form-control">
+													<input name="vehicle_mileage" id="vehicle_mileage" maxlength="2" placeholder="{{ __('admin.rentals.mileage_placeholder') }}" type="text" class="form-control priceLimit">
 												</div>
 											</div>
 											<div class="col-lg-4 col-md-6">
 												<div class="mb-3">
 													<label class="form-label">{{ __('admin.rentals.passengers') }} <span class="text-danger">*</span></label></label>
-													<input name="vehicle_passenger" id="vehicle_passenger" maxlength="2" placeholder="{{ __('admin.rentals.passengers_placeholder') }}" type="text" class="form-control">
+													<input name="vehicle_passenger" id="vehicle_passenger" maxlength="2" placeholder="{{ __('admin.rentals.passengers_placeholder') }}" type="text" class="form-control priceLimit">
 												</div>
 											</div>
 											<div class="col-lg-4 col-md-6">
@@ -323,7 +323,7 @@
 											<div class="col-lg-4 col-md-6">
 												<div class="mb-3">
 													<label class="form-label">{{ __('admin.rentals.no_of_airbags') }}</label>
-													<input type="text" class="form-control" maxlength="1" placeholder="{{ __('admin.rentals.airbags_placeholder') }}" name="num_airbags" id="num_airbags">
+													<input type="text" class="form-control priceLimit" maxlength="1" placeholder="{{ __('admin.rentals.airbags_placeholder') }}" name="num_airbags" id="num_airbags">
 												</div>
 											</div>
 											<div class="col-lg-12 col-md-6">
@@ -1225,7 +1225,10 @@
 							</div>
 						</div>
 						<div class="d-flex align-items-center icon-list delivery-add">
-							<button type="button"><i class="ti ti-plus plus-active"></i><i class="ti ti-check check-active"></i></button>
+							<button type="button" class="bg-transparent border-0">
+								<i class="ti ti-plus plus-active"></i>
+								<i class="ti ti-check check-active d-none"></i>
+							</button>
 							<input type="checkbox" id="insurance_checked" hidden>
 						</div>
 					</div>
@@ -1292,5 +1295,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('backend/assets/js/add-car.js') }}"></script>
+<script src="{{ asset('backend/assets/js/add-vehicle.js') }}"></script>
 @endpush

@@ -1,7 +1,7 @@
 (async () => {
     "use strict";
     await loadTranslationFile("admin", "general_settings,common");
- 
+
     $(document).ready(function () {
         $("#language").on("change", function () {
             loadCookiesSettings($(this).val());

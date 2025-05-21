@@ -261,7 +261,7 @@
                                                     @php
                                                     $imagePath = $booking->vehicle_image ?? '';
                                                     @endphp
-                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" alt="img" class="rounded-3"></a>
+                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" class="rounded-3" alt="Image Preview"></a>
                                                 <div>
                                                     <h6><a href="javascript:void(0);" class="fw-semibold fs-14">{{$booking->name}}</a></h6>
                                                 </div>

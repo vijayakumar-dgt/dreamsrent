@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-5">
-                                    <img src="{{asset('/backend/assets/img/icons/car.svg')}}" alt="img">
+                                    <img src="{{asset('/backend/assets/img/icons/car.svg')}}" alt="Image Preview">
                                 </div>
                             </div>
                         </div>
@@ -146,7 +146,7 @@
                                 @php
                                 $imagePath = ($carTypes[0]->vehicle_image ?? " ");
                                 @endphp
-                                <img src="{{ uploadedAsset($imagePath, 'default2') }}" alt="img" class="dash-height rounded w-100">
+                                <img src="{{ uploadedAsset($imagePath, 'default2') }}" class="dash-height rounded w-100" alt="Image Preview">
                             </div>
                             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                                 <div>
@@ -207,7 +207,7 @@
                                                     @php
                                                     $imagePath = $reservation->vehicle_image ?? "";
                                                     @endphp
-                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" alt="img">
+                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" alt="Image Preview">
                                                 </a>
                                                 <?php
                                                 $start = \Carbon\Carbon::parse($reservation->start_datetime);
@@ -242,7 +242,7 @@
                                                     @php
                                                     $imagePath = $reservation->profile_image ?? "";
                                                     @endphp
-                                                    <img src="{{ uploadedAsset($imagePath, 'profile') }}" alt="img" class="rounded-circle">
+                                                    <img src="{{ uploadedAsset($imagePath, 'profile') }}" class="rounded-circle" alt="Image Preview">
                                                 </a>
                                             </div>
                                         </td>
@@ -281,7 +281,7 @@
                                                     @php
                                                     $imagePath = $user->profile_image ?? "";
                                                     @endphp
-                                                    <img src="{{ uploadedAsset($imagePath, 'profile') }}" alt="img" class="rounded-circle">
+                                                    <img src="{{ uploadedAsset($imagePath, 'profile') }}" class="rounded-circle" alt="Image Preview">
                                                 </a>
                                                 <div class="flex-grow-1 ms-2">
                                                     <h6 class="fs-14 fw-semibold mb-1"><a href="javascript:void(0);">{{ucfirst($user->name)}}</a></h6>
@@ -367,7 +367,7 @@
                                                     @php
                                                         $imagePath = $maintenance->vehicle_image ?? "";
                                                     @endphp
-                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" alt="img">
+                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" alt="Image Preview">
                                                 </a>
                                                 <div class="flex-grow-1 ms-2">
                                                     <h6 class="fs-14 fw-semibold mb-1"><a href="javascript:void(0);">{{$maintenance->name}}</a></h6>
@@ -428,7 +428,7 @@
                                                     @php
                                                         $imagePath = $driver->image ?? "";
                                                     @endphp
-                                                    <img src="{{ uploadedAsset($imagePath, 'profile') }}" alt="img" class="rounded-circle">
+                                                    <img src="{{ uploadedAsset($imagePath, 'profile') }}" class="rounded-circle" alt="Image Preview">
                                                 </a>
                                                 <div class="flex-grow-1 ms-2">
                                                     <h6 class="fs-14 fw-semibold mb-1"><a href="javascript:void(0);">{{$driver->driver_name}}</a></h6>
@@ -493,7 +493,7 @@
                                                         @php
                                                         $imagePath = $invoice->profile_image ?? "";
                                                         @endphp
-                                                        <img src="{{ uploadedAsset($imagePath, 'profile') }}" alt="profile image">
+                                                        <img src="{{ uploadedAsset($imagePath, 'profile') }}" alt="Image Preview">
                                                     </a>
                                                     <div>
                                                         <h6 class="fs-14"><a href="javascript:void(0);">{{$invoice->full_name}}</a></h6>

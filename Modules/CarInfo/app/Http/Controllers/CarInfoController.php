@@ -52,9 +52,11 @@ class CarInfoController extends Controller
      */
     public function vehiclelist(): View
     {
-        $vechileName = VehicleInfo::orderBy('id', 'desc')->get();
-        $vechileType = Cartype::orderBy('id', 'desc')->get();
-        $vechileLocation = Location::orderBy('id', 'desc')->get();
+        $langID = current_user()->language_id ?? 1;
+
+        $vechileName = VehicleInfo::orderBy('id', 'desc')->where("language_id", $langID)->get();
+        $vechileType = Cartype::orderBy('id', 'desc')->where("language_id", $langID)->get();
+        $vechileLocation = Location::orderBy('id', 'desc')->where("language_id", $langID)->get();
 
         return view('carinfo::vehicle.index', compact("vechileName", "vechileType", "vechileLocation"));
     }

@@ -106,7 +106,7 @@
                                         $imagePath = 'storage/' . $blogPost->image;
                                         $defaultImage = asset('backend/assets/img/default-image-02.jpg');
                                     @endphp
-                                    <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image">
+                                    <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image Preview">
                                 </a>
                                 <div class="edit-delete-btns d-flex align-items-center justify-content-between">
                                     <div class="d-flex align-items-center">
@@ -133,7 +133,7 @@
                                                 $imagePath = 'storage/' . $blogPost->profile_image;
                                                 $defaultImage = asset('backend/assets/img/default-profile.png');
                                             @endphp
-                                            <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image" class="avatar avatar-sm rounded-circle me-1">
+                                            <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" class="avatar avatar-sm rounded-circle me-1" alt="Image Preview">
                                         </a>
                                         <a href="javascript:void(0);" class="fs-16">{{$blogPost->full_name}}</a>
                                     </div>

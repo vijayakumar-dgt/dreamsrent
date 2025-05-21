@@ -50,7 +50,8 @@ class CarModelController extends Controller
                 'required',
                 'max:30',
                 'min:3',
-                Rule::unique('car_models')->ignore($id)->whereNull('deleted_at')
+                Rule::unique('car_models')->ignore($id)->whereNull('deleted_at'),
+                'not_regex:/<\/?script\b[^>]*>/i'
             ],
             'brand_id' => 'required',
             'total_cars' => [
@@ -63,6 +64,7 @@ class CarModelController extends Controller
             'model_name.unique' => __('admin.rentals.model_name_unique'),
             'total_cars.required' => __('admin.rentals.total_vehicles_required'),
             'brand_id.required' => __('admin.rentals.brand_required'),
+            'model_name' => __('admin.common.script_tag_not_allowed'),
         ]);
 
         if ($validator->fails()) {

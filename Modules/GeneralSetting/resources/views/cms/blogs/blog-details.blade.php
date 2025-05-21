@@ -15,7 +15,7 @@
 						</div>
 						<h3>{{$blogPosts->title}}</h3>
 						<div class="blog-details-1">
-							<img src="{{asset ('/storage/'.$blogPosts->image)}}" alt="img" class="w-100 rounded-3">
+							<img src="{{asset ('/storage/'.$blogPosts->image)}}" class="w-100 rounded-3" alt="Image Preview">
 						</div>
 						<div class="d-flex align-items-center flex-wrap gap-2">
 							<h6 class="me-2">{{ __('admin.blog.tags') }}: </h6>

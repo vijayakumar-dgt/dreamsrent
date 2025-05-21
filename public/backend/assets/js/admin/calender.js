@@ -1,304 +1,6 @@
-"use strict";
-document.addEventListener("DOMContentLoaded", function () {
-    let selectedStatus = ""; // Default: Get all bookings
-    let selectedVehicles = [];
-    let selectedCustomers = [];
-    let selectedDrivers = [];
-    let selectedCartypes = [];
-
-    async function fetchCalendarData() {
-        let filterData = {
-            status: selectedStatus,
-            vehicles: selectedVehicles.length > 0 ? selectedVehicles : [],
-            customers: selectedCustomers.length > 0 ? selectedCustomers : [],
-            drivers: selectedDrivers.length > 0 ? selectedDrivers : [],
-            cartypes: selectedCartypes.length > 0 ? selectedCartypes : [],
-        };
-
-        try {
-            const response = await fetch("/admin/calendar-info", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"),
-                },
-                body: JSON.stringify(filterData),
-            });
-
-            return await response.json();
-        } catch (error) {
-            console.error("Error fetching calendar data:", error);
-            return { data: [] }; // Return empty array on error
-        }
-    }
-
-    async function loadCalendar() {
-        const data = await fetchCalendarData();
-
-        document.querySelectorAll(".adminCalendar").forEach((calendarEl) => {
-            if (calendarEl.fcInstance) {
-                calendarEl.fcInstance.destroy(); // Destroy previous instance
-            }
-
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                headerToolbar: {
-                    left: "prev,next today",
-                    center: "title",
-                    right: "dayGridMonth,timeGridWeek,timeGridDay",
-                },
-                initialView: "dayGridMonth",
-                events: data.data.map((booking) => {
-                    let backgroundColor = "#AEEA94";
-
-                    switch (booking.booking_status) {
-                        case 1:
-                            backgroundColor = "#FFF6B3";
-                            break;
-                        case 4:
-                            backgroundColor = "#AEEA94";
-                            break;
-                        case 5:
-                            backgroundColor = "#A1E3F9";
-                            break;
-                        case 6:
-                            backgroundColor = "#FFA09B";
-                            break;
-                    }
-
-                    return {
-                        id: booking.id,
-                        title: booking.name,
-                        booking_status: booking.booking_status,
-                        backgroundColor: backgroundColor,
-                        textColor: "#111827",
-                        start: booking.start_datetime,
-                        end: booking.end_datetime,
-                        display: "block",
-                    };
-                }),
-                eventClick: function (info) {
-                    const bookingId = info.event.id;
-                    $.ajax({
-                        url: "/admin/calendar-detail",
-                        type: "GET",
-                        data: { booking_id: bookingId },
-                        success: function (response) {
-                            if (response.code === 200) {
-                                const booking = response.booking;
-                                const vehicleType = response.vehicleType;
-                                const pickupLocation = response.pickupLocation;
-                                const returnLocation = response.returnLocation;
-                                const driverDetails = response.driverDetails;
-                                const customer = response.customerDetails;
-
-                                if (customer) {
-                                    $("#customer_name").text(
-                                        `${customer.first_name} ${customer.last_name}`
-                                    );
-                                    $("#customer_num").text(
-                                        customer.phone_number
-                                    );
-                                    $("#customer_img").attr(
-                                        "src",
-                                        customer.profile_image
-                                    );
-                                    $("#customer_section").removeClass(
-                                        "d-none"
-                                    );
-                                } else {
-                                    $("#customer_section").addClass("d-none");
-                                }
-
-                                const statusMap = {
-                                    1: {
-                                        text: "In Progress",
-                                        class: "badge-soft-warning",
-                                    },
-                                    2: {
-                                        text: "Confirmed",
-                                        class: "badge-soft-primary",
-                                    },
-                                    3: {
-                                        text: "Rejected",
-                                        class: "badge-soft-danger",
-                                    },
-                                    4: {
-                                        text: "Booked",
-                                        class: "badge-soft-info",
-                                    },
-                                    5: {
-                                        text: "Completed",
-                                        class: "badge-soft-success",
-                                    },
-                                    6: {
-                                        text: "Cancelled",
-                                        class: "badge-soft-secondary",
-                                    },
-                                };
-
-                                const bookingStatus = booking.booking_status;
-                                const statusInfo = statusMap[bookingStatus] || {
-                                    text: "Unknown",
-                                    class: "badge-soft-dark",
-                                };
-
-                                $("#book_status").text(statusInfo.text);
-
-                                $("#book_status")
-                                    .removeClass(
-                                        "badge-soft-success badge-soft-warning badge-soft-primary badge-soft-danger badge-soft-info badge-soft-secondary badge-soft-dark"
-                                    )
-                                    .addClass(statusInfo.class);
-
-                                $("#car_img").attr(
-                                    "src",
-                                    booking.vehicle.vehicle_image
-                                );
-                                $("#car_title").text(booking.vehicle.name);
-                                $("#car_type").text(vehicleType.name);
-                                $("#car_price").html(
-                                    `$${booking.vehicle_price}<span class="text-gray-5 fw-normal">/${booking.rental_type}</span>`
-                                );
-                                $("#start_date_time").text(
-                                    booking.start_datetime
-                                );
-                                $("#end_date_time").text(booking.end_datetime);
-                                $("#rent_period").html(
-                                    `${booking.no_of_days} Days`
-                                );
-                                $("#drive_type").text(
-                                    booking.delivery_type &&
-                                        booking.delivery_type !== "N/A"
-                                        ? booking.delivery_type
-                                        : "N/A"
-                                );
-
-                                $("#pickLan").text(pickupLocation);
-                                $("#retLan").text(returnLocation);
-                                $("#passenger_name").text(
-                                    booking.passenger_name
-                                );
-                                if (
-                                    driverDetails.driver_name &&
-                                    driverDetails.driver_name.trim() !== ""
-                                ) {
-                                    $("#driver_name").text(
-                                        driverDetails.driver_name
-                                    );
-                                    $("#driver_num").text(
-                                        driverDetails.phone_number
-                                    );
-                                    $("#driver_img").attr(
-                                        "src",
-                                        driverDetails.image
-                                    );
-                                    $(".driverInfo").show();
-                                } else {
-                                    $(".driverInfo").addClass("d-none");
-                                }
-                                $("#totalValue").html(`$${booking.vehicle_total_price}`);
-                                $("#taxValue").html(`$${booking.tax_val ?? 0}`);
-                                $("#extraService").html(
-                                    `$${booking.total_extra_service_price}`
-                                );
-                                $("#final_price").html(
-                                    `$${booking.final_price}`
-                                );
-
-                                $("#booking_details_modal").modal("show");
-                            }
-                        },
-                        error: function () {
-                            alert("Error fetching booking details.");
-                        },
-                    });
-                },
-                editable: false,
-                eventContent: function (arg) {
-                    return { html: `<div>${arg.event.title}</div>` };
-                },
-            });
-
-            calendarEl.fcInstance = calendar;
-            calendar.render();
-        });
-    }
-
-    loadCalendar();
-
-    document
-        .querySelectorAll("#bookingStatusFilter .nav-link")
-        .forEach((tab) => {
-            tab.addEventListener("click", function () {
-                document
-                    .querySelector("#bookingStatusFilter .nav-link.active")
-                    ?.classList.remove("active");
-                this.classList.add("active");
-
-                switch (this.innerText.trim()) {
-                    case "In Progress":
-                        selectedStatus = "1";
-                        break;
-                    case "Confirmed":
-                        selectedStatus = "4";
-                        break;
-                    case "Completed":
-                        selectedStatus = "5";
-                        break;
-                    case "Rejected":
-                        selectedStatus = "6";
-                        break;
-                    default:
-                        selectedStatus = "";
-                }
-
-                loadCalendar();
-            });
-        });
-
-    document
-        .getElementById("applyFilter")
-        .addEventListener("click", function () {
-            const selectedVehicles = [];
-            const selectedCustomers = [];
-            const selectedDrivers = [];
-            const selectedCartypes = [];
-
-            document
-                .querySelectorAll(".selectedVehicle:checked")
-                .forEach((el) => selectedVehicles.push(el.value));
-            document
-                .querySelectorAll(".selectedCustomer:checked")
-                .forEach((el) => selectedCustomers.push(el.value));
-            document
-                .querySelectorAll(".selectedDriver:checked")
-                .forEach((el) => selectedDrivers.push(el.value));
-            document
-                .querySelectorAll(".selectedCartype:checked")
-                .forEach((el) => selectedCartypes.push(el.value));
-
-            loadCalendar(); // or whatever function uses these arrays
-        });
-
-    document
-        .getElementById("clearFilter")
-        .addEventListener("click", function () {
-            document.querySelectorAll(".form-check-input").forEach((el) => {
-                el.checked = false;
-            });
-
-            selectedStatus = "";
-            selectedVehicles = [];
-            selectedCustomers = [];
-            selectedDrivers = [];
-            selectedCartypes = [];
-
-            loadCalendar();
-        });
-});
 (async function () {
+    "use strict";
+
     await loadTranslationFile("admin", "common, bookings");
 
     $(document).ready(function () {
@@ -948,9 +650,9 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             beforeSend: function () {
                 if (isLoadMore == false) {
-                    $('.list-loader').show();
-                    $('.card-loader').show();
-                    $('#vehicle_list_container').addClass('d-none');
+                    $(".list-loader").show();
+                    $(".card-loader").show();
+                    $("#vehicle_list_container").addClass("d-none");
                 }
             },
             success: function (result) {
@@ -1069,8 +771,12 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             complete: function () {
                 isFetching = false;
-                $(".list-loader, .label-loader, .card-loader, .table-loader").hide();
-                $('#vehicle_list_container, .real-table, .real-label, .real-input').removeClass('d-none');
+                $(
+                    ".list-loader, .label-loader, .card-loader, .table-loader"
+                ).hide();
+                $(
+                    "#vehicle_list_container, .real-table, .real-label, .real-input"
+                ).removeClass("d-none");
             },
         });
     }
@@ -2457,8 +2163,8 @@ document.addEventListener("DOMContentLoaded", function () {
                                 booking_status: booking.booking_status,
                                 backgroundColor: backgroundColor,
                                 textColor: "#111827",
-                                start: booking.booking_date,
-                                end: booking.booking_date,
+                                start: booking.start_datetime,
+                                end: booking.end_datetime,
                                 display: "block",
                             };
                         }),
@@ -2557,7 +2263,9 @@ document.addEventListener("DOMContentLoaded", function () {
                                             `$${booking.final_price}`
                                         );
 
-                                        $("#booking_details_modal").modal("show");
+                                        $("#booking_details_modal").modal(
+                                            "show"
+                                        );
                                     }
                                 },
                                 error: function () {
@@ -2577,3 +2285,305 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 })();
+
+document.addEventListener("DOMContentLoaded", function () {
+    let selectedStatus = ""; // Default: Get all bookings
+    let selectedVehicles = [];
+    let selectedCustomers = [];
+    let selectedDrivers = [];
+    let selectedCartypes = [];
+
+    async function fetchCalendarData() {
+        let filterData = {
+            status: selectedStatus,
+            vehicles: selectedVehicles.length > 0 ? selectedVehicles : [],
+            customers: selectedCustomers.length > 0 ? selectedCustomers : [],
+            drivers: selectedDrivers.length > 0 ? selectedDrivers : [],
+            cartypes: selectedCartypes.length > 0 ? selectedCartypes : [],
+        };
+
+        try {
+            const response = await fetch("/admin/calendar-info", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document
+                        .querySelector('meta[name="csrf-token"]')
+                        .getAttribute("content"),
+                },
+                body: JSON.stringify(filterData),
+            });
+
+            return await response.json();
+        } catch (error) {
+            console.error("Error fetching calendar data:", error);
+            return { data: [] }; // Return empty array on error
+        }
+    }
+
+    async function loadCalendar() {
+        const data = await fetchCalendarData();
+
+        document.querySelectorAll(".adminCalendar").forEach((calendarEl) => {
+            if (calendarEl.fcInstance) {
+                calendarEl.fcInstance.destroy(); // Destroy previous instance
+            }
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                    left: "prev,next today",
+                    center: "title",
+                    right: "dayGridMonth,timeGridWeek,timeGridDay",
+                },
+                initialView: "dayGridMonth",
+                events: data.data.map((booking) => {
+                    let backgroundColor = "#AEEA94";
+
+                    switch (booking.booking_status) {
+                        case 1:
+                            backgroundColor = "#FFF6B3";
+                            break;
+                        case 4:
+                            backgroundColor = "#AEEA94";
+                            break;
+                        case 5:
+                            backgroundColor = "#A1E3F9";
+                            break;
+                        case 6:
+                            backgroundColor = "#FFA09B";
+                            break;
+                    }
+
+                    return {
+                        id: booking.id,
+                        title: booking.name,
+                        booking_status: booking.booking_status,
+                        backgroundColor: backgroundColor,
+                        textColor: "#111827",
+                        start: booking.start_datetime,
+                        end: booking.end_datetime,
+                        display: "block",
+                    };
+                }),
+                eventClick: function (info) {
+                    const bookingId = info.event.id;
+                    $.ajax({
+                        url: "/admin/calendar-detail",
+                        type: "GET",
+                        data: { booking_id: bookingId },
+                        success: function (response) {
+                            if (response.code === 200) {
+                                const booking = response.booking;
+                                const vehicleType = response.vehicleType;
+                                const pickupLocation = response.pickupLocation;
+                                const returnLocation = response.returnLocation;
+                                const driverDetails = response.driverDetails;
+                                const customer = response.customerDetails;
+
+                                if (customer) {
+                                    $("#customer_name").text(
+                                        `${customer.first_name} ${customer.last_name}`
+                                    );
+                                    $("#customer_num").text(
+                                        customer.phone_number
+                                    );
+                                    $("#customer_img").attr(
+                                        "src",
+                                        customer.profile_image
+                                    );
+                                    $("#customer_section").removeClass(
+                                        "d-none"
+                                    );
+                                } else {
+                                    $("#customer_section").addClass("d-none");
+                                }
+
+                                const statusMap = {
+                                    1: {
+                                        text: "In Progress",
+                                        class: "badge-soft-warning",
+                                    },
+                                    2: {
+                                        text: "Confirmed",
+                                        class: "badge-soft-primary",
+                                    },
+                                    3: {
+                                        text: "Rejected",
+                                        class: "badge-soft-danger",
+                                    },
+                                    4: {
+                                        text: "Booked",
+                                        class: "badge-soft-info",
+                                    },
+                                    5: {
+                                        text: "Completed",
+                                        class: "badge-soft-success",
+                                    },
+                                    6: {
+                                        text: "Cancelled",
+                                        class: "badge-soft-secondary",
+                                    },
+                                };
+
+                                const bookingStatus = booking.booking_status;
+                                const statusInfo = statusMap[bookingStatus] || {
+                                    text: "Unknown",
+                                    class: "badge-soft-dark",
+                                };
+
+                                $("#book_status").text(statusInfo.text);
+
+                                $("#book_status")
+                                    .removeClass(
+                                        "badge-soft-success badge-soft-warning badge-soft-primary badge-soft-danger badge-soft-info badge-soft-secondary badge-soft-dark"
+                                    )
+                                    .addClass(statusInfo.class);
+
+                                $("#car_img").attr(
+                                    "src",
+                                    booking.vehicle.vehicle_image
+                                );
+                                $("#car_title").text(booking.vehicle.name);
+                                $("#car_type").text(vehicleType.name);
+                                $("#car_price").html(
+                                    `$${booking.vehicle_price}<span class="text-gray-5 fw-normal">/${booking.rental_type}</span>`
+                                );
+                                $("#start_date_time").text(
+                                    booking.start_datetime
+                                );
+                                $("#end_date_time").text(booking.end_datetime);
+                                $("#rent_period").html(
+                                    `${booking.no_of_days} Days`
+                                );
+                                $("#drive_type").text(
+                                    booking.delivery_type &&
+                                        booking.delivery_type !== "N/A"
+                                        ? booking.delivery_type
+                                        : "N/A"
+                                );
+
+                                $("#pickLan").text(pickupLocation);
+                                $("#retLan").text(returnLocation);
+                                $("#passenger_name").text(
+                                    booking.passenger_name
+                                );
+                                if (
+                                    driverDetails.driver_name &&
+                                    driverDetails.driver_name.trim() !== ""
+                                ) {
+                                    $("#driver_name").text(
+                                        driverDetails.driver_name
+                                    );
+                                    $("#driver_num").text(
+                                        driverDetails.phone_number
+                                    );
+                                    $("#driver_img").attr(
+                                        "src",
+                                        driverDetails.image
+                                    );
+                                    $(".driverInfo").show();
+                                } else {
+                                    $(".driverInfo").addClass("d-none");
+                                }
+                                $("#totalValue").html(
+                                    `$${booking.vehicle_total_price}`
+                                );
+                                $("#taxValue").html(`$${booking.tax_val ?? 0}`);
+                                $("#extraService").html(
+                                    `$${booking.total_extra_service_price}`
+                                );
+                                $("#final_price").html(
+                                    `$${booking.final_price}`
+                                );
+
+                                $("#booking_details_modal").modal("show");
+                            }
+                        },
+                        error: function () {
+                            alert("Error fetching booking details.");
+                        },
+                    });
+                },
+                editable: false,
+                eventContent: function (arg) {
+                    return { html: `<div>${arg.event.title}</div>` };
+                },
+            });
+
+            calendarEl.fcInstance = calendar;
+            calendar.render();
+        });
+    }
+
+    loadCalendar();
+
+    document
+        .querySelectorAll("#bookingStatusFilter .nav-link")
+        .forEach((tab) => {
+            tab.addEventListener("click", function () {
+                document
+                    .querySelector("#bookingStatusFilter .nav-link.active")
+                    ?.classList.remove("active");
+                this.classList.add("active");
+
+                switch (this.innerText.trim()) {
+                    case "In Progress":
+                        selectedStatus = "1";
+                        break;
+                    case "Confirmed":
+                        selectedStatus = "4";
+                        break;
+                    case "Completed":
+                        selectedStatus = "5";
+                        break;
+                    case "Rejected":
+                        selectedStatus = "6";
+                        break;
+                    default:
+                        selectedStatus = "";
+                }
+
+                loadCalendar();
+            });
+        });
+
+    document
+        .getElementById("applyFilter")
+        .addEventListener("click", function () {
+            const selectedVehicles = [];
+            const selectedCustomers = [];
+            const selectedDrivers = [];
+            const selectedCartypes = [];
+
+            document
+                .querySelectorAll(".selectedVehicle:checked")
+                .forEach((el) => selectedVehicles.push(el.value));
+            document
+                .querySelectorAll(".selectedCustomer:checked")
+                .forEach((el) => selectedCustomers.push(el.value));
+            document
+                .querySelectorAll(".selectedDriver:checked")
+                .forEach((el) => selectedDrivers.push(el.value));
+            document
+                .querySelectorAll(".selectedCartype:checked")
+                .forEach((el) => selectedCartypes.push(el.value));
+
+            loadCalendar(); // or whatever function uses these arrays
+        });
+
+    document
+        .getElementById("clearFilter")
+        .addEventListener("click", function () {
+            document.querySelectorAll(".form-check-input").forEach((el) => {
+                el.checked = false;
+            });
+
+            selectedStatus = "";
+            selectedVehicles = [];
+            selectedCustomers = [];
+            selectedDrivers = [];
+            selectedCartypes = [];
+
+            loadCalendar();
+        });
+});

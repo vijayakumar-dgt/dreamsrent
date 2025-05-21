@@ -207,5 +207,4 @@
             reader.readAsDataURL(file);
         }
     });
-
 })();

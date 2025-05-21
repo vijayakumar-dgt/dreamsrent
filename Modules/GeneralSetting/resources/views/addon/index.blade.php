@@ -33,7 +33,9 @@
                                 <h6 class="mb-3">{{ __('admin.general_settings.plugin_managers') }}</h6>
                                 @if (hasPermission($permissions, 'website_settings', 'create'))
 
-                                <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_plugin"><i class="ti ti-plus me-1"></i>{{ __('admin.general_settings.add_new_plugin') }}</a>
+                               <button type="button" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_plugin">
+                                    <i class="ti ti-plus me-1"></i>{{ __('admin.general_settings.add_new_plugin') }}
+                                </button>
                             @endif
                             </div>
                             <div class="plugin-content">
@@ -151,7 +153,9 @@
                 </div>
                 <div class="modal-footer">
                     <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
+                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
+                            {{ __('admin.general_settings.cancel') }}
+                        </button>
                         <button type="button" class="btn btn-primary install_btn">{{ __('admin.general_settings.add') }}</button>
                     </div>
                 </div>
@@ -180,7 +184,9 @@
                 </div>
                 <div class="modal-footer">
                     <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
+                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
+                            {{ __('admin.general_settings.cancel') }}
+                        </button>
                         <button type="button" class="btn btn-primary purchase_confirm_btn">{{ __('admin.general_settings.install') }}</button>
                     </div>
                 </div>

@@ -1,10 +1,660 @@
 (async () => {
+    
     "use strict";
+
     await loadTranslationFile("admin", "rentals, common");
-    const permissions = await loadUserPermissions();
+
+    let faqCounter = 0;
+
+    function getDamageInfo() {
+        let vehicleId = $("#vehicle_id").val();
+
+        $.ajax({
+            url: "/admin/get-damage-info",
+            type: "GET",
+            data: { vehicle_id: vehicleId },
+            success: function (response) {
+                if (response.success && response.data.length > 0) {
+                    $("#car_damage_append").html("");
+                    response.data.forEach((damage) => {
+                        adddamage(damage);
+                    });
+                } else {
+                    // showToast("error", "No damage data found.");
+                }
+            },
+            error: function (xhr, status, error) {},
+        });
+    }
+
+    function adddamage(damage) {
+        let uniqueID = `damage_${crypto.randomUUID()}`;
+
+        let currentDate = new Date(
+            damage.created_at || Date.now()
+        ).toLocaleDateString("en-US", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        });
+
+        let imageUrl = damage.image;
+        let newDamage = `
+            <div id="${uniqueID}" class="bg-white p-20 br-5 border mb-2">
+                <input type="hidden" name="damage_id[]" value="${uniqueID}">
+                <input type="hidden" name="damage_image[]" value="${imageUrl}">
+                <div class="row align-items-center row-gap-3">
+                    <div class="col-xxl-8 col-md-7">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <h6 class="fs-14 fw-medium">${damage.damage_type}</h6>
+                            <input type="hidden" name="damage_loaction[]" value="${damage.damage_type}">
+                            <span class="badge bg-pink-transparent badge-sm">${damage.damage_loaction}</span>
+                            <input type="hidden" name="damage_location[]" value="${damage.damage_loaction}">
+                        </div>
+                        <p class="fs-13">${damage.description}</p>
+                        <input type="hidden" name="damage_description[]" value="${damage.description}">
+                    </div>
+                    <div class="col-xxl-4 col-md-5">
+                        <div class="d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
+                            <p class="mb-0">Added on : ${currentDate}</p>
+                            <div class="icon-list d-flex align-items-center">
+                                <a href="#" class="edit-damage me-2" data-id="${damage.id}" data-bs-toggle="modal" data-bs-target="#add-damage">
+                                    <i class="ti ti-edit"></i>
+                                </a>
+                                <a href="#" class="trash-damage" data-id="${uniqueID}" data-bs-toggle="modal" data-bs-target="#delete_damage">
+                                    <i class="ti ti-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>                                                            
+            </div>
+        `;
+
+        $("#car_damage_append").append(newDamage);
+        updateDamageCount();
+    }
+
+    function updateDamageCount() {
+        let totalDamages = $("#car_damage_append > div").length;
+        $("#damage_count").text(totalDamages.toString().padStart(2, "0"));
+    }
+
+    function getInsuranceInfo() {
+        let vehicleId = $("#vehicle_id").val();
+
+        $.ajax({
+            url: "/admin/get-insurance-info",
+            type: "GET",
+            data: { vehicle_id: vehicleId },
+            success: function (response) {
+                $("#insurance_car_append").html(""); // Clear previous entries
+
+                if (response.success && response.data.length > 0) {
+                    response.data.forEach((insurances) => {
+                        addinsurances(insurances);
+                    });
+                } else {
+                    $("#insurance_car_append").html(`
+                        <div class="text-center text-muted py-3">
+                            ${
+                                _l("admin.rentals.no_data_available") ||
+                                "No insurance data available."
+                            }
+                        </div>
+                    `);
+                }
+            },
+            error: function (xhr, status, error) {
+                showToast(
+                    "error",
+                    "An error occurred while fetching insurance data."
+                );
+            },
+        });
+    }
+
+    function addinsurances(insurances) {
+        const appendContainer = document.getElementById("insurance_car_append");
+
+        const uniqueId = `insurance_${Date.now()}_${Math.floor(
+            Math.random() * 1000
+        )}`;
+
+        // Create a new div element
+        const newInsuranceDiv = document.createElement("div");
+        newInsuranceDiv.setAttribute(
+            "class",
+            "d-flex align-items-center justify-content-between bg-white border br-5 gap-3 flex-wrap p-20 mb-2"
+        );
+        newInsuranceDiv.setAttribute("data-id", uniqueId);
+
+        newInsuranceDiv.innerHTML = `
+        <div>
+            <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">${
+                insurances.insurance_name
+            }</h6>
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                <p class="fs-13 fw-medium border-end pe-2 mb-0">${_l(
+                    "admin.rentals.insurance_price"
+                )} : 
+                    <span class="text-gray-9 priceIn" data-id="${uniqueId}">$${
+            insurances.price
+        }</span>
+                </p>
+                <input type="hidden" name="insurance_id_one[]" id="insurance_id_one_${uniqueId}" value="${
+            insurances.insurances_id
+        }">
+                <input type="hidden" name="insurance_price_one[]" id="insurance_price_one_${uniqueId}" value="${
+            insurances.price
+        }">
+                <p class="fs-13 fw-medium mb-0">${_l(
+                    "admin.rentals.insurance_benefits"
+                )} : <span class="text-gray-9">${insurances.benefits}</span></p>
+                <p class="fs-13 fw-medium mb-0">${_l(
+                    "admin.rentals.insurance_price_type"
+                )} : 
+                    <span class="text-gray-9 priceTypeIn" data-id="${uniqueId}">${
+            insurances.value
+        }</span>
+                </p>
+                <input type="hidden" name="insurance_price_type_one[]" id="insurance_price_type_one_${uniqueId}" value="${
+            insurances.value
+        }">
+            </div>
+        </div>
+        <div class="d-flex align-items-center icon-list">
+            <a href="#" class="edit-icon me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance" 
+                data-id="${uniqueId}" data-price="${
+            insurances.price
+        }" data-price-type="${insurances.value}">
+                <i class="ti ti-edit"></i>
+            </a>
+            <a href="#" class="trash-icon" data-bs-toggle="modal" data-bs-target="#delete_insurance">
+                <i class="ti ti-trash"></i>
+            </a>
+        </div>
+    `;
+
+        appendContainer.appendChild(newInsuranceDiv);
+    }
+
+    function getSeasonalInfo() {
+        let vehicleId = $("#vehicle_id").val();
+
+        $.ajax({
+            url: "/admin/get-seasonal-info",
+            type: "GET",
+            data: { vehicle_id: vehicleId },
+            success: function (response) {
+                $("#seasonal_append").html(""); // Clear previous content
+
+                if (response.success && response.data.length > 0) {
+                    response.data.forEach((season) => {
+                        addSeasonalPricing(season);
+                    });
+                } else {
+                    $("#seasonal_append").html(`
+                        <div class="text-center text-muted py-3">
+                            ${
+                                _l("admin.rentals.no_data_available") ||
+                                "No seasonal data available."
+                            }
+                        </div>
+                    `);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Optional: show error message
+                showToast(
+                    "error",
+                    "An error occurred while fetching seasonal data."
+                );
+            },
+        });
+    }
+
+    function addSeasonalPricing(season) {
+        let uniqueId = "season_" + season.id;
+        let newSeasonalPricing = `
+        <div id="${uniqueId}" class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-1">
+            <div class="flex-grow-1">
+                <input type="hidden" name="seasonal_id[]" value="${season.id}">
+                <h6 class="fs-14 fw-semibold mb-1">${season.seasonal_title}</h6>
+                <input type="hidden" name="seasonal_title[]" value="${
+                    season.seasonal_title
+                }">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <p class="fs-13 fw-medium border-end pe-2 mb-0 start-date">
+                    ${_l(
+                        "admin.rentals.start_date"
+                    )} : <span class="text-gray-9">${
+            season.seasonal_start_date
+        }</span>
+                        <input type="hidden" name="seasonal_start_date[]" value="${
+                            season.seasonal_start_date
+                        }">
+                    </p>
+                    <p class="fs-13 fw-medium border-end pe-2 mb-0 end-date">
+                    ${_l(
+                        "admin.rentals.end_date"
+                    )} : <span class="text-gray-9">${
+            season.seasonal_end_date
+        }</span>
+                        <input type="hidden" name="seasonal_end_date[]" value="${
+                            season.seasonal_end_date
+                        }">
+                    </p>
+                    <p class="fs-13 fw-medium border-end pe-2 mb-0 daily-price">
+                    ${_l(
+                        "admin.rentals.seasonal_daily_price"
+                    )} : <span class="text-gray-9">$${parseFloat(
+            season.seasonal_daily_rate
+        ).toFixed(0)}</span>
+                        <input type="hidden" name="seasonal_daily_rate[]" value="${
+                            season.seasonal_daily_rate
+                        }">
+                    </p>
+                    <p class="fs-13 fw-medium border-end pe-2 mb-0 weekly-price">
+                    ${_l(
+                        "admin.rentals.seasonal_weekly_price"
+                    )}  : <span class="text-gray-9">$${parseFloat(
+            season.seasonal_weekly_rate
+        ).toFixed(0)}</span>
+                        <input type="hidden" name="seasonal_weekly_rate[]" value="${
+                            season.seasonal_weekly_rate
+                        }">
+                    </p>
+                    <p class="fs-13 fw-medium border-end pe-2 mb-0 monthly-price">
+                    ${_l(
+                        "admin.rentals.seasonal_monthly_price"
+                    )} : <span class="text-gray-9">$${parseFloat(
+            season.seasonal_monthly_rate
+        ).toFixed(0)}</span>
+                        <input type="hidden" name="seasonal_monthly_rate[]" value="${
+                            season.seasonal_monthly_rate
+                        }">
+                    </p>
+                    <p class="fs-13 fw-medium pe-2 mb-0 late-fee">
+                    ${_l(
+                        "admin.rentals.seasonal_late_fee"
+                    )} : <span class="text-gray-9">$${parseFloat(
+            season.seasonal_late_fee
+        ).toFixed(0)}</span>
+                        <input type="hidden" name="seasonal_late_fee[]" value="${
+                            season.seasonal_late_fee
+                        }">
+                    </p>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2 icon-list">
+                <a href="#" class="edit-icon d-flex align-items-center justify-content-center me-2" 
+                   data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#add_price">
+                    <i class="ti ti-edit"></i>
+                </a>
+                <a href="#" class="trash-icon d-flex align-items-center justify-content-center"
+                   data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#delete_price">
+                    <i class="ti ti-trash"></i>
+                </a>
+            </div>
+        </div>`;
+
+        $("#seasonal_append").append(newSeasonalPricing);
+    }
+
+    function getTrraifInfo() {
+        let vehicleId = $("#vehicle_id").val();
+
+        $.ajax({
+            url: "/admin/get-tarrif-info",
+            type: "GET",
+            data: { vehicle_id: vehicleId },
+            success: function (response) {
+                $("#tariff_append").html(""); // Clear existing content
+
+                if (response.success && response.data.length > 0) {
+                    response.data.forEach((tarrif) => {
+                        addTarrifPricing(tarrif);
+                    });
+                } else {
+                    $("#tariff_append").html(`
+                        <div class="text-center text-muted py-3">
+                            ${
+                                _l("admin.rentals.no_data_available") ||
+                                "No data available."
+                            }
+                        </div>
+                    `);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Optional: Show a generic error message
+                showToast(
+                    "error",
+                    "An error occurred while fetching tariff data."
+                );
+            },
+        });
+    }
+
+    function addTarrifPricing(tarrif) {
+        let uniqueId = "tariff_" + new Date().getTime();
+
+        let newTariff = `
+        <div id="${uniqueId}" class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-1">
+            <div>
+                <input type="hidden" name="tariff_id[]" value="${tarrif.id}">
+                <h6 class="fs-14 fw-semibold mb-1">${tarrif.tariff_title}</h6>
+                <input type="hidden" name="tariff_title[]" value="${
+                    tarrif.tariff_title
+                }">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <p class="fs-13 fw-medium border-end pe-2 mb-0 daily-price">
+                    ${_l(
+                        "admin.rentals.day_price"
+                    )} : <span class="text-gray-9">$${
+            tarrif.tariff_daily_price
+        }</span>
+                        <input type="hidden" name="tariff_daily_price[]" value="${
+                            tarrif.tariff_daily_price
+                        }">
+                    </p>
+                    <p class="fs-13 fw-medium border-end pe-2 mb-0 from-days">
+                    ${_l(
+                        "admin.rentals.from_days"
+                    )} : <span class="text-gray-9">${
+            tarrif.tariff_from_days
+        }</span>
+                        <input type="hidden" name="tariff_from_days[]" value="${
+                            tarrif.tariff_from_days
+                        }">
+                    </p>
+                    <p class="fs-13 fw-medium border-end pe-2 mb-0 to-days">
+                         ${_l(
+                             "admin.rentals.to_days"
+                         )} : <span class="text-gray-9">${
+            tarrif.tariff_to_days
+        }</span>
+                        <input type="hidden" name="tariff_to_days[]" value="${
+                            tarrif.tariff_to_days
+                        }">
+                    </p>
+                    <p class="fs-13 fw-medium border-end pe-2 mb-0 base-km">
+                    ${_l(
+                        "admin.rentals.base_km"
+                    )} : <span class="text-gray-9">${
+            tarrif.tariff_base_km
+        }</span>
+                        <input type="hidden" name="tariff_base_km[]" value="${
+                            tarrif.tariff_base_km
+                        }">
+                    </p>
+                    <p class="fs-13 fw-medium pe-2 mb-0 extra-price">
+                    ${_l(
+                        "admin.rentals.extra_price"
+                    )} : <span class="text-gray-9">$${
+            tarrif.tariff_extra_price
+        }</span>
+                        <input type="hidden" name="tariff_extra_price[]" value="${
+                            tarrif.tariff_extra_price
+                        }">
+                    </p>
+                </div>
+            </div>
+            <div class="d-flex align-items-center icon-list">
+                <a href="#" class="edit-tariff me-2" data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#add-tarrif">
+                    <i class="ti ti-edit"></i>
+                </a>
+                <a href="#" class="trash-tariff" data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#delete_tarrif">
+                    <i class="ti ti-trash"></i>
+                </a>
+            </div>
+        </div>`;
+
+        $("#tariff_append").append(newTariff);
+    }
+
+    function getFaqInfo() {
+        let vehicleId = $("#vehicle_id").val();
+
+        $.ajax({
+            url: "/admin/get-faq-info",
+            type: "GET",
+            data: { vehicle_id: vehicleId },
+            success: function (response) {
+                if (response.success) {
+                    $(".car_faq_append").html("");
+                    response.data.forEach((faq) => {
+                        addFaq(faq);
+                    });
+                } else {
+                    showToast("error", "No faq data found.");
+                }
+            },
+            error: function (xhr, status, error) {},
+        });
+    }
+
+    function addFaq(faq) {
+        let uniqueID = "faq_" + faqCounter++; // Increment counter for each FAQ
+
+        let faqItem = `
+    <div class="accordion-item" id="faq_item_${uniqueID}">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#${uniqueID}"
+                aria-expanded="false" aria-controls="${uniqueID}">
+                <span class="faq-icon"><i class="ti ti-grip-vertical"></i></span> ${
+                    faq.question
+                }
+            </button>
+            <input type="hidden" name="faq_id[]" value="${
+                faq.id ?? ""
+            }" id="${uniqueID}_id">
+            <input type="hidden" name="faq_question[]" value="${
+                faq.question
+            }" id="${uniqueID}_question">
+        </h2>
+        <div class="faq-actions text-end py-2 px-3">
+            <i class="ti ti-edit edit-faq cursor-pointer" data-id="${uniqueID}"></i>
+            <i class="ti ti-trash delete-faq cursor-pointer" data-id="${uniqueID}"></i>
+        </div>
+        <div id="${uniqueID}" class="accordion-collapse collapse" data-bs-parent="#faqaccordion">
+            <div class="accordion-body">
+                <p class="fs-13" id="${uniqueID}_text">${faq.answer}</p>
+                <input type="hidden" name="faq_answer[]" value="${
+                    faq.answer
+                }" id="${uniqueID}_answer">
+            </div>
+        </div>
+    </div>
+    `;
+
+        $(".car_faq_append").append(faqItem);
+        updateFaqCount();
+    }
+
+    function updateFaqCount() {
+        const count = $(".car_faq_append .accordion-item").length;
+        console.log(count);
+        $("#faq_count").text(count); // Assuming you have an element with this ID
+    }
+
+    function getDocumentsInfo() {
+        let vehicleId = $("#vehicle_id").val(); // Get vehicle ID from input field
+
+        $.ajax({
+            url: "/admin/get-documents-info", // API route for fetching documents
+            type: "GET",
+            data: { vehicle_id: vehicleId },
+            success: function (response) {
+                if (response.success) {
+                    // Clear existing content before appending new data
+                    $("#car_images_append").html("");
+                    $("#car_doc_append").html("");
+                    $("#car_policy_append").html("");
+
+                    // Process each category separately
+                    response.data.vehicle_images.forEach((image) => {
+                        addVehicleImage(image);
+                    });
+
+                    response.data.vehicle_docs.forEach((doc) => {
+                        addVehicleDocument(doc);
+                    });
+
+                    response.data.vehicle_policies.forEach((policy) => {
+                        addVehiclePolicy(policy);
+                    });
+                } else {
+                    showToast("error", "No documents found.");
+                }
+            },
+            error: function (xhr, status, error) {},
+        });
+    }
+
+    function addVehicleDocument(docPath) {
+        let fileListContainer = $("#car_doc_append");
+
+        // Extract file name and extension
+        let fileName = docPath.split("/").pop();
+
+        // Simulate file size (since backend doesn’t provide it)
+        let randomFileSize = Math.floor(Math.random() * (50 * 1024 * 1024)); // Random size up to 50MB
+        let fileSizeText =
+            randomFileSize < 1024 * 1024
+                ? (randomFileSize / 1024).toFixed(2) + " KB"
+                : (randomFileSize / (1024 * 1024)).toFixed(2) + " MB";
+
+        // Calculate progress percentage
+        let progressPercentage = Math.min(
+            (randomFileSize / (50 * 1024 * 1024)) * 100,
+            100
+        ).toFixed(2);
+
+        let fileItem = $(`
+        <div class="d-flex align-items-center justify-content-between bg-white border br-5 gap-3 flex-wrap p-20 mb-2 file-item" data-file="${fileName}">
+            <div class="d-flex align-items-center">
+                <span><img src="/backend/assets/img/icons/pdf-icon.svg" alt="File Icon" width="30"></span>
+                <div class="ms-2">
+                    <h6 class="fs-14 fw-medium">Douments</h6>
+                    <p class="fs-13">${fileSizeText} MB</p>
+                </div>
+            </div>
+            <div class="progress-wrap w-50">
+                <div class="progress progress-sm" role="progressbar">
+                    <div class="progress-bar bg-success" style="width: ${progressPercentage}%;"></div>
+                </div>
+                <p class="fs-12 text-muted mt-1">${fileSizeText} of 50MB</p>
+            </div>
+            <div class="icon-list">
+                <a href="javascript:void(0);" class="trash-icon doc-delete-file"><i class="ti ti-trash"></i></a>
+            </div>
+        </div>
+    `);
+
+        // Append to container
+        fileListContainer.append(fileItem);
+
+        // Add delete functionality
+        fileItem.find(".doc-delete-file").on("click", function () {
+            $(this).closest(".file-item").remove();
+        });
+    }
+
+    function addVehiclePolicy(policy) {
+        let fileListContainer = $("#car_policy_append");
+
+        let fileName = policy.split("/").pop();
+
+        let randomFileSize = Math.floor(Math.random() * (50 * 1024 * 1024)); // Random size up to 50MB
+        let fileSizeText =
+            randomFileSize < 1024 * 1024
+                ? (randomFileSize / 1024).toFixed(2) + " KB"
+                : (randomFileSize / (1024 * 1024)).toFixed(2) + " MB";
+
+        let progressPercentage = Math.min(
+            (randomFileSize / (50 * 1024 * 1024)) * 100,
+            100
+        ).toFixed(2);
+
+        let fileItem = $(`
+        <div class="d-flex align-items-center justify-content-between bg-white border br-5 gap-3 flex-wrap p-20 mb-2 file-item" data-file="${fileName}">
+            <div class="d-flex align-items-center">
+                <span><img src="/backend/assets/img/icons/pdf-icon.svg" alt="File Icon" width="30"></span>
+                <div class="ms-2">
+                    <h6 class="fs-14 fw-medium">Douments</h6>
+                    <p class="fs-13">${fileSizeText} MB</p>
+                </div>
+            </div>
+            <div class="progress-wrap w-50">
+                <div class="progress progress-sm" role="progressbar">
+                    <div class="progress-bar bg-success" style="width: ${progressPercentage}%;"></div>
+                </div>
+                <p class="fs-12 text-muted mt-1">${fileSizeText} of 50MB</p>
+            </div>
+            <div class="icon-list">
+                <a href="javascript:void(0);" class="trash-icon policy-delete-file"><i class="ti ti-trash"></i></a>
+            </div>
+        </div>
+    `);
+
+        // Append to container
+        fileListContainer.append(fileItem);
+
+        // Add delete functionality
+        fileItem.find(".doc-delete-file").on("click", function () {
+            $(this).closest(".file-item").remove();
+        });
+    }
+
+    let editingDamageID = null;
+    function editDamage(damageID) {
+        let damageItem = $("#" + damageID);
+
+        let damageType = damageItem.find("input[name='damage_name[]']").val();
+        let damageLocation = damageItem
+            .find("input[name='damage_location[]']")
+            .val();
+        let damageDescription = damageItem
+            .find("input[name='damage_description[]']")
+            .val();
+
+        $("#dam_type").val(damageType);
+        $("#dam_name").val(damageLocation);
+        $("#dam_dis").val(damageDescription);
+
+        $("#damage_title").text("Edit Damage");
+        $("#damage_btn").text("Update").attr("data-editing", "true");
+
+        editingDamageID = damageID;
+    }
+
+    function addVehicleImage(imagePath) {
+        let fileListContainer = $("#car_images_append");
+
+        let imageItem = $(`
+        <div class="uploaded-img" data-file="${imagePath}">
+            <img src="${imagePath}" alt="Vehicle Image">
+            <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
+        </div>
+    `);
+
+        fileListContainer.append(imageItem);
+
+        imageItem.find(".delete-image").on("click", function () {
+            $(this).closest(".uploaded-img").remove();
+        });
+    }
 
     $(document).ready(function () {
-        initTable();
+        getSeasonalInfo();
+        getTrraifInfo();
+        getDocumentsInfo();
+        getFaqInfo();
+        getDamageInfo();
+        getInsuranceInfo();
 
         $(".summernote").summernote({
             height: 200,
@@ -16,478 +666,11 @@
                 ["view", ["fullscreen", "codeview", "help"]],
             ],
         });
-    });
-    
 
-    $(document).ready(function () {
-        $("#selectall_feature").on("change", function () {
-            $(".singleCheckbox").prop("checked", $(this).prop("checked"));
-        });
-
-        $(".singleCheckbox").on("change", function () {
-            if (
-                $(".singleCheckbox:checked").length ===
-                $(".singleCheckbox").length
-            ) {
-                $("#selectall_feature").prop("checked", true);
-            } else {
-                $("#selectall_feature").prop("checked", false);
-            }
-        });
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        let select = document.getElementById("sort_by");
-
-        let savedSort = localStorage.getItem("sort_by") || "ascending";
-        select.value = savedSort;
-
-        function updateSelectText() {
-            let selectedOption = select.options[select.selectedIndex];
-            select.options[0].text = "Selected : " + selectedOption.text;
-        }
-
-        updateSelectText();
-
-        select.addEventListener("change", function () {
-            localStorage.setItem("sort_by", this.value);
-            updateSelectText();
-        });
-    });
-
-    $(document).ready(function () {
-        let selectedStatus = null;
-        let currentSortType = null;
-
-        $("#sort_by_date").val("");
-
-        function getFilterData(includeStatus = false) {
-            let vehicleIds = [];
-            let vehicleTypeIds = [];
-            let vehicleLocationIds = [];
-            let sortByDate = $("#sort_by_date").val() || null;
-            let name = $("#name").val().trim() || null;
-
-            $("input[name='vehicle_id']:checked").each(function () {
-                vehicleIds.push($(this).val());
-            });
-
-            $("input[name='vehicle_type_id']:checked").each(function () {
-                vehicleTypeIds.push($(this).val());
-            });
-
-            $("input[name='vehicle_location_id']:checked").each(function () {
-                vehicleLocationIds.push($(this).val());
-            });
-
-            let filterData = {
-                name: name,
-                vehicle_id: vehicleIds.length > 0 ? vehicleIds : null,
-                vehicle_type_id:
-                    vehicleTypeIds.length > 0 ? vehicleTypeIds : null,
-                vehicle_location_id:
-                    vehicleLocationIds.length > 0 ? vehicleLocationIds : null,
-                sort_by: currentSortType || null,
-                sort_by_date: sortByDate,
-            };
-
-            if (includeStatus && selectedStatus !== null) {
-                filterData.status = selectedStatus;
-            }
-
-            return filterData;
-        }
-
-        function fetchFilteredData(includeStatus = false) {
-            let filterData = getFilterData(includeStatus);
-            initTable(filterData);
-            $("#loader-table").show();
-            $(".real-data").addClass("d-none");
-        }
-
-        $("#name, #sort_by_date").on("change keyup", function () {
-            fetchFilteredData();
-        });
-
-        $(document).on("#applyFilter", "click", function () {
-            fetchFilteredData(true);
-        });
-
-        $(document).on("#clearFilter", "click", function () {
-            $("input[type='checkbox']").prop("checked", false);
-            $(".dropdown-menu-md .dropdown-item").removeClass("active");
-            $("#name").val("");
-            $("#sort_by_date").val("");
-            selectedStatus = null;
-            currentSortType = null;
-            $("#sortLabel").text("{{ __('admin.page.latest') }}");
-            fetchFilteredData();
-        });
-
-        $(document).on(".statusFilter .dropdown-item", "click", function () {
-            $(".statusFilter .dropdown-item").removeClass("active");
-            $(this).addClass("active");
-
-            let statusText = $(this).text().trim();
-            selectedStatus =
-                statusText === "Active"
-                    ? 1
-                    : statusText === "Inactive"
-                    ? 0
-                    : null;
-        });
-
-        window.filterSort = function (element, sortType) {
-            $("#sortFilter a").removeClass("active");
-            $(element).addClass("active");
-
-            currentSortType = sortType;
-
-            $("#sortLabel").text($(element).text().trim());
-
-            fetchFilteredData();
-        };
-    });
-
-    function initTable(filterData) {
-        $.ajax({
-            url: "/admin/vehicle-list",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(filterData),
-            headers: {
-                Accept: "application/json",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            success: function (response) {
-                let tableBody = "";
-
-                if ($.fn.DataTable.isDataTable("#vehicleListIndex")) {
-                    $("#vehicleListIndex").DataTable().destroy();
-                }
-                if (response.code === 200 && response.data.length > 0) {
-                    let data = response.data;
-
-                    function formatDateTime(dateString) {
-                        let date = new Date(dateString);
-
-                        let optionsDate = {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                        };
-                        let formattedDate = date.toLocaleDateString(
-                            "en-GB",
-                            optionsDate
-                        );
-
-                        let optionsTime = {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                        };
-                        let formattedTime = date.toLocaleTimeString(
-                            "en-US",
-                            optionsTime
-                        );
-
-                        return { formattedDate, formattedTime };
-                    }
-                    function ucfirst(str) {
-                        return str.charAt(0).toUpperCase() + str.slice(1);
-                    }
-
-                    $.each(data, function (index, value) {
-                        let priceObj = [];
-                        let priceText = "";
-
-                        try {
-                            priceObj = JSON.parse(value.vehicle_price);
-                            let prices = priceObj[0];
-
-                            for (const [key, val] of Object.entries(prices)) {
-                                if (val && val !== "0") {
-                                    priceText = `$${val} (${key})`;
-                                    break;
-                                }
-                            }
-                        } catch (e) {}
-
-                        tableBody += `<tr>
-                            <td>
-                                <div class="form-check form-check-md" data-id="${
-                                    value.id
-                                }">
-                                                <input class="form-check-input" type="checkbox">
-                                </div>
-                            </td>
-                            <td>
-                            <div class="d-flex align-items-start">
-								<div class="avatar me-2 flex-shrink-0">
-									<img src="${value.vehicle_image}" class="rounded-3" alt="">
-								</div>
-								<div class="text-start">
-									<h6><p class="fs-14 fw-semibold">${ucfirst(value.name)}</p></h6>
-									<p>${value.car_type ? value.car_type.name : ""}</p>
-								</div>
-							</div>
-                            <h6 class="fw-medium"><a href="#"></a></h6></td>
-                            <td>${value.main_location.name}</td>
-                             <td>${priceText}</td>
-                            <td>0${value.damage_count}</td>
-                         <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox"
-                                    ${value.popular == 1 ? "checked" : ""}
-                                    onchange="togglePopular(${
-                                        value.id
-                                    }, this.checked)">
-                            </div>
-                        </td>
-                         <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox"
-                                    ${value.recommended == 1 ? "checked" : ""}
-                                    onchange="toggleRecommended(${
-                                        value.id
-                                    }, this.checked)">
-                            </div>
-                        </td>
-                        <td class="text-start">${value.created_date}</td>
-                          <td>
-                            <span class="badge ${value.status == 1 ? "badge-success-transparent" : "badge-danger-transparent"} d-inline-flex align-items-center badge-sm cursor-pointer"
-                                data-id="${value.id}" data-status="${value.status}" data-bs-toggle="modal" data-bs-target="#status-modal">
-                                <i class="ti ti-point-filled me-1"></i>
-                                ${value.status == 1 ? _l("admin.common.active") : _l("admin.common.inactive")}
-                            </span>
-                        </td>
-             ${
-                 hasPermission(permissions, "vehicles", "edit") ||
-                 hasPermission(permissions, "vehicles", "delete")
-                     ? `<td>
-                                <div class="dropdown">
-                                    <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="ti ti-dots-vertical"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end p-2">
-                                          ${
-                                              hasPermission(
-                                                  permissions,
-                                                  "vehicles",
-                                                  "edit"
-                                              )
-                                                  ? `<li>
-                                            <button class="dropdown-item edit-vehicles rounded-1 border-0 bg-white" data-id="${value.slug}">
-                                                <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
-                                            </button>
-                                        </li>`
-                                                  : ""
-                                          }
-                                               ${
-                                                   hasPermission(
-                                                       permissions,
-                                                       "vehicles",
-                                                       "delete"
-                                                   )
-                                                       ? `<li>
-                                           <button 
-                                                class="dropdown-item border-0 bg-white rounded-1 delete-vehicle" 
-                                                data-id="${value.id}" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#delete-modal">
-                                                <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
-                                            </button>
-                                        </li>`
-                                                       : ""
-                                               }
-                                    </ul>
-                                </div>
-                            </td>`
-                     : ""
-             }
-                        </tr>`;
-                    });
-                } else {
-                    tableBody += `
-                            <tr>
-                                <td colspan="8" class="text-center">${_l(
-                                    "admin.common.empty_table"
-                                )}e</td>
-                            </tr>`;
-                    $(".table-footer").empty();
-                }
-                $("#vehicleListIndex tbody").html(tableBody);
-                if (response.data.length > 0) {
-                    $("#vehicleListIndex").DataTable({
-                        ordering: false,
-                        searching: false,
-                        pageLength: 10,
-                        lengthChange: false,
-                        drawCallback: function () {
-                            $(".dataTables_info").addClass("d-none");
-                            $(
-                                ".dataTables_wrapper .dataTables_paginate"
-                            ).addClass("d-none");
-                            var tableWrapper = $(this).closest(
-                                ".dataTables_wrapper"
-                            );
-                            var info = tableWrapper.find(".dataTables_info");
-                            var pagination = tableWrapper.find(
-                                ".dataTables_paginate"
-                            );
-
-                            $(".table-footer")
-                                .empty()
-                                .append(
-                                    $(
-                                        '<div class="d-flex justify-content-between align-items-center w-100"></div>'
-                                    )
-                                        .append(
-                                            $(
-                                                '<div class="datatable-info"></div>'
-                                            ).append(info.clone(true))
-                                        )
-                                        .append(
-                                            $(
-                                                '<div class="datatable-pagination"></div>'
-                                            ).append(pagination.clone(true))
-                                        )
-                                );
-                            $(".table-footer")
-                                .find(".dataTables_paginate")
-                                .removeClass("d-none");
-                        },
-                        language: {
-                            emptyTable: _l("admin.common.no_matching_records"),
-                            info:
-                                _l("admin.common.showing") +
-                                " _START_ " +
-                                _l("admin.common.to") +
-                                " _END_ " +
-                                _l("admin.common.of") +
-                                " _TOTAL_ " +
-                                _l("admin.common.entries"),
-                            infoEmpty:
-                                _l("admin.common.showing") +
-                                " 0 " +
-                                _l("admin.common.to") +
-                                " 0 " +
-                                _l("admin.common.of") +
-                                " 0 " +
-                                _l("admin.common.entries"),
-                            infoFiltered:
-                                "(" +
-                                _l("admin.common.filtered_from") +
-                                " _MAX_ " +
-                                _l("admin.common.total_entries") +
-                                ")",
-                            lengthMenu:
-                                _l("admin.common.show") +
-                                " _MENU_ " +
-                                _l("admin.common.entries"),
-                            search: _l("admin.common.search") + ":",
-                            zeroRecords: _l("admin.common.empty_table"),
-                            paginate: {
-                                first: _l("admin.common.first"),
-                                last: _l("admin.common.last"),
-                                next: _l("admin.common.next"),
-                                previous: _l("admin.common.previous"),
-                            },
-                        },
-                    });
-                }
-                $("#loader-table").hide();
-                $(".label-loader, .input-loader").hide();
-                $(".real-label, .real-input, .real-data").removeClass("d-none");
-            },
-            error: function (error) {},
-        });
-    }
-
-    $("#deleteVehicle").on("submit", function (e) {
-        e.preventDefault();
-
-        var vehicleId = $("#delete_id").val();
-        var $submitBtn = $(".submitbtn"); // Button for submission
-
-        $submitBtn.prop("disabled", true); // Disable the button
-        $submitBtn.html(
-            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...'
-        ); // Show loading spinner
-
-        $.ajax({
-            url: "/admin/vehicle/delete",
-            method: "POST",
-            data: {
-                delete_id: vehicleId,
-            },
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            success: function (response) {
-                if (response.success) {
-                    $("#delete-modal").modal("hide");
-                    initTable();
-                } else {
-                    alert("Failed to delete vehicle.");
-                }
-            },
-            error: function (error) {
-                alert("An error occurred while deleting the vehicle.");
-            },
-            complete: function () {
-                $submitBtn.prop("disabled", false); // Re-enable the button
-                $submitBtn.html("Yes, Delete"); // Reset the button text
-            },
-        });
-    });
-
-    $(document).on("click", "#deleteSelectedVehicles", function () {
-        const vehicleIds = [];
-
-        $(".form-check-input:checked").each(function () {
-            const id = $(this).closest(".form-check").data("id");
-            if (id) {
-                vehicleIds.push(id);
-            }
-        });
-
-        if (vehicleIds.length === 0) {
-            showToast("error", "No vehicles selected.");
-            return;
-        }
-
-        $.ajax({
-            url: "/admin/vehicle/multiple/delete",
-            method: "POST",
-            data: {
-                delete_id: vehicleIds,
-            },
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            success: function (response) {
-                if (response.success) {
-                    initTable();
-                    showToast(
-                        "success",
-                        "Selected Vehicles delated successfully."
-                    );
-                } else {
-                    alert("Failed to delete vehicle(s).");
-                }
-            },
-            error: function () {
-                alert("An error occurred while deleting the vehicles.");
-            },
-        });
-    });
-
-    $(document).ready(function () {
         $("#carBasicInfoForm").validate({
             rules: {
                 vehicle_image: {
-                    required: true,
+                    required: false,
                 },
                 title: {
                     required: true,
@@ -581,7 +764,7 @@
                     var errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 } else if (element.attr("name") === "vehicle_image") {
-                    $("#vehicle_image_error_container").html(error);
+                    $("#vehicle_image_error_container").html(error); // Append error to a separate div
                 } else {
                     error.addClass("text-danger");
                     element.closest(".mb-3").append(error);
@@ -649,6 +832,9 @@
             }
         });
 
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // (Features & Amenities Validation and scripts)
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         $("#priceTariffNext").on("click", function (event) {
             event.preventDefault();
 
@@ -676,6 +862,9 @@
             }
         });
 
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // (Pricing & Tariff Validation and scripts)
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         $("#priceTariffForm").validate({
             rules: {
                 daily: {
@@ -756,10 +945,12 @@
                 "yearly_price",
             ];
 
+            // Check if at least one price type is selected (checkboxes)
             let hasPriceType = priceTypes.some((priceType) => {
                 return $(`[name="${priceType}"]`).is(":checked");
             });
 
+            // Check if at least one price value is entered (input fields)
             let hasPriceValue = priceValues.some((priceValue) => {
                 return $(`[name="${priceValue}"]`).val().trim() !== "";
             });
@@ -791,7 +982,6 @@
         let deletingId = null;
 
         $("#price_btn").on("click", function () {
-            $(".noDataS").html(""); // Clear previous entries
             let seasonName = $("#s_name").val();
             let startDate = $("#s_strdate").val();
             let endDate = $("#s_enddate").val();
@@ -816,6 +1006,7 @@
             if (editingId) {
                 let editElement = $("#" + editingId);
 
+                // Update text labels
                 editElement.find("h6").text(seasonName);
                 editElement.find(".start-date span").text(startDate);
                 editElement.find(".end-date span").text(endDate);
@@ -824,6 +1015,7 @@
                 editElement.find(".monthly-price span").text(`$${monthlyRate}`);
                 editElement.find(".late-fee span").text(`$${lateFee}`);
 
+                // Update hidden input values
                 editElement
                     .find("input[name='seasonal_title[]']")
                     .val(seasonName);
@@ -846,11 +1038,12 @@
                     .find("input[name='seasonal_late_fee[]']")
                     .val(lateFee);
 
+                // Reset form labels and buttons
                 $("#seas_title").text("Create Seasonal Pricing");
                 $("#price_btn").text("Create New");
                 editingId = null;
             } else {
-                let uniqueId = `season_${crypto.randomUUID()}`;
+                let uniqueId = "season_" + new Date().getTime();
                 let newSeasonalPricing = `
                 <div id="${uniqueId}" class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-1">
                     <div>
@@ -859,41 +1052,39 @@
                         <input type="hidden" name="seasonal_title[]" value="${seasonName}">
                         <div class="d-flex align-items-center gap-2 flex-wrap">
                             <p class="fs-13 fw-medium border-end pe-2 mb-0 start-date">
-                                ${_l(
-                                    "admin.rentals.start_date"
-                                )} : <span class="text-gray-9">${startDate}</span>
+                            ${_l(
+                                "admin.rentals.start_date"
+                            )} : <span class="text-gray-9">${startDate}</span>
                                 <input type="hidden" name="seasonal_start_date[]" value="${startDate}">
                             </p>
                             <p class="fs-13 fw-medium border-end pe-2 mb-0 end-date">
-                                ${_l(
-                                    "admin.rentals.end_date"
-                                )} : <span class="text-gray-9">${endDate}</span>
+                            ${_l(
+                                "admin.rentals.end_date"
+                            )} : <span class="text-gray-9">${endDate}</span>
                                 <input type="hidden" name="seasonal_end_date[]" value="${endDate}">
                             </p>
                             <p class="fs-13 fw-medium border-end pe-2 mb-0 daily-price">
-                                ${_l(
-                                    "admin.rentals.seasonal_daily_price"
-                                )} : <span class="text-gray-9">$${dailyRate}</span>
+                            ${_l(
+                                "admin.rentals.seasonal_daily_price"
+                            )} : <span class="text-gray-9">$${dailyRate}</span>
                                 <input type="hidden" name="seasonal_daily_rate[]" value="${dailyRate}">
                             </p>
                             <p class="fs-13 fw-medium border-end pe-2 mb-0 weekly-price">
-                                ${_l(
-                                    "admin.rentals.seasonal_weekly_price"
-                                )} : <span class="text-gray-9">$${weeklyRate}</span>
+                            ${_l(
+                                "admin.rentals.seasonal_weekly_price"
+                            )}  : <span class="text-gray-9">$${weeklyRate}</span>
                                 <input type="hidden" name="seasonal_weekly_rate[]" value="${weeklyRate}">
                             </p>
                             <p class="fs-13 fw-medium border-end pe-2 mb-0 monthly-price">
-                                ${_l(
-                                    "admin.rentals.seasonal_monthly_price"
-                                )}${_l(
-                    "admin.rentals.start_date"
-                )} : <span class="text-gray-9">$${monthlyRate}</span>
+                            ${_l(
+                                "admin.rentals.seasonal_monthly_price"
+                            )} : <span class="text-gray-9">$${monthlyRate}</span>
                                 <input type="hidden" name="seasonal_monthly_rate[]" value="${monthlyRate}">
                             </p>
                             <p class="fs-13 fw-medium pe-2 mb-0 late-fee">
-                                ${_l(
-                                    "admin.rentals.seasonal_late_fee"
-                                )} : <span class="text-gray-9">$${lateFee}</span>
+                            ${_l(
+                                "admin.rentals.seasonal_late_fee"
+                            )} : <span class="text-gray-9">$${lateFee}</span>
                                 <input type="hidden" name="seasonal_late_fee[]" value="${lateFee}">
                             </p>
                         </div>
@@ -912,7 +1103,7 @@
             }
 
             $("#add_price").modal("hide");
-            $("#add_price input").val("");
+            $("#add_price input").val(""); // Clear input fields
         });
 
         $(document).on("click", ".edit-icon", function () {
@@ -955,7 +1146,6 @@
         let deletingTariffId = null;
 
         $("#tarrif_btn").on("click", function () {
-            $(".noDataT").html(""); // Clear previous entries
             let tariffName = $("#t_name").val();
             let dailyPrice = $("#t_price").val();
             let fromDays = $("#t_fromday").val();
@@ -966,6 +1156,7 @@
                 ? "Unlimited"
                 : baseKilometers;
 
+            // Validation
             if (
                 !tariffName ||
                 !dailyPrice ||
@@ -981,6 +1172,7 @@
             if (editingTariffId) {
                 let editElement = $("#" + editingTariffId);
 
+                // Update text labels
                 editElement.find("h6").text(tariffName);
                 editElement.find(".daily-price span").text(`$${dailyPrice}`);
                 editElement.find(".from-days span").text(fromDays);
@@ -988,6 +1180,7 @@
                 editElement.find(".base-km span").text(isUnlimited);
                 editElement.find(".extra-price span").text(`$${extraPrice}`);
 
+                // Update hidden input values
                 editElement
                     .find("input[name='tariff_title[]']")
                     .val(tariffName);
@@ -1005,11 +1198,12 @@
                     .find("input[name='tariff_extra_price[]']")
                     .val(extraPrice);
 
+                // Reset form labels and buttons
                 $("#tarrif_title").text("Add New Tariff");
                 $("#tarrif_btn").text("Create Tariff");
                 editingTariffId = null;
             } else {
-                let uniqueId = `tariff_${crypto.randomUUID()}`;
+                let uniqueId = "tariff_" + new Date().getTime();
 
                 let newTariff = `
             <div id="${uniqueId}" class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-1">
@@ -1019,33 +1213,33 @@
                     <input type="hidden" name="tariff_title[]" value="${tariffName}">
                     <div class="d-flex align-items-center gap-2 flex-wrap">
                         <p class="fs-13 fw-medium border-end pe-2 mb-0 daily-price">
-                            ${_l(
-                                "admin.rentals.day_price"
-                            )} : <span class="text-gray-9">$${dailyPrice}</span>
+                        ${_l(
+                            "admin.rentals.day_price"
+                        )} : <span class="text-gray-9">$${dailyPrice}</span>
                             <input type="hidden" name="tariff_daily_price[]" value="${dailyPrice}">
                         </p>
                         <p class="fs-13 fw-medium border-end pe-2 mb-0 from-days">
-                            ${_l(
-                                "admin.rentals.from_days"
-                            )} : <span class="text-gray-9">${fromDays}</span>
+                        ${_l(
+                            "admin.rentals.from_days"
+                        )} : <span class="text-gray-9">${fromDays}</span>
                             <input type="hidden" name="tariff_from_days[]" value="${fromDays}">
                         </p>
                         <p class="fs-13 fw-medium border-end pe-2 mb-0 to-days">
-                            ${_l(
-                                "admin.rentals.to_days"
-                            )} : <span class="text-gray-9">${toDays}</span>
+                             ${_l(
+                                 "admin.rentals.to_days"
+                             )} : <span class="text-gray-9">${toDays}</span>
                             <input type="hidden" name="tariff_to_days[]" value="${toDays}">
                         </p>
                         <p class="fs-13 fw-medium border-end pe-2 mb-0 base-km">
-                            ${_l(
-                                "admin.rentals.base_km"
-                            )} : <span class="text-gray-9">${isUnlimited}</span>
+                        ${_l(
+                            "admin.rentals.base_km"
+                        )} : <span class="text-gray-9">${isUnlimited}</span>
                             <input type="hidden" name="tariff_base_km[]" value="${isUnlimited}">
                         </p>
                         <p class="fs-13 fw-medium pe-2 mb-0 extra-price">
-                            ${_l(
-                                "admin.rentals.extra_price"
-                            )} : <span class="text-gray-9">$${extraPrice}</span>
+                        ${_l(
+                            "admin.rentals.extra_price"
+                        )} : <span class="text-gray-9">$${extraPrice}</span>
                             <input type="hidden" name="tariff_extra_price[]" value="${extraPrice}">
                         </p>
                     </div>
@@ -1069,6 +1263,7 @@
             $("#t_base").prop("disabled", false);
         });
 
+        // Edit Tariff
         $(document).on("click", ".edit-tariff", function () {
             editingTariffId = $(this).data("id");
             let editElement = $("#" + editingTariffId);
@@ -1097,6 +1292,7 @@
             $("#tarrif_btn").text("Update");
         });
 
+        // Delete Tariff
         $(document).on("click", ".trash-tariff", function () {
             deletingTariffId = $(this).data("id");
         });
@@ -1111,6 +1307,7 @@
             $("#delete_tarrif").modal("hide");
         });
 
+        // Handle "Unlimited" Checkbox
         $("#unlimited1").on("change", function () {
             if ($(this).prop("checked")) {
                 $("#t_base").val("").prop("disabled", true);
@@ -1119,6 +1316,9 @@
             }
         });
 
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // (Car Documents validation and scripts)
+        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         $("#carDocumentForm").validate({
             rules: {
                 "car_document[]": {
@@ -1169,6 +1369,7 @@
             },
         });
 
+        // (Documents validation and scripts)
         let docSelectedFiles = new Map();
         const docAllowedExtensions = ["pdf", "doc", "docx", "txt"];
 
@@ -1277,10 +1478,11 @@
             docUpdateFileInput();
         });
 
+        // (policy validation and scripts)
         let policySelectedFiles = new Map();
         const policyAllowedExtensions = ["pdf", "doc", "docx", "txt"];
 
-        $(document).on("change", "#policy_document", function (event) {
+        $("#policy_document").on("change", function (event) {
             let files = event.target.files;
             let maxFileSize = 50 * 1024 * 1024;
             let fileListContainer = $("#car_policy_append");
@@ -1358,6 +1560,7 @@
                 dataTransfer.items.add(file);
             });
 
+            // Ensure policy documents are correctly assigned to the right input field
             $("#policy_document")[0].files = dataTransfer.files;
         }
 
@@ -1365,13 +1568,11 @@
             let fileExtension = fileName.split(".").pop().toLowerCase();
             let iconPath = ""; // 🛠️ Declare it here first
             if (fileExtension === "doc" || fileExtension === "docx") {
-                iconPath = "/backend/assets/img/icons/pdf-icon.svg"; // 📝 maybe a Word icon instead?
-            } else if (fileExtension === "pdf") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg";
             } else if (fileExtension === "txt") {
                 iconPath = "/backend/assets/img/icons/txt.svg";
-            } else {
-                iconPath = "/backend/assets/img/icons/default-file-icon.svg"; // ⚙️ default for unknown files
+            } else if (fileExtension === "pdf") {
+                iconPath = "/backend/assets/img/icons/pdf-icon.svg";
             }
 
             return iconPath;
@@ -1381,52 +1582,85 @@
             let fileItem = $(this).closest(".file-item");
             let fileName = fileItem.data("file");
 
-            policySelectedFiles.delete(fileName);
-            fileItem.remove();
+            // Confirm deletion
+            if (!confirm("Are you sure you want to delete this policy file?"))
+                return;
 
-            policyUpdateFileInput();
+            // If the file is newly uploaded (not yet in the database)
+            if (policySelectedFiles.has(fileName)) {
+                policySelectedFiles.delete(fileName); // Remove from map
+                fileItem.remove(); // Remove from UI
+                policyUpdateFileInput(); // Update input field
+                return;
+            }
+
+            // If it's an existing file, send an AJAX request to delete it from the database
+            $.ajax({
+                url: "/admin/vehicle/policy/delete",
+                type: "POST",
+                data: {
+                    vehicle_id: $("#vehicle_id").val(), // Hidden input field with vehicle_id
+                    file_path: fileName, // Send file path
+                    _token: $('meta[name="csrf-token"]').attr("content"), // CSRF token
+                },
+                success: function (response) {
+                    if (response.success) {
+                        showToast(
+                            "success",
+                            "Policy file deleted successfully."
+                        );
+                        fileItem.remove(); // Remove from UI
+                    } else {
+                        showToast("error", response.message);
+                    }
+                },
+                error: function () {
+                    showToast("error", "Failed to delete policy file.");
+                },
+            });
         });
 
         let selectedImages = new Map();
-        const allowedImageExtensions = ["jpg", "jpeg", "png"];
+        const allowedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+        const maxFileSize = 50 * 1024 * 1024;
 
         $("#car_images").on("change", function (event) {
             let files = event.target.files;
-            let maxFileSize = 50 * 1024 * 1024;
             let imageListContainer = $("#car_images_append");
             let validFiles = [];
-            let pending = files.length;
+            let remainingChecks = files.length;
 
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
                 let ext = file.name.split(".").pop().toLowerCase();
 
+                // Invalid file type
                 if (!allowedImageExtensions.includes(ext)) {
                     showToast(
                         "error",
-                        `Only image files (${allowedImageExtensions.join(
-                            ", "
-                        )}) are allowed.`
+                        `File "${file.name}" is not a valid image.`
                     );
-                    pending--;
+                    remainingChecks--;
                     continue;
                 }
 
+                // File size too large
                 if (file.size > maxFileSize) {
                     showToast(
                         "error",
                         `File "${file.name}" exceeds the 50MB size limit.`
                     );
-                    pending--;
+                    remainingChecks--;
                     continue;
                 }
 
+                // Duplicate file
                 if (selectedImages.has(file.name)) {
                     showToast(
                         "error",
-                        `Image "${file.name}" is already selected.`
+                        `File "${file.name}" is already selected.`
                     );
-                    pending--;
+                    remainingChecks--;
                     continue;
                 }
 
@@ -1448,64 +1682,93 @@
                     } else {
                         showToast(
                             "error",
-                            `Image "${file.name}" must be 690x420 pixels.`
+                            `Image "${file.name}" must be exactly 690x420 pixels.`
                         );
                         URL.revokeObjectURL(imageUrl);
                     }
 
-                    pending--;
-                    if (pending === 0) updateImageInput(validFiles);
+                    remainingChecks--;
+                    if (remainingChecks === 0) updateImageInput(validFiles);
                 };
 
                 img.onerror = function () {
-                    showToast("error", `Failed to load "${file.name}".`);
+                    showToast("error", `Could not load image "${file.name}".`);
                     URL.revokeObjectURL(imageUrl);
-                    pending--;
-                    if (pending === 0) updateImageInput(validFiles);
+                    remainingChecks--;
+                    if (remainingChecks === 0) updateImageInput(validFiles);
                 };
             }
         });
 
-        function updateImageInput(validFiles) {
+        function updateImageInput(
+            validFiles = Array.from(selectedImages.values())
+        ) {
             let dt = new DataTransfer();
             validFiles.forEach((file) => dt.items.add(file));
             $("#car_images")[0].files = dt.files;
         }
 
         $(document).on("click", ".delete-image", function () {
-            let item = $(this).closest(".uploaded-img");
-            let fileName = item.data("file");
+            let imageItem = $(this).closest(".uploaded-img");
+            let fileName = imageItem.data("file");
 
-            selectedImages.delete(fileName);
-            item.remove();
+            if (!confirm("Are you sure you want to delete this image?")) return;
 
-            let updatedFiles = Array.from(selectedImages.values());
-            updateImageInput(updatedFiles);
+            // Newly added (not in DB yet)
+            if (selectedImages.has(fileName)) {
+                selectedImages.delete(fileName);
+                imageItem.remove();
+                updateImageInput();
+                return;
+            }
+
+            // Existing DB image
+            $.ajax({
+                url: "/admin/vehicle/image/delete",
+                type: "POST",
+                data: {
+                    vehicle_id: $("#vehicle_id").val(),
+                    image_path: fileName,
+                },
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                success: function (response) {
+                    if (response.success) {
+                        imageItem.remove();
+                    }
+                },
+            });
         });
 
         $("#car_video").on("input", function () {
             let videoUrl = $(this).val().trim();
             let videoContainer = $("#car_video_append");
 
+            // Regular expression to validate YouTube URLs
             let youtubeRegex =
                 /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
 
+            // If input is empty, remove the appended video
             if (videoUrl === "") {
                 videoContainer.html("");
                 return;
             }
 
+            // Check if the entered URL matches the YouTube format
             if (youtubeRegex.test(videoUrl)) {
                 let videoItem = `
-                    <img src="/backend/assets/img/car/car-lg-01.jpg" alt="img">
+                    <img src="/assets/img/car/car-lg-01.jpg" alt="img">
                     <a href="${videoUrl}" target="_blank" data-fancybox="" class="play-icon">
                         <i class="ti ti-player-play-filled"></i>
                     </a>
             `;
 
-                videoContainer.html(videoItem);
+                videoContainer.html(videoItem); // Append or replace the video
             } else {
-                videoContainer.html("");
+                videoContainer.html(""); // Remove invalid input if it doesn’t match the format
             }
         });
 
@@ -1525,15 +1788,20 @@
                 $("#fifthBar").removeClass("active").addClass("activated");
                 $("#sixthBar").addClass("active");
             } else {
+                // showToast("error", "Please upload valid documents before proceeding.");
             }
         });
+
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // (Damage validation and scripts)
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         let editingDamageId = null;
         let deletingDamageId = null;
 
+        // Image Preview on File Selection
         $("#dam_image").on("change", function (event) {
             let file = event.target.files[0];
-
             if (file) {
                 let imageUrl = URL.createObjectURL(file);
                 $("#image_preview").attr("src", imageUrl).removeClass("d-none");
@@ -1542,6 +1810,7 @@
             }
         });
 
+        // Add or Edit Damage Entry
         $("#damage_btn").on("click", function () {
             let damageImage = $("#dam_image")[0].files[0];
             let damageName = $("#dam_name").val();
@@ -1553,13 +1822,8 @@
                 year: "numeric",
             });
 
-            if (!damageName) {
-                showToast("error", "Please enter a damage name.");
-                return;
-            }
-
-            if (!damageType || damageType === "Select Type") {
-                showToast("error", "Please select a damage type.");
+            if (!damageName || !damageType) {
+                showToast("error", "Please fill in all required fields.");
                 return;
             }
 
@@ -1606,42 +1870,41 @@
                 editingDamageId = null;
                 showToast("success", "Damage updated successfully!");
             } else {
-                let uniqueId = `damage_${crypto.randomUUID()}`;
+                let uniqueId = "damage_" + new Date().getTime();
                 let reader = new FileReader();
 
                 reader.onload = function (e) {
                     let imageUrl = e.target.result;
-
                     let newDamage = `
-                <div id="${uniqueId}" class="bg-white p-20 br-5 border mb-2">
-                 <input type="hidden" name="damage_id[]" value="${uniqueId}">
-                        <input type="hidden" name="damage_image[]" value="${imageUrl}">
-                    <div class="row align-items-center row-gap-3">
-                        <div class="col-xxl-8 col-md-7">
-                            <div class="d-flex align-items-center gap-2 mb-1">
-                                <h6 class="fs-14 fw-medium">${damageType}</h6>
-                                <input type="hidden" name="damage_name[]" value="${damageType}">
-                                <span class="badge bg-pink-transparent badge-sm">${damageName}</span>
-                                <input type="hidden" name="damage_location[]" value="${damageName}">
-                            </div>
-                            <p class="fs-13">${damageDesc}</p>
-                            <input type="hidden" name="damage_description[]" value="${damageDesc}">
-                        </div>
-                        <div class="col-xxl-4 col-md-5">
-                            <div class="d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
-                                <p class="mb-0">Added on : ${currentDate}</p>
-                                <div class="icon-list d-flex align-items-center">
-                                    <a href="#" class="edit-damage me-2" data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#add-damage">
-                                        <i class="ti ti-edit"></i>
-                                    </a>
-                                    <a href="#" class="trash-damage" data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#delete_damage">
-                                        <i class="ti ti-trash"></i>
-                                    </a>
+                        <div id="${uniqueId}" class="bg-white p-20 br-5 border mb-2">
+                            <input type="hidden" name="damage_id[]" value="${uniqueId}">
+                            <input type="hidden" name="damage_image[]" value="${imageUrl}">
+                            <div class="row align-items-center row-gap-3">
+                                <div class="col-xxl-8 col-md-7">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <h6 class="fs-14 fw-medium">${damageType}</h6>
+                                        <input type="hidden" name="damage_name[]" value="${damageType}">
+                                        <span class="badge bg-pink-transparent badge-sm">${damageName}</span>
+                                        <input type="hidden" name="damage_location[]" value="${damageName}">
+                                    </div>
+                                    <p class="fs-13">${damageDesc}</p>
+                                    <input type="hidden" name="damage_description[]" value="${damageDesc}">
                                 </div>
-                            </div>
-                        </div>
-                    </div>                                                            
-                </div>`;
+                                <div class="col-xxl-4 col-md-5">
+                                    <div class="d-flex align-items-center justify-content-md-end gap-2 flex-wrap">
+                                        <p class="mb-0">Added on : ${currentDate}</p>
+                                        <div class="icon-list d-flex align-items-center">
+                                            <a href="#" class="edit-damage me-2" data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#add-damage">
+                                                <i class="ti ti-edit"></i>
+                                            </a>
+                                            <a href="#" class="trash-damage" data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#delete_damage">
+                                                <i class="ti ti-trash"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                                                 
+                        </div>`;
 
                     $("#car_damage_append").append(newDamage);
                     updateDamageCount();
@@ -1650,60 +1913,99 @@
                 reader.readAsDataURL(damageImage);
             }
 
+            // Reset modal fields and hide modal
             $("#add-damage").modal("hide");
             showToast("success", "Damage added successfully!");
         });
 
+        // Update Damage Count
         function updateDamageCount() {
             let totalDamages = $("#car_damage_append > div").length;
             $("#damage_count").text(totalDamages.toString().padStart(2, "0"));
         }
 
+        // Open Add Damage Modal and Reset Fields
         $(document).on("click", "#damage_car", function (e) {
             e.preventDefault();
             $("#damage_title").text("Add Damage");
             $("#damage_btn").text("Create New");
 
+            // Clear fields
             $("#add-damage input, #add-damage textarea").val("");
-
             $("#add-damage select").prop("selectedIndex", 0).trigger("change");
             $("#image_preview").attr("src", "").addClass("d-none");
         });
 
         // Edit Damage
         $(document).on("click", ".edit-damage", function () {
-            editingDamageId = $(this).data("id");
-            let editElement = $("#" + editingDamageId);
+            let damageId = $(this).data("id"); // Get the damage ID
 
-            // Get values from hidden inputs
-            let damageId = editElement.find("input[name='damage_id[]']").val();
-            let damageName = editElement
-                .find("input[name='damage_name[]']")
-                .val();
-            let damageLocation = editElement
-                .find("input[name='damage_location[]']")
-                .val();
-            let damageDesc = editElement
-                .find("input[name='damage_description[]']")
-                .val();
-            let imgSrc = editElement.find("input[name='damage_image[]']").val();
+            // Make AJAX request to fetch damage details using the damage ID
+            $.ajax({
+                url: "/admin/get-damage-details", // Adjust this URL according to your route
+                type: "GET",
+                data: { id: damageId }, // Send the damage ID as part of the payload
+                success: function (response) {
+                    if (response.success) {
+                        let damage = response.data;
 
-            // Populate form fields
-            $("#dam_name").val(damageLocation);
-            $("#dam_dis").val(damageDesc);
+                        // If the data was returned from the server, populate the modal fields
+                        populateDamageForm(damage);
+                    } else {
+                        // If no data found, fallback to using the existing hidden input values
+                        let editElement = $("#" + damageId);
+
+                        let damageName = editElement
+                            .find("input[name='damage_location[]']")
+                            .val();
+                        let damageDesc = editElement
+                            .find("input[name='damage_description[]']")
+                            .val();
+                        let imgSrc = editElement
+                            .find("input[name='damage_image[]']")
+                            .val();
+
+                        // Populate the modal fields with the values from the hidden inputs
+                        populateDamageForm({
+                            damage_location: damageName,
+                            description: damageDesc,
+                            image: imgSrc,
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showToast(
+                        "error",
+                        "Something went wrong while fetching damage details."
+                    );
+                },
+            });
+        });
+
+        function populateDamageForm(damage) {
+            $("#dam_dis").val(damage.description || ""); // Description field
             $("#damage_title").text("Edit Damage");
             $("#damage_btn").text("Update");
 
-            // Handle Image Preview
-            if (imgSrc) {
-                $("#image_preview").attr("src", imgSrc).removeClass("d-none");
+            $("#dam_name")
+                .val(damage.damage_loaction || "")
+                .trigger("change");
+
+            $("#dam_type")
+                .val(damage.damage_type || "")
+                .trigger("change");
+
+            if (damage.image) {
+                $("#image_preview")
+                    .attr("src", "/" + damage.image)
+                    .removeClass("d-none");
             } else {
                 $("#image_preview").attr("src", "").addClass("d-none");
             }
 
             // Reset file input so user can select a new image
             $("#dam_image").val("");
-        });
+        }
 
         // Delete Damage
         $(document).on("click", ".trash-damage", function () {
@@ -1726,9 +2028,9 @@
         // (FAQ validation and scripts)
         // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        let faqCounter = 0; // Counter to create unique IDs
         let editingFAQ = null; // Track the currently editing FAQ
 
+        // Create / Update FAQ
         $("#faq_btn").on("click", function (e) {
             e.preventDefault();
 
@@ -1746,7 +2048,9 @@
                 $(`#${uniqueID}_question`).val(question);
                 $(`#${uniqueID}_answer`).val(answer);
                 $(`#${uniqueID}_text`).text(answer);
-                $(`#${uniqueID} button`).html(
+
+                // Update button text properly inside the accordion
+                $(`#faq_item_${uniqueID} .accordion-button`).html(
                     `<span><i class="ti ti-angle-down"></i></span> ${question}`
                 );
 
@@ -1754,16 +2058,16 @@
                 editingFAQ = null; // Reset after editing
             } else {
                 // Add new FAQ
-                let uniqueID = `faq_${crypto.randomUUID()}`;
+                let uniqueID = "faq_" + faqCounter++; // Unique ID for each FAQ
                 let faqItem = `
             <div class="accordion-item" id="faq_item_${uniqueID}">
                 <h2 class="accordion-header d-flex align-items-center justify-content-between">
                     <button class="accordion-button collapsed" type="button"
                         data-bs-toggle="collapse" data-bs-target="#${uniqueID}"
                         aria-expanded="false" aria-controls="${uniqueID}">
-                        <span class="faq-icon"><i class="ti ti ti-grip-vertical"></i></span> ${question}
+                        <span class="faq-icon"><i class="ti ti-grip-vertical"></i></span> ${question}
                     </button>
-                    <input type="hidden" name="faq_id[]" value="" id="${uniqueID}_id">
+                    <input type="hidden" name="faq_id[]" value="${uniqueID}" id="${uniqueID}_id">
                     <input type="hidden" name="faq_question[]" value="${question}" id="${uniqueID}_question">
                 </h2>
                 <div class="faq-actions text-end py-2 px-3">
@@ -1924,22 +2228,6 @@
 
                 finalFormData.append("feature_id", JSON.stringify(featureIds));
 
-                let otherLocationIds = [];
-
-                $("select[name='other_location_id[]'] option:selected").each(
-                    function () {
-                        let value = parseInt($(this).val());
-                        if (!isNaN(value)) {
-                            otherLocationIds.push(value);
-                        }
-                    }
-                );
-
-                finalFormData.append(
-                    "other_location_id",
-                    JSON.stringify(otherLocationIds)
-                );
-
                 let carDocFiles = $("#car_document")[0].files;
                 if (carDocFiles.length > 0) {
                     for (let i = 0; i < carDocFiles.length; i++) {
@@ -2075,24 +2363,35 @@
 
                 let extraServicePayload = [];
 
-                $("input[name='extra_service[]']:checked").each(function (
-                    index
-                ) {
-                    let serviceId = $(this).val(); // Get service ID
-                    let serviceValue = $("input[name='service_value[]']")
-                        .eq(index)
-                        .val();
-                    let servicePrice = $("input[name='service_price[]']")
-                        .eq(index)
-                        .val();
+                $("input[name='extra_service[]']:checked").each(function () {
+                    let serviceId = $(this).val(); // Get checked service ID
 
-                    extraServicePayload.push({
-                        service_id: parseInt(serviceId),
-                        value: serviceValue,
-                        price: parseFloat(servicePrice),
-                    });
+                    // Find the exact index of the selected service in service_id[]
+                    let index = $("input[name='service_id[]']").index(
+                        $(
+                            "input[name='service_id[]'][value='" +
+                                serviceId +
+                                "']"
+                        )
+                    );
+
+                    if (index !== -1) {
+                        let serviceValue = $("input[name='service_value[]']")
+                            .eq(index)
+                            .val();
+                        let servicePrice = $("input[name='service_price[]']")
+                            .eq(index)
+                            .val();
+
+                        extraServicePayload.push({
+                            service_id: parseInt(serviceId),
+                            value: serviceValue,
+                            price: parseFloat(servicePrice),
+                        });
+                    }
                 });
 
+                // Append the filtered extra services to FormData
                 finalFormData.append(
                     "extra_services",
                     JSON.stringify(extraServicePayload)
@@ -2121,47 +2420,6 @@
                 });
 
                 finalFormData.append("vehicle_faq", JSON.stringify(faqPayload));
-
-                let damagePayload = [];
-
-                $("input[name='damage_image[]']").each(function (index) {
-                    let image = $(this).val().trim();
-                    let name = $("input[name='damage_name[]']")
-                        .eq(index)
-                        .val()
-                        .trim();
-                    let location = $("input[name='damage_location[]']")
-                        .eq(index)
-                        .val()
-                        .trim();
-                    let description = $("input[name='damage_description[]']")
-                        .eq(index)
-                        .val()
-                        .trim();
-                    let damageId = $("input[name='damage_id[]']")
-                        .eq(index)
-                        .val()
-                        .trim(); // Get Damage ID
-
-                    if (
-                        image !== "" &&
-                        name !== "" &&
-                        location !== "" &&
-                        description !== ""
-                    ) {
-                        damagePayload.push({
-                            image: image,
-                            name: name,
-                            location: location,
-                            description: description,
-                        });
-                    }
-                });
-
-                finalFormData.append(
-                    "vehicle_damage",
-                    JSON.stringify(damagePayload)
-                );
 
                 let vehicleImage = $("#vehicle_image")[0].files[0];
 
@@ -2199,10 +2457,55 @@
                     JSON.stringify(insurancePayload)
                 );
 
+                let damagePayload = [];
+
+                $("input[name='damage_image[]']").each(function (index) {
+                    let image = $(this).val()?.trim() || "";
+
+                    let nameField = $("input[name='damage_name[]']").eq(index);
+                    let name = nameField.length
+                        ? nameField.val()?.trim() || ""
+                        : "";
+
+                    let locationField = $("input[name='damage_location[]']").eq(
+                        index
+                    );
+                    let location = locationField.length
+                        ? locationField.val()?.trim() || ""
+                        : "";
+
+                    let descriptionField = $(
+                        "input[name='damage_description[]']"
+                    ).eq(index);
+                    let description = descriptionField.length
+                        ? descriptionField.val()?.trim() || ""
+                        : "";
+
+                    let damageIdField = $("input[name='damage_id[]']").eq(
+                        index
+                    );
+                    let damageId = damageIdField.length
+                        ? damageIdField.val()?.trim() || ""
+                        : "";
+
+                    if (image && name && location && description) {
+                        damagePayload.push({
+                            image: image,
+                            name: name,
+                            location: location,
+                            description: description,
+                        });
+                    }
+                });
+
+                finalFormData.append(
+                    "vehicle_damage",
+                    JSON.stringify(damagePayload)
+                );
                 $("#seoFinalBtn").text("Please Wait...").prop("disabled", true);
 
                 $.ajax({
-                    url: "/admin/create/vehicle",
+                    url: "/admin/update/vehicle",
                     method: "POST",
                     data: finalFormData,
                     dataType: "json",
@@ -2213,6 +2516,12 @@
                         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
                             "content"
                         ),
+                    },
+                    beforeSend: function () {
+                        $(".add_btn").attr("disabled", true);
+                        $(".add_btn").html(
+                            '<div class="spinner-border text-light" role="status"></div>'
+                        );
                     },
                 })
                     .done((response, statusText, xhr) => {
@@ -2242,7 +2551,7 @@
                         $(".add_btn").removeAttr("disabled");
                         $(".add_btn").html("submit");
                         $("#seoFinalBtn")
-                            .text("Save & Exit")
+                            .text("Update & Exit")
                             .prop("disabled", false);
 
                         if (error.status == 422) {
@@ -2251,331 +2560,185 @@
                                 $("#" + key + "_error").text(val[0]);
                             });
                             $("#seoFinalBtn")
-                                .text("Save & Exit")
+                                .text("Update & Exit")
                                 .prop("disabled", false);
                         } else {
                             toastr(error.responseJSON.message, "bg-danger");
                             $("#seoFinalBtn")
-                                .text("Save & Exit")
+                                .text("Update & Exit")
                                 .prop("disabled", false);
-                            F;
                         }
                     });
             }
         });
-    });
 
-    $(document).on("click", "[data-bs-target='#status-modal']", function () {
-        const vehicleId = $(this).data("id");
-        const status = $(this).data("status");
-    
-        $("#status_vehicle_id").val(vehicleId);
-        $("#vehicle_status").val(status).trigger("change"); // Important for Select2
-    });
-    
-
-
-    $("#statusVehicleForm").on("submit", function (e) {
-        e.preventDefault();
-    
-        let vehicleId = $("#status_vehicle_id").val();
-        let status = $("#vehicle_status").val();
-    
-        $.ajax({
-            url: "/admin/set-status", 
-            method: "GET",
-            data: {
-                vehicle_id: vehicleId,
-                status: status
-            },
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            success: function (response) {
-                if (response.success) {
-                    initTable();
-                    $("#status-modal").modal("hide");
-                    showToast("success", "Vehicle status updated.");
-                } else {
-                    showToast("error", "Failed to update status.");
-                }
-            },
-            error: function () {
-                showToast("error", "An error occurred.");
-            }
-        });
-    });
-    
-
-})();
-
-let editingDamageID = null; // Track the item being edited
-function editDamage(damageID) {
-    let item = $("#" + damageID);
-
-    let damageType = item.find("input[name='damage_name[]']").val();
-    let damageLocation = item.find("input[name='damage_location[]']").val();
-    let damageDescription = item
-        .find("input[name='damage_description[]']")
-        .val();
-    let damageImage = item.find("input[name='damage_image[]']").val();
-
-    // Set values in modal
-    $("#dam_type").val(damageType);
-    $("#dam_name").val(damageLocation);
-    $("#dam_dis").val(damageDescription);
-
-    // Show image preview
-    if (damageImage) {
-        $("#image_preview").attr("src", damageImage).removeClass("d-none");
-    } else {
-        $("#image_preview").addClass("d-none");
-    }
-
-    editingDamageID = damageID;
-}
-
-$(document).on("click", ".edit-vehicles", function () {
-    const vehicleSlug = $(this).data("id");
-    editVechileList(vehicleSlug);
-});
-
-function editVechileList(vehicleSlug) {
-    $.ajax({
-        url: "/admin/check-vehicle",
-        type: "GET",
-        data: { vehicle_slug: vehicleSlug },
-        success: function (response) {
-            if (response.exists === "yes") {
-                window.location.href = `/admin/edit-vehicle/${vehicleSlug}`;
-            } else {
-                showToast("error", "Vehicle not found.");
-            }
-        },
-        error: function (xhr, status, error) {
-            showToast("error", "Something went wrong while checking the vehicle.");
-        },
-    });
-}
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const saveBtn = document.getElementById("service_save_btn");
-    if (saveBtn) {
-        saveBtn.addEventListener("click", function () {
-            let tableRows = document.querySelectorAll(
-                ".custom-table1 tbody tr"
-            );
-
-            tableRows.forEach((row) => {
-                let serviceName = row
-                    .querySelector("#extra_name")
-                    .innerText.trim();
-                let extraValue = row.querySelector("#extra_value").value;
-                let extraPrice = row.querySelector("#extra_price").value;
-
-                let serviceCards = document.querySelectorAll(
-                    ".extra-service-card"
+        document
+            .getElementById("service_save_btn")
+            .addEventListener("click", function () {
+                // Get all table rows from the modal
+                let tableRows = document.querySelectorAll(
+                    ".custom-table1 tbody tr"
                 );
 
-                serviceCards.forEach((card) => {
-                    let cardName = card
-                        .querySelector("#service_name")
+                tableRows.forEach((row) => {
+                    let serviceName = row
+                        .querySelector("#extra_name")
                         .innerText.trim();
+                    let extraValue = row.querySelector("#extra_value").value;
+                    let extraPrice = row.querySelector("#extra_price").value;
 
-                    if (cardName === serviceName) {
-                        card.querySelector("#set_value").innerText =
-                            extraValue === "per_day"
-                                ? _l("admin.rentals.per_day")
-                                : _l("admin.rentals.one_time");
-                        card.querySelector("#service_value").value = extraValue;
+                    // Find the matching service card in the main list
+                    let serviceCards = document.querySelectorAll(
+                        ".extra-service-card"
+                    );
 
-                        card.querySelector(
-                            "#set_price"
-                        ).innerText = `$${extraPrice}`;
-                        card.querySelector("#service_price").value = extraPrice;
-                    }
+                    serviceCards.forEach((card) => {
+                        let cardName = card
+                            .querySelector("#service_name")
+                            .innerText.trim();
+
+                        if (cardName === serviceName) {
+                            // Update the selected value
+                            card.querySelector("#set_value").innerText =
+                                extraValue === "per_day"
+                                    ? _l("admin.rentals.per_day")
+                                    : _l("admin.rentals.one_time");
+                            card.querySelector("#service_value").value =
+                                extraValue;
+
+                            // Update the price
+                            card.querySelector(
+                                "#set_price"
+                            ).innerText = `$${extraPrice}`;
+                            card.querySelector("#service_price").value =
+                                extraPrice;
+                        }
+                    });
                 });
+
+                // Close the modal
+                $("#edit_price").modal("hide");
             });
 
-            $("#edit_price").modal("hide");
-        });
-    }
-});
+        $("#vehicle_brand_id").on("change", function () {
+            let brandId = $(this).val();
+            let modelDropdown = $("#vehicle_model_id");
 
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".delivery-add").forEach(function (container) {
-        const plusIcon = container.querySelector(".plus-active");
-        const checkIcon = container.querySelector(".check-active");
-        const checkbox = container.querySelector("#insurance_checked");
+            modelDropdown.html('<option value="">Loading...</option>'); // Show loading text
 
-        container.addEventListener("click", function (event) {
-            event.preventDefault();
-            if (checkbox.checked) {
-                checkbox.checked = false;
-                checkIcon.style.display = "none";
-                plusIcon.style.display = "inline";
+            if (brandId) {
+                $.ajax({
+                    url: "/admin/get-model",
+                    type: "GET",
+                    data: { brand_id: brandId },
+                    success: function (response) {
+                        modelDropdown.html(
+                            '<option value="">Select Model</option>'
+                        ); // Reset dropdown
+
+                        if (response.length > 0) {
+                            $.each(response, function (key, model) {
+                                modelDropdown.append(
+                                    `<option value="${model.id}">${model.model_name}</option>`
+                                );
+                            });
+                        } else {
+                            modelDropdown.html(
+                                '<option value="">No models found</option>'
+                            );
+                        }
+                    },
+                    error: function () {
+                        modelDropdown.html(
+                            '<option value="">Error loading models</option>'
+                        );
+                    },
+                });
             } else {
-                checkbox.checked = true;
-                checkIcon.style.display = "inline";
-                plusIcon.style.display = "none";
+                modelDropdown.html('<option value="">Select Model</option>'); // Reset if no brand is selected
             }
         });
-    });
 
-    document.addEventListener("click", function (event) {
-        if (event.target.closest(".edit-icon")) {
-            const editButton = event.target.closest(".edit-icon");
-            const uniqueId = editButton.getAttribute("data-id");
-            const price = editButton.getAttribute("data-price");
-            const priceType = editButton.getAttribute("data-price-type");
-
-            document.getElementById("price").value = price;
-            document
-                .getElementById("edit_insurance")
-                .setAttribute("data-id", uniqueId);
-
-            document
-                .querySelectorAll("input[name='Radio']")
-                .forEach((radio) => {
-                    if (
-                        radio.nextElementSibling.innerText.trim() === priceType
-                    ) {
-                        radio.checked = true;
-                    }
-                });
+        function toggleKilometerFields() {
+            if ($("#Baseunlimited").is(":checked")) {
+                $("#basic_kilometer").prop("disabled", true).val("");
+                $("#extra_kilometer").prop("disabled", true).val("");
+            } else {
+                $("#basic_kilometer").prop("disabled", false);
+                $("#extra_kilometer").prop("disabled", false);
+            }
         }
-    });
-});
 
-document.addEventListener("click", function (event) {
-    // Delete functionality
-    if (event.target.closest(".trash-icon")) {
-        event.preventDefault();
-        const deleteButton = event.target.closest(".trash-icon");
-        const container = deleteButton.closest("div[data-id]"); // Find the insurance container
-        const uniqueId = container.getAttribute("data-id");
+        toggleKilometerFields();
 
-        // Remove from the appended list
-        container.remove();
+        $("#Baseunlimited").change(function () {
+            toggleKilometerFields();
+        });
 
-        // Uncheck the corresponding checkbox in the modal
-        document
-            .querySelectorAll("#set_value .delivery-add input[type='checkbox']")
-            .forEach((checkbox) => {
-                const parentContainer = checkbox.closest("#inCont");
-                const insuranceId =
-                    parentContainer.querySelector("#insurance_id").value;
-                if (
-                    document.getElementById(`insurance_id_one_${uniqueId}`)
-                        ?.value === insuranceId
-                ) {
-                    checkbox.checked = false;
-                    const plusIcon =
-                        parentContainer.querySelector(".plus-active");
-                    const checkIcon =
-                        parentContainer.querySelector(".check-active");
-                    checkIcon.style.display = "none";
-                    plusIcon.style.display = "inline";
-                }
-            });
-    }
-});
+        function updateSelectAllCheckbox() {
+            var total = $("input[name='feature_id[]']").length;
+            var checked = $("input[name='feature_id[]']:checked").length;
 
-$(document).ready(function () {
-    $("#vehicle_brand_id").on("change", function () {
-        let brandId = $(this).val();
-        let modelDropdown = $("#vehicle_model_id");
-
-        modelDropdown.html('<option value="">Loading...</option>'); // Show loading text
-
-        if (brandId) {
-            $.ajax({
-                url: "/admin/get-model",
-                type: "GET",
-                data: { brand_id: brandId },
-                success: function (response) {
-                    modelDropdown.html(
-                        '<option value="">Select Model</option>'
-                    ); // Reset dropdown
-
-                    if (response.length > 0) {
-                        $.each(response, function (key, model) {
-                            modelDropdown.append(
-                                `<option value="${model.id}">${model.model_name}</option>`
-                            );
-                        });
-                    } else {
-                        modelDropdown.html(
-                            '<option value="">No models found</option>'
-                        );
-                    }
-                },
-                error: function () {
-                    modelDropdown.html(
-                        '<option value="">Error loading models</option>'
-                    );
-                },
-            });
-        } else {
-            modelDropdown.html('<option value="">Select Model</option>'); // Reset if no brand is selected
+            if (total > 0 && total === checked) {
+                $("#select-all1").prop("checked", true);
+            } else {
+                $("#select-all1").prop("checked", false);
+            }
         }
-    });
-});
 
-$(document).ready(function () {
-    $(document).on("change", "#Baseunlimited", function () {
-        if ($(this).is(":checked")) {
-            $("#basic_kilometer").prop("disabled", true).val("");
-            $("#extra_kilometer").prop("disabled", true).val("");
-        } else {
-            $("#basic_kilometer").prop("disabled", false);
-            $("#extra_kilometer").prop("disabled", false);
-        }
-    });
-});
+        updateSelectAllCheckbox();
 
-$(document).ready(function () {
-    $("#delImg").on("click", function () {
-        // Clear the file input field
-        $("#vehicle_image").val("");
+        $(document).on("change", "input[name='feature_id[]']", function () {
+            updateSelectAllCheckbox();
+        });
 
-        // Remove the selected image (hide or reset to a default)
-        $(".frames img").attr("src", "").hide(); // Hides the image after removal
-    });
-});
+        $("#select-all1").on("change", function () {
+            $("input[name='feature_id[]']").prop("checked", this.checked);
+        });
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Handle price checkboxes
-    const checkboxes = document.querySelectorAll(".price-checkbox");
-    checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener("change", function () {
-            let priceInput = document.getElementById(this.name + "_price");
+        $("#languageSelector").on("change", function () {
+            var langId = $(this).val();
 
-            if (priceInput) {
+            var pathSegments = window.location.pathname.split("/");
+            var slug = pathSegments[pathSegments.length - 1];
+
+            if (langId && slug) {
+                window.location.href =
+                    "/admin/edit-vehicle/" + slug + "?language_id=" + langId;
+            }
+        });
+
+        $("#delImg").on("click", function () {
+            $("#vehicle_image").val("");
+
+            $(".frames img").attr("src", "").hide();
+        });
+
+        const checkboxes = document.querySelectorAll(".price-checkbox");
+
+        checkboxes.forEach((checkbox) => {
+            checkbox.addEventListener("change", function () {
+                let priceInput = document.getElementById(this.name + "_price");
+
                 if (this.checked) {
                     priceInput.removeAttribute("disabled"); // Enable the input
                 } else {
-                    priceInput.setAttribute("disabled", "true"); // Disable the input
+                    priceInput.setAttribute("disabled", "false"); // Disable the input
                     priceInput.value = ""; // Clear the input value
                 }
-            }
+            });
         });
-    });
 
-    // Limit input to numbers only for priceLimit fields
-    document.querySelectorAll(".priceLimit").forEach((input) => {
-        input.addEventListener("input", function () {
-            this.value = this.value.replace(/\D/g, "").slice(0, 5);
+        document.querySelectorAll(".priceLimit").forEach((input) => {
+            input.addEventListener("input", function () {
+                this.value = this.value.replace(/\D/g, "").slice(0, 5);
+            });
         });
-    });
 
-    // Handle title and permalink generation
-    const titleInput = document.getElementById("title");
-    const permalinkInput = document.getElementById("perma_link");
-    const previewLink = document.querySelector(".link-info");
+        const titleInput = document.getElementById("title");
+        const permalinkInput = document.getElementById("perma_link");
+        const previewLink = document.querySelector(".link-info");
 
-    if (titleInput && permalinkInput && previewLink) {
         titleInput.addEventListener("input", function () {
             let slug = titleInput.value
                 .toLowerCase()
@@ -2591,75 +2754,60 @@ document.addEventListener("DOMContentLoaded", function () {
             previewLink.href = fullUrl;
             previewLink.textContent = fullUrl;
         });
-    }
-});
 
-$(document).on("click", ".change-language", function () {
-    var languageCode = $(this).data("language_code");
+        $(".delivery-add").each(function () {
+            const $container = $(this);
+            const $plusIcon = $container.find(".plus-active");
+            const $checkIcon = $container.find(".check-active");
+            const $checkbox = $container.find("#insurance_checked");
 
-    $.ajax({
-        url: "/admin/flag-change-language",
-        type: "POST",
-        data: { language_code: languageCode },
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        success: function (response) {
-            if (response.status === "success") {
-                location.reload();
-            }
-        },
-    });
-});
+            $container.on("click", function (event) {
+                event.preventDefault();
+                if ($checkbox.prop("checked")) {
+                    $checkbox.prop("checked", false);
+                    $checkIcon.addClass("d-none");
+                    $plusIcon.removeClass("d-none");
+                } else {
+                    $checkbox.prop("checked", true);
+                    $checkIcon.removeClass("d-none");
+                    $plusIcon.addClass("d-none");
+                }
+            });
+        });
 
-$(document).on("click", ".delete-vehicle", function () {
-    const vehicleId = $(this).data("id");
-    deleteVehicleList(vehicleId);
-});
-
-function deleteVehicleList(vehicleId) {
-    $("#delete_id").val(vehicleId);
-}
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const inBtn = document.getElementById("in_btn");
-
-    // Check if the element exists before adding the event listener
-    if (inBtn) {
-        inBtn.addEventListener("click", function () {
-            $(".noDataI").html(""); // Clear previous entries
-            const selectedInsurances = document.querySelectorAll(
+        $("#in_btn").on("click", function () {
+            const selectedInsurances = $(
                 "#set_value .delivery-add input[type='checkbox']:checked"
             );
-            const appendContainer = document.getElementById(
-                "insurance_car_append"
-            );
+            const appendContainer = $("#insurance_car_append");
 
             // Clear previously appended elements
-            appendContainer.innerHTML = "";
+            appendContainer.html("");
 
-            selectedInsurances.forEach((checkbox) => {
-                const container = checkbox.closest("#inCont");
-                const insuranceId =
-                    container.querySelector("#insurance_id").value;
-                const insuranceName =
-                    container.querySelector("#insurance_name").value;
-                const insurancePrice =
-                    container.querySelector("#insurance_price").value;
-                const insuranceCount =
-                    container.querySelector("#insurance_count").value;
-                const insurancePriceType = container.querySelector(
-                    "#insurance_price_type"
-                ).value;
+            selectedInsurances.each(function () {
+                const $checkbox = $(this);
+                const $container = $checkbox.closest("#inCont");
 
-                const uniqueId = `insurance_${crypto.randomUUID()}`;
+                const insuranceId = $container.find("#insurance_id").val();
+                const insuranceName = $container.find("#insurance_name").val();
+                const insurancePrice = $container
+                    .find("#insurance_price")
+                    .val();
+                const insuranceCount = $container
+                    .find("#insurance_count")
+                    .val();
+                const insurancePriceType = $container
+                    .find("#insurance_price_type")
+                    .val();
 
-                const newInsuranceDiv = document.createElement("div");
-                newInsuranceDiv.className =
-                    "d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3";
-                newInsuranceDiv.setAttribute("data-id", uniqueId);
-                newInsuranceDiv.innerHTML = `
+                const uniqueId =
+                    "insurance_" +
+                    Date.now() +
+                    "_" +
+                    Math.floor(Math.random() * 1000);
+
+                const newInsuranceDiv = $(`
+                <div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" data-id="${uniqueId}">
                     <div>
                         <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">${insuranceName}</h6>
                         <div class="d-flex align-items-center gap-2 flex-wrap">
@@ -2682,98 +2830,80 @@ document.addEventListener("DOMContentLoaded", function () {
                         data-id="${uniqueId}" data-price="${insurancePrice}" data-price-type="${insurancePriceType}"><i class="ti ti-edit"></i></a>
                         <a href="#" class="trash-icon" data-bs-toggle="modal" data-bs-target="#delete_insurance"><i class="ti ti-trash"></i></a>
                     </div>
-                `;
-                appendContainer.appendChild(newInsuranceDiv);
+                </div>
+            `);
+                appendContainer.append(newInsuranceDiv);
             });
+
             $("#select_insurance").modal("hide");
         });
-    } else {
-    }
-});
 
-document.addEventListener("DOMContentLoaded", function () {
-    const saveUpdateBtn = document.getElementById("save_update");
+        $(document).on("click", ".edit-icon", function () {
+            const $editButton = $(this);
+            const uniqueId = $editButton.attr("data-id");
+            const price = $editButton.attr("data-price");
+            const priceType = $editButton.attr("data-price-type");
 
-    if (saveUpdateBtn) {
-        saveUpdateBtn.addEventListener("click", function () {
-            const updatedPrice = document.getElementById("price").value;
-            const updatedPriceType = document
-                .querySelector("input[name='Radio']:checked")
-                .nextElementSibling.innerText.trim();
+            $("#price").val(price);
+            $("#edit_insurance").attr("data-id", uniqueId);
 
-            // Get the unique ID from the modal
-            const uniqueId = document
-                .getElementById("edit_insurance")
-                .getAttribute("data-id");
+            $("input[name='Radio']").each(function () {
+                const $radio = $(this);
+                if ($radio.next().text().trim() === priceType) {
+                    $radio.prop("checked", true);
+                }
+            });
+        });
 
-            // Update only the selected entry
-            document.querySelector(
-                `.priceIn[data-id='${uniqueId}']`
-            ).innerText = `$${updatedPrice}`;
-            document.getElementById(`insurance_price_one_${uniqueId}`).value =
-                updatedPrice;
+        $("#save_update").on("click", function () {
+            const updatedPrice = $("#price").val();
+            const updatedPriceType = $("input[name='Radio']:checked")
+                .next()
+                .text()
+                .trim();
 
-            document.querySelector(
-                `.priceTypeIn[data-id='${uniqueId}']`
-            ).innerText = updatedPriceType;
-            document.getElementById(
-                `insurance_price_type_one_${uniqueId}`
-            ).value = updatedPriceType;
+            const uniqueId = $("#edit_insurance").attr("data-id");
 
-            // Close the modal
+            $(`.priceIn[data-id='${uniqueId}']`).text(`$${updatedPrice}`);
+            $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
+
+            $(`.priceTypeIn[data-id='${uniqueId}']`).text(updatedPriceType);
+            $(`#insurance_price_type_one_${uniqueId}`).val(updatedPriceType);
+
             $("#edit_insurance").modal("hide");
         });
-    } else {
-    }
-});
 
-function togglePopular(vehicleId, isChecked) {
-    $.ajax({
-        url: "/admin/set-popular",
-        type: "GET",
-        data: {
-            id: vehicleId,
-            popular: isChecked ? 1 : 0,
-        },
-        success: function (response) {
-            showToast("success", "Popular status updated.");
-        },
-        error: function (xhr, status, error) {
-            showToast("error", "Something went wrong.");
-        },
-    });
-}
-function toggleRecommended(vehicleId, isChecked) {
-    $.ajax({
-        url: "/admin/set-recommended",
-        type: "GET",
-        data: {
-            id: vehicleId,
-            recommended: isChecked ? 1 : 0,
-        },
-        success: function (response) {
-            showToast("success", "Recommended status updated.");
-        },
-        error: function (xhr, status, error) {
-            showToast("error", "Something went wrong.");
-        },
-    });
-}
+        $(document).on("click", ".trash-icon", function (event) {
+            event.preventDefault();
+            const $deleteButton = $(this);
+            const $container = $deleteButton.closest("div[data-id]");
+            const uniqueId = $container.attr("data-id");
 
-function toggleStatus(vehicleId, isChecked) {
-    $.ajax({
-        url: "/admin/set-status",
-        type: "GET",
-        data: {
-            id: vehicleId,
-            status: isChecked ? 1 : 0,
-        },
-        success: function (response) {
-            showToast("success", "Vehicle status updated.");
-            initTable();
-        },
-        error: function (xhr, status, error) {
-            showToast("error", "Something went wrong.");
-        },
+            $container.remove();
+
+            $("#set_value .delivery-add input[type='checkbox']").each(
+                function () {
+                    const $checkbox = $(this);
+                    const $parentContainer = $checkbox.closest("#inCont");
+                    const insuranceId = $parentContainer
+                        .find("#insurance_id")
+                        .val();
+
+                    const matchedInput = $(`#insurance_id_one_${uniqueId}`);
+                    if (
+                        matchedInput.length &&
+                        matchedInput.val() === insuranceId
+                    ) {
+                        $checkbox.prop("checked", false);
+                        $parentContainer
+                            .find(".check-active")
+                            .addClass("d-none");
+                        $parentContainer
+                            .find(".plus-active")
+                            .removeClass("d-none");
+                    }
+                }
+            );
+        });
     });
-}
+})();
