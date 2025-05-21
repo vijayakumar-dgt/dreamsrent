@@ -382,6 +382,7 @@
                         </table>
                     </div>
                     <!-- Custom Data Table -->
+                    <div class="table-footer d-none"></div>
                 </div>
                 <div class="modal-footer">
                     <div class="d-flex justify-content-center">

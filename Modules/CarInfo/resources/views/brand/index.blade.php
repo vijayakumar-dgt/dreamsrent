@@ -108,7 +108,7 @@
 							<label class="form-label">{{ __('admin.rentals.brand_image') }}<span class="text-danger"> *</span></label>
 							<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 								<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
-									<img id="imagePreview" src="" class="img-fluid d-none">
+									<img src="" id="imagePreview" class="img-fluid d-none" alt="{{ __('admin.common.image') }}">
 									<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
 								</div>
 								<div class="profile-upload">
@@ -130,7 +130,7 @@
 							<label class="form-label">{{ __('admin.rentals.brand_icon') }}<span class="text-danger"> *</span></label>
 							<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 								<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
-									<img id="iconPreview" src="" class="img-fluid d-none">
+									<img src="" id="iconPreview" class="img-fluid d-none" alt="{{ __('admin.common.image') }}">
 									<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon_2"></i>
 								</div>
 								<div class="profile-upload">
@@ -142,7 +142,7 @@
 										</div>
 									</div>
 									<div class="mt-2">
-										<p class="fs-14">{{ __('admin.common.upload_icon_size', ['size' => 2]) }}</p>
+										<p class="fs-14">{{ __('admin.common.upload_brand_icon_size', ['size' => 2]) }}</p>
 									</div>
 								</div>
 								<span class="text-danger error-text" id="brand_icon_error"></span>

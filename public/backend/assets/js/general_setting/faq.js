@@ -1,6 +1,8 @@
 (async () => {
     "use strict";
+
     await loadTranslationFile("admin", "cms,common");
+
     const permissions = await loadUserPermissions();
 
     $(document).ready(function () {
@@ -19,6 +21,7 @@
 
             $("#edit_FAQ").modal("show");
         });
+
         $(document).on("click", ".delete-faq-btn", function () {
             const id = $(this).data("id");
             $("#delete_id").val(id);
@@ -239,7 +242,73 @@
                 });
             },
         });
+
+        $(".sort-option").on("click", function () {
+            $(".sort-option").removeClass("active");
+            $(this).addClass("active");
+            let sortBy = $(this).data("sort");
+            faqTable({ sort_by: sortBy });
+        });
+
+        $(".filter-option").on("click", function () {
+            $(".filter-option").removeClass("active");
+            $(this).addClass("active");
+            let status = $(this).data("status");
+            faqTable({ status: status });
+        });
+
+        $("#applyFilters").on("click", function () {
+            let selectedStatus =
+                $(".filter-option.active").data("status") ?? ""; // Get active status filter
+            let selectedSort = $(".sort-option.active").data("sort") ?? "desc"; // Get active sorting option
+            faqTable({ status: selectedStatus, sort_by: selectedSort });
+        });
+
+        $("#clearFilters").on("click", function () {
+            $(".filter-option, .sort-option").removeClass("active");
+            faqTable({});
+        });
+
+        $("#language_id").on("change", function () {
+            faqTable();
+        });
+        faqTable();
+
+        $("#deleteFaq").on("submit", function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "/admin/faq/delete",
+                type: "POST",
+                data: {
+                    id: $("#delete_id").val(),
+                },
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                success: function (response) {
+                    if (response.code === 200) {
+                        showToast("success", response.message);
+                        $("#delete_FAQ").modal("hide");
+                        faqTable();
+                    }
+                },
+                error: function (res) {
+                    if (res.responseJSON.code === 500) {
+                        showToast("error", res.responseJSON.message);
+                    } else {
+                        showToast(
+                            "error",
+                            _l("admin.common.default_delete_error")
+                        );
+                    }
+                },
+            });
+        });
     });
+
     function faqTable(filters = {}) {
         const selectedLang = $("#language_id").val();
         filters.language_id = selectedLang;
@@ -472,79 +541,16 @@
         });
     }
 
-    $(document).ready(function () {
-        $(".sort-option").on("click", function () {
-            $(".sort-option").removeClass("active");
-            $(this).addClass("active");
-            let sortBy = $(this).data("sort");
-            faqTable({ sort_by: sortBy });
-        });
+    function editFAQ(id, question, answer, status, languageId) {
+        $("#editFaqQuestion").val(question);
+        $("#editFaqAnswer").val(answer);
+        $("#editFaqStatus").prop("checked", status == 1);
+        $("#id").val(id);
+        $("#editFaqLanguage").val(languageId).trigger("change");
+        $("#edit_FAQ").modal("show");
+    }
 
-        $(".filter-option").on("click", function () {
-            $(".filter-option").removeClass("active");
-            $(this).addClass("active");
-            let status = $(this).data("status");
-            faqTable({ status: status });
-        });
-
-        $("#applyFilters").on("click", function () {
-            let selectedStatus =
-                $(".filter-option.active").data("status") ?? ""; // Get active status filter
-            let selectedSort = $(".sort-option.active").data("sort") ?? "desc"; // Get active sorting option
-            faqTable({ status: selectedStatus, sort_by: selectedSort });
-        });
-
-        $("#clearFilters").on("click", function () {
-            $(".filter-option, .sort-option").removeClass("active");
-            faqTable({});
-        });
-
-        $("#language_id").on("change", function () {
-            faqTable();
-        });
-        faqTable();
-    });
-
-    $("#deleteFaq").on("submit", function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "/admin/faq/delete",
-            type: "POST",
-            data: {
-                id: $("#delete_id").val(),
-            },
-            headers: {
-                Accept: "application/json",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            success: function (response) {
-                if (response.code === 200) {
-                    showToast("success", response.message);
-                    $("#delete_FAQ").modal("hide");
-                    faqTable();
-                }
-            },
-            error: function (res) {
-                if (res.responseJSON.code === 500) {
-                    showToast("error", res.responseJSON.message);
-                } else {
-                    showToast("error", _l("admin.common.default_delete_error"));
-                }
-            },
-        });
-    });
+    function deleteFAQ(id) {
+        $("#delete_id").val(id);
+    }
 })();
-
-function editFAQ(id, question, answer, status, languageId) {
-    $("#editFaqQuestion").val(question);
-    $("#editFaqAnswer").val(answer);
-    $("#editFaqStatus").prop("checked", status == 1);
-    $("#id").val(id);
-    $("#editFaqLanguage").val(languageId).trigger("change");
-
-    $("#edit_FAQ").modal("show");
-}
-
-function deleteFAQ(id) {
-    $("#delete_id").val(id);
-}

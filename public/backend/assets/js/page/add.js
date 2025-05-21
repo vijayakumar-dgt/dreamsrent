@@ -288,20 +288,21 @@
         });
     });
 
-    let themeId = 1;
+let themeId = 1;
 
-    function updateThemeSelection(selectedButton) {
-        let selectedText = $(selectedButton).text().trim();
-        console.log(selectedText);
-        let themeId = selectedText === "First Screen" ? 1 : 2;
+function updateThemeSelection(selectedButton) {
+    let selectedText = $(selectedButton).text().trim();
 
-        $("#theme_id").val(themeId);
+    themeId = selectedText === "First Screen" ? 1 : 2;
 
-        $(".setSection button").removeClass("btn-primary").addClass("btn-dark");
-        $(selectedButton).removeClass("btn-dark").addClass("btn-primary");
+    $("#theme_id").val(themeId);
 
-        fetchSection();
-    }
+    $(".setSection button").removeClass("btn-primary").addClass("btn-dark");
+    $(selectedButton).removeClass("btn-dark").addClass("btn-primary");
+
+    fetchSection();
+}
+
 
     function fetchSection() {
         $(".table-loader").show();
@@ -321,30 +322,10 @@
             },
             success: function (response) {
                 if (response.code === 200) {
+                    console.log(response);
                     var sectionHtml = '<div class="row p-1">';
 
-                    let themeId = response.theme?.theme_id || 1;
-
-                    console.log(themeId);
-
-                    let bannerText =
-                        themeId === 2 ? "Banner Two" : "Banner One";
-                    let bannerValue =
-                        themeId === 2 ? "banner_two" : "banner_one";
-
-                    sectionHtml += `
-                    <div class="col-md-6">
-                        <div class="card mb-3 draggable-card shadow-sm rounded-0" draggable="true" data-value="[${bannerValue}]">
-                            <div class="py-2 text-center">
-                                <p class="fs-14 fw-bold mb-0">${bannerText}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
                     $.each(response.data, function (index, section) {
-                        if (section.name === bannerText) return;
-
                         $.each(section, function (key, value) {
                             if (
                                 key !== "id" &&
@@ -352,14 +333,14 @@
                                 key !== "status"
                             ) {
                                 sectionHtml += `
-                                <div class="col-md-6">
-                                    <div class="card mb-3 draggable-card shadow-sm rounded-0" draggable="true" data-value="${value}">
-                                        <div class="py-2 text-center">
-                                            <p class="fs-14 fw-bold mb-0">${section.name}</p>
-                                        </div>
-                                    </div>
+                        <div class="col-md-6">
+                            <div class="card mb-3 draggable-card shadow-sm rounded-0" draggable="true" data-value="${value}">
+                                <div class="py-2 text-center">
+                                    <p class="fs-14 fw-bold mb-0">${section.name}</p>
                                 </div>
-                            `;
+                            </div>
+                        </div>
+                    `;
                             }
                         });
                     });

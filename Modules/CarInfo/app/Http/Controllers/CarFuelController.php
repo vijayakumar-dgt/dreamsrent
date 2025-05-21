@@ -10,6 +10,7 @@ use Modules\CarInfo\Models\CarFuel;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 
 class CarFuelController extends Controller
 {
@@ -25,7 +26,11 @@ class CarFuelController extends Controller
         $languageId = $authUser->language_id ?? 1;
 
         $rules = [
-            'fuel_type' => ['required'],
+            'fuel_type' => [
+                'required',
+                Rule::unique('car_fuels')->ignore($id)->whereNull('deleted_at'),
+                'not_regex:/<\/?script\b[^>]*>/i'
+            ],
         ];
 
         if (empty($id)) {
@@ -35,6 +40,7 @@ class CarFuelController extends Controller
         $validator = Validator::make($request->all(), $rules, [
             'fuel_type.required' => __('admin.rentals.fuel_type_required'),
             'fuel_type.unique' => __('admin.rentals.fuel_type_unique'),
+            'fuel_type.not_regex' => __('admin.common.script_tag_not_allowed'),
         ]);
 
         if ($validator->fails()) {

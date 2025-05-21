@@ -212,7 +212,7 @@
                     $.each(data, function (index, value) {
                         tableBody += `<tr>
                             <td>
-                                <h6 class="fw-medium"><a href="#">${value.tag}</a></h6>
+                                <h6 class="fw-medium text-black">${value.tag}</h6>
                             </td>
                             <td>
                                 <span class="badge ${value.status == 1

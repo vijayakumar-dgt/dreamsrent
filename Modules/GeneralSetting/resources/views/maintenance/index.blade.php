@@ -39,7 +39,7 @@
                                     <label for="maintenance_image" class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
-                                            <img src="" id="profile_photo_preview" class="img-fluid" alt="Profile Photo">
+                                            <img src="" id="maintenance_photo_preview" class="img-fluid" alt="maintenance_img">
                                             
                                             <input type="hidden" name="is_remove_image" id="is_remove_image" value="0">
                                         </div>

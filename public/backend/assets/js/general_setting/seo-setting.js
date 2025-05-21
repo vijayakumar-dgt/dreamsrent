@@ -169,7 +169,7 @@
                             const element = $("#" + setting.key);
 
                             if (setting.key === "metaImage" && setting.value) {
-                                $("#profile_photo_preview")
+                                $("#seo_photo_preview")
                                     .attr("src", setting.value)
                                     .show();
                             } else if (setting.key === "siteDescription") {
@@ -223,7 +223,7 @@
     function previewImage(event) {
         const file = event.target.files[0];
         const reader = new FileReader();
-        const preview = $("#profile_photo_preview");
+        const preview = $("#seo_photo_preview");
 
         if (file) {
             if (file.size > 5 * 1024 * 1024) {

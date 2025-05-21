@@ -33,13 +33,15 @@ class SafetyFeatureController extends Controller
                 'required',
                 'max:100',
                 'min:3',
-                Rule::unique('safety_features')->ignore($id)->whereNull('deleted_at')
+                Rule::unique('safety_features')->ignore($id)->whereNull('deleted_at'),
+                'not_regex:/<\/?script\b[^>]*>/i',
             ],
         ], [
             'feature.required' => __('admin.rentals.feature_required'),
             'feature.max' => __('admin.rentals.feature_maxlength'),
             'feature.min' => __('admin.rentals.feature_minlength'),
             'feature.unique' => __('admin.rentals.feature_unique'),
+            'feature.not_regex' => __('admin.common.script_tag_not_allowed'),
         ]);
 
         if ($validator->fails()) {

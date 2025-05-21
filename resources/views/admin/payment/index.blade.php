@@ -25,15 +25,15 @@
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                     <div class="dropdown me-2 sortByClass">
-                        <a href="javascript:void(0);" class="dropdown-toggle dropdown-toggles btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="selectedSort">
+                        <button type="button" class="dropdown-toggle dropdown-toggles btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="selectedSort">
                             <i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }} : <span id="currentSortText">{{ __('admin.common.latest') }}</span>
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2">
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option sort-optionss active" data-sort="latest">{{ __('admin.common.latest') }}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option sort-optionss" data-sort="asc">{{ __('admin.common.ascending') }}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option sort-optionss" data-sort="desc">{{ __('admin.common.descending') }}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option sort-optionss" data-sort="last_month">{{ __('admin.common.last_month') }}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option sort-optionss" data-sort="last_7_days">{{ __('admin.common.last_7_days') }}</a></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option sort-optionss active" data-sort="latest">{{ __('admin.common.latest') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option sort-optionss" data-sort="asc">{{ __('admin.common.ascending') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option sort-optionss" data-sort="desc">{{ __('admin.common.descending') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option sort-optionss" data-sort="last_month">{{ __('admin.common.last_month') }}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option sort-optionss" data-sort="last_7_days">{{ __('admin.common.last_7_days') }}</button></li>
                         </ul>
                     </div>
                     <div class="dropdown">
@@ -60,9 +60,9 @@
                 <div class="filterbox mb-3 d-flex align-items-center">
                     <h6 class="me-3">{{ __('admin.finance_accounts.payment_method') }}</h6>
                     <div class="dropdown me-2">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                             <span class="badge badge-xs rounded-pill bg-success me-2"></span>{{ __('admin.finance_accounts.payment_method') }}
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-lg p-2 filyerPaymentType">
                             @foreach ($GetPayments as $payment)
                             @if ($payment)
@@ -78,9 +78,9 @@
 
                     </div>
                     <div class="dropdown me-2">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                        {{ __('admin.common.status') }}
-                        </a>
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                            {{ __('admin.common.status') }}
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-lg p-2 filyerPaymentStatus">
                             <li>
                                 <label class="dropdown-item d-flex align-items-center rounded-1">
@@ -104,8 +104,8 @@
                             </li>
                         </ul>
                     </div>
-                    <a href="javascript:void(0);" class="me-2 text-purple links applyFilter">{{ __('admin.common.apply') }}</a>
-                    <a href="javascript:void(0);" class="text-danger links clearFilter">{{ __('admin.common.clear') }}</a>
+                    <button type="button" class="text-purple links applyFilter border-0 bg-transparent">{{ __('admin.common.apply') }}</button>
+                    <button type="button" class="text-danger links clearFilter border-0 bg-transparent">{{ __('admin.common.clear') }}</button>
                 </div>
             </div>
             <!-- Custom Data Table -->

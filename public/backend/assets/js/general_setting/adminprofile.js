@@ -1,7 +1,9 @@
 (async () => {
     "use strict";
     await loadTranslationFile("admin", "common, general_settings");
+    let iti;
     $(document).ready(function () {
+        initInternationalPhoneInput();
         $("#profile_photo").on("change", function (event) {
             const file = event.target.files[0];
             const reader = new FileReader();
@@ -614,42 +616,40 @@
             },
         });
     }
-})();
+    function initInternationalPhoneInput() {
+        const userPhoneInput = document.querySelector(".admin_phone");
+        const intlPhoneInput = document.querySelector(
+            "#international_phone_number"
+        );
 
-let iti;
-document.addEventListener("DOMContentLoaded", function () {
-    const userPhoneInput = document.querySelector(".admin_phone");
-    const intlPhoneInput = document.querySelector(
-        "#international_phone_number"
-    );
-
-    if (userPhoneInput) {
-        iti = intlTelInput(userPhoneInput, {
-            utilsScript:
-                window.location.origin +
-                "/backend/assets/plugins/intltelinput/js/utils.js",
-            separateDialCode: true,
-        });
-
-        userPhoneInput.classList.add("iti");
-        userPhoneInput.parentElement.classList.add("intl-tel-input");
-
-        document
-            .querySelector("#adminProfileForm")
-            .addEventListener("submit", function (event) {
-                event.preventDefault();
-
-                const intlNumber = iti.getNumber();
-                if (intlNumber) {
-                    document.querySelector(
-                        "#international_phone_number"
-                    ).value = intlNumber;
-
-                    intlPhoneInput.value = intlNumber;
-                }
-
-                if ($("#adminProfileForm").valid()) {
-                }
+        if (userPhoneInput) {
+            iti = intlTelInput(userPhoneInput, {
+                utilsScript:
+                    window.location.origin +
+                    "/backend/assets/plugins/intltelinput/js/utils.js",
+                separateDialCode: true,
             });
+
+            userPhoneInput.classList.add("iti");
+            userPhoneInput.parentElement.classList.add("intl-tel-input");
+
+            document
+                .querySelector("#adminProfileForm")
+                .addEventListener("submit", function (event) {
+                    event.preventDefault();
+
+                    const intlNumber = iti.getNumber();
+                    if (intlNumber) {
+                        document.querySelector(
+                            "#international_phone_number"
+                        ).value = intlNumber;
+
+                        intlPhoneInput.value = intlNumber;
+                    }
+
+                    if ($("#adminProfileForm").valid()) {
+                    }
+                });
+        }
     }
-});
+})();

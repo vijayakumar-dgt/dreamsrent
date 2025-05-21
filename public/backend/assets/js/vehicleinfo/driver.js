@@ -778,11 +778,11 @@
                         render: function (data, type, row) {
                         return `
                             <div class="d-flex align-items-center">
-                                <a href="#" class="avatar rounded-circle me-2 flex-shrink-0">
-                                    <img src="${row.image}" class="rounded-circle" alt="img">
-                                </a>
+                                <div class="avatar rounded-circle me-2 flex-shrink-0">
+                                    <img src="${row.image}" class="rounded-circle" alt="Image Preview">
+                                </div>
                                 <div>
-                                    <h6 class="fs-14 fw-semibold"><a href="#">${ucfirst(row.driver_name)}</a></h6>
+                                    <h6 class="fs-14 fw-semibold text-black">${ucfirst(row.driver_name)}</h6>
                                     <p>${row.phone_number}</p>
                                 </div>
                             </div>`;

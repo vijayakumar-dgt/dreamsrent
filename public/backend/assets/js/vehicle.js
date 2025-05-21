@@ -1,4 +1,5 @@
 (async () => {
+    
     "use strict";
 
     await loadTranslationFile("admin", "rentals, common");
@@ -86,12 +87,23 @@
 									<img src="${value.vehicle_image}" class="rounded-3" alt="">
 								</div>
 								<div class="text-start">
-									<h6><p class="fs-14 fw-semibold">${ucfirst(value.name)}</p></h6>
+									<h6><p class="fs-14 fw-semibold">${ucfirst(
+                                        value.name.length > 14
+                                            ? value.name.slice(0, 14) + ".."
+                                            : value.name
+                                    )}</p></h6>
 									<p>${value.car_type ? value.car_type.name : ""}</p>
 								</div>
 							</div>
                             <h6 class="fw-medium"><a href="#"></a></h6></td>
-                            <td>${value.main_location.name}</td>
+                            <td>${
+                                value.main_location.name.length > 15
+                                    ? ucfirst(value.main_location.name).slice(
+                                          0,
+                                          15
+                                      ) + ".."
+                                    : ucfirst(value.main_location.name)
+                            }</td>
                              <td>${priceText}</td>
                             <td>0${value.damage_count}</td>
                          <td>
@@ -607,5 +619,4 @@
             }
         );
     });
-
 })();

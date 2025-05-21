@@ -33,7 +33,7 @@
                     $.each(data, function(index, value) {
                         tableBody += `
                                 <tr>
-                                    <td class="text-start"><h6 class="fw-medium"><a href="#">${value.damage_type}</a></h6></td>
+                                    <td class="text-start"><h6 class="fw-medium text-black">${value.damage_type}</h6></td>
                                     <td class="text-start">
                                         <span class="badge ${value.status == 1 ? `badge-success-transparent` : `badge-danger-transparent`}  d-inline-flex align-items-center badge-sm">
                                             <i class="ti ti-point-filled me-1"></i>${value.status == 1 ? `${_l('admin.common.active')}` : `${_l('admin.common.inactive')}` }

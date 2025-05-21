@@ -1,25 +1,10 @@
 (async () => {
+    
     "use strict";
-    await loadTranslationFile("admin", "rentals, common");
-    $(document).ready(function () {
-        getSeasonalInfo();
-        getTrraifInfo();
-        getDocumentsInfo();
-        getFaqInfo();
-        getDamageInfo();
-        getInsuranceInfo();
 
-        $(".summernote").summernote({
-            height: 200,
-            placeholder: _l("admin.rentals.summer_des"),
-            toolbar: [
-                ["style", ["bold", "italic", "underline", "clear"]],
-                ["para", ["ul", "ol", "paragraph"]],
-                ["insert", ["link", "picture", "video"]],
-                ["view", ["fullscreen", "codeview", "help"]],
-            ],
-        });
-    });
+    await loadTranslationFile("admin", "rentals, common");
+
+    let faqCounter = 0;
 
     function getDamageInfo() {
         let vehicleId = $("#vehicle_id").val();
@@ -41,8 +26,6 @@
             error: function (xhr, status, error) {},
         });
     }
-
-    let DamageCounter = 0; // Ensure global unique IDs
 
     function adddamage(damage) {
         let uniqueID = `damage_${crypto.randomUUID()}`;
@@ -99,14 +82,14 @@
 
     function getInsuranceInfo() {
         let vehicleId = $("#vehicle_id").val();
-    
+
         $.ajax({
             url: "/admin/get-insurance-info",
             type: "GET",
             data: { vehicle_id: vehicleId },
             success: function (response) {
                 $("#insurance_car_append").html(""); // Clear previous entries
-    
+
                 if (response.success && response.data.length > 0) {
                     response.data.forEach((insurances) => {
                         addinsurances(insurances);
@@ -114,17 +97,22 @@
                 } else {
                     $("#insurance_car_append").html(`
                         <div class="text-center text-muted py-3">
-                            ${_l("admin.rentals.no_data_available") || "No insurance data available."}
+                            ${
+                                _l("admin.rentals.no_data_available") ||
+                                "No insurance data available."
+                            }
                         </div>
                     `);
                 }
             },
             error: function (xhr, status, error) {
-                showToast("error", "An error occurred while fetching insurance data.");
+                showToast(
+                    "error",
+                    "An error occurred while fetching insurance data."
+                );
             },
         });
     }
-    
 
     function addinsurances(insurances) {
         const appendContainer = document.getElementById("insurance_car_append");
@@ -193,14 +181,14 @@
 
     function getSeasonalInfo() {
         let vehicleId = $("#vehicle_id").val();
-    
+
         $.ajax({
             url: "/admin/get-seasonal-info",
             type: "GET",
             data: { vehicle_id: vehicleId },
             success: function (response) {
                 $("#seasonal_append").html(""); // Clear previous content
-    
+
                 if (response.success && response.data.length > 0) {
                     response.data.forEach((season) => {
                         addSeasonalPricing(season);
@@ -208,18 +196,23 @@
                 } else {
                     $("#seasonal_append").html(`
                         <div class="text-center text-muted py-3">
-                            ${_l("admin.rentals.no_data_available") || "No seasonal data available."}
+                            ${
+                                _l("admin.rentals.no_data_available") ||
+                                "No seasonal data available."
+                            }
                         </div>
                     `);
                 }
             },
             error: function (xhr, status, error) {
                 // Optional: show error message
-                showToast("error", "An error occurred while fetching seasonal data.");
+                showToast(
+                    "error",
+                    "An error occurred while fetching seasonal data."
+                );
             },
         });
     }
-    
 
     function addSeasonalPricing(season) {
         let uniqueId = "season_" + season.id;
@@ -311,14 +304,14 @@
 
     function getTrraifInfo() {
         let vehicleId = $("#vehicle_id").val();
-    
+
         $.ajax({
             url: "/admin/get-tarrif-info",
             type: "GET",
             data: { vehicle_id: vehicleId },
             success: function (response) {
                 $("#tariff_append").html(""); // Clear existing content
-    
+
                 if (response.success && response.data.length > 0) {
                     response.data.forEach((tarrif) => {
                         addTarrifPricing(tarrif);
@@ -326,18 +319,23 @@
                 } else {
                     $("#tariff_append").html(`
                         <div class="text-center text-muted py-3">
-                            ${_l("admin.rentals.no_data_available") || "No data available."}
+                            ${
+                                _l("admin.rentals.no_data_available") ||
+                                "No data available."
+                            }
                         </div>
                     `);
                 }
             },
             error: function (xhr, status, error) {
                 // Optional: Show a generic error message
-                showToast("error", "An error occurred while fetching tariff data.");
+                showToast(
+                    "error",
+                    "An error occurred while fetching tariff data."
+                );
             },
         });
     }
-    
 
     function addTarrifPricing(tarrif) {
         let uniqueId = "tariff_" + new Date().getTime();
@@ -436,8 +434,6 @@
             error: function (xhr, status, error) {},
         });
     }
-
-    let faqCounter = 0; // Global counter to ensure unique IDs
 
     function addFaq(faq) {
         let uniqueID = "faq_" + faqCounter++; // Increment counter for each FAQ
@@ -570,17 +566,14 @@
     function addVehiclePolicy(policy) {
         let fileListContainer = $("#car_policy_append");
 
-        // Extract file name and extension
         let fileName = policy.split("/").pop();
 
-        // Simulate file size (since backend doesn’t provide it)
         let randomFileSize = Math.floor(Math.random() * (50 * 1024 * 1024)); // Random size up to 50MB
         let fileSizeText =
             randomFileSize < 1024 * 1024
                 ? (randomFileSize / 1024).toFixed(2) + " KB"
                 : (randomFileSize / (1024 * 1024)).toFixed(2) + " MB";
 
-        // Calculate progress percentage
         let progressPercentage = Math.min(
             (randomFileSize / (50 * 1024 * 1024)) * 100,
             100
@@ -616,6 +609,28 @@
         });
     }
 
+    let editingDamageID = null;
+    function editDamage(damageID) {
+        let damageItem = $("#" + damageID);
+
+        let damageType = damageItem.find("input[name='damage_name[]']").val();
+        let damageLocation = damageItem
+            .find("input[name='damage_location[]']")
+            .val();
+        let damageDescription = damageItem
+            .find("input[name='damage_description[]']")
+            .val();
+
+        $("#dam_type").val(damageType);
+        $("#dam_name").val(damageLocation);
+        $("#dam_dis").val(damageDescription);
+
+        $("#damage_title").text("Edit Damage");
+        $("#damage_btn").text("Update").attr("data-editing", "true");
+
+        editingDamageID = damageID;
+    }
+
     function addVehicleImage(imagePath) {
         let fileListContainer = $("#car_images_append");
 
@@ -626,36 +641,32 @@
         </div>
     `);
 
-        // Append the image item to the container
         fileListContainer.append(imageItem);
 
-        // Add delete functionality
         imageItem.find(".delete-image").on("click", function () {
             $(this).closest(".uploaded-img").remove();
         });
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        let select = document.getElementById("sort_by");
-
-        // Set "Latest" as default if no option is selected
-        select.value = localStorage.getItem("sort_by") || "latest";
-
-        function updateSelectText() {
-            let selectedOption = select.options[select.selectedIndex];
-            select.options[0].text = "Select : " + selectedOption.text;
-        }
-
-        // Update text on page load
-        updateSelectText();
-
-        select.addEventListener("change", function () {
-            localStorage.setItem("sort_by", this.value);
-            updateSelectText();
-        });
-    });
-
     $(document).ready(function () {
+        getSeasonalInfo();
+        getTrraifInfo();
+        getDocumentsInfo();
+        getFaqInfo();
+        getDamageInfo();
+        getInsuranceInfo();
+
+        $(".summernote").summernote({
+            height: 200,
+            placeholder: _l("admin.rentals.summer_des"),
+            toolbar: [
+                ["style", ["bold", "italic", "underline", "clear"]],
+                ["para", ["ul", "ol", "paragraph"]],
+                ["insert", ["link", "picture", "video"]],
+                ["view", ["fullscreen", "codeview", "help"]],
+            ],
+        });
+
         $("#carBasicInfoForm").validate({
             rules: {
                 vehicle_image: {
@@ -1445,10 +1456,10 @@
 
         function docGetFileTypeIcon(fileName) {
             let fileExtension = fileName.split(".").pop().toLowerCase();
-            let iconPath = ''; // 🛠️ Declare it here first
+            let iconPath = ""; // 🛠️ Declare it here first
             if (fileExtension === "doc" || fileExtension === "docx") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg";
-            }   else if (fileExtension === "txt") {
+            } else if (fileExtension === "txt") {
                 iconPath = "/backend/assets/img/icons/txt.svg";
             } else if (fileExtension === "pdf") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg";
@@ -1555,10 +1566,10 @@
 
         function policyGetFileTypeIcon(fileName) {
             let fileExtension = fileName.split(".").pop().toLowerCase();
-            let iconPath = ''; // 🛠️ Declare it here first
+            let iconPath = ""; // 🛠️ Declare it here first
             if (fileExtension === "doc" || fileExtension === "docx") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg";
-            }  else if (fileExtension === "txt") {
+            } else if (fileExtension === "txt") {
                 iconPath = "/backend/assets/img/icons/txt.svg";
             } else if (fileExtension === "pdf") {
                 iconPath = "/backend/assets/img/icons/pdf-icon.svg";
@@ -1612,47 +1623,56 @@
         let selectedImages = new Map();
         const allowedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
         const maxFileSize = 50 * 1024 * 1024;
-        
+
         $("#car_images").on("change", function (event) {
             let files = event.target.files;
             let imageListContainer = $("#car_images_append");
             let validFiles = [];
             let remainingChecks = files.length;
-        
+
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
                 let ext = file.name.split(".").pop().toLowerCase();
-        
+
                 // Invalid file type
                 if (!allowedImageExtensions.includes(ext)) {
-                    showToast("error", `File "${file.name}" is not a valid image.`);
+                    showToast(
+                        "error",
+                        `File "${file.name}" is not a valid image.`
+                    );
                     remainingChecks--;
                     continue;
                 }
-        
+
                 // File size too large
                 if (file.size > maxFileSize) {
-                    showToast("error", `File "${file.name}" exceeds the 50MB size limit.`);
+                    showToast(
+                        "error",
+                        `File "${file.name}" exceeds the 50MB size limit.`
+                    );
                     remainingChecks--;
                     continue;
                 }
-        
+
                 // Duplicate file
                 if (selectedImages.has(file.name)) {
-                    showToast("error", `File "${file.name}" is already selected.`);
+                    showToast(
+                        "error",
+                        `File "${file.name}" is already selected.`
+                    );
                     remainingChecks--;
                     continue;
                 }
-        
+
                 let imageUrl = URL.createObjectURL(file);
                 let img = new Image();
                 img.src = imageUrl;
-        
+
                 img.onload = function () {
                     if (this.width === 690 && this.height === 420) {
                         selectedImages.set(file.name, file);
                         validFiles.push(file);
-        
+
                         imageListContainer.append(`
                             <div class="uploaded-img" data-file="${file.name}">
                                 <img src="${imageUrl}" alt="img">
@@ -1660,14 +1680,17 @@
                             </div>
                         `);
                     } else {
-                        showToast("error", `Image "${file.name}" must be exactly 690x420 pixels.`);
+                        showToast(
+                            "error",
+                            `Image "${file.name}" must be exactly 690x420 pixels.`
+                        );
                         URL.revokeObjectURL(imageUrl);
                     }
-        
+
                     remainingChecks--;
                     if (remainingChecks === 0) updateImageInput(validFiles);
                 };
-        
+
                 img.onerror = function () {
                     showToast("error", `Could not load image "${file.name}".`);
                     URL.revokeObjectURL(imageUrl);
@@ -1676,7 +1699,6 @@
                 };
             }
         });
-        
 
         function updateImageInput(
             validFiles = Array.from(selectedImages.values())
@@ -2549,142 +2571,243 @@
                     });
             }
         });
-    });
-})();
 
-let editingDamageID = null; // Track the item being edited
-function editDamage(damageID) {
-    let damageItem = $("#" + damageID);
+        document
+            .getElementById("service_save_btn")
+            .addEventListener("click", function () {
+                // Get all table rows from the modal
+                let tableRows = document.querySelectorAll(
+                    ".custom-table1 tbody tr"
+                );
 
-    let damageType = damageItem.find("input[name='damage_name[]']").val();
-    let damageLocation = damageItem
-        .find("input[name='damage_location[]']")
-        .val();
-    let damageDescription = damageItem
-        .find("input[name='damage_description[]']")
-        .val();
+                tableRows.forEach((row) => {
+                    let serviceName = row
+                        .querySelector("#extra_name")
+                        .innerText.trim();
+                    let extraValue = row.querySelector("#extra_value").value;
+                    let extraPrice = row.querySelector("#extra_price").value;
 
-    // Populate modal fields with existing values
-    $("#dam_type").val(damageType);
-    $("#dam_name").val(damageLocation);
-    $("#dam_dis").val(damageDescription);
+                    // Find the matching service card in the main list
+                    let serviceCards = document.querySelectorAll(
+                        ".extra-service-card"
+                    );
 
-    // Change modal title and button text
-    $("#damage_title").text("Edit Damage");
-    $("#damage_btn").text("Update").attr("data-editing", "true");
+                    serviceCards.forEach((card) => {
+                        let cardName = card
+                            .querySelector("#service_name")
+                            .innerText.trim();
 
-    // Store the ID of the item being edited
-    editingDamageID = damageID;
-}
+                        if (cardName === serviceName) {
+                            // Update the selected value
+                            card.querySelector("#set_value").innerText =
+                                extraValue === "per_day"
+                                    ? _l("admin.rentals.per_day")
+                                    : _l("admin.rentals.one_time");
+                            card.querySelector("#service_value").value =
+                                extraValue;
 
-function editVechileList(vehicleSlug) {
-    $.ajax({
-        url: "/admin/check-vehicle",
-        type: "GET",
-        data: { vehicle_slug: vehicleSlug },
-        success: function (response) {
-            if (response.exists === "yes") {
-                window.location.href = `/admin/edit-vehicle/${vehicleSlug}`;
+                            // Update the price
+                            card.querySelector(
+                                "#set_price"
+                            ).innerText = `$${extraPrice}`;
+                            card.querySelector("#service_price").value =
+                                extraPrice;
+                        }
+                    });
+                });
+
+                // Close the modal
+                $("#edit_price").modal("hide");
+            });
+
+        $("#vehicle_brand_id").on("change", function () {
+            let brandId = $(this).val();
+            let modelDropdown = $("#vehicle_model_id");
+
+            modelDropdown.html('<option value="">Loading...</option>'); // Show loading text
+
+            if (brandId) {
+                $.ajax({
+                    url: "/admin/get-model",
+                    type: "GET",
+                    data: { brand_id: brandId },
+                    success: function (response) {
+                        modelDropdown.html(
+                            '<option value="">Select Model</option>'
+                        ); // Reset dropdown
+
+                        if (response.length > 0) {
+                            $.each(response, function (key, model) {
+                                modelDropdown.append(
+                                    `<option value="${model.id}">${model.model_name}</option>`
+                                );
+                            });
+                        } else {
+                            modelDropdown.html(
+                                '<option value="">No models found</option>'
+                            );
+                        }
+                    },
+                    error: function () {
+                        modelDropdown.html(
+                            '<option value="">Error loading models</option>'
+                        );
+                    },
+                });
             } else {
-                showToast("error", "Vehicle not found.");
+                modelDropdown.html('<option value="">Select Model</option>'); // Reset if no brand is selected
             }
-        },
-        error: function (xhr, status, error) {},
-    });
-}
+        });
 
-document
-    .getElementById("service_save_btn")
-    .addEventListener("click", function () {
-        // Get all table rows from the modal
-        let tableRows = document.querySelectorAll(".custom-table1 tbody tr");
+        function toggleKilometerFields() {
+            if ($("#Baseunlimited").is(":checked")) {
+                $("#basic_kilometer").prop("disabled", true).val("");
+                $("#extra_kilometer").prop("disabled", true).val("");
+            } else {
+                $("#basic_kilometer").prop("disabled", false);
+                $("#extra_kilometer").prop("disabled", false);
+            }
+        }
 
-        tableRows.forEach((row) => {
-            let serviceName = row.querySelector("#extra_name").innerText.trim();
-            let extraValue = row.querySelector("#extra_value").value;
-            let extraPrice = row.querySelector("#extra_price").value;
+        toggleKilometerFields();
 
-            // Find the matching service card in the main list
-            let serviceCards = document.querySelectorAll(".extra-service-card");
+        $("#Baseunlimited").change(function () {
+            toggleKilometerFields();
+        });
 
-            serviceCards.forEach((card) => {
-                let cardName = card
-                    .querySelector("#service_name")
-                    .innerText.trim();
+        function updateSelectAllCheckbox() {
+            var total = $("input[name='feature_id[]']").length;
+            var checked = $("input[name='feature_id[]']:checked").length;
 
-                if (cardName === serviceName) {
-                    // Update the selected value
-                    card.querySelector("#set_value").innerText =
-                        extraValue === "per_day"
-                            ? _l("admin.rentals.per_day")
-                            : _l("admin.rentals.one_time");
-                    card.querySelector("#service_value").value = extraValue;
+            if (total > 0 && total === checked) {
+                $("#select-all1").prop("checked", true);
+            } else {
+                $("#select-all1").prop("checked", false);
+            }
+        }
 
-                    // Update the price
-                    card.querySelector(
-                        "#set_price"
-                    ).innerText = `$${extraPrice}`;
-                    card.querySelector("#service_price").value = extraPrice;
+        updateSelectAllCheckbox();
+
+        $(document).on("change", "input[name='feature_id[]']", function () {
+            updateSelectAllCheckbox();
+        });
+
+        $("#select-all1").on("change", function () {
+            $("input[name='feature_id[]']").prop("checked", this.checked);
+        });
+
+        $("#languageSelector").on("change", function () {
+            var langId = $(this).val();
+
+            var pathSegments = window.location.pathname.split("/");
+            var slug = pathSegments[pathSegments.length - 1];
+
+            if (langId && slug) {
+                window.location.href =
+                    "/admin/edit-vehicle/" + slug + "?language_id=" + langId;
+            }
+        });
+
+        $("#delImg").on("click", function () {
+            $("#vehicle_image").val("");
+
+            $(".frames img").attr("src", "").hide();
+        });
+
+        const checkboxes = document.querySelectorAll(".price-checkbox");
+
+        checkboxes.forEach((checkbox) => {
+            checkbox.addEventListener("change", function () {
+                let priceInput = document.getElementById(this.name + "_price");
+
+                if (this.checked) {
+                    priceInput.removeAttribute("disabled"); // Enable the input
+                } else {
+                    priceInput.setAttribute("disabled", "false"); // Disable the input
+                    priceInput.value = ""; // Clear the input value
                 }
             });
         });
 
-        // Close the modal
-        $("#edit_price").modal("hide");
-    });
-
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".delivery-add").forEach(function (container) {
-        const plusIcon = container.querySelector(".plus-active");
-        const checkIcon = container.querySelector(".check-active");
-        const checkbox = container.querySelector("#insurance_checked");
-
-        container.addEventListener("click", function (event) {
-            event.preventDefault();
-            if (checkbox.checked) {
-                checkbox.checked = false;
-                checkIcon.style.display = "none";
-                plusIcon.style.display = "inline";
-            } else {
-                checkbox.checked = true;
-                checkIcon.style.display = "inline";
-                plusIcon.style.display = "none";
-            }
+        document.querySelectorAll(".priceLimit").forEach((input) => {
+            input.addEventListener("input", function () {
+                this.value = this.value.replace(/\D/g, "").slice(0, 5);
+            });
         });
-    });
 
-    document.getElementById("in_btn").addEventListener("click", function () {
-        const selectedInsurances = document.querySelectorAll(
-            "#set_value .delivery-add input[type='checkbox']:checked"
-        );
-        const appendContainer = document.getElementById("insurance_car_append");
+        const titleInput = document.getElementById("title");
+        const permalinkInput = document.getElementById("perma_link");
+        const previewLink = document.querySelector(".link-info");
 
-        // Clear previously appended elements
-        appendContainer.innerHTML = "";
+        titleInput.addEventListener("input", function () {
+            let slug = titleInput.value
+                .toLowerCase()
+                .trim()
+                .replace(/[^a-z0-9\s-]/g, "") // Remove special characters
+                .replace(/\s+/g, "-") // Replace spaces with dashes
+                .replace(/-+/g, "-"); // Remove multiple dashes
 
-        selectedInsurances.forEach((checkbox) => {
-            const container = checkbox.closest("#inCont");
-            const insuranceId = container.querySelector("#insurance_id").value;
-            const insuranceName =
-                container.querySelector("#insurance_name").value;
-            const insurancePrice =
-                container.querySelector("#insurance_price").value;
-            const insuranceCount =
-                container.querySelector("#insurance_count").value;
-            const insurancePriceType = container.querySelector(
-                "#insurance_price_type"
-            ).value;
+            let baseUrl = "https://www.example.com/cars/";
+            let fullUrl = baseUrl + slug;
 
-            // Generate a unique ID for this insurance entry
-            const uniqueId = `insurance_${Date.now()}_${Math.floor(
-                Math.random() * 1000
-            )}`;
+            permalinkInput.value = fullUrl;
+            previewLink.href = fullUrl;
+            previewLink.textContent = fullUrl;
+        });
 
-            const newInsuranceDiv = document.createElement("div");
-            newInsuranceDiv.className =
-                "d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3";
-            newInsuranceDiv.setAttribute("data-id", uniqueId);
-            newInsuranceDiv.innerHTML = `
+        $(".delivery-add").each(function () {
+            const $container = $(this);
+            const $plusIcon = $container.find(".plus-active");
+            const $checkIcon = $container.find(".check-active");
+            const $checkbox = $container.find("#insurance_checked");
+
+            $container.on("click", function (event) {
+                event.preventDefault();
+                if ($checkbox.prop("checked")) {
+                    $checkbox.prop("checked", false);
+                    $checkIcon.addClass("d-none");
+                    $plusIcon.removeClass("d-none");
+                } else {
+                    $checkbox.prop("checked", true);
+                    $checkIcon.removeClass("d-none");
+                    $plusIcon.addClass("d-none");
+                }
+            });
+        });
+
+        $("#in_btn").on("click", function () {
+            const selectedInsurances = $(
+                "#set_value .delivery-add input[type='checkbox']:checked"
+            );
+            const appendContainer = $("#insurance_car_append");
+
+            // Clear previously appended elements
+            appendContainer.html("");
+
+            selectedInsurances.each(function () {
+                const $checkbox = $(this);
+                const $container = $checkbox.closest("#inCont");
+
+                const insuranceId = $container.find("#insurance_id").val();
+                const insuranceName = $container.find("#insurance_name").val();
+                const insurancePrice = $container
+                    .find("#insurance_price")
+                    .val();
+                const insuranceCount = $container
+                    .find("#insurance_count")
+                    .val();
+                const insurancePriceType = $container
+                    .find("#insurance_price_type")
+                    .val();
+
+                const uniqueId =
+                    "insurance_" +
+                    Date.now() +
+                    "_" +
+                    Math.floor(Math.random() * 1000);
+
+                const newInsuranceDiv = $(`
+                <div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" data-id="${uniqueId}">
                     <div>
                         <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">${insuranceName}</h6>
                         <div class="d-flex align-items-center gap-2 flex-wrap">
@@ -2707,266 +2830,80 @@ document.addEventListener("DOMContentLoaded", function () {
                         data-id="${uniqueId}" data-price="${insurancePrice}" data-price-type="${insurancePriceType}"><i class="ti ti-edit"></i></a>
                         <a href="#" class="trash-icon" data-bs-toggle="modal" data-bs-target="#delete_insurance"><i class="ti ti-trash"></i></a>
                     </div>
-                `;
-            appendContainer.appendChild(newInsuranceDiv);
-        });
-        $("#select_insurance").modal("hide");
-    });
-
-    document.addEventListener("click", function (event) {
-        if (event.target.closest(".edit-icon")) {
-            const editButton = event.target.closest(".edit-icon");
-            const uniqueId = editButton.getAttribute("data-id");
-            const price = editButton.getAttribute("data-price");
-            const priceType = editButton.getAttribute("data-price-type");
-
-            document.getElementById("price").value = price;
-            document
-                .getElementById("edit_insurance")
-                .setAttribute("data-id", uniqueId);
-
-            document
-                .querySelectorAll("input[name='Radio']")
-                .forEach((radio) => {
-                    if (
-                        radio.nextElementSibling.innerText.trim() === priceType
-                    ) {
-                        radio.checked = true;
-                    }
-                });
-        }
-    });
-
-    document
-        .getElementById("save_update")
-        .addEventListener("click", function () {
-            const updatedPrice = document.getElementById("price").value;
-            const updatedPriceType = document
-                .querySelector("input[name='Radio']:checked")
-                .nextElementSibling.innerText.trim();
-
-            // Get the unique ID from the modal
-            const uniqueId = document
-                .getElementById("edit_insurance")
-                .getAttribute("data-id");
-
-            // Update only the selected entry
-            document.querySelector(
-                `.priceIn[data-id='${uniqueId}']`
-            ).innerText = `$${updatedPrice}`;
-            document.getElementById(`insurance_price_one_${uniqueId}`).value =
-                updatedPrice;
-
-            document.querySelector(
-                `.priceTypeIn[data-id='${uniqueId}']`
-            ).innerText = updatedPriceType;
-            document.getElementById(
-                `insurance_price_type_one_${uniqueId}`
-            ).value = updatedPriceType;
-
-            // Close the modal
-            $("#edit_insurance").modal("hide");
-        });
-});
-
-$(document).ready(function () {
-    $("#vehicle_brand_id").on("change", function () {
-        let brandId = $(this).val();
-        let modelDropdown = $("#vehicle_model_id");
-
-        modelDropdown.html('<option value="">Loading...</option>'); // Show loading text
-
-        if (brandId) {
-            $.ajax({
-                url: "/admin/get-model",
-                type: "GET",
-                data: { brand_id: brandId },
-                success: function (response) {
-                    modelDropdown.html(
-                        '<option value="">Select Model</option>'
-                    ); // Reset dropdown
-
-                    if (response.length > 0) {
-                        $.each(response, function (key, model) {
-                            modelDropdown.append(
-                                `<option value="${model.id}">${model.model_name}</option>`
-                            );
-                        });
-                    } else {
-                        modelDropdown.html(
-                            '<option value="">No models found</option>'
-                        );
-                    }
-                },
-                error: function () {
-                    modelDropdown.html(
-                        '<option value="">Error loading models</option>'
-                    );
-                },
+                </div>
+            `);
+                appendContainer.append(newInsuranceDiv);
             });
-        } else {
-            modelDropdown.html('<option value="">Select Model</option>'); // Reset if no brand is selected
-        }
-    });
-});
 
-document.addEventListener("click", function (event) {
-    // Delete functionality
-    if (event.target.closest(".trash-icon")) {
-        event.preventDefault();
-        const deleteButton = event.target.closest(".trash-icon");
-        const container = deleteButton.closest("div[data-id]"); // Find the insurance container
-        const uniqueId = container.getAttribute("data-id");
+            $("#select_insurance").modal("hide");
+        });
 
-        // Remove from the appended list
-        container.remove();
+        $(document).on("click", ".edit-icon", function () {
+            const $editButton = $(this);
+            const uniqueId = $editButton.attr("data-id");
+            const price = $editButton.attr("data-price");
+            const priceType = $editButton.attr("data-price-type");
 
-        // Uncheck the corresponding checkbox in the modal
-        document
-            .querySelectorAll("#set_value .delivery-add input[type='checkbox']")
-            .forEach((checkbox) => {
-                const parentContainer = checkbox.closest("#inCont");
-                const insuranceId =
-                    parentContainer.querySelector("#insurance_id").value;
-                if (
-                    document.getElementById(`insurance_id_one_${uniqueId}`)
-                        ?.value === insuranceId
-                ) {
-                    checkbox.checked = false;
-                    const plusIcon =
-                        parentContainer.querySelector(".plus-active");
-                    const checkIcon =
-                        parentContainer.querySelector(".check-active");
-                    checkIcon.style.display = "none";
-                    plusIcon.style.display = "inline";
+            $("#price").val(price);
+            $("#edit_insurance").attr("data-id", uniqueId);
+
+            $("input[name='Radio']").each(function () {
+                const $radio = $(this);
+                if ($radio.next().text().trim() === priceType) {
+                    $radio.prop("checked", true);
                 }
             });
-    }
-});
+        });
 
-$(document).ready(function () {
-    function toggleKilometerFields() {
-        if ($("#Baseunlimited").is(":checked")) {
-            $("#basic_kilometer").prop("disabled", true).val("");
-            $("#extra_kilometer").prop("disabled", true).val("");
-        } else {
-            $("#basic_kilometer").prop("disabled", false);
-            $("#extra_kilometer").prop("disabled", false);
-        }
-    }
+        $("#save_update").on("click", function () {
+            const updatedPrice = $("#price").val();
+            const updatedPriceType = $("input[name='Radio']:checked")
+                .next()
+                .text()
+                .trim();
 
-    // Run function on page load to handle default state
-    toggleKilometerFields();
+            const uniqueId = $("#edit_insurance").attr("data-id");
 
-    // Bind change event to checkbox
-    $("#Baseunlimited").change(function () {
-        toggleKilometerFields();
-    });
-});
+            $(`.priceIn[data-id='${uniqueId}']`).text(`$${updatedPrice}`);
+            $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
 
-$(document).ready(function () {
-    $("#delImg").on("click", function () {
-        // Clear the file input field
-        $("#vehicle_image").val("");
+            $(`.priceTypeIn[data-id='${uniqueId}']`).text(updatedPriceType);
+            $(`#insurance_price_type_one_${uniqueId}`).val(updatedPriceType);
 
-        // Remove the selected image (hide or reset to a default)
-        $(".frames img").attr("src", "").hide(); // Hides the image after removal
-    });
-});
+            $("#edit_insurance").modal("hide");
+        });
 
-// $(document).on("click", ".change-language", function () {
-//     var languageCode = $(this).data("language_code");
+        $(document).on("click", ".trash-icon", function (event) {
+            event.preventDefault();
+            const $deleteButton = $(this);
+            const $container = $deleteButton.closest("div[data-id]");
+            const uniqueId = $container.attr("data-id");
 
-//     $.ajax({
-//         url: "/admin/flag-change-language",
-//         type: "POST",
-//         data: { language_code: languageCode },
-//         headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") },
-//         success: function (response) {
-//             if (response.status === "success") {
-//                 location.reload();
-//             }
-//         }
-//     });
-// });
+            $container.remove();
 
-document.addEventListener("DOMContentLoaded", function () {
-    const checkboxes = document.querySelectorAll(".price-checkbox");
+            $("#set_value .delivery-add input[type='checkbox']").each(
+                function () {
+                    const $checkbox = $(this);
+                    const $parentContainer = $checkbox.closest("#inCont");
+                    const insuranceId = $parentContainer
+                        .find("#insurance_id")
+                        .val();
 
-    checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener("change", function () {
-            let priceInput = document.getElementById(this.name + "_price");
-
-            if (this.checked) {
-                priceInput.removeAttribute("disabled"); // Enable the input
-            } else {
-                priceInput.setAttribute("disabled", "false"); // Disable the input
-                priceInput.value = ""; // Clear the input value
-            }
+                    const matchedInput = $(`#insurance_id_one_${uniqueId}`);
+                    if (
+                        matchedInput.length &&
+                        matchedInput.val() === insuranceId
+                    ) {
+                        $checkbox.prop("checked", false);
+                        $parentContainer
+                            .find(".check-active")
+                            .addClass("d-none");
+                        $parentContainer
+                            .find(".plus-active")
+                            .removeClass("d-none");
+                    }
+                }
+            );
         });
     });
-
-    document.querySelectorAll(".priceLimit").forEach((input) => {
-        input.addEventListener("input", function () {
-            this.value = this.value.replace(/\D/g, "").slice(0, 5);
-        });
-    });
-
-    const titleInput = document.getElementById("title");
-    const permalinkInput = document.getElementById("perma_link");
-    const previewLink = document.querySelector(".link-info");
-
-    titleInput.addEventListener("input", function () {
-        let slug = titleInput.value
-            .toLowerCase()
-            .trim()
-            .replace(/[^a-z0-9\s-]/g, "") // Remove special characters
-            .replace(/\s+/g, "-") // Replace spaces with dashes
-            .replace(/-+/g, "-"); // Remove multiple dashes
-
-        let baseUrl = "https://www.example.com/cars/";
-        let fullUrl = baseUrl + slug;
-
-        permalinkInput.value = fullUrl;
-        previewLink.href = fullUrl;
-        previewLink.textContent = fullUrl;
-    });
-});
-
-$(document).ready(function () {
-    $("#languageSelector").on("change", function () {
-        var langId = $(this).val();
-
-        // Get slug from current URL
-        var pathSegments = window.location.pathname.split("/");
-        var slug = pathSegments[pathSegments.length - 1];
-
-        if (langId && slug) {
-            window.location.href =
-                "/admin/edit-vehicle/" + slug + "?language_id=" + langId;
-        }
-    });
-});
-
-$(document).ready(function () {
-    function updateSelectAllCheckbox() {
-        var total = $("input[name='feature_id[]']").length;
-        var checked = $("input[name='feature_id[]']:checked").length;
-
-        if (total > 0 && total === checked) {
-            $("#select-all1").prop("checked", true);
-        } else {
-            $("#select-all1").prop("checked", false);
-        }
-    }
-
-    updateSelectAllCheckbox();
-
-    $(document).on("change", "input[name='feature_id[]']", function () {
-        updateSelectAllCheckbox();
-    });
-
-    $("#select-all1").on("change", function () {
-        $("input[name='feature_id[]']").prop("checked", this.checked);
-    });
-});
+})();

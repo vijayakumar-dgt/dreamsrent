@@ -290,7 +290,7 @@ class CarInfoController extends Controller
         if ($request->hasFile('vehicle_image')) {
             $file = $request->file('vehicle_image');
             if ($file && $file->isValid()) {
-                $vehicleImagePath = uploadFile($file, 'vehicles');
+                $vehicleImagePath = uploadFile($file, 'vehicles/images');
             }
         }
 
@@ -342,7 +342,7 @@ class CarInfoController extends Controller
             $imagePaths = [];
             if (is_array($images)) {
                 foreach ($images as $image) {
-                    $fileName = uploadFile($image, 'vehicles');
+                    $fileName = uploadFile($image, 'vehicles/images');
                     $imagePaths[] = '/' . $fileName;
                 }
             }
@@ -363,8 +363,8 @@ class CarInfoController extends Controller
             $carDocPaths = [];
             if (is_array($carDocs)) {
                 foreach ($carDocs as $doc) {
-                    $fileName = uploadMutipleFile($doc, 'vehicle_doc');
-                    $carDocPaths[] = 'vehicle_doc/' . $fileName;
+                    $fileName = uploadMutipleFile($doc, 'vehicles/document');
+                    $carDocPaths[] = 'vehicles/document' . $fileName;
                 }
             }
 
@@ -384,8 +384,8 @@ class CarInfoController extends Controller
             $policyDocPaths = [];
             if (is_array($policyDocs)) {
                 foreach ($policyDocs as $doc) {
-                    $fileName = uploadMutipleFile($doc, 'vehicle_policy');
-                    $policyDocPaths[] = 'vehicle_policy/' . $fileName;
+                    $fileName = uploadMutipleFile($doc, 'vehicles/policy');
+                    $policyDocPaths[] = 'vehicles/policy' . $fileName;
                 }
             }
 
@@ -558,10 +558,10 @@ class CarInfoController extends Controller
 
                     $uploadedImage = $damage['image'] ?? null;
                     if ($imageFile instanceof \Illuminate\Http\UploadedFile) {
-                        $uploadedImage = $imageFile->store('vehicle_damage', 'public');
+                        $uploadedImage = $imageFile->store('vehicles/damage', 'public');
                     } elseif (!empty($uploadedImage) && strpos($uploadedImage, 'data:image') === 0) {
                         $imageData = explode(',', $uploadedImage)[1];
-                        $imageName = 'vehicle_damage/' . uniqid() . '.png';
+                        $imageName = 'vehicles/damage' . uniqid() . '.png';
                         Storage::disk('public')->put($imageName, base64_decode($imageData));
                         $uploadedImage = $imageName;
                     }
@@ -1100,12 +1100,10 @@ class CarInfoController extends Controller
             }
             $vehicle->has_multiple_image = count($vehicle->multiple_vehicle_images) > 1;
 
-            $vehicle->avatar_image = 'https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-2-512.png';
-
             $damageCount = VehicleDamage::where('vehicle_id', $vehicle->id)->count();
             $vehicle->damage_count = $damageCount;
             $vehicle->status = $vehicle->status;
-            $vehicle->created_date = formatDateTime($vehicle->created_at);
+            $vehicle->created_date = formatDateTime($vehicle->created_at, false);
 
             return $vehicle;
         });
@@ -1435,8 +1433,8 @@ class CarInfoController extends Controller
                 'wishlist' => $wishlistExists,
                 'review_count' => $review_count,
                 'price' => !empty($filteredPrices) ? $filteredPrices : null,
-                'is_featured' => (bool) rand(0, 1),
-                'is_top_rated' => (bool) rand(0, 1),
+                'is_featured' => $vehicle->popular == 1 ? true : false,
+                'is_top_rated' => is_numeric($rating) && $rating >= 4,
                 'seo_title' => $vehicle->vehicle_metatitle,
                 'seo_key' => $vehicle->vehicle_metakeywords,
                 'seo_description' => $vehicle->vehicle_metadesc,
@@ -1994,7 +1992,7 @@ class CarInfoController extends Controller
             $user = User::where('id', $vehicle->created_by)
                 ->first();
             $userDetail = null;
-            
+
             $defaultAvatar = asset('/backend/assets/img/default-profile.png');
             $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
 
