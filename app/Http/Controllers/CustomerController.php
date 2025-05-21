@@ -235,7 +235,8 @@ class CustomerController extends Controller
                 )
                 ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
                 ->leftJoin('translation_languages', 'translation_languages.id', '=', 'users.language_id')
-                ->where(['users.user_type' => 3]);
+                ->where(['users.user_type' => 3])
+                ->whereNull('users.deleted_at');
 
             if ($request->has('search') && !empty($request->search)) {
                 $search = $request->search;

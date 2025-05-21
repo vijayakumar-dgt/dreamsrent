@@ -59,7 +59,7 @@
                             <div class="camaro-location">
                                 <div class="camaro-location-inner">
                                     <i class='bx bx-map'></i>
-                                    <span class="vehicle_location">Location : Miami St, Destin, FL 32550, USA </span>
+                                    <span class="vehicle_location"></span>
                                 </div>
                                 <div class="camaro-location-inner">
                                     <i class='bx bx-show'></i>
@@ -102,7 +102,6 @@
                         <div class="review-header">
                             <h4>{{ __('web.user.extra_services') }}</h4>
                         </div>
-                        
                     </div>
                     <!-- /Extra Services -->
                     <!-- Listing Section -->
@@ -111,7 +110,6 @@
                             <h4>{{ __('web.home.desc_of_listing') }}</h4>
                         </div>
                         <div class="description-list">
-
                         </div>
                     </div>
                     <!-- /Listing Section -->
@@ -290,7 +288,7 @@
                             <div class="rating-wraps">
                                 <h2 id="overall_ratings"><span>/5</span></h2>
                                 <p id="rating_description"></p>
-                                <h6 id="total_reviews">Based on 0 Reviews</h6>
+                                <h6 id="total_reviews"></h6>
                             </div>
                             <div class="rating-progress">
                                 <div class="progress-info">
@@ -332,7 +330,7 @@
                         </div>
                         <div class="review-card" id="review_list_main_card">
                             <div class="review-head">
-                                <h6 id="total_reviews_count">Showing 0 reviews</h6>
+                                <h6 id="total_reviews_count"></h6>
                             </div>
                             <ul id="review_list_container">
 
@@ -478,7 +476,6 @@
                             <input type="hidden" name="final_price_rate" id="final_price_rate" value="">
                             <input type="hidden" name="auth_user_id" id="auth_user_id" value="{{ Auth::guard('web')->user()->id ?? '' }}">
                             <div class="mb-3 price_options">
-
                             </div>
                             <div class="location-content">
                                 <div class="delivery-tab">
@@ -684,7 +681,7 @@
                                 <h5><a>{{ $data['author_name'] ?? "" }}</a></h5>
                             </div>
                         </div>
-                    <ul class="booking-list mb-0">
+                        <ul class="booking-list mb-0">
                             <li>
                                 {{__('web.user.email')}}
                                 <span>{{ $data['author_email'] ?? "" }}</span>
@@ -698,9 +695,7 @@
                                 <span>{{ $data['author_location'] ?? "" }}</span>
                             </li>
                         </ul>
-
                     </div>
-
                 </div>
             </div>
             <div id="recommended-vehicle">

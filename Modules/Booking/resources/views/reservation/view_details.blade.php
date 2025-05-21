@@ -28,7 +28,7 @@
                                         <div class="col-8">
                                             <div class="d-flex align-items-center">
                                                 <span class="avatar flex-shrink-0 me-2">
-                                                    <img src="{{ $booking->vehicle_image }}" alt="">
+                                                    <img src="{{ $booking->vehicle_image }}" alt="{{ __('admin.common.image') }}">
                                                 </span>
                                                 <div>
                                                     <p class="mb-1">{{ $booking->vehicle_type }}</p>
@@ -91,7 +91,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-center mb-3">
                                                     <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                                        <img src="{{ $booking->customer_image }}" alt="">
+                                                        <img src="{{ $booking->customer_image }}" alt="{{ __('admin.common.image') }}">
                                                     </span>
                                                     <div>
                                                         <h6 class="fs-14 fw-medium mb-1">
@@ -110,7 +110,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-center mb-3">
                                                     <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                                        <img src="{{ $booking->driver_image }}" alt="">
+                                                        <img src="{{ $booking->driver_image }}" alt="{{ __('admin.common.image') }}">
                                                     </span>
                                                     <div>
                                                         <h6 class="fs-14 fw-medium mb-1">{{ $booking->driver_name }}</h6>
@@ -129,7 +129,9 @@
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mb-2">
                                         <h6 class="fw-medium d-flex align-items-center fs-14">{{ $booking->extra_service_count }} {{ __('admin.common.extra_services') }}
-                                            <a href="javascript:void(0);" class="me-2 ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="{{ !empty($booking->extra_service_names) ? implode(', ', $booking->extra_service_names) : '' }}"><i class="ti ti-info-circle-filled"></i></a>
+                                            <a href="javascript:void(0);" class="me-2 ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="{{ !empty($booking->extra_service_names) ? implode(', ', $booking->extra_service_names) : '' }}">
+                                                <i class="ti ti-info-circle-filled"></i>
+                                            </a>
                                         </h6>
                                         <p>{{ $booking->currency_symbol }}{{ $booking->total_extra_service_price }}</p>
                                     </div>
@@ -147,7 +149,9 @@
                                     @endif
                                     <div class="d-flex align-items-center justify-content-between mb-2">
                                         <h6 class="fw-medium d-flex align-items-center fs-14">{{ $booking->insurance_count }} {{ __('admin.common.insurances') }}
-                                            <a href="javascript:void(0);" class="me-2 ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="{{ !empty($booking->insurance_benefits_formatted) ? implode(', ', $booking->insurance_benefits_formatted) : '' }}"><i class="ti ti-info-circle-filled"></i></a>
+                                            <a href="javascript:void(0);" class="me-2 ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="{{ !empty($booking->insurance_benefits_formatted) ? implode(', ', $booking->insurance_benefits_formatted) : '' }}">
+                                                <i class="ti ti-info-circle-filled"></i>
+                                            </a>
                                         </h6>
                                         <p>{{ $booking->currency_symbol }}{{ $booking->total_insurance_price }}</p>
                                     </div>
@@ -163,7 +167,7 @@
                                         <div class="col-8">
                                             <div class="d-flex align-items-center">
                                                 <span class="avatar flex-shrink-0 me-2">
-                                                    <img src="{{ $booking->vehicle_image }}" alt="">
+                                                    <img src="{{ $booking->vehicle_image }}" alt="{{ __('admin.common.image') }}">
                                                 </span>
                                                 <div>
                                                     <p class="mb-1">{{ $booking->vehicle_type }}</p>
@@ -205,10 +209,10 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center justify-content-center flex-wrap row-gap-3">
-                    <a href="javascript:void(0);" class="btn btn-primary me-3 d-none"><i class="ti ti-files me-1"></i>View Invoice</a>
-                    <a href="javascript:void(0);" class="btn btn-dark me-3 d-none"><i class="ti ti-calendar me-1"></i>Reschedule</a>
                     @if ($booking->booking_status == 1 || $booking->booking_status == 2 || $booking->booking_status == 4)
-                    <a href="javascript:void(0);" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#booking_cancel_modal"><i class="ti ti-x me-1"></i>{{ __('admin.bookings.cancel_booking') }}</a>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#booking_cancel_modal">
+                        <i class="ti ti-x me-1"></i>{{ __('admin.bookings.cancel_booking') }}
+                    </button>
                     @endif
                 </div>
             </div>
@@ -242,7 +246,7 @@
                 </div>
                 <div class="modal-footer">
                     <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.close') }}</a>
+                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.close') }}</button>
                         <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.bookings.cancel_booking') }}</button>
                     </div>
                 </div>

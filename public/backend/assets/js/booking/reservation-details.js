@@ -83,7 +83,7 @@
                     error:function(error){
                         $(".error-text").text("");
                         $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-                        $(".submitbtn").removeAttr("disabled").html(_l('admin.common.cancel_booking'));
+                        $(".submitbtn").removeAttr("disabled").html(_l('admin.bookings.cancel_booking'));
                         if (error.responseJSON.code === 422) {
                             $.each(error.responseJSON.errors, function(key, val) {
                                 $("#" + key).addClass("is-invalid");
