@@ -484,23 +484,8 @@
         }
 
         reader.onload = function (e) {
-            const img = new Image();
-            img.src = e.target.result;
-
-            img.onload = function () {
-                if (img.width === 180 && img.height === 180) {
-                    preview.src = e.target.result;
-                    document
-                        .querySelector(".frames")
-                        .classList.remove("d-none");
-                } else {
-                    showToast(
-                        "error",
-                        _l("admin.general_settings.image_dimension")
-                    );
-                    event.target.value = "";
-                }
-            };
+            preview.src = e.target.result;
+            document.querySelector(".frames").classList.remove("d-none");
         };
 
         reader.readAsDataURL(file);
@@ -520,23 +505,8 @@
         }
 
         reader.onload = function (e) {
-            const img = new Image();
-            img.src = e.target.result;
-
-            img.onload = function () {
-                if (img.width === 180 && img.height === 180) {
-                    preview.src = e.target.result;
-                    document
-                        .querySelector(".frames")
-                        .classList.remove("d-none");
-                } else {
-                    showToast(
-                        "error",
-                        _l("admin.general_settings.image_dimension")
-                    );
-                    event.target.value = "";
-                }
-            };
+            preview.src = e.target.result;
+            document.querySelector(".frames").classList.remove("d-none");
         };
 
         reader.readAsDataURL(file);

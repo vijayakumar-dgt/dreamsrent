@@ -1,7 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
-
-});
-
 (async () => {
     await loadTranslationFile("admin", "general_settings,common");
     "use strict";

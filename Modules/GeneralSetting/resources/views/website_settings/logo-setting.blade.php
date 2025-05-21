@@ -41,7 +41,7 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex align-items-center">
                                                 <span class="logo-large-size border rounded d-flex align-items-center justify-content-center p-3 me-2 ">
-                                                    <img src="" alt="Logo" id="logo_photo_preview" class="real-input">
+                                                    <img src="" class="real-input" id="logo_photo_preview" alt="Logo">
                                                 </span>
                                             </div>
                                         </div>
@@ -66,7 +66,7 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex align-items-center">
                                                 <span class="logo-large-size border rounded d-flex align-items-center justify-content-center p-3 me-2">
-                                                    <img src="" alt="Logo" id="favicon_photo_preview" class="real-input">
+                                                    <img src="" class="real-input" id="favicon_photo_preview" alt="Logo">
                                                 </span>
                                             </div>
                                         </div>
@@ -91,7 +91,7 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex align-items-center">
                                                 <span class="logo-large-size border rounded d-flex align-items-center justify-content-center p-3 me-2">
-                                                    <img src="" alt="Logo" id="small_icon_photo_preview" class="real-input">
+                                                    <img src="" class="real-input" id="small_icon_photo_preview" alt="Logo">
                                                 </span>
                                             </div>
                                         </div>
@@ -116,7 +116,7 @@
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex align-items-center">
                                                 <span class="logo-large-size border rounded d-flex align-items-center justify-content-center p-3 me-2">
-                                                    <img src="" alt="Logo" id="dark_logo_preview" class="real-input">
+                                                    <img src="" class="real-input" id="dark_logo_preview" alt="Logo">
                                                 </span>
                                             </div>
                                         </div>
