@@ -40,6 +40,7 @@
                             <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-type="sort" data-value="asc">{{ __('admin.common.ascending') }}</a></li>
                             <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-type="sort" data-value="desc">{{ __('admin.common.descending') }}</a></li>
                             <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-type="sort" data-value="last_month">{{ __('admin.common.last_month') }}</a></li>
+                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-type="sort" data-value="last_7_days">{{ __('admin.common.last_7_days') }}</a></li>
                         </ul>
                     </div>
                     <div class="dropdown">
@@ -88,7 +89,7 @@
                     </thead>
                     <tbody>
                         @foreach($invoices as $invoice)
-                        <tr>
+                        <tr data-created="{{ \Carbon\Carbon::parse($invoice->created_at)->format('Y-m-d') }}">
                             <td><a href="javascript:void(0);" class="fs-12 fw-medium">#{{$invoice->invoice_number}}</a></td>
                             <td>
                                 <div class="d-flex align-items-center">

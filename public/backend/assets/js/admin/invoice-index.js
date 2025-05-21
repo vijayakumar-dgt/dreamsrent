@@ -103,33 +103,33 @@ document.addEventListener("DOMContentLoaded", function () {
     // Apply date range filter (for last_7_days and last_month)
     if (filters.sort === "last_7_days" || filters.sort === "last_month") {
         const now = new Date();
-
+    
         filteredRows = filteredRows.filter((row) => {
-            const dateText = row.querySelector("td:nth-child(4) p").innerText;
-            const rowDate = new Date(dateText);
-
+            const createdAttr = row.getAttribute("data-created");
+            const rowDate = new Date(createdAttr); // YYYY-MM-DD is safely parsable
+    
             if (filters.sort === "last_7_days") {
                 const sevenDaysAgo = new Date();
                 sevenDaysAgo.setDate(now.getDate() - 7);
-                return rowDate >= sevenDaysAgo;
+                return rowDate >= sevenDaysAgo && rowDate <= now;
             }
-
+    
             if (filters.sort === "last_month") {
-                const lastMonth = new Date();
-                lastMonth.setMonth(now.getMonth() - 1);
-                return rowDate >= lastMonth;
+                const firstDayLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                const lastDayLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                return rowDate >= firstDayLastMonth && rowDate <= lastDayLastMonth;
             }
-
+    
             return true;
         });
-
-        // After filtering, sort descending by date
+    
+        // Sort after filter
         filteredRows.sort((a, b) => {
-            const dateA = new Date(a.querySelector("td:nth-child(4) p").innerText);
-            const dateB = new Date(b.querySelector("td:nth-child(4) p").innerText);
+            const dateA = new Date(a.getAttribute("data-created"));
+            const dateB = new Date(b.getAttribute("data-created"));
             return dateB - dateA;
         });
-    } else if (filters.sort === "asc" || filters.sort === "desc") {
+    }else if (filters.sort === "asc" || filters.sort === "desc") {
         // Sort by Invoice Number (column 1)
         filteredRows.sort((a, b) => {
             const valA = a.querySelector("td:nth-child(1)").innerText.replace("#", "").trim();
