@@ -1,10 +1,57 @@
 (async () => {
+    
     "use strict";
+
     await loadTranslationFile("admin", "rentals, common");
+
     const permissions = await loadUserPermissions();
 
+    let editingDamageID = null;
+
     $(document).ready(function () {
-        initTable();
+        const titleInput = document.getElementById("title");
+        const permalinkInput = document.getElementById("perma_link");
+        const previewLink = document.querySelector(".link-info");
+
+        if (titleInput && permalinkInput && previewLink) {
+            titleInput.addEventListener("input", function () {
+                let slug = titleInput.value
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[^a-z0-9\s-]/g, "")
+                    .replace(/\s+/g, "-")
+                    .replace(/-+/g, "-");
+
+                let baseUrl = "https://www.example.com/cars/";
+                let fullUrl = baseUrl + slug;
+
+                permalinkInput.value = fullUrl;
+                previewLink.href = fullUrl;
+                previewLink.textContent = fullUrl;
+            });
+        }
+
+        const checkboxes = document.querySelectorAll(".price-checkbox");
+        checkboxes.forEach((checkbox) => {
+            checkbox.addEventListener("change", function () {
+                let priceInput = document.getElementById(this.name + "_price");
+
+                if (priceInput) {
+                    if (this.checked) {
+                        priceInput.removeAttribute("disabled"); // Enable the input
+                    } else {
+                        priceInput.setAttribute("disabled", "true"); // Disable the input
+                        priceInput.value = ""; // Clear the input value
+                    }
+                }
+            });
+        });
+
+        document.querySelectorAll(".priceLimit").forEach((input) => {
+            input.addEventListener("input", function () {
+                this.value = this.value.replace(/\D/g, "").slice(0, 5);
+            });
+        });
 
         $(".summernote").summernote({
             height: 200,
@@ -16,10 +63,7 @@
                 ["view", ["fullscreen", "codeview", "help"]],
             ],
         });
-    });
-    
 
-    $(document).ready(function () {
         $("#selectall_feature").on("change", function () {
             $(".singleCheckbox").prop("checked", $(this).prop("checked"));
         });
@@ -34,481 +78,32 @@
                 $("#selectall_feature").prop("checked", false);
             }
         });
-    });
 
-    document.addEventListener("DOMContentLoaded", function () {
-        let select = document.getElementById("sort_by");
-
-        let savedSort = localStorage.getItem("sort_by") || "ascending";
-        select.value = savedSort;
-
-        function updateSelectText() {
-            let selectedOption = select.options[select.selectedIndex];
-            select.options[0].text = "Selected : " + selectedOption.text;
-        }
-
-        updateSelectText();
-
-        select.addEventListener("change", function () {
-            localStorage.setItem("sort_by", this.value);
-            updateSelectText();
-        });
-    });
-
-    $(document).ready(function () {
-        let selectedStatus = null;
-        let currentSortType = null;
-
-        $("#sort_by_date").val("");
-
-        function getFilterData(includeStatus = false) {
-            let vehicleIds = [];
-            let vehicleTypeIds = [];
-            let vehicleLocationIds = [];
-            let sortByDate = $("#sort_by_date").val() || null;
-            let name = $("#name").val().trim() || null;
-
-            $("input[name='vehicle_id']:checked").each(function () {
-                vehicleIds.push($(this).val());
-            });
-
-            $("input[name='vehicle_type_id']:checked").each(function () {
-                vehicleTypeIds.push($(this).val());
-            });
-
-            $("input[name='vehicle_location_id']:checked").each(function () {
-                vehicleLocationIds.push($(this).val());
-            });
-
-            let filterData = {
-                name: name,
-                vehicle_id: vehicleIds.length > 0 ? vehicleIds : null,
-                vehicle_type_id:
-                    vehicleTypeIds.length > 0 ? vehicleTypeIds : null,
-                vehicle_location_id:
-                    vehicleLocationIds.length > 0 ? vehicleLocationIds : null,
-                sort_by: currentSortType || null,
-                sort_by_date: sortByDate,
-            };
-
-            if (includeStatus && selectedStatus !== null) {
-                filterData.status = selectedStatus;
-            }
-
-            return filterData;
-        }
-
-        function fetchFilteredData(includeStatus = false) {
-            let filterData = getFilterData(includeStatus);
-            initTable(filterData);
-            $("#loader-table").show();
-            $(".real-data").addClass("d-none");
-        }
-
-        $("#name, #sort_by_date").on("change keyup", function () {
-            fetchFilteredData();
-        });
-
-        $(document).on("#applyFilter", "click", function () {
-            fetchFilteredData(true);
-        });
-
-        $(document).on("#clearFilter", "click", function () {
-            $("input[type='checkbox']").prop("checked", false);
-            $(".dropdown-menu-md .dropdown-item").removeClass("active");
-            $("#name").val("");
-            $("#sort_by_date").val("");
-            selectedStatus = null;
-            currentSortType = null;
-            $("#sortLabel").text("{{ __('admin.page.latest') }}");
-            fetchFilteredData();
-        });
-
-        $(document).on(".statusFilter .dropdown-item", "click", function () {
-            $(".statusFilter .dropdown-item").removeClass("active");
-            $(this).addClass("active");
-
-            let statusText = $(this).text().trim();
-            selectedStatus =
-                statusText === "Active"
-                    ? 1
-                    : statusText === "Inactive"
-                    ? 0
-                    : null;
-        });
-
-        window.filterSort = function (element, sortType) {
-            $("#sortFilter a").removeClass("active");
-            $(element).addClass("active");
-
-            currentSortType = sortType;
-
-            $("#sortLabel").text($(element).text().trim());
-
-            fetchFilteredData();
-        };
-    });
-
-    function initTable(filterData) {
-        $.ajax({
-            url: "/admin/vehicle-list",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(filterData),
-            headers: {
-                Accept: "application/json",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            success: function (response) {
-                let tableBody = "";
-
-                if ($.fn.DataTable.isDataTable("#vehicleListIndex")) {
-                    $("#vehicleListIndex").DataTable().destroy();
-                }
-                if (response.code === 200 && response.data.length > 0) {
-                    let data = response.data;
-
-                    function formatDateTime(dateString) {
-                        let date = new Date(dateString);
-
-                        let optionsDate = {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                        };
-                        let formattedDate = date.toLocaleDateString(
-                            "en-GB",
-                            optionsDate
-                        );
-
-                        let optionsTime = {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                        };
-                        let formattedTime = date.toLocaleTimeString(
-                            "en-US",
-                            optionsTime
-                        );
-
-                        return { formattedDate, formattedTime };
-                    }
-                    function ucfirst(str) {
-                        return str.charAt(0).toUpperCase() + str.slice(1);
-                    }
-
-                    $.each(data, function (index, value) {
-                        let priceObj = [];
-                        let priceText = "";
-
-                        try {
-                            priceObj = JSON.parse(value.vehicle_price);
-                            let prices = priceObj[0];
-
-                            for (const [key, val] of Object.entries(prices)) {
-                                if (val && val !== "0") {
-                                    priceText = `$${val} (${key})`;
-                                    break;
-                                }
-                            }
-                        } catch (e) {}
-
-                        tableBody += `<tr>
-                            <td>
-                                <div class="form-check form-check-md" data-id="${
-                                    value.id
-                                }">
-                                                <input class="form-check-input" type="checkbox">
-                                </div>
-                            </td>
-                            <td>
-                            <div class="d-flex align-items-start">
-								<div class="avatar me-2 flex-shrink-0">
-									<img src="${value.vehicle_image}" class="rounded-3" alt="">
-								</div>
-								<div class="text-start">
-									<h6><p class="fs-14 fw-semibold">${ucfirst(value.name)}</p></h6>
-									<p>${value.car_type ? value.car_type.name : ""}</p>
-								</div>
-							</div>
-                            <h6 class="fw-medium"><a href="#"></a></h6></td>
-                            <td>${value.main_location.name}</td>
-                             <td>${priceText}</td>
-                            <td>0${value.damage_count}</td>
-                         <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox"
-                                    ${value.popular == 1 ? "checked" : ""}
-                                    onchange="togglePopular(${
-                                        value.id
-                                    }, this.checked)">
-                            </div>
-                        </td>
-                         <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox"
-                                    ${value.recommended == 1 ? "checked" : ""}
-                                    onchange="toggleRecommended(${
-                                        value.id
-                                    }, this.checked)">
-                            </div>
-                        </td>
-                        <td class="text-start">${value.created_date}</td>
-                          <td>
-                            <span class="badge ${value.status == 1 ? "badge-success-transparent" : "badge-danger-transparent"} d-inline-flex align-items-center badge-sm cursor-pointer"
-                                data-id="${value.id}" data-status="${value.status}" data-bs-toggle="modal" data-bs-target="#status-modal">
-                                <i class="ti ti-point-filled me-1"></i>
-                                ${value.status == 1 ? _l("admin.common.active") : _l("admin.common.inactive")}
-                            </span>
-                        </td>
-             ${
-                 hasPermission(permissions, "vehicles", "edit") ||
-                 hasPermission(permissions, "vehicles", "delete")
-                     ? `<td>
-                                <div class="dropdown">
-                                    <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="ti ti-dots-vertical"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end p-2">
-                                          ${
-                                              hasPermission(
-                                                  permissions,
-                                                  "vehicles",
-                                                  "edit"
-                                              )
-                                                  ? `<li>
-                                            <button class="dropdown-item edit-vehicles rounded-1 border-0 bg-white" data-id="${value.slug}">
-                                                <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
-                                            </button>
-                                        </li>`
-                                                  : ""
-                                          }
-                                               ${
-                                                   hasPermission(
-                                                       permissions,
-                                                       "vehicles",
-                                                       "delete"
-                                                   )
-                                                       ? `<li>
-                                           <button 
-                                                class="dropdown-item border-0 bg-white rounded-1 delete-vehicle" 
-                                                data-id="${value.id}" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#delete-modal">
-                                                <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
-                                            </button>
-                                        </li>`
-                                                       : ""
-                                               }
-                                    </ul>
-                                </div>
-                            </td>`
-                     : ""
-             }
-                        </tr>`;
-                    });
-                } else {
-                    tableBody += `
-                            <tr>
-                                <td colspan="8" class="text-center">${_l(
-                                    "admin.common.empty_table"
-                                )}e</td>
-                            </tr>`;
-                    $(".table-footer").empty();
-                }
-                $("#vehicleListIndex tbody").html(tableBody);
-                if (response.data.length > 0) {
-                    $("#vehicleListIndex").DataTable({
-                        ordering: false,
-                        searching: false,
-                        pageLength: 10,
-                        lengthChange: false,
-                        drawCallback: function () {
-                            $(".dataTables_info").addClass("d-none");
-                            $(
-                                ".dataTables_wrapper .dataTables_paginate"
-                            ).addClass("d-none");
-                            var tableWrapper = $(this).closest(
-                                ".dataTables_wrapper"
-                            );
-                            var info = tableWrapper.find(".dataTables_info");
-                            var pagination = tableWrapper.find(
-                                ".dataTables_paginate"
-                            );
-
-                            $(".table-footer")
-                                .empty()
-                                .append(
-                                    $(
-                                        '<div class="d-flex justify-content-between align-items-center w-100"></div>'
-                                    )
-                                        .append(
-                                            $(
-                                                '<div class="datatable-info"></div>'
-                                            ).append(info.clone(true))
-                                        )
-                                        .append(
-                                            $(
-                                                '<div class="datatable-pagination"></div>'
-                                            ).append(pagination.clone(true))
-                                        )
-                                );
-                            $(".table-footer")
-                                .find(".dataTables_paginate")
-                                .removeClass("d-none");
-                        },
-                        language: {
-                            emptyTable: _l("admin.common.no_matching_records"),
-                            info:
-                                _l("admin.common.showing") +
-                                " _START_ " +
-                                _l("admin.common.to") +
-                                " _END_ " +
-                                _l("admin.common.of") +
-                                " _TOTAL_ " +
-                                _l("admin.common.entries"),
-                            infoEmpty:
-                                _l("admin.common.showing") +
-                                " 0 " +
-                                _l("admin.common.to") +
-                                " 0 " +
-                                _l("admin.common.of") +
-                                " 0 " +
-                                _l("admin.common.entries"),
-                            infoFiltered:
-                                "(" +
-                                _l("admin.common.filtered_from") +
-                                " _MAX_ " +
-                                _l("admin.common.total_entries") +
-                                ")",
-                            lengthMenu:
-                                _l("admin.common.show") +
-                                " _MENU_ " +
-                                _l("admin.common.entries"),
-                            search: _l("admin.common.search") + ":",
-                            zeroRecords: _l("admin.common.empty_table"),
-                            paginate: {
-                                first: _l("admin.common.first"),
-                                last: _l("admin.common.last"),
-                                next: _l("admin.common.next"),
-                                previous: _l("admin.common.previous"),
-                            },
-                        },
-                    });
-                }
-                $("#loader-table").hide();
-                $(".label-loader, .input-loader").hide();
-                $(".real-label, .real-input, .real-data").removeClass("d-none");
-            },
-            error: function (error) {},
-        });
-    }
-
-    $("#deleteVehicle").on("submit", function (e) {
-        e.preventDefault();
-
-        var vehicleId = $("#delete_id").val();
-        var $submitBtn = $(".submitbtn"); // Button for submission
-
-        $submitBtn.prop("disabled", true); // Disable the button
-        $submitBtn.html(
-            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...'
-        ); // Show loading spinner
-
-        $.ajax({
-            url: "/admin/vehicle/delete",
-            method: "POST",
-            data: {
-                delete_id: vehicleId,
-            },
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            success: function (response) {
-                if (response.success) {
-                    $("#delete-modal").modal("hide");
-                    initTable();
-                } else {
-                    alert("Failed to delete vehicle.");
-                }
-            },
-            error: function (error) {
-                alert("An error occurred while deleting the vehicle.");
-            },
-            complete: function () {
-                $submitBtn.prop("disabled", false); // Re-enable the button
-                $submitBtn.html("Yes, Delete"); // Reset the button text
-            },
-        });
-    });
-
-    $(document).on("click", "#deleteSelectedVehicles", function () {
-        const vehicleIds = [];
-
-        $(".form-check-input:checked").each(function () {
-            const id = $(this).closest(".form-check").data("id");
-            if (id) {
-                vehicleIds.push(id);
-            }
-        });
-
-        if (vehicleIds.length === 0) {
-            showToast("error", "No vehicles selected.");
-            return;
-        }
-
-        $.ajax({
-            url: "/admin/vehicle/multiple/delete",
-            method: "POST",
-            data: {
-                delete_id: vehicleIds,
-            },
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            success: function (response) {
-                if (response.success) {
-                    initTable();
-                    showToast(
-                        "success",
-                        "Selected Vehicles delated successfully."
-                    );
-                } else {
-                    alert("Failed to delete vehicle(s).");
-                }
-            },
-            error: function () {
-                alert("An error occurred while deleting the vehicles.");
-            },
-        });
-    });
-
-    $(document).ready(function () {
         $("#carBasicInfoForm").validate({
             rules: {
                 vehicle_image: {
-                    required: true,
+                    required: false,
                 },
                 title: {
-                    required: true,
+                    required: false,
                     minlength: 3,
                     maxlength: 50,
                 },
                 perma_link: {
                     required: false,
-                    url: true,
+                    url: false,
                 },
                 vehicle_type_id: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_brand_id: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_model_id: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_category_id: {
-                    required: true,
+                    required: false,
                 },
                 plate_number: {
                     required: false,
@@ -517,7 +112,7 @@
                     required: false,
                 },
                 main_location_id: {
-                    required: true,
+                    required: false,
                 },
                 other_location: {
                     required: false,
@@ -529,13 +124,13 @@
                     required: false,
                 },
                 vehicle_color_id: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_year: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_passenger: {
-                    required: true,
+                    required: false,
                 },
             },
             messages: {
@@ -2263,517 +1858,312 @@
                     });
             }
         });
-    });
 
-    $(document).on("click", "[data-bs-target='#status-modal']", function () {
-        const vehicleId = $(this).data("id");
-        const status = $(this).data("status");
-    
-        $("#status_vehicle_id").val(vehicleId);
-        $("#vehicle_status").val(status).trigger("change"); // Important for Select2
-    });
-    
+        $(document).on(
+            "click",
+            "[data-bs-target='#status-modal']",
+            function () {
+                const vehicleId = $(this).data("id");
+                const status = $(this).data("status");
 
+                $("#status_vehicle_id").val(vehicleId);
+                $("#vehicle_status").val(status).trigger("change"); // Important for Select2
+            }
+        );
 
-    $("#statusVehicleForm").on("submit", function (e) {
-        e.preventDefault();
-    
-        let vehicleId = $("#status_vehicle_id").val();
-        let status = $("#vehicle_status").val();
-    
-        $.ajax({
-            url: "/admin/set-status", 
-            method: "GET",
-            data: {
-                vehicle_id: vehicleId,
-                status: status
-            },
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            success: function (response) {
-                if (response.success) {
-                    initTable();
-                    $("#status-modal").modal("hide");
-                    showToast("success", "Vehicle status updated.");
-                } else {
-                    showToast("error", "Failed to update status.");
-                }
-            },
-            error: function () {
-                showToast("error", "An error occurred.");
+        $("#vehicle_brand_id").on("change", function () {
+            let brandId = $(this).val();
+            let modelDropdown = $("#vehicle_model_id");
+
+            modelDropdown.html('<option value="">Loading...</option>'); // Show loading text
+
+            if (brandId) {
+                $.ajax({
+                    url: "/admin/get-model",
+                    type: "GET",
+                    data: { brand_id: brandId },
+                    success: function (response) {
+                        modelDropdown.html(
+                            '<option value="">Select Model</option>'
+                        ); // Reset dropdown
+
+                        if (response.length > 0) {
+                            $.each(response, function (key, model) {
+                                modelDropdown.append(
+                                    `<option value="${model.id}">${model.model_name}</option>`
+                                );
+                            });
+                        } else {
+                            modelDropdown.html(
+                                '<option value="">No models found</option>'
+                            );
+                        }
+                    },
+                    error: function () {
+                        modelDropdown.html(
+                            '<option value="">Error loading models</option>'
+                        );
+                    },
+                });
+            } else {
+                modelDropdown.html('<option value="">Select Model</option>'); // Reset if no brand is selected
             }
         });
-    });
-    
 
-})();
-
-let editingDamageID = null; // Track the item being edited
-function editDamage(damageID) {
-    let item = $("#" + damageID);
-
-    let damageType = item.find("input[name='damage_name[]']").val();
-    let damageLocation = item.find("input[name='damage_location[]']").val();
-    let damageDescription = item
-        .find("input[name='damage_description[]']")
-        .val();
-    let damageImage = item.find("input[name='damage_image[]']").val();
-
-    // Set values in modal
-    $("#dam_type").val(damageType);
-    $("#dam_name").val(damageLocation);
-    $("#dam_dis").val(damageDescription);
-
-    // Show image preview
-    if (damageImage) {
-        $("#image_preview").attr("src", damageImage).removeClass("d-none");
-    } else {
-        $("#image_preview").addClass("d-none");
-    }
-
-    editingDamageID = damageID;
-}
-
-$(document).on("click", ".edit-vehicles", function () {
-    const vehicleSlug = $(this).data("id");
-    editVechileList(vehicleSlug);
-});
-
-function editVechileList(vehicleSlug) {
-    $.ajax({
-        url: "/admin/check-vehicle",
-        type: "GET",
-        data: { vehicle_slug: vehicleSlug },
-        success: function (response) {
-            if (response.exists === "yes") {
-                window.location.href = `/admin/edit-vehicle/${vehicleSlug}`;
+        $(document).on("change", "#Baseunlimited", function () {
+            if ($(this).is(":checked")) {
+                $("#basic_kilometer").prop("disabled", true).val("");
+                $("#extra_kilometer").prop("disabled", true).val("");
             } else {
-                showToast("error", "Vehicle not found.");
+                $("#basic_kilometer").prop("disabled", false);
+                $("#extra_kilometer").prop("disabled", false);
             }
-        },
-        error: function (xhr, status, error) {
-            showToast("error", "Something went wrong while checking the vehicle.");
-        },
-    });
-}
+        });
 
+        $("#delImg").on("click", function () {
+            $("#vehicle_image").val("");
 
-document.addEventListener("DOMContentLoaded", function () {
-    const saveBtn = document.getElementById("service_save_btn");
-    if (saveBtn) {
-        saveBtn.addEventListener("click", function () {
-            let tableRows = document.querySelectorAll(
-                ".custom-table1 tbody tr"
-            );
+            $(".frames img").attr("src", "").hide(); // Hides the image after removal
+        });
 
-            tableRows.forEach((row) => {
-                let serviceName = row
-                    .querySelector("#extra_name")
-                    .innerText.trim();
-                let extraValue = row.querySelector("#extra_value").value;
-                let extraPrice = row.querySelector("#extra_price").value;
+        $(document).on("click", ".change-language", function () {
+            var languageCode = $(this).data("language_code");
 
-                let serviceCards = document.querySelectorAll(
-                    ".extra-service-card"
+            $.ajax({
+                url: "/admin/flag-change-language",
+                type: "POST",
+                data: { language_code: languageCode },
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                success: function (response) {
+                    if (response.status === "success") {
+                        location.reload();
+                    }
+                },
+            });
+        });
+
+        const saveBtn = document.getElementById("service_save_btn");
+        if (saveBtn) {
+            saveBtn.addEventListener("click", function () {
+                let tableRows = document.querySelectorAll(
+                    ".custom-table1 tbody tr"
                 );
 
-                serviceCards.forEach((card) => {
-                    let cardName = card
-                        .querySelector("#service_name")
+                tableRows.forEach((row) => {
+                    let serviceName = row
+                        .querySelector("#extra_name")
                         .innerText.trim();
+                    let extraValue = row.querySelector("#extra_value").value;
+                    let extraPrice = row.querySelector("#extra_price").value;
 
-                    if (cardName === serviceName) {
-                        card.querySelector("#set_value").innerText =
-                            extraValue === "per_day"
-                                ? _l("admin.rentals.per_day")
-                                : _l("admin.rentals.one_time");
-                        card.querySelector("#service_value").value = extraValue;
-
-                        card.querySelector(
-                            "#set_price"
-                        ).innerText = `$${extraPrice}`;
-                        card.querySelector("#service_price").value = extraPrice;
-                    }
-                });
-            });
-
-            $("#edit_price").modal("hide");
-        });
-    }
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".delivery-add").forEach(function (container) {
-        const plusIcon = container.querySelector(".plus-active");
-        const checkIcon = container.querySelector(".check-active");
-        const checkbox = container.querySelector("#insurance_checked");
-
-        container.addEventListener("click", function (event) {
-            event.preventDefault();
-            if (checkbox.checked) {
-                checkbox.checked = false;
-                checkIcon.style.display = "none";
-                plusIcon.style.display = "inline";
-            } else {
-                checkbox.checked = true;
-                checkIcon.style.display = "inline";
-                plusIcon.style.display = "none";
-            }
-        });
-    });
-
-    document.addEventListener("click", function (event) {
-        if (event.target.closest(".edit-icon")) {
-            const editButton = event.target.closest(".edit-icon");
-            const uniqueId = editButton.getAttribute("data-id");
-            const price = editButton.getAttribute("data-price");
-            const priceType = editButton.getAttribute("data-price-type");
-
-            document.getElementById("price").value = price;
-            document
-                .getElementById("edit_insurance")
-                .setAttribute("data-id", uniqueId);
-
-            document
-                .querySelectorAll("input[name='Radio']")
-                .forEach((radio) => {
-                    if (
-                        radio.nextElementSibling.innerText.trim() === priceType
-                    ) {
-                        radio.checked = true;
-                    }
-                });
-        }
-    });
-});
-
-document.addEventListener("click", function (event) {
-    // Delete functionality
-    if (event.target.closest(".trash-icon")) {
-        event.preventDefault();
-        const deleteButton = event.target.closest(".trash-icon");
-        const container = deleteButton.closest("div[data-id]"); // Find the insurance container
-        const uniqueId = container.getAttribute("data-id");
-
-        // Remove from the appended list
-        container.remove();
-
-        // Uncheck the corresponding checkbox in the modal
-        document
-            .querySelectorAll("#set_value .delivery-add input[type='checkbox']")
-            .forEach((checkbox) => {
-                const parentContainer = checkbox.closest("#inCont");
-                const insuranceId =
-                    parentContainer.querySelector("#insurance_id").value;
-                if (
-                    document.getElementById(`insurance_id_one_${uniqueId}`)
-                        ?.value === insuranceId
-                ) {
-                    checkbox.checked = false;
-                    const plusIcon =
-                        parentContainer.querySelector(".plus-active");
-                    const checkIcon =
-                        parentContainer.querySelector(".check-active");
-                    checkIcon.style.display = "none";
-                    plusIcon.style.display = "inline";
-                }
-            });
-    }
-});
-
-$(document).ready(function () {
-    $("#vehicle_brand_id").on("change", function () {
-        let brandId = $(this).val();
-        let modelDropdown = $("#vehicle_model_id");
-
-        modelDropdown.html('<option value="">Loading...</option>'); // Show loading text
-
-        if (brandId) {
-            $.ajax({
-                url: "/admin/get-model",
-                type: "GET",
-                data: { brand_id: brandId },
-                success: function (response) {
-                    modelDropdown.html(
-                        '<option value="">Select Model</option>'
-                    ); // Reset dropdown
-
-                    if (response.length > 0) {
-                        $.each(response, function (key, model) {
-                            modelDropdown.append(
-                                `<option value="${model.id}">${model.model_name}</option>`
-                            );
-                        });
-                    } else {
-                        modelDropdown.html(
-                            '<option value="">No models found</option>'
-                        );
-                    }
-                },
-                error: function () {
-                    modelDropdown.html(
-                        '<option value="">Error loading models</option>'
+                    let serviceCards = document.querySelectorAll(
+                        ".extra-service-card"
                     );
-                },
+
+                    serviceCards.forEach((card) => {
+                        let cardName = card
+                            .querySelector("#service_name")
+                            .innerText.trim();
+
+                        if (cardName === serviceName) {
+                            card.querySelector("#set_value").innerText =
+                                extraValue === "per_day"
+                                    ? _l("admin.rentals.per_day")
+                                    : _l("admin.rentals.one_time");
+                            card.querySelector("#service_value").value =
+                                extraValue;
+
+                            card.querySelector(
+                                "#set_price"
+                            ).innerText = `$${extraPrice}`;
+                            card.querySelector("#service_price").value =
+                                extraPrice;
+                        }
+                    });
+                });
+
+                $("#edit_price").modal("hide");
             });
-        } else {
-            modelDropdown.html('<option value="">Select Model</option>'); // Reset if no brand is selected
         }
-    });
-});
 
-$(document).ready(function () {
-    $(document).on("change", "#Baseunlimited", function () {
-        if ($(this).is(":checked")) {
-            $("#basic_kilometer").prop("disabled", true).val("");
-            $("#extra_kilometer").prop("disabled", true).val("");
-        } else {
-            $("#basic_kilometer").prop("disabled", false);
-            $("#extra_kilometer").prop("disabled", false);
-        }
-    });
-});
+        $(".delivery-add").each(function () {
+            const $container = $(this);
+            const $plusIcon = $container.find(".plus-active");
+            const $checkIcon = $container.find(".check-active");
+            const $checkbox = $container.find("#insurance_checked");
 
-$(document).ready(function () {
-    $("#delImg").on("click", function () {
-        // Clear the file input field
-        $("#vehicle_image").val("");
-
-        // Remove the selected image (hide or reset to a default)
-        $(".frames img").attr("src", "").hide(); // Hides the image after removal
-    });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    // Handle price checkboxes
-    const checkboxes = document.querySelectorAll(".price-checkbox");
-    checkboxes.forEach((checkbox) => {
-        checkbox.addEventListener("change", function () {
-            let priceInput = document.getElementById(this.name + "_price");
-
-            if (priceInput) {
-                if (this.checked) {
-                    priceInput.removeAttribute("disabled"); // Enable the input
+            $container.on("click", function (event) {
+                event.preventDefault();
+                if ($checkbox.prop("checked")) {
+                    $checkbox.prop("checked", false);
+                    $checkIcon.addClass("d-none");
+                    $plusIcon.removeClass("d-none");
                 } else {
-                    priceInput.setAttribute("disabled", "true"); // Disable the input
-                    priceInput.value = ""; // Clear the input value
+                    $checkbox.prop("checked", true);
+                    $checkIcon.removeClass("d-none");
+                    $plusIcon.addClass("d-none");
                 }
-            }
+            });
         });
-    });
 
-    // Limit input to numbers only for priceLimit fields
-    document.querySelectorAll(".priceLimit").forEach((input) => {
-        input.addEventListener("input", function () {
-            this.value = this.value.replace(/\D/g, "").slice(0, 5);
+        // Edit icon click handler
+        $(document).on("click", ".edit-icon", function (event) {
+            const $editButton = $(this);
+            const uniqueId = $editButton.data("id");
+            const price = $editButton.data("price");
+            const priceType = $editButton.data("price-type");
+
+            $("#price").val(price);
+            $("#edit_insurance").attr("data-id", uniqueId);
+
+            $("input[name='Radio']").each(function () {
+                if ($(this).next().text().trim() === priceType) {
+                    $(this).prop("checked", true);
+                }
+            });
         });
-    });
 
-    // Handle title and permalink generation
-    const titleInput = document.getElementById("title");
-    const permalinkInput = document.getElementById("perma_link");
-    const previewLink = document.querySelector(".link-info");
+        // Add insurance button click
+        const $inBtn = $("#in_btn");
+        if ($inBtn.length) {
+            $inBtn.on("click", function () {
+                $(".noDataI").html(""); // Clear previous entries
+                const $selectedInsurances = $(
+                    "#set_value .delivery-add input[type='checkbox']:checked"
+                );
+                const $appendContainer = $("#insurance_car_append");
 
-    if (titleInput && permalinkInput && previewLink) {
-        titleInput.addEventListener("input", function () {
-            let slug = titleInput.value
-                .toLowerCase()
-                .trim()
-                .replace(/[^a-z0-9\s-]/g, "") // Remove special characters
-                .replace(/\s+/g, "-") // Replace spaces with dashes
-                .replace(/-+/g, "-"); // Remove multiple dashes
+                $appendContainer.html("");
 
-            let baseUrl = "https://www.example.com/cars/";
-            let fullUrl = baseUrl + slug;
+                $selectedInsurances.each(function () {
+                    const $checkbox = $(this);
+                    const $container = $checkbox.closest("#inCont");
+                    const insuranceId = $container.find("#insurance_id").val();
+                    const insuranceName = $container
+                        .find("#insurance_name")
+                        .val();
+                    const insurancePrice = $container
+                        .find("#insurance_price")
+                        .val();
+                    const insuranceCount = $container
+                        .find("#insurance_count")
+                        .val();
+                    const insurancePriceType = $container
+                        .find("#insurance_price_type")
+                        .val();
 
-            permalinkInput.value = fullUrl;
-            previewLink.href = fullUrl;
-            previewLink.textContent = fullUrl;
-        });
-    }
-});
+                    const uniqueId = `insurance_${crypto.randomUUID()}`;
 
-$(document).on("click", ".change-language", function () {
-    var languageCode = $(this).data("language_code");
-
-    $.ajax({
-        url: "/admin/flag-change-language",
-        type: "POST",
-        data: { language_code: languageCode },
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        success: function (response) {
-            if (response.status === "success") {
-                location.reload();
-            }
-        },
-    });
-});
-
-$(document).on("click", ".delete-vehicle", function () {
-    const vehicleId = $(this).data("id");
-    deleteVehicleList(vehicleId);
-});
-
-function deleteVehicleList(vehicleId) {
-    $("#delete_id").val(vehicleId);
-}
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const inBtn = document.getElementById("in_btn");
-
-    // Check if the element exists before adding the event listener
-    if (inBtn) {
-        inBtn.addEventListener("click", function () {
-            $(".noDataI").html(""); // Clear previous entries
-            const selectedInsurances = document.querySelectorAll(
-                "#set_value .delivery-add input[type='checkbox']:checked"
-            );
-            const appendContainer = document.getElementById(
-                "insurance_car_append"
-            );
-
-            // Clear previously appended elements
-            appendContainer.innerHTML = "";
-
-            selectedInsurances.forEach((checkbox) => {
-                const container = checkbox.closest("#inCont");
-                const insuranceId =
-                    container.querySelector("#insurance_id").value;
-                const insuranceName =
-                    container.querySelector("#insurance_name").value;
-                const insurancePrice =
-                    container.querySelector("#insurance_price").value;
-                const insuranceCount =
-                    container.querySelector("#insurance_count").value;
-                const insurancePriceType = container.querySelector(
-                    "#insurance_price_type"
-                ).value;
-
-                const uniqueId = `insurance_${crypto.randomUUID()}`;
-
-                const newInsuranceDiv = document.createElement("div");
-                newInsuranceDiv.className =
-                    "d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3";
-                newInsuranceDiv.setAttribute("data-id", uniqueId);
-                newInsuranceDiv.innerHTML = `
-                    <div>
-                        <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">${insuranceName}</h6>
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <p class="fs-13 fw-medium border-end pe-2 mb-0">${_l(
-                                "admin.rentals.insurance_price"
-                            )} : <span class="text-gray-9 priceIn" data-id="${uniqueId}">$${insurancePrice}</span></p>
-                            <input type="hidden" name="insurance_id_one[]" id="insurance_id_one_${uniqueId}" value="${insuranceId}">
-                            <input type="hidden" name="insurance_price_one[]" id="insurance_price_one_${uniqueId}" value="${insurancePrice}">
-                            <p class="fs-13 fw-medium mb-0">${_l(
-                                "admin.rentals.insurance_benefits"
-                            )} : <span class="text-gray-9">${insuranceCount}</span></p>
-                            <p class="fs-13 fw-medium mb-0">${_l(
-                                "admin.rentals.insurance_price_type"
-                            )} : <span class="text-gray-9 priceTypeIn" data-id="${uniqueId}">${insurancePriceType}</span></p>
-                            <input type="hidden" name="insurance_price_type_one[]" id="insurance_price_type_one_${uniqueId}" value="${insurancePriceType}">
+                    const newInsuranceDiv = $(`
+                    <div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" data-id="${uniqueId}">
+                        <div>
+                            <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">${insuranceName}</h6>
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <p class="fs-13 fw-medium border-end pe-2 mb-0">${_l(
+                                    "admin.rentals.insurance_price"
+                                )} : <span class="text-gray-9 priceIn" data-id="${uniqueId}">$${insurancePrice}</span></p>
+                                <input type="hidden" name="insurance_id_one[]" id="insurance_id_one_${uniqueId}" value="${insuranceId}">
+                                <input type="hidden" name="insurance_price_one[]" id="insurance_price_one_${uniqueId}" value="${insurancePrice}">
+                                <p class="fs-13 fw-medium mb-0">${_l(
+                                    "admin.rentals.insurance_benefits"
+                                )} : <span class="text-gray-9">${insuranceCount}</span></p>
+                                <p class="fs-13 fw-medium mb-0">${_l(
+                                    "admin.rentals.insurance_price_type"
+                                )} : <span class="text-gray-9 priceTypeIn" data-id="${uniqueId}">${insurancePriceType}</span></p>
+                                <input type="hidden" name="insurance_price_type_one[]" id="insurance_price_type_one_${uniqueId}" value="${insurancePriceType}">
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center icon-list">
+                            <a href="#" class="edit-icon me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance" 
+                            data-id="${uniqueId}" data-price="${insurancePrice}" data-price-type="${insurancePriceType}"><i class="ti ti-edit"></i></a>
+                            <a href="#" class="trash-icon" data-bs-toggle="modal" data-bs-target="#delete_insurance"><i class="ti ti-trash"></i></a>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center icon-list">
-                        <a href="#" class="edit-icon me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance" 
-                        data-id="${uniqueId}" data-price="${insurancePrice}" data-price-type="${insurancePriceType}"><i class="ti ti-edit"></i></a>
-                        <a href="#" class="trash-icon" data-bs-toggle="modal" data-bs-target="#delete_insurance"><i class="ti ti-trash"></i></a>
-                    </div>
-                `;
-                appendContainer.appendChild(newInsuranceDiv);
+                `);
+
+                    $appendContainer.append(newInsuranceDiv);
+                });
+
+                $("#select_insurance").modal("hide");
             });
-            $("#select_insurance").modal("hide");
+        }
+
+        // Save updated insurance values
+        const $saveUpdateBtn = $("#save_update");
+        if ($saveUpdateBtn.length) {
+            $saveUpdateBtn.on("click", function () {
+                const updatedPrice = $("#price").val();
+                const updatedPriceType = $("input[name='Radio']:checked")
+                    .next()
+                    .text()
+                    .trim();
+                const uniqueId = $("#edit_insurance").attr("data-id");
+
+                $(`.priceIn[data-id='${uniqueId}']`).text(`$${updatedPrice}`);
+                $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
+
+                $(`.priceTypeIn[data-id='${uniqueId}']`).text(updatedPriceType);
+                $(`#insurance_price_type_one_${uniqueId}`).val(
+                    updatedPriceType
+                );
+
+                $("#edit_insurance").modal("hide");
+            });
+        }
+
+        // Delete insurance entry
+        $(document).on("click", ".trash-icon", function (event) {
+            event.preventDefault();
+            const $deleteButton = $(this);
+            const $container = $deleteButton.closest("div[data-id]");
+            const uniqueId = $container.data("id");
+
+            $container.remove();
+
+            $("#set_value .delivery-add input[type='checkbox']").each(
+                function () {
+                    const $checkbox = $(this);
+                    const $parentContainer = $checkbox.closest("#inCont");
+                    const insuranceId = $parentContainer
+                        .find("#insurance_id")
+                        .val();
+
+                    if (
+                        $(`#insurance_id_one_${uniqueId}`).val() === insuranceId
+                    ) {
+                        $checkbox.prop("checked", false);
+                        $parentContainer.find(".check-active").hide();
+                        $parentContainer.find(".plus-active").show();
+                    }
+                }
+            );
         });
-    } else {
+    });
+
+    function editDamage(damageID) {
+        let item = $("#" + damageID);
+
+        let damageType = item.find("input[name='damage_name[]']").val();
+        let damageLocation = item.find("input[name='damage_location[]']").val();
+        let damageDescription = item
+            .find("input[name='damage_description[]']")
+            .val();
+        let damageImage = item.find("input[name='damage_image[]']").val();
+
+        $("#dam_type").val(damageType);
+        $("#dam_name").val(damageLocation);
+        $("#dam_dis").val(damageDescription);
+
+        if (damageImage) {
+            $("#image_preview").attr("src", damageImage).removeClass("d-none");
+        } else {
+            $("#image_preview").addClass("d-none");
+        }
+
+        editingDamageID = damageID;
     }
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    const saveUpdateBtn = document.getElementById("save_update");
-
-    if (saveUpdateBtn) {
-        saveUpdateBtn.addEventListener("click", function () {
-            const updatedPrice = document.getElementById("price").value;
-            const updatedPriceType = document
-                .querySelector("input[name='Radio']:checked")
-                .nextElementSibling.innerText.trim();
-
-            // Get the unique ID from the modal
-            const uniqueId = document
-                .getElementById("edit_insurance")
-                .getAttribute("data-id");
-
-            // Update only the selected entry
-            document.querySelector(
-                `.priceIn[data-id='${uniqueId}']`
-            ).innerText = `$${updatedPrice}`;
-            document.getElementById(`insurance_price_one_${uniqueId}`).value =
-                updatedPrice;
-
-            document.querySelector(
-                `.priceTypeIn[data-id='${uniqueId}']`
-            ).innerText = updatedPriceType;
-            document.getElementById(
-                `insurance_price_type_one_${uniqueId}`
-            ).value = updatedPriceType;
-
-            // Close the modal
-            $("#edit_insurance").modal("hide");
-        });
-    } else {
-    }
-});
-
-function togglePopular(vehicleId, isChecked) {
-    $.ajax({
-        url: "/admin/set-popular",
-        type: "GET",
-        data: {
-            id: vehicleId,
-            popular: isChecked ? 1 : 0,
-        },
-        success: function (response) {
-            showToast("success", "Popular status updated.");
-        },
-        error: function (xhr, status, error) {
-            showToast("error", "Something went wrong.");
-        },
-    });
-}
-function toggleRecommended(vehicleId, isChecked) {
-    $.ajax({
-        url: "/admin/set-recommended",
-        type: "GET",
-        data: {
-            id: vehicleId,
-            recommended: isChecked ? 1 : 0,
-        },
-        success: function (response) {
-            showToast("success", "Recommended status updated.");
-        },
-        error: function (xhr, status, error) {
-            showToast("error", "Something went wrong.");
-        },
-    });
-}
-
-function toggleStatus(vehicleId, isChecked) {
-    $.ajax({
-        url: "/admin/set-status",
-        type: "GET",
-        data: {
-            id: vehicleId,
-            status: isChecked ? 1 : 0,
-        },
-        success: function (response) {
-            showToast("success", "Vehicle status updated.");
-            initTable();
-        },
-        error: function (xhr, status, error) {
-            showToast("error", "Something went wrong.");
-        },
-    });
-}
+})();

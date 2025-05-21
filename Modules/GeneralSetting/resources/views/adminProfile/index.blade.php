@@ -47,7 +47,7 @@
                                                         <div class="drag-upload-btn btn btn-md btn-dark">
                                                             <i class="ti ti-photo-up fs-14"></i>
                                                             {{ __('admin.common.change') }}
-                                                            <input type="file" class="form-control image-sign" id="profile_photo" name="profile_photo" accept="image/*" onchange="validateImageSize(this, event)">
+                                                            <input type="file" class="form-control image-sign" id="profile_photo" name="profile_photo" accept="image/*" >
                                                         </div>
                                                     </div>
                                                     <div class="mt-2">

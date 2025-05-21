@@ -40,7 +40,6 @@
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center justify-content-between mb-3">
                                                     <img src="/backend/assets/img/icons/nexmo-logo-icon.svg" alt="Nexmo" class="img-flui">
-                                                    <span class="badge badge-outline d-flex align-items-center"><i class="ti ti-point-filled text-success me-1"></i>{{ __('admin.general_settings.connected') }}</span>
                                                 </div>
                                                 <p class="mb-0">{{ __('admin.general_settings.enable_communication_sms') }}</p>
                                             </div>
@@ -64,7 +63,6 @@
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center justify-content-between mb-3">
                                                     <img src="/backend/assets/img/icons/two-factor-icon.svg" alt="2Factor" class="img-flui">
-                                                    <span class="badge badge-outline d-flex align-items-center"><i class="ti ti-point-filled text-success me-1"></i>{{ __('admin.general_settings.connected') }}</span>
                                                 </div>
                                                 <p class="mb-0">{{ __('admin.general_settings.sms_integration') }}</p>
                                             </div>
@@ -88,7 +86,6 @@
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center justify-content-between mb-3">
                                                     <img src="/backend/assets/img/icons/twilio-icon.svg" alt="Twilio" class="img-flui">
-                                                    <span class="badge badge-outline d-flex align-items-center"><i class="ti ti-point-filled text-success me-1"></i>{{ __('admin.general_settings.connected') }}</span>
                                                 </div>
                                                 <p class="mb-0">{{ __('admin.general_settings.twilio_api_integration') }}</p>
                                             </div>

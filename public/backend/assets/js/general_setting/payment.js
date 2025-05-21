@@ -1432,9 +1432,7 @@
             },
         });
     });
-})();
-
-$(document).on("change", ".checkStatus", function () {
+    $(document).on("change", ".checkStatus", function () {
     let status = $(this).is(":checked") ? 1 : 0;
     let key = $(this).attr("name");
 
@@ -1515,3 +1513,6 @@ function initList() {
         },
     });
 }
+})();
+
+

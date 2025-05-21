@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 (async () => {
     await loadTranslationFile("admin", "general_settings,common");
-    ("use strict");
+    "use strict";
     $(document).ready(function () {
         company_list();
 
@@ -629,11 +629,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 })();
-
-function removeImage() {
-    const preview = document.getElementById("profile_photo_preview");
-    const fileInput = document.getElementById("profile_photo");
-
-    preview.src = "/backend/assets/img/settings/company-logo-01.jpg";
-    fileInput.value = "";
-}
