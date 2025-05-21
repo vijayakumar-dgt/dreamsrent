@@ -39,10 +39,8 @@
                                     <label for="maintenance_image" class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
-                                            <img src="" id="profile_photo_preview" class="img-fluid" alt="Profile Photo">
-                                            <a href="javascript:void(0);" class="uploadimgtrash btn btn-sm rounded-circle remove-maintenance-image" data-default_image="{{ uploadedAsset('', 'default2')}}">
-                                                <i class="ti ti-trash fs-12"></i>
-                                            </a>
+                                            <img src="" id="maintenance_photo_preview" class="img-fluid" alt="maintenance_img">
+                                            
                                             <input type="hidden" name="is_remove_image" id="is_remove_image" value="0">
                                         </div>
                                         <div class="profile-upload">
@@ -50,7 +48,7 @@
                                                 <div class="drag-upload-btn btn btn-md btn-dark">
                                                     <i class="ti ti-photo-up fs-14"></i>
                                                     {{ __('admin.common.change') }}
-                                                    <input type="file" class="form-control image-sign" id="maintenance_image" name="maintenance_image" accept="image/*" onchange="previewImage(event)">
+                                                    <input type="file" class="form-control image-sign" id="maintenance_image" name="maintenance_image" accept="image/*">
                                                 </div>
                                             </div>
                                             <div class="mt-2">

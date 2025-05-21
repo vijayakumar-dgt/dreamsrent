@@ -1524,6 +1524,8 @@ return array (
     'cylinder_type_minlength' => 'يجب أن يتكون نوع الأسطوانة من 3 أحرف على الأقل.',
     'cylinder_type_maxlength' => 'يجب ألا يتجاوز نوع الأسطوانة 30 حرفًا.',
     'checklist_required' => 'قائمة التحقق مطلوبة.',
+    'color_name_unique' => 'اسم اللون موجود بالفعل.',
+    'color_code_unique' => 'كود اللون موجود بالفعل.',
   ),
   'user_management' =>
   array (
@@ -1995,6 +1997,7 @@ return array (
     'documents' => 'المستندات',
     'upload_image_size' => 'حجم الصورة المرفوعة 180*180، ضمن 2 ميجابايت',
     'upload_icon_size' => 'حجم الأيقونة 100*100، في حدود 2 ميجابايت',
+    'upload_brand_icon_size' => 'حجم أيقونة التحميل بين 10*10 و 25*25',
     'gender' => 'الجنس',
     'male' => 'ذكر',
     'female' => 'أنثى',
@@ -2166,6 +2169,7 @@ return array (
     'delete_vehicle_confirmation' => 'هل أنت متأكد أنك تريد حذف المركبة؟',
     'update_status_vehicle' => 'تحديث حالة هذه المركبة',
     'update_status' => 'تحديث الحالة',
+    'script_tag_not_allowed' => 'السكريبتات لا يمكن استخدامها.',
   ),
   'page' =>
   array (

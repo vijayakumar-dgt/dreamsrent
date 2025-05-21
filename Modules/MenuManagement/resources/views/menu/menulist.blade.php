@@ -22,7 +22,7 @@
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
                     @if (hasPermission($permissions, 'menu_management', 'create'))
                     <div class="mb-2 me-2">
-                        <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_menu"><i class="ti ti-plus me-2"></i>{{ __('admin.cms.add_new_menu') }}</a>
+                        <button type="button" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_menu"><i class="ti ti-plus me-2"></i>{{ __('admin.cms.add_new_menu') }}</button>
                     </div>
                     @endif
                 </div>
@@ -32,24 +32,24 @@
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                     <div class="dropdown me-2">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                             <i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }} : <span class="ms-1" id="current_sort">{{ __('admin.common.latest') }}</span>
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2 sort_by_list">
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="latest">{{ __('admin.common.latest') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="latest">{{ __('admin.common.latest') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="ascending">{{ __('admin.common.ascending') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="ascending">{{ __('admin.common.ascending') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="descending">{{ __('admin.common.descending') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="descending">{{ __('admin.common.descending') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="last month">{{ __('admin.common.last_month') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="last month">{{ __('admin.common.last_month') }}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1" data-sort="last 7 days">{{ __('admin.common.last_7_days') }}</a>
+                                <button type="button" class="dropdown-item rounded-1" data-sort="last 7 days">{{ __('admin.common.last_7_days') }}</button>
                             </li>
                         </ul>
                     </div>
@@ -60,7 +60,7 @@
                             <span class="input-icon">
                                 <i class="ti ti-search"></i>
                             </span>
-                            <input type="text" class="form-control" placeholder="{{ __('admin.common.search') }}">
+                            <input type="text" class="form-control" name="search" id="search" placeholder="{{ __('admin.common.search') }}">
                         </div>
                     </div>
                 </div>
@@ -137,11 +137,11 @@
                             <input type="text" class="form-control" id="menuPermalink" name="menu_permalink">
                             <span class="text-danger error-message" id="menuPermalinkError"></span>
                         </div>
-                        <p>{{ __('admin.cms.preview') }}: <a href="javascript:void(0);" class="text-info">https://www.example.com</a></p>
+                        <p>{{ __('admin.cms.preview') }}: <span class="text-info">https://www.example.com</span></p>
                     </div>
                     <div class="modal-footer">
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                             <button type="submit" class="btn btn-primary" id="createMenuBtn">{{ __('admin.common.create_new') }}</button>
                         </div>
                     </div>
@@ -193,7 +193,7 @@
                             <input type="text" class="form-control" id="editMenuPermalink" name="editMenuPermalink" value="https://www.example.com/contact/">
                             <span class="text-danger error-message" id="editMenuPermalinkError"></span>
                         </div>
-                        <p>{{ __('admin.cms.preview') }}: <a href="javascript:void(0);" class="text-info">https://www.example.com</a></p>
+                        <p>{{ __('admin.cms.preview') }}: <span class="text-info">https://www.example.com</span></p>
                     </div>
                     <div class="modal-footer">
                         <div class="d-flex justify-content-between align-items-center w-100">
@@ -204,7 +204,7 @@
                                 </label>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                                 <button type="submit" class="btn btn-primary savebtn">{{ __('admin.common.save_changes') }}</button>
                             </div>
                         </div>
@@ -228,7 +228,7 @@
                         <h4 class="mb-1">{{ __('admin.cms.delete_menu') }}</h4>
                         <p class="mb-3">{{ __('admin.cms.menu_delete_confirmation') }}</p>
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                             <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
                         </div>
                     </div>

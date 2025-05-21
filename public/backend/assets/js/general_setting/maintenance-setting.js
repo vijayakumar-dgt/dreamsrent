@@ -128,7 +128,7 @@
                             const element = $("#" + setting.key);
 
                             if (setting.key === "maintenance_image") {
-                                $("#profile_photo_preview")
+                                $("#maintenance_photo_preview")
                                     .attr("src", setting.value)
                                     .show();
                             } else if (
@@ -163,7 +163,7 @@
     });
 
     $(document).on("click", ".remove-maintenance-image", function () {
-        const preview = document.getElementById("profile_photo_preview");
+        const preview = document.getElementById("maintenance_photo_preview");
         preview.src = $(this).data("default_image");
         $("#maintenance_image").val("");
         $("#is_remove_image").val(1);
@@ -172,7 +172,7 @@
     $("#maintenance_image").on("change", function (event) {
         const file = event.target.files[0];
         const reader = new FileReader();
-        const preview = $("#profile_photo_preview");
+        const preview = $("#maintenance_photo_preview");
         $("#is_remove_image").val(0);
 
         if (file) {
@@ -195,7 +195,7 @@
                             _l("admin.general_settings.image_dimension")
                         );
                         const preview = document.getElementById(
-                            "profile_photo_preview"
+                            "maintenance_photo_preview"
                         );
                         preview.src = $(".remove-maintenance-image").data(
                             "default_image"
@@ -208,23 +208,3 @@
         }
     });
 })();
-
-function previewImage(event) {
-    const reader = new FileReader();
-    const preview = document.getElementById("profile_photo_preview");
-
-    reader.onload = function () {
-        preview.src = reader.result;
-    };
-
-    if (event.target.files.length > 0) {
-        reader.readAsDataURL(event.target.files[0]);
-    }
-}
-
-// function removeImage() {
-//     const preview = document.getElementById('profile_photo_preview');
-
-//     preview.src = ;
-//     fileInput.value = '';
-// }

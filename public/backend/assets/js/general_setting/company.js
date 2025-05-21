@@ -1,32 +1,9 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const userPhoneInput = document.querySelector("#company_phone");
-    const intlPhoneInput = document.querySelector(
-        "#international_phone_number"
-    );
-
-    if (userPhoneInput) {
-        window.iti = intlTelInput(userPhoneInput, {
-            utilsScript: "/backend/assets/plugins/intltelinput/js/utils.js",
-            separateDialCode: true,
-        });
-    }
-
-    document
-        .querySelector("#companySettingForm")
-        .addEventListener("submit", function (event) {
-            event.preventDefault();
-            if (window.iti) {
-                const intlNumber = window.iti.getNumber();
-                intlPhoneInput.value = intlNumber;
-            }
-        });
-});
-
 (async () => {
     await loadTranslationFile("admin", "general_settings,common");
-    ("use strict");
+    "use strict";
     $(document).ready(function () {
         company_list();
+        initInternationalPhoneInput();
 
         fetchCountries();
         $("#country").on("change", function () {
@@ -628,12 +605,27 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     }
+     function initInternationalPhoneInput() {
+            const userPhoneInput = document.querySelector("#company_phone");
+    const intlPhoneInput = document.querySelector(
+        "#international_phone_number"
+    );
+
+    if (userPhoneInput) {
+        window.iti = intlTelInput(userPhoneInput, {
+            utilsScript: "/backend/assets/plugins/intltelinput/js/utils.js",
+            separateDialCode: true,
+        });
+    }
+
+    document
+        .querySelector("#companySettingForm")
+        .addEventListener("submit", function (event) {
+            event.preventDefault();
+            if (window.iti) {
+                const intlNumber = window.iti.getNumber();
+                intlPhoneInput.value = intlNumber;
+            }
+        });
+     }
 })();
-
-function removeImage() {
-    const preview = document.getElementById("profile_photo_preview");
-    const fileInput = document.getElementById("profile_photo");
-
-    preview.src = "/backend/assets/img/settings/company-logo-01.jpg";
-    fileInput.value = "";
-}

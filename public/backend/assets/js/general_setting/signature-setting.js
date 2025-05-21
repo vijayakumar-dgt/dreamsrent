@@ -4,6 +4,12 @@
     const permissions = await loadUserPermissions();
 
     $(document).ready(function () {
+        $("#signature_image").on("change", function (event) {
+            previewImage(event);
+        });
+        $("#edit_signature_image").on("change", function (event) {
+            editpreviewImage(event);
+        });
         $(document).on("click", ".edit-signature-btn", function () {
             const id = $(this).data("id");
             const name = $(this).data("name");
@@ -450,52 +456,59 @@
             },
         });
     });
+    function editSignature(id, name, image, status, isDefault) {
+        $("#edit_signature_id").val(id);
+        $("#edit_signature_name").val(name);
+        $("#edit_signature_preview").attr("src", `${image}`);
+        $("#edit_signature_status").prop("checked", status === 1);
+        $("#edit_signature_default").prop("checked", isDefault === 1);
+
+        $("#edit_signature").modal("show");
+    }
+
+    function deleteSignature(id) {
+        $("#delete_id").val(id);
+    }
+
+    function editpreviewImage(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        const preview = document.getElementById("edit_signature_preview");
+
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+            showToast("error", _l("admin.general_settings.image_size_5mb"));
+            event.target.value = "";
+            return;
+        }
+
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            document.querySelector(".frames").classList.remove("d-none");
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    function previewImage(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        const preview = document.getElementById("image_photo_preview");
+
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+            showToast("error", _l("admin.general_settings.image_size_5mb"));
+            event.target.value = "";
+            return;
+        }
+
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            document.querySelector(".frames").classList.remove("d-none");
+        };
+
+        reader.readAsDataURL(file);
+    }
 })();
-
-function editSignature(id, name, image, status, isDefault) {
-    $("#edit_signature_id").val(id);
-    $("#edit_signature_name").val(name);
-    $("#edit_signature_preview").attr("src", `${image}`);
-    $("#edit_signature_status").prop("checked", status === 1);
-    $("#edit_signature_default").prop("checked", isDefault === 1);
-
-    $("#edit_signature").modal("show");
-}
-
-function deleteSignature(id) {
-    $("#delete_id").val(id);
-}
-
-function editpreviewImage(event) {
-    const reader = new FileReader();
-    const preview = document.getElementById("edit_signature_preview");
-
-    reader.onload = function () {
-        preview.src = reader.result;
-    };
-
-    if (event.target.files.length > 0) {
-        reader.readAsDataURL(event.target.files[0]);
-    }
-}
-
-function previewImage(event) {
-    const reader = new FileReader();
-    const preview = document.getElementById("profile_photo_preview");
-
-    reader.onload = function () {
-        preview.src = reader.result;
-    };
-
-    if (event.target.files.length > 0) {
-        reader.readAsDataURL(event.target.files[0]);
-    }
-}
-
-function removeImage() {
-    const preview = document.getElementById("profile_photo_preview");
-    const fileInput = document.getElementById("profile_photo");
-
-    preview.src = "/backend/assets/img/settings/company-logo-01.jpg";
-    fileInput.value = "";
-}

@@ -125,7 +125,7 @@
             columns:[
                 { data: "cylinder_type",
                     render:function(data,type,row){
-                        return `<h6 class="fw-medium"><a href="#">${row.cylinder_type}</a></h6>`;
+                        return `<h6 class="fw-medium text-black">${row.cylinder_type}</h6>`;
                     }
                 },
                 { data: "status", render:function(data,type,row){
@@ -177,7 +177,7 @@
                 infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
                 lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
                 search: _l("admin.common.search") + ":",
-                zeroRecords: _l("admin.common.no_matching_records"),
+                zeroRecords: _l("admin.common.empty_table"),
                 paginate: {
                     first: _l("admin.common.first"),
                     last: _l("admin.common.last"),

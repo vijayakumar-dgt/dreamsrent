@@ -52,9 +52,11 @@ class CarInfoController extends Controller
      */
     public function vehiclelist(): View
     {
-        $vechileName = VehicleInfo::orderBy('id', 'desc')->get();
-        $vechileType = Cartype::orderBy('id', 'desc')->get();
-        $vechileLocation = Location::orderBy('id', 'desc')->get();
+        $langID = current_user()->language_id ?? 1;
+
+        $vechileName = VehicleInfo::orderBy('id', 'desc')->where("language_id", $langID)->get();
+        $vechileType = Cartype::orderBy('id', 'desc')->where("language_id", $langID)->get();
+        $vechileLocation = Location::orderBy('id', 'desc')->where("language_id", $langID)->get();
 
         return view('carinfo::vehicle.index', compact("vechileName", "vechileType", "vechileLocation"));
     }
@@ -1098,12 +1100,10 @@ class CarInfoController extends Controller
             }
             $vehicle->has_multiple_image = count($vehicle->multiple_vehicle_images) > 1;
 
-            $vehicle->avatar_image = 'https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-2-512.png';
-
             $damageCount = VehicleDamage::where('vehicle_id', $vehicle->id)->count();
             $vehicle->damage_count = $damageCount;
             $vehicle->status = $vehicle->status;
-            $vehicle->created_date = formatDateTime($vehicle->created_at);
+            $vehicle->created_date = formatDateTime($vehicle->created_at, false);
 
             return $vehicle;
         });
@@ -1433,8 +1433,8 @@ class CarInfoController extends Controller
                 'wishlist' => $wishlistExists,
                 'review_count' => $review_count,
                 'price' => !empty($filteredPrices) ? $filteredPrices : null,
-                'is_featured' => (bool) rand(0, 1),
-                'is_top_rated' => (bool) rand(0, 1),
+                'is_featured' => $vehicle->popular == 1 ? true : false,
+                'is_top_rated' => is_numeric($rating) && $rating >= 4,
                 'seo_title' => $vehicle->vehicle_metatitle,
                 'seo_key' => $vehicle->vehicle_metakeywords,
                 'seo_description' => $vehicle->vehicle_metadesc,
@@ -1992,7 +1992,7 @@ class CarInfoController extends Controller
             $user = User::where('id', $vehicle->created_by)
                 ->first();
             $userDetail = null;
-            
+
             $defaultAvatar = asset('/backend/assets/img/default-profile.png');
             $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
 

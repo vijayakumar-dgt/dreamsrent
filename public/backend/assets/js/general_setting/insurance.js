@@ -492,9 +492,7 @@
             },
         });
     });
-})();
-
-function getBenefits(benefits) {
+    function getBenefits(benefits) {
     $("#benefitsList").empty();
     let benefitsArray =
         typeof benefits === "string" ? JSON.parse(benefits) : benefits;
@@ -582,3 +580,5 @@ function editInsurance(id) {
 function deleteInsurance(id) {
     $("#delete_id").val(id);
 }
+
+})();

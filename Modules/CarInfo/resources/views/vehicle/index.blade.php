@@ -33,27 +33,27 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end p-2" id="sortFilter">
                         <li>
-                            <button type="button" class="dropdown-item rounded-1" onclick="filterSort(this, 'latest')">
+                            <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="latest">
                                 {{ __('admin.page.latest') }}
                             </button>
                         </li>
                         <li>
-                            <button type="button" class="dropdown-item rounded-1" onclick="filterSort(this, 'asc')">
+                            <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="asc">
                                 {{ __('admin.page.ascending') }}
                             </button>
                         </li>
                         <li>
-                            <button type="button" class="dropdown-item rounded-1" onclick="filterSort(this, 'desc')">
+                            <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="desc">
                                 {{ __('admin.page.descending') }}
                             </button>
                         </li>
                         <li>
-                            <button type="button" class="dropdown-item rounded-1" onclick="filterSort(this, 'last_month')">
+                            <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="last_month">
                                 {{ __('admin.page.last_month') }}
                             </button>
                         </li>
                         <li>
-                            <button type="button" class="dropdown-item rounded-1" onclick="filterSort(this, 'last_7_days')">
+                            <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="last_7_days">
                                 {{ __('admin.page.last_7_days') }}
                             </button>
                         </li>
@@ -115,13 +115,13 @@
                             </div>
                         </li>
                         <div class="custom-scroll">
-                        @foreach ($vechileName as $value)
-                        <li>
-                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                <input class="form-check-input m-0 me-2" type="checkbox" id="vehicle_id" name="vehicle_id" value="{{ $value->id }}">{{ $value->name }}
-                            </label>
-                        </li>
-                        @endforeach
+                            @foreach ($vechileName as $value)
+                            <li>
+                                <label class="dropdown-item d-flex align-items-center rounded-1">
+                                    <input class="form-check-input m-0 me-2" type="checkbox" id="vehicle_id" name="vehicle_id" value="{{ $value->id }}">{{ $value->name }}
+                                </label>
+                            </li>
+                            @endforeach
                         </div>
                     </ul>
                 </div>
@@ -141,13 +141,13 @@
                             </div>
                         </li>
                         <div class="custom-scroll">
-                        @foreach ($vechileType as $value)
-                        <li>
-                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                <input class="form-check-input m-0 me-2" type="checkbox" id="vehicle_type_id" name="vehicle_type_id" value="{{ $value->id }}">{{ $value->name }}
-                            </label>
-                        </li>
-                        @endforeach
+                            @foreach ($vechileType as $value)
+                            <li>
+                                <label class="dropdown-item d-flex align-items-center rounded-1">
+                                    <input class="form-check-input m-0 me-2" type="checkbox" id="vehicle_type_id" name="vehicle_type_id" value="{{ $value->id }}">{{ $value->name }}
+                                </label>
+                            </li>
+                            @endforeach
                         </div>
                     </ul>
                 </div>
@@ -167,13 +167,13 @@
                             </div>
                         </li>
                         <div class="custom-scroll">
-                        @foreach ($vechileLocation as $value)
-                        <li>
-                            <label class="dropdown-item d-flex align-items-center rounded-1">
-                                <input class="form-check-input m-0 me-2" type="checkbox" id="vehicle_location_id" name="vehicle_location_id" value="{{ $value->id }}">{{ $value->name }}
-                            </label>
-                        </li>
-                        @endforeach
+                            @foreach ($vechileLocation as $value)
+                            <li>
+                                <label class="dropdown-item d-flex align-items-center rounded-1">
+                                    <input class="form-check-input m-0 me-2" type="checkbox" id="vehicle_location_id" name="vehicle_location_id" value="{{ $value->id }}">{{ $value->name }}
+                                </label>
+                            </li>
+                            @endforeach
                         </div>
                     </ul>
                 </div>
@@ -190,8 +190,8 @@
                         </li>
                     </ul>
                 </div>
-                <button type="button" class="me-2 text-purple links" id="applyFilter">{{ __('admin.rentals.apply') }}</button>
-                <button type="button" class="text-danger links" id="clearFilter">{{ __('admin.rentals.clear_all') }}</button>
+                <button type="button" class="border-0 bg-transparent text-purple links" id="applyFilter">{{ __('admin.rentals.apply') }}</button>
+                <button type="button" class="text-danger border-0 bg-transparent links" id="clearFilter">{{ __('admin.rentals.clear_all') }}</button>
             </div>
         </div>
         <div class="custom-datatable-filter table-responsive brandstable">
@@ -279,5 +279,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('backend/assets/js/add-car.js') }}"></script>
+<script src="{{ asset('backend/assets/js/vehicle.js') }}"></script>
 @endpush

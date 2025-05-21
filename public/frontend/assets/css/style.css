@@ -19599,6 +19599,10 @@ iframe {
 	flex-shrink: 0;
 }
 
+.servicelist .service-img img {
+	width: 100%;
+}
+
 .servicelist .service-info p {
 	font-size: 14px;
 	color: #111;
@@ -27639,6 +27643,10 @@ input.form-control.rounded-pill:focus {
 	font-size: 25px;
 	flex-shrink: 0;
 	margin-right: 10px;
+}
+
+.adons-lists li .adons-types .adon-name-info .adon-icon img {
+	width: 100%;
 }
 
 .adons-lists li .adons-types .adon-name-info .adon-name h6 {

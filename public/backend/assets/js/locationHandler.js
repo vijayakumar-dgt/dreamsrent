@@ -272,7 +272,7 @@
                 } else {
                     tableBody += `
                             <tr>
-                                <td colspan="3" class="text-center">${_l(
+                                <td colspan="6" class="text-center">${_l(
                                     "admin.common.empty_table"
                                 )}</td>
                             </tr>`;
@@ -350,7 +350,7 @@
                                 " _MENU_ " +
                                 _l("admin.common.entries"),
                             search: _l("admin.common.search") + ":",
-                            zeroRecords: _l("admin.common.no_matching_records"),
+                            zeroRecords: _l("admin.common.empty_table"),
                             paginate: {
                                 first: _l("admin.common.first"),
                                 last: _l("admin.common.last"),

@@ -107,13 +107,3 @@
 @push('scripts')
 <script src="{{ asset('backend/assets/js/general_setting/otp-setting.js') }}"></script>
 @endpush
-
-
-
-
-
-
-
-
-
-

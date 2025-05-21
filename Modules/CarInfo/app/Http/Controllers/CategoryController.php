@@ -33,12 +33,16 @@ class CategoryController extends Controller
         $id = $request->id ?? null;
 
         $rules = [
-            'name' => ['required', Rule::unique('categories', 'name')->ignore($id)->whereNull('deleted_at')],
+            'name' => [
+                'required', Rule::unique('categories', 'name')->ignore($id)->whereNull('deleted_at'),
+                'not_regex:/<\/?script\b[^>]*>/i'
+            ],
         ];
 
         $messages = [
             'name.required' => __('admin.rentals.category_required'),
             'name.unique' => __('admin.rentals.category_unique'),
+            'name.not_regex' => __('admin.common.script_tag_not_allowed'),
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);

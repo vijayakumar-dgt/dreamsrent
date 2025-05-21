@@ -190,7 +190,7 @@
                                 <label for="image" class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
                                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                                     <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-                                        <img src="" class="img-fluid rounded d-none" id="imagePreview" alt="img">
+                                        <img src="" class="img-fluid rounded d-none" id="imagePreview" alt="Image Preview">
                                         <i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
                                     </div>
                                     <div class="profile-upload">
@@ -308,8 +308,10 @@
                                 <div class="mb-3">
                                     <label for="documents" class="form-label">{{ __('admin.common.documents') }}</label></label>
                                     <div class="document-upload text-center br-3 mb-3">
-                                        <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
-                                        <p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span></p>
+                                        <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="{{ __('admin.common.image') }}">
+                                        <p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} 
+                                            <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span>
+                                        </p>
                                         <p class="fs-12 mb-0">{{ __('admin.common.maximum_size', ['size' => 5]) }}</p>
                                         <input type="file" class="form-control image-sign" name="documents[]" id="documents" multiple="">
                                     </div>
@@ -348,7 +350,7 @@
                                 <label for="edit_image" class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
                                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                                     <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-                                        <img src="" class="img-fluid rounded d-none" id="editImagePreview" alt="img">
+                                        <img src="" class="img-fluid rounded d-none" id="editImagePreview" alt="Image Preview">
                                         <i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
                                     </div>
                                     <div class="profile-upload">
@@ -466,8 +468,10 @@
                                 <div class="mb-3">
                                     <label for="edit_documents" class="form-label">{{ __('admin.common.documents') }}</label></label>
                                     <div class="document-upload text-center br-3 mb-3">
-                                        <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
-                                        <p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span></p>
+                                        <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="{{ __('admin.common.image') }}">
+                                        <p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} 
+                                            <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span>
+                                        </p>
                                         <p class="fs-12 mb-0">{{ __('admin.common.maximum_size', ['size' => 5]) }}</p>
                                         <input type="file" class="form-control image-sign" name="documents[]" id="edit_documents" multiple="">
                                     </div>

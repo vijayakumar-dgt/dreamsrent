@@ -40,7 +40,8 @@ class ExtraServiceController extends Controller
                 'required',
                 Rule::unique('extra_services')->ignore($request->id)->whereNull('deleted_at'),
                 'max:30',
-                'min:3'
+                'min:3',
+                'not_regex:/<\/?script\b[^>]*>/i',
             ],
             'icon' => [
                 'mimes:jpeg,jpg,png,svg',
@@ -52,6 +53,7 @@ class ExtraServiceController extends Controller
             ],
             'description' => [
                 'required',
+                'not_regex:/<\/?script\b[^>]*>/i',
             ],
         ], [
             'name.required' => __('admin.rentals.name_required'),
@@ -63,6 +65,8 @@ class ExtraServiceController extends Controller
             'image.mimes' => __('admin.rentals.extra_service_image_format'),
             'image.max' => __('admin.common.image_size', ['size' => 2]),
             'description.required' => __('admin.rentals.description_required'),
+            'name.not_regex' => __('admin.common.script_tag_not_allowed'),
+            'description.not_regex' => __('admin.common.script_tag_not_allowed'),
         ]);
 
         if ($validator->fails()) {

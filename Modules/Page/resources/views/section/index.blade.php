@@ -64,6 +64,13 @@
                 <div class="modal-body">
                     <div id="section_id_1" class="d-none">
                         <div class="row">
+                            <div class="form-group col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('admin.cms.title') }}</label>
+                                    <input type="text" name="section_title_one" id="section_title_one" class="form-control" placeholder="{{ __('admin.cms.enter_section_title') }}">
+                                    <div class="invalid-feedback" id="section_title_one_error"></div>
+                                </div>
+                            </div>
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.thumbnail_image') }}</label>
@@ -110,6 +117,14 @@
 
                     <div id="section_id_2" class="d-none">
                         <div class="row">
+                            <div class="form-group col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('admin.cms.title') }}</label>
+                                    <input type="text" name="section_title_two" id="section_title_two" class="form-control" placeholder="{{ __('admin.cms.enter_section_title') }}">
+                                    <div class="invalid-feedback" id="section_title_two_error"></div>
+                                </div>
+                            </div>
+
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.thumbnail_image') }}</label>
@@ -139,6 +154,14 @@
 
                     <div id="section_id_3" class="d-none">
                         <div class="row">
+
+                            <div class="form-group col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('admin.cms.title') }}</label>
+                                    <input type="text" name="section_title_three" id="section_title_three" class="form-control" placeholder="{{ __('admin.cms.enter_section_title') }}">
+                                    <div class="invalid-feedback" id="section_title_three_error"></div>
+                                </div>
+                            </div>
 
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
@@ -254,6 +277,14 @@
 
                     <div id="section_id_4" class="d-none">
                         <div class="row">
+
+                            <div class="form-group col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('admin.cms.title') }}</label>
+                                    <input type="text" name="section_title_four" id="section_title_four" class="form-control" placeholder="{{ __('admin.cms.enter_section_title') }}">
+                                    <div class="invalid-feedback" id="section_title_four_error"></div>
+                                </div>
+                            </div>
 
                             <div class="form-group col-md-6">
                                 <div class="mb-3">

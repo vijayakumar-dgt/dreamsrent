@@ -133,7 +133,7 @@
                                                                                 <img src="{{ $booking->vehicle_image_url }}" alt="">
                                                                             </span>
                                                                             <div>
-                                                                                <a href="#" class="text-info">{{ $booking->reservation_id }}</a>
+                                                                                <div class="text-info">{{ $booking->reservation_id }}</div>
                                                                                 <h6 class="fs-14">{{ $booking->vehicle_name }}</h6>
                                                                             </div>
                                                                         </div>

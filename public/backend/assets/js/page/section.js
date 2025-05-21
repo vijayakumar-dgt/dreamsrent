@@ -76,6 +76,7 @@
             if (ID == 1) {
                 $("#section_id_1").removeClass("d-none");
                 $("#section_id").val(ID);
+                $("#section_title_one").val($(this).data("section_title_one"));
                 $("#description_one").val($(this).data("description_one"));
                 $("#label_one").val($(this).data("label_one"));
                 $("#line_two").val($(this).data("line_two"));
@@ -93,6 +94,7 @@
             } else if (ID == 29) {
                 $("#section_id_2").removeClass("d-none");
                 $("#section_id").val(ID);
+                $("#section_title_two").val($(this).data("section_title_two"));
                 $("#description_two").val($(this).data("description_two"));
                 $("#label_two").val($(this).data("label_two"));
 
@@ -107,6 +109,7 @@
                 }
             } else if (ID == 42) {
                 $("#section_id_3").removeClass("d-none");
+                $("#section_title_three").val($(this).data("section_title_three"));
                 $("#section_id").val(ID);
             } else if (ID == 26) {
                 $("#section_id_4").removeClass("d-none");
@@ -114,6 +117,7 @@
 
                 const trigger = $(this);
 
+                $("#section_title_four").val($(this).data("section_title_four"));
                 $("#why_label_1").val(trigger.data("why_label_1"));
                 $("#why_dis_1").val(trigger.data("why_dis_1"));
                 $("#why_label_2").val(trigger.data("why_label_2"));
@@ -176,7 +180,7 @@
 
                     $.each(data, function (index, value) {
                         tableBody += `<tr>
-                                <td>${value.name}</td>
+                                <td>${value.title}</td>
                                 <td>${value.theme_id}</td>
                                 <td>
                                     <span class="badge ${
@@ -214,6 +218,10 @@
                                                 data-bs-target="#add_banner_sec"
                                                 data-id="${value.id}"
                                                 data-name="${value.name}"
+                                                data-section_title_one="${value.title}"
+                                                data-section_title_two="${value.title}"
+                                                data-section_title_three="${value.title}"
+                                                data-section_title_four="${value.title}"
                                                 data-label_one="${
                                                     value.label_one ?? ""
                                                 }"

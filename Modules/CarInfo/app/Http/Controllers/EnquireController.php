@@ -149,7 +149,7 @@ class EnquireController extends Controller
             ]);
         }
     }
-    public function update(Request $request): JsonResponse
+   public function update(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'comment' => 'required|string|max:500',
@@ -169,7 +169,6 @@ class EnquireController extends Controller
             /** @var \Modules\CarInfo\Models\Enquiry */
             $enquiry = Enquiry::findOrFail($id);
 
-
             if ($enquiry->status == 3) {
                 return response()->json([
                     'success' => false,
@@ -177,17 +176,19 @@ class EnquireController extends Controller
                 ], 400);
             }
 
-
-            if (
-                ($enquiry->status == 1 && $request->status == 3) ||
-                ($enquiry->status == 2 && $request->status == 1)
-            ) {
+            if ($enquiry->status == 1 && $request->status == 3) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Invalid status transition.',
+                    'message' => 'Enquiry must be opened before it can be closed.',
                 ], 400);
             }
 
+            if ($enquiry->status == 2 && $request->status == 1) {
+            return response()->json([
+                    'success' => false,
+                    'message' => 'The enquiry has already been opened and cannot be reverted to not opened.',
+                ], 400);
+            }
 
             $enquiry->comment = $request->comment;
             $enquiry->status = $request->status;

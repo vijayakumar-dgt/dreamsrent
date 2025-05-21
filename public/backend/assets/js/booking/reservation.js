@@ -233,19 +233,21 @@
             columns: [
                 { data: 'reservation_id', render: function(data, type, row) {
                     return `<div class="d-flex align-items-center">
-                            <a href="#" class="avatar me-2 flex-shrink-0"><img src="${row.vehicle_image}" alt=""></a>
+                            <div class="avatar me-2 flex-shrink-0"><img src="${row.vehicle_image}" alt="${_l('admin.common.image')}"></div>
                             <div>
                                 <a href="/admin/reservation-details/${row.encrypted_id}" class="text-info d-block mb-1">#${row.reservation_id}</a>
-                                <h6 class="fs-14"><a href="#">${row.vehicle_name}</a></h6>
+                                <h6 class="fs-14 text-black">${row.vehicle_name}</h6>
                             </div>
                         </div>
                     `;
                 }},
                 { data: 'user_name', render: function(data, type, row) {
                     return `<div class="d-flex align-items-center">
-                                <a href="#" class="avatar avatar-rounded me-2 flex-shrink-0"><img src="${row.customer_image}" alt=""></a>
+                                <div class="avatar avatar-rounded me-2 flex-shrink-0">
+                                    <img src="${row.customer_image}" alt="${_l('admin.common.image')}">
+                                </div>
                                 <div>
-                                    <h6 class="mb-1 fs-14"><a href="#">${row.customer_full_name ? row.customer_full_name : row.user_name}</a></h6>
+                                    <h6 class="mb-1 fs-14 text-black">${row.customer_full_name ? row.customer_full_name : ''}</h6>
                                     <span class="badge bg-secondary-transparent rounded-pill">${_l('admin.common.client')}</span>
                                 </div>
                             </div>
@@ -332,7 +334,7 @@
                                 `<li>
                                     <button type="button" class="dropdown-item rounded-1 deleteReservation" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}</button>
                                 </li>`:''}
-                                ${(hasPermission(permissions, 'reservations', 'edit') && (row.booking_status == 1 || row.booking_status == 2 || row.booking_by == 4)) ?
+                                ${(hasPermission(permissions, 'reservations', 'edit') && (row.booking_status == 1 || row.booking_status == 2 || row.booking_status == 4)) ?
                                 `<li>
                                     <button type="button" class="dropdown-item rounded-1 completeReservation" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#complete_modal"><i class="ti ti-check me-1"></i>${_l('admin.common.booking_complete')}</button>
                                 </li>`:''}

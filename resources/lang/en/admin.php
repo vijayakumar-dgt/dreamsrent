@@ -785,6 +785,17 @@ return array(
   'bookings' =>
   array(
     'bookings' => 'Bookings',
+    'select_extra_services' => 'Select Extra Services',
+    'add_extra_services_for_your_rental' => 'Add extra services for your rental',
+    'base_kilometers' => 'Base Kilometers (Per Day)',
+    'kilometers_extra_price' => 'Kilometers Extra Price',
+    'expenses' => 'Expenses',
+    'tax_type' => 'Tax Type',
+    'select' => 'Select',
+    'percentage' => '%',
+    'fixed' => 'Direct',
+    'add_tax_value' => 'Add Tax Value',
+    'delivery_price' => 'Delivery Price',
     'cancel_booking' => 'Cancel Booking',
     'cancel_reason' => 'Cancel Reason',
     'complete_booking' => 'Complete Booking',
@@ -1525,6 +1536,8 @@ return array(
     'edit_vehicle' => 'Edit Vehicle',
     'add_vehicle' => 'Add Vehicle',
     'view_review' => 'View Review',
+    'color_code_unique' => 'Color code already exists.',
+    'color_name_unique' => 'Color name already exists.',
   ),
   'user_management' =>
   array(
@@ -1684,6 +1697,8 @@ return array(
   'cms' =>
   array(
     'page' => 'Page',
+    'title' => 'Section Title',
+    'enter_section_title' => 'Enter Section Title',
     'pages' => 'Pages',
     'section' => 'Section',
     'menu_management' => 'Menu Management',
@@ -1876,6 +1891,7 @@ return array(
   'common' =>
   array(
     'assign' => 'Assign',
+    'tax' => 'Tax Rate',
     'type' => 'Type',
     'covert' => 'Covert to Bookings',
     'created_by' => 'Created By',
@@ -2000,6 +2016,7 @@ return array(
     'documents' => 'Documents',
     'upload_image_size' => 'Upload Image size 180*180, within 2 MB',
     'upload_icon_size' => 'Upload Icon size 100*100, within 2 MB',
+    'upload_brand_icon_size' => 'Upload Icon size between 10*10 and 25*25',
     'gender' => 'Gender',
     'male' => 'Male',
     'female' => 'Female',
@@ -2168,6 +2185,7 @@ return array(
     'delete_vehicle_confirmation' => 'Are you sure you want to delete vehicle?',
     'update_status_vehicle' => 'Update the status for this vehicle',
     'update_status' => 'Update Status',
+    'script_tag_not_allowed' => 'Script tags are not allowed.',
   ),
   'page' => [
     'pages' => 'Pages',
@@ -2387,7 +2405,7 @@ return array(
     'return_to' => 'Return to',
     'enter_new_password' => 'Enter New Password',
     'verify_your_email' => 'Verify Your Email',
-    'we_sent_otp_to_email' =>'We have Sent OTP to',
+    'we_sent_otp_to_email' => 'We have Sent OTP to',
     'verify_your_email_address' => 'to verify your email address and activate your account entering the OTP',
     'otp_time' => '0:55',
     'resend_otp' => 'Resend OTP',
