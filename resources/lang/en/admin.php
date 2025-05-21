@@ -2013,6 +2013,7 @@ return array(
     'documents' => 'Documents',
     'upload_image_size' => 'Upload Image size 180*180, within 2 MB',
     'upload_icon_size' => 'Upload Icon size 100*100, within 2 MB',
+    'upload_brand_icon_size' => 'Upload Icon size between 10*10 and 25*25',
     'gender' => 'Gender',
     'male' => 'Male',
     'female' => 'Female',

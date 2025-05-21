@@ -142,7 +142,7 @@
 										</div>
 									</div>
 									<div class="mt-2">
-										<p class="fs-14">{{ __('admin.common.upload_icon_size', ['size' => 2]) }}</p>
+										<p class="fs-14">{{ __('admin.common.upload_brand_icon_size', ['size' => 2]) }}</p>
 									</div>
 								</div>
 								<span class="text-danger error-text" id="brand_icon_error"></span>

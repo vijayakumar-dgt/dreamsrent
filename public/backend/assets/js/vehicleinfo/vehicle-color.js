@@ -136,7 +136,7 @@
                 $(".real-table, .real-label, .real-input").removeClass(
                     "d-none"
                 );
-                if ($("#carColorTable").DataTable().rows().count() === 0) {
+                if ($("#carColorTable").length === 0) {
                     $(".table-footer").addClass("d-none");
                 } else {
                     $(".table-footer").removeClass("d-none");

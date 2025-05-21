@@ -50,6 +50,7 @@ class MaintenanceController extends Controller
             ],
             'details' => [
                 'required',
+                'not_regex:/<\/?script\b[^>]*>/i'
             ],
             'status' => [
                 'required',
@@ -60,6 +61,7 @@ class MaintenanceController extends Controller
             'start_date.required' => __("admin.rentals.start_date_required"),
             'end_date.required' => __("admin.rentals.end_date_required"),
             'details.required' => __("admin.rentals.details_required"),
+            'details.not_regex' => __("admin.common.script_tag_not_allowed"),
             'status.required' => __("admin.rentals.status_required"),
         ]);
 
