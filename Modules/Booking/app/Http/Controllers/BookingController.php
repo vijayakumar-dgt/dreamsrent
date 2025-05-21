@@ -827,6 +827,7 @@ class BookingController extends Controller
             'bookings.total_insurance_price',
             'bookings.total_extra_service_price',
             'bookings.final_price',
+            'bookings.tax_val',
             'vehicle_info.name as vehicle_name',
             'vehicle_info.vehicle_image',
             'cartypes.name as vehicle_type',

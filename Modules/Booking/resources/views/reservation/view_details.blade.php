@@ -155,6 +155,10 @@
                                         </h6>
                                         <p>{{ $booking->currency_symbol }}{{ $booking->total_insurance_price }}</p>
                                     </div>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h6 class="fw-medium d-flex align-items-center fs-14">{{ __('admin.common.tax') }}</h6>
+                                        <p>{{ $booking->currency_symbol . number_format($booking->tax_val ?? 0, 2) }}</p>
+                                    </div>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between">
                                     <h6>{{ __('admin.common.total_price') }}</h6>

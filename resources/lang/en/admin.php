@@ -1891,6 +1891,7 @@ return array(
   'common' =>
   array(
     'assign' => 'Assign',
+    'tax' => 'Tax Rate',
     'type' => 'Type',
     'covert' => 'Covert to Bookings',
     'created_by' => 'Created By',
