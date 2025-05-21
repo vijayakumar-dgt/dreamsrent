@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 (async () => {
     await loadTranslationFile("admin", "general_settings,common");
-    ("use strict");
+    "use strict";
     $(document).ready(function () {
         company_list();
 
