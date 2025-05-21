@@ -226,9 +226,7 @@
 
         loadPrefixesSettings();
     });
-})();
-
-function loadPrefixesSettings() {
+    function loadPrefixesSettings() {
     $.ajax({
         url: "/admin/settings/list",
         type: "POST",
@@ -262,3 +260,4 @@ function loadPrefixesSettings() {
         },
     });
 }
+})();

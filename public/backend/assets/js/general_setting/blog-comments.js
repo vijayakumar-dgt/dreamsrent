@@ -88,9 +88,7 @@
     $("#tableSearch").on("keyup", function () {
         blogCommentTable.search(this.value).draw();
     });
-})();
-
-document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
     const filterItems = document.querySelectorAll(
         ".dropdown-menu .dropdown-item"
     );
@@ -142,3 +140,5 @@ document.addEventListener("DOMContentLoaded", function () {
         table.draw();
     }
 });
+
+})();
