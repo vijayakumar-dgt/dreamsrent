@@ -227,37 +227,40 @@
         loadPrefixesSettings();
     });
     function loadPrefixesSettings() {
-    $.ajax({
-        url: "/admin/settings/list",
-        type: "POST",
-        data: { group_id: 3 },
-        headers: {
-            Accept: "application/json",
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        success: function (response) {
-            if (response.code === 200) {
-                const settings = response.data;
+        $.ajax({
+            url: "/admin/settings/list",
+            type: "POST",
+            data: { group_id: 3 },
+            headers: {
+                Accept: "application/json",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    const settings = response.data;
 
-                settings.forEach((setting) => {
-                    const element = $("#" + setting.key);
-                    if (element.length) {
-                        element.val(setting.value);
-                    }
-                });
-            }
-        },
-        error: function (error) {
-            if (error.responseJSON.code === 500) {
-                showToast("error", error.responseJSON.message);
-            } else {
-                showToast("error", _l("admin.common.default_retrieve_error"));
-            }
-        },
-        complete: function () {
-            $(".label-loader, .input-loader, .card-loader").hide();
-            $(".real-label, .real-input, .real-card").removeClass("d-none");
-        },
-    });
-}
+                    settings.forEach((setting) => {
+                        const element = $("#" + setting.key);
+                        if (element.length) {
+                            element.val(setting.value);
+                        }
+                    });
+                }
+            },
+            error: function (error) {
+                if (error.responseJSON.code === 500) {
+                    showToast("error", error.responseJSON.message);
+                } else {
+                    showToast(
+                        "error",
+                        _l("admin.common.default_retrieve_error")
+                    );
+                }
+            },
+            complete: function () {
+                $(".label-loader, .input-loader, .card-loader").hide();
+                $(".real-label, .real-input, .real-card").removeClass("d-none");
+            },
+        });
+    }
 })();

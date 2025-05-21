@@ -31,17 +31,8 @@
                         </div>
                         <div class="card-body">
                             <h6 class="fw-bold mb-3">{{ __('admin.general_settings.signatures') }}</h6>
-                            <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
-                                <div class="d-flex align-items-center flex-wrap row-gap-3">
-                                    <div class="top-search me-2">
-                                        <div class="top-search-group">
-                                            <span class="input-icon">
-                                                <i class="ti ti-search"></i>
-                                            </span>
-                                            <input type="text" class="form-control" id="signatureSearch" placeholder="{{ __('admin.common.search') }}">
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="d-flex align-items-end justify-content-end flex-wrap row-gap-3 mb-3">
+                                
                                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                                     @if (hasPermission($permissions, 'app_settings', 'create'))
                                     <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_signatures" class="btn btn-primary">
@@ -93,14 +84,14 @@
                                     <label for="signature_image" class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
-                                            <img id="profile_photo_preview" src="/backend/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
+                                            <img id="image_photo_preview" src="/backend/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
                                         </div>
                                         <div class="profile-upload">
                                             <div class="profile-uploader d-flex align-items-center">
                                                 <div class="drag-upload-btn btn btn-md btn-dark">
                                                     <i class="ti ti-photo-up fs-14"></i>
                                                     {{ __('admin.common.upload') }}
-                                                    <input type="file" class="form-control image-sign" id="signature_image" name="signature_image" accept="image/*" onchange="previewImage(event)">
+                                                    <input type="file" class="form-control image-sign" id="signature_image" name="signature_image" accept="image/*" >
                                                 </div>
                                             </div>
                                             <div class="mt-2">
@@ -160,7 +151,7 @@
                                                 <div class="drag-upload-btn btn btn-md btn-dark">
                                                     <i class="ti ti-photo-up fs-14"></i>
                                                     {{ __('admin.common.upload') }}
-                                                    <input type="file" id="edit_signature_image" name="signature_image"  accept="image/*" onchange="editpreviewImage(event)" class="form-control image-sign">
+                                                    <input type="file" id="edit_signature_image" name="signature_image"  accept="image/*"  class="form-control image-sign">
                                                 </div>
                                             </div>
                                             <div class="mt-2">

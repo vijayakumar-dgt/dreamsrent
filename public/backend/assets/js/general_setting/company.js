@@ -629,11 +629,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 })();
-
-function removeImage() {
-    const preview = document.getElementById("profile_photo_preview");
-    const fileInput = document.getElementById("profile_photo");
-
-    preview.src = "/backend/assets/img/settings/company-logo-01.jpg";
-    fileInput.value = "";
-}
