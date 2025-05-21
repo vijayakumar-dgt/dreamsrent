@@ -41,29 +41,29 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end p-2" id="sortFilter">
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1" onclick="filterSort(this, 'latest')">
+                            <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="latest">
                                 {{ __('admin.page.latest') }}
-                            </a>
+                            </button>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1" onclick="filterSort(this, 'asc')">
+                            <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="asc">
                                 {{ __('admin.page.ascending') }}
-                            </a>
+                            </button>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1" onclick="filterSort(this, 'desc')">
+                            <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="desc">
                                 {{ __('admin.page.descending') }}
-                            </a>
+                            </button>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1" onclick="filterSort(this, 'last_month')">
+                            <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="last_month">
                                 {{ __('admin.page.last_month') }}
-                            </a>
+                            </button>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1" onclick="filterSort(this, 'last_7_days')">
+                            <button type="button" class="dropdown-item rounded-1 sort-option" data-sort="last_7_days">
                                 {{ __('admin.page.last_7_days') }}
-                            </a>
+                            </button>
                         </li>
                     </ul>
                 </div>
@@ -73,19 +73,19 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end p-2" id="statusFilter">
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1" onclick="filterPages(this, 1)">
+                            <a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="1">
                                 {{ __('admin.page.published') }}
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);" class="dropdown-item rounded-1" onclick="filterPages(this, 0)">
+                            <a href="javascript:void(0);" class="dropdown-item rounded-1" data-status="0">
                                 {{ __('admin.page.unpublished') }}
                             </a>
                         </li>
                     </ul>
                 </div>
                 <div class="">
-                    <select class="form-select select" id="language_id" name="language_id" onchange="filterlang()">
+                    <select class="form-select select" id="language_id" name="language_id">
                         <option value="">{{ __('admin.page.select') }}</option>
                         @foreach($languages as $language)
                         <option value="{{ $language->language_id }}">
@@ -109,7 +109,7 @@
         <!-- /Table Header -->
         <input type="hidden" name="lang_id" id="lang_id" value="{{ $authUser->language_id }}">
         <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
-           @include('admin.content-loader')
+            @include('admin.content-loader')
         </div>
         <!-- Custom Data Table -->
         <div class="custom-datatable-filter table-responsive d-none real-table">
@@ -141,7 +141,7 @@
         <div class="modal-content">
             <div class="modal-body text-center">
                 <form id="deletePage">
-					@csrf
+                    @csrf
                     <input type="hidden" name="delete_id" id="delete_id">
                     <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
                         <i class="ti ti-trash-x fs-26"></i>
