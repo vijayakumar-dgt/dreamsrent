@@ -283,7 +283,7 @@
                         @if (hasPermission($permissions, 'income_vs_expense', 'view'))
                         <li class="{{ request()->routeIs('admin.income-report') ? 'active' : '' }}">
                             <a href="{{ route('admin.income-report') }}">
-                                <i class="ti ti-chart-histogram"></i><span>{{ __('admin.reports.income_vs_expense') }}</span>
+                                <i class="ti ti-chart-histogram"></i><span>{{ __('admin.reports.income') }}</span>
                             </a>
                         </li>
                         @endif
