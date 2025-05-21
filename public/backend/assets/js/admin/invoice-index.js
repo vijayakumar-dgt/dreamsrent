@@ -47,7 +47,7 @@
             }
         }
     });
-    
+
 })();
 document.addEventListener("DOMContentLoaded", function () {
     let filters = {
@@ -66,11 +66,8 @@ document.addEventListener("DOMContentLoaded", function () {
             filterTable();
 
             if (type === "status") {
-                document.getElementById(
-                    "statusDropdownBtn"
-                ).innerHTML = `<i class="ti ti-badge me-1"></i> ${
-                    value.charAt(0).toUpperCase() + value.slice(1)
-                }`;
+                document.getElementById("statusDropdownBtn").innerHTML = `<i class="ti ti-badge me-1"></i> ${value.charAt(0).toUpperCase() + value.slice(1)
+                    }`;
             }
 
             if (type === "sort") {
@@ -82,57 +79,77 @@ document.addEventListener("DOMContentLoaded", function () {
                     last_month: "Last Month",
                 };
 
-                document.getElementById(
-                    "sortDropdownBtn"
-                ).innerHTML = `<i class="ti ti-filter me-1"></i> Sort By : ${
-                    sortText[value] || "Latest"
-                }`;
+                document.getElementById("sortDropdownBtn").innerHTML = `<i class="ti ti-filter me-1"></i> Sort By : ${sortText[value] || "Latest"
+                    }`;
             }
         });
     });
 
-    function filterTable() {
-        rows.forEach((row) => (row.style.display = "table-row")); // Reset all rows
+   function filterTable() {
+    rows.forEach((row) => (row.style.display = "table-row")); // Reset all rows
 
-        let filteredRows = [...rows];
+    let filteredRows = [...rows];
 
-        // Apply status filter
-        if (filters.status) {
-            filteredRows = filteredRows.filter((row) => {
-                const status = row
-                    .querySelector("td:nth-child(7) span")
-                    .innerText.toLowerCase();
-                return status.includes(filters.status);
-            });
-        }
-
-        // Sort by created_at (date)
-        if (filters.sort) {
-            filteredRows.sort((a, b) => {
-                const dateA = new Date(
-                    a.querySelector("td:nth-child(4) p").innerText
-                );
-                const dateB = new Date(
-                    b.querySelector("td:nth-child(4) p").innerText
-                );
-
-                switch (filters.sort) {
-                    case "asc":
-                        return dateA - dateB; // Ascending order
-                    case "desc":
-                    case "latest":
-                        return dateB - dateA; // Descending order (latest first)
-                    default:
-                        return 0;
-                }
-            });
-        }
-
-        // Re-insert rows in sorted order
-        const tbody = document.querySelector("#invoicesTable tbody");
-        tbody.innerHTML = "";
-        filteredRows.forEach((row) => tbody.appendChild(row)); // Append rows after sorting
+    // Apply status filter
+    if (filters.status) {
+        filteredRows = filteredRows.filter((row) => {
+            const status = row
+                .querySelector("td:nth-child(7) span")
+                .innerText.toLowerCase();
+            return status.includes(filters.status);
+        });
     }
+
+    // Apply date range filter (for last_7_days and last_month)
+    if (filters.sort === "last_7_days" || filters.sort === "last_month") {
+        const now = new Date();
+
+        filteredRows = filteredRows.filter((row) => {
+            const dateText = row.querySelector("td:nth-child(4) p").innerText;
+            const rowDate = new Date(dateText);
+
+            if (filters.sort === "last_7_days") {
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(now.getDate() - 7);
+                return rowDate >= sevenDaysAgo;
+            }
+
+            if (filters.sort === "last_month") {
+                const lastMonth = new Date();
+                lastMonth.setMonth(now.getMonth() - 1);
+                return rowDate >= lastMonth;
+            }
+
+            return true;
+        });
+
+        // After filtering, sort descending by date
+        filteredRows.sort((a, b) => {
+            const dateA = new Date(a.querySelector("td:nth-child(4) p").innerText);
+            const dateB = new Date(b.querySelector("td:nth-child(4) p").innerText);
+            return dateB - dateA;
+        });
+    } else if (filters.sort === "asc" || filters.sort === "desc") {
+        // Sort by Invoice Number (column 1)
+        filteredRows.sort((a, b) => {
+            const valA = a.querySelector("td:nth-child(1)").innerText.replace("#", "").trim();
+            const valB = b.querySelector("td:nth-child(1)").innerText.replace("#", "").trim();
+            return filters.sort === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        });
+    } else if (filters.sort === "latest") {
+        // Sort by Created Date (column 4) descending
+        filteredRows.sort((a, b) => {
+            const dateA = new Date(a.querySelector("td:nth-child(4) p").innerText);
+            const dateB = new Date(b.querySelector("td:nth-child(4) p").innerText);
+            return dateB - dateA;
+        });
+    }
+
+    // Re-insert rows in filtered and sorted order
+    const tbody = document.querySelector("#invoicesTable tbody");
+    tbody.innerHTML = "";
+    filteredRows.forEach((row) => tbody.appendChild(row));
+}
 
     // Get the search input element and add event listener
     const searchInput = document.getElementById("searchInput");
@@ -155,29 +172,29 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-$(document).ready(function() {
+$(document).ready(function () {
 
-    
-    $(document).on('click', '#delete-invoice-btn', function() {
+
+    $(document).on('click', '#delete-invoice-btn', function () {
         const invoiceId = $(this).data('id');
         $('#delete_modal').data('id', invoiceId);
     });
 
-    
-    $(document).on('click', '#delete_modal .btn-primary', function() {
+
+    $(document).on('click', '#delete_modal .btn-primary', function () {
         const invoiceId = $('#delete_modal').data('id');
         $.ajax({
             url: '/admin/delete-invoices/' + invoiceId,
             type: 'GET',
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     showToast("success", response.message);
-                    location.reload(); 
+                    location.reload();
                 } else {
                     showToast(response.message);
                 }
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 showToast("error", xhr.responseJSON.message);
             }
         });
