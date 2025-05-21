@@ -1697,6 +1697,8 @@ return array(
   'cms' =>
   array(
     'page' => 'Page',
+    'title' => 'Section Title',
+    'enter_section_title' => 'Enter Section Title',
     'pages' => 'Pages',
     'section' => 'Section',
     'menu_management' => 'Menu Management',

@@ -659,7 +659,7 @@
                             <div class="mb-3">
                                 <label class="form-label">{{ __('admin.manage.drivers') }}<span class="text-danger"> *</span></label>
                                 <div class="d-flex align-items-center mt-2">
-                                    <a href="#" class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0"><img src="/backend/assets/img/default-profile.png" class="edit_driver_img" alt=""></a>
+                                    <a href="#" class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0"><img src="{{ asset('/backend/assets/img/default-profile.png') }}" class="edit_driver_img" alt="Profile Image"></a>
                                     <div>
                                         <a class="d-block fw-semibold edit_driver_name" href="#"></a>
                                     </div>

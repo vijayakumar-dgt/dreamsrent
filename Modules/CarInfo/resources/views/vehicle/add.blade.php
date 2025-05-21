@@ -66,8 +66,7 @@
 								<div class="dropdown flag-dropdown">
 									<button type="button" class="dropdown-toggle btn btn-white d-flex align-items-center justify-content-between py-1 px-2" data-bs-toggle="dropdown" href="javascript:void(0);">
 										<img src="{{ asset('backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
-											alt="Language"
-											class="img-fluid rounded-circle me-2 lang-flag">
+											class="img-fluid rounded-circle me-2 lang-flag" alt="Language">
 										<span>{{ $currentLang->name ?? 'Language' }}</span>
 									</button>
 									<ul class="dropdown-menu p-2">
@@ -79,7 +78,7 @@
 												data-id="{{ $language->id }}"
 												data-language_code="{{ $language->code }}">
 												<img src="{{ asset('backend/assets/img/flags/' . $language->code . '.svg') }}"
-													alt="{{ $language->name }}"
+													alt="Language"
 													class="rounded-circle me-2 lang-flag">
 												{{ $language->name }}
 											</button>
@@ -98,7 +97,7 @@
 									<div class="col-xl-9">
 										<div class="d-flex align-items-center flex-wrap row-gap-3 upload-pic">
 											<div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 border rounded-circle frames">
-												<img src="/backend/assets/img/car/default-car.png" class="img-fluid rounded-circle" alt="brands">
+												<img src="{{ asset('/backend/assets/img/car/default-car.png') }}" class="img-fluid rounded-circle" alt="Brands">
 												<button type="button" id="delImg" class="upload-img-trash trash-end btn btn-sm rounded-circle">
 													<i class="ti ti-trash fs-12"></i>
 												</button>
@@ -296,15 +295,9 @@
 													<label class="form-label">{{ __('admin.rentals.no_of_seats') }}</label>
 													<select name="num_seats" class="form-control select" id="num_seats">
 														<option value="">{{ __('admin.rentals.select') }}</option>
-														<option value="2">2</option>
-														<option value="4">4</option>
-														<option value="5">5</option>
-														<option value="6">6</option>
-														<option value="7">7</option>
-														<option value="8">8</option>
-														<option value="10">10</option>
-														<option value="12">12</option>
-														<option value="14">14</option>
+														@for ($i = 2; $i <= 14; $i++)
+															<option value="{{ $i }}">{{ $i }}</option>
+															@endfor
 													</select>
 												</div>
 											</div>
@@ -313,10 +306,9 @@
 													<label class="form-label">{{ __('admin.rentals.no_of_doors') }}</label>
 													<select name="num_doors" class="form-control select" id="num_doors">
 														<option value="">{{ __('admin.rentals.select') }}</option>
-														<option value="2">2</option>
-														<option value="4">4</option>
-														<option value="6">6</option>
-														<option value="8">8</option>
+														@for ($i = 2; $i <= 10; $i++)
+															<option value="{{ $i }}">{{ $i }}</option>
+															@endfor
 													</select>
 												</div>
 											</div>
@@ -329,7 +321,7 @@
 											<div class="col-lg-12 col-md-6">
 												<div class="mb-3">
 													<label class="form-label">{{ __('admin.rentals.description') }}</label>
-													<textarea type="text" class="form-control summernote" maxlength="500" placeholder="E{{ __('admin.rentals.description_placeholder') }}" name="description" id="description"></textarea>
+													<textarea type="text" class="form-control summernote" maxlength="500" placeholder="{{ __('admin.rentals.description_placeholder') }}" name="description" id="description"></textarea>
 												</div>
 											</div>
 										</div>
@@ -588,7 +580,7 @@
 													@if($ExtraServiceInfo->contains('extra_service_id', $service->id)) checked @endif>
 												<input class="form-check-input" type="hidden" id="service_id" name="service_id[]" value="{{ $service->id }}">
 												<span class="service-icon bg-dark d-flex align-items-center justify-content-center me-2 ms-2">
-													<img src="{{ asset('storage/' . $service->icon) }}" alt="{{ $service->name }} Icon" width="50">
+													<img src="{{ asset('storage/' . $service->icon) }}" alt="Extra Service">
 												</span>
 												<div>
 													<h6 class="fs-14 fw-semibold mb-1" id="service_name">{{ $service->name }}</h6>
@@ -628,7 +620,7 @@
 											<div class="col-xxl-8 col-lg-10">
 												<h6 class="mb-3">{{ __('admin.rentals.upload_document') }}</h6>
 												<div class="document-upload text-center bg-light br-5 mb-3">
-													<img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+													<img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="img">
 													<p class="mb-2">{{ __('admin.rentals.drop_files_or_browse') }} <span class="text-info text-decoration-underline"></span></p>
 													<p class="fs-12 mb-0">{{ __('admin.rentals.max_file_size') }}</p>
 													<input type="file" class="form-control image-sign" name="car_document[]" id="car_document" multiple>
@@ -655,7 +647,7 @@
 											<div class="col-xxl-8 col-lg-10">
 												<h6 class="mb-3">{{ __('admin.rentals.upload_policy') }}</h6>
 												<div class="document-upload text-center bg-light br-5 mb-3">
-													<img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+													<img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="img">
 													<p class="mb-2">{{ __('admin.rentals.drop_files_or_browse') }} <span class="text-info text-decoration-underline"></span></p>
 													<p class="fs-12 mb-0">{{ __('admin.rentals.max_file_size') }}</p>
 													<input type="file" class="form-control image-sign" name="policy_document[]" id="policy_document" multiple>
@@ -682,7 +674,7 @@
 											<div class="col-xxl-8 col-lg-10">
 												<h6 class="mb-3">{{ __('admin.rentals.upload_image') }}</h6>
 												<div class="document-upload text-center bg-light br-5 mb-3">
-													<img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+													<img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="img">
 													<p class="mb-2">{{ __('admin.rentals.drop_files_or_browse') }} <span class="text-info text-decoration-underline"></span></p>
 													<p class="fs-12 mb-0">{{ __('admin.rentals.max_file_size') }}</p>
 													<input type="file" class="form-control image-sign" name="car_images[]" id="car_images" multiple>
@@ -1086,7 +1078,7 @@
 					<div class="mb-3">
 						<label class="form-label">{{ __('admin.rentals.damage_image_label') }} <span class="text-danger">*</span></label>
 						<input type="file" name="dam_image" id="dam_image" class="form-control">
-						<img id="image_preview" src="" class="mt-2 d-none" width="100">
+						<img src="" class="mt-2 d-none" id="image_preview" alt="Damege Image">
 					</div>
 					<div class="mb-3">
 						<label class="form-label">{{ __('admin.rentals.damage_location_label') }} <span class="text-danger">*</span></label>

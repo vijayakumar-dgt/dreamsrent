@@ -450,30 +450,10 @@
             },
             success: function (response) {
                 if (response.code === 200) {
-                    var sectionHtml = '<div class="row">';
-
-                    // Get theme_id from the response
-                    let themeId = response.theme?.theme_id || 1; // Default to 1 if not provided
-
-                    // Set banner text based on theme_id
-                    let bannerText =
-                        themeId === 2 ? "Banner Two" : "Banner One";
-                    let bannerValue =
-                        themeId === 2 ? "banner_two" : "banner_one";
-
-                    sectionHtml += `
-                    <div class="col-md-6">
-                        <div class="card mb-3 draggable-card shadow-sm rounded-0" draggable="true" data-value="[${bannerValue}]">
-                            <div class="py-2 text-center">
-                                <p class="fs-14 fw-bold mb-0">${bannerText}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                    console.log(response);
+                    var sectionHtml = '<div class="row p-1">';
 
                     $.each(response.data, function (index, section) {
-                        if (section.name === bannerText) return;
-
                         $.each(section, function (key, value) {
                             if (
                                 key !== "id" &&
@@ -481,19 +461,19 @@
                                 key !== "status"
                             ) {
                                 sectionHtml += `
-                                <div class="col-md-6">
-                                    <div class="card mb-3 draggable-card shadow-sm rounded-0" draggable="true" data-value="${value}">
-                                        <div class="py-2 text-center">
-                                            <p class="fs-14 fw-bold mb-0">${section.name}</p>
-                                        </div>
-                                    </div>
+                        <div class="col-md-6">
+                            <div class="card mb-3 draggable-card shadow-sm rounded-0" draggable="true" data-value="${value}">
+                                <div class="py-2 text-center">
+                                    <p class="fs-14 fw-bold mb-0">${section.name}</p>
                                 </div>
-                            `;
+                            </div>
+                        </div>
+                    `;
                             }
                         });
                     });
 
-                    sectionHtml += "</div>"; // Close row
+                    sectionHtml += "</div>";
 
                     $("#cardContainer").html(sectionHtml);
                 }
@@ -521,5 +501,4 @@
             },
         });
     }
-
 })();

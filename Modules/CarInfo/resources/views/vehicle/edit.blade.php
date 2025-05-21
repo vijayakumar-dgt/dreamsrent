@@ -66,8 +66,7 @@
                                 @if ($allLanguages)
                                 <div class="d-flex align-items-center gap-2">
                                     <img src="{{ asset('backend/assets/img/flags/' . app()->getLocale() . '.svg') }}"
-                                        alt="Language"
-                                        class="img-fluid rounded-circle lang-flag">
+                                        class="img-fluid rounded-circle lang-flag" alt="Language">
                                     <select id="languageSelector" class="form-select w-auto">
                                         @foreach ($allLanguages as $language)
                                         <option value="{{ $language->id }}"
@@ -89,7 +88,7 @@
                                     <div class="col-xl-9">
                                         <div class="d-flex align-items-center flex-wrap row-gap-3 upload-pic">
                                             <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 border rounded-circle frames">
-                                                <img src="{{ $query->vehicle_image_url }}" class="img-fluid rounded-circle" alt="brands">
+                                                <img src="{{ $query->vehicle_image_url }}" class="img-fluid rounded-circle" alt="Brands">
                                                 <button type="button" id="delImg" class="upload-img-trash trash-end btn btn-sm rounded-circle">
                                                     <i class="ti ti-trash fs-12"></i>
                                                 </button>
@@ -319,15 +318,9 @@
                                                     <label class="form-label">{{ __('admin.rentals.no_of_seats') }}</label>
                                                     <select name="num_seats" class="form-control select" id="num_seats">
                                                         <option value="">{{ __('admin.rentals.select') }}</option>
-                                                        <option value="2" {{ $query->num_seats == 2 ? 'selected' : '' }}>2</option>
-                                                        <option value="4" {{ $query->num_seats == 4 ? 'selected' : '' }}>4</option>
-                                                        <option value="5" {{ $query->num_seats == 5 ? 'selected' : '' }}>5</option>
-                                                        <option value="6" {{ $query->num_seats == 6 ? 'selected' : '' }}>6</option>
-                                                        <option value="7" {{ $query->num_seats == 7 ? 'selected' : '' }}>7</option>
-                                                        <option value="8" {{ $query->num_seats == 8 ? 'selected' : '' }}>8</option>
-                                                        <option value="10" {{ $query->num_seats == 10 ? 'selected' : '' }}>10</option>
-                                                        <option value="12" {{ $query->num_seats == 12 ? 'selected' : '' }}>12</option>
-                                                        <option value="14" {{ $query->num_seats == 14 ? 'selected' : '' }}>14</option>
+                                                        @foreach ([2, 4, 5, 6, 7, 8, 10, 12, 14] as $seat)
+                                                        <option value="{{ $seat }}" {{ $query->num_seats == $seat ? 'selected' : '' }}>{{ $seat }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -336,10 +329,9 @@
                                                     <label class="form-label">{{ __('admin.rentals.no_of_doors') }}</label>
                                                     <select name="num_doors" class="form-control select" id="num_doors">
                                                         <option value="">{{ __('admin.rentals.select') }}</option>
-                                                        <option value="2" {{ $query->num_doors == 2 ? 'selected' : '' }}>2</option>
-                                                        <option value="4" {{ $query->num_doors == 4 ? 'selected' : '' }}>4</option>
-                                                        <option value="6" {{ $query->num_doors == 6 ? 'selected' : '' }}>6</option>
-                                                        <option value="8" {{ $query->num_doors == 8 ? 'selected' : '' }}>8</option>
+                                                        @for ($i = 2; $i <= 10; $i++)
+                                                            <option value="{{ $i }}" {{ $query->num_doors == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                                            @endfor
                                                     </select>
                                                 </div>
                                             </div>
@@ -618,7 +610,7 @@
                                                     @if($ExtraServiceInfo->contains('extra_service_id', $service->id)) checked @endif>
                                                 <input class="form-check-input" type="hidden" id="service_id" name="service_id[]" value="{{ $service->id }}">
                                                 <span class="service-icon bg-dark d-flex align-items-center justify-content-center me-2 ms-2">
-                                                    <img src="{{ asset('storage/' . $service->icon) }}" alt="{{ $service->name }} Icon" width="50">
+                                                    <img src="{{ asset('storage/' . $service->icon) }}" alt="Extra Service">
                                                 </span>
                                                 <div>
                                                     <h6 class="fs-14 fw-semibold mb-1" id="service_name">{{ $service->name }}</h6>
@@ -658,7 +650,7 @@
                                             <div class="col-xxl-8 col-lg-10">
                                                 <h6 class="mb-3">{{ __('admin.rentals.upload_document') }}</h6>
                                                 <div class="document-upload text-center bg-light br-5 mb-3">
-                                                    <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+                                                    <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="img">
                                                     <p class="mb-2">{{ __('admin.rentals.drop_files_or_browse') }} <span class="text-info text-decoration-underline"></span></p>
                                                     <p class="fs-12 mb-0">{{ __('admin.rentals.max_file_size') }}</p>
                                                     <input type="file" class="form-control image-sign" name="car_document[]" id="car_document" multiple>
@@ -684,7 +676,7 @@
                                             <div class="col-xxl-8 col-lg-10">
                                                 <h6 class="mb-3">{{ __('admin.rentals.upload_policy') }}</h6>
                                                 <div class="document-upload text-center bg-light br-5 mb-3">
-                                                    <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+                                                    <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="img">
                                                     <p class="mb-2">{{ __('admin.rentals.drop_files_or_browse') }} <span class="text-info text-decoration-underline"></span></p>
                                                     <p class="fs-12 mb-0">{{ __('admin.rentals.max_file_size') }}</p>
                                                     <input type="file" class="form-control image-sign" name="policy_document[]" id="policy_document" multiple>
@@ -711,7 +703,7 @@
                                             <div class="col-xxl-8 col-lg-10">
                                                 <h6 class="mb-3">{{ __('admin.rentals.upload_image') }}</h6>
                                                 <div class="document-upload text-center bg-light br-5 mb-3">
-                                                    <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+                                                    <img src="{{ asset('backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="img">
                                                     <p class="mb-2">{{ __('admin.rentals.drop_files_or_browse') }} <span class="text-info text-decoration-underline"></span></p>
                                                     <p class="fs-12 mb-0">{{ __('admin.rentals.max_file_size') }}</p>
                                                     <input type="file" class="form-control image-sign" name="car_images[]" id="car_images" multiple>
@@ -1269,7 +1261,7 @@
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.rentals.damage_image_label') }} <span class="text-danger">*</span></label>
                         <input type="file" name="dam_image" id="dam_image" class="form-control">
-                        <img id="image_preview" src="" class="mt-2 d-none" width="100">
+                        <img src="" class="mt-2 d-none" id="image_preview" alt="Damage Preview">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.rentals.damage_location_label') }} <span class="text-danger">*</span></label>

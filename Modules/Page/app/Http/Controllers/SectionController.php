@@ -41,7 +41,7 @@ class SectionController extends Controller
 
             $data[] = array_merge([
                 'id' => $section->id,
-                'name' => $section->name,
+                'name' => $section->title,
                 'status' => $section->status,
             ], $decodedDatas);
 
@@ -92,7 +92,6 @@ class SectionController extends Controller
         $baseUrl = asset('storage');
 
         foreach ($sections as $section) {
-            // Fetch matching section_datas row
             $sectionData = DB::table('section_datas')
                 ->where('section_id', $section->id)
                 ->where('language_id', $language_id)
@@ -100,7 +99,6 @@ class SectionController extends Controller
 
             $decodedDatas = $sectionData ? json_decode($sectionData, true) : [];
 
-            // Update image URLs
             if (!empty($decodedDatas['thumbnail_image_one'])) {
                 $decodedDatas['thumbnail_image_one'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_one'];
             }
@@ -112,6 +110,7 @@ class SectionController extends Controller
             $data[] = array_merge([
                 'id' => $section->id,
                 'theme_id' => $section->theme_id,
+                'title' => $section->title,
                 'name' => $section->name,
                 'status' => $section->status,
             ], $decodedDatas);
@@ -147,6 +146,7 @@ class SectionController extends Controller
         $rules = [];
 
         if ($request->section_id == 1) {
+            $rules['section_title_one'] = 'required';
             $rules['description_one'] = 'required';
             $rules['label_one'] = 'required';
             $rules['line_one'] = 'required';
@@ -270,6 +270,50 @@ class SectionController extends Controller
                 'why_dis_3'   => $request->why_dis_3,
                 'why_icon_3'  => $thumbnail3 ?? ($existingData['why_icon_3'] ?? null),
             ];
+        }
+
+        if ($request->section_id == 1 && $request->has('section_title_one')) {
+            $section = Section::find($request->section_id);
+
+            if ($section) {
+                $section->title = $request->section_title_one;
+                $section->save();
+            } else {
+                return response()->json(['error' => 'Section not found.'], 404);
+            }
+        }
+
+        if ($request->section_id == 29 && $request->has('section_title_two')) {
+            $section = Section::find($request->section_id);
+
+            if ($section) {
+                $section->title = $request->section_title_two;
+                $section->save();
+            } else {
+                return response()->json(['error' => 'Section not found.'], 404);
+            }
+        }
+
+        if ($request->section_id == 42 && $request->has('section_title_three')) {
+            $section = Section::find($request->section_id);
+
+            if ($section) {
+                $section->title = $request->section_title_three;
+                $section->save();
+            } else {
+                return response()->json(['error' => 'Section not found.'], 404);
+            }
+        }
+
+        if ($request->section_id == 26 && $request->has('section_title_four')) {
+            $section = Section::find($request->section_id);
+
+            if ($section) {
+                $section->title = $request->section_title_four;
+                $section->save();
+            } else {
+                return response()->json(['error' => 'Section not found.'], 404);
+            }
         }
 
         try {

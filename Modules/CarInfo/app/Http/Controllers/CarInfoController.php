@@ -1100,12 +1100,10 @@ class CarInfoController extends Controller
             }
             $vehicle->has_multiple_image = count($vehicle->multiple_vehicle_images) > 1;
 
-            $vehicle->avatar_image = 'https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-2-512.png';
-
             $damageCount = VehicleDamage::where('vehicle_id', $vehicle->id)->count();
             $vehicle->damage_count = $damageCount;
             $vehicle->status = $vehicle->status;
-            $vehicle->created_date = formatDateTime($vehicle->created_at);
+            $vehicle->created_date = formatDateTime($vehicle->created_at, false);
 
             return $vehicle;
         });
