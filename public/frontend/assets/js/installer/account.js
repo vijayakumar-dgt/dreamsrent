@@ -1,5 +1,6 @@
-"use strict";
 
+(function () {
+    "use strict";
 $(document).ready(function () {
     const form = $("#account_form");    
     const submitBtn = $("#submit_btn");
@@ -96,3 +97,4 @@ $(document).ready(function () {
         }
     });
 });
+})();

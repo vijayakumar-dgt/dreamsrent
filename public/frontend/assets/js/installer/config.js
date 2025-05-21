@@ -1,3 +1,5 @@
+(function () {
+    "use strict";
 $(document).ready(function () {
     $(document).on("submit", "#config_form", async function (e) {
         e.preventDefault();
@@ -57,3 +59,4 @@ $(document).ready(function () {
         }
     });
 });
+})();

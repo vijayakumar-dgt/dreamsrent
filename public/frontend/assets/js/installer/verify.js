@@ -1,3 +1,5 @@
+(function () {
+    "use strict";
 $(document).ready(function () {
     $(document).on("submit", "#verify_form", async function (e) {
     e.preventDefault();
@@ -62,3 +64,4 @@ $(document).ready(function () {
     }
 });
 });
+})();

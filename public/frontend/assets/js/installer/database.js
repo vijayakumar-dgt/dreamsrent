@@ -1,4 +1,5 @@
-"use strict";
+(function () {
+    "use strict";
 
 // Toggle switches (optional if using custom UI toggles)
 $("#reset_database").bootstrapToggle({
@@ -110,3 +111,4 @@ $(document).ready(function () {
         }
     });
 });
+})();
