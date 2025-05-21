@@ -465,7 +465,7 @@
                         @endif
                         @if (hasPermission($permissions, 'finance_settings', 'view'))
                         <li class="submenu">
-                            <a href="javascript:void(0);" class="{{ request()->routeIs(['admin.currencies', 'admin.tax-rates']) ? 'subdrop active' : '' }}">
+                            <a href="javascript:void(0);" class="{{ request()->routeIs(['admin.currencies', 'admin.tax-rates', 'admin.bankindex-settings', 'admin.paymentIndex-settings']) ? 'subdrop active' : '' }}">
                                 <i class="ti ti-settings-dollar"></i><span>{{ __('admin.general_settings.finance_settings') }}</span>
                                 <span class="menu-arrow"></span>
                             </a>
@@ -487,7 +487,7 @@
                         @endif
                         @if (hasPermission($permissions, 'other_settings', 'view'))
                         <li class="submenu">
-                            <a href="javascript:void(0);" class="{{ request()->routeIS(['admin.sitemap','admin.storage-settings', 'admin.database-settings', 'admin.system-backup-settings']) ? 'subdrop active' : '' }}">
+                            <a href="javascript:void(0);" class="{{ request()->routeIS(['admin.sitemap','admin.storage-settings', 'admin.database-settings', 'admin.system-backup-settings', 'admin.clearCache-settings']) ? 'subdrop active' : '' }}">
                                 <i class="ti ti-settings-2"></i><span>{{ __('admin.general_settings.other_settings') }}</span>
                                 <span class="menu-arrow"></span>
                             </a>

@@ -86,10 +86,10 @@
                             tableBody += `<tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
+                                        <div class="avatar me-2 flex-shrink-0">
                                             <img src="${imageSrc}" class="rounded-circle" alt="">
-                                        </a>
-                                        <h6><a href="javascript:void(0);" class="fs-14 fw-semibold">${value.name}</a></h6>
+                                        </div>
+                                        <h6 class="fs-14 fw-semibold text-black">${value.name}</h6>
                                     </div>
                                 </td>
                                 <td><p class="text-gray-9">${value.phone_number}</p></td>
@@ -116,11 +116,9 @@
                                                     class="dropdown-item rounded-1 delete-contact-btn" 
                                                     data-id="${value.id}" 
                                                     data-bs-toggle="modal" 
-                                                    data-bs-target="#delete_contact"
-                                                >
+                                                    data-bs-target="#delete_contact">
                                                     <i class="ti ti-trash me-1"></i>${_l('admin.common.delete')}
                                                 </button>
-
                                             </li>` : ''}
                                         </ul>
                                     </div>
@@ -129,6 +127,7 @@
                         });
                     } else {
                         tableBody = `<tr><td colspan="6" class="text-center">${_l("admin.common.empty_table")}</td></tr>`;
+                        $('.table-footer').empty();
                     }
 
                     $("#contactTable tbody").html(tableBody);
@@ -161,7 +160,7 @@
                                 infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
                                 lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
                                 search: _l("admin.common.search") + ":",
-                                zeroRecords: _l("admin.common.no_matching_records"),
+                                zeroRecords: _l("admin.common.empty_table"),
                                 paginate: {
                                     first: _l("admin.common.first"),
                                     last: _l("admin.common.last"),
@@ -184,5 +183,4 @@
             $("#delete_id").val(id);
         }
     });
-
 })();

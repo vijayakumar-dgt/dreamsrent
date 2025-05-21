@@ -573,3 +573,32 @@ function getCommonSettingData(?array $notifyData): array
 
     return $notifyData;
 }
+
+if (!function_exists('formatPrice')) {
+    function formatPrice($price, $withSymbol = true, $rawPrice = false) {
+        $defaultCurrencySymbol = getDefaultCurrencySymbol();
+
+        $currencyPosition = GeneralSetting::where('key', 'currency_position')->first();
+        $currencyPosition = $currencyPosition ? $currencyPosition->value : 'before';
+
+        $decimalSeparatorSetting = GeneralSetting::where('key', 'decimal_seperator')->first();
+        $decimalSeparator = $decimalSeparatorSetting ? $decimalSeparatorSetting->value : '.';
+
+        $thousandsSeparatorSetting = GeneralSetting::where('key', 'thousand_seperator')->first();
+        $thousandsSeparator = $thousandsSeparatorSetting ? $thousandsSeparatorSetting->value : ',';
+
+        if ($rawPrice) {
+            return $price;
+        }
+
+        $formattedPrice = number_format($price, 2, '.', ',');
+
+        if ($withSymbol) {
+            return $currencyPosition === 'before'
+                ? $defaultCurrencySymbol . $formattedPrice
+                : $formattedPrice . $defaultCurrencySymbol;
+        }
+
+        return $formattedPrice;
+    }
+}

@@ -125,7 +125,7 @@ class InsuranceController extends Controller
         try {
             $authId = current_user();
             $language_id = $authId->language_id ?? null;
-            $query = Insurance::where("language_id", $language_id)->with('insuranceBenefits')->withCount('insuranceBenefits');
+            $query = Insurance::where("language_id", $language_id)->with(['insuranceBenefits', 'priceType'])->withCount('insuranceBenefits');
 
             if (!empty($request->search)) {
                 $search = $request->search;
@@ -145,7 +145,15 @@ class InsuranceController extends Controller
 
             $filtertotalRecords = $query->count();
             $totalRecords = Insurance::count();
-            $data = $query->skip($start)->take($length)->get();
+            $data = $query->skip($start)->take($length)->get()->map(function ($item) {
+                $priceType = $item->priceType->pricing_type ?? '';
+                if ($priceType == 'percentage') {
+                    $item->price = $item->price . '%';
+                } else {
+                    $item->price = getDefaultCurrencySymbol() . $item->price;
+                }
+                return $item;
+            });
 
             return response()->json([
                 'draw' => intval($request->draw),
