@@ -9,6 +9,7 @@ use Modules\CarInfo\Models\DamageType;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\Rule;
 
 class DamageTypeController extends Controller
 {
@@ -34,10 +35,11 @@ class DamageTypeController extends Controller
         $language_id = $authUser->language_id;
 
         $validator = Validator::make($request->all(), [
-            'damage_type' => 'required|unique:damage_types,damage_type,' . $request->id . ',id,deleted_at,NULL',
+            'damage_type' => 'required|unique:damage_types,damage_type,' . $request->id . ',id,deleted_at,NULL|not_regex:/<\/?script\b[^>]*>/i',
         ], [
             'damage_type.required' => __('admin.rentals.damage_type_required'),
             'damage_type.unique' => __('admin.rentals.damage_type_unique'),
+            'damage_type.not_regex' => __('admin.common.script_tag_not_allowed'),
         ]);
 
         if ($validator->fails()) {

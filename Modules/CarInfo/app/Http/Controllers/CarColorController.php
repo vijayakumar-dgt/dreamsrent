@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Modules\CarInfo\Models\CarColor;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\Rule;
 
 class CarColorController extends Controller
 {
@@ -22,11 +23,21 @@ class CarColorController extends Controller
         $languageId = $authUser->language_id ?? 1;
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'value' => 'required',
+            'name' => [
+                'required',
+                'not_regex:/<\/?script\b[^>]*>/i',
+                Rule::unique('car_colors')->ignore($request->id)->whereNull('deleted_at')
+            ],
+            'value' => [
+                'required',
+                Rule::unique('car_colors')->ignore($request->id)->whereNull('deleted_at')
+            ],
         ], [
             'name.required' => __('admin.rentals.color_name_required'),
             'value.required' => __('admin.rentals.color_code_required'),
+            'name.not_regex' => __('admin.common.script_tag_not_allowed'),
+            'value.unique' => __('admin.rentals.color_code_unique'),
+            'name.unique' => __('admin.rentals.color_name_unique'),
         ]);
 
         if ($validator->fails()) {

@@ -27,11 +27,13 @@ class CarSeatController extends Controller
         $validator = Validator::make($request->all(), [
             'seat_type' => [
                 'required',
-                Rule::unique('seat_types')->ignore($id)->whereNull('deleted_at')
+                Rule::unique('seat_types')->ignore($id)->whereNull('deleted_at'),
+                'not_regex:/<\/?script\b[^>]*>/i'
             ]
         ], [
             'seat_type.required' => __('admin.rentals.seat_type_required'),
             'seat_type.unique' => __('admin.rentals.seat_type_unique'),
+            'seat_type.not_regex' => __('admin.common.script_tag_not_allowed'),
         ]);
 
         if ($validator->fails()) {

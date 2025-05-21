@@ -27,12 +27,14 @@ class CarSteeringController extends Controller
             'steering_type' => [
                 'required',
                 'max:30',
-                Rule::unique('car_steerings')->ignore($id)->whereNull('deleted_at')
+                Rule::unique('car_steerings')->ignore($id)->whereNull('deleted_at'),
+                'not_regex:/<\/?script\b[^>]*>/i'
             ],
         ], [
             'steering_type.required' => __('admin.rentals.steering_type_required'),
             'steering_type.unique' => __('admin.rentals.steering_type_unique'),
             'steering_type.max' => __('admin.rentals.steering_type_maxlength'),
+            'steering_type.not_regex' => __('admin.common.script_tag_not_allowed'),
         ]);
 
         if ($validator->fails()) {

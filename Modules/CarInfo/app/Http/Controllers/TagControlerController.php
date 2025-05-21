@@ -41,10 +41,11 @@ class TagControlerController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'tag' => 'required|unique:tags,tag,' . $request->id . ',id,deleted_at,NULL',
+            'tag' => 'required|unique:tags,tag,' . $request->id . ',id,deleted_at,NULL|not_regex:/<\/?script\b[^>]*>/i',
         ], [
             'tag.required' => __('admin.rentals.tag_required'),
             'tag.unique' => __('admin.rentals.tag_unique'),
+            'tag.not_regex' => __('admin.common.script_tag_not_allowed'),
         ]);
         if ($validator->fails()) {
             return response()->json([

@@ -9,6 +9,7 @@ use Modules\CarInfo\Models\Cartype;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\Rule;
 
 class CarTypeController extends Controller
 {
@@ -41,10 +42,16 @@ class CarTypeController extends Controller
         $language_id = $authUser->language_id;
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:30|unique:cartypes,name,' . $request->id . ',id,deleted_at,NULL',
+            'name' => [
+                'required',
+                'max:30',
+                Rule::unique('cartypes', 'name')->ignore($request->id)->whereNull('deleted_at'),
+                'not_regex:/<\/?script\b[^>]*>/i',
+            ],
         ], [
             'name.required' => __('admin.rentals.vehicle_type_required'),
             'name.unique' => __('admin.rentals.vehicle_type_unique'),
+            'name.not_regex' => __('admin.common.script_tag_not_allowed'),
         ]);
 
         if ($validator->fails()) {
