@@ -129,12 +129,7 @@
             },
         });
     });
+    function deleteSystemBackup(id) {
+        $("#delete_id").val(id);
+    }
 })();
-
-function restoreBackup(filename) {
-    alert("Restore function for " + filename + " will be implemented here.");
-}
-
-function deleteSystemBackup(id) {
-    $("#delete_id").val(id);
-}

@@ -207,24 +207,5 @@
             reader.readAsDataURL(file);
         }
     });
+
 })();
-
-function previewImage(event) {
-    const reader = new FileReader();
-    const preview = document.getElementById("profile_photo_preview");
-
-    reader.onload = function () {
-        preview.src = reader.result;
-    };
-
-    if (event.target.files.length > 0) {
-        reader.readAsDataURL(event.target.files[0]);
-    }
-}
-
-// function removeImage() {
-//     const preview = document.getElementById('profile_photo_preview');
-
-//     preview.src = ;
-//     fileInput.value = '';
-// }

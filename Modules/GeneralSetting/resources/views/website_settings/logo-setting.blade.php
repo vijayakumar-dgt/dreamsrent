@@ -50,7 +50,7 @@
                                                 <div class="drag-upload-btn btn btn-md btn-dark">
                                                     <i class="ti ti-photo-up fs-14"></i>
                                                     {{ __('admin.general_settings.upload') }}
-                                                    <input type="file" id="logo_image" name="logo_image" accept="image/*" onchange="previewImage(event, 'logo_photo_preview', 151, 26)">
+                                                    <input type="file" id="logo_image" name="logo_image" accept="image/*" >
                                                 </div>
                                             </div>
                                             <div class="mt-2">
@@ -75,7 +75,7 @@
                                                 <div class="drag-upload-btn btn btn-md btn-dark">
                                                     <i class="ti ti-photo-up fs-14"></i>
                                                     {{ __('admin.general_settings.upload') }}
-                                                    <input type="file" id="favicon_image" name="favicon_image" accept="image/*" onchange="previewImage(event, 'favicon_photo_preview', 128, 128)">
+                                                    <input type="file" id="favicon_image" name="favicon_image" accept="image/*" >
                                                 </div>
                                             </div>
                                             <div class="mt-2">
@@ -100,7 +100,7 @@
                                                 <div class="drag-upload-btn btn btn-md btn-dark">
                                                     <i class="ti ti-photo-up fs-14"></i>
                                                     {{ __('admin.general_settings.upload') }}
-                                                    <input type="file" id="small_image" name="small_image" accept="image/*" onchange="previewImage(event, 'small_icon_photo_preview', 35, 35)">
+                                                    <input type="file" id="small_image" name="small_image" accept="image/*">
                                                 </div>
                                             </div>
                                             <div class="mt-2">
@@ -125,7 +125,7 @@
                                                 <div class="drag-upload-btn btn btn-md btn-dark">
                                                     <i class="ti ti-photo-up fs-14"></i>
                                                     {{ __('admin.general_settings.upload') }}
-                                                    <input type="file" id="dark_logo" name="dark_logo" accept="image/*" onchange="previewImage(event, 'dark_logo_preview', 151, 26)">
+                                                    <input type="file" id="dark_logo" name="dark_logo" accept="image/*">
                                                 </div>
                                             </div>
                                             <div class="mt-2">
