@@ -6,8 +6,6 @@
 
     const permissions = await loadUserPermissions();
 
-    let editingDamageID = null;
-
     $(document).ready(function () {
         const titleInput = document.getElementById("title");
         const permalinkInput = document.getElementById("perma_link");
@@ -2144,6 +2142,7 @@
         });
     });
 
+    let editingDamageID = null;
     function editDamage(damageID) {
         let item = $("#" + damageID);
 
