@@ -546,25 +546,25 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="base_km" class="form-label">Base Kilometers (Per Day)</label>
+                                                        <label for="base_km" class="form-label">{{ __('admin.bookings.base_kilometers') }}</label>
                                                         <input type="text" name="base_km" id="base_km" class="form-control Number" maxlength="4" value="{{ old('base_km', $booking->base_km) }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="km_extra_price" class="form-label">Kilometers Extra Price</label>
+                                                        <label for="km_extra_price" class="form-label">{{ __('admin.bookings.kilometers_extra_price') }}</label>
                                                         <input type="text" name="km_extra_price" id="km_extra_price" class="form-control Number" maxlength="4" value="{{ old('km_extra_price', $booking->km_extra_price) }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="expenses" class="form-label">Expenses</label>
+                                                        <label for="expenses" class="form-label">{{ __('admin.bookings.expenses') }}</label>
                                                         <input type="text" name="expenses" id="expenses" class="form-control Number" maxlength="4" value="{{ old('expenses', $booking->expenses) }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="delivery_price" class="form-label">Delivery Price</label>
+                                                        <label for="delivery_price" class="form-label">{{ __('admin.bookings.delivery_price') }}</label>
                                                         <input type="text" name="delivery_price" id="delivery_price" class="form-control Number" maxlength="4" value="{{ old('delivery_price', $booking->delivery_price) }}">
                                                     </div>
                                                 </div>
@@ -585,18 +585,18 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label class="form-label">Tax Type <span class="text-danger">*</span></label>
+                                                        <label class="form-label">{{ __('admin.bookings.tax_type') }} <span class="text-danger">*</span></label>
                                                         <select class="select" name="tax_type" id="tax_type">
-                                                            <option value="">Select</option>
-                                                            <option value="percentage" {{ old('tax_type', $booking->tax_type) == 'percentage' ? 'selected' : '' }}>%</option>
-                                                            <option value="fixed" {{ old('tax_type', $booking->tax_type) == 'fixed' ? 'selected' : '' }}>Direct</option>
+                                                            <option value="">{{ __('admin.bookings.select') }}</option>
+                                                            <option value="percentage" {{ old('tax_type', $booking->tax_type) == 'percentage' ? 'selected' : '' }}>{{ __('admin.bookings.percentage') }}</option>
+                                                            <option value="fixed" {{ old('tax_type', $booking->tax_type) == 'fixed' ? 'selected' : '' }}>">{{ __('admin.bookings.fixed') }}</option>
                                                         </select>
                                                         <span class="error-text text-danger" id="tax_type_error"></span>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label class="form-label">Add Tax Value <span class="text-danger">*</span></label>
+                                                        <label class="form-label">{{ __('admin.bookings.add_tax_value') }} <span class="text-danger">*</span></label>
                                                         <input type="text" name="tax_val" id="tax_val" class="form-control" value="{{ old('tax_val', $booking->tax_val) }}">
                                                         <span class="error-text text-danger" id="tax_val_error"></span>
                                                     </div>
