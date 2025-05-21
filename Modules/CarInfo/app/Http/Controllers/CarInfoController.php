@@ -1433,8 +1433,8 @@ class CarInfoController extends Controller
                 'wishlist' => $wishlistExists,
                 'review_count' => $review_count,
                 'price' => !empty($filteredPrices) ? $filteredPrices : null,
-                'is_featured' => (bool) rand(0, 1),
-                'is_top_rated' => (bool) rand(0, 1),
+                'is_featured' => $vehicle->popular == 1 ? true : false,
+                'is_top_rated' => is_numeric($rating) && $rating >= 4,
                 'seo_title' => $vehicle->vehicle_metatitle,
                 'seo_key' => $vehicle->vehicle_metakeywords,
                 'seo_description' => $vehicle->vehicle_metadesc,
@@ -1992,7 +1992,7 @@ class CarInfoController extends Controller
             $user = User::where('id', $vehicle->created_by)
                 ->first();
             $userDetail = null;
-            
+
             $defaultAvatar = asset('/backend/assets/img/default-profile.png');
             $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
 
