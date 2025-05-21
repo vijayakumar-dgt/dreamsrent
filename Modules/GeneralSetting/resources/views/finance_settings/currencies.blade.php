@@ -34,9 +34,9 @@
                                     <h6>{{ __('admin.general_settings.currencies') }}</h6>
                                     <div>
                                         @if (hasPermission($permissions, 'finance_settings', 'create'))
-                                            <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center" id="add_new_currency" data-bs-toggle="modal" data-bs-target="#add_currency">
+                                            <button type="button" class="btn btn-primary d-flex align-items-center" id="add_new_currency" data-bs-toggle="modal" data-bs-target="#add_currency">
                                                 <i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_currency') }}
-                                            </a>
+                                            </button>
                                         @endif
                                     </div>
                                 </div>
@@ -123,7 +123,9 @@
                                 </label>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
+                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
+                                    {{ __('admin.general_settings.cancel') }}
+                                </button>
                                 <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.general_settings.create_new') }}</button>
                             </div>
                         </div>

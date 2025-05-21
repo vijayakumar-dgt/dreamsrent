@@ -35,9 +35,9 @@
                                 
                                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                                     @if (hasPermission($permissions, 'app_settings', 'create'))
-                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_signatures" class="btn btn-primary">
+                                    <button type="button" data-bs-toggle="modal" data-bs-target="#add_signatures" class="btn btn-primary">
                                         <i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new_signature') }}
-                                    </a>
+                                    </button>
                                     @endif
                                 </div>
                             </div>
@@ -119,7 +119,9 @@
                         </div>
                         <div class="modal-footer">
                             <div class="d-flex justify-content-center">
-                                <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
+                                    {{ __('admin.general_settings.cancel') }}
+                                </button>
                                 <button type="submit" class="btn btn-primary add_btn">{{ __('admin.common.create_new') }}</button>
                             </div>
                         </div>
@@ -180,7 +182,9 @@
                                 <label for="edit_signature_status" class="form-check-label form-label">{{ __('admin.common.status') }}</label>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
+                                    {{ __('admin.common.cancel') }}
+                                </button>
                                 <button type="submit" class="btn btn-primary edit_btn">{{ __('admin.common.save_changes') }}</button>
                             </div>
                         </div>
@@ -201,7 +205,9 @@
                             <h4 class="mb-1">{{ __('admin.general_settings.delete_signatures') }}</h4>
                             <p class="mb-3">{{ __('admin.general_settings.delete_signatures_description') }}</p>
                             <div class="d-flex justify-content-center">
-                                <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
+                                    {{ __('admin.general_settings.cancel') }}
+                                </button>
                                 <button type="submit" data-bs-dismiss="modal" id="deleteSignature" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
                             </div>
                         </form>

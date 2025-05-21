@@ -46,7 +46,9 @@
                                 <div>
                                     <div class="mb-2 me-2">
                                         @if (hasPermission($permissions, 'finance_settings', 'create'))
-                                        <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_bank" id="bank_clear"><i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new_account') }}</a>
+                                        <button type="button" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_bank" id="bank_clear">
+                                            <i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new_account') }}
+                                        </button>
                                         @endif
                                     </div>
                                 </div>
@@ -135,7 +137,9 @@
                 </div>
                 <div class="modal-footer">
                     <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
+                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
+                            {{ __('admin.general_settings.cancel') }}
+                        </button>
                         <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.general_settings.create_new') }}</button>
                     </div>
                 </div>
@@ -158,7 +162,9 @@
                     <h4 class="mb-1">{{ __('admin.general_settings.delete_bank_account') }}</h4>
                     <p class="mb-3">{{ __('admin.general_settings.delete_bank_account_confirmation') }}</p>
                     <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
+                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
+                            {{ __('admin.general_settings.cancel') }}
+                        </button>
                         <button type="submit" class="btn btn-primary">{{ __('admin.general_settings.yes_delete') }}</button>
                     </div>
                 </div>
