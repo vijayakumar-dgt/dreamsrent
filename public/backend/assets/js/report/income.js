@@ -530,7 +530,7 @@
                 link.setAttribute("href", encodedUri);
                 link.setAttribute("download", "income_table.csv");
                 document.body.appendChild(link);
-                link.click();
+                link.dispatchEvent(new MouseEvent("click"));
                 document.body.removeChild(link);
             });
     });

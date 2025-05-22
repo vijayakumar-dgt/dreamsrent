@@ -620,7 +620,7 @@ Version      : 1.0
 		$(".acting-driver-info").hide();
 		$(".self-driver-info").show();
 	}
-	$('#acting_driver').click(function() {
+	$(document).on('click','#acting_driver', function(){
 		if ($(this).is(':checked')) {
 			$(".acting-driver-info").show();
 			$(".self-driver-info").hide();
@@ -629,7 +629,8 @@ Version      : 1.0
 			$(".self-driver-info").show();
 		}
 	});
-	$('#self_driver').click(function() {
+
+	$('#self_driver').on('click', function(){
 		if ($(this).is(':checked')) {
 			$(".acting-driver-info").hide();
 			$(".self-driver-info").show();
@@ -640,39 +641,38 @@ Version      : 1.0
 	});
 	
 	// Add New Card
-
-	$('#add_new_card').click(function() {
+    $(document).on('click', '#add_new_card', function(){
 		if ($(this).is(':checked')) {
 			$(".add-new-cards").show();
 		} else {
 			$("add-new-cards").hide();
 		}
 	});
-
-	$('#debit_card').click(function() {
+     
+	$(document).on('click', '#debit_card', function(){
 		if ($(this).is(':checked')) {
 			$(".add-new-cards").hide();
 		}
 	});
 
-	$('#credit_card').click(function() {
+	$(document).on('click', '#credit_card', function(){
 		if ($(this).is(':checked')) {
 			$(".add-new-cards").hide();
 		}
 	});
 
 	// Locarion Changes
+    $(document).on('click', '#location_delivery', function(){
+		if ($(this).is(':checked')) {
+			$(".delivery-location").show();
+			$(".pickup-location").hide();
+		} else {
+			$(".delivery-location").hide();
+			$(".pickup-location").show();
+		}
+	});
 
-	$('#location_delivery').click(function() {
-		if ($(this).is(':checked')) {
-			$(".delivery-location").show();
-			$(".pickup-location").hide();
-		} else {
-			$(".delivery-location").hide();
-			$(".pickup-location").show();
-		}
-	});
-	$('#location_pickup').click(function() {
+	$(document).on('click', '#location_pickup', function(){
 		if ($(this).is(':checked')) {
 			$(".delivery-location").hide();
 			$(".pickup-location").show();
@@ -681,6 +681,7 @@ Version      : 1.0
 			$(".pickup-location").hide();
 		}
 	});
+
 	if ($('#location_delivery').is(':checked')) {
 		$(".pickup-location").hide();
 		$(".delivery-location").show();
@@ -696,14 +697,12 @@ Version      : 1.0
 		$(".delivery-location").show();
 	}
 	
-
-	$('#image_sign').change(function(){
+    $(document).on('change', '#image_sign', function(){
 		$("#frames").html('');
 		for (var i = 0; i < $(this)[0].files.length; i++) {
 			$("#frames").append('<img src="'+window.URL.createObjectURL(this.files[i])+'" width="100px" height="100px">');
 		}
 	});
-
 
 	if($('.read-more').length > 0) {
 		$(".more-text").hide();

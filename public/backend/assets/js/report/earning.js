@@ -374,7 +374,7 @@
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "earnings_report.csv");
             document.body.appendChild(link);
-            link.click();
+            link.dispatchEvent(new MouseEvent("click"));
             document.body.removeChild(link);
         });
     });
