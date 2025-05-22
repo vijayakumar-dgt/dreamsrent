@@ -88,12 +88,12 @@ class LocationController extends Controller
                 $location->status = $request->status == 'on' ? 1 : 0;
                 $location->language_id = $request->language_id ?? $authUser->language_id;
             }
-            $oldImage = is_array($location->image) ? null : $location->image;
+           
             $folderName = 'vehicles/location';
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 if ($image && $image->isValid()) {
-                    $location->image = uploadFile($image, $folderName, $oldImage);
+                    $location->image = uploadFile($image, $folderName);
                 }
             }
             $location->name = $request->name;
