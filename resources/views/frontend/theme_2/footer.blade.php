@@ -13,10 +13,10 @@
                         </div>
                         <div class="d-flex align-items-center gap-1 app-icon">
                             <a href="javascript:void(0);">
-                                <img src="/frontend/assets/img/icons/gpay.svg" class="img-fluid" alt="logo">
+                                <img src="{{ asset('frontend/assets/img/icons/gpay.svg') }}" class="img-fluid" alt="logo">
                             </a>
                             <a href="javascript:void(0);">
-                                <img src="/frontend/assets/img/icons/app.svg" class="img-fluid" alt="logo">
+                                <img src="{{ asset('frontend/assets/img/icons/app.svg') }}" class="img-fluid" alt="logo">
                             </a>
                         </div>
                         <ul class="social-icon">
@@ -86,13 +86,13 @@
                     <div class="col-lg-4">
                         <div class="payment-list">
                             <a href="javascript:void(0);">
-                                <img src="/frontend/assets/img/icons/payment-01.svg" alt="img">
+                                <img src="{{ asset('frontend/assets/img/icons/payment-01.svg') }}" alt="img">
                             </a>
                             <a href="javascript:void(0);">
-                                <img src="/frontend/assets/img/icons/payment-02.svg" alt="img">
+                                <img src="{{ asset('frontend/assets/img/icons/payment-02.svg') }}" alt="img">
                             </a>
                             <a href="javascript:void(0);">
-                                <img src="/frontend/assets/img/icons/payment-03.svg" alt="img">
+                                <img src="{{ asset('frontend/assets/img/icons/payment-03.svg') }}" alt="img">
                             </a>
                         </div>
                     </div>

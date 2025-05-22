@@ -6,17 +6,17 @@
 		<title>{{ isset($title) ? $title : config('app.name') }}</title>
 		
 		<!-- Favicon -->
-		<link rel="shortcut icon" href="/frontend/assets/img/favicon.png">
+		<link rel="shortcut icon" href="{{ asset('frontend/assets/img/favicon.png') }}">
 		
 		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="/frontend/assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}">
 		
 		<!-- Fontawesome CSS -->
-		<link rel="stylesheet" href="/frontend/assets/plugins/fontawesome/css/fontawesome.min.css">
-		<link rel="stylesheet" href="/frontend/assets/plugins/fontawesome/css/all.min.css">
+		<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
+		<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/all.min.css') }}">
 		
 		<!-- Main CSS -->
-		<link rel="stylesheet" href="/frontend/assets/css/style.css">
+		<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
 	</head>
     <body class="error-page">
 	
@@ -36,13 +36,13 @@
 		<!-- /Main Wrapper -->
 		
 		<!-- jQuery -->
-		<script src="/frontend/assets/js/jquery-3.7.1.min.js"></script>
+		<script src="{{ asset('frontend/assets/js/jquery-3.7.1.min.js') }}"></script>
 		
 		<!-- Bootstrap Core JS -->
-		<script src="/frontend/assets/js/bootstrap.bundle.min.js"></script>
+		<script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>
 		
 		<!-- Custom JS -->
-		<script src="/frontend/assets/js/script.js"></script>
+		<script src="{{ asset('frontend/assets/js/script.js') }}"></script>
 
 	</body>
 </html>

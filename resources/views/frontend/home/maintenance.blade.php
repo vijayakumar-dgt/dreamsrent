@@ -27,7 +27,7 @@
         <div class="main-wrapper">
 
 			<div class="error-box">
-				<img src="{{ $response['image'] ?? '/frontend/assets/img/maintenance.png' }}" class="img-fluid" alt="Maintenance">
+				<img src="{{ $response['image'] ?? asset('frontend/assets/img/maintenance.png') }}" class="img-fluid" alt="Maintenance">
 				<h2 class="coming-soon pt-0">{{ __('web.home.maintenence_heading') }}</h2>
 				<p>{!! $response['description'] ?? 'Our website is currently undergoing scheduled maintenance, will be right
 					back in a few minutes.' !!}</p>
