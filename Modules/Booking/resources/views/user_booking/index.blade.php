@@ -56,7 +56,7 @@
                 </div>
             </div>
         </div>
-       <!-- Booking Information -->
+        <!-- Booking Information -->
         <div class="booking-detail-info">
             <div class="row">
                 <!-- Location and Time -->
@@ -446,31 +446,34 @@
                                     <span><i class="bx bx-file-blank"></i></span>
                                     <h5>{{__('web.home.insurance')}}</h5>
                                 </div>
-                                <div class="booking-info-body">
+                                <div class="booking-info-body insuranceCardContiner">
                                     @if($vehicleInsurance->isNotEmpty())
                                     @foreach($vehicleInsurance as $insurance)
-                                    <div class="insurance-select custom-checkbox">
-                                        <div>
-                                            <p class="fs-14 d-inline-flex align-items-center mb-1">
+                                    <div class="insurance-select" data-insurance-id="{{ $insurance->insurances_id }}">
+                                        <div class="insurance-info">
+                                            <p class="fs-14 insurance-name d-inline-flex align-items-center mb-1">
                                                 {{ $insurance->insurance_name }}
                                             </p>
                                             <div>
                                                 <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
                                                     data-bs-original-title="{{ $insurance->first_benefit }}">
                                                     +{{ $insurance->benefits_count }} {{__('web.home.benefits')}}
-
                                                 </a>
                                             </div>
                                         </div>
-                                        <div class="text-end">
+                                        <div class="insurance-meta text-end">
                                             <span class="d-block mb-1">
                                                 {{ $insurance->price_type_id == 1 ? 'Onetime Ride' : 'Recurring Payment' }}
                                             </span>
-                                            <h6 class="fw-normal">{{ $currencySymbol }}{{ $insurance->price }}</h6>
-                                            <input type="checkbox" name="add_insurance" hidden>
-                                            <input type="hidden" name="insurance_id[]" value="{{ $insurance->insurances_id }}">
-                                            <input type="hidden" name="insurance_price[]" value="{{ $insurance->price }}">
-                                            <input type="hidden" name="insurance_type[]" value="{{ $insurance->value }}">
+                                            <h6 class="fw-normal insurance-price-text">
+                                                {{ $currencySymbol }}{{ number_format($insurance->price, 2) }}
+                                            </h6>
+
+                                            {{-- Hidden fields for backend --}}
+                                            <input type="checkbox" name="add_insurance" class="add_insurance_checkbox" hidden>
+                                            <input type="hidden" name="insurance_id[]" class="insurance_id_input" value="{{ $insurance->insurances_id }}">
+                                            <input type="hidden" name="insurance_price[]" class="insurance_price_input" value="{{ $insurance->price }}">
+                                            <input type="hidden" name="insurance_type[]" class="insurance_type_input" value="{{ $insurance->value }}">
                                         </div>
                                     </div>
                                     @endforeach
@@ -702,7 +705,7 @@
                     </div>
                 </div>
                 <!-- /Payment Information -->
-                
+
                 <div class="col-lg-4">
                     <div class="booking-sidebar">
                         <!-- Sidebar Booking Details -->

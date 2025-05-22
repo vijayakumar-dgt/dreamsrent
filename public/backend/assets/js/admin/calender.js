@@ -2492,6 +2492,9 @@ document.addEventListener("DOMContentLoaded", function () {
                                 $("#extraService").html(
                                     `$${booking.total_extra_service_price}`
                                 );
+                                $("#inService").html(
+                                    `$${booking.total_insurance_price}`
+                                );
                                 $("#final_price").html(
                                     `$${booking.final_price}`
                                 );

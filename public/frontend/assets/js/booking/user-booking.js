@@ -175,8 +175,7 @@
 
         let totalExtraServicePrice = 0;
         let totalInsurancePrice = 0;
-        let basePrice = $("#total_price").val().replace(/,/g, '');
-
+        let basePrice = $("#total_price").val().replace(/,/g, "");
 
         let $extraChargesList = $(".extra-charges-list"); // Extra services list
         let $insuranceChargesList = $(".insurance-charges-list"); // Insurance list
@@ -196,28 +195,30 @@
             "web.home.no_insurance_available"
         )}</li>`;
 
-       
         let currencySymbol = $("#currency").val() || "$";
 
         function updateTotalPrice() {
             const base = parseFloat(basePrice) || 0;
             const extra = parseFloat(totalExtraServicePrice) || 0;
             const insurance = parseFloat(totalInsurancePrice) || 0;
-        
+
             const finalTotal = base + extra + insurance;
-                
+
             $totalPriceExtra.val(extra.toFixed(2));
             $totalPriceInsurance.val(insurance.toFixed(2));
             $totalPriceElement.val(finalTotal.toFixed(2));
-        
+
             $totalPriceSpan.text(`${currencySymbol}${finalTotal.toFixed(2)}`);
             $submitButton.text(
-                `${_l("web.home.pay")} ${currencySymbol}${finalTotal.toFixed(2)} & ${_l("web.home.place_reservation")}`
+                `${_l("web.home.pay")} ${currencySymbol}${finalTotal.toFixed(
+                    2
+                )} & ${_l("web.home.place_reservation")}`
             );
             $extraChargesTotal.text(`${currencySymbol}${extra.toFixed(2)}`);
-            $insuranceChargesTotal.text(`${currencySymbol}${insurance.toFixed(2)}`);
+            $insuranceChargesTotal.text(
+                `${currencySymbol}${insurance.toFixed(2)}`
+            );
         }
-        
 
         // Check if extra services or insurance lists are empty
         function checkEmptyCart() {
@@ -239,16 +240,23 @@
             let serviceId = parent.data("service-id");
             let serviceName = parent.find(".adon-name h6").text();
             let servicePrice = parseFloat(
-                parent.find(".adon-price").text().replace(currencySymbol, "").trim()
+                parent
+                    .find(".adon-price")
+                    .text()
+                    .replace(currencySymbol, "")
+                    .trim()
             );
-        
+
             parent.find("input[name='add_extra']").prop("checked", true);
             $(this).addClass("d-none");
             parent.find(".remove-adon-btn").removeClass("d-none");
-        
+
             $extraChargesList.find(".no-service-message").remove();
-        
-            if ($extraChargesList.find(`li[data-service-id="${serviceId}"]`).length === 0) {
+
+            if (
+                $extraChargesList.find(`li[data-service-id="${serviceId}"]`)
+                    .length === 0
+            ) {
                 $extraChargesList.append(`
                     <li data-service-id="${serviceId}">
                         <h6>${serviceName}</h6>
@@ -257,55 +265,68 @@
                 `);
                 totalExtraServicePrice += servicePrice;
             }
-        
+
             updateTotalPrice();
         });
-        
+
         $(".remove-adon-btn").on("click", function () {
             let parent = $(this).closest("li");
             let serviceId = parent.data("service-id");
             let servicePrice = parseFloat(
-                parent.find(".adon-price").text().replace(currencySymbol, "").trim()
+                parent
+                    .find(".adon-price")
+                    .text()
+                    .replace(currencySymbol, "")
+                    .trim()
             );
-        
+
             parent.find("input[name='add_extra']").prop("checked", false);
             $(this).addClass("d-none");
             parent.find(".add-addon-btn").removeClass("d-none");
-        
-            let $selectedService = $extraChargesList.find(`li[data-service-id="${serviceId}"]`);
+
+            let $selectedService = $extraChargesList.find(
+                `li[data-service-id="${serviceId}"]`
+            );
             if ($selectedService.length > 0) {
                 totalExtraServicePrice -= servicePrice;
                 $selectedService.remove();
             }
-        
+
             checkEmptyCart();
             updateTotalPrice();
         });
-        
 
         // Select Insurance
-        $(".insurance-select").on("click", function () {
-            let parent = $(this);
-            let checkbox = parent.find("input[name='add_insurance']");
-            let insuranceId = parent.find("input[name='insurance_id[]']").val();
-            let insuranceName = parent.find("p.fs-14").text().trim();
-            let insurancePrice = parseFloat(
-                parent.find("h6").text().replace(currencySymbol, "")
+        $(".booking-info-body").on("click", ".insurance-select", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const $card = $(this);
+            const checkbox = $card.find("input[name='add_insurance']");
+            const insuranceId = $card
+                .find("input[name='insurance_id[]']")
+                .val();
+            const insuranceName = $card.find("p.fs-14").text().trim();
+            const insurancePrice = parseFloat(
+                $card
+                    .find("h6")
+                    .text()
+                    .replace(currencySymbol, "")
+                    .replace(/,/g, "")
             );
 
-            if (parent.hasClass("active")) {
-                parent.removeClass("active");
+            const isActive = $card.hasClass("active");
+
+            if (isActive) {
+                $card.removeClass("active");
                 checkbox.prop("checked", false);
 
-                let $selectedInsurance = $insuranceChargesList.find(
-                    `li[data-insurance-id="${insuranceId}"]`
-                );
-                if ($selectedInsurance.length > 0) {
-                    totalInsurancePrice -= insurancePrice;
-                    $selectedInsurance.remove();
-                }
+                $insuranceChargesList
+                    .find(`li[data-insurance-id="${insuranceId}"]`)
+                    .remove();
+                totalInsurancePrice -= insurancePrice;
             } else {
-                parent.addClass("active");
+                $card.addClass("active");
                 checkbox.prop("checked", true);
 
                 $insuranceChargesList.find(".no-insurance-message").remove();
@@ -316,11 +337,11 @@
                     ).length === 0
                 ) {
                     $insuranceChargesList.append(`
-                <li data-insurance-id="${insuranceId}">
-                    <h6>${insuranceName}</h6>
-                    <h5>${currencySymbol}${insurancePrice.toFixed(2)}</h5>
-                </li>
-            `);
+                    <li data-insurance-id="${insuranceId}">
+                        <h6>${insuranceName}</h6>
+                        <h5>${currencySymbol}${insurancePrice.toFixed(2)}</h5>
+                    </li>
+                `);
                     totalInsurancePrice += insurancePrice;
                 }
             }
@@ -329,12 +350,6 @@
             updateTotalPrice();
         });
 
-        // $("input[name='driver_type']").on("change", toggleDriverInfo);
-
-        // Initial call
-        // toggleDriverInfo();
-
-        // Initial checks
         checkEmptyCart();
         updateTotalPrice();
 

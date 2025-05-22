@@ -273,6 +273,10 @@
                         <p id="extraService"></p>
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
+                        <p>{{ __('admin.common.insurance') }}</p>
+                        <p id="inService"></p>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
                         <p>{{ __('admin.finance_accounts.tax') }}</p>
                         <p id="taxValue"></p>
                     </div>
