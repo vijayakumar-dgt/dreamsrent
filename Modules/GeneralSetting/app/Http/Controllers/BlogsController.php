@@ -175,7 +175,7 @@ class BlogsController extends Controller
             'image' => 'required|image|max:5120', // 5MB
         ]);
         assert($request->file('image') instanceof \Illuminate\Http\UploadedFile);
-        $imagePath = $request->hasFile('image') ? $request->file('image')->store('blogs', 'public') : null;
+        $imagePath = $request->hasFile('image') ? $request->file('image')->store('blogs/images', 'public') : null;
         BlogPost::create([
             'title' => $request->title,
             'slug' => Str::slug($request->title),
@@ -221,7 +221,7 @@ class BlogsController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             if ($file) {
-                $path = $file->store('blog_images', 'public');
+                $path = $file->store('blogs/images', 'public');
                 if (is_string($path)) {
                     $blog->image = $path;
                 }
