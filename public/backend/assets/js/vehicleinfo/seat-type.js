@@ -11,7 +11,7 @@
     });
 
     function initFormValidation() {
-         $("#seatTypeForm").validate({
+        $("#seatTypeForm").validate({
             rules: {
                 seat_type: {
                     required: true,
@@ -101,7 +101,7 @@
             let searchQuery = $(this).val().trim();
             initTable(searchQuery, currentStatus);
         });
-    
+
         $(".statusfilter").on("click", function () {
             $(".statusfilter").removeClass("active"); // Reset
             $(this).addClass("active"); // Set current active
@@ -112,7 +112,9 @@
         });
 
         $(document).on("click", ".dataTables_paginate a", function () {
-            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+            $(".table-footer")
+                .find(".dataTables_paginate")
+                .removeClass("d-none");
         });
 
         $("#delateSeatType").on("submit", function (e) {
@@ -125,7 +127,9 @@
                 },
                 headers: {
                     Accept: "application/json",
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
                 },
                 success: function (response) {
                     if (response.code === 200) {
@@ -138,7 +142,10 @@
                     if (res.responseJSON.code === 500) {
                         showToast("success", res.responseJSON.message);
                     } else {
-                        showToast("error", _l("admin.common.default_delete_error"));
+                        showToast(
+                            "error",
+                            _l("admin.common.default_delete_error")
+                        );
                     }
                 },
             });
@@ -152,7 +159,7 @@
             $(".error-text").text("");
             $(".form-control").removeClass("is-invalid is-valid");
             $("#statusDiv")
-                .addClass('d-none')
+                .addClass("d-none")
                 .parent()
                 .removeClass("justify-content-between")
                 .addClass("justify-content-end");
@@ -191,52 +198,96 @@
 
                     $.each(data, function (index, value) {
                         tableBody += `<tr>
-                                <td>${value.seat_type.length > 24
-                                        ? value.seat_type.substring(0, 24) + "..." : value.seat_type}
+                                <td>${
+                                    value.seat_type.length > 24
+                                        ? value.seat_type.substring(0, 24) +
+                                          "..."
+                                        : value.seat_type
+                                }
                                 </td>
                                 <td>
-                                    <span class="badge ${value.status == 1
-                                        ? "badge-success-transparent" : "badge-danger-transparent"} d-inline-flex align-items-center badge-sm">
-                                        <i class="ti ti-point-filled me-1"></i>${value.status == 1
-                                            ? `${_l("admin.common.active")}` : `${_l("admin.common.inactive")}`}
+                                    <span class="badge ${
+                                        value.status == 1
+                                            ? "badge-success-transparent"
+                                            : "badge-danger-transparent"
+                                    } d-inline-flex align-items-center badge-sm">
+                                        <i class="ti ti-point-filled me-1"></i>${
+                                            value.status == 1
+                                                ? `${_l("admin.common.active")}`
+                                                : `${_l(
+                                                      "admin.common.inactive"
+                                                  )}`
+                                        }
                                         </span>
                                 </td>
-                                ${ hasPermission(permissions, "vehicle_attributes", "edit") || hasPermission(permissions, "vehicle_attributes", "delete") ? 
-                                `<td>
+                                ${
+                                    hasPermission(
+                                        permissions,
+                                        "vehicle_attributes",
+                                        "edit"
+                                    ) ||
+                                    hasPermission(
+                                        permissions,
+                                        "vehicle_attributes",
+                                        "delete"
+                                    )
+                                        ? `<td>
                                     <div class="dropdown">
                                         <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="ti ti-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end p-2">
-                                            ${hasPermission(permissions, "vehicle_attributes", "edit") ? 
-                                            `<li>
+                                            ${
+                                                hasPermission(
+                                                    permissions,
+                                                    "vehicle_attributes",
+                                                    "edit"
+                                                )
+                                                    ? `<li>
                                                 <button 
                                                     type="button" 
                                                     class="dropdown-item rounded-1 edit-seat-type" 
                                                     data-id="${value.id}">
-                                                    <i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}
+                                                    <i class="ti ti-edit me-1"></i>${_l(
+                                                        "admin.common.edit"
+                                                    )}
                                                 </button>
-                                            </li>` : "" }
-                                            ${hasPermission(permissions, "vehicle_attributes", "delete") ? 
-                                            `<li>
+                                            </li>`
+                                                    : ""
+                                            }
+                                            ${
+                                                hasPermission(
+                                                    permissions,
+                                                    "vehicle_attributes",
+                                                    "delete"
+                                                )
+                                                    ? `<li>
                                                 <button 
                                                     type="button" 
                                                     class="dropdown-item rounded-1 delete-seat-type" 
                                                     data-id="${value.id}" 
                                                     data-bs-toggle="modal" 
                                                     data-bs-target="#delete-modal">
-                                                    <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
+                                                    <i class="ti ti-trash me-1"></i>${_l(
+                                                        "admin.common.delete"
+                                                    )}
                                                 </button>
-                                            </li>` : "" }
+                                            </li>`
+                                                    : ""
+                                            }
                                         </ul>
                                     </div>
-                                </td>` : "" }
+                                </td>`
+                                        : ""
+                                }
                             </tr>`;
                     });
                 } else {
                     tableBody += `
                             <tr>
-                                <td colspan="4" class="text-center">${_l("admin.common.empty_table")}</td>
+                                <td colspan="4" class="text-center">${_l(
+                                    "admin.common.empty_table"
+                                )}</td>
                             </tr>`;
                     $(".table-footer").empty();
                 }
@@ -248,25 +299,67 @@
                         searching: false,
                         pageLength: 10,
                         lengthChange: false,
-                        drawCallback: function() {
-                            $(".dataTables_info").addClass('d-none');
-                            $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
-                            var tableWrapper = $(this).closest('.dataTables_wrapper');
-                            var info = tableWrapper.find('.dataTables_info');
-                            var pagination = tableWrapper.find('.dataTables_paginate');
-                            $('.table-footer').empty()
-                                .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
-                                .append($('<div class="datatable-info"></div>').append(info.clone(true)))
-                                .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
+                        drawCallback: function () {
+                            $(".dataTables_info").addClass("d-none");
+                            $(
+                                ".dataTables_wrapper .dataTables_paginate"
+                            ).addClass("d-none");
+                            var tableWrapper = $(this).closest(
+                                ".dataTables_wrapper"
                             );
-                            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+                            var info = tableWrapper.find(".dataTables_info");
+                            var pagination = tableWrapper.find(
+                                ".dataTables_paginate"
+                            );
+                            $(".table-footer")
+                                .empty()
+                                .append(
+                                    $(
+                                        '<div class="d-flex justify-content-between align-items-center w-100"></div>'
+                                    )
+                                        .append(
+                                            $(
+                                                '<div class="datatable-info"></div>'
+                                            ).append(info.clone(true))
+                                        )
+                                        .append(
+                                            $(
+                                                '<div class="datatable-pagination"></div>'
+                                            ).append(pagination.clone(true))
+                                        )
+                                );
+                            $(".table-footer")
+                                .find(".dataTables_paginate")
+                                .removeClass("d-none");
                         },
                         language: {
                             emptyTable: _l("admin.common.empty_table"),
-                            info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
-                            infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
-                            infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
-                            lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
+                            info:
+                                _l("admin.common.showing") +
+                                " _START_ " +
+                                _l("admin.common.to") +
+                                " _END_ " +
+                                _l("admin.common.of") +
+                                " _TOTAL_ " +
+                                _l("admin.common.entries"),
+                            infoEmpty:
+                                _l("admin.common.showing") +
+                                " 0 " +
+                                _l("admin.common.to") +
+                                " 0 " +
+                                _l("admin.common.of") +
+                                " 0 " +
+                                _l("admin.common.entries"),
+                            infoFiltered:
+                                "(" +
+                                _l("admin.common.filtered_from") +
+                                " _MAX_ " +
+                                _l("admin.common.total_entries") +
+                                ")",
+                            lengthMenu:
+                                _l("admin.common.show") +
+                                " _MENU_ " +
+                                _l("admin.common.entries"),
                             search: _l("admin.common.search") + ":",
                             zeroRecords: _l("admin.common.empty_table"),
                             paginate: {
@@ -325,7 +418,7 @@
                     );
                     $(".submitbtn").text(_l("admin.common.save_changes"));
                     $("#statusDiv")
-                        .removeClass('d-none')
+                        .removeClass("d-none")
                         .parent()
                         .removeClass("justify-content-end")
                         .addClass("justify-content-between");
@@ -335,4 +428,3 @@
         });
     }
 })();
-
