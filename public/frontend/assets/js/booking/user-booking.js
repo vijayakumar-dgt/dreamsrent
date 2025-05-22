@@ -195,7 +195,17 @@
             const base = parseFloat(basePrice) || 0;
             const extra = parseFloat(totalExtraServicePrice) || 0;
             const insurance = parseFloat(totalInsurancePrice) || 0;
-            const tax = parseFloat($("#tax_val").val().replace(/,/g, "")) || 0;
+
+            let tax = 0;
+            const $taxInput = $("#tax_val");
+
+            if ($taxInput.length) {
+                const rawTaxVal = $taxInput.val();
+                // Only parse if it's a valid numeric string (no commas, etc.)
+                if (!isNaN(rawTaxVal) && rawTaxVal.trim() !== "") {
+                    tax = parseFloat(rawTaxVal);
+                }
+            }
 
             let finalTotal = base + extra + insurance;
 
