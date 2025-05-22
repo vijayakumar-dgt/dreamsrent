@@ -90,7 +90,7 @@
                                                     <div class="payment-content">
                                                         <span class=""><img src="/backend/assets/img/icons/cash-delivery-icon.svg" alt="image"></span>
                                                     </div>
-                                                    <p class="fs-13">Indicating that goods must be paid for at the time of delivery.</p>
+                                                    <p class="fs-13">{{ __('admin.general_settings.cod_cards') }}</p>
                                                 </div>
                                             </div>
                                             <div class="card-footer">
@@ -113,7 +113,7 @@
                                                     <div class="payment-content">
                                                         <span class=""><img src="/backend/assets/img/icons/payment-method-04.svg" alt="image"></span>
                                                     </div>
-                                                    <p class="fs-13">Indicating that goods must be paid for at the time of delivery.</p>
+                                                    <p class="fs-13">{{ __('admin.general_settings.cod_cards') }}</p>
                                                 </div>
                                             </div>
                                             <div class="card-footer">
@@ -144,7 +144,7 @@
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="mb-0">Paypal</h4>
+                    <h4 class="mb-0">{{ __('admin.common.paypal') }}</h4>
                     <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="ti ti-x fs-16"></i>
                     </button>
@@ -155,12 +155,12 @@
                     <div class="modal-body">
                         
                         <div class="mb-3">
-                            <label class="form-label">API Keys <span class="text-danger">*</span></label>
+                            <label class="form-label">{{ __('admin.general_settings.api_keys') }} <span class="text-danger">*</span></label>
                             <input type="text" id="paypal_key" name="paypal_key" class="form-control">
                             <span class="invalid-feedback" id="paypal_key_error"></span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Secret Key <span class="text-danger">*</span></label>
+                            <label class="form-label">{{ __('admin.general_settings.secret_key') }} <span class="text-danger">*</span></label>
                             <input type="text" id="paypal_secret" name="paypal_secret" class="form-control">
                             <span class="invalid-feedback" id="paypal_secret_error"></span>
                         </div>
@@ -168,8 +168,8 @@
                     </div>
                     <div class="modal-footer">
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
+                            <button type="submit" class="btn btn-primary">{{ __('admin.common.submit') }}</button>
                         </div>
                     </div>
                 </form>
@@ -183,7 +183,7 @@
         <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="mb-0">Stripe</h4>
+                    <h4 class="mb-0">{{ __('admin.common.stripe') }}</h4>
                     <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <i class="ti ti-x fs-16"></i>
                     </button>
@@ -194,20 +194,20 @@
                     <div class="modal-body">
                         
                         <div class="mb-3">
-                            <label class="form-label">API Keys <span class="text-danger">*</span></label>
+                            <label class="form-label">{{ __('admin.general_settings.api_keys') }} <span class="text-danger">*</span></label>
                             <input type="text" id="stripe_key" name="stripe_key" class="form-control">
                             <span class="invalid-feedback" id="stripe_key_error"></span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Secret Key <span class="text-danger">*</span></label>
+                            <label class="form-label">{{ __('admin.general_settings.secret_key') }} <span class="text-danger">*</span></label>
                             <input type="text" id="stripe_secret" name="stripe_secret" class="form-control">
                             <span class="invalid-feedback" id="stripe_secret_error"></span>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
+                            <button type="submit" class="btn btn-primary">{{ __('admin.common.submit') }}</button>
                         </div>
                     </div>
                 </form>

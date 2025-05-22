@@ -95,7 +95,6 @@ class CarInfoController extends Controller
         $priceType = PricingType::where('status', 1)->get();
 
         $authUser = current_user();
-
         return view('carinfo::vehicle.add', compact('carTypes', 'Brands', 'CarModel', 'Category', 'Location', 'CarColor', 'CarFuel', 'Transmission', 'SafetyFeature', 'DamageTypes', 'ExtraServices', 'ExtraServiceInfo', 'insurances', 'priceType', 'authUser'));
     }
     public function vehicleedit(string $slug, Request $request): View
@@ -220,7 +219,9 @@ class CarInfoController extends Controller
             ->whereIn('extra_service_id', $ExtraServices->pluck('id'))
             ->get();
 
+        $authId = current_user()->language_id;
         $insurances = Insurance::with('insuranceBenefits', 'priceType')
+            ->where('language_id', $authId)
             ->where('status', 1)
             ->get();
 
@@ -243,7 +244,6 @@ class CarInfoController extends Controller
 
     public function saveCarInfo(Request $request): JsonResponse
     {
-
         $authId = Auth::id();
 
         $rules = [
@@ -426,11 +426,15 @@ class CarInfoController extends Controller
             if (is_array($vehicleInsurances)) {
                 foreach ($vehicleInsurances as $insurance) {
                     if (!empty($insurance['id']) && !empty($insurance['price']) && !empty($insurance['type'])) {
+
+                        // Normalize type to 'Percentage' or 'Fixed'
+                        $type = in_array(strtolower($insurance['type']), ['%', 'percentage']) ? 'Percentage' : 'Fixed';
+
                         VehicleInsurance::create([
                             'vehicle_id'    => $save->id,
-                            'insurances_id' => $insurance['id'],  // Mapping ID to insurances_id
-                            'value'         => $insurance['type'], // Mapping type to value
-                            'price'         => $insurance['price'],
+                            'insurances_id' => $insurance['id'],     // Insurance ID
+                            'value'         => $type,                // Type as normalized value
+                            'price'         => $insurance['price'],  // Raw price value
                         ]);
                     }
                 }
@@ -590,7 +594,6 @@ class CarInfoController extends Controller
         ], 200);
     }
 
-
     public function updateCarInfo(Request $request): JsonResponse
     {
         $authId = Auth::id();
@@ -733,7 +736,6 @@ class CarInfoController extends Controller
             }
         }
 
-        // Handle policy documents
         if ($request->hasFile('policy_document')) {
             /** @var UploadedFile[]|UploadedFile|null $policyDocs */
             $policyDocs = $request->file('policy_document');
@@ -766,7 +768,6 @@ class CarInfoController extends Controller
             }
         }
 
-
         if ($request->has('vehicle_faq')) {
             $vehicleFaqs = json_decode($request->input('vehicle_faq'), true);
 
@@ -789,16 +790,19 @@ class CarInfoController extends Controller
             $vehicleInsurances = json_decode($request->input('vehicle_insurance'), true);
 
             if (is_array($vehicleInsurances)) {
-                // Delete all existing records related to the vehicle_id
                 VehicleInsurance::where('vehicle_id', $update->id)->delete();
 
-                // Insert new records
                 foreach ($vehicleInsurances as $insurance) {
                     if (!empty($insurance['id']) && !empty($insurance['price']) && !empty($insurance['type'])) {
+
+                        $type = strtolower($insurance['type']) === '%' || strtolower($insurance['type']) === 'percentage'
+                            ? 'Percentage'
+                            : 'Fixed';
+
                         VehicleInsurance::create([
                             'vehicle_id'    => $update->id,
                             'insurances_id' => $insurance['id'],
-                            'value'         => $insurance['type'],
+                            'value'         => $type,
                             'price'         => $insurance['price'],
                         ]);
                     }
@@ -838,7 +842,6 @@ class CarInfoController extends Controller
             }
         }
 
-        // Vehicle Seasonal Pricing Update or Create
         if ($request->has('seasonal')) {
             $seasonals = json_decode($request->input('seasonal'), true);
 

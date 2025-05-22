@@ -1,5 +1,4 @@
 (async () => {
-    
     "use strict";
 
     await loadTranslationFile("admin", "rentals, common");
@@ -138,8 +137,10 @@
                 <p class="fs-13 fw-medium border-end pe-2 mb-0">${_l(
                     "admin.rentals.insurance_price"
                 )} : 
-                    <span class="text-gray-9 priceIn" data-id="${uniqueId}">$${
-            insurances.price
+                   <span class="text-gray-9 priceIn" data-id="${uniqueId}">${
+            insurances.value == "Percentage"
+                ? `${parseFloat(insurances.price)}%`
+                : `$${parseFloat(insurances.price)}`
         }</span>
                 </p>
                 <input type="hidden" name="insurance_id_one[]" id="insurance_id_one_${uniqueId}" value="${
@@ -1997,7 +1998,7 @@
 
             if (damage.image) {
                 $("#image_preview")
-                    .attr("src", "/" + damage.image)
+                    .attr("src", "/storage/" + damage.image)
                     .removeClass("d-none");
             } else {
                 $("#image_preview").attr("src", "").addClass("d-none");
@@ -2781,8 +2782,7 @@
             );
             const appendContainer = $("#insurance_car_append");
 
-            // Clear previously appended elements
-            appendContainer.html("");
+            appendContainer.html(""); // Clear previous entries
 
             selectedInsurances.each(function () {
                 const $checkbox = $(this);
@@ -2799,6 +2799,10 @@
                 const insurancePriceType = $container
                     .find("#insurance_price_type")
                     .val();
+                const insurancePriceTypeId = $container
+                    .find("#insurance_price_type_id")
+                    .val();
+                        console.log(insurancePriceTypeId);
 
                 const uniqueId =
                     "insurance_" +
@@ -2806,32 +2810,49 @@
                     "_" +
                     Math.floor(Math.random() * 1000);
 
+                // Format price display based on price_type_id
+                const displayPrice =
+                    insurancePriceTypeId == 7
+                        ? `${parseFloat(insurancePrice).toFixed(0)}%`
+                        : `$${parseFloat(insurancePrice).toFixed(2)}`;
+
                 const newInsuranceDiv = $(`
-                <div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" data-id="${uniqueId}">
-                    <div>
-                        <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">${insuranceName}</h6>
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <p class="fs-13 fw-medium border-end pe-2 mb-0">${_l(
-                                "admin.rentals.insurance_price"
-                            )} : <span class="text-gray-9 priceIn" data-id="${uniqueId}">$${insurancePrice}</span></p>
-                            <input type="hidden" name="insurance_id_one[]" id="insurance_id_one_${uniqueId}" value="${insuranceId}">
-                            <input type="hidden" name="insurance_price_one[]" id="insurance_price_one_${uniqueId}" value="${insurancePrice}">
-                            <p class="fs-13 fw-medium mb-0">${_l(
-                                "admin.rentals.insurance_benefits"
-                            )} : <span class="text-gray-9">${insuranceCount}</span></p>
-                            <p class="fs-13 fw-medium mb-0">${_l(
-                                "admin.rentals.insurance_price_type"
-                            )} : <span class="text-gray-9 priceTypeIn" data-id="${uniqueId}">${insurancePriceType}</span></p>
-                            <input type="hidden" name="insurance_price_type_one[]" id="insurance_price_type_one_${uniqueId}" value="${insurancePriceType}">
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center icon-list">
-                        <a href="#" class="edit-icon me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance" 
-                        data-id="${uniqueId}" data-price="${insurancePrice}" data-price-type="${insurancePriceType}"><i class="ti ti-edit"></i></a>
-                        <a href="#" class="trash-icon" data-bs-toggle="modal" data-bs-target="#delete_insurance"><i class="ti ti-trash"></i></a>
+            <div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" data-id="${uniqueId}">
+                <div>
+                    <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">${insuranceName}</h6>
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <p class="fs-13 fw-medium border-end pe-2 mb-0">${_l(
+                            "admin.rentals.insurance_price"
+                        )} :
+                            <span class="text-gray-9 priceIn" data-id="${uniqueId}">${displayPrice}</span>
+                        </p>
+                        <input type="hidden" name="insurance_id_one[]" id="insurance_id_one_${uniqueId}" value="${insuranceId}">
+                        <input type="hidden" name="insurance_price_one[]" id="insurance_price_one_${uniqueId}" value="${insurancePrice}">
+                        <p class="fs-13 fw-medium mb-0">${_l(
+                            "admin.rentals.insurance_benefits"
+                        )} :
+                            <span class="text-gray-9">${insuranceCount}</span>
+                        </p>
+                        <p class="fs-13 fw-medium mb-0">${_l(
+                            "admin.rentals.insurance_price_type"
+                        )} :
+                            <span class="text-gray-9 priceTypeIn" data-id="${uniqueId}">${insurancePriceType}</span>
+                        </p>
+                        <input type="hidden" name="insurance_price_type_one[]" id="insurance_price_type_one_${uniqueId}" value="${insurancePriceType}">
                     </div>
                 </div>
-            `);
+                <div class="d-flex align-items-center icon-list">
+                    <a href="#" class="edit-icon me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance"
+                        data-id="${uniqueId}" data-price="${insurancePrice}" data-price-type="${insurancePriceType}">
+                        <i class="ti ti-edit"></i>
+                    </a>
+                    <a href="#" class="trash-icon" data-bs-toggle="modal" data-bs-target="#delete_insurance">
+                        <i class="ti ti-trash"></i>
+                    </a>
+                </div>
+            </div>
+        `);
+
                 appendContainer.append(newInsuranceDiv);
             });
 
@@ -2856,19 +2877,29 @@
         });
 
         $("#save_update").on("click", function () {
-            const updatedPrice = $("#price").val();
-            const updatedPriceType = $("input[name='Radio']:checked")
-                .next()
-                .text()
-                .trim();
+            let updatedPrice = $("#price").val().trim();
+            const selectedRadio = $("input[name='Radio']:checked");
+            const updatedPriceType = selectedRadio.next().text().trim();
 
             const uniqueId = $("#edit_insurance").attr("data-id");
 
-            $(`.priceIn[data-id='${uniqueId}']`).text(`$${updatedPrice}`);
-            $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
-
-            $(`.priceTypeIn[data-id='${uniqueId}']`).text(updatedPriceType);
-            $(`#insurance_price_type_one_${uniqueId}`).val(updatedPriceType);
+            // If percentage, format price and set symbol
+            if (updatedPriceType.toLowerCase() === "percentage") {
+                updatedPrice = parseFloat(updatedPrice).toFixed(0); // e.g., 100.00 => 100
+                $(`.priceIn[data-id='${uniqueId}']`).text(`${updatedPrice}%`);
+                $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
+                $(`.priceTypeIn[data-id='${uniqueId}']`).text("Percentage");
+                $(`#insurance_price_type_one_${uniqueId}`).val("%");
+            } else {
+                // Keep fixed or daily prices as currency
+                updatedPrice = parseFloat(updatedPrice).toFixed(2); // Keep as 2 decimals
+                $(`.priceIn[data-id='${uniqueId}']`).text(`$${updatedPrice}`);
+                $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
+                $(`.priceTypeIn[data-id='${uniqueId}']`).text(updatedPriceType);
+                $(`#insurance_price_type_one_${uniqueId}`).val(
+                    updatedPriceType
+                );
+            }
 
             $("#edit_insurance").modal("hide");
         });
