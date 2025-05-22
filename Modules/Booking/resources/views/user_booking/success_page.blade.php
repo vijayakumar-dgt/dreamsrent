@@ -106,7 +106,7 @@
                                     <div>
                                         <p>{{__('web.home.vehicle_total_price')}}</p>
                                     </div>
-                                    <span>{{ $currencySymbol }}{{ $booking->vehicle_price ?? 0 }}</span>
+                                    <span>{{ $currencySymbol }}{{ $booking->vehicle_total_price ?? 0 }}</span>
                                 </li>
                                 <li>
                                     <div>

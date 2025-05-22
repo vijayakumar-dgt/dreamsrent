@@ -621,7 +621,7 @@
                                         <div class="col-md-12">
                                             <div class="input-block m-0">
                                                 <label class="custom_check d-inline-flex location-check m-0 ml-2"><span>{{__('web.home.readed_terms')}}</span> <span class="text-danger">*</span>
-                                                    <input type="checkbox" name="trems" id="trems">
+                                                    <input type="checkbox" name="terms" id="terms">
                                                     <span class="checkmark"></span>
                                                 </label>
                                             </div>
