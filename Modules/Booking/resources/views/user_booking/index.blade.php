@@ -463,10 +463,14 @@
                                         </div>
                                         <div class="insurance-meta text-end">
                                             <span class="d-block mb-1">
-                                                {{ $insurance->price_type_id == 1 ? 'Onetime Ride' : 'Recurring Payment' }}
+                                                {{ $insurance->value == 'Percentage' ? __('Percentage') : __('Price') }}
                                             </span>
                                             <h6 class="fw-normal insurance-price-text">
-                                                {{ $currencySymbol }}{{ number_format($insurance->price, 2) }}
+                                                @if($insurance->value == 'Percentage')
+                                                {{ intval($insurance->price) }}%
+                                                @else
+                                                {{ $currencySymbol }}{{ intval($insurance->price) }}
+                                                @endif
                                             </h6>
 
                                             {{-- Hidden fields for backend --}}
@@ -617,7 +621,7 @@
                                         <div class="col-md-12">
                                             <div class="input-block m-0">
                                                 <label class="custom_check d-inline-flex location-check m-0 ml-2"><span>{{__('web.home.readed_terms')}}</span> <span class="text-danger">*</span>
-                                                    <input type="checkbox" name="trems" id="trems">
+                                                    <input type="checkbox" name="terms" id="terms">
                                                     <span class="checkmark"></span>
                                                 </label>
                                             </div>
@@ -860,7 +864,6 @@
                                                             </div>
                                                         </div>
                                                         @endif
-
                                                         <div class="self-driver-info">
                                                             <div class="driver-name">
                                                                 <h5>{{__('web.home.self_drive')}}</h5>

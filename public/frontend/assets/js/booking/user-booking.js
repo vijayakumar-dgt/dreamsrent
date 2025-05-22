@@ -307,13 +307,21 @@
                 .find("input[name='insurance_id[]']")
                 .val();
             const insuranceName = $card.find("p.fs-14").text().trim();
-            const insurancePrice = parseFloat(
-                $card
-                    .find("h6")
-                    .text()
-                    .replace(currencySymbol, "")
-                    .replace(/,/g, "")
+            const insuranceType = $card
+                .find("input[name='insurance_type[]']")
+                .val();
+            const insurancePriceRaw = parseFloat(
+                $card.find("input[name='insurance_price[]']").val()
             );
+
+            let insurancePrice = 0;
+            const base = parseFloat(basePrice) || 0;
+
+            if (insuranceType === "Percentage") {
+                insurancePrice = (base * insurancePriceRaw) / 100;
+            } else {
+                insurancePrice = insurancePriceRaw;
+            }
 
             const isActive = $card.hasClass("active");
 
@@ -336,12 +344,19 @@
                         `li[data-insurance-id="${insuranceId}"]`
                     ).length === 0
                 ) {
+                    const displayPrice =
+                        insuranceType === "Percentage"
+                            ? `${insurancePriceRaw}% (${currencySymbol}${insurancePrice.toFixed(
+                                  2
+                              )})`
+                            : `${currencySymbol}${insurancePrice.toFixed(2)}`;
+
                     $insuranceChargesList.append(`
-                    <li data-insurance-id="${insuranceId}">
-                        <h6>${insuranceName}</h6>
-                        <h5>${currencySymbol}${insurancePrice.toFixed(2)}</h5>
-                    </li>
-                `);
+                <li data-insurance-id="${insuranceId}">
+                    <h6>${insuranceName}</h6>
+                    <h5>${displayPrice}</h5>
+                </li>
+            `);
                     totalInsurancePrice += insurancePrice;
                 }
             }

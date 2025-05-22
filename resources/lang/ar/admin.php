@@ -3,6 +3,9 @@
 return array (
   'general_settings' =>
   array (
+    'cod_cards' => 'تشير إلى أنه يجب دفع ثمن البضائع عند التسليم',
+    'secret_key' => 'المفتاح السري',
+    'api_keys' => 'مفاتيح API',
     'settings_configuration' => 'الإعدادات والتكوين',
     'account_settings' => 'إعدادات الحساب',
     'basic_information' => 'المعلومات الأساسية',

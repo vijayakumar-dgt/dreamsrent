@@ -1,5 +1,4 @@
 (async () => {
-    
     "use strict";
 
     await loadTranslationFile("admin", "rentals, common");
@@ -80,28 +79,28 @@
         $("#carBasicInfoForm").validate({
             rules: {
                 vehicle_image: {
-                    required: true,
+                    required: false,
                 },
                 title: {
-                    required: true,
+                    required: false,
                     minlength: 3,
                     maxlength: 50,
                 },
                 perma_link: {
                     required: false,
-                    url: true,
+                    url: false,
                 },
                 vehicle_type_id: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_brand_id: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_model_id: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_category_id: {
-                    required: true,
+                    required: false,
                 },
                 plate_number: {
                     required: false,
@@ -110,7 +109,7 @@
                     required: false,
                 },
                 main_location_id: {
-                    required: true,
+                    required: false,
                 },
                 other_location: {
                     required: false,
@@ -122,13 +121,13 @@
                     required: false,
                 },
                 vehicle_color_id: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_year: {
-                    required: true,
+                    required: false,
                 },
                 vehicle_passenger: {
-                    required: true,
+                    required: false,
                 },
             },
             messages: {
@@ -2053,9 +2052,15 @@
                     const insurancePriceType = $container
                         .find("#insurance_price_type")
                         .val();
+                    const insurancePriceTypeId = $container
+                        .find("#insurance_price_type_id")
+                        .val();
 
                     const uniqueId = `insurance_${crypto.randomUUID()}`;
-
+                    const displayPrice =
+                        insurancePriceTypeId == 7
+                            ? `${parseFloat(insurancePrice).toFixed(0)}%`
+                            : `$${parseFloat(insurancePrice).toFixed(2)}`;
                     const newInsuranceDiv = $(`
                     <div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" data-id="${uniqueId}">
                         <div>
@@ -2063,7 +2068,7 @@
                             <div class="d-flex align-items-center gap-2 flex-wrap">
                                 <p class="fs-13 fw-medium border-end pe-2 mb-0">${_l(
                                     "admin.rentals.insurance_price"
-                                )} : <span class="text-gray-9 priceIn" data-id="${uniqueId}">$${insurancePrice}</span></p>
+                                )} : <span class="text-gray-9 priceIn" data-id="${uniqueId}">${displayPrice}</span></p>
                                 <input type="hidden" name="insurance_id_one[]" id="insurance_id_one_${uniqueId}" value="${insuranceId}">
                                 <input type="hidden" name="insurance_price_one[]" id="insurance_price_one_${uniqueId}" value="${insurancePrice}">
                                 <p class="fs-13 fw-medium mb-0">${_l(
@@ -2092,22 +2097,46 @@
 
         // Save updated insurance values
         const $saveUpdateBtn = $("#save_update");
+
         if ($saveUpdateBtn.length) {
             $saveUpdateBtn.on("click", function () {
-                const updatedPrice = $("#price").val();
-                const updatedPriceType = $("input[name='Radio']:checked")
+                let updatedPrice = $("#price").val().trim();
+                const $selectedRadio = $("input[name='Radio']:checked");
+                const updatedPriceType = $selectedRadio
                     .next()
                     .text()
-                    .trim();
-                const uniqueId = $("#edit_insurance").attr("data-id");
+                    .trim()
+                    .toLowerCase();
+                const uniqueId = $("#edit_insurance").data("id"); // Cleaner jQuery data access
 
-                $(`.priceIn[data-id='${uniqueId}']`).text(`$${updatedPrice}`);
-                $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
+                // Validate price input
+                if (updatedPrice === "" || isNaN(updatedPrice)) {
+                    alert("Please enter a valid price.");
+                    return;
+                }
 
-                $(`.priceTypeIn[data-id='${uniqueId}']`).text(updatedPriceType);
-                $(`#insurance_price_type_one_${uniqueId}`).val(
-                    updatedPriceType
-                );
+                if (updatedPriceType === "percentage") {
+                    updatedPrice = parseFloat(updatedPrice).toFixed(0); // No decimals for percentage
+                    $(`.priceIn[data-id='${uniqueId}']`).text(
+                        `${updatedPrice}%`
+                    );
+                    $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
+                    $(`.priceTypeIn[data-id='${uniqueId}']`).text("Percentage");
+                    $(`#insurance_price_type_one_${uniqueId}`).val("%");
+                } else {
+                    updatedPrice = parseFloat(updatedPrice).toFixed(2); // Two decimals for currency/fixed
+                    $(`.priceIn[data-id='${uniqueId}']`).text(
+                        `$${updatedPrice}`
+                    );
+                    $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
+                    $(`.priceTypeIn[data-id='${uniqueId}']`).text(
+                        updatedPriceType.charAt(0).toUpperCase() +
+                            updatedPriceType.slice(1)
+                    );
+                    $(`#insurance_price_type_one_${uniqueId}`).val(
+                        updatedPriceType
+                    );
+                }
 
                 $("#edit_insurance").modal("hide");
             });

@@ -1198,9 +1198,15 @@
 							</h6>
 							<input type="hidden" id="insurance_name" value="{{ $insurance->insurance_name }}">
 							<input type="hidden" id="insurance_price_type" value="{{ $insurance->priceType->pricing_type }}">
+                            <input type="hidden" id="insurance_price_type_id" value="{{ $insurance->price_type_id }}">
 							<div class="d-flex align-items-center gap-2 flex-wrap">
 								<p class="fs-13 fw-medium border-end pe-2 mb-0">
-									{{ __('admin.rentals.price') }}: <span class="text-gray-9">${{ number_format($insurance->price, 2) }}</span>
+									{{ __('admin.rentals.price') }}: <span class="text-gray-9">
+										@if ($insurance->price_type_id == 7)
+										{{ rtrim(rtrim(number_format($insurance->price, 2), '0'), '.') }}%
+										@else
+										${{ number_format($insurance->price, 2) }}
+										@endif</span>
 									<input type="hidden" id="insurance_price" value="{{ $insurance->price }}">
 								</p>
 								<p class="fs-13 fw-medium mb-0">

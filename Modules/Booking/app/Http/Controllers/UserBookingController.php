@@ -453,9 +453,8 @@ class UserBookingController extends Controller
         $startDatetime = $startDatetimeObj ? $startDatetimeObj->format('Y-m-d H:i:s') : null;
         $endDatetime = $endDatetimeObj ? $endDatetimeObj->format('Y-m-d H:i:s') : null;
 
-        $diffInDays = $startDatetimeObj->floatDiffInDays($endDatetimeObj); // Get exact difference with decimals
-
-        $noOfDays = $diffInDays <= 1 ? 2 : ceil($diffInDays);
+        $diffInHours = $startDatetimeObj->floatDiffInHours($endDatetimeObj); // More precise in hours
+        $noOfDays = max(1, ceil($diffInHours / 24)); // Minimum 1 day, then round up partial days
 
         $pickup_location_id = null;
         $return_location_id = null;
@@ -581,18 +580,21 @@ class UserBookingController extends Controller
                 'payment_status'  => $booking->payment_status ?? "",
                 'tototal_amount'  => $booking->final_price ?? ""
             ];
-            if (rentalNotificationEnabled()) {
-                $appAdmin = User::where('user_type', 1)->first();
+            try{
+                if (rentalNotificationEnabled()) {
+                    $appAdmin = User::where('user_type', 1)->first();
 
-                if ($appAdmin?->email) {
-                    sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+                    if ($appAdmin?->email) {
+                        sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+                    }
                 }
-            }
-            if (userNotificationsEnabled() && $authUser?->email) {
-                sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
-            }
+                if (userNotificationsEnabled() && $authUser?->email) {
+                    sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
+                }
+            }catch (\Exception $e){
 
-
+            }
+            
             return response()->json([
                 'code' => 200,
                 'message' => __('web.home.booking_successfully_created'),
@@ -1001,18 +1003,21 @@ class UserBookingController extends Controller
                 'payment_status'  => $booking->payment_status ?? "",
                 'tototal_amount'  => $booking->final_price ?? ""
             ];
-            if (rentalNotificationEnabled()) {
-                $appAdmin = User::where('user_type', 1)->first();
+            try{
+                if (rentalNotificationEnabled()) {
+                    $appAdmin = User::where('user_type', 1)->first();
 
-                if ($appAdmin) {
-                    sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+                    if ($appAdmin) {
+                        sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+                    }
                 }
+                if (userNotificationsEnabled() && $authUser && $authUser->email) {
+                    sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
+                }
+            }catch (\Exception $e){
+                
             }
-            if (userNotificationsEnabled() && $authUser && $authUser->email) {
-                sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
-            }
-
-
+            
             return response()->json([
                 'code' => 200,
                 'message' => __('web.home.booking_successfully_created'),
@@ -1060,16 +1065,21 @@ class UserBookingController extends Controller
                         'payment_status'  => $booking->payment_status ?? "",
                         'tototal_amount'  => $booking->final_price ?? ""
                     ];
-                    if (rentalNotificationEnabled()) {
-                        $appAdmin = User::where('user_type', 1)->first();
+                    try{
+                        if (rentalNotificationEnabled()) {
+                            $appAdmin = User::where('user_type', 1)->first();
 
-                        if ($appAdmin) {
-                            sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+                            if ($appAdmin) {
+                                sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+                            }
                         }
+                        if (userNotificationsEnabled() && $authUser && $authUser->email) {
+                            sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
+                        }
+                    }catch (\Exception $e) {
+
                     }
-                    if (userNotificationsEnabled() && $authUser && $authUser->email) {
-                        sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
-                    }
+                    
                     return redirect()->route('payment.success.page', ['transaction_id' => $response['id']]);
                 }
 
@@ -1152,17 +1162,21 @@ class UserBookingController extends Controller
                 'payment_status' => $booking->payment_status ?? '',
                 'tototal_amount' => $booking->final_price ?? ''
             ];
+            try {
+                if (rentalNotificationEnabled()) {
+                    $appAdmin = User::where('user_type', 1)->first();
 
-            if (rentalNotificationEnabled()) {
-                $appAdmin = User::where('user_type', 1)->first();
-
-                if ($appAdmin) {
-                    sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+                    if ($appAdmin) {
+                        sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+                    }
                 }
+                if (userNotificationsEnabled() && $authUser) {
+                    sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
+                }
+            }catch (\Exception $e) {
+                
             }
-            if (userNotificationsEnabled() && $authUser) {
-                sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
-            }
+            
             return redirect()->route('payment.success.page', ['transaction_id' => $sessionId]);
         } catch (\Exception $e) {
             return response()->json([
