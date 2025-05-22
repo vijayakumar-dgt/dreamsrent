@@ -64,7 +64,9 @@
                                             <th>{{ __('admin.general_settings.total') }}</th>
                                             <th>{{ __('admin.general_settings.done') }}</th>
                                             <th>{{ __('admin.general_settings.progress') }}</th>
+                                            @if (hasPermission($permissions, 'website_settings', 'edit'))
                                             <th>{{ __('admin.common.action') }}</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -1,6 +1,7 @@
 (async () => {
     "use strict";
     await loadTranslationFile("admin", "general_settings,common");
+    const permissions = await loadUserPermissions();
 
     $(document).ready(function () {
         loadLanguageModules();
@@ -58,7 +59,7 @@
                                 }
                                 html += `<tr>
                                         <td>
-                                            <a href="javascript:void(0);" class="fw-semibold">${module.module_name}</a>
+                                            <div class="fw-semibold text-black">${module.module_name}</div>
                                         </td>
                                         <td>
                                             ${module.total_keys}
@@ -74,18 +75,18 @@
                                                 <span class="d-inline-flex fs-12 ms-2">${module.progress}%</span>
                                             </div>
                                         </td>
-                                        <td>
+                                        ${ hasPermission(permissions, 'website_settings', 'edit') ?
+                                        `<td>
                                             <button type="button" class="btn btn-icon" id="editModuleLanguage" data-code="${code}" data-tab="${tab}" data-module="${module.module_key}">
                                                 <i class="ti ti-edit"></i>
                                             </button>
-
-                                        </td>
+                                        </td>` : ''}
                                     </tr>`;
                             });
                         } else {
                             html += `<tr>
                                     <td colspan="6" class="text-center">${_l(
-                                        "admin.common.no_data_found"
+                                        "admin.common.empty_table"
                                     )}</td>
                                 </tr>`;
                         }

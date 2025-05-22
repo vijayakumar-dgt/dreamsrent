@@ -21202,5 +21202,7 @@ span.flatpickr-weekday {
   height: 200px !important;
   }
 
-  
+.dataTable th {
+  text-align: right !important;
+}
 

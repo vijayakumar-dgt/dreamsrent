@@ -28949,3 +28949,7 @@ a#category-filter.active {
 .rental-deal-slider .owl-stage , .popular-cartype-slider .owl-stage , .rental-deal-slider .owl-stage{
 	margin: auto;
 }
+
+.dataTable th {
+  text-align: right !important;
+}
