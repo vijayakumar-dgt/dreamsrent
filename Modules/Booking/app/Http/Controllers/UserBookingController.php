@@ -453,9 +453,8 @@ class UserBookingController extends Controller
         $startDatetime = $startDatetimeObj ? $startDatetimeObj->format('Y-m-d H:i:s') : null;
         $endDatetime = $endDatetimeObj ? $endDatetimeObj->format('Y-m-d H:i:s') : null;
 
-        $diffInDays = $startDatetimeObj->floatDiffInDays($endDatetimeObj); // Get exact difference with decimals
-
-        $noOfDays = $diffInDays <= 1 ? 2 : ceil($diffInDays);
+        $diffInHours = $startDatetimeObj->floatDiffInHours($endDatetimeObj); // More precise in hours
+        $noOfDays = max(1, ceil($diffInHours / 24)); // Minimum 1 day, then round up partial days
 
         $pickup_location_id = null;
         $return_location_id = null;

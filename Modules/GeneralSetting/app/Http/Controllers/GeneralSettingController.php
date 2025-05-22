@@ -497,7 +497,7 @@ class GeneralSettingController extends Controller
                 $file = $request->file('company_profile_photo');
                 $imagePath = null;
                 if ($file instanceof UploadedFile) {
-                    $imagePath = uploadFile($file, 'company_profiles');
+                    $imagePath = uploadFile($file, 'profile');
                 }
 
                 GeneralSetting::updateOrCreate(
