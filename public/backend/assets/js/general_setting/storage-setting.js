@@ -2,16 +2,16 @@
     "use strict";
     await loadTranslationFile("admin", "general_settings,common");
 
-    document.addEventListener("DOMContentLoaded", () => {
-        const localStorageSwitch = document.getElementById("local_storage");
-        const awsStorageSwitch = document.getElementById("aws_storage");
+    $(document).ready(function () {
+        const localStorageSwitch = $("#local_storage");
+        const awsStorageSwitch = $("#aws_storage");
 
-        localStorageSwitch.addEventListener("change", (e) => {
-            updateStorageSettings("local_storage", e.target.checked);
+        localStorageSwitch.on("change", function () {
+            updateStorageSettings("local_storage", this.checked);
         });
 
-        awsStorageSwitch.addEventListener("change", (e) => {
-            updateStorageSettings("aws_storage", e.target.checked);
+        awsStorageSwitch.on("change", function () {
+            updateStorageSettings("aws_storage", this.checked);
         });
 
         function updateStorageSettings(type, isEnabled) {
@@ -20,28 +20,40 @@
                 status: isEnabled ? 1 : 0,
             };
 
-            fetch("/admin/settings/storageupdate", {
+            $.ajax({
+                url: "/admin/settings/storageupdate",
                 method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(payload),
                 headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"),
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
                 },
-                body: JSON.stringify(payload),
-            })
-                .then((response) => response.json())
-                .then((data) => {
+                success: function (data) {
                     if (data.success) {
-                        loadStorageSettings();
+                        if (typeof loadStorageSettings === "function") {
+                            loadStorageSettings();
+                        }
                     } else {
-                        console.error(
+                        showToast(
+                            "error",
                             data.message ||
                                 _l("admin.general_setting.fail_storage_setting")
                         );
                     }
-                })
-                .catch((error) => console.error("Error:", error));
+                },
+                error: function (xhr) {
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        showToast("error", xhr.responseJSON.message);
+                    } else {
+                        showToast(
+                            "error",
+                            _l("admin.general_setting.fail_storage_setting")
+                        );
+                    }
+                },
+            });
         }
     });
 
