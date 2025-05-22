@@ -362,7 +362,7 @@
                         let data = response.data;
                         $.each(data, function (index, value) {
                             tableBody += `<tr>
-                                <td>${new Date(value.created_at).toLocaleDateString()}</td>
+                                <td>${value.formatted_created_at}</td>
                                 <td><strong>${value.announcement_title.length > 80 ? value.announcement_title.substring(0, 80) + "..." : value.announcement_title}</strong></td>
                                 <td>${value.type_name}</td>
                                 <td>

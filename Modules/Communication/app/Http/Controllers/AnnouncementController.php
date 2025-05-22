@@ -118,7 +118,10 @@ class AnnouncementController extends Controller
                     }
                 })
                 ->get();
-
+            $announcements->transform(function ($transaction) {
+                $transaction->formatted_created_at = formatDateTime($transaction->created_at, false);
+                return $transaction;
+            });
             return response()->json([
                 'code' => 200,
                 'success' => true,
