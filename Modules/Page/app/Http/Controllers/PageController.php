@@ -555,9 +555,9 @@ class PageController extends Controller
                             $banner->customer_count = $userCount;
 
                             $banner->customer_images = [
-                                asset('backend/assets/img/profiles/avatar-05.jpg'),
-                                asset('backend/assets/img/profiles/avatar-12.jpg'),
-                                asset('backend/assets/img/profiles/avatar-22.jpg'),
+                                asset('backend/assets/img/profiles/avatar-01.jpg'),
+                                asset('backend/assets/img/profiles/avatar-02.jpg'),
+                                asset('backend/assets/img/profiles/avatar-03.jpg'),
                             ];
 
                             unset($banner->datas);
@@ -1407,9 +1407,9 @@ class PageController extends Controller
                             $banner->customer_count = $userCount;
 
                             $banner->customer_images = [
-                                asset('backend/assets/img/profiles/avatar-05.jpg'),
-                                asset('backend/assets/img/profiles/avatar-12.jpg'),
-                                asset('backend/assets/img/profiles/avatar-22.jpg'),
+                                asset('backend/assets/img/profiles/avatar-01.jpg'),
+                                asset('backend/assets/img/profiles/avatar-02.jpg'),
+                                asset('backend/assets/img/profiles/avatar-03.jpg'),
                             ];
 
                             unset($banner->datas);

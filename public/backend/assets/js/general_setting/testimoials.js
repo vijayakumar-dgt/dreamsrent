@@ -384,7 +384,7 @@
                     $.each(data, function (index, testimonial) {
                         let imageUrl = testimonial.image
                             ? "/storage/" + testimonial.image
-                            : "/backend/assets/img/blog/blog-1.jpg";
+                            : "/backend/assets/img/default-profile.png";
 
                         let stars = "";
                         for (let i = 1; i <= 5; i++) {

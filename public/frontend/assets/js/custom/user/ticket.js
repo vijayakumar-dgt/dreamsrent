@@ -540,7 +540,7 @@
                     history.user.user_detail &&
                     history.user.user_detail.profile_image
                         ? "/storage/" + history.user.user_detail.profile_image
-                        : "/backend/assets/img/profiles/avatar-20.jpg";
+                        : "/backend/assets/img/profiles/avatar-01.jpg";
 
                 let userName =
                     history.user?.user_detail?.first_name &&
