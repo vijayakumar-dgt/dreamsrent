@@ -103,11 +103,11 @@ class DashboardController extends Controller
 
         // Count cars created this week
         $thisWeekCars = VehicleInfo::whereBetween('created_at', [$startOfThisWeek, $endOfThisWeek])
-        ->where('vehicle_info.language_id', $languageId)->count();
+            ->where('vehicle_info.language_id', $languageId)->count();
 
         // Count cars created last week
         $lastWeekCars = VehicleInfo::whereBetween('created_at', [$startOfLastWeek, $endOfLastWeek])
-        ->where('vehicle_info.language_id', $languageId)->count();
+            ->where('vehicle_info.language_id', $languageId)->count();
 
         // Calculate percentage change
         if ($lastWeekCars > 0) {
@@ -124,7 +124,7 @@ class DashboardController extends Controller
         $upcomingCount = Booking::whereDate('start_datetime', '>', $today)->count();
 
         $reservations = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
-        ->LeftJoin('car_fuels', 'vehicle_info.fuel_type_id', '=', 'car_fuels.id')
+            ->LeftJoin('car_fuels', 'vehicle_info.fuel_type_id', '=', 'car_fuels.id')
             ->LeftJoin('driving_types', 'vehicle_info.type_id', '=', 'driving_types.id')
             ->LeftJoin('users', 'bookings.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
@@ -180,14 +180,14 @@ class DashboardController extends Controller
                     'date' => $firstBooking?->booking_date,
                     'income' => $dayBookings->sum(function ($booking) {
                         return ($booking->payment_status == 1 || $booking->booking_by == 'admin') ?
-                         $booking->final_price : 0;
+                            $booking->final_price : 0;
                     }),
                     'expense' => 0
                 ];
             })
             ->values();
 
-        $maintenances =  Maintenance::Join('vehicle_info', 'maintenances.vehicle_id', '=', 'vehicle_info.id')
+        $maintenances = Maintenance::Join('vehicle_info', 'maintenances.vehicle_id', '=', 'vehicle_info.id')
             ->LeftJoin('car_models', 'vehicle_info.model_id', '=', 'car_models.id')
             ->where('maintenances.deleted_at', null)
             ->orderBy('maintenances.id', 'desc')
@@ -230,12 +230,12 @@ class DashboardController extends Controller
             ->orderBy('time')
             ->get();
 
-            // Extract unique dates (x-axis) and times (y-axis)
-            $dates = $bookingsRes->pluck('date')->unique()->values();
-            $times = $bookingsRes->pluck('time')->unique()->sort()->values();
+        // Extract unique dates (x-axis) and times (y-axis)
+        $dates = $bookingsRes->pluck('date')->unique()->values();
+        $times = $bookingsRes->pluck('time')->unique()->sort()->values();
 
-            // Format data for ApexCharts
-            $series = [];
+        // Format data for ApexCharts
+        $series = [];
         foreach ($times as $time) {
             $seriesData = [];
             foreach ($dates as $date) {
@@ -247,14 +247,14 @@ class DashboardController extends Controller
                 'data' => $seriesData
             ];
         }
-            $formattedDates = $dates->map(function ($date) {
-                return \Carbon\Carbon::parse($date)->format('d M');
-            })->values();
-            /** @var \App\Models\User|null $authId */
-            $authId = current_user();
-            $languageId = $authId ? $authId->language_id : null;
+        $formattedDates = $dates->map(function ($date) {
+            return \Carbon\Carbon::parse($date)->format('d M');
+        })->values();
+        /** @var \App\Models\User|null $authId */
+        $authId = current_user();
+        $languageId = $authId ? $authId->language_id : null;
 
-            $invoices = Invoice::with('items')
+        $invoices = Invoice::with('items')
             ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image', 'user_details.first_name', 'user_details.last_name')

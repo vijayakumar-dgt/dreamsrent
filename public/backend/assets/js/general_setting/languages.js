@@ -101,24 +101,26 @@
                                                <td>
                                                    ${language.lang_code}
                                                </td>
-                                               <td>
-                                                   <div class="form-check form-check-md form-switch">
-                                                       <input class="form-check-input form-label" data-field="rtl" data-id="${
-                                                           language.id
-                                                       }" type="checkbox" role="switch" ${
-                                    language.lang_rtl == 1 ? "checked" : ""
-                                }>
-                                                   </div>
-                                               </td>
-                                               <td>
-                                                   <div class="form-check form-check-md form-switch">
-                                                       <input class="form-check-input form-label" data-field="default" data-id="${
-                                                           language.id
-                                                       }" type="checkbox" role="switch" ${
-                                    language.default == 1 ? "checked" : ""
-                                } ${language.default == 1 ? "disabled" : ""}>
-                                                   </div>
-                                               </td>
+                                               ${ hasPermission(permissions, 'website_settings', 'edit') ?
+                                                `<td>
+                                                    <div class="form-check form-check-md form-switch">
+                                                        <input class="form-check-input form-label" data-field="rtl" data-id="${
+                                                            language.id
+                                                        }" type="checkbox" role="switch" ${
+                                                             language.lang_rtl == 1 ? "checked" : ""
+                                                         }>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-check form-check-md form-switch">
+                                                        <input class="form-check-input form-label" data-field="default" data-id="${
+                                                            language.id
+                                                        }" type="checkbox" role="switch" ${
+                                                             language.default == 1 ? "checked" : ""
+                                                         } ${language.default == 1 ? "disabled" : ""}>
+                                                    </div>
+                                                </td>` : ''
+                                               }
                                                <td>
                                                    ${language.total_keys}
                                                </td>
@@ -143,17 +145,18 @@
                                                        }%</div>
                                                    </div>
                                                </td>
-                                               <td>
+                                               ${ hasPermission(permissions, 'website_settings', 'edit') ?
+                                               `<td>
                                                    <div class="form-check form-check-md form-switch">
                                                        <input class="form-check-input form-label" data-field="status" data-id="${
                                                            language.id
                                                        }" type="checkbox" role="switch" ${
-                                    language.status == 1 ? "checked" : ""
-                                } ${
-                                    language.lang_code == "en" ? "disabled" : ""
-                                }>
+                                                            language.status == 1 ? "checked" : ""
+                                                        } ${
+                                                            language.lang_code == "en" ? "disabled" : ""
+                                                        }>
                                                    </div>
-                                               </td>
+                                               </td>` : ''}
                                                <td>
                                                    <div class="d-flex align-items-center">
                                                        <a href="/admin/settings/language?code=${
@@ -164,13 +167,8 @@
                                                        }&type=admin" class="btn btn-white">Admin</a>
                                                    </div>
                                                </td>
-                                               ${
-                                                   hasPermission(
-                                                       permissions,
-                                                       "website_settings",
-                                                       "delete"
-                                                   )
-                                                       ? `<td>
+                                               ${ hasPermission(permissions, 'website_settings', 'delete') ?
+                                              `<td>
                                                    <div class="dropdown">
                                                        <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                            <i class="ti ti-dots-vertical"></i>
@@ -193,23 +191,20 @@
                                                        }
                                                        </ul>
                                                    </div>
-                                               </td>`
-                                                       : ""
-                                               }
-                                           </tr>`;
-                            });
+                                               </td>` : '' }
+                            `});
                             $("#languageTable tbody").html(html);
                         } else {
                             $("#languageTable tbody").html(
                                 `<tr><td colspan="10" class="text-center">${_l(
-                                    "admin.common.no_data_found"
+                                    "admin.common.empty_table"
                                 )}</td></tr>`
                             );
                         }
                     } else {
                         $("#languageTable tbody").html(
                             `<tr><td colspan="10" class="text-center">${_l(
-                                "admin.common.no_data_found"
+                                "admin.common.empty_table"
                             )}</td></tr>`
                         );
                     }

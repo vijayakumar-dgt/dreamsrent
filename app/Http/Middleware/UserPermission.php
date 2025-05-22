@@ -91,8 +91,8 @@ class UserPermission
                 'inspection.index' => ['module' => 'inspections', 'action' => 'view'],
                 'maintenance.index' => ['module' => 'maintenance', 'action' => 'view'],
                 'vehicle.list' => ['module' => 'vehicles', 'action' => 'view'],
-                'edit.car' =>  ['module' => 'vehicles', 'action' => 'edit'],
-                'vehicle.vehicleadd' =>  ['module' => 'vehicles', 'action' => 'create'],
+                'edit.car' => ['module' => 'vehicles', 'action' => 'edit'],
+                'vehicle.vehicleadd' => ['module' => 'vehicles', 'action' => 'create'],
                 'admin.users' => ['module' => 'users', 'action' => 'view'],
                 'admin.roles-permisions' => ['module' => 'roles_permissions', 'action' => 'view'],
 

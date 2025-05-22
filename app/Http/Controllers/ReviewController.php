@@ -38,7 +38,7 @@ class ReviewController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 422,
+                'code' => 422,
                 'errors' => $validator->errors()->toArray()
             ], 422);
         }
@@ -54,7 +54,7 @@ class ReviewController extends Controller
         if (!$booking) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 403,
+                'code' => 403,
                 'message' => __('web.home.review_not_allowed')
             ], 403);
         }
@@ -83,13 +83,13 @@ class ReviewController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('web.home.review_create_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.common.default_create_error'),
                 'error' => $e->getMessage()
             ], 500);
@@ -111,7 +111,7 @@ class ReviewController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 422,
+                'code' => 422,
                 'errors' => $validator->errors()->toArray()
             ], 422);
         }
@@ -127,7 +127,7 @@ class ReviewController extends Controller
         if (!$booking) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 403,
+                'code' => 403,
                 'message' => __('web.home.reply_not_allowed')
             ], 403);
         }
@@ -141,13 +141,13 @@ class ReviewController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('web.home.reply_create_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.home.reply_create_error'),
                 'error' => $e->getMessage()
             ], 500);
@@ -165,7 +165,7 @@ class ReviewController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 422,
+                'code' => 422,
                 'errors' => $validator->errors()->toArray()
             ], 422);
         }
@@ -220,18 +220,18 @@ class ReviewController extends Controller
 
             $finalData = [
                 'reviews_meta' => [
-                    'avg_service_ratings' => number_format((float)$serviceRatings, 1),
+                    'avg_service_ratings' => number_format((float) $serviceRatings, 1),
                     'service_ratings_percentage' => $servicePercentage . '%',
-                    'avg_location_ratings' => number_format((float)$locationRatings, 1),
+                    'avg_location_ratings' => number_format((float) $locationRatings, 1),
                     'location_ratings_percentage' => $locationPercentage . '%',
-                    'avg_facility_ratings' => number_format((float)$facilityRatings, 1),
+                    'avg_facility_ratings' => number_format((float) $facilityRatings, 1),
                     'facility_ratings_percentage' => $facilityPercentage . '%',
-                    'avg_value_for_money_ratings' => number_format((float)$valueForMoneyRatings, 1),
+                    'avg_value_for_money_ratings' => number_format((float) $valueForMoneyRatings, 1),
                     'value_for_money_ratings_percentage' => $valueForMoneyPercentage . '%',
-                    'avg_cleanliness_ratings' => number_format((float)$cleanlinessRatings, 1),
+                    'avg_cleanliness_ratings' => number_format((float) $cleanlinessRatings, 1),
                     'cleanliness_ratings_percentage' => $cleanlinessPercentage . '%',
-                    'overall_avg_ratings' => number_format((float)$overallRatings, 1),
-                    'overall_ratings_percentage' => round(((float)$overallRatings / 5) * 100, 1) . '%',
+                    'overall_avg_ratings' => number_format((float) $overallRatings, 1),
+                    'overall_ratings_percentage' => round(((float) $overallRatings / 5) * 100, 1) . '%',
                     'rating_description' => $totalReviews > 0 ? $this->getRatingDescription($overallRatings) : '',
                     'total_reviews' => $totalReviews,
                 ],
@@ -240,13 +240,13 @@ class ReviewController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'data' => $finalData
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.common.default_retrieve_error'),
                 'error' => $e->getMessage()
             ], 500);
@@ -329,7 +329,7 @@ class ReviewController extends Controller
 
             if ($request->has('duration') && $request->duration != "") {
                 $customFrom = $request->custom_from_date ?? "";
-                $customTo   = $request->custom_to_date ?? "";
+                $customTo = $request->custom_to_date ?? "";
                 $duration = $this->getDuration($request->duration, $customFrom, $customTo);
 
                 if (!isset($duration['error']) && isset($duration['from'])) {
@@ -378,7 +378,7 @@ class ReviewController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.common.default_retrieve_error'),
                 'error' => $e->getMessage()
             ], 500);
@@ -461,13 +461,13 @@ class ReviewController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('web.user.review_delete_success')
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.common.default_delete_error')
             ], 500);
         }
@@ -591,7 +591,7 @@ class ReviewController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.common.default_retrieve_error'),
                 'error' => $e->getMessage()
             ], 500);

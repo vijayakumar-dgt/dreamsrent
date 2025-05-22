@@ -23,9 +23,9 @@ class InvoiceController extends Controller
 {
     public function index(): View
     {
-         /** @var \App\Models\User|null $authId */
-         $authId = current_user();
-         $languageId = $authId ? $authId->language_id : null;
+        /** @var \App\Models\User|null $authId */
+        $authId = current_user();
+        $languageId = $authId ? $authId->language_id : null;
         $invoices = Invoice::with('items')
             ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
@@ -63,17 +63,17 @@ class InvoiceController extends Controller
         $symbol = $currency->symbol ?? '$';
 
         $bookings = Booking::Join('users', 'bookings.customer_id', '=', 'users.id')
-        ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
-        ->leftJoin('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
-        ->select(
-            'bookings.*',
-            'users.name as customer',
-            'user_details.profile_image',
-            'vehicle_info.vehicle_image',
-            'vehicle_info.name as vehicle'
-        )
-        ->whereDate('start_datetime', '>=', Carbon::today())
-        ->orderBy('start_datetime', 'asc')->get();
+            ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
+            ->leftJoin('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
+            ->select(
+                'bookings.*',
+                'users.name as customer',
+                'user_details.profile_image',
+                'vehicle_info.vehicle_image',
+                'vehicle_info.name as vehicle'
+            )
+            ->whereDate('start_datetime', '>=', Carbon::today())
+            ->orderBy('start_datetime', 'asc')->get();
 
         $languages = Language::with('transLang')->where('deleted_at', null)->get();
 
@@ -163,12 +163,17 @@ class InvoiceController extends Controller
 
             DB::commit();
 
-            return response()->json(['success' => true,
-             'message' => __('admin.finance_accounts.invoice_create_success')]);
+            return response()->json([
+                'success' => true,
+                'message' => __('admin.finance_accounts.invoice_create_success')
+            ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['success' => false,
-             'message' => __('admin.common.default_create_error.'), 'error' => $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => __('admin.common.default_create_error.'),
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -195,17 +200,17 @@ class InvoiceController extends Controller
         $symbol = $currency->symbol ?? '$';
 
         $bookings = Booking::Join('users', 'bookings.customer_id', '=', 'users.id')
-        ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
-        ->leftJoin('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
-        ->select(
-            'bookings.*',
-            'users.name as customer',
-            'user_details.profile_image',
-            'vehicle_info.vehicle_image',
-            'vehicle_info.name as vehicle'
-        )
-        ->whereDate('start_datetime', '>=', Carbon::today())
-        ->orderBy('start_datetime', 'asc')->get();
+            ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
+            ->leftJoin('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
+            ->select(
+                'bookings.*',
+                'users.name as customer',
+                'user_details.profile_image',
+                'vehicle_info.vehicle_image',
+                'vehicle_info.name as vehicle'
+            )
+            ->whereDate('start_datetime', '>=', Carbon::today())
+            ->orderBy('start_datetime', 'asc')->get();
 
         $languages = Language::with('transLang')->where('deleted_at', null)->get();
 
@@ -222,11 +227,16 @@ class InvoiceController extends Controller
             $invoice->items()->delete();
             $invoice->delete();
 
-            return response()->json(['success' => true,
-             'message' => __('admin.finance_accounts.invoice_delete_success')]);
+            return response()->json([
+                'success' => true,
+                'message' => __('admin.finance_accounts.invoice_delete_success')
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false,
-             'message' => __('admin.common.default_delete_error.'), 'error' => $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => __('admin.common.default_delete_error.'),
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -259,17 +269,17 @@ class InvoiceController extends Controller
             foreach ($items as $item) {
                 $invoice->items()->create([
                     'description' => $item['description'] ?? 0,
-                    'qty'         => $item['qty'] ?? 0,
-                    'price'       => $item['price'] ?? 0,
-                    'tax'         => 0,
+                    'qty' => $item['qty'] ?? 0,
+                    'price' => $item['price'] ?? 0,
+                    'tax' => 0,
                     'total_price' => $item['total_price'] ?? 0,
-                    'created_at'  => now(),
-                    'updated_at'  => now(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
             }
 
             return redirect()->route('admin.invoice')
-            ->with('success', __('admin.finance_accounts.invoice_update_success'));
+                ->with('success', __('admin.finance_accounts.invoice_update_success'));
         } catch (\Exception $e) {
             return back()->with('error', __('admin.common.default_update_error'));
         }

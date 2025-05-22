@@ -148,9 +148,9 @@ class CalanderController extends Controller
             $bookingUser = BookingUserInfo::where('booking_id', $booking->id)->first();
 
             $driverDetails = (object) [
-                'driver_name'  => trim(($bookingUser->driver_first_name ?? '') . ' ' . ($bookingUser->driver_last_name ?? '')) ?: null,
-                'phone_number'   => $bookingUser->driver_mobile_number ?? null,
-                'image'          => uploadedAsset('', 'profile'),
+                'driver_name' => trim(($bookingUser->driver_first_name ?? '') . ' ' . ($bookingUser->driver_last_name ?? '')) ?: null,
+                'phone_number' => $bookingUser->driver_mobile_number ?? null,
+                'image' => uploadedAsset('', 'profile'),
             ];
         }
 

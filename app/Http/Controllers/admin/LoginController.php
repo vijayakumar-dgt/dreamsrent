@@ -42,7 +42,7 @@ class LoginController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'code'   => 422,
+                'code' => 422,
                 'errors' => $validator->errors()->toArray(),
                 'message' => $validator->errors()->first()
             ], 200);
@@ -56,14 +56,14 @@ class LoginController extends Controller
                 if ($user->status == 0 && $user->user_type == 2) {
                     return response()->json([
                         'status' => false,
-                        'code'   => 401,
+                        'code' => 401,
                         'message' => 'Currently you are blocked! Please contact to admin.',
                     ], 200);
                 }
                 $agent = new Agent();
-                $ip    = $request->ip();
+                $ip = $request->ip();
                 $device_type = $agent->device();
-                $os    = $agent->platform();
+                $os = $agent->platform();
                 $browser = $agent->browser();
                 $locationData = Http::get("http://ip-api.com/json/{$ip}?fields=status,country,city,regionName,lat,lon")->json();
                 $localtion = "";
@@ -80,12 +80,12 @@ class LoginController extends Controller
                 $user_device->device_type = is_string($device_type) ? $device_type : null;
                 $user_device->browser = is_string($browser) ? $browser : null;
                 $user_device->os = is_string($os) ? $os : null;
-                $user_device->ip_address  = $ip ?? "";
-                $user_device->location    = $localtion;
+                $user_device->ip_address = $ip ?? "";
+                $user_device->location = $localtion;
                 $user_device->save();
                 return response()->json([
                     'status' => true,
-                    'code'   => 200,
+                    'code' => 200,
                     'redirect_url' => route('dashboard'),
                     'message' => 'Login successfully',
                 ]);
@@ -94,7 +94,7 @@ class LoginController extends Controller
 
         return response()->json([
             'status' => false,
-            'code'   => 401,
+            'code' => 401,
             'message' => 'Invalid admin credentials',
         ], 200);
     }

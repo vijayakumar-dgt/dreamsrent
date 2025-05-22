@@ -32,7 +32,7 @@ class HomeController extends Controller
         return view($viewPath);
     }
 
-    public function list(Request $request): View | JsonResponse
+    public function list(Request $request): View|JsonResponse
     {
         $languageCode = app()->getLocale();
         $languageId = getLanguageId($languageCode);
@@ -103,13 +103,13 @@ class HomeController extends Controller
         $data['pickuptime'] = $pickuptime;
         $data['returndate'] = $returndate;
         $data['returntime'] = $returntime;
-        $data['seo_title']  = __('web.common.vehicles');
+        $data['seo_title'] = __('web.common.vehicles');
         $data['initialPickupLocation'] = $pickuplocation ?
             Location::select('id', 'name')->where('status', 1)->where('language_id', $languageId)->where('name', 'like', '%' . $pickuplocation . '%')->first() : null;
         return view('frontend.home.list.list', $data);
     }
 
-    public function vehicleDetails(Request $request): View | JsonResponse
+    public function vehicleDetails(Request $request): View|JsonResponse
     {
         $slug = $request->slug;
 
@@ -196,7 +196,7 @@ class HomeController extends Controller
         $data['author_profile'] = $appAdminDetails ? uploadedAsset($appAdminDetails->profile_image, 'profile') : '';
         $data['author_email'] = $appAdmin->email ?? "";
         $data['author_phone'] = $appAdminDetails->mobile_number ?? "";
-        $data['author_name']  = getCurrentUserFullname($appAdmin->id);
+        $data['author_name'] = getCurrentUserFullname($appAdmin->id);
         return view(
             'frontend.home.list.vehicle-details',
             compact("data", "allowEnquiries", "allowBooking", "slug", "mainLocation", 'vehicle', "bookingCount", "vehicleCount", "lastUpdateFormatted", "vehicleDetail", "seo_title", "seo_description", "meta_keywords", "og_image", "allLocation")
@@ -215,7 +215,7 @@ class HomeController extends Controller
 
         return response()->json([
             'status' => true,
-            'data'   => $locations
+            'data' => $locations
         ]);
     }
 

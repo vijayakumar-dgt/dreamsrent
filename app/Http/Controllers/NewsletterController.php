@@ -37,7 +37,7 @@ class NewsletterController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 422,
+                'code' => 422,
                 'errors' => $validator->errors()->toArray()
             ], 422);
         }
@@ -58,13 +58,13 @@ class NewsletterController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('web.user.newsletter_subscriber_create_success')
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.common.default_create_error'),
                 'error' => $e->getMessage()
             ], 500);
@@ -138,7 +138,7 @@ class NewsletterController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.common.default_retrieve_error'),
                 'error' => $e->getMessage()
             ], 500);
@@ -153,13 +153,13 @@ class NewsletterController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('admin.others.newsletter_delete_success')
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('admin.common.default_delete_error')
             ], 500);
         }
@@ -178,7 +178,7 @@ class NewsletterController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 422,
+                'code' => 422,
                 'errors' => $validator->errors()->toArray()
             ], 422);
         }
@@ -200,13 +200,13 @@ class NewsletterController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('admin.others.newsletter_send_success')
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('admin.others.newsletter_send_error'),
                 'error' => $e->getMessage()
             ], 500);

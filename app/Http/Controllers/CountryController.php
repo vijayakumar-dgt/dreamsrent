@@ -27,14 +27,14 @@ class CountryController extends Controller
                 Rule::unique('countries')->ignore($id)
             ],
         ], [
-            'name.required' =>  __('admin.cms.country_required'),
-            'name.unique' =>  __('admin.cms.country_exists'),
+            'name.required' => __('admin.cms.country_required'),
+            'name.unique' => __('admin.cms.country_exists'),
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 422,
+                'code' => 422,
                 'errors' => $validator->errors()->toArray()
             ], 422);
         }
@@ -57,13 +57,13 @@ class CountryController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => $successMsg
             ]);
         } catch (\Exception $th) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => $errorMsg
             ], 500);
         }
@@ -91,7 +91,7 @@ class CountryController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
-                'message' =>  __('admin.common.default_retrieve_error'),
+                'message' => __('admin.common.default_retrieve_error'),
                 'error' => $e->getMessage(),
             ], 500);
         }
@@ -104,7 +104,7 @@ class CountryController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'code'   => 200,
+            'code' => 200,
             'data' => $country
         ], 200);
     }
@@ -118,14 +118,14 @@ class CountryController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
-                'message' =>  __('admin.common.default_delete_success'),
+                'code' => 200,
+                'message' => __('admin.common.default_delete_success'),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
-                'message' =>  __('admin.common.default_delete_error'),
+                'code' => 500,
+                'message' => __('admin.common.default_delete_error'),
             ], 500);
         }
     }
@@ -135,11 +135,11 @@ class CountryController extends Controller
         $ids = $request->ids;
 
         if (!$ids || count($ids) == 0) {
-            return response()->json(['success' => false, 'message' =>  __('admin.common.no_data_found'),]);
+            return response()->json(['success' => false, 'message' => __('admin.common.no_data_found'),]);
         }
 
         Country::whereIn('id', $ids)->delete();
 
-        return response()->json(['success' => true, 'message' =>  __('admin.common.default_delete_success')]);
+        return response()->json(['success' => true, 'message' => __('admin.common.default_delete_success')]);
     }
 }

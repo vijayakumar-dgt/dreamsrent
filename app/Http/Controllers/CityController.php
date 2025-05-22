@@ -47,7 +47,7 @@ class CityController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 422,
+                'code' => 422,
                 'errors' => $validator->errors()->toArray()
             ], 422);
         }
@@ -70,13 +70,13 @@ class CityController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => $successMsg
             ]);
         } catch (\Exception $th) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => $errorMsg,
                 'error' => $th->getMessage()
             ], 500);
@@ -126,7 +126,7 @@ class CityController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
-                'message' =>  __('admin.common.default_retrieve_error'),
+                'message' => __('admin.common.default_retrieve_error'),
                 'error' => $e->getMessage(),
             ], 500);
         }
@@ -139,7 +139,7 @@ class CityController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'code'   => 200,
+            'code' => 200,
             'data' => $city
         ], 200);
     }
@@ -152,13 +152,13 @@ class CityController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('admin.cms.city_delete_success')
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('admin.common.default_delete_error')
             ], 500);
         }

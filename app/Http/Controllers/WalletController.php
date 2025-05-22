@@ -130,14 +130,16 @@ class WalletController extends Controller
             $currency_details = "USD";
 
             $session = Session::create([
-                'line_items' => [[
-                    'price_data' => [
-                        'currency' => $currency_details,
-                        'product_data' => ['name' => "Wallet Top-up"],
-                        'unit_amount' => intval($amount * 100),
-                    ],
-                    'quantity' => 1,
-                ]],
+                'line_items' => [
+                    [
+                        'price_data' => [
+                            'currency' => $currency_details,
+                            'product_data' => ['name' => "Wallet Top-up"],
+                            'unit_amount' => intval($amount * 100),
+                        ],
+                        'quantity' => 1,
+                    ]
+                ],
                 'mode' => 'payment',
                 'success_url' => route('user.stripe.payment.success.wallet') . "?session_id={CHECKOUT_SESSION_ID}",
                 'cancel_url' => route('payment-failed'),
@@ -172,7 +174,7 @@ class WalletController extends Controller
         ]);
     }
 
-    public function paypalPaymentSuccessWallet(Request $request): JsonResponse | RedirectResponse
+    public function paypalPaymentSuccessWallet(Request $request): JsonResponse|RedirectResponse
     {
         try {
             $accessToken = $this->provider->getAccessToken();
@@ -209,7 +211,7 @@ class WalletController extends Controller
         }
     }
 
-    public function stripePaymentSuccessWallet(Request $request): JsonResponse | RedirectResponse
+    public function stripePaymentSuccessWallet(Request $request): JsonResponse|RedirectResponse
     {
         try {
             Stripe::setApiKey(config('stripe.test.sk'));

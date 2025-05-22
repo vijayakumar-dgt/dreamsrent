@@ -39,8 +39,8 @@ class StateController extends Controller
                 'exists:countries,id'
             ],
         ], [
-            'name.required' =>  __('admin.cms.state_required'),
-            'name.unique' =>  __('admin.cms.state_exists'),
+            'name.required' => __('admin.cms.state_required'),
+            'name.unique' => __('admin.cms.state_exists'),
             'country_id.required' => __('admin.cms.country_required'),
             'country_id.exists' => __('admin.cms.country_exists'),
         ]);
@@ -48,7 +48,7 @@ class StateController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 422,
+                'code' => 422,
                 'errors' => $validator->errors()->toArray()
             ], 422);
         }
@@ -71,13 +71,13 @@ class StateController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => $successMsg
             ]);
         } catch (\Exception $th) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => $errorMsg
             ], 500);
         }
@@ -120,7 +120,7 @@ class StateController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'code'   => 200,
+            'code' => 200,
             'data' => $state
         ], 200);
     }
@@ -134,13 +134,13 @@ class StateController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('admin.cms.state_delete_success'),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('admin.common.default_delete_error'),
             ], 500);
         }

@@ -63,15 +63,15 @@ class ReportController extends Controller
         $bookings->groupBy(function ($booking) {
             return Carbon::parse($booking->booking_date)->format('Y-m-d'); // Group by date
         })
-        ->map(function ($dayBookings) {
-            return [
-                'date' => $dayBookings->first()?->booking_date,
-                'income' => $dayBookings->sum(function ($booking) {
-                    return ($booking->payment_status == 1 || $booking->booking_by == 'admin') ? $booking->final_price : 0;
-                }),
-                'expense' => 0 // Placeholder, modify if you have expenses
-            ];
-        })
+            ->map(function ($dayBookings) {
+                return [
+                    'date' => $dayBookings->first()?->booking_date,
+                    'income' => $dayBookings->sum(function ($booking) {
+                        return ($booking->payment_status == 1 || $booking->booking_by == 'admin') ? $booking->final_price : 0;
+                    }),
+                    'expense' => 0 // Placeholder, modify if you have expenses
+                ];
+            })
 
             ->values(); // Convert collection to array
 
@@ -196,9 +196,9 @@ class ReportController extends Controller
             DB::raw('SUM(final_price) as total_income'),
             DB::raw('MONTH(created_at) as month')
         )
-        ->groupBy('month')
-        ->orderBy('month')
-        ->get();
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
 
         return response()->json($monthlyEarnings); // Ensure JSON response
     }
