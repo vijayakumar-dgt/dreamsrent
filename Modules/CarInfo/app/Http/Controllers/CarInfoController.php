@@ -364,7 +364,7 @@ class CarInfoController extends Controller
             if (is_array($carDocs)) {
                 foreach ($carDocs as $doc) {
                     $fileName = uploadMutipleFile($doc, 'vehicles/document');
-                    $carDocPaths[] = 'vehicles/document' . $fileName;
+                    $carDocPaths[] = 'vehicles/document/' . $fileName;
                 }
             }
 
@@ -377,7 +377,6 @@ class CarInfoController extends Controller
             }
         }
 
-        // Handle policy documents
         if ($request->hasFile('policy_document')) {
             /** @var UploadedFile[]|UploadedFile|null $policyDocs */
             $policyDocs = $request->file('policy_document');
@@ -385,7 +384,7 @@ class CarInfoController extends Controller
             if (is_array($policyDocs)) {
                 foreach ($policyDocs as $doc) {
                     $fileName = uploadMutipleFile($doc, 'vehicles/policy');
-                    $policyDocPaths[] = 'vehicles/policy' . $fileName;
+                    $policyDocPaths[] = 'vehicles/policy/' . $fileName;
                 }
             }
 
@@ -426,7 +425,6 @@ class CarInfoController extends Controller
 
             if (is_array($vehicleInsurances)) {
                 foreach ($vehicleInsurances as $insurance) {
-                    // Ensure valid data before creating a record
                     if (!empty($insurance['id']) && !empty($insurance['price']) && !empty($insurance['type'])) {
                         VehicleInsurance::create([
                             'vehicle_id'    => $save->id,
@@ -470,14 +468,12 @@ class CarInfoController extends Controller
             }
         }
 
-        // Vehicle Seasonal Pricing Update or Create
         if ($request->has('seasonal')) {
             $seasonals = json_decode($request->input('seasonal'), true);
 
             if (is_array($seasonals)) {
                 foreach ($seasonals as $season) {
                     if (!empty($season['id'])) {
-                        // Update existing seasonal price
                         VehicleSeason::where('id', $season['id'])
                             ->where('vehicle_id', $save->id)
                             ->update([
@@ -516,19 +512,16 @@ class CarInfoController extends Controller
                     $value = $service['value'];           // Service value
                     $price = $service['price'];           // Service price
 
-                    // Check if the record exists for this vehicle and extra service
                     $existingService = VehicleExtraService::where('vehicle_id', $save->id)
                         ->where('extra_service_id', $serviceId)
                         ->first();
 
                     if ($existingService) {
-                        // Update the existing record
                         $existingService->update([
                             'value' => $value,
                             'price' => $price,
                         ]);
                     } else {
-                        // Create a new record if it doesn't exist
                         VehicleExtraService::create([
                             'vehicle_id' => $save->id,
                             'extra_service_id' => $serviceId,
@@ -561,12 +554,11 @@ class CarInfoController extends Controller
                         $uploadedImage = $imageFile->store('vehicles/damage', 'public');
                     } elseif (!empty($uploadedImage) && strpos($uploadedImage, 'data:image') === 0) {
                         $imageData = explode(',', $uploadedImage)[1];
-                        $imageName = 'vehicles/damage' . uniqid() . '.png';
+                        $imageName = 'vehicles/damage/' . uniqid() . '.png';
                         Storage::disk('public')->put($imageName, base64_decode($imageData));
                         $uploadedImage = $imageName;
                     }
 
-                    // Update or create damage record
                     if (!empty($damage['id'])) {
                         VehicleDamage::where('id', $damage['id'])
                             ->where('vehicle_id', $save->id)
@@ -652,7 +644,7 @@ class CarInfoController extends Controller
             $file = $request->file('vehicle_image');
             $existingImage = $vehicle->vehicle_image;
             if ($file && $file->isValid()) {
-                $vehicleImagePath = uploadFile($file, 'vehicles', $existingImage);
+                $vehicleImagePath = uploadFile($file, 'vehicles/images/', $existingImage);
             }
         } else {
             $vehicleImagePath = $vehicle->vehicle_image;
@@ -717,7 +709,7 @@ class CarInfoController extends Controller
             if (is_array($images)) {
                 foreach ($images as $image) {
                     $fileName = uploadMutipleFile($image, 'vehicles/images');
-                    $imagePaths[] = 'vehicles/images' . $fileName;
+                    $imagePaths[] = 'vehicles/images/' . $fileName;
                 }
             }
 
@@ -749,7 +741,7 @@ class CarInfoController extends Controller
             if (is_array($policyDocs)) {
                 foreach ($policyDocs as $doc) {
                     $fileName = uploadMutipleFile($doc, 'vehicles/policy');
-                    $policyDocPaths[] = 'vehicles/policy' . $fileName;
+                    $policyDocPaths[] = 'vehicles/policy/' . $fileName;
                 }
             }
 
@@ -921,7 +913,7 @@ class CarInfoController extends Controller
                         $uploadedImage = $imageFile->store('vehicles/damages', 'public');
                     } elseif (!empty($uploadedImage) && strpos($uploadedImage, 'data:image') === 0) {
                         $imageData = explode(',', $uploadedImage)[1];
-                        $imageName = 'vehicles/damages' . uniqid() . '.png';
+                        $imageName = 'vehicles/damages/' . uniqid() . '.png';
                         Storage::disk('public')->put($imageName, base64_decode($imageData));
                         $uploadedImage = $imageName;
                     }
@@ -1726,6 +1718,7 @@ class CarInfoController extends Controller
                 }
             }
 
+            $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
             $multiplePolicy = $vehiclepolicys ? json_decode($vehiclepolicys->value, true) : [];
             $multipleDoc = $vehicleDoc ? json_decode($vehicleDoc->value, true) : [];
 
@@ -1770,8 +1763,8 @@ class CarInfoController extends Controller
                 'name' => $vehicle->name,
                 'slug' => $vehicle->slug,
                 'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
-                'multiple_vehicle_doc' => array_map(fn($doc) => url('storage/vehicleDoc/' . basename($doc)), $multipleDoc),
-                'multiple_vehicle_policy' => array_map(fn($policy) => url('storage/vehiclePolicy/' . basename($policy)), $multiplePolicy),
+                'multiple_vehicle_doc' => array_map(fn($doc) => url('storage/' . ($doc)), $multipleDoc),
+                'multiple_vehicle_policy' => array_map(fn($policy) => url('storage/' . ($policy)), $multiplePolicy),
                 'multiple_vehicle_images' => $multipleImages,
                 'has_multiple_image' => count($multipleImages) > 1,
                 'brand' => $vehicle->brand->brand_name ?? null,
