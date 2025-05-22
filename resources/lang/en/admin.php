@@ -6,6 +6,7 @@ return array(
     'cod_cards' => 'Indicating that goods must be paid for at the time of delivery.',
     'secret_key' => 'Secret Key',
     'api_keys' => 'API Keys',
+    'mins' => 'mins',
     'privacy_policy' => 'Privacy Policy',
     'terms_of_use' => 'Terms of Use',
     'settings_configuration' => 'Settings & Configuration',

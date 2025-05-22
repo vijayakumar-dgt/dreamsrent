@@ -426,7 +426,6 @@ class CarInfoController extends Controller
             if (is_array($vehicleInsurances)) {
                 foreach ($vehicleInsurances as $insurance) {
                     if (!empty($insurance['id']) && !empty($insurance['price']) && !empty($insurance['type'])) {
-
                         // Normalize type to 'Percentage' or 'Fixed'
                         $type = in_array(strtolower($insurance['type']), ['%', 'percentage']) ? 'Percentage' : 'Fixed';
 
@@ -794,7 +793,6 @@ class CarInfoController extends Controller
 
                 foreach ($vehicleInsurances as $insurance) {
                     if (!empty($insurance['id']) && !empty($insurance['price']) && !empty($insurance['type'])) {
-
                         $type = strtolower($insurance['type']) === '%' || strtolower($insurance['type']) === 'percentage'
                             ? 'Percentage'
                             : 'Fixed';

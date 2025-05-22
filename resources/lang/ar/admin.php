@@ -3,6 +3,7 @@
 return array (
   'general_settings' =>
   array (
+    'mins' => 'mins',
     'cod_cards' => 'تشير إلى أنه يجب دفع ثمن البضائع عند التسليم',
     'secret_key' => 'المفتاح السري',
     'api_keys' => 'مفاتيح API',

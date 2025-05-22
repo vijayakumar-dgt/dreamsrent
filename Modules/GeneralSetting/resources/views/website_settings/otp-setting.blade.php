@@ -37,8 +37,7 @@
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label class="form-label" for="otp_type">{{ __('admin.general_settings.otp_type') }}<span class="text-danger"> *</span></label>
-                                            <select class="form-control" name="otp_type" id="otp_type" >
-                                                <option value="sms">{{ __('SMS') }}</option>
+                                            <select class="form-control" name="otp_type" id="otp_type" >                                             
                                                 <option value="email">{{ __('Email') }}</option>
                                             </select>
                                             <span class="text-danger error-text" id="otp_type_error"></span>
@@ -59,9 +58,9 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="otp_expire_time">{{ __('admin.general_settings.otp_expire_time') }}<span class="text-danger"> *</span></label>
                                             <select class="form-control" name="otp_expire_time" id="otp_expire_time">
-                                                <option value="5 mins">5 mins</option>
-                                                <option value="2 mins">2 mins</option>
-                                                <option value="10 mins">10 mins</option>
+                                                <option value="5 mins">5 {{ __('admin.general_settings.mins') }}</option>
+                                                <option value="2 mins">2 {{ __('admin.general_settings.mins') }}</option>
+                                                <option value="10 mins">10 {{ __('admin.general_settings.mins') }}</option>
                                             </select>
                                             <span class="text-danger error-text" id="otp_expire_time_error"></span>
                                         </div>

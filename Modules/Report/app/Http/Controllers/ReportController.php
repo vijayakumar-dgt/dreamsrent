@@ -23,10 +23,10 @@ class ReportController extends Controller
     {
         $bookings = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
             ->get();
-        
+
         $bookingsCount = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
             ->orderby('bookings.id', 'desc')->paginate(10);
-        
+
         // Format totalIncome with 2 decimals
         $totalIncome = number_format($bookings->filter(function ($booking) {
             if ($booking->booking_by === 'admin') {
@@ -68,7 +68,7 @@ class ReportController extends Controller
         // Format income in grouped bookings (2 decimal places)
         $bookings = $bookings->groupBy(function ($booking) {
                 return Carbon::parse($booking->booking_date)->format('Y-m-d');
-            })
+        })
             ->map(function ($dayBookings) {
                 $income = $dayBookings->sum(function ($booking) {
                     return ($booking->payment_status == 1 || $booking->booking_by == 'admin') ? $booking->final_price : 0;
@@ -82,14 +82,14 @@ class ReportController extends Controller
             ->values();
 
         return view('report::incomeReport', compact(
-            "totalIncome", 
-            "topEarningCar", 
-            "vehicle", 
-            "percentageChange", 
-            "sign", 
-            "symbol", 
-            "bookings", 
-            "vehicleInfo", 
+            "totalIncome",
+            "topEarningCar",
+            "vehicle",
+            "percentageChange",
+            "sign",
+            "symbol",
+            "bookings",
+            "vehicleInfo",
             "bookingsCount"
         ));
     }

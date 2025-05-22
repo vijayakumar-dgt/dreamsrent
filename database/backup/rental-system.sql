@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 22, 2025 at 09:04 AM
+-- Generation Time: May 22, 2025 at 10:41 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -50402,6 +50402,7 @@ CREATE TABLE `sections` (
   `theme_id` int(11) NOT NULL,
   `order_by` int(11) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
+  `title` varchar(225) DEFAULT NULL,
   `datas` longtext NOT NULL,
   `content` longtext DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
@@ -50414,35 +50415,35 @@ CREATE TABLE `sections` (
 -- Dumping data for table `sections`
 --
 
-INSERT INTO `sections` (`id`, `theme_id`, `order_by`, `name`, `datas`, `content`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 1, 'Banner One', '{\"label_one\":\"100% Trusted car rental platform in the World\",\"line_one\":\"Find Your Best\",\"line_two\":\"Dream Car for Rental\",\"description_one\":\"Experience the ultimate in comfort, performance, and sophistication with our luxury car rentals. From sleek sedans and stylish coupes to spacious SUVs and elegant convertibles, we offer a range of premium vehicles to suit your preferences and lifestyle.\",\"thumbnail_image_one\":\"thumbnail_image_banner_one\\/ac3e1a87-bddc-45ac-903c-58f2c432d82c_1744178901.png\"}', NULL, 1, '2024-11-06 11:52:16', '2025-04-09 11:38:21', NULL),
-(2, 1, 2, 'Category', '{\"category\":\"[category type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(3, 1, 3, 'Recommended Vehicle', '{\"feature_vehicle\":\"[vehicle type=featured limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:33', NULL),
-(4, 1, 4, 'Popular Vehicle', '{\"popular_vehicle\":\"[vehicle type=popular limit=10 viewall=no]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:39', NULL),
-(5, 1, 5, 'Vehicle', '{\"vehicle\":\"[vehicle type=all limit=10 viewall=yes]\"}', NULL, 1, '2024-11-07 10:27:43', '2024-11-07 05:01:55', NULL),
-(11, 1, 11, 'Faq', '{\"faq\":\"[faq limit=10 viewall=yes order=asc]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 22:41:02', NULL),
-(14, 1, 14, 'Testimonial', '{\"testimonial\":\"[testimonial limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 07:41:02', NULL),
-(15, 1, 15, 'How It Work', '{\"how_it_work\":\"[how_it_work limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 22:32:42', NULL),
-(16, 1, 16, 'Blog', '{\"blog\":\"[blogs type=all limit=10 viewall=yes]\"}\n', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
-(22, 1, 22, 'Search Vehicle', '{\"search\":\"[search viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(23, 1, 23, 'Car Type', '{\"car_type\":\"[car_type type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(25, 1, 25, 'Ad Card', '{\"ad_card\":\"[ad_card type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(26, 1, 26, 'Why Choose Us', '{\"why_us\":\"[why_us type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(27, 1, 27, 'Facts', '{\"facts\":\"[facts type=all limit=10 viewall=yes]\"}\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(29, 2, 29, 'Banner Two', '{\"label_two\":\"Explore our Verified & Professional Cars\",\"description_two\":\"Explore our Verified & Professional CarsModern design sports cruisers for those who crave adventure & grandeur Cars for relaxing with your loved ones.\",\"thumbnail_image_two\":\"thumbnail_image_banner_two\\/31587ff2-88d2-43cc-b83c-0a8deea5d8a0_1744178913.png\"}', NULL, 1, '2024-11-06 11:52:16', '2025-04-09 11:38:33', NULL),
-(30, 2, 30, 'Festured Category', '{\"category\":\"[category type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(31, 2, 31, 'Recommended Vehicle', '{\"feature_vehicle\":\"[vehicle type=featured limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:33', NULL),
-(32, 2, 32, 'Popular Vehicle', '{\"popular_vehicle\":\"[vehicle type=popular limit=10 viewall=no]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:39', NULL),
-(33, 2, 33, 'Faq', '{\"faq\":\"[faq limit=10 viewall=yes order=asc]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 22:41:02', NULL),
-(34, 2, 34, 'Testimonial', '{\"testimonial\":\"[testimonial limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 07:41:02', NULL),
-(35, 2, 35, 'Blog', '{\"blog\":\"[blogs type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
-(36, 2, 36, 'Ad Card', '{\"ad_card\":\"[ad_card type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(37, 2, 37, 'Facts', '{\"facts\":\"[facts type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(38, 2, 38, 'Brands', '{\"brand\":\"[brand type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(39, 2, 39, 'Search Vehicle', '{\"search\":\"[search viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(40, 2, 40, 'All Category', '{\"category\":\"[all_category type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(41, 2, 41, 'Marquee', '{\"marquee\":\"[marquee type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(42, 2, 42, 'Best Vehicle', '{\"best_vehicle\":\"[bestVehicle type=best_vehicle limit=10 viewall=no]\"}', '{\"vehicle_id\":\"51\",\"label_1\":\"Best Deal\",\"dis_1\":\"Dreams Rent offers a fleet of high-quality\",\"label_2\":\"Doorstep Delivery\",\"dis_2\":\"Dreams Rent offers a fleet of high-quality\",\"label_3\":\"Low Security Deposit\",\"dis_3\":\"Dreams Rent offers a fleet of high-quality\",\"label_4\":\"Latest Cars\",\"dis_4\":\"Dreams Rent offers a fleet of high-quality\",\"label_5\":\"Customer Support\",\"dis_5\":\"Dreams Rent offers a fleet of high-quality\",\"label_6\":\"No Hidden Charges\",\"dis_6\":\"Dreams Rent offers a fleet of high-quality\"}', 1, '2024-11-06 11:52:16', '2025-04-09 10:23:11', NULL);
+INSERT INTO `sections` (`id`, `theme_id`, `order_by`, `name`, `title`, `datas`, `content`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 1, 'Banner One', 'Banner One', '{\"label_one\":\"100% Trusted car rental platform in the World\",\"line_one\":\"Find Your Best\",\"line_two\":\"Dream Car for Rental\",\"description_one\":\"Experience the ultimate in comfort, performance, and sophistication with our luxury car rentals. From sleek sedans and stylish coupes to spacious SUVs and elegant convertibles, we offer a range of premium vehicles to suit your preferences and lifestyle.\",\"thumbnail_image_one\":\"thumbnail_image_banner_one\\/ac3e1a87-bddc-45ac-903c-58f2c432d82c_1744178901.png\"}', NULL, 1, '2024-11-06 11:52:16', '2025-04-09 11:38:21', NULL),
+(2, 1, 2, 'Category', 'Category', '{\"category\":\"[category type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(3, 1, 3, 'Recommended Vehicle', 'Recommended Vehicle', '{\"feature_vehicle\":\"[vehicle type=featured limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:33', NULL),
+(4, 1, 4, 'Popular Vehicle', 'Popular Vehicle', '{\"popular_vehicle\":\"[vehicle type=popular limit=10 viewall=no]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:39', NULL),
+(5, 1, 5, 'Vehicle', 'Vehicle', '{\"vehicle\":\"[vehicle type=all limit=10 viewall=yes]\"}', NULL, 1, '2024-11-07 10:27:43', '2024-11-07 05:01:55', NULL),
+(11, 1, 11, 'Faq', 'Faq', '{\"faq\":\"[faq limit=10 viewall=yes order=asc]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 22:41:02', NULL),
+(14, 1, 14, 'Testimonial', 'Testimonial', '{\"testimonial\":\"[testimonial limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 07:41:02', NULL),
+(15, 1, 15, 'How It Work', 'How It Work', '{\"how_it_work\":\"[how_it_work limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 22:32:42', NULL),
+(16, 1, 16, 'Blog', 'Blog', '{\"blog\":\"[blogs type=all limit=10 viewall=yes]\"}\n', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
+(22, 1, 22, 'Search Vehicle', 'Search Vehicle', '{\"search\":\"[search viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(23, 1, 23, 'Car Type', 'Car Type', '{\"car_type\":\"[car_type type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(25, 1, 25, 'Ad Card', 'Ad Card', '{\"ad_card\":\"[ad_card type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(26, 1, 26, 'Why Choose Us', 'Why Choose Us', '{\"why_us\":\"[why_us type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(27, 1, 27, 'Facts', 'Facts', '{\"facts\":\"[facts type=all limit=10 viewall=yes]\"}\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(29, 2, 29, 'Banner Two', 'Banner Two', '{\"label_two\":\"Explore our Verified & Professional Cars\",\"description_two\":\"Explore our Verified & Professional CarsModern design sports cruisers for those who crave adventure & grandeur Cars for relaxing with your loved ones.\",\"thumbnail_image_two\":\"thumbnail_image_banner_two\\/31587ff2-88d2-43cc-b83c-0a8deea5d8a0_1744178913.png\"}', NULL, 1, '2024-11-06 11:52:16', '2025-04-09 11:38:33', NULL),
+(30, 2, 30, 'Festured Category', 'Festured Category', '{\"category\":\"[category type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(31, 2, 31, 'Recommended Vehicle', 'Recommended Vehicle', '{\"feature_vehicle\":\"[vehicle type=featured limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:33', NULL),
+(32, 2, 32, 'Popular Vehicle', 'Popular Vehicle', '{\"popular_vehicle\":\"[vehicle type=popular limit=10 viewall=no]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:39', NULL),
+(33, 2, 33, 'Faq', 'Faq', '{\"faq\":\"[faq limit=10 viewall=yes order=asc]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 22:41:02', NULL),
+(34, 2, 34, 'Testimonial', 'Testimonial', '{\"testimonial\":\"[testimonial limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 07:41:02', NULL),
+(35, 2, 35, 'Blog', 'Blog', '{\"blog\":\"[blogs type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
+(36, 2, 36, 'Ad Card', 'Ad Card', '{\"ad_card\":\"[ad_card type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(37, 2, 37, 'Facts', 'Facts', '{\"facts\":\"[facts type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(38, 2, 38, 'Brands', 'Brands', '{\"brand\":\"[brand type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(39, 2, 39, 'Search Vehicle', 'Search Vehicle', '{\"search\":\"[search viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(40, 2, 40, 'All Category', 'All Category', '{\"category\":\"[all_category type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(41, 2, 41, 'Marquee', 'Marquee', '{\"marquee\":\"[marquee type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(42, 2, 42, 'Best Vehicle', 'Best Vehicle', '{\"best_vehicle\":\"[bestVehicle type=best_vehicle limit=10 viewall=no]\"}', '{\"vehicle_id\":\"51\",\"label_1\":\"Best Deal\",\"dis_1\":\"Dreams Rent offers a fleet of high-quality\",\"label_2\":\"Doorstep Delivery\",\"dis_2\":\"Dreams Rent offers a fleet of high-quality\",\"label_3\":\"Low Security Deposit\",\"dis_3\":\"Dreams Rent offers a fleet of high-quality\",\"label_4\":\"Latest Cars\",\"dis_4\":\"Dreams Rent offers a fleet of high-quality\",\"label_5\":\"Customer Support\",\"dis_5\":\"Dreams Rent offers a fleet of high-quality\",\"label_6\":\"No Hidden Charges\",\"dis_6\":\"Dreams Rent offers a fleet of high-quality\"}', 1, '2024-11-06 11:52:16', '2025-04-09 10:23:11', NULL);
 
 -- --------------------------------------------------------
 
@@ -55471,14 +55472,14 @@ CREATE TABLE `vehicle_info` (
   `vehicle_basekm` decimal(10,2) DEFAULT NULL,
   `vehicle_extrakmprice` decimal(10,2) DEFAULT NULL,
   `vehicle_video` varchar(255) DEFAULT NULL,
-  `vehicle_metatitle` varchar(100) NOT NULL,
+  `vehicle_metatitle` varchar(100) DEFAULT NULL,
   `vehicle_metadesc` varchar(255) DEFAULT NULL,
   `vehicle_metakeywords` varchar(255) DEFAULT NULL,
   `description` longtext DEFAULT NULL,
   `features` varchar(225) DEFAULT NULL,
-  `popular` int(11) DEFAULT 1,
-  `recommended` int(11) DEFAULT 1,
-  `feature` int(11) DEFAULT 1,
+  `popular` int(11) DEFAULT NULL,
+  `recommended` int(11) DEFAULT NULL,
+  `feature` int(11) DEFAULT NULL,
   `views` int(11) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_by` int(11) DEFAULT NULL,
