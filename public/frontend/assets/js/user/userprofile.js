@@ -457,11 +457,4 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-
-    // $(document).on('click', '#profile_photo_btn', function () {
-    //     $('#profile_photo').click();
-    // });
-
 })();
-
-

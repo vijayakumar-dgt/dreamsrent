@@ -230,7 +230,7 @@
     }
 
     $(document).on('click', '#openFile', function () {
-        $("#fileupload").click();
+        $("#fileupload").trigger('click');
     });
 
     $(document).on('change', '#fileupload', function () {

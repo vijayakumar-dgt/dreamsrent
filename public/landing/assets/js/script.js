@@ -8,9 +8,9 @@ Version      : 1.0
     "use strict";
 	
 	// Close Ad
-	$(".close-ad").click(function(){
+	$(".close-ad").on('click',function(){
 		$(".top-header").fadeOut();
-	  });
+	});
 
 	  // Sticky Header
 	
@@ -77,7 +77,7 @@ Version      : 1.0
 				$('#scroll').fadeOut(); 
 			} 
 		}); 
-		$('#scroll').click(function(){ 
+		$('#scroll').on('click',function(){ 
 			$("html, body").animate({ scrollTop: 0 }, 600); 
 			return false; 
 		}); 
