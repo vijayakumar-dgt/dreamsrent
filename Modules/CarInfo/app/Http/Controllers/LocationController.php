@@ -89,7 +89,7 @@ class LocationController extends Controller
                 $location->language_id = $request->language_id ?? $authUser->language_id;
             }
             $oldImage = is_array($location->image) ? null : $location->image;
-            $folderName = 'location';
+            $folderName = 'vehicles/location';
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 if ($image && $image->isValid()) {
@@ -212,9 +212,7 @@ class LocationController extends Controller
         $location->working_days = $location->workingDays;
         $image = is_string($location->image) ? $location->image : null;
 
-        $location->image = $image && file_exists(public_path('storage/' . $image))
-            ? uploadedAsset($image)
-            : null;
+        $location->image = uploadedAsset($image ?? '', 'default');
 
         return response()->json([
             'status' => 'success',
