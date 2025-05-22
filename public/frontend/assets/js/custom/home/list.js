@@ -348,13 +348,10 @@
                                             <div class="blog-list-title">
                                                 <div class="title-bottom">
                                                     <div class="car-list-icon">
-                                                        <img src="${vehicle.avatar_image ?? '/frontend/assets/img/profiles/avatar-03.jpg'}" alt="user">
+                                                        <img src="${vehicle.avatar_image ?? '/frontend/assets/img/profiles/avatar-01.jpg'}" alt="user">
                                                     </div>
                                                     <div class="address-info">
                                                         <h6><i class="feather-map-pin"></i>${ucfirst(vehicle.location ?? '')}</h6>
-                                                    </div>
-                                                    <div class="list-km d-none">
-                                                        <span class="km-count"><img src="/frontend/assets/img/icons/map-pin.svg" alt="author">3.7m</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -447,7 +444,7 @@
                 <div class="listing-features d-flex align-items-end justify-content-between">
                  <div class="list-rating">
                  <button type="button" class="author-img btn border-0">
-                    <img src="${vehicle.avatar_image ?? '/frontend/assets/img/profiles/avatar-03.jpg'}" alt="author">
+                    <img src="${vehicle.avatar_image ?? '/frontend/assets/img/profiles/avatar-01.jpg'}" alt="author">
                 </button>
                 <h3 class="listing-title"><a href="/vehicle-details/${vehicle.slug}?pl=${pl}&dl=${dl}&pd=${pd}&pt=${pt}&rd=${rd}&rt=${rt}">${vehicleName}</a></h3>
                     <div class="list-rating">
