@@ -29,6 +29,11 @@
   width: 2.5rem;
 }
 
+/* image contain */
+.img-contain{
+  object-fit: contain !important;
+}
+
 .list_view-container {
   display: flex;
   gap: 15px;
