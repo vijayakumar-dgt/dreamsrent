@@ -735,7 +735,7 @@
                                             <div class="col-md-8">
                                                 <div class="mb-4">
                                                     <label class="form-label">{{ __('admin.rentals.video_link') }}</label>
-                                                    <input type="text" class="form-control" name="car_video" id="car_video" value="{{ $query->vehicle_video }}" placeholder="https://www.youtube.com/cars_add/">
+                                                    <input type="text" class="form-control" name="car_video" id="car_video" value="{{ $query->vehicle_video }}" placeholder="https://www.youtube.com/watch?v=abcd1234">
                                                     <span class="invalid-feedback" id="car_video_error"></span>
                                                 </div>
                                             </div>
