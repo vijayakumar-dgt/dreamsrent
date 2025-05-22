@@ -2284,10 +2284,8 @@
                 });
         }
     });
-})();
 
-document.addEventListener("DOMContentLoaded", function () {
-    let selectedStatus = ""; // Default: Get all bookings
+    let selectedStatus = "";
     let selectedVehicles = [];
     let selectedCustomers = [];
     let selectedDrivers = [];
@@ -2589,4 +2587,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
             loadCalendar();
         });
-});
+})();
