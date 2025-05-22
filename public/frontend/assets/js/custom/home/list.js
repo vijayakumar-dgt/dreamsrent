@@ -578,79 +578,77 @@
         });
     });
 
-})();
+    $(document).ready(function () {
+        let $input = $("#pickuplocation");
+        let $suggestions = $("#pickup-suggestions");
+        let searchTimeout;
+        let cache = {};
+        let initialPickupId = $("#initialPickupId").val();
+        let initialPickupName = $("#initialPickupName").val();
 
+        if (initialPickupId && initialPickupName) {
+            $input.val(initialPickupName);
 
-$(document).ready(function () {
-    let $input = $("#pickuplocation");
-    let $suggestions = $("#pickup-suggestions");
-    let searchTimeout;
-    let cache = {};
-    let initialPickupId = $("#initialPickupId").val();
-    let initialPickupName = $("#initialPickupName").val();
-
-    if (initialPickupId && initialPickupName) {
-        $input.val(initialPickupName);
-
-        $suggestions.html(`<li data-id="${initialPickupId}" class="selected">${initialPickupName}</li>`);
-        // hide the suggestions
-        $suggestions.hide();
-    }
-    $input.on("keyup", function () {
-        let query = $(this).val().trim().toLowerCase();
-
-        clearTimeout(searchTimeout);
-
-        if (query.length < 1) {
+            $suggestions.html(`<li data-id="${initialPickupId}" class="selected">${initialPickupName}</li>`);
+            // hide the suggestions
             $suggestions.hide();
-            return;
         }
+        $input.on("keyup", function () {
+            let query = $(this).val().trim().toLowerCase();
 
-        if (cache[query]) {
-            displaySuggestions(cache[query]);
-            return;
+            clearTimeout(searchTimeout);
+
+            if (query.length < 1) {
+                $suggestions.hide();
+                return;
+            }
+
+            if (cache[query]) {
+                displaySuggestions(cache[query]);
+                return;
+            }
+
+            searchTimeout = setTimeout(() => {
+                $.ajax({
+                    url: "/search-locations",
+                    method: "GET",
+                    data: { query: query },
+                    success: function (response) {
+                        cache[query] = response.data;
+                        displaySuggestions(response.data);
+                    }
+                });
+            }, 300);
+        });
+
+        function displaySuggestions(data) {
+            $suggestions.html("");
+            if (data.length > 0) {
+                data.forEach(location => {
+                    $suggestions.append(`<li data-id="${location.id}">${location.name}</li>`);
+                });
+            } else {
+                $suggestions.append(`<li class="no-result">${_l('web.home.no_location_found')}</li>`);
+            }
+            $suggestions.show();
         }
-
-        searchTimeout = setTimeout(() => {
-            $.ajax({
-                url: "/search-locations",
-                method: "GET",
-                data: { query: query },
-                success: function (response) {
-                    cache[query] = response.data;
-                    displaySuggestions(response.data);
-                }
-            });
-        }, 300);
-    });
-
-    function displaySuggestions(data) {
-        $suggestions.html("");
-        if (data.length > 0) {
-            data.forEach(location => {
-                $suggestions.append(`<li data-id="${location.id}">${location.name}</li>`);
-            });
-        } else {
-            $suggestions.append(`<li class="no-result">${_l('web.home.no_location_found')}</li>`);
-        }
-        $suggestions.show();
-    }
-    
-
-    $(document).on("click", "#pickup-suggestions li", function () {
-        $("#pickup-suggestions li").removeClass('selected');
-        if(!$(this).hasClass('no-result')){
-          $input.val($(this).text());
-          $(this).addClass('selected');
-          $suggestions.hide();
-        }
-        $suggestions.hide();
         
-    });
 
-    $(document).on("click", function (event) {
-        if (!$(event.target).closest(".group-img").length) {
+        $(document).on("click", "#pickup-suggestions li", function () {
+            $("#pickup-suggestions li").removeClass('selected');
+            if(!$(this).hasClass('no-result')){
+            $input.val($(this).text());
+            $(this).addClass('selected');
             $suggestions.hide();
-        }
+            }
+            $suggestions.hide();
+            
+        });
+
+        $(document).on("click", function (event) {
+            if (!$(event.target).closest(".group-img").length) {
+                $suggestions.hide();
+            }
+        });
     });
-});
+})();
