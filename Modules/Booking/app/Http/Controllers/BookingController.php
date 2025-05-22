@@ -93,8 +93,8 @@ class BookingController extends Controller
         try {
             $orderBy = $request->order_by ?? 'desc';
             $search = $request->search ?? null;
-            $perPage = $request->per_page ?? 1;
-            $page = $request->page ?? 10;
+            $perPage = $request->per_page ?? 10;
+            $page = $request->page ?? 1;
 
             $startDateTime = '';
             $endDateTime = '';
@@ -220,7 +220,6 @@ class BookingController extends Controller
                     }
                 })
 
-
                 ->when($tariff, function ($query) use ($tariff, $startDateTime, $endDateTime) {
                     $noOfDays = 1;
 
@@ -231,16 +230,21 @@ class BookingController extends Controller
                         $noOfDays = ceil($diffMinutes / 1440);
                     }
 
-                    return $query->join('vehicle_tarrifs', function ($join) {
-                        $join->on('vehicle_tarrifs.vehicle_id', '=', 'vehicle_info.id');
+                    return $query->leftJoin('vehicle_tarrifs', function ($join) use ($noOfDays) {
+                        $join->on('vehicle_tarrifs.vehicle_id', '=', 'vehicle_info.id')
+                            ->whereRaw('CAST(vehicle_tarrifs.tariff_from_days AS UNSIGNED) <= ?', [$noOfDays])
+                            ->whereRaw('CAST(vehicle_tarrifs.tariff_to_days AS UNSIGNED) >= ?', [$noOfDays]);
                     })
-                        ->where(function ($q) use ($noOfDays) {
-                            $q->whereRaw('CAST(vehicle_tarrifs.tariff_from_days AS UNSIGNED) <= ?', [$noOfDays])
-                                ->whereRaw('CAST(vehicle_tarrifs.tariff_to_days AS UNSIGNED) = ?', [$noOfDays]);
-                        })
-                        ->selectRaw("
+                    ->where(function ($q) use ($tariff) {
+                        $q->whereNotNull("vehicle_tarrifs.tariff_daily_price")
+                        ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, '$[0].{$tariff}')) IS NOT NULL");
+                    })
+                    ->selectRaw("
                         vehicle_tarrifs.id as vehicle_tariff_id,
-                        vehicle_tarrifs.tariff_daily_price as vehicle_price,
+                        COALESCE(
+                            vehicle_tarrifs.tariff_daily_price,
+                            JSON_UNQUOTE(JSON_EXTRACT(vehicle_info.vehicle_price, '$[0].{$tariff}'))
+                        ) as vehicle_price,
                         ? as vehicle_price_type
                     ", [$tariff]);
                 })
@@ -303,6 +307,7 @@ class BookingController extends Controller
                             $tariffType
                         ]);
                 })
+
                 ->when(!empty($startDateTime) || !empty($endDateTime), function ($query) use ($startDateTime, $endDateTime, $bookingId) {
                     $query->whereNotExists(function ($q) use ($startDateTime, $endDateTime, $bookingId) {
                         $q->select(DB::raw(1))
@@ -342,7 +347,6 @@ class BookingController extends Controller
                 'data' => $vehicles,
             ], 200);
         } catch (\Exception $e) {
-            dd($e);
             return response()->json([
                 'code' => 500,
                 'message' => __('admin.common.default_retrieve_error'),
