@@ -109,7 +109,9 @@
                 }
             } else if (ID == 42) {
                 $("#section_id_3").removeClass("d-none");
-                $("#section_title_three").val($(this).data("section_title_three"));
+                $("#section_title_three").val(
+                    $(this).data("section_title_three")
+                );
                 $("#section_id").val(ID);
                 $("#label_1").val($(this).data("label_1"));
                 $("#label_2").val($(this).data("label_2"));
@@ -129,7 +131,9 @@
 
                 const trigger = $(this);
 
-                $("#section_title_four").val($(this).data("section_title_four"));
+                $("#section_title_four").val(
+                    $(this).data("section_title_four")
+                );
                 $("#why_label_1").val(trigger.data("why_label_1"));
                 $("#why_dis_1").val(trigger.data("why_dis_1"));
                 $("#why_label_2").val(trigger.data("why_label_2"));
@@ -230,10 +234,18 @@
                                                 data-bs-target="#add_banner_sec"
                                                 data-id="${value.id}"
                                                 data-name="${value.name}"
-                                                data-section_title_one="${value.title}"
-                                                data-section_title_two="${value.title}"
-                                                data-section_title_three="${value.title}"
-                                                data-section_title_four="${value.title}"
+                                                data-section_title_one="${
+                                                    value.title
+                                                }"
+                                                data-section_title_two="${
+                                                    value.title
+                                                }"
+                                                data-section_title_three="${
+                                                    value.title
+                                                }"
+                                                data-section_title_four="${
+                                                    value.title
+                                                }"
                                                 data-label_1="${value.label_1}"
                                                 data-label_2="${value.label_2}"
                                                 data-label_3="${value.label_3}"
@@ -424,78 +436,78 @@
         });
     }
 
-})();
-function previewThumbnailOne(input) {
-    if (input.files && input.files[0]) {
-        let reader = new FileReader();
-        reader.onload = function (e) {
-            $("#thumbnail_preview_one").attr("src", e.target.result).show();
+    $(document).on("change", "#why_icon_1", function (e) {
+        validateAndPreview("why_icon_1", "preview_why_icon_1");
+    });
+
+    $(document).on("change", "#why_icon_2", function (e) {
+        validateAndPreview("why_icon_2", "preview_why_icon_2");
+    });
+
+    $(document).on("change", "#why_icon_3", function (e) {
+        validateAndPreview("why_icon_3", "preview_why_icon_3");
+    });
+
+    function previewThumbnailOne(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                $("#thumbnail_preview_one").attr("src", e.target.result).show();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function previewThumbnailTwo(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                $("#thumbnail_preview_two").attr("src", e.target.result).show();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function validateAndPreview(inputId, previewId) {
+        const input = $("#" + inputId)[0];
+        const file = input.files[0];
+        const preview = $("#" + previewId);
+        preview.addClass("d-none");
+        preview.attr("src", "#");
+
+        if (!file) return;
+
+        const allowedTypes = ["image/jpeg", "image/png", "image/svg+xml"];
+        if (!allowedTypes.includes(file.type)) {
+            showToast("error", "Only JPG, PNG, or SVG files are allowed.");
+            input.value = "";
+            return;
+        }
+
+        const objectURL = URL.createObjectURL(file);
+
+        // SVG preview without dimension check
+        if (file.type === "image/svg+xml") {
+            preview.attr("src", objectURL).removeClass("d-none");
+            return;
+        }
+
+        const img = new Image();
+        img.onload = function () {
+            if (this.width !== 40 || this.height !== 40) {
+                showToast("error", "Image must be exactly 40x40 pixels.");
+                input.value = "";
+                preview.addClass("d-none");
+            } else {
+                preview.attr("src", objectURL).removeClass("d-none");
+            }
         };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-function previewThumbnailTwo(input) {
-    if (input.files && input.files[0]) {
-        let reader = new FileReader();
-        reader.onload = function (e) {
-            $("#thumbnail_preview_two").attr("src", e.target.result).show();
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-function validateAndPreview(inputId, previewId) {
-    const input = $("#" + inputId)[0];
-    const file = input.files[0];
-    const preview = $("#" + previewId);
-    preview.addClass("d-none");
-    preview.attr("src", "#");
-
-    if (!file) return;
-
-    const allowedTypes = ["image/jpeg", "image/png", "image/svg+xml"];
-    if (!allowedTypes.includes(file.type)) {
-        showToast("error", "Only JPG, PNG, or SVG files are allowed.");
-        input.value = "";
-        return;
-    }
-
-    const objectURL = URL.createObjectURL(file);
-
-    // SVG preview without dimension check
-    if (file.type === "image/svg+xml") {
-        preview.attr("src", objectURL).removeClass("d-none");
-        return;
-    }
-
-    const img = new Image();
-    img.onload = function () {
-        if (this.width !== 40 || this.height !== 40) {
-            showToast("error", "Image must be exactly 40x40 pixels.");
+        img.onerror = function () {
+            showToast("error", "Invalid image file.");
             input.value = "";
             preview.addClass("d-none");
-        } else {
-            preview.attr("src", objectURL).removeClass("d-none");
-        }
-    };
-    img.onerror = function () {
-        showToast("error", "Invalid image file.");
-        input.value = "";
-        preview.addClass("d-none");
-    };
+        };
 
-    img.src = objectURL;
-}
-
-$(document).on("change", "#why_icon_1", function (e) {
-    validateAndPreview("why_icon_1", "preview_why_icon_1");
-});
-
-$(document).on("change", "#why_icon_2", function (e) {
-    validateAndPreview("why_icon_2", "preview_why_icon_2");
-});
-
-$(document).on("change", "#why_icon_3", function (e) {
-    validateAndPreview("why_icon_3", "preview_why_icon_3");
-});
+        img.src = objectURL;
+    }
+})();

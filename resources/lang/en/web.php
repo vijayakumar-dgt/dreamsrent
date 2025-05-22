@@ -296,6 +296,7 @@ return [
         'view_vehicle_details' => 'View Vehicle Details',
         'subtotal' => 'Subtotal',
         'total_tax' => 'Total Tax',
+        'tax_rate' => 'Tax Info',
         'estimated_total' => 'Estimated Total',
         'edit' => 'Edit',
         'booking_type' => 'Booking Type',

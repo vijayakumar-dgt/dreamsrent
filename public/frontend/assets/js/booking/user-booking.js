@@ -51,7 +51,7 @@
         // Initial state
         toggleContainer();
     });
-    
+
     $(document).ready(function () {
         $("#bookLocationForm").validate({
             rules: {
@@ -189,12 +189,19 @@
 
         let currencySymbol = $("#currency").val() || "$";
 
-        function updateTotalPrice() {
+        function updateTotalPrice(includeTax = false) {
             const base = parseFloat(basePrice) || 0;
             const extra = parseFloat(totalExtraServicePrice) || 0;
             const insurance = parseFloat(totalInsurancePrice) || 0;
+            const tax = parseFloat($("#tax_val").val().replace(/,/g, "")) || 0;
 
-            const finalTotal = base + extra + insurance;
+            let finalTotal = base + extra + insurance;
+
+            if (includeTax) {
+                finalTotal += tax;
+            }
+
+            console.log(finalTotal);
 
             $totalPriceExtra.val(extra.toFixed(2));
             $totalPriceInsurance.val(insurance.toFixed(2));
@@ -447,19 +454,53 @@
             },
         });
 
+        // Utility Functions
+        function getNumericVal(selector) {
+            let val = $(selector).val();
+            return parseFloat(val.replace(/,/g, "")) || 0;
+        }
+
+        function setTotalPriceDisplay(total) {
+            $(".vehicle-total-price span").text(total.toFixed(2));
+            $("#total_price").val(total.toFixed(2));
+        }
+
+        function addTaxToTotal() {
+            let currentTotal = getNumericVal("#total_price");
+            let taxVal = getNumericVal("#tax_val");
+
+            let newTotal = currentTotal + taxVal;
+            setTotalPriceDisplay(newTotal);
+        }
+
+        function removeTaxFromTotal() {
+            let currentTotal = getNumericVal("#total_price");
+            let taxVal = getNumericVal("#tax_val");
+
+            let newTotal = currentTotal - taxVal;
+            if (newTotal < 0) newTotal = 0;
+            setTotalPriceDisplay(newTotal);
+        }
+
+        document
+            .getElementById("removeTax")
+            .addEventListener("click", removeTaxFromTotal);
+
         $(".userInfoBtn").on("click", function (event) {
             event.preventDefault();
 
-            let carExtraInfoFormDate = $(
-                "#bookExtraDetailsForm"
-            ).serializeArray();
+            let $form = $("#bookExtraDetailsForm");
 
-            if ($("#bookExtraDetailsForm").valid()) {
+            if ($form.valid()) {
+                let carExtraInfoFormData = $form.serializeArray();
                 let formDataCollection = {};
-                carExtraInfoFormDate.forEach(function (item) {
+                carExtraInfoFormData.forEach(function (item) {
                     formDataCollection[item.name] = item.value;
                 });
+                // Add tax once after form is valid
+                updateTotalPrice(true);
 
+                // UI transitions
                 $("#second-field").hide();
                 $("#third-field").removeClass("d-none").show();
                 $("#extra-card").removeClass("d-none").show();
@@ -823,7 +864,6 @@
             }
         });
     });
-
 
     let $stateDropdown = $("#state_id");
     let $cityDropdown = $("#city_id");

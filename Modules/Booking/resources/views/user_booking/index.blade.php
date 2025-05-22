@@ -488,7 +488,7 @@
                             </div>
                             <div class="booking-info-btns d-flex justify-content-end">
                                 <button type="button" class="btn btn-secondary backLocationBtn scrolUp">{{__('web.home.back_to_location_and_time')}}</button>
-                                <button type="button" class="btn btn-primary continue-book-btn userInfoBtn scrolUp">{{__('web.home.continue_booking')}}</button>
+                                <button type="button" class="btn btn-primary continue-book-btn userInfoBtn scrolUp" id="addTax">{{__('web.home.continue_booking')}}</button>
                             </div>
                         </form>
                     </div>
@@ -631,7 +631,7 @@
                                 </div>
                             </div>
                             <div class="booking-info-btns d-flex justify-content-end">
-                                <button type="button" class="btn btn-secondary backToExtra scrolUp">{{__('web.home.back_to_extra_services')}}</button>
+                                <button type="button" class="btn btn-secondary backToExtra scrolUp" id="removeTax">{{__('web.home.back_to_extra_services')}}</button>
                                 <button type="button" id="nextBtn" class="btn btn-primary goCheckOut continue-book-btn scrolUp">{{__('web.home.confirm_and_pay_now')}}</button>
                             </div>
                         </form>
@@ -736,24 +736,6 @@
                                         </div>
                                         <div class="booking-vehicle-rates">
                                             <ul>
-                                                <li class="total-rate">
-                                                    <h6>{{__('web.home.subtotal')}}</h6>
-                                                    <h5>{{ $currencySymbol }}{{ number_format($finalRate, 2) }}</h5>
-                                                </li>
-
-                                                @foreach($calculatedTaxes as $tax)
-                                                <li>
-                                                    <h6>{{ $tax['group_name'] }} ({{ $tax['rate_name'] }} - {{ $tax['rate_percent'] }}%)</h6>
-                                                    <h5>{{ $currencySymbol }}{{ number_format($tax['amount'], 2) }}</h5>
-                                                </li>
-                                                @endforeach
-
-                                                <li class="total-rate">
-                                                    <h6>{{__('web.home.total_tax')}}</h6>
-                                                    <input type="hidden" name="tax_val" id="tax_val" value="{{ number_format($totalTax, 2) }}">
-                                                    <h5>{{ $currencySymbol }}{{ number_format($totalTax, 2) }}</h5>
-                                                </li>
-
                                                 <li class="total-rate">
                                                     <h6>{{__('web.home.estimated_total')}}</h6>
                                                     <h5>{{ $currencySymbol }}{{ number_format($grandTotal, 2) }}</h5>
@@ -871,6 +853,23 @@
                                                         </div>
                                                     </div>
 
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="booking-vehicle-rates mt-2">
+                                            <p class="fw-bold mb-1">{{__('web.home.tax_rate')}} :</p>
+                                            <ul>
+                                                @foreach($calculatedTaxes as $tax)
+                                                <li>
+                                                    <h6>{{ $tax['group_name'] }} ({{ $tax['rate_name'] }} - {{ $tax['rate_percent'] }}%)</h6>
+                                                    <h5>{{ $currencySymbol }}{{ number_format($tax['amount'], 2) }}</h5>
+                                                </li>
+                                                @endforeach
+
+                                                <li class="total-rate">
+                                                    <h6>{{__('web.home.total_tax')}}</h6>
+                                                    <input type="hidden" name="tax_val" id="tax_val" value="{{ number_format($totalTax, 2) }}">
+                                                    <h5>{{ $currencySymbol }}{{ number_format($totalTax, 2) }}</h5>
                                                 </li>
                                             </ul>
                                         </div>

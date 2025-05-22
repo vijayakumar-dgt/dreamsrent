@@ -120,12 +120,10 @@ class UserBookingController extends Controller
             }
         }
 
-        // Get other locations and remove duplicates
         if (!empty($vehicle->other_location_id)) {
             $otherIds = json_decode($vehicle->other_location_id, true);
 
             if (is_array($otherIds)) {
-                // Remove main_location_id if present in other_location_id
                 $filteredOtherIds = array_filter($otherIds, function ($id) use ($vehicle) {
                     return $id != $vehicle->main_location_id;
                 });
@@ -207,10 +205,8 @@ class UserBookingController extends Controller
 
         $finalRate = is_numeric($request->final_price_rate) ? (float) $request->final_price_rate : 0.0;
 
-        // Get all tax groups with their tax rates using Eloquent relationship
         $taxGroups = TaxGroup::with(['taxRates'])->get();
 
-        // Prepare an array to store calculated tax details
         $calculatedTaxes = [];
 
         foreach ($taxGroups as $group) {
@@ -229,7 +225,7 @@ class UserBookingController extends Controller
             }
         }
         $totalTax = array_sum(array_column($calculatedTaxes, 'amount'));
-        $grandTotal = $finalRate + $totalTax;
+        $grandTotal = $finalRate;
         $user = Auth::guard('web')->user();
         $seo_title = "User Booking";
 
@@ -294,7 +290,6 @@ class UserBookingController extends Controller
             'message' => __('web.home.vehicle_available')
         ]);
     }
-
 
     public function paymentSuccess(string $transaction_id): View
     {
