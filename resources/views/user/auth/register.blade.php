@@ -91,7 +91,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header d-flex align-items-center justify-content-end pb-0 border-0">
-                       <button type="button" class="btn btn-link p-0" data-bs-dismiss="modal" aria-label="Close" id="close-otp-modal" style="font-size: 20px;">
+                       <button type="button" class="btn btn-link p-0" data-bs-dismiss="modal" aria-label="Close" id="close-otp-modal">
                             <i class="ti ti-circle-x-filled"></i>
                         </button>
 
@@ -112,7 +112,7 @@
                                     <div class="mb-3 d-flex justify-content-center">
                                         <p>
                                             {{ __('web.auth.didnt_get_otp') }}
-                                            <button type="button" class="btn btn-link p-0 resendRegEmailOtp text-primary" style="vertical-align: baseline;">
+                                            <button type="button" class="btn btn-link p-0 resendRegEmailOtp text-primary">
                                                 {{ __('web.auth.resend_otp') }}
                                             </button>
                                         </p>
