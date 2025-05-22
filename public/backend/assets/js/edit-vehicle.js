@@ -1998,7 +1998,7 @@
 
             if (damage.image) {
                 $("#image_preview")
-                    .attr("src", "/" + damage.image)
+                    .attr("src", "/storage/" + damage.image)
                     .removeClass("d-none");
             } else {
                 $("#image_preview").attr("src", "").addClass("d-none");
