@@ -842,8 +842,6 @@ return array(
     'select_driver' => 'Select Driver',
     'add_information_for_driver' => 'Add information for Driver',
     'add_extra_services' => 'Add Extra Services',
-    'select_extra_services' => 'Select Extra Services',
-    'add_extra_services_for_your_rental' => 'Add extra services for your rental',
     'proceed_to_billing' => 'Proceed to Billing',
     'add_insurance_for_your_rental' => 'Add insurance for your rental',
     'reservation_created_for_the' => 'Reservation created for the',
@@ -1538,7 +1536,6 @@ return array(
     'add_vehicle' => 'Add Vehicle',
     'view_review' => 'View Review',
     'color_code_unique' => 'Color code already exists.',
-    'color_name_unique' => 'Color name already exists.',
   ),
   'user_management' =>
   array(
@@ -2139,7 +2136,6 @@ return array(
     'states' => 'States',
     'cities' => 'Cities',
     'tariffs' => 'Tariffs',
-    'tariff' => 'Tariff',
     'summary' => 'Summary',
     'driver' => 'Driver',
     'back' => 'Back',
