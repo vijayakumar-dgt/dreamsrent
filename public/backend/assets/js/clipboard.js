@@ -1,6 +1,6 @@
 /*
-Author       : Dreamstechnologies
-Template Name: Dreams rent - Bootstrap Admin Template
+Author       : Dreamguys
+Template Name: Dreams Rent 
 */
 (function () {
     "use strict";

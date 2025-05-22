@@ -477,7 +477,6 @@
 
     function updateFaqCount() {
         const count = $(".car_faq_append .accordion-item").length;
-        console.log(count);
         $("#faq_count").text(count); // Assuming you have an element with this ID
     }
 
@@ -2802,7 +2801,6 @@
                 const insurancePriceTypeId = $container
                     .find("#insurance_price_type_id")
                     .val();
-                        console.log(insurancePriceTypeId);
 
                 const uniqueId =
                     "insurance_" +

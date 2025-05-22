@@ -17,10 +17,6 @@
             prevEl: ".swiper-button-prev",
         },
         loop: true,
-        // autoplay: {
-        //     delay: 1500,
-        //     disableOnInteraction: false,
-        // }
     });
 
     // swiper with pagination
