@@ -17,9 +17,6 @@
                 return;
             }
 
-            // Debug: Check if translations are available
-            console.log('Loaded translations:', _l('web.auth.invalid_email'));
-
             $.ajax({
                 url: "/otp-settings",
                 type: "POST",
