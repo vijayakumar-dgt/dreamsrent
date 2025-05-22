@@ -13,6 +13,10 @@
     $(document).on('change', '#duration', fetchUserBookings);
     $(document).on('change', '#sort', fetchTransactions);
 
+    function ucfirst(str) {
+        if (!str) return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
     // Fetch Bookings
     function fetchUserBookings() {
         const duration = $("#duration").val();

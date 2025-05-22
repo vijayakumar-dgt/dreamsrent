@@ -2,6 +2,10 @@
     "use strict";
     await loadTranslationFile('web', 'user,common');
 
+    function ucfirst(str) {
+        if (!str) return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
     $(function () {
         // Helper
         const getCsrf = () => $('meta[name="csrf-token"]').attr('content');
