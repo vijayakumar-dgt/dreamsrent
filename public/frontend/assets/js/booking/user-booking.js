@@ -1144,20 +1144,23 @@ $(document).ready(function () {
         const insuranceId = $(this).data("insurance-id");
         const token = $('meta[name="csrf-token"]').attr("content");
 
-        const $preloader = $("#content-preloader");
-        const $list = $("#benefit-list");
-
-        $list.empty();
-        $preloader.show(); // Show loader
+        $("#benefit-list").html(`
+    <div class="d-flex justify-content-center py-3">
+        <div class="spinner-border text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+`);
 
         $.ajax({
             type: "POST",
             url: "/get/benefits",
             data: {
                 id: insuranceId,
-                _token: token,
+                _token: $('meta[name="csrf-token"]').attr("content"),
             },
             success: function (response) {
+                const $list = $("#benefit-list");
                 $list.empty();
 
                 if (response.length > 0) {
@@ -1172,14 +1175,6 @@ $(document).ready(function () {
                 }
 
                 $("#show_benifit").modal("show");
-            },
-            error: function () {
-                $list.html(
-                    "<li class='text-danger'>Failed to load benefits.</li>"
-                );
-            },
-            complete: function () {
-                $preloader.hide(); // Hide loader in both success & error
             },
         });
     });

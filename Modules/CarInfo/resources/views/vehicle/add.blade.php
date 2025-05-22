@@ -850,13 +850,13 @@
 						<div class="col-md-6">
 							<div class="mb-3">
 								<label class="form-label">{{ __('admin.rentals.from_days') }} <span class="text-danger">*</span></label>
-								<input type="text" name="t_fromday" id="t_fromday" maxlength="10" class="form-control">
+								<input type="text" name="t_fromday" id="t_fromday" maxlength="10" class="form-control priceLimit">
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="mb-3">
 								<label class="form-label">{{ __('admin.rentals.to_days') }} <span class="text-danger">*</span></label>
-								<input type="text" name="t_today" id="t_today" maxlength="10" class="form-control">
+								<input type="text" name="t_today" id="t_today" maxlength="10" class="form-control priceLimit">
 							</div>
 						</div>
 						<div class="col-md-12">

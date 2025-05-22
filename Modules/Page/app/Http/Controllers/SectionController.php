@@ -246,15 +246,15 @@ class SectionController extends Controller
             $thumbnail1 = $thumbnail2 = $thumbnail3 = null;
 
             if ($request->hasFile('why_icon_1') && $request->file('why_icon_1')->isValid()) {
-                $thumbnail1 = uploadFile($request->file('why_icon_1'), 'general/');
+                $thumbnail1 = uploadFile($request->file('why_icon_1'), 'general');
             }
 
             if ($request->hasFile('why_icon_2') && $request->file('why_icon_2')->isValid()) {
-                $thumbnail2 = uploadFile($request->file('why_icon_2'), 'general/');
+                $thumbnail2 = uploadFile($request->file('why_icon_2'), 'general');
             }
 
             if ($request->hasFile('why_icon_3') && $request->file('why_icon_3')->isValid()) {
-                $thumbnail3 = uploadFile($request->file('why_icon_3'), 'general/');
+                $thumbnail3 = uploadFile($request->file('why_icon_3'), 'general');
             }
 
             $data = [

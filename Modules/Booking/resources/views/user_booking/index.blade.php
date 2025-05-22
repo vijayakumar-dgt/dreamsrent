@@ -942,12 +942,6 @@
                 <ul id="benefit-list" class="ps-3">
                 </ul>
             </div>
-
-            <div class="modal-footer border-0 justify-content-center">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
-                    {{ __('admin.common.close') }}
-                </button>
-            </div>
         </div>
     </div>
 </div>
