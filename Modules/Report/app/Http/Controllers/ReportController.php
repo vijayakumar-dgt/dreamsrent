@@ -93,12 +93,11 @@ class ReportController extends Controller
             ->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image')
             ->paginate(10);
 
-        $totalIncome = (float) $bookings->sum('final_price');
-        $totalInsurancePrice = (float) $bookings->sum('total_insurance_price');
-        $totalExtraServicePrice = (float) $bookings->sum('total_extra_service_price');
+        $totalIncome = number_format((float) $bookings->sum('final_price'), 2);
+        $totalInsurancePrice = number_format((float) $bookings->sum('total_insurance_price'), 2);
+        $totalExtraServicePrice = number_format((float) $bookings->sum('total_extra_service_price'), 2);
 
-        $grandTotal = $totalInsurancePrice + $totalExtraServicePrice;
-
+        $grandTotal = number_format($totalInsurancePrice + $totalExtraServicePrice, 2);
         // This month
         $thisMonthInsurance = (float) $bookings->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->sum('total_insurance_price');
@@ -131,6 +130,7 @@ class ReportController extends Controller
 
         $topEarningCar = $earningsByCar->keys()->first();
         $topEarningCarTotal = $earningsByCar->first();
+        $topEarningCarTotal = number_format((float) $topEarningCarTotal, 2);
 
         $vehicle = VehicleInfo::find($topEarningCar);
         $vehicleInfo = VehicleInfo::where('status', 1)->whereNull('deleted_at')->get();
@@ -169,7 +169,7 @@ class ReportController extends Controller
         $percentageCarChangeFormatted = $signCar . abs($percentageCarChange) . '%';
 
         $symbol = getDefaultCurrencySymbol();
-
+            // dd($totalIncome);
         return view('report::earningReport', compact(
             'symbol',
             'bookings',

@@ -219,7 +219,7 @@ class QuotationController extends Controller
                         if ($appAdmin !== null) {
                             sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
                         }
-    
+
                         if ($customer !== null) {
                             sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
                         }

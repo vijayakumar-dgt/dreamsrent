@@ -150,7 +150,7 @@ class EnquireController extends Controller
             ]);
         }
     }
-   public function update(Request $request): JsonResponse
+    public function update(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'comment' => 'required|string|max:500',
@@ -185,7 +185,7 @@ class EnquireController extends Controller
             }
 
             if ($enquiry->status == 2 && $request->status == 1) {
-            return response()->json([
+                return response()->json([
                     'success' => false,
                     'message' => 'The enquiry has already been opened and cannot be reverted to not opened.',
                 ], 400);
@@ -203,10 +203,10 @@ class EnquireController extends Controller
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
-                'success' => false,
-                'message' => 'Failed to update enquiry.',
-                'error' => $e->getMessage()
+              'code' => 500,
+              'success' => false,
+              'message' => 'Failed to update enquiry.',
+              'error' => $e->getMessage()
             ], 500);
         }
     }

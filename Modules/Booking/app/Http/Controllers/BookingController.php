@@ -512,7 +512,7 @@ class BookingController extends Controller
                     if (userNotificationsEnabled() && $customer && $customer->email) {
                             sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
                     }
-                } catch (\Exception $e) {                    
+                } catch (\Exception $e) {
                 }
             } else {
                 $data['updated_by'] = Auth::guard('admin')->id();
@@ -1143,7 +1143,7 @@ class BookingController extends Controller
                 if ($appAdmin && isset($appAdmin->email)) {
                     sendNotification($appAdmin->email, 'booking-cancelled-to-admin', $notifyData ?? []);
                 }
-    
+
                 if (isset($customer) && isset($notifyData) && !empty($customer->email)) {
                     sendNotification($customer->email, 'booking-cancelled-to-user', $notifyData);
                 }

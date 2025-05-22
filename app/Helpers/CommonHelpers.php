@@ -575,7 +575,8 @@ function getCommonSettingData(?array $notifyData): array
 }
 
 if (!function_exists('formatPrice')) {
-    function formatPrice($price, $withSymbol = true, $rawPrice = false) {
+    function formatPrice($price, $withSymbol = true, $rawPrice = false)
+    {
         $defaultCurrencySymbol = getDefaultCurrencySymbol();
 
         $currencyPosition = GeneralSetting::where('key', 'currency_position')->first();

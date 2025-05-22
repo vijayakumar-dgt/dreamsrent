@@ -135,7 +135,7 @@ class DashboardController extends Controller
                 'car_fuels.fuel_type',
                 'user_details.profile_image'
             )
-            ->where('bookings.deleted_at', NULL)
+            ->where('bookings.deleted_at', null)
             ->orderBy('bookings.id', 'desc')
             ->limit(5)
             ->get();
@@ -153,7 +153,7 @@ class DashboardController extends Controller
             return $booking;
         });
 
-       $users = DB::table('users')
+        $users = DB::table('users')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->whereNull('users.deleted_at')
             ->where('users.user_type', 3)
@@ -189,7 +189,7 @@ class DashboardController extends Controller
 
         $maintenances =  Maintenance::Join('vehicle_info', 'maintenances.vehicle_id', '=', 'vehicle_info.id')
             ->LeftJoin('car_models', 'vehicle_info.model_id', '=', 'car_models.id')
-            ->where('maintenances.deleted_at', NULL)
+            ->where('maintenances.deleted_at', null)
             ->orderBy('maintenances.id', 'desc')
             ->limit(5)
             ->get();
@@ -215,7 +215,7 @@ class DashboardController extends Controller
             )
             ->groupBy('drivers.id', 'drivers.driver_name', 'drivers.email', 'drivers.phone_number', 'drivers.image')
             ->orderBy('drivers.id', 'desc')
-            ->where('drivers.deleted_at', NULL)
+            ->where('drivers.deleted_at', null)
             ->limit(5)
             ->get();
 
@@ -258,7 +258,7 @@ class DashboardController extends Controller
             ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image', 'user_details.first_name', 'user_details.last_name')
-            ->where('invoices.deleted_at', NULL)->where('invoices.language_id', $languageId)->limit(5)->get()->map(function ($invoice) {
+            ->where('invoices.deleted_at', null)->where('invoices.language_id', $languageId)->limit(5)->get()->map(function ($invoice) {
                 $invoice->full_name = !empty($invoice->first_name) ? ucwords($invoice->first_name . ' ' . $invoice->last_name) : '';
                 return $invoice;
             });

@@ -48,7 +48,7 @@ class DriverController extends Controller
             'gender' => ['required'],
             'phone_number' => ['required'],
             'email' => [
-                'required', 
+                'required',
                 'email',
                 Rule::unique('drivers', 'email')->ignore($id)->whereNull('deleted_at'),
             ],
