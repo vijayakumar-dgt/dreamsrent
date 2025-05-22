@@ -809,10 +809,15 @@ class PageController extends Controller
                                 }
                             }
                             $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
+
                             if (!empty($vehicle->vehicle_image)) {
                                 array_unshift($multipleImages, $vehicle->vehicle_image);
                             }
-                            $multipleImages = array_map(fn($img) => url('storage/vehicles/' . basename($img)), $multipleImages);
+
+                            $multipleImages = array_map(function ($img) {
+                                $img = '/' . ltrim($img, '/'); // Ensure single leading slash
+                                return url('storage' . $img);
+                            }, $multipleImages);
 
                             /** @var \App\Models\User|null $auth */
                             $auth = current_user();
