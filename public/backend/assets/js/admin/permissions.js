@@ -91,5 +91,4 @@
 
         row.find('.perm-allow-all').prop('checked', allChecked);
     });
-
 }) ();
