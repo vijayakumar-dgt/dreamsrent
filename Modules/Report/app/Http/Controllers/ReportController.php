@@ -23,20 +23,15 @@ class ReportController extends Controller
     {
         $bookings = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
             ->get();
-
         $bookingsCount = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
             ->orderby('bookings.id', 'desc')->paginate(10);
-
-        // Format totalIncome with 2 decimals
-        $totalIncome = number_format($bookings->filter(function ($booking) {
+        $totalIncome = $bookings->filter(function ($booking) {
             if ($booking->booking_by === 'admin') {
                 return is_null($booking->payment_status) || $booking->payment_status == 2;
             } else {
                 return $booking->payment_status == 2;
             }
-        })->sum('final_price'), 2);
-
-        // Get top earning car (ID)
+        })->sum('final_price');
         $topEarningCar = $bookings
             ->groupBy('vehicle_id')
             ->map(fn($group) => $group->sum('final_price'))
@@ -49,11 +44,12 @@ class ReportController extends Controller
 
         $startOfThisWeek = now()->startOfWeek();
         $endOfThisWeek = now()->endOfWeek();
+
         $startOfLastWeek = now()->subWeek()->startOfWeek();
         $endOfLastWeek = now()->subWeek()->endOfWeek();
 
-        $thisWeekIncome = number_format(Booking::whereBetween('booking_date', [$startOfThisWeek, $endOfThisWeek])->sum('final_price'), 2);
-        $lastWeekIncome = number_format(Booking::whereBetween('booking_date', [$startOfLastWeek, $endOfLastWeek])->sum('final_price'), 2);
+        $thisWeekIncome = Booking::whereBetween('booking_date', [$startOfThisWeek, $endOfThisWeek])->sum('final_price');
+        $lastWeekIncome = Booking::whereBetween('booking_date', [$startOfLastWeek, $endOfLastWeek])->sum('final_price');
 
         if ($lastWeekIncome > 0) {
             $percentageChange = (($thisWeekIncome - $lastWeekIncome) / $lastWeekIncome) * 100;
@@ -62,36 +58,24 @@ class ReportController extends Controller
             $percentageChange = $thisWeekIncome > 0 ? 100 : 0;
             $sign = $thisWeekIncome > 0 ? '+' : '0'; // If last week was 0, show +100% increase
         }
-
         $symbol = getDefaultCurrencySymbol();
 
-        // Format income in grouped bookings (2 decimal places)
-        $bookings = $bookings->groupBy(function ($booking) {
-                return Carbon::parse($booking->booking_date)->format('Y-m-d');
+        $bookings->groupBy(function ($booking) {
+            return Carbon::parse($booking->booking_date)->format('Y-m-d'); // Group by date
         })
-            ->map(function ($dayBookings) {
-                $income = $dayBookings->sum(function ($booking) {
+        ->map(function ($dayBookings) {
+            return [
+                'date' => $dayBookings->first()?->booking_date,
+                'income' => $dayBookings->sum(function ($booking) {
                     return ($booking->payment_status == 1 || $booking->booking_by == 'admin') ? $booking->final_price : 0;
-                });
-                return [
-                    'date' => $dayBookings->first()?->booking_date,
-                    'income' => number_format($income, 2), // Format income
-                    'expense' => '0.00' // Placeholder (formatted)
-                ];
-            })
-            ->values();
+                }),
+                'expense' => 0 // Placeholder, modify if you have expenses
+            ];
+        })
 
-        return view('report::incomeReport', compact(
-            "totalIncome",
-            "topEarningCar",
-            "vehicle",
-            "percentageChange",
-            "sign",
-            "symbol",
-            "bookings",
-            "vehicleInfo",
-            "bookingsCount"
-        ));
+            ->values(); // Convert collection to array
+
+        return view('report::incomeReport', compact("totalIncome", "topEarningCar", "vehicle", "percentageChange", "sign", "symbol", "bookings", "vehicleInfo", "bookingsCount"));
     }
 
     public function earningReport(): View
