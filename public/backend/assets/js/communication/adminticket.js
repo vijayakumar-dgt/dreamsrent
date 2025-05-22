@@ -1,6 +1,6 @@
-let ticketData = [];
-"use strict";
 (async () => {
+    let ticketData = [];
+    "use strict";
     await loadTranslationFile('admin', 'common, support');
     const permissions = await loadUserPermissions();
     updateFilterCount();

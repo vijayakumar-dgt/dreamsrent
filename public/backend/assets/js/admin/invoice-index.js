@@ -1,5 +1,8 @@
-(async () => {
+(function () {
     "use strict";
+
+(async () => {
+
     await loadTranslationFile('admin', 'common, finance_accounts');
 
     $('#invoicesTable').DataTable({
@@ -201,3 +204,4 @@ $(document).ready(function () {
         });
     });
 });
+})();
