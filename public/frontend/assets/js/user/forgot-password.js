@@ -3,6 +3,8 @@
     await loadTranslationFile('web', 'user,common,auth');
 
     $(document).ready(function () {
+        
+        let emailTimerInterval;
         $(document).on("click", "#forgot_otp, .resendEmailOtpForgot", function (event) {
             event.preventDefault();
 
@@ -14,9 +16,6 @@
                 showToast("error", errorMessage);
                 return;
             }
-
-            // Debug: Check if translations are available
-            console.log('Loaded translations:', _l('web.auth.invalid_email'));
 
             $.ajax({
                 url: "/otp-settings",
@@ -169,76 +168,74 @@
                 },
             });
         });
+
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        function startTimer(expireTime) {
+            clearInterval(emailTimerInterval); // Clear any existing timer
+            emailTimerTime = expireTime * 60; // Convert minutes to seconds
+
+            setTimeout(() => {
+                let otpTimerDisplay = document.getElementById("otp-timer");
+
+                if (!otpTimerDisplay) {
+                    console.error("OTP Timer element not found!");
+                    return;
+                }
+
+                emailTimerInterval = setInterval(() => {
+                    let minutes = Math.floor(emailTimerTime / 60);
+                    let seconds = emailTimerTime % 60;
+
+                    otpTimerDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+                    if (emailTimerTime <= 0) {
+                        clearInterval(emailTimerInterval);
+                        otpTimerDisplay.textContent = "00:00"; // Timer finished
+                    } else {
+                        emailTimerTime--;
+                    }
+                }, 1000);
+            }, 500); // Ensures modal and elements are visible
+        }
+
+        function sendEmail(email, emailData, userName, otp) {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "/api/mail/sendmail",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        otp_type: "email",
+                        to_email: email,
+                        notification_type: 2,
+                        type: 1,
+                        user_name: userName,
+                        otp: otp,
+                        subject: emailData.subject,
+                        content: emailData.content,
+                    },
+                    headers: {
+                        Authorization:
+                            "Bearer " + localStorage.getItem("admin_token"),
+                        Accept: "application/json",
+                    },
+                    success: function (response) {
+                        resolve(response);
+                    },
+                    error: function (error) {
+                        reject(error);
+                    },
+                });
+            });
+        }
     });
 })();
 
 
-let emailTimerInterval;``
-
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
 
 
-
-function startTimer(expireTime) {
-    clearInterval(emailTimerInterval); // Clear any existing timer
-    emailTimerTime = expireTime * 60; // Convert minutes to seconds
-
-    setTimeout(() => {
-        let otpTimerDisplay = document.getElementById("otp-timer");
-
-        if (!otpTimerDisplay) {
-            console.error("OTP Timer element not found!");
-            return;
-        }
-
-        emailTimerInterval = setInterval(() => {
-            let minutes = Math.floor(emailTimerTime / 60);
-            let seconds = emailTimerTime % 60;
-
-            otpTimerDisplay.textContent = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-
-            if (emailTimerTime <= 0) {
-                clearInterval(emailTimerInterval);
-                otpTimerDisplay.textContent = "00:00"; // Timer finished
-            } else {
-                emailTimerTime--;
-            }
-        }, 1000);
-    }, 500); // Ensures modal and elements are visible
-}
-
-function sendEmail(email, emailData, userName, otp) {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            url: "/api/mail/sendmail",
-            type: "POST",
-            dataType: "json",
-            data: {
-                otp_type: "email",
-                to_email: email,
-                notification_type: 2,
-                type: 1,
-                user_name: userName,
-                otp: otp,
-                subject: emailData.subject,
-                content: emailData.content,
-            },
-            headers: {
-                Authorization:
-                    "Bearer " + localStorage.getItem("admin_token"),
-                Accept: "application/json",
-            },
-            success: function (response) {
-                resolve(response);
-            },
-            error: function (error) {
-                reject(error);
-            },
-        });
-    });
-}
 
 
