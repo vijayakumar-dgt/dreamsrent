@@ -1198,7 +1198,7 @@
 							</h6>
 							<input type="hidden" id="insurance_name" value="{{ $insurance->insurance_name }}">
 							<input type="hidden" id="insurance_price_type" value="{{ $insurance->priceType->pricing_type }}">
-                            <input type="hidden" id="insurance_price_type_id" value="{{ $insurance->price_type_id }}">
+							<input type="hidden" id="insurance_price_type_id" value="{{ $insurance->price_type_id }}">
 							<div class="d-flex align-items-center gap-2 flex-wrap">
 								<p class="fs-13 fw-medium border-end pe-2 mb-0">
 									{{ __('admin.rentals.price') }}: <span class="text-gray-9">
@@ -1257,19 +1257,19 @@
 					<label class="form-label">{{ __('admin.rentals.price_type') }} <span class="text-danger"> *</span></label>
 					<div class="d-flex align-items-center">
 						<div class="form-check me-3">
-							<input class="form-check-input" type="radio" name="Radio" id="Radio-sm" checked>
+							<input class="form-check-input" type="radio" name="Radio" id="Radio-sm" value="daily">
 							<label class="form-check-label" for="Radio-sm">
 								{{ __('admin.rentals.daily') }}
 							</label>
 						</div>
 						<div class="form-check me-3">
-							<input class="form-check-input" type="radio" name="Radio" id="Radio-sm2">
+							<input class="form-check-input" type="radio" name="Radio" id="Radio-sm2" value="fixed">
 							<label class="form-check-label" for="Radio-sm2">
 								{{ __('admin.rentals.fixed') }}
 							</label>
 						</div>
 						<div class="form-check">
-							<input class="form-check-input" type="radio" name="Radio" id="Radio-sm3">
+							<input class="form-check-input" type="radio" name="Radio" id="Radio-sm3" value="percentage">
 							<label class="form-check-label" for="Radio-sm3">
 								{{ __('admin.rentals.percentage') }}
 							</label>

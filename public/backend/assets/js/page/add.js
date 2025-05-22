@@ -322,7 +322,6 @@ function updateThemeSelection(selectedButton) {
             },
             success: function (response) {
                 if (response.code === 200) {
-                    console.log(response);
                     var sectionHtml = '<div class="row p-1">';
 
                     $.each(response.data, function (index, section) {

@@ -2008,17 +2008,18 @@
         });
 
         // Edit icon click handler
-        $(document).on("click", ".edit-icon", function (event) {
+        $(document).on("click", ".edit-icon-in", function () {
             const $editButton = $(this);
             const uniqueId = $editButton.data("id");
             const price = $editButton.data("price");
-            const priceType = $editButton.data("price-type");
+            const priceType = $editButton.data("price-type").toLowerCase(); // Ensure lowercase match
 
             $("#price").val(price);
             $("#edit_insurance").attr("data-id", uniqueId);
 
+            // Match the radio by value instead of label text
             $("input[name='Radio']").each(function () {
-                if ($(this).next().text().trim() === priceType) {
+                if ($(this).val() === priceType) {
                     $(this).prop("checked", true);
                 }
             });
@@ -2077,12 +2078,28 @@
                                 <p class="fs-13 fw-medium mb-0">${_l(
                                     "admin.rentals.insurance_price_type"
                                 )} : <span class="text-gray-9 priceTypeIn" data-id="${uniqueId}">${insurancePriceType}</span></p>
-                                <input type="hidden" name="insurance_price_type_one[]" id="insurance_price_type_one_${uniqueId}" value="${insurancePriceType}">
+                                <input type="hidden" name="insurance_price_type_one[]" id="insurance_price_type_one_${uniqueId}" value="${
+                        insurancePriceTypeId == 7
+                            ? "percentage"
+                            : insurancePriceTypeId == 6
+                            ? "fixed"
+                            : "daily"
+                    }">
                             </div>
                         </div>
                         <div class="d-flex align-items-center icon-list">
-                            <a href="#" class="edit-icon me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance" 
-                            data-id="${uniqueId}" data-price="${insurancePrice}" data-price-type="${insurancePriceType}"><i class="ti ti-edit"></i></a>
+                            <a href="#" class="edit-icon-in me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance" 
+                                data-id="${uniqueId}" 
+                                data-price="${insurancePrice}" 
+                                data-price-type="${
+                                    insurancePriceTypeId == 7
+                                        ? "percentage"
+                                        : insurancePriceTypeId == 6
+                                        ? "fixed"
+                                        : "daily"
+                                }">
+                                <i class="ti ti-edit"></i>
+                            </a>
                             <a href="#" class="trash-icon" data-bs-toggle="modal" data-bs-target="#delete_insurance"><i class="ti ti-trash"></i></a>
                         </div>
                     </div>
@@ -2095,54 +2112,46 @@
             });
         }
 
-        // Save updated insurance values
         const $saveUpdateBtn = $("#save_update");
 
         if ($saveUpdateBtn.length) {
             $saveUpdateBtn.on("click", function () {
-                let updatedPrice = $("#price").val().trim();
+                const updatedPriceRaw = $("#price").val().trim();
                 const $selectedRadio = $("input[name='Radio']:checked");
-                const updatedPriceType = $selectedRadio
-                    .next()
-                    .text()
-                    .trim()
-                    .toLowerCase();
-                const uniqueId = $("#edit_insurance").data("id"); // Cleaner jQuery data access
+                const updatedPriceType = $selectedRadio.val();
+                const uniqueId = $("#edit_insurance").data("id");
 
-                // Validate price input
-                if (updatedPrice === "" || isNaN(updatedPrice)) {
+                if (updatedPriceRaw === "" || isNaN(updatedPriceRaw)) {
                     alert("Please enter a valid price.");
                     return;
                 }
 
+                let updatedPrice = parseFloat(updatedPriceRaw);
+
+                let displayPrice = "";
+                let priceTypeLabel =
+                    updatedPriceType.charAt(0).toUpperCase() +
+                    updatedPriceType.slice(1);
+
                 if (updatedPriceType === "percentage") {
-                    updatedPrice = parseFloat(updatedPrice).toFixed(0); // No decimals for percentage
-                    $(`.priceIn[data-id='${uniqueId}']`).text(
-                        `${updatedPrice}%`
-                    );
-                    $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
-                    $(`.priceTypeIn[data-id='${uniqueId}']`).text("Percentage");
-                    $(`#insurance_price_type_one_${uniqueId}`).val("%");
+                    updatedPrice = updatedPrice.toFixed(0);
+                    displayPrice = `${updatedPrice}%`;
                 } else {
-                    updatedPrice = parseFloat(updatedPrice).toFixed(2); // Two decimals for currency/fixed
-                    $(`.priceIn[data-id='${uniqueId}']`).text(
-                        `$${updatedPrice}`
-                    );
-                    $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
-                    $(`.priceTypeIn[data-id='${uniqueId}']`).text(
-                        updatedPriceType.charAt(0).toUpperCase() +
-                            updatedPriceType.slice(1)
-                    );
-                    $(`#insurance_price_type_one_${uniqueId}`).val(
-                        updatedPriceType
-                    );
+                    updatedPrice = updatedPrice.toFixed(2);
+                    displayPrice = `$${updatedPrice}`;
                 }
+
+                $(`.priceIn[data-id='${uniqueId}']`).text(displayPrice);
+                $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
+                $(`.priceTypeIn[data-id='${uniqueId}']`).text(priceTypeLabel);
+                $(`#insurance_price_type_one_${uniqueId}`).val(
+                    updatedPriceType
+                );
 
                 $("#edit_insurance").modal("hide");
             });
         }
 
-        // Delete insurance entry
         $(document).on("click", ".trash-icon", function (event) {
             event.preventDefault();
             const $deleteButton = $(this);
