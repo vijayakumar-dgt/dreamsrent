@@ -204,7 +204,7 @@ class SectionController extends Controller
             $thumbnailPath = $existingData['thumbnail_image_one'] ?? null;
 
             if ($request->hasFile('thumbnail_image_one') && $request->file('thumbnail_image_one') instanceof \Illuminate\Http\UploadedFile) {
-                $thumbnailPath = uploadFile($request->file('thumbnail_image_one'), 'thumbnail_image_banner_one');
+                $thumbnailPath = uploadFile($request->file('thumbnail_image_one'), 'general');
             }
 
             $data = [
@@ -218,7 +218,7 @@ class SectionController extends Controller
             $thumbnailPath = $existingData['thumbnail_image_two'] ?? null;
 
             if ($request->hasFile('thumbnail_image_two') && $request->file('thumbnail_image_two') instanceof \Illuminate\Http\UploadedFile) {
-                $thumbnailPath = uploadFile($request->file('thumbnail_image_two'), 'thumbnail_image_banner_two');
+                $thumbnailPath = uploadFile($request->file('thumbnail_image_two'), 'general');
             }
 
             $data = [
