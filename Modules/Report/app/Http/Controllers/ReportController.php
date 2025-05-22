@@ -93,11 +93,12 @@ class ReportController extends Controller
             ->select('bookings.*', 'users.id', 'users.name', 'user_details.id', 'user_details.user_id', 'user_details.profile_image')
             ->paginate(10);
 
-        $totalIncome = number_format((float) $bookings->sum('final_price'), 2);
-        $totalInsurancePrice = number_format((float) $bookings->sum('total_insurance_price'), 2);
-        $totalExtraServicePrice = number_format((float) $bookings->sum('total_extra_service_price'), 2);
+        $totalIncome = (float) $bookings->sum('final_price');
+        $totalInsurancePrice = (float) $bookings->sum('total_insurance_price');
+        $totalExtraServicePrice = (float) $bookings->sum('total_extra_service_price');
 
-        $grandTotal = number_format($totalInsurancePrice + $totalExtraServicePrice, 2);
+        $grandTotal = $totalInsurancePrice + $totalExtraServicePrice;
+
         // This month
         $thisMonthInsurance = (float) $bookings->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->sum('total_insurance_price');
@@ -121,6 +122,8 @@ class ReportController extends Controller
         $class = $percentageBreakChange >= 0 ? 'text-success' : 'text-danger';
         $icon = $percentageBreakChange >= 0 ? 'ti ti-arrow-wave-right-up' : 'ti ti-arrow-wave-right-down';
         $percentageBreakChangeFormatted = $signbreak . abs($percentageBreakChange) . '%';
+        $percentageBreakChangeFormatted = number_format((float) $percentageBreakChangeFormatted, 2);
+
 
         // Earnings per vehicle
         $earningsByCar = $bookings
@@ -130,7 +133,6 @@ class ReportController extends Controller
 
         $topEarningCar = $earningsByCar->keys()->first();
         $topEarningCarTotal = $earningsByCar->first();
-        $topEarningCarTotal = number_format((float) $topEarningCarTotal, 2);
 
         $vehicle = VehicleInfo::find($topEarningCar);
         $vehicleInfo = VehicleInfo::where('status', 1)->whereNull('deleted_at')->get();
@@ -145,7 +147,7 @@ class ReportController extends Controller
             : ($thisMonthIncome > 0 ? 100 : 0);
         $sign = $percentageChange >= 0 ? '+' : '-';
         $percentageChangeFormatted = $sign . abs($percentageChange) . '%';
-
+        $percentageChangeFormatted = number_format((float) $percentageChangeFormatted, 2);
         // Per-vehicle earnings
         $thisMonthEarnings = $bookings->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->groupBy('vehicle_id')
@@ -167,9 +169,10 @@ class ReportController extends Controller
         $class = $percentageCarChange >= 0 ? 'text-success' : 'text-danger';
         $icon = $percentageCarChange >= 0 ? 'ti ti-arrow-wave-right-up' : 'ti ti-arrow-wave-right-down';
         $percentageCarChangeFormatted = $signCar . abs($percentageCarChange) . '%';
+        $percentageCarChangeFormatted = number_format((float) $percentageCarChangeFormatted, 2);
 
         $symbol = getDefaultCurrencySymbol();
-            // dd($totalIncome);
+
         return view('report::earningReport', compact(
             'symbol',
             'bookings',
