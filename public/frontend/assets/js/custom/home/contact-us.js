@@ -1,5 +1,32 @@
 (async () => {
+    "use strict";
     await loadTranslationFile("web", "home, common");
+    initIntelInput();
+
+    function initIntelInput() {
+        const $userPhoneInput = $("#contact_phone");
+        const $intlPhoneInput = $("#international_phone_number");
+        const $userProfileForm = $("#contactForm");
+
+        if ($userPhoneInput.length && $userProfileForm.length) {
+            const iti = window.intlTelInput($userPhoneInput[0], {
+                utilsScript: `${window.location.origin}/frontend/assets/plugins/intltelinput/js/utils.js`,
+                separateDialCode: true,
+            });
+
+
+            $userPhoneInput.addClass("iti");
+            $userPhoneInput.parent().addClass("intl-tel-input");
+
+            $userPhoneInput.on("keyup", function () {
+                $intlPhoneInput.val(iti.getNumber());
+            });
+            //append while change
+            $userPhoneInput.on("countrychange", function () {
+                $intlPhoneInput.val(iti.getNumber());
+            });
+        }
+    }
     $("#contactForm").validate({
         rules: {
             contact_name: {
@@ -102,30 +129,7 @@
         }
     });
 })();
-$(document).ready(function () {
-    const $userPhoneInput = $("#contact_phone");
-    const $intlPhoneInput = $("#international_phone_number");
-    const $userProfileForm = $("#contactForm");
 
-    if ($userPhoneInput.length && $userProfileForm.length) {
-        const iti = window.intlTelInput($userPhoneInput[0], {
-            utilsScript: `${window.location.origin}/frontend/assets/plugins/intltelinput/js/utils.js`,
-            separateDialCode: true,
-        });
-
-
-        $userPhoneInput.addClass("iti");
-        $userPhoneInput.parent().addClass("intl-tel-input");
-
-        $userPhoneInput.on("keyup", function () {
-            $intlPhoneInput.val(iti.getNumber());
-        });
-        //append while change
-        $userPhoneInput.on("countrychange", function () {
-            $intlPhoneInput.val(iti.getNumber());
-        });
-    }
-});
 
 
 
