@@ -639,6 +639,12 @@
             $addLocationModal.find(".submitbtn").text(_l('admin.common.create_new'));
             $("#status_div").addClass('d-none').parent().removeClass('justify-content-between').addClass('justify-content-end');
             resetForm();
+            const $preview = $("#image_preview");
+            const $placeholder = $(".image_placeholder");
+            $preview.addClass('d-none');
+            $placeholder.show();
+            //refresh all select2
+            $("#country, #state, #city").val(null).trigger("change");
         });
         
         // Edit location

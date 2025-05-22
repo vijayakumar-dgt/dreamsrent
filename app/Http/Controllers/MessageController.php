@@ -34,7 +34,7 @@ class MessageController extends Controller
     public function sendMessage(Request $request): JsonResponse
     {
         if ($request->messageType == 'file' && $request->hasFile('file')) {
-            $foldername = 'chat_attachments';
+            $foldername = 'chat';
             $file       = $request->file('file');
             $filename   = $file ? $file->getClientOriginalName() : null;
             $mime_type  = $file ? $file->getClientMimeType() : null;
