@@ -1878,7 +1878,7 @@ class PageController extends Controller
                                 'updated_at' => \Carbon\Carbon::parse($blog->updated_at)->format('F j, Y'),
                                 'author' => [
                                     'name' => 'Admin',
-                                    'avatar' => 'https://www.w3schools.com/howto/img_avatar.png',
+                                    'avatar' => asset('/backend/assets/img/default-profile.png'),
                                 ],
                             ];
                         }
