@@ -18,7 +18,7 @@ use Illuminate\View\View;
 
 class BlogController extends Controller
 {
-    public function BlogList(Request $request): View | JsonResponse
+    public function BlogList(Request $request): View|JsonResponse
     {
         $authUser = current_user();
 
@@ -72,10 +72,10 @@ class BlogController extends Controller
             ->where('language_id', $lang_id)->where('status', 1)->get();
         $tags = BlogTag::where('deleted_at', null)->where('language_id', $lang_id)->where('status', 1)->get();
 
-        $latestblogs =  BlogPost::latest()->where('blog_posts.language_id', $lang_id)
+        $latestblogs = BlogPost::latest()->where('blog_posts.language_id', $lang_id)
             ->where('blog_posts.status', 1)->limit(3)->get();
 
-        $seo_title  = __('web.blog.blogs_title');
+        $seo_title = __('web.blog.blogs_title');
 
         if ($request->ajax()) {
             return response()->json([
@@ -127,10 +127,10 @@ class BlogController extends Controller
             ->where('language_id', $lang_id)->where('status', 1)->get();
         $tags = BlogTag::where('deleted_at', null)->where('language_id', $lang_id)->where('status', 1)->get();
 
-        $latestblogs =  BlogPost::latest()
+        $latestblogs = BlogPost::latest()
             ->where('blog_posts.language_id', $lang_id)->where('blog_posts.status', 1)->limit(3)->get();
 
-        $seo_title  = __('web.blog.blogs_title');
+        $seo_title = __('web.blog.blogs_title');
         return view('frontend.blogs.blog-grid', compact(
             'blogPosts',
             'languages',
@@ -184,7 +184,7 @@ class BlogController extends Controller
             ->inRandomOrder()
             ->take(2)
             ->get();
-        $seo_title  = $blogPosts->title ?? '';
+        $seo_title = $blogPosts->title ?? '';
         return view(
             'frontend.blogs.blog-details',
             compact('blogPosts', 'languages', 'blogReviews', 'countReview', 'otherBlogs', 'seo_title')
@@ -206,7 +206,7 @@ class BlogController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'comments' => $request->comment,
-            'created_at' =>  Carbon::now(),
+            'created_at' => Carbon::now(),
         ]);
 
         return redirect()->back()->with('success', 'Review Added successfully.');

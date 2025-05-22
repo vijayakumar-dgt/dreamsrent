@@ -35,19 +35,19 @@ class ForgotpasswordController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'code'   => 422,
+                'code' => 422,
                 'errors' => $validator->errors()->toArray(),
                 'message' => $validator->errors()->first()
             ], 200);
         }
         try {
             $email = $request->email;
-            $otp   = rand(1000, 9999);//4 digit OTP
+            $otp = rand(1000, 9999);//4 digit OTP
             $token = Str::random(64);
-            $user  = User::where('email', $email)->first();
+            $user = User::where('email', $email)->first();
             Cache::put('forgotPasswordEmail_' . $token, $email, 600);
             Cache::put('forgotPasswordOtp_' . $token, $otp, 600);
-            $data  = [
+            $data = [
                 'otp' => (string) $otp,
                 'name' => $user->name ?? 'User',
                 'subject' => 'Forgot Password Otp'
@@ -56,25 +56,25 @@ class ForgotpasswordController extends Controller
 
             return response()->json([
                 'status' => true,
-                'code'   => 200,
-                'otp'    => $otp,
-                'token'  => $token,
+                'code' => 200,
+                'otp' => $otp,
+                'token' => $token,
                 'message' => 'OTP sent successfully',
             ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'code'   => 422,
+                'code' => 422,
                 'message' => 'Please contact administrator',
             ], 200);
         }
     }
 
-    public function verifyOtp(Request $request): View | RedirectResponse
+    public function verifyOtp(Request $request): View|RedirectResponse
     {
         $token = $request->token;
         $email = Cache::get('forgotPasswordEmail_' . $token);
-        $otp   = Cache::get('forgotPasswordOtp_' . $token);
+        $otp = Cache::get('forgotPasswordOtp_' . $token);
         if ($token && $email && $otp) {
             $data = [
                 'token' => $token,
@@ -92,11 +92,11 @@ class ForgotpasswordController extends Controller
         $email = Cache::get('forgotPasswordEmail_' . $token);
 
         if ($email && User::where('email', $email)->exists()) {
-            $otp   = rand(1000, 9999);//4 digit OTP
-            $user  = User::where('email', $email)->first();
+            $otp = rand(1000, 9999);//4 digit OTP
+            $user = User::where('email', $email)->first();
             Cache::put('forgotPasswordEmail_' . $token, $email, 600);
             Cache::put('forgotPasswordOtp_' . $token, $otp, 600);
-            $data  = [
+            $data = [
                 'otp' => (string) $otp,
                 'name' => $user->name ?? 'User',
                 'subject' => 'Forgot Password Otp'
@@ -105,15 +105,15 @@ class ForgotpasswordController extends Controller
 
             return response()->json([
                 'status' => true,
-                'code'   => 200,
+                'code' => 200,
                 // 'otp'    => $otp,
-                'token'  => $token,
+                'token' => $token,
                 'message' => 'OTP sent successfully',
             ]);
         } else {
             return response()->json([
                 'status' => false,
-                'code'   => 422,
+                'code' => 422,
                 'message' => 'Email does not exist or token is invalid',
             ], 422);
         }
@@ -123,19 +123,19 @@ class ForgotpasswordController extends Controller
     {
         $token = $request->token;
         $email = Cache::get('forgotPasswordEmail_' . $token);
-        $cache_otp   = Cache::get('forgotPasswordOtp_' . $token);
+        $cache_otp = Cache::get('forgotPasswordOtp_' . $token);
         if ($token && $email && $cache_otp) {
             if ($request->otp == $cache_otp) {
                 return response()->json([
                     'status' => true,
-                    'code'   => 200,
+                    'code' => 200,
                     'redirect_url' => route('reset-password', ['token' => $token]),
                     'message' => 'OTP verified successfully',
                 ]);
             } else {
                 return response()->json([
                     'status' => false,
-                    'code'   => 422,
+                    'code' => 422,
                     'message' => 'OTP does not match',
                     // 'valid_otp' => $cache_otp
                 ], 200);
@@ -143,13 +143,13 @@ class ForgotpasswordController extends Controller
         } else {
             return response()->json([
                 'status' => false,
-                'code'   => 422,
+                'code' => 422,
                 'message' => 'Email does not exist or token is invalid',
             ], 200);
         }
     }
 
-    public function resetPassword(Request $request): View | RedirectResponse
+    public function resetPassword(Request $request): View|RedirectResponse
     {
         $token = $request->token;
         $email = Cache::get('forgotPasswordEmail_' . $token);
@@ -177,7 +177,7 @@ class ForgotpasswordController extends Controller
             if ($validator->fails()) {
                 return response()->json([
                     'status' => false,
-                    'code'   => 422,
+                    'code' => 422,
                     'error' => $validator->errors()->first(),
                     'message' => $validator->errors()->first()
                 ], 422);
@@ -191,7 +191,7 @@ class ForgotpasswordController extends Controller
             } else {
                 return response()->json([
                     'status' => false,
-                    'code'   => 422,
+                    'code' => 422,
                     'message' => 'User not found',
                 ], 422);
             }
@@ -199,14 +199,14 @@ class ForgotpasswordController extends Controller
             Cache::forget('forgotPasswordOtp_' . $token);
             return response()->json([
                 'status' => true,
-                'code'   => 200,
+                'code' => 200,
                 'message' => 'Password updated successfully',
                 'redirect_url' => route('admin-login'),
             ]);
         } else {
             return response()->json([
                 'status' => false,
-                'code'   => 422,
+                'code' => 422,
                 'message' => 'Email does not exist or token is invalid',
             ], 422);
         }

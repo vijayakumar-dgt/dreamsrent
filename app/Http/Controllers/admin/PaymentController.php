@@ -46,7 +46,7 @@ class PaymentController extends Controller
                             ->orWhere('last_name', 'LIKE', "%{$search}%")
                             ->orWhere('reservation_id', 'LIKE', "%{$search}%");
                     })
-                    ->orWhere('payment_type', 'LIKE', "%{$search}%");
+                        ->orWhere('payment_type', 'LIKE', "%{$search}%");
                 });
             }
 
@@ -90,9 +90,9 @@ class PaymentController extends Controller
                 $paymentType = '';
 
                 if ($booking->payment_type == 'cod') {
-                    $paymentType = strtoupper(str_replace('_', ' ', (string)$booking->payment_type));
+                    $paymentType = strtoupper(str_replace('_', ' ', (string) $booking->payment_type));
                 } else {
-                    $paymentType = ucfirst(str_replace('_', ' ', (string)$booking->payment_type));
+                    $paymentType = ucfirst(str_replace('_', ' ', (string) $booking->payment_type));
                 }
 
                 return [

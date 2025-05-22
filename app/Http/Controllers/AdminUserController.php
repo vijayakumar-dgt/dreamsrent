@@ -84,13 +84,13 @@ class AdminUserController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 422,
+                'code' => 422,
                 'errors' => $validator->errors()->toArray()
             ], 422);
         }
 
         $successMsg = empty($id) ? __('admin.user_management.user_create_success') : __('admin.user_management.user_update_success');
-        $errorMsg = empty($id) ?  __('admin.common.default_create_error') : __('admin.common.default_update_error');
+        $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
             DB::beginTransaction();
@@ -145,14 +145,14 @@ class AdminUserController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => $successMsg
             ]);
         } catch (\Throwable $e) {
             DB::rollBack();
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => $errorMsg,
                 'error' => $e->getMessage()
             ], 500);
@@ -293,7 +293,7 @@ class AdminUserController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'code'   => 200,
+            'code' => 200,
             'data' => $data
         ], 200);
     }
@@ -308,13 +308,13 @@ class AdminUserController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('admin.user_management.user_delete_success')
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('admin.common.default_delete_error')
             ], 500);
         }
@@ -335,7 +335,7 @@ class AdminUserController extends Controller
         $html = view('admin.partials.notification-popup', compact('notifications'))->render();
         return response()->json([
             'status' => 'success',
-            'code'   => 200,
+            'code' => 200,
             'html' => $html,
             'auth' => $authUser,
             'count' => $notificationCount
@@ -349,19 +349,19 @@ class AdminUserController extends Controller
             Notification::where('user_id', $authUser->id)->update(['readed' => 1]);
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('web.user.all_notofocations_marked_as_read')
             ], 200);
         } else {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.user.all_notofocations_marked_as_read')
             ], 200);
         }
     }
 
-    public function notifications(Request $request): View | JsonResponse
+    public function notifications(Request $request): View|JsonResponse
     {
         $authUser = Auth::guard('admin')->user();
         $notifications = collect();
@@ -387,7 +387,7 @@ class AdminUserController extends Controller
         Notification::where('id', $request->id)->update(['readed' => 1]);
         return response()->json([
             'status' => 'success',
-            'code'   => 200,
+            'code' => 200,
             'message' => __('web.user.notification_marked_as_read')
         ], 200);
     }
@@ -397,7 +397,7 @@ class AdminUserController extends Controller
         Notification::where('id', $request->id)->delete();
         return response()->json([
             'status' => 'success',
-            'code'   => 200,
+            'code' => 200,
             'message' => __('web.user.notification_deleted')
         ], 200);
     }
@@ -410,7 +410,7 @@ class AdminUserController extends Controller
         }
         return response()->json([
             'status' => 'success',
-            'code'   => 200,
+            'code' => 200,
             'message' => __('web.user.all_notofocations_deleted')
         ], 200);
     }

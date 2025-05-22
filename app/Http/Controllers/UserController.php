@@ -84,7 +84,7 @@ class UserController extends Controller
 
         if ($request->has('duration') && $request->duration != "") {
             $customFrom = $request->custom_from_date ?? "";
-            $customTo   = $request->custom_to_date ?? "";
+            $customTo = $request->custom_to_date ?? "";
             $duration = $this->getDuration($request->duration, $customFrom, $customTo);
 
             if (!isset($duration['error']) && isset($duration['from'])) {
@@ -108,12 +108,14 @@ class UserController extends Controller
                     $bookings->orderBy('id', 'desc');
                     break;
                 case 'alphabet':
-                    $bookings->with(['vehicle' => function ($query) {
-                        $query->orderBy('name', 'asc');
-                    }])->orderBy(
-                        DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
-                        'asc'
-                    );
+                    $bookings->with([
+                        'vehicle' => function ($query) {
+                            $query->orderBy('name', 'asc');
+                        }
+                    ])->orderBy(
+                            DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
+                            'asc'
+                        );
                     break;
             }
         }
@@ -138,7 +140,7 @@ class UserController extends Controller
 
         if ($request->has('duration') && $request->duration != "") {
             $customFrom = $request->custom_from_date ?? "";
-            $customTo   = $request->custom_to_date ?? "";
+            $customTo = $request->custom_to_date ?? "";
             $duration = $this->getDuration($request->duration, $customFrom, $customTo);
 
             if (!isset($duration['error']) && isset($duration['from'])) {
@@ -162,12 +164,14 @@ class UserController extends Controller
                     $bookings->orderBy('id', 'desc');
                     break;
                 case 'alphabet':
-                    $bookings->with(['vehicle' => function ($query) {
-                        $query->orderBy('name', 'asc');
-                    }])->orderBy(
-                        DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
-                        'asc'
-                    );
+                    $bookings->with([
+                        'vehicle' => function ($query) {
+                            $query->orderBy('name', 'asc');
+                        }
+                    ])->orderBy(
+                            DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
+                            'asc'
+                        );
                     break;
             }
         }
@@ -178,7 +182,7 @@ class UserController extends Controller
         ]);
     }
 
-     /**
+    /**
      * @return array{from: string, to: string}|array{error: string}
      */
     public function getDuration(?string $duration, ?string $customFromDate = null, ?string $customToDate = null): array
@@ -263,7 +267,7 @@ class UserController extends Controller
             if (!$booking) {
                 return response()->json([
                     'status' => 'error',
-                    'code'   => 404,
+                    'code' => 404,
                     'message' => __('web.user.booking_not_found')
                 ]);
             }
@@ -271,7 +275,7 @@ class UserController extends Controller
             if (!$booking instanceof \Modules\Booking\Models\Booking) {
                 return response()->json([
                     'status' => 'error',
-                    'code'   => 404,
+                    'code' => 404,
                     'message' => __('web.user.booking_not_found')
                 ]);
             }
@@ -284,16 +288,16 @@ class UserController extends Controller
 
             BookingHistory::create([
                 'booking_id' => $booking->id,
-                'action'     => 'cancel',
-                'data'       => json_encode($historyData),
-                'message'    => 'Reservation Cancelled'
+                'action' => 'cancel',
+                'data' => json_encode($historyData),
+                'message' => 'Reservation Cancelled'
             ]);
 
             $booking->update([
                 'booking_status' => 6,
-                'cancel_date'    => now(),
-                'cancel_by'      => Auth::id(),
-                'cancel_reason'  => $request->reason
+                'cancel_date' => now(),
+                'cancel_by' => Auth::id(),
+                'cancel_reason' => $request->reason
             ]);
 
             DB::commit();
@@ -303,25 +307,25 @@ class UserController extends Controller
                     $authUser = Auth::user();
                     $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
                     $vehicle = VehicleInfo::find($booking->vehicle_id ?? '');
-                    $driver  = Driver::find($booking->driver_id ?? '');
+                    $driver = Driver::find($booking->driver_id ?? '');
                     $appAdmin = User::where('user_type', 1)->first();
 
                     $notifyData = [
-                        'user_name'       => $authUser->name ?? '',
-                        'company_name'    => $companyName,
-                        'email'           => $authUser->email ?? '',
-                        'phonenumber'     => $authUser->phone_number ?? '',
-                        'vehicle_name'    => $vehicle->name ?? "",
-                        'driver_name'     => $driver->driver_name ?? "",
-                        'reservation_id'  => $booking->reservation_id ?? "",
-                        'start_date'      => formatDateTime($booking->start_datetime),
-                        'end_date'        => formatDateTime($booking->end_datetime),
+                        'user_name' => $authUser->name ?? '',
+                        'company_name' => $companyName,
+                        'email' => $authUser->email ?? '',
+                        'phonenumber' => $authUser->phone_number ?? '',
+                        'vehicle_name' => $vehicle->name ?? "",
+                        'driver_name' => $driver->driver_name ?? "",
+                        'reservation_id' => $booking->reservation_id ?? "",
+                        'start_date' => formatDateTime($booking->start_datetime),
+                        'end_date' => formatDateTime($booking->end_datetime),
                         'pickup_location' => $booking->pickupLocation->name ?? "",
-                        'delivery_type'   => $booking->delivery_type ?? "",
-                        'rental_type'     => $booking->rental_type ?? "",
-                        'payment_type'    => $booking->payment_type ?? "",
-                        'payment_status'  => $booking->payment_status ?? "",
-                        'tototal_amount'  => $booking->final_price ?? ""
+                        'delivery_type' => $booking->delivery_type ?? "",
+                        'rental_type' => $booking->rental_type ?? "",
+                        'payment_type' => $booking->payment_type ?? "",
+                        'payment_status' => $booking->payment_status ?? "",
+                        'tototal_amount' => $booking->final_price ?? ""
                     ];
 
 
@@ -337,15 +341,15 @@ class UserController extends Controller
             }
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('web.user.reservation_cancelled')
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('web.user.error_occured')
             ]);
         }
@@ -364,9 +368,9 @@ class UserController extends Controller
 
             BookingHistory::create([
                 'booking_id' => $booking->id ?? '',
-                'action'     => 'completed',
-                'data'       => json_encode($historyData),
-                'message'    => __('web.user.ride_completed')
+                'action' => 'completed',
+                'data' => json_encode($historyData),
+                'message' => __('web.user.ride_completed')
             ]);
 
             if ($booking) {
@@ -377,13 +381,13 @@ class UserController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('web.user.ride_completed')
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.user.error_occured')
             ], 200);
         }
@@ -392,7 +396,7 @@ class UserController extends Controller
     public function startRide(Request $request): JsonResponse
     {
         try {
-             /** @var Booking|null $booking */
+            /** @var Booking|null $booking */
             $booking = Booking::find($request->id);
             $bookingDetail = BookingDetail::where('booking_id', $request->id)->first();
             $historyData = [
@@ -402,9 +406,9 @@ class UserController extends Controller
 
             BookingHistory::create([
                 'booking_id' => $booking->id ?? '',
-                'action'     => 'started',
-                'data'       => json_encode($historyData),
-                'message'    => __('web.user.ride_started')
+                'action' => 'started',
+                'data' => json_encode($historyData),
+                'message' => __('web.user.ride_started')
             ]);
 
             if ($booking) {
@@ -415,13 +419,13 @@ class UserController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('web.user.ride_started')
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.user.error_occured')
             ], 200);
         }
@@ -437,13 +441,13 @@ class UserController extends Controller
             }
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('web.user.booking_deleted')
             ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.user.error_occured')
             ], 200);
         }
@@ -462,13 +466,13 @@ class UserController extends Controller
             /** @var VehicleInfo|null $vehicle */
             $vehicle = VehicleInfo::find($request->id);
             $wishlist = Wishlist::where('user_id', $authUserId)
-                                    ->where('vehicle_id', $vehicle->id ?? '')
-                                    ->first();
+                ->where('vehicle_id', $vehicle->id ?? '')
+                ->first();
             if ($wishlist) {
                 $wishlist->delete();
                 return response()->json([
                     'status' => 'success',
-                    'code'   => 200,
+                    'code' => 200,
                     'message' => __('web.user.removed_from_wishlist')
                 ]);
             } else {
@@ -478,14 +482,14 @@ class UserController extends Controller
                 ]);
                 return response()->json([
                     'status' => 'success',
-                    'code'   => 200,
+                    'code' => 200,
                     'message' => __('web.user.added_to_wishlist')
                 ]);
             }
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.user.error_occured')
             ], 200);
         }
@@ -497,7 +501,7 @@ class UserController extends Controller
         $wishlists = Wishlist::where('user_id', $authUserId)->get();
         return response()->json([
             'status' => 'success',
-            'code'   => 200,
+            'code' => 200,
             'data' => UserWishlist::collection($wishlists)
         ]);
     }
@@ -586,9 +590,11 @@ class UserController extends Controller
     public function userpreference(): View
     {
         $languages = Language::select('languages.language_id')
-            ->with(['transLang' => function ($query) {
-                $query->select('id', 'code', 'name');
-            }])
+            ->with([
+                'transLang' => function ($query) {
+                    $query->select('id', 'code', 'name');
+                }
+            ])
             ->where('languages.status', 1)
             ->get();
         $id = Auth::guard('web')->user()->id ?? 0;
@@ -646,14 +652,14 @@ class UserController extends Controller
         $user = Auth::guard('web')->user();
         if ($user && $user->password && Hash::check($password, $user->password)) {
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('web.user.current_password_correct')
             ]);
         } else {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
+                'status' => 'error',
+                'code' => 422,
                 'message' => __('web.user.current_password_incorrect')
             ]);
         }
@@ -663,24 +669,24 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'current_password' => 'required',
-            'new_password'     => 'required|min:6',
+            'new_password' => 'required|min:6',
             'confirm_password' => 'required|same:new_password',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
+                'status' => 'error',
+                'code' => 422,
                 'message' => __('web.user.validation_failed'),
-                'errors'  => $validator->errors()->toArray()
+                'errors' => $validator->errors()->toArray()
             ], 422);
         }
 
         $user = Auth::guard('web')->user();
         if (!$user || !$user->password || !Hash::check($request->current_password, $user->password)) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('web.user.current_password_incorrect')
             ], 500);
         }
@@ -693,8 +699,8 @@ class UserController extends Controller
         }
 
         return response()->json([
-            'status'  => 'success',
-            'code'    => 200,
+            'status' => 'success',
+            'code' => 200,
             'message' => __('web.user.password_updated_successfully')
         ]);
     }
@@ -710,11 +716,11 @@ class UserController extends Controller
                     'os' => $device->os,
                     'ip_address' => $device->ip_address,
                     'location' => $device->location,
-                    'date'     => formatDateTime($device->created_at),
+                    'date' => formatDateTime($device->created_at),
                 ];
             });
-            $user = Auth::guard('web')->user();
-        $response    = [
+        $user = Auth::guard('web')->user();
+        $response = [
             'user' => Auth::guard('web')->user(),
             'last_password_changed_at' => Auth::guard('web')->check() && $user && $user->last_password_changed_at
                 ? formatDateTime($user->last_password_changed_at)
@@ -722,9 +728,9 @@ class UserController extends Controller
             'devices' => $userDevices
         ];
         return response()->json([
-            'status'  => 'success',
-            'code'    => 200,
-            'data'    => $response
+            'status' => 'success',
+            'code' => 200,
+            'data' => $response
         ]);
     }
 
@@ -734,8 +740,8 @@ class UserController extends Controller
         if ($request->isAll === "true") {
             UserDevice::where('user_id', $authUserId)->delete();
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('web.user.all_devices_removed')
             ]);
         } else {
@@ -745,15 +751,15 @@ class UserController extends Controller
                     $device->delete();
                 }
                 return response()->json([
-                    'status'  => 'success',
-                    'code'    => 200,
+                    'status' => 'success',
+                    'code' => 200,
                     'message' => __('web.user.device_removed_successfully')
                 ]);
             }
         }
         return response()->json([
-            'status'  => 'error',
-            'code'    => 404,
+            'status' => 'error',
+            'code' => 404,
             'message' => __('web.user.device_not_found')
         ], 404);
     }
@@ -777,13 +783,13 @@ class UserController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('web.user.preference_update_success')
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.common.default_update_error')
             ], 500);
         }
@@ -797,14 +803,14 @@ class UserController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
-                'data'   => $data,
+                'code' => 200,
+                'data' => $data,
                 'message' => __('web.common.default_retrieve_success'),
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.common.default_retrieve_error')
             ], 500);
         }
@@ -830,13 +836,13 @@ class UserController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('web.user.enquiry_submitted_successfully')
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.user.error_occured')
             ], 500);
         }
@@ -855,7 +861,7 @@ class UserController extends Controller
         $html = view('frontend.user.notifications-popup', compact('notifications'))->render();
         return response()->json([
             'status' => 'success',
-            'code'   => 200,
+            'code' => 200,
             'html' => $html,
             'count' => $notificationCount
         ]);
@@ -865,18 +871,18 @@ class UserController extends Controller
         $authUserId = Auth::guard('web')->user()->id ?? 0;
         if (
             Notification::where('user_id', $authUserId)
-            ->where('readed', 0)->count() > 0
+                ->where('readed', 0)->count() > 0
         ) {
             Notification::where('user_id', $authUserId)->update(['readed' => 1]);
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('web.user.all_notofocations_marked_as_read')
             ], 200);
         } else {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('web.user.all_notofocations_marked_as_read')
             ], 200);
         }
@@ -890,7 +896,7 @@ class UserController extends Controller
 
     public function ajaxTransactions(Request $request): AnonymousResourceCollection
     {
-        $bookingUsers = ['admin','user'];
+        $bookingUsers = ['admin', 'user'];
         $authUserId = Auth::guard('web')->user()->id ?? 0;
         $bookings = Booking::where('customer_id', $authUserId)->whereIn('booking_by', $bookingUsers);
 
@@ -900,7 +906,7 @@ class UserController extends Controller
 
         if ($request->has('duration') && $request->duration != "") {
             $customFrom = $request->custom_from_date ?? "";
-            $customTo   = $request->custom_to_date ?? "";
+            $customTo = $request->custom_to_date ?? "";
             $duration = $this->getDuration($request->duration, $customFrom, $customTo);
 
             if (!isset($duration['error']) && isset($duration['from'])) {
@@ -924,12 +930,14 @@ class UserController extends Controller
                     $bookings->orderBy('id', 'desc');
                     break;
                 case 'alphabet':
-                    $bookings->with(['vehicle' => function ($query) {
-                        $query->orderBy('name', 'asc');
-                    }])->orderBy(
-                        DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
-                        'asc'
-                    );
+                    $bookings->with([
+                        'vehicle' => function ($query) {
+                            $query->orderBy('name', 'asc');
+                        }
+                    ])->orderBy(
+                            DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
+                            'asc'
+                        );
                     break;
             }
         }
@@ -940,7 +948,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function notifications(Request $request): View | JsonResponse
+    public function notifications(Request $request): View|JsonResponse
     {
         $authUserId = Auth::guard('web')->user()->id ?? 0;
         $notifications = Notification::where('user_id', $authUserId)
@@ -967,7 +975,7 @@ class UserController extends Controller
         Notification::where('id', $request->id)->update(['readed' => 1]);
         return response()->json([
             'status' => 'success',
-            'code'   => 200,
+            'code' => 200,
             'message' => __('web.user.notification_marked_as_read')
         ], 200);
     }
@@ -977,7 +985,7 @@ class UserController extends Controller
         Notification::where('id', $request->id)->delete();
         return response()->json([
             'status' => 'success',
-            'code'   => 200,
+            'code' => 200,
             'message' => __('web.user.notification_deleted')
         ], 200);
     }
@@ -988,7 +996,7 @@ class UserController extends Controller
         Notification::where('user_id', $authUserId)->delete();
         return response()->json([
             'status' => 'success',
-            'code'   => 200,
+            'code' => 200,
             'message' => __('web.user.all_notofocations_deleted')
         ], 200);
     }
@@ -998,9 +1006,9 @@ class UserController extends Controller
         /** @var \App\Models\User|null $user */
         $user = Auth::guard('web')->user();
         if (!$user) {
-            return response()->json(['success' => false, 'message' =>   __('admin.general_settings.user_not_found')], 404);
+            return response()->json(['success' => false, 'message' => __('admin.general_settings.user_not_found')], 404);
         }
         $user->delete();
-        return response()->json(['success' => true, 'message' =>  __('web.user.account_deleted_successfully')]);
+        return response()->json(['success' => true, 'message' => __('web.user.account_deleted_successfully')]);
     }
 }

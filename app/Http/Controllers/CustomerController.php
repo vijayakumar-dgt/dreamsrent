@@ -21,12 +21,14 @@ use Modules\GeneralSetting\Models\TranslationLanguage;
 
 class CustomerController extends Controller
 {
-    public function index(Request $request): View | JsonResponse
+    public function index(Request $request): View|JsonResponse
     {
         $languages = Language::select('languages.language_id')
-            ->with(['transLang' => function ($query) {
-                $query->select('id', 'code', 'name');
-            }])
+            ->with([
+                'transLang' => function ($query) {
+                    $query->select('id', 'code', 'name');
+                }
+            ])
             ->where('languages.status', 1)
             ->get();
 
@@ -93,13 +95,13 @@ class CustomerController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 422,
+                'code' => 422,
                 'errors' => $validator->errors()->toArray()
             ], 422);
         }
 
         $successMsg = empty($id) ? __('admin.manage.customer_create_success') : __('admin.manage.customer_update_success');
-        $errorMsg = empty($id) ?  __('admin.common.default_create_error') : __('admin.common.default_update_error');
+        $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 
         try {
             DB::beginTransaction();
@@ -194,14 +196,14 @@ class CustomerController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => $successMsg
             ]);
         } catch (\Throwable $e) {
             DB::rollBack();
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => $errorMsg,
                 'error' => $e->getMessage()
             ], 500);
@@ -390,7 +392,7 @@ class CustomerController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'code'   => 200,
+            'code' => 200,
             'data' => $data
         ], 200);
     }
@@ -491,13 +493,13 @@ class CustomerController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => __('admin.user_management.user_delete_success')
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 500,
+                'code' => 500,
                 'message' => __('admin.common.default_delete_error')
             ], 500);
         }

@@ -35,18 +35,18 @@ class MessageController extends Controller
     {
         if ($request->messageType == 'file' && $request->hasFile('file')) {
             $foldername = 'chat_attachments';
-            $file       = $request->file('file');
-            $filename   = $file ? $file->getClientOriginalName() : null;
-            $mime_type  = $file ? $file->getClientMimeType() : null;
-            $size       = $file ? $file->getSize() : null;
+            $file = $request->file('file');
+            $filename = $file ? $file->getClientOriginalName() : null;
+            $mime_type = $file ? $file->getClientMimeType() : null;
+            $size = $file ? $file->getSize() : null;
             $path = $file ? uploadFile($file, $foldername, $filename) : null;
             $_message = new Message();
             $_message->sender_id = $request->sender_id;
             $_message->receiver_id = $request->receiver_id;
-            $_message->type        = 'file';
-            $_message->file        = $path;
-            $_message->mime_type   = $mime_type;
-            $_message->size        = $size !== null ? (string) $size : null;
+            $_message->type = 'file';
+            $_message->file = $path;
+            $_message->mime_type = $mime_type;
+            $_message->size = $size !== null ? (string) $size : null;
             $_message->message = $filename ?? '';
             $_message->save();
         }
@@ -54,7 +54,7 @@ class MessageController extends Controller
             $message = new Message();
             $message->sender_id = $request->sender_id;
             $message->receiver_id = $request->receiver_id;
-            $message->message     = $request->message;
+            $message->message = $request->message;
             $message->save();
         }
         $publishMessage = ($request->messageType == 'file' && isset($path)) ? $path : $request->message;
