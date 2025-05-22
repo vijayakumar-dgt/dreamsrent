@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 22, 2025 at 12:23 PM
+-- Generation Time: May 22, 2025 at 05:18 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -56,30 +56,6 @@ CREATE TABLE `announcements` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `announcement_types`
---
-
-CREATE TABLE `announcement_types` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `announcement_types`
---
-
-INSERT INTO `announcement_types` (`id`, `name`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Promotional Offers', 1, '2025-05-13 17:47:50', '2025-05-13 17:47:50', NULL),
-(2, 'New Vehicle Launch', 1, '2025-05-13 17:48:26', '2025-05-13 17:48:26', NULL),
-(3, 'Safety Reminders', 1, '2025-05-13 17:48:26', '2025-05-13 17:48:26', NULL);
 
 -- --------------------------------------------------------
 
@@ -48996,7 +48972,7 @@ INSERT INTO `communication_settings` (`id`, `type`, `key`, `value`, `settings_ty
 (14, 'smtp', 'smtp_from_email', NULL, 1, '2025-03-26 08:12:21', '2025-04-09 10:38:27', NULL, NULL, NULL),
 (15, 'smtp', 'smtp_password', NULL, 1, '2025-03-26 08:12:21', '2025-04-09 10:38:27', NULL, NULL, NULL),
 (16, 'smtp', 'smtp_from_name', NULL, 1, '2025-03-26 08:12:21', '2025-04-09 10:38:27', NULL, NULL, NULL),
-(17, 'smtp', 'smtp_port', '587', 1, '2025-03-26 08:12:21', '2025-04-02 10:39:53', NULL, NULL, NULL),
+(17, 'smtp', 'smtp_port', NULL, 1, '2025-03-26 08:12:21', '2025-04-02 10:39:53', NULL, NULL, NULL),
 (18, 'smtp', 'smtp_host', 'smtp.googlemail.com', 1, '2025-03-26 08:12:21', '2025-03-26 08:12:21', NULL, NULL, NULL),
 (19, 'sendgrid', 'sendgrid_status', '0', 1, '2025-04-02 10:46:35', '2025-04-02 10:46:41', NULL, NULL, NULL);
 
@@ -49331,8 +49307,7 @@ CREATE TABLE `currencies` (
 --
 
 INSERT INTO `currencies` (`id`, `currency_name`, `code`, `symbol`, `exchange_rate`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Dollar', 'en', '$', 94.00, 1, '2025-04-01 11:22:48', '2025-04-01 11:24:59', NULL),
-(2, 'Euro', 'GBP', '#', 80.00, 1, '2025-04-07 17:56:36', '2025-04-07 17:56:47', NULL);
+(1, 'Dollar', 'en', '$', 94.00, 1, '2025-04-01 11:22:48', '2025-04-01 11:24:59', NULL);
 
 -- --------------------------------------------------------
 
@@ -49614,60 +49589,60 @@ CREATE TABLE `general_settings` (
 --
 
 INSERT INTO `general_settings` (`id`, `key`, `value`, `group_id`, `language_id`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(9, 'country', '101', 1, NULL, NULL, '2025-02-28 04:46:37', '2025-04-01 13:12:54'),
-(10, 'state', '35', 1, NULL, NULL, '2025-02-28 04:46:37', '2025-04-02 10:32:16'),
-(11, 'city', '3683', 1, NULL, NULL, '2025-02-28 04:46:37', '2025-04-02 10:32:16'),
+(9, 'country', NULL, 1, NULL, NULL, '2025-02-28 04:46:37', '2025-04-01 13:12:54'),
+(10, 'state', NULL, 1, NULL, NULL, '2025-02-28 04:46:37', '2025-04-02 10:32:16'),
+(11, 'city', NULL, 1, NULL, NULL, '2025-02-28 04:46:37', '2025-04-02 10:32:16'),
 (13, 'group_id', '1', 1, NULL, NULL, '2025-03-07 06:48:42', '2025-04-12 21:53:46'),
 (14, 'notificationPreference', 'mentions', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-03-07 07:26:45'),
-(15, 'desktopNotifications', '0', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-03-07 07:10:42'),
+(15, 'desktopNotifications', '1', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-03-07 07:10:42'),
 (16, 'unreadBadge', '1', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-03-07 06:48:42'),
 (17, 'bookingUpdates', '1', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-03-22 01:51:03'),
 (18, 'paymentNotifications', '1', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-03-07 07:10:42'),
-(19, 'userTenantNotifications', '0', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-03-07 07:10:32'),
+(19, 'userTenantNotifications', '1', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-03-07 07:10:32'),
 (20, 'vehicleManagement', '1', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-03-07 07:10:42'),
-(21, 'discountOffers', '0', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-04-02 10:31:40'),
-(22, 'organization_name', 'Dreams Rent', 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-23 12:21:08'),
-(23, 'owner_name', 'Admin', 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-02 10:34:20'),
-(24, 'company_email', 'contact@dreamsrent.com', 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-12 21:53:46'),
-(25, 'company_phone', '+93888348823423', 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-24 18:34:34'),
-(26, 'industry', '1', 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-01 13:12:54'),
-(27, 'team_size', '2', 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-01 13:12:54'),
-(28, 'company_address_line', '589 5th Ave, NY 10024, USA', 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-01 13:12:54'),
-(29, 'company_postal_code', '600028', 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-01 13:12:54'),
-(30, 'reservation_prefix', 'RES-', 3, NULL, NULL, '2025-03-10 07:57:54', '2025-03-10 08:28:01'),
-(31, 'quotation_prefix', 'wer', 3, NULL, NULL, '2025-03-10 07:57:54', '2025-03-10 07:57:54'),
-(32, 'enquiry_prefix', 'ewr', 3, NULL, NULL, '2025-03-10 07:57:54', '2025-03-10 07:57:54'),
-(33, 'company_prefix', 'iue', 3, NULL, NULL, '2025-03-10 07:57:54', '2025-03-10 07:57:54'),
-(34, 'inspection_prefix', 'nm', 3, NULL, NULL, '2025-03-10 07:57:55', '2025-03-10 07:57:55'),
-(35, 'invoice_prefix', 'INV-', 9, NULL, NULL, '2025-03-10 07:57:55', '2025-04-10 12:55:03'),
-(36, 'report_prefix', 'rep', 3, NULL, NULL, '2025-03-10 07:57:55', '2025-04-02 11:03:05'),
-(37, 'customer_prefix', 'kfdg', 3, NULL, NULL, '2025-03-10 07:57:55', '2025-03-10 07:57:55'),
-(38, 'ai_api_key', 'uiqwu872384dsf', 4, NULL, NULL, '2025-03-10 18:40:18', '2025-03-10 18:40:18'),
+(21, 'discountOffers', '1', 2, NULL, NULL, '2025-03-07 06:48:42', '2025-04-02 10:31:40'),
+(22, 'organization_name', NULL, 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-23 12:21:08'),
+(23, 'owner_name', NULL, 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-02 10:34:20'),
+(24, 'company_email', NULL, 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-12 21:53:46'),
+(25, 'company_phone', NULL, 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-24 18:34:34'),
+(26, 'industry', NULL, 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-01 13:12:54'),
+(27, 'team_size', NULL, 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-01 13:12:54'),
+(28, 'company_address_line', NULL, 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-01 13:12:54'),
+(29, 'company_postal_code', NULL, 1, NULL, NULL, '2025-03-10 01:01:12', '2025-04-01 13:12:54'),
+(30, 'reservation_prefix', NULL, 3, NULL, NULL, '2025-03-10 07:57:54', '2025-03-10 08:28:01'),
+(31, 'quotation_prefix', NULL, 3, NULL, NULL, '2025-03-10 07:57:54', '2025-03-10 07:57:54'),
+(32, 'enquiry_prefix', NULL, 3, NULL, NULL, '2025-03-10 07:57:54', '2025-03-10 07:57:54'),
+(33, 'company_prefix', NULL, 3, NULL, NULL, '2025-03-10 07:57:54', '2025-03-10 07:57:54'),
+(34, 'inspection_prefix', NULL, 3, NULL, NULL, '2025-03-10 07:57:55', '2025-03-10 07:57:55'),
+(35, 'invoice_prefix', NULL, 9, NULL, NULL, '2025-03-10 07:57:55', '2025-04-10 12:55:03'),
+(36, 'report_prefix', NULL, 3, NULL, NULL, '2025-03-10 07:57:55', '2025-04-02 11:03:05'),
+(37, 'customer_prefix', NULL, 3, NULL, NULL, '2025-03-10 07:57:55', '2025-03-10 07:57:55'),
+(38, 'ai_api_key', NULL, 4, NULL, NULL, '2025-03-10 18:40:18', '2025-03-10 18:40:18'),
 (39, 'ai_global_status', '1', 4, NULL, NULL, '2025-03-10 18:40:18', '2025-03-10 18:40:18'),
 (40, 'ai_admin_status', '0', 4, NULL, NULL, '2025-03-10 18:40:18', '2025-04-02 10:54:52'),
 (41, 'ai_user_status', '0', 4, NULL, NULL, '2025-03-10 18:40:18', '2025-04-02 10:54:52'),
 (42, 'local_storage', '1', 8, NULL, NULL, '2025-03-13 05:34:58', '2025-04-02 12:34:43'),
 (43, 'aws_storage', '0', 8, NULL, NULL, '2025-03-13 05:34:58', '2025-04-02 12:34:43'),
-(44, 'metaImage', 'seo/Mm0u7J00C0erYYn1HwzGCbXtCNgihwZOMsBjuvps.png', 6, NULL, NULL, '2025-03-13 06:30:59', '2025-03-13 06:30:59'),
-(45, 'metaTitle', 'Rental System', 6, NULL, NULL, '2025-03-13 06:30:59', '2025-03-13 06:30:59'),
-(46, 'siteDescription', 'Rental system description', 6, NULL, NULL, '2025-03-13 06:30:59', '2025-04-10 12:17:39'),
-(47, 'keywords', 'Test', 6, NULL, NULL, '2025-03-13 06:30:59', '2025-04-10 12:17:39'),
-(48, 'maintenance_image', 'maintenance/yvxxODvYg7RCWBy1cg7yT27xEVtCUS5MkOvNXJO1.jpg', 4, NULL, NULL, '2025-03-13 06:31:55', '2025-04-02 10:59:47'),
+(44, 'metaImage', NULL, 6, NULL, NULL, '2025-03-13 06:30:59', '2025-03-13 06:30:59'),
+(45, 'metaTitle', NULL, 6, NULL, NULL, '2025-03-13 06:30:59', '2025-03-13 06:30:59'),
+(46, 'siteDescription', NULL, 6, NULL, NULL, '2025-03-13 06:30:59', '2025-04-10 12:17:39'),
+(47, 'keywords', NULL, 6, NULL, NULL, '2025-03-13 06:30:59', '2025-04-10 12:17:39'),
+(48, 'maintenance_image', NULL, 4, NULL, NULL, '2025-03-13 06:31:55', '2025-04-02 10:59:47'),
 (49, 'maintenance_description', '<div style=\"text-align: center;\"><b style=\"background-color: var(--white); color: inherit; text-align: var(--bs-body-text-align);\">Site under the Maintenance.</b></div><div style=\"text-align: center;\"><b><br></b></div><b><div style=\"text-align: center;\"><b style=\"background-color: var(--white); color: inherit; text-align: var(--bs-body-text-align);\">We will be live soon!!!!</b></div></b>', 4, NULL, NULL, '2025-03-13 06:31:55', '2025-04-02 10:59:47'),
 (50, 'maintenance_status', '0', 4, NULL, NULL, '2025-03-13 06:31:55', '2025-04-03 11:44:10'),
-(51, 'aws_access_key', 'dwedwdewdwdwed', 8, NULL, NULL, '2025-03-13 06:41:26', '2025-03-13 06:41:26'),
-(52, 'aws_secret_key', 'wfewefwfefwef', 8, NULL, NULL, '2025-03-13 06:41:26', '2025-03-13 06:41:26'),
-(53, 'aws_region', 'fwef', 8, NULL, NULL, '2025-03-13 06:41:26', '2025-03-13 06:41:26'),
-(54, 'aws_bucket_name', 'fwefwef', 8, NULL, NULL, '2025-03-13 06:41:26', '2025-03-13 06:41:26'),
-(55, 'aws_base_url', 'https://rental-system.dreamstechnologies.com/', 8, NULL, NULL, '2025-03-13 06:41:26', '2025-03-13 06:41:26'),
-(56, 'company_profile_photo', 'company_profiles/L6n2TnBP660cFNM3Gq6DJtOLVxeummrrAwOkapFJ.jpg', 1, NULL, NULL, '2025-03-13 07:47:26', '2025-04-01 13:27:09'),
-(57, 'stripe_status', '1', 13, NULL, NULL, '2025-03-17 05:48:20', '2025-03-17 06:38:17'),
+(51, 'aws_access_key', NULL, 8, NULL, NULL, '2025-03-13 06:41:26', '2025-03-13 06:41:26'),
+(52, 'aws_secret_key', NULL, 8, NULL, NULL, '2025-03-13 06:41:26', '2025-03-13 06:41:26'),
+(53, 'aws_region', NULL, 8, NULL, NULL, '2025-03-13 06:41:26', '2025-03-13 06:41:26'),
+(54, 'aws_bucket_name', NULL, 8, NULL, NULL, '2025-03-13 06:41:26', '2025-03-13 06:41:26'),
+(55, 'aws_base_url', NULL, 8, NULL, NULL, '2025-03-13 06:41:26', '2025-03-13 06:41:26'),
+(56, 'company_profile_photo', NULL, 1, NULL, NULL, '2025-03-13 07:47:26', '2025-04-01 13:27:09'),
+(57, 'stripe_status', '0', 13, NULL, NULL, '2025-03-17 05:48:20', '2025-03-17 06:38:17'),
 (58, 'stripe_email', 'APIs to accept cards, manage subscriptions, send money.', 13, NULL, NULL, '2025-03-17 06:38:11', '2025-03-17 06:38:11'),
 (59, 'stripe_key', NULL, 13, NULL, NULL, '2025-03-17 06:38:11', '2025-04-04 10:45:10'),
 (60, 'stripe_secret', NULL, 13, NULL, NULL, '2025-03-17 06:38:11', '2025-04-05 06:13:36'),
 (61, 'how_it_works_1', '<section class=\"section services\">\r\n    <div class=\"service-right\">\r\n        <img src=\"https://rental-system.dreamstechnologies.com/frontend/assets/img/bg/service-right.svg\" class=\"img-fluid\" alt=\"services right\">\r\n    </div>		\r\n    <div class=\"container\">	\r\n        <!-- Heading title-->\r\n        <div class=\"section-heading aos-init aos-animate\" data-aos=\"fade-down\">\r\n            <h2>How It Works</h2>\r\n            <p>Booking a car rental is a straightforward process that typically involves the following steps</p>\r\n        </div>\r\n        <!-- /Heading title -->\r\n        <div class=\"services-work\">\r\n            <div class=\"row\">\r\n                <div class=\"col-lg-4 col-md-4 col-12 d-flex aos-init aos-animate\" data-aos=\"fade-down\">\r\n                    <div class=\"services-group service-date flex-fill\">\r\n                        <div class=\"services-icon border-secondary\">\r\n                            <img class=\"icon-img bg-secondary\" src=\"https://rental-system.dreamstechnologies.com/frontend/assets/img/icons/services-icon-01.svg    \" alt=\"Choose Locations\">\r\n                        </div>\r\n                        <div class=\"services-content\">\r\n                            <h3>1. Choose Date &amp;  Locations</h3>\r\n                            <p>Determine the date &amp; location for your car rental. Consider factors such as your travel itinerary, pickup/drop-off locations (e.g., airport, city center), and duration of rental.</p>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n                <div class=\"col-lg-4 col-md-4 col-12 d-flex aos-init aos-animate\" data-aos=\"fade-down\">\r\n                    <div class=\"services-group service-loc flex-fill\">\r\n                        <div class=\"services-icon border-warning\">\r\n                            <img class=\"icon-img bg-warning\" src=\"https://rental-system.dreamstechnologies.com/frontend/assets/img/icons/services-icon-02.svg\" alt=\"Choose Locations\">\r\n                        </div>\r\n                        <div class=\"services-content\">\r\n                            <h3>2. Pick-Up Locations</h3>\r\n                            <p>Check the availability of your desired vehicle type for your chosen dates and location. Ensure that the rental rates, taxes, fees, and any additional charges.</p>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n                <div class=\"col-lg-4 col-md-4 col-12 d-flex aos-init aos-animate\" data-aos=\"fade-down\">\r\n                    <div class=\"services-group service-book flex-fill\">\r\n                        <div class=\"services-icon border-dark\">\r\n                            <img class=\"icon-img bg-dark\" src=\"https://rental-system.dreamstechnologies.com/frontend/assets/img/icons/services-icon-03.svg\" alt=\"Choose Locations\">\r\n                        </div>\r\n                        <div class=\"services-content\">\r\n                            <h3>3. Book your Car</h3>\r\n                            <p>Once you\'ve found car rental option, proceed to make a reservation. Provide the required information, including your details, driver\'s license, contact info, and payment details.</p>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</section>', 10, 1, NULL, NULL, '2025-03-24 09:57:20'),
-(63, 'play_store_link', 'https://play.google.com/store/apps/details?id=notion.id&hl=en_IN&pli=1', 15, 1, NULL, NULL, NULL),
-(64, 'apple_store_link', 'https://apps.apple.com/us/app/notion-notes-tasks-ai/id1232780281', 15, 1, NULL, NULL, NULL),
+(63, 'play_store_link', NULL, 15, 1, NULL, NULL, NULL),
+(64, 'apple_store_link', NULL, 15, 1, NULL, NULL, NULL),
 (65, 'default_theme', '1', 16, NULL, NULL, '2025-03-24 07:20:45', '2025-04-24 16:13:17'),
 (66, 'otp_type', 'email', 15, NULL, NULL, NULL, NULL),
 (67, 'otp_digit_limit', '4', 15, NULL, NULL, NULL, NULL),
@@ -49675,7 +49650,7 @@ INSERT INTO `general_settings` (`id`, `key`, `value`, `group_id`, `language_id`,
 (69, 'paypal_email', NULL, 13, NULL, NULL, '2025-03-27 18:32:29', '2025-03-27 18:32:29'),
 (70, 'paypal_key', NULL, 13, NULL, NULL, '2025-03-27 18:32:29', '2025-03-27 18:32:29'),
 (71, 'paypal_secret', NULL, 13, NULL, NULL, '2025-03-27 18:32:29', '2025-03-27 18:32:29'),
-(72, 'paypal_status', '1', 13, NULL, NULL, '2025-03-27 18:32:34', '2025-03-27 18:32:34'),
+(72, 'paypal_status', '0', 13, NULL, NULL, '2025-03-27 18:32:34', '2025-03-27 18:32:34'),
 (73, 'minAdvanceReservation', '1 Day', 20, NULL, NULL, '2025-03-28 04:57:50', '2025-03-28 04:57:50'),
 (74, 'maxAdvanceReservation', '1 Day', 20, NULL, NULL, '2025-03-28 04:57:50', '2025-03-28 04:57:50'),
 (75, 'cancellationBuffer', '3 Day', 20, NULL, NULL, '2025-03-28 04:57:50', '2025-03-28 04:57:50'),
@@ -49700,23 +49675,23 @@ INSERT INTO `general_settings` (`id`, `key`, `value`, `group_id`, `language_id`,
 (94, 'thousand_seperator', '.', 5, NULL, NULL, '2025-04-01 11:27:03', '2025-04-01 11:27:03'),
 (95, 'currency_switcher', '0', 5, NULL, NULL, '2025-04-01 11:27:03', '2025-04-02 10:51:16'),
 (96, 'language_switcher', '1', 5, NULL, NULL, '2025-04-01 11:27:03', '2025-04-01 11:27:03'),
-(97, 'login', '1', 15, NULL, NULL, '2025-04-02 10:52:34', '2025-04-02 10:52:34'),
+(97, 'login', '0', 15, NULL, NULL, '2025-04-02 10:52:34', '2025-04-02 10:52:34'),
 (98, 'register', '0', 15, NULL, NULL, '2025-04-02 10:52:34', '2025-04-08 17:25:42'),
 (99, 'cookiesContentText', '<p>Cookie Policies -&nbsp;<span style=\"background-color: var(--white); color: inherit; font-weight: var(--bs-body-font-weight); text-align: var(--bs-body-text-align);\">\"We use cookies to improve your experience, analyze site traffic, and personalize content. By continuing to browse, you agree to our use of cookies\".</span></p>', 7, NULL, NULL, '2025-04-02 12:32:45', '2025-04-03 11:48:39'),
 (100, 'cookiesPosition', 'right', 7, NULL, NULL, '2025-04-02 12:32:45', '2025-04-02 12:32:45'),
 (101, 'agreeButtonText', 'Accept', 7, NULL, NULL, '2025-04-02 12:32:45', '2025-04-02 12:32:45'),
 (102, 'declineButtonText', 'Reject', 7, NULL, NULL, '2025-04-02 12:32:45', '2025-04-02 12:32:45'),
 (103, 'showDeclineButton', '1', 7, NULL, NULL, '2025-04-02 12:32:45', '2025-04-02 12:32:45'),
-(104, 'cookiesPageLink', 'https://rental-system.dreamstechnologies.com/', 7, NULL, NULL, '2025-04-02 12:32:45', '2025-04-02 12:32:45'),
+(104, 'cookiesPageLink', NULL, 7, NULL, NULL, '2025-04-02 12:32:45', '2025-04-02 12:32:45'),
 (105, 'how_it_works_2', '<section class=\"section services\">\r\n    <div class=\"container\" style=\"--bs-gutter-y: 0; width: 1320px; padding-right: 12px; padding-left: 12px;\"><div class=\"section-heading aos-init aos-animate\" data-aos=\"fade-down\"><h1 style=\"margin-right: 0px; margin-bottom: 10px; margin-left: 0px; color: rgb(17, 17, 17); font-size: 62px; padding: 0px; border: 0px; letter-spacing: -0.02em; font-family: &quot;Fira Sans&quot;, sans-serif; background-color: rgb(252, 251, 251);\"><span style=\"margin: 0px; padding: 0px; border: 0px; color: rgb(255, 166, 51);\">ابحث عن أفضل ما لديك</span></h1><p>إن حجز تأجير سيارة هي عملية مباشرة تتضمن عادةً الخطوات التالية</p></div><div class=\"services-work\"><div class=\"row\" style=\"--bs-gutter-y: 0; margin-top: 0px; margin-right: -12px; margin-left: -12px;\"><div class=\"col-lg-4 col-md-4 col-12 d-flex aos-init aos-animate\" data-aos=\"fade-down\" style=\"width: 440px; padding-right: 12px; padding-left: 12px; margin-top: 0px;\"><div class=\"services-group service-date flex-fill\"><div class=\"services-icon border-secondary\"><img class=\"icon-img bg-secondary\" src=\"https://rental-system.dreamstechnologies.com/frontend/assets/img/icons/services-icon-01.svg\" alt=\"Choose Locations\" style=\"color: rgb(255, 255, 255);\"></div><div class=\"services-content\"><h3 style=\"color: rgb(17, 24, 39);\">1. اختر التاريخ والمواقع</h3><p>حدد تاريخ ومكان استئجار سيارتك. ضع في اعتبارك عوامل مثل مسار رحلتك، ومواقع الاستلام والتسليم (مثل المطار، أو مركز المدينة)، ومدة الاستئجار.</p></div></div></div><div class=\"col-lg-4 col-md-4 col-12 d-flex aos-init aos-animate\" data-aos=\"fade-down\" style=\"width: 440px; padding-right: 12px; padding-left: 12px; margin-top: 0px;\"><div class=\"services-group service-loc flex-fill\"><div class=\"services-icon border-warning\"><img class=\"icon-img bg-warning\" src=\"https://rental-system.dreamstechnologies.com/frontend/assets/img/icons/services-icon-02.svg\" alt=\"Choose Locations\" style=\"color: rgb(255, 255, 255);\"></div><div class=\"services-content\"><h3 style=\"color: rgb(17, 24, 39);\">2. مواقع الاستلام</h3><p>تأكد من توفر نوع السيارة التي ترغب بها في التاريخ والمكان الذي اخترته. تأكد من أسعار الإيجار والضرائب والرسوم وأي تكاليف إضافية.</p></div></div></div><div class=\"col-lg-4 col-md-4 col-12 d-flex aos-init aos-animate\" data-aos=\"fade-down\" style=\"width: 440px; padding-right: 12px; padding-left: 12px; margin-top: 0px;\"><div class=\"services-group service-book flex-fill\"><div class=\"services-icon border-dark\" style=\"border-color: rgb(33, 37, 41) !important;\"><img class=\"icon-img bg-dark\" src=\"https://rental-system.dreamstechnologies.com/frontend/assets/img/icons/services-icon-03.svg\" alt=\"Choose Locations\" style=\"background-color: rgb(33, 37, 41) !important;\"></div><div class=\"services-content\"><h3 style=\"color: rgb(17, 24, 39);\">3.احجز سيارتك</h3><p>بعد العثور على خيار تأجير سيارة، احجزه. قدّم المعلومات المطلوبة، بما في ذلك بياناتك، ورخصة القيادة، ومعلومات الاتصال، وتفاصيل الدفع</p><p><br></p></div></div></div></div></div></div><div class=\"container\"><div class=\"services-work\"><div class=\"row\"><div class=\"col-lg-4 col-md-4 col-12 d-flex aos-init aos-animate\" data-aos=\"fade-down\"><div class=\"services-group service-book flex-fill\"><div class=\"services-content\">\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</section>', 10, 2, NULL, '2025-04-07 16:59:10', '2025-04-12 12:42:06'),
 (106, 'payment_status', '1', 13, NULL, NULL, '2025-04-09 17:16:22', '2025-04-09 17:16:22'),
 (107, 'logo_image', NULL, 16, NULL, NULL, '2025-04-10 12:09:14', '2025-04-23 12:38:47'),
 (108, 'favicon_image', NULL, 16, NULL, NULL, '2025-04-10 12:09:14', '2025-04-10 12:09:14'),
 (109, 'small_image', NULL, 16, NULL, NULL, '2025-04-10 12:09:14', '2025-04-10 12:09:14'),
 (110, 'dark_logo', NULL, 16, NULL, NULL, '2025-04-10 12:09:14', '2025-04-10 12:09:14'),
-(111, 'ogmetaTitle', 'Rental System', 6, NULL, NULL, '2025-04-10 12:17:39', '2025-04-10 12:17:39'),
-(112, 'ogsiteDescription', 'Rental system description', 6, NULL, NULL, '2025-04-10 12:17:39', '2025-04-10 12:17:39'),
-(113, 'ogkeywords', 'Test', 6, NULL, NULL, '2025-04-10 12:17:39', '2025-04-10 12:17:39'),
+(111, 'ogmetaTitle', NULL, 6, NULL, NULL, '2025-04-10 12:17:39', '2025-04-10 12:17:39'),
+(112, 'ogsiteDescription', NULL, 6, NULL, NULL, '2025-04-10 12:17:39', '2025-04-10 12:17:39'),
+(113, 'ogkeywords', NULL, 6, NULL, NULL, '2025-04-10 12:17:39', '2025-04-10 12:17:39'),
 (114, 'invoice_due', '5', 9, NULL, NULL, '2025-04-10 12:55:03', '2025-04-10 12:55:03'),
 (115, 'invoice_round_off', '5', 9, NULL, NULL, '2025-04-10 12:55:03', '2025-04-10 12:55:03'),
 (116, 'round_off_enabled', '1', 9, NULL, NULL, '2025-04-10 12:55:03', '2025-04-10 12:55:03'),
@@ -49730,27 +49705,13 @@ INSERT INTO `general_settings` (`id`, `key`, `value`, `group_id`, `language_id`,
 (124, 'agreeButtonText_1', 'Accept All', 7, 1, NULL, '2025-04-23 14:50:36', '2025-04-23 14:50:36'),
 (125, 'declineButtonText_1', 'Decline', 7, 1, NULL, '2025-04-23 14:50:36', '2025-04-23 14:50:36'),
 (126, 'showDeclineButton_1', '1', 7, 1, NULL, '2025-04-23 14:50:36', '2025-04-23 14:50:36'),
-(127, 'cookiesPageLink_1', 'https://dreamsrent-laravel.dreamstechnologies.com/pages/privacy-policy', 7, 1, NULL, '2025-04-23 14:50:36', '2025-04-23 14:50:36'),
+(127, 'cookiesPageLink_1', NULL, 7, 1, NULL, '2025-04-23 14:50:36', '2025-04-23 14:50:36'),
 (128, 'cookiesContentText_2', '<p data-start=\"71\" data-end=\"248\" class=\"\">نستخدم ملفات تعريف الارتباط لتحسين تجربة التصفح الخاصة بك، وتقديم محتوى مخصص، وتحليل حركة المرور. بالنقر على \"الموافقة على الكل\"، فإنك توافق على استخدامنا لملفات تعريف الارتباط.</p>', 7, 2, NULL, '2025-04-23 14:52:15', '2025-04-23 14:52:15'),
 (129, 'cookiesPosition_2', 'left', 7, 2, NULL, '2025-04-23 14:52:15', '2025-04-23 14:52:15'),
 (130, 'agreeButtonText_2', 'قبول الكل', 7, 2, NULL, '2025-04-23 14:52:15', '2025-04-23 14:52:15'),
 (131, 'declineButtonText_2', 'انخفاض', 7, 2, NULL, '2025-04-23 14:52:15', '2025-04-23 14:52:15'),
 (132, 'showDeclineButton_2', '1', 7, 2, NULL, '2025-04-23 14:52:15', '2025-04-23 14:52:15'),
-(133, 'cookiesPageLink_2', 'https://dreamsrent-laravel.dreamstechnologies.com/pages/privacy-policy', 7, 2, NULL, '2025-04-23 14:52:15', '2025-04-23 14:52:15');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `industry_types`
---
-
-CREATE TABLE `industry_types` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+(133, 'cookiesPageLink_2', NULL, 7, 2, NULL, '2025-04-23 14:52:15', '2025-04-23 14:52:15');
 
 -- --------------------------------------------------------
 
@@ -49875,8 +49836,7 @@ CREATE TABLE `languages` (
 --
 
 INSERT INTO `languages` (`id`, `language_id`, `rtl`, `default`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(9, 1, 0, 1, 1, '2025-03-14 10:35:10', '2025-04-12 16:05:14', NULL),
-(11, 2, 1, 0, 1, '2025-04-07 16:58:18', '2025-04-12 10:57:09', NULL);
+(9, 1, 0, 1, 1, '2025-03-14 10:35:10', '2025-04-12 16:05:14', NULL);
 
 -- --------------------------------------------------------
 
@@ -54717,30 +54677,6 @@ CREATE TABLE `tax_rates` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `team_sizes`
---
-
-CREATE TABLE `team_sizes` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `team_sizes`
---
-
-INSERT INTO `team_sizes` (`id`, `name`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, '>1-10', NULL, NULL, NULL),
-(2, '11-50', NULL, NULL, NULL),
-(3, '50+', NULL, NULL, NULL),
-(4, '100+', NULL, NULL, NULL);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `testimonials`
 --
 
@@ -55284,16 +55220,6 @@ CREATE TABLE `transmissions` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `transmissions`
---
-
-INSERT INTO `transmissions` (`id`, `language_id`, `name`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 'Manual', 1, '2025-04-22 20:56:20', '2025-04-22 20:56:20', NULL),
-(2, 1, 'Automatic', 1, '2025-04-22 20:56:27', '2025-04-22 20:56:27', NULL),
-(3, 1, 'Automated Manual', 1, '2025-04-22 20:56:49', '2025-04-22 20:56:49', NULL),
-(4, 1, 'Electric Vehicle', 1, '2025-04-22 20:56:58', '2025-04-22 20:56:58', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -55614,12 +55540,6 @@ ALTER TABLE `announcements`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `announcement_types`
---
-ALTER TABLE `announcement_types`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `banks`
 --
 ALTER TABLE `banks`
@@ -55863,13 +55783,6 @@ ALTER TABLE `general_settings`
   ADD UNIQUE KEY `general_settings_key_unique` (`key`);
 
 --
--- Indexes for table `industry_types`
---
-ALTER TABLE `industry_types`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `industry_types_name_unique` (`name`);
-
---
 -- Indexes for table `inspections`
 --
 ALTER TABLE `inspections`
@@ -56102,13 +56015,6 @@ ALTER TABLE `tax_rates`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `team_sizes`
---
-ALTER TABLE `team_sizes`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `team_sizes_name_unique` (`name`);
-
---
 -- Indexes for table `testimonials`
 --
 ALTER TABLE `testimonials`
@@ -56275,12 +56181,6 @@ ALTER TABLE `addons`
 --
 ALTER TABLE `announcements`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `announcement_types`
---
-ALTER TABLE `announcement_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `banks`
@@ -56511,12 +56411,6 @@ ALTER TABLE `general_settings`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
 
 --
--- AUTO_INCREMENT for table `industry_types`
---
-ALTER TABLE `industry_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `inspections`
 --
 ALTER TABLE `inspections`
@@ -56733,12 +56627,6 @@ ALTER TABLE `tax_rates`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `team_sizes`
---
-ALTER TABLE `team_sizes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
 -- AUTO_INCREMENT for table `testimonials`
 --
 ALTER TABLE `testimonials`
@@ -56784,7 +56672,7 @@ ALTER TABLE `translation_languages`
 -- AUTO_INCREMENT for table `transmissions`
 --
 ALTER TABLE `transmissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`

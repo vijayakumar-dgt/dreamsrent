@@ -38,10 +38,7 @@
         </form>
 
         </div>
-        <div class="card-footer text-center">
-            <p>For script support, contact us at <a href="https://dreamstechnologies.com/page/support" target="_blank"
-                    rel="noopener noreferrer">@dreamstechnologies</a>. We're here to help. Thank you!</p>
-        </div>
+       
     </div>
 @endsection
 @push('scripts')
