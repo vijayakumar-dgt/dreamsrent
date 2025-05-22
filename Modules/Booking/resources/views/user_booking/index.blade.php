@@ -455,9 +455,9 @@
                                                 {{ $insurance->insurance_name }}
                                             </p>
                                             <div>
-                                                <a href="#" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    data-bs-original-title="{{ $insurance->first_benefit }}">
-                                                    +{{ $insurance->benefits_count }} {{__('web.home.benefits')}}
+                                                <a href="#" class="show-benefits-link" data-bs-toggle="modal" data-bs-target="#show_benifit"
+                                                    data-insurance-id="{{ $insurance->insurances_id }}">
+                                                    +{{ $insurance->benefits_count }} {{ __('web.home.benefits') }}
                                                 </a>
                                             </div>
                                         </div>
@@ -928,6 +928,30 @@
 
     </div>
 </div>
+
+
+<div class="modal fade" id="show_benifit" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-start w-100">Insurance Benefits</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <ul id="benefit-list" class="ps-3">
+                </ul>
+            </div>
+
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                    {{ __('admin.common.close') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')

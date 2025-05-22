@@ -1122,23 +1122,65 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    // Hide all descriptions by default
     $(".more-adon-info").hide();
 
-    // Toggle description and icon on click
     $(".adon-info-btn").on("click", function () {
         const $button = $(this);
         const $listItem = $button.closest("li");
         const $description = $listItem.find(".more-adon-info");
         const $icon = $button.find(".arrow-icon");
 
-        $description.slideToggle(200); // toggle the description
+        $description.slideToggle(200);
 
-        // Toggle icon class
         if ($icon.hasClass("bx-chevron-down")) {
             $icon.removeClass("bx-chevron-down").addClass("bx-chevron-up");
         } else {
             $icon.removeClass("bx-chevron-up").addClass("bx-chevron-down");
         }
+    });
+
+    $(".show-benefits-link").on("click", function (e) {
+        e.preventDefault();
+        const insuranceId = $(this).data("insurance-id");
+        const token = $('meta[name="csrf-token"]').attr("content");
+
+        const $preloader = $("#content-preloader");
+        const $list = $("#benefit-list");
+
+        $list.empty();
+        $preloader.show(); // Show loader
+
+        $.ajax({
+            type: "POST",
+            url: "/get/benefits",
+            data: {
+                id: insuranceId,
+                _token: token,
+            },
+            success: function (response) {
+                $list.empty();
+
+                if (response.length > 0) {
+                    response.forEach((item, index) => {
+                        const number = index + 1;
+                        $list.append(
+                            `<li class="mb-2">${number}. ${item.benefit}</li>`
+                        );
+                    });
+                } else {
+                    $list.append("<li>No benefits available.</li>");
+                }
+
+                $("#show_benifit").modal("show");
+            },
+            error: function () {
+                $list.html(
+                    "<li class='text-danger'>Failed to load benefits.</li>"
+                );
+            },
+            complete: function () {
+                $preloader.hide(); // Hide loader in both success & error
+            },
+        });
     });
 });

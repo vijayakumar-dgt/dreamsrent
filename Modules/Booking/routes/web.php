@@ -35,6 +35,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
 
     Route::post('/get-filter-vehicles', [BookingController::class, 'getFilterVehicles']);
     Route::post('get-customer-details', [BookingController::class, 'getCustomerDetails']);
+    Route::post('/get/benefits', [UserBookingController::class, 'getBenefits']);
 
     Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
         Route::get('quotations', [QuotationController::class, 'index'])->name('quotations.index')->middleware('permission');

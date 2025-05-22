@@ -38,6 +38,7 @@ use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Config;
+use Modules\GeneralSetting\Models\InsuranceBenefit;
 
 class UserBookingController extends Controller
 {
@@ -580,7 +581,7 @@ class UserBookingController extends Controller
                 'payment_status'  => $booking->payment_status ?? "",
                 'tototal_amount'  => $booking->final_price ?? ""
             ];
-            try{
+            try {
                 if (rentalNotificationEnabled()) {
                     $appAdmin = User::where('user_type', 1)->first();
 
@@ -591,10 +592,9 @@ class UserBookingController extends Controller
                 if (userNotificationsEnabled() && $authUser?->email) {
                     sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
                 }
-            }catch (\Exception $e){
-
+            } catch (\Exception $e) {
             }
-            
+
             return response()->json([
                 'code' => 200,
                 'message' => __('web.home.booking_successfully_created'),
@@ -1003,7 +1003,7 @@ class UserBookingController extends Controller
                 'payment_status'  => $booking->payment_status ?? "",
                 'tototal_amount'  => $booking->final_price ?? ""
             ];
-            try{
+            try {
                 if (rentalNotificationEnabled()) {
                     $appAdmin = User::where('user_type', 1)->first();
 
@@ -1014,10 +1014,9 @@ class UserBookingController extends Controller
                 if (userNotificationsEnabled() && $authUser && $authUser->email) {
                     sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
                 }
-            }catch (\Exception $e){
-                
+            } catch (\Exception $e) {
             }
-            
+
             return response()->json([
                 'code' => 200,
                 'message' => __('web.home.booking_successfully_created'),
@@ -1065,7 +1064,7 @@ class UserBookingController extends Controller
                         'payment_status'  => $booking->payment_status ?? "",
                         'tototal_amount'  => $booking->final_price ?? ""
                     ];
-                    try{
+                    try {
                         if (rentalNotificationEnabled()) {
                             $appAdmin = User::where('user_type', 1)->first();
 
@@ -1076,10 +1075,9 @@ class UserBookingController extends Controller
                         if (userNotificationsEnabled() && $authUser && $authUser->email) {
                             sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
                         }
-                    }catch (\Exception $e) {
-
+                    } catch (\Exception $e) {
                     }
-                    
+
                     return redirect()->route('payment.success.page', ['transaction_id' => $response['id']]);
                 }
 
@@ -1173,10 +1171,9 @@ class UserBookingController extends Controller
                 if (userNotificationsEnabled() && $authUser) {
                     sendNotification($authUser->email, 'booking-confirmation-to-user', $notifyData);
                 }
-            }catch (\Exception $e) {
-                
+            } catch (\Exception $e) {
             }
-            
+
             return redirect()->route('payment.success.page', ['transaction_id' => $sessionId]);
         } catch (\Exception $e) {
             return response()->json([
@@ -1234,5 +1231,16 @@ class UserBookingController extends Controller
             'status' => 'success',
             'data' => $data
         ]);
+    }
+
+    public function getBenefits(Request $request)
+    {
+        $insuranceId = $request->input('id');
+
+        $benefits = InsuranceBenefit::where('insurance_id', $insuranceId)
+            ->select('benefit')
+            ->get();
+
+        return response()->json($benefits);
     }
 }
