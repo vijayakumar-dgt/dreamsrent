@@ -856,8 +856,9 @@
                                                 </li>
                                             </ul>
                                         </div>
+                                        @if(!empty($totalTax) && floatval($totalTax) > 0)
                                         <div class="booking-vehicle-rates mt-2">
-                                            <p class="fw-bold mb-1">{{__('web.home.tax_rate')}} :</p>
+                                            <p class="fw-bold mb-1">{{ __('web.home.tax_rate') }} :</p>
                                             <ul>
                                                 @foreach($calculatedTaxes as $tax)
                                                 <li>
@@ -867,12 +868,13 @@
                                                 @endforeach
 
                                                 <li class="total-rate">
-                                                    <h6>{{__('web.home.total_tax')}}</h6>
+                                                    <h6>{{ __('web.home.total_tax') }}</h6>
                                                     <input type="hidden" name="tax_val" id="tax_val" value="{{ number_format($totalTax, 2) }}">
                                                     <h5>{{ $currencySymbol }}{{ number_format($totalTax, 2) }}</h5>
                                                 </li>
                                             </ul>
                                         </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

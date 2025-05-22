@@ -203,8 +203,6 @@
                 finalTotal += tax;
             }
 
-            console.log(finalTotal);
-
             $totalPriceExtra.val(extra.toFixed(2));
             $totalPriceInsurance.val(insurance.toFixed(2));
             $totalPriceElement.val(finalTotal.toFixed(2));
@@ -469,14 +467,6 @@
         function setTotalPriceDisplay(total) {
             $(".vehicle-total-price span").text(total.toFixed(2));
             $("#total_price").val(total.toFixed(2));
-        }
-
-        function addTaxToTotal() {
-            let currentTotal = getNumericVal("#total_price");
-            let taxVal = getNumericVal("#tax_val");
-
-            let newTotal = currentTotal + taxVal;
-            setTotalPriceDisplay(newTotal);
         }
 
         function removeTaxFromTotal() {
