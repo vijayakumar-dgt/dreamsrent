@@ -296,8 +296,8 @@
              } 
          }); 
     }
-})();
 
+    
 if ($(".bookingpickupdate").length > 0) {
     $(".bookingpickupdate").datetimepicker({
         format: "DD-MM-YYYY",
@@ -1654,3 +1654,5 @@ $(document).ready(function () {
 $(document).on("click", "#enquire_us", function () {
     $("#enquiry").modal("show");
 });
+})();
+
