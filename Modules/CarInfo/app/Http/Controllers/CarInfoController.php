@@ -1353,10 +1353,16 @@ class CarInfoController extends Controller
                 }
             }
             $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
+
             if (!empty($vehicle->vehicle_image)) {
                 array_unshift($multipleImages, $vehicle->vehicle_image);
             }
-            $multipleImages = array_map(fn($img) => url('storage/vehicles/images/' . basename($img)), $multipleImages);
+
+            $multipleImages = array_map(function ($img) {
+                $img = '/' . ltrim($img, '/'); // Ensure single leading slash
+                return url('storage' . $img);
+            }, $multipleImages);
+
 
             /** @var \App\Models\User $auth */
             $auth = current_user();
@@ -1720,15 +1726,19 @@ class CarInfoController extends Controller
                 }
             }
 
-            $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
             $multiplePolicy = $vehiclepolicys ? json_decode($vehiclepolicys->value, true) : [];
             $multipleDoc = $vehicleDoc ? json_decode($vehicleDoc->value, true) : [];
+
+            $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
 
             if (!empty($vehicle->vehicle_image)) {
                 array_unshift($multipleImages, $vehicle->vehicle_image);
             }
 
-            $multipleImages = array_map(fn($img) => url('storage/vehicles/' . basename($img)), $multipleImages);
+            $multipleImages = array_map(function ($img) {
+                $img = '/' . ltrim($img, '/'); // Ensure single leading slash
+                return url('storage' . $img);
+            }, $multipleImages);
             $user = null;
             $wishlist = null;
             if (Auth::guard('web')->check()) {
