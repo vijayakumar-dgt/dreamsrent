@@ -98,7 +98,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>${new Date(value.transaction_date).toLocaleString()}</td>
+                            <td>${value.formatted_created_at}</td>
                             <td class="text-${value.status === 'Completed' ? 'success' : 'danger'}-light">
                                 ${value.status === 'Completed' ? '+ ' : '- '} ${currencySymbol}${value.amount}
                             </td>

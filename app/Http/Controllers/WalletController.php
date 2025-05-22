@@ -247,6 +247,10 @@ class WalletController extends Controller
                 ->where('type', '1')
                 ->orderBy('transaction_date', 'desc')
                 ->get();
+            $walletHistory->transform(function ($transaction) {
+                $transaction->formatted_created_at = formatDateTime($transaction->created_at, false);
+                return $transaction;
+            });
 
             $totalCredit = WalletHistory::where('user_id', $user->id)
                 ->where('status', 'Completed')
