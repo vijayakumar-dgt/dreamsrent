@@ -111,6 +111,18 @@
                 $("#section_id_3").removeClass("d-none");
                 $("#section_title_three").val($(this).data("section_title_three"));
                 $("#section_id").val(ID);
+                $("#label_1").val($(this).data("label_1"));
+                $("#label_2").val($(this).data("label_2"));
+                $("#label_3").val($(this).data("label_3"));
+                $("#label_4").val($(this).data("label_4"));
+                $("#label_5").val($(this).data("label_5"));
+                $("#label_6").val($(this).data("label_6"));
+                $("#dis_1").val($(this).data("dis_1"));
+                $("#dis_2").val($(this).data("dis_2"));
+                $("#dis_3").val($(this).data("dis_3"));
+                $("#dis_4").val($(this).data("dis_4"));
+                $("#dis_5").val($(this).data("dis_5"));
+                $("#dis_6").val($(this).data("dis_6"));
             } else if (ID == 26) {
                 $("#section_id_4").removeClass("d-none");
                 $("#section_id").val(ID);
@@ -222,6 +234,18 @@
                                                 data-section_title_two="${value.title}"
                                                 data-section_title_three="${value.title}"
                                                 data-section_title_four="${value.title}"
+                                                data-label_1="${value.label_1}"
+                                                data-label_2="${value.label_2}"
+                                                data-label_3="${value.label_3}"
+                                                data-label_4="${value.label_4}"
+                                                data-label_5="${value.label_5}"
+                                                data-label_6="${value.label_6}"
+                                                data-dis_1="${value.dis_1}"
+                                                data-dis_2="${value.dis_2}"
+                                                data-dis_3="${value.dis_3}"
+                                                data-dis_4="${value.dis_4}"
+                                                data-dis_5="${value.dis_5}"
+                                                data-dis_6="${value.dis_6}"
                                                 data-label_one="${
                                                     value.label_one ?? ""
                                                 }"

@@ -167,7 +167,6 @@
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.best_vehicle') }}</label>
                                     <select name="vehicle_id" id="vehicle_id" class="form-control select" data-placeholder="{{ __('admin.common.select') }}">
-                                        <option value="">{{ __('admin.common.select') }}</option>
                                         @foreach ($vehicles as $vehicle)
                                         <option value="{{ $vehicle->id }}">{{ $vehicle->name }}</option>
                                         @endforeach
