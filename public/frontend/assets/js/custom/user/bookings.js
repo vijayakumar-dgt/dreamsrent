@@ -6,10 +6,6 @@
     fetchUserBookings();
 })();
 
-function ucfirst(str) {
-    if (!str) return '';
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
 const fetchUserBookings = (callback = null) => {
     const limit = 3;
     const status = $(".status_filter.active").data("status") || "";

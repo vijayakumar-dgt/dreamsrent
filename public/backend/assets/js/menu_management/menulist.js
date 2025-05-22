@@ -220,7 +220,7 @@
         });
 
         // Sort by dropdown
-        $(".sort_by_list a").click(function() {
+        $(".sort_by_list").on('click', function() {
             const sortBy = $(this).data("sort");
             $("#current_sort").text($(this).text());
             menuTable(sortBy);
