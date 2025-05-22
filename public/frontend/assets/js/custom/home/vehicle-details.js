@@ -1213,7 +1213,7 @@ function createExtraService(vehicle) {
                 (service) =>
                     `<div class="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
                 <div class="service-img">
-                    <img src="${service.icon}" width="25px" height="25px" alt="${service.name ?? ""}">
+                    <img src="${service.icon}" class="extra-service-img" alt="${service.name ?? ""}">
                 </div>
                 <div class="service-info">
                     <p>${service.name ?? ""}</p>

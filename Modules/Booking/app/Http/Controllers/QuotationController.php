@@ -212,15 +212,19 @@ class QuotationController extends Controller
                     'payment_status'  => $booking->payment_status ?? "",
                     'tototal_amount'  => $booking->final_price ?? ""
                 ];
-                if (rentalNotificationEnabled()) {
-                    $appAdmin = User::where('user_type', 1)->first();
-                    if ($appAdmin !== null) {
-                        sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
-                    }
 
-                    if ($customer !== null) {
-                        sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
+                try {
+                    if (rentalNotificationEnabled()) {
+                        $appAdmin = User::where('user_type', 1)->first();
+                        if ($appAdmin !== null) {
+                            sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+                        }
+    
+                        if ($customer !== null) {
+                            sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
+                        }
                     }
+                } catch (\Exception $e) {
                 }
             } else {
                 $data['updated_by'] = Auth::guard('admin')->id();

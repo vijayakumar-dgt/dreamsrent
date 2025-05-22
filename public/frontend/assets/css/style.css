@@ -28945,3 +28945,8 @@ a#category-filter.active {
 	height: 40px;
 }
 
+.extra-service-img {
+	width: 25px !important;
+	height: 25px !important;
+}
+

@@ -501,14 +501,18 @@ class BookingController extends Controller
                     'payment_status'  => $booking->payment_status ?? "",
                     'tototal_amount'  => $booking->final_price ?? ""
                 ];
-                if (rentalNotificationEnabled()) {
-                    $appAdmin = User::where('user_type', 1)->first();
-                    if ($appAdmin && $appAdmin->email) {
-                        sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+
+                try {
+                    if (rentalNotificationEnabled()) {
+                        $appAdmin = User::where('user_type', 1)->first();
+                        if ($appAdmin && $appAdmin->email) {
+                            sendNotification($appAdmin->email, 'booking-confirmation-to-admin', $notifyData);
+                        }
                     }
-                }
-                if (userNotificationsEnabled() && $customer && $customer->email) {
-                        sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
+                    if (userNotificationsEnabled() && $customer && $customer->email) {
+                            sendNotification($customer->email, 'booking-confirmation-to-user', $notifyData);
+                    }
+                } catch (\Exception $e) {                    
                 }
             } else {
                 $data['updated_by'] = Auth::guard('admin')->id();
