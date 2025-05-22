@@ -1356,7 +1356,7 @@ class CarInfoController extends Controller
             if (!empty($vehicle->vehicle_image)) {
                 array_unshift($multipleImages, $vehicle->vehicle_image);
             }
-            $multipleImages = array_map(fn($img) => url('storage/vehicles/' . basename($img)), $multipleImages);
+            $multipleImages = array_map(fn($img) => url('storage/vehicles/images/' . basename($img)), $multipleImages);
 
             /** @var \App\Models\User $auth */
             $auth = current_user();
