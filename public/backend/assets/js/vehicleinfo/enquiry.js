@@ -217,7 +217,7 @@
                             <td>${value.customer_name}</td>
                             <td>${value.email}</td>
                             <td>${value.phone ?? '-'}</td>
-                            <td>${value.enquiry_date}</td>
+                            <td>${value.formatted_created_at}</td>
                             <td>
                                 <span class="avatar avatar-md bg-light rounded-circle tooltip-trigger"
                                     data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"

@@ -107,35 +107,35 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="mb-3">
-									<label class="form-label">{{ __('admin.common.vehicle') }}   <span class="text-danger"> *</span></label>
+									<label class="form-label">{{ __('admin.common.vehicle') }} </label>
 									<p class="assigned_cars"></p>
 									<span class="text-danger error-text" id="assigned_cars_error"></span>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="mb-3">
-									<label class="form-label">{{ __('admin.common.name') }}<span class="text-danger"> *</span></label>
+									<label class="form-label">{{ __('admin.common.name') }}</label>
 									<p class="customer_name"></p>
 									<span id="customer_name_error" class="text-danger error-text"></span>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="mb-3">
-									<label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
+									<label class="form-label">{{ __('admin.common.email') }}</label>
 									<p class="email"></p>
 									<span id="email_error" class="text-danger error-text"></span>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="mb-3">
-									<label class="form-label">{{ __('admin.common.phone') }}<span class="text-danger"> *</span></label>
+									<label class="form-label">{{ __('admin.common.phone') }}</label>
 									<p class="phone_number"></p>
 									<span id="phone_number_error" class="text-danger error-text"></span>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="mb-3">
-									<label class="form-label">{{ __('admin.bookings.enquiry') }}<span class="text-danger"> *</span></label>
+									<label class="form-label">{{ __('admin.bookings.enquiry') }}</label>
 									<p class="enquiry_details"></p>
 									<span id="enquiry_details_error" class="text-danger error-text"></span>
 								</div>

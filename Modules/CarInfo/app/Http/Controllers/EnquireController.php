@@ -131,6 +131,7 @@ class EnquireController extends Controller
                 ->get()->map(function ($enquiry) {
                     $enquiry->vehicle_image = uploadedAsset($enquiry->vehicle_image ?? null, 'default');
                     $enquiry->customer_name = ucwords($enquiry->customer_name);
+                    $enquiry->formatted_created_at = formatDateTime($enquiry->created_at, false);
                     return $enquiry;
                 });
 

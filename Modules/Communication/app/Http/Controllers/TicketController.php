@@ -137,7 +137,6 @@ class TicketController extends Controller
             $statusFilters = $request->input('status', []);
             $sortBy = $request->input('sort_by', 'latest');
             $searchTermInput = $request->input('search', '');
-            // Ensure search term is always a string
             $searchTerm = is_string($searchTermInput) ? $searchTermInput : '';
 
             $withRelations = [
@@ -151,23 +150,19 @@ class TicketController extends Controller
                 'ticketHistories.user.userDetail:id,user_id,first_name,last_name,profile_image',
             ];
 
-
             $query = Ticket::query()->with($withRelations);
 
-            // Apply user-specific filters
+            // Role-based ticket filtering
             if ($user->user_type == 1) {
-                // Admin can see all tickets
                 if ($ticketId) {
                     $query->where('id', $ticketId);
                 }
             } elseif ($user->user_type == 3) {
-                // Regular user can only see their own tickets
                 $query->where('user_id', $user->id);
                 if ($ticketId) {
                     $query->where('id', $ticketId);
                 }
             } elseif ($user->user_type == 2) {
-                // Assignee can only see tickets assigned to them
                 $query->where('assignee_id', $user->id);
                 if ($ticketId) {
                     $query->where('id', $ticketId);
@@ -180,30 +175,30 @@ class TicketController extends Controller
                 ], 403);
             }
 
-            // Apply priority filters
+            // Apply priority filter
             if (!empty($priorityFilters)) {
                 $query->whereIn('priority', $priorityFilters);
             }
 
-            // Apply status filters
+            // Apply status filter
             if (!empty($statusFilters)) {
                 $query->whereIn('status', $statusFilters);
             }
 
-            // Apply search filter
+            // Search logic
             if (!empty($searchTerm)) {
                 $query->where(function ($q) use ($searchTerm) {
                     $q->where('ticket_id', 'like', '%' . $searchTerm . '%')
-                      ->orWhereHas('user', function ($q2) use ($searchTerm) {
-                          $q2->where('name', 'like', '%' . $searchTerm . '%');
-                      })
-                      ->orWhereHas('category', function ($q2) use ($searchTerm) {
-                          $q2->where('name', 'like', '%' . $searchTerm . '%');
-                      });
+                        ->orWhereHas('user', function ($q2) use ($searchTerm) {
+                            $q2->where('name', 'like', '%' . $searchTerm . '%');
+                        })
+                        ->orWhereHas('category', function ($q2) use ($searchTerm) {
+                            $q2->where('name', 'like', '%' . $searchTerm . '%');
+                        });
                 });
             }
 
-            // Apply sorting
+            // Sorting
             switch ($sortBy) {
                 case 'ascending':
                     $query->orderBy('created_at', 'asc');
@@ -223,6 +218,13 @@ class TicketController extends Controller
             }
 
             $tickets = $query->get();
+
+            // Format created_at for each ticket
+            $tickets->transform(function ($ticket) {
+                $ticket->formatted_created_at = formatDateTime($ticket->created_at, false);
+                $ticket->formatted_updated_at = formatDateTime($ticket->updated_at, false);
+                return $ticket;
+            });
 
             return response()->json([
                 'code' => 200,

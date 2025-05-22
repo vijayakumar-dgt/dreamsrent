@@ -146,8 +146,8 @@ function ticketDetails() {
             $(".user_name").text(`${ticket.user?.user_detail?.first_name || ''} ${ticket.user?.user_detail?.last_name || ''}`);
             $(".Priority").text(ticket.priority);
             $(".assigne_name").text(ticket.assignee?.user_detail?.first_name || 'Unassigned');
-            $(".created_at").text(new Date(ticket.created_at).toLocaleDateString());
-            $(".update_at").text(new Date(ticket.updated_at).toLocaleDateString());
+            $(".created_at").text(ticket.formatted_created_at);
+            $(".update_at").text(ticket.formatted_updated_at);
             $(".ticket_description").html(ticket.description || '');
 
             $("#status").val(ticket.status).trigger('change');

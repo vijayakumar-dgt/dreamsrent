@@ -268,7 +268,7 @@ let ticketData = [];
                                 </div>
                             </td>
                             <td><p class="text-gray-9">${ticket.category.name}</p></td>
-                            <td><p class="text-gray-9">${new Date(ticket.created_at).toLocaleDateString()}</p></td>
+                            <td><p class="text-gray-9">${ticket.formatted_created_at}</p></td>
                             <td>
                                 <span class="badge badge-dark-transparent rounded-pill"><i class="ti ti-point-filled ${priorityClass}"></i> ${ticket.priority}</span>
                             </td>

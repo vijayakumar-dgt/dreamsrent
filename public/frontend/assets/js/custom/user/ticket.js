@@ -327,7 +327,7 @@ function TicketTable() {
                                     value.ticket_id ? value.ticket_id : "N/A"
                                 }</td>
                                 <td>${subjectName}</td>
-                                <td>${createdDate}</td>
+                                <td>${value.formatted_created_at}</td>
                                 <td>${priorityBadge}</td>
                                 <td>
                                     ${
