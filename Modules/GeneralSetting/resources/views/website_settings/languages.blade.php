@@ -70,7 +70,7 @@
                                 @include('admin.content-loader')
                             </div>
                             <!-- Custom Data Table -->
-                            <div class="custom-datatable-filter table-responsive d-none real-table">
+                            <div class="custom-datatable-filter d-none real-table overflow-hidden">
                                 <table class="table datatable" id="languageTable">
                                     <thead class="thead-light">
                                         <tr>
