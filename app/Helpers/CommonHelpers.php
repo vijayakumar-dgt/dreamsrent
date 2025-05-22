@@ -41,8 +41,8 @@ if (!function_exists('uploadFile')) {
     function uploadFile(UploadedFile $file, string $path = 'uploads', ?string $oldFileName = '', string $disk = 'public'): ?string
     {
         $disk = config('filesystems.default');
-
         if ($file->isValid()) {
+            $oldFileName = $oldFileName ?? '';
             if (Storage::disk($disk)->exists($oldFileName)) {
                 Storage::disk($disk)->delete($oldFileName);
             }
@@ -60,6 +60,7 @@ if (!function_exists('uploadMutipleFile')) {
         $disk = config('filesystems.default');
 
         if ($file->isValid()) {
+            $oldFileName = $oldFileName ?? '';
             if ($oldFileName && Storage::disk($disk)->exists("$path/$oldFileName")) {
                 Storage::disk($disk)->delete("$path/$oldFileName");
             }
