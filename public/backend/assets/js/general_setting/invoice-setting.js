@@ -202,7 +202,7 @@
                         // Reset the input and show error
                         input.value = "";
                         preview.src =
-                            "/backend/assets/img/customer/customer-01.jpg"; // default image
+                            "/backend/assets/img/default-placeholder-image.png"; // default image
                         showToast(
                             "error",
                             "Image must be exactly 500px × 500px"
