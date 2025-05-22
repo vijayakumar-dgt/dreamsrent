@@ -1,6 +1,8 @@
 (async () => {
     "use strict";
+
     await loadTranslationFile("web", "user,common,home");
+
     $(document).ready(function () {
         if ($(".userTimepicker").length > 0) {
             $(".userTimepicker").datetimepicker({
@@ -301,7 +303,6 @@
             e.stopPropagation();
 
             const $card = $(this);
-            const checkbox = $card.find("input[name='add_insurance']");
             const insuranceId = $card
                 .find("input[name='insurance_id[]']")
                 .val();
@@ -312,7 +313,6 @@
             const insurancePriceRaw = parseFloat(
                 $card.find("input[name='insurance_price[]']").val()
             );
-
             let insurancePrice = 0;
             const base = parseFloat(basePrice) || 0;
 
@@ -324,40 +324,46 @@
 
             const isActive = $card.hasClass("active");
 
-            if (isActive) {
-                $card.removeClass("active");
-                checkbox.prop("checked", false);
+            if (!isActive) {
+                // Deselect all other cards
+                $(".insurance-select")
+                    .removeClass("active")
+                    .find("input[name='add_insurance']")
+                    .prop("checked", false);
 
+                // Clear the insurance charges list and reset total
+                $insuranceChargesList.empty();
+                totalInsurancePrice = 0;
+
+                // Select this card
+                $card.addClass("active");
+                $card.find("input[name='add_insurance']").prop("checked", true);
+
+                const displayPrice =
+                    insuranceType === "Percentage"
+                        ? `${insurancePriceRaw}% (${currencySymbol}${insurancePrice.toFixed(
+                              2
+                          )})`
+                        : `${currencySymbol}${insurancePrice.toFixed(2)}`;
+
+                $insuranceChargesList.append(`
+            <li data-insurance-id="${insuranceId}">
+                <h6>${insuranceName}</h6>
+                <h5>${displayPrice}</h5>
+            </li>
+        `);
+
+                totalInsurancePrice += insurancePrice;
+            } else {
+                // Unselect if the same card is clicked again (optional - can be removed for strict radio behavior)
+                $card.removeClass("active");
+                $card
+                    .find("input[name='add_insurance']")
+                    .prop("checked", false);
                 $insuranceChargesList
                     .find(`li[data-insurance-id="${insuranceId}"]`)
                     .remove();
                 totalInsurancePrice -= insurancePrice;
-            } else {
-                $card.addClass("active");
-                checkbox.prop("checked", true);
-
-                $insuranceChargesList.find(".no-insurance-message").remove();
-
-                if (
-                    $insuranceChargesList.find(
-                        `li[data-insurance-id="${insuranceId}"]`
-                    ).length === 0
-                ) {
-                    const displayPrice =
-                        insuranceType === "Percentage"
-                            ? `${insurancePriceRaw}% (${currencySymbol}${insurancePrice.toFixed(
-                                  2
-                              )})`
-                            : `${currencySymbol}${insurancePrice.toFixed(2)}`;
-
-                    $insuranceChargesList.append(`
-                <li data-insurance-id="${insuranceId}">
-                    <h6>${insuranceName}</h6>
-                    <h5>${displayPrice}</h5>
-                </li>
-            `);
-                    totalInsurancePrice += insurancePrice;
-                }
             }
 
             checkEmptyCart();
@@ -867,6 +873,7 @@
 
     let $stateDropdown = $("#state_id");
     let $cityDropdown = $("#city_id");
+
     $(document).ready(function () {
         function loadStates(
             countryId,
@@ -1118,62 +1125,61 @@
             }
         });
     });
-})();
 
-$(document).ready(function () {
-    $("#driver_file").on("change", function (event) {
-        const files = event.target.files;
-        const imagePreview = $(".imagePreview");
-        imagePreview.html(""); // Clear previous preview
+    $(document).ready(function () {
+        $("#driver_file").on("change", function (event) {
+            const files = event.target.files;
+            const imagePreview = $(".imagePreview");
+            imagePreview.html(""); // Clear previous preview
 
-        if (files && files[0]) {
-            const file = files[0];
-            if (!file.type.match("image.*")) {
-                $("#driver_file_error").text(
-                    "Please upload a valid image file."
-                );
-                return;
+            if (files && files[0]) {
+                const file = files[0];
+                if (!file.type.match("image.*")) {
+                    $("#driver_file_error").text(
+                        "Please upload a valid image file."
+                    );
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = $("<img>", {
+                        src: e.target.result,
+                        class: "img-thumbnail",
+                        width: 150,
+                    });
+                    imagePreview.append(img);
+                    $("#driver_file_error").text(""); // Clear error
+                };
+                reader.readAsDataURL(file);
             }
-
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = $("<img>", {
-                    src: e.target.result,
-                    class: "img-thumbnail",
-                    width: 150,
-                });
-                imagePreview.append(img);
-                $("#driver_file_error").text(""); // Clear error
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-});
-
-$(document).ready(function () {
-    $(".more-adon-info").hide();
-
-    $(".adon-info-btn").on("click", function () {
-        const $button = $(this);
-        const $listItem = $button.closest("li");
-        const $description = $listItem.find(".more-adon-info");
-        const $icon = $button.find(".arrow-icon");
-
-        $description.slideToggle(200);
-
-        if ($icon.hasClass("bx-chevron-down")) {
-            $icon.removeClass("bx-chevron-down").addClass("bx-chevron-up");
-        } else {
-            $icon.removeClass("bx-chevron-up").addClass("bx-chevron-down");
-        }
+        });
     });
 
-    $(".show-benefits-link").on("click", function (e) {
-        e.preventDefault();
-        const insuranceId = $(this).data("insurance-id");
-        const token = $('meta[name="csrf-token"]').attr("content");
+    $(document).ready(function () {
+        $(".more-adon-info").hide();
 
-        $("#benefit-list").html(`
+        $(".adon-info-btn").on("click", function () {
+            const $button = $(this);
+            const $listItem = $button.closest("li");
+            const $description = $listItem.find(".more-adon-info");
+            const $icon = $button.find(".arrow-icon");
+
+            $description.slideToggle(200);
+
+            if ($icon.hasClass("bx-chevron-down")) {
+                $icon.removeClass("bx-chevron-down").addClass("bx-chevron-up");
+            } else {
+                $icon.removeClass("bx-chevron-up").addClass("bx-chevron-down");
+            }
+        });
+
+        $(".show-benefits-link").on("click", function (e) {
+            e.preventDefault();
+            const insuranceId = $(this).data("insurance-id");
+            const token = $('meta[name="csrf-token"]').attr("content");
+
+            $("#benefit-list").html(`
     <div class="d-flex justify-content-center py-3">
         <div class="spinner-border text-warning" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -1181,30 +1187,31 @@ $(document).ready(function () {
     </div>
 `);
 
-        $.ajax({
-            type: "POST",
-            url: "/get/benefits",
-            data: {
-                id: insuranceId,
-                _token: $('meta[name="csrf-token"]').attr("content"),
-            },
-            success: function (response) {
-                const $list = $("#benefit-list");
-                $list.empty();
+            $.ajax({
+                type: "POST",
+                url: "/get/benefits",
+                data: {
+                    id: insuranceId,
+                    _token: $('meta[name="csrf-token"]').attr("content"),
+                },
+                success: function (response) {
+                    const $list = $("#benefit-list");
+                    $list.empty();
 
-                if (response.length > 0) {
-                    response.forEach((item, index) => {
-                        const number = index + 1;
-                        $list.append(
-                            `<li class="mb-2">${number}. ${item.benefit}</li>`
-                        );
-                    });
-                } else {
-                    $list.append("<li>No benefits available.</li>");
-                }
+                    if (response.length > 0) {
+                        response.forEach((item, index) => {
+                            const number = index + 1;
+                            $list.append(
+                                `<li class="mb-2">${number}. ${item.benefit}</li>`
+                            );
+                        });
+                    } else {
+                        $list.append("<li>No benefits available.</li>");
+                    }
 
-                $("#show_benifit").modal("show");
-            },
+                    $("#show_benifit").modal("show");
+                },
+            });
         });
     });
-});
+})();
