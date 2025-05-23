@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Route;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,14 +30,18 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+   public function boot()
     {
         $modulesStatusPath = base_path('modules_statuses.json');
 
         if (File::exists($modulesStatusPath)) {
             $modulesStatus = json_decode(File::get($modulesStatusPath), true);
 
-            if (!isset($modulesStatus['Installer']) || $modulesStatus['Installer'] !== true) {
+           
+            if (isset($modulesStatus['Installer']) && $modulesStatus['Installer'] === true) {
+               return redirect('setup.verify');
+            }            
+            else {
                 $this->globalViews();
                 $this->shareThemeAndLayout();
                 $this->shareHeader();
