@@ -176,10 +176,10 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
 
 // USER ROUTES //
 
-Route::group(['middleware' => ['setLocaleUser', 'checkInstallerStatus']], function () {
+Route::group(['middleware' => ['checkInstallerStatus','setLocaleUser']], function () {
 
     Route::get('/user/translations/{file}/{module}', [TranslationController::class, 'getFileTranslations'])->name('translations');
-    Route::get('/', [PageController::class, 'pageBuilderApi'])->middleware('maintenance')->name('home');
+    Route::get('/', [PageController::class, 'pageBuilderApi'])->middleware('checkInstallerStatus','maintenance')->name('home');
     Route::middleware('maintenance')->controller(HomeController::class)->group(function () {
         Route::get('/vehicles', 'list')->name('list');
         Route::get('/vehicle-details/{slug}', 'vehicleDetails')->name('vehicleDetails');

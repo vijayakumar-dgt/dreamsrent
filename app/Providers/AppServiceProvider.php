@@ -30,29 +30,24 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-   public function boot()
+    public function boot()
     {
         $modulesStatusPath = base_path('modules_statuses.json');
 
         if (File::exists($modulesStatusPath)) {
             $modulesStatus = json_decode(File::get($modulesStatusPath), true);
 
-           
+            // If installer is active, skip all DB-dependent boot logic
             if (isset($modulesStatus['Installer']) && $modulesStatus['Installer'] === true) {
-               return redirect('setup.verify');
-            }            
-            else {
-                $this->globalViews();
-                $this->shareThemeAndLayout();
-                $this->shareHeader();
-                $this->shareFooter();
+                return; // Do nothing, skip boot
             }
-        } else {
-            $this->globalViews();
-            $this->shareThemeAndLayout();
-            $this->shareHeader();
-            $this->shareFooter();
         }
+
+        // Safe to run DB logic here
+        $this->globalViews();
+        $this->shareThemeAndLayout();
+        $this->shareHeader();
+        $this->shareFooter();
     }
 
     public function globalViews(): void
@@ -92,8 +87,8 @@ class AppServiceProvider extends ServiceProvider
 
             $permissions = getUserPermissions();
             $appLanguage = App::getLocale();
-            $languageId    = getLanguageId($appLanguage);
-            $copyright   = null;
+            $languageId = getLanguageId($appLanguage);
+            $copyright = null;
             if ($languageId) {
                 $key = 'copy_right_' . $languageId;
                 $copyright = GeneralSetting::where('key', $key)
@@ -175,7 +170,7 @@ class AppServiceProvider extends ServiceProvider
     {
         view()->composer(["frontend.theme_1.footer", "frontend.theme_2.footer"], function ($view) {
             $appLanguage = App::getLocale();
-            $languageId    = getLanguageId($appLanguage);
+            $languageId = getLanguageId($appLanguage);
 
             $footers = Menu::where(['menu_type' => 'footer', 'status' => 1, 'language_id' => $languageId])
                 ->get(['id', 'name', 'menus']);
