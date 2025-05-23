@@ -36,7 +36,6 @@
         $(document).on("click", ".resend_otp_btn", function (e) {
             e.preventDefault();
             if ($(this).hasClass("disabled")) {
-                //    console.log("disabled");
                 return;
             }
             $(".countdowndiv").removeClass("d-none");

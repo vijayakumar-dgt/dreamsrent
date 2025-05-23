@@ -67,10 +67,11 @@
 
 	<!-- Custom JS -->
 	<script src="{{ asset('backend/assets/js/script.js') }}"></script>
+	
 	<script src="{{ asset('backend/assets/js/custom/custom-script.js') }}"></script>
 
 	<!-- language JS -->
-	<script src="{{ asset('frontend/assets/js/custom/lang_script.js') }}"></script>
+	<script src="{{ asset('backend/assets/js/lang/lang-script.js') }}"></script>
 
     @stack('scripts')
 </body>

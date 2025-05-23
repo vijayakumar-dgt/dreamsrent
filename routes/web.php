@@ -84,14 +84,10 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
     Route::post('forgot-password/resend-otp', [ForgotpasswordController::class, 'resendOtp'])->name('send-otp');
     Route::post('forgot-password/confirm-otp', [ForgotpasswordController::class, 'confirmOtp'])->name('confirm-otp');
     Route::get('reset-password', [ForgotpasswordController::class, 'resetPassword'])->name('reset-password');
-    Route::post('forgot-password/update-password', [ForgotpasswordController::class, 'updatePassword'])
-    ->name('update-password');
+    Route::post('forgot-password/update-password', [ForgotpasswordController::class, 'updatePassword'])->name('update-password');
+    Route::get('admin/translations/{file}/{module}', [TranslationController::class, 'getFileTranslations'])->name('admin.translations');
 
     Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
-
-        Route::get('/translations/{file}/{module}', [TranslationController::class, 'getFileTranslations'])
-        ->name('admin.translations');
-
         //Country
         Route::get('country', [CountryController::class, 'index'])->name('country.index')->middleware('permission');
         Route::post('country/store', [CountryController::class, 'store'])->name('country.store');

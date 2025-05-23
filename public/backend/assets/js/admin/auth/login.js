@@ -45,11 +45,9 @@
             },
             highlight: function (element) {
                 $(element).addClass("is-invalid").removeClass("is-valid");
-                // $(element).closest(".input-group").addClass("is-invalid"); // Add to input group
             },
             unhighlight: function (element) {
                 $(element).removeClass("is-invalid").addClass("is-valid");
-                // $(element).closest(".input-group").removeClass("is-invalid"); // Remove from input group
                 var errorId = element.id + "_error";
                 $("#" + errorId).text("");
             },
