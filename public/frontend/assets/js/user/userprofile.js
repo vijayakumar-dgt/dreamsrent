@@ -187,6 +187,8 @@
             const iti = intlTelInput(userPhoneInput, {
                 utilsScript: `${window.location.origin}/frontend/assets/plugins/intltelinput/js/utils.js`,
                 separateDialCode: true,
+                placeholderNumberType: "",
+                autoPlaceholder: "off"
             });
 
             userPhoneInput.classList.add("iti");

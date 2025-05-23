@@ -33,6 +33,8 @@
                 nationalMode: false,
                 utilsScript: `${window.location.origin}/frontend/assets/plugins/intltelinput/js/utils.js`,
                 separateDialCode: true,
+                placeholderNumberType: "",
+                autoPlaceholder: "off"
             });
 
             $userPhoneInput.addClass("iti").parent().addClass("intl-tel-input");
@@ -105,7 +107,7 @@
                     required: true,
                     email: true,
                 },
-                international_phone_number: {
+                mobile: {
                     required: true,
                     digits: true,
                     minlength: 10,
@@ -145,7 +147,7 @@
                     required: _l("admin.common.email_required"),
                     email: _l("admin.common.email_valid"),
                 },
-                international_phone_number: {
+                mobile: {
                     required: _l("admin.common.phone_number_required"),
                     pattern: _l("admin.manage.valid_phone_number"),
                 },

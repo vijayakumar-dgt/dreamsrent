@@ -11,13 +11,15 @@
         initSelect2();
         initEvents();
         function initIntelPhoneInput() {
-        const userPhoneInput = document.querySelector(".customer_phone_number");
+            const userPhoneInput = document.querySelector(".customer_phone_number");
             const intlPhoneInput = document.querySelector("#international_phone_number");
 
             if (userPhoneInput) {
                 const iti = intlTelInput(userPhoneInput, {
                     utilsScript: window.location.origin + "/backend/assets/plugins/intltelinput/js/utils.js",
                     separateDialCode: true,
+                    placeholderNumberType: "",
+                    autoPlaceholder: "off"
                 });
 
                 userPhoneInput.classList.add("iti");
@@ -476,295 +478,297 @@
 
     function initEvents(){
         $('#image').on('change', function (event) {
-                if ($(this).val() !== '') {
-                    $(this).valid();
-                }
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#imagePreview').attr('src', e.target.result).removeClass('d-none');
-                    $('.upload_icon').addClass('d-none');
-                };
-                reader.readAsDataURL(event.target.files[0]);
-                var file = this.files[0];
-                if (file) {
-                    var img = new Image();
-                    var objectURL = URL.createObjectURL(file);
-                    
-                    img.onload = function () {
-                        if (this.width < 180 || this.height < 180) {
-                            $("#image_error").text(_l('admin.common.image_pixel', {width: 180, height: 180}));
-                            $("#image").addClass("is-invalid").removeClass("is-valid");
-                        }
-                        URL.revokeObjectURL(objectURL);
-                    };
-                    img.src = objectURL;
-                }
-            });
-
-            $('#edit_image').on('change', function (event) {
-                if ($(this).val() !== '') {
-                    $(this).valid();
-                }
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#editImagePreview').attr('src', e.target.result).removeClass('d-none');
-                    $('.upload_icon').addClass('d-none');
-                };
-                reader.readAsDataURL(event.target.files[0]);
-                var file = this.files[0];
-                if (file) {
-                    var img = new Image();
-                    var objectURL = URL.createObjectURL(file);
-                    
-                    img.onload = function () {
-                        if (this.width < 180 || this.height < 180) {
-                            $("#edit_image_error").text(_l('admin.common.image_pixel', {width: 180, height: 180}));
-                            $("#edit_image").addClass("is-invalid").removeClass("is-valid");
-                        }
-                        URL.revokeObjectURL(objectURL);
-                    };
-                    img.src = objectURL;
-                }
-            });
-
-            $("#add_customer").on('click', function() {
-                $("#customerForm")[0].reset();
-                $("#id").val('');
-                $(".error-text").text("");
-                $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-                $('#gender').val('').trigger('change');
-                $('#language').val('').trigger('change');
-                $(".upload_icon").removeClass('d-none');
-                $('#imagePreview').addClass('d-none');
-                $('.submitbtn').text(_l('admin.common.create_new'));
-            });
-
-            $('#gender').on('change', function () {
+            if ($(this).val() !== '') {
                 $(this).valid();
-            });
-            $("#phone_number").on("input", function () {
-                $(this).val($(this).val().replace(/[^0-9]/g, ""));
-            });
-            $("#card_number").on("input", function () {
-                $(this).val($(this).val().replace(/[^a-zA-Z0-9]/g, ""));
-            });
-            $('#edit_gender').on('change', function () {
-                $(this).valid();
-            });
-            $("#edit_phone_number").on("input", function () {
-                $(this).val($(this).val().replace(/[^0-9]/g, ""));
-            });
-            $("#edit_card_number").on("input", function () {
-                $(this).val($(this).val().replace(/[^a-zA-Z0-9]/g, ""));
-            });
-            $('#language').on('change', function () {
-                $(this).valid();
-            });
-            $('#edit_language').on('change', function () {
-                $(this).valid();
-            });
-            $(document).on('click', '.dataTables_paginate a', function() {
-                $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
-            });
-
-            $(document).on('keyup', '#search', function() {
-                $('#customerTable').DataTable().ajax.reload();
-            });
-
-            $(document).on('click', '.sort_by_list .dropdown-item', function () {
-                let sortBy = $(this).data('sort');
-                $('#sort_by_input').val(sortBy);
-                $('#current_sort').text(sortBy.charAt(0).toUpperCase() + sortBy.slice(1).toLowerCase());
-                $('.sort_by_list .dropdown-item').removeClass('active');
-                $(this).addClass('active');
-                $('#customerTable').DataTable().ajax.reload();
-            });
-
-            $('#sort_by_date').on('change', function() {
-                var sort_by_date = $(this).val();
-                initTable(sort_by_date);
-            });
-
-            $(document).on('click', '#apply_filter', function () {
-                $('#customerTable').DataTable().ajax.reload();
-            });
-
-            $(document).on('click', '#reset_filter', function () {
-                $('#language_list input:checkbox').prop('checked', false);
-                $('#sort_by_date').val('').trigger('change');
-                $('#sort_by_input').val('');
-                $('#customerTable').DataTable().ajax.reload();
-            });
-
-            let removedDocuments = [];
-            $(document).on('click', '.remove-document', function() {
-                let documentId = $(this).data('id');
-                removedDocuments.push(documentId);
-                $("#removed_documents").val(removedDocuments.join(","));
-                $(this).closest('.document-preview').remove();
-            });
-
-            $("#deleteCustomerForm").on('submit', function(e){
-                e.preventDefault();
-                $.ajax({
-                    url:"/admin/customer/delete",
-                    type:"POST",
-                    data: {
-                        id: $('#delete_id').val()
-                    },
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if(response.code === 200){
-                            showToast('success', response.message);
-                            $("#delete_modal").modal('hide');
-                            $("#customerTable").DataTable().ajax.reload();
-                        }
-                    },
-                    error: function(res) {
-                        if(res.responseJSON.code === 500){
-                            showToast('error', res.responseJSON.message);
-                        } else {
-                            showToast('error', _l('admin.common.default_delete_error'));
-                        }
+            }
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imagePreview').attr('src', e.target.result).removeClass('d-none');
+                $('.upload_icon').addClass('d-none');
+            };
+            reader.readAsDataURL(event.target.files[0]);
+            var file = this.files[0];
+            if (file) {
+                var img = new Image();
+                var objectURL = URL.createObjectURL(file);
+                
+                img.onload = function () {
+                    if (this.width < 180 || this.height < 180) {
+                        $("#image_error").text(_l('admin.common.image_pixel', {width: 180, height: 180}));
+                        $("#image").addClass("is-invalid").removeClass("is-valid");
                     }
-                });
-            });
+                    URL.revokeObjectURL(objectURL);
+                };
+                img.src = objectURL;
+            }
+        });
 
-            $('#select-all').on('change', function () {
-                $('.select-multiple').prop('checked', $(this).prop('checked'));
-            });
-
-            $('#bulk_delete').on('click', function () {
-                let selectedIds = [];
-
-                $('.select-multiple:checked').each(function () {
-                    var id = $(this).val(); 
-                    if (id) {
-                        selectedIds.push(id);
+        $('#edit_image').on('change', function (event) {
+            if ($(this).val() !== '') {
+                $(this).valid();
+            }
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                $('#editImagePreview').attr('src', e.target.result).removeClass('d-none');
+                $('.upload_icon').addClass('d-none');
+            };
+            reader.readAsDataURL(event.target.files[0]);
+            var file = this.files[0];
+            if (file) {
+                var img = new Image();
+                var objectURL = URL.createObjectURL(file);
+                
+                img.onload = function () {
+                    if (this.width < 180 || this.height < 180) {
+                        $("#edit_image_error").text(_l('admin.common.image_pixel', {width: 180, height: 180}));
+                        $("#edit_image").addClass("is-invalid").removeClass("is-valid");
                     }
-                });
+                    URL.revokeObjectURL(objectURL);
+                };
+                img.src = objectURL;
+            }
+        });
 
-                if (selectedIds.length === 0) {
-                    showToast('error', _l('admin.common.select_atleast_one_item_delete'));
-                    return;
+        $("#add_customer").on('click', function() {
+            $("#customerForm")[0].reset();
+            $("#id").val('');
+            $(".error-text").text("");
+            $(".form-control, .select2-container").removeClass("is-invalid is-valid");
+            $('#gender').val('').trigger('change');
+            $('#language').val('').trigger('change');
+            $(".upload_icon").removeClass('d-none');
+            $('#imagePreview').addClass('d-none');
+            $('.submitbtn').text(_l('admin.common.create_new'));
+        });
+
+        $('#gender').on('change', function () {
+            $(this).valid();
+        });
+        $("#phone_number").on("input", function () {
+            $(this).val($(this).val().replace(/[^0-9]/g, ""));
+        });
+        $("#card_number").on("input", function () {
+            $(this).val($(this).val().replace(/[^a-zA-Z0-9]/g, ""));
+        });
+        $('#edit_gender').on('change', function () {
+            $(this).valid();
+        });
+        $("#edit_phone_number").on("input", function () {
+            $(this).val($(this).val().replace(/[^0-9]/g, ""));
+        });
+        $("#edit_card_number").on("input", function () {
+            $(this).val($(this).val().replace(/[^a-zA-Z0-9]/g, ""));
+        });
+        $('#language').on('change', function () {
+            $(this).valid();
+        });
+        $('#edit_language').on('change', function () {
+            $(this).valid();
+        });
+        $(document).on('click', '.dataTables_paginate a', function() {
+            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+        });
+
+        $(document).on('keyup', '#search', function() {
+            $('#customerTable').DataTable().ajax.reload();
+        });
+
+        $(document).on('click', '.sort_by_list .dropdown-item', function () {
+            let sortBy = $(this).data('sort');
+            $('#sort_by_input').val(sortBy);
+            $('#current_sort').text(sortBy.charAt(0).toUpperCase() + sortBy.slice(1).toLowerCase());
+            $('.sort_by_list .dropdown-item').removeClass('active');
+            $(this).addClass('active');
+            $('#customerTable').DataTable().ajax.reload();
+        });
+
+        $('#sort_by_date').on('change', function() {
+            var sort_by_date = $(this).val();
+            initTable(sort_by_date);
+        });
+
+        $(document).on('click', '#apply_filter', function () {
+            $('#customerTable').DataTable().ajax.reload();
+        });
+
+        $(document).on('click', '#reset_filter', function () {
+            $('#language_list input:checkbox').prop('checked', false);
+            $('#sort_by_date').val('').trigger('change');
+            $('#sort_by_input').val('');
+            $('#customerTable').DataTable().ajax.reload();
+        });
+
+        let removedDocuments = [];
+        $(document).on('click', '.remove-document', function() {
+            let documentId = $(this).data('id');
+            removedDocuments.push(documentId);
+            $("#removed_documents").val(removedDocuments.join(","));
+            $(this).closest('.document-preview').remove();
+        });
+
+        $("#deleteCustomerForm").on('submit', function(e){
+            e.preventDefault();
+            $.ajax({
+                url:"/admin/customer/delete",
+                type:"POST",
+                data: {
+                    id: $('#delete_id').val()
+                },
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if(response.code === 200){
+                        showToast('success', response.message);
+                        $("#delete_modal").modal('hide');
+                        $("#customerTable").DataTable().ajax.reload();
+                    }
+                },
+                error: function(res) {
+                    if(res.responseJSON.code === 500){
+                        showToast('error', res.responseJSON.message);
+                    } else {
+                        showToast('error', _l('admin.common.default_delete_error'));
+                    }
                 }
+            });
+        });
 
-                $.ajax({
-                    url: '/admin/customer/delete', 
-                    type: 'POST',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'), 
-                        ids: selectedIds,
-                    },
-                    success: function (response) {
-                        if(response.code === 200){
-                            showToast('success', response.message);
-                            $("#customerTable").DataTable().ajax.reload();
-                            $('#select-all').prop('checked', false);
-                        }
-                    },
-                    error: function () {
-                        if(res.responseJSON.code === 500){
-                            showToast('error', res.responseJSON.message);
-                        } else {
-                            showToast('error', _l('admin.common.default_delete_error'));
-                        }
-                    },
-                });
+        $('#select-all').on('change', function () {
+            $('.select-multiple').prop('checked', $(this).prop('checked'));
+        });
+
+        $('#bulk_delete').on('click', function () {
+            let selectedIds = [];
+
+            $('.select-multiple:checked').each(function () {
+                var id = $(this).val(); 
+                if (id) {
+                    selectedIds.push(id);
+                }
             });
 
-            let initialPhoneNumber = null;
+            if (selectedIds.length === 0) {
+                showToast('error', _l('admin.common.select_atleast_one_item_delete'));
+                return;
+            }
 
-            $(document).on('click', '.edit-customer', function() {
-                let id = $(this).data('id');
-                $('#editCustomerForm').trigger('reset');
-                $('.submitbtn').text(_l('admin.common.save_changes'));
+            $.ajax({
+                url: '/admin/customer/delete', 
+                type: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'), 
+                    ids: selectedIds,
+                },
+                success: function (response) {
+                    if(response.code === 200){
+                        showToast('success', response.message);
+                        $("#customerTable").DataTable().ajax.reload();
+                        $('#select-all').prop('checked', false);
+                    }
+                },
+                error: function () {
+                    if(res.responseJSON.code === 500){
+                        showToast('error', res.responseJSON.message);
+                    } else {
+                        showToast('error', _l('admin.common.default_delete_error'));
+                    }
+                },
+            });
+        });
 
-                removedDocuments = [];
-                $.ajax({
-                    type:"GET",
-                    url:"/admin/customer/edit/"+id,
-                    success: function(response) {
-                        $(".error-text").text("");
-                        $(".form-control, .select2-container").removeClass("is-invalid is-valid");
-                        if(response.code === 200){
-                            let data = response.data;
+        let initialPhoneNumber = null;
 
-                            $("#id").val(data.id);
-                            $('#edit_dob').val(data.dob);
-                            $('#edit_language').val(data.language_id).trigger('change');
-                            $("#edit_first_name").val(data.first_name);
-                            $("#edit_last_name").val(data.last_name);
-                            $("#edit_gender").val(data.gender).trigger('change');
-                            $("#edit_email").val(data.email);
-                            $("#edit_address").val(data.address);
-                            $("#edit_date_of_issue").val(data.date_of_issue);
-                            $("#edit_valid_date").val(data.valid_date);
-                            $("#edit_card_number").val(data.card_number);
+        $(document).on('click', '.edit-customer', function() {
+            let id = $(this).data('id');
+            $('#editCustomerForm').trigger('reset');
+            $('.submitbtn').text(_l('admin.common.save_changes'));
 
-                            if (data.profile_image) {
-                                $('#editImagePreview').attr('src', data.profile_image).removeClass('d-none');
-                                $(".upload_icon").addClass('d-none');
-                            } else {
-                                $(".upload_icon").removeClass('d-none');
-                                $('#editImagePreview').addClass('d-none');
-                            }
-                            $('.document-preview-container').empty();
-                            if (data.documents && data.documents.length > 0) {
-                                $.each(response.data.documents, function(index, value) {
-                                    $('.document-preview-container').append(
-                                        `<div class="document-preview me-2">
-                                            <a href="${value.document_url}" target="_blank" class="btn btn-sm btn-light me-0" ><i class="ti ti-file-text fs-40"></i></a>
-                                            <button type="button" class="btn btn-sm btn-light remove-document" data-id="${value.id}"><i class="ti ti-trash"></i></button>
-                                        </div>`
-                                    );
-                                });
-                            }
+            removedDocuments = [];
+            $.ajax({
+                type:"GET",
+                url:"/admin/customer/edit/"+id,
+                success: function(response) {
+                    $(".error-text").text("");
+                    $(".form-control, .select2-container").removeClass("is-invalid is-valid");
+                    if(response.code === 200){
+                        let data = response.data;
 
-                            const phoneNumber = data.phone_number ? data.phone_number.trim() : data.phone_number;
-                            const phoneInput = document.querySelector(".edit_customer_phone_number");
-                            const hiddenInput = document.querySelector("#edit_international_phone_number");
-                            
-                            if ($(phoneInput).data('itiInstance')) {
-                                $(phoneInput).data('itiInstance').destroy();
-                            }
-                            const iti = intlTelInput(phoneInput, {
-                                utilsScript: window.location.origin + "/backend/assets/plugins/intltelinput/js/utils.js",
-                                separateDialCode: true,
+                        $("#id").val(data.id);
+                        $('#edit_dob').val(data.dob);
+                        $('#edit_language').val(data.language_id).trigger('change');
+                        $("#edit_first_name").val(data.first_name);
+                        $("#edit_last_name").val(data.last_name);
+                        $("#edit_gender").val(data.gender).trigger('change');
+                        $("#edit_email").val(data.email);
+                        $("#edit_address").val(data.address);
+                        $("#edit_date_of_issue").val(data.date_of_issue);
+                        $("#edit_valid_date").val(data.valid_date);
+                        $("#edit_card_number").val(data.card_number);
+
+                        if (data.profile_image) {
+                            $('#editImagePreview').attr('src', data.profile_image).removeClass('d-none');
+                            $(".upload_icon").addClass('d-none');
+                        } else {
+                            $(".upload_icon").removeClass('d-none');
+                            $('#editImagePreview').addClass('d-none');
+                        }
+                        $('.document-preview-container').empty();
+                        if (data.documents && data.documents.length > 0) {
+                            $.each(response.data.documents, function(index, value) {
+                                $('.document-preview-container').append(
+                                    `<div class="document-preview me-2">
+                                        <a href="${value.document_url}" target="_blank" class="btn btn-sm btn-light me-0" ><i class="ti ti-file-text fs-40"></i></a>
+                                        <button type="button" class="btn btn-sm btn-light remove-document" data-id="${value.id}"><i class="ti ti-trash"></i></button>
+                                    </div>`
+                                );
                             });
-                            $(phoneInput).data('itiInstance', iti);
-                    
-                            if (phoneNumber) {
-                                iti.setNumber(phoneNumber);
-                                hiddenInput.value = iti.getNumber();
-                                initialPhoneNumber = phoneNumber;
-                            }
-                            const updateHiddenPhoneNumber = () => {
-                                const currentPhoneNumber = iti.getNumber();
-                                if (currentPhoneNumber !== initialPhoneNumber) {
-                                    hiddenInput.value = currentPhoneNumber.trim();
-                                }
-                            };
-
-                            phoneInput.addEventListener("input", updateHiddenPhoneNumber);
-                            phoneInput.addEventListener("countrychange", updateHiddenPhoneNumber);
-                    
-                            if (!hiddenInput.value) {
-                                hiddenInput.value = initialPhoneNumber;
-                            }
-                            $("#edit_customer_modal").modal('show');
                         }
-                    }
-                });
-            });
 
-            $(document).on('click', '.delete-customer', function() {
-                let id = $(this).data('id');
-                $("#delete_id").val(id);
+                        const phoneNumber = data.phone_number ? data.phone_number.trim() : data.phone_number;
+                        const phoneInput = document.querySelector(".edit_customer_phone_number");
+                        const hiddenInput = document.querySelector("#edit_international_phone_number");
+                        
+                        if ($(phoneInput).data('itiInstance')) {
+                            $(phoneInput).data('itiInstance').destroy();
+                        }
+                        const iti = intlTelInput(phoneInput, {
+                            utilsScript: window.location.origin + "/backend/assets/plugins/intltelinput/js/utils.js",
+                            separateDialCode: true,
+                            placeholderNumberType: "",
+                            autoPlaceholder: "off"
+                        });
+                        $(phoneInput).data('itiInstance', iti);
+                
+                        if (phoneNumber) {
+                            iti.setNumber(phoneNumber);
+                            hiddenInput.value = iti.getNumber();
+                            initialPhoneNumber = phoneNumber;
+                        }
+                        const updateHiddenPhoneNumber = () => {
+                            const currentPhoneNumber = iti.getNumber();
+                            if (currentPhoneNumber !== initialPhoneNumber) {
+                                hiddenInput.value = currentPhoneNumber.trim();
+                            }
+                        };
+
+                        phoneInput.addEventListener("input", updateHiddenPhoneNumber);
+                        phoneInput.addEventListener("countrychange", updateHiddenPhoneNumber);
+                
+                        if (!hiddenInput.value) {
+                            hiddenInput.value = initialPhoneNumber;
+                        }
+                        $("#edit_customer_modal").modal('show');
+                    }
+                }
             });
+        });
+
+        $(document).on('click', '.delete-customer', function() {
+            let id = $(this).data('id');
+            $("#delete_id").val(id);
+        });
     }
    
     function initTable(sortByDate = '') {
