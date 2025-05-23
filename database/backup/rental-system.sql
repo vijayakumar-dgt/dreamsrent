@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 22, 2025 at 05:18 PM
+-- Generation Time: May 23, 2025 at 06:55 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -223,7 +223,7 @@ CREATE TABLE `bookings` (
   `expenses` int(11) DEFAULT NULL,
   `delivery_price` int(11) DEFAULT NULL,
   `tax_type` varchar(225) DEFAULT NULL,
-  `tax_val` int(11) DEFAULT NULL,
+  `tax_val` double(10,2) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -49491,7 +49491,7 @@ INSERT INTO `email_templates` (`id`, `title`, `notification_type`, `description`
 (10, 'Booking cancelled to adminn', 6, '<p>Hello Admin, #{reservation_id} reservation has been cancelled.</p>', 'Booking cancelled', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 1, '2025-04-10 11:07:18', '2025-04-29 09:47:20', NULL),
 (11, 'Login Otp', 8, '<p>Your OTP Verification for login</p>', 'OTP Verification for login', 'Your OTP Verification for login', 'Your OTP Verification for login', 1, '2025-05-08 23:49:29', '2025-05-08 23:49:29', NULL),
 (12, 'Forgot Otp', 9, '<p>Your OTP Verification for Forgot password</p>', 'OTP Verification for Forgot password', 'Your OTP Verification for Forgot password', 'Your OTP Verification for Forgot password', 1, '2025-05-08 23:51:10', '2025-05-08 23:51:10', NULL),
-(13, 'Test Mail', 7, '<p>Hello {user_name},<br><br>\r\n        This is a test email to confirm that the email configuration for admin notifications is working correctly.<br><br>\r\n        If you have received this email, everything is set up properly on your end. No further action is required.<br><br>\r\n        Regards,</p><p>{company_name}<br>\r\n        System Administrator\"</p>', 'Reg - Test Mail', 'This is a test email to confirm that the email configuration for admin notifications is working correctly.', 'This is a test email to confirm that the email configuration for admin notifications is working correctly.', 1, '2025-05-15 13:52:57', '2025-05-15 13:52:57', NULL);
+(13, 'Test Mail', 7, '<p>Hello {user_name},<br><br>\r\n        This is a test email to confirm that the email configuration for admin notifications is working correctly.<br><br>\r\n        If you have received this email, everything is set up properly on your end. No further action is required.<br><br>\r\n        Regards,</p><p>{company_name}<br>\r\n        System Administrator\"</p>', 'Reg - Test Mail', 'This is a test email to confirm that the email configuration for admin notifications is working correctly.', 'This is a test email to confirm that the email configuration for admin notifications is working correctly.', 1, '2025-05-15 13:52:57', '2025-05-15 13:52:57', '2025-05-07 04:52:09');
 
 -- --------------------------------------------------------
 

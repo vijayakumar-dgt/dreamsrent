@@ -22,8 +22,7 @@
 
         <div class="row">
             <ul class="progressbar installer-progress-bar">
-                <li class="@if (request()->routeIs('setup.verify') || (session()->has('step-1-complete') && session()->get('step-1-complete'))) active @endif"><a
-                        href="{{ route('setup.verify') }}">Verification</a></li>
+                
 
                 <li class="@if (request()->routeIs('setup.requirements') ||
                         (session()->has('step-2-complete') && session()->get('step-2-complete'))) active @endif"><a

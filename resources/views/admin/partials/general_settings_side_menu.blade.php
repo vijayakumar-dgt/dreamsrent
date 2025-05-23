@@ -162,12 +162,7 @@
                             <a href="{{ route('admin.paymentIndex-settings') }}">
                                 <i class="ti ti-lock me-2"></i><span>{{ __('admin.general_settings.payment_methods') }}</span>
                             </a>
-                        </li>
-                        <li class="{{ request()->routeIs('admin.bankindex-settings') ? 'active' : '' }}">
-                            <a href="{{ route('admin.bankindex-settings') }}">
-                                <i class="ti ti-lock me-2"></i><span>{{ __('admin.general_settings.bank_accounts') }}</span>
-                            </a>
-                        </li>
+                        </li>                        
                         <li class="{{ request()->routeIs('admin.tax-rates') ? 'active' : '' }}">
                             <a href="{{ route('admin.tax-rates') }}">
                                 <i class="ti ti-file-percent me-2"></i><span>{{ __('admin.general_settings.tax_rates') }}</span>

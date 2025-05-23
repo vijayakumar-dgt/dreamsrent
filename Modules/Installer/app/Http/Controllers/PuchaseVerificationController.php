@@ -12,6 +12,7 @@ use Modules\Installer\Models\Configuration;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use RuntimeException;
+use Illuminate\Http\RedirectResponse;
 
 class PuchaseVerificationController extends Controller
 {
@@ -21,11 +22,9 @@ class PuchaseVerificationController extends Controller
     }
 
 
-    public function index(): View
+    public function index(): RedirectResponse
     {
-        /** @var view-string $view */
-        $view = 'installer::index';
-        return view($view);
+        return redirect()->route('setup.requirements');
     }
 
     /**
