@@ -38,11 +38,10 @@ class GeneralSettingController extends Controller
 
     public function company(Request $request): View
     {
-        $industries = IndustryType::all();
-        $teamSizes = TeamSize::all();
+       
         $users = User::where('user_type', 4)->get();
 
-        return view('generalsetting::company.index', compact('industries', 'teamSizes', 'users'));
+        return view('generalsetting::company.index', compact( 'users'));
     }
 
     public function notifications(Request $request): View
@@ -471,13 +470,8 @@ class GeneralSettingController extends Controller
             'owner_name'           => 'required|string|max:100',
             'company_email'        => 'required|email|max:100',
             'company_phone'        => 'required',
-            'international_phone_number' => 'required',
-            'industry'             => 'required|integer',
-            'team_size'            => 'required|integer',
-            'company_address_line' => 'nullable|string|max:150',
-            'country'              => 'required|integer',
-            'state'                => 'required|integer',
-            'city'                 => 'required|integer',
+            'international_phone_number' => 'required',            
+            'company_address_line' => 'nullable|string|max:150',           
             'company_postal_code'  => 'nullable|string|max:10',
             'company_profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
@@ -901,8 +895,7 @@ class GeneralSettingController extends Controller
                 ], 404);
             }
 
-            $industryName = IndustryType::find($settings['industry'])->name ?? null;
-            $teamSizeName = TeamSize::find($settings['team_size'])->name ?? null;
+           
 
             $response = [
                 'organization_name'    => $settings['organization_name'] ?? null,
@@ -910,9 +903,7 @@ class GeneralSettingController extends Controller
                 'company_email'        => $settings['company_email'] ?? null,
                 'company_phone'        => $settings['international_phone_number'] ?? null,
                 'industry'             => $settings['industry'] ?? null,
-                'industry_name'        => $industryName,
                 'team_size'            => $settings['team_size'] ?? null,
-                'team_size_name'       => $teamSizeName,
                 'company_address_line' => $settings['company_address_line'] ?? null,
                 'country'              => $settings['country'] ?? null,
                 'state'                => $settings['state'] ?? null,

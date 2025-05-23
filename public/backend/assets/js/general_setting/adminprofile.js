@@ -235,10 +235,7 @@
             last_name: { required: true, maxlength: 30 },
             email: { required: true, email: true },
             admin_phone: { required: true, pattern: /^[0-9]+$/, maxlength: 10 },
-            address_line: { required: true, maxlength: 50 },
-            country: { required: true },
-            state: { required: true },
-            city: { required: true },
+            address_line: { required: true, maxlength: 50 },           
             postal_code: { required: true, pattern: /^[0-9a-zA-Z]+$/ },
             current_password: { required: false },
             new_password: { required: false, minlength: 6 },
@@ -627,7 +624,9 @@
                 utilsScript:
                     window.location.origin +
                     "/backend/assets/plugins/intltelinput/js/utils.js",
-                separateDialCode: true,
+                    separateDialCode: true,
+                    placeholderNumberType: "",
+                    autoPlaceholder: "off"
             });
 
             userPhoneInput.classList.add("iti");

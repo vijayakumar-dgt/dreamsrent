@@ -95,36 +95,8 @@
                                                 <span id="company_phone_error" class="text-danger error-text"></span>
                                             </div>
                                         </div>
-                                        <!-- Industry -->
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.general_settings.industry') }} <span class="text-danger">*</span></label>
-                                                <div class="">
-                                                    <select class="form-control select" id="industry" name="industry">
-                                                        <option value="">{{ __('admin.common.select') }}</option>
-                                                        @foreach($industries as $industry)
-                                                            <option value="{{ $industry->id }}">{{ $industry->name }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <span id="industry_error" class="text-danger error-text"></span>
-                                            </div>
-                                        </div>
-                                        <!-- Team Size -->
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.general_settings.team_size') }} <span class="text-danger">*</span></label>
-                                                <div class="">
-                                                    <select class="form-control select" id="team_size" name="team_size">
-                                                        <option value="">{{ __('admin.common.select') }}</option>
-                                                        @foreach($teamSizes as $teamSize)
-                                                            <option value="{{ $teamSize->id }}">{{ $teamSize->name }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <span id="team_size_error" class="text-danger error-text"></span>
-                                            </div>
-                                        </div>
+                                       
+                                       
                                     </div>
                                 </div>
                                 <!-- Address Information Section -->
@@ -142,7 +114,7 @@
                                         <!-- Country -->
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.common.country') }} <span class="text-danger">*</span></label>
+                                                <label class="form-label">{{ __('admin.common.country') }} </label>
                                                 <div class="">
                                                     <select name="country" class="form-control select2" id="country"></select>
                                                 </div>
@@ -152,7 +124,7 @@
                                         <!-- State -->
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.common.state') }} <span class="text-danger">*</span></label>
+                                                <label class="form-label">{{ __('admin.common.state') }} </label>
                                                 <div class="">
                                                     <select name="state" class="form-control select2" id="state"></select>
                                                 </div>
@@ -162,7 +134,7 @@
                                         <!-- City -->
                                         <div class="col-md-6">
                                             <div class="mb-3">
-                                                <label class="form-label">{{ __('admin.common.city') }} <span class="text-danger">*</span></label>
+                                                <label class="form-label">{{ __('admin.common.city') }}</label>
                                                 <div class="">
                                                     <select name="city" id="city" class="form-control select2"></select>
                                                 </div>

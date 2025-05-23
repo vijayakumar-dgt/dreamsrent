@@ -53,21 +53,7 @@
                     required: true,
                     pattern: /^[0-9]+$/,
                 },
-                industry: {
-                    required: true,
-                },
-                team_size: {
-                    required: true,
-                },
-                country: {
-                    required: true,
-                },
-                state: {
-                    required: true,
-                },
-                city: {
-                    required: true,
-                },
+               
             },
             messages: {
                 organization_name: {
@@ -615,6 +601,8 @@
         window.iti = intlTelInput(userPhoneInput, {
             utilsScript: "/backend/assets/plugins/intltelinput/js/utils.js",
             separateDialCode: true,
+            placeholderNumberType: "",
+            autoPlaceholder: "off"
         });
     }
 

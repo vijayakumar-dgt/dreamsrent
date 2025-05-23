@@ -28,10 +28,7 @@ class AdminProfileController extends Controller
             'last_name'     => 'required|string|max:255',
             'email'         => 'required|email|unique:users,email,' . $request->id,
             'phone'         => 'required',
-            'address_line'  => 'nullable|string|max:255',
-            'country'       => 'required|integer|exists:countries,id',
-            'state'         => 'required|integer|exists:states,id',
-            'city'          => 'required|integer|exists:cities,id',
+            'address_line'  => 'nullable|string|max:255',           
             'postal_code'   => 'nullable|string|max:10',
         ]);
         if ($validator->fails()) {

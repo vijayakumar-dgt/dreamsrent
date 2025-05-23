@@ -102,7 +102,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.common.country') }}<span class="text-danger">*</span></label>
+                                            <label class="form-label">{{ __('admin.common.country') }}</label>
                                             <div class="">
                                                 <select name="country" class="form-control select2" id="country"></select>
                                             </div>
@@ -111,7 +111,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">{{ __('admin.common.state') }} <span class="text-danger">*</span></label>
+                                            <label class="form-label">{{ __('admin.common.state') }} </label>
                                             <div class="">
                                                 <select name="state" class="form-control select2" id="state"></select>
                                             </div>
@@ -120,7 +120,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div>
-                                            <label class="form-label">{{ __('admin.common.city') }} <span class="text-danger">*</span></label>
+                                            <label class="form-label">{{ __('admin.common.city') }} </label>
                                             <div class="">
                                                 <select name="city" id="city" class="form-control select2"></select>
                                             </div>
