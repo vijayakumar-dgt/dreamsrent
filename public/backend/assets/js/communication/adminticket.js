@@ -14,12 +14,11 @@
 
             var ticketId = button.data('ticket-id');
             var assigneeId = button.data('assignee-id');
-            var categoryId = button.data('category-id');
             var priority = button.data('priority');
             var status = button.data('status');
             var reply = button.data('reply');
 
-            populateEditForm(ticketId, assigneeId, categoryId, priority, status, reply);
+            populateEditForm(ticketId, assigneeId,  priority, status, reply);
         });
         $(document).on('click', '.ticket-history-btn', function () {
             const ticketId = $(this).data('ticket-id');
@@ -267,7 +266,7 @@
                                     </h6>
                                 </div>
                             </td>
-                            <td><p class="text-gray-9">${ticket.category.name}</p></td>
+                            <td><p class="text-gray-9">${ticket.subject}</p></td>
                             <td><p class="text-gray-9">${ticket.formatted_created_at}</p></td>
                             <td>
                                 <span class="badge badge-dark-transparent rounded-pill"><i class="ti ti-point-filled ${priorityClass}"></i> ${ticket.priority}</span>
@@ -311,7 +310,6 @@
                                                 data-bs-target="#edit_ticket"
                                                 data-ticket-id="${ticket.id}"
                                                 data-assignee-id="${ticket.assignee_id}"
-                                                data-category-id="${ticket.category.id}"
                                                 data-priority="${ticket.priority}"
                                                 data-status="${ticket.status}"
                                                 data-reply='${JSON.stringify(ticket.reply_description)}'
@@ -443,13 +441,11 @@
 
     $(".ticket_histroy").html(historyHtml);
 }
-    function populateEditForm(ticketId, assigneeId, categoryId, priority, status, reply) {
+    function populateEditForm(ticketId, assigneeId,  priority, status, reply) {
         $('#editTicketstatus').attr('data-ticket-id', ticketId);
         $('#ticketid').val(ticketId);
 
         $('#assignStaff').val(assigneeId).change();
-
-        $('#category').val(categoryId);
 
         $('#priority').val(priority).change();
 

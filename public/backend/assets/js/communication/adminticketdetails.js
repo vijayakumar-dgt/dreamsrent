@@ -205,7 +205,7 @@ function ticketDetails() {
             ticket.ticket_histories.forEach(history => {
                 let userImage =  history.user && history.user.user_detail && history.user.user_detail.profile_image
                                     ? '/storage/' + history.user.user_detail.profile_image
-                                    : '/backend/assets/img/profiles/avatar-01.jpg';
+                                    : '/backend/assets/img/default-profile.png';
 
                let userName = history.user?.user_detail?.first_name && history.user?.user_detail?.last_name
                                 ? `${history.user.user_detail.first_name} ${history.user.user_detail.last_name}`
