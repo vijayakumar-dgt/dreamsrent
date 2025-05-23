@@ -75,7 +75,7 @@
                         <div class="input-block">
                             <label>{{ __('web.home.pickup_date_time') }}</label>
                             <div class="input-wrap">
-                                    <input type="text" name="pickupdatetime" class="form-control flatpickr-pickupadtetime" placeholder="{{ date('Y-m-d H:i') }}">
+                                    <input type="text" name="pickupdatetime" class="form-control flatpickr-pickupadtetime" autocomplete="off" placeholder="YYYY-MM-DD HH:MM">
                                     <span class="input-icon"><i class="bx bx-chevron-down"></i></span>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                         <div class="input-block">
                             <label>{{ __('web.home.return_date_time') }}</label>
                             <div class="input-wrap">
-                                    <input type="text" name="returndatetime" class="form-control flatpickr-dropdatetime" placeholder="{{ date('Y-m-d H:i') }}">
+                                    <input type="text" name="returndatetime" class="form-control flatpickr-dropdatetime" autocomplete="off" placeholder="YYYY-MM-DD HH:MM">
                                     <span class="input-icon"><i class="bx bx-chevron-down"></i></span>
                                 </div>
                         </div>
