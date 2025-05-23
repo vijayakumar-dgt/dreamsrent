@@ -85,7 +85,6 @@
 						<tr>
 							<th>{{ __('admin.common.date') }}</th>
 							<th>{{ __('admin.support.announcements') }}</th>
-							<th>{{ __('admin.common.type') }}</th>
 							<th>{{ __('admin.common.status') }}</th>
 							@if (hasPermission($permissions, 'announcements', 'edit') || hasPermission($permissions, 'announcements', 'delete'))
 							<th>{{ __('admin.common.action') }}</th>
@@ -117,24 +116,11 @@
 					@csrf
 					<div class="modal-body">
 						<div class="row">
-							<div class="col-md-12">
+							<div class="col-md-6">
 								<div class="mb-3">
 									<label class="form-label">{{ __('admin.support.announcement_title') }}<span class="text-danger"> *</span></label>
 									<input type="text" class="form-control" name="announcement_title" id="announcement_title">
 									<span id="announcement_title_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="mb-3">
-									<label class="form-label">{{ __('admin.support.announcement_type') }}<span class="text-danger"> *</span></label>
-									<select class="select select2" id="announcement_type" name="announcement_type" data-placeholder="{{ __('admin.common.select') }}">
-										@if ($announcement_types)
-											@foreach ($announcement_types as $announcement_type)
-												<option value="{{ $announcement_type->id }}">{{ $announcement_type->name }}</option>
-											@endforeach
-										@endif
-									</select>
-									<span class="text-danger error-text" id="announcement_type_error"></span>
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -184,24 +170,11 @@
 					<input type="hidden" name="id" id="id">
 					<div class="modal-body">
 						<div class="row">
-							<div class="col-md-12">
+							<div class="col-md-6">
 								<div class="mb-3">
 									<label class="form-label">{{ __('admin.support.announcement_title') }}<span class="text-danger"> *</span></label>
 									<input type="text" class="form-control" name="edit_announcement_title" id="edit_announcement_title">
 									<span id="edit_announcement_title_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="mb-3">
-									<label class="form-label">{{ __('admin.support.announcement_type') }}<span class="text-danger"> *</span></label>
-									<select class="select select2" id="edit_announcement_type" name="edit_announcement_type" data-placeholder="{{ __('admin.common.select') }}">
-										@if ($announcement_types)
-											@foreach ($announcement_types as $announcement_type)
-												<option value="{{ $announcement_type->id }}">{{ $announcement_type->name }}</option>
-											@endforeach
-										@endif
-									</select>
-									<span class="text-danger error-text" id="announcement_type_error"></span>
 								</div>
 							</div>
 							<div class="col-md-6">

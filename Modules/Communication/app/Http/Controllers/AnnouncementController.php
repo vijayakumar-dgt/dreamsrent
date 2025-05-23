@@ -18,15 +18,13 @@ class AnnouncementController extends Controller
      */
     public function index(): View
     {
-        $announcement_types = DB::table('announcement_types')->get(['id', 'name']);
-        return view('communication::announcement.index', compact('announcement_types'));
+        return view('communication::announcement.index');
     }
 
     public function store(Request $request): JsonResponse
     {
         $request->validate([
             'announcement_title' => 'required|string|max:100',
-            'announcement_type' => 'required|exists:announcement_types,id',
             'user_type' => 'required|in:user,admin',
             'description' => 'required|string|max:500',
         ]);
@@ -76,8 +74,7 @@ class AnnouncementController extends Controller
     {
         try {
             if ($request->input('id')) {
-                $announcement = Announcement::select('announcements.*', 'announcement_types.name as type_name')
-                    ->join('announcement_types', 'announcements.announcement_type', '=', 'announcement_types.id')
+                $announcement = Announcement::select('announcements.*')
                     ->where('announcements.id', $request->id)
                     ->first();
 
@@ -89,10 +86,8 @@ class AnnouncementController extends Controller
                 ]);
             }
 
-            $announcements = Announcement::select('announcements.*', 'announcement_types.name as type_name')
-                ->join('announcement_types', 'announcements.announcement_type', '=', 'announcement_types.id')
+            $announcements = Announcement::select('announcements.*')
                 ->when($request->input('user_type'), fn($q, $userType) => $q->where('announcements.user_type', $userType))
-                ->when($request->input('announcement_type') && $request->announcement_type != 'all', fn($q) => $q->where('announcements.announcement_type', $request->announcement_type))
                 ->when($request->input('status') !== null && $request->status !== 'all', fn($q) => $q->where('announcements.status', $request->status))
                 ->when($request->input('title'), fn($q, $title) => $q->where('announcements.announcement_title', 'like', '%' . $title . '%'))
                 ->when($request->input('sort'), function ($query, $sort) {

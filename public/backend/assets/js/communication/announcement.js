@@ -18,8 +18,6 @@
                 $("#announcementForm")[0].reset();
                 $(".error-text").text("");
                 $(".form-control").removeClass("is-invalid is-valid");
-        
-                $('#announcement_type').val('').trigger('change');
                 $('#user_type').val('').trigger('change');
             });
 
@@ -43,7 +41,6 @@
 
                             $('#id').val(data.id);
                             $('#edit_announcement_title').val(data.announcement_title);
-                            $('#edit_announcement_type').val(data.announcement_type).trigger('change');
                             $('#edit_user_type').val(data.user_type).trigger('change');
                             $('#edit_description').summernote('code', data.description);
                             $('#status').prop('checked', data.status == 1);
@@ -74,7 +71,6 @@
                         if(response.code === 200){
                             showToast('success', response.message);
                             $("#delete_announcement_modal").modal('hide');
-                            window.location.reload();
                             announcementTable();
                         }
                     },
@@ -134,9 +130,6 @@
                         required: true,
                         maxlength: 100,
                     },
-                    announcement_type: {
-                        required: true,
-                    },
                     user_type: {
                         required: true,
                     },
@@ -149,9 +142,6 @@
                     announcement_title: {
                         required: _l('admin.support.announcement_title_required'),
                         maxlength: _l('admin.support.announcement_title_maxlength'),
-                    },
-                    announcement_type: {
-                        required: _l('admin.support.announcement_type_required'),
                     },
                     user_type: {
                         required: _l('admin.support.user_type_required'),
@@ -232,9 +222,6 @@
                         required: true,
                         maxlength: 100,
                     },
-                    edit_announcement_type: {
-                        required: true,
-                    },
                     edit_user_type: {
                         required: true,
                     },
@@ -247,9 +234,6 @@
                     edit_announcement_title: {
                         required: _l('admin.support.announcement_title_required'),
                         maxlength: _l('admin.support.announcement_title_maxlength'),
-                    },
-                    edit_announcement_type: {
-                        required: _l('admin.support.announcement_type_required'),
                     },
                     edit_user_type: {
                         required: _l('admin.support.user_type_required'),
@@ -281,7 +265,6 @@
                     let formData = new FormData();
                         formData.append('id', $('#id').val());
                         formData.append('announcement_title', $('#edit_announcement_title').val());
-                        formData.append('announcement_type', $('#edit_announcement_type').val());
                         formData.append('user_type', $('#edit_user_type').val());
                         formData.append('description', $('#edit_description').val());
                         formData.append('status', $('#status').prop('checked') ? 1 : 0);
@@ -364,7 +347,6 @@
                             tableBody += `<tr>
                                 <td>${value.formatted_created_at}</td>
                                 <td><strong>${value.announcement_title.length > 80 ? value.announcement_title.substring(0, 80) + "..." : value.announcement_title}</strong></td>
-                                <td>${value.type_name}</td>
                                 <td>
                                     <span class="badge ${(value.status == 1) ? 'badge-success-transparent' : 'badge-danger-transparent'} d-inline-flex align-items-center badge-sm">
                                         <i class="ti ti-point-filled me-1"></i>${(value.status == 1) ? `${_l('admin.support.published')}` : `${_l('admin.support.unpublished')}`}
@@ -379,7 +361,7 @@
                                         <ul class="dropdown-menu dropdown-menu-end p-2">
                                             ${hasPermission(permissions, 'announcements', 'edit') ?
                                             `<li><a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit_announcement_modal" class="edit_data dropdown-item"
-                                                data-id="${value.id}" data-title="${value.announcement_title}" data-type="${value.announcement_type}" data-user="${value.user_type}" data-status="${value.status}">
+                                                data-id="${value.id}" data-title="${value.announcement_title}" data-user="${value.user_type}" data-status="${value.status}">
                                                 <i class="ti ti-edit me-1"></i>${_l('admin.common.edit')}
                                             </a></li>` : ''}
                                             ${hasPermission(permissions, 'announcements', 'delete') ?
