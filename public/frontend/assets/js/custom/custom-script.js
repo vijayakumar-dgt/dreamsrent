@@ -129,6 +129,7 @@
                 next: "fas fa-angle-right",
                 previous: "fas fa-angle-left",
             },
+            stepping: 15,
         }).on("dp.change", function (e) {
             const pickupTime = e.date;
             const pickupDate = $(".homepickupdate").data("DateTimePicker").date();
@@ -199,6 +200,7 @@
                 next: "fas fa-angle-right",
                 previous: "fas fa-angle-left",
             },
+            stepping: 15,
         }).on("dp.change", function (e) {
             const returnTime = e.date;
             const pickupTime = $(".hometimepicker").data("DateTimePicker").date();
@@ -266,6 +268,7 @@
                 next: "fas fa-angle-right",
                 previous: "fas fa-angle-left",
             },
+            stepping: 15,
         }).on("dp.change", function (e) {
             const pickupTime = e.date;
             const pickupDate = $(".listpickupdate").data("DateTimePicker").date();
@@ -336,6 +339,7 @@
                 next: "fas fa-angle-right",
                 previous: "fas fa-angle-left",
             },
+            stepping: 15,
         }).on("dp.change", function (e) {
             const returnTime = e.date;
             const pickupTime = $(".listtimepicker").data("DateTimePicker").date();
@@ -366,6 +370,7 @@
             enableTime: true,
             dateFormat: "Y-m-d H:i",
             minDate: "today",
+            minuteIncrement: 15,
             onChange: function (selectedDates, dateStr, instance) {
                 const now = new Date();
                 pickupDateTime = selectedDates[0];
@@ -390,6 +395,7 @@
             enableTime: true,
             dateFormat: "Y-m-d H:i",
             minDate: "today",
+            minuteIncrement: 15,
             onOpen: function (selectedDates, dateStr, instance) {
                 if (pickupDateTime) {
                     instance.set("minDate", pickupDateTime);
