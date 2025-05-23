@@ -63,7 +63,7 @@ class TicketController extends Controller
             }
 
             $validator = Validator::make($request->all(), [
-                'category' => 'required|integer|exists:ticket_categories,id',
+                'category' => 'required',
                 'priority' => 'required|string|in:Low,Medium,High',
                 'description' => 'required|string|max:1000',
                 'document' => 'array|max:10',
@@ -152,7 +152,6 @@ class TicketController extends Controller
 
             $query = Ticket::query()->with($withRelations);
 
-            // Role-based ticket filtering
             if ($user->user_type == 1) {
                 if ($ticketId) {
                     $query->where('id', $ticketId);
@@ -175,17 +174,14 @@ class TicketController extends Controller
                 ], 403);
             }
 
-            // Apply priority filter
             if (!empty($priorityFilters)) {
                 $query->whereIn('priority', $priorityFilters);
             }
 
-            // Apply status filter
             if (!empty($statusFilters)) {
                 $query->whereIn('status', $statusFilters);
             }
 
-            // Search logic
             if (!empty($searchTerm)) {
                 $query->where(function ($q) use ($searchTerm) {
                     $q->where('ticket_id', 'like', '%' . $searchTerm . '%')
@@ -198,7 +194,6 @@ class TicketController extends Controller
                 });
             }
 
-            // Sorting
             switch ($sortBy) {
                 case 'ascending':
                     $query->orderBy('created_at', 'asc');
@@ -219,7 +214,6 @@ class TicketController extends Controller
 
             $tickets = $query->get();
 
-            // Format created_at for each ticket
             $tickets->transform(function ($ticket) {
                 $ticket->formatted_created_at = formatDateTime($ticket->created_at, false);
                 $ticket->formatted_updated_at = formatDateTime($ticket->updated_at, false);

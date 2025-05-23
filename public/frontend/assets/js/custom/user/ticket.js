@@ -12,7 +12,7 @@
             $(document).on("click", ".view-reply-btn", function () {
                 const ticketId = $(this).data("id");
                 const assigneeId = $(this).data("assignee-id");
-                const categoryId = $(this).data("category-id");
+                const subject = $(this).data("subject");
                 const priority = $(this).data("priority");
                 const status = $(this).data("status");
                 const reply = $(this).data("reply");
@@ -21,7 +21,7 @@
                 populateEditForm(
                     ticketId,
                     assigneeId,
-                    categoryId,
+                    subject,
                     priority,
                     status,
                     reply,
@@ -101,7 +101,7 @@
             },
             messages: {
                 category: {
-                    required: _l("web.user.category_required"),
+                    required: _l("web.user.subject_required"),
                 },
                 priority: {
                     required: _l("web.user.priority_required"),
@@ -299,11 +299,8 @@
 
                     if (response.data.length > 0) {
                         let data = response.data;
-
                         $.each(data, function (index, value) {
-                            let subjectName = value.category
-                                ? value.category.name
-                                : _l("web.user.no_subject");
+                            let subjectName = value.subject;
                             let assigneeName =
                                 value.assignee && value.assignee.user_detail
                                     ? value.assignee.user_detail.first_name +
@@ -396,8 +393,8 @@
                                                         data-assignee-id="${
                                                             value.assignee_id
                                                         }" 
-                                                        data-category-id="${
-                                                            value.category.id
+                                                        data-subject="${
+                                                            value.subject
                                                         }" 
                                                         data-priority="${
                                                             value.priority

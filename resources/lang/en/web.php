@@ -486,6 +486,7 @@ return [
     ],
     'user' => [
         'user_dashboard' => 'User Dashboard',
+        'enter_subject' => 'Enter Subject',
         'dashboard'  => 'Dashboard',
         'choose_your_payment_method'  => 'Choose your Payment Method',
         'available_balance'  => 'Available Balance',
@@ -669,6 +670,7 @@ return [
         'are_you_sure_delete_ticket' => 'Are you sure you want to delete this ticket?',
         'yes_delete' => 'Yes, delete',
         'category_required' => 'Category is required',
+        'subject_required' => 'Subject is required',
         'priority_required' => 'Priority is required',
         'description_required' => 'Description is required',
         'desc_max_60_words' => 'Maximum 60 words are allowed',
