@@ -101,24 +101,7 @@
                                             <span class="text-danger error-text" id="time_format_error"></span>
                                         </div>
                                     </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-8">
-                                            <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.default_language') }} <span class="text-danger">*</span></p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="">
-                                                <select class="select" name="default_language" id="default_language">
-                                                    <option value="">{{ __('admin.general_settings.select') }}</option>
-                                                    @if(!empty($languages) && count($languages) > 0)
-                                                        @foreach($languages as $language)
-                                                            <option value="{{ $language->id }}">{{ $language->name }}</option>
-                                                        @endforeach
-                                                    @endif
-                                                </select>
-                                            </div>
-                                            <span class="text-danger error-text" id="default_language_error"></span>
-                                        </div>
-                                    </div>
+                                   
                                     <div class="localization-list">
                                         <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.language_switcher') }} <span class="text-danger">*</span></p>
                                         <div>

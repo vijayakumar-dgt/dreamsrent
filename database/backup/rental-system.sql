@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 23, 2025 at 06:55 AM
+-- Generation Time: May 23, 2025 at 08:17 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49699,7 +49699,7 @@ INSERT INTO `general_settings` (`id`, `key`, `value`, `group_id`, `language_id`,
 (118, 'invoice_terms', 'Accept', 9, NULL, NULL, '2025-04-10 12:55:03', '2025-04-10 12:55:03'),
 (119, 'copy_right_1', '© 2025 Dreams Rent. All Rights Reserved.', 20, 1, NULL, '2025-04-10 17:29:00', '2025-04-10 18:06:51'),
 (120, 'copy_right_2', '© ٢٠٢٥ دريمز رينت. جميع الحقوق محفوظة.', 20, 2, NULL, '2025-04-10 18:08:09', '2025-04-10 18:08:09'),
-(121, 'international_phone_number', '+93888348823423', 1, NULL, NULL, '2025-04-12 21:53:46', '2025-04-15 09:37:48'),
+(121, 'international_phone_number', NULL, 1, NULL, NULL, '2025-04-12 21:53:46', '2025-04-15 09:37:48'),
 (122, 'cookiesContentText_1', '<p>We use cookies to improve your browsing experience, serve personalized content, and analyze our traffic. By clicking “Accept All,” you consent to our use of cookies.</p>', 7, 1, NULL, '2025-04-23 14:50:36', '2025-04-23 14:50:36'),
 (123, 'cookiesPosition_1', 'left', 7, 1, NULL, '2025-04-23 14:50:36', '2025-04-23 14:50:36'),
 (124, 'agreeButtonText_1', 'Accept All', 7, 1, NULL, '2025-04-23 14:50:36', '2025-04-23 14:50:36'),
