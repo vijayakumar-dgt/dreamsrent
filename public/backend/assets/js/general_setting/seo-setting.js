@@ -176,27 +176,32 @@
                                 $("#siteDescription").val(setting.value);
                             } else if (setting.key === "keywords") {
                                 $("#keywords").tagsinput("removeAll");
-                                const keywordsArray = setting.value.split(",");
-                                keywordsArray.forEach((keyword) => {
-                                    $("#keywords").tagsinput(
-                                        "add",
-                                        keyword.trim()
-                                    );
-                                });
+                                if (setting.value) {
+                                    const keywordsArray =
+                                        setting.value.split(",");
+                                    keywordsArray.forEach((keyword) => {
+                                        $("#keywords").tagsinput(
+                                            "add",
+                                            keyword.trim()
+                                        );
+                                    });
+                                }
                             } else if (setting.key === "OGmetaTitle") {
                                 $("#ogmetaTitle").val(setting.value);
                             } else if (setting.key === "OGsiteDescription") {
                                 $("#ogsiteDescription").val(setting.value);
                             } else if (setting.key === "ogkeywords") {
                                 $("#ogkeywords").tagsinput("removeAll");
-                                const ogKeywordsArray =
-                                    setting.value.split(",");
-                                ogKeywordsArray.forEach((keyword) => {
-                                    $("#ogkeywords").tagsinput(
-                                        "add",
-                                        keyword.trim()
-                                    );
-                                });
+                                if (setting.value) {
+                                    const ogKeywordsArray =
+                                        setting.value.split(",");
+                                    ogKeywordsArray.forEach((keyword) => {
+                                        $("#ogkeywords").tagsinput(
+                                            "add",
+                                            keyword.trim()
+                                        );
+                                    });
+                                }
                             } else if (element.length) {
                                 element.val(setting.value);
                             }
