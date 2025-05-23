@@ -101,7 +101,6 @@
                                             <span class="text-danger error-text" id="time_format_error"></span>
                                         </div>
                                     </div>
-                                   
                                     <div class="localization-list">
                                         <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.language_switcher') }} <span class="text-danger">*</span></p>
                                         <div>

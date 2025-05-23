@@ -114,20 +114,11 @@ class LocalizationController extends Controller
             }
             config(['app.timezone' => $timezoneName]);
 
-            /** @var \App\Models\User $authUser */
-            $authUser = Auth::guard('admin')->user();
-            $refresh = false;
-            if ($authUser->language_id != $request->default_language) {
-                $authUser->language_id = $request->default_language;
-                $authUser->save();
-                $refresh = true;
-            }
             DB::commit();
 
             return response()->json([
                 'status' => 'success',
                 'code'   => 200,
-                'refresh' => $refresh,
                 'message' => __('admin.general_settings.localization_update_success')
             ]);
         } catch (\Throwable $th) {

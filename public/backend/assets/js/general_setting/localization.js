@@ -141,11 +141,8 @@
                     success: function (resp) {
                         if (resp.code === 200) {
                             showToast("success", resp.message);
-                            if (resp.refresh == true) {
-                                location.reload();
-                            }
                         } else {
-                            toastr.error(resp.message);
+                            showToast("error", resp.message);
                         }
                         getLocalizationSettings();
                     },
