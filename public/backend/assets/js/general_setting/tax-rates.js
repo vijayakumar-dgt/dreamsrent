@@ -195,6 +195,11 @@
                     $("#status").prop("checked", status === 1);
                     $("#tax_rate_modal").modal("show");
                     $(".submitBtn").text(_l("admin.common.save_changes"));
+                    $("#tax_rate_modal .statusDiv")
+                        .removeClass("d-none")
+                        .parent()
+                        .removeClass("justify-content-end")
+                        .addClass("justify-content-between");
                 }
             });
         });
@@ -254,6 +259,11 @@
                         .trigger("change");
                     $("#tax_group_modal").modal("show");
                     $(".submitBtn").text(_l("admin.common.save_changes"));
+                    $("#tax_group_modal .statusDiv")
+                        .removeClass("d-none")
+                        .parent()
+                        .removeClass("justify-content-end")
+                        .addClass("justify-content-between");
                 }
             });
         });
@@ -365,6 +375,11 @@
         $("#tax_rate_modal .modal-title").text(
             _l("admin.general_settings.create_tax_rate")
         );
+        $("#tax_rate_modal .statusDiv")
+            .addClass("d-none")
+            .parent()
+            .removeClass("justify-content-between")
+            .addClass("justify-content-end");
     }
 
     function resetTaxGroupForm() {
@@ -378,6 +393,11 @@
         $("#tax_group_modal .modal-title").text(
             _l("admin.general_settings.create_tax_group")
         );
+        $("#tax_group_modal .statusDiv")
+            .addClass("d-none")
+            .parent()
+            .removeClass("justify-content-between")
+            .addClass("justify-content-end");
     }
 
     // -------------------- Data Loaders --------------------
