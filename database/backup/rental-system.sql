@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 23, 2025 at 08:17 AM
+-- Generation Time: May 23, 2025 at 09:16 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -48,7 +48,7 @@ CREATE TABLE `addons` (
 CREATE TABLE `announcements` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `announcement_title` varchar(255) NOT NULL,
-  `announcement_type` bigint(20) UNSIGNED NOT NULL,
+  `announcement_type` bigint(20) UNSIGNED DEFAULT NULL,
   `user_type` enum('user','admin') NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `description` text NOT NULL,
