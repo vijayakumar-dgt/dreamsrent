@@ -1992,7 +1992,7 @@
 
                             card.querySelector(
                                 "#set_price"
-                            ).innerText = `$${extraPrice}`;
+                            ).innerText = `${currency}${extraPrice}`;
                             card.querySelector("#service_price").value =
                                 extraPrice;
                         }

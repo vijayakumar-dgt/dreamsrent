@@ -591,7 +591,7 @@
 											<div>
 												<p class="fs-13 mb-1" id="set_value">{{ $formattedServiceValue }}</p>
 												<input type="hidden" name="service_value[]" id="service_value" value="{{ $serviceValue }}">
-												<h6 class="fs-14 fw-semibold" id="set_price">${{ number_format($servicePrice, 2) }}</h6>
+												<h6 class="fs-14 fw-semibold" id="set_price">{{ $currencySymbol }}{{ number_format($servicePrice, 2) }}</h6>
 												<input type="hidden" name="service_price[]" id="service_price" value="{{ $servicePrice }}">
 											</div>
 										</div>
