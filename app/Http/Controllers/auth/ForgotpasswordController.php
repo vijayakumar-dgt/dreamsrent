@@ -27,9 +27,9 @@ class ForgotpasswordController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|exists:users',
         ], [
-            'email.required' => 'Email is required',
-            'email.email' => 'Email is invalid',
-            'email.exists' => 'Email does not exist',
+            'email.required' => __('admin.auth.please_enter_email'),
+            'email.email' => __('admin.auth.please_enter_valid_email'),
+            'email.exists' => __('admin.auth.email_does_not_exist')
         ]);
 
         if ($validator->fails()) {
@@ -59,13 +59,13 @@ class ForgotpasswordController extends Controller
                 'code' => 200,
                 'otp' => $otp,
                 'token' => $token,
-                'message' => 'OTP sent successfully',
+                'message' => __('admin.auth.otp_sent_successfully')
             ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
                 'code' => 422,
-                'message' => 'Please contact administrator',
+                'message' => __('admin.auth.please_contact_administrator')
             ], 200);
         }
     }
@@ -92,7 +92,7 @@ class ForgotpasswordController extends Controller
         $email = Cache::get('forgotPasswordEmail_' . $token);
 
         if ($email && User::where('email', $email)->exists()) {
-            $otp = rand(1000, 9999);//4 digit OTP
+            $otp = rand(1000, 9999);
             $user = User::where('email', $email)->first();
             Cache::put('forgotPasswordEmail_' . $token, $email, 600);
             Cache::put('forgotPasswordOtp_' . $token, $otp, 600);
@@ -106,15 +106,14 @@ class ForgotpasswordController extends Controller
             return response()->json([
                 'status' => true,
                 'code' => 200,
-                // 'otp'    => $otp,
                 'token' => $token,
-                'message' => 'OTP sent successfully',
+                'message' => __('admin.auth.otp_sent_successfully')
             ]);
         } else {
             return response()->json([
                 'status' => false,
                 'code' => 422,
-                'message' => 'Email does not exist or token is invalid',
+                'message' => __('admin.auth.email_does_not_exist_or_token_is_invalid')
             ], 422);
         }
     }
@@ -130,21 +129,20 @@ class ForgotpasswordController extends Controller
                     'status' => true,
                     'code' => 200,
                     'redirect_url' => route('reset-password', ['token' => $token]),
-                    'message' => 'OTP verified successfully',
+                    'message' => __('admin.auth.otp_verified_successfully')
                 ]);
             } else {
                 return response()->json([
                     'status' => false,
                     'code' => 422,
-                    'message' => 'OTP does not match',
-                    // 'valid_otp' => $cache_otp
+                    'message' => __('admin.auth.otp_does_not_match')
                 ], 200);
             }
         } else {
             return response()->json([
                 'status' => false,
                 'code' => 422,
-                'message' => 'Email does not exist or token is invalid',
+                'message' => __('admin.auth.email_does_not_exist_or_token_is_invalid')
             ], 200);
         }
     }
@@ -192,7 +190,7 @@ class ForgotpasswordController extends Controller
                 return response()->json([
                     'status' => false,
                     'code' => 422,
-                    'message' => 'User not found',
+                    'message' => __('admin.general_settings.user_not_found')
                 ], 422);
             }
             Cache::forget('forgotPasswordEmail_' . $token);
@@ -200,14 +198,14 @@ class ForgotpasswordController extends Controller
             return response()->json([
                 'status' => true,
                 'code' => 200,
-                'message' => 'Password updated successfully',
+                'message' => __('admin.general_settings.password_updated_successfully'),
                 'redirect_url' => route('admin-login'),
             ]);
         } else {
             return response()->json([
                 'status' => false,
                 'code' => 422,
-                'message' => 'Email does not exist or token is invalid',
+                'message' => __('admin.auth.email_does_not_exist_or_token_is_invalid')
             ], 422);
         }
     }
