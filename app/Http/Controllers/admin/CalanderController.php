@@ -16,6 +16,8 @@ use Modules\CarInfo\Models\Driver;
 use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Models\PricingType;
 use Modules\CarInfo\Models\VehicleInfo;
+use Modules\GeneralSetting\Models\Currency;
+use Modules\GeneralSetting\Models\GeneralSetting;
 
 class CalanderController extends Controller
 {
@@ -36,6 +38,15 @@ class CalanderController extends Controller
             ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
             ->where(['users.user_type' => 3, 'users.status' => 1])
             ->get();
+
+        $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+        $currency = null;
+
+        if ($currencySetting && $currencySetting->value) {
+            $currency = Currency::find($currencySetting->value);
+        }
+
+        $currencySymbol = $currency->symbol ?? "$";
 
         return view('admin.calender.index', compact(
             'Vehicles',
@@ -177,6 +188,14 @@ class CalanderController extends Controller
         }
         $booking->delivery_type = $booking->delivery_type ? ucfirst(str_replace('_', ' ', $booking->delivery_type)) : 'N/A';
 
+        $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+        $currency = null;
+
+        if ($currencySetting && $currencySetting->value) {
+            $currency = Currency::find($currencySetting->value);
+        }
+
+        $currencySymbol = $currency->symbol ?? "$";
         return response()->json([
             'code' => 200,
             'booking' => $booking,
@@ -185,6 +204,7 @@ class CalanderController extends Controller
             'returnLocation' => $returnLocation,
             'driverDetails' => $driverDetails,
             'customerDetails' => $customerData,
+            'currency' => $currencySymbol,
         ]);
     }
 }

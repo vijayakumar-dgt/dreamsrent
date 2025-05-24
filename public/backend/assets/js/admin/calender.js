@@ -2377,6 +2377,7 @@
                                 const returnLocation = response.returnLocation;
                                 const driverDetails = response.driverDetails;
                                 const customer = response.customerDetails;
+                                const  currency = response.currency;
 
                                 if (customer) {
                                     $("#customer_name").text(
@@ -2444,7 +2445,7 @@
                                 $("#car_title").text(booking.vehicle.name);
                                 $("#car_type").text(vehicleType.name);
                                 $("#car_price").html(
-                                    `$${booking.vehicle_price}<span class="text-gray-5 fw-normal">/${booking.rental_type}</span>`
+                                    `${currency}${booking.vehicle_price}<span class="text-gray-5 fw-normal">/${booking.rental_type}</span>`
                                 );
                                 $("#start_date_time").text(
                                     booking.start_datetime
@@ -2484,17 +2485,17 @@
                                     $(".driverInfo").addClass("d-none");
                                 }
                                 $("#totalValue").html(
-                                    `$${booking.vehicle_total_price}`
+                                    `${currency}${booking.vehicle_total_price}`
                                 );
-                                $("#taxValue").html(`$${booking.tax_val ?? 0}`);
+                                $("#taxValue").html(`${currency}${booking.tax_val ?? 0}`);
                                 $("#extraService").html(
-                                    `$${booking.total_extra_service_price}`
+                                    `${currency}${booking.total_extra_service_price}`
                                 );
                                 $("#inService").html(
-                                    `$${booking.total_insurance_price}`
+                                    `${currency}${booking.total_insurance_price}`
                                 );
                                 $("#final_price").html(
-                                    `$${booking.final_price}`
+                                    `${currency}${booking.final_price}`
                                 );
 
                                 $("#booking_details_modal").modal("show");
