@@ -32,6 +32,7 @@
                 </div>
                 <div class="d-flex align-items-center header-icons">
                     <!-- Flag -->
+                    @if(!empty($language_switcher) && $language_switcher == 1)
                     <div class="nav-item dropdown has-arrow flag-nav nav-item-box">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
                             role="button">
@@ -50,6 +51,7 @@
                             @endif
                         </ul>
                     </div>
+                    @endif
                     <!-- /Flag -->
                     <div class="theme-item">
                         <a href="javascript:void(0);" id="dark-mode-toggle" class="theme-toggle btn btn-menubar">
