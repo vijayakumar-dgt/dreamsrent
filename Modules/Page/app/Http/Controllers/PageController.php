@@ -493,7 +493,7 @@ class PageController extends Controller
                             $banner->description = $decodedData['description_one'] ?? null;
 
                             $relativePath = 'storage/' . ($decodedData['thumbnail_image_one'] ?? '');
-                            $defaultImage = asset('backend/assets/img/car/car-right.png');
+                            $defaultImage = asset('frontend/assets/img/placeholder/placeholder1.jpg');
                             $thumbnailKey = 'thumbnail_image_one';
 
                             $banner->thumbnail_image = (
