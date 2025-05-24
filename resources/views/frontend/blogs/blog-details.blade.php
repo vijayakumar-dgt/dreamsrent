@@ -98,6 +98,7 @@
                             <h4>{{ __('web.blog.leave_a_reply') }}</h4>
                         </div>
                         <div class="card-body">
+                            @auth
                             <form id="blogReviewForm" action="{{ route('blogs.review.store') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="blog_id" value="{{ $blogPosts->id }}">
@@ -106,18 +107,6 @@
                                         <li class="review-box feedbackbox mb-0">
                                             <div class="review-details">
                                                 <div class="row">
-                                                    <div class="col-lg-6">
-                                                        <div class="input-block">
-                                                            <label>{{ __('web.blog.full_name') }} <span class="text-danger">*</span></label>
-                                                            <input type="text" name="name" class="form-control" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="input-block">
-                                                            <label>{{ __('web.blog.email_address') }} <span class="text-danger">*</span></label>
-                                                            <input type="email" name="email" class="form-control" required>
-                                                        </div>
-                                                    </div>
                                                     <div class="col-lg-12">
                                                         <div class="input-block">
                                                             <label>{{ __('web.blog.comments') }}</label>
@@ -135,6 +124,11 @@
                                     </ul>
                                 </div>
                             </form>
+                            @else
+                            <div class="alert alert-warning mt-3" role="alert">
+                                  Please login to comment
+                            </div>
+                            @endauth
                         </div>
                     </div>
                 </div>

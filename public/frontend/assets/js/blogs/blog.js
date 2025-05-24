@@ -66,8 +66,6 @@
                 const formData = new FormData(this);
 
                 if (
-                    !formData.get("name") ||
-                    !formData.get("email") ||
                     !formData.get("comment")
                 ) {
                     showToast("error", _l("web.blog.all_fields_are_required"));

@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Modules\Communication\Helpers\MailConfigurator;
 
 class ForgotpasswordController extends Controller
 {
@@ -49,9 +50,10 @@ class ForgotpasswordController extends Controller
             Cache::put('forgotPasswordOtp_' . $token, $otp, 600);
             $data = [
                 'otp' => (string) $otp,
-                'name' => $user->name ?? 'User',
+                'name' => getCurrentUserFullname($user->id) ?? 'User',
                 'subject' => 'Forgot Password Otp'
             ];
+            MailConfigurator::configureMail();
             Mail::to($email)->send(new ForgotPasswordOtp($data));
 
             return response()->json([
@@ -98,9 +100,10 @@ class ForgotpasswordController extends Controller
             Cache::put('forgotPasswordOtp_' . $token, $otp, 600);
             $data = [
                 'otp' => (string) $otp,
-                'name' => $user->name ?? 'User',
+                'name' => getCurrentUserFullname($user->id) ?? 'User',
                 'subject' => 'Forgot Password Otp'
             ];
+            MailConfigurator::configureMail();
             Mail::to($email)->send(new ForgotPasswordOtp($data));
 
             return response()->json([

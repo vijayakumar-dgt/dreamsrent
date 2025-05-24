@@ -54,7 +54,7 @@
                     contentType: false,
                     success: function (resp) {
                         if (resp.code === 200) {
-                            toastr.success(resp.message);
+                            showToast("success", resp.message);
                         }
                         $("#resetpasswordForm .submitbtn").text(_l('admin.auth.we_are_redirecting_you'));
                         setTimeout(() => {
