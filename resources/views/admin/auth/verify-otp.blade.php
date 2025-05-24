@@ -1,25 +1,5 @@
 @extends('admin.auth.layouts.app')
 @section('meta_title', __('Verify OTP') . ' || ' . $companyName)
-@push('styles')
-   <style>
-         .resend_otp_btn.disabled {
-            pointer-events: none; 
-            opacity: 0.5;        
-            cursor: not-allowed; 
-        }
-        /* Chrome, Safari, Edge, Opera */
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-        }
-
-        /* Firefox */
-        input[type=number] {
-        -moz-appearance: textfield;
-        }
-   </style>
-@endpush
 @section('content')
 <div class="container-fuild">
     <div class="w-100 overflow-hidden position-relative flex-wrap d-block vh-100">
