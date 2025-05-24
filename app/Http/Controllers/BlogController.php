@@ -195,16 +195,14 @@ class BlogController extends Controller
     {
         $request->validate([
             'blog_id' => 'required',
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
             'comment' => 'required|string|max:1000',
         ]);
-
+        $authUser = Auth::guard('web')->user();
         BlogReviews::create([
             'blog_id' => $request->blog_id,
             'user_id' => Auth::id(),
-            'name' => $request->name,
-            'email' => $request->email,
+            'name' => getCurrentUserFullname($authUser->id),
+            'email' => $authUser->email,
             'comments' => $request->comment,
             'created_at' => Carbon::now(),
         ]);

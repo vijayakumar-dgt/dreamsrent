@@ -137,10 +137,12 @@
                         @elseif(count($categories) == 0)
                         <tr>
                             <td></td>
-                            <td colspan="5" class="text-center">{{ __('admin.blog.no_data_found') }}</td>
+                            <td class="text-center">{{ __('admin.blog.no_data_found') }}</td>
                             <td></td>
                             <td></td>
+                            @if (hasPermission($permissions, 'blogs', 'edit') || hasPermission($permissions, 'blogs', 'delete'))
                             <td></td>
+                            @endif
                         </tr>
                         @endif
                     </tbody>

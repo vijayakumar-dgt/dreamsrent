@@ -32,7 +32,7 @@
         <p>This OTP will expire in 10 minutes.</p>
         <p>If you did not request this, please ignore this email.</p>
         <div class="footer">
-            <p>Thanks,<br>The {{ env('APP_NAME') }} Team</p>
+            <p>Thanks,<br>The {{ $companyName ?? 'Dreamsrent' }} Team</p>
         </div>
     </div>
 </body>
