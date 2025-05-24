@@ -39,7 +39,7 @@
                                         <div class="card flex-fill">
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center justify-content-between mb-3">
-                                                    <img src="/backend/assets/img/icons/nexmo-logo-icon.svg" alt="Nexmo" class="img-flui">
+                                                    <img src="{{ asset('backend/assets/img/icons/nexmo-logo-icon.svg') }}" alt="Nexmo" class="img-flui">
                                                 </div>
                                                 <p class="mb-0">{{ __('admin.general_settings.enable_communication_sms') }}</p>
                                             </div>
@@ -62,7 +62,7 @@
                                         <div class="card flex-fill">
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center justify-content-between mb-3">
-                                                    <img src="/backend/assets/img/icons/two-factor-icon.svg" alt="2Factor" class="img-flui">
+                                                    <img src="{{ asset('backend/assets/img/icons/two-factor-icon.svg') }}" alt="2Factor" class="img-flui">
                                                 </div>
                                                 <p class="mb-0">{{ __('admin.general_settings.sms_integration') }}</p>
                                             </div>
@@ -85,7 +85,7 @@
                                         <div class="card flex-fill">
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center justify-content-between mb-3">
-                                                    <img src="/backend/assets/img/icons/twilio-icon.svg" alt="Twilio" class="img-flui">
+                                                    <img src="{{ asset('backend/assets/img/icons/twilio-icon.svg') }}" alt="Twilio" class="img-flui">
                                                 </div>
                                                 <p class="mb-0">{{ __('admin.general_settings.twilio_api_integration') }}</p>
                                             </div>

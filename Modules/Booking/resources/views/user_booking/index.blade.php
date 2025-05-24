@@ -703,7 +703,7 @@
                             </div>
                             <div class="booking-info-btns d-flex justify-content-end">
                                 <a class="btn btn-secondary backUserInfo scrolUp">{{__('web.home.back_to_billing_info')}}</a>
-                                <button class="btn btn-primary continue-book-btn" id="sumbit_btn" type="submit">Pay $4700 & Place Reservation</button>
+                                <button class="btn btn-primary continue-book-btn" id="sumbit_btn" type="submit"></button>
                             </div>
                         </form>
                     </div>
