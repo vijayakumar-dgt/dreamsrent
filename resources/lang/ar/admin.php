@@ -2416,5 +2416,12 @@ return array (
     'please_enter_valid_email' => 'الرجاء إدخال بريد إلكتروني صالح',
     'we_are_redirecting_you' => 'نحن نوجهك إلى...',
     'please_enter_password' => 'يرجى إدخال كلمة المرور',
+    'enter_valid_otp' => 'الرجاء إدخال رمز التحقق صالح',
+    'email_does_not_exist' => 'البريد الإلكتروني غير موجود',
+    'otp_sent_successfully' => 'تم إرسال رمز التحقق بنجاح',
+    'please_contact_administrator' => 'يرجى الاتصال بالمسؤول',
+    'email_does_not_exist_or_token_is_invalid' => 'البريد الإلكتروني غير موجود أو الرمز غير صالح',
+    'otp_verified_successfully' => 'تم التحقق من رمز التحقق بنجاح',
+    'otp_does_not_match' => 'رمز التحقق غير متطابق',
   ),
 );

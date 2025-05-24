@@ -1,14 +1,14 @@
 (async () => {
+    "use strict";
     await loadTranslationFile("admin", "general_settings, auth");
-    ("use strict");
-
+    
     $(document).ready(function () {
         $(".submitbtn").attr("disabled", false);
         $("#resetpasswordForm").validate({
             rules: {
                 email: {
                     required: true,
-                    email: true,
+                    email: true,    
                 },
             },
             messages: {

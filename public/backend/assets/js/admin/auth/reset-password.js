@@ -1,11 +1,12 @@
-(function () {
+(async () => {
     "use strict";
+    await loadTranslationFile("admin", "common, auth");
     $(document).ready(function () {
         $("#resetpasswordForm").validate({
             rules: {
                 password: {
                     required: true,
-                    minlength: 6,
+                    minlength: 8,
                 },
                 password_confirmation: {
                     required: true,
@@ -14,12 +15,12 @@
             },
             messages: {
                 password: {
-                    required: "Please enter password",
-                    minlength: "Password must be at least 6 characters",
+                    required: _l('admin.common.password_required'),
+                    minlength: _l("admin.common.password_minlength")
                 },
                 password_confirmation: {
-                    required: "Please enter confirm password",
-                    equalTo: "Password and confirm password must be same",
+                    required: _l('admin.common.confirm_password_required'),
+                    equalTo: _l('admin.common.confirm_password_equal_to')
                 },
             },
             errorPlacement: function (error, element) {
@@ -42,7 +43,7 @@
             },
             submitHandler: function (form) {
                 let cylinderFormData = new FormData(form);
-                $("#resetpasswordForm .submitbtn").text("Please Wait...");
+                $("#resetpasswordForm .submitbtn").text(_l('admin.common.please_wait'));
                 $("#resetpasswordForm .submitbtn").attr("disabled", true);
                 $(".password-error-text").text("");
                 $.ajax({
@@ -55,9 +56,7 @@
                         if (resp.code === 200) {
                             toastr.success(resp.message);
                         }
-                        $("#resetpasswordForm .submitbtn").text(
-                            "We're redirecting you..."
-                        );
+                        $("#resetpasswordForm .submitbtn").text(_l('admin.auth.we_are_redirecting_you'));
                         setTimeout(() => {
                             window.location.href = resp.redirect_url;
                         }, 3000);
@@ -66,9 +65,7 @@
                         $(".password-error-text").text(
                             error.responseJSON.message
                         );
-                        $("#resetpasswordForm .submitbtn").text(
-                            "Reset Password"
-                        );
+                        $("#resetpasswordForm .submitbtn").text(_l('admin.common.reset_password'));
                         $("#resetpasswordForm .submitbtn").prop(
                             "disabled",
                             false

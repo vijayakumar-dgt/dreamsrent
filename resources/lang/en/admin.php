@@ -2416,5 +2416,12 @@ return array(
     'please_enter_valid_email' => 'Please enter valid email',
     'we_are_redirecting_you' => 'We are redirecting you...',
     'please_enter_password' => 'Please Enter Password',
+    'enter_valid_otp' => 'Please enter valid OTP',
+    'email_does_not_exist' => 'Email does not exist',
+    'otp_sent_successfully' => 'OTP sent successfully',
+    'please_contact_administrator' => 'Please contact administrator',
+    'email_does_not_exist_or_token_is_invalid' => 'Email does not exist or token is invalid',
+    'otp_verified_successfully' => 'OTP verified successfully',
+    'otp_does_not_match' => 'OTP does not match',
   ]
 );

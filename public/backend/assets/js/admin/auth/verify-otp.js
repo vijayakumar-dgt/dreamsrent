@@ -1,5 +1,6 @@
-(function () {
+(async () => {
     "use strict";
+    await loadTranslationFile("admin", "common, auth");
     $(document).ready(function () {
         $(".resend_otp_btn").addClass("disabled");
 
@@ -106,28 +107,26 @@
                             showToast("success", response.message);
                             $(".otp-error-text").text("");
                             $(".resetpasswordbtn").prop("disabled", true);
-                            $(".resetpasswordbtn").text(
-                                "We're redirecting you..."
-                            );
+                            $(".resetpasswordbtn").text(_l('admin.auth.we_are_redirecting_you'));
                             setTimeout(function () {
                                 window.location.href = response.redirect_url;
                             }, 3000);
                         } else {
                             $(".otp-error-text").text(response.message);
                             $(".resetpasswordbtn").prop("disabled", false);
-                            $(".resetpasswordbtn").html("Reset Password");
+                            $(".resetpasswordbtn").html(_l('admin.auth.reset_password'));
                         }
                     },
                     error: function (error) {
                         $(".otp-error-text").text(error.responseJSON.message);
                         $(".resetpasswordbtn").prop("disabled", false);
-                        $(".resetpasswordbtn").html("Reset Password");
+                        $(".resetpasswordbtn").html(_l('admin.auth.reset_password'));
                     },
                 });
             } else {
-                $(".otp-error-text").text("Please enter a valid OTP.");
+                $(".otp-error-text").text(_l('admin.auth.enter_valid_otp'));
                 $(".resetpasswordbtn").prop("disabled", false);
-                $(".resetpasswordbtn").html("Reset Password");
+                $(".resetpasswordbtn").html(_l('admin.auth.reset_password'));
                 return;
             }
         });
