@@ -57,6 +57,7 @@
 					</ul>
 					<fieldset id="first-field">
 						<form id="carBasicInfoForm" autocomplete="off">
+							<input type="hidden" name="currency" id="currency" value="{{ $currencySymbol }}">
 							<input type="hidden" name="lang_id" id="lang_id" value="{{ $authUser->language_id }}">
 							<div class="filterbox  p-20 mb-4 info-box d-flex align-items-center justify-content-between flex-wrap gap-3">
 								<h4 class="d-flex align-items-center"><i class="ti ti-info-circle text-secondary me-2"></i>{{ __('admin.rentals.basic_info') }}</h4>
@@ -1205,7 +1206,7 @@
 										@if ($insurance->price_type_id == 7)
 										{{ rtrim(rtrim(number_format($insurance->price, 2), '0'), '.') }}%
 										@else
-										${{ number_format($insurance->price, 2) }}
+										{{ $currencySymbol }}{{ number_format($insurance->price, 2) }}
 										@endif</span>
 									<input type="hidden" id="insurance_price" value="{{ $insurance->price }}">
 								</p>

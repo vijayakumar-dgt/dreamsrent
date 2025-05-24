@@ -95,7 +95,16 @@ class CarInfoController extends Controller
         $priceType = PricingType::where('status', 1)->get();
 
         $authUser = current_user();
-        return view('carinfo::vehicle.add', compact('carTypes', 'Brands', 'CarModel', 'Category', 'Location', 'CarColor', 'CarFuel', 'Transmission', 'SafetyFeature', 'DamageTypes', 'ExtraServices', 'ExtraServiceInfo', 'insurances', 'priceType', 'authUser'));
+
+        $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+        $currency = null;
+
+        if ($currencySetting && $currencySetting->value) {
+            $currency = Currency::find($currencySetting->value);
+        }
+
+        $currencySymbol = $currency->symbol ?? "$";
+        return view('carinfo::vehicle.add', compact('carTypes', 'Brands', 'CarModel', 'Category', 'Location', 'CarColor', 'CarFuel', 'Transmission', 'SafetyFeature', 'DamageTypes', 'ExtraServices', 'ExtraServiceInfo', 'insurances', 'priceType', 'authUser', 'currencySymbol'));
     }
     public function vehicleedit(string $slug, Request $request): View
     {
@@ -1081,6 +1090,15 @@ class CarInfoController extends Controller
         $vehicles = $query->where("language_id", $languageId)->get()->map(function ($vehicle) {
             $vehicle->vehicle_image = uploadedAsset($vehicle->vehicle_image);
 
+            $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+            $currency = null;
+
+            if ($currencySetting && $currencySetting->value) {
+                $currency = Currency::find($currencySetting->value);
+            }
+
+            $currencySymbol = $currency->symbol ?? "$";
+
             $vehicleMetas = VehicleMeta::where('vehicle_id', $vehicle->id)
                 ->where('key', 'vehicle_image')
                 ->first();
@@ -1096,6 +1114,7 @@ class CarInfoController extends Controller
             $damageCount = VehicleDamage::where('vehicle_id', $vehicle->id)->count();
             $vehicle->damage_count = $damageCount;
             $vehicle->status = $vehicle->status;
+            $vehicle->currency = $currencySymbol;
             $vehicle->created_date = formatDateTime($vehicle->created_at, false);
 
             return $vehicle;

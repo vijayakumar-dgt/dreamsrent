@@ -28,6 +28,7 @@
                 if (response.code === 200 && response.data.length > 0) {
                     let data = response.data;
 
+                    console.log(data);
                     function formatDateTime(dateString) {
                         let date = new Date(dateString);
 
@@ -67,7 +68,7 @@
 
                             for (const [key, val] of Object.entries(prices)) {
                                 if (val && val !== "0") {
-                                    priceText = `$${val} (${key})`;
+                                    priceText = `${value.currency}${val} (${key})`;
                                     break;
                                 }
                             }
