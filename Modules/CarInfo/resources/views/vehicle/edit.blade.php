@@ -55,6 +55,7 @@
                     </ul>
                     <fieldset id="first-field">
                         <form id="carBasicInfoForm" autocomplete="off">
+							<input type="hidden" name="currency" id="currency" value="{{ $currencySymbol }}">
                             <input type="hidden" name="vehicle_id" id="vehicle_id" value="{{ $query->id }}">
                             <input type="hidden" name="language_id" id="language_id" value="{{ $query->language_id }}">
                             <input type="hidden" name="parent_id" id="parent_id" value="{{ $query->parent_id }}">
@@ -620,7 +621,7 @@
                                             <div>
                                                 <p class="fs-13 mb-1" id="set_value">{{ $formattedServiceValue }}</p>
                                                 <input type="hidden" name="service_value[]" id="service_value" value="{{ $serviceValue }}">
-                                                <h6 class="fs-14 fw-semibold" id="set_price">${{ number_format($servicePrice, 2) }}</h6>
+                                                <h6 class="fs-14 fw-semibold" id="set_price">{{ $currencySymbol }}{{ number_format($servicePrice, 2) }}</h6>
                                                 <input type="hidden" name="service_price[]" id="service_price" value="{{ $servicePrice }}">
                                             </div>
                                         </div>
@@ -1149,7 +1150,7 @@
                                         @if ($insurance->price_type_id == 7)
                                         {{ rtrim(rtrim(number_format($insurance->price, 2), '0'), '.') }}%
                                         @else
-                                        ${{ number_format($insurance->price, 2) }}
+                                        {{ $currencySymbol }}{{ number_format($insurance->price, 2) }}
                                         @endif
                                     </span>
                                     <input type="hidden" id="insurance_price" value="{{ $insurance->price }}">
@@ -1223,7 +1224,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Price <span class="text-danger"> *</span></label>
-                    <input type="text" class="form-control priceLimit	" id="price" maxlength="5" value="">
+                    <input type="text" class="form-control priceLimit" id="price" maxlength="5" value="">
                 </div>
             </div>
             <div class="modal-footer">

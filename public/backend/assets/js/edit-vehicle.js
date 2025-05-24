@@ -5,6 +5,8 @@
 
     let faqCounter = 0;
 
+    let currency = $("#currency").val();
+
     function getDamageInfo() {
         let vehicleId = $("#vehicle_id").val();
 
@@ -140,7 +142,7 @@
                    <span class="text-gray-9 priceIn" data-id="${uniqueId}">${
             insurances.value == "Percentage"
                 ? `${parseFloat(insurances.price)}%`
-                : `$${parseFloat(insurances.price)}`
+                : `${currency}${parseFloat(insurances.price)}`
         }</span>
                 </p>
                 <input type="hidden" name="insurance_id_one[]" id="insurance_id_one_${uniqueId}" value="${
@@ -249,7 +251,7 @@
                     <p class="fs-13 fw-medium border-end pe-2 mb-0 daily-price">
                     ${_l(
                         "admin.rentals.seasonal_daily_price"
-                    )} : <span class="text-gray-9">$${parseFloat(
+                    )} : <span class="text-gray-9">${currency}${parseFloat(
             season.seasonal_daily_rate
         ).toFixed(0)}</span>
                         <input type="hidden" name="seasonal_daily_rate[]" value="${
@@ -259,7 +261,7 @@
                     <p class="fs-13 fw-medium border-end pe-2 mb-0 weekly-price">
                     ${_l(
                         "admin.rentals.seasonal_weekly_price"
-                    )}  : <span class="text-gray-9">$${parseFloat(
+                    )}  : <span class="text-gray-9">${currency}${parseFloat(
             season.seasonal_weekly_rate
         ).toFixed(0)}</span>
                         <input type="hidden" name="seasonal_weekly_rate[]" value="${
@@ -269,7 +271,7 @@
                     <p class="fs-13 fw-medium border-end pe-2 mb-0 monthly-price">
                     ${_l(
                         "admin.rentals.seasonal_monthly_price"
-                    )} : <span class="text-gray-9">$${parseFloat(
+                    )} : <span class="text-gray-9">${currency}${parseFloat(
             season.seasonal_monthly_rate
         ).toFixed(0)}</span>
                         <input type="hidden" name="seasonal_monthly_rate[]" value="${
@@ -279,7 +281,7 @@
                     <p class="fs-13 fw-medium pe-2 mb-0 late-fee">
                     ${_l(
                         "admin.rentals.seasonal_late_fee"
-                    )} : <span class="text-gray-9">$${parseFloat(
+                    )} : <span class="text-gray-9">${currency}${parseFloat(
             season.seasonal_late_fee
         ).toFixed(0)}</span>
                         <input type="hidden" name="seasonal_late_fee[]" value="${
@@ -353,7 +355,7 @@
                     <p class="fs-13 fw-medium border-end pe-2 mb-0 daily-price">
                     ${_l(
                         "admin.rentals.day_price"
-                    )} : <span class="text-gray-9">$${
+                    )} : <span class="text-gray-9">${currency}${
             tarrif.tariff_daily_price
         }</span>
                         <input type="hidden" name="tariff_daily_price[]" value="${
@@ -393,7 +395,7 @@
                     <p class="fs-13 fw-medium pe-2 mb-0 extra-price">
                     ${_l(
                         "admin.rentals.extra_price"
-                    )} : <span class="text-gray-9">$${
+                    )} : <span class="text-gray-9">${currency}${
             tarrif.tariff_extra_price
         }</span>
                         <input type="hidden" name="tariff_extra_price[]" value="${
@@ -655,6 +657,8 @@
         getFaqInfo();
         getDamageInfo();
         getInsuranceInfo();
+
+        let currency = $("#currency").val();
 
         $(".summernote").summernote({
             height: 200,
@@ -982,6 +986,7 @@
         let deletingId = null;
 
         $("#price_btn").on("click", function () {
+            $(".noDataS").html(""); // Clear previous entries
             let seasonName = $("#s_name").val();
             let startDate = $("#s_strdate").val();
             let endDate = $("#s_enddate").val();
@@ -1006,16 +1011,22 @@
             if (editingId) {
                 let editElement = $("#" + editingId);
 
-                // Update text labels
                 editElement.find("h6").text(seasonName);
                 editElement.find(".start-date span").text(startDate);
                 editElement.find(".end-date span").text(endDate);
-                editElement.find(".daily-price span").text(`$${dailyRate}`);
-                editElement.find(".weekly-price span").text(`$${weeklyRate}`);
-                editElement.find(".monthly-price span").text(`$${monthlyRate}`);
-                editElement.find(".late-fee span").text(`$${lateFee}`);
+                editElement
+                    .find(".daily-price span")
+                    .text(`${currency}${dailyRate}`);
+                editElement
+                    .find(".weekly-price span")
+                    .text(`${currency}${weeklyRate}`);
+                editElement
+                    .find(".monthly-price span")
+                    .text(`${currency}${monthlyRate}`);
+                editElement
+                    .find(".late-fee span")
+                    .text(`${currency}${lateFee}`);
 
-                // Update hidden input values
                 editElement
                     .find("input[name='seasonal_title[]']")
                     .val(seasonName);
@@ -1038,72 +1049,70 @@
                     .find("input[name='seasonal_late_fee[]']")
                     .val(lateFee);
 
-                // Reset form labels and buttons
                 $("#seas_title").text("Create Seasonal Pricing");
                 $("#price_btn").text("Create New");
                 editingId = null;
             } else {
-                let uniqueId = "season_" + new Date().getTime();
+                let uniqueId = `season_${crypto.randomUUID()}`;
                 let newSeasonalPricing = `
-                <div id="${uniqueId}" class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-1">
-                    <div>
-                        <input type="hidden" name="seasonal_id[]" value="">
-                        <h6 class="fs-14 fw-semibold mb-1">${seasonName}</h6>
-                        <input type="hidden" name="seasonal_title[]" value="${seasonName}">
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <p class="fs-13 fw-medium border-end pe-2 mb-0 start-date">
-                            ${_l(
-                                "admin.rentals.start_date"
-                            )} : <span class="text-gray-9">${startDate}</span>
-                                <input type="hidden" name="seasonal_start_date[]" value="${startDate}">
-                            </p>
-                            <p class="fs-13 fw-medium border-end pe-2 mb-0 end-date">
-                            ${_l(
-                                "admin.rentals.end_date"
-                            )} : <span class="text-gray-9">${endDate}</span>
-                                <input type="hidden" name="seasonal_end_date[]" value="${endDate}">
-                            </p>
-                            <p class="fs-13 fw-medium border-end pe-2 mb-0 daily-price">
-                            ${_l(
-                                "admin.rentals.seasonal_daily_price"
-                            )} : <span class="text-gray-9">$${dailyRate}</span>
-                                <input type="hidden" name="seasonal_daily_rate[]" value="${dailyRate}">
-                            </p>
-                            <p class="fs-13 fw-medium border-end pe-2 mb-0 weekly-price">
-                            ${_l(
-                                "admin.rentals.seasonal_weekly_price"
-                            )}  : <span class="text-gray-9">$${weeklyRate}</span>
-                                <input type="hidden" name="seasonal_weekly_rate[]" value="${weeklyRate}">
-                            </p>
-                            <p class="fs-13 fw-medium border-end pe-2 mb-0 monthly-price">
-                            ${_l(
-                                "admin.rentals.seasonal_monthly_price"
-                            )} : <span class="text-gray-9">$${monthlyRate}</span>
-                                <input type="hidden" name="seasonal_monthly_rate[]" value="${monthlyRate}">
-                            </p>
-                            <p class="fs-13 fw-medium pe-2 mb-0 late-fee">
-                            ${_l(
-                                "admin.rentals.seasonal_late_fee"
-                            )} : <span class="text-gray-9">$${lateFee}</span>
-                                <input type="hidden" name="seasonal_late_fee[]" value="${lateFee}">
-                            </p>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center icon-list">
-                        <a href="#" class="edit-icon me-2" data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#add_price">
-                            <i class="ti ti-edit"></i>
-                        </a>
-                        <a href="#" class="trash-icon" data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#delete_price">
-                            <i class="ti ti-trash"></i>
-                        </a>
-                    </div>
-                </div>`;
-
+<div id="${uniqueId}" class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-1">
+    <div>
+        <input type="hidden" name="seasonal_id[]" value="">
+        <h6 class="fs-14 fw-semibold mb-1">${seasonName}</h6>
+        <input type="hidden" name="seasonal_title[]" value="${seasonName}">
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <p class="fs-13 fw-medium border-end pe-2 mb-0 start-date">
+                ${_l(
+                    "admin.rentals.start_date"
+                )} : <span class="text-gray-9">${startDate}</span>
+                <input type="hidden" name="seasonal_start_date[]" value="${startDate}">
+            </p>
+            <p class="fs-13 fw-medium border-end pe-2 mb-0 end-date">
+                ${_l(
+                    "admin.rentals.end_date"
+                )} : <span class="text-gray-9">${endDate}</span>
+                <input type="hidden" name="seasonal_end_date[]" value="${endDate}">
+            </p>
+            <p class="fs-13 fw-medium border-end pe-2 mb-0 daily-price">
+                ${_l(
+                    "admin.rentals.seasonal_daily_price"
+                )} : <span class="text-gray-9">${currency}${dailyRate}</span>
+                <input type="hidden" name="seasonal_daily_rate[]" value="${dailyRate}">
+            </p>
+            <p class="fs-13 fw-medium border-end pe-2 mb-0 weekly-price">
+                ${_l(
+                    "admin.rentals.seasonal_weekly_price"
+                )} : <span class="text-gray-9">${currency}${weeklyRate}</span>
+                <input type="hidden" name="seasonal_weekly_rate[]" value="${weeklyRate}">
+            </p>
+            <p class="fs-13 fw-medium border-end pe-2 mb-0 monthly-price">
+                ${_l(
+                    "admin.rentals.seasonal_monthly_price"
+                )} : <span class="text-gray-9">${currency}${monthlyRate}</span>
+                <input type="hidden" name="seasonal_monthly_rate[]" value="${monthlyRate}">
+            </p>
+            <p class="fs-13 fw-medium pe-2 mb-0 late-fee">
+                ${_l(
+                    "admin.rentals.seasonal_late_fee"
+                )} : <span class="text-gray-9">${currency}${lateFee}</span>
+                <input type="hidden" name="seasonal_late_fee[]" value="${lateFee}">
+            </p>
+        </div>
+    </div>
+    <div class="d-flex align-items-center icon-list">
+        <a href="#" class="edit-icon me-2" data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#add_price">
+            <i class="ti ti-edit"></i>
+        </a>
+        <a href="#" class="trash-icon" data-id="${uniqueId}" data-bs-toggle="modal" data-bs-target="#delete_price">
+            <i class="ti ti-trash"></i>
+        </a>
+    </div>
+</div>`;
                 $("#seasonal_append").append(newSeasonalPricing);
             }
 
             $("#add_price").modal("hide");
-            $("#add_price input").val(""); // Clear input fields
+            $("#add_price input").val("");
         });
 
         $(document).on("click", ".edit-icon", function () {
@@ -1114,16 +1123,25 @@
             $("#s_strdate").val(editElement.find(".start-date span").text());
             $("#s_enddate").val(editElement.find(".end-date span").text());
             $("#s_drate").val(
-                editElement.find(".daily-price span").text().replace("$", "")
+                editElement
+                    .find(".daily-price span")
+                    .text()
+                    .replace(currency, "")
             );
             $("#s_wrate").val(
-                editElement.find(".weekly-price span").text().replace("$", "")
+                editElement
+                    .find(".weekly-price span")
+                    .text()
+                    .replace(currency, "")
             );
             $("#s_mrate").val(
-                editElement.find(".monthly-price span").text().replace("$", "")
+                editElement
+                    .find(".monthly-price span")
+                    .text()
+                    .replace(currency, "")
             );
             $("#s_lrate").val(
-                editElement.find(".late-fee span").text().replace("$", "")
+                editElement.find(".late-fee span").text().replace(currency, "")
             );
 
             $("#seas_title").text("Edit Seasonal Pricing");
@@ -1146,6 +1164,7 @@
         let deletingTariffId = null;
 
         $("#tarrif_btn").on("click", function () {
+            $(".noDataT").html(""); // Clear previous entries
             let tariffName = $("#t_name").val();
             let dailyPrice = $("#t_price").val();
             let fromDays = $("#t_fromday").val();
@@ -1156,7 +1175,6 @@
                 ? "Unlimited"
                 : baseKilometers;
 
-            // Validation
             if (
                 !tariffName ||
                 !dailyPrice ||
@@ -1172,15 +1190,17 @@
             if (editingTariffId) {
                 let editElement = $("#" + editingTariffId);
 
-                // Update text labels
                 editElement.find("h6").text(tariffName);
-                editElement.find(".daily-price span").text(`$${dailyPrice}`);
+                editElement
+                    .find(".daily-price span")
+                    .text(`${currency}${dailyPrice}`);
+                editElement
+                    .find(".extra-price span")
+                    .text(`${currency}${extraPrice}`);
                 editElement.find(".from-days span").text(fromDays);
                 editElement.find(".to-days span").text(toDays);
                 editElement.find(".base-km span").text(isUnlimited);
-                editElement.find(".extra-price span").text(`$${extraPrice}`);
 
-                // Update hidden input values
                 editElement
                     .find("input[name='tariff_title[]']")
                     .val(tariffName);
@@ -1198,12 +1218,11 @@
                     .find("input[name='tariff_extra_price[]']")
                     .val(extraPrice);
 
-                // Reset form labels and buttons
                 $("#tarrif_title").text("Add New Tariff");
                 $("#tarrif_btn").text("Create Tariff");
                 editingTariffId = null;
             } else {
-                let uniqueId = "tariff_" + new Date().getTime();
+                let uniqueId = `tariff_${crypto.randomUUID()}`;
 
                 let newTariff = `
             <div id="${uniqueId}" class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-1">
@@ -1213,33 +1232,33 @@
                     <input type="hidden" name="tariff_title[]" value="${tariffName}">
                     <div class="d-flex align-items-center gap-2 flex-wrap">
                         <p class="fs-13 fw-medium border-end pe-2 mb-0 daily-price">
-                        ${_l(
-                            "admin.rentals.day_price"
-                        )} : <span class="text-gray-9">$${dailyPrice}</span>
+                            ${_l(
+                                "admin.rentals.day_price"
+                            )} : <span class="text-gray-9">${currency}${dailyPrice}</span>
                             <input type="hidden" name="tariff_daily_price[]" value="${dailyPrice}">
                         </p>
                         <p class="fs-13 fw-medium border-end pe-2 mb-0 from-days">
-                        ${_l(
-                            "admin.rentals.from_days"
-                        )} : <span class="text-gray-9">${fromDays}</span>
+                            ${_l(
+                                "admin.rentals.from_days"
+                            )} : <span class="text-gray-9">${fromDays}</span>
                             <input type="hidden" name="tariff_from_days[]" value="${fromDays}">
                         </p>
                         <p class="fs-13 fw-medium border-end pe-2 mb-0 to-days">
-                             ${_l(
-                                 "admin.rentals.to_days"
-                             )} : <span class="text-gray-9">${toDays}</span>
+                            ${_l(
+                                "admin.rentals.to_days"
+                            )} : <span class="text-gray-9">${toDays}</span>
                             <input type="hidden" name="tariff_to_days[]" value="${toDays}">
                         </p>
                         <p class="fs-13 fw-medium border-end pe-2 mb-0 base-km">
-                        ${_l(
-                            "admin.rentals.base_km"
-                        )} : <span class="text-gray-9">${isUnlimited}</span>
+                            ${_l(
+                                "admin.rentals.base_km"
+                            )} : <span class="text-gray-9">${isUnlimited}</span>
                             <input type="hidden" name="tariff_base_km[]" value="${isUnlimited}">
                         </p>
                         <p class="fs-13 fw-medium pe-2 mb-0 extra-price">
-                        ${_l(
-                            "admin.rentals.extra_price"
-                        )} : <span class="text-gray-9">$${extraPrice}</span>
+                            ${_l(
+                                "admin.rentals.extra_price"
+                            )} : <span class="text-gray-9">${currency}${extraPrice}</span>
                             <input type="hidden" name="tariff_extra_price[]" value="${extraPrice}">
                         </p>
                     </div>
@@ -1263,14 +1282,16 @@
             $("#t_base").prop("disabled", false);
         });
 
-        // Edit Tariff
         $(document).on("click", ".edit-tariff", function () {
             editingTariffId = $(this).data("id");
             let editElement = $("#" + editingTariffId);
 
             $("#t_name").val(editElement.find("h6").text());
             $("#t_price").val(
-                editElement.find(".daily-price span").text().replace("$", "")
+                editElement
+                    .find(".daily-price span")
+                    .text()
+                    .replace(currency, "")
             );
             $("#t_fromday").val(editElement.find(".from-days span").text());
             $("#t_today").val(editElement.find(".to-days span").text());
@@ -1285,7 +1306,10 @@
             }
 
             $("#t_extra").val(
-                editElement.find(".extra-price span").text().replace("$", "")
+                editElement
+                    .find(".extra-price span")
+                    .text()
+                    .replace(currency, "")
             );
 
             $("#tarrif_title").text("Edit Tariff");
@@ -2609,7 +2633,7 @@
                             // Update the price
                             card.querySelector(
                                 "#set_price"
-                            ).innerText = `$${extraPrice}`;
+                            ).innerText = `${currency}${extraPrice}`;
                             card.querySelector("#service_price").value =
                                 extraPrice;
                         }
@@ -2812,7 +2836,7 @@
                 const displayPrice =
                     insurancePriceTypeId == 7
                         ? `${parseFloat(insurancePrice).toFixed(0)}%`
-                        : `$${parseFloat(insurancePrice).toFixed(2)}`;
+                        : `${currency}${parseFloat(insurancePrice).toFixed(2)}`;
 
                 const newInsuranceDiv = $(`
             <div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" data-id="${uniqueId}">
@@ -2891,7 +2915,7 @@
             } else {
                 // Keep fixed or daily prices as currency
                 updatedPrice = parseFloat(updatedPrice).toFixed(2); // Keep as 2 decimals
-                $(`.priceIn[data-id='${uniqueId}']`).text(`$${updatedPrice}`);
+                $(`.priceIn[data-id='${uniqueId}']`).text(`${currency}${updatedPrice}`);
                 $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
                 $(`.priceTypeIn[data-id='${uniqueId}']`).text(updatedPriceType);
                 $(`#insurance_price_type_one_${uniqueId}`).val(

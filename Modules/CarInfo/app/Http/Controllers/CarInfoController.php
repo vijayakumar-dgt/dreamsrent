@@ -238,7 +238,16 @@ class CarInfoController extends Controller
 
         app()->setLocale($languageCode->code ?? 'en');
 
-        return view('carinfo::vehicle.edit', compact('carTypes', 'Brands', 'Models', 'Category', 'Location', 'CarFuel', 'CarColor', 'Transmission', 'SafetyFeature', 'selectedFeatures', 'vehiclePrices', 'ExtraServices', 'ExtraServiceInfo', 'insurances', 'priceType', 'DamageTypes', 'query'));
+        $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+        $currency = null;
+
+        if ($currencySetting && $currencySetting->value) {
+            $currency = Currency::find($currencySetting->value);
+        }
+
+        $currencySymbol = $currency->symbol ?? "$";
+
+        return view('carinfo::vehicle.edit', compact('carTypes', 'Brands', 'Models', 'Category', 'Location', 'CarFuel', 'CarColor', 'Transmission', 'SafetyFeature', 'selectedFeatures', 'vehiclePrices', 'ExtraServices', 'ExtraServiceInfo', 'insurances', 'priceType', 'DamageTypes', 'query', 'currencySymbol'));
     }
 
     public function getvehiclelist(): JsonResponse
