@@ -146,49 +146,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-8">
-                                            <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.currency_position') }} <span class="text-danger">*</span></p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="">
-                                                <select class="select" id="currency_position" name="currency_position">
-                                                    <option value="">{{ __('admin.general_settings.select') }}</option>
-                                                </select>
-                                                <span class="text-danger error-text" id="currency_position_error"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-md-8">
-                                            <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.decimal_seperator') }} <span class="text-danger">*</span></p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="">
-                                                <select class="select" name="decimal_seperator" id="decimal_seperator">
-                                                    <option value="">{{ __('admin.general_settings.select') }}</option>
-                                                    <option value=".">.</option>
-                                                    <option value=",">,</option>
-                                                </select>
-                                                <span class="text-danger error-text" id="decimal_seperator_error"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.thousand_seperator') }} <span class="text-danger">*</span></p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="">
-                                                <select class="select" name="thousand_seperator" id="thousand_seperator">
-                                                    <option value="">{{ __('admin.general_settings.select') }}</option>
-                                                    <option value=".">.</option>
-                                                    <option value=",">,</option>
-                                                </select>
-                                                <span class="text-danger error-text" id="thousand_seperator_error"></span>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="localization-list d-none">
                                         <p class="text-gray-9 fw-medium">{{ __('admin.general_settings.currency_switcher') }} <span class="text-danger">*</span></p>
                                         <div>

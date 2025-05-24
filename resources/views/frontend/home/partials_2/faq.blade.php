@@ -35,6 +35,10 @@
                                 </div>
                             </div>
                         @endforeach
+                        @else
+                        <div class="col-12">
+                            <p class="text-center">{{ __('web.common.empty_table') }}</p>
+                        </div>
                     @endif
                     </div>
                 </div>

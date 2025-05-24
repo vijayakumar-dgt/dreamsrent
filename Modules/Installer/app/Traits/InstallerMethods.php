@@ -223,7 +223,6 @@ trait InstallerMethods
         if (File::exists($database_path)) {
             try {
                 DB::unprepared(File::get($database_path));
-                Log::info("Database imported successfully from '{$database_path}'.");
                 return true;
             } catch (\Exception $e) {
                 Log::error('Migration failed: ' . $e->getMessage());

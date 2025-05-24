@@ -8,6 +8,7 @@
             </div>
             <!-- /Heading title -->
             <div class="faq-info">
+                @if(!empty($section['section_content']) && count($section['section_content']) > 0)
                 @foreach($section['section_content'] as $faq)
                     <div class="faq-card bg-white" data-aos="fade-down">
                         <h4 class="faq-title">
@@ -19,7 +20,12 @@
                             <p>{{ ucfirst($faq->answer ?? "") }}</p>
                         </div>
                     </div>	
-                @endforeach									
+                @endforeach								
+                @else
+                <div class="col-12">
+                    <p class="text-center">{{ __('web.common.empty_table') }}</p>
+                </div>
+                @endif	
             </div>		
         </div>	
     </section>

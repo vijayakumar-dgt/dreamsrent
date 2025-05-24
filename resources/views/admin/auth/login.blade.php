@@ -1,5 +1,5 @@
 @extends('admin.auth.layouts.app')
-@section('meta_title', __('admin.general_settings.login') . ' || ' . $companyName)
+@section('meta_title', __('admin.auth.login') . ' || ' . $companyName)
 @section('content')
 <div class="container-fuild">
     <div class="w-100 overflow-hidden position-relative flex-wrap d-block vh-100">
@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                             <div class="mt-3 mb-3">
-                                <button type="submit" class="btn btn-dark w-100 submitbtn" disabled>{{ __('admin.general_settings.login') }}</button>
+                                <button type="submit" class="btn btn-dark w-100 submitbtn" disabled>{{ __('admin.auth.login') }}</button>
                             </div>
                           </form> 
                            <div class="mb-0">

@@ -30,11 +30,17 @@
                         </div>
                         <!-- /Blog Item -->
                     @endforeach
+                @else
+                    <div class="col-12">
+                        <p class="text-center">{{ __('web.common.empty_table') }}</p>
+                    </div>
                 @endif
             </div>
+            @if(!empty($section['section_content']) && count($section['section_content']) > 0)
             <div class="view-all-btn text-center aos" data-aos="fade-down">
                 <a href="/blogs" class="btn btn-secondary d-inline-flex align-center">{{ __('web.home.view_more') }}<i class="bx bx-right-arrow-alt ms-1"></i></a>
             </div>
+            @endif
             @php
                 $subscriptionSection = $content_sections->where('section_type', 'ad_card_section')->first();
             @endphp

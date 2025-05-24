@@ -242,7 +242,7 @@
                 img.src = e.target.result;
 
                 img.onload = function () {
-                    if (img.width === 500 && img.height === 500) {
+                    if (img.width === 1200 && img.height === 630) {
                         preview.attr("src", e.target.result).show();
                         $(".frames").removeClass("d-none");
                     } else {

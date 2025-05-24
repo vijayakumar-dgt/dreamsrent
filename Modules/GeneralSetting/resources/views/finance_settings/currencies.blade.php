@@ -51,7 +51,6 @@
                                                 <th>{{ strtoupper(__('admin.general_settings.currency')) }}</th>
                                                 <th>{{ strtoupper(__('admin.general_settings.code')) }}</th>
                                                 <th>{{ strtoupper(__('admin.general_settings.symbol')) }}</th>
-                                                <th>{{ strtoupper(__('admin.general_settings.exchange_rate')) }}</th>
                                                 <th>{{ strtoupper(__('admin.general_settings.status')) }}</th>
                                                 @if (hasPermission($permissions, 'finance_settings', 'edit') || hasPermission($permissions, 'finance_settings', 'delete'))
                                                 <th>{{ strtoupper(__('admin.common.action')) }}</th>
@@ -91,11 +90,6 @@
                             <label class="form-label">{{ __('admin.general_settings.currency_name') }} <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="currency_name" id="currency_name">
                             <span id="currency_name_error" class="text-danger error-text"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('admin.general_settings.exchange_rate') }} <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" name="exchange_rate" id="exchange_rate">
-                            <span id="exchange_rate_error" class="text-danger error-text"></span>
                         </div>
                         <div class="row">
                             <div class="col-md-6">

@@ -14,6 +14,11 @@
                 @endforeach
                 @endif
             </div>
+            @if(empty($section['section_content']) || count($section['section_content']) == 0)
+            <div class="col-12">
+                <p class="text-center">{{ __('web.common.empty_table') }}</p>
+            </div>
+            @endif
             <div class="brand-img text-center">
                 <img src="{{ asset('/frontend/assets/img/bg/brand.png') }}" alt="img" class="img-fluid">
             </div>

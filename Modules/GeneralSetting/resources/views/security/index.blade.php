@@ -37,7 +37,6 @@
                                             <div class="col-xl-5">
                                                 <div>
                                                     <h6 class="fs-14 fw-medium mb-1">{{ __('admin.common.password') }}</h6>
-                                                    <p class="fs-13">{{ __('admin.general_settings.set_unique_password') }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-xl-4">
@@ -53,37 +52,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card mb-3 d-none">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-xl-4">
-                                                <div>
-                                                    <h6 class="fs-14 fw-medium">{{ __('admin.general_settings.google_authentication') }}</h6>
-                                                    <p class="fs-13">{{ __('admin.general_settings.connect_google') }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <div class="d-flex justify-content-center align-items-center">
-                                                    <span class="badge badge-outline d-inline-flex align-items-center badge-sm google_auth"> <i class="ti ti-point-filled text-success"></i>{{ __('admin.general_settings.connected') }}</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-4">
-                                                <div class="d-flex justify-content-end">
-                                                    <div class="form-check form-check-md form-switch me-2">
-                                                        <input class="form-check-input form-label me-2" name="google_auth" id="google_auth" type="checkbox" role="switch">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="card mb-3">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-xl-5">
                                                 <div>
                                                     <h6 class="fs-14 fw-medium mb-1">{{ __('admin.general_settings.phonenumber_verification') }}</h6>
-                                                    <p class="fs-13">{{ __('admin.general_settings.connect_google') }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-xl-4">
@@ -105,7 +79,6 @@
                                             <div class="col-xl-5">
                                                 <div>
                                                     <h6 class="fs-14 fw-medium mb-1">{{ __('admin.general_settings.email_verification') }}</h6>
-                                                    <p class="fs-13">{{ __('admin.general_settings.email_associated_account') }}</p>
                                                 </div>
                                             </div>
                                             <div class="col-xl-4">

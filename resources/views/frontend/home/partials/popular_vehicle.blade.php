@@ -34,6 +34,7 @@
             </div>
 
             <div class="tab-content">
+                @if(!empty($vehicleBrand) && count($vehicleBrand) > 0)
                 @foreach($vehicleBrand as $brand)
                 <div class="tab-pane @if($loop->first) active show @endif" id="tab_{{ $brand->id ?? '' }}">
                     <div class="row">
@@ -161,6 +162,11 @@
                     </div>
                 </div>
                 @endforeach
+                @else
+                <div class="col-12">
+                    <p class="text-center">{{ __('web.common.empty_table') }}</p>
+                </div>
+                @endif
             </div>
         </div>
     </section>

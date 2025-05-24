@@ -84,7 +84,7 @@
                                     <label for="signature_image" class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                                     <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                         <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
-                                            <img id="image_photo_preview" src="/backend/assets/img/settings/company-logo-01.jpg" class="img-fluid" alt="Profile Photo">
+                                            <img id="image_photo_preview" src="{{ asset('backend/assets/img/default-placeholder-image.png') }}" class="img-fluid" alt="Profile Photo">
                                         </div>
                                         <div class="profile-upload">
                                             <div class="profile-uploader d-flex align-items-center">
