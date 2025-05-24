@@ -1990,6 +1990,16 @@ class CarInfoController extends Controller
                     ->exists();
             }
 
+
+            $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+            $currency = null;
+
+            if ($currencySetting && $currencySetting->value) {
+                $currency = Currency::find($currencySetting->value);
+            }
+
+            $currencySymbol = $currency->symbol ?? "$";
+
             $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
             $review_count = Review::where("vehicle_id", $vehicle->id)->count();
 
@@ -2030,7 +2040,7 @@ class CarInfoController extends Controller
                 'num_airbags' => $vehicle->num_airbags,
                 'vehicle_video' => $vehicle->vehicle_video,
                 'features' => $vehicle->features,
-                'currency' => "$",
+                'currency' => $currencySymbol,
                 'rating' => $rating,
                 'wishlist' => $wishlistExists,
                 'review_count' => $review_count,

@@ -179,7 +179,7 @@
 
                                 <li class="total">
                                     <p>{{ __('web.home.extra_services_charges_rate') }}</p>
-                                    <span>${{ $booking->total_extra_service_price ?? 0 }}</span>
+                                    <span>{{ $currencySymbol }}{{ $booking->total_extra_service_price ?? 0 }}</span>
                                 </li>
                             </ul>
                         </div>
