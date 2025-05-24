@@ -14,6 +14,7 @@
                         <img src="{{ $smallLogo ?? asset('frontend/assets/img/logo-small.png') }}" class="img-fluid"
                             alt="Logo">
                     </a>
+                    @if(!empty($language_switcher) && $language_switcher == 1)
                     <div class="navbar-brand dropdown has-arrow flag-nav flag-nav1 nav-item-box flag-resposnive">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
                             role="button">
@@ -35,6 +36,7 @@
                             @endif
                         </ul>
                     </div>
+                    @endif
                 </div>
                 <div class="main-menu-wrapper">
                     <div class="menu-header">
@@ -90,6 +92,7 @@
                     </ul>
                 </div>
                 <ul class="nav header-navbar-rht">
+                    @if(!empty($language_switcher) && $language_switcher == 1)
                     <li class="nav-item">
                         <div class="nav-item dropdown has-arrow flag-nav flag-nav1 nav-item-box">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
@@ -113,6 +116,7 @@
                             </ul>
                         </div>
                     </li>
+                    @endif
                     @if (Auth::guard('web')->check())
                     <!-- Show this if user is logged in -->
                     <!-- Notifications -->

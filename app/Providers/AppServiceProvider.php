@@ -115,7 +115,8 @@ class AppServiceProvider extends ServiceProvider
             $companyEmail = $companyEmail ? $companyEmail->value : '';
             $companyName = $companyName ? $companyName->value : 'Dreams Rent';
             $theme = $defaultTheme ? $defaultTheme->value : 1;
-
+            $language_switcher = GeneralSetting::where('group_id', 5)->where('key', 'language_switcher')->first();
+            $language_switcher = $language_switcher ? $language_switcher->value : 0;
             $logoSetting = GeneralSetting::where('group_id', 16)->pluck('value', 'key')->toArray();
             $logo = uploadedAsset(($logoSetting['logo_image'] ?? null), 'default_logo');
             $favicon = uploadedAsset(($logoSetting['favicon_image'] ?? null), 'default_favicon');
@@ -128,7 +129,8 @@ class AppServiceProvider extends ServiceProvider
                 'companyName' => $companyName,
                 'logo' => $logo,
                 'favicon' => $favicon,
-                'smallLogo' => $smallLogo
+                'smallLogo' => $smallLogo,
+                'language_switcher' => $language_switcher
             ]);
         });
     }
