@@ -26,13 +26,11 @@ class CurrencyController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'currency_name' => 'required|unique:currencies,currency_name,' . $request->id . ',id,deleted_at,NULL',
-            'exchange_rate' => 'required|numeric|min:0',
             'code'          => 'required',
             'symbol'        => 'required'
         ], [
             'currency_name.required' => __('admin.general_settings.enter_currency_name'),
             'currency_name.unique'   => __('admin.general_settings.currency_name_unique'),
-            'exchange_rate.required' => __('admin.general_settings.enter_exchange_rate'),
             'code.required'          => __('admin.general_settings.enter_currency_code'),
             'symbol.required'        => __('admin.general_settings.enter_currency_symbol')
         ]);
@@ -59,7 +57,7 @@ class CurrencyController extends Controller
             $currency->currency_name  = $request->currency_name;
             $currency->code           = $request->code;
             $currency->symbol         = $request->symbol;
-            $currency->exchange_rate  = $request->exchange_rate;
+            $currency->exchange_rate  = $request->exchange_rate ?? 0;
             $currency->save();
 
             return response()->json([

@@ -6,8 +6,13 @@
                 <p>{{ $section['section_label'] }}</p>
             </div>
             <!-- /Section Header -->
+            @if(empty($section['section_content']) || count($section['section_content']) == 0)
+            <div class="col-12 aos">
+                <span class="text-center text-white">{{ __('web.common.empty_table') }}</span>
+            </div>
+            @endif
+            @if(!empty($section['section_content']) && count($section['section_content']) > 0)
             <div class="car-slider owl-carousel">
-                @if(!empty($section['section_content']) && count($section['section_content']) > 0)
                 @foreach($section['section_content'] as $content)
                 <!-- Car Item -->
                 @php
@@ -43,7 +48,7 @@
                 </div>
                 <!-- /Car Item -->
                 @endforeach
-                @endif
             </div>
+            @endif
         </div>
     </section>

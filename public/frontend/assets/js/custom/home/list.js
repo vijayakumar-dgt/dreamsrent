@@ -27,6 +27,7 @@
     let ratings;
     let sort_by;
     let rental_type;
+    const _currency = $("#general-settings").attr('data-currency');
     //check if any vehicletype checked or not by default
     $(".vehicle_types").each(function () {
         if ($(this).is(":checked")) {
@@ -537,7 +538,7 @@
 			max:5000,
 			from: 0,
 			to: 500,
-			prefix: "$"
+			prefix: _currency ?? "$",
 		});
 	}
 

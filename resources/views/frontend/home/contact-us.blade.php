@@ -11,21 +11,21 @@
                             <div class="single-contact-info flex-fill">
                                 <span><i class="feather-phone-call"></i></span>
                                 <h3>{{ __('web.user.phone_number') }}</h3>
-                                <a href="javascript:void(0);">{{ $companyPhoneNumber ?? "" }}</a>
+                                <a href="javascript:void(0);">{{ $companyPhoneNumber ?? "-" }}</a>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 col-12 d-flex" data-aos="fade-down" data-aos-duration="1200" data-aos-delay="0.2">
                             <div class="single-contact-info flex-fill">
                                 <span><i class="feather-mail"></i></span>
                                 <h3>{{ __('web.home.email_address') }}</h3>
-                                <a href="mailto:{{ $companyEmail }}">{{ $companyEmail ?? "" }}</a>
+                                <a href="mailto:{{ $companyEmail }}">{{ $companyEmail ?? "-" }}</a>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 col-12 d-flex" data-aos="fade-down" data-aos-duration="1200" data-aos-delay="0.3">
                             <div class="single-contact-info flex-fill">
                                 <span><i class="feather-map-pin"></i></span>
                                 <h3>{{ __('web.user.location') }}</h3>
-                                <a href="javascript:void(0);">{{ $companyAddress ?? "" }}</a>
+                                <a href="javascript:void(0);">{{ $companyAddress ?? "-" }}</a>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6 col-12 d-flex" data-aos="fade-down" data-aos-duration="1200" data-aos-delay="0.4">

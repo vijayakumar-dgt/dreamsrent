@@ -101,13 +101,19 @@
                     </div>
                 </div>
                 @endforeach
+                @else
+                <div class="col-12">
+                    <p class="text-center">{{ __('web.common.empty_table') }}</p>
+                </div>
                 @endif
                 <!-- /Car List -->
             </div>
+            @if(!empty($section['section_content']) && count($section['section_content']) > 0)
             <div class="view-all-btn text-center aos" data-aos="fade-down">
                 <a href="{{ route('list') }}"
                     class="btn btn-secondary d-inline-flex align-items-center">{{ __('web.home.view_all_cars') }}<i
                         class="bx bx-right-arrow-alt ms-1"></i></a>
             </div>
+            @endif
         </div>
     </section>

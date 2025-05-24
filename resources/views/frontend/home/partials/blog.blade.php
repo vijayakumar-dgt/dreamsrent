@@ -8,6 +8,7 @@
         <!-- /Heading title -->
 
         <div class="row">
+            @if(!empty($section['section_content']) && count($section['section_content']) > 0)
             @foreach($section['section_content'] as $blog)
             <div class="col-lg-4 col-md-6 d-lg-flex">
                 <div class="blog grid-blog">
@@ -28,9 +29,16 @@
                 </div>
             </div>
             @endforeach
+            @else
+            <div class="col-12">
+                <p class="text-center">{{ __('web.common.empty_table') }}</p>
+            </div>
+            @endif
         </div>
+        @if(!empty($section['section_content']) && count($section['section_content']) > 0)
         <div class="view-all text-center aos-init aos-animate" data-aos="fade-down">
             <a href="{{ route('blogs.list') }}" class="btn btn-view d-inline-flex align-items-center">{{  __('web.home.view_all_blogs') }} <span><i class="feather-arrow-right ms-2"></i></span></a>
         </div>
+        @endif
     </div>
 </section>

@@ -7,8 +7,8 @@
                 <p class="description text-white">{{ $section['section_label'] }}</p>
             </div>
             <!-- /Heading title -->
+            @if(!empty($section['section_content']) && count($section['section_content']) > 0)
             <div class="owl-carousel about-testimonials testimonial-group mb-0 owl-theme">
-
                 <!-- Carousel Item -->
                 @foreach($section['section_content'] as $testimonial)
                 <div class="testimonial-item d-flex">
@@ -47,6 +47,12 @@
                 @endforeach
                 <!-- /Carousel Item  -->
             </div>
+            @endif
+            @if(empty($section['section_content']) || count($section['section_content']) == 0)
+            <div class="col-12">
+                <p class="text-center">{{ __('web.common.empty_table') }}</p>
+            </div>
+            @endif
         </div>
     </section>
     <!-- /Testimonials -->

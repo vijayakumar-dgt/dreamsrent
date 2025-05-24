@@ -14,10 +14,6 @@
                     minlength: 3,
                     maxlength: 50,
                 },
-                exchange_rate: {
-                    required: true,
-                    min: 0,
-                },
                 code: {
                     required: true,
                 },
@@ -29,9 +25,6 @@
             messages: {
                 currency_name: {
                     required: _l("admin.general_settings.enter_currency_name"),
-                },
-                exchange_rate: {
-                    required: _l("admin.general_settings.enter_exchange_rate"),
                 },
                 code: {
                     required: _l("admin.general_settings.enter_currency_code"),
@@ -165,12 +158,6 @@
                     data: "symbol",
                     render: function (data, type, row) {
                         return `<p class="text-gray-9">${row.symbol}</p>`;
-                    },
-                },
-                {
-                    data: "exchange_rate",
-                    render: function (data, type, row) {
-                        return `<p class="text-gray-9">${row.exchange_rate}</p>`;
                     },
                 },
                 {
@@ -341,9 +328,6 @@
                 if (response && response.code === 200) {
                     $("#currencyForm #currency_name").val(
                         response.data.currency_name
-                    );
-                    $("#currencyForm #exchange_rate").val(
-                        response.data.exchange_rate
                     );
                     $("#currencyForm #code").val(response.data.code);
                     $("#currencyForm #symbol").val(response.data.symbol);

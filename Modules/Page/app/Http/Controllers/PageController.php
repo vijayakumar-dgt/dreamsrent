@@ -1229,7 +1229,7 @@ class PageController extends Controller
             $data = [
                 'page_title' => $page->page_title,
                 'slug' => $page->slug,
-                'currency' => "$",
+                'currency' => getDefaultCurrencySymbol(),
                 'language_id' => $page->language_id,
                 'content_sections' => $pageContentSections,
                 'seo_tag' => $page->seo_tag,
@@ -2014,7 +2014,7 @@ class PageController extends Controller
             $data = [
                 'page_title' => $page->page_title,
                 'slug' => $page->slug,
-                'currency' => "$",
+                'currency' => getDefaultCurrencySymbol(),
                 'language_id' => $page->language_id,
                 'content_sections' => $pageContentSections,
                 'seo_tag' => $page->seo_tag,

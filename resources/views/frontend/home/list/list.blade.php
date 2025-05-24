@@ -8,7 +8,7 @@
     <div class="breadcrumb-bar vehiclelist-brudgrumb">
         <div class="container">
             <div class="row align-items-center text-center">
-                <div class="col-md-12 col-12" id="general-settings" data-allow_booking="{{ $allowBooking }}" data-allow_enquiry="{{ $allowEnquiries }}">
+                <div class="col-md-12 col-12" id="general-settings" data-allow_booking="{{ $allowBooking }}" data-allow_enquiry="{{ $allowEnquiries }}" data-currency="{{ getDefaultCurrencySymbol() }}">
                     <h2 class="breadcrumb-title">{{__('web.home.car_listings')}}</h2>
                     <nav aria-label="breadcrumb" class="page-breadcrumb">
                         <ol class="breadcrumb">

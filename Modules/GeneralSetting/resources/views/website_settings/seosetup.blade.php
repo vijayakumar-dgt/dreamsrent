@@ -72,7 +72,7 @@
                                                 </div>
                                             </div>
                                             <div class="mt-2">
-                                                <p class="fs-14">{{ __('admin.common.recommended_size_is') }} 500px x 500px</p>
+                                                <p class="fs-14">{{ __('admin.common.recommended_size_is') }} 1200px x 630px</p>
                                             </div>
                                         </div>
                                     </div>
@@ -89,14 +89,6 @@
                                     <label class="form-label" for="siteDescription">{{ __('admin.general_settings.site_description') }}<span class="text-danger ms-1">*</span></label>
                                     <textarea id="ogsiteDescription" name="ogsiteDescription" class="form-control" rows="3"></textarea>
                                     <span id="ogsiteDescription_error" class="text-danger error-text"></span>
-                                </div>
-                                <!-- Keywords -->
-                                <div class="mb-0">
-                                    <label class="form-label" for="keywords">{{ __('admin.general_settings.keywords') }}<span class="text-danger ms-1">*</span></label>
-                                    <div class="">
-                                        <input class="input-tags form-control" id="ogkeywords" type="text" data-role="tagsinput" name="ogkeywords" value="">
-                                    </div>
-                                    <span id="ogkeywords_error" class="text-danger error-text"></span>
                                 </div>
                             </div>
                             <div class="card-footer d-none real-card">
