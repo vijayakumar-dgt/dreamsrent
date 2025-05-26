@@ -105,7 +105,7 @@
                             <label for="icon" class="form-label">{{ __('admin.common.icon') }} <span class="text-danger icon_asterisk">*</span></label>
                             <div class="col-md-4">
                                 <div class="d-flex align-items-center justify-content-center avatar avatar-xxxl border border-dashed me-2 flex-shrink-0 text-dark frames">
-                                    <img src="" alt="" id="icon_preview" class="img-contain rounded d-none">
+                                    <img src="{{ uploadedAsset('', 'default') }}" id="icon_preview" class="img-contain rounded d-none" alt="Icon">
                                     <i class="ti ti-photo-plus icon_placeholder"></i>
                                 </div>
                             </div>

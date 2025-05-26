@@ -60,7 +60,6 @@
             </div>
             <form id="addBannerOneForm" autocomplete="off">
                 <input type="hidden" name="section_id" id="section_id">
-
                 <div class="modal-body">
                     <div id="section_id_1" class="d-none">
                         <div class="row">
@@ -77,9 +76,8 @@
                                     <input type="file" name="thumbnail_image_one" id="thumbnail_image_one" class="form-control" accept="image/*" onchange="previewThumbnailOne(this)">
                                     <div class="invalid-feedback" id="thumbnail_image_one_error"></div>
                                 </div>
-                                <img id="thumbnail_preview_one" src="" alt="Preview" class="mt-2 img-preview-thumb">
+                                <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_one" class="mt-2 img-preview-thumb" alt="Thumbnail Image">
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.label') }}</label>
@@ -87,8 +85,6 @@
                                     <div class="invalid-feedback" id="label_error"></div>
                                 </div>
                             </div>
-
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.line_one') }}</label>
@@ -96,7 +92,6 @@
                                     <div class="invalid-feedback" id="line_one_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.line_two') }}</label>
@@ -104,7 +99,6 @@
                                     <div class="invalid-feedback" id="line_two_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.description') }}</label>
@@ -114,7 +108,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div id="section_id_2" class="d-none">
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -124,16 +117,14 @@
                                     <div class="invalid-feedback" id="section_title_two_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.thumbnail_image') }}</label>
                                     <input type="file" name="thumbnail_image_two" id="thumbnail_image_two" class="form-control" accept="image/*" onchange="previewThumbnailTwo(this)">
                                     <div class="invalid-feedback" id="thumbnail_image_two_error"></div>
                                 </div>
-                                <img id="thumbnail_preview_two" src="" alt="Preview" class="mt-2 img-preview-thumb">
+                                <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_two" class="mt-2 img-preview-thumb" alt="Image">
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.label') }}</label>
@@ -141,7 +132,6 @@
                                     <div class="invalid-feedback" id="label_two_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.description') }}</label>
@@ -151,10 +141,8 @@
                             </div>
                         </div>
                     </div>
-
                     <div id="section_id_3" class="d-none">
                         <div class="row">
-
                             <div class="form-group col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.title') }}</label>
@@ -162,7 +150,6 @@
                                     <div class="invalid-feedback" id="section_title_three_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.best_vehicle') }}</label>
@@ -174,7 +161,6 @@
                                     <div class="invalid-feedback" id="vehicle_id_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.label') }} 1</label>
@@ -182,7 +168,6 @@
                                     <div class="invalid-feedback" id="label_1_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.description') }} 1</label>
@@ -190,7 +175,6 @@
                                     <div class="invalid-feedback" id="dis_1_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.label') }} 2</label>
@@ -198,7 +182,6 @@
                                     <div class="invalid-feedback" id="label_2_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.description') }} 2</label>
@@ -206,7 +189,6 @@
                                     <div class="invalid-feedback" id="dis_2_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.label') }} 3</label>
@@ -214,7 +196,6 @@
                                     <div class="invalid-feedback" id="label_3_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.description') }} 3</label>
@@ -222,7 +203,6 @@
                                     <div class="invalid-feedback" id="dis_3_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.label') }} 4</label>
@@ -230,7 +210,6 @@
                                     <div class="invalid-feedback" id="label_4_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.description') }} 4</label>
@@ -238,7 +217,6 @@
                                     <div class="invalid-feedback" id="dis_4_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.label') }} 5</label>
@@ -246,7 +224,6 @@
                                     <div class="invalid-feedback" id="label_5_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.description') }} 5</label>
@@ -254,7 +231,6 @@
                                     <div class="invalid-feedback" id="dis_5_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.label') }} 6</label>
@@ -262,7 +238,6 @@
                                     <div class="invalid-feedback" id="label_6_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.description') }} 6</label>
@@ -270,13 +245,11 @@
                                     <div class="invalid-feedback" id="dis_6_error"></div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
                     <div id="section_id_4" class="d-none">
                         <div class="row">
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.title') }}</label>
@@ -284,24 +257,21 @@
                                     <div class="invalid-feedback" id="section_title_four_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.icon') }} 1 (40x40, JPG/PNG/SVG)</label>
                                     <input type="file" name="why_icon_1" id="why_icon_1" class="form-control" accept=".jpg,.jpeg,.png,.svg">
                                     <div class="invalid-feedback" id="why_icon_1_error"></div>
                                     <div class="mt-2">
-                                        <img id="preview_why_icon_1" src="#" alt="Preview" class="img-thumbnail d-none sectionImage">
+                                        <img src="{{ uploadedAsset('', 'default2') }}" id="preview_why_icon_1" class="img-thumbnail d-none sectionImage" alt="Image">
                                     </div>
                                 </div>
-
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.label') }} 1</label>
                                     <input type="text" name="why_label_1" id="why_label_1" class="form-control" placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                                     <div class="invalid-feedback" id="why_label_1_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.description') }} 1</label>
@@ -309,26 +279,21 @@
                                     <div class="invalid-feedback" id="why_dis_1_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-6">
-
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.icon') }} 2 (40x40, JPG/PNG/SVG)</label>
                                     <input type="file" name="why_icon_2" id="why_icon_2" class="form-control" accept=".jpg,.jpeg,.png,.svg">
                                     <div class="invalid-feedback" id="why_icon_2_error"></div>
                                     <div class="mt-2">
-                                        <img id="preview_why_icon_2" src="#" alt="Preview" class="img-thumbnail d-none sectionImage">
+                                        <img src="{{ uploadedAsset('', 'default') }}" id="preview_why_icon_2" class="img-thumbnail d-none sectionImage" alt="Image">
                                     </div>
                                 </div>
-
-
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.label') }} 2</label>
                                     <input type="text" name="why_label_2" id="why_label_2" class="form-control" placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                                     <div class="invalid-feedback" id="why_label_2_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.description') }} 2</label>
@@ -336,27 +301,21 @@
                                     <div class="invalid-feedback" id="why_dis_2_error"></div>
                                 </div>
                             </div>
-
-
-
                             <div class="form-group col-md-6">
-
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.icon') }} 3 (40x40, JPG/PNG/SVG)</label>
                                     <input type="file" name="why_icon_3" id="why_icon_3" class="form-control" accept=".jpg,.jpeg,.png,.svg">
                                     <div class="invalid-feedback" id="why_icon_3_error"></div>
                                     <div class="mt-2">
-                                        <img id="preview_why_icon_3" src="#" alt="Preview" class="img-thumbnail d-none sectionImage">
+                                        <img src="{{ uploadedAsset('', 'default2') }}" id="preview_why_icon_3" class="img-thumbnail d-none sectionImage" alt="Image">
                                     </div>
                                 </div>
-
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.cms.label') }} 3</label>
                                     <input type="text" name="why_label_3" id="why_label_3" class="form-control" placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
                                     <div class="invalid-feedback" id="why_label_3_error"></div>
                                 </div>
                             </div>
-
                             <div class="form-group col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">{{ __('admin.common.description') }} 3</label>
@@ -364,11 +323,9 @@
                                     <div class="invalid-feedback" id="why_dis_3_error"></div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light me-2" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                     <button type="submit" id="btn_banner_one" class="btn btn-primary banner_one">{{ __('admin.common.save_changes') }}</button>

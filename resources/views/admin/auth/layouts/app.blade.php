@@ -43,8 +43,8 @@
 			@yield('content')
 			@include('admin.partials.toast')
 		<div class="login-bg">
-			<img src="{{ asset('backend/assets/img/bg/login-bg-01.png') }}" class="login-bg-01">
-			<img src="{{ asset('backend/assets/img/bg/login-bg-02.png') }}" class="login-bg-02">
+			<img src="{{ asset('backend/assets/img/bg/login-bg-01.png') }}" class="login-bg-01" alt="Background Image">
+			<img src="{{ asset('backend/assets/img/bg/login-bg-02.png') }}" class="login-bg-02" alt="Background Image">
 		</div>
 	</div>
 	<!-- /Main Wrapper -->

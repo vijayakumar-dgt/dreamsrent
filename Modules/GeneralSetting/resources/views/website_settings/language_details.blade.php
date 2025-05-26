@@ -101,14 +101,14 @@
                                     <span class="input-icon">
                                         <i class="ti ti-search"></i>
                                     </span>
-                                    <input type="text" class="form-control" placeholder="Search" id="keyword">
+                                    <input type="text" class="form-control" id="keyword" placeholder="{{ __('admin.common.search') }}">
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex align-items-center flex-wrap gap-2">
                             <a href="{{ route('admin.languages') }}" class="btn btn-dark me-2"><i class="ti ti-arrow-left me-1"></i>{{ __('admin.general_settings.back_to_translation') }}</a>
                             <a href="javascript:void(0);" class="btn btn-white me-2">
-                                <img src="" id="lngicon" class="avatar avatar-sm rounded-circle me-1" alt="img">
+                                <img src="{{ uploadedAsset('', 'default') }}" id="lngicon" class="avatar avatar-sm rounded-circle me-1" alt="img">
                                 <span class="lngTitile"> {{ __('admin.general_settings.arabic') }}</span>
                             </a>
                             <div class="progress-percent">
@@ -117,7 +117,7 @@
                                     <div class="progress progress-xs">
                                         <div class="w-60" role="progressbar" id="modalProgressBar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
-                                    <span class="d-inline-flex fs-12 ms-2 modalProgress">80%</span>
+                                    <span class="d-inline-flex fs-12 ms-2 modalProgress"></span>
                                 </div>
                             </div>
                         </div>

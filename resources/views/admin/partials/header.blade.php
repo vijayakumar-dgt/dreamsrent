@@ -36,14 +36,14 @@
                     <div class="nav-item dropdown has-arrow flag-nav nav-item-box">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
                             role="button">
-                            <img src="{{ asset('/backend/assets/img/flags/'. app()->getLocale() .'.svg') }}" alt="Language" class="img-fluid">
+                            <img src="{{ asset('/backend/assets/img/flags/'. app()->getLocale() .'.svg') }}" class="img-fluid" alt="{{ strtoupper(app()->getLocale()) }} Flag">
                         </a>
                         <ul class="dropdown-menu p-2">
                             @if ($allLanguages)
                                 @foreach ($allLanguages as $language)
                                     <li>
                                         <a href="javascript:void(0);" class="dropdown-item change-language" data-id="{{ $language->id }}" data-language_code="{{ $language->code }}">
-                                            <img src="{{ asset('/backend/assets/img/flags/'. $language->code.'.svg') }}" alt="" height="16">
+                                            <img src="{{ asset('/backend/assets/img/flags/'. $language->code.'.svg') }}"  height="16" alt="{{ strtoupper($language->code) }} Flag">
                                             {{ $language->name }}
                                         </a>
                                     </li>
@@ -94,13 +94,13 @@
                     <div class="dropdown profile-dropdown">
                         <a href="javascript:void(0);" class="d-flex align-items-center" data-bs-toggle="dropdown"  data-bs-auto-close="outside">
                             <span class="avatar avatar-sm">
-                                <img src="{{ $userDetails && $userDetails->profile_image ? $userDetails->profile_image : uploadedAsset('','profile') }}" alt="Img" class="img-fluid rounded-circle">
+                                <img src="{{ $userDetails && $userDetails->profile_image ? $userDetails->profile_image : uploadedAsset('','profile') }}" class="img-fluid rounded-circle" alt="Profile Image">
                             </span>
                         </a>
                         <div class="dropdown-menu">
                             <div class="profileset d-flex align-items-center">
                                 <span class="user-img me-2">
-                                    <img src="{{ $userDetails && $userDetails->profile_image ? $userDetails->profile_image : uploadedAsset('','profile') }}" alt="">
+                                    <img src="{{ $userDetails && $userDetails->profile_image ? $userDetails->profile_image : uploadedAsset('','profile') }}" alt="Profile Image">
                                 </span>
                                 <div>
                                     <h6 class="fw-semibold mb-1"> {{ getCurrentUserFullname() }} </h6>

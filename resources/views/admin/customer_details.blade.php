@@ -19,7 +19,7 @@
                             <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
                                 <div class="d-flex align-items-center">
                                     <span class="avatar avatar-lg me-3">
-                                        <img src="{{ $customer->profile_image }}" alt="img">
+                                        <img src="{{ $customer->profile_image }}" alt="Profile Image">
                                     </span>
                                     <div>
                                         <h6 class="mb-1">{{ $customer->customer_full_name ?? '' }}</h6>
@@ -102,7 +102,7 @@
                                                 @foreach ($customer->documents as $document)
                                                     <div class="d-flex align-items-center">
                                                         <span class="me-2">
-                                                            <img src="{{ $document->icon }}" alt="img">
+                                                            <img src="{{ $document->icon }}" alt="Document Icon">
                                                         </span>
                                                         <div>
                                                             <a href="{{ $document->document_url }}" target="_blank" class="fs-14 fw-medium">{{ $document->file_name ?? 'default-image-02.jpg'}}</a>
@@ -130,7 +130,7 @@
                                                                     <div class="col-lg-4">
                                                                         <div class="d-flex align-items-center">
                                                                             <span class="avatar flex-shrink-0 me-2">
-                                                                                <img src="{{ $booking->vehicle_image_url }}" alt="">
+                                                                                <img src="{{ $booking->vehicle_image_url }}" alt="Vehicle Image">
                                                                             </span>
                                                                             <div>
                                                                                 <div class="text-info">{{ $booking->reservation_id }}</div>

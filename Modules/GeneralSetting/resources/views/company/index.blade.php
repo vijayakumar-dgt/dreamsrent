@@ -38,7 +38,7 @@
                                         <label class="form-label">{{ __('admin.general_settings.profile_photo') }}</label>
                                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                                             <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
-                                                <img src="" id="profile_photo_preview" class="img-fluid" alt="Profile Photo">
+                                                <img src="{{ uploadedAsset('', 'default') }}" id="profile_photo_preview" class="img-fluid" alt="Profile Photo">
                                             </div>
                                             <div class="profile-upload">
                                                 <div class="profile-uploader d-flex align-items-center">

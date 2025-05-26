@@ -56,7 +56,7 @@
                                             <div class="chat-list">
                                                 <a href="javascript:void(0);" class="chat-user-list userprofile" data-userid="{{ $user->id }}" data-username="{{ getCurrentUserFullname($user->id) }}" data-avatar="{{ uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default','profile') }}">
                                                     <div class="avatar avatar-lg  me-2">
-                                                        <img src="{{ uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default','profile') }}"  class="rounded-circle avatarimg" alt="image">
+                                                        <img src="{{ uploadedAsset($user->userDetail ? $user->userDetail->profile_image : 'default','profile') }}"  class="rounded-circle avatarimg" alt="Profile Image">
                                                     </div>
                                                     <div class="chat-user-info">
                                                         <div class="chat-user-msg">
@@ -86,7 +86,7 @@
                                     </a>
                                 </div>
                                 <div class="avatar avatar-lg  flex-shrink-0">
-                                    <img src="{{ uploadedAsset('default','profile') }}" class="rounded-circle" alt="image" id="chat_avatar" data-userid="">
+                                    <img src="{{ uploadedAsset('default','profile') }}" class="rounded-circle" id="chat_avatar" alt="Profile Image" data-userid="">
                                 </div>
                                 <div class="ms-2 overflow-hidden">
                                     <h6 class="chat-user-name"></h6>

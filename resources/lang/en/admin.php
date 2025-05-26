@@ -2189,6 +2189,9 @@ return array(
     'update_status' => 'Update Status',
     'script_tag_not_allowed' => 'Script tags are not allowed.',
     'percentage' => 'Percentage',
+    'new' => 'New',
+    'notice' => 'Notice',
+    'no_notifications_found' => 'No notifications found',
   ),
   'page' => [
     'pages' => 'Pages',

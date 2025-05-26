@@ -321,11 +321,9 @@
                                         <div class="d-flex align-items-center">
                                             <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
                                                 @php
-                                                $imagePath = 'storage/' . $booking->vehicle_image;
-                                                $defaultImage = asset('backend/assets/img/default-profile.png');
+                                                $imagePath = $booking->vehicle_image ?? '';
                                                 @endphp
-
-                                                <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image Preview">
+                                                <img src="{{ uploadedAsset($imagePath) }}" alt="Vehicle Image">
                                             </a>
                                             <div>
                                                 <h6 class="fs-14"><a href="javascript:void(0);">{{$booking->vehicle}}</a></h6>
@@ -335,13 +333,11 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <a href="javascript:void(0);" class="avatar avatar-rounded me-2 flex-shrink-0"> @php
-                                                $imagePath = 'storage/' . $booking->profile_image;
-                                                $defaultImage = asset('backend/assets/img/default-profile.png');
+                                                $imagePath = $booking->profile_image ?? '';
                                                 @endphp
-
-                                                <img src="{{ file_exists(public_path($imagePath)) ? asset($imagePath) : $defaultImage }}" alt="Image Preview"></a>
+                                                <img src="{{ uploadedAsset($imagePath, 'profile') }}" alt="Profile Image"></a>
                                             <div>
-                                                <h6 class="mb-1 fs-14"><a href="javascript:void(0);">{{$booking->customer}}</a></h6>
+                                                <h6 class="mb-1 fs-14"><a href="javascript:void(0);">{{$booking->full_name}}</a></h6>
 
                                             </div>
                                         </div>
@@ -353,9 +349,9 @@
                                                 <span class="fw-medium fs-12 bg-light p-1 rounded-1 d-inline-block text-gray-9">{{ \Carbon\Carbon::parse($booking->start_datetime)->format('M, Y') }}</span>
                                             </div>
                                             <div>
-                                                <?php
-                                                $start = Illuminate\Support\Facades\DB::table('locations')->where('id', $booking->pickup_location)->first();
-                                                ?>
+                                                @php
+                                                $start = Illuminate\Support\Facades\DB::table('locations')->where('id', $booking->pickup_location)->first();  
+                                                @endphp
                                                 <p class="text-gray-9 mb-0">{{$start->name ?? ''}}</p>
                                                 <span class="fs-13">{{ \Carbon\Carbon::parse($booking->start_datetime)->format('h:m a') }}</span>
                                             </div>

@@ -665,7 +665,7 @@
                                     <label class="form-label">{{ __('admin.manage.drivers') }}<span class="text-danger"> *</span></label>
                                     <div class="d-flex align-items-center mt-2">
                                         <div class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0">
-                                            <img src="{{ uploadedAsset('', 'profile') }}" class="edit_driver_img" alt="{{ __('admin.common.image')}}">
+                                            <img src="{{ uploadedAsset('', 'profile') }}" class="edit_driver_img" alt="Profile Image">
                                         </div>
                                         <div>
                                             <div class="d-block fw-semibold edit_driver_name text-black"></div>

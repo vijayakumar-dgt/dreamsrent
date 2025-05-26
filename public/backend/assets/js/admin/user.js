@@ -598,7 +598,7 @@
                         return `
                             <div class="d-flex align-items-center">
                                 <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
-                                    <img src="${row.profile_image}" class="rounded-circle" alt="">
+                                    <img src="${row.profile_image}" class="rounded-circle" alt="Profile Image">
                                 </a>
                                 <h6><a href="javascript:void(0);" class="fs-14 fw-semibold">${row.full_name ? row.full_name : ''}</a></h6>
                             </div>`;

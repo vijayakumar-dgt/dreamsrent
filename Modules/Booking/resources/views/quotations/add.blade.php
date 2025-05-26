@@ -195,7 +195,7 @@
                                                     <div class="d-flex align-items-center justify-content-end flex-wrap row-gap-3 mb-3">
                                                         <div class="dropdown me-2">
                                                             <a href="#filtercollapse" class="filtercollapse coloumn d-inline-flex align-items-center" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="filtercollapse">
-                                                                <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }} <span class="count text-center ms-2 fs-12">0</span>
+                                                                <i class="ti ti-filter me-1"></i> {{ __('admin.common.filter') }}
                                                             </a>
                                                         </div>
                                                         <div class="top-search me-2">
@@ -659,9 +659,11 @@
                             <div class="mb-3">
                                 <label class="form-label">{{ __('admin.manage.drivers') }}<span class="text-danger"> *</span></label>
                                 <div class="d-flex align-items-center mt-2">
-                                    <a href="#" class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0"><img src="{{ asset('/backend/assets/img/default-profile.png') }}" class="edit_driver_img" alt="Profile Image"></a>
+                                    <div class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0">
+                                        <img src="{{ uploadedAsset('', 'profile') }}" class="edit_driver_img" alt="Profile Image">
+                                    </div>
                                     <div>
-                                        <a class="d-block fw-semibold edit_driver_name" href="#"></a>
+                                        <div class="d-block fw-semibold edit_driver_name text-black"></div>
                                     </div>
                                 </div>
                             </div>

@@ -826,7 +826,7 @@
                     return `
                         <div class="d-flex align-items-center">
                             <a href="/admin/customer-details/${row.encrypted_id}" class="avatar rounded-circle me-2 flex-shrink-0">
-                                <img src="${row.profile_image}" class="rounded-circle" alt="img">
+                                <img src="${row.profile_image}" class="rounded-circle" alt="Profile Image">
                             </a>
                             <div>
                                 <h6 class="fs-14 fw-semibold"><a href="/admin/customer-details/${row.encrypted_id}">${row.customer_full_name ? row.customer_full_name : ''}</a></h6>
@@ -841,7 +841,7 @@
                             ${row.language_name ? 
                             `<div class="d-flex align-items-center">
                                 <span class="avatar avatar-xxs rounded-circle me-1 flex-shrink-0">
-                                    <img src="${row.language_flag}" class="rounded-circle" alt="img">
+                                    <img src="${row.language_flag}" class="rounded-circle" alt="Profile Image">
                                 </span>
                                 <p class="text-gray-9">${row.language_name}</p>
                             </div>` : '-' }`;

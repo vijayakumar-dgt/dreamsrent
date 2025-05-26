@@ -2188,6 +2188,9 @@ return array (
     'script_tag_not_allowed' => 'السكريبتات لا يمكن استخدامها.',
     'percentage' => 'نسبة مئوية',
     'tax' => 'معدل الضريبة',
+    'new' => 'جديد',
+    'notice' => 'ملاحظة',
+    'no_notifications_found' => 'لم يتم العثور على اشعارات',
   ),
   'page' =>
   array (

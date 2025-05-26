@@ -108,7 +108,7 @@
 							<label class="form-label">{{ __('admin.rentals.brand_image') }}<span class="text-danger"> *</span></label>
 							<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 								<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
-									<img src="" id="imagePreview" class="img-fluid d-none" alt="{{ __('admin.common.image') }}">
+									<img src="{{ uploadedAsset('', 'default') }}" id="imagePreview" class="img-fluid d-none" alt="Brand Image">
 									<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
 								</div>
 								<div class="profile-upload">
@@ -130,7 +130,7 @@
 							<label class="form-label">{{ __('admin.rentals.brand_icon') }}<span class="text-danger"> *</span></label>
 							<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 								<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
-									<img src="" id="iconPreview" class="img-fluid d-none" alt="{{ __('admin.common.image') }}">
+									<img src="{{ uploadedAsset('', 'default') }}" id="iconPreview" class="img-fluid d-none" alt="Brand Icon">
 									<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon_2"></i>
 								</div>
 								<div class="profile-upload">

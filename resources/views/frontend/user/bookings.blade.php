@@ -160,11 +160,11 @@
                     <div class="booking-header">
                         <div class="booking-img-wrap">
                             <div class="book-img">
-                                <img src="" alt="img" class="bk-img">
+                                <img src="{{ uploadedAsset('', 'default') }}" class="bk-img" alt="img">
                             </div>
                             <div class="book-info">
                                 <h6 class="bk-name"></h6>
-                                <p><i class="feather-map-pin"></i> <span class="bk-location">{{__('web.user.location')}} : Miami St, Destin, FL 32550, USA</span></p>
+                                <p><i class="feather-map-pin"></i> <span class="bk-location">{{__('web.user.location')}}</span></p>
                             </div>
                         </div>
                         <div class="book-amount">

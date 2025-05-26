@@ -69,11 +69,16 @@ class InvoiceController extends Controller
                 'bookings.*',
                 'users.name as customer',
                 'user_details.profile_image',
+                'user_details.first_name',
+                'user_details.last_name',
                 'vehicle_info.vehicle_image',
                 'vehicle_info.name as vehicle'
             )
             ->whereDate('start_datetime', '>=', Carbon::today())
-            ->orderBy('start_datetime', 'asc')->get();
+            ->orderBy('start_datetime', 'asc')->get()->map(function ($booking) {
+                $booking->full_name = $booking->first_name ? ucwords($booking->first_name . ' ' . $booking->last_name) : '';
+                return $booking;
+            });
 
         $languages = Language::with('transLang')->where('deleted_at', null)->get();
 
@@ -206,11 +211,16 @@ class InvoiceController extends Controller
                 'bookings.*',
                 'users.name as customer',
                 'user_details.profile_image',
+                'user_details.first_name',
+                'user_details.last_name',
                 'vehicle_info.vehicle_image',
                 'vehicle_info.name as vehicle'
             )
             ->whereDate('start_datetime', '>=', Carbon::today())
-            ->orderBy('start_datetime', 'asc')->get();
+            ->orderBy('start_datetime', 'asc')->get()->map(function ($booking) {
+                $booking->full_name = $booking->first_name ? ucwords($booking->first_name . ' ' . $booking->last_name) : '';
+                return $booking;
+            });
 
         $languages = Language::with('transLang')->where('deleted_at', null)->get();
 

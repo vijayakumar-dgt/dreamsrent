@@ -28,7 +28,7 @@
                                         <div class="col-8">
                                             <div class="d-flex align-items-center">
                                                 <span class="avatar flex-shrink-0 me-2">
-                                                    <img src="{{ $booking->vehicle_image }}" alt="{{ __('admin.common.image') }}">
+                                                    <img src="{{ $booking->vehicle_image }}" alt="Vehicle Image">
                                                 </span>
                                                 <div>
                                                     <p class="mb-1">{{ $booking->vehicle_type }}</p>
@@ -91,7 +91,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-center mb-3">
                                                     <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                                        <img src="{{ $booking->customer_image }}" alt="{{ __('admin.common.image') }}">
+                                                        <img src="{{ $booking->customer_image }}" alt="Profile Image">
                                                     </span>
                                                     <div>
                                                         <h6 class="fs-14 fw-medium mb-1">
@@ -110,7 +110,7 @@
                                                 </div>
                                                 <div class="d-flex align-items-center mb-3">
                                                     <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                                        <img src="{{ $booking->driver_image }}" alt="{{ __('admin.common.image') }}">
+                                                        <img src="{{ $booking->driver_image }}" alt="Profile Image">
                                                     </span>
                                                     <div>
                                                         <h6 class="fs-14 fw-medium mb-1">{{ $booking->driver_name }}</h6>
@@ -171,7 +171,7 @@
                                         <div class="col-8">
                                             <div class="d-flex align-items-center">
                                                 <span class="avatar flex-shrink-0 me-2">
-                                                    <img src="{{ $booking->vehicle_image }}" alt="{{ __('admin.common.image') }}">
+                                                    <img src="{{ $booking->vehicle_image }}" alt="Vehicle Image">
                                                 </span>
                                                 <div>
                                                     <p class="mb-1">{{ $booking->vehicle_type }}</p>

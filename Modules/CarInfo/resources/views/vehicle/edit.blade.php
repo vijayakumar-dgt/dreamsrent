@@ -1269,7 +1269,7 @@
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.rentals.damage_image_label') }} <span class="text-danger">*</span></label>
                         <input type="file" name="dam_image" id="dam_image" class="form-control">
-                        <img src="" class="mt-2 d-none" id="image_preview" alt="Damage Preview">
+                        <img src="{{ uploadedAsset('', 'default') }}" class="mt-2 d-none" id="image_preview" alt="Damage Preview">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.rentals.damage_location_label') }} <span class="text-danger">*</span></label>

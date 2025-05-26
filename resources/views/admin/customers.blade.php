@@ -190,7 +190,7 @@
                                 <label for="image" class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
                                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                                     <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-                                        <img src="" class="img-fluid rounded d-none" id="imagePreview" alt="Image Preview">
+                                        <img src="{{ uploadedAsset('', 'profile') }}" class="img-fluid rounded d-none" id="imagePreview" alt="Profile Image">
                                         <i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
                                     </div>
                                     <div class="profile-upload">
@@ -350,7 +350,7 @@
                                 <label for="edit_image" class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
                                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                                     <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-                                        <img src="" class="img-fluid rounded d-none" id="editImagePreview" alt="Image Preview">
+                                        <img src="{{ uploadedAsset('', 'profile') }}" class="img-fluid rounded d-none" id="editImagePreview" alt="Profile Image">
                                         <i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
                                     </div>
                                     <div class="profile-upload">

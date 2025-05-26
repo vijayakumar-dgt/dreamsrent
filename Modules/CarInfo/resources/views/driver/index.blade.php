@@ -154,7 +154,7 @@
 									<label class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
 									<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 										<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-											<img src="" id="imagePreview" class="img-fluid rounded d-none">
+											<img src="{{ uploadedAsset('', 'profile') }}" id="imagePreview" class="img-fluid rounded d-none" alt="Profile Image">
 											<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
 										</div>
 										<div class="profile-upload">
@@ -253,7 +253,7 @@
 								<div class="mb-3">
 									<label class="form-label">{{ __('admin.common.documents') }}</label><span class="text-danger"> *</span></label>
 									<div class="document-upload text-center br-3 mb-3">
-										<img src="{{ asset('/backend/assets/img/icons/upload-icon.svg') }}" alt="img" class="mb-2">
+										<img src="{{ asset('/backend/assets/img/icons/upload-icon.svg') }}" class="mb-2" alt="Icon">
 										<p class="mb-2">{{ __('admin.common.drop_your_files_here_or') }} <span class="text-info text-decoration-underline">{{ __('admin.common.browse') }}</span></p>
 										<p class="fs-12 mb-0">{{ __('admin.common.maximum_size', ['size' => 5]) }}</p>
 										<input type="file" class="form-control image-sign" name="documents[]" id="documents" multiple="">
@@ -295,7 +295,7 @@
 									<label class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
 									<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
 										<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-											<img src="" id="editImagePreview" class="img-fluid rounded d-none">
+											<img src="{{ uploadedAsset('', 'profile') }}" id="editImagePreview" class="img-fluid rounded d-none" alt="Profile Image">
 											<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
 										</div>
 										<div class="profile-upload">

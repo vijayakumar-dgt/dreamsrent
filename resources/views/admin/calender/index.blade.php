@@ -186,7 +186,7 @@
                             <div class="col-6">
                                 <div class="d-flex align-items-center">
                                     <span class="avatar flex-shrink-0 me-2">
-                                        <img id="car_img" src="" alt="">
+                                        <img src="{{ uploadedAsset('', 'profile')}}" id="car_img" alt="Vehicle Image">
                                     </span>
                                     <div>
                                         <h6 id="car_title" class="fs-14 mb-1"></h6>
@@ -244,7 +244,7 @@
                         </div>
                         <div class="d-flex align-items-center mb-3">
                             <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                <img id="customer_img" src="" alt="">
+                                <img src="{{ uploadedAsset('', 'profile')}}" id="customer_img" alt="Profile Image">
                             </span>
                             <div>
                                 <h6 class="fs-14 fw-medium mb-1" id="customer_name"></h6>
@@ -258,7 +258,7 @@
                         </div>
                         <div class="d-flex align-items-center mb-3">
                             <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                <img id="driver_img" src="" alt="">
+                                <img src="{{ uploadedAsset('', 'profile')}}" id="driver_img" alt="Profile Image">
                             </span>
                             <div>
                                 <h6 class="fs-14 fw-medium mb-1" id="driver_name"></h6>
@@ -869,7 +869,9 @@
                             <div class="mb-3">
                                 <label class="form-label">{{ __('admin.manage.drivers') }} <span class="text-danger">*</span></label>
                                 <div class="d-flex align-items-center mt-2">
-                                    <a class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0"><img src="" class="edit_driver_img" alt=""></a>
+                                    <a class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0">
+                                        <img src="{{ uploadedAsset('', 'profile')}}" class="edit_driver_img" alt="Profile Image">
+                                    </a>
                                     <div>
                                         <a href="#" class="d-block fw-semibold edit_driver_name"></a>
                                     </div>
