@@ -6,36 +6,22 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <!-- Breadcrumb -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h2 class="mb-1">{{ __('admin.general_settings.testimonials') }}</h2>
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('admin.general_settings.testimonials') }}</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
-                    <div class="mb-2">
-                        @if (hasPermission($permissions, 'testimonials', 'create'))
-                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_testimonial" class="btn btn-primary d-flex align-items-center">
-                                <i class="ti ti-plus me-2"></i>{{ __('admin.cms.add_new_testimonial') }}
-                            </a>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            <!-- /Breadcrumb -->
+            <x-admin.breadcrumb 
+                :title="__('admin.general_settings.testimonials')" 
+                :breadcrumbs="[
+                    __('admin.general_settings.testimonials') => ''
+                ]"
+                :buttonText="__('admin.cms.add_new_testimonial')"
+                :modalId="'add_testimonial'"
+                :buttonId="'add_testimonial_btn'"
+                :permissionKey="'testimonials'"
+            />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                     <div class="dropdown me-2">
                         <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                            <i class="ti ti-filter me-1"></i>  <span class="ms-1 sort" id="current_sort"></span>
+                            <i class="ti ti-filter me-1"></i><span class="ms-1 sort" id="current_sort">{{ __('admin.common.sort_by') }} : {{ __('admin.common.latest') }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end p-2 sort_by_list">
                             <li>

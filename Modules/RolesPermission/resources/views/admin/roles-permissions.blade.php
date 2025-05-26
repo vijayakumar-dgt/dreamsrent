@@ -6,30 +6,16 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <!-- Breadcrumb -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h4 class="mb-1">{{ __('admin.user_management.roles') }}</h4>
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('admin.user_management.roles') }}</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-                    <div class="mb-2">
-                        @if (hasPermission($permissions, 'roles_permissions', 'create'))
-                        <a href="javascript:void(0);" class="btn btn-primary d-flex align-items-center" id="add_role" data-bs-toggle="modal" data-bs-target="#role_modal">
-                            <i class="ti ti-plus me-2"></i>{{ __('admin.user_management.add_new_role') }}
-                        </a>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            <!-- /Breadcrumb -->
+            <x-admin.breadcrumb 
+                :title="__('admin.user_management.roles')" 
+                :breadcrumbs="[
+                    __('admin.user_management.roles') => ''
+                ]"
+                :buttonText="__('admin.user_management.add_new_role')"
+                :modalId="'role_modal'"
+                :buttonId="'add_role'"
+                :permissionKey="'roles_permissions'"
+            />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-end flex-wrap row-gap-3 mb-3">
                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
@@ -99,7 +85,7 @@
                                 </label>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                                 <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
                             </div>
                         </div>
@@ -123,7 +109,7 @@
                         <h4 class="mb-1">{{ __('admin.user_management.delete_role') }}</h4>
                         <p class="mb-3">{{ __('admin.user_management.delete_role_confirmation') }}</p>
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
                             <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
                         </div>
                     </div>

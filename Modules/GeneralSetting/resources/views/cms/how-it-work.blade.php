@@ -6,21 +6,12 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-            <!-- Breadcrumb -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h4 class="mb-1">{{__('admin.general_settings.how_it_works')}}</h4>
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">{{__('admin.general_settings.home')}}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{__('admin.general_settings.how_it_works')}}</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-            <!-- /Breadcrumb -->
+            <x-admin.breadcrumb 
+                :title="__('admin.general_settings.how_it_works')" 
+                :breadcrumbs="[
+                    __('admin.general_settings.how_it_works') => ''
+                ]"
+            />
             <!-- Settings Prefix -->
             <div class="row">
                 <div class="col-lg-12">

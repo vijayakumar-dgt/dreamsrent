@@ -19,7 +19,7 @@
 @else
 <div class="notification-list">
     <div class="text-center">
-        <p class="mb-0">{{ __('admin.common.no_notification') }}</p>
+        <p class="mb-0">{{ __('admin.common.no_notifications_found') }}</p>
     </div>
 </div>
 @endif

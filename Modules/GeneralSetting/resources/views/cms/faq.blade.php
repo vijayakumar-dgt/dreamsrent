@@ -6,30 +6,16 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <!-- Breadcrumb -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h4 class="mb-1">{{__('admin.general_settings.faq')}}</h4>
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">{{__('admin.general_settings.home')}}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{__('admin.general_settings.faq')}}</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-                    <div class="mb-2">
-                        @if (hasPermission($permissions, 'faq', 'create'))
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#add_FAQ" class="btn btn-primary d-flex align-items-center">
-                            <i class="ti ti-plus me-2"></i>{{__('admin.general_settings.add_faq')}}
-                        </button>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            <!-- /Breadcrumb -->
+            <x-admin.breadcrumb 
+                :title="__('admin.general_settings.faq')" 
+                :breadcrumbs="[
+                    __('admin.general_settings.faq') => ''
+                ]"
+                :buttonText="__('admin.general_settings.add_faq')"
+                :modalId="'add_FAQ'"
+                :buttonId="'add_faq_btn'"
+                :permissionKey="'faq'"
+            />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap gap-2">

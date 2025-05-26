@@ -6,28 +6,16 @@
 <!-- Page Wrapper -->
 <div class="page-wrapper">
     <div class="content me-4">
-        <!-- Breadcrumb -->
-        <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-            <div class="my-auto mb-2">
-                <h4 class="mb-1">{{ __('admin.bookings.calendar') }}</h4>
-                <nav>
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ __('admin.bookings.calendar') }}</li>
-                    </ol>
-                </nav>
-            </div>
-            <div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
-                @if (hasPermission($permissions, 'calendar', 'create'))
-                <div class="mb-2">
-                    <button type="button" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_booking"><i class="ti ti-plus me-2"></i>{{ __('admin.bookings.add_new_booking') }}</button>
-                </div>
-                @endif
-            </div>
-        </div>
-        <!-- /Breadcrumb -->
+        <x-admin.breadcrumb 
+            :title="__('admin.bookings.calendar')" 
+            :breadcrumbs="[
+                __('admin.bookings.calendar') => ''
+            ]"
+            :buttonText="__('admin.bookings.add_new_booking')"
+            :modalId="'add_booking'"
+            :buttonId="'add_booking_button'"
+            :permissionKey="'calendar'"
+        />
         <div class="row">
             <div class="col-md-10">
                 <ul class="nav nav-tabs nav-tabs-solid custom-nav-tabs bg-transparent mb-3" role="tablist" id="bookingStatusFilter">

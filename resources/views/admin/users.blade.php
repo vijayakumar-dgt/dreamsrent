@@ -6,28 +6,16 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <!-- Breadcrumb -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h4 class="mb-1">{{ __('admin.common.users') }}</h4>
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('admin.common.users') }}</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-                    <div class="mb-2">
-                        @if (hasPermission($permissions, 'users', 'create'))
-                        <button type="button" class="btn btn-primary d-flex align-items-center" id="add_user" data-bs-toggle="modal" data-bs-target="#add_user_modal"><i class="ti ti-plus me-2"></i>{{ __('admin.user_management.add_new_user') }}</button>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            <!-- /Breadcrumb -->
+            <x-admin.breadcrumb 
+                :title="__('admin.common.users')" 
+                :breadcrumbs="[
+                    __('admin.common.users') => ''
+                ]"
+                :buttonText="__('admin.user_management.add_new_user')"
+                :modalId="'add_user_modal'"
+                :buttonId="'add_user'"
+                :permissionKey="'users'"
+            />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
@@ -107,8 +95,8 @@
                             </div>
                         </ul>
                     </div>
-                    <a href="javascript:void(0);" class="me-2 text-purple links" id="apply_filter">{{ __('admin.common.apply') }}</a>
-                    <a href="javascript:void(0);" class="text-danger links" id="reset_filter">{{ __('admin.common.clear_all') }}</a>
+                    <button type="button" class="text-purple links border-0 bg-transparent" id="apply_filter">{{ __('admin.common.apply') }}</button>
+                    <button type="button" class="text-danger links border-0 bg-transparent" id="reset_filter">{{ __('admin.common.clear_all') }}</button>
                 </div>
             </div>
             <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">

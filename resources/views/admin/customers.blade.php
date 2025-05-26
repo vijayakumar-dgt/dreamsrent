@@ -6,38 +6,16 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <!-- Breadcrumb -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h4 class="mb-1">{{ __('admin.common.customers') }}</h4>
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('admin.common.customers') }}</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-                    <div class="mb-2 me-2 d-none">
-                        <button type="button" class="btn btn-white d-flex align-items-center"><i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}</button>
-                    </div>
-                    <div class="mb-2 me-2 d-none">
-                        <div class="dropdown">
-                            <button type="button" class="btn btn-dark d-inline-flex align-items-center">
-                                <i class="ti ti-upload me-1"></i>{{ __('admin.common.export') }}
-                            </button>
-                        </div>
-                    </div>
-                    <div class="mb-2">
-                        @if (hasPermission($permissions, 'customers', 'create'))
-                        <button type="button" class="btn btn-primary d-flex align-items-center" id="add_customer" data-bs-toggle="modal" data-bs-target="#add_customer_modal"><i class="ti ti-plus me-2"></i>{{ __('admin.manage.add_new_customer') }}</button>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            <!-- /Breadcrumb -->
+            <x-admin.breadcrumb 
+                :title="__('admin.common.customers')" 
+                :breadcrumbs="[
+                    __('admin.common.customers') => ''
+                ]"
+                :buttonText="__('admin.manage.add_new_customer')"
+                :modalId="'add_customer_modal'"
+                :buttonId="'add_customer'"
+                :permissionKey="'customers'"
+            />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
@@ -86,11 +64,9 @@
                             <i class="ti ti-edit-circle me-1"></i>{{ __('admin.common.bulk_actions') }}
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2" id="bulk_actions">
-                            @if (hasPermission($permissions, 'customers', 'delete'))
                             <li>
                                 <button type="button" class="dropdown-item rounded-1" id="bulk_delete">{{ __('admin.common.delete') }}</button>
                             </li>
-                            @endif
                         </ul>
                     </div>
                     @endif

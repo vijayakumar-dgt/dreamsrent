@@ -6,28 +6,16 @@
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-			<!-- Breadcrumb -->
-			<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-				<div class="my-auto mb-2">
-					<h2 class="mb-1">{{ __('admin.manage.drivers') }}</h2>
-					<nav>
-						<ol class="breadcrumb mb-0">
-							<li class="breadcrumb-item">
-								<a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-							</li>
-							<li class="breadcrumb-item active" aria-current="page">{{ __('admin.manage.drivers') }}</li>
-						</ol>
-					</nav>
-				</div>
-				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">	
-					<div class="mb-2">
-						@if (hasPermission($permissions, 'drivers', 'create'))
-						<button type="button" data-bs-toggle="modal" data-bs-target="#add_driver_modal" id="add_driver" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.manage.add_new_driver') }}</button>
-						@endif
-					</div>
-				</div>
-			</div>
-			<!-- /Breadcrumb -->
+			<x-admin.breadcrumb 
+                :title="__('admin.manage.drivers')" 
+                :breadcrumbs="[
+                    __('admin.manage.drivers') => ''
+                ]"
+                :buttonText="__('admin.manage.add_new_driver')"
+                :modalId="'add_driver_modal'"
+                :buttonId="'add_driver'"
+                :permissionKey="'drivers'"
+            />
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
 				<div class="d-flex align-items-center flex-wrap row-gap-3">
@@ -78,6 +66,7 @@
 					</div>
 				</div>
 				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
+					@if (hasPermission($permissions, 'drivers', 'edit'))
 					<div class="dropdown me-2">
 						<button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
 							<i class="ti ti-edit me-1"></i> {{ __('admin.common.bulk_actions') }}
@@ -91,6 +80,7 @@
 							</li>
 						</ul>
 					</div>
+					@endif
 					<div class="top-search">
 						<div class="top-search-group">
 							<span class="input-icon">

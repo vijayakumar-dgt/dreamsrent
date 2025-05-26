@@ -228,7 +228,7 @@
                     {
                         data: "title",
                         render: function (data, type, row) {
-                            return `<p class="text-gray-9 fw-semibold fs-14"><a href="javascript(0)" id="viewTemplate" data-id="${row.id}">${row.title}</a></p>`;
+                            return `<p class="text-gray-9 fw-semibold fs-14"><a href="javascript:void(0)" id="viewTemplate" data-id="${row.id}">${row.title}</a></p>`;
                         },
                     },
                     {
