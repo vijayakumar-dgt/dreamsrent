@@ -26,11 +26,11 @@ class CarColorController extends Controller
             'name' => [
                 'required',
                 'not_regex:/<\/?script\b[^>]*>/i',
-                Rule::unique('car_colors')->ignore($request->id)->whereNull('deleted_at')
+                Rule::unique('car_colors', 'name')->ignore($request->id)->whereNull('deleted_at')->where('language_id', $languageId)
             ],
             'value' => [
                 'required',
-                Rule::unique('car_colors')->ignore($request->id)->whereNull('deleted_at')
+                Rule::unique('car_colors', 'value')->ignore($request->id)->whereNull('deleted_at')->where('language_id', $languageId)
             ],
         ], [
             'name.required' => __('admin.rentals.color_name_required'),

@@ -6,21 +6,12 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <!-- Breadcrumb -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h4 class="mb-1">{{__('admin.finance_accounts.payments')}}</h4>
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">{{__('admin.common.home')}}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{__('admin.finance_accounts.payments')}}</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-            <!-- /Breadcrumb -->
+            <x-admin.breadcrumb 
+				:title="__('admin.finance_accounts.payments')" 
+				:breadcrumbs="[
+					__('admin.finance_accounts.payments') => ''
+				]"
+			/>
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">

@@ -27,7 +27,7 @@ class CarTransmissionContollerController extends Controller
             'name' => [
                 'required',
                 'max:30',
-                Rule::unique('transmissions')->ignore($id)->whereNull('deleted_at'),
+                Rule::unique('transmissions')->ignore($id)->whereNull('deleted_at')->where('language_id', $languageId),
                 'not_regex:/<\/?script\b[^>]*>/i'
             ],
         ], [

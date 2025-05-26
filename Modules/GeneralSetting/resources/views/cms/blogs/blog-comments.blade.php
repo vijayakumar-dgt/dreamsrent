@@ -6,43 +6,34 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <!-- Breadcrumb -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h2 class="mb-1">{{__('admin.blog.blog_comments')}}</h2>
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="/admin">{{__('admin.blog.home')}}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{__('admin.blog.blog_comments')}}</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-            <!-- /Breadcrumb -->
+            <x-admin.breadcrumb 
+				:title="__('admin.blog.blog_comments')" 
+				:breadcrumbs="[
+					__('admin.blog.blog_comments') => ''
+				]"
+			/>
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                     <div class="dropdown me-2">
-                        <a href="javascript:void(0);" id="selectedFilter" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                        <button type="button" id="selectedFilter" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                             <i class="ti ti-filter me-1"></i> {{__('admin.blog.sort_by')}} : <span id="filterText">{{__('admin.blog.latest')}}</span>
-                        </a>
+                        </button>
                         <ul class="dropdown-menu  dropdown-menu-end p-2">
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1">{{__('admin.blog.latest')}}</a>
+                                <button type="button" class="dropdown-item rounded-1">{{__('admin.blog.latest')}}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1">{{__('admin.blog.ascending')}}</a>
+                                <button type="button" class="dropdown-item rounded-1">{{__('admin.blog.ascending')}}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1">{{__('admin.blog.descending')}}</a>
+                                <button type="button" class="dropdown-item rounded-1">{{__('admin.blog.descending')}}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1">{{__('admin.blog.last_month')}}</a>
+                                <button type="button" class="dropdown-item rounded-1">{{__('admin.blog.last_month')}}</button>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1">{{__('admin.blog.last_7_days')}}</a>
+                                <button type="button" class="dropdown-item rounded-1">{{__('admin.blog.last_7_days')}}</button>
                             </li>
                         </ul>
                     </div>
@@ -91,7 +82,7 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <h6 class="fw-semibold"><a href="javascript:void(0);">{{$comment->name}}</a></h6>
+                                        <h6 class="fw-semibold text-black">{{$comment->name}}</h6>
                                     </div>
                                 </div>
                             </td>
@@ -118,8 +109,8 @@
                     <h4 class="mb-1">{{__('admin.blog.delete_page')}}</h4>
                     <p class="mb-3">{{__('admin.blog.are_you_sure_you_want_to_delete_page')}}?</p>
                     <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</a>
-                        <a href="#" class="btn btn-primary">{{__('admin.blog.yes_delete')}}</a>
+                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</button>
+                        <button type="button" class="btn btn-primary">{{__('admin.blog.yes_delete')}}</button>
                     </div>
                 </div>
             </div>

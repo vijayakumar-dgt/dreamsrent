@@ -28,7 +28,7 @@ class CarFuelController extends Controller
         $rules = [
             'fuel_type' => [
                 'required',
-                Rule::unique('car_fuels')->ignore($id)->whereNull('deleted_at'),
+                Rule::unique('car_fuels')->ignore($id)->whereNull('deleted_at')->where('language_id', $languageId),
                 'not_regex:/<\/?script\b[^>]*>/i'
             ],
         ];

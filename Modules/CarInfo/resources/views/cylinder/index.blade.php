@@ -6,30 +6,16 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <!-- Breadcrumb -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h2 class="mb-1">{{ __('admin.rentals.cylinders') }}</h2>
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('admin.rentals.cylinders') }}</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
-                    <div class="mb-2">
-                        @if (hasPermission($permissions, 'vehicle_attributes', 'create'))
-                            <button type="button" data-bs-toggle="modal" data-bs-target="#add_cylinder" class="btn btn-primary d-flex align-items-center" id="add_new_cylinder">
-                                <i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_cylinder') }}
-                            </button>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            <!-- /Breadcrumb -->
+            <x-admin.breadcrumb 
+				:title="__('admin.rentals.cylinders')" 
+				:breadcrumbs="[
+					__('admin.rentals.cylinders') => ''
+				]"
+				:buttonText="__('admin.rentals.add_new_cylinder')"
+				:modalId="'add_cylinder'"
+				:buttonId="'add_new_cylinder'"
+				:permissionKey="'vehicle_attributes'"
+			/>
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">

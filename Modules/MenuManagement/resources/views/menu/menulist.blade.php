@@ -6,28 +6,16 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <!-- Breadcrumb -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h2 class="mb-1">{{ __('admin.cms.menu_management') }}</h2>
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('admin.cms.menu_management') }}</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-                    @if (hasPermission($permissions, 'menu_management', 'create'))
-                    <div class="mb-2 me-2">
-                        <button type="button" class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_menu"><i class="ti ti-plus me-2"></i>{{ __('admin.cms.add_new_menu') }}</button>
-                    </div>
-                    @endif
-                </div>
-            </div>
-            <!-- /Breadcrumb -->
+            <x-admin.breadcrumb 
+				:title="__('admin.cms.menu_management')" 
+				:breadcrumbs="[
+					__('admin.cms.menu_management') => ''
+				]"
+				:buttonText="__('admin.cms.add_new_menu')"
+				:modalId="'add_menu'"
+				:buttonId="'add_menu_button'"
+				:permissionKey="'menu_management'"
+			/>
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">

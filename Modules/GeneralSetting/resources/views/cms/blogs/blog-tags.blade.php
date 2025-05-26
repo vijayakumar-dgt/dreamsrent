@@ -6,43 +6,29 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <!-- Breadcrumb -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h4 class="mb-1">{{__('admin.blog.blog_tags')}}</h4>
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="/admin">{{__('admin.blog.home')}}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{__('admin.blog.blog_tags')}}</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-                    <div class="mb-2">
-                        @if (hasPermission($permissions, 'blogs', 'create'))
-                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_Tag" class="btn btn-primary d-flex align-items-center">
-                            <i class="ti ti-plus me-2"></i>{{__('admin.blog.add_tag')}}
-                        </a>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            <!-- /Breadcrumb -->
+            <x-admin.breadcrumb 
+				:title="__('admin.blog.blog_tags')" 
+				:breadcrumbs="[
+					__('admin.blog.blog_tags') => ''
+				]"
+				:buttonText="__('admin.blog.add_tag')"
+				:modalId="'add_Tag'"
+				:buttonId="'addTagButton'"
+				:permissionKey="'blogs'"
+			/>
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                 <div class="dropdown me-2">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="selectedFilterText">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="selectedFilterText">
                             <i class="ti ti-filter me-1"></i> {{__('admin.blog.sort_by')}} : <span>{{__('admin.blog.latest')}}</span>
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-end p-2">
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-tag" data-sort="latest">{{__('admin.blog.latest')}}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-tag" data-sort="asc">{{__('admin.blog.ascending')}}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-tag" data-sort="desc">{{__('admin.blog.descending')}}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-tag" data-sort="last_month">{{__('admin.blog.last_month')}}</a></li>
-                            <li><a href="javascript:void(0);" class="dropdown-item rounded-1 sort-option-tag" data-sort="last_7_days">{{__('admin.blog.last_7_days')}}</a></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option-tag" data-sort="latest">{{__('admin.blog.latest')}}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option-tag" data-sort="asc">{{__('admin.blog.ascending')}}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option-tag" data-sort="desc">{{__('admin.blog.descending')}}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option-tag" data-sort="last_month">{{__('admin.blog.last_month')}}</button></li>
+                            <li><button type="button" class="dropdown-item rounded-1 sort-option-tag" data-sort="last_7_days">{{__('admin.blog.last_7_days')}}</button></li>
                         </ul>
                     </div>
                 </div>
@@ -162,7 +148,7 @@
                 </div>
                 <div class="modal-footer">
                     <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</a>
+                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</button>
                         <button type="submit" id="create_tag_btn" class="btn btn-primary">{{__('admin.blog.create_new')}}</button>
                     </div>
                 </div>

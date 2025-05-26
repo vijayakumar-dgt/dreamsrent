@@ -38,6 +38,7 @@ class CarModelController extends Controller
             ], 401);
         }
         $id = $request->id ?? '';
+        $languageId = $request->language_id ?? null;
 
         $data = [
             'model_name' => $request->model_name,
@@ -50,7 +51,7 @@ class CarModelController extends Controller
                 'required',
                 'max:30',
                 'min:3',
-                Rule::unique('car_models')->ignore($id)->whereNull('deleted_at'),
+                Rule::unique('car_models')->ignore($id)->whereNull('deleted_at')->where('language_id', $languageId),
                 'not_regex:/<\/?script\b[^>]*>/i'
             ],
             'brand_id' => 'required',

@@ -250,7 +250,6 @@ class MenuManagementController extends Controller
                 'data' => $menu
             ]);
         } catch (\Exception $e) {
-            \Log::error('Menu update failed: ' . $e->getMessage());
             return response()->json([
                 'code' => 500,
                 'message' => __('admin.common.default_update_error'),

@@ -39,7 +39,7 @@ class BrandController extends Controller
                 'required',
                 'max:30',
                 'min:3',
-                Rule::unique('brands')->ignore($id)->whereNull('deleted_at'),
+                Rule::unique('brands')->ignore($id)->whereNull('deleted_at')->where('language_id', $language_id),
                 'not_regex:/<\/?script\b[^>]*>/i'
             ],
             'brand_image' => 'mimes:jpeg,jpg,png,svg|max:2048',

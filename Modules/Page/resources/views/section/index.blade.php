@@ -6,21 +6,12 @@
 <!-- Page Wrapper -->
 <div class="page-wrapper">
     <div class="content me-4">
-        <!-- Breadcrumb -->
-        <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-            <div class="my-auto mb-2">
-                <h2 class="mb-1">{{ __('admin.cms.section') }}</h2>
-                <nav>
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ __('admin.cms.section') }}</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-        <!-- /Breadcrumb -->
+        <x-admin.breadcrumb 
+            :title="__('admin.cms.section')" 
+            :breadcrumbs="[
+                __('admin.cms.section') => ''
+            ]"
+        />
         <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
             @include('admin.content-loader')
         </div>

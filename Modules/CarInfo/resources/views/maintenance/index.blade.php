@@ -6,28 +6,16 @@
 	<!-- Page Wrapper -->
 	<div class="page-wrapper">
 		<div class="content me-4">
-			<!-- Breadcrumb -->
-			<div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-				<div class="my-auto mb-2">
-					<h2 class="mb-1">{{ __('admin.rentals.maintenance') }}</h2>
-					<nav>
-						<ol class="breadcrumb mb-0">
-							<li class="breadcrumb-item">
-								<a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-							</li>
-							<li class="breadcrumb-item active" aria-current="page">{{ __('admin.rentals.maintenance') }}</li>
-						</ol>
-					</nav>
-				</div>
-				<div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
-					<div class="mb-2">
-						@if (hasPermission($permissions, 'maintenance', 'create'))
-						<button type="button" data-bs-toggle="modal" data-bs-target="#maintenance_modal" id="add_maintenance" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_maintenance') }}</button>
-						@endif
-					</div>
-				</div>
-			</div>
-			<!-- /Breadcrumb -->
+			<x-admin.breadcrumb 
+				:title="__('admin.rentals.maintenance')" 
+				:breadcrumbs="[
+					__('admin.rentals.maintenance') => ''
+				]"
+				:buttonText="__('admin.rentals.add_new_maintenance')"
+				:modalId="'maintenance_modal'"
+				:buttonId="'add_maintenance'"
+				:permissionKey="'maintenance'"
+			/>
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
 				<div class="d-flex align-items-center flex-wrap row-gap-3">
