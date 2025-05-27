@@ -9,7 +9,6 @@ use Modules\GeneralSetting\Http\Requests\UpdateAdminProfileRequest;
 use Modules\GeneralSetting\Repositories\AdminProfileRepository;
 use Illuminate\Http\Request;
 
-
 class AdminProfileController extends Controller
 {
     protected $profileRepo;
@@ -19,79 +18,23 @@ class AdminProfileController extends Controller
         $this->profileRepo = $profileRepo;
     }
 
-    public function adminProfile(): View
+    public function getProfile(): JsonResponse
     {
-        return view('generalsetting::adminProfile.index');
+        return response()->json($this->profileRepo->getProfile());
     }
 
     public function updateProfile(UpdateAdminProfileRequest $request): JsonResponse
     {
-        $updated = $this->profileRepo->updateProfile($request->validated());
-
-        if (!$updated) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 404,
-                'message' => __('admin.general_settings.user_not_found'),
-            ], 404);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'code'   => 200,
-            'message' => __('admin.general_settings.profile_update_success'),
-        ]);
-    }
-
-    public function getProfile(): JsonResponse
-    {
-        $user = $this->profileRepo->getProfile();
-
-        if (!$user) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 404,
-                'message' => __('admin.general_settings.user_not_found'),
-            ], 404);
-        }
-
-        $profile = [
-            'id'            => $user->id,
-            'email'         => $user->email,
-            'phone'         => $user->phone_number,
-            'first_name'    => $user->userDetail->first_name ?? null,
-            'last_name'     => $user->userDetail->last_name ?? null,
-            'address_line'  => $user->userDetail->address ?? null,
-            'country'       => $user->userDetail->country_id ?? null,
-            'state'         => $user->userDetail->state_id ?? null,
-            'city'          => $user->userDetail->city_id ?? null,
-            'postal_code'   => $user->userDetail->postal_code ?? null,
-            'profile_photo' => uploadedAsset($user->userDetail->profile_image ?? null, 'profile'),
-        ];
-
-        return response()->json([
-            'status' => 'success',
-            'code'   => 200,
-            'message' => __('admin.general_settings.profile_update_success'),
-            'data'   => $profile,
-        ]);
+        return response()->json($this->profileRepo->updateProfile($request->validated()));
     }
 
     public function checkPassword(Request $request): JsonResponse
     {
-        $isValid = $this->profileRepo->checkPassword($request->id, $request->current_password);
-        return response()->json($isValid);
+        return response()->json($this->profileRepo->checkPassword($request->current_password));
     }
 
     public function deleteAccount(): JsonResponse
     {
-        $deleted = $this->profileRepo->deleteAccount();
-
-        return response()->json([
-            'success' => $deleted,
-            'message' => $deleted
-                ? __('admin.general_settings.account_deleted_successfully')
-                : __('admin.general_settings.user_not_found'),
-        ], $deleted ? 200 : 404);
+        return response()->json($this->profileRepo->deleteAccount());
     }
 }

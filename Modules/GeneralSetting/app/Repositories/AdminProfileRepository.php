@@ -8,64 +8,157 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 
-
 class AdminProfileRepository
 {
-    public function getProfile(): ?User
+    public function getProfile(): array
     {
-        return Auth::guard('admin')->user();
-    }
-
-    public function updateProfile(array $data): bool
-    {
-        $user = User::find(Auth::guard('admin')->id());
-        if (!$user) return false;
-
-        $user->update([
-            'email'        => $data['email'],
-            'phone_number' => $data['phone'],
-        ]);
-
-        $profilePhoto = $user->userDetail->profile_image ?? null;
-        if (isset($data['profile_photo'])) {
-            $profilePhoto = uploadFile($data['profile_photo'], 'profile');
-            if ($user->userDetail && $user->userDetail->profile_image) {
-                Storage::disk('public')->delete($user->userDetail->profile_image);
+        try {
+            $user = Auth::guard('admin')->user();
+            if (!$user) {
+                return [
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'User not found',
+                ];
             }
+
+            $profile = [
+                'id'            => $user->id,
+                'email'         => $user->email,
+                'phone'         => $user->phone_number,
+                'first_name'    => $user->userDetail->first_name ?? null,
+                'last_name'     => $user->userDetail->last_name ?? null,
+                'address_line'  => $user->userDetail->address ?? null,
+                'country'       => $user->userDetail->country_id ?? null,
+                'state'         => $user->userDetail->state_id ?? null,
+                'city'          => $user->userDetail->city_id ?? null,
+                'postal_code'   => $user->userDetail->postal_code ?? null,
+                'profile_photo' => uploadedAsset($user->userDetail->profile_image ?? null, 'profile')
+            ];
+
+            return [
+                'status' => 'success',
+                'code' => 200,
+                'message' => __('admin.general_settings.profile_update_success'),
+                'data' => $profile
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'code' => 500,
+                'message' => __('admin.general_settings.profile_update_error'),
+                'error' => $e->getMessage()
+            ];
         }
-
-        UserDetail::updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'first_name'    => $data['first_name'],
-                'last_name'     => $data['last_name'],
-                'address'       => $data['address_line'] ?? null,
-                'country_id'    => $data['country'] ?? null,
-                'state_id'      => $data['state'] ?? null,
-                'city_id'       => $data['city'] ?? null,
-                'postal_code'   => $data['postal_code'] ?? null,
-                'profile_image' => $profilePhoto,
-            ]
-        );
-
-        return true;
     }
 
-    public function checkPassword(int $id, string $password): bool
+    public function updateProfile(array $data): array
     {
-        $user = User::find($id);
-        return $user && Hash::check($password, $user->password);
-    }
+        try {
+            $user = User::find(Auth::guard('admin')->id());
 
-    public function deleteAccount(): bool
-    {
-        $user = Auth::guard('admin')->user();
-    
-        if ($user instanceof \App\Models\User) {
-            return $user->delete();
+            if (!$user) {
+                return [
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => __('admin.general_settings.user_not_found')
+                ];
+            }
+
+            $user->update([
+                'email' => $data['email'],
+                'phone_number' => $data['phone'],
+            ]);
+
+            $profilePhoto = null;
+
+            if (isset($data['profile_photo'])) {
+                $profilePhoto = uploadFile($data['profile_photo'], 'profile');
+                if ($user->userDetail && $user->userDetail->profile_image) {
+                    Storage::disk('public')->delete($user->userDetail->profile_image);
+                }
+            }
+
+            UserDetail::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'first_name'    => $data['first_name'],
+                    'last_name'     => $data['last_name'],
+                    'address'       => $data['address_line'] ?? null,
+                    'country_id'    => $data['country'] ?? null,
+                    'state_id'      => $data['state'] ?? null,
+                    'city_id'       => $data['city'] ?? null,
+                    'postal_code'   => $data['postal_code'] ?? null,
+                    'profile_image' => $profilePhoto ?? $user->userDetail->profile_image ?? null,
+                ]
+            );
+
+            return [
+                'status' => 'success',
+                'code' => 200,
+                'message' => __('admin.general_settings.profile_update_success')
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'code' => 500,
+                'message' => __('admin.general_settings.profile_update_error'),
+                'error' => $e->getMessage()
+            ];
         }
-    
-        return false;
     }
-    
+
+    public function checkPassword(string $currentPassword): array
+    {
+        try {
+            $user = Auth::guard('admin')->user();
+
+            $isValid = $user && $user->password ? Hash::check($currentPassword, $user->password) : false;
+
+            return [
+                'status' => 'success',
+                'code' => 200,
+                'valid' => $isValid
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'code' => 500,
+                'valid' => false,
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    public function deleteAccount(): array
+    {
+        try {
+            $user = Auth::guard('admin')->user();
+
+            if (!$user) {
+                return [
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => __('admin.general_settings.user_not_found'),
+                ];
+            }
+            
+            if ($user instanceof \App\Models\User) {
+                $user->delete();
+            }
+
+            return [
+                'status' => 'success',
+                'code' => 200,
+                'message' => __('admin.general_settings.account_deleted_successfully'),
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'error',
+                'code' => 500,
+                'message' => __('admin.general_settings.profile_update_error'),
+                'error' => $e->getMessage()
+            ];
+        }
+    }
 }
