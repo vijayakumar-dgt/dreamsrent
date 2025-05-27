@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
+Use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Illuminate\Support\Facades\Cache;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot()
+    public function boot(): void
     {
         $modulesStatusPath = base_path('modules_statuses.json');
 
@@ -45,6 +48,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Safe to run DB logic here
         $this->globalViews();
+        $this->shareSeo();
         $this->shareThemeAndLayout();
         $this->shareHeader();
         $this->shareFooter();
@@ -132,6 +136,34 @@ class AppServiceProvider extends ServiceProvider
                 'smallLogo' => $smallLogo,
                 'language_switcher' => $language_switcher
             ]);
+        });
+    }
+
+    public function shareSeo(): void
+    {
+        view()->composer('*', function ($view) {
+            $seoSettings = Cache::remember('seo_settings', 86400, function () {
+                return GeneralSetting::where('group_id', 6)
+                    ->pluck('value', 'key')->toArray();
+            });
+
+            $seoSettings['metaTitle'] = $seoSettings['metaTitle'] ?? 'Dreams Rent';
+            $seoSettings['siteDescription'] = $seoSettings['siteDescription'] ?? '';
+            $seoSettings['keywords'] = $seoSettings['keywords'] ?? '';
+            $seoSettings['ogmetaTitle'] = $seoSettings['ogmetaTitle'] ?? 'Dreams Rent';
+            $seoSettings['metaImage'] = uploadedAsset($seoSettings['metaImage'] ?? null, 'default_seo_image');
+            $seoSettings['ogsiteDescription'] = $seoSettings['ogsiteDescription'] ?? '';
+
+            // SEO Meta
+            SEOMeta::addMeta('title', $seoSettings['metaTitle'], 'name');
+            SEOMeta::setDescription($seoSettings['siteDescription']);
+            SEOMeta::setKeywords(explode(',', $seoSettings['keywords']));
+            SEOMeta::setRobots('noindex, nofollow');
+
+            // Open Graph
+            OpenGraph::setTitle($seoSettings['ogmetaTitle']);
+            OpenGraph::setDescription($seoSettings['ogsiteDescription']);
+            OpenGraph::addProperty('og:image', $seoSettings['metaImage']);
         });
     }
 

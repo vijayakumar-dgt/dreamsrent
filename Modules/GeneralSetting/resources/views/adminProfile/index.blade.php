@@ -16,7 +16,7 @@
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-lg-9">
-                    <form action="" id="adminProfileForm" enctype="multipart/form-data">
+                    <form id="adminProfileForm" action="{{ route('admin.updateprofile-settings') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="card profile-setting-section h-100">
                             <div class="card-header">

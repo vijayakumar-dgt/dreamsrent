@@ -20,6 +20,7 @@ use Modules\GeneralSetting\Models\Language;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class GeneralSettingController extends Controller
@@ -664,6 +665,8 @@ class GeneralSettingController extends Controller
                     ]
                 );
             }
+
+            Cache::forget('seo_settings');
 
             return response()->json([
                 'status'  => 'success',
