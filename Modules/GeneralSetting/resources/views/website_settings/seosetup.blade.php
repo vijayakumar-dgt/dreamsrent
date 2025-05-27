@@ -43,7 +43,7 @@
                                 </div>
                                 <!-- Site Description -->
                                 <div class="mb-3">
-                                    <label class="form-label" for="siteDescription">{{ __('admin.general_settings.site_description') }}<span class="text-danger ms-1">*</span></label>
+                                    <label class="form-label" for="siteDescription">{{ __('admin.general_settings.meta_description') }}<span class="text-danger ms-1">*</span></label>
                                     <textarea id="siteDescription" name="siteDescription" class="form-control" rows="3"></textarea>
                                     <span id="siteDescription_error" class="text-danger error-text"></span>
                                 </div>
@@ -80,13 +80,13 @@
                                 </div>
                                 <!-- Meta Title -->
                                 <div class="mb-3">
-                                    <label class="form-label" for="metaTitle">{{ __('admin.general_settings.meta_title') }}<span class="text-danger ms-1">*</span></label>
+                                    <label class="form-label" for="ogmetaTitle">{{ __('admin.general_settings.og_meta_title') }}<span class="text-danger ms-1">*</span></label>
                                     <input type="text" id="ogmetaTitle" name="ogmetaTitle" class="form-control">
                                     <span id="ogmetaTitle_error" class="text-danger error-text"></span>
                                 </div>
                                 <!-- Site Description -->
                                 <div class="mb-3">
-                                    <label class="form-label" for="siteDescription">{{ __('admin.general_settings.site_description') }}<span class="text-danger ms-1">*</span></label>
+                                    <label class="form-label" for="ogsiteDescription">{{ __('admin.general_settings.og_meta_description') }}<span class="text-danger ms-1">*</span></label>
                                     <textarea id="ogsiteDescription" name="ogsiteDescription" class="form-control" rows="3"></textarea>
                                     <span id="ogsiteDescription_error" class="text-danger error-text"></span>
                                 </div>

@@ -1,4 +1,3 @@
-<!-- Sidebar -->
 <div class="sidebar" id="sidebar">
     <!-- Logo -->
     <div class="sidebar-logo">
@@ -514,4 +513,3 @@
         </div>
     </div>
 </div>
-<!-- /Sidebar -->

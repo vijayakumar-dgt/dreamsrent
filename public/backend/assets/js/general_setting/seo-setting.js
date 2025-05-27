@@ -44,37 +44,37 @@
                 },
                 metaTitle: {
                     required: _l(
-                        "admin.general_settings.favicon_image_resolution"
+                        "admin.general_settings.enter_meta_title"
                     ),
                     minlength: _l(
                         "admin.general_settings.meta_title_characters"
                     ),
                 },
                 siteDescription: {
-                    required: _l("admin.general_settings.site_description"),
+                    required: _l("admin.general_settings.enter_meta_description"),
                     minlength: _l(
-                        "admin.general_settings.description_characters"
+                        "admin.general_settings.meta_description_characters"
                     ),
                 },
                 keywords: {
                     required: _l("admin.general_settings.enter_least_keyword"),
                 },
                 ogmetaTitle: {
-                    required: _l("admin.general_settings.enter_og_metatitle"),
+                    required: _l("admin.general_settings.enter_og_meta_title"),
                     minlength: _l(
-                        "admin.general_settings.description_characters"
+                        "admin.general_settings.og_meta_title_characters"
                     ),
                 },
                 ogsiteDescription: {
                     required: _l(
-                        "admin.general_settings.enter_og_site_description"
+                        "admin.general_settings.enter_og_meta_description"
                     ),
                     minlength: _l(
                         "admin.general_settings.og_description_characters"
                     ),
                 },
                 ogkeywords: {
-                    required: _l("admin.general_settings.enter_one_og"),
+                    required: _l("admin.general_settings.enter_one_og_keyword"),
                 },
             },
             errorPlacement: function (error, element) {

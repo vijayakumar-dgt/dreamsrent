@@ -1,4 +1,3 @@
-<!-- Header -->
 <div class="header">
     <div class="main-header">
         <div class="header-left">
@@ -144,4 +143,3 @@
         <!-- /Mobile Menu -->
     </div>
 </div>
-<!-- /Header -->
