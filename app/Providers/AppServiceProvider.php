@@ -163,7 +163,7 @@ class AppServiceProvider extends ServiceProvider
             // Open Graph
             OpenGraph::setTitle($seoSettings['ogmetaTitle']);
             OpenGraph::setDescription($seoSettings['ogsiteDescription']);
-            OpenGraph::addProperty('og:image', $seoSettings['metaImage']);
+            OpenGraph::addProperty('image', $seoSettings['metaImage']);
         });
     }
 

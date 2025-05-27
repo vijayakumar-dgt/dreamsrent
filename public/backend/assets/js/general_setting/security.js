@@ -33,55 +33,6 @@
             $(".form-control").removeClass("is-invalid is-valid");
             $(".form-control").siblings("span").removeClass("me-3");
         }
-        function checkCurrentPassword(elementId) {
-            return new Promise((resolve, reject) => {
-                let password = $(elementId).val();
-                if (password.length >= 6) {
-                    $.ajax({
-                        url: "/admin/settings/check-current-password",
-                        type: "POST",
-                        data: {
-                            _token: $('meta[name="csrf-token"]').attr(
-                                "content"
-                            ),
-                            password: password,
-                        },
-                        success: function (response) {
-                            if (response.code === 200) {
-                                $(elementId).removeClass("is-invalid");
-                                $(elementId).addClass("is-valid");
-                                $(elementId + "_error").text("");
-                                $("#passwordSuccess").text(response.message);
-                                resolve(true);
-                            } else {
-                                $(elementId).removeClass("is-valid");
-                                $(elementId).addClass("is-invalid");
-                                $(elementId + "_error").text(response.message);
-                                $("#passwordSuccess").text("");
-                                resolve(false);
-                            }
-                        },
-                        error: function (error) {
-                            $(elementId).removeClass("is-valid");
-                            $(elementId).addClass("is-invalid");
-                            $(elementId + "_error").text(
-                                error.responseJSON.message
-                            );
-                            $("#passwordSuccess").text("");
-                            resolve(false);
-                        },
-                    });
-                } else {
-                    $(elementId).removeClass("is-valid");
-                    $(elementId).addClass("is-invalid");
-                    $(elementId + "_error").text(
-                        _l("admin.general_settings.password_incorrect")
-                    );
-                    $("#passwordSuccess").text("");
-                    resolve(false);
-                }
-            });
-        }
 
         $("#changePasswordForm").validate({
             rules: {
@@ -106,12 +57,18 @@
                 },
                 new_password: {
                     required: _l(
-                        "admin.general_settings.enter_current_password"
+                        "admin.general_settings.enter_new_password"
                     ),
                     minlength: _l("admin.general_settings.password_character"),
                     notEqualTo: _l(
                         "admin.general_settings.new_paasword_different"
                     ),
+                },
+                confirm_password: {
+                    required: _l(
+                        "admin.general_settings.enter_confirm_password"
+                    ),
+                    equalTo: _l("admin.general_settings.confirm_password_match"),
                 },
             },
             errorPlacement: function (error, element) {

@@ -18,7 +18,6 @@
 	@include('admin.partials.styles')
 </head>
 <body data-currency="{{ getDefaultCurrencySymbol() ?? '$' }}" data-user-type="{{ current_user()->user_type ?? '' }}" data-permission_error="{{ session('permission-error') }}">
-	
 	<!-- Main Wrapper -->
 	<div class="main-wrapper">
 		<!-- Header -->
