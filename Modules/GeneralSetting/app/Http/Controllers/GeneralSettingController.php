@@ -21,6 +21,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Laravel\Facades\Image;
 
 class GeneralSettingController extends Controller
 {
@@ -170,21 +172,21 @@ class GeneralSettingController extends Controller
     public function storeLogoSettings(Request $request): JsonResponse
     {
         $rules = [
-            'logo_image' => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
+            'logo_image'    => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
             'favicon_image' => 'nullable|mimes:jpg,jpeg,png,svg,ico|max:5120',
-            'small_image' => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
-            'dark_logo' => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
+            'small_image'   => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
+            'dark_logo'     => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
         ];
 
         $messages = [
-            'logo_image.image' => __('admin.general_settings.logo_image_type'),
+            'logo_image.image'    => __('admin.general_settings.logo_image_type'),
             'favicon_image.image' => __('admin.general_settings.favicon_image_type'),
-            'small_image.image' => __('admin.general_settings.small_image_type'),
-            'dark_logo.image' => __('admin.general_settings.dark_logo_image_type'),
-            'logo_image.max' => __('admin.general_settings.logo_image_size'),
-            'favicon_image.max' => __('admin.general_settings.favicon_image_size'),
-            'small_image.max' => __('admin.general_settings.small_image_size'),
-            'dark_logo.max' => __('admin.general_settings.dark_logo_image_size'),
+            'small_image.image'   => __('admin.general_settings.small_image_type'),
+            'dark_logo.image'     => __('admin.general_settings.dark_logo_image_type'),
+            'logo_image.max'      => __('admin.general_settings.logo_image_size'),
+            'favicon_image.max'   => __('admin.general_settings.favicon_image_size'),
+            'small_image.max'     => __('admin.general_settings.small_image_size'),
+            'dark_logo.max'       => __('admin.general_settings.dark_logo_image_size'),
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -197,21 +199,59 @@ class GeneralSettingController extends Controller
             $groupId = 16;
             $paths = [];
             $logoFields = [
-                'logo_image' => 'logo',
+                'logo_image'    => 'logo',
                 'favicon_image' => 'favicon',
-                'small_image' => 'small',
-                'dark_logo' => 'dark',
+                'small_image'   => 'small',
+                'dark_logo'     => 'dark',
             ];
+
+            $mainPath = storage_path('app/public/logo/');
+            $thumbPath = storage_path('app/public/logo/thumbnail/');
+
+            if (!File::exists($mainPath)) {
+                File::makeDirectory($mainPath, 0755, true);
+            }
+            if (!File::exists($thumbPath)) {
+                File::makeDirectory($thumbPath, 0755, true);
+            }
 
             foreach ($logoFields as $field => $prefix) {
                 if ($request->hasFile($field)) {
                     $file = $request->file($field);
-                    $fullPath = null;
-                    if ($file instanceof UploadedFile) {
-                        $fullPath = uploadFile($file, 'logo');
+                    $imageName = time() . '-' . $file->getClientOriginalName();
+
+                    // Read and save original
+                    $image = Image::read($file);
+                    $image->save($mainPath . $imageName);
+
+                    // Resize and save thumbnail
+                    $image->resize(300, 300, function ($constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+                    $image->save($thumbPath . $imageName);
+
+                    // Delete old image if exists
+                    $existing = GeneralSetting::where('key', $field)->first();
+                    if ($existing && $existing->value) {
+                        $oldPath = storage_path('app/public/' . $existing->value);
+                        $oldThumb = storage_path('app/public/' . str_replace('logo/', 'logo/thumbnail/', $existing->value));
+
+                        if (File::exists($oldPath)) File::delete($oldPath);
+                        if (File::exists($oldThumb)) File::delete($oldThumb);
                     }
-                    $this->updateOrCreateLogoSetting($field, $fullPath, $groupId);
-                    $paths[$field] = $fullPath;
+
+                    // Save to DB
+                    $relativePath = 'logo/' . $imageName;
+                    GeneralSetting::updateOrCreate(
+                        ['key' => $field],
+                        [
+                            'value' => $relativePath,
+                            'group_id' => $groupId
+                        ]
+                    );
+
+                    $paths[$field] = $relativePath;
                 }
             }
 
@@ -223,8 +263,9 @@ class GeneralSettingController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
-                'message' =>  __('admin.general_settings.logo_setting_error'),
-            ]);
+                'message' => __('admin.general_settings.logo_setting_error'),
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -466,14 +507,14 @@ class GeneralSettingController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'organization_name'    => 'required|string|max:100',
-            'owner_name'           => 'required|string|max:100',
-            'company_email'        => 'required|email|max:100',
-            'company_phone'        => 'required',
-            'international_phone_number' => 'required',            
-            'company_address_line' => 'nullable|string|max:150',           
-            'company_postal_code'  => 'nullable|string|max:10',
-            'company_profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'organization_name'         => 'required|string|max:100',
+            'owner_name'                => 'required|string|max:100',
+            'company_email'             => 'required|email|max:100',
+            'company_phone'             => 'required',
+            'international_phone_number'=> 'required',
+            'company_address_line'      => 'nullable|string|max:150',
+            'company_postal_code'       => 'nullable|string|max:10',
+            'company_profile_photo'     => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         if ($validator->fails()) {
@@ -487,22 +528,52 @@ class GeneralSettingController extends Controller
 
         try {
             $settings = $request->except('_token', 'company_profile_photo');
+
+            // Handle company_profile_photo upload and resizing
             if ($request->hasFile('company_profile_photo')) {
                 $file = $request->file('company_profile_photo');
-                $imagePath = null;
-                if ($file instanceof UploadedFile) {
-                    $imagePath = uploadFile($file, 'profile');
+                $imageName = time() . '-' . $file->getClientOriginalName();
+
+                $destinationPath = storage_path('app/public/company/');
+                $destinationThumbnail = storage_path('app/public/company/thumbnail/');
+
+                if (!File::exists($destinationPath)) {
+                    File::makeDirectory($destinationPath, 0755, true);
+                }
+                if (!File::exists($destinationThumbnail)) {
+                    File::makeDirectory($destinationThumbnail, 0755, true);
+                }
+
+                $image = Image::read($file);
+                $image->save($destinationPath . $imageName);
+
+                // Resize proportionally to max width 500 or height 600
+                $image->resize(500, 600, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+                $image->save($destinationThumbnail . $imageName);
+
+                // Optional: Delete old image if stored in GeneralSetting
+                $existing = GeneralSetting::where('key', 'company_profile_photo')->first();
+                if ($existing && $existing->value) {
+                    $oldPath = storage_path('app/public/' . $existing->value);
+                    $oldThumbnail = storage_path('app/public/' . str_replace('company/', 'company/thumbnail/', $existing->value));
+
+                    if (File::exists($oldPath)) File::delete($oldPath);
+                    if (File::exists($oldThumbnail)) File::delete($oldThumbnail);
                 }
 
                 GeneralSetting::updateOrCreate(
                     ['key' => 'company_profile_photo'],
                     [
-                        'value' => "$imagePath",
+                        'value' => 'company/' . $imageName,
                         'group_id' => $request->group_id ?? null
                     ]
                 );
             }
 
+            // Save other settings
             foreach ($settings as $key => $value) {
                 GeneralSetting::updateOrCreate(
                     ['key' => $key],
@@ -516,7 +587,7 @@ class GeneralSettingController extends Controller
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
-                'message' =>  __('admin.general_settings.company_setting_success')
+                'message' => __('admin.general_settings.company_setting_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -631,7 +702,7 @@ class GeneralSettingController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'code'    => 422,
-                'message' =>  __('admin.general_settings.validation_error'),
+                'message' => __('admin.general_settings.validation_error'),
                 'errors'  => $validator->errors()
             ], 422);
         }
@@ -639,27 +710,55 @@ class GeneralSettingController extends Controller
         try {
             $settings = $request->except('_token', 'metaImage');
 
+            // Handle metaImage upload
             if ($request->hasFile('metaImage')) {
                 $file = $request->file('metaImage');
-                $imagePath = null;
                 if ($file instanceof UploadedFile) {
-                    $imagePath = uploadFile($file, 'seo');
-                }
+                    $image      = Image::read($file);
+                    $imageName  = time() . '-' . $file->getClientOriginalName();
+                    $destinationPath = storage_path('app/public/seo/');
+                    $thumbnailPath   = storage_path('app/public/seo/thumbnail/');
 
-                GeneralSetting::updateOrCreate(
-                    ['key' => 'metaImage'],
-                    [
-                        'value' => "$imagePath",
-                        'group_id' => $request->group_id ?? null
-                    ]
-                );
+                    // Create directories if they don't exist
+                    if (!File::exists($destinationPath)) {
+                        File::makeDirectory($destinationPath, 0755, true);
+                    }
+                    if (!File::exists($thumbnailPath)) {
+                        File::makeDirectory($thumbnailPath, 0755, true);
+                    }
+
+                    // Save original image
+                    $image->save($destinationPath . $imageName);
+
+                    // Save resized thumbnail
+                    $image->resize(500, 500); // adjust as needed
+                    $image->save($thumbnailPath . $imageName);
+
+                    // Delete old image if exists
+                    $existing = GeneralSetting::where('key', 'metaImage')->first();
+                    if ($existing && File::exists(storage_path('app/public/' . $existing->value))) {
+                        File::delete(storage_path('app/public/' . $existing->value));
+                        File::delete(storage_path('app/public/' . str_replace('seo/', 'seo/thumbnail/', $existing->value)));
+                    }
+
+                    // Save new image path
+                    $metaImagePath = 'seo/' . $imageName;
+                    GeneralSetting::updateOrCreate(
+                        ['key' => 'metaImage'],
+                        [
+                            'value'    => $metaImagePath,
+                            'group_id' => $request->group_id ?? null
+                        ]
+                    );
+                }
             }
 
+            // Save other settings
             foreach ($settings as $key => $value) {
                 GeneralSetting::updateOrCreate(
                     ['key' => $key],
                     [
-                        'value' => $value,
+                        'value'    => $value,
                         'group_id' => $request->group_id ?? null
                     ]
                 );
@@ -674,7 +773,7 @@ class GeneralSettingController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'code'    => 500,
-                'message' =>  __('admin.general_settings.seo_update_error'),
+                'message' => __('admin.general_settings.seo_update_error'),
                 'error'   => $e->getMessage()
             ], 500);
         }
