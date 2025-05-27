@@ -2,13 +2,10 @@
 <html lang="{{ app()->getLocale() }}">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-	<meta name="description" content="Dreams Rent - Admin Login">
-	<meta name="keywords" content="admin, login">
-	<meta name="author" content="Dreams technologies">
-	<meta name="robots" content="noindex, nofollow">
-
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
+    {!! SEOMeta::generate() !!}
+    {!! OpenGraph::generate() !!}
 	<title>@yield('meta_title', $companyName)</title>
 
 	<!-- Favicon -->
