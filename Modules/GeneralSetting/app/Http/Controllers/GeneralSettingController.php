@@ -48,11 +48,8 @@ class GeneralSettingController extends Controller
     }
 
     public function company(Request $request): View
-    {
-       
-        $users = User::where('user_type', 4)->get();
-
-        return view('generalsetting::company.index', compact( 'users'));
+    {       
+        return view('generalsetting::company.index');
     }
 
     public function notifications(Request $request): View
