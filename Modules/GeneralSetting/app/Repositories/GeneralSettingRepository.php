@@ -222,7 +222,7 @@ class GeneralSettingRepository
         return $paths;
     }
 
-   public function storeMaintenanceSettings(array $data): void
+    public function storeMaintenanceSettings(array $data): void
     {
         try {
             $groupId = $data['group_id'];
@@ -235,7 +235,7 @@ class GeneralSettingRepository
                 $existing = GeneralSetting::where('key', 'maintenance_image')->first();
                 $oldPath = $existing->value ?? null;
 
-               $relativePath = $this->imageResizer->uploadFile($file, 'maintenance', $oldPath);
+                $relativePath = $this->imageResizer->uploadFile($file, 'maintenance', $oldPath);
 
                 GeneralSetting::updateOrCreate(
                     ['key' => 'maintenance_image'],
@@ -279,7 +279,7 @@ class GeneralSettingRepository
         }
     }
 
-    
+
     public function updateThemeSettings(array $data): void
     {
         try {
@@ -351,7 +351,7 @@ class GeneralSettingRepository
             ->first();
     }
 
-     public function saveRentalSettings(array $data): void
+    public function saveRentalSettings(array $data): void
     {
         $settings = [
             'minAdvanceReservation' => $data['minAdvanceReservation'] ?? null,
@@ -374,6 +374,92 @@ class GeneralSettingRepository
                 ['value' => $value]
             );
         }
+    }
+
+    public function saveInvoiceSettings(array $data): void
+    {
+        try {
+            $groupId = $data['group_id'] ?? 9;
+            $file = $data['invoice_logo'] ?? null;
+            $isRemove = $data['is_remove_image'] ?? false;
+
+            unset($data['_token'], $data['invoice_logo'], $data['is_remove_image']);
+
+            // Handle invoice logo upload
+            if (!empty($file) && $file instanceof \Illuminate\Http\UploadedFile) {
+                $existing = GeneralSetting::where('key', 'invoice_logo')->first();
+                $oldPath = $existing->value ?? null;
+
+                // Upload new file and get relative path
+                $relativePath = $this->imageResizer->uploadFile(
+                    $file,
+                    'invoices',
+                    $oldPath,
+                    [
+                        'width' => 300,  // Set desired width
+                        'height' => 150,  // Set desired height
+                        'thumbnail' => true  // Generate thumbnail
+                    ]
+                );
+
+                GeneralSetting::updateOrCreate(
+                    ['key' => 'invoice_logo'],
+                    ['value' => $relativePath, 'group_id' => $groupId]
+                );
+            }
+
+            // Remove image if requested
+            if ($isRemove) {
+                $existing = GeneralSetting::where('key', 'invoice_logo')->first();
+                if ($existing && $existing->value) {
+                    $paths = [
+                        storage_path('app/public/' . $existing->value),
+                        storage_path('app/public/' . str_replace('invoices/', 'invoices/thumbnail/', $existing->value)),
+                    ];
+                    foreach ($paths as $path) {
+                        if (File::exists($path)) {
+                            File::delete($path);
+                        }
+                    }
+                    $existing->update(['value' => '']);
+                }
+            }
+
+            // Handle other invoice settings
+            $settings = [
+                'invoice_prefix' => $data['invoice_prefix'] ?? null,
+                'invoice_due' => $data['invoice_due'] ?? null,
+                'invoice_round_off' => $data['invoice_round_off'] ?? null,
+                'round_off_enabled' => ($data['round_off_enabled'] ?? 'off') === 'on' ? 1 : 0,
+                'show_company_details' => ($data['show_company_details'] ?? 'off') === 'on' ? 1 : 0,
+                'invoice_terms' => $data['invoice_terms'] ?? null,
+            ];
+
+            foreach ($settings as $key => $value) {
+                GeneralSetting::updateOrCreate(
+                    ['key' => $key],
+                    ['value' => $value, 'group_id' => $groupId]
+                );
+            }
+
+        } catch (Exception $e) {
+            \Log::error('Invoice settings update failed: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+            throw $e;
+        }
+    }
+
+    protected function updateOrCreateSetting(string $key, mixed $value, ?int $groupId = null): bool
+    {
+        $attributes = ['key' => $key];
+        $values = ['value' => $value];
+
+        if ($groupId !== null) {
+            $values['group_id'] = $groupId;
+        }
+
+        return (bool) GeneralSetting::updateOrCreate($attributes, $values);
     }
 
 }

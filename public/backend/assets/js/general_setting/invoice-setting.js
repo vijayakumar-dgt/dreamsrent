@@ -153,7 +153,7 @@
                                 setting.key === "invoice_logo" &&
                                 setting.value
                             ) {
-                                const imageUrl = `/storage/${setting.value}`;
+                                const imageUrl = `${setting.value}`;
                                 $("#profile_photo_preview")
                                     .attr("src", imageUrl)
                                     .show();

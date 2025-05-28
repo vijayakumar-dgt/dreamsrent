@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Modules\GeneralSetting\Http\Requests\ListCompanyRequest;
 use Modules\GeneralSetting\Http\Requests\SettingListRequest;
+use Modules\GeneralSetting\Http\Requests\StoreInvoiceSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreLogoSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreMaintenanceSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreOtpSettingsRequest;
@@ -116,7 +117,7 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeRentalSettings(StoreRentalSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse 
+    public function storeRentalSettings(StoreRentalSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
     {
         try {
             $repository->saveRentalSettings($request->validated());
@@ -171,7 +172,7 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeOtpSettings(StoreOtpSettingsRequest $request, GeneralSettingRepository $repository ): JsonResponse 
+    public function storeOtpSettings(StoreOtpSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
     {
         try {
             $repository->storeOtpSettings($request->validated());
@@ -293,69 +294,21 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeInvoiceSettings(Request $request): JsonResponse
+    public function storeInvoiceSettings(StoreInvoiceSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
     {
-        $rules = [
-            'invoice_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'invoice_prefix' => 'required|string|max:10',
-            'invoice_due' => 'required|integer|min:1',
-            'invoice_round_off' => 'nullable|numeric',
-            'round_off_enabled' => 'nullable|in:on,off',
-            'show_company_details' => 'nullable|in:on,off',
-            'invoice_terms' => 'nullable|string',
-        ];
-
-        $messages = [
-            'invoice_logo.image' => __('The invoice logo must be an image.'),
-            'invoice_logo.mimes' => __('The invoice logo must be a file of type: jpeg, png, jpg, gif.'),
-            'invoice_logo.max' => __('The invoice logo may not be greater than 2MB.'),
-            'invoice_prefix.required' => __('The invoice prefix field is required.'),
-            'invoice_due.required' => __('The invoice due field is required.'),
-            'invoice_due.integer' => __('The invoice due must be an integer.'),
-            'invoice_due.min' => __('The invoice due must be at least 1 day.'),
-            'invoice_round_off.numeric' => __('The invoice round-off must be a number.'),
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['code' => 422, 'errors' => $validator->errors()], 422);
-        }
-
         try {
-            if ($request->hasFile('invoice_logo')) {
-                $file = $request->file('invoice_logo');
-                if ($file instanceof UploadedFile) {
-                    $logoPath = uploadFile($file, 'invoices');
-                    $this->updateOrCreateInvoiceSetting('invoice_logo', $logoPath);
-                }
-            }
-
-            $settings = [
-                'invoice_prefix' => $request->invoice_prefix,
-                'invoice_due' => $request->invoice_due,
-                'invoice_round_off' => $request->invoice_round_off,
-                'round_off_enabled' => $request->round_off_enabled === 'on' ? 1 : 0,
-                'show_company_details' => $request->show_company_details === 'on' ? 1 : 0,
-                'invoice_terms' => $request->invoice_terms,
-            ];
-
-            foreach ($settings as $key => $value) {
-                $saveSetting = $this->updateOrCreateInvoiceSetting($key, $value);
-                if (!$saveSetting) {
-                    throw new \Exception("Failed to save $key");
-                }
-            }
+            $repository->saveInvoiceSettings($request->validated());
 
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.general_settings.invoice_setting_success'),
                 'data' => []
-            ], 200);
-        } catch (\Exception $e) {
+            ]);
+        } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
                 'message' => __('admin.general_settings.invoice_setting_error'),
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
