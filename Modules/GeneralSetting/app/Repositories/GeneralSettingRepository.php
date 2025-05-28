@@ -4,34 +4,26 @@ namespace Modules\GeneralSetting\Repositories;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
 use Modules\GeneralSetting\Models\GeneralSetting;
+use App\Services\ImageResizer;
 
 
 class GeneralSettingRepository
 {
+    protected ImageResizer $imageResizer;
+
+    public function __construct(ImageResizer $imageResizer)
+    {
+        $this->imageResizer = $imageResizer;
+    }
     public function storeCompanySettings(array $data): void
     {
         $file = $data['company_profile_photo'] ?? null;
         unset($data['company_profile_photo']);
 
-        if ($file && $file instanceof \Illuminate\Http\UploadedFile) {
-            $imageName = time() . '-' . $file->getClientOriginalName();
+        if (!empty($file) && $file instanceof \Illuminate\Http\UploadedFile) {
+            $companyPhotoPath = 'company';
 
-            $destinationPath = storage_path('app/public/company/');
-            $destinationThumbnail = storage_path('app/public/company/thumbnail/');
-
-            if (!File::exists($destinationPath))
-                File::makeDirectory($destinationPath, 0755, true);
-            if (!File::exists($destinationThumbnail))
-                File::makeDirectory($destinationThumbnail, 0755, true);
-
-            $image = Image::read($file);
-            $image->save($destinationPath . $imageName);
-
-            $image->resize(500, 600, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
-            $image->save($destinationThumbnail . $imageName);
+            $companyPhotoStoragePath = $this->imageResizer->uploadFile($file, $companyPhotoPath, 'company');
 
             $existing = GeneralSetting::where('key', 'company_profile_photo')->first();
             if ($existing && $existing->value) {
@@ -42,17 +34,18 @@ class GeneralSettingRepository
             GeneralSetting::updateOrCreate(
                 ['key' => 'company_profile_photo'],
                 [
-                    'value' => 'company/' . $imageName,
+                    'value'    => $companyPhotoStoragePath,
                     'group_id' => $data['group_id'] ?? null
                 ]
             );
         }
 
+        // Save other general settings
         foreach ($data as $key => $value) {
             GeneralSetting::updateOrCreate(
                 ['key' => $key],
                 [
-                    'value' => $value,
+                    'value'    => $value,
                     'group_id' => $data['group_id'] ?? null
                 ]
             );
