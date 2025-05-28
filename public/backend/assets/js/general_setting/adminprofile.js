@@ -27,7 +27,7 @@
                         } else {
                             showToast(
                                 "error",
-                                _l("admin.general_settings.image_dimension")
+                                _l("admin.general_settings.image_dimension_must_be")  + " 500x500 pixels"
                             );
                             $("#profile_photo").val("");
                         }
@@ -59,58 +59,6 @@
                 } else {
                     resetDropdown("#city");
                 }
-            });
-
-            $("#changePasswordForm").validate({
-                rules: {
-                    current_password: {
-                        required: true,
-                        minlength: 8,
-                        remote: {
-                            url: "/api/admin/check-password",
-                            type: "post",
-                            headers: {
-                                Authorization:
-                                    "Bearer " +
-                                    localStorage.getItem("admin_token"),
-                                Accept: "application/json",
-                            },
-                            data: {
-                                current_password: () =>
-                                    $("#current_password").val(),
-                                id: () => $("#id").val(),
-                            },
-                        },
-                    },
-                    new_password: {
-                        required: true,
-                        minlength: 8,
-                        notEqualTo: "#current_password",
-                    },
-                    confirm_password: {
-                        required: true,
-                        equalTo: "#new_password",
-                    },
-                },
-                messages: {
-                    current_password: generateMessage(
-                        "#current_password_error"
-                    ),
-                    new_password: generateMessage("#new_password_error"),
-                    confirm_password: generateMessage(
-                        "#confirm_password_error"
-                    ),
-                },
-                errorPlacement: placeError,
-                highlight: highlightElement,
-                unhighlight: unhighlightElement,
-                onkeyup: validateOnInput,
-                onchange: validateOnInput,
-                submitHandler: function (form) {
-                    const data = new FormData(form);
-                    data.append("id", $("#id").val());
-                    // API submission logic to be added
-                },
             });
 
             $("#adminProfileForm").validate({

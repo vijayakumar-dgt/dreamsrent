@@ -7,15 +7,22 @@ use App\Http\Middleware\MaintenanceMode;
 use App\Http\Middleware\SetLocaleAdmin;
 use App\Http\Middleware\SetLocaleUser;
 use App\Http\Middleware\CheckInstallerStatus;
+use App\Http\Middleware\SecurityHeader;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__ . '/../routes/web.php',
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
+        using: function () {
+            Route::group(['middleware' => ['web']], function () {
+                require __DIR__ . '/../routes/web.php';
+                require __DIR__ . '/../routes/admin.php';   
+            });
+        }
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
@@ -26,6 +33,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'maintenance' => MaintenanceMode::class,
             'permission' => UserPermission::class,
             'checkInstallerStatus' => CheckInstallerStatus::class,
+            'securityHeader' => SecurityHeader::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

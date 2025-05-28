@@ -16,10 +16,7 @@ use Modules\GeneralSetting\Http\Controllers\AdminProfileController;
  *
 */
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('generalsetting', GeneralSettingController::class)->names('generalsetting');
-});
-Route::post('/admin/check-password', [AdminProfileController::class, 'checkPassword']);
+Route::group(['middleware' => ['SecurityHeader']], function () {
 
     Route::group(['prefix' => 'admin/blogs'], function () {
         Route::post('/list-category', [BlogsController::class, 'index']);
@@ -30,7 +27,7 @@ Route::post('/admin/check-password', [AdminProfileController::class, 'checkPassw
         Route::post('/check-unique-category-name', [BlogsController::class, 'checkUniqueCategoryName']);
         Route::post('/check-unique-category-slug', [BlogsController::class, 'checkUniqueCategorySlug']);
         Route::post('/get-blog-category', [BlogsController::class, 'getBlogCategory']);
-
+    
         Route::post('/list-post', [BlogsController::class, 'listPost']);
         Route::post('/save-post', [BlogsController::class, 'savePost']);
         Route::post('/delete-post', [BlogsController::class, 'deletePost']);
@@ -39,3 +36,6 @@ Route::post('/admin/check-password', [AdminProfileController::class, 'checkPassw
         Route::post('/check-unique-post-title', [BlogsController::class, 'checkUniquePostTitle']);
         Route::post('/check-unique-post-slug', [BlogsController::class, 'checkUniquePostSlug']);
     });
+    
+});
+
