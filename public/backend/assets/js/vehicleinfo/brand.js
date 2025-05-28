@@ -18,9 +18,6 @@
                     minlength: 3,
                     maxlength: 30,
                 },
-                total_cars: {
-                    required: true,
-                },
                 brand_image: {
                     required: () => $("#id").val() === "",
                     extension: "jpeg|jpg|png|svg",
@@ -39,9 +36,6 @@
                     required: _l("admin.rentals.brand_name_required"),
                     minlength: _l("admin.rentals.brand_name_minlength"),
                     maxlength: _l("admin.rentals.brand_name_maxlength"),
-                },
-                total_cars: {
-                    required: _l("admin.rentals.total_vehicles_required"),
                 },
                 brand_image: {
                     required: _l("admin.rentals.brand_image_required"),

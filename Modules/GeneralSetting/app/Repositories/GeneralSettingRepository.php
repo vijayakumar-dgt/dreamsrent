@@ -44,7 +44,7 @@ class GeneralSettingRepository
         if (!empty($file) && $file instanceof \Illuminate\Http\UploadedFile) {
             $companyPhotoPath = 'company';
 
-            $companyPhotoStoragePath = $this->imageResizer->uploadFile($file, $companyPhotoPath, 'company');
+            $companyPhotoStoragePath = $this->imageResizer->uploadFile($file, 'company', $companyPhotoPath);
 
             $existing = GeneralSetting::where('key', 'company_profile_photo')->first();
             if ($existing && $existing->value) {
@@ -167,7 +167,7 @@ class GeneralSettingRepository
 
         if (!empty($file) && $file instanceof \Illuminate\Http\UploadedFile) {
             $seoPhotoPath = 'seo';
-            $seoPhotoStoragePath = $this->imageResizer->uploadFile($file, $oldPath, $seoPhotoPath);
+            $seoPhotoStoragePath = $this->imageResizer->uploadFile($file, $seoPhotoPath, $oldPath);
 
             GeneralSetting::updateOrCreate(
                 ['key' => 'metaImage'],
@@ -208,7 +208,7 @@ class GeneralSettingRepository
                 $existing = GeneralSetting::where('key', $field)->first();
                 $oldPath = $existing->value ?? null;
 
-                $relativePath = $this->imageResizer->uploadFile($file, $oldPath, 'logo');
+                $relativePath = $this->imageResizer->uploadFile($file, 'logo', $oldPath);
                 GeneralSetting::updateOrCreate(
                     ['key' => $field],
                     ['value' => $relativePath, 'group_id' => $groupId]
@@ -234,7 +234,7 @@ class GeneralSettingRepository
                 $existing = GeneralSetting::where('key', 'maintenance_image')->first();
                 $oldPath = $existing->value ?? null;
 
-               $relativePath = $this->imageResizer->uploadFile($file, $oldPath, 'maintenance');
+               $relativePath = $this->imageResizer->uploadFile($file, 'maintenance', $oldPath);
 
                 GeneralSetting::updateOrCreate(
                     ['key' => 'maintenance_image'],

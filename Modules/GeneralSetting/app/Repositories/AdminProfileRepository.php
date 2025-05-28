@@ -83,7 +83,7 @@ class AdminProfileRepository
             $profilePhotoPath = $user->userDetail->profile_image ?? null;
 
             if (!empty($data['profile_photo']) && $data['profile_photo'] instanceof \Illuminate\Http\UploadedFile) {
-                $profilePhotoPath = $this->imageResizer->uploadFile($data['profile_photo'], $profilePhotoPath, 'profile');
+                $profilePhotoPath = $this->imageResizer->uploadFile($data['profile_photo'], 'profile', $profilePhotoPath);
             }
 
             UserDetail::updateOrCreate(

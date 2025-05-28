@@ -10,135 +10,28 @@ use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Modules\CarInfo\Models\Brand;
 use Illuminate\Http\UploadedFile;
+use Modules\CarInfo\Http\Requests\BrandRequest;
+use Modules\CarInfo\Repositories\BrandRepository;
 
 class BrandController extends Controller
 {
+    protected BrandRepository $brandRepo;
+
+    public function __construct(BrandRepository $brandRepo)
+    {
+        $this->brandRepo = $brandRepo;
+    }
+    
     public function index(): View
     {
         return view('carinfo::brand.index');
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(BrandRequest $request)
     {
-        /** @var \App\Models\User|null $authUser */
-        $authUser = current_user();
-        if (!$authUser) {
-            return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
-        }
-        $language_id = $authUser->language_id;
-
-        $id = $request->id ?? '';
-
-        $data = [
-            'brand_name' => $request->brand_name,
-            'total_cars' => $request->total_cars,
-        ];
-
-        $validator = Validator::make($request->all(), [
-            'brand_name' => [
-                'required',
-                'max:30',
-                'min:3',
-                Rule::unique('brands')->ignore($id)->whereNull('deleted_at')->where('language_id', $language_id),
-                'not_regex:/<\/?script\b[^>]*>/i'
-            ],
-            'brand_image' => 'mimes:jpeg,jpg,png,svg|max:2048',
-            'brand_icon' => 'mimes:jpeg,jpg,png,svg|max:2048',
-            'total_cars' => [
-                'max:255',
-            ]
-        ], [
-            'brand_name.required' => __('admin.rentals.brand_name_required'),
-            'brand_name.max' => __('admin.rentals.brand_name_maxlength'),
-            'brand_name.min' => __('admin.rentals.brand_name_minlength'),
-            'brand_name.unique' => __('admin.rentals.brand_name_unique'),
-            'brand_name.not_regex' => __('admin.common.script_tag_not_allowed'),
-            'total_cars.required' => __('admin.rentals.total_vehicles_required'),
-            'brand_image.mimes' => __('admin.rentals.brand_image_format'),
-            'brand_image.max' => __('admin.rentals.brand_image_size', ['size' => 2]),
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 422,
-                'errors' => $validator->errors()->toArray()
-            ], 422);
-        }
-
-        $successMsg = empty($id) ? __('admin.rentals.brand_create_success') : __('admin.rentals.brand_update_success');
-        $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
-
-        try {
-            if (empty($id)) {
-                // CREATE
-                $data['language_id'] = $language_id;
-
-                if ($request->hasFile('brand_image')) {
-                    $file = $request->file('brand_image');
-                    if ($file instanceof UploadedFile) {
-                        $data['brand_image'] = uploadFile($file, 'vehicles/brands');
-                    }
-                }
-
-                if ($request->hasFile('brand_icon')) {
-                    $file = $request->file('brand_icon');
-                    if ($file instanceof UploadedFile) {
-                        $data['brand_icon'] = uploadFile($file, 'vehicles/brands');
-                    }
-                }
-
-                Brand::create($data);
-            } else {
-                // UPDATE
-                $brand = Brand::where("id", $id)->first();
-
-                if (!$brand) {
-                    return response()->json([
-                        'status' => 'error',
-                        'code' => 404,
-                        'message' => __('admin.common.not_found')
-                    ], 404);
-                }
-
-                $oldImage = $brand->brand_image;
-                $oldIcon = $brand->brand_icon;
-
-                if ($request->hasFile('brand_image')) {
-                    $file = $request->file('brand_image');
-                    if ($file instanceof UploadedFile) {
-                        $data['brand_image'] = uploadFile($file, 'vehicles/brands', $oldImage);
-                    }
-                }
-
-                if ($request->hasFile('brand_icon')) {
-                    $file = $request->file('brand_icon');
-                    if ($file instanceof UploadedFile) {
-                        $data['brand_icon'] = uploadFile($file, 'vehicles/brands', $oldIcon);
-                    }
-                }
-
-                $data['status'] = $request->status ?? 1;
-                $data['language_id'] = $request->language_id ?? $brand->language_id;
-
-                $brand->update($data);
-            }
-
-            return response()->json([
-                'status' => 'success',
-                'code'   => 200,
-                'message' => $successMsg
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 500,
-                'message' => $errorMsg,
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $response = $this->brandRepo->store($request);
+        return response()->json($response);
     }
-
 
     public function list(Request $request): JsonResponse
     {

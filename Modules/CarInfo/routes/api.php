@@ -27,13 +27,3 @@ Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
 Route::get('/countries', [LocationController::class, 'getCountries']);
 Route::post('/states', [LocationController::class, 'getStates']);
 Route::post('/cities', [LocationController::class, 'getCities']);
-
-Route::post('/get-filter-vehicles', [CarInfoController::class,'getFilterVehicles']);
-Route::post('/get-brands', [BrandController::class,'getBrands']);
-Route::post('/get-vehicle-types', [CarTypeController::class,'getVehicleTypes']);
-Route::post('/get-vehicle-models', [CarModelController::class,'getVehicleModels']);
-Route::post('/get-vehicle-colors', [CarColorController::class,'getVehicleColors']);
-Route::post('/get-drivers', [DriverController::class,'getDrivers']);
-
-Route::post('vehicle-list-detail-api', [CarInfoController::class,'vehicleDetailsList']);
-Route::get('vehicle-list-api', [CarInfoController::class,'vehicleLists']);

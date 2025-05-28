@@ -18,7 +18,7 @@ class ImageResizer
      * @param string $baseFolder
      * @return string|null
      */
-    public function uploadFile(UploadedFile $file, ?string $oldFilePath = null, string $baseFolder): ?string
+    public function uploadFile(UploadedFile $file, string $baseFolder, ?string $oldFilePath = null): ?string
     {
         if (!$file->isValid()) {
             return null;

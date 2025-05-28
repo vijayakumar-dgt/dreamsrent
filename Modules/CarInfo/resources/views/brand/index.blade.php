@@ -85,7 +85,7 @@
 						<i class="ti ti-x fs-16"></i>
 					</button>
 				</div>
-				<form id="brandForm">
+				<form action="{{  route('brand.store') }}" id="brandForm" method="POST" enctype="multipart/form-data">
 					@csrf
 					<input type="hidden" name="id" id="id">
 					<input type="hidden" name="language_id" id="language_id">
@@ -138,11 +138,6 @@
 							<label class="form-label">{{ __('admin.rentals.brand_name') }}<span class="text-danger"> *</span></label>
 							<input type="text" class="form-control" name="brand_name" id="brand_name">
 							<span id="brand_name_error" class="text-danger error-text"></span>
-						</div>
-						<div class="mb-3 d-none">
-							<label class="form-label">{{ __('admin.rentals.total_vehicles') }}<span class="text-danger"> *</span></label>
-							<input type="text" class="form-control" name="total_cars" id="total_cars">
-							<span id="total_cars_error" class="text-danger error-text"></span>
 						</div>
 					</div>
 					<div class="modal-footer">
