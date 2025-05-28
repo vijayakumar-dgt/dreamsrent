@@ -6,23 +6,23 @@ return [
 
         'source' => [
             'files' => [
-                'include' => [], // ✅ Exclude all files
+                'include' => [],
                 'exclude' => [],
                 'relative_path' => base_path(),
             ],
-            'databases' => ['mysql'], // ✅ Backup only the database
+            'databases' => ['mysql'],
         ],
 
-        'database_dump_compressor' => null, // ✅ Ensure raw SQL is stored
+        'database_dump_compressor' => null,
 
         'destination' => [
             'disks' => [
-                'public_db', // ✅ Store SQL backups separately
+                'public_db',
             ],
         ],
 
         'backup' => [
-            'filename' => 'database_backup_{date}.sql', // ✅ Ensure raw SQL filename
+            'filename' => 'database_backup_{date}.sql',
         ],
     ],
 ];

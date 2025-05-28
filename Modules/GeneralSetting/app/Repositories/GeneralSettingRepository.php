@@ -7,6 +7,7 @@ use Intervention\Image\Laravel\Facades\Image;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use App\Services\ImageResizer;
 use Exception;
+use Modules\GeneralSetting\Models\Language;
 
 
 class GeneralSettingRepository
@@ -278,7 +279,101 @@ class GeneralSettingRepository
         }
     }
 
+    
+    public function updateThemeSettings(array $data): void
+    {
+        try {
+            $groupId = $data['group_id'];
 
+            foreach ($data as $key => $value) {
+                if ($key !== 'group_id') {
+                    GeneralSetting::updateOrCreate(
+                        ['key' => $key],
+                        [
+                            'value' => $value,
+                            'group_id' => $groupId
+                        ]
+                    );
+                }
+            }
+        } catch (Exception $e) {
+            \Log::error('Theme settings update failed: ' . $e->getMessage());
+            throw $e;
+        }
+    }
 
+    public function storeOtpSettings(array $data): void
+    {
+        try {
+            $settings = [
+                'otp_type' => $data['otp_type'],
+                'otp_digit_limit' => $data['otp_digit_limit'],
+                'otp_expire_time' => $data['otp_expire_time'],
+                'login' => $data['login'] ?? false,
+                'register' => $data['register'] ?? false,
+            ];
+
+            foreach ($settings as $key => $value) {
+                $saved = GeneralSetting::updateOrCreate(
+                    ['key' => $key],
+                    ['value' => is_array($value) ? json_encode($value) : $value]
+                );
+
+                if (!$saved) {
+                    throw new Exception("Failed to save $key");
+                }
+            }
+        } catch (Exception $e) {
+            \Log::error('Failed to store OTP settings: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+    public function updateCopyright(array $data): void
+    {
+        GeneralSetting::updateOrCreate(
+            [
+                'key' => 'copy_right_' . $data['language'],
+                'group_id' => $data['group_id'],
+            ],
+            [
+                'value' => $data['copy_right_description'],
+                'language_id' => $data['language']
+            ]
+        );
+    }
+
+    public function getCopyright(array $data)
+    {
+        $languageId = $data['language_id'] ?? Language::where('default', 1)->value('language_id');
+
+        return GeneralSetting::where('group_id', $data['group_id'])
+            ->where('key', 'copy_right_' . $languageId)
+            ->first();
+    }
+
+     public function saveRentalSettings(array $data): void
+    {
+        $settings = [
+            'minAdvanceReservation' => $data['minAdvanceReservation'] ?? null,
+            'maxAdvanceReservation' => $data['maxAdvanceReservation'] ?? null,
+            'cancellationBuffer' => $data['cancellationBuffer'] ?? null,
+            'rescheduleBuffer' => $data['rescheduleBuffer'] ?? null,
+            'faq' => $data['faq'] ?? null,
+            'damages' => $data['damages'] ?? null,
+            'extraService' => $data['extraService'] ?? null,
+            'booking' => $data['booking'] ?? null,
+            'enquiries' => $data['enquiries'] ?? null,
+            'reservation' => $data['reservation'] ?? null,
+            'seasonalPricing' => $data['seasonalPricing'] ?? null,
+            'pricing' => $data['pricing'] ?? null,
+        ];
+
+        foreach ($settings as $key => $value) {
+            GeneralSetting::updateOrCreate(
+                ['key' => $key],
+                ['value' => $value]
+            );
+        }
+    }
 
 }

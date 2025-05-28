@@ -12,7 +12,10 @@ use Modules\GeneralSetting\Http\Requests\ListCompanyRequest;
 use Modules\GeneralSetting\Http\Requests\SettingListRequest;
 use Modules\GeneralSetting\Http\Requests\StoreLogoSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreMaintenanceSettingsRequest;
+use Modules\GeneralSetting\Http\Requests\StoreOtpSettingsRequest;
+use Modules\GeneralSetting\Http\Requests\StoreRentalSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreSeoSetupRequest;
+use Modules\GeneralSetting\Http\Requests\UpdateThemeSettingsRequest;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\UserDevice;
 use Modules\GeneralSetting\Models\IndustryType;
@@ -55,7 +58,7 @@ class GeneralSettingController extends Controller
     }
 
     public function company(Request $request): View
-    {       
+    {
         return view('generalsetting::company.index');
     }
 
@@ -113,63 +116,21 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeRentalSettings(Request $request): JsonResponse
+    public function storeRentalSettings(StoreRentalSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse 
     {
-        $rules = [
-            'faq' => 'nullable|boolean',
-            'damages' => 'nullable|boolean',
-            'extraService' => 'nullable|boolean',
-            'booking' => 'nullable|boolean',
-            'enquiries' => 'nullable|boolean',
-            'reservation' => 'nullable|boolean',
-            'seasonalPricing' => 'nullable|boolean',
-        ];
-
-        $messages = [
-            'cancellationBuffer.required' => __('The cancellation buffer field is required.'),
-            'cancellationBuffer.in' => __('Invalid cancellation buffer value.'),
-            'rescheduleBuffer.required' => __('The reschedule buffer field is required.'),
-            'rescheduleBuffer.in' => __('Invalid reschedule buffer value.'),
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['code' => 422, 'errors' => $validator->errors()], 422);
-        }
-
         try {
-            $settings = [
-                'minAdvanceReservation' => $request->minAdvanceReservation,
-                'maxAdvanceReservation' => $request->maxAdvanceReservation,
-                'cancellationBuffer' => $request->cancellationBuffer,
-                'rescheduleBuffer' => $request->rescheduleBuffer,
-                'faq' => $request->faq,
-                'damages' => $request->damages,
-                'extraService' => $request->extraService,
-                'booking' => $request->booking,
-                'enquiries' => $request->enquiries,
-                'reservation' => $request->reservation,
-                'seasonalPricing' => $request->seasonalPricing,
-                'pricing' => $request->pricing,
-            ];
-
-            foreach ($settings as $key => $value) {
-                $saveSetting = $this->updateOrCreateRentalSetting($key, $value);
-                if (!$saveSetting) {
-                    throw new \Exception("Failed to save $key");
-                }
-            }
+            $repository->saveRentalSettings($request->validated());
 
             return response()->json([
                 'code' => 200,
-                'message' =>  __('admin.general_settings.rental_saved_successfully'),
+                'message' => __('admin.general_settings.rental_saved_successfully'),
                 'data' => []
-            ], 200);
-        } catch (\Exception $e) {
+            ]);
+        } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -189,15 +150,15 @@ class GeneralSettingController extends Controller
             $paths = $this->repository->storeLogoSettings($files);
 
             return response()->json([
-                'code'    => 200,
+                'code' => 200,
                 'message' => __('admin.general_settings.logo_update_success'),
-                'data'    => $paths,
+                'data' => $paths,
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code'    => 500,
+                'code' => 500,
                 'message' => __('admin.general_settings.logo_setting_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -210,55 +171,17 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeOtpSettings(Request $request): JsonResponse
+    public function storeOtpSettings(StoreOtpSettingsRequest $request, GeneralSettingRepository $repository ): JsonResponse 
     {
-        $rules = [
-            'otp_type' => 'required',
-            'otp_type.*' => 'in:sms,email',
-            'otp_digit_limit' => 'required|integer|in:4,5,6',
-            'otp_expire_time' => 'required|string|in:2 mins,5 mins,10 mins',
-            'login' => 'nullable|boolean',
-            'register' => 'nullable|boolean',
-        ];
-
-        $messages = [
-            'otp_type.required' => __('The OTP type field is required.'),
-            'otp_type.*.in' => __('Invalid OTP type selected.'),
-            'otp_digit_limit.required' => __('The OTP digit limit field is required.'),
-            'otp_digit_limit.integer' => __('The OTP digit limit must be a number.'),
-            'otp_digit_limit.in' => __('Invalid OTP digit limit selected.'),
-            'otp_expire_time.required' => __('The OTP expiry time field is required.'),
-            'otp_expire_time.in' => __('Invalid OTP expiry time selected.'),
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['code' => 422, 'errors' => $validator->errors()], 422);
-        }
-
         try {
-            $settings = [
-                'otp_type' => $request->otp_type,
-                'otp_digit_limit' => $request->otp_digit_limit,
-                'otp_expire_time' => $request->otp_expire_time,
-                'login' => $request->login,
-                'register' => $request->register,
-            ];
-
-            foreach ($settings as $key => $value) {
-                $saveSetting = $this->updateOrCreateOtpSetting($key, $value);
-                if (!$saveSetting) {
-                    throw new \Exception("Failed to save $key");
-                }
-            }
+            $repository->storeOtpSettings($request->validated());
 
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.general_settings.otp_success'),
                 'data' => []
             ], 200);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
@@ -443,16 +366,16 @@ class GeneralSettingController extends Controller
             $this->repository->storeCompanySettings($request->validated());
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.company_setting_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -465,10 +388,10 @@ class GeneralSettingController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
+                'status' => 'error',
+                'code' => 422,
                 'message' => __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
+                'errors' => $validator->errors()
             ], 422);
         }
 
@@ -482,16 +405,16 @@ class GeneralSettingController extends Controller
             });
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.ownership_transfer_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -502,16 +425,16 @@ class GeneralSettingController extends Controller
             $this->repository->saveNotificationSettings($request->validated());
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.notification_update_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.notification_error_update'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -519,21 +442,21 @@ class GeneralSettingController extends Controller
     public function storeSeoSetupSettings(StoreSeoSetupRequest $request): JsonResponse
     {
         try {
-            $data      = $request->validated();           
-            $groupId   = $request->group_id ?? null;
-            $this->repository->storeSeoSettings($data,  $groupId);
+            $data = $request->validated();
+            $groupId = $request->group_id ?? null;
+            $this->repository->storeSeoSettings($data, $groupId);
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.seo_update_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.seo_update_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -544,16 +467,16 @@ class GeneralSettingController extends Controller
             $repository->storeMaintenanceSettings($request->all());
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.maintanance_update_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.maintanance_update_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -561,50 +484,50 @@ class GeneralSettingController extends Controller
     public function storeCookiesSettings(Request $request): JsonResponse
     {
         $request->validate([
-            'group_id'           => 'required|integer',
-            'language'           => 'required|integer',
+            'group_id' => 'required|integer',
+            'language' => 'required|integer',
             'cookiesContentText' => 'required|string|max:5000',
-            'cookiesPosition'    => 'required|in:right,left',
-            'agreeButtonText'    => 'required|string|min:2|max:255',
-            'declineButtonText'  => 'required|string|min:2|max:255',
-            'showDeclineButton'  => 'nullable|boolean',
-            'cookiesPageLink'    => 'required|url|max:2048'
+            'cookiesPosition' => 'required|in:right,left',
+            'agreeButtonText' => 'required|string|min:2|max:255',
+            'declineButtonText' => 'required|string|min:2|max:255',
+            'showDeclineButton' => 'nullable|boolean',
+            'cookiesPageLink' => 'required|url|max:2048'
         ]);
 
         try {
             $fields = [
                 'cookiesContentText' => $request->cookiesContentText,
-                'cookiesPosition'    => $request->cookiesPosition,
-                'agreeButtonText'    => $request->agreeButtonText,
-                'declineButtonText'  => $request->declineButtonText,
-                'showDeclineButton'  => $request->has('showDeclineButton') ? 1 : 0,
-                'cookiesPageLink'    => $request->cookiesPageLink,
+                'cookiesPosition' => $request->cookiesPosition,
+                'agreeButtonText' => $request->agreeButtonText,
+                'declineButtonText' => $request->declineButtonText,
+                'showDeclineButton' => $request->has('showDeclineButton') ? 1 : 0,
+                'cookiesPageLink' => $request->cookiesPageLink,
             ];
 
             foreach ($fields as $key => $value) {
                 GeneralSetting::updateOrCreate(
                     [
-                        'key'      => $key . '_' . $request->language,
+                        'key' => $key . '_' . $request->language,
                         'group_id' => $request->group_id,
                     ],
                     [
-                        'value'       => $value,
+                        'value' => $value,
                         'language_id' => $request->language
                     ]
                 );
             }
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
-                'message' =>  __('admin.general_settings.cookies_success'),
+                'status' => 'success',
+                'code' => 200,
+                'message' => __('admin.general_settings.cookies_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
-                'message' =>  __('admin.general_settings.sretrive_error'),
-                'error'   => $e->getMessage()
+                'status' => 'error',
+                'code' => 500,
+                'message' => __('admin.general_settings.sretrive_error'),
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -612,16 +535,16 @@ class GeneralSettingController extends Controller
     public function cookiesSettingsList(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'group_id'    => 'required|integer',
+            'group_id' => 'required|integer',
             'language_id' => 'nullable|integer'
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' =>  __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
+                'status' => 'error',
+                'code' => 422,
+                'message' => __('admin.general_settings.validation_error'),
+                'errors' => $validator->errors()
             ], 422);
         }
 
@@ -632,8 +555,8 @@ class GeneralSettingController extends Controller
                 $defaultLanguage = Language::where('default', 1)->first();
                 if (!$defaultLanguage) {
                     return response()->json([
-                        'status'  => 'error',
-                        'code'    => 500,
+                        'status' => 'error',
+                        'code' => 500,
                         'message' => __('admin.general_settings.language_not_found'),
                     ], 500);
                 }
@@ -662,17 +585,17 @@ class GeneralSettingController extends Controller
             }
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
-                'message' =>  __('admin.general_settings.cookies_retrive_success'),
-                'data'    => $formatted
+                'status' => 'success',
+                'code' => 200,
+                'message' => __('admin.general_settings.cookies_retrive_success'),
+                'data' => $formatted
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -684,44 +607,44 @@ class GeneralSettingController extends Controller
 
             if (!$data) {
                 return response()->json([
-                    'status'  => 'error',
-                    'code'    => 404,
+                    'status' => 'error',
+                    'code' => 404,
                     'message' => __('admin.common.no_data_found'),
                 ], 404);
             }
 
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
-                'data'   => $data
+                'code' => 200,
+                'data' => $data
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
 
-   public function list(SettingListRequest $request): JsonResponse
+    public function list(SettingListRequest $request): JsonResponse
     {
         try {
-            $settings =  $this->repository->getSettingsByGroup($request->validated()['group_id']);
+            $settings = $this->repository->getSettingsByGroup($request->validated()['group_id']);
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.setting_retrive_success'),
-                'data'    => $settings
+                'data' => $settings
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -744,14 +667,14 @@ class GeneralSettingController extends Controller
         $password = $request->password;
         if ($authUser->password !== null && Hash::check($password, $authUser->password)) {
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.current_password_correct'),
             ]);
         } else {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
+                'status' => 'error',
+                'code' => 422,
                 'message' => __('admin.general_settings.current_password_incorrect'),
             ]);
         }
@@ -764,28 +687,28 @@ class GeneralSettingController extends Controller
         $user = current_user();
         if ($user->phone_number == "") {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'error'   => "null",
+                'status' => 'error',
+                'code' => 422,
+                'error' => "null",
                 'message' => __('admin.general_settings.phone_number_not_set'),
             ], 422);
         } elseif ($user->phone_number != $currentPhoneNumber) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'error'   => "incorrect",
+                'status' => 'error',
+                'code' => 422,
+                'error' => "incorrect",
                 'message' => __('admin.general_settings.phone_number_incorrect'),
             ], 422);
         } elseif ($user->phone_number == $currentPhoneNumber) {
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.phone_number_correct'),
             ]);
         } else {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
+                'status' => 'error',
+                'code' => 422,
                 'message' => __('admin.general_settings.phone_number_incorrect'),
             ], 422);
         }
@@ -795,16 +718,16 @@ class GeneralSettingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'current_password' => 'required',
-            'new_password'     => 'required|min:6',
+            'new_password' => 'required|min:6',
             'confirm_password' => 'required|same:new_password',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
+                'status' => 'error',
+                'code' => 422,
                 'message' => __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()->toArray()
+                'errors' => $validator->errors()->toArray()
             ], 422);
         }
 
@@ -813,10 +736,10 @@ class GeneralSettingController extends Controller
 
         if ($user->password !== null && !Hash::check($request->current_password, $user->password)) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.current_password_incorrect'),
-                'errors'  => $validator->errors()->toArray()
+                'errors' => $validator->errors()->toArray()
             ], 500);
         }
 
@@ -825,8 +748,8 @@ class GeneralSettingController extends Controller
         $user->save();
 
         return response()->json([
-            'status'  => 'success',
-            'code'    => 200,
+            'status' => 'success',
+            'code' => 200,
             'message' => __('admin.general_settings.password_updated_successfully'),
         ]);
     }
@@ -849,9 +772,9 @@ class GeneralSettingController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 200,
-                'message'  => $validator->errors()->first()
+                'status' => 'error',
+                'code' => 200,
+                'message' => $validator->errors()->first()
             ], 200);
         }
         $currentPassword = $request->phone_current_password;
@@ -860,26 +783,26 @@ class GeneralSettingController extends Controller
 
         if ($authUser->password !== null && !Hash::check($currentPassword, $authUser->password)) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 200,
-                'message'  => __('admin.general_settings.current_password_incorrect')
+                'status' => 'error',
+                'code' => 200,
+                'message' => __('admin.general_settings.current_password_incorrect')
             ]);
         }
         $currentPhoneNumber = $request->current_phonenumber;
         if ($authUser->phone_number != $currentPhoneNumber && $authUser->phone_number != "") {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 200,
-                'message'  => __('admin.general_settings.phone_number_incorrect')
+                'status' => 'error',
+                'code' => 200,
+                'message' => __('admin.general_settings.phone_number_incorrect')
             ]);
         }
         $authUser->phone_number = $request->new_phonenumber;
         $authUser->save();
 
         return response()->json([
-            'status'  => 'success',
-            'code'    => 200,
-            'message' =>  __('admin.general_settings.phone_number_updated_successfully'),
+            'status' => 'success',
+            'code' => 200,
+            'message' => __('admin.general_settings.phone_number_updated_successfully'),
         ]);
     }
 
@@ -891,9 +814,9 @@ class GeneralSettingController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message'  => $validator->errors()->first()
+                'status' => 'error',
+                'code' => 422,
+                'message' => $validator->errors()->first()
             ], 422);
         }
         $current_email = $request->current_email;
@@ -901,26 +824,26 @@ class GeneralSettingController extends Controller
         $authUser = Auth::guard('admin')->user();
         if ($authUser->email != $current_email) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 200,
-                'message'  => __('admin.general_settings.current_email_incorrect')
+                'status' => 'error',
+                'code' => 200,
+                'message' => __('admin.general_settings.current_email_incorrect')
             ]);
         }
         $email_current_password = $request->email_current_password;
         if ($authUser->password !== null && !Hash::check($email_current_password, $authUser->password)) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 200,
-                'message'  => __('admin.general_settings.current_password_incorrect')
+                'status' => 'error',
+                'code' => 200,
+                'message' => __('admin.general_settings.current_password_incorrect')
             ]);
         }
         $authUser->email = $request->new_email;
         $authUser->save();
 
         return response()->json([
-            'status'  => 'success',
-            'code'    => 200,
-            'message' =>  __('admin.general_settings.email_updated_successfully'),
+            'status' => 'success',
+            'code' => 200,
+            'message' => __('admin.general_settings.email_updated_successfully'),
         ]);
     }
 
@@ -936,18 +859,18 @@ class GeneralSettingController extends Controller
                 'os' => $device->os,
                 'ip_address' => $device->ip_address,
                 'location' => $device->location,
-                'date'     => formatDateTime($device->created_at)
+                'date' => formatDateTime($device->created_at)
             ];
         });
-        $response    = [
+        $response = [
             'user' => Auth::user(),
             'last_password_changed_at' => $authUser->last_password_changed_at ? formatDateTime($authUser->last_password_changed_at) : "null",
             'devices' => $userDevices
         ];
         return response()->json([
-            'status'  => 'success',
-            'code'    => 200,
-            'data'    => $response
+            'status' => 'success',
+            'code' => 200,
+            'data' => $response
         ]);
     }
 
@@ -959,8 +882,8 @@ class GeneralSettingController extends Controller
             UserDevice::where('user_id', $authUser->id)->delete();
             Auth::guard('admin')->logout();
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.all_device_removed_successfully'),
             ]);
         }
@@ -968,8 +891,8 @@ class GeneralSettingController extends Controller
         $device = UserDevice::find($request->id);
         $device->delete();
         return response()->json([
-            'status'  => 'success',
-            'code'    => 200,
+            'status' => 'success',
+            'code' => 200,
             'message' => __('admin.general_settings.device_removed_successfully'),
         ]);
     }
@@ -984,15 +907,15 @@ class GeneralSettingController extends Controller
             $message = $user->google_auth_enabled === 1 ? "Google Authentication Enabled Successfully" : "Google Authentication Disabled Successfully";
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => $message
             ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 422,
+                'code' => 422,
                 'message' => 'Something went wrong',
-                'error'   => $th->getMessage()
+                'error' => $th->getMessage()
             ]);
         }
     }
@@ -1000,19 +923,19 @@ class GeneralSettingController extends Controller
     public function updatePrefixes(Request $request): JsonResponse
     {
         try {
-           $this->repository->updatePrefixes($request->all(), $request->group_id);
+            $this->repository->updatePrefixes($request->all(), $request->group_id);
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.prefix_settings_update_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.common.default_update_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -1031,10 +954,10 @@ class GeneralSettingController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' =>  __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
+                'status' => 'error',
+                'code' => 422,
+                'message' => __('admin.general_settings.validation_error'),
+                'errors' => $validator->errors()
             ], 422);
         }
 
@@ -1046,7 +969,7 @@ class GeneralSettingController extends Controller
                     GeneralSetting::updateOrCreate(
                         ['key' => $key],
                         [
-                            'value'    => $value,
+                            'value' => $value,
                             'group_id' => $request->group_id
                         ]
                     );
@@ -1054,16 +977,16 @@ class GeneralSettingController extends Controller
             }
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.ai_configuration_update_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.common.default_update_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -1183,45 +1106,20 @@ class GeneralSettingController extends Controller
         return view('generalsetting::website_settings.theme_settings');
     }
 
-    public function updateThemeSettings(Request $request): JsonResponse
+    public function updateThemeSettings(UpdateThemeSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'group_id' => 'required|integer',
-            'default_theme' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' =>  __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = $request->all();
+            $repository->updateThemeSettings($request->validated());
 
-            foreach ($settings as $key => $value) {
-                if ($key != 'group_id') {
-                    GeneralSetting::updateOrCreate(
-                        ['key' => $key],
-                        [
-                            'value'    => $value,
-                            'group_id' => $request->group_id
-                        ]
-                    );
-                }
-            }
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.theme_update_success')
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.common.default_update_error'),
             ], 500);
         }

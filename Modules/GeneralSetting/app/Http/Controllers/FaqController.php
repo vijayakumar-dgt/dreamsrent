@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
+use Modules\GeneralSetting\Http\Requests\CopyrightListRequest;
+use Modules\GeneralSetting\Http\Requests\CopyrightUpdateRequest;
 use Modules\GeneralSetting\Models\Faq;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\View\View;
+use Modules\GeneralSetting\Repositories\GeneralSettingRepository;
 
 class FaqController extends Controller
 {
@@ -65,16 +68,16 @@ class FaqController extends Controller
     public function howItWorksList(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'group_id'    => 'required|integer',
+            'group_id' => 'required|integer',
             'language_id' => 'nullable|integer'
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
+                'status' => 'error',
+                'code' => 422,
                 'message' => 'Validation failed!',
-                'errors'  => $validator->errors()
+                'errors' => $validator->errors()
             ], 422);
         }
 
@@ -86,17 +89,17 @@ class FaqController extends Controller
                 ->first();
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data'    => $settings
+                'data' => $settings
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -109,32 +112,16 @@ class FaqController extends Controller
         return view('generalsetting::cms.copyright', compact('languages'));
     }
 
-    public function copyrightUpdate(Request $request): JsonResponse
-    {
-        $request->validate([
-            'group_id' => 'required|integer',
-            'language' => 'required|integer',
-            'copy_right_description' => 'required|string|min:10',
-        ]);
-
+    public function copyrightUpdate(CopyrightUpdateRequest $request, GeneralSettingRepository $repository ): JsonResponse {
         try {
-            GeneralSetting::updateOrCreate(
-                [
-                    'key' => 'copy_right_' . $request->language,
-                    'group_id' => $request->group_id,
-                ],
-                [
-                    'value' => $request->copy_right_description,
-                    'language_id' => $request->language
-                ]
-            );
+            $repository->updateCopyright($request->validated());
 
             return response()->json([
                 'code' => 200,
                 'success' => true,
                 'message' => __('admin.cms.copyright_update_success'),
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
                 'success' => false,
@@ -144,41 +131,22 @@ class FaqController extends Controller
         }
     }
 
-    public function copyrightList(Request $request): JsonResponse
-    {
-        $validator = Validator::make($request->all(), [
-            'group_id'    => 'required|integer',
-            'language_id' => 'nullable|integer'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' => 'Validation failed!',
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
+    public function copyrightList(CopyrightListRequest $request, GeneralSettingRepository $repository ): JsonResponse {
         try {
-            $languageId = $request->language_id ?? Language::where('default', 1)->value('language_id');
-
-            $settings = GeneralSetting::where('group_id', $request->group_id)
-                ->where('key', 'copy_right_' . $languageId)
-                ->first();
+            $data = $repository->getCopyright($request->validated());
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data'    => $settings
+                'data' => $data
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
