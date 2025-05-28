@@ -24,9 +24,17 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
+use Modules\GeneralSetting\Http\Requests\StoreNotificationSettingsRequest;
+use Modules\GeneralSetting\Repositories\NotificationSettingsRepository;
 
 class GeneralSettingController extends Controller
 {
+    protected NotificationSettingsRepository $repository;
+
+    public function __construct(NotificationSettingsRepository $repository)
+    {
+        $this->repository = $repository;
+    }
     public function index(): View
     {
         /** @var view-string $view */
@@ -639,52 +647,21 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeNotificationSettings(Request $request): JsonResponse
+    public function storeNotificationSettings(StoreNotificationSettingsRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'group_id'                   => 'required|integer',
-            'notificationPreference'     => 'required',
-            'desktopNotifications'       => 'required|boolean',
-            'bookingUpdates'             => 'required|boolean',
-            'paymentNotifications'       => 'required|boolean',
-            'vehicleManagement'          => 'required|boolean',
-            'unreadBadge'                => 'required|boolean',
-            'userTenantNotifications'    => 'required|boolean',
-            'discountOffers'             => 'required|boolean'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' => __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = $request->all();
-
-            foreach ($settings as $key => $value) {
-                GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    [
-                        'value'    => $value,
-                        'group_id' => $request->group_id ?? null
-                    ]
-                );
-            }
+            $this->repository->saveSettings($request->validated());
 
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
-                'message' => __('admin.general_settings.notification_update_success')
+                'message' => __('admin.general_settings.notification_update_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 500,
-                'message' =>  __('admin.general_settings.notification_error_update'),
+                'message' => __('admin.general_settings.notification_error_update'),
                 'error'   => $e->getMessage()
             ], 500);
         }
@@ -795,46 +772,80 @@ class GeneralSettingController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'code'    => 422,
-                'message' =>  __('admin.general_settings.validation_failed'),
+                'message' => __('admin.general_settings.validation_failed'),
                 'errors'  => $validator->errors()
             ], 422);
         }
 
         try {
-            $settings = $request->except('_token', 'maintenance_image');
+            $settings = $request->except('_token', 'maintenance_image', 'is_remove_image');
             $groupId = $request->group_id;
 
             if ($request->hasFile('maintenance_image')) {
                 $file = $request->file('maintenance_image');
-                $imagePath = null;
-                if ($file instanceof UploadedFile) {
-                    $imagePath = uploadFile($file, 'maintenance');
-                }
 
-                GeneralSetting::updateOrCreate(
-                    ['key' => 'maintenance_image'],
-                    [
-                        'value' => "$imagePath",
-                        'group_id' => $request->group_id ?? null
-                    ]
-                );
+                if ($file instanceof UploadedFile) {
+                    $image = Image::read($file);
+                    $imageName = time() . '-' . $file->getClientOriginalName();
+                    $destinationPath = storage_path('app/public/maintenance/');
+                    $thumbnailPath = storage_path('app/public/maintenance/thumbnail/');
+
+                    // Create directories if they don't exist
+                    if (!File::exists($destinationPath)) {
+                        File::makeDirectory($destinationPath, 0755, true);
+                    }
+                    if (!File::exists($thumbnailPath)) {
+                        File::makeDirectory($thumbnailPath, 0755, true);
+                    }
+
+                    // Save original image
+                    $image->save($destinationPath . $imageName);
+
+                    // Save resized thumbnail
+                    $image->resize(500, 500);
+                    $image->save($thumbnailPath . $imageName);
+
+                    // Delete previous image if exists
+                    $existing = GeneralSetting::where('key', 'maintenance_image')->first();
+                    if ($existing && File::exists(storage_path('app/public/' . $existing->value))) {
+                        File::delete(storage_path('app/public/' . $existing->value));
+                        File::delete(storage_path('app/public/' . str_replace('maintenance/', 'maintenance/thumbnail/', $existing->value)));
+                    }
+
+                    // Save new image path
+                    $maintenanceImagePath = 'maintenance/' . $imageName;
+                    GeneralSetting::updateOrCreate(
+                        ['key' => 'maintenance_image'],
+                        [
+                            'value'    => $maintenanceImagePath,
+                            'group_id' => $groupId
+                        ]
+                    );
+                }
             }
+
+            // Save other settings
             foreach ($settings as $key => $value) {
                 GeneralSetting::updateOrCreate(
                     ['key' => $key],
                     [
-                        'value' => $value,
-                        'group_id' => $request->group_id ?? null
+                        'value'    => $value,
+                        'group_id' => $groupId
                     ]
                 );
             }
 
+            // Remove image if requested
             if ($request->is_remove_image == 1) {
-                GeneralSetting::where('key', 'maintenance_image')->update(
-                    [
-                        'value' => '',
-                    ]
-                );
+                $existing = GeneralSetting::where('key', 'maintenance_image')->first();
+                if ($existing && File::exists(storage_path('app/public/' . $existing->value))) {
+                    File::delete(storage_path('app/public/' . $existing->value));
+                    File::delete(storage_path('app/public/' . str_replace('maintenance/', 'maintenance/thumbnail/', $existing->value)));
+                }
+
+                GeneralSetting::where('key', 'maintenance_image')->update([
+                    'value' => ''
+                ]);
             }
 
             return response()->json([

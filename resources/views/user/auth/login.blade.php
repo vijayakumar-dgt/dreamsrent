@@ -69,7 +69,7 @@
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
-                            <button type="submit" class="btn btn-outline-light w-100 btn-size mt-1">
+                            <button type="submit" class="btn btn-outline-light w-100 btn-size mt-1 submitbtn" disabled>
                                 {{ __('web.auth.sign_in') }}
                             </button>                          
                             

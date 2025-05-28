@@ -1,6 +1,7 @@
+<?php
 namespace Modules\GeneralSetting\Repositories;
 
-use Modules\GeneralSetting\Entities\GeneralSetting;
+use Modules\GeneralSetting\Models\GeneralSetting;
 
 class NotificationSettingsRepository
 {
