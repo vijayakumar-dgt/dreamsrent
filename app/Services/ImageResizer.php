@@ -27,7 +27,7 @@ class ImageResizer
         $basePath = storage_path("app/public/$baseFolder/");
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $extension = $file->getClientOriginalExtension();
-        $uniqueName = time() . '-' . Str::slug($originalName) . '.' . $extension;
+        $uniqueName = Str::uuid() . '_' . time() . '.' . $extension;
 
         $sizes = [
             'original'  => null,
@@ -72,7 +72,6 @@ class ImageResizer
             }
         }
 
-        // Return relative storage path to original image
         return "$baseFolder/$uniqueName";
     }
 }

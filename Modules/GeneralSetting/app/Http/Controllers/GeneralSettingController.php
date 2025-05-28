@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Modules\GeneralSetting\Http\Requests\ListCompanyRequest;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\UserDevice;
 use Modules\GeneralSetting\Models\IndustryType;
@@ -26,12 +27,14 @@ use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
 use Modules\GeneralSetting\Http\Requests\StoreNotificationSettingsRequest;
 use Modules\GeneralSetting\Repositories\NotificationSettingsRepository;
+use Modules\GeneralSetting\Http\Requests\CompanySettingRequest;
+use Modules\GeneralSetting\Repositories\GeneralSettingRepository;
 
 class GeneralSettingController extends Controller
 {
-    protected NotificationSettingsRepository $repository;
+    protected GeneralSettingRepository $repository;
 
-    public function __construct(NotificationSettingsRepository $repository)
+    public function __construct(GeneralSettingRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -510,85 +513,10 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(CompanySettingRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'organization_name'         => 'required|string|max:100',
-            'owner_name'                => 'required|string|max:100',
-            'company_email'             => 'required|email|max:100',
-            'company_phone'             => 'required',
-            'international_phone_number'=> 'required',
-            'company_address_line'      => 'nullable|string|max:150',
-            'company_postal_code'       => 'nullable|string|max:10',
-            'company_profile_photo'     => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' => 'Validation failed!',
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = $request->except('_token', 'company_profile_photo');
-
-            // Handle company_profile_photo upload and resizing
-            if ($request->hasFile('company_profile_photo')) {
-                $file = $request->file('company_profile_photo');
-                $imageName = time() . '-' . $file->getClientOriginalName();
-
-                $destinationPath = storage_path('app/public/company/');
-                $destinationThumbnail = storage_path('app/public/company/thumbnail/');
-
-                if (!File::exists($destinationPath)) {
-                    File::makeDirectory($destinationPath, 0755, true);
-                }
-                if (!File::exists($destinationThumbnail)) {
-                    File::makeDirectory($destinationThumbnail, 0755, true);
-                }
-
-                $image = Image::read($file);
-                $image->save($destinationPath . $imageName);
-
-                // Resize proportionally to max width 500 or height 600
-                $image->resize(500, 600, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
-                $image->save($destinationThumbnail . $imageName);
-
-                // Optional: Delete old image if stored in GeneralSetting
-                $existing = GeneralSetting::where('key', 'company_profile_photo')->first();
-                if ($existing && $existing->value) {
-                    $oldPath = storage_path('app/public/' . $existing->value);
-                    $oldThumbnail = storage_path('app/public/' . str_replace('company/', 'company/thumbnail/', $existing->value));
-
-                    if (File::exists($oldPath)) File::delete($oldPath);
-                    if (File::exists($oldThumbnail)) File::delete($oldThumbnail);
-                }
-
-                GeneralSetting::updateOrCreate(
-                    ['key' => 'company_profile_photo'],
-                    [
-                        'value' => 'company/' . $imageName,
-                        'group_id' => $request->group_id ?? null
-                    ]
-                );
-            }
-
-            // Save other settings
-            foreach ($settings as $key => $value) {
-                GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    [
-                        'value' => $value,
-                        'group_id' => $request->group_id ?? null
-                    ]
-                );
-            }
+            $this->repository->storeCompanySettings($request->validated());
 
             return response()->json([
                 'status'  => 'success',
@@ -647,7 +575,7 @@ class GeneralSettingController extends Controller
     public function storeNotificationSettings(StoreNotificationSettingsRequest $request): JsonResponse
     {
         try {
-            $this->repository->saveSettings($request->validated());
+            $this->repository->saveNotificationSettings($request->validated());
 
             return response()->json([
                 'status'  => 'success',
@@ -979,25 +907,12 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function listCompany(Request $request): JsonResponse
+    public function listCompany(ListCompanyRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'group_id' => 'required|integer'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' =>  __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = GeneralSetting::where('group_id', $request->group_id)->pluck('value', 'key');
+            $data = $this->repository->getCompanySettings($request->group_id);
 
-            if ($settings->isEmpty()) {
+            if (!$data) {
                 return response()->json([
                     'status'  => 'error',
                     'code'    => 404,
@@ -1005,33 +920,16 @@ class GeneralSettingController extends Controller
                 ], 404);
             }
 
-           
-
-            $response = [
-                'organization_name'    => $settings['organization_name'] ?? null,
-                'owner_name'           => $settings['owner_name'] ?? null,
-                'company_email'        => $settings['company_email'] ?? null,
-                'company_phone'        => $settings['international_phone_number'] ?? null,
-                'industry'             => $settings['industry'] ?? null,
-                'team_size'            => $settings['team_size'] ?? null,
-                'company_address_line' => $settings['company_address_line'] ?? null,
-                'country'              => $settings['country'] ?? null,
-                'state'                => $settings['state'] ?? null,
-                'city'                 => $settings['city'] ?? null,
-                'company_postal_code'  => $settings['company_postal_code'] ?? null,
-                'company_profile_photo' => uploadedAsset($settings['company_profile_photo'] ?? null, 'default')
-            ];
-
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
-                'data'    => $response
+                'status' => 'success',
+                'code'   => 200,
+                'data'   => $data
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 500,
-                'message' =>  __('admin.general_settings.retrive_error'),
+                'message' => __('admin.general_settings.retrive_error'),
                 'error'   => $e->getMessage()
             ], 500);
         }
