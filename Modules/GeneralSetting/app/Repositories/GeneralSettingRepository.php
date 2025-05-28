@@ -1,6 +1,7 @@
 <?php
 
 namespace Modules\GeneralSetting\Repositories;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
 use Modules\GeneralSetting\Models\GeneralSetting;
@@ -14,6 +15,25 @@ class GeneralSettingRepository
     public function __construct(ImageResizer $imageResizer)
     {
         $this->imageResizer = $imageResizer;
+    }
+    protected array $imageKeys = [
+        'logo_image',
+        'favicon_image',
+        'small_image',
+        'dark_logo',
+        'invoice_logo',
+        'maintenance_image',
+        'metaImage'
+    ];
+
+    public function getSettingsByGroup(int $groupId)
+    {
+        return GeneralSetting::where('group_id', $groupId)->get()->map(function ($setting) {
+            if (in_array($setting->key, $this->imageKeys)) {
+                $setting->value = uploadedAsset($setting->value, 'default2');
+            }
+            return $setting;
+        });
     }
     public function storeCompanySettings(array $data): void
     {
@@ -34,7 +54,7 @@ class GeneralSettingRepository
             GeneralSetting::updateOrCreate(
                 ['key' => 'company_profile_photo'],
                 [
-                    'value'    => $companyPhotoStoragePath,
+                    'value' => $companyPhotoStoragePath,
                     'group_id' => $data['group_id'] ?? null
                 ]
             );
@@ -45,7 +65,7 @@ class GeneralSettingRepository
             GeneralSetting::updateOrCreate(
                 ['key' => $key],
                 [
-                    'value'    => $value,
+                    'value' => $value,
                     'group_id' => $data['group_id'] ?? null
                 ]
             );
@@ -90,5 +110,88 @@ class GeneralSettingRepository
             );
         }
     }
+
+    /**
+     * Update prefix settings
+     *
+     * @param array $settings
+     * @param int $groupId
+     * @return void
+     * @throws \Exception
+     */
+    public function updatePrefixes(array $settings, int $groupId)
+    {
+        foreach ($settings as $key => $value) {
+            if ($key !== 'group_id') {
+                GeneralSetting::updateOrCreate(
+                    ['key' => $key],
+                    [
+                        'value' => $value,
+                        'group_id' => $groupId
+                    ]
+                );
+            }
+        }
+    }
+
+    /**
+     * Get all prefix settings for a group
+     *
+     * @param int $groupId
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getPrefixesByGroup(int $groupId)
+    {
+        return GeneralSetting::where('group_id', $groupId)
+            ->whereIn('key', [
+                'reservation_prefix',
+                'quotation_prefix',
+                'enquiry_prefix',
+                'company_prefix',
+                'inspection_prefix',
+                'report_prefix',
+                'customer_prefix'
+            ])
+            ->get();
+    }
+
+    public function storeSeoSettings(array $data,  ?int $groupId = 6): void
+    {
+        $file = $data['metaImage'] ?? null;
+        unset($data['metaImage']);
+        unset($data['_token']);
+        // Fetch old image path
+        $existing = GeneralSetting::where('key', 'metaImage')->first();
+        $oldPath = $existing?->value;
+
+        if (!empty($file) && $file instanceof \Illuminate\Http\UploadedFile) {
+            $seoPhotoPath = 'seo';
+            $seoPhotoStoragePath = $this->imageResizer->uploadFile($file, $oldPath, $seoPhotoPath);
+
+            GeneralSetting::updateOrCreate(
+                ['key' => 'metaImage'],
+                [
+                    'value' => $seoPhotoStoragePath,
+                    'group_id' => $groupId
+                ]
+            );
+        }
+
+        // Save other SEO settings
+        foreach ($data as $key => $value) {
+            GeneralSetting::updateOrCreate(
+                ['key' => $key],
+                [
+                    'value' => $value,
+                    'group_id' => $groupId
+                ]
+            );
+        }
+
+        Cache::forget('seo_settings');
+    }
+
+
+
 
 }

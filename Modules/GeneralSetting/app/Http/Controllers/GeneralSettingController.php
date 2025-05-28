@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Modules\GeneralSetting\Http\Requests\ListCompanyRequest;
+use Modules\GeneralSetting\Http\Requests\SettingListRequest;
+use Modules\GeneralSetting\Http\Requests\StoreSeoSetupRequest;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\UserDevice;
 use Modules\GeneralSetting\Models\IndustryType;
@@ -592,82 +594,12 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeSeoSetupSettings(Request $request): JsonResponse
+    public function storeSeoSetupSettings(StoreSeoSetupRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'metaImage'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
-            'metaTitle'       => 'required|string|min:5|max:255',
-            'siteDescription' => 'required|string|min:10|max:5000',
-            'keywords'        => 'required|string|max:1000'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' => __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = $request->except('_token', 'metaImage');
-
-            // Handle metaImage upload
-            if ($request->hasFile('metaImage')) {
-                $file = $request->file('metaImage');
-                if ($file instanceof UploadedFile) {
-                    $image      = Image::read($file);
-                    $imageName  = time() . '-' . $file->getClientOriginalName();
-                    $destinationPath = storage_path('app/public/seo/');
-                    $thumbnailPath   = storage_path('app/public/seo/thumbnail/');
-
-                    // Create directories if they don't exist
-                    if (!File::exists($destinationPath)) {
-                        File::makeDirectory($destinationPath, 0755, true);
-                    }
-                    if (!File::exists($thumbnailPath)) {
-                        File::makeDirectory($thumbnailPath, 0755, true);
-                    }
-
-                    // Save original image
-                    $image->save($destinationPath . $imageName);
-
-                    // Save resized thumbnail
-                    $image->resize(500, 500); // adjust as needed
-                    $image->save($thumbnailPath . $imageName);
-
-                    // Delete old image if exists
-                    $existing = GeneralSetting::where('key', 'metaImage')->first();
-                    if ($existing && File::exists(storage_path('app/public/' . $existing->value))) {
-                        File::delete(storage_path('app/public/' . $existing->value));
-                        File::delete(storage_path('app/public/' . str_replace('seo/', 'seo/thumbnail/', $existing->value)));
-                    }
-
-                    // Save new image path
-                    $metaImagePath = 'seo/' . $imageName;
-                    GeneralSetting::updateOrCreate(
-                        ['key' => 'metaImage'],
-                        [
-                            'value'    => $metaImagePath,
-                            'group_id' => $request->group_id ?? null
-                        ]
-                    );
-                }
-            }
-
-            // Save other settings
-            foreach ($settings as $key => $value) {
-                GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    [
-                        'value'    => $value,
-                        'group_id' => $request->group_id ?? null
-                    ]
-                );
-            }
-
-            Cache::forget('seo_settings');
+            $data      = $request->validated();           
+            $groupId   = $request->group_id ?? null;
+            $this->repository->storeSeoSettings($data,  $groupId);
 
             return response()->json([
                 'status'  => 'success',
@@ -935,28 +867,10 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function list(Request $request): JsonResponse
+   public function list(SettingListRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'group_id' => 'required|integer'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' => __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = GeneralSetting::where('group_id', $request->group_id)->get()->map(function ($setting) {
-                if ($setting->key == 'logo_image' || $setting->key == 'favicon_image' || $setting->key == 'small_image' || $setting->key == 'dark_logo' || $setting->key == 'invoice_logo' || $setting->key == 'maintenance_image' || $setting->key == 'metaImage') {
-                    $setting->value = uploadedAsset($setting->value, 'default2');
-                }
-                return $setting;
-            });
+            $settings =  $this->repository->getSettingsByGroup($request->validated()['group_id']);
 
             return response()->json([
                 'status'  => 'success',
@@ -1247,45 +1161,13 @@ class GeneralSettingController extends Controller
 
     public function updatePrefixes(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'group_id' => 'required|integer',
-            'reservation_prefix' => 'required',
-            'quotation_prefix' => 'required',
-            'enquiry_prefix' => 'required',
-            'company_prefix' => 'required',
-            'inspection_prefix' => 'required',
-            'report_prefix' => 'required',
-            'customer_prefix' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' => 'Validation failed!',
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = $request->all();
-
-            foreach ($settings as $key => $value) {
-                if ($key != 'group_id') {
-                    GeneralSetting::updateOrCreate(
-                        ['key' => $key],
-                        [
-                            'value'    => $value,
-                            'group_id' => $request->group_id
-                        ]
-                    );
-                }
-            }
+           $this->repository->updatePrefixes($request->all(), $request->group_id);
 
             return response()->json([
                 'status'  => 'success',
                 'code'    => 200,
-                'message' => __('admin.general_settings.prefix_settings_update_success')
+                'message' => __('admin.general_settings.prefix_settings_update_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([

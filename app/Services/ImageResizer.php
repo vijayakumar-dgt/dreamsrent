@@ -25,29 +25,26 @@ class ImageResizer
         }
 
         $basePath = storage_path("app/public/$baseFolder/");
-        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $extension = $file->getClientOriginalExtension();
         $uniqueName = Str::uuid() . '_' . time() . '.' . $extension;
 
         $sizes = [
-            'original'  => null,
-            'large'     => 1200,
-            'medium'    => 800,
+            'original' => null,
+            'large' => 1200,
+            'medium' => 800,
             'thumbnail' => 300,
         ];
 
-        // Ensure base and size directories exist
+        // Ensure folders exist
         foreach ($sizes as $folder => $width) {
             $path = $basePath . ($folder === 'original' ? '' : $folder . '/');
-            if (!File::exists($path)) {
-                File::makeDirectory($path, 0755, true);
-            }
+            File::ensureDirectoryExists($path, 0755, true);
         }
 
         // Read original image
         $image = Image::read($file);
 
-        // Save each size
+        // Save image in each size
         foreach ($sizes as $folder => $width) {
             $targetPath = $basePath . ($folder === 'original' ? '' : $folder . '/') . $uniqueName;
 
@@ -61,17 +58,18 @@ class ImageResizer
             $resized->save($targetPath);
         }
 
-        // Delete old images if exist
+        // Delete old images if path provided
         if (!empty($oldFilePath)) {
             $oldFilename = basename($oldFilePath);
             foreach ($sizes as $folder => $_) {
-                $path = $basePath . ($folder === 'original' ? '' : $folder . '/') . $oldFilename;
-                if (File::exists($path)) {
-                    File::delete($path);
+                $oldPath = $basePath . ($folder === 'original' ? '' : $folder . '/') . $oldFilename;
+                if (File::exists($oldPath)) {
+                    File::delete($oldPath);
                 }
             }
         }
 
-        return "$baseFolder/$uniqueName";
+        return "$baseFolder/$uniqueName"; // Return original (base) path
     }
+
 }
