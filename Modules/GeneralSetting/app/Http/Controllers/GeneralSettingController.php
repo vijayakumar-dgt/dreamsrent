@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Modules\GeneralSetting\Http\Requests\ListCompanyRequest;
 use Modules\GeneralSetting\Http\Requests\SettingListRequest;
+use Modules\GeneralSetting\Http\Requests\StoreLogoSettingsRequest;
+use Modules\GeneralSetting\Http\Requests\StoreMaintenanceSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreSeoSetupRequest;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\UserDevice;
@@ -180,102 +182,22 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeLogoSettings(Request $request): JsonResponse
+    public function storeLogoSettings(StoreLogoSettingsRequest $request): JsonResponse
     {
-        $rules = [
-            'logo_image'    => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
-            'favicon_image' => 'nullable|mimes:jpg,jpeg,png,svg,ico|max:5120',
-            'small_image'   => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
-            'dark_logo'     => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
-        ];
-
-        $messages = [
-            'logo_image.image'    => __('admin.general_settings.logo_image_type'),
-            'favicon_image.image' => __('admin.general_settings.favicon_image_type'),
-            'small_image.image'   => __('admin.general_settings.small_image_type'),
-            'dark_logo.image'     => __('admin.general_settings.dark_logo_image_type'),
-            'logo_image.max'      => __('admin.general_settings.logo_image_size'),
-            'favicon_image.max'   => __('admin.general_settings.favicon_image_size'),
-            'small_image.max'     => __('admin.general_settings.small_image_size'),
-            'dark_logo.max'       => __('admin.general_settings.dark_logo_image_size'),
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['code' => 422, 'errors' => $validator->errors()], 422);
-        }
-
         try {
-            $groupId = 16;
-            $paths = [];
-            $logoFields = [
-                'logo_image'    => 'logo',
-                'favicon_image' => 'favicon',
-                'small_image'   => 'small',
-                'dark_logo'     => 'dark',
-            ];
-
-            $mainPath = storage_path('app/public/logo/');
-            $thumbPath = storage_path('app/public/logo/thumbnail/');
-
-            if (!File::exists($mainPath)) {
-                File::makeDirectory($mainPath, 0755, true);
-            }
-            if (!File::exists($thumbPath)) {
-                File::makeDirectory($thumbPath, 0755, true);
-            }
-
-            foreach ($logoFields as $field => $prefix) {
-                if ($request->hasFile($field)) {
-                    $file = $request->file($field);
-                    $imageName = time() . '-' . $file->getClientOriginalName();
-
-                    // Read and save original
-                    $image = Image::read($file);
-                    $image->save($mainPath . $imageName);
-
-                    // Resize and save thumbnail
-                    $image->resize(300, 300, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    });
-                    $image->save($thumbPath . $imageName);
-
-                    // Delete old image if exists
-                    $existing = GeneralSetting::where('key', $field)->first();
-                    if ($existing && $existing->value) {
-                        $oldPath = storage_path('app/public/' . $existing->value);
-                        $oldThumb = storage_path('app/public/' . str_replace('logo/', 'logo/thumbnail/', $existing->value));
-
-                        if (File::exists($oldPath)) File::delete($oldPath);
-                        if (File::exists($oldThumb)) File::delete($oldThumb);
-                    }
-
-                    // Save to DB
-                    $relativePath = 'logo/' . $imageName;
-                    GeneralSetting::updateOrCreate(
-                        ['key' => $field],
-                        [
-                            'value' => $relativePath,
-                            'group_id' => $groupId
-                        ]
-                    );
-
-                    $paths[$field] = $relativePath;
-                }
-            }
+            $files = $request->only(['logo_image', 'favicon_image', 'small_image', 'dark_logo']);
+            $paths = $this->repository->storeLogoSettings($files);
 
             return response()->json([
-                'code' => 200,
+                'code'    => 200,
                 'message' => __('admin.general_settings.logo_update_success'),
-                'data' => $paths,
+                'data'    => $paths,
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'code' => 500,
+                'code'    => 500,
                 'message' => __('admin.general_settings.logo_setting_error'),
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -616,94 +538,10 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeMaintenanceSettings(Request $request): JsonResponse
+    public function storeMaintenanceSettings(StoreMaintenanceSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'group_id'                => 'required',
-            'maintenance_image'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'maintenance_description' => 'nullable|string|max:5000',
-            'maintenance_status'      => 'nullable'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' => __('admin.general_settings.validation_failed'),
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = $request->except('_token', 'maintenance_image', 'is_remove_image');
-            $groupId = $request->group_id;
-
-            if ($request->hasFile('maintenance_image')) {
-                $file = $request->file('maintenance_image');
-
-                if ($file instanceof UploadedFile) {
-                    $image = Image::read($file);
-                    $imageName = time() . '-' . $file->getClientOriginalName();
-                    $destinationPath = storage_path('app/public/maintenance/');
-                    $thumbnailPath = storage_path('app/public/maintenance/thumbnail/');
-
-                    // Create directories if they don't exist
-                    if (!File::exists($destinationPath)) {
-                        File::makeDirectory($destinationPath, 0755, true);
-                    }
-                    if (!File::exists($thumbnailPath)) {
-                        File::makeDirectory($thumbnailPath, 0755, true);
-                    }
-
-                    // Save original image
-                    $image->save($destinationPath . $imageName);
-
-                    // Save resized thumbnail
-                    $image->resize(500, 500);
-                    $image->save($thumbnailPath . $imageName);
-
-                    // Delete previous image if exists
-                    $existing = GeneralSetting::where('key', 'maintenance_image')->first();
-                    if ($existing && File::exists(storage_path('app/public/' . $existing->value))) {
-                        File::delete(storage_path('app/public/' . $existing->value));
-                        File::delete(storage_path('app/public/' . str_replace('maintenance/', 'maintenance/thumbnail/', $existing->value)));
-                    }
-
-                    // Save new image path
-                    $maintenanceImagePath = 'maintenance/' . $imageName;
-                    GeneralSetting::updateOrCreate(
-                        ['key' => 'maintenance_image'],
-                        [
-                            'value'    => $maintenanceImagePath,
-                            'group_id' => $groupId
-                        ]
-                    );
-                }
-            }
-
-            // Save other settings
-            foreach ($settings as $key => $value) {
-                GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    [
-                        'value'    => $value,
-                        'group_id' => $groupId
-                    ]
-                );
-            }
-
-            // Remove image if requested
-            if ($request->is_remove_image == 1) {
-                $existing = GeneralSetting::where('key', 'maintenance_image')->first();
-                if ($existing && File::exists(storage_path('app/public/' . $existing->value))) {
-                    File::delete(storage_path('app/public/' . $existing->value));
-                    File::delete(storage_path('app/public/' . str_replace('maintenance/', 'maintenance/thumbnail/', $existing->value)));
-                }
-
-                GeneralSetting::where('key', 'maintenance_image')->update([
-                    'value' => ''
-                ]);
-            }
+            $repository->storeMaintenanceSettings($request->all());
 
             return response()->json([
                 'status'  => 'success',
