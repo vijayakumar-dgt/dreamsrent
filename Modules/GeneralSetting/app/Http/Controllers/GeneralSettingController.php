@@ -8,8 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Modules\GeneralSetting\Http\Requests\CookiesSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\ListCompanyRequest;
 use Modules\GeneralSetting\Http\Requests\SettingListRequest;
+use Modules\GeneralSetting\Http\Requests\StoreCookiesSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreInvoiceSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreLogoSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreMaintenanceSettingsRequest;
@@ -434,41 +436,10 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeCookiesSettings(Request $request): JsonResponse
+    public function storeCookiesSettings(StoreCookiesSettingsRequest $request, GeneralSettingRepository $repository ): JsonResponse
     {
-        $request->validate([
-            'group_id' => 'required|integer',
-            'language' => 'required|integer',
-            'cookiesContentText' => 'required|string|max:5000',
-            'cookiesPosition' => 'required|in:right,left',
-            'agreeButtonText' => 'required|string|min:2|max:255',
-            'declineButtonText' => 'required|string|min:2|max:255',
-            'showDeclineButton' => 'nullable|boolean',
-            'cookiesPageLink' => 'required|url|max:2048'
-        ]);
-
         try {
-            $fields = [
-                'cookiesContentText' => $request->cookiesContentText,
-                'cookiesPosition' => $request->cookiesPosition,
-                'agreeButtonText' => $request->agreeButtonText,
-                'declineButtonText' => $request->declineButtonText,
-                'showDeclineButton' => $request->has('showDeclineButton') ? 1 : 0,
-                'cookiesPageLink' => $request->cookiesPageLink,
-            ];
-
-            foreach ($fields as $key => $value) {
-                GeneralSetting::updateOrCreate(
-                    [
-                        'key' => $key . '_' . $request->language,
-                        'group_id' => $request->group_id,
-                    ],
-                    [
-                        'value' => $value,
-                        'language_id' => $request->language
-                    ]
-                );
-            }
+            $repository->storeCookiesSettings($request->validated());
 
             return response()->json([
                 'status' => 'success',
@@ -485,63 +456,19 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function cookiesSettingsList(Request $request): JsonResponse
+    public function cookiesSettingsList(CookiesSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'group_id' => 'required|integer',
-            'language_id' => 'nullable|integer'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'message' => __('admin.general_settings.validation_error'),
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $languageId = $request->language_id;
-
-            if (!$languageId) {
-                $defaultLanguage = Language::where('default', 1)->first();
-                if (!$defaultLanguage) {
-                    return response()->json([
-                        'status' => 'error',
-                        'code' => 500,
-                        'message' => __('admin.general_settings.language_not_found'),
-                    ], 500);
-                }
-                $languageId = $defaultLanguage->language_id;
-            }
-
-            $keys = [
-                'cookiesContentText',
-                'cookiesPosition',
-                'agreeButtonText',
-                'declineButtonText',
-                'showDeclineButton',
-                'cookiesPageLink'
-            ];
-
-            $settings = GeneralSetting::where('group_id', $request->group_id)
-                ->whereIn('key', array_map(function ($key) use ($languageId) {
-                    return $key . '_' . $languageId;
-                }, $keys))
-                ->pluck('value', 'key');
-
-            $formatted = [];
-            foreach ($settings as $key => $value) {
-                $baseKey = explode('_' . $languageId, $key)[0];
-                $formatted[$baseKey] = $value;
-            }
+            $settings = $repository->getCookiesSettings(
+                $request->group_id,
+                $request->language_id
+            );
 
             return response()->json([
                 'status' => 'success',
                 'code' => 200,
                 'message' => __('admin.general_settings.cookies_retrive_success'),
-                'data' => $formatted
+                'data' => $settings
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -549,7 +476,7 @@ class GeneralSettingController extends Controller
                 'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
                 'error' => $e->getMessage()
-            ], 500);
+            ]);
         }
     }
 

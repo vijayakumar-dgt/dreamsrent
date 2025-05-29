@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="camaro-location-inner">
                                     <i class='bx bx-car'></i>
-                                    <span>{{__('web.home.listed_on')}} : {{ $lastUpdateFormatted }} </span>
+                                    <span>{{__('web.home.listed_on')}} : {{ $lastUpdate }} </span>
                                 </div>
                             </div>
                         </div>
@@ -675,24 +675,24 @@
                         </div>
                         <div class="owner-detail">
                             <div class="owner-img">
-                                <a href="#"><img src="{{ $data['author_profile'] }}" alt="User"></a>
+                                <a href="#"><img src="{{ $author_profile }}" alt="User"></a>
                             </div>
                             <div class="reviewbox-list-rating">
-                                <h5><a>{{ $data['author_name'] ?? "" }}</a></h5>
+                                <h5><a>{{ $author_name ?? "" }}</a></h5>
                             </div>
                         </div>
                         <ul class="booking-list mb-0">
                             <li>
                                 {{__('web.user.email')}}
-                                <span>{{ $data['author_email'] ?? "" }}</span>
+                                <span>{{ $author_email ?? "" }}</span>
                             </li>
                             <li>
                                 {{ __('web.home.phone_number') }}
-                                <span>{{ $data['author_phone'] ?? ""}}</span>
+                                <span>{{ $author_phone ?? ""}}</span>
                             </li>
                             <li>
                                 {{__('web.home.location')}}
-                                <span>{{ $data['author_location'] ?? "" }}</span>
+                                <span>{{ $author_location ?? "" }}</span>
                             </li>
                         </ul>
                     </div>
