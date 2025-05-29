@@ -461,5 +461,62 @@ class GeneralSettingRepository
 
         return (bool) GeneralSetting::updateOrCreate($attributes, $values);
     }
+    public function getCookiesSettings(int $groupId, ?int $languageId = null): array
+    {
+        if (!$languageId) {
+            $defaultLanguage = Language::where('default', 1)->first();
+
+            if (!$defaultLanguage) {
+                throw new \Exception(__('admin.general_settings.language_not_found'));
+            }
+
+            $languageId = $defaultLanguage->language_id;
+        }
+
+        $keys = [
+            'cookiesContentText',
+            'cookiesPosition',
+            'agreeButtonText',
+            'declineButtonText',
+            'showDeclineButton',
+            'cookiesPageLink'
+        ];
+
+        $settings = GeneralSetting::where('group_id', $groupId)
+            ->whereIn('key', array_map(fn($key) => $key . '_' . $languageId, $keys))
+            ->pluck('value', 'key');
+
+        $formatted = [];
+        foreach ($settings as $key => $value) {
+            $baseKey = explode('_' . $languageId, $key)[0];
+            $formatted[$baseKey] = $value;
+        }
+
+        return $formatted;
+    }
+    public function storeCookiesSettings(array $data): void
+    {
+        $fields = [
+            'cookiesContentText' => $data['cookiesContentText'],
+            'cookiesPosition' => $data['cookiesPosition'],
+            'agreeButtonText' => $data['agreeButtonText'],
+            'declineButtonText' => $data['declineButtonText'],
+            'showDeclineButton' => isset($data['showDeclineButton']) ? 1 : 0,
+            'cookiesPageLink' => $data['cookiesPageLink'],
+        ];
+        foreach ($fields as $key => $value) {
+            GeneralSetting::updateOrCreate(
+                [
+                    'key' => $key . '_' . $data['language'],
+                    'group_id' => $data['group_id'],
+                ],
+                [
+                    'value' => $value,
+                    'language_id' => $data['language']
+                ]
+            );
+        }
+    }
+
 
 }
