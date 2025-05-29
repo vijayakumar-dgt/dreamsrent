@@ -81,7 +81,7 @@
 		<div class="modal-dialog modal-dialog-centered modal-md">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4 class="mb-0 modal-title">{{ __('admin.rentals.vehicle_color') }}</h4>
+					<h4 class="mb-0 modal-title">{{ __('admin.rentals.create_vehicle_color') }}</h4>
 					<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
 						<i class="ti ti-x fs-16"></i>
 					</button>

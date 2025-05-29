@@ -189,7 +189,7 @@ class BrandRepository implements BrandRepositoryInterface
             return [
                 'status' => 'error',
                 'code'   => 404,
-                'message' => __('admin.common.not_found'),
+                'message' => __('admin.common.no_data_found'),
             ];
         } catch (\Throwable $e) {
             return [

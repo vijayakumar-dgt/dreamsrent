@@ -397,8 +397,8 @@
         });
 
         $("#add_car_color").on("click", function () {
-            $(".modal-title").text("Create Car Color");
-            $(".submitbtn").text("Create New");
+            $(".modal-title").text(_l("admin.rentals.create_vehicle_color"));
+            $(".submitbtn").text(_l("admin.common.create_new"));
             $("#carColorForm")[0].reset();
             $("#id").val("");
             $(".error-text").text("");
@@ -445,8 +445,8 @@
                     $("#id").val(data.id);
                     $("#language_id").val(data.language_id);
 
-                    $("#car_color_modal .modal-title").text("Edit Car Color");
-                    $(".submitbtn").text("Save Changes");
+                    $("#car_color_modal .modal-title").text(_l("admin.rentals.edit_vehicle_color"));
+                    $(".submitbtn").text(_l("admin.common.save_changes"));
                     $("#statusDiv")
                         .removeClass("d-none")
                         .parent()

@@ -97,9 +97,6 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::get('seat-type/edit/{id}', [CarSeatController::class, 'edit'])->name('carSeat.edit');
         Route::post('seat-type/update', [CarSeatController::class, 'update'])->name('carSeat.update');
         Route::post('seat-type/delete', [CarSeatController::class, 'delete'])->name('carSeat.delete');
-        Route::post('seat-type/delete-bulk', [CarSeatController::class, 'bulkDelete'])->name('carSeat.bulkDelete');
-        Route::post('seat-type/pdf-bulk', [CarSeatController::class, 'pdfExport'])->name('carSeat.bulkPdf');
-        Route::post('seat-type/excel-bulk', [CarSeatController::class, 'excelExport'])->name('carSeat.bulkExcel');
         // Car Color Type
         Route::get('vehicle-color', [CarColorController::class, 'index'])->name('carColor.index')->middleware('permission');
         Route::post('vehicle-color/store', [CarColorController::class, 'store'])->name('carColor.store');
@@ -107,7 +104,6 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::get('vehicle-color/edit/{id}', [CarColorController::class, 'edit'])->name('carColor.edit');
         Route::post('vehicle-color/update', [CarColorController::class, 'update'])->name('carColor.update');
         Route::post('vehicle-color/delete', [CarColorController::class, 'delete'])->name('carColor.delete');
-        Route::post('vehicle-color/delete-bulk', [CarColorController::class, 'bulkDelete'])->name('carColor.bulkDelete');
         //Car transmission
         Route::get('vehicle-transmission', [CarTransmissionContollerController::class, 'index'])->name('carTrasmission.index')->middleware('permission');
         Route::post('vehicle-transmission/store', [CarTransmissionContollerController::class, 'store'])->name('carTrasmission.store');
@@ -115,7 +111,6 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::get('vehicle-transmission/edit/{id}', [CarTransmissionContollerController::class, 'edit'])->name('carTrasmission.edit');
         Route::post('vehicle-transmission/update', [CarTransmissionContollerController::class, 'update'])->name('carTrasmission.update');
         Route::post('vehicle-transmission/delete', [CarTransmissionContollerController::class, 'delete'])->name('carTrasmission.delete');
-        Route::post('vehicle-transmission/delete-bulk', [CarTransmissionContollerController::class, 'bulkDelete'])->name('carTrasmission.bulkDelete');
         //Car steeringFuel
         Route::get('fuel-type', [CarFuelController::class, 'index'])->name('fuelType.index')->middleware('permission');
         Route::post('fuel-type/store', [CarFuelController::class, 'store'])->name('fuelType.store');
@@ -123,7 +118,6 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::get('fuel-type/edit/{id}', [CarFuelController::class, 'edit'])->name('fuelType.edit');
         Route::post('fuel-type/update', [CarFuelController::class, 'update'])->name('fuelType.update');
         Route::post('fuel-type/delete', [CarFuelController::class, 'delete'])->name('fuelType.delete');
-        Route::post('fuel-type/delete-bulk', [CarFuelController::class, 'bulkDelete'])->name('fuelType.bulkDelete');
         //Car Sttering
         Route::get('steering-type', [CarSteeringController::class, 'index'])->name('steeringType.index')->middleware('permission');
         Route::post('steering-type/store', [CarSteeringController::class, 'store'])->name('steeringType.store');
@@ -131,7 +125,6 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::get('steering-type/edit/{id}', [CarSteeringController::class, 'edit'])->name('steeringType.edit');
         Route::post('steering-type/update', [CarSteeringController::class, 'update'])->name('steeringType.update');
         Route::post('steering-type/delete', [CarSteeringController::class, 'delete'])->name('steeringType.delete');
-        Route::post('steering-type/delete-bulk', [CarSteeringController::class, 'bulkDelete'])->name('steeringType.bulkDelete');
         //Seasons Routes
         Route::get('seasons', [SeasonController::class, 'index'])->name('seasons')->middleware('permission');
         Route::post('store_season', [SeasonController::class, 'save'])->name('store_season');
@@ -145,7 +138,6 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::get('category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
         Route::post('category/update', [CategoryController::class, 'update'])->name('category.update');
         Route::post('category/delete', [CategoryController::class, 'delete'])->name('category.delete');
-        Route::post('category/delete-bulk', [CategoryController::class, 'bulkDelete'])->name('category.bulkDelete');
         //Car Inspection
         Route::get('inspection', [InspectionController::class, 'index'])->name('inspection.index')->middleware('permission');
         Route::post('store_inspection', [InspectionController::class, 'save'])->name('inspection.store');
