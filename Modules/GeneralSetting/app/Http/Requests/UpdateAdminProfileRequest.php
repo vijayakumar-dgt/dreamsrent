@@ -3,8 +3,9 @@
 namespace Modules\GeneralSetting\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 
-class UpdateAdminProfileRequest extends FormRequest
+class UpdateAdminProfileRequest extends CustomFailedValidation
 {
     public function authorize(): bool
     {

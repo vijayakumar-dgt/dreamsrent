@@ -12,9 +12,8 @@ class CustomFailedValidation extends FormRequest
     {
         throw new HttpResponseException(
             response()->json([
-            'code' => 422,
-            'data' => null,
-            'message' => $validator->errors()->toArray(),
+                'code' => 422,
+                'errors' => $validator->errors()->toArray(),
             ], 422)
         );
     }
