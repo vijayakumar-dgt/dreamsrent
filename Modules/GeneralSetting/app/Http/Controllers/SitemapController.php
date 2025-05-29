@@ -3,64 +3,34 @@
 namespace Modules\GeneralSetting\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Modules\GeneralSetting\Models\SitemapUrl;
-use Spatie\Sitemap\Sitemap;
-use Spatie\Sitemap\Tags\Url;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-
-use function PHPUnit\Framework\fileExists;
+use Illuminate\View\View;
+use Modules\GeneralSetting\Http\Requests\SitemapSettingRequest;
+use Modules\GeneralSetting\Repositories\Contracts\SitemapSettingInterface;
 
 class SitemapController extends Controller
 {
-    public function index(): View
+    protected $sitemapSetting;
+
+    public function __construct(SitemapSettingInterface $sitemapSetting)
     {
-        return view('generalsetting::other_settings.sitemap');
+        $this->sitemapSetting = $sitemapSetting;
     }
 
-    public function store(): JsonResponse
+    public function index(): View
     {
-        $validator = Validator::make(
-            request()->all(),
-            [
-                'id' => ['nullable', 'exists:sitemap_urls,id'],
-                'url' => [
-                    'required',
-                    'string',
-                    'max:200',
-                    request()->id
-                        ? 'unique:sitemap_urls,url,' . request()->id . ',id'
-                        : 'unique:sitemap_urls,url',
-                    'regex:/^(https?:\/\/)(localhost|(\d{1,3}\.){3}\d{1,3}|([a-zA-Z0-9.-]+\.[a-zA-Z]{2,}))(:\d+)?(\/.*)?$/'
-                ]
+        return $this->sitemapSetting->index();
+    }
 
-            ],
-            [
-                'url.unique' => __('admin.general_settings.url_added'),
-            ]
-        );
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'errors' => $validator->errors()->toArray(),
-                'message' => __('admin.general_settings.invalid'),
-            ], 422);
-        }
-
+    public function store(SitemapSettingRequest $request): JsonResponse
+    {
         try {
-            $sitemap = new SitemapUrl();
-            $sitemap->url = request()->url;
-            $sitemap->save();
-            $this->generateSitemap();
+            $this->sitemapSetting->store($request->validated());
+            
             return response()->json([
                 'status' => 'success',
                 'code' => 200,
-                'message' =>  __('admin.general_settings.sitemap_success'),
+                'message' => __('admin.general_settings.sitemap_success'),
             ]);
         } catch (\Throwable $th) {
             return response()->json([
@@ -72,111 +42,30 @@ class SitemapController extends Controller
         }
     }
 
-    public function generateSitemap(): ?string
+    public function generateSitemap(): JsonResponse
     {
-        try {
-            $urls = SitemapUrl::all();
-            if ($urls->isEmpty()) {
-                return '';
-            }
-
-            $sitemap = Sitemap::create();
-            foreach ($urls as $url) {
-                $url = $url->url;
-                if ($url) {
-                    $sitemap->add(
-                        Url::create($url)
-                            ->setLastModificationDate(now())
-                            ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
-                            ->setPriority(0.8)
-                    );
-                }
-            }
-
-            $sitemapFolder = public_path('sitemaps');
-            if (!file_exists($sitemapFolder) && !mkdir($sitemapFolder, 0777, true) && !is_dir($sitemapFolder)) {
-                return '';
-            }
-            $lastBeforeSitemap = SitemapUrl::orderByDesc('id')->skip(1)->first();
-
-            if ($lastBeforeSitemap && $lastBeforeSitemap->sitemap_path) {
-                $oldPath = public_path($lastBeforeSitemap->sitemap_path);
-                if (file_exists($oldPath)) {
-                    // Generate a clean new name with timestamp
-                    $newFilename = 'sitemaps/sitemap-' . date('Y-m-d-H-i-s') . '-' . rand(1000, 9999) . '.xml';
-                    $newFullPath = public_path($newFilename);
-
-                    // Rename the old sitemap file
-                    if (rename($oldPath, $newFullPath)) {
-                        $lastBeforeSitemap->sitemap_path = $newFilename;
-                        $lastBeforeSitemap->save();
-                    }
-                }
-            }
-            $relativePath = 'sitemaps/sitemap.xml';
-            $fullPath = public_path($relativePath);
-            $sitemap->writeToFile($fullPath);
-            if (!file_exists($fullPath)) {
-                return '';
-            }
-            $latestUrl = SitemapUrl::orderByDesc('id')->first();
-            if ($latestUrl) {
-                $latestUrl->update(['sitemap_path' => $relativePath]);
-            }
-
-            return $relativePath;
-        } catch (\Throwable $e) {
-            return '';
-        }
-    }
-
-    public function getSitemapUrls(Request $request): JsonResponse
-    {
-        $pageLength = $request->input('length', 10);
-        $offset = $request->input('start', 0);
-
-        $sitemapUrlsQuery = SitemapUrl::query();
-
-        if ($request->filled('keyword')) {
-            $sitemapUrlsQuery->where('url', 'like', '%' . $request->input('keyword') . '%');
-        }
-
-        $filteredRecords = $sitemapUrlsQuery->count();
-        $totalRecords = SitemapUrl::count();
-
-        $sitemapUrls = $sitemapUrlsQuery->orderBy('id', 'desc')
-            ->skip($offset)
-            ->take($pageLength)
-            ->get()
-            ->map(function ($sitemapUrl) {
-                return [
-                    'filePath' => !empty($sitemapUrl->sitemap_path) &&
-                        file_exists(public_path($sitemapUrl->sitemap_path))
-                        ? asset($sitemapUrl->sitemap_path)
-                        : '',
-                    'url' => $sitemapUrl->url,
-                    'sitemap_path' => $sitemapUrl->sitemap_path,
-                    'id' => $sitemapUrl->id,
-                ];
-            });
-
+        $result = $this->sitemapSetting->generateSitemap();
+        
         return response()->json([
-            'draw' => $request->input('draw', 0),
-            'recordsTotal' => $totalRecords,
-            'recordsFiltered' => $filteredRecords,
-            'data' => $sitemapUrls,
+            'status' => !empty($result) ? 'success' : 'error',
+            'message' => !empty($result) 
+                ? __('admin.general_settings.sitemap_generated') 
+                : __('admin.general_settings.sitemap_generation_failed')
         ]);
     }
 
-    public function deleteSitemapUrl(Request $request): JsonResponse
+    public function getSitemapUrls(): JsonResponse
     {
-        /** @var \Modules\GeneralSetting\Models\SitemapUrl */
-        $sitemapUrl = SitemapUrl::find($request->id);
+        $data = $this->sitemapSetting->getSitemapUrls(request()->all());
+        
+        return response()->json($data);
+    }
+
+    public function deleteSitemapUrl(): JsonResponse
+    {
         try {
-            if (!empty($sitemapUrl->sitemap_path) && file_exists(public_path($sitemapUrl->sitemap_path))) {
-                unlink(public_path($sitemapUrl->sitemap_path));
-            }
-            $sitemapUrl->delete();
+            $this->sitemapSetting->deleteSitemapUrl(request()->id);
+            
             return response()->json([
                 'status' => 'success',
                 'code' => 200,
