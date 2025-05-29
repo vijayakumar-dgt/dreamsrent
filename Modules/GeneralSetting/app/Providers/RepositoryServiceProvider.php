@@ -3,6 +3,7 @@
 namespace Modules\GeneralSetting\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\GeneralSetting\Repositories\Contracts\CommunicationSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\EmailTemplateRepositoryInterface;
 use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\InsuranceSettingInterface;
@@ -10,6 +11,7 @@ use Modules\GeneralSetting\Repositories\Contracts\LanguageSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\LocalizationInterface;
 use Modules\GeneralSetting\Repositories\Contracts\SignatureSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\SitemapSettingInterface;
+use Modules\GeneralSetting\Repositories\Eloquent\CommunicationSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\EmailTemplateSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\GeneralSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\InsuranceSettingRepository;
@@ -37,5 +39,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SignatureSettingInterface::class, SignatureSettingRepository::class);
         $this->app->bind(LocalizationInterface::class, LocalizationRepository::class);
         $this->app->bind(SitemapSettingInterface::class, SitemapSettingRepository::class);
+        $this->app->bind(CommunicationSettingInterface::class, CommunicationSettingRepository::class);
     }    
 }
