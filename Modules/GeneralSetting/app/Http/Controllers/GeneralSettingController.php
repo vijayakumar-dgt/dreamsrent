@@ -8,6 +8,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Modules\GeneralSetting\Http\Requests\ListCompanyRequest;
+use Modules\GeneralSetting\Http\Requests\SettingListRequest;
+use Modules\GeneralSetting\Http\Requests\StoreInvoiceSettingsRequest;
+use Modules\GeneralSetting\Http\Requests\StoreLogoSettingsRequest;
+use Modules\GeneralSetting\Http\Requests\StoreMaintenanceSettingsRequest;
+use Modules\GeneralSetting\Http\Requests\StoreOtpSettingsRequest;
+use Modules\GeneralSetting\Http\Requests\StoreRentalSettingsRequest;
+use Modules\GeneralSetting\Http\Requests\StoreSeoSetupRequest;
+use Modules\GeneralSetting\Http\Requests\UpdateThemeSettingsRequest;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\UserDevice;
 use Modules\GeneralSetting\Models\IndustryType;
@@ -24,9 +33,19 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
+use Modules\GeneralSetting\Http\Requests\StoreNotificationSettingsRequest;
+use Modules\GeneralSetting\Repositories\NotificationSettingsRepository;
+use Modules\GeneralSetting\Http\Requests\CompanySettingRequest;
+use Modules\GeneralSetting\Repositories\GeneralSettingRepository;
 
 class GeneralSettingController extends Controller
 {
+    protected GeneralSettingRepository $repository;
+
+    public function __construct(GeneralSettingRepository $repository)
+    {
+        $this->repository = $repository;
+    }
     public function index(): View
     {
         /** @var view-string $view */
@@ -41,10 +60,7 @@ class GeneralSettingController extends Controller
 
     public function company(Request $request): View
     {
-       
-        $users = User::where('user_type', 4)->get();
-
-        return view('generalsetting::company.index', compact( 'users'));
+        return view('generalsetting::company.index');
     }
 
     public function notifications(Request $request): View
@@ -101,63 +117,21 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeRentalSettings(Request $request): JsonResponse
+    public function storeRentalSettings(StoreRentalSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
     {
-        $rules = [
-            'faq' => 'nullable|boolean',
-            'damages' => 'nullable|boolean',
-            'extraService' => 'nullable|boolean',
-            'booking' => 'nullable|boolean',
-            'enquiries' => 'nullable|boolean',
-            'reservation' => 'nullable|boolean',
-            'seasonalPricing' => 'nullable|boolean',
-        ];
-
-        $messages = [
-            'cancellationBuffer.required' => __('The cancellation buffer field is required.'),
-            'cancellationBuffer.in' => __('Invalid cancellation buffer value.'),
-            'rescheduleBuffer.required' => __('The reschedule buffer field is required.'),
-            'rescheduleBuffer.in' => __('Invalid reschedule buffer value.'),
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['code' => 422, 'errors' => $validator->errors()], 422);
-        }
-
         try {
-            $settings = [
-                'minAdvanceReservation' => $request->minAdvanceReservation,
-                'maxAdvanceReservation' => $request->maxAdvanceReservation,
-                'cancellationBuffer' => $request->cancellationBuffer,
-                'rescheduleBuffer' => $request->rescheduleBuffer,
-                'faq' => $request->faq,
-                'damages' => $request->damages,
-                'extraService' => $request->extraService,
-                'booking' => $request->booking,
-                'enquiries' => $request->enquiries,
-                'reservation' => $request->reservation,
-                'seasonalPricing' => $request->seasonalPricing,
-                'pricing' => $request->pricing,
-            ];
-
-            foreach ($settings as $key => $value) {
-                $saveSetting = $this->updateOrCreateRentalSetting($key, $value);
-                if (!$saveSetting) {
-                    throw new \Exception("Failed to save $key");
-                }
-            }
+            $repository->saveRentalSettings($request->validated());
 
             return response()->json([
                 'code' => 200,
-                'message' =>  __('admin.general_settings.rental_saved_successfully'),
+                'message' => __('admin.general_settings.rental_saved_successfully'),
                 'data' => []
-            ], 200);
-        } catch (\Exception $e) {
+            ]);
+        } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -170,91 +144,11 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeLogoSettings(Request $request): JsonResponse
+    public function storeLogoSettings(StoreLogoSettingsRequest $request): JsonResponse
     {
-        $rules = [
-            'logo_image'    => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
-            'favicon_image' => 'nullable|mimes:jpg,jpeg,png,svg,ico|max:5120',
-            'small_image'   => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
-            'dark_logo'     => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
-        ];
-
-        $messages = [
-            'logo_image.image'    => __('admin.general_settings.logo_image_type'),
-            'favicon_image.image' => __('admin.general_settings.favicon_image_type'),
-            'small_image.image'   => __('admin.general_settings.small_image_type'),
-            'dark_logo.image'     => __('admin.general_settings.dark_logo_image_type'),
-            'logo_image.max'      => __('admin.general_settings.logo_image_size'),
-            'favicon_image.max'   => __('admin.general_settings.favicon_image_size'),
-            'small_image.max'     => __('admin.general_settings.small_image_size'),
-            'dark_logo.max'       => __('admin.general_settings.dark_logo_image_size'),
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['code' => 422, 'errors' => $validator->errors()], 422);
-        }
-
         try {
-            $groupId = 16;
-            $paths = [];
-            $logoFields = [
-                'logo_image'    => 'logo',
-                'favicon_image' => 'favicon',
-                'small_image'   => 'small',
-                'dark_logo'     => 'dark',
-            ];
-
-            $mainPath = storage_path('app/public/logo/');
-            $thumbPath = storage_path('app/public/logo/thumbnail/');
-
-            if (!File::exists($mainPath)) {
-                File::makeDirectory($mainPath, 0755, true);
-            }
-            if (!File::exists($thumbPath)) {
-                File::makeDirectory($thumbPath, 0755, true);
-            }
-
-            foreach ($logoFields as $field => $prefix) {
-                if ($request->hasFile($field)) {
-                    $file = $request->file($field);
-                    $imageName = time() . '-' . $file->getClientOriginalName();
-
-                    // Read and save original
-                    $image = Image::read($file);
-                    $image->save($mainPath . $imageName);
-
-                    // Resize and save thumbnail
-                    $image->resize(300, 300, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    });
-                    $image->save($thumbPath . $imageName);
-
-                    // Delete old image if exists
-                    $existing = GeneralSetting::where('key', $field)->first();
-                    if ($existing && $existing->value) {
-                        $oldPath = storage_path('app/public/' . $existing->value);
-                        $oldThumb = storage_path('app/public/' . str_replace('logo/', 'logo/thumbnail/', $existing->value));
-
-                        if (File::exists($oldPath)) File::delete($oldPath);
-                        if (File::exists($oldThumb)) File::delete($oldThumb);
-                    }
-
-                    // Save to DB
-                    $relativePath = 'logo/' . $imageName;
-                    GeneralSetting::updateOrCreate(
-                        ['key' => $field],
-                        [
-                            'value' => $relativePath,
-                            'group_id' => $groupId
-                        ]
-                    );
-
-                    $paths[$field] = $relativePath;
-                }
-            }
+            $files = $request->only(['logo_image', 'favicon_image', 'small_image', 'dark_logo']);
+            $paths = $this->repository->storeLogoSettings($files);
 
             return response()->json([
                 'code' => 200,
@@ -278,55 +172,17 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeOtpSettings(Request $request): JsonResponse
+    public function storeOtpSettings(StoreOtpSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
     {
-        $rules = [
-            'otp_type' => 'required',
-            'otp_type.*' => 'in:sms,email',
-            'otp_digit_limit' => 'required|integer|in:4,5,6',
-            'otp_expire_time' => 'required|string|in:2 mins,5 mins,10 mins',
-            'login' => 'nullable|boolean',
-            'register' => 'nullable|boolean',
-        ];
-
-        $messages = [
-            'otp_type.required' => __('The OTP type field is required.'),
-            'otp_type.*.in' => __('Invalid OTP type selected.'),
-            'otp_digit_limit.required' => __('The OTP digit limit field is required.'),
-            'otp_digit_limit.integer' => __('The OTP digit limit must be a number.'),
-            'otp_digit_limit.in' => __('Invalid OTP digit limit selected.'),
-            'otp_expire_time.required' => __('The OTP expiry time field is required.'),
-            'otp_expire_time.in' => __('Invalid OTP expiry time selected.'),
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['code' => 422, 'errors' => $validator->errors()], 422);
-        }
-
         try {
-            $settings = [
-                'otp_type' => $request->otp_type,
-                'otp_digit_limit' => $request->otp_digit_limit,
-                'otp_expire_time' => $request->otp_expire_time,
-                'login' => $request->login,
-                'register' => $request->register,
-            ];
-
-            foreach ($settings as $key => $value) {
-                $saveSetting = $this->updateOrCreateOtpSetting($key, $value);
-                if (!$saveSetting) {
-                    throw new \Exception("Failed to save $key");
-                }
-            }
+            $repository->storeOtpSettings($request->validated());
 
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.general_settings.otp_success'),
                 'data' => []
             ], 200);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
@@ -438,164 +294,41 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeInvoiceSettings(Request $request): JsonResponse
+    public function storeInvoiceSettings(StoreInvoiceSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
     {
-        $rules = [
-            'invoice_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'invoice_prefix' => 'required|string|max:10',
-            'invoice_due' => 'required|integer|min:1',
-            'invoice_round_off' => 'nullable|numeric',
-            'round_off_enabled' => 'nullable|in:on,off',
-            'show_company_details' => 'nullable|in:on,off',
-            'invoice_terms' => 'nullable|string',
-        ];
-
-        $messages = [
-            'invoice_logo.image' => __('The invoice logo must be an image.'),
-            'invoice_logo.mimes' => __('The invoice logo must be a file of type: jpeg, png, jpg, gif.'),
-            'invoice_logo.max' => __('The invoice logo may not be greater than 2MB.'),
-            'invoice_prefix.required' => __('The invoice prefix field is required.'),
-            'invoice_due.required' => __('The invoice due field is required.'),
-            'invoice_due.integer' => __('The invoice due must be an integer.'),
-            'invoice_due.min' => __('The invoice due must be at least 1 day.'),
-            'invoice_round_off.numeric' => __('The invoice round-off must be a number.'),
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['code' => 422, 'errors' => $validator->errors()], 422);
-        }
-
         try {
-            if ($request->hasFile('invoice_logo')) {
-                $file = $request->file('invoice_logo');
-                if ($file instanceof UploadedFile) {
-                    $logoPath = uploadFile($file, 'invoices');
-                    $this->updateOrCreateInvoiceSetting('invoice_logo', $logoPath);
-                }
-            }
-
-            $settings = [
-                'invoice_prefix' => $request->invoice_prefix,
-                'invoice_due' => $request->invoice_due,
-                'invoice_round_off' => $request->invoice_round_off,
-                'round_off_enabled' => $request->round_off_enabled === 'on' ? 1 : 0,
-                'show_company_details' => $request->show_company_details === 'on' ? 1 : 0,
-                'invoice_terms' => $request->invoice_terms,
-            ];
-
-            foreach ($settings as $key => $value) {
-                $saveSetting = $this->updateOrCreateInvoiceSetting($key, $value);
-                if (!$saveSetting) {
-                    throw new \Exception("Failed to save $key");
-                }
-            }
+            $repository->saveInvoiceSettings($request->validated());
 
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.general_settings.invoice_setting_success'),
                 'data' => []
-            ], 200);
-        } catch (\Exception $e) {
+            ]);
+        } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
                 'message' => __('admin.general_settings.invoice_setting_error'),
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(CompanySettingRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'organization_name'         => 'required|string|max:100',
-            'owner_name'                => 'required|string|max:100',
-            'company_email'             => 'required|email|max:100',
-            'company_phone'             => 'required',
-            'international_phone_number'=> 'required',
-            'company_address_line'      => 'nullable|string|max:150',
-            'company_postal_code'       => 'nullable|string|max:10',
-            'company_profile_photo'     => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' => 'Validation failed!',
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = $request->except('_token', 'company_profile_photo');
-
-            // Handle company_profile_photo upload and resizing
-            if ($request->hasFile('company_profile_photo')) {
-                $file = $request->file('company_profile_photo');
-                $imageName = time() . '-' . $file->getClientOriginalName();
-
-                $destinationPath = storage_path('app/public/company/');
-                $destinationThumbnail = storage_path('app/public/company/thumbnail/');
-
-                if (!File::exists($destinationPath)) {
-                    File::makeDirectory($destinationPath, 0755, true);
-                }
-                if (!File::exists($destinationThumbnail)) {
-                    File::makeDirectory($destinationThumbnail, 0755, true);
-                }
-
-                $image = Image::read($file);
-                $image->save($destinationPath . $imageName);
-
-                // Resize proportionally to max width 500 or height 600
-                $image->resize(500, 600, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
-                $image->save($destinationThumbnail . $imageName);
-
-                // Optional: Delete old image if stored in GeneralSetting
-                $existing = GeneralSetting::where('key', 'company_profile_photo')->first();
-                if ($existing && $existing->value) {
-                    $oldPath = storage_path('app/public/' . $existing->value);
-                    $oldThumbnail = storage_path('app/public/' . str_replace('company/', 'company/thumbnail/', $existing->value));
-
-                    if (File::exists($oldPath)) File::delete($oldPath);
-                    if (File::exists($oldThumbnail)) File::delete($oldThumbnail);
-                }
-
-                GeneralSetting::updateOrCreate(
-                    ['key' => 'company_profile_photo'],
-                    [
-                        'value' => 'company/' . $imageName,
-                        'group_id' => $request->group_id ?? null
-                    ]
-                );
-            }
-
-            // Save other settings
-            foreach ($settings as $key => $value) {
-                GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    [
-                        'value' => $value,
-                        'group_id' => $request->group_id ?? null
-                    ]
-                );
-            }
+            $this->repository->storeCompanySettings($request->validated());
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.company_setting_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -608,10 +341,10 @@ class GeneralSettingController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
+                'status' => 'error',
+                'code' => 422,
                 'message' => __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
+                'errors' => $validator->errors()
             ], 422);
         }
 
@@ -625,229 +358,78 @@ class GeneralSettingController extends Controller
             });
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.ownership_transfer_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
 
-    public function storeNotificationSettings(Request $request): JsonResponse
+    public function storeNotificationSettings(StoreNotificationSettingsRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'group_id'                   => 'required|integer',
-            'notificationPreference'     => 'required',
-            'desktopNotifications'       => 'required|boolean',
-            'bookingUpdates'             => 'required|boolean',
-            'paymentNotifications'       => 'required|boolean',
-            'vehicleManagement'          => 'required|boolean',
-            'unreadBadge'                => 'required|boolean',
-            'userTenantNotifications'    => 'required|boolean',
-            'discountOffers'             => 'required|boolean'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' => __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = $request->all();
-
-            foreach ($settings as $key => $value) {
-                GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    [
-                        'value'    => $value,
-                        'group_id' => $request->group_id ?? null
-                    ]
-                );
-            }
+            $this->repository->saveNotificationSettings($request->validated());
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
-                'message' => __('admin.general_settings.notification_update_success')
+                'status' => 'success',
+                'code' => 200,
+                'message' => __('admin.general_settings.notification_update_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
-                'message' =>  __('admin.general_settings.notification_error_update'),
-                'error'   => $e->getMessage()
+                'status' => 'error',
+                'code' => 500,
+                'message' => __('admin.general_settings.notification_error_update'),
+                'error' => $e->getMessage()
             ], 500);
         }
     }
 
-    public function storeSeoSetupSettings(Request $request): JsonResponse
+    public function storeSeoSetupSettings(StoreSeoSetupRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'metaImage'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
-            'metaTitle'       => 'required|string|min:5|max:255',
-            'siteDescription' => 'required|string|min:10|max:5000',
-            'keywords'        => 'required|string|max:1000'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' => __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = $request->except('_token', 'metaImage');
-
-            // Handle metaImage upload
-            if ($request->hasFile('metaImage')) {
-                $file = $request->file('metaImage');
-                if ($file instanceof UploadedFile) {
-                    $image      = Image::read($file);
-                    $imageName  = time() . '-' . $file->getClientOriginalName();
-                    $destinationPath = storage_path('app/public/seo/');
-                    $thumbnailPath   = storage_path('app/public/seo/thumbnail/');
-
-                    // Create directories if they don't exist
-                    if (!File::exists($destinationPath)) {
-                        File::makeDirectory($destinationPath, 0755, true);
-                    }
-                    if (!File::exists($thumbnailPath)) {
-                        File::makeDirectory($thumbnailPath, 0755, true);
-                    }
-
-                    // Save original image
-                    $image->save($destinationPath . $imageName);
-
-                    // Save resized thumbnail
-                    $image->resize(500, 500); // adjust as needed
-                    $image->save($thumbnailPath . $imageName);
-
-                    // Delete old image if exists
-                    $existing = GeneralSetting::where('key', 'metaImage')->first();
-                    if ($existing && File::exists(storage_path('app/public/' . $existing->value))) {
-                        File::delete(storage_path('app/public/' . $existing->value));
-                        File::delete(storage_path('app/public/' . str_replace('seo/', 'seo/thumbnail/', $existing->value)));
-                    }
-
-                    // Save new image path
-                    $metaImagePath = 'seo/' . $imageName;
-                    GeneralSetting::updateOrCreate(
-                        ['key' => 'metaImage'],
-                        [
-                            'value'    => $metaImagePath,
-                            'group_id' => $request->group_id ?? null
-                        ]
-                    );
-                }
-            }
-
-            // Save other settings
-            foreach ($settings as $key => $value) {
-                GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    [
-                        'value'    => $value,
-                        'group_id' => $request->group_id ?? null
-                    ]
-                );
-            }
-
-            Cache::forget('seo_settings');
+            $data = $request->validated();
+            $groupId = $request->group_id ?? null;
+            $this->repository->storeSeoSettings($data, $groupId);
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.seo_update_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.seo_update_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
 
-    public function storeMaintenanceSettings(Request $request): JsonResponse
+    public function storeMaintenanceSettings(StoreMaintenanceSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'group_id'                => 'required',
-            'maintenance_image'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'maintenance_description' => 'nullable|string|max:5000',
-            'maintenance_status'      => 'nullable'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' =>  __('admin.general_settings.validation_failed'),
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = $request->except('_token', 'maintenance_image');
-            $groupId = $request->group_id;
-
-            if ($request->hasFile('maintenance_image')) {
-                $file = $request->file('maintenance_image');
-                $imagePath = null;
-                if ($file instanceof UploadedFile) {
-                    $imagePath = uploadFile($file, 'maintenance');
-                }
-
-                GeneralSetting::updateOrCreate(
-                    ['key' => 'maintenance_image'],
-                    [
-                        'value' => "$imagePath",
-                        'group_id' => $request->group_id ?? null
-                    ]
-                );
-            }
-            foreach ($settings as $key => $value) {
-                GeneralSetting::updateOrCreate(
-                    ['key' => $key],
-                    [
-                        'value' => $value,
-                        'group_id' => $request->group_id ?? null
-                    ]
-                );
-            }
-
-            if ($request->is_remove_image == 1) {
-                GeneralSetting::where('key', 'maintenance_image')->update(
-                    [
-                        'value' => '',
-                    ]
-                );
-            }
+            $repository->storeMaintenanceSettings($request->all());
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.maintanance_update_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.maintanance_update_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -855,50 +437,50 @@ class GeneralSettingController extends Controller
     public function storeCookiesSettings(Request $request): JsonResponse
     {
         $request->validate([
-            'group_id'           => 'required|integer',
-            'language'           => 'required|integer',
+            'group_id' => 'required|integer',
+            'language' => 'required|integer',
             'cookiesContentText' => 'required|string|max:5000',
-            'cookiesPosition'    => 'required|in:right,left',
-            'agreeButtonText'    => 'required|string|min:2|max:255',
-            'declineButtonText'  => 'required|string|min:2|max:255',
-            'showDeclineButton'  => 'nullable|boolean',
-            'cookiesPageLink'    => 'required|url|max:2048'
+            'cookiesPosition' => 'required|in:right,left',
+            'agreeButtonText' => 'required|string|min:2|max:255',
+            'declineButtonText' => 'required|string|min:2|max:255',
+            'showDeclineButton' => 'nullable|boolean',
+            'cookiesPageLink' => 'required|url|max:2048'
         ]);
 
         try {
             $fields = [
                 'cookiesContentText' => $request->cookiesContentText,
-                'cookiesPosition'    => $request->cookiesPosition,
-                'agreeButtonText'    => $request->agreeButtonText,
-                'declineButtonText'  => $request->declineButtonText,
-                'showDeclineButton'  => $request->has('showDeclineButton') ? 1 : 0,
-                'cookiesPageLink'    => $request->cookiesPageLink,
+                'cookiesPosition' => $request->cookiesPosition,
+                'agreeButtonText' => $request->agreeButtonText,
+                'declineButtonText' => $request->declineButtonText,
+                'showDeclineButton' => $request->has('showDeclineButton') ? 1 : 0,
+                'cookiesPageLink' => $request->cookiesPageLink,
             ];
 
             foreach ($fields as $key => $value) {
                 GeneralSetting::updateOrCreate(
                     [
-                        'key'      => $key . '_' . $request->language,
+                        'key' => $key . '_' . $request->language,
                         'group_id' => $request->group_id,
                     ],
                     [
-                        'value'       => $value,
+                        'value' => $value,
                         'language_id' => $request->language
                     ]
                 );
             }
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
-                'message' =>  __('admin.general_settings.cookies_success'),
+                'status' => 'success',
+                'code' => 200,
+                'message' => __('admin.general_settings.cookies_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
-                'message' =>  __('admin.general_settings.sretrive_error'),
-                'error'   => $e->getMessage()
+                'status' => 'error',
+                'code' => 500,
+                'message' => __('admin.general_settings.sretrive_error'),
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -906,16 +488,16 @@ class GeneralSettingController extends Controller
     public function cookiesSettingsList(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'group_id'    => 'required|integer',
+            'group_id' => 'required|integer',
             'language_id' => 'nullable|integer'
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' =>  __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
+                'status' => 'error',
+                'code' => 422,
+                'message' => __('admin.general_settings.validation_error'),
+                'errors' => $validator->errors()
             ], 422);
         }
 
@@ -926,8 +508,8 @@ class GeneralSettingController extends Controller
                 $defaultLanguage = Language::where('default', 1)->first();
                 if (!$defaultLanguage) {
                     return response()->json([
-                        'status'  => 'error',
-                        'code'    => 500,
+                        'status' => 'error',
+                        'code' => 500,
                         'message' => __('admin.general_settings.language_not_found'),
                     ], 500);
                 }
@@ -956,114 +538,66 @@ class GeneralSettingController extends Controller
             }
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
-                'message' =>  __('admin.general_settings.cookies_retrive_success'),
-                'data'    => $formatted
+                'status' => 'success',
+                'code' => 200,
+                'message' => __('admin.general_settings.cookies_retrive_success'),
+                'data' => $formatted
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
 
-    public function listCompany(Request $request): JsonResponse
+    public function listCompany(ListCompanyRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'group_id' => 'required|integer'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' =>  __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = GeneralSetting::where('group_id', $request->group_id)->pluck('value', 'key');
+            $data = $this->repository->getCompanySettings($request->group_id);
 
-            if ($settings->isEmpty()) {
+            if (!$data) {
                 return response()->json([
-                    'status'  => 'error',
-                    'code'    => 404,
+                    'status' => 'error',
+                    'code' => 404,
                     'message' => __('admin.common.no_data_found'),
                 ], 404);
             }
 
-           
-
-            $response = [
-                'organization_name'    => $settings['organization_name'] ?? null,
-                'owner_name'           => $settings['owner_name'] ?? null,
-                'company_email'        => $settings['company_email'] ?? null,
-                'company_phone'        => $settings['international_phone_number'] ?? null,
-                'industry'             => $settings['industry'] ?? null,
-                'team_size'            => $settings['team_size'] ?? null,
-                'company_address_line' => $settings['company_address_line'] ?? null,
-                'country'              => $settings['country'] ?? null,
-                'state'                => $settings['state'] ?? null,
-                'city'                 => $settings['city'] ?? null,
-                'company_postal_code'  => $settings['company_postal_code'] ?? null,
-                'company_profile_photo' => uploadedAsset($settings['company_profile_photo'] ?? null, 'default')
-            ];
-
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
-                'data'    => $response
+                'status' => 'success',
+                'code' => 200,
+                'data' => $data
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
-                'message' =>  __('admin.general_settings.retrive_error'),
-                'error'   => $e->getMessage()
+                'status' => 'error',
+                'code' => 500,
+                'message' => __('admin.general_settings.retrive_error'),
+                'error' => $e->getMessage()
             ], 500);
         }
     }
 
-    public function list(Request $request): JsonResponse
+    public function list(SettingListRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'group_id' => 'required|integer'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' => __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = GeneralSetting::where('group_id', $request->group_id)->get()->map(function ($setting) {
-                if ($setting->key == 'logo_image' || $setting->key == 'favicon_image' || $setting->key == 'small_image' || $setting->key == 'dark_logo' || $setting->key == 'invoice_logo' || $setting->key == 'maintenance_image' || $setting->key == 'metaImage') {
-                    $setting->value = uploadedAsset($setting->value, 'default2');
-                }
-                return $setting;
-            });
+            $settings = $this->repository->getSettingsByGroup($request->validated()['group_id']);
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.setting_retrive_success'),
-                'data'    => $settings
+                'data' => $settings
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.retrive_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -1086,14 +620,14 @@ class GeneralSettingController extends Controller
         $password = $request->password;
         if ($authUser->password !== null && Hash::check($password, $authUser->password)) {
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.current_password_correct'),
             ]);
         } else {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
+                'status' => 'error',
+                'code' => 422,
                 'message' => __('admin.general_settings.current_password_incorrect'),
             ]);
         }
@@ -1106,28 +640,28 @@ class GeneralSettingController extends Controller
         $user = current_user();
         if ($user->phone_number == "") {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'error'   => "null",
+                'status' => 'error',
+                'code' => 422,
+                'error' => "null",
                 'message' => __('admin.general_settings.phone_number_not_set'),
             ], 422);
         } elseif ($user->phone_number != $currentPhoneNumber) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'error'   => "incorrect",
+                'status' => 'error',
+                'code' => 422,
+                'error' => "incorrect",
                 'message' => __('admin.general_settings.phone_number_incorrect'),
             ], 422);
         } elseif ($user->phone_number == $currentPhoneNumber) {
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.phone_number_correct'),
             ]);
         } else {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
+                'status' => 'error',
+                'code' => 422,
                 'message' => __('admin.general_settings.phone_number_incorrect'),
             ], 422);
         }
@@ -1137,16 +671,16 @@ class GeneralSettingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'current_password' => 'required',
-            'new_password'     => 'required|min:6',
+            'new_password' => 'required|min:6',
             'confirm_password' => 'required|same:new_password',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
+                'status' => 'error',
+                'code' => 422,
                 'message' => __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()->toArray()
+                'errors' => $validator->errors()->toArray()
             ], 422);
         }
 
@@ -1155,10 +689,10 @@ class GeneralSettingController extends Controller
 
         if ($user->password !== null && !Hash::check($request->current_password, $user->password)) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.general_settings.current_password_incorrect'),
-                'errors'  => $validator->errors()->toArray()
+                'errors' => $validator->errors()->toArray()
             ], 500);
         }
 
@@ -1167,8 +701,8 @@ class GeneralSettingController extends Controller
         $user->save();
 
         return response()->json([
-            'status'  => 'success',
-            'code'    => 200,
+            'status' => 'success',
+            'code' => 200,
             'message' => __('admin.general_settings.password_updated_successfully'),
         ]);
     }
@@ -1191,9 +725,9 @@ class GeneralSettingController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 200,
-                'message'  => $validator->errors()->first()
+                'status' => 'error',
+                'code' => 200,
+                'message' => $validator->errors()->first()
             ], 200);
         }
         $currentPassword = $request->phone_current_password;
@@ -1202,26 +736,26 @@ class GeneralSettingController extends Controller
 
         if ($authUser->password !== null && !Hash::check($currentPassword, $authUser->password)) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 200,
-                'message'  => __('admin.general_settings.current_password_incorrect')
+                'status' => 'error',
+                'code' => 200,
+                'message' => __('admin.general_settings.current_password_incorrect')
             ]);
         }
         $currentPhoneNumber = $request->current_phonenumber;
         if ($authUser->phone_number != $currentPhoneNumber && $authUser->phone_number != "") {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 200,
-                'message'  => __('admin.general_settings.phone_number_incorrect')
+                'status' => 'error',
+                'code' => 200,
+                'message' => __('admin.general_settings.phone_number_incorrect')
             ]);
         }
         $authUser->phone_number = $request->new_phonenumber;
         $authUser->save();
 
         return response()->json([
-            'status'  => 'success',
-            'code'    => 200,
-            'message' =>  __('admin.general_settings.phone_number_updated_successfully'),
+            'status' => 'success',
+            'code' => 200,
+            'message' => __('admin.general_settings.phone_number_updated_successfully'),
         ]);
     }
 
@@ -1233,9 +767,9 @@ class GeneralSettingController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message'  => $validator->errors()->first()
+                'status' => 'error',
+                'code' => 422,
+                'message' => $validator->errors()->first()
             ], 422);
         }
         $current_email = $request->current_email;
@@ -1243,26 +777,26 @@ class GeneralSettingController extends Controller
         $authUser = Auth::guard('admin')->user();
         if ($authUser->email != $current_email) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 200,
-                'message'  => __('admin.general_settings.current_email_incorrect')
+                'status' => 'error',
+                'code' => 200,
+                'message' => __('admin.general_settings.current_email_incorrect')
             ]);
         }
         $email_current_password = $request->email_current_password;
         if ($authUser->password !== null && !Hash::check($email_current_password, $authUser->password)) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 200,
-                'message'  => __('admin.general_settings.current_password_incorrect')
+                'status' => 'error',
+                'code' => 200,
+                'message' => __('admin.general_settings.current_password_incorrect')
             ]);
         }
         $authUser->email = $request->new_email;
         $authUser->save();
 
         return response()->json([
-            'status'  => 'success',
-            'code'    => 200,
-            'message' =>  __('admin.general_settings.email_updated_successfully'),
+            'status' => 'success',
+            'code' => 200,
+            'message' => __('admin.general_settings.email_updated_successfully'),
         ]);
     }
 
@@ -1278,18 +812,18 @@ class GeneralSettingController extends Controller
                 'os' => $device->os,
                 'ip_address' => $device->ip_address,
                 'location' => $device->location,
-                'date'     => formatDateTime($device->created_at)
+                'date' => formatDateTime($device->created_at)
             ];
         });
-        $response    = [
+        $response = [
             'user' => Auth::user(),
             'last_password_changed_at' => $authUser->last_password_changed_at ? formatDateTime($authUser->last_password_changed_at) : "null",
             'devices' => $userDevices
         ];
         return response()->json([
-            'status'  => 'success',
-            'code'    => 200,
-            'data'    => $response
+            'status' => 'success',
+            'code' => 200,
+            'data' => $response
         ]);
     }
 
@@ -1301,8 +835,8 @@ class GeneralSettingController extends Controller
             UserDevice::where('user_id', $authUser->id)->delete();
             Auth::guard('admin')->logout();
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.all_device_removed_successfully'),
             ]);
         }
@@ -1310,8 +844,8 @@ class GeneralSettingController extends Controller
         $device = UserDevice::find($request->id);
         $device->delete();
         return response()->json([
-            'status'  => 'success',
-            'code'    => 200,
+            'status' => 'success',
+            'code' => 200,
             'message' => __('admin.general_settings.device_removed_successfully'),
         ]);
     }
@@ -1326,67 +860,35 @@ class GeneralSettingController extends Controller
             $message = $user->google_auth_enabled === 1 ? "Google Authentication Enabled Successfully" : "Google Authentication Disabled Successfully";
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
+                'code' => 200,
                 'message' => $message
             ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 422,
+                'code' => 422,
                 'message' => 'Something went wrong',
-                'error'   => $th->getMessage()
+                'error' => $th->getMessage()
             ]);
         }
     }
 
     public function updatePrefixes(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'group_id' => 'required|integer',
-            'reservation_prefix' => 'required',
-            'quotation_prefix' => 'required',
-            'enquiry_prefix' => 'required',
-            'company_prefix' => 'required',
-            'inspection_prefix' => 'required',
-            'report_prefix' => 'required',
-            'customer_prefix' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' => 'Validation failed!',
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = $request->all();
-
-            foreach ($settings as $key => $value) {
-                if ($key != 'group_id') {
-                    GeneralSetting::updateOrCreate(
-                        ['key' => $key],
-                        [
-                            'value'    => $value,
-                            'group_id' => $request->group_id
-                        ]
-                    );
-                }
-            }
+            $this->repository->updatePrefixes($request->all(), $request->group_id);
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
-                'message' => __('admin.general_settings.prefix_settings_update_success')
+                'status' => 'success',
+                'code' => 200,
+                'message' => __('admin.general_settings.prefix_settings_update_success'),
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.common.default_update_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -1405,10 +907,10 @@ class GeneralSettingController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' =>  __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
+                'status' => 'error',
+                'code' => 422,
+                'message' => __('admin.general_settings.validation_error'),
+                'errors' => $validator->errors()
             ], 422);
         }
 
@@ -1420,7 +922,7 @@ class GeneralSettingController extends Controller
                     GeneralSetting::updateOrCreate(
                         ['key' => $key],
                         [
-                            'value'    => $value,
+                            'value' => $value,
                             'group_id' => $request->group_id
                         ]
                     );
@@ -1428,16 +930,16 @@ class GeneralSettingController extends Controller
             }
 
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.ai_configuration_update_success')
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.common.default_update_error'),
-                'error'   => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -1557,45 +1059,20 @@ class GeneralSettingController extends Controller
         return view('generalsetting::website_settings.theme_settings');
     }
 
-    public function updateThemeSettings(Request $request): JsonResponse
+    public function updateThemeSettings(UpdateThemeSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'group_id' => 'required|integer',
-            'default_theme' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'code'    => 422,
-                'message' =>  __('admin.general_settings.validation_error'),
-                'errors'  => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $settings = $request->all();
+            $repository->updateThemeSettings($request->validated());
 
-            foreach ($settings as $key => $value) {
-                if ($key != 'group_id') {
-                    GeneralSetting::updateOrCreate(
-                        ['key' => $key],
-                        [
-                            'value'    => $value,
-                            'group_id' => $request->group_id
-                        ]
-                    );
-                }
-            }
             return response()->json([
-                'status'  => 'success',
-                'code'    => 200,
+                'status' => 'success',
+                'code' => 200,
                 'message' => __('admin.general_settings.theme_update_success')
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'status'  => 'error',
-                'code'    => 500,
+                'status' => 'error',
+                'code' => 500,
                 'message' => __('admin.common.default_update_error'),
             ], 500);
         }

@@ -7,9 +7,19 @@ use App\Models\UserDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Str;
+use App\Services\ImageResizer;
 
 class AdminProfileRepository
 {
+     protected ImageResizer $imageResizer;
+
+    public function __construct(ImageResizer $imageResizer)
+    {
+        $this->imageResizer = $imageResizer;
+    }
     public function getProfile(): array
     {
         try {
@@ -70,13 +80,10 @@ class AdminProfileRepository
                 'phone_number' => $data['phone'],
             ]);
 
-            $profilePhoto = null;
+            $profilePhotoPath = $user->userDetail->profile_image ?? null;
 
-            if (isset($data['profile_photo'])) {
-                $profilePhoto = uploadFile($data['profile_photo'], 'profile');
-                if ($user->userDetail && $user->userDetail->profile_image) {
-                    Storage::disk('public')->delete($user->userDetail->profile_image);
-                }
+            if (!empty($data['profile_photo']) && $data['profile_photo'] instanceof \Illuminate\Http\UploadedFile) {
+                $profilePhotoPath = $this->imageResizer->uploadFile($data['profile_photo'], 'profile', $profilePhotoPath);
             }
 
             UserDetail::updateOrCreate(
@@ -89,7 +96,7 @@ class AdminProfileRepository
                     'state_id'      => $data['state'] ?? null,
                     'city_id'       => $data['city'] ?? null,
                     'postal_code'   => $data['postal_code'] ?? null,
-                    'profile_image' => $profilePhoto ?? $user->userDetail->profile_image ?? null,
+                    'profile_image' => $profilePhotoPath,
                 ]
             );
 

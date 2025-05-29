@@ -17,6 +17,10 @@ class AdminProfileController extends Controller
     {
         $this->profileRepo = $profileRepo;
     }
+    public function adminProfile(): View
+    {
+        return view('generalsetting::adminProfile.index');
+    }
 
     public function getProfile(): JsonResponse
     {

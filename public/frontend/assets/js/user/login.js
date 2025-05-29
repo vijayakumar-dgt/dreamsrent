@@ -5,6 +5,7 @@
     await loadTranslationFile('web', 'auth, common');
 
 $(document).ready(function () {
+    $(".submitbtn").attr("disabled", false);
     $("#userLoginForm").validate({
         rules: {
             email: {

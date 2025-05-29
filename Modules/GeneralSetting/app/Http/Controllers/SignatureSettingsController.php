@@ -4,16 +4,21 @@ namespace Modules\GeneralSetting\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Modules\GeneralSetting\Models\SignatureSetting;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\UploadedFile;
+use Modules\GeneralSetting\Http\Requests\SignatureSettingRequest;
+use Modules\GeneralSetting\Repositories\SignatureSettingRepository;
+use Illuminate\Support\Facades\Artisan;
 
 class SignatureSettingsController extends Controller
 {
+    protected $repository;
+
+    public function __construct(SignatureSettingRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     public function signature(): View
     {
         return view('generalsetting::app_settings.signature-setting');
@@ -24,171 +29,106 @@ class SignatureSettingsController extends Controller
         return view('generalsetting::other_settings.clear-cache');
     }
 
-    public function clear(Request $request): JsonResponse
+    public function clear(): JsonResponse
     {
         try {
             Artisan::call('optimize:clear');
-
-            return response()->json([
-                'code' => 200,
-                'message' => __('admin.general_settings.cache_cleared_successfully')
-            ], 200);
+            return $this->jsonResponse(200, __('admin.general_settings.cache_cleared_successfully'));
         } catch (\Exception $e) {
-            return response()->json([
-                'code' => 500,
-                'message' => __('admin.general_settings.cache_clear_error'),
-                'error' => $e->getMessage()
-            ], 500);
+            return $this->jsonResponse(500, __('admin.general_settings.cache_clear_error'), $e->getMessage());
         }
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(SignatureSettingRequest $request): JsonResponse
     {
         try {
-            $request->validate([
-                'signature_name' => 'required|string|max:255',
-                'signature_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB max
-                'is_default' => 'nullable|boolean',
-            ]);
+            $signature = $this->repository->createSignature(
+                $request->all(),
+                $request->file('signature_image')
+            );
 
-            $imagePath = null;
-            if ($request->hasFile('signature_image')) {
-                $file = $request->file('signature_image');
-                if ($file instanceof UploadedFile) {
-                    $imagePath = uploadFile($file, 'signatures');
-                }
-            }
-
-            if ($request->is_default) {
-                SignatureSetting::where('is_default', 1)->update(['is_default' => 0]);
-            }
-
-            $signature = SignatureSetting::create([
-                'signature_name' => $request->signature_name,
-                'signature_image' => $imagePath ?? null,
-                'status' => 1,
-                'is_default' => $request->is_default ? 1 : 0,
-            ]);
-
-            $totalRecords = SignatureSetting::count();
-
-            return response()->json([
-                'code' => 200,
-                'message' =>  __('admin.general_settings.signature_success'),
-                'data' => $signature,
-                'totalRecords' => $totalRecords
-            ], 200);
+            return $this->jsonResponse(200, 
+                __('admin.general_settings.signature_success'),
+                $signature,
+                ['totalRecords' => $this->repository->getTotalSignaturesCount()]
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'code' => 500,
-                'message' =>  __('admin.general_settings.retrive_error'),
-                'error' => $e->getMessage()
-            ], 500);
+            return $this->jsonResponse(500, 
+                __('admin.general_settings.retrive_error'),
+                null,
+                ['error' => $e->getMessage()]
+            );
         }
     }
 
-
-    public function update(Request $request): JsonResponse
+    public function update(SignatureSettingRequest $request): JsonResponse
     {
         try {
-            $request->validate([
-                'id' => 'required|integer|exists:signature_settings,id',
-                'signature_name' => 'required|string|max:255',
-                'signature_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB max
-                'is_default' => 'nullable|boolean',
-                'status' => 'nullable|boolean'
-            ]);
+            $signature = $this->repository->updateSignature(
+                $request->id,
+                $request->all(),
+                $request->file('signature_image')
+            );
 
-            /** @var \Modules\GeneralSetting\Models\SignatureSetting $signature */
-            $signature = SignatureSetting::find($request->id);
-
-            if ($request->hasFile('signature_image')) {
-                $oldImage = $signature->signature_image ?? '';
-                $file = $request->file('signature_image');
-                if ($file instanceof UploadedFile) {
-                    $imagePath = uploadFile($file, 'signatures', $oldImage);
-                    $signature->signature_image = $imagePath;
-                }
-            }
-
-            if ($request->is_default) {
-                SignatureSetting::where('is_default', 1)->update(['is_default' => 0]);
-            }
-
-            $signature->update([
-                'signature_name' => $request->signature_name,
-                'is_default' => $request->is_default ? 1 : 0,
-                'status' => $request->status ? 1 : 0
-            ]);
-
-            return response()->json([
-                'code' => 200,
-                'message' => __('admin.general_settings.signature_update_success'),
-                'data' => $signature
-            ], 200);
+            return $this->jsonResponse(200, 
+                __('admin.general_settings.signature_update_success'),
+                $signature
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'code' => 500,
-                'message' => __('admin.general_settings.retrive_error'),
-                'error' => $e->getMessage()
-            ], 500);
+            return $this->jsonResponse(500, 
+                __('admin.general_settings.retrive_error'),
+                null,
+                ['error' => $e->getMessage()]
+            );
         }
     }
 
     public function index(Request $request): JsonResponse
     {
         try {
-            $search = $request->input('search');
+            $signatures = $this->repository->getAllSignatures($request->input('search'));
 
-            $signatures = SignatureSetting::when($search, function ($query) use ($search) {
-                $query->where('signature_name', 'like', "%{$search}%");
-            })
-                ->orderBy('created_at', 'desc')
-                ->get()
-                ->map(function ($signature) {
-                    $signature->signature_image = uploadedAsset($signature->signature_image ?? '', 'default');
-
-                    return $signature;
-                });
-
-            return response()->json([
-                'code' => 200,
-                'message' => __('admin.general_settings.signature_list_fetch_success'),
-                'data' => $signatures,
-                'totalRecords' => $signatures->count()
-            ], 200);
+            return $this->jsonResponse(200, 
+                __('admin.general_settings.signature_list_fetch_success'),
+                $signatures,
+                ['totalRecords' => $signatures->count()]
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'code' => 500,
-                'message' => __('admin.general_settings.fail_signature_list'),
-                'error' => $e->getMessage(),
-                'data' => []
-            ], 500);
+            return $this->jsonResponse(500, 
+                __('admin.general_settings.fail_signature_list'),
+                [],
+                ['error' => $e->getMessage()]
+            );
         }
     }
 
     public function destroy(Request $request): JsonResponse
     {
         try {
-            $request->validate([
-                'id' => 'required|integer|exists:signature_settings,id'
-            ]);
+            $totalRecords = $this->repository->deleteSignature($request->id);
 
-            /** @var \Modules\GeneralSetting\Models\SignatureSetting $signature */
-            $signature = SignatureSetting::findOrFail($request->id);
-            $signature->delete();
-
-            return response()->json([
-                'code' => 200,
-                'message' => __('admin.general_settings.signature_deleted_successfully'),
-                'totalRecords' => SignatureSetting::count()
-            ], 200);
+            return $this->jsonResponse(200, 
+                __('admin.general_settings.signature_deleted_successfully'),
+                null,
+                ['totalRecords' => $totalRecords]
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'code' => 500,
-                'message' => __('admin.general_settings.fail_delete_signature'),
-                'error' => $e->getMessage()
-            ], 500);
+            return $this->jsonResponse(500, 
+                __('admin.general_settings.fail_delete_signature'),
+                null,
+                ['error' => $e->getMessage()]
+            );
         }
+    }
+
+    protected function jsonResponse(int $code, string $message, $data = null, array $additional = [])
+    {
+        $response = [
+            'code' => $code,
+            'message' => $message,
+            'data' => $data
+        ];
+
+        return response()->json(array_merge($response, $additional), $code);
     }
 }
