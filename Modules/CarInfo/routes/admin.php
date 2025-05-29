@@ -12,7 +12,7 @@ use Modules\CarInfo\Http\Controllers\CarModelController;
 use Modules\CarInfo\Http\Controllers\CylinderController;
 use Modules\CarInfo\Http\Controllers\ExtraServiceController;
 use Modules\CarInfo\Http\Controllers\SafetyFeatureController;
-use Modules\CarInfo\Http\Controllers\TagControlerController;
+use Modules\CarInfo\Http\Controllers\TagController;
 use Modules\CarInfo\Http\Controllers\CarFuelController;
 use Modules\CarInfo\Http\Controllers\CarSeatController;
 use Modules\CarInfo\Http\Controllers\CarSteeringController;
@@ -30,7 +30,6 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
     Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
         Route::get('vehicle-types', [CarTypeController::class, 'carTypes'])->name('cartypes')->middleware('permission');
         Route::post('storetype', [CarTypeController::class, 'storeType'])->name('storetype');
-        Route::get('getcartypes', [CarTypeController::class, 'getCarTypes'])->name('getcartype');
         Route::get('getcartype/{id}', [CarTypeController::class, 'getCarType'])->name('getcartype');
         Route::post('update_type', [CarTypeController::class, 'updateType'])->name('update_type');
         Route::post('deletetype', [CarTypeController::class, 'deleteType'])->name('deletetype');
@@ -54,11 +53,11 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::get('get_damage_type/{id}', [DamageTypeController::class, 'getDamageType'])->name('get_damage_type');
         Route::post('delete_damage_type', [DamageTypeController::class, 'deleteDamageType'])->name('delete_damage_type');
         //Tag Routes
-        Route::get('tags', [TagControlerController::class, 'index'])->name('tags')->middleware('permission');
-        Route::post('store_tag', [TagControlerController::class, 'save'])->name('store_tag');
-        Route::get('get_tags', [TagControlerController::class, 'getTags'])->name('get_tags');
-        Route::get('get_tag/{id}', [TagControlerController::class, 'getTag'])->name('get_tag');
-        Route::post('delete_tag', [TagControlerController::class, 'deleteTag'])->name('delete_tag');
+        Route::get('tags', [TagController::class, 'index'])->name('tags')->middleware('permission');
+        Route::post('store_tag', [TagController::class, 'save'])->name('store_tag');
+        Route::get('get_tags', [TagController::class, 'getTags'])->name('get_tags');
+        Route::get('get_tag/{id}', [TagController::class, 'getTag'])->name('get_tag');
+        Route::post('delete_tag', [TagController::class, 'deleteTag'])->name('delete_tag');
         // Brand
         Route::get('brands', [BrandController::class, 'index'])->name('brand.index')->middleware('permission');
         Route::post('brand/save', [BrandController::class, 'store'])->name('brand.store');

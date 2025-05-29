@@ -10,144 +10,46 @@ use Modules\CarInfo\Models\DoorType;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Modules\CarInfo\Http\Requests\DoorTypeRequest;
+use Modules\CarInfo\Repositories\Contracts\DoorTypeRepositoryInterface;
 
 class DoorTypeController extends Controller
 {
+    protected DoorTypeRepositoryInterface $doorTypeRepository;
+
+    public function __construct(DoorTypeRepositoryInterface $doorTypeRepository)
+    {
+        $this->doorTypeRepository = $doorTypeRepository;
+    }
+
     public function index(): View
     {
         return view('carinfo::door_type.index');
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(DoorTypeRequest $request): JsonResponse
     {
-        $id = $request->id ?? '';
-        $data = [
-            'door_type' => $request->door_type,
-        ];
-
-        $validator = Validator::make($request->all(), [
-            'door_type' => [
-                'required',
-                'max:1',
-                Rule::unique('door_types')->ignore($id)->whereNull('deleted_at')
-            ],
-        ], [
-            'door_type.required' => __('admin.rentals.door_type_required'),
-            'door_type.unique' => __('admin.rentals.door_type_unique'),
-            'door_type.max' => __('admin.rentals.door_type_maxlength'),
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 422,
-                'errors' => $validator->errors()->toArray()
-            ], 422);
-        }
-
-        $successMsg = empty($id) ? __('admin.rentals.door_type_create_success') : __('admin.rentals.door_type_update_success');
-        $errorMsg = empty($id) ?  __('admin.common.default_create_error') : __('admin.common.default_update_error');
-
-        try {
-            if (empty($id)) {
-                DoorType::create($data);
-            } else {
-                $data['status'] = $request->status ?? 1;
-                DoorType::where('id', $id)->update($data);
-            }
-
-            return response()->json([
-                'status' => 'success',
-                'code'   => 200,
-                'message' => $successMsg
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 500,
-                'message' => $errorMsg,
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $response = $this->doorTypeRepository->store($request);
+        return response()->json($response, $response['code']);
     }
 
     public function list(Request $request): JsonResponse
     {
-        try {
-            $query = DoorType::query();
-
-            if (!empty($request->search)) {
-                $search = $request->search;
-                $query->where(function ($q) use ($search) {
-                    $q->where('door_type', 'like', "%{$search}%");
-                });
-            }
-
-             // Status Filter
-            if ($request->has('sort_by_status') && !empty($request->sort_by_status) || $request->sort_by_status == '0') {
-                $status = $request->sort_by_status;
-                $query->where('door_types.status', $status);
-            }
-
-            $columnIndex = $request->order[0]['column'] ?? 0;
-            $columnName = $request->columns[$columnIndex]['data'] ?? 'door_type';
-            $orderDir = $request->order[0]['dir'] ?? 'asc';
-
-            $query->orderBy($columnName, $orderDir);
-
-            $start = $request->start ?? 0;
-            $length = $request->length ?? 10;
-
-            $filterTotalRecords = $query->count();
-            $totalRecords = DoorType::count();
-
-            $data = $query->skip($start)->take($length)->get();
-
-            return response()->json([
-                'draw' => intval($request->draw),
-                'recordsTotal' => $totalRecords,
-                'recordsFiltered' => $filterTotalRecords,
-                'data' => $data,
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'code' => 500,
-                'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
-            ], 500);
-        }
+        $response = $this->doorTypeRepository->list($request);
+        return response()->json($response, $response['code']);
     }
-
 
     public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
-        $doorType = DoorType::find($id);
-
-        return response()->json([
-            'status' => 'success',
-            'code'   => 200,
-            'data' => $doorType
-        ], 200);
+        $response = $this->doorTypeRepository->edit($id);
+        return response()->json($response, $response['code']);
     }
 
     public function delete(Request $request): JsonResponse
     {
-        try {
-            $id = $request->id;
-            DoorType::where('id', $id)->delete();
-
-            return response()->json([
-                'status' => 'success',
-                'code'   => 200,
-                'message' => __('admin.rentals.door_type_delete_success')
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 500,
-                'message' => __('admin.common.default_delete_error')
-            ], 500);
-        }
+        $id = $request->id;
+        $response = $this->doorTypeRepository->delete($id);
+        return response()->json($response, $response['code']);
     }
 }

@@ -196,7 +196,6 @@ class BrandRepository implements BrandRepositoryInterface
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_delete_error'),
-                'error'   => $e->getMessage(),
             ];
         }
     }

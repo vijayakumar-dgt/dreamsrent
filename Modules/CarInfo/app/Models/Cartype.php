@@ -21,5 +21,10 @@ class Cartype extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'name',
+        'language_id',
+        'status',
+        'icon',
+    ];
 }
