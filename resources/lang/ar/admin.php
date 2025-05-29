@@ -1,7 +1,5 @@
-<?php
-
-return array (
-  'general_settings' =>
+<?php return array (
+  'general_settings' => 
   array (
     'mins' => 'mins',
     'cod_cards' => 'تشير إلى أنه يجب دفع ثمن البضائع عند التسليم',
@@ -438,7 +436,6 @@ return array (
     'aws' => 'خدمة AWS',
     'aws_settings' => 'إعدادات AWS',
     'aws_access_key' => 'مفتاح الوصول لـ AWS',
-    'secret_key' => 'المفتاح السري',
     'bucket_name' => 'اسم الحاوية (Bucket)',
     'region' => 'المنطقة',
     'base_url' => 'الرابط الأساسي',
@@ -752,7 +749,7 @@ return array (
     'edit_bank_account' => 'تحرير حساب بنكي',
     'edit_template' => 'تحرير قالب',
   ),
-  'main' =>
+  'main' => 
   array (
     'dashboard' => 'لوحة التحكم',
     'main' => 'الرئيسية',
@@ -791,7 +788,7 @@ return array (
     'invoice_amount' => 'قيمة الفاتورة',
     'drivers' => 'السائقون',
   ),
-  'bookings' =>
+  'bookings' => 
   array (
     'bookings' => 'الحجوزات',
     'select_extra_services' => 'اختر خدمات إضافية',
@@ -904,7 +901,7 @@ return array (
     'comment_required' => 'التعليق مطلوب.',
     'status_required' => 'الحالة مطلوبة.',
   ),
-  'manage' =>
+  'manage' => 
   array (
     'manage' => 'إدارة',
     'drivers' => 'السائقين',
@@ -991,7 +988,7 @@ return array (
     'location_update_success' => 'تم تحديث الموقع بنجاح.',
     'location_delete_success' => 'تم حذف الموقع بنجاح.',
   ),
-  'rentals' =>
+  'rentals' => 
   array (
     'rentals' => 'الإيجارات',
     'maintenance' => 'الصيانة',
@@ -1545,7 +1542,7 @@ return array (
     'checklist_required' => 'قائمة التحقق مطلوبة.',
     'color_code_unique' => 'كود اللون موجود بالفعل.',
   ),
-  'user_management' =>
+  'user_management' => 
   array (
     'user_management' => 'إدارة المستخدمين',
     'roles_permissions' => 'الأدوار والصلاحيات',
@@ -1576,7 +1573,7 @@ return array (
     'user_update_success' => 'تم تحديث المستخدم بنجاح.',
     'user_delete_success' => 'تم حذف المستخدم بنجاح.',
   ),
-  'reports' =>
+  'reports' => 
   array (
     'earnings' => 'الإيرادات',
     'earning_report' => 'تقرير الإيرادات',
@@ -1613,7 +1610,7 @@ return array (
     'earnings_breakdown' => 'تقسيم الإيرادات',
     'payment_method' => 'طريقة الدفع',
   ),
-  'finance_accounts' =>
+  'finance_accounts' => 
   array (
     'finance_accounts' => 'المالية والحسابات',
     'payments' => 'المدفوعات',
@@ -1682,7 +1679,7 @@ return array (
     'grand_total_required' => 'الإجمالي الكلي مطلوب.',
     'grand_total_numeric' => 'يجب أن يكون الإجمالي الكلي رقماً.',
   ),
-  'others' =>
+  'others' => 
   array (
     'others' => 'أخرى',
     'messages' => 'الرسائل',
@@ -1700,7 +1697,7 @@ return array (
     'type_your_message' => 'اكتب رسالتك',
     'message_sent_success' => 'تم ارسال الرسالة بنجاح.',
   ),
-  'cms' =>
+  'cms' => 
   array (
     'page' => 'الصفحة',
     'pages' => 'الصفحات',
@@ -1833,7 +1830,7 @@ return array (
     'enter_section_title' => 'أدخل عنوان القسم',
     'answer_unique' => 'الإجابة موجودة بالفعل.',
   ),
-  'support' =>
+  'support' => 
   array (
     'ticket_assignment_failed_due_to_status' => 'لا يمكن تعيين هذه التذكرة لأنها قيد المعالجة أو مغلقة بالفعل.',
     'support' => 'الدعم',
@@ -1895,7 +1892,7 @@ return array (
     'invalid_status_transition' => 'الانتقال إلى الحالة غير صالح.',
     'reply_allowed_only_in_status_3' => 'الرد مسموح فقط في حالة قيد المعالجة.',
   ),
-  'common' =>
+  'common' => 
   array (
     'assign' => 'تعيين',
     'type' => 'النوع',
@@ -2197,7 +2194,7 @@ return array (
     'notice' => 'ملاحظة',
     'no_notifications_found' => 'لم يتم العثور على اشعارات',
   ),
-  'page' =>
+  'page' => 
   array (
     'pages' => 'الصفحات',
     'seo_settings' => 'إعدادات السيو',
@@ -2271,7 +2268,7 @@ return array (
     'new_page_created' => 'تم إنشاء الصفحة الجديدة بنجاح!',
     'page_slug' => 'مُعرّف الصفحة',
   ),
-  'dashboard' =>
+  'dashboard' => 
   array (
     'dashboard' => 'لوحة التحكم',
     'admin_dashboard' => 'الرئيسية',
@@ -2321,7 +2318,7 @@ return array (
     'INVOICE_AMOUNT' => 'مبلغ الفاتورة',
     'STATUS' => 'حالة',
   ),
-  'blog' =>
+  'blog' => 
   array (
     'blogs' => 'مدونات',
     'home' => 'بيت',
@@ -2403,7 +2400,7 @@ return array (
     'image_dimensions_must_be_exactly_735_310_pixels' => 'يجب أن تكون أبعاد الصورة 735 × 310 بكسل بالضبط',
     'blog_details' => 'تفاصيل المدونة',
   ),
-  'auth' =>
+  'auth' => 
   array (
     'welcome_back' => 'مرحباً بعودتك',
     'please_enter_details_to_sign_in' => 'الرجاء إدخال التفاصيل لتسجيل الدخول',
@@ -2431,5 +2428,6 @@ return array (
     'email_does_not_exist_or_token_is_invalid' => 'البريد الإلكتروني غير موجود أو الرمز غير صالح',
     'otp_verified_successfully' => 'تم التحقق من رمز التحقق بنجاح',
     'otp_does_not_match' => 'رمز التحقق غير متطابق',
+    'login' => 'تسجيل الدخول',
   ),
 );

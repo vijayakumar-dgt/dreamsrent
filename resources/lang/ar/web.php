@@ -1,7 +1,5 @@
-<?php
-
-return array (
-  'auth' =>
+<?php return array (
+  'auth' => 
   array (
     'sign_in' => 'تسجيل الدخول',
     'email_confirmation_subtitle' => 'سنرسل رمز تأكيد إلى بريدك الإلكتروني.',
@@ -72,7 +70,7 @@ return array (
     'last_name_alphabets' => 'يمكن أن يحتوي اسم العائلة على أحرف فقط.',
     'email_otp_verification' => 'التحقق من البريد الإلكتروني OTP',
   ),
-  'home' =>
+  'home' => 
   array (
     'signin' => 'تسجيل الدخول',
     'signup' => 'إنشاء حساب',
@@ -391,8 +389,9 @@ return array (
     'below_average' => 'اقل من المتوسط',
     'poor' => 'ضعيف',
     'miles' => 'ميلات',
+    'customer_recomendation' => 'توصية العملاء',
   ),
-  'common' =>
+  'common' => 
   array (
     'back_to_home' => 'العودة إلى الصفحة الرئيسية',
     'search' => 'بحث',
@@ -486,7 +485,7 @@ return array (
     'notice' => 'إشعار',
     'view_reply' => 'عرض والرد',
   ),
-  'user' =>
+  'user' => 
   array (
     'user_dashboard' => 'لوحة تحكم المستخدم',
     'dashboard' => 'لوحة التحكم',
@@ -741,9 +740,11 @@ return array (
     'last_login_at' => 'آخر تسجيل دخول في',
     'device_not_found' => 'الجهاز غير موجود',
     'add_to_wallet' => 'اضافة الى المحفظة',
-    'phone_number_required' => 'رقم الهاتف مطلوب.'
+    'phone_number_required' => 'رقم الهاتف مطلوب.',
+    'enter_subject' => 'أدخل الموضوع',
+    'subject_required' => 'الموضوع مطلوب',
   ),
-  'blog' =>
+  'blog' => 
   array (
     'blog_list' => 'قائمة المدونات',
     'blogs' => 'مدونات',

@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Modules\GeneralSetting\Repositories\Contracts\EmailTemplateRepositoryInterface;
 use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\InsuranceSettingInterface;
+use Modules\GeneralSetting\Repositories\Contracts\LanguageSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\LocalizationInterface;
 use Modules\GeneralSetting\Repositories\Contracts\SignatureSettingInterface;
 use Modules\GeneralSetting\Repositories\Eloquent\EmailTemplateSettingRepository;
@@ -13,6 +14,7 @@ use Modules\GeneralSetting\Repositories\Eloquent\GeneralSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\InsuranceSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\LocalizationRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\SignatureSettingRepository;
+use Modules\GeneralSetting\Repositories\Eloquent\LanguageSettingRepository;
 
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -27,6 +29,7 @@ class RepositoryServiceProvider extends ServiceProvider
     protected function registerBindings(): void
     {
         $this->app->bind(GeneralSettingInterface::class, GeneralSettingRepository::class);
+        $this->app->bind(LanguageSettingInterface::class, LanguageSettingRepository::class);
         $this->app->bind(EmailTemplateRepositoryInterface::class, EmailTemplateSettingRepository::class);
         $this->app->bind(InsuranceSettingInterface::class, InsuranceSettingRepository::class);
         $this->app->bind(SignatureSettingInterface::class, SignatureSettingRepository::class);

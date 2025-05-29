@@ -25,7 +25,7 @@ class Language extends Model
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = [];
+    protected $fillable = ['language_id','rtl','default','status'];
 
     /**
      * @return BelongsTo<TranslationLanguage, Language>
