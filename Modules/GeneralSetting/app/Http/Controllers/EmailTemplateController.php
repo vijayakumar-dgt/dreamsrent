@@ -7,13 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Modules\GeneralSetting\Http\Requests\EmailTemplateRequest;
-use Modules\GeneralSetting\Repositories\EmailTemplateSettingRepository;
+use Modules\GeneralSetting\Repositories\Contracts\EmailTemplateRepositoryInterface;
 
 class EmailTemplateController extends Controller
 {
-    protected $repository;
+    protected EmailTemplateRepositoryInterface $repository;
 
-    public function __construct(EmailTemplateSettingRepository $repository)
+    public function __construct(EmailTemplateRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }

@@ -1,14 +1,14 @@
 <?php
 
-namespace Modules\GeneralSetting\Repositories;
+namespace Modules\GeneralSetting\Repositories\Eloquent;
 
 use Modules\GeneralSetting\Models\EmailTemplate;
 use Modules\GeneralSetting\Models\NotificationTag;
 use Modules\GeneralSetting\Models\NotificationType;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Modules\GeneralSetting\Repositories\Contracts\EmailTemplateRepositoryInterface;
 
-class EmailTemplateSettingRepository
+class EmailTemplateSettingRepository implements EmailTemplateRepositoryInterface
 {
     public function getAllNotificationTags(): Collection
     {
