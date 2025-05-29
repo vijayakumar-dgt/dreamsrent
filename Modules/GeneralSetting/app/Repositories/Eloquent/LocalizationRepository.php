@@ -1,31 +1,23 @@
 <?php
 
-namespace Modules\GeneralSetting\Repositories;
+namespace Modules\GeneralSetting\Repositories\Eloquent;
 
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Timezone;
+use Modules\GeneralSetting\Repositories\Contracts\LocalizationInterface;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 
-class LocalizationRepository
+class LocalizationRepository implements LocalizationInterface
 {
-    protected $groupId = 5;
+    protected int $groupId = 5;
 
-    /**
-     * Get all timezones
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getTimezones()
+    public function getTimezones(): Collection
     {
         return Timezone::all();
     }
 
-    /**
-     * Search timezones
-     *
-     * @param string $search
-     * @return \Illuminate\Support\Collection
-     */
-    public function searchTimezones($search)
+    public function searchTimezones(string $search): SupportCollection
     {
         return Timezone::where('name', 'like', "%$search%")
             ->take(10)
@@ -38,25 +30,14 @@ class LocalizationRepository
             });
     }
 
-    /**
-     * Get current timezone setting
-     *
-     * @return mixed
-     */
-    public function getCurrentTimezone()
+    public function getCurrentTimezone(): ?GeneralSetting
     {
         return GeneralSetting::where('group_id', $this->groupId)
             ->where('key', 'timezone')
             ->first();
     }
 
-    /**
-     * Update localization settings
-     *
-     * @param array $data
-     * @return void
-     */
-    public function updateLocalization(array $data)
+    public function updateLocalization(array $data): void
     {
         foreach ($data as $key => $value) {
             GeneralSetting::updateOrCreate(
@@ -66,13 +47,7 @@ class LocalizationRepository
         }
     }
 
-    /**
-     * Get timezone by ID
-     *
-     * @param int $id
-     * @return \Modules\GeneralSetting\Models\Timezone|null
-     */
-    public function getTimezoneById($id)
+    public function getTimezoneById(int $id): ?Timezone
     {
         return Timezone::find($id);
     }

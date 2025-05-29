@@ -36,15 +36,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
 use Modules\GeneralSetting\Http\Requests\StoreNotificationSettingsRequest;
-use Modules\GeneralSetting\Repositories\NotificationSettingsRepository;
+use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 use Modules\GeneralSetting\Http\Requests\CompanySettingRequest;
-use Modules\GeneralSetting\Repositories\GeneralSettingRepository;
 
 class GeneralSettingController extends Controller
 {
-    protected GeneralSettingRepository $repository;
+    protected GeneralSettingInterface $repository;
 
-    public function __construct(GeneralSettingRepository $repository)
+    public function __construct(GeneralSettingInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -119,7 +118,7 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeRentalSettings(StoreRentalSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
+    public function storeRentalSettings(StoreRentalSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
     {
         try {
             $repository->saveRentalSettings($request->validated());
@@ -174,7 +173,7 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeOtpSettings(StoreOtpSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
+    public function storeOtpSettings(StoreOtpSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
     {
         try {
             $repository->storeOtpSettings($request->validated());
@@ -296,7 +295,7 @@ class GeneralSettingController extends Controller
         );
     }
 
-    public function storeInvoiceSettings(StoreInvoiceSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
+    public function storeInvoiceSettings(StoreInvoiceSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
     {
         try {
             $repository->saveInvoiceSettings($request->validated());
@@ -416,7 +415,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeMaintenanceSettings(StoreMaintenanceSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
+    public function storeMaintenanceSettings(StoreMaintenanceSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
     {
         try {
             $repository->storeMaintenanceSettings($request->all());
@@ -436,7 +435,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeCookiesSettings(StoreCookiesSettingsRequest $request, GeneralSettingRepository $repository ): JsonResponse
+    public function storeCookiesSettings(StoreCookiesSettingsRequest $request, GeneralSettingInterface $repository ): JsonResponse
     {
         try {
             $repository->storeCookiesSettings($request->validated());
@@ -456,7 +455,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function cookiesSettingsList(CookiesSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
+    public function cookiesSettingsList(CookiesSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
     {
         try {
             $settings = $repository->getCookiesSettings(
@@ -986,7 +985,7 @@ class GeneralSettingController extends Controller
         return view('generalsetting::website_settings.theme_settings');
     }
 
-    public function updateThemeSettings(UpdateThemeSettingsRequest $request, GeneralSettingRepository $repository): JsonResponse
+    public function updateThemeSettings(UpdateThemeSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
     {
         try {
             $repository->updateThemeSettings($request->validated());

@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\GeneralSetting\Repositories;
+namespace Modules\GeneralSetting\Repositories\Eloquent;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
@@ -8,9 +8,10 @@ use Modules\GeneralSetting\Models\GeneralSetting;
 use App\Services\ImageResizer;
 use Exception;
 use Modules\GeneralSetting\Models\Language;
+use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 
 
-class GeneralSettingRepository
+class GeneralSettingRepository implements GeneralSettingInterface
 {
     protected ImageResizer $imageResizer;
 
