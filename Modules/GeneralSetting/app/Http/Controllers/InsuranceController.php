@@ -7,13 +7,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Modules\GeneralSetting\Http\Requests\InsuranceRequest;
-use Modules\GeneralSetting\Repositories\InsuranceSettingRepository;
+use Modules\GeneralSetting\Repositories\Contracts\InsuranceSettingInterface;
 
 class InsuranceController extends Controller
 {
-    protected $repository;
+    protected InsuranceSettingInterface $repository;
 
-    public function __construct(InsuranceSettingRepository $repository)
+    public function __construct(InsuranceSettingInterface $repository)
     {
         $this->repository = $repository;
     }
