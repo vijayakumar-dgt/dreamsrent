@@ -76,7 +76,7 @@
                         } else {
                             showToast("error", resp.message);
                             $("#loginForm .submitbtn").text(
-                                _l("admin.general_settings.login")
+                                _l("admin.auth.login")
                             );
                             $("#loginForm .submitbtn").prop("disabled", false);
                         }
@@ -96,7 +96,7 @@
                             $("#error").text(error.responseJSON.message);
                         }
                         $("#loginForm .submitbtn").text(
-                            _l("admin.general_settings.login")
+                            _l("admin.auth.login")
                         );
                         $("#loginForm .submitbtn").prop("disabled", false);
                     },
