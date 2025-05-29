@@ -18,6 +18,9 @@ use Modules\GeneralSetting\Http\Requests\StoreMaintenanceSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreOtpSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreRentalSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreSeoSetupRequest;
+use Modules\GeneralSetting\Http\Requests\UpdateEmailRequest;
+use Modules\GeneralSetting\Http\Requests\UpdatePasswordRequest;
+use Modules\GeneralSetting\Http\Requests\UpdatePhoneNumberRequest;
 use Modules\GeneralSetting\Http\Requests\UpdateThemeSettingsRequest;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\UserDevice;
@@ -332,46 +335,7 @@ class GeneralSettingController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
-    }
-
-    public function transferOwnership(Request $request): JsonResponse
-    {
-        $validator = Validator::make($request->all(), [
-            'owner_id' => 'required|exists:users,id'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'message' => __('admin.general_settings.validation_error'),
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        try {
-            $newOwnerId = $request->owner_id;
-
-            DB::transaction(function () use ($newOwnerId) {
-                \App\Models\User::where('user_type', 1)->update(['user_type' => 4]);
-
-                \App\Models\User::where('id', $newOwnerId)->update(['user_type' => 1]);
-            });
-
-            return response()->json([
-                'status' => 'success',
-                'code' => 200,
-                'message' => __('admin.general_settings.ownership_transfer_success')
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 500,
-                'message' => __('admin.general_settings.retrive_error'),
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
+    }   
 
     public function storeNotificationSettings(StoreNotificationSettingsRequest $request): JsonResponse
     {
@@ -435,7 +399,7 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function storeCookiesSettings(StoreCookiesSettingsRequest $request, GeneralSettingInterface $repository ): JsonResponse
+    public function storeCookiesSettings(StoreCookiesSettingsRequest $request, GeneralSettingInterface $repository): JsonResponse
     {
         try {
             $repository->storeCookiesSettings($request->validated());
@@ -528,251 +492,118 @@ class GeneralSettingController extends Controller
         }
     }
 
-    public function security(Request $request): View
+    public function security(Request $request)
     {
         return view('generalsetting::security.index');
     }
 
-    /**
-     * Check if the provided current password matches the user's actual password.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function checkCurrentPassword(Request $request): JsonResponse
     {
-        /** @var \App\Models\User $authUser */
-        $authUser = Auth::guard('admin')->user();
         $password = $request->password;
-        if ($authUser->password !== null && Hash::check($password, $authUser->password)) {
-            return response()->json([
-                'status' => 'success',
-                'code' => 200,
-                'message' => __('admin.general_settings.current_password_correct'),
-            ]);
-        } else {
-            return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'message' => __('admin.general_settings.current_password_incorrect'),
-            ]);
-        }
+        $result = \Hash::check($password, auth('admin')->user()->password);
+
+        return response()->json([
+            'status' => $result ? 'success' : 'error',
+            'code' => $result ? 200 : 422,
+            'message' => __(
+                $result ? 'admin.general_settings.current_password_correct' : 'admin.general_settings.current_password_incorrect'
+            ),
+        ]);
     }
 
     public function checkCurrentPhoneNumber(Request $request): JsonResponse
     {
-        $currentPhoneNumber = $request->currentPhoneNumber;
-        /** @var \App\Models\User $user */
-        $user = current_user();
-        if ($user->phone_number == "") {
+        $user = auth('admin')->user();
+        $currentPhone = $request->currentPhoneNumber;
+
+        if (!$user->phone_number) {
             return response()->json([
                 'status' => 'error',
                 'code' => 422,
                 'error' => "null",
                 'message' => __('admin.general_settings.phone_number_not_set'),
             ], 422);
-        } elseif ($user->phone_number != $currentPhoneNumber) {
+        }
+
+        if ($user->phone_number !== $currentPhone) {
             return response()->json([
                 'status' => 'error',
                 'code' => 422,
                 'error' => "incorrect",
                 'message' => __('admin.general_settings.phone_number_incorrect'),
             ], 422);
-        } elseif ($user->phone_number == $currentPhoneNumber) {
-            return response()->json([
-                'status' => 'success',
-                'code' => 200,
-                'message' => __('admin.general_settings.phone_number_correct'),
-            ]);
-        } else {
-            return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'message' => __('admin.general_settings.phone_number_incorrect'),
-            ], 422);
         }
-    }
-
-    public function updatePassword(Request $request): JsonResponse
-    {
-        $validator = Validator::make($request->all(), [
-            'current_password' => 'required',
-            'new_password' => 'required|min:6',
-            'confirm_password' => 'required|same:new_password',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'message' => __('admin.general_settings.validation_error'),
-                'errors' => $validator->errors()->toArray()
-            ], 422);
-        }
-
-        /** @var \App\Models\User $user */
-        $user = current_user();
-
-        if ($user->password !== null && !Hash::check($request->current_password, $user->password)) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 500,
-                'message' => __('admin.general_settings.current_password_incorrect'),
-                'errors' => $validator->errors()->toArray()
-            ], 500);
-        }
-
-        $user->password = Hash::make($request->new_password);
-        $user->last_password_changed_at = now();
-        $user->save();
 
         return response()->json([
             'status' => 'success',
             'code' => 200,
-            'message' => __('admin.general_settings.password_updated_successfully'),
+            'message' => __('admin.general_settings.phone_number_correct'),
         ]);
     }
 
-    /**
-     * Update the authenticated user's phone number.
-     *
-     * Validates the new phone number and updates it in the database
-     * if the validation passes. Returns a JSON response indicating
-     * success or failure of the update operation.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function updatePhoneNumber(Request $request): JsonResponse
+    public function updatePassword(UpdatePasswordRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'new_phonenumber' => 'required|unique:users,phone_number',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 200,
-                'message' => $validator->errors()->first()
-            ], 200);
-        }
-        $currentPassword = $request->phone_current_password;
-        /** @var \App\Models\User $authUser */
-        $authUser = Auth::guard('admin')->user();
-
-        if ($authUser->password !== null && !Hash::check($currentPassword, $authUser->password)) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 200,
-                'message' => __('admin.general_settings.current_password_incorrect')
-            ]);
-        }
-        $currentPhoneNumber = $request->current_phonenumber;
-        if ($authUser->phone_number != $currentPhoneNumber && $authUser->phone_number != "") {
-            return response()->json([
-                'status' => 'error',
-                'code' => 200,
-                'message' => __('admin.general_settings.phone_number_incorrect')
-            ]);
-        }
-        $authUser->phone_number = $request->new_phonenumber;
-        $authUser->save();
+        $result = $this->repository->updatePassword($request->only([
+            'current_password',
+            'new_password'
+        ]));
 
         return response()->json([
-            'status' => 'success',
-            'code' => 200,
-            'message' => __('admin.general_settings.phone_number_updated_successfully'),
-        ]);
+            'status' => $result['success'] ? 'success' : 'error',
+            'code' => $result['success'] ? 200 : 422,
+            'message' => $result['message']
+        ], $result['success'] ? 200 : 422);
     }
 
-    public function updateEmail(Request $request): JsonResponse
+    public function updatePhoneNumber(UpdatePhoneNumberRequest $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'new_email' => 'required|email|unique:users,email',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'message' => $validator->errors()->first()
-            ], 422);
-        }
-        $current_email = $request->current_email;
-        /** @var \App\Models\User $authUser */
-        $authUser = Auth::guard('admin')->user();
-        if ($authUser->email != $current_email) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 200,
-                'message' => __('admin.general_settings.current_email_incorrect')
-            ]);
-        }
-        $email_current_password = $request->email_current_password;
-        if ($authUser->password !== null && !Hash::check($email_current_password, $authUser->password)) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 200,
-                'message' => __('admin.general_settings.current_password_incorrect')
-            ]);
-        }
-        $authUser->email = $request->new_email;
-        $authUser->save();
+        $result = $this->repository->updatePhoneNumber($request->only([
+            'phone_current_password',
+            'current_phonenumber',
+            'new_phonenumber'
+        ]));
 
         return response()->json([
-            'status' => 'success',
-            'code' => 200,
-            'message' => __('admin.general_settings.email_updated_successfully'),
-        ]);
+            'status' => $result['success'] ? 'success' : 'error',
+            'code' => $result['success'] ? 200 : 422,
+            'message' => $result['message']
+        ], $result['success'] ? 200 : 422);
+    }
+
+    public function updateEmail(UpdateEmailRequest $request): JsonResponse
+    {
+        $result = $this->repository->updateEmail($request->only([
+            'email_current_password',
+            'current_email',
+            'new_email'
+        ]));
+
+        return response()->json([
+            'status' => $result['success'] ? 'success' : 'error',
+            'code' => $result['success'] ? 200 : 422,
+            'message' => $result['message']
+        ], $result['success'] ? 200 : 422);
     }
 
     public function getSecuritySettings(): JsonResponse
     {
-        /** @var \App\Models\User $authUser */
-        $authUser = Auth::guard('admin')->user();
-        $userDevices = UserDevice::where('user_id', $authUser->id)->orderBy('created_at', 'desc')->take(5)->get()->map(function ($device) {
-            return [
-                'id' => $device->id,
-                'device_type' => $device->device_type,
-                'browser' => $device->browser,
-                'os' => $device->os,
-                'ip_address' => $device->ip_address,
-                'location' => $device->location,
-                'date' => formatDateTime($device->created_at)
-            ];
-        });
-        $response = [
-            'user' => Auth::user(),
-            'last_password_changed_at' => $authUser->last_password_changed_at ? formatDateTime($authUser->last_password_changed_at) : "null",
-            'devices' => $userDevices
-        ];
+        $data = $this->repository->getSecuritySettings();
+
         return response()->json([
             'status' => 'success',
             'code' => 200,
-            'data' => $response
+            'data' => $data
         ]);
     }
 
     public function logoutDevice(Request $request): JsonResponse
     {
-        /** @var \App\Models\User $authUser */
-        $authUser = Auth::guard('admin')->user();
-        if ($request->isAll === "true") {
-            UserDevice::where('user_id', $authUser->id)->delete();
-            Auth::guard('admin')->logout();
-            return response()->json([
-                'status' => 'success',
-                'code' => 200,
-                'message' => __('admin.general_settings.all_device_removed_successfully'),
-            ]);
-        }
-        /** @var \Modules\GeneralSetting\Models\UserDevice $device */
-        $device = UserDevice::find($request->id);
-        $device->delete();
+        $result = $this->repository->logoutDevice($request->only(['isAll', 'id']));
+
         return response()->json([
-            'status' => 'success',
+            'status' => $result['success'] ? 'success' : 'error',
             'code' => 200,
-            'message' => __('admin.general_settings.device_removed_successfully'),
+            'message' => $result['message']
         ]);
     }
 

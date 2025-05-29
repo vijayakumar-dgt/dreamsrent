@@ -21,4 +21,9 @@ interface GeneralSettingInterface
     public function saveInvoiceSettings(array $data);
     public function storeCookiesSettings(array $data);
     public function getCookiesSettings(int $groupId, ?int $languageId = null): array;
+    public function updatePassword(array $data);
+    public function updatePhoneNumber(array $data);
+    public function updateEmail(array $data);
+    public function getSecuritySettings();
+    public function logoutDevice(array $data);
 }
