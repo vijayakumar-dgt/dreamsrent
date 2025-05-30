@@ -15,7 +15,7 @@ class RepositoryServiceProvider extends ServiceProvider
     }
 
     public function registerBindings(): void
-    {
+    { 
         
     }
 }

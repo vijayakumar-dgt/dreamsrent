@@ -31,7 +31,7 @@ class CommunicationServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the service provider.
+     * Register the service provider. 
      */
     public function register(): void
     {
