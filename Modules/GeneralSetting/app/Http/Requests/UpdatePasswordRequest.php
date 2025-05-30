@@ -2,10 +2,10 @@
 
 namespace Modules\GeneralSetting\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 use Illuminate\Support\Facades\Hash;
 
-class UpdatePasswordRequest extends FormRequest
+class UpdatePasswordRequest extends CustomFailedValidation
 {
     public function authorize(): bool
     {

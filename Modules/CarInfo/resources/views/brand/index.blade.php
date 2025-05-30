@@ -75,117 +75,89 @@
 	</div>
 	<!-- /Page Wrapper -->
 
-	<!-- Add Brand -->
-	<div class="modal fade addmodal" id="brand_modal">
-		<div class="modal-dialog modal-dialog-centered modal-md">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="mb-0 modal-title">{{ __('admin.rentals.create_brand') }}</h4>
-					<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-						<i class="ti ti-x fs-16"></i>
-					</button>
+	<!-- Add/Edit Brand -->
+	<x-admin.modal className="addmodal" id="brand_modal" :title="__('admin.rentals.create_vehicle_color')" action="{{  route('brand.store') }}" formId="brandForm" method="POST" enctype="multipart/form-data">
+       <x-slot name="body">
+			<input type="hidden" name="id" id="id">
+			<input type="hidden" name="language_id" id="language_id">
+			<div class="mb-3">
+				<label class="form-label">{{ __('admin.rentals.brand_image') }}<span class="text-danger"> *</span></label>
+				<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
+					<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
+						<img src="{{ uploadedAsset('', 'default') }}" id="imagePreview" class="img-fluid d-none" alt="Brand Image">
+						<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
+					</div>
+					<div class="profile-upload">
+						<div class="profile-uploader d-flex align-items-center">
+							<div class="drag-upload-btn btn btn-md btn-dark">
+								<i class="ti ti-photo-up fs-14"></i>
+								{{ __('admin.common.upload') }}
+								<input type="file" class="form-control image-sign" name="brand_image" id="brand_image">
+							</div>
+						</div>
+						<div class="mt-2">
+							<p class="fs-14">{{ __('admin.common.upload_image_size', ['size' => 2]) }}</p>
+						</div>
+					</div>
+					<span class="text-danger error-text" id="brand_image_error"></span>
 				</div>
-				<form action="{{  route('brand.store') }}" id="brandForm" method="POST" enctype="multipart/form-data">
-					@csrf
-					<input type="hidden" name="id" id="id">
-					<input type="hidden" name="language_id" id="language_id">
-					<div class="modal-body">
-						<div class="mb-3">
-							<label class="form-label">{{ __('admin.rentals.brand_image') }}<span class="text-danger"> *</span></label>
-							<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
-								<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
-									<img src="{{ uploadedAsset('', 'default') }}" id="imagePreview" class="img-fluid d-none" alt="Brand Image">
-									<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
-								</div>
-								<div class="profile-upload">
-									<div class="profile-uploader d-flex align-items-center">
-										<div class="drag-upload-btn btn btn-md btn-dark">
-											<i class="ti ti-photo-up fs-14"></i>
-											{{ __('admin.common.upload') }}
-											<input type="file" class="form-control image-sign" name="brand_image" id="brand_image">
-										</div>
-									</div>
-									<div class="mt-2">
-										<p class="fs-14">{{ __('admin.common.upload_image_size', ['size' => 2]) }}</p>
-									</div>
-								</div>
-								<span class="text-danger error-text" id="brand_image_error"></span>
-							</div>
-						</div>
-						<div class="mb-3">
-							<label class="form-label">{{ __('admin.rentals.brand_icon') }}<span class="text-danger"> *</span></label>
-							<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
-								<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
-									<img src="{{ uploadedAsset('', 'default') }}" id="iconPreview" class="img-fluid d-none" alt="Brand Icon">
-									<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon_2"></i>
-								</div>
-								<div class="profile-upload">
-									<div class="profile-uploader d-flex align-items-center">
-										<div class="drag-upload-btn btn btn-md btn-dark">
-											<i class="ti ti-photo-up fs-14"></i>
-											{{ __('admin.common.upload') }}
-											<input type="file" class="form-control image-sign" name="brand_icon" id="brand_icon">
-										</div>
-									</div>
-									<div class="mt-2">
-										<p class="fs-14">{{ __('admin.common.upload_brand_icon_size', ['size' => 2]) }}</p>
-									</div>
-								</div>
-								<span class="text-danger error-text" id="brand_icon_error"></span>
-							</div>
-						</div>
-						<div class="mb-3">
-							<label class="form-label">{{ __('admin.rentals.brand_name') }}<span class="text-danger"> *</span></label>
-							<input type="text" class="form-control" name="brand_name" id="brand_name">
-							<span id="brand_name_error" class="text-danger error-text"></span>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<div class="d-flex justify-content-between align-items-center w-100">
-							<div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
-								<label for="status" class="form-check-label form-label mt-0 mb-0">
-									<input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked>
-									{{ __('admin.common.status') }}
-								</label>
-							</div>
-							<div class="d-flex justify-content-center">
-								<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
-									{{ __('admin.common.cancel') }}
-								</button>
-								<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
-							</div>
-						</div>
-					</div>
-				</form>
 			</div>
-		</div>
-	</div>
-	<!-- /Add Brand -->
+			<div class="mb-3">
+				<label class="form-label">{{ __('admin.rentals.brand_icon') }}<span class="text-danger"> *</span></label>
+				<div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
+					<div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
+						<img src="{{ uploadedAsset('', 'default') }}" id="iconPreview" class="img-fluid d-none" alt="Brand Icon">
+						<i class="ti ti-photo-up text-gray-4 fs-24 upload_icon_2"></i>
+					</div>
+					<div class="profile-upload">
+						<div class="profile-uploader d-flex align-items-center">
+							<div class="drag-upload-btn btn btn-md btn-dark">
+								<i class="ti ti-photo-up fs-14"></i>
+								{{ __('admin.common.upload') }}
+								<input type="file" class="form-control image-sign" name="brand_icon" id="brand_icon">
+							</div>
+						</div>
+						<div class="mt-2">
+							<p class="fs-14">{{ __('admin.common.upload_brand_icon_size', ['size' => 2]) }}</p>
+						</div>
+					</div>
+					<span class="text-danger error-text" id="brand_icon_error"></span>
+				</div>
+			</div>
+			<div class="mb-3">
+				<label class="form-label">{{ __('admin.rentals.brand_name') }}<span class="text-danger"> *</span></label>
+				<input type="text" class="form-control" name="brand_name" id="brand_name">
+				<span id="brand_name_error" class="text-danger error-text"></span>
+			</div>
+	   </x-slot>
+	   <x-slot name="footer">
+			<div class="d-flex justify-content-between align-items-center w-100">
+				<div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
+					<label for="status" class="form-check-label form-label mt-0 mb-0">
+						<input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked>
+						{{ __('admin.common.status') }}
+					</label>
+				</div>
+				<div class="d-flex justify-content-center">
+					<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+					<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
+				</div>
+			</div>
+	   </x-slot>
+	</x-admin.modal>
+	<!-- / Add/Edit Brand -->
 
 	<!-- Delete Brand -->
-	<div class="modal fade deletemodal" id="delete-modal">
-		<div class="modal-dialog modal-dialog-centered modal-sm">
-			<div class="modal-content">
-				<form id="brandDeleteForm">
-					@csrf
-					<input type="hidden" name="delete_id" id="delete_id">
-					<div class="modal-body text-center">
-						<span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-							<i class="ti ti-trash-x fs-26"></i>
-						</span>
-						<h4 class="mb-1">{{ __('admin.rentals.delete_brand') }}</h4>
-						<p class="mb-3">{{ __('admin.rentals.delete_brand_confirmation') }}</p>
-						<div class="d-flex justify-content-center">
-							<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
-								{{ __('admin.common.cancel') }}
-							</button>				
-							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</a>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+	<x-admin.delete-modal 
+		className="deletemodal" 
+		id="delete-modal" 
+		action="{{ route('brand.delete') }}" 
+		formId="brandDeleteForm" 
+		method="POST"
+		:hiddenInputs="['delete_id' => '']" 
+		:title="__('admin.rentals.delete_brand')" 
+		:description="__('admin.rentals.delete_brand_confirmation')">
+	</x-admin.delete-modal>
 	<!-- /Delete Brand -->
 @endsection
 

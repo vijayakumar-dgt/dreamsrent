@@ -880,15 +880,16 @@ return array(
     'select_brand' => 'Select Brand',
     'all_bookings' => 'All Bookings',
     'add_new_booking' => 'Add New Booking',
-    'add_new_enquiry' => 'Add New Enquiry',
     'enquiry' => 'Enquiry',
-    'create_enquiry' => 'Create Enquiry',
     'edit_enquiry' => 'Edit Enquiry',
     'delete_enquiry' => 'Delete Enquiry',
     'delete_enquiry_confirmation' => 'Are you sure you want to delete enquiry?',
-    'enquiry_create_success' => 'Enquiry created successfully.',
+    'enquiry_create_success' => 'Enquiry submitted successfully.',
     'enquiry_update_success' => 'Enquiry updated successfully.',
     'enquiry_delete_success' => 'Enquiry deleted successfully.',
+    'enquiry_already_closed' => 'This enquiry has already been closed and cannot be updated.',
+    'enquiry_opened_before_cannot_be_closed' => 'Enquiry must be opened before it can be closed.',
+    'enquiry_closed_before_cannot_be_opened' => 'The enquiry has already been opened and cannot be reverted to not opened.',
     'add_new_quotation' => 'Add New Quotation',
     'add_reservation' => 'Add Reservation',
     'add_quotation' => 'Add Quotation',
@@ -990,7 +991,6 @@ return array(
     'location_create_success' => 'Location created successfully.',
     'location_update_success' => 'Location updated successfully.',
     'location_delete_success' => 'Location deleted successfully.',
-
   ),
   'rentals' =>
   array(

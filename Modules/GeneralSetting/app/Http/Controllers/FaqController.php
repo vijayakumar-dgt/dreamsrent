@@ -8,10 +8,15 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Modules\GeneralSetting\Http\Requests\CopyrightListRequest;
 use Modules\GeneralSetting\Http\Requests\CopyrightUpdateRequest;
+use Modules\GeneralSetting\Http\Requests\FaqStoreRequest;
+use Modules\GeneralSetting\Http\Requests\FaqUpdateRequest;
+use Modules\GeneralSetting\Http\Requests\HowItWorksListRequest;
+use Modules\GeneralSetting\Http\Requests\HowItWorksStoreRequest;
 use Modules\GeneralSetting\Models\Faq;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\View\View;
+use Modules\GeneralSetting\Repositories\Contracts\FaqInterface;
 use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 
 class FaqController extends Controller
@@ -30,32 +35,17 @@ class FaqController extends Controller
         return view('generalsetting::cms.how-it-work', compact('languages'));
     }
 
-    public function howItWorksUpdate(Request $request): JsonResponse
+    public function howItWorksUpdate(HowItWorksStoreRequest $request, GeneralSettingInterface $repository): JsonResponse
     {
-        $request->validate([
-            'group_id' => 'required|integer',
-            'language' => 'required|integer',
-            'howitwork_description' => 'required|string|min:10',
-        ]);
-
         try {
-            GeneralSetting::updateOrCreate(
-                [
-                    'key' => 'how_it_works_' . $request->language,
-                    'group_id' => $request->group_id,
-                ],
-                [
-                    'value' => $request->howitwork_description,
-                    'language_id' => $request->language
-                ]
-            );
+            $repository->storeHowItWorks($request->validated());
 
             return response()->json([
                 'code' => 200,
                 'success' => true,
                 'message' => __('admin.cms.how_it_works_update_success'),
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
                 'success' => false,
@@ -65,44 +55,27 @@ class FaqController extends Controller
         }
     }
 
-    public function howItWorksList(Request $request): JsonResponse
+    public function howItWorksList(HowItWorksListRequest $request, GeneralSettingInterface $repository): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'group_id' => 'required|integer',
-            'language_id' => 'nullable|integer'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'message' => 'Validation failed!',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
         try {
-            $languageId = $request->language_id ?? Language::where('default', 1)->value('language_id');
-
-            $settings = GeneralSetting::where('group_id', $request->group_id)
-                ->where('key', 'how_it_works_' . $languageId)
-                ->first();
+            $data = $repository->getHowItWorks($request->validated());
 
             return response()->json([
                 'status' => 'success',
                 'code' => 200,
                 'message' => __('admin.common.default_retrieve_success'),
-                'data' => $settings
+                'data' => $data,
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return response()->json([
                 'status' => 'error',
                 'code' => 500,
                 'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
+
 
 
     public function copyright(Request $request): View
@@ -112,7 +85,8 @@ class FaqController extends Controller
         return view('generalsetting::cms.copyright', compact('languages'));
     }
 
-    public function copyrightUpdate(CopyrightUpdateRequest $request, GeneralSettingInterface $repository ): JsonResponse {
+    public function copyrightUpdate(CopyrightUpdateRequest $request, GeneralSettingInterface $repository): JsonResponse
+    {
         try {
             $repository->updateCopyright($request->validated());
 
@@ -131,7 +105,8 @@ class FaqController extends Controller
         }
     }
 
-    public function copyrightList(CopyrightListRequest $request, GeneralSettingInterface $repository ): JsonResponse {
+    public function copyrightList(CopyrightListRequest $request, GeneralSettingInterface $repository): JsonResponse
+    {
         try {
             $data = $repository->getCopyright($request->validated());
 
@@ -150,47 +125,16 @@ class FaqController extends Controller
             ], 500);
         }
     }
-
-    public function faqStore(Request $request): JsonResponse
+    public function faqStore(FaqStoreRequest $request, FaqInterface $repository): JsonResponse
     {
-        $rules = [
-            'question' => 'required|string|max:255|unique:faqs,question',
-            'answer' => 'required|string',
-            'language' => 'required|integer|exists:translation_languages,id',
-            'status' => 'nullable|boolean'
-        ];
-
-        $messages = [
-            'question.required' => 'The question field is required.',
-            'question.unique' => 'This FAQ question already exists.',
-            'answer.required' => 'The answer field is required.',
-            'language.required' => 'The language field is required.',
-            'language.exists' => 'The selected language is invalid.',
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['code' => 422, 'errors' => $validator->errors()], 422);
-        }
-
         try {
-            $lastOrder = Faq::max('order_by') ?? 0;
-            $orderBy = $lastOrder + 1;
-
-            $faq = Faq::create([
-                'question' => $request->question,
-                'answer' => $request->answer,
-                'status' => $request->status ?? 1,
-                'order_by' => $orderBy,
-                'language_id' => $request->language ?? 1
-            ]);
+            $faq = $repository->store($request->validated());
 
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.cms.faq_create_success'),
                 'data' => $faq
-            ], 200);
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -200,45 +144,16 @@ class FaqController extends Controller
         }
     }
 
-    public function faqList(Request $request): JsonResponse
+    public function faqList(FaqInterface $repository): JsonResponse
     {
         try {
-            // Get the default language ID
-            $defaultLanguage = Language::where('default', 1)->value('language_id');
-
-            $faqs = Faq::when($request->language_id, function ($query) use ($request) {
-                return $query->where('language_id', $request->language_id);
-            }, function ($query) use ($defaultLanguage) {
-                return $query->where('language_id', $defaultLanguage);
-            })
-                ->when($request->has('status'), function ($query) use ($request) {
-                    return $query->where('status', $request->status);
-                })
-                ->when($request->sort_by, function ($query) use ($request) {
-                    switch ($request->sort_by) {
-                        case 'asc':
-                            return $query->orderBy('order_by', 'asc');
-                        case 'desc':
-                            return $query->orderBy('order_by', 'desc');
-                        case 'last_7_days':
-                            return $query->where('created_at', '>=', now()->subDays(7));
-                        case 'last_month':
-                            return $query->where('created_at', '>=', now()->subMonth());
-                        default:
-                            return $query->orderBy('order_by', 'desc'); // Default sorting
-                    }
-                })
-                ->when($request->search, function ($query) use ($request) {
-                    return $query->where('question', 'like', '%' . $request->search . '%')
-                        ->orWhere('answer', 'like', '%' . $request->search . '%');
-                })
-                ->get();
+            $faqs = $repository->list(request()->all());
 
             return response()->json([
                 'code' => 200,
-                'message' => 'FAQ list retrieved successfully!',
+                'message' => __('admin.cms.faq_list_success'),
                 'data' => $faqs
-            ], 200);
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -248,50 +163,16 @@ class FaqController extends Controller
         }
     }
 
-    public function faqUpdate(Request $request): JsonResponse
+    public function faqUpdate(FaqUpdateRequest $request, FaqInterface $repository): JsonResponse
     {
-        $id = $request->id;
-
-        if (!$id) {
-            return response()->json(['code' => 400, 'message' => 'FAQ ID is required.'], 400);
-        }
-
-        $rules = [
-            'question' => 'required|string|max:255|unique:faqs,question,' . $id,
-            'answer' => 'required|string',
-            'language' => 'required|integer|exists:translation_languages,id',
-            'status' => 'nullable|boolean'
-        ];
-
-        $messages = [
-            'question.required' => __('admin.cms.question_required'),
-            'question.unique' => __('admin.cms.question_unique'),
-            'answer.required' => __('admin.cms.answer_required'),
-            'language.required' => __('admin.cms.language_required'),
-            'language.exists' => __('admin.cms.language_exists'),
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['code' => 422, 'errors' => $validator->errors()], 422);
-        }
-
         try {
-            /** @var \Modules\GeneralSetting\Models\Faq $faq */
-            $faq = Faq::findOrFail($id);
-            $faq->update([
-                'question' => $request->question,
-                'answer' => $request->answer,
-                'status' => $request->status ?? 1,
-                'language_id' => $request->language
-            ]);
+            $faq = $repository->update($request->id, $request->validated());
 
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.cms.faq_update_success'),
                 'data' => $faq
-            ], 200);
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -301,23 +182,21 @@ class FaqController extends Controller
         }
     }
 
-    public function faqDelete(Request $request): JsonResponse
+    public function faqDelete(FaqInterface $repository): JsonResponse
     {
-        $id = $request->id;
+        $id = request('id');
 
         if (!$id) {
-            return response()->json(['code' => 400, 'message' => 'FAQ ID is required.'], 400);
+            return response()->json(['code' => 400, 'message' => __('admin.cms.faq_id_required')], 400);
         }
 
         try {
-            /** @var \Modules\GeneralSetting\Models\Faq $faq */
-            $faq = Faq::findOrFail($id);
-            $faq->delete();
+            $repository->delete($id);
 
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.cms.faq_delete_success'),
-            ], 200);
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,

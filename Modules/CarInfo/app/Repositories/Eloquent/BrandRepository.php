@@ -45,14 +45,12 @@ class BrandRepository implements BrandRepositoryInterface
             ];
 
             // Handle image uploads
-            if ($request->hasFile('brand_image')) {
-                $file = $request->file('brand_image');
-                $data['brand_image'] = $this->imageResizer->uploadFile($file, $folderPath, $brand->brand_image ?? null);
-            }
-
-            if ($request->hasFile('brand_icon')) {
-                $file = $request->file('brand_icon');
-                $data['brand_icon'] = $this->imageResizer->uploadFile($file, $folderPath, $brand->brand_icon ?? null);
+            foreach (['brand_image', 'brand_icon'] as $field) {
+                if ($request->hasFile($field)) {
+                    $file = $request->file($field);
+                    $existing = $brand->{$field} ?? null;
+                    $data[$field] = $this->imageResizer->uploadFile($file, $folderPath, $existing);
+                }
             }
 
             // Create or Update
@@ -96,15 +94,14 @@ class BrandRepository implements BrandRepositoryInterface
             if (!empty($request->search)) {
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {
-                    $q->where('brand_name', 'like', "%{$search}%")
-                        ->orWhere('total_cars', 'like', "%{$search}%");
+                    $q->where('brand_name', 'like', "%{$search}%");
                 });
             }
 
             // Status Filter
             if ($request->has('sort_by_status') && !empty($request->sort_by_status) || $request->sort_by_status == '0') {
                 $status = $request->sort_by_status;
-                $query->where('brands.status', $status);
+                $query->where('status', $status);
             }
 
             // Ordering
@@ -113,7 +110,7 @@ class BrandRepository implements BrandRepositoryInterface
             $orderDir = $request->order[0]['dir'] ?? 'asc';
 
             // Validate column names to avoid SQL injection
-            if (in_array($columnName, ['brand_name', 'total_cars', 'status'])) {
+            if (in_array($columnName, ['brand_name', 'status'])) {
                 $query->orderBy($columnName, $orderDir);
             }
 
@@ -161,10 +158,8 @@ class BrandRepository implements BrandRepositoryInterface
             ];
         }
 
-        if ($data) {
-            $data->brand_image = uploadedAsset($data->brand_image);
-            $data->brand_icon = uploadedAsset($data->brand_icon);
-        }
+        $data->brand_image = uploadedAsset($data->brand_image);
+        $data->brand_icon = uploadedAsset($data->brand_icon);
 
         return [
             'status' => 'success',

@@ -33,5 +33,7 @@ interface GeneralSettingInterface
     public function updateStorageStatus(string $storageType, bool $status): bool;
     public function updateAwsSettings(array $settings): bool;
     public function updateOrCreateStorageSetting(array $conditions, array $data): bool;
-   
+    public function storeHowItWorks(array $data): void;
+    public function getHowItWorks(array $data);
+
 }

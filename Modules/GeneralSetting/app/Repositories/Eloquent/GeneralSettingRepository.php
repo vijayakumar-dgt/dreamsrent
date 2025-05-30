@@ -743,6 +743,29 @@ class GeneralSettingRepository implements GeneralSettingInterface
         return (bool) GeneralSetting::updateOrCreate($conditions, $data);
     }
 
+    public function storeHowItWorks(array $data): void
+    {
+        GeneralSetting::updateOrCreate(
+            [
+                'key' => 'how_it_works_' . $data['language'],
+                'group_id' => $data['group_id'],
+            ],
+            [
+                'value' => $data['howitwork_description'],
+                'language_id' => $data['language'],
+            ]
+        );
+    }
+
+    public function getHowItWorks(array $data)
+    {
+        $languageId = $data['language_id'] ?? Language::where('default', 1)->value('language_id');
+
+        return GeneralSetting::where('group_id', $data['group_id'])
+            ->where('key', 'how_it_works_' . $languageId)
+            ->first();
+    }
+
    
 
 

@@ -2,9 +2,9 @@
 
 namespace Modules\GeneralSetting\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 
-class UpdateLocalizationRequest extends FormRequest
+class UpdateLocalizationRequest extends CustomFailedValidation
 {
     /**
      * Determine if the user is authorized to make this request.

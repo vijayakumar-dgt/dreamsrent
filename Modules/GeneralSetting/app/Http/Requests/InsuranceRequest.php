@@ -2,11 +2,11 @@
 
 namespace Modules\GeneralSetting\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 use Illuminate\Validation\Rule;
 use Modules\GeneralSetting\Models\Insurance;
 
-class InsuranceRequest extends FormRequest
+class InsuranceRequest extends CustomFailedValidation
 {
     /**
      * Determine if the user is authorized to make this request.

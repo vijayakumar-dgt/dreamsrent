@@ -2,9 +2,9 @@
 
 namespace Modules\GeneralSetting\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 
-class UpdatePaymentSettingsRequest extends FormRequest
+class UpdatePaymentSettingsRequest extends CustomFailedValidation
 {
    public function rules(): array
     {

@@ -1,7 +1,7 @@
 <div class="modal fade {{ $className ?? 'deletemodal' }}" id="{{ $id ?? 'delete-modal' }}">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
-            <form action="{{ $action ?? null }}" method="{{ $method ?? 's' }}" id="{{ $formId }}" class="{{ $formClass ?? null }}">
+            <form action="{{ $action ?? null }}" method="{{ $method ?? 'POST' }}" id="{{ $formId }}" class="{{ $formClass ?? null }}">
                 @csrf
                 @if(!empty($hiddenInputs))
                 @foreach ($hiddenInputs as $key => $value)

@@ -2,10 +2,10 @@
 
 namespace Modules\GeneralSetting\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 use Illuminate\Validation\Rule;
 
-class StoreCurrencyRequest extends FormRequest
+class StoreCurrencyRequest extends CustomFailedValidation
 {
     public function rules(): array
     {

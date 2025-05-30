@@ -9,146 +9,37 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Modules\Communication\Http\Requests\ContactMessagesRequest;
+use Modules\Communication\Repositories\Contracts\ContactMessagesRepositoryInterface;
 
 class ContactController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected ContactMessagesRepositoryInterface $contactMessagesRepository;
+
+    public function __construct(ContactMessagesRepositoryInterface $contactMessagesRepository)
+    {
+        $this->contactMessagesRepository = $contactMessagesRepository;
+    }
     public function index(): View
     {
         return view('communication::contact-message.index');
+    }  
+
+    public function store(ContactMessagesRequest $request): JsonResponse
+    {
+        $result = $this->contactMessagesRepository->store($request);
+        return response()->json($result, $result['code']);
     }
 
-    public function store(Request $request): JsonResponse
+       public function list(Request $request): JsonResponse
     {
-        try {
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:contacts,email',
-                'phone_number' => 'required|string|max:255',
-                'message' => 'required|string',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            ]);
-
-            $imagePath = null;
-            if ($request->hasFile('image') && $request->file('image') !== null) {
-                $imagePath = $request->file('image')->store('contacts', 'public');
-            }
-
-            $contact = Contact::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone_number' => $request->phone_number,
-                'message' => $request->message,
-                'image' => $imagePath,
-            ]);
-
-            return response()->json([
-                'code' => 200,
-                'success' => true,
-                'message' => __('admin.support.contact_message_create_success'),
-                'data' => $contact,
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Contact creation failed: ' . $e->getMessage());
-
-            return response()->json([
-                'code' => 500,
-                'success' => false,
-                'message' => __('admin.common.default_create_error'),
-                'error' => $e->getMessage(),
-            ], 500);
-        }
-    }
-
-    public function list(Request $request): JsonResponse
-    {
-        try {
-            $sortBy = $request->get('sort_by', 'latest');
-            $searchInput = $request->get('search', '');
-            // Ensure search is always a string
-            $search = is_string($searchInput) ? $searchInput : '';
-            $startDate = \Carbon\Carbon::now()->subMonth()->startOfMonth();
-            $endDate = \Carbon\Carbon::now()->subMonth()->endOfMonth();
-            $sevanStartDate = \Carbon\Carbon::now()->subDays(7)->startOfDay();
-            $sevenEndDate = \Carbon\Carbon::now()->endOfDay();
-            $contacts = Contact::query()
-                ->when($search, function ($query) use ($search) {
-                    $query->where('name', 'LIKE', '%' . $search . '%')
-                          ->orWhere('phone_number', 'LIKE', '%' . $search . '%')
-                          ->orWhere('email', 'LIKE', '%' . $search . '%');
-                })
-                ->when($sortBy === 'latest', fn($query) => $query->orderBy('created_at', 'desc'))
-                ->when($sortBy === 'ascending', fn($query) => $query->orderBy('name', 'asc'))
-                ->when($sortBy === 'descending', fn($query) => $query->orderBy('name', 'desc'))
-                ->when($sortBy === 'last_month', fn($query) => $query->whereBetween('created_at', [$startDate, $endDate]))
-                ->when($sortBy === 'last_7_days', fn($query) => $query->whereBetween('created_at', [$sevanStartDate, $sevenEndDate]))
-                ->get()
-                ->map(function ($contact) {
-                    $contact->name = ucwords($contact->name);
-                    $url = uploadedAsset($contact->image, 'profile');
-                    $contact->created_date = formatDateTime($contact->created_at, false);
-                    $contact->image = $url;
-                    unset($contact->created_at);
-                    return $contact;
-                });
-            return response()->json([
-                'code' => 200,
-                'success' => true,
-                'message' => __('admin.common.default_retrieve_success'),
-                'data' => $contacts,
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Fetching contacts failed: ' . $e->getMessage());
-
-            return response()->json([
-                'code' => 500,
-                'success' => false,
-                'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
-            ], 500);
-        }
+        $result = $this->contactMessagesRepository->list($request);
+        return response()->json($result, $result['code']);
     }
 
     public function delete(Request $request): JsonResponse
     {
-        try {
-            $idInput = $request->id;
-            // Validate id is numeric before conversion
-            if (!is_numeric($idInput)) {
-                return response()->json([
-                    'code'    => 400,
-                    'success' => false,
-                    'message' => 'Invalid contact ID format.'
-                ], 400);
-            }
-
-            $id = (int) $idInput;
-            $contact = Contact::find($id);
-
-            if (!$contact) {
-                return response()->json([
-                    'code'    => 404,
-                    'success' => false,
-                    'message' => 'Contact not found.'
-                ], 404);
-            }
-
-            $contact->delete();
-
-            return response()->json([
-                'code'    => 200,
-                'success' => true,
-                'message' => __('admin.support.contact_message_delete_success')
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'code'    => 500,
-                'success' => false,
-                'message' => __('admin.common.default_delete_error'),
-                'error'   => $e->getMessage()
-            ], 500);
-        }
+        $result = $this->contactMessagesRepository->delete($request);
+        return response()->json($result, $result['code']);
     }
 }

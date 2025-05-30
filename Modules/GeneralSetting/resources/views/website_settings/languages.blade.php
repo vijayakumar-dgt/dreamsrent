@@ -99,27 +99,15 @@
     <!-- /Page Wrapper -->
 
     <!-- Delete Language  -->
-    <div class="modal fade" id="delete-modal">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <form action="" id="deleteForm">
-                    @csrf
-                    <input type="hidden" name="id" id="delete_id">
-                    <div class="modal-body text-center">
-                        <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-                            <i class="ti ti-trash-x fs-26"></i>
-                        </span>
-                        <h4 class="mb-1">{{ __('admin.general_settings.delete_language') }}</h4>
-                        <p class="mb-3">{{ __('admin.general_settings.delete_language_confirmation') }}</p>
-                        <div class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</button>
-                            <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.general_settings.yes_delete') }}</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <x-admin.delete-modal 
+        className="deletemodal"
+        id="delete-modal"
+        action=""
+        formId="deleteForm"
+        :hiddenInputs="['id' => 'delete_id']"
+        :title="__('admin.general_settings.delete_language')"
+        :description="__('admin.general_settings.delete_language_confirmation')">
+    </x-admin.delete-modal>
     <!-- /Delete Language -->
 @endsection
 

@@ -2,9 +2,8 @@
 
 namespace Modules\GeneralSetting\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class StoreOtpSettingsRequest extends FormRequest
+use App\Library\CustomFailedValidation;
+class StoreOtpSettingsRequest extends CustomFailedValidation
 {
    public function authorize(): bool
     {

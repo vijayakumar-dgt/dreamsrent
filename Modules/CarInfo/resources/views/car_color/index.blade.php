@@ -113,8 +113,9 @@
 	<x-admin.delete-modal 
 		className="deletemodal" 
 		id="delete-modal" 
-		action="deleteData" 
+		action="{{ route('carColor.delete') }}" 
 		formId="delateCarColorForm" 
+		method="POST"
 		:hiddenInputs="['delete_id' => '']" 
 		:title="__('admin.rentals.delete_vehicle_color')" 
 		:description="__('admin.rentals.delete_vehicle_color_confirmation')">

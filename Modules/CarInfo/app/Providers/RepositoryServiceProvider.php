@@ -10,7 +10,10 @@ use Modules\CarInfo\Repositories\Contracts\SeasonRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\BrandRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\DamageTypeRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\DoorTypeRepositoryInterface;
+use Modules\CarInfo\Repositories\Contracts\DriverRepositoryInterface;
+use Modules\CarInfo\Repositories\Contracts\EnquiryRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\ExtraServiceRepositoryInterface;
+use Modules\CarInfo\Repositories\Contracts\InspectionRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\LocationRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\MaintenanceRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\TagRepositoryInterface;
@@ -36,6 +39,9 @@ use Modules\CarInfo\Repositories\Eloquent\VehicleTransmissionRepository;
 use Modules\CarInfo\Repositories\Eloquent\VehicleTypeRepository;
 use Modules\CarInfo\Repositories\Eloquent\CategoryRepository;
 use Modules\CarInfo\Repositories\Eloquent\CylinderRepository;
+use Modules\CarInfo\Repositories\Eloquent\DriverRepository;
+use Modules\CarInfo\Repositories\Eloquent\EnquiryRepository;
+use Modules\CarInfo\Repositories\Eloquent\InspectionRepository;
 use Modules\CarInfo\Repositories\Eloquent\LocationRepository;
 use Modules\CarInfo\Repositories\Eloquent\SafetyFeatureRepository;
 use Modules\CarInfo\Repositories\Eloquent\SeasonRepository;
@@ -70,5 +76,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CylinderRepositoryInterface::class, CylinderRepository::class);
         $this->app->bind(SafetyFeatureRepositoryInterface::class, SafetyFeatureRepository::class);
         $this->app->bind(LocationRepositoryInterface::class, LocationRepository::class);
+        $this->app->bind(InspectionRepositoryInterface::class, InspectionRepository::class);
+        $this->app->bind(DriverRepositoryInterface::class, DriverRepository::class);
+        $this->app->bind(EnquiryRepositoryInterface::class, EnquiryRepository::class);
     }
 }
