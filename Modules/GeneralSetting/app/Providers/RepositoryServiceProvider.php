@@ -11,18 +11,22 @@ use Modules\CarInfo\Repositories\Eloquent\CategoryRepository;
 use Modules\CarInfo\Repositories\Eloquent\CylinderRepository;
 use Modules\CarInfo\Repositories\Eloquent\SafetyFeatureRepository;
 use Modules\CarInfo\Repositories\Eloquent\SeasonRepository;
+use Modules\GeneralSetting\Repositories\Contracts\CommunicationSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\EmailTemplateRepositoryInterface;
 use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\InsuranceSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\LanguageSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\LocalizationInterface;
 use Modules\GeneralSetting\Repositories\Contracts\SignatureSettingInterface;
+use Modules\GeneralSetting\Repositories\Contracts\SitemapSettingInterface;
+use Modules\GeneralSetting\Repositories\Eloquent\CommunicationSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\EmailTemplateSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\GeneralSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\InsuranceSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\LocalizationRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\SignatureSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\LanguageSettingRepository;
+use Modules\GeneralSetting\Repositories\Eloquent\SitemapSettingRepository;
 
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -46,6 +50,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SeasonRepositoryInterface::class, SeasonRepository::class);
         $this->app->bind(CylinderRepositoryInterface::class, CylinderRepository::class);
         $this->app->bind(SafetyFeatureRepositoryInterface::class, SafetyFeatureRepository::class);
-
+        $this->app->bind(SitemapSettingInterface::class, SitemapSettingRepository::class);
+        $this->app->bind(CommunicationSettingInterface::class, CommunicationSettingRepository::class);
     }    
 }
