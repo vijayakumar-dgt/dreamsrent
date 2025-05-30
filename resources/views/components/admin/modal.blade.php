@@ -7,7 +7,7 @@
                     <i class="ti ti-x fs-16"></i>
                 </button>
             </div>
-            <form action="{{ $action ?? null }}" method="{{ $method ?? 'POST' }}" id="{{ $formId }}" autocomplete="off">
+            <form action="{{ $action ?? null }}" method="{{ $method ?? 'POST' }}" id="{{ $formId }}" {{ $enctype ?? 'enctype="multipart/form-data"' }} autocomplete="off">
                 @csrf
                 <div class="modal-body">
                     {{ $body }}

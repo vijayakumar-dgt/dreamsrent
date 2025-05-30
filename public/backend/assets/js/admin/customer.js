@@ -915,7 +915,7 @@
                 infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
                 lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
                 search: _l("admin.common.search") + ":",
-                zeroRecords: _l("admin.common.no_matching_records"),
+                zeroRecords: _l("admin.common.empty_table"),
                 paginate: {
                     first: _l("admin.common.first"),
                     last: _l("admin.common.last"),
