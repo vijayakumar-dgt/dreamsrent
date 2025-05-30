@@ -3,22 +3,37 @@
 namespace Modules\CarInfo\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SafetyFeatureRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
      */
-    public function rules(): array
+   public function rules(): array
     {
-        return [];
+        $id = $this->id ?? null;
+
+        return [
+            'feature' => [
+                'required',
+                'max:100',
+                'min:3',
+                Rule::unique('safety_features')->ignore($id)->whereNull('deleted_at'),
+                'not_regex:/<\/?script\b[^>]*>/i',
+            ],
+        ];
     }
 
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    public function messages(): array
     {
-        return true;
+        return [
+            'feature.required' => __('admin.rentals.feature_required'),
+            'feature.max' => __('admin.rentals.feature_maxlength'),
+            'feature.min' => __('admin.rentals.feature_minlength'),
+            'feature.unique' => __('admin.rentals.feature_unique'),
+            'feature.not_regex' => __('admin.common.script_tag_not_allowed'),
+        ];
     }
+
 }
