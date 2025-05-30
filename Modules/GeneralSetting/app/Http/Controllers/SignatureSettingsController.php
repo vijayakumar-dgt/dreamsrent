@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Modules\GeneralSetting\Http\Requests\SignatureSettingRequest;
-use Modules\GeneralSetting\Repositories\SignatureSettingRepository;
+use Modules\GeneralSetting\Repositories\Contracts\SignatureSettingInterface;
 use Illuminate\Support\Facades\Artisan;
 
 class SignatureSettingsController extends Controller
 {
     protected $repository;
 
-    public function __construct(SignatureSettingRepository $repository)
+    public function __construct(SignatureSettingInterface $repository)
     {
         $this->repository = $repository;
     }

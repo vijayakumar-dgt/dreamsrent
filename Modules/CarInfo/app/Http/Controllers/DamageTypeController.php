@@ -4,15 +4,20 @@ namespace Modules\CarInfo\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Modules\CarInfo\Models\DamageType;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Validation\Rule;
+use Modules\CarInfo\Http\Requests\DamageTypeRequest;
+use Modules\CarInfo\Repositories\Contracts\DamageTypeRepositoryInterface;
 
 class DamageTypeController extends Controller
 {
+    protected DamageTypeRepositoryInterface $damageTypeRepository;
+
+    public function __construct(DamageTypeRepositoryInterface $damageTypeRepository)
+    {
+        $this->damageTypeRepository = $damageTypeRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -21,76 +26,11 @@ class DamageTypeController extends Controller
         return view('carinfo::damage_type.index');
     }
 
-    public function storeDamageType(Request $request): JsonResponse
+    public function storeDamageType(DamageTypeRequest $request): JsonResponse
     {
-        /** @var \App\Models\User|null $authUser */
-        $authUser = current_user();
-        if (!$authUser) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 401,
-                'message' => 'Unauthorized: User not authenticated.'
-            ], 401);
-        }
-        $language_id = $authUser->language_id;
-
-        $validator = Validator::make($request->all(), [
-            'damage_type' => 'required|unique:damage_types,damage_type,' . $request->id . ',id,deleted_at,NULL|not_regex:/<\/?script\b[^>]*>/i',
-        ], [
-            'damage_type.required' => __('admin.rentals.damage_type_required'),
-            'damage_type.unique' => __('admin.rentals.damage_type_unique'),
-            'damage_type.not_regex' => __('admin.common.script_tag_not_allowed'),
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 422,
-                'errors' => $validator->errors()->toArray()
-            ], 422);
-        }
-
-        try {
-            $successMessage = "";
-
-            if (empty($request->id)) {
-                $carType = new DamageType();
-                $carType->language_id = $language_id;
-                $successMessage = __('admin.rentals.damage_type_added');
-            } else {
-                /** @var \Modules\CarInfo\Models\DamageType  */
-                $carType = DamageType::find($request->id);
-
-                if ($carType == null) {
-                    return response()->json([
-                        'status' => 'error',
-                        'code' => 404,
-                        'message' => 'Damage type not found.'
-                    ], 404);
-                }
-
-                $carType->language_id = $request->language_id ?? $carType->language_id;
-                $carType->status = $request->status === 'on' ? 1 : 0;
-                $successMessage = __('admin.rentals.damage_type_updated');
-            }
-
-            $carType->damage_type = $request->damage_type;
-            $carType->save();
-
-            return response()->json([
-                'status' => 'success',
-                'code'   => 200,
-                'message' => $successMessage
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 500,
-                'message' => $th->getMessage()
-            ], 500);
-        }
+        $response = $this->damageTypeRepository->store($request);
+        return response()->json($response, $response['code']);
     }
-
 
     /**
      * Get all damage types
@@ -99,22 +39,8 @@ class DamageTypeController extends Controller
      */
     public function getDamageTypes(Request $request): JsonResponse
     {
-        /** @var \App\Models\User $authUser  */
-        $authUser = current_user();
-        $language_id = $authUser->language_id;
-        $damageTypes = DamageType::when($request->has('keyword') && $request->keyword != "", function ($query) use ($request) {
-            $query->where('damage_type', 'like', '%' . $request->keyword . '%');
-        })
-        ->when($request->has('status') && $request->status != "", function ($query) use ($request) {
-            $query->where('status', $request->status);
-        })
-        ->where("language_id", $language_id)
-        ->orderBy('damage_type', 'asc')->get();
-        return response()->json([
-            'status' => 'success',
-            'code'   => 200,
-            'data' => $damageTypes
-        ]);
+        $response = $this->damageTypeRepository->getAll($request);
+        return response()->json($response, $response['code']);
     }
 
     /**
@@ -125,12 +51,8 @@ class DamageTypeController extends Controller
      */
     public function getDamageType($id): JsonResponse
     {
-        $damageType = DamageType::find($id);
-        return response()->json([
-            'status' => 'success',
-            'code'   => 200,
-            'data' => $damageType
-        ]);
+        $response = $this->damageTypeRepository->getById($id);
+        return response()->json($response, $response['code']);
     }
 
     /**
@@ -141,26 +63,8 @@ class DamageTypeController extends Controller
      */
     public function deleteDamageType(Request $request): JsonResponse
     {
-        try {
-            $damageType = DamageType::where('id', $request->delete_id)->firstOrFail();
-            $damageType->delete();
-            return response()->json([
-                'status' => 'success',
-                'code'   => 200,
-                'message' => __('admin.rentals.damage_type_deleted')
-            ], 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 422,
-                'message' => __('admin.rentals.damage_type_not_found')
-            ], 422);
-        } catch (\Throwable $th) {
-            return response()->json([
-               'status' => 'error',
-               'code'   => 422,
-               'message' => $th->getMessage()
-            ]);
-        }
+        $id = $request->delete_id;
+        $response = $this->damageTypeRepository->delete($id);
+        return response()->json($response, $response['code']);
     }
 }

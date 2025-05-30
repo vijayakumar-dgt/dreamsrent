@@ -1,12 +1,13 @@
 <?php
 
-namespace Modules\GeneralSetting\Repositories;
+namespace Modules\GeneralSetting\Repositories\Eloquent;
 
-use Modules\GeneralSetting\Models\SignatureSetting;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Modules\GeneralSetting\Models\SignatureSetting;
+use Modules\GeneralSetting\Repositories\Contracts\SignatureSettingInterface;
 
-class SignatureSettingRepository
+class SignatureSettingRepository implements SignatureSettingInterface
 {
     public function getAllSignatures(string $search = null)
     {
@@ -23,10 +24,7 @@ class SignatureSettingRepository
 
     public function createSignature(array $data, UploadedFile $image = null)
     {
-        $imagePath = null;
-        if ($image) {
-            $imagePath = $this->uploadSignatureImage($image);
-        }
+        $imagePath = $image ? $this->uploadSignatureImage($image) : null;
 
         if (!empty($data['is_default'])) {
             $this->resetDefaultSignature();
@@ -44,26 +42,24 @@ class SignatureSettingRepository
     {
         $signature = SignatureSetting::findOrFail($id);
 
-        // Handle image upload
         if ($image) {
             $this->deleteSignatureImage($signature->signature_image);
             $signature->signature_image = $this->uploadSignatureImage($image);
         }
 
-        // Set default if flagged
-        if (!empty($data['is_default'])) {
+        if (isset($data['is_default']) && $data['is_default'] == 1) {
             $this->resetDefaultSignature();
         }
 
+
         $signature->update([
             'signature_name' => $data['signature_name'],
-            'is_default' => !empty($data['is_default']) ? 1 : 0,
+            'is_default' => isset($data['is_default']) ? 1 : 0,
             'status' => !empty($data['status']) ? 1 : 0
         ]);
 
         return $signature;
     }
-
 
     public function deleteSignature(int $id)
     {

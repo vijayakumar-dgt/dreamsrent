@@ -23,7 +23,7 @@
                 icon: {
                     required: {
                         depends: function (element) {
-                            return $("#icon_preview").attr("src") == "";
+                            return $("#id").val() == "";
                         },
                     },
                     extension: "jpeg|jpg|png|svg",
@@ -99,13 +99,17 @@
                             table.ajax.reload();
                         }
                         $("#add_type .submitbtn").text(
-                            _l("admin.common.create_new")
+                            `${$("#id").val() ? _l("admin.common.save_changes") : _l("admin.common.create_new")}`
                         );
                         $("#add_type .submitbtn").prop("disabled", false);
                     },
                     error: function (error) {
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
+                        $("#add_type .submitbtn").text(
+                            `${$("#id").val() ? _l("admin.common.save_changes") : _l("admin.common.create_new")}`
+                        );
+                        $("#add_type .submitbtn").prop("disabled", false);
                         if (error.responseJSON.code === 422) {
                             $.each(
                                 error.responseJSON.errors,
@@ -117,10 +121,6 @@
                         } else {
                             showToast("error", error.responseJSON.message);
                         }
-                        $("#add_type .submitbtn").text(
-                            _l("admin.common.create_new")
-                        );
-                        $("#add_type .submitbtn").prop("disabled", false);
                     },
                 });
             },

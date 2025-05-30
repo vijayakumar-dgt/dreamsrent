@@ -15,11 +15,11 @@ use Modules\CarInfo\Repositories\Contracts\BrandRepositoryInterface;
 
 class BrandController extends Controller
 {
-    protected BrandRepositoryInterface $brandRepo;
+    protected BrandRepositoryInterface $brandRepository;
 
-    public function __construct(BrandRepositoryInterface $brandRepo)
+    public function __construct(BrandRepositoryInterface $brandRepository)
     {
-        $this->brandRepo = $brandRepo;
+        $this->brandRepository = $brandRepository;
     }
     
     public function index(): View
@@ -29,33 +29,33 @@ class BrandController extends Controller
 
     public function store(BrandRequest $request)
     {
-        $response = $this->brandRepo->store($request);
+        $response = $this->brandRepository->store($request);
         return response()->json($response, $response['code']);
     }
 
     public function list(Request $request): JsonResponse
     {
-        $response = $this->brandRepo->list($request);
+        $response = $this->brandRepository->list($request);
         return response()->json($response, $response['code']);
     }
 
     public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
-        $response = $this->brandRepo->edit($id);
+        $response = $this->brandRepository->edit($id);
         return response()->json($response, $response['code']);
     }
 
     public function delete(Request $request): JsonResponse
     {
         $id = $request->id;
-        $response = $this->brandRepo->delete($id);
+        $response = $this->brandRepository->delete($id);
         return response()->json($response, $response['code']);
     }
 
     public function getBrands(Request $request): JsonResponse
     {
-        $response = $this->brandRepo->getBrands($request);
+        $response = $this->brandRepository->getBrands($request);
         return response()->json($response, $response['code']);
     }
 }

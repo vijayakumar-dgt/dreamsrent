@@ -5,74 +5,63 @@ namespace Modules\GeneralSetting\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Js;
-use Illuminate\Validation\Rule;
+use Modules\GeneralSetting\Http\Requests\StoreTaxRateRequest;
+use Modules\GeneralSetting\Http\Requests\StoreTaxGroupRequest;
+use Modules\GeneralSetting\Repositories\Contracts\TaxRateSettingInterface;
 use Illuminate\View\View;
-use Modules\GeneralSetting\Models\SubTax;
-use Modules\GeneralSetting\Models\TaxGroup;
-use Modules\GeneralSetting\Models\TaxRate;
 
 class TaxRateController extends Controller
 {
+    protected $taxRateSettingRepository;
+
+    public function __construct(TaxRateSettingInterface $taxRateSettingRepository)
+    {
+        $this->taxRateSettingRepository = $taxRateSettingRepository;
+    }
+
     public function index(): View
     {
         return view('generalsetting::finance_settings.tax_rates');
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreTaxRateRequest $request): JsonResponse
     {
-        $id = $request->id ?? '';
-
-        $validator = Validator::make($request->all(), [
-            'tax_name' => [
-                'required',
-                'max:30',
-                'min:3',
-                Rule::unique('tax_rates')->ignore($id)->whereNull('deleted_at')
-            ],
-            "tax_rate" => "required",
-        ], [
-            'tax_name.required' => __('admin.general_settings.tax_name_required'),
-            'tax_name.min' => __('admin.general_settings.tax_name_minlength'),
-            'tax_name.max' => __('admin.general_settings.tax_name_maxlength'),
-            'tax_name.unique' => __('admin.general_settings.tax_name_unique'),
-            'tax_rate.required' => __('admin.general_settings.tax_rate_required'),
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 422,
-                'errors' => $validator->errors()->toArray()
-            ], 422);
-        }
-
-        $successMsg = empty($id) ? __('admin.general_settings.tax_rate_create_success') : __('admin.general_settings.tax_rate_update_success');
-        $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
-
         try {
             $data = [
                 'tax_name' => $request->tax_name,
                 'tax_rate' => $request->tax_rate,
+                'status' => $request->status ?? 1,
             ];
 
-            if (empty($id)) {
-                TaxRate::create($data);
-            } else {
-                $data['status'] = $request->status ?? 1;
-                TaxRate::where('id', $id)->update($data);
+            if (isset($request->id)) {
+                $data['id'] = $request->id;
             }
-            return response()->json([
-                'status' => 'success',
-                'code'   => 200,
-                'message' => $successMsg
-            ]);
+
+            $success = $this->taxRateSettingRepository->createOrUpdateTaxRate($data);
+
+            if ($success) {
+                $message = isset($request->id) 
+                    ? __('admin.general_settings.tax_rate_update_success') 
+                    : __('admin.general_settings.tax_rate_create_success');
+                
+                return response()->json([
+                    'status' => 'success',
+                    'code'   => 200,
+                    'message' => $message
+                ]);
+            }
+
+            throw new \Exception('Failed to save tax rate');
+
         } catch (\Exception $e) {
+            $message = isset($request->id) 
+                ? __('admin.common.default_update_error') 
+                : __('admin.common.default_create_error');
+            
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
-                'message' => $errorMsg,
+                'message' => $message,
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -82,11 +71,11 @@ class TaxRateController extends Controller
     {
         try {
             $orderBy = $request->order_by ?? 'asc';
-
-            $data = TaxRate::orderBy('id', $orderBy)->get()->map(function ($taxRate) {
-                $taxRate->created_on = formatDateTime($taxRate->created_at, false);
-                return $taxRate;
-            });
+            $data = $this->taxRateSettingRepository->getTaxRateList($orderBy)
+                ->map(function ($taxRate) {
+                    $taxRate->created_on = formatDateTime($taxRate->created_at, false);
+                    return $taxRate;
+                });
 
             return response()->json([
                 'code' => 200,
@@ -105,7 +94,7 @@ class TaxRateController extends Controller
     public function edit(Request $request): JsonResponse
     {
         $id = $request->id;
-        $data = TaxRate::find($id);
+        $data = $this->taxRateSettingRepository->findTaxRate($id);
 
         return response()->json([
             'status' => 'success',
@@ -118,7 +107,7 @@ class TaxRateController extends Controller
     {
         try {
             $id = $request->id;
-            TaxRate::where('id', $id)->delete();
+            $this->taxRateSettingRepository->deleteTaxRate($id);
 
             return response()->json([
                 'status' => 'success',
@@ -134,71 +123,44 @@ class TaxRateController extends Controller
         }
     }
 
-    public function taxGroupStore(Request $request): JsonResponse
+    public function taxGroupStore(StoreTaxGroupRequest $request): JsonResponse
     {
-        $id = $request->id ?? '';
-
-        $validator = Validator::make($request->all(), [
-            'tax_group_name' => [
-                'required',
-                'max:30',
-                'min:3',
-                Rule::unique('tax_groups', 'tax_name')->ignore($id)->whereNull('deleted_at')
-            ],
-            "sub_tax" => "required",
-        ], [
-            'tax_group_name.required' => __('admin.general_settings.tax_group_name_required'),
-            'tax_group_name.min' => __('admin.general_settings.tax_group_name_minlength'),
-            'tax_group_name.max' => __('admin.general_settings.tax_group_name_maxlength'),
-            'tax_group_name.unique' => __('admin.general_settings.tax_group_name_unique'),
-            'sub_tax.required' => __('admin.general_settings.sub_taxes_required'),
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 422,
-                'errors' => $validator->errors()->toArray()
-            ], 422);
-        }
-
-        $successMsg = empty($id) ? __('admin.general_settings.tax_group_create_success') : __('admin.general_settings.tax_group_update_success');
-        $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
-
         try {
             $data = [
-                'tax_name' => $request->tax_group_name,
+                'tax_group_name' => $request->tax_group_name,
+                'sub_tax' => $request->sub_tax,
+                'status' => $request->status ?? 1,
             ];
 
-            if (empty($id)) {
-                $taxGroup = TaxGroup::create($data);
-                foreach ($request->sub_tax as $taxRateId) {
-                    SubTax::updateOrCreate(
-                        ['tax_group_id' => $taxGroup->id, 'tax_rate_id' => $taxRateId],
-                        ['tax_group_id' => $taxGroup->id, 'tax_rate_id' => $taxRateId]
-                    );
-                }
-            } else {
-                $data['status'] = $request->status ?? 1;
-                $taxGroup = TaxGroup::where('id', $id)->update($data);
-                SubTax::where('tax_group_id', $id)->whereNotIn('tax_rate_id', $request->sub_tax)->delete();
-                foreach ($request->sub_tax as $taxRateId) {
-                    SubTax::updateOrCreate(
-                        ['tax_group_id' => $id, 'tax_rate_id' => $taxRateId],
-                        ['tax_group_id' => $id, 'tax_rate_id' => $taxRateId]
-                    );
-                }
+            if (isset($request->id)) {
+                $data['id'] = $request->id;
             }
-            return response()->json([
-                'status' => 'success',
-                'code'   => 200,
-                'message' => $successMsg
-            ]);
+
+            $success = $this->taxRateSettingRepository->createOrUpdateTaxGroup($data);
+
+            if ($success) {
+                $message = isset($request->id)
+                    ? __('admin.general_settings.tax_group_update_success')
+                    : __('admin.general_settings.tax_group_create_success');
+                
+                return response()->json([
+                    'status' => 'success',
+                    'code'   => 200,
+                    'message' => $message
+                ]);
+            }
+
+            throw new \Exception('Failed to save tax group');
+
         } catch (\Exception $e) {
+            $message = isset($request->id)
+                ? __('admin.common.default_update_error')
+                : __('admin.common.default_create_error');
+            
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
-                'message' => $errorMsg,
+                'message' => $message,
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -208,12 +170,12 @@ class TaxRateController extends Controller
     {
         try {
             $orderBy = $request->order_by ?? 'asc';
-
-            $data = TaxGroup::with(['taxRates:id,tax_name,tax_rate'])->orderBy('id', $orderBy)->get()->map(function ($tax) {
-                $tax->created_on = formatDateTime($tax->created_at, false);
-                $tax->total_tax_rate = number_format($tax->taxRates->sum('tax_rate'), 2);
-                return $tax;
-            });
+            $data = $this->taxRateSettingRepository->getTaxGroupList($orderBy)
+                ->map(function ($tax) {
+                    $tax->created_on = formatDateTime($tax->created_at, false);
+                    $tax->total_tax_rate = number_format($tax->taxRates->sum('tax_rate'), 2);
+                    return $tax;
+                });
 
             return response()->json([
                 'code' => 200,
@@ -232,8 +194,9 @@ class TaxRateController extends Controller
     public function taxGroupEdit(Request $request): JsonResponse
     {
         $id = $request->id;
-        $data = TaxGroup::with('taxRates')->find($id);
-        if (!$data instanceof TaxGroup) {
+        $data = $this->taxRateSettingRepository->findTaxGroup($id);
+
+        if (!$data) {
             return response()->json([
                 'status'  => 'error',
                 'code'    => 404,
@@ -241,6 +204,7 @@ class TaxRateController extends Controller
                 'data'    => null,
             ], 404);
         }
+
         $data['total_tax_rate'] = $data->taxRates->sum('tax_rate');
 
         return response()->json([
@@ -254,7 +218,7 @@ class TaxRateController extends Controller
     {
         try {
             $id = $request->id;
-            TaxGroup::where('id', $id)->delete();
+            $this->taxRateSettingRepository->deleteTaxGroup($id);
 
             return response()->json([
                 'status' => 'success',
@@ -273,7 +237,7 @@ class TaxRateController extends Controller
     public function getTaxRates(Request $request): JsonResponse
     {
         try {
-            $data = TaxRate::where('status', 1)->get(['id', 'tax_name', 'tax_rate']);
+            $data = $this->taxRateSettingRepository->getActiveTaxRates();
 
             return response()->json([
                 'code' => 200,

@@ -14,10 +14,10 @@ class StoreLogoSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'logo_image'    => 'nullable|image|mimes:jpg,jpeg,png,svg|max:5120',
+            'logo_image'    => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
             'favicon_image' => 'nullable|image|mimes:jpg,jpeg,png,svg,ico|max:5120',
             'small_image'   => 'nullable|image|mimes:jpg,jpeg,png,svg|max:5120',
-            'dark_logo'     => 'nullable|image|mimes:jpg,jpeg,png,svg|max:5120',
+            'dark_logo'     => 'nullable|mimes:jpg,jpeg,png,svg|max:5120',
         ];
     }
 

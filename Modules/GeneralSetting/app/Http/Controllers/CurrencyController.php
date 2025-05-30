@@ -3,133 +3,155 @@
 namespace Modules\GeneralSetting\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Modules\GeneralSetting\Models\Currency;
-use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Modules\GeneralSetting\Http\Requests\StoreCurrencyRequest;
+use Modules\GeneralSetting\Models\Currency;
+use Modules\GeneralSetting\Repositories\Contracts\CurrencySettingInterface;
 
 class CurrencyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): View
+    protected $currencySettingRepository;
+
+    public function __construct(CurrencySettingInterface $currencySettingRepository)
     {
-        $data = [
-            'page_title' => 'Currencies'
-        ];
-        return view('generalsetting::finance_settings.currencies', $data);
+        $this->currencySettingRepository = $currencySettingRepository;
     }
 
-    public function save_currency(Request $request): JsonResponse
+    public function index(): View
     {
-        $validator = Validator::make($request->all(), [
-            'currency_name' => 'required|unique:currencies,currency_name,' . $request->id . ',id,deleted_at,NULL',
-            'code'          => 'required',
-            'symbol'        => 'required'
-        ], [
-            'currency_name.required' => __('admin.general_settings.enter_currency_name'),
-            'currency_name.unique'   => __('admin.general_settings.currency_name_unique'),
-            'code.required'          => __('admin.general_settings.enter_currency_code'),
-            'symbol.required'        => __('admin.general_settings.enter_currency_symbol')
+        return view('generalsetting::finance_settings.currencies', [
+            'page_title' => 'Currencies'
         ]);
+    }
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 422,
-                'message' => __('admin.general_settings.validation_error'),
-                'errors' => $validator->errors()->toArray()
-            ], 422);
-        }
+    public function save_currency(StoreCurrencyRequest $request): JsonResponse
+    {
         try {
-            $successMessage = "";
-            if ($request->has('id') && $request->id != "") {
-                /** @var \Modules\GeneralSetting\Models\Currency $currency */
-                $currency = Currency::find($request->id);
-                $currency->status         = $request->status == 'on' ? 1 : 0;
-                $successMessage = __('admin.general_settings.currency_updated_successfully');
-            } else {
-                $currency = new Currency();
-                $successMessage = __('admin.general_settings.currency_created_successfully');
-            }
-            $currency->currency_name  = $request->currency_name;
-            $currency->code           = $request->code;
-            $currency->symbol         = $request->symbol;
-            $currency->exchange_rate  = $request->exchange_rate ?? 0;
-            $currency->save();
+            $data = [
+                'currency_name' => $request->currency_name,
+                'code' => $request->code,
+                'symbol' => $request->symbol,
+                'exchange_rate' => $request->exchange_rate ?? 0,
+                'status' => $request->status === 'on' ? 1 : 0,
+            ];
 
-            return response()->json([
-                'status' => 'success',
-                'code'   => 200,
-                'message' => $successMessage
-            ]);
+            if ($request->has('id')) {
+                $data['id'] = $request->id;
+            }
+
+            $success = $this->currencySettingRepository->createOrUpdateCurrency($data);
+
+            if ($success) {
+                $message = $request->has('id')
+                    ? __('admin.general_settings.currency_updated_successfully')
+                    : __('admin.general_settings.currency_created_successfully');
+
+                return response()->json([
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => $message
+                ]);
+            }
+
+            throw new \Exception('Failed to save currency');
+
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
-                'code'   => 422,
+                'code' => 500,
                 'message' => $th->getMessage()
-            ], 422);
+            ], 500);
         }
     }
 
     public function getCurrencies(Request $request): JsonResponse
     {
-        $pageLength = $request->length;
-        $offset     = $request->start;
-        $currencies = Currency::query();
-        if ($request->has('keyword') && $request->keyword != "") {
-            $currencies = $currencies->where(function ($query) use ($request) {
-                $query->where('currency_name', 'like', '%' . $request->keyword . '%')
-                    ->orWhere('code', 'like', '%' . $request->keyword . '%');
-            });
+        try {
+            $filters = [
+                'keyword' => $request->keyword ?? '',
+                'order_by' => 'asc',
+                'paginate' => false
+            ];
+
+            // Get all filtered currencies without pagination
+            $currencies = $this->currencySettingRepository->getCurrencyList($filters);
+
+            if ($request->has('draw')) {
+                $recordsFiltered = $currencies->count();
+                $recordsTotal = Currency::count();
+
+                return response()->json([
+                    'draw' => intval($request->draw),
+                    'recordsTotal' => $recordsTotal,
+                    'recordsFiltered' => $recordsFiltered,
+                    'data' => $currencies
+                ]);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'data' => $currencies
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 500,
+                'message' => $th->getMessage()
+            ], 500);
         }
-        $currencies = $currencies->orderBy('currency_name', 'asc');
-        $currencies = $currencies->skip($offset)->take($pageLength)->get();
-        $totalRecords = $filteredRecords = Currency::count();
-        return response()->json([
-            'draw' => $request->draw,
-            'recordsTotal' => $totalRecords,
-            'recordsFiltered' => $filteredRecords,
-            'data' => $currencies
-        ]);
     }
 
     public function editCurrency(?int $id): JsonResponse
     {
-        $currency = Currency::find($id);
-        return response()->json([
-            'status' => 'success',
-            'code'   => 200,
-            'data'   => $currency,
-            'message' => __('admin.general_settings.currency_fetched_successfully')
-        ]);
+        try {
+            $currency = $this->currencySettingRepository->findCurrency($id);
+
+            if (!$currency) {
+                throw new \Exception(__('admin.general_settings.currency_not_found'));
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'data' => $currency,
+                'message' => __('admin.general_settings.currency_fetched_successfully')
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 404,
+                'message' => $th->getMessage()
+            ], 404);
+        }
     }
 
     public function deleteCurrency(Request $request): JsonResponse
     {
         try {
-            /** @var \Modules\GeneralSetting\Models\Currency $currency */
-            $currency = Currency::findOrFail($request->id);
-            $currency->delete();
+            $deleted = $this->currencySettingRepository->deleteCurrency($request->id);
+
+            if (!$deleted) {
+                throw new \Exception(__('admin.general_settings.currency_not_found'));
+            }
+
             return response()->json([
                 'status' => 'success',
-                'code'   => 200,
-                'message' =>  __('admin.general_settings.currency_deleted_successfully')
-            ], 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 422,
-                'message' =>  __('admin.general_settings.currency_not_found')
-            ], 422);
+                'code' => 200,
+                'message' => __('admin.general_settings.currency_deleted_successfully')
+            ]);
+
         } catch (\Throwable $th) {
+            $code = $th->getMessage() === __('admin.general_settings.currency_not_found') ? 404 : 500;
+            
             return response()->json([
                 'status' => 'error',
-                'code'   => 422,
+                'code' => $code,
                 'message' => $th->getMessage()
-            ], 422);
+            ], $code);
         }
     }
 }

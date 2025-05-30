@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\GeneralSetting\Repositories;
+namespace Modules\GeneralSetting\Repositories\Eloquent;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
@@ -8,9 +8,13 @@ use Modules\GeneralSetting\Models\GeneralSetting;
 use App\Services\ImageResizer;
 use Exception;
 use Modules\GeneralSetting\Models\Language;
+use Modules\GeneralSetting\Models\UserDevice;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 
 
-class GeneralSettingRepository
+class GeneralSettingRepository implements GeneralSettingInterface
 {
     protected ImageResizer $imageResizer;
 
@@ -408,7 +412,6 @@ class GeneralSettingRepository
                 );
             }
 
-            // Remove image if requested
             if ($isRemove) {
                 $existing = GeneralSetting::where('key', 'invoice_logo')->first();
                 if ($existing && $existing->value) {
@@ -425,7 +428,6 @@ class GeneralSettingRepository
                 }
             }
 
-            // Handle other invoice settings
             $settings = [
                 'invoice_prefix' => $data['invoice_prefix'] ?? null,
                 'invoice_due' => $data['invoice_due'] ?? null,
@@ -517,6 +519,231 @@ class GeneralSettingRepository
             );
         }
     }
+
+    public function updatePassword(array $data)
+    {
+        $user = Auth::guard('admin')->user();
+
+        if (!Hash::check($data['current_password'], $user->password)) {
+            return ['success' => false, 'message' => __('admin.general_settings.current_password_incorrect')];
+        }
+
+        $user->password = Hash::make($data['new_password']);
+        $user->last_password_changed_at = now();
+        $user->save();
+
+        return ['success' => true, 'message' => __('admin.general_settings.password_updated_successfully')];
+    }
+
+    public function updatePhoneNumber(array $data)
+    {
+        $user = Auth::guard('admin')->user();
+
+        if (!Hash::check($data['phone_current_password'], $user->password)) {
+            return ['success' => false, 'message' => __('admin.general_settings.current_password_incorrect')];
+        }
+
+        if ($user->phone_number !== $data['current_phonenumber']) {
+            return ['success' => false, 'message' => __('admin.general_settings.phone_number_incorrect')];
+        }
+
+        $user->phone_number = $data['new_phonenumber'];
+        $user->save();
+
+        return ['success' => true, 'message' => __('admin.general_settings.phone_number_updated_successfully')];
+    }
+
+    public function updateEmail(array $data)
+    {
+        $user = Auth::guard('admin')->user();
+
+        if (!Hash::check($data['email_current_password'], $user->password)) {
+            return ['success' => false, 'message' => __('admin.general_settings.current_password_incorrect')];
+        }
+
+        if ($user->email !== $data['current_email']) {
+            return ['success' => false, 'message' => __('admin.general_settings.current_email_incorrect')];
+        }
+
+        $user->email = $data['new_email'];
+        $user->save();
+
+        return ['success' => true, 'message' => __('admin.general_settings.email_updated_successfully')];
+    }
+
+    public function getSecuritySettings()
+    {
+        $user = Auth::guard('admin')->user();
+
+        $devices = UserDevice::where('user_id', $user->id)
+            ->orderByDesc('created_at')
+            ->take(5)
+            ->get()
+            ->map(fn($device) => [
+                'id' => $device->id,
+                'device_type' => $device->device_type,
+                'browser' => $device->browser,
+                'os' => $device->os,
+                'ip_address' => $device->ip_address,
+                'location' => $device->location,
+                'date' => formatDateTime($device->created_at)
+            ]);
+
+        return [
+            'user' => $user,
+            'last_password_changed_at' => $user->last_password_changed_at ? formatDateTime($user->last_password_changed_at) : 'null',
+            'devices' => $devices
+        ];
+    }
+
+    public function logoutDevice(array $data)
+    {
+        $user = Auth::guard('admin')->user();
+
+        if ($data['isAll'] === "true") {
+            UserDevice::where('user_id', $user->id)->delete();
+            Auth::guard('admin')->logout();
+
+            return ['success' => true, 'message' => __('admin.general_settings.all_device_removed_successfully')];
+        }
+
+        $device = UserDevice::find($data['id']);
+        if ($device)
+            $device->delete();
+
+        return ['success' => true, 'message' => __('admin.general_settings.device_removed_successfully')];
+    }
+    public function updatePaymentSettings(array $data): bool
+    {
+        try {
+            $group_id = $data['group_id'];
+            $envUpdates = [];
+
+            foreach ($data as $key => $value) {
+                if ($key !== 'group_id') {
+                    $this->updateOrCreateSettingPayment(
+                        ['key' => $key, 'group_id' => $group_id],
+                        ['value' => $value]
+                    );
+
+                    // Track environment variable updates
+                    switch ($key) {
+                        case 'paypal_key':
+                            $envUpdates['PAYPAL_SANDBOX_CLIENT_ID'] = $value;
+                            break;
+                        case 'paypal_secret':
+                            $envUpdates['PAYPAL_SANDBOX_CLIENT_SECRET'] = $value;
+                            break;
+                        case 'stripe_key':
+                            $envUpdates['STRIPE_KEY'] = $value;
+                            break;
+                        case 'stripe_secret':
+                            $envUpdates['STRIPE_SECRET'] = $value;
+                            break;
+                    }
+                }
+            }
+
+            if (!empty($envUpdates)) {
+                $this->updateEnvVariables($envUpdates);
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function updatePaymentStatus(array $data): bool
+    {
+        return $this->updateOrCreateSettingPayment(
+            ['key' => $data['key'], 'group_id' => $data['group_id']],
+            ['value' => $data['value']]
+        );
+    }
+
+    public function getPaymentSettings(int $groupId, string $orderBy = 'desc'): array
+    {
+        return GeneralSetting::where('group_id', $groupId)
+            ->orderBy('id', $orderBy)
+            ->get()
+            ->toArray();
+    }
+
+    protected function updateOrCreateSettingPayment(array $conditions, array $data): bool
+    {
+        return GeneralSetting::updateOrCreate($conditions, $data) ? true : false;
+    }
+
+    public function updateEnvVariables(array $envData): bool
+    {
+        $path = base_path('.env');
+
+        if (!file_exists($path)) {
+            return false;
+        }
+
+        $envContent = file_get_contents($path);
+        if ($envContent === false) {
+            return false;
+        }
+
+        foreach ($envData as $key => $value) {
+            $pattern = "/^{$key}=.*/m";
+
+            if (preg_match($pattern, $envContent)) {
+                $envContent = preg_replace($pattern, "{$key}={$value}", $envContent);
+            } else {
+                $envContent .= "\n{$key}={$value}";
+            }
+        }
+
+        return file_put_contents($path, $envContent) !== false;
+    }
+
+    public function updateStorageStatus(string $storageType, bool $status): bool
+    {
+        try {
+            $oppositeStorageType = $storageType === 'local_storage' ? 'aws_storage' : 'local_storage';
+            $oppositeStatus = !$status;
+
+            $this->updateOrCreateStorageSetting(
+                ['key' => $storageType],
+                ['value' => $status, 'group_id' => 8]
+            );
+
+            $this->updateOrCreateStorageSetting(
+                ['key' => $oppositeStorageType],
+                ['value' => $oppositeStatus, 'group_id' => 8]
+            );
+
+            return true;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function updateAwsSettings(array $settings): bool
+    {
+        try {
+            foreach ($settings as $key => $value) {
+                $this->updateOrCreateStorageSetting(
+                    ['key' => $key],
+                    ['value' => $value, 'group_id' => 8]
+                );
+            }
+            return true;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+     public function updateOrCreateStorageSetting(array $conditions, array $data): bool
+    {
+        return (bool) GeneralSetting::updateOrCreate($conditions, $data);
+    }
+
+   
 
 
 }

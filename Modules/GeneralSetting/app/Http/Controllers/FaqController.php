@@ -12,7 +12,7 @@ use Modules\GeneralSetting\Models\Faq;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\View\View;
-use Modules\GeneralSetting\Repositories\GeneralSettingRepository;
+use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 
 class FaqController extends Controller
 {
@@ -112,7 +112,7 @@ class FaqController extends Controller
         return view('generalsetting::cms.copyright', compact('languages'));
     }
 
-    public function copyrightUpdate(CopyrightUpdateRequest $request, GeneralSettingRepository $repository ): JsonResponse {
+    public function copyrightUpdate(CopyrightUpdateRequest $request, GeneralSettingInterface $repository ): JsonResponse {
         try {
             $repository->updateCopyright($request->validated());
 
@@ -131,7 +131,7 @@ class FaqController extends Controller
         }
     }
 
-    public function copyrightList(CopyrightListRequest $request, GeneralSettingRepository $repository ): JsonResponse {
+    public function copyrightList(CopyrightListRequest $request, GeneralSettingInterface $repository ): JsonResponse {
         try {
             $data = $repository->getCopyright($request->validated());
 

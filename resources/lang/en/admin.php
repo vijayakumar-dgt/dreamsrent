@@ -1897,7 +1897,7 @@ return array(
   ),
   'common' =>
   array(
-    'percentage ' => 'Percentage ',
+    'percentage ' => 'Percentage',
     'assign' => 'Assign',
     'tax' => 'Tax Rate',
     'type' => 'Type',

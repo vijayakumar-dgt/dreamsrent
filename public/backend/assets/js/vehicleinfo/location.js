@@ -759,7 +759,7 @@
             $submitBtn
                 .html(
                     `<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
-                        "admin.common.saving"
+                        "admin.common.deleting"
                     )}..`
                 )
                 .prop("disabled", true);

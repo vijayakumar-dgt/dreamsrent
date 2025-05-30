@@ -1,7 +1,5 @@
-<?php
-
-return array (
-  'auth' =>
+<?php return array (
+  'auth' => 
   array (
     'sign_in' => 'تسجيل الدخول',
     'email_confirmation_subtitle' => 'سنرسل رمز تأكيد إلى بريدك الإلكتروني.',
@@ -71,8 +69,22 @@ return array (
     'last_name_maxlength' => 'يجب ألا يزيد اسم العائلة عن 50 حرفًا.',
     'last_name_alphabets' => 'يمكن أن يحتوي اسم العائلة على أحرف فقط.',
     'email_otp_verification' => 'التحقق من البريد الإلكتروني OTP',
+    'valid_profile_img' => 'يجب أن تكون صورة الملف الشخصي صورة صالحة.',
+    'profile_img_mimes' => 'يجب أن تكون صورة الملف الشخصي من نوع JPEG أو PNG.',
+    'profile_max_2mb'   => 'يجب ألا يتجاوز حجم صورة الملف الشخصي 2 ميغابايت.',
+    'firstname_string'  => 'يجب أن يكون الاسم الأول عبارة عن نص.',
+    'lastname_string'   => 'يجب أن يكون الاسم الأخير عبارة عن نص.',
+    'email_already_taken' => 'البريد الإلكتروني مستخدم بالفعل.',
+    'phone_required' => 'رقم الهاتف مطلوب.',
+    'phone_numeric' => 'يجب أن يكون رقم الهاتف رقمًا.',
+    'address_string' => 'يجب أن يكون العنوان عبارة عن نص.',
+    'address_maxlength' => 'يجب ألا يتجاوز طول العنوان 255 حرفًا.',
+    'country_required' => 'الدولة مطلوبة.',
+    'country_integer' => 'يجب أن تكون الدولة رقمًا صحيحًا.',
+    'city_required' => 'المدينة مطلوبة.',
+    'postal_code_string' => 'يجب أن يكون الرمز البريدي عبارة عن نص.',
   ),
-  'home' =>
+  'home' => 
   array (
     'signin' => 'تسجيل الدخول',
     'signup' => 'إنشاء حساب',
@@ -391,8 +403,9 @@ return array (
     'below_average' => 'اقل من المتوسط',
     'poor' => 'ضعيف',
     'miles' => 'ميلات',
+    'customer_recomendation' => 'توصية العملاء',
   ),
-  'common' =>
+  'common' => 
   array (
     'back_to_home' => 'العودة إلى الصفحة الرئيسية',
     'search' => 'بحث',
@@ -486,7 +499,7 @@ return array (
     'notice' => 'إشعار',
     'view_reply' => 'عرض والرد',
   ),
-  'user' =>
+  'user' => 
   array (
     'user_dashboard' => 'لوحة تحكم المستخدم',
     'dashboard' => 'لوحة التحكم',
@@ -741,9 +754,11 @@ return array (
     'last_login_at' => 'آخر تسجيل دخول في',
     'device_not_found' => 'الجهاز غير موجود',
     'add_to_wallet' => 'اضافة الى المحفظة',
-    'phone_number_required' => 'رقم الهاتف مطلوب.'
+    'phone_number_required' => 'رقم الهاتف مطلوب.',
+    'enter_subject' => 'أدخل الموضوع',
+    'subject_required' => 'الموضوع مطلوب',
   ),
-  'blog' =>
+  'blog' => 
   array (
     'blog_list' => 'قائمة المدونات',
     'blogs' => 'مدونات',

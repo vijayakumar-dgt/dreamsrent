@@ -1,110 +1,36 @@
 <?php
 
-namespace Modules\GeneralSetting\Repositories;
+namespace Modules\GeneralSetting\Repositories\Eloquent;
 
+use Illuminate\Support\Facades\Auth;
 use Modules\GeneralSetting\Models\Insurance;
 use Modules\GeneralSetting\Models\InsuranceBenefit;
 use Modules\CarInfo\Models\PricingType;
-use Illuminate\Support\Facades\Auth;
+use Modules\GeneralSetting\Repositories\Contracts\InsuranceSettingInterface;
+use Illuminate\Database\Eloquent\Collection;
 
-class InsuranceSettingRepository
+class InsuranceSettingRepository implements InsuranceSettingInterface
 {
-    /**
-     * Get all pricing types for insurance
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getPricingTypes()
+    public function getPricingTypes(): Collection
     {
         return PricingType::where('type', 2)->get();
     }
 
-    /**
-     * Create or update insurance
-     *
-     * @param array $data
-     * @param array $benefits
-     * @param int|null $id
-     * @return \Modules\GeneralSetting\Models\Insurance
-     */
-    public function saveInsurance(array $data, array $benefits, int $id = null)
+    public function saveInsurance(array $data, array $benefits, ?int $id = null): Insurance
     {
-        $authUser = Auth::user();
-        
         if (is_null($id)) {
-            $data['language_id'] = $authUser->language_id ?? 1;
             $insurance = Insurance::create($data);
-            
             $this->createBenefits($insurance->id, $benefits);
         } else {
             $insurance = Insurance::findOrFail($id);
             $insurance->update($data);
-            
             $this->syncBenefits($insurance->id, $benefits);
         }
 
         return $insurance;
     }
 
-    /**
-     * Create new benefits for insurance
-     *
-     * @param int $insuranceId
-     * @param array $benefits
-     * @return void
-     */
-    protected function createBenefits(int $insuranceId, array $benefits)
-    {
-        foreach ($benefits as $benefit) {
-            if (!empty($benefit)) {
-                InsuranceBenefit::create([
-                    'insurance_id' => $insuranceId,
-                    'benefit' => $benefit
-                ]);
-            }
-        }
-    }
-
-    /**
-     * Sync insurance benefits
-     *
-     * @param int $insuranceId
-     * @param array $benefits
-     * @return void
-     */
-    protected function syncBenefits(int $insuranceId, array $benefits)
-    {
-        // Delete removed benefits
-        InsuranceBenefit::where('insurance_id', $insuranceId)
-            ->whereNotIn('id', array_keys($benefits))
-            ->delete();
-
-        // Update or create benefits
-        foreach ($benefits as $key => $benefit) {
-            if ($key === 'new' && is_array($benefit)) {
-                foreach ($benefit as $newBenefit) {
-                    if (!empty($newBenefit)) {
-                        InsuranceBenefit::create([
-                            'insurance_id' => $insuranceId,
-                            'benefit' => $newBenefit
-                        ]);
-                    }
-                }
-            } else {
-                InsuranceBenefit::where('id', $key)->update([
-                    'benefit' => $benefit
-                ]);
-            }
-        }
-    }
-
-    /**
-     * Get insurance list with pagination and search
-     *
-     * @param array $params
-     * @return array
-     */
-    public function getInsuranceList(array $params)
+    public function getInsuranceList(array $params): array
     {
         $languageId = Auth::user()->language_id ?? null;
         $query = Insurance::where("language_id", $languageId)
@@ -148,36 +74,19 @@ class InsuranceSettingRepository
         ];
     }
 
-    /**
-     * Get insurance details with benefits
-     *
-     * @param int $id
-     * @return \Modules\GeneralSetting\Models\Insurance
-     */
-    public function getInsuranceWithBenefits(int $id)
+    public function getInsuranceWithBenefits(int $id): Insurance
     {
         return Insurance::with('insuranceBenefits')->findOrFail($id);
     }
 
-    /**
-     * Delete insurance and its benefits
-     *
-     * @param int $id
-     * @return void
-     */
-    public function deleteInsurance(int $id)
+    public function deleteInsurance(int $id): void
     {
-        Insurance::where('id', $id)->delete();
+        $insurance = Insurance::findOrFail($id);
         InsuranceBenefit::where('insurance_id', $id)->delete();
+        $insurance->delete();
     }
 
-    /**
-     * Get vehicle insurances
-     *
-     * @param array $vehicleIds
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getVehicleInsurances(array $vehicleIds)
+    public function getVehicleInsurances(array $vehicleIds): Collection
     {
         return Insurance::with(['insuranceBenefits:id,insurance_id,benefit'])
             ->select(
@@ -195,5 +104,41 @@ class InsuranceSettingRepository
                 $item->insurance_type = strtolower($item->insurance_type);
                 return $item;
             });
+    }
+
+    protected function createBenefits(int $insuranceId, array $benefits): void
+    {
+        foreach ($benefits as $benefit) {
+            if (!empty($benefit)) {
+                InsuranceBenefit::create([
+                    'insurance_id' => $insuranceId,
+                    'benefit' => $benefit
+                ]);
+            }
+        }
+    }
+
+    protected function syncBenefits(int $insuranceId, array $benefits): void
+    {
+        InsuranceBenefit::where('insurance_id', $insuranceId)
+            ->whereNotIn('id', array_keys($benefits))
+            ->delete();
+
+        foreach ($benefits as $key => $benefit) {
+            if ($key === 'new' && is_array($benefit)) {
+                foreach ($benefit as $newBenefit) {
+                    if (!empty($newBenefit)) {
+                        InsuranceBenefit::create([
+                            'insurance_id' => $insuranceId,
+                            'benefit' => $newBenefit
+                        ]);
+                    }
+                }
+            } else {
+                InsuranceBenefit::where('id', $key)->update([
+                    'benefit' => $benefit
+                ]);
+            }
+        }
     }
 }

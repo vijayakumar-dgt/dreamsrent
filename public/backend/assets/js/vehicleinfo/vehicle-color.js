@@ -230,9 +230,9 @@
                                                         "delete"
                                                     )
                                                         ? `<li>
-                                                    <button type="button" class="dropdown-item rounded-1" data-id="${
+                                                    <button type="button" class="dropdown-item rounded-1 delete-color" data-id="${
                                                         value.id
-                                                    }" id="delete-color" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                                                    }" data-bs-toggle="modal" data-bs-target="#delete-modal">
                                                         <i class="ti ti-trash me-1"></i>${_l(
                                                             "admin.common.delete"
                                                         )}
@@ -357,8 +357,10 @@
                 .removeClass("d-none");
         });
 
-        $(document).on("click", "#delete-color", function () {
+        $(document).on("click", ".delete-color", function () {
             let id = $(this).data("id");
+            console.log(id);
+            
             $("#delete_id").val(id);
         });
 
@@ -397,8 +399,8 @@
         });
 
         $("#add_car_color").on("click", function () {
-            $(".modal-title").text("Create Car Color");
-            $(".submitbtn").text("Create New");
+            $(".modal-title").text(_l("admin.rentals.create_vehicle_color"));
+            $(".submitbtn").text(_l("admin.common.create_new"));
             $("#carColorForm")[0].reset();
             $("#id").val("");
             $(".error-text").text("");
@@ -445,8 +447,8 @@
                     $("#id").val(data.id);
                     $("#language_id").val(data.language_id);
 
-                    $("#car_color_modal .modal-title").text("Edit Car Color");
-                    $(".submitbtn").text("Save Changes");
+                    $("#car_color_modal .modal-title").text(_l("admin.rentals.edit_vehicle_color"));
+                    $(".submitbtn").text(_l("admin.common.save_changes"));
                     $("#statusDiv")
                         .removeClass("d-none")
                         .parent()

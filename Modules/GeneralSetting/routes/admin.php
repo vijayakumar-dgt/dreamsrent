@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\GeneralSetting\Http\Controllers\AddonController;
 use Modules\GeneralSetting\Http\Controllers\GeneralSettingController;
 use Modules\GeneralSetting\Http\Controllers\AdminProfileController;
 use Modules\GeneralSetting\Http\Controllers\CurrencyController;
@@ -63,12 +62,8 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::get('localization', [LocalizationController::class, 'index'])->name('admin.localization')->middleware('permission');
         Route::get('get-timezones', [LocalizationController::class, 'getTimezones']);
         Route::post('update-localization', [LocalizationController::class, 'updateLocalization']);
-        Route::get('get-timezone', [LocalizationController::class, 'getTimezone']);
-        
-        // company settings
-        Route::post('ownership/transfer', [GeneralSettingController::class, 'transferOwnership'])->name('admin-transferOwnership-settings');
-        Route::post('ownership/transfer', [GeneralSettingController::class, 'transferOwnership'])->name('admin-transferOwnership-settings');
-        
+        Route::get('get-timezone', [LocalizationController::class, 'getTimezone']);       
+       
         //maintenance settings
         Route::get('maintenance', [GeneralSettingController::class, 'maintenance'])->name('admin.maintenance-settings')->middleware('permission');
         Route::post('maintenance/update', [GeneralSettingController::class, 'storeMaintenanceSettings'])->name('admin.maintenanceupdate-settings');
@@ -182,13 +177,8 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         
         // Invoice settings
         Route::get('invoice-settings', [GeneralSettingController::class, 'invoiceSettings'])->name('admin.invoiceSettings-settings')->middleware('permission');
-        Route::post('invoice-settings/store', [GeneralSettingController::class, 'storeInvoiceSettings'])->name('admin.storeInvoiceSettings-settings');
-        
-        // Plugin Managers
-        Route::get('plugin-managers', [AddonController::class, 'addonIndex'])->name('admin.addonIndex-settings')->middleware('permission');
-        Route::post('addon-module-list', [AddonController::class, 'index']);
-        Route::post('purchase-module', [AddonController::class, 'purchaseModule']);
-        
+        Route::post('invoice-settings/store', [GeneralSettingController::class, 'storeInvoiceSettings'])->name('admin.storeInvoiceSettings-settings');       
+
         // Theme Settings
         Route::get('theme', [GeneralSettingController::class, 'themeSettings'])->name('admin.theme-settings');
         Route::post('update-theme-settings', [GeneralSettingController::class, 'updateThemeSettings']);
