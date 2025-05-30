@@ -230,9 +230,9 @@
                                                         "delete"
                                                     )
                                                         ? `<li>
-                                                    <button type="button" class="dropdown-item rounded-1" data-id="${
+                                                    <button type="button" class="dropdown-item rounded-1 delete-color" data-id="${
                                                         value.id
-                                                    }" id="delete-color" data-bs-toggle="modal" data-bs-target="#delete-modal">
+                                                    }" data-bs-toggle="modal" data-bs-target="#delete-modal">
                                                         <i class="ti ti-trash me-1"></i>${_l(
                                                             "admin.common.delete"
                                                         )}
@@ -357,8 +357,10 @@
                 .removeClass("d-none");
         });
 
-        $(document).on("click", "#delete-color", function () {
+        $(document).on("click", ".delete-color", function () {
             let id = $(this).data("id");
+            console.log(id);
+            
             $("#delete_id").val(id);
         });
 
