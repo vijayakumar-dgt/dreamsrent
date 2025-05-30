@@ -119,12 +119,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::post('storageupdate', [GeneralSettingController::class, 'storageStatusUpdate'])->name('admin.storageupdate-settings');
         Route::post('aws/store', [GeneralSettingController::class, 'storeAwsSettings'])->name('admin.storawsStoreage-settings');
         
-        // Bank settings
-        Route::get('bank-accounts', [BankController::class, 'index'])->name('admin.bankindex-settings');
-        Route::post('bank-store', [BankController::class, 'store'])->name('admin.bankstore-settings');
-        Route::get('bank/datatable', [BankController::class, 'list'])->name('admin.bankdatatable-settings');
-        Route::get('bank/edit/{id}', [BankController::class, 'edit'])->name('admin.bankedit-settings');
-        Route::post('bank/delete', [BankController::class, 'delete'])->name('admin.bankdelete-settings');
+       
         
         //Language
         Route::get('languages', [LanguageController::class, 'index'])->name('admin.languages')->middleware('permission');
@@ -160,14 +155,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
 
         //clear cache
         Route::get('clear-cache', [SignatureSettingsController::class, 'clearCache'])->name('admin.clearCache-settings');
-        Route::post('clear', [SignatureSettingsController::class, 'clear']);
-
-        // Bank settings
-        Route::get('bank-accounts', [BankController::class, 'index'])->name('admin.bankindex-settings')->middleware('permission');
-        Route::post('bank-store', [BankController::class, 'store'])->name('admin.bankstore-settings');
-        Route::get('bank/datatable', [BankController::class, 'list'])->name('admin.bankdatatable-settings');
-        Route::get('bank/edit/{id}', [BankController::class, 'edit'])->name('admin.bankedit-settings');
-        Route::post('bank/delete', [BankController::class, 'delete'])->name('admin.bankdelete-settings');
+        Route::post('clear', [SignatureSettingsController::class, 'clear']);       
 
         // Payment settings
         Route::get('payment-methods', [GeneralSettingController::class, 'paymentIndex'])->name('admin.paymentIndex-settings')->middleware('permission');

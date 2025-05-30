@@ -616,57 +616,7 @@ class GeneralSettingController extends Controller
             ], 500);
         }
     }
-
-    public function aiConfiguration(Request $request): View
-    {
-        return view('generalsetting::website_settings.ai_configuration');
-    }
-
-    public function updateAiConfiguration(Request $request): JsonResponse
-    {
-        $validator = Validator::make($request->all(), [
-            'group_id' => 'required|integer',
-            'ai_api_key' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 422,
-                'message' => __('admin.general_settings.validation_error'),
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        try {
-            $settings = $request->all();
-
-            foreach ($settings as $key => $value) {
-                if ($key != 'group_id') {
-                    GeneralSetting::updateOrCreate(
-                        ['key' => $key],
-                        [
-                            'value' => $value,
-                            'group_id' => $request->group_id
-                        ]
-                    );
-                }
-            }
-
-            return response()->json([
-                'status' => 'success',
-                'code' => 200,
-                'message' => __('admin.general_settings.ai_configuration_update_success')
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'code' => 500,
-                'message' => __('admin.common.default_update_error'),
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
+   
     public function paymentIndex(Request $request): View
     {
         return view('generalsetting::payment.index');
