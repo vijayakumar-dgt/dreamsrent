@@ -3,7 +3,6 @@
 namespace Modules\GeneralSetting\Http\Requests;
 
 use App\Library\CustomFailedValidation;
-use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateAdminProfileRequest extends CustomFailedValidation
 {

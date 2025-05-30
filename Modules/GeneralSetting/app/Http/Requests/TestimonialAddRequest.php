@@ -2,9 +2,9 @@
 
 namespace Modules\GeneralSetting\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 
-class TestimonialAddRequest extends FormRequest
+class TestimonialAddRequest extends CustomFailedValidation
 {
     public function authorize(): bool
     {

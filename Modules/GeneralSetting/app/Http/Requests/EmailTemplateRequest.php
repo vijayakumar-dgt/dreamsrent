@@ -2,11 +2,11 @@
 
 namespace Modules\GeneralSetting\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 use Illuminate\Validation\Rule;
 use Modules\GeneralSetting\Models\EmailTemplate;
 
-class EmailTemplateRequest extends FormRequest
+class EmailTemplateRequest extends CustomFailedValidation
 {
     public function authorize()
     {

@@ -2,9 +2,9 @@
 
 namespace Modules\GeneralSetting\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 
-class StoreNotificationSettingsRequest extends FormRequest
+class StoreNotificationSettingsRequest extends CustomFailedValidation
 {
     public function authorize(): bool
     {

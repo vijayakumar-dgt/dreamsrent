@@ -2,9 +2,9 @@
 
 namespace Modules\GeneralSetting\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 
-class SignatureSettingRequest extends FormRequest
+class SignatureSettingRequest extends CustomFailedValidation
 {
    public function authorize()
     {

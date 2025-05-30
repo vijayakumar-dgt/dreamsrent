@@ -2,9 +2,9 @@
 
 namespace Modules\GeneralSetting\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 
-class FaqStoreRequest extends FormRequest
+class FaqStoreRequest extends CustomFailedValidation
 {
    public function rules(): array
     {
