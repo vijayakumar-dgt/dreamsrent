@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use Modules\GeneralSetting\Http\Requests\CookiesSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\ListCompanyRequest;
 use Modules\GeneralSetting\Http\Requests\SettingListRequest;
+use Modules\GeneralSetting\Http\Requests\StorageStatusUpdateRequest;
+use Modules\GeneralSetting\Http\Requests\StoreAwsSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreCookiesSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreInvoiceSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreLogoSettingsRequest;
@@ -195,33 +197,27 @@ class GeneralSettingController extends Controller
             ], 500);
         }
     }
-
-    public function storageStatusUpdate(Request $request): JsonResponse
+    public function storageStatusUpdate(StorageStatusUpdateRequest $request): JsonResponse
     {
-        $request->validate([
-            'storage_type' => 'required|in:local_storage,aws_storage',
-            'status' => 'required|boolean',
-        ]);
-
         try {
-            $oppositeStorageType = $request->storage_type === 'local_storage' ? 'aws_storage' : 'local_storage';
-            $oppositeStatus = $request->status == 1 ? 0 : 1;
-
-            GeneralSetting::updateOrCreate(
-                ['key' => $request->storage_type],
-                ['value' => $request->status, 'group_id' => 8]
+            $success = $this->repository->updateStorageStatus(
+                $request->storage_type,
+                (bool) $request->status
             );
 
-            GeneralSetting::updateOrCreate(
-                ['key' => $oppositeStorageType],
-                ['value' => $oppositeStatus, 'group_id' => 8]
-            );
+            if ($success) {
+                $message = $request->status == 1
+                    ? ucfirst(str_replace('_', ' ', $request->storage_type)) . ' activated'
+                    : ucfirst(str_replace('_', ' ', $request->storage_type)) . ' blocked';
 
-            $message = $request->status == 1
-                ? ucfirst(str_replace('_', ' ', $request->storage_type)) . ' activated'
-                : ucfirst(str_replace('_', ' ', $request->storage_type)) . ' blocked';
+                return response()->json([
+                    'success' => true,
+                    'message' => $message
+                ]);
+            }
 
-            return response()->json(['success' => true, 'message' => $message]);
+            throw new \Exception(__('admin.general_settings.update_failed'));
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -230,39 +226,8 @@ class GeneralSettingController extends Controller
         }
     }
 
-    private function updateOrCreateAwsSetting(?string $key, ?string $value): bool
+    public function storeAwsSettings(StoreAwsSettingsRequest $request): JsonResponse
     {
-        return (bool) GeneralSetting::updateOrCreate(
-            ['key' => $key],
-            ['value' => $value, 'group_id' => 8]
-        );
-    }
-
-    public function storeAwsSettings(Request $request): JsonResponse
-    {
-        $rules = [
-            'aws_access_key' => 'required|string',
-            'aws_secret_key' => 'required|string',
-            'aws_region' => 'required|string',
-            'aws_bucket_name' => 'required|string',
-            'aws_base_url' => 'required|url',
-        ];
-
-        $messages = [
-            'aws_access_key.required' => __('The AWS access key field is required.'),
-            'aws_secret_key.required' => __('The AWS secret access key field is required.'),
-            'aws_region.required' => __('The AWS region field is required.'),
-            'aws_bucket_name.required' => __('The AWS bucket field is required.'),
-            'aws_base_url.required' => __('The AWS URL field is required.'),
-            'aws_base_url.url' => __('The AWS URL must be a valid URL.'),
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['code' => 422, 'errors' => $validator->errors()], 422);
-        }
-
         try {
             $settings = [
                 'aws_access_key' => $request->aws_access_key,
@@ -272,18 +237,18 @@ class GeneralSettingController extends Controller
                 'aws_base_url' => $request->aws_base_url
             ];
 
-            foreach ($settings as $key => $value) {
-                $saveSetting = $this->updateOrCreateAwsSetting($key, $value);
-                if (!$saveSetting) {
-                    throw new \Exception("Failed to save $key");
-                }
+            $success = $this->repository->updateAwsSettings($settings);
+
+            if ($success) {
+                return response()->json([
+                    'code' => 200,
+                    'message' => __('admin.general_settings.aws_success'),
+                    'data' => []
+                ]);
             }
 
-            return response()->json([
-                'code' => 200,
-                'message' => __('admin.general_settings.aws_success'),
-                'data' => []
-            ], 200);
+            throw new \Exception(__('admin.general_settings.update_failed'));
+
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -337,7 +302,7 @@ class GeneralSettingController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
-    }   
+    }
 
     public function storeNotificationSettings(StoreNotificationSettingsRequest $request): JsonResponse
     {
@@ -702,7 +667,7 @@ class GeneralSettingController extends Controller
             ], 500);
         }
     }
- public function paymentIndex(Request $request): View
+    public function paymentIndex(Request $request): View
     {
         return view('generalsetting::payment.index');
     }

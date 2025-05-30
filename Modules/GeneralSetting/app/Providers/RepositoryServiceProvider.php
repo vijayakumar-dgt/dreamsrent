@@ -5,6 +5,7 @@ namespace Modules\GeneralSetting\Providers;
 use Illuminate\Support\ServiceProvider;
 use Modules\GeneralSetting\Repositories\Contracts\CommunicationSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\CurrencySettingInterface;
+use Modules\GeneralSetting\Repositories\Contracts\DbbackupInterface;
 use Modules\GeneralSetting\Repositories\Contracts\EmailTemplateRepositoryInterface;
 use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\InsuranceSettingInterface;
@@ -15,6 +16,7 @@ use Modules\GeneralSetting\Repositories\Contracts\SitemapSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\TaxRateSettingInterface;
 use Modules\GeneralSetting\Repositories\Eloquent\CommunicationSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\CurrencySettingRepository;
+use Modules\GeneralSetting\Repositories\Eloquent\DbbackupRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\EmailTemplateSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\GeneralSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\InsuranceSettingRepository;
@@ -46,5 +48,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CommunicationSettingInterface::class, CommunicationSettingRepository::class);
         $this->app->bind(TaxRateSettingInterface::class, TaxRateSettingRepository::class);
         $this->app->bind(CurrencySettingInterface::class, CurrencySettingRepository::class);
+        $this->app->bind(DbbackupInterface::class, DbbackupRepository::class);
+
     }    
 }

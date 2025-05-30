@@ -3,17 +3,21 @@
 namespace Modules\GeneralSetting\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Spatie\DbDumper\Databases\MySql;
-use Spatie\DbDumper\Exceptions\DumpFailed;
-use Illuminate\Support\Facades\Log;
-use Modules\GeneralSetting\Models\Dbbackup;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
+use Modules\GeneralSetting\Http\Requests\DeleteBackupRequest;
+use Modules\GeneralSetting\Repositories\Contracts\DbbackupInterface;
 
 class DbbackupController extends Controller
 {
+    protected $dbbackupRepository;
+
+    public function __construct(DbbackupInterface $dbbackupRepository)
+    {
+        $this->dbbackupRepository = $dbbackupRepository;
+    }
+
     public function datebaseSettings(Request $request): View
     {
         return view('generalsetting::other_settings.database-backup');
@@ -24,85 +28,12 @@ class DbbackupController extends Controller
         return view('generalsetting::other_settings.system-backup');
     }
 
-    public function backupDatabase(Request $request): RedirectResponse
-    {
-        try {
-            $backupDir = storage_path('app/public/dbbackups');
-            if (!is_dir($backupDir)) {
-                mkdir($backupDir, 0777, true);
-            }
-
-            $fileName = 'backup_' . now()->format('Y_m_d_His') . '.sql';
-            $backupPath = $backupDir . DIRECTORY_SEPARATOR . $fileName;
-
-            $dbName = config('database.connections.mysql.database');
-            $dbUserName = config('database.connections.mysql.username');
-            $dbPassword = config('database.connections.mysql.password');
-            $dbHost = config('database.connections.mysql.host', '127.0.0.1'); // Ensure using 127.0.0.1
-            $dbPort = config('database.connections.mysql.port', 3306);
-
-            $mysqldumpPath = 'C:\\newxampp\\mysql\\bin\\mysqldump.exe'; // Ensure the path is correct
-
-            // Command to execute
-            $command = "\"{$mysqldumpPath}\" --user={$dbUserName} --password={$dbPassword} --host={$dbHost} --port={$dbPort} --protocol=TCP {$dbName} > \"{$backupPath}\"";
-
-            // Execute the command
-            exec($command, $output, $result);
-
-            if ($result !== 0) {
-                Log::error("Database backup failed with exit code {$result}");
-                return redirect()->route('admin.database-settings')->with('error', __('admin.general_settings.retrieve_error'));
-            }
-
-            // Save backup details in database
-            Dbbackup::create(['name' => $fileName]);
-
-            return redirect()->route('admin.datebase-settings')->with('success', __('admin.general_settings.backup_successfull'));
-        } catch (\Exception $e) {
-            Log::error('An unexpected error occurred during database backup: ' . $e->getMessage());
-            return redirect()->route('admin.datebase-settings')->with('error', __('admin.general_settings.retrieve_error') . $e->getMessage());
-        }
-    }
-
     public function listBackups(): JsonResponse
     {
         try {
-            $backups = Dbbackup::where('type', 1)->orderBy('created_at', 'desc')->get();
-
+            $backups = $this->dbbackupRepository->getDatabaseBackups();
             $baseUrl = asset('storage/database');
 
-            /** @var \Illuminate\Support\Collection<int, Dbbackup> $backups */
-            $formattedBackups = $backups->map(function (Dbbackup $backup) use ($baseUrl): array {
-                return [
-                    'id' => $backup->id,
-                    'name' => $backup->name,
-                    'created_on' => $backup->created_at ? formatDateTime($backup->created_at) : null,
-                    'download_url' => "{$baseUrl}/{$backup->name}",
-                ];
-            });
-
-
-            return response()->json([
-                'success' => true,
-                'message' => __('admin.general_settings.backup_successfull'),
-                'data' => $formattedBackups,
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => __('admin.general_settings.retrieve_error'),
-                'error' => $e->getMessage(),
-            ], 500);
-        }
-    }
-
-    public function listSystemBackups(): JsonResponse
-    {
-        try {
-            $backups = Dbbackup::where('type', 2)->orderBy('created_at', 'desc')->get();
-            $baseUrl = asset('storage/backups');
-
-            // Format data for response
             $formattedBackups = $backups->map(function ($backup) use ($baseUrl) {
                 return [
                     'id' => $backup->id,
@@ -116,7 +47,7 @@ class DbbackupController extends Controller
                 'success' => true,
                 'message' => __('admin.general_settings.backup_successfull'),
                 'data' => $formattedBackups,
-            ], 200);
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -125,22 +56,46 @@ class DbbackupController extends Controller
             ], 500);
         }
     }
-    public function deleteSystemBackup(Request $request): JsonResponse
+
+    public function listSystemBackups(): JsonResponse
     {
         try {
-            $request->validate([
-                'id' => 'required|integer|exists:dbbackups,id'
-            ]);
+            $backups = $this->dbbackupRepository->getSystemBackups();
+            $baseUrl = asset('storage/backups');
 
-            /** @var \Modules\GeneralSetting\Models\Dbbackup $backup */
-            $backup = Dbbackup::findOrFail($request->id);
-            $backup->delete();
+            $formattedBackups = $backups->map(function ($backup) use ($baseUrl) {
+                return [
+                    'id' => $backup->id,
+                    'name' => $backup->name,
+                    'created_on' => $backup->created_at ? formatDateTime($backup->created_at) : null,
+                    'download_url' => "{$baseUrl}/{$backup->name}",
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => __('admin.general_settings.backup_successfull'),
+                'data' => $formattedBackups,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => __('admin.general_settings.retrieve_error'),
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function deleteSystemBackup(DeleteBackupRequest $request): JsonResponse
+    {
+        try {
+            $this->dbbackupRepository->deleteBackup($request->id);
 
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.general_settings.deleted_successfull'),
-                'totalRecords' => Dbbackup::count()
-            ], 200);
+                'totalRecords' => $this->dbbackupRepository->getTotalBackupCount()
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -150,22 +105,16 @@ class DbbackupController extends Controller
         }
     }
 
-    public function deleteBackup(Request $request): JsonResponse
+    public function deleteBackup(DeleteBackupRequest $request): JsonResponse
     {
         try {
-            $request->validate([
-                'id' => 'required|integer|exists:dbbackups,id'
-            ]);
-
-            /** @var \Modules\GeneralSetting\Models\Dbbackup $backup */
-            $backup = Dbbackup::findOrFail($request->id);
-            $backup->delete();
+            $this->dbbackupRepository->deleteBackup($request->id);
 
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.general_settings.deleted_successfull'),
-                'totalRecords' => Dbbackup::count()
-            ], 200);
+                'totalRecords' => $this->dbbackupRepository->getTotalBackupCount()
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,

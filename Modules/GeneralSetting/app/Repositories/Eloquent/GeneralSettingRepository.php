@@ -701,5 +701,49 @@ class GeneralSettingRepository implements GeneralSettingInterface
         return file_put_contents($path, $envContent) !== false;
     }
 
+    public function updateStorageStatus(string $storageType, bool $status): bool
+    {
+        try {
+            $oppositeStorageType = $storageType === 'local_storage' ? 'aws_storage' : 'local_storage';
+            $oppositeStatus = !$status;
+
+            $this->updateOrCreateStorageSetting(
+                ['key' => $storageType],
+                ['value' => $status, 'group_id' => 8]
+            );
+
+            $this->updateOrCreateStorageSetting(
+                ['key' => $oppositeStorageType],
+                ['value' => $oppositeStatus, 'group_id' => 8]
+            );
+
+            return true;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function updateAwsSettings(array $settings): bool
+    {
+        try {
+            foreach ($settings as $key => $value) {
+                $this->updateOrCreateStorageSetting(
+                    ['key' => $key],
+                    ['value' => $value, 'group_id' => 8]
+                );
+            }
+            return true;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+     public function updateOrCreateStorageSetting(array $conditions, array $data): bool
+    {
+        return (bool) GeneralSetting::updateOrCreate($conditions, $data);
+    }
+
+   
+
 
 }
