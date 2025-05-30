@@ -9,12 +9,16 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Modules\Communication\Repositories\Contracts\ContactMessagesRepositoryInterface;
 
 class ContactController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected ContactMessagesRepositoryInterface $contactMessagesRepository;
+
+    public function __construct(ContactMessagesRepositoryInterface $contactMessagesRepository)
+    {
+        $this->contactMessagesRepository = $contactMessagesRepository;
+    }
     public function index(): View
     {
         return view('communication::contact-message.index');
