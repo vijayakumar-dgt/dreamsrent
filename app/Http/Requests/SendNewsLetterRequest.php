@@ -9,21 +9,20 @@ class SendNewsLetterRequest extends CustomFailedValidation
 {
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
+            'email' => 'required',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'email.required' => __('admin.common.email_required'),
-            'email.email' => __('admin.common.email_invalid'),
+            'email.required' => __('admin.common.email_required')
         ];
     }
 }
