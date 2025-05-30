@@ -1,24 +1,35 @@
 <?php
 
 namespace Modules\CarInfo\Http\Requests;
+use Illuminate\Validation\Rule;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 class SeasonRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     */
     public function rules(): array
     {
-        return [];
+        $id = $this->input('id');
+
+        return [
+            'name' => [
+                'required',
+                'max:30',
+                Rule::unique('seasons')->ignore($id)->whereNull('deleted_at'),
+                'not_regex:/<\/?script\b[^>]*>/i',
+            ],
+        ];
     }
 
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+
+    public function messages(): array
     {
-        return true;
+        return [
+            'name.required' => __('admin.rentals.season_name_required'),
+            'name.unique' => __('admin.rentals.season_name_unique'),
+            'name.max' => __('admin.rentals.season_name_maxlength'),
+            'name.not_regex' => __('admin.common.script_tag_not_allowed'),
+        ];
     }
+    
 }

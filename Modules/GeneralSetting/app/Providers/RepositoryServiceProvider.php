@@ -3,6 +3,14 @@
 namespace Modules\GeneralSetting\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\CarInfo\Repositories\Contracts\CategoryRepositoryInterface;
+use Modules\CarInfo\Repositories\Contracts\CylinderRepositoryInterface;
+use Modules\CarInfo\Repositories\Contracts\SafetyFeatureRepositoryInterface;
+use Modules\CarInfo\Repositories\Contracts\SeasonRepositoryInterface;
+use Modules\CarInfo\Repositories\Eloquent\CategoryRepository;
+use Modules\CarInfo\Repositories\Eloquent\CylinderRepository;
+use Modules\CarInfo\Repositories\Eloquent\SafetyFeatureRepository;
+use Modules\CarInfo\Repositories\Eloquent\SeasonRepository;
 use Modules\GeneralSetting\Repositories\Contracts\EmailTemplateRepositoryInterface;
 use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\InsuranceSettingInterface;
@@ -34,5 +42,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(InsuranceSettingInterface::class, InsuranceSettingRepository::class);
         $this->app->bind(SignatureSettingInterface::class, SignatureSettingRepository::class);
         $this->app->bind(LocalizationInterface::class, LocalizationRepository::class);
+        $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
+        $this->app->bind(SeasonRepositoryInterface::class, SeasonRepository::class);
+        $this->app->bind(CylinderRepositoryInterface::class, CylinderRepository::class);
+        $this->app->bind(SafetyFeatureRepositoryInterface::class, SafetyFeatureRepository::class);
+
     }    
 }
