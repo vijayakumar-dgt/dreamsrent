@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\GeneralSetting\Models\BlogCategory;
+use Modules\GeneralSetting\Repositories\Contracts\BlogCategoryRepositoryInterface;
 use Modules\GeneralSetting\Models\BlogReviews;
 use Modules\GeneralSetting\Models\BlogTag;
 use Modules\GeneralSetting\Models\BlogPost;
@@ -19,14 +20,17 @@ use Illuminate\Support\Str;
 
 class BlogsController extends Controller
 {
-    public function blogCategory(Request $request): View
+    
+    protected BlogCategoryRepositoryInterface $blogRepository;
+
+    public function __construct(BlogCategoryRepositoryInterface $blogRepository)
     {
-        /** @var \App\Models\User|null $authId */
-        $authId = current_user();
-        $languageId = $authId ? $authId->language_id : null;
-        $languages = Language::with('transLang')->get();
-        $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->orderBy('name', 'asc')->get();
-        return view('generalsetting::cms.blogs.blog-category', compact('languages', 'categories'));
+        $this->blogRepository = $blogRepository;
+    }
+    public function blogCategory(): View
+    {
+        $data = $this->blogRepository->blogCategory();
+        return view('generalsetting::cms.blogs.blog-category', [...$data]);
     }
 
     public function categoryStore(Request $request): JsonResponse

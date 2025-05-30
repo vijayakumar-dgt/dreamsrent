@@ -139,7 +139,6 @@ Route::group(['middleware' => ['checkInstallerStatus', 'setLocaleUser', 'securit
     Route::get('/pages/{slug}', [PageController::class, 'getPage'])->name('pages');
 
     Route::get('blogs', [BlogController::class, 'BlogList'])->name('blogs.list');
-    Route::get('blog-grid', [BlogController::class, 'BlogGrid'])->name('blogs.grid');
     Route::get('blog-details/{id}', [BlogController::class, 'BlogDetail'])->name('blogs.detail');
     Route::post('/blog-review', [BlogController::class, 'storeReview'])->name('blogs.review.store');
     Route::post('/userprofile', [UserController::class, 'userprofile'])->name('userprofile');

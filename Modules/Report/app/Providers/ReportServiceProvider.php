@@ -7,6 +7,8 @@ use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Modules\Report\Repositories\Contracts\ReportRepositoryInterface;
+use Modules\Report\Repositories\Eloquent\ReportRepository;
 
 class ReportServiceProvider extends ServiceProvider
 {
@@ -36,6 +38,7 @@ class ReportServiceProvider extends ServiceProvider
     {
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+        $this->app->bind(ReportRepositoryInterface::class, ReportRepository::class);
     }
 
     /**

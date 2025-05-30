@@ -3,9 +3,15 @@
 namespace App\Providers;
 
 use App\Repositories\Contracts\HomeRepositoryInterface;
+use App\Repositories\Contracts\DashboardRepositoryInterface;
+use App\Repositories\Contracts\BlogRepositoryInterface;
+use App\Repositories\Contracts\InvoiceRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Eloquent\HomeRepository;
+use App\Repositories\Eloquent\DashboardRepository;
+use App\Repositories\Eloquent\InvoiceRepository;
 use App\Repositories\Eloquent\UserRepository;
+use App\Repositories\Eloquent\BlogRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -21,6 +27,9 @@ class RepositoryServiceProvider extends ServiceProvider
     protected function registerBindings(): void
     {
         $this->app->bind(HomeRepositoryInterface::class, HomeRepository::class);
+        $this->app->bind(DashboardRepositoryInterface::class, DashboardRepository::class);
+        $this->app->bind(InvoiceRepositoryInterface::class, InvoiceRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(BlogRepositoryInterface::class, BlogRepository::class);
     }
 }

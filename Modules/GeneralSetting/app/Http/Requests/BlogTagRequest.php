@@ -4,7 +4,7 @@ namespace Modules\GeneralSetting\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BlogCategoryRequest extends FormRequest
+class BlogTagRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -15,7 +15,7 @@ class BlogCategoryRequest extends FormRequest
     {
         $id = $this->route('id');
         return [
-            'name' => 'required|string|max:255|unique:blog_categories,name,' . $id,
+            'name' => 'required|string|max:255|unique:blog_tags,name,' . $id,
             'language_id' => 'required|integer',
             'status' => 'nullable|boolean',
         ];
