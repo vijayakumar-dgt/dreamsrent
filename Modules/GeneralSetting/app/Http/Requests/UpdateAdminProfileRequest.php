@@ -3,7 +3,6 @@
 namespace Modules\GeneralSetting\Http\Requests;
 
 use App\Library\CustomFailedValidation;
-
 class UpdateAdminProfileRequest extends CustomFailedValidation
 {
     public function authorize(): bool

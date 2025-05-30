@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\GeneralSetting\Models\BlogCategory;
+use Modules\GeneralSetting\Repositories\Contracts\BlogCategoryRepositoryInterface;
 use Modules\GeneralSetting\Models\BlogReviews;
 use Modules\GeneralSetting\Models\BlogTag;
 use Modules\GeneralSetting\Models\BlogPost;
@@ -16,35 +17,28 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\Support\Str;
+use Modules\GeneralSetting\Http\Requests\BlogCategoryRequest;
 
 class BlogsController extends Controller
 {
-    public function blogCategory(Request $request): View
+    
+    protected BlogCategoryRepositoryInterface $blogRepository;
+
+    public function __construct(BlogCategoryRepositoryInterface $blogRepository)
     {
-        /** @var \App\Models\User|null $authId */
-        $authId = current_user();
-        $languageId = $authId ? $authId->language_id : null;
-        $languages = Language::with('transLang')->get();
-        $categories = BlogCategory::where('deleted_at', null)->where('language_id', $languageId)->orderBy('name', 'asc')->get();
-        return view('generalsetting::cms.blogs.blog-category', compact('languages', 'categories'));
+        $this->blogRepository = $blogRepository;
+    }
+    public function blogCategory(): View
+    {
+        $data = $this->blogRepository->blogCategory();
+        return view('generalsetting::cms.blogs.blog-category', [...$data]);
     }
 
-    public function categoryStore(Request $request): JsonResponse
+    public function categoryStore(BlogCategoryRequest $request): JsonResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:blog_categories,name',
-            'language_id' => 'required',
-        ]);
-        BlogCategory::create([
-            'name' => $request->name,
-            'status' => 1,
-            'created_at' =>  Carbon::now(),
-            'language_id' => $request->language_id,
-        ]);
-        return response()->json([
-            'code' => 200,
-            'message' => 'Blog Category added successfully!'
-        ], 200);
+        $response = $this->blogRepository->categoryStore($request);
+        return $response;
+        
     }
     public function categoryUpdate(Request $request, int $id): RedirectResponse
     {

@@ -7,6 +7,7 @@ use Modules\GeneralSetting\Repositories\Contracts\CommunicationSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\CurrencySettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\DbbackupInterface;
 use Modules\GeneralSetting\Repositories\Contracts\EmailTemplateRepositoryInterface;
+use Modules\GeneralSetting\Repositories\Contracts\BlogCategoryRepositoryInterface;
 use Modules\GeneralSetting\Repositories\Contracts\FaqInterface;
 use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\InsuranceSettingInterface;
@@ -29,6 +30,7 @@ use Modules\GeneralSetting\Repositories\Eloquent\LanguageSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\SitemapSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\TaxRateSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\TestimonialRepository;
+use Modules\GeneralSetting\Repositories\Eloquent\BlogCategoryRepository;
 
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -54,6 +56,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CurrencySettingInterface::class, CurrencySettingRepository::class);
         $this->app->bind(DbbackupInterface::class, DbbackupRepository::class);
         $this->app->bind(TestimonialInterface::class, TestimonialRepository::class);
+        $this->app->bind(BlogCategoryRepositoryInterface::class, BlogCategoryRepository::class);
         $this->app->bind(FaqInterface::class, FaqRepository::class);
     }    
 }
