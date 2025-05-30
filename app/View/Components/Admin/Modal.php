@@ -14,6 +14,8 @@ class Modal extends Component
     public string $dialogClassName;
     public string $dialogPosition;
     public string $formId;
+    public string $method;
+    public string $action;
 
     /**
      * Create a new component instance.
@@ -24,7 +26,9 @@ class Modal extends Component
         string $className = '',
         string $dialogClassName = '',
         string $dialogPosition = 'modal-dialog-centered',
-        string $formId = ''
+        string $formId = '',
+        string $method = '',
+        string $action = ''
     ) {
         $this->id = $id;
         $this->title = $title;
@@ -32,6 +36,8 @@ class Modal extends Component
         $this->dialogClassName = $dialogClassName;
         $this->dialogPosition = $dialogPosition;
         $this->formId = $formId;
+        $this->method = $method;
+        $this->action = $action;
     }
 
     /**
