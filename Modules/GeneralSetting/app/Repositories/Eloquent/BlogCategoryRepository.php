@@ -31,4 +31,18 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
 
         return $data;
     }
+
+    public function categoryStore(Request $request): JsonResponse
+    {
+        BlogCategory::create([
+            'name' => $request->name,
+            'status' => 1,
+            'created_at' =>  Carbon::now(),
+            'language_id' => $request->language_id,
+        ]);
+        return response()->json([
+            'code' => 200,
+            'message' => 'Blog Category added successfully!'
+        ], 200);
+    }
 }

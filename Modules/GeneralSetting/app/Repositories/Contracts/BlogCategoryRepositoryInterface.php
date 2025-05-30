@@ -2,10 +2,11 @@
 
 namespace Modules\GeneralSetting\Repositories\Contracts;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
+
 
 interface BlogCategoryRepositoryInterface
 {
     public function blogCategory(): array;
+    public function categoryStore(Request $request);
 }

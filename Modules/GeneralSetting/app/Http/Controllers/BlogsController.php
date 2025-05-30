@@ -17,6 +17,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\Support\Str;
+use Modules\GeneralSetting\Http\Requests\BlogCategoryRequest;
 
 class BlogsController extends Controller
 {
@@ -33,22 +34,11 @@ class BlogsController extends Controller
         return view('generalsetting::cms.blogs.blog-category', [...$data]);
     }
 
-    public function categoryStore(Request $request): JsonResponse
+    public function categoryStore(BlogCategoryRequest $request): JsonResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:blog_categories,name',
-            'language_id' => 'required',
-        ]);
-        BlogCategory::create([
-            'name' => $request->name,
-            'status' => 1,
-            'created_at' =>  Carbon::now(),
-            'language_id' => $request->language_id,
-        ]);
-        return response()->json([
-            'code' => 200,
-            'message' => 'Blog Category added successfully!'
-        ], 200);
+        $response = $this->blogRepository->categoryStore($request);
+        return $response;
+        
     }
     public function categoryUpdate(Request $request, int $id): RedirectResponse
     {

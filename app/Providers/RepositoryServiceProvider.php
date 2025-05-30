@@ -12,8 +12,6 @@ use App\Repositories\Eloquent\DashboardRepository;
 use App\Repositories\Eloquent\InvoiceRepository;
 use App\Repositories\Contracts\NewsLetterRepositoryInterface;
 use App\Repositories\Contracts\ReviewRepositoryInterface;
-use App\Repositories\Contracts\UserRepositoryInterface;
-use App\Repositories\Eloquent\HomeRepository;
 use App\Repositories\Eloquent\NewsLetterRepository;
 use App\Repositories\Eloquent\ReviewRepository;
 use App\Repositories\Eloquent\UserRepository;
