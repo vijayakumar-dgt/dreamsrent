@@ -613,6 +613,93 @@ class GeneralSettingRepository implements GeneralSettingInterface
 
         return ['success' => true, 'message' => __('admin.general_settings.device_removed_successfully')];
     }
+    public function updatePaymentSettings(array $data): bool
+    {
+        try {
+            $group_id = $data['group_id'];
+            $envUpdates = [];
+
+            foreach ($data as $key => $value) {
+                if ($key !== 'group_id') {
+                    $this->updateOrCreateSettingPayment(
+                        ['key' => $key, 'group_id' => $group_id],
+                        ['value' => $value]
+                    );
+
+                    // Track environment variable updates
+                    switch ($key) {
+                        case 'paypal_key':
+                            $envUpdates['PAYPAL_SANDBOX_CLIENT_ID'] = $value;
+                            break;
+                        case 'paypal_secret':
+                            $envUpdates['PAYPAL_SANDBOX_CLIENT_SECRET'] = $value;
+                            break;
+                        case 'stripe_key':
+                            $envUpdates['STRIPE_KEY'] = $value;
+                            break;
+                        case 'stripe_secret':
+                            $envUpdates['STRIPE_SECRET'] = $value;
+                            break;
+                    }
+                }
+            }
+
+            if (!empty($envUpdates)) {
+                $this->updateEnvVariables($envUpdates);
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function updatePaymentStatus(array $data): bool
+    {
+        return $this->updateOrCreateSettingPayment(
+            ['key' => $data['key'], 'group_id' => $data['group_id']],
+            ['value' => $data['value']]
+        );
+    }
+
+    public function getPaymentSettings(int $groupId, string $orderBy = 'desc'): array
+    {
+        return GeneralSetting::where('group_id', $groupId)
+            ->orderBy('id', $orderBy)
+            ->get()
+            ->toArray();
+    }
+
+    protected function updateOrCreateSettingPayment(array $conditions, array $data): bool
+    {
+        return GeneralSetting::updateOrCreate($conditions, $data) ? true : false;
+    }
+
+    public function updateEnvVariables(array $envData): bool
+    {
+        $path = base_path('.env');
+
+        if (!file_exists($path)) {
+            return false;
+        }
+
+        $envContent = file_get_contents($path);
+        if ($envContent === false) {
+            return false;
+        }
+
+        foreach ($envData as $key => $value) {
+            $pattern = "/^{$key}=.*/m";
+
+            if (preg_match($pattern, $envContent)) {
+                $envContent = preg_replace($pattern, "{$key}={$value}", $envContent);
+            } else {
+                $envContent .= "\n{$key}={$value}";
+            }
+        }
+
+        return file_put_contents($path, $envContent) !== false;
+    }
 
 
 }

@@ -20,6 +20,8 @@ use Modules\GeneralSetting\Http\Requests\StoreRentalSettingsRequest;
 use Modules\GeneralSetting\Http\Requests\StoreSeoSetupRequest;
 use Modules\GeneralSetting\Http\Requests\UpdateEmailRequest;
 use Modules\GeneralSetting\Http\Requests\UpdatePasswordRequest;
+use Modules\GeneralSetting\Http\Requests\UpdatePaymentSettingsRequest;
+use Modules\GeneralSetting\Http\Requests\UpdatePaymentStatusRequest;
 use Modules\GeneralSetting\Http\Requests\UpdatePhoneNumberRequest;
 use Modules\GeneralSetting\Http\Requests\UpdateThemeSettingsRequest;
 use Modules\GeneralSetting\Models\GeneralSetting;
@@ -700,48 +702,25 @@ class GeneralSettingController extends Controller
             ], 500);
         }
     }
-
-    public function paymentIndex(Request $request): View
+ public function paymentIndex(Request $request): View
     {
         return view('generalsetting::payment.index');
     }
 
-    public function updatepaymentSettings(Request $request): JsonResponse
+    public function updatepaymentSettings(UpdatePaymentSettingsRequest $request): JsonResponse
     {
-        $settings = $request->except(['_token']);
-
         try {
-            foreach ($settings as $key => $value) {
-                if ($key != 'group_id') {
-                    GeneralSetting::updateOrCreate(
-                        ['key' => $key],
-                        [
-                            'value' => $value,
-                            'group_id' => $request->group_id
-                        ],
-                    );
-                }
+            $success = $this->repository->updatePaymentSettings($request->all());
 
-                if ($key == 'paypal_key') {
-                    $this->updateEnvFile('PAYPAL_SANDBOX_CLIENT_ID', $value);
-                }
-
-                if ($key == 'paypal_secret') {
-                    $this->updateEnvFile('PAYPAL_SANDBOX_CLIENT_SECRET', $value);
-                }
-
-                if ($key == 'stripe_key') {
-                    $this->updateEnvFile('STRIPE_KEY', $value);
-                }
-                if ($key == 'stripe_secret') {
-                    $this->updateEnvFile('STRIPE_SECRET', $value);
-                }
+            if ($success) {
+                return response()->json([
+                    'code' => 200,
+                    'message' => __('admin.general_settings.payment_updated_successfull'),
+                ]);
             }
 
-            return response()->json([
-                'code' => 200,
-                'message' => __('admin.general_settings.payment_updated_successfull'),
-            ], 200);
+            throw new \Exception(__('admin.general_settings.update_failed'));
+
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -750,58 +729,42 @@ class GeneralSettingController extends Controller
         }
     }
 
-    private function updateEnvFile(string $key, string $value): void
+    public function updatepaymentStatus(UpdatePaymentStatusRequest $request): JsonResponse
     {
-        $path = base_path('.env');
+        try {
+            $success = $this->repository->updatePaymentStatus($request->all());
 
-        if (file_exists($path)) {
-            $envContent = file_get_contents($path);
-
-            if ($envContent === false) {
-                return;
+            if ($success) {
+                return response()->json([
+                    'success' => true,
+                    'message' => __('admin.general_settings.payment_updated_successfull')
+                ]);
             }
 
-            $pattern = "/^{$key}=.*/m";
+            throw new \Exception(__('admin.general_settings.update_failed'));
 
-            if (preg_match($pattern, $envContent)) {
-                $envContent = preg_replace($pattern, "{$key}={$value}", $envContent);
-            } else {
-                $envContent .= "\n{$key}={$value}";
-            }
-
-            file_put_contents($path, $envContent);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
         }
-    }
-
-
-    public function updatepaymentStatus(Request $request): JsonResponse
-    {
-        $request->validate([
-            'key' => 'required|string',
-            'value' => 'required|in:0,1',
-            'group_id' => 'required|integer',
-        ]);
-
-        GeneralSetting::updateOrCreate(
-            ['key' => $request->key, 'group_id' => $request->group_id],
-            ['value' => $request->value]
-        );
-
-        return response()->json(['success' => true, 'message' => __('admin.general_settings.payment_updated_successfull')]);
     }
 
     public function paymentList(Request $request): JsonResponse
     {
         $orderBy = $request->order_by ?? 'desc';
+        $groupId = 13;
 
         try {
-            $data = GeneralSetting::orderBy('id', $orderBy)->where('group_id', 13)->get();
+            $data = $this->repository->getPaymentSettings($groupId, $orderBy);
 
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.general_settings.general_settings_success'),
                 'data' => $data,
-            ], 200);
+            ]);
+
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
