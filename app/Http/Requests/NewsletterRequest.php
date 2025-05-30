@@ -10,7 +10,7 @@ class NewsletterRequest extends CustomFailedValidation
   
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
       public function rules(): array
