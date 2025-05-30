@@ -11,6 +11,7 @@ use Modules\CarInfo\Repositories\Contracts\BrandRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\DamageTypeRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\DoorTypeRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\ExtraServiceRepositoryInterface;
+use Modules\CarInfo\Repositories\Contracts\LocationRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\MaintenanceRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\TagRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleColorRepositoryInterface;
@@ -35,6 +36,7 @@ use Modules\CarInfo\Repositories\Eloquent\VehicleTransmissionRepository;
 use Modules\CarInfo\Repositories\Eloquent\VehicleTypeRepository;
 use Modules\CarInfo\Repositories\Eloquent\CategoryRepository;
 use Modules\CarInfo\Repositories\Eloquent\CylinderRepository;
+use Modules\CarInfo\Repositories\Eloquent\LocationRepository;
 use Modules\CarInfo\Repositories\Eloquent\SafetyFeatureRepository;
 use Modules\CarInfo\Repositories\Eloquent\SeasonRepository;
 
@@ -67,5 +69,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SeasonRepositoryInterface::class, SeasonRepository::class);
         $this->app->bind(CylinderRepositoryInterface::class, CylinderRepository::class);
         $this->app->bind(SafetyFeatureRepositoryInterface::class, SafetyFeatureRepository::class);
+        $this->app->bind(LocationRepositoryInterface::class, LocationRepository::class);
     }
 }

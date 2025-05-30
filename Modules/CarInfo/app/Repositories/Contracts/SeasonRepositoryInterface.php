@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 interface SeasonRepositoryInterface
 {
-    // public function list(Request $request);
     public function save(Request $request);
     public function getSeasons(Request $request): array;
     public function getSeason($id): array;
