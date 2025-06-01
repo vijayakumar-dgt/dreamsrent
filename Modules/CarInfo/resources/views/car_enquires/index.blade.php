@@ -83,108 +83,90 @@
 	<!-- /Page Wrapper -->
 
 	<!-- Edit Enquiry -->
-	<div class="modal fade addmodal" id="edit_enquiry_modal">
-		<div class="modal-dialog modal-dialog-centered modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="mb-0 modal-title">{{ __('admin.bookings.edit_enquiry') }}</h4>
-					<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-						<i class="ti ti-x fs-16"></i>
-					</button>
+	<x-admin.modal className="addmodal" 
+		id="edit_enquiry_modal"
+		dialogClassName="modal-lg"
+		:title="__('admin.bookings.edit_enquiry')" 
+		action="{{  route('enquire.update') }}" 
+		formId="editEnquiryForm" 
+		method="POST">
+       <x-slot name="body">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="mb-3">
+						<label class="form-label">{{ __('admin.common.vehicle') }} </label>
+						<p class="assigned_cars"></p>
+						<span class="text-danger error-text" id="assigned_cars_error"></span>
+					</div>
 				</div>
-				<form id="editEnquiryForm">
-					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-md-6">
-								<div class="mb-3">
-									<label class="form-label">{{ __('admin.common.vehicle') }} </label>
-									<p class="assigned_cars"></p>
-									<span class="text-danger error-text" id="assigned_cars_error"></span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="mb-3">
-									<label class="form-label">{{ __('admin.common.name') }}</label>
-									<p class="customer_name"></p>
-									<span id="customer_name_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="mb-3">
-									<label class="form-label">{{ __('admin.common.email') }}</label>
-									<p class="email"></p>
-									<span id="email_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="mb-3">
-									<label class="form-label">{{ __('admin.common.phone') }}</label>
-									<p class="phone_number"></p>
-									<span id="phone_number_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="mb-3">
-									<label class="form-label">{{ __('admin.bookings.enquiry') }}</label>
-									<p class="enquiry_details"></p>
-									<span id="enquiry_details_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="mb-3">
-									<label class="form-label">{{ __('admin.common.status') }}<span class="text-danger"> *</span></label>
-									<select id="status" name="status" class="select form-control">
-										<option value="">{{ __('admin.common.select') }}</option>
-										<option value="1">{{ __('admin.common.not_opened') }}</option>
-										<option value="2">{{ __('admin.common.opened') }}</option>
-										<option value="3">{{ __('admin.common.closed') }}</option>
-									</select>
-									<span id="status_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-							<div class="mb-3">
-								<input type="hidden"  class="form-control id" name="id" id="id">
-								<label class="form-label">{{ __('admin.common.comments') }}<span class="text-danger"> *</span></label>
-								<input type="text" class="form-control" name="comment" id="comment">
-								<span id="comment_error" class="text-danger error-text"></span>
-							</div>
-						</div>
+				<div class="col-md-6">
+					<div class="mb-3">
+						<label class="form-label">{{ __('admin.common.name') }}</label>
+						<p class="customer_name"></p>
+						<span id="customer_name_error" class="text-danger error-text"></span>
 					</div>
-					<div class="modal-footer">
-						<div class="d-flex justify-content-center">
-							<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-							<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.update') }}</button>
-						</div>
+				</div>
+				<div class="col-md-6">
+					<div class="mb-3">
+						<label class="form-label">{{ __('admin.common.email') }}</label>
+						<p class="email"></p>
+						<span id="email_error" class="text-danger error-text"></span>
 					</div>
-				</form>
+				</div>
+				<div class="col-md-6">
+					<div class="mb-3">
+						<label class="form-label">{{ __('admin.common.phone') }}</label>
+						<p class="phone_number"></p>
+						<span id="phone_number_error" class="text-danger error-text"></span>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="mb-3">
+						<label class="form-label">{{ __('admin.bookings.enquiry') }}</label>
+						<p class="enquiry_details"></p>
+						<span id="enquiry_details_error" class="text-danger error-text"></span>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="mb-3">
+						<label class="form-label">{{ __('admin.common.status') }}<span class="text-danger"> *</span></label>
+						<select id="status" name="status" class="select form-control">
+							<option value="">{{ __('admin.common.select') }}</option>
+							<option value="1">{{ __('admin.common.not_opened') }}</option>
+							<option value="2">{{ __('admin.common.opened') }}</option>
+							<option value="3">{{ __('admin.common.closed') }}</option>
+						</select>
+						<span id="status_error" class="text-danger error-text"></span>
+					</div>
+				</div>
+				<div class="mb-3">
+					<input type="hidden"  class="form-control id" name="id" id="id">
+					<label class="form-label">{{ __('admin.common.comments') }}<span class="text-danger"> *</span></label>
+					<input type="text" class="form-control" name="comment" id="comment">
+					<span id="comment_error" class="text-danger error-text"></span>
+				</div>
 			</div>
-		</div>
-	</div>
+	   </x-slot>
+	   <x-slot name="footer">
+			<div class="d-flex justify-content-center">
+				<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+				<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.update') }}</button>
+			</div>
+	   </x-slot>
+	</x-admin.modal>
 	<!-- /Edit Enquiry -->
 	
 	<!-- Delete Enquiry -->
-	<div class="modal fade deletemodal" id="delete-modal">
-		<div class="modal-dialog modal-dialog-centered modal-sm"> 
-			<div class="modal-content">
-				<form id="enquiryDeleteForm"> 
-					<input type="hidden" name="_token" value="{{ csrf_token() }}">
-					<input type="hidden" name="delete_id" id="delete_id">
-					<div class="modal-body text-center">
-						<span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-							<i class="ti ti-trash-x fs-26"></i>
-						</span>
-						<h4 class="mb-1">{{ __('admin.bookings.delete_enquiry') }}</h4>
-						<p class="mb-3">{{ __('admin.bookings.delete_enquiry_confirmation') }}</p>
-						<div class="d-flex justify-content-center"> 
-							<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
-						</div> 
-					</div>
-				</form>
-			</div> 
-		</div> 
-	</div> 
+	<x-admin.delete-modal 
+		className="deletemodal" 
+		id="delete-modal" 
+		action="{{ route('enquiry.delete') }}" 
+		formId="enquiryDeleteForm" 
+		method="POST"
+		:hiddenInputs="['delete_id' => '']" 
+		:title="__('admin.bookings.delete_enquiry')" 
+		:description="__('admin.bookings.delete_enquiry_confirmation')">
+	</x-admin.delete-modal>
 	<!-- /Delete Enquiry -->
 @endsection
 

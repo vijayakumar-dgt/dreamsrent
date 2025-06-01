@@ -82,154 +82,137 @@
     </div>
     <!-- /Page Wrapper -->
 
-    <!-- Add Inspection Modal Start-->  
-    <div class="modal fade" id="add_inspection">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title mb-0">{{ __('admin.rentals.create_inspection') }}</h4>
-                    <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti ti-x fs-16"></i>
-                    </button>
-                </div>
-                <form action="" id="inspectionForm">
-                    @csrf
-                    <input type="hidden" name="id" id="id">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('admin.common.vehicle') }} <span class="text-danger">*</span></label>
-                            <select name="vehicle_info_id" id="vehicle_info_id" class="form-control" data-placeholder="{{ __('admin.common.select') }}">
-                                <option value="">{{ __('admin.common.select') }}</option>
-                            </select>
-                            <span id="vehicle_info_id_error" class="text-danger error-text"></span>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="inspection_date" class="form-label">{{ __('admin.rentals.inspection_date') }} <em class="text-danger">*</em></label>
-                                <input type="text" name="inspection_date" class="form-control inspection_date" id="inspection_date">
-                                <span class="text-danger error-text" id="inspection_date_error"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="inspection_by" class="form-label">{{ __('admin.rentals.inspection_by') }} <em class="text-danger">*</em></label>
-                                <select name="inspection_by" id="inspection_by" class="form-control select2" data-placeholder="{{ __('admin.common.select') }}">
-                                    @if (!empty($users) && $users->count() > 0)
-                                        <option value="">{{ __('admin.common.select') }}</option>
-                                        @foreach ($users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                        @endforeach
-                                    @else
-                                        <option value="">{{ __('admin.common.no_data_found') }}</option>
-                                    @endif
-                                </select>
-                                <span class="text-danger error-text" id="inspection_by_error"></span>
-                            </div>
-                        </div>
-                        <p class="text-dark fs-16 mb-3">{{ __('admin.rentals.incoming_details') }}</p>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="odometer" class="form-label">{{ __('admin.rentals.odometer') }} <em class="text-danger">*</em></label>
-                                <input type="number" name="odometer" class="form-control" id="odometer">
-                                <span class="text-danger error-text" id="odometer_error"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="fuel" class="form-label">{{ __('admin.rentals.fuel') }} <em class="text-danger">*</em></label>
-                                <input type="number" name="fuel" class="form-control" id="fuel">
-                                <span class="text-danger error-text" id="fuel_error"></span>
-                            </div>
-                        </div>
-                        <p class="text-dark fs-16 mb-3">{{ __('admin.rentals.checklist') }}</p>
-                        <span class="text-danger error-text" id="checklist_error"></span>
-                        <div class="row mb-3">
-                            @if (!empty($checklists) && $checklists->count() > 0)
-                                @foreach ($checklists as $checklist)
-                                    <div class="col-md-6">
-                                        <div class="form-check form-check-md">
-                                            <label class="form-check-label form-label mt-0 mb-0">
-                                                <input class="form-check-input form-label me-2 checklist" type="checkbox" value="{{ $checklist->id }}" name="checklist_id[]" id="checklist_id_{{ $checklist->id }}">
-                                                {{ $checklist->name }}
-                                            </label>
-                                            <p class="text-muted">{{ $checklist->description }}</p>
-                                            <span class="text-danger error-text" id="checklist_id_error_{{ $checklist->id }}"></span>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            @else
-                                <option value="">{{ __('admin.common.no_data_found') }}</option>
-                            @endif
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('admin.rentals.notes') }}</label>
-                            <textarea class="form-control" name="notes" id="notes" rows="3"></textarea>
-                            <span class="text-danger error-text" id="notes_error"></span>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="inspection_status" class="form-label">{{ __('admin.rentals.inspection_status') }} <em class="text-danger">*</em></label>
-                                <select name="inspection_status" id="inspection_status" class="form-control select" data-placeholder="{{ __('admin.common.select') }}">
-                                    <option value="">{{ __('admin.common.select') }}</option>
-                                    <option value="completed">{{ __('admin.rentals.completed') }}</option>
-                                    <option value="inprogress">{{ __('admin.rentals.inprogress') }}</option>
-                                    <option value="pending">{{ __('admin.rentals.pending') }}</option>
-                                    <option value="onhold">{{ __('admin.rentals.onhold') }}</option>
-                                    <option value="rejected">{{ __('admin.rentals.rejected') }}</option>
-                                </select>
-                                <span class="text-danger error-text" id="inspection_status_error"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="repair_status" class="form-label">{{ __('admin.rentals.repair_status') }} <em class="text-danger">*</em></label>
-                                <select name="repair_status" id="repair_status" class="form-control select" data-placeholder="{{ __('admin.common.select') }}">
-                                    <option value="">{{ __('admin.common.select') }}</option>
-                                    <option value="completed">{{ __('admin.rentals.completed') }}</option>
-                                    <option value="inprogress">{{ __('admin.rentals.inprogress') }}</option>
-                                    <option value="pending">{{ __('admin.rentals.pending') }}</option>
-                                    <option value="onhold">{{ __('admin.rentals.onhold') }}</option>
-                                    <option value="rejected">{{ __('admin.rentals.rejected') }}</option>
-                                </select>
-                                <span class="text-danger error-text" id="repair_status_error"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="d-flex justify-content-end align-items-center w-100">
-                            <div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
-                                <label for="status" class="form-check-label form-label mt-0 mb-0">
-                                    <input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked>
-                                    {{ __('admin.common.status') }}
-                                </label>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                                <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+    <!-- Add Inspection Modal Start-->
+    <x-admin.modal className="addmodal"
+        dialogClassName="modal-lg"
+		id="add_inspection"
+		:title="__('admin.rentals.create_inspection')" 
+		action="{{  route('inspection.store') }}" 
+		formId="inspectionForm" 
+		method="POST">
+		<x-slot name="body">
+            <input type="hidden" name="id" id="id">
+            <div class="mb-3">
+                <label class="form-label">{{ __('admin.common.vehicle') }} <span class="text-danger">*</span></label>
+                <select name="vehicle_info_id" id="vehicle_info_id" class="form-control" data-placeholder="{{ __('admin.common.select') }}">
+                    <option value="">{{ __('admin.common.select') }}</option>
+                </select>
+                <span id="vehicle_info_id_error" class="text-danger error-text"></span>
             </div>
-        </div>
-    </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="inspection_date" class="form-label">{{ __('admin.rentals.inspection_date') }} <em class="text-danger">*</em></label>
+                    <input type="text" name="inspection_date" class="form-control inspection_date" id="inspection_date">
+                    <span class="text-danger error-text" id="inspection_date_error"></span>
+                </div>
+                <div class="col-md-6">
+                    <label for="inspection_by" class="form-label">{{ __('admin.rentals.inspection_by') }} <em class="text-danger">*</em></label>
+                    <select name="inspection_by" id="inspection_by" class="form-control select2" data-placeholder="{{ __('admin.common.select') }}">
+                        @if (!empty($users) && $users->count() > 0)
+                            <option value="">{{ __('admin.common.select') }}</option>
+                            @foreach ($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        @else
+                            <option value="">{{ __('admin.common.no_data_found') }}</option>
+                        @endif
+                    </select>
+                    <span class="text-danger error-text" id="inspection_by_error"></span>
+                </div>
+            </div>
+            <p class="text-dark fs-16 mb-3">{{ __('admin.rentals.incoming_details') }}</p>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="odometer" class="form-label">{{ __('admin.rentals.odometer') }} <em class="text-danger">*</em></label>
+                    <input type="number" name="odometer" class="form-control" id="odometer">
+                    <span class="text-danger error-text" id="odometer_error"></span>
+                </div>
+                <div class="col-md-6">
+                    <label for="fuel" class="form-label">{{ __('admin.rentals.fuel') }} <em class="text-danger">*</em></label>
+                    <input type="number" name="fuel" class="form-control" id="fuel">
+                    <span class="text-danger error-text" id="fuel_error"></span>
+                </div>
+            </div>
+            <p class="text-dark fs-16 mb-3">{{ __('admin.rentals.checklist') }}</p>
+            <span class="text-danger error-text" id="checklist_error"></span>
+            <div class="row mb-3">
+                @if (!empty($checklists) && $checklists->count() > 0)
+                    @foreach ($checklists as $checklist)
+                        <div class="col-md-6">
+                            <div class="form-check form-check-md">
+                                <label class="form-check-label form-label mt-0 mb-0">
+                                    <input class="form-check-input form-label me-2 checklist" type="checkbox" value="{{ $checklist->id }}" name="checklist_id[]" id="checklist_id_{{ $checklist->id }}">
+                                    {{ $checklist->name }}
+                                </label>
+                                <p class="text-muted">{{ $checklist->description }}</p>
+                                <span class="text-danger error-text" id="checklist_id_error_{{ $checklist->id }}"></span>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <option value="">{{ __('admin.common.no_data_found') }}</option>
+                @endif
+            </div>
+            <div class="mb-3">
+                <label class="form-label">{{ __('admin.rentals.notes') }}</label>
+                <textarea class="form-control" name="notes" id="notes" rows="3"></textarea>
+                <span class="text-danger error-text" id="notes_error"></span>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="inspection_status" class="form-label">{{ __('admin.rentals.inspection_status') }} <em class="text-danger">*</em></label>
+                    <select name="inspection_status" id="inspection_status" class="form-control select" data-placeholder="{{ __('admin.common.select') }}">
+                        <option value="">{{ __('admin.common.select') }}</option>
+                        <option value="completed">{{ __('admin.rentals.completed') }}</option>
+                        <option value="inprogress">{{ __('admin.rentals.inprogress') }}</option>
+                        <option value="pending">{{ __('admin.rentals.pending') }}</option>
+                        <option value="onhold">{{ __('admin.rentals.onhold') }}</option>
+                        <option value="rejected">{{ __('admin.rentals.rejected') }}</option>
+                    </select>
+                    <span class="text-danger error-text" id="inspection_status_error"></span>
+                </div>
+                <div class="col-md-6">
+                    <label for="repair_status" class="form-label">{{ __('admin.rentals.repair_status') }} <em class="text-danger">*</em></label>
+                    <select name="repair_status" id="repair_status" class="form-control select" data-placeholder="{{ __('admin.common.select') }}">
+                        <option value="">{{ __('admin.common.select') }}</option>
+                        <option value="completed">{{ __('admin.rentals.completed') }}</option>
+                        <option value="inprogress">{{ __('admin.rentals.inprogress') }}</option>
+                        <option value="pending">{{ __('admin.rentals.pending') }}</option>
+                        <option value="onhold">{{ __('admin.rentals.onhold') }}</option>
+                        <option value="rejected">{{ __('admin.rentals.rejected') }}</option>
+                    </select>
+                    <span class="text-danger error-text" id="repair_status_error"></span>
+                </div>
+            </div>
+        </x-slot>
+        <x-slot name="footer">
+            <div class="d-flex justify-content-end align-items-center w-100">
+                <div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
+                    <label for="status" class="form-check-label form-label mt-0 mb-0">
+                        <input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked>
+                        {{ __('admin.common.status') }}
+                    </label>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+                    <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
+                </div>
+            </div>
+        </x-slot>
+	</x-admin.modal>
     <!-- Add Inspection Modal End-->
 
     <!-- Delete Modal Start-->
-    <div class="modal fade deletemodal" id="delete-modal">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <form action="" id="deleteInspection">
-                    @csrf
-                    <input type="hidden" name="delete_id" id="delete_id">
-                    <div class="modal-body text-center">
-                    <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-                        <i class="ti ti-trash-x fs-26"></i>
-                    </span>
-                    <h4 class="mb-1">{{ __('admin.rentals.delete_inspection') }}</h4>
-                    <p class="mb-3">{{ __('admin.rentals.delete_inspection_confirmation') }}</p>
-                    <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                        <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <x-admin.delete-modal 
+		className="deletemodal" 
+		id="delete-modal" 
+		action="{{ route('delete_inspection') }}" 
+		formId="deleteInspection" 
+		method="POST"
+		:hiddenInputs="['delete_id' => '']" 
+		:title="__('admin.rentals.delete_inspection')" 
+		:description="__('admin.rentals.delete_inspection_confirmation')">
+	</x-admin.delete-modal>
     <!-- Delete Modal End -->
 @endsection
 

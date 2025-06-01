@@ -117,7 +117,7 @@
                 .removeClass("d-none");
         });
 
-        $("#delateSeatType").on("submit", function (e) {
+        $("#deleteSeatType").on("submit", function (e) {
             e.preventDefault();
             $.ajax({
                 url: "/admin/seat-type/delete",

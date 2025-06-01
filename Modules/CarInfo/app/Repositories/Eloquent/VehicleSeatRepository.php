@@ -99,7 +99,7 @@ class VehicleSeatRepository implements VehicleSeatRepositoryInterface
             return [
                 'status' => 'success',
                 'code'   => 200,
-                'message' => __('admin.rentals.fuel_type_delete_success')
+                'message' => __('admin.rentals.seat_type_delete_success')
             ];
         } catch (ModelNotFoundException $e) {
             return [

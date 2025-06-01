@@ -125,108 +125,89 @@
 	</div>
 	<!-- /Page Wrapper -->
 
-	<!-- Add Maintenance -->
-	<div class="modal fade addmodal" id="maintenance_modal">
-		<div class="modal-dialog modal-dialog-centered modal-md">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="mb-0 modal-title">{{ __('admin.rentals.maintenance') }}</h4>
-					<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-						<i class="ti ti-x fs-16"></i>
-					</button>
+	<!-- Add/Edit Maintenance -->
+	<x-admin.modal className="addmodal" 
+		id="maintenance_modal"
+		:title="__('admin.rentals.create_maintenance')" 
+		action="{{  route('maintenance.store') }}" 
+		formId="maintenanceForm" 
+		method="POST">
+		<x-slot name="body">
+            <input type="hidden" name="id" id="id">
+            <div class="row">     
+				<div class="col-md-6">
+					<label class="form-label">{{ __('admin.common.vehicle') }}<span class="text-danger"> *</span></label>
+					<select class="select" id="vehicle_id" name="vehicle_id" data-placeholder="{{ __('admin.common.select') }}">
+						<option value="">{{ __('admin.common.select') }}</option>
+						@if ($vehicles)
+							@foreach ($vehicles as $vehicle)
+								<option value="{{ $vehicle->id }}">{{ $vehicle->name }}</option>
+							@endforeach
+						@endif
+					</select>
+					<span class="text-danger error-text" id="vehicle_id_error"></span>
+				</div>    
+				<div class="col-md-6">
+					<div class="mb-3">
+						<label class="form-label">{{ __('admin.common.odometer') }}<span class="text-danger"> *</span></label>
+						<input type="text" class="form-control" name="odometer" id="odometer">
+						<span id="odometer_error" class="text-danger error-text"></span>
+					</div>
 				</div>
-				<form id="maintenanceForm" autocomplete="off">
-					@csrf
-					<input type="hidden" name="id" id="id">
-					<div class="modal-body">
-						<div class="row">     
-							<div class="col-md-6">
-								<label class="form-label">{{ __('admin.common.vehicle') }}<span class="text-danger"> *</span></label>
-								<select class="select" id="vehicle_id" name="vehicle_id" data-placeholder="{{ __('admin.common.select') }}">
-									<option value="">{{ __('admin.common.select') }}</option>
-									@if ($vehicles)
-										@foreach ($vehicles as $vehicle)
-											<option value="{{ $vehicle->id }}">{{ $vehicle->name }}</option>
-										@endforeach
-									@endif
-								</select>
-								<span class="text-danger error-text" id="vehicle_id_error"></span>
-							</div>    
-							<div class="col-md-6">
-								<div class="mb-3">
-									<label class="form-label">{{ __('admin.common.odometer') }}<span class="text-danger"> *</span></label>
-									<input type="text" class="form-control" name="odometer" id="odometer">
-									<span id="odometer_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-							<div class="col-md-6">                    
-								<div class="mb-3">
-									<label class="form-label">{{ __('admin.common.start_date') }}<span class="text-danger"> *</span></label>
-									<input type="text" class="form-control custom_date_picker" name="start_date" id="start_date" placeholder="dd-mm-yyyy">
-									<span id="start_date_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-							<div class="col-md-6">                    
-								<div class="mb-3">
-									<label class="form-label">{{ __('admin.common.end_date') }}<span class="text-danger"> *</span></label>
-									<input type="text" class="form-control custom_date_picker" name="end_date" id="end_date" placeholder="dd-mm-yyyy">
-									<span id="end_date_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="mb-3">
-									<label class="form-label">{{ __('admin.common.details') }}<span class="text-danger"> *</span></label>
-									<textarea class="form-control" rows="4"  name="details" id="details"></textarea>
-									<span id="details_error" class="text-danger error-text"></span>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<label class="form-label">{{ __('admin.common.status') }}<span class="text-danger"> *</span></label>
-								<select class="select" id="status" name="status" data-placeholder="{{ __('admin.common.select') }}">
-									<option value="">{{ __('admin.common.select') }}</option>
-									<option value="1">{{ __('admin.common.planned') }}</option>
-									<option value="2">{{ __('admin.common.in_progress') }}</option>
-									<option value="3">{{ __('admin.common.completed') }}</option>
-								</select>
-								<span class="text-danger error-text" id="status_error"></span>
-							</div>    
-						</div>
+				<div class="col-md-6">                    
+					<div class="mb-3">
+						<label class="form-label">{{ __('admin.common.start_date') }}<span class="text-danger"> *</span></label>
+						<input type="text" class="form-control custom_date_picker" name="start_date" id="start_date" placeholder="dd-mm-yyyy">
+						<span id="start_date_error" class="text-danger error-text"></span>
 					</div>
-					<div class="modal-footer">
-						<div class="d-flex justify-content-center">
-							<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-							<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
-						</div>
+				</div>
+				<div class="col-md-6">                    
+					<div class="mb-3">
+						<label class="form-label">{{ __('admin.common.end_date') }}<span class="text-danger"> *</span></label>
+						<input type="text" class="form-control custom_date_picker" name="end_date" id="end_date" placeholder="dd-mm-yyyy">
+						<span id="end_date_error" class="text-danger error-text"></span>
 					</div>
-				</form>
+				</div>
+				<div class="col-md-12">
+					<div class="mb-3">
+						<label class="form-label">{{ __('admin.common.details') }}<span class="text-danger"> *</span></label>
+						<textarea class="form-control" rows="4"  name="details" id="details"></textarea>
+						<span id="details_error" class="text-danger error-text"></span>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<label class="form-label">{{ __('admin.common.status') }}<span class="text-danger"> *</span></label>
+					<select class="select" id="status" name="status" data-placeholder="{{ __('admin.common.select') }}">
+						<option value="">{{ __('admin.common.select') }}</option>
+						<option value="1">{{ __('admin.common.planned') }}</option>
+						<option value="2">{{ __('admin.common.in_progress') }}</option>
+						<option value="3">{{ __('admin.common.completed') }}</option>
+					</select>
+					<span class="text-danger error-text" id="status_error"></span>
+				</div>    
 			</div>
-		</div>
-	</div>
-	<!-- /Add Brand -->
+		</x-slot>
+		<x-slot name="footer">
+            <div class="d-flex justify-content-center">
+				<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+				<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
+			</div>
+		</x-slot>
+	</x-admin.modal>
+	<!-- /Add/Edit Maintenance -->
 
-	<!-- Delete Brand -->
-	<div class="modal fade deletemodal" id="delete-modal">
-		<div class="modal-dialog modal-dialog-centered modal-sm">
-			<div class="modal-content">
-				<form id="maintenanceDeleteForm">
-					@csrf
-					<input type="hidden" name="delete_id" id="delete_id">
-					<div class="modal-body text-center">
-						<span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-							<i class="ti ti-trash-x fs-26"></i>
-						</span>
-						<h4 class="mb-1">{{ __('admin.rentals.delete_maintenance') }}</h4>
-						<p class="mb-3">{{ __('admin.rentals.delete_maintenance_confirmation') }}</p>
-						<div class="d-flex justify-content-center">
-							<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	<!-- /Delete Brand -->
+	<!-- Delete Maintenance -->
+	<x-admin.delete-modal 
+		className="deletemodal" 
+		id="delete-modal" 
+		action="{{ route('maintenance.delete') }}" 
+		formId="maintenanceDeleteForm" 
+		method="POST"
+		:hiddenInputs="['delete_id' => '']" 
+		:title="__('admin.rentals.delete_maintenance')" 
+		:description="__('admin.rentals.delete_maintenance_confirmation')">
+	</x-admin.delete-modal>
+	<!-- /Delete Maintenance -->
 @endsection
 
 @push('scripts')
