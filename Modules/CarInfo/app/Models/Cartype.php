@@ -23,6 +23,7 @@ class Cartype extends Model
      */
     protected $fillable = [
         'name',
+        'type',
         'language_id',
         'status',
         'icon',

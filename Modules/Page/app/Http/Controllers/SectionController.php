@@ -81,7 +81,7 @@ class SectionController extends Controller
             ], 400);
         }
 
-        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle'];
+        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three'];
 
         $sections = Section::orderBy($sortBy, $orderBy)
             ->where('status', 1)
@@ -154,6 +154,10 @@ class SectionController extends Controller
         } elseif ($request->section_id == 29) {
             $rules['description_two'] = 'required';
             $rules['label_two'] = 'required';
+        } elseif ($request->section_id == 43) {
+            $rules['section_title_five'] = 'required';
+            $rules['description_three'] = 'required';
+            $rules['label_three'] = 'required';
         } elseif ($request->section_id == 42) {
             $rules['vehicle_id'] = 'required';
             $rules['label_1'] = 'required|max:50';
@@ -226,6 +230,19 @@ class SectionController extends Controller
                 'description_two' => $request->description_two,
                 'thumbnail_image_two' => $thumbnailPath,
             ];
+        } elseif ($request->section_id == 43) {
+            $thumbnailPath = $existingData['thumbnail_image_four'] ?? null;
+
+            if ($request->hasFile('thumbnail_image_four') && $request->file('thumbnail_image_four') instanceof \Illuminate\Http\UploadedFile) {
+                $thumbnailPath = uploadFile($request->file('thumbnail_image_four'), 'general');
+            }
+
+            $data = [
+                'section_title_five' => $request->section_title_five,
+                'label_three' => $request->label_three,
+                'description_three' => $request->description_three,
+                'thumbnail_image_four' => $thumbnailPath,
+            ];
         } elseif ($request->section_id == 42) {
             $data = [
                 'vehicle_id' => $request->vehicle_id,
@@ -288,6 +305,17 @@ class SectionController extends Controller
 
             if ($section) {
                 $section->title = $request->section_title_two;
+                $section->save();
+            } else {
+                return response()->json(['error' => 'Section not found.'], 404);
+            }
+        }
+
+        if ($request->section_id == 43 && $request->has('section_title_five')) {
+            $section = Section::find($request->section_id);
+
+            if ($section) {
+                $section->title = $request->section_title_five;
                 $section->save();
             } else {
                 return response()->json(['error' => 'Section not found.'], 404);

@@ -108,6 +108,7 @@
                     <div class="d-flex align-items-center justify-content-center setSection mb-3">
                         <button class="btn btn-primary w-100 rounded-0">{{ __('admin.page.screen_one') }}</button>
                         <button class="btn btn-dark w-100 rounded-0">{{ __('admin.page.screen_two') }}</button>
+                        <button class="btn btn-dark w-100 rounded-0">{{ __('admin.page.screen_three') }}</button>
                     </div>
                     <div class="d-flex align-items-center justify-content-center setSection">
                         <div id="cardContainer" class="section-list d-none real-table"></div>

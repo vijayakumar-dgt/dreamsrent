@@ -75,6 +75,7 @@ class VehicleInfo extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
+        'type',
         'language_id',
         'parent_id',
         'name',

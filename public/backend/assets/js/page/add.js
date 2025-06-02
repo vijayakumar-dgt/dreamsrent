@@ -288,21 +288,25 @@
         });
     });
 
-let themeId = 1;
+    let themeId = 1;
 
-function updateThemeSelection(selectedButton) {
-    let selectedText = $(selectedButton).text().trim();
+    function updateThemeSelection(selectedButton) {
+        let selectedText = $(selectedButton).text().trim();
+        
+        themeId =
+            selectedText === "First Screen"
+                ? 1
+                : selectedText === "Second Screen"
+                ? 2
+                : 3;
 
-    themeId = selectedText === "First Screen" ? 1 : 2;
+        $("#theme_id").val(themeId);
 
-    $("#theme_id").val(themeId);
+        $(".setSection button").removeClass("btn-primary").addClass("btn-dark");
+        $(selectedButton).removeClass("btn-dark").addClass("btn-primary");
 
-    $(".setSection button").removeClass("btn-primary").addClass("btn-dark");
-    $(selectedButton).removeClass("btn-dark").addClass("btn-primary");
-
-    fetchSection();
-}
-
+        fetchSection();
+    }
 
     function fetchSection() {
         $(".table-loader").show();

@@ -6,12 +6,11 @@
 <!-- Page Wrapper -->
 <div class="page-wrapper">
     <div class="content me-4">
-        <x-admin.breadcrumb 
-            :title="__('admin.cms.section')" 
+        <x-admin.breadcrumb
+            :title="__('admin.cms.section')"
             :breadcrumbs="[
                 __('admin.cms.section') => ''
-            ]"
-        />
+            ]" />
         <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
             @include('admin.content-loader')
         </div>
@@ -99,6 +98,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div id="section_id_2" class="d-none">
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -132,6 +132,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div id="section_id_3" class="d-none">
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -312,6 +313,40 @@
                                     <label class="form-label">{{ __('admin.common.description') }} 3</label>
                                     <input type="text" name="why_dis_3" id="why_dis_3" class="form-control" placeholder="{{ __('admin.cms.enter_description') }}" maxlength="200">
                                     <div class="invalid-feedback" id="why_dis_3_error"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section_id_5" class="d-none">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('admin.cms.title') }}</label>
+                                    <input type="text" name="section_title_five" id="section_title_five" class="form-control" placeholder="{{ __('admin.cms.enter_section_title') }}">
+                                    <div class="invalid-feedback" id="section_title_five_error"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('admin.cms.thumbnail_image') }}</label>
+                                    <input type="file" name="thumbnail_image_four" id="thumbnail_image_four" class="form-control" accept="image/*" onchange="previewThumbnailTwo(this)">
+                                    <div class="invalid-feedback" id="thumbnail_image_four_error"></div>
+                                </div>
+                                <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_two" class="mt-2 img-preview-thumb" alt="Image">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('admin.cms.label') }}</label>
+                                    <input type="text" name="label_three" id="label_three" class="form-control" placeholder="{{ __('admin.cms.enter_label') }}">
+                                    <div class="invalid-feedback" id="label_three_error"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">{{ __('admin.common.description') }}</label>
+                                    <textarea type="text" name="description_three" id="description_three" class="form-control" placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
+                                    <div class="invalid-feedback" id="description_two_error"></div>
                                 </div>
                             </div>
                         </div>

@@ -70,7 +70,7 @@
             var ID = $(this).data("id");
 
             $(
-                "#section_id_1, #section_id_2, #section_id_3, #section_id_4"
+                "#section_id_1, #section_id_2, #section_id_3, #section_id_4, #section_id_5"
             ).addClass("d-none");
 
             if (ID == 1) {
@@ -161,6 +161,22 @@
                     $("#preview_why_icon_3")
                         .attr("src", icon3)
                         .removeClass("d-none");
+                }
+            } else if (ID == 43) {
+                $("#section_id_5").removeClass("d-none");
+                $("#section_id").val(ID);
+                $("#section_title_five").val($(this).data("section_title_five"));
+                $("#description_three").val($(this).data("description_three"));
+                $("#label_three").val($(this).data("label_three"));
+
+                let thumbnailImageUrl = $(this).data("thumbnail_image_four");
+
+                if (thumbnailImageUrl) {
+                    $("#thumbnail_preview_three")
+                        .attr("src", thumbnailImageUrl)
+                        .removeClass("d-none");
+                } else {
+                    $("#thumbnail_preview_three").addClass("d-none");
                 }
             }
         });
@@ -277,9 +293,22 @@
                                                     value.thumbnail_image_one ??
                                                     ""
                                                 }"
-                                                data-thumbnail_image_two="${
+                                                data-thumbnail_image_three="${
                                                     value.thumbnail_image_two ??
                                                     ""
+                                                }"
+                                                data-thumbnail_image_four="${
+                                                    value.thumbnail_image_four ??
+                                                    ""
+                                                }"
+                                                data-label_three="${
+                                                    value.label_three ?? ""
+                                                }"
+                                                data-section_title_five="${
+                                                    value.section_title_five ?? ""
+                                                }"
+                                                data-description_three="${
+                                                    value.description_three ?? ""
                                                 }"
                                                 data-line_one="${
                                                     value.line_one ?? ""

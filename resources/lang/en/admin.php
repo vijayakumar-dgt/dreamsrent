@@ -2243,6 +2243,7 @@ return array(
     'section_title' => 'Section Title',
     'enter_title' => 'Enter Section Title',
     'section_label' => 'Section Label',
+    'screen_three' => 'Second Three',
     'enter_label' => 'Enter Section Label',
     'section_des' => 'Section Content',
     'enter_content' => 'Enter Section Content',
