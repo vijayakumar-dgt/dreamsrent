@@ -6,6 +6,7 @@ use App\Repositories\Contracts\HomeRepositoryInterface;
 use App\Repositories\Contracts\DashboardRepositoryInterface;
 use App\Repositories\Contracts\BlogRepositoryInterface;
 use App\Repositories\Contracts\InvoiceRepositoryInterface;
+use App\Repositories\Contracts\MessageRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Repositories\Eloquent\HomeRepository;
 use App\Repositories\Eloquent\DashboardRepository;
@@ -17,6 +18,7 @@ use App\Repositories\Eloquent\NewsLetterRepository;
 use App\Repositories\Eloquent\ReviewRepository;
 use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\Eloquent\BlogRepository;
+use App\Repositories\Eloquent\MessageRepository;
 use App\Repositories\Eloquent\UserLoginRegisterRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -40,5 +42,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ReviewRepositoryInterface::class, ReviewRepository::class);
         $this->app->bind(NewsLetterRepositoryInterface::class, NewsLetterRepository::class);
         $this->app->bind(UserLoginRegisterInterface::class, UserLoginRegisterRepository::class);
+        $this->app->bind(MessageRepositoryInterface::class, MessageRepository::class);
     }
 }
