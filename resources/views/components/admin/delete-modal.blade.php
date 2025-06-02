@@ -1,8 +1,10 @@
 <div class="modal fade {{ $className ?? 'deletemodal' }}" id="{{ $id ?? 'delete-modal' }}">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
+            @if (!empty($formId))
             <form action="{{ $action ?? null }}" method="{{ $method ?? 'POST' }}" id="{{ $formId }}" class="{{ $formClass ?? null }}">
                 @csrf
+            @endif
                 @if(!empty($hiddenInputs))
                 @foreach ($hiddenInputs as $key => $value)
                     <input type="hidden" name="{{ $key }}" value="{{ $value }}" id="{{ $key }}">
@@ -16,10 +18,12 @@
                     <p class="mb-3">{{ $description }}</p>
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                        <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
+                        <button type="{{ $deleteBtnType ?? 'submit' }}" class="btn btn-primary" @if ($deleteBtnId) id="{{ $deleteBtnId }}" @endif>{{ __('admin.common.yes_delete') }}</button>
                     </div>
                 </div>
+            @if (!empty($formId))
             </form>
+            @endif
         </div>
     </div>
 </div>

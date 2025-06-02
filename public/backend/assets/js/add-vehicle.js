@@ -3,6 +3,12 @@
     await loadTranslationFile("admin", "rentals, common");
 
     $(document).ready(function () {
+        if ($('.custom-select').length > 0) {
+            $('.custom-select').select2({
+                minimumResultsForSearch: -1,
+                width: '100%'
+            });
+        }
         let currency = $("#currency").val();
 
         const titleInput = document.getElementById("title");
@@ -558,6 +564,18 @@
 
         let editingTariffId = null;
         let deletingTariffId = null;
+
+        $(document).on('click', '#add_tariff_btn', function () {
+           $('#tarrif_title').text( _l('admin.rentals.add_tariff'));
+            $("#t_name").val(''); 
+            $("#t_price").val('');
+            $("#t_fromday").val('');
+            $("#t_today").val('');
+            $("#t_base").val('').attr('disabled', false);
+            $("#t_extra").val('');
+            $("#unlimited1").prop("checked", false);
+            $('#tarrif_btn').text(_l('admin.rentals.create_tariff'));
+        });
 
         $("#tarrif_btn").on("click", function () {
             $(".noDataT").html(""); // Clear previous entries
@@ -1327,10 +1345,6 @@
             $("#delete_damage").modal("hide");
         });
 
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // (FAQ validation and scripts)
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
         let faqCounter = 0; // Counter to create unique IDs
         let editingFAQ = null; // Track the currently editing FAQ
 
@@ -1437,12 +1451,6 @@
                     updateFaqCount();
                 });
         });
-
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // (SEO validation and scripts)
-        //
-        // - > Storing all the data
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         $("#carSeoForm").validate({
             rules: {

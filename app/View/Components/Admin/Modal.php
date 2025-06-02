@@ -9,7 +9,9 @@ use Illuminate\View\Component;
 class Modal extends Component
 {
     public string $id;
+    public bool $isHeader;
     public string $title;
+    public string $modalTitleId;
     public string $className;
     public string $dialogClassName;
     public string $dialogPosition;
@@ -17,23 +19,29 @@ class Modal extends Component
     public string $method;
     public string $action;
     public string $enctype;
+    public string $modalBodyClass = '';
 
     /**
      * Create a new component instance.
      */
     public function __construct(
         string $id,
-        string $title,
+        bool $isHeader = true,
+        string $title = '',
+        string $modalTitleId = '',
         string $className = '',
-        string $dialogClassName = '',
+        string $dialogClassName = 'modal-md',
         string $dialogPosition = 'modal-dialog-centered',
         string $formId = '',
         string $method = '',
         string $action = '',
         string $enctype = '',
+        string $modalBodyClass = '',
     ) {
         $this->id = $id;
+        $this->isHeader = $isHeader;
         $this->title = $title;
+        $this->modalTitleId = $modalTitleId;
         $this->className = $className;
         $this->dialogClassName = $dialogClassName;
         $this->dialogPosition = $dialogPosition;
@@ -41,6 +49,7 @@ class Modal extends Component
         $this->method = $method;
         $this->action = $action;
         $this->enctype = $enctype;
+        $this->modalBodyClass = $modalBodyClass;
     }
 
     /**

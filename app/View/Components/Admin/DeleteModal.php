@@ -20,7 +20,10 @@ class DeleteModal extends Component
     public array $hiddenInputs;
     public string $title;
     public string $description;
-    public function __construct($className = '', $id = '', $formId = '', $action = '', $method = '', $formClass = '', $hiddenInputs = [], $title = '', $description = '')
+    public string $deleteBtnType;
+    public string $deleteBtnId;
+    
+    public function __construct($className = '', $id = '', $formId = '', $action = '', $method = '', $formClass = '', $hiddenInputs = [], $title = '', $description = '', $deleteBtnType = 'submit', $deleteBtnId = '')
     {
         $this->className = $className;
         $this->id = $id;
@@ -31,6 +34,8 @@ class DeleteModal extends Component
         $this->hiddenInputs = $hiddenInputs;
         $this->title = $title;
         $this->description = $description;
+        $this->deleteBtnType = $deleteBtnType;
+        $this->deleteBtnId = $deleteBtnId;
     }
 
     /**

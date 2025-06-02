@@ -20,8 +20,6 @@
                     response.data.forEach((damage) => {
                         adddamage(damage);
                     });
-                } else {
-                    // showToast("error", "No damage data found.");
                 }
             },
             error: function (xhr, status, error) {},
@@ -836,9 +834,6 @@
             }
         });
 
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // (Features & Amenities Validation and scripts)
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         $("#priceTariffNext").on("click", function (event) {
             event.preventDefault();
 
@@ -866,9 +861,6 @@
             }
         });
 
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // (Pricing & Tariff Validation and scripts)
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         $("#priceTariffForm").validate({
             rules: {
                 daily: {
@@ -1831,14 +1823,8 @@
                 $("#sixth-field").show();
                 $("#fifthBar").removeClass("active").addClass("activated");
                 $("#sixthBar").addClass("active");
-            } else {
-                // showToast("error", "Please upload valid documents before proceeding.");
             }
         });
-
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // (Damage validation and scripts)
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         let editingDamageId = null;
         let deletingDamageId = null;
@@ -2068,10 +2054,6 @@
             $("#delete_damage").modal("hide");
         });
 
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // (FAQ validation and scripts)
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
         let editingFAQ = null; // Track the currently editing FAQ
 
         // Create / Update FAQ
@@ -2180,12 +2162,6 @@
                     updateFaqCount();
                 });
         });
-
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // (SEO validation and scripts)
-        //
-        // - > Storing all the data
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         $("#carSeoForm").validate({
             rules: {
