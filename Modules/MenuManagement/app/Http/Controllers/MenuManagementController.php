@@ -5,15 +5,25 @@ namespace Modules\MenuManagement\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Modules\MenuManagement\Http\Requests\StoreMenuRequest;
 use Modules\MenuManagement\Models\Menu;
 use Modules\GeneralSetting\Models\Language;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Illuminate\View\View;
+use Modules\MenuManagement\Http\Requests\UpdateMenuRequest;
+use Modules\MenuManagement\Repositories\Contracts\MenuManagementInterface;
 
 class MenuManagementController extends Controller
 {
+    protected $menuRepository;
+
+    public function __construct(MenuManagementInterface $menuRepository)
+    {
+        $this->menuRepository = $menuRepository;
+    }
+
     public function menu(): View
     {
         $languages = Language::with('transLang')->get();
@@ -54,7 +64,7 @@ class MenuManagementController extends Controller
             }
         }
 
-        // Use `first()` instead of `find()` to avoid possible collection ambiguity
+       
         $menu = Menu::where('id', $request->menu_id)->first();
 
         if (!$menu) {
@@ -78,25 +88,17 @@ class MenuManagementController extends Controller
     }
 
 
-    public function menuStore(Request $request): JsonResponse
+    public function menuStore(StoreMenuRequest $request): JsonResponse
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'menu_name' => 'required|string|max:255',
-                'menu_type' => 'required',
-                'menu_permalink' => 'required|url',
-                'language' => 'required|integer',
-            ]);
+            $data = $request->validated();
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'code' => 422,
-                    'message' => 'Validation Error',
-                    'errors' => $validator->errors(),
-                ], 422);
-            }
-
-            if ($request->menu_type === 'header' && Menu::where(['menu_type' => 'header', 'language_id' => $request->language])->exists()) {
+            // Check for duplicate header menu
+            if ($data['menu_type'] === 'header' && 
+                $this->menuRepository->exists([
+                    'menu_type' => 'header', 
+                    'language_id' => $data['language']
+                ])) {
                 return response()->json([
                     'code' => 422,
                     'message' => __('admin.cms.header_menu_exists'),
@@ -104,11 +106,12 @@ class MenuManagementController extends Controller
                 ], 422);
             }
 
-            $menu = Menu::create([
-                'name' => $request->menu_name,
-                'permenantlink' => $request->menu_permalink,
-                'language_id' => $request->language,
-                'menu_type' => $request->menu_type,
+            $menu = $this->menuRepository->create([
+                'name' => $data['menu_name'],
+                'permenantlink' => $data['menu_permalink'],
+                'language_id' => $data['language'],
+                'menu_type' => $data['menu_type'],
+                'status' => 1
             ]);
 
             return response()->json([
@@ -131,47 +134,17 @@ class MenuManagementController extends Controller
             $langCode = app()->getLocale();
             $defaultLanguageId = $request->language_id ?? getLanguageId($langCode);
 
-            $query = Menu::where('language_id', $defaultLanguageId);
-
-            // Search functionality
-            if ($request->has('search') && !empty($request->search)) {
-                $searchTerm = $request->search;
-                $query->where(function ($q) use ($searchTerm) {
-                    $q->where('name', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('menu_type', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('permenantlink', 'like', '%' . $searchTerm . '%');
-                });
-            }
-
-            // Sorting functionality
-            if ($request->has('sort')) {
-                switch ($request->sort) {
-                    case 'ascending':
-                        $query->orderBy('name', 'asc');
-                        break;
-                    case 'descending':
-                        $query->orderBy('name', 'desc');
-                        break;
-                    case 'last month':
-                        $query->where('created_at', '>=', now()->subMonth());
-                        break;
-                    case 'last 7 days':
-                        $query->where('created_at', '>=', now()->subDays(7));
-                        break;
-                    case 'latest':
-                    default:
-                        $query->orderBy('created_at', 'desc');
-                        break;
-                }
-            } else {
-                $query->orderBy('created_at', 'desc');
-            }
+            $filters = [
+                'language_id' => $defaultLanguageId,
+                'search' => $request->search,
+                'sort' => $request->sort
+            ];
 
             // Single menu retrieval
             if ($request->has('id')) {
-                $menu = $query->where('id', $request->id)->first();
+                $menu = $this->menuRepository->find($request->id);
 
-                if (!$menu) {
+                if ($menu->language_id != $defaultLanguageId) {
                     return response()->json([
                         'code' => 404,
                         'message' => 'Menu not found for the default language',
@@ -186,7 +159,7 @@ class MenuManagementController extends Controller
             }
 
             // Get all menus
-            $menus = $query->get()->map(function ($menu) {
+            $menus = $this->menuRepository->all($filters)->map(function ($menu) {
                 $menu->created_date = formatDateTime($menu->created_at, false);
                 unset($menu->created_at);
                 return $menu;
@@ -206,29 +179,18 @@ class MenuManagementController extends Controller
         }
     }
 
-    public function menuUpdate(Request $request): JsonResponse
+    public function menuUpdate(UpdateMenuRequest $request): JsonResponse
     {
-        $request->validate([
-            'menu_id' => 'required|exists:menus,id',
-            'editMenuType' => 'required',
-            'editMenuName' => 'required|string|min:3|max:255',
-            'editMenuPermalink' => 'required|url|max:255',
-            'menu_status' => 'nullable|in:on,off',
-            'language' => 'required|integer',
-        ]);
-
         try {
-            /** @var \Modules\MenuManagement\Models\Menu $menu */
-            $menu = Menu::findOrFail($request->menu_id);
+            $data = $request->validated();
 
             // Prevent duplicate header menus for the same language
-            if (
-                $request->editMenuType == 'header' &&
-                Menu::where('menu_type', 'header')
-                    ->where('language_id', $request->language)
-                    ->where('id', '!=', $request->menu_id)
-                    ->exists()
-            ) {
+            if ($data['editMenuType'] == 'header' && 
+                $this->menuRepository->exists([
+                    'menu_type' => 'header',
+                    'language_id' => $data['language'],
+                    ['id', '!=', $data['menu_id']]
+                ])) {
                 return response()->json([
                     'code' => 422,
                     'message' => __('admin.cms.header_menu_exists'),
@@ -236,12 +198,12 @@ class MenuManagementController extends Controller
                 ], 422);
             }
 
-            $menu->update([
-                'name' => $request->editMenuName,
-                'permenantlink' => $request->editMenuPermalink,
+            $menu = $this->menuRepository->update($data['menu_id'], [
+                'name' => $data['editMenuName'],
+                'permenantlink' => $data['editMenuPermalink'],
                 'status' => $request->has('menu_status') ? 1 : 0,
-                'language_id' => $request->language,
-                'menu_type' => $request->editMenuType,
+                'language_id' => $data['language'],
+                'menu_type' => $data['editMenuType'],
             ]);
 
             return response()->json([
@@ -253,6 +215,7 @@ class MenuManagementController extends Controller
             return response()->json([
                 'code' => 500,
                 'message' => __('admin.common.default_update_error'),
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -266,10 +229,7 @@ class MenuManagementController extends Controller
         }
 
         try {
-            // Use firstOrFail to ensure a single model is returned
-            $menu = Menu::where('id', $id)->firstOrFail();
-
-            $menu->delete();
+            $this->menuRepository->delete($id);
 
             return response()->json([
                 'code' => 200,
