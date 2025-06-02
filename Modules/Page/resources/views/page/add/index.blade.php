@@ -90,7 +90,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <input type="hidden" id="theme_id" name="theme_id" value="1">
                         <div class="card-footer d-flex justify-content-end">

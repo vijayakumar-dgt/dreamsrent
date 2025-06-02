@@ -1545,6 +1545,8 @@
     'vehicle_delete_success' => 'تم حذف السيارة بنجاح.',
     'popular_status_update_success' => 'تم تحديث حالة السيارة بنجاح.',
     'recommended_status_update_success' => 'تم تحديث حالة السيارة بنجاح.',
+    'vehicle_update_success' => 'تم تحديث السيارة بنجاح.',
+    'vehicle_create_success' => 'تم انشاء السيارة بنجاح.',
   ),
   'user_management' => 
   array (

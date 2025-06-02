@@ -15,6 +15,9 @@
     function initValidation() {
         $("#typeForm").validate({
             rules: {
+                vehicle_category_id: {
+                    required: true,
+                },
                 name: {
                     required: true,
                     minlength: 3,
@@ -32,6 +35,9 @@
                 },
             },
             messages: {
+                vehicle_category_id: {
+                    required: _l("admin.rentals.category_required"),
+                },
                 name: {
                     required: _l("admin.rentals.name_required"),
                 },
@@ -99,7 +105,11 @@
                             table.ajax.reload();
                         }
                         $("#add_type .submitbtn").text(
-                            `${$("#id").val() ? _l("admin.common.save_changes") : _l("admin.common.create_new")}`
+                            `${
+                                $("#id").val()
+                                    ? _l("admin.common.save_changes")
+                                    : _l("admin.common.create_new")
+                            }`
                         );
                         $("#add_type .submitbtn").prop("disabled", false);
                     },
@@ -107,7 +117,11 @@
                         $(".error-text").text("");
                         $(".form-control").removeClass("is-invalid is-valid");
                         $("#add_type .submitbtn").text(
-                            `${$("#id").val() ? _l("admin.common.save_changes") : _l("admin.common.create_new")}`
+                            `${
+                                $("#id").val()
+                                    ? _l("admin.common.save_changes")
+                                    : _l("admin.common.create_new")
+                            }`
                         );
                         $("#add_type .submitbtn").prop("disabled", false);
                         if (error.responseJSON.code === 422) {
@@ -171,6 +185,7 @@
         $(document).on("click", "#add_new_type", function () {
             $("#add_type .modal-title").text(_l("admin.rentals.create_type"));
             $("#add_type .submitbtn").text(_l("admin.common.create_new"));
+            $("#add_type #vehicle_category_id").val("").trigger("change");
             $("#status_div")
                 .addClass("d-none")
                 .parent()
@@ -484,6 +499,9 @@
                 if (response.code === 200) {
                     let data = response.data;
                     $("#add_type #name").val(data.name);
+                    $("#add_type #vehicle_category_id")
+                        .val(data.category_id)
+                        .trigger("change");
                     $("#add_type #id").val(data.id);
                     $("#add_type #language_id").val(data.language_id);
                     if (data.status === 1) {

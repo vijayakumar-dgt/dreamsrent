@@ -136,6 +136,18 @@
 										<div class="row">
 											<div class="col-lg-4 col-md-6">
 												<div class="mb-3">
+													<label class="form-label">{{ __('admin.rentals.category') }} <span class="text-danger">*</span></label>
+													<select name="vehicle_category_id" class="form-control select" id="vehicle_category_id">
+														<option value="">{{ __('admin.rentals.select') }}</option>
+														@foreach($Category as $CategoryValues)
+														<option value="{{ $CategoryValues->id }}">{{ ucwords(strtolower($CategoryValues->name)) }}</option>
+														@endforeach
+													</select>
+													<span class="invalid-feedback" id="vehicle_category_id_error"></span>
+												</div>
+											</div>
+											<div class="col-lg-4 col-md-6">
+												<div class="mb-3">
 													<div class="d-flex align-items-center justify-content-between">
 														<label class="form-label">{{ __('admin.rentals.vehicle_type') }} <span class="text-danger">*</span></label>
 													</div>
@@ -171,18 +183,6 @@
 														<option value="">{{ __('admin.rentals.select_model') }}</option>
 													</select>
 													<span class="invalid-feedback" id="vehicle_model_id_error"></span>
-												</div>
-											</div>
-											<div class="col-lg-4 col-md-6">
-												<div class="mb-3">
-													<label class="form-label">{{ __('admin.rentals.category') }} <span class="text-danger">*</span></label>
-													<select name="vehicle_category_id" class="form-control select" id="vehicle_category_id">
-														<option value="">{{ __('admin.rentals.select') }}</option>
-														@foreach($Category as $CategoryValues)
-														<option value="{{ $CategoryValues->id }}">{{ ucwords(strtolower($CategoryValues->name)) }}</option>
-														@endforeach
-													</select>
-													<span class="invalid-feedback" id="vehicle_category_id_error"></span>
 												</div>
 											</div>
 											<div class="col-lg-4 col-md-6">

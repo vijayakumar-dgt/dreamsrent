@@ -165,7 +165,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::get('enquiry/list', [EnquireController::class, 'list'])->name('enquiry.list');
         Route::post('enquiry/delete', [EnquireController::class, 'delete'])->name('enquiry.delete');
 
-        // Door Types
+        // Vehicle
         Route::get('vehiclelist', [CarInfoController::class, 'vehiclelist'])->name('vehicle.list')->middleware('permission');
         Route::get('getvehiclelist', [CarInfoController::class, 'getvehiclelist'])->name('getvehiclelist');
         Route::get('vehicleadd', [CarInfoController::class, 'vehicleadd'])->name('vehicle.vehicleadd')->middleware('permission');

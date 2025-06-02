@@ -937,6 +937,7 @@ return array(
     'select_state' => 'Select State',
     'select_city' => 'Select City',
     'name_required' => 'Please enter name',
+    'category_required' => 'Please select a category',
     'select_working_days' => 'Please select at least one working day',
     'create_driver' => 'Create Driver',
     'edit_driver' => 'Edit Driver',
@@ -1548,6 +1549,8 @@ return array(
     'vehicle_delete_success' => 'Vehicle deleted successfully.',
     'popular_status_update_success' => 'Popular status updated successfully.',
     'recommended_status_update_success' => 'Recommended status updated successfully.',
+    'vehicle_update_success' => 'Vehicle updated successfully.',
+    'vehicle_create_success' => 'Vehicle created successfully.',
   ),
   'user_management' =>
   array(

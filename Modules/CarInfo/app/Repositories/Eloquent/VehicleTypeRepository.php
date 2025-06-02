@@ -50,9 +50,9 @@ class VehicleTypeRepository implements VehicleTypeRepositoryInterface
                     'message' => __('admin.common.not_found')
                 ];
             }
-
             $data = [
                 'name'   => $request->name,
+                'category_id'   => $request->vehicle_category_id,
                 'language_id'  => $request->language_id ?? ($vehicleType->language_id ?? $language_id),
                 'status'       => $id ? ($request->input('status') == 'on' ? 1 : 0) : 1,
             ];
