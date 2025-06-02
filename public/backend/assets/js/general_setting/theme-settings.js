@@ -27,6 +27,8 @@
                             $("#theme_01").prop("checked", true);
                         } else if (setting.value == 2) {
                             $("#theme_02").prop("checked", true);
+                        } else if(setting.value == 3) {
+                            $("#theme_03").prop("checked", true);
                         }
                     });
                 }
@@ -45,10 +47,18 @@
     function initThemeEventHandlers() {
         $(document).on("click", ".default_theme, .theme-img", function () {
             const themeId = $(this).data("id");
+            let theme_val = 0;
             $(`#${themeId}`).prop("checked", true);
-
-            const theme_val = themeId === "theme_01" ? 1 : 2;
-
+            if(themeId === "theme_01") {
+                theme_val = 1;
+            }else if(themeId === "theme_02") {
+                theme_val = 2;
+            }else if(themeId === "theme_03") {
+                theme_val = 3;
+            }
+            if(theme_val === 0) {
+                return;
+            }
             const formData = new FormData();
             formData.append("group_id", 16);
             formData.append("default_theme", theme_val);
