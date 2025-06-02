@@ -19,7 +19,6 @@ class BlogPostRequest extends FormRequest
             'category_id' => 'required|integer',
             'tag_id' => 'required|array',
             'description' => 'nullable|string',
-            'status' => 'nullable|boolean',
         ];
 
         if ($this->isMethod('post')) {

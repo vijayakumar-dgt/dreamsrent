@@ -13,11 +13,19 @@ class BlogTagRequest extends FormRequest
 
     public function rules(): array
     {
-        $id = $this->route('id');
         return [
-            'name' => 'required|string|max:255|unique:blog_tags,name,' . $id,
-            'language_id' => 'required|integer',
-            'status' => 'nullable|boolean',
+            'name' => 'required|string|max:255|unique:blog_tags,name',
+            'language_id' => 'required',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => __('admin.manage.name_required'),
+            'name.max' => __('admin.manage.name_maxlength'),
+            'name.min' => __('admin.manage.name_minlength'),
+            'name.unique' => __('admin.manage.name_unique'),
         ];
     }
 }
