@@ -1,6 +1,13 @@
 @php 
-   $section_content = $section['section_content'];
-//    dd($section_content);
+    $section_content = $section['section_content'];
+    $titleRaw = $section['section_title'];
+    $titleWords = explode(' ', $titleRaw);
+    $wordCount = count($titleWords);
+
+    $lastPartCount = min(2, $wordCount);
+
+    $titleMain = implode(' ', array_slice($titleWords, 0, -$lastPartCount));
+    $titleLastPart = implode(' ', array_slice($titleWords, -$lastPartCount));
 @endphp
 <!-- Banner -->
 <section class="banner-section banner-slider">		
@@ -8,7 +15,7 @@
         <div class="home-banner">		
             <div class="row align-items-center">					    
                 <div class="col-lg-7" data-aos="fade-down">
-                    <h1>Make your Ride Easy with <span>Dreams rent </span></h1>
+                    <h1>{{ $titleMain ?? "" }} <span>{{ $titleLastPart ?? "" }} </span></h1>
                     <h4>{{ optional($section_content[0])->description }}</h4>
                     <div class="banner-search">
                         <form action="listing-grid.html" class="form-block d-flex align-items-center">
