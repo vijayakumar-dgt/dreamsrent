@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\MenuManagement\Providers;
+namespace Modules\Page\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Modules\MenuManagement\Repositories\Contracts\MenuManagementInterface;
-use Modules\MenuManagement\Repositories\Eloquent\MenuManagementRepository;
+use Modules\Page\Repositories\Contracts\SectionInterface;
+use Modules\Page\Repositories\Eloquent\SectionRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -20,6 +20,6 @@ class RepositoryServiceProvider extends ServiceProvider
 
     protected function registerBindings(): void
     {
-        $this->app->bind(MenuManagementInterface::class, MenuManagementRepository::class);
+        $this->app->bind(SectionInterface::class, SectionRepository::class);
     }
 }

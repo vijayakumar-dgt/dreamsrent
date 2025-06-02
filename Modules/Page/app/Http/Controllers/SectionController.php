@@ -4,25 +4,32 @@ namespace Modules\Page\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Modules\CarInfo\Models\VehicleInfo;
-use Modules\Page\Models\Section;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Modules\CarInfo\Models\VehicleInfo;
+use Modules\Page\Models\Section;
+use Modules\Page\Http\Requests\AddSectionRequest;
+use Modules\Page\Http\Requests\UpdateSectionRequest;
+use Modules\Page\Repositories\Contracts\SectionInterface;
 use Modules\Page\Models\Page;
 
 class SectionController extends Controller
 {
+    protected $sectionRepository;
+
+    public function __construct(SectionInterface $sectionRepository)
+    {
+        $this->sectionRepository = $sectionRepository;
+    }
+
     public function index(Request $request): JsonResponse
     {
         $orderBy = $request->input('order_by', 'asc');
         $sortBy = $request->input('sort_by', 'id');
+        $themeId = $request->theme_id;
 
-        $sections = Section::orderBy($sortBy, $orderBy)
-            ->where("theme_id", $request->theme_id)
-            ->where("status", 1)
-            ->get();
+        $sections = $this->sectionRepository->getAllSections($orderBy, $sortBy, $themeId);
 
         $data = [];
         $baseUrl = asset('storage/uploads');
@@ -63,7 +70,7 @@ class SectionController extends Controller
         $orderBy = $request->input('order_by', 'asc');
         $sortBy = $request->input('sort_by', 'id');
 
-        $authuser = auth()->user();
+        $authuser = Auth::user();
 
         if (!$authuser) {
             return response()->json([
@@ -72,31 +79,23 @@ class SectionController extends Controller
             ], 401);
         }
 
-        $language_id = $authuser->language_id ?? null;
+        $languageId = $authuser->language_id ?? null;
 
-        if (!$language_id) {
+        if (!$languageId) {
             return response()->json([
                 'code' => 400,
                 'message' => __('Language ID not found for the user.'),
             ], 400);
         }
 
-        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three'];
-
-        $sections = Section::orderBy($sortBy, $orderBy)
-            ->where('status', 1)
-            ->whereIn('name', $allowedNames)
-            ->get();
+        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle'];
+        $sections = $this->sectionRepository->getFilteredSections($orderBy, $sortBy, $allowedNames);
 
         $data = [];
         $baseUrl = asset('storage');
 
         foreach ($sections as $section) {
-            $sectionData = DB::table('section_datas')
-                ->where('section_id', $section->id)
-                ->where('language_id', $language_id)
-                ->value('datas');
-
+            $sectionData = $this->sectionRepository->getSectionData($section->id, $languageId);
             $decodedDatas = $sectionData ? json_decode($sectionData, true) : [];
 
             if (!empty($decodedDatas['thumbnail_image_one'])) {
@@ -126,15 +125,12 @@ class SectionController extends Controller
     public function indexSection(): View
     {
         $vehicles = VehicleInfo::select("id", "name")->get();
-
         return view('page::section.index', compact("vehicles"));
     }
 
-
-    public function store(Request $request): JsonResponse
+    public function store(AddSectionRequest $request): JsonResponse
     {
-
-        $authuser = auth()->user();
+        $authuser = Auth::user();
         if (!$authuser) {
             return response()->json([
                 'code' => 401,
@@ -142,72 +138,80 @@ class SectionController extends Controller
             ], 401);
         }
 
-        $language_id = $authuser->language_id;
-        $rules = [];
+        $languageId = $authuser->language_id;
+        $sectionId = $request->section_id;
 
-        if ($request->section_id == 1) {
-            $rules['section_title_one'] = 'required';
-            $rules['description_one'] = 'required';
-            $rules['label_one'] = 'required';
-            $rules['line_one'] = 'required';
-            $rules['line_two'] = 'required';
-        } elseif ($request->section_id == 29) {
-            $rules['description_two'] = 'required';
-            $rules['label_two'] = 'required';
-        } elseif ($request->section_id == 43) {
-            $rules['section_title_five'] = 'required';
-            $rules['description_three'] = 'required';
-            $rules['label_three'] = 'required';
-        } elseif ($request->section_id == 42) {
-            $rules['vehicle_id'] = 'required';
-            $rules['label_1'] = 'required|max:50';
-            $rules['dis_1'] = 'required|max:100';
-            $rules['label_2'] = 'required|max:50';
-            $rules['dis_2'] = 'required|max:100';
-            $rules['label_3'] = 'required|max:50';
-            $rules['dis_3'] = 'required|max:100';
-            $rules['label_4'] = 'required|max:50';
-            $rules['dis_4'] = 'required|max:100';
-            $rules['label_5'] = 'required|max:50';
-            $rules['dis_5'] = 'required|max:100';
-            $rules['label_6'] = 'required|max:50';
-            $rules['dis_6'] = 'required|max:100';
-        } elseif ($request->section_id == 26) {
-            $rules['why_label_1'] = 'required|max:50';
-            $rules['why_dis_1']   = 'required|max:200';
-            $rules['why_label_2'] = 'required|max:50';
-            $rules['why_dis_2']   = 'required|max:200';
-            $rules['why_label_3'] = 'required|max:50';
-            $rules['why_dis_3']   = 'required|max:200';
-        } else {
-            return response()->json(['message' => 'Invalid section ID'], 400);
-        }
-
-        $messages = [
-            'how_it_work.required' => __('The how it work field is required.'),
-        ];
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $data = [];
-
-        $id = $request->section_id;
-
-        $existingData = DB::table('section_datas')
-            ->where('section_id', $id)
-            ->where('language_id', $language_id)
-            ->value('datas');
-
+        $existingData = $this->sectionRepository->getSectionData($sectionId, $languageId);
         $existingData = $existingData ? json_decode($existingData, true) : [];
 
-        // Process section data based on section_id
-        if ($request->section_id == 1) {
-            $thumbnailPath = $existingData['thumbnail_image_one'] ?? null;
+        $data = $this->processSectionData($request, $existingData);
 
-            if ($request->hasFile('thumbnail_image_one') && $request->file('thumbnail_image_one') instanceof \Illuminate\Http\UploadedFile) {
+        // Update section title if provided
+        $this->updateSectionTitle($request, $sectionId);
+
+        try {
+            $this->sectionRepository->updateOrCreateSectionData($sectionId, $languageId, $data);
+            return response()->json(['code' => 200, 'message' => __('admin.cms.section_update_success')], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => __('admin.common.default_update_error'), 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function update(UpdateSectionRequest $request): JsonResponse
+    {
+        $authuser = Auth::user();
+        if (!$authuser) {
+            return response()->json([
+                'code' => 401,
+                'message' => __('Unauthorized. User not found.'),
+            ], 401);
+        }
+
+        $languageId = $authuser->language_id;
+        $sectionId = $request->section_id;
+
+        $existingData = $this->sectionRepository->getSectionData($sectionId, $languageId);
+        $existingData = $existingData ? json_decode($existingData, true) : [];
+
+        $data = $this->processSectionData($request, $existingData);
+
+        // Update section title if provided
+        $this->updateSectionTitle($request, $sectionId);
+
+        try {
+            $this->sectionRepository->updateOrCreateSectionData($sectionId, $languageId, $data);
+            return response()->json(['code' => 200, 'message' => __('admin.cms.section_update_success')], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => __('admin.common.default_update_error'), 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function delete(Request $request): JsonResponse
+    {
+        try {
+            $this->sectionRepository->deletePage($request->id);
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Page deleted successfully.'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'code' => 500,
+                'message' => 'An error occurred while deleting page!'
+            ], 500);
+        }
+    }
+
+    protected function processSectionData($request, $existingData)
+    {
+        $data = [];
+        $sectionId = $request->section_id;
+
+        if ($sectionId == 1) {
+            $thumbnailPath = $existingData['thumbnail_image_one'] ?? null;
+            if ($request->hasFile('thumbnail_image_one')) {
                 $thumbnailPath = uploadFile($request->file('thumbnail_image_one'), 'general');
             }
 
@@ -218,10 +222,9 @@ class SectionController extends Controller
                 'description_one' => $request->description_one,
                 'thumbnail_image_one' => $thumbnailPath,
             ];
-        } elseif ($request->section_id == 29) {
+        } elseif ($sectionId == 29) {
             $thumbnailPath = $existingData['thumbnail_image_two'] ?? null;
-
-            if ($request->hasFile('thumbnail_image_two') && $request->file('thumbnail_image_two') instanceof \Illuminate\Http\UploadedFile) {
+            if ($request->hasFile('thumbnail_image_two')) {
                 $thumbnailPath = uploadFile($request->file('thumbnail_image_two'), 'general');
             }
 
@@ -230,20 +233,7 @@ class SectionController extends Controller
                 'description_two' => $request->description_two,
                 'thumbnail_image_two' => $thumbnailPath,
             ];
-        } elseif ($request->section_id == 43) {
-            $thumbnailPath = $existingData['thumbnail_image_four'] ?? null;
-
-            if ($request->hasFile('thumbnail_image_four') && $request->file('thumbnail_image_four') instanceof \Illuminate\Http\UploadedFile) {
-                $thumbnailPath = uploadFile($request->file('thumbnail_image_four'), 'general');
-            }
-
-            $data = [
-                'section_title_five' => $request->section_title_five,
-                'label_three' => $request->label_three,
-                'description_three' => $request->description_three,
-                'thumbnail_image_four' => $thumbnailPath,
-            ];
-        } elseif ($request->section_id == 42) {
+        } elseif ($sectionId == 42) {
             $data = [
                 'vehicle_id' => $request->vehicle_id,
                 'label_1' => $request->label_1,
@@ -259,131 +249,42 @@ class SectionController extends Controller
                 'label_6' => $request->label_6,
                 'dis_6' => $request->dis_6,
             ];
-        } elseif ($request->section_id == 26) {
-            $thumbnail1 = $thumbnail2 = $thumbnail3 = null;
-
-            if ($request->hasFile('why_icon_1') && $request->file('why_icon_1')->isValid()) {
-                $thumbnail1 = uploadFile($request->file('why_icon_1'), 'general');
-            }
-
-            if ($request->hasFile('why_icon_2') && $request->file('why_icon_2')->isValid()) {
-                $thumbnail2 = uploadFile($request->file('why_icon_2'), 'general');
-            }
-
-            if ($request->hasFile('why_icon_3') && $request->file('why_icon_3')->isValid()) {
-                $thumbnail3 = uploadFile($request->file('why_icon_3'), 'general');
-            }
-
+        } elseif ($sectionId == 26) {
             $data = [
                 'why_label_1' => $request->why_label_1,
-                'why_dis_1'   => $request->why_dis_1,
-                'why_icon_1'  => $thumbnail1 ?? ($existingData['why_icon_1'] ?? null),
-
+                'why_dis_1' => $request->why_dis_1,
+                'why_icon_1' => $this->processIcon($request, 'why_icon_1', $existingData['why_icon_1'] ?? null),
                 'why_label_2' => $request->why_label_2,
-                'why_dis_2'   => $request->why_dis_2,
-                'why_icon_2'  => $thumbnail2 ?? ($existingData['why_icon_2'] ?? null),
-
+                'why_dis_2' => $request->why_dis_2,
+                'why_icon_2' => $this->processIcon($request, 'why_icon_2', $existingData['why_icon_2'] ?? null),
                 'why_label_3' => $request->why_label_3,
-                'why_dis_3'   => $request->why_dis_3,
-                'why_icon_3'  => $thumbnail3 ?? ($existingData['why_icon_3'] ?? null),
+                'why_dis_3' => $request->why_dis_3,
+                'why_icon_3' => $this->processIcon($request, 'why_icon_3', $existingData['why_icon_3'] ?? null),
             ];
         }
 
-        if ($request->section_id == 1 && $request->has('section_title_one')) {
-            $section = Section::find($request->section_id);
-
-            if ($section) {
-                $section->title = $request->section_title_one;
-                $section->save();
-            } else {
-                return response()->json(['error' => 'Section not found.'], 404);
-            }
-        }
-
-        if ($request->section_id == 29 && $request->has('section_title_two')) {
-            $section = Section::find($request->section_id);
-
-            if ($section) {
-                $section->title = $request->section_title_two;
-                $section->save();
-            } else {
-                return response()->json(['error' => 'Section not found.'], 404);
-            }
-        }
-
-        if ($request->section_id == 43 && $request->has('section_title_five')) {
-            $section = Section::find($request->section_id);
-
-            if ($section) {
-                $section->title = $request->section_title_five;
-                $section->save();
-            } else {
-                return response()->json(['error' => 'Section not found.'], 404);
-            }
-        }
-
-        if ($request->section_id == 42 && $request->has('section_title_three')) {
-            $section = Section::find($request->section_id);
-
-            if ($section) {
-                $section->title = $request->section_title_three;
-                $section->save();
-            } else {
-                return response()->json(['error' => 'Section not found.'], 404);
-            }
-        }
-
-        if ($request->section_id == 26 && $request->has('section_title_four')) {
-            $section = Section::find($request->section_id);
-
-            if ($section) {
-                $section->title = $request->section_title_four;
-                $section->save();
-            } else {
-                return response()->json(['error' => 'Section not found.'], 404);
-            }
-        }
-
-        try {
-            // Try update first
-            $updated = DB::table('section_datas')
-                ->where('section_id', $id)
-                ->where('language_id', $language_id)
-                ->update(['datas' => json_encode($data)]);
-
-            // If not updated, insert
-            if ($updated === 0) {
-                DB::table('section_datas')->insert([
-                    'section_id' => $id,
-                    'language_id' => $language_id,
-                    'datas' => json_encode($data),
-                ]);
-            }
-
-            return response()->json(['code' => 200, 'message' => __('admin.cms.section_update_success')], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => __('admin.common.default_update_error'), 'error' => $e->getMessage()], 500);
-        }
+        return $data;
     }
 
-    public function delete(Request $request): JsonResponse
+    protected function processIcon($request, $fieldName, $existingValue)
     {
-        try {
-            $id = $request->id;
+        if ($request->hasFile($fieldName)) {
+            return uploadFile($request->file($fieldName), 'general');
+        }
+        return $existingValue;
+    }
 
-            Page::where('id', $id)->delete();
+    protected function updateSectionTitle($request, $sectionId)
+    {
+        $titleFieldMap = [
+            1 => 'section_title_one',
+            29 => 'section_title_two',
+            42 => 'section_title_three',
+            26 => 'section_title_four',
+        ];
 
-            return response()->json([
-                'status' => 'success',
-                'code'   => 200,
-                'message' => 'Page deleted successfully.'
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'code'   => 500,
-                'message' => 'An error occured while deleting page!'
-            ], 500);
+        if (isset($titleFieldMap[$sectionId]) && $request->has($titleFieldMap[$sectionId])) {
+            $this->sectionRepository->updateSectionTitle($sectionId, $request->{$titleFieldMap[$sectionId]});
         }
     }
 }
