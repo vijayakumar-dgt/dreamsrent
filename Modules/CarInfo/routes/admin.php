@@ -183,6 +183,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::get('get-damage-info', [CarInfoController::class, 'damage'])->name('damage');
         Route::get('get-insurance-info', [CarInfoController::class, 'insurance'])->name('insurance');
         Route::get('get-model', [CarInfoController::class, 'getModel']);
+        Route::get('get-type-brand', [CarInfoController::class, 'getTypeAndModel']);
         Route::post('vehicle/image/delete', [CarInfoController::class, 'deleteVehicleImage']);
         Route::post('vehicle/policy/delete', [CarInfoController::class, 'deleteVehiclePolicy']);
         Route::post('vehicle-list', [CarInfoController::class, 'vehicleListApi']);

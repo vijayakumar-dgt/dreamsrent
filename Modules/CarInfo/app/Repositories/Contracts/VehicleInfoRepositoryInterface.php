@@ -20,6 +20,7 @@ interface VehicleInfoRepositoryInterface
     public function deleteVehicleImage(Request $request);
     public function vehicleDetailsList(Request $request);
     public function getModel(?int $brandId);
+    public function getTypeAndModel(?int $categoryId);
     public function insurance(?int $vehicleId);
     public function damage(?int $vehicleId);
     public function faq(?int $vehicleId);
