@@ -2,11 +2,14 @@
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\AdminUserRepositoryInterface;
 use App\Repositories\Contracts\CityInterface;
 use App\Repositories\Contracts\CountryInterface;
 use App\Repositories\Contracts\HomeRepositoryInterface;
 use App\Repositories\Contracts\DashboardRepositoryInterface;
 use App\Repositories\Contracts\BlogRepositoryInterface;
+use App\Repositories\Contracts\CalendarRepositoryInterface;
+use App\Repositories\Contracts\CustomerRepositoryInterface;
 use App\Repositories\Contracts\InvoiceRepositoryInterface;
 use App\Repositories\Contracts\MessageRepositoryInterface;
 use App\Repositories\Contracts\PaymentInterface;
@@ -20,12 +23,15 @@ use App\Repositories\Eloquent\InvoiceRepository;
 use App\Repositories\Contracts\NewsLetterRepositoryInterface;
 use App\Repositories\Contracts\ReviewRepositoryInterface;
 use App\Repositories\Contracts\UserLoginRegisterInterface;
+use App\Repositories\Eloquent\AdminUserRepository;
 use App\Repositories\Eloquent\NewsLetterRepository;
 use App\Repositories\Eloquent\PaymentRepository;
 use App\Repositories\Eloquent\ReviewRepository;
 use App\Repositories\Eloquent\StateRepository;
 use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\Eloquent\BlogRepository;
+use App\Repositories\Eloquent\CalendarRepository;
+use App\Repositories\Eloquent\CustomerRepository;
 use App\Repositories\Eloquent\MessageRepository;
 use App\Repositories\Eloquent\UserLoginRegisterRepository;
 use Illuminate\Support\ServiceProvider;
@@ -55,5 +61,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(StateInterface::class, StateRepository::class);
         $this->app->bind(CityInterface::class, CityRepository::class);
         $this->app->bind(PaymentInterface::class, PaymentRepository::class);
+        $this->app->bind(CustomerRepositoryInterface::class, CustomerRepository::class);
+        $this->app->bind(AdminUserRepositoryInterface::class, AdminUserRepository::class);
+        $this->app->bind(CalendarRepositoryInterface::class, CalendarRepository::class);
     }
 }
