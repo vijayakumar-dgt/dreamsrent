@@ -72,79 +72,60 @@
 	</div>
 	<!-- /Page Wrapper -->
 
-	<!-- Add Seat -->
-	<div class="modal fade addmodal" id="state_modal">
-		<div class="modal-dialog modal-dialog-centered modal-md">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="mb-0 modal-title">{{ __('admin.cms.create_state') }}</h4>
-					<button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-						<i class="ti ti-x fs-16"></i>
+	<!-- Add/Edit State Modal -->
+	<x-admin.modal className="addmodal" id="state_modal" :title="__('admin.cms.create_state')" formId="stateForm"
+		dialogClass="modal-dialog-centered modal-md">
+		<x-slot name="body">
+			@csrf
+			<input type="hidden" name="id" id="id">
+
+			<div class="mb-3">
+				<label class="form-label">{{ __('admin.common.state') }}<span class="text-danger"> *</span></label>
+				<input type="text" class="form-control" name="name" id="name" maxlength="50">
+				<span id="name_error" class="text-danger error-text"></span>
+			</div>
+
+			<div class="mb-3">
+				<label class="form-label">{{ __('admin.common.country') }}<span class="text-danger"> *</span></label>
+				<select class="form-control select2" name="country_id" id="country_id">
+					<option value="">{{ __('admin.common.select') }}</option>
+					@foreach ($country_ids as $country)
+						<option value="{{ $country->id }}">{{ $country->name }}</option>
+					@endforeach
+				</select>
+				<span id="country_id_error" class="text-danger error-text"></span>
+			</div>
+		</x-slot>
+
+		<x-slot name="footer">
+			<div class="d-flex justify-content-between align-items-center w-100">
+				<div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
+					<label for="status" class="form-check-label form-label mt-0 mb-0">
+						<input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch">
+						{{ __('admin.common.status') }}
+					</label>
+				</div>
+				<div class="d-flex justify-content-center">
+					<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">
+						{{ __('admin.common.cancel') }}
+					</a>
+					<button type="submit" class="btn btn-primary submitbtn">
+						{{ __('admin.common.create_new') }}
 					</button>
 				</div>
-				<form id="stateForm">
-					@csrf
-					<input type="hidden" name="id" id="id">
-					<div class="modal-body">
-						<div class="mb-3">
-							<label class="form-label">{{ __('admin.common.state') }}<span class="text-danger"> *</span></label>
-							<input type="text" class="form-control" name="name" id="name" maxlength="50">
-							<span id="name_error" class="text-danger error-text"></span>
-						</div>
-						<div class="mb-3">
-							<label class="form-label">{{ __('admin.common.country') }}<span class="text-danger"> *</span></label>
-							<select class="form-control select2" name="country_id" id="country_id">
-								<option value="">{{ __('admin.common.select') }}</option>
-								@foreach ($country_ids as $country)
-									<option value="{{ $country->id }}">{{ $country->name }}</option>
-								@endforeach
-							</select>
-							<span id="country_id_error" class="text-danger error-text"></span>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<div class="d-flex justify-content-between align-items-center w-100">
-							<div class="form-check form-check-md form-switch me-2 d-none" id="statusDiv">
-								<label for="status" class="form-check-label form-label mt-0 mb-0">
-									<input class="form-check-input form-label me-2 status" id="status" type="checkbox" role="switch" checked>
-									{{ __('admin.common.status') }}
-								</label>
-							</div>
-							<div class="d-flex justify-content-center">
-								<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-								<button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
-							</div>
-						</div>
-					</div>
-				</form>
 			</div>
-		</div>
-	</div>
-	<!-- /Add Seat -->
+		</x-slot>
+	</x-admin.modal>
+	<!-- /Add/Edit State Modal -->
+	 
+	<!-- Delete State Modal -->
+	<x-admin.delete-modal className="deletemodal" id="delete-modal" action="" formId="delateState"
+		:hiddenInputs="['delete_id' => '']" 
+		:title="__('admin.cms.delete_state')" 
+		:description="__('admin.cms.state_delete_confirmation')">
+	</x-admin.delete-modal>
+	<!-- /Delete State Modal -->
 
-	<!-- Delete Seat -->
-	<div class="modal fade deletemodal" id="delete-modal">
-		<div class="modal-dialog modal-dialog-centered modal-sm">
-			<div class="modal-content">
-				<form id="delateState">
-					@csrf
-					<input type="hidden" name="delete_id" id="delete_id">
-					<div class="modal-body text-center">
-						<span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-							<i class="ti ti-trash-x fs-26"></i>
-						</span>
-						<h4 class="mb-1">{{ __('admin.cms.delete_state') }}</h4>
-						<p class="mb-3">{{ __('admin.cms.state_delete_confirmation') }}</p>
-						<div class="d-flex justify-content-center">
-							<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-							<button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</a>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	<!-- /Delete Seat -->
 @endsection
 
 @push('scripts')
