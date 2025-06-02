@@ -327,7 +327,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             if ($request->hasFile('vehicle_image')) {
                 $file = $request->file('vehicle_image');
                 if ($file && $file->isValid()) {
-                    $vehicleImagePath = uploadFile($file, 'vehicles/images');
+                    $vehicleImagePath = $this->imageResizer->uploadFile($file, 'vehicles/images');
                 }
             }
 
@@ -379,7 +379,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 $imagePaths = [];
                 if (is_array($images)) {
                     foreach ($images as $image) {
-                        $fileName = uploadFile($image, 'vehicles/images');
+                        $fileName = $this->imageResizer->uploadFile($image, 'vehicles/images');
                         $imagePaths[] = $fileName;
                     }
                 }
@@ -732,7 +732,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 $imagePaths = [];
                 if (is_array($images)) {
                     foreach ($images as $image) {
-                        $fileName = uploadFile($image, 'vehicles/images');
+                        $fileName =  $this->imageResizer->uploadFile($image, 'vehicles/images');
                         $imagePaths[] = $fileName;
                     }
                 }
@@ -785,6 +785,38 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                         'vehicle_id' => $update->id,
                         'key'        => 'vehicle_policy',
                         'value'      => json_encode($policyDocPaths),
+                    ]);
+                }
+            }
+
+            if ($request->hasFile('car_document')) {
+                /** @var UploadedFile[]|UploadedFile|null $vehicleDocs */
+                $vehicleDocs = $request->file('car_document');
+                $vehicleDocsPaths = [];
+                if (is_array($vehicleDocs)) {
+                    foreach ($vehicleDocs as $doc) {
+                        $fileName = uploadFile($doc, 'vehicles/document');
+                        $vehicleDocsPaths[] = $fileName;
+                    }
+                }
+
+                // Retrieve existing policy documents
+                $vehicleMeta = VehicleMeta::where('vehicle_id', $update->id)
+                    ->where('key', 'vehicle_doc')
+                    ->first();
+
+                if ($vehicleMeta) {
+                    $existingDocs = json_decode($vehicleMeta->value, true) ?? [];
+                    $updatedDocs = array_merge($existingDocs, $vehicleDocsPaths);
+
+                    $vehicleMeta->update([
+                        'value' => json_encode($updatedDocs),
+                    ]);
+                } else {
+                    VehicleMeta::create([
+                        'vehicle_id' => $update->id,
+                        'key'        => 'vehicle_doc',
+                        'value'      => json_encode($vehicleDocsPaths),
                     ]);
                 }
             }
