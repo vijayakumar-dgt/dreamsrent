@@ -407,7 +407,7 @@ class PageController extends Controller
     {
         $defaultThemeValue = GeneralSetting::where('key', 'default_theme')->first();
 
-        $themeId = $defaultThemeValue ? $defaultThemeValue->value : 1;
+        $themeId = $defaultThemeValue ? intval($defaultThemeValue->value) : 1;
 
         $slug = $request->slug;
 
@@ -425,7 +425,6 @@ class PageController extends Controller
             $defaultLang = Language::select("language_id")->where("default", 1)->first();
             $lang_id = $defaultLang->language_id ?? 1;
         }
-
         if (in_array($themeId, [1, 2, 3], true)) {
             if ($slug === null || $slug === '/') {
                 $slug = match ((int)$themeId) {
