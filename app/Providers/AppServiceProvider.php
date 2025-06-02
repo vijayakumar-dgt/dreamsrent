@@ -202,7 +202,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function shareFooter(): void
     {
-        view()->composer(["frontend.theme_1.partials.footer", "frontend.theme_2.footer"], function ($view) {
+        view()->composer(["frontend.theme_1.partials.footer", "frontend.theme_2.partials.footer","frontend.theme_3.partials.footer"], function ($view) {
             $appLanguage = App::getLocale();
             $languageId = getLanguageId($appLanguage);
 
