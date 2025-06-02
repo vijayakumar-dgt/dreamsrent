@@ -3,6 +3,7 @@
 namespace Modules\MenuManagement\Repositories\Eloquent;
 
 use Modules\MenuManagement\Models\Menu;
+use Illuminate\Support\Facades\DB;
 use Modules\MenuManagement\Repositories\Contracts\MenuManagementInterface;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -85,5 +86,27 @@ class MenuManagementRepository implements MenuManagementInterface
     public function exists(array $conditions)
     {
         return $this->model->where($conditions)->exists();
+    }
+
+    public function getPagesByLanguage(int $languageId)
+    {
+        return DB::table('pages')
+            ->select('id', 'page_title', 'slug')
+            ->where('language_id', $languageId)
+            ->get();
+    }
+
+    public function getMenusByLanguage(int $languageId)
+    {
+        return $this->model->where('language_id', $languageId)
+            ->select('id', 'name')
+            ->get();
+    }
+
+    public function updateMenuItems(int $menuId, array $items)
+    {
+        $menu = $this->model->findOrFail($menuId);
+        $menu->update(['menus' => json_encode($items)]);
+        return $menu;
     }
 }

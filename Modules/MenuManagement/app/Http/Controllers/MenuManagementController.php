@@ -5,6 +5,7 @@ namespace Modules\MenuManagement\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Modules\MenuManagement\Http\Requests\MenuManagementUpdateRequest;
 use Modules\MenuManagement\Http\Requests\StoreMenuRequest;
 use Modules\MenuManagement\Models\Menu;
 use Modules\GeneralSetting\Models\Language;
@@ -32,61 +33,39 @@ class MenuManagementController extends Controller
 
     public function menuManagement(): View
     {
-        $langCode = app()->getLocale();  // Fixed: Removed unnecessary null coalescing operator
+        $langCode = app()->getLocale();
         $defaultLanguageId = getLanguageId($langCode);
 
-        // Fetch pages (page title and slug)
-        $pages = DB::table('pages')->select('id', 'page_title', 'slug')->where('language_id', $defaultLanguageId)->get();
-
-        // Fetch menus (menu name and ID)
-        $menus = DB::table('menus')
-        ->where('language_id', $defaultLanguageId)
-        ->select('id', 'name')
-        ->get();
+        $pages = $this->menuRepository->getPagesByLanguage($defaultLanguageId);
+        $menus = $this->menuRepository->getMenusByLanguage($defaultLanguageId);
 
         return view('menumanagement::menu.menumanagement', compact('pages', 'menus'));
     }
 
-    public function menuManagementUpdate(Request $request): JsonResponse
+    public function menuManagementUpdate(MenuManagementUpdateRequest $request): JsonResponse
     {
-        $request->validate([
-            'menu_id' => 'required|exists:menus,id',
-            'menu_items' => 'required|array|min:1',
-        ]);
+        try {
+            $validated = $request->validated();
+            $menu = $this->menuRepository->updateMenuItems(
+                $validated['menu_id'],
+                $request->menu_items
+            );
 
-        foreach ($request->menu_items as $item) {
-            if (empty($item['link'])) {
-                return response()->json([
-                    'code' => 422,
-                    'success' => false,
-                    'message' => 'The link field is required for all menu items.',
-                ], 422);
-            }
-        }
-
-       
-        $menu = Menu::where('id', $request->menu_id)->first();
-
-        if (!$menu) {
             return response()->json([
-                'code' => 404,
+                'code' => 200,
+                'success' => true,
+                'message' => __('admin.cms.menu_update_success'),
+                'menu' => $menu
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'code' => 500,
                 'success' => false,
-                'message' => 'Menu not found',
-            ], 404);
+                'message' => __('admin.common.default_update_error'),
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-        $menu->update([
-            'menus' => json_encode($request->menu_items),
-        ]);
-
-        return response()->json([
-            'code' => 200,
-            'success' => true,
-            'message' => __('admin.cms.menu_update_success'),
-            'menu' => $menu
-        ], 200);
     }
-
 
     public function menuStore(StoreMenuRequest $request): JsonResponse
     {
@@ -94,11 +73,13 @@ class MenuManagementController extends Controller
             $data = $request->validated();
 
             // Check for duplicate header menu
-            if ($data['menu_type'] === 'header' && 
+            if (
+                $data['menu_type'] === 'header' &&
                 $this->menuRepository->exists([
-                    'menu_type' => 'header', 
+                    'menu_type' => 'header',
                     'language_id' => $data['language']
-                ])) {
+                ])
+            ) {
                 return response()->json([
                     'code' => 422,
                     'message' => __('admin.cms.header_menu_exists'),
@@ -185,12 +166,14 @@ class MenuManagementController extends Controller
             $data = $request->validated();
 
             // Prevent duplicate header menus for the same language
-            if ($data['editMenuType'] == 'header' && 
+            if (
+                $data['editMenuType'] == 'header' &&
                 $this->menuRepository->exists([
                     'menu_type' => 'header',
                     'language_id' => $data['language'],
                     ['id', '!=', $data['menu_id']]
-                ])) {
+                ])
+            ) {
                 return response()->json([
                     'code' => 422,
                     'message' => __('admin.cms.header_menu_exists'),

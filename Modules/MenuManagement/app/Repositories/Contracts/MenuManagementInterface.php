@@ -2,6 +2,8 @@
 
 namespace Modules\MenuManagement\Repositories\Contracts;
 
+use Illuminate\Support\Collection;
+
 interface MenuManagementInterface
 {
     public function create(array $data);
@@ -10,4 +12,7 @@ interface MenuManagementInterface
     public function find(int $id);
     public function all(array $filters = []);
     public function exists(array $conditions);
+    public function getPagesByLanguage(int $languageId);
+    public function getMenusByLanguage(int $languageId);
+    public function updateMenuItems(int $menuId, array $items);
 }
