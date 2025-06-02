@@ -11,7 +11,7 @@
                 <nav class="l">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item">
-                            <a href="/admin">{{ __('admin.rentals.home') }}</a>
+                            <a href="{{ route('dashboard') }}">{{ __('admin.rentals.home') }}</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">{{ __('admin.rentals.all_vehicle') }}</li>
                     </ol>
@@ -203,17 +203,17 @@
                                 <input class="form-check-input" type="checkbox" id="select-all">
                             </div>
                         </th>
-                        <th>{{ __('admin.rentals.car') }}</th>
-                        <th>{{ __('admin.rentals.base_location') }}</th>
-                        <th>{{ __('admin.rentals.price') }}</th>
-                        <th>{{ __('admin.rentals.damages') }}</th>
-                        <th>{{ __('admin.rentals.is_featured') }}</th>
-                        <th>{{ __('admin.rentals.is_recommended') }}</th>
-                        <th>{{ __('admin.rentals.created_date') }}</th>
+                        <th>{{ strtoupper(__('admin.common.vehicle')) }}</th>
+                        <th>{{ strtoupper(__('admin.rentals.base_location')) }}</th>
+                        <th>{{ strtoupper(__('admin.rentals.price')) }}</th>
+                        <th>{{ strtoupper(__('admin.rentals.damages')) }}</th>
+                        <th>{{ strtoupper(__('admin.rentals.is_featured')) }}</th>
+                        <th>{{ strtoupper(__('admin.rentals.is_recommended')) }}</th>
+                        <th>{{ strtoupper(__('admin.rentals.created_date')) }}</th>
                         @if (hasPermission($permissions, 'vehicles', 'edit') || hasPermission($permissions, 'vehicles', 'delete'))
-                        <th>{{ __('admin.rentals.status') }}</th>
+                        <th>{{ strtoupper(__('admin.rentals.status')) }}</th>
                         @endif
-                        <th></th>
+                        <th>{{ strtoupper(__('admin.common.action')) }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -223,7 +223,7 @@
                 @include('admin.content-loader')
             </div>
         </div>
-        <div class="table-footer  d-none real-label"></div>
+        <div class="table-footer d-none"></div>
     </div>
     @include('admin.partials.footer')
 </div>

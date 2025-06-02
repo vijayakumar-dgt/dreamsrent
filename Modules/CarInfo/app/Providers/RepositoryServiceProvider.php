@@ -19,6 +19,7 @@ use Modules\CarInfo\Repositories\Contracts\MaintenanceRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\TagRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleColorRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleFuelRepositoryInterface;
+use Modules\CarInfo\Repositories\Contracts\VehicleInfoRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleModelRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleSeatRepositoryInterface;
 use Modules\CarInfo\Repositories\Contracts\VehicleSteeringRepositoryInterface;
@@ -45,6 +46,7 @@ use Modules\CarInfo\Repositories\Eloquent\InspectionRepository;
 use Modules\CarInfo\Repositories\Eloquent\LocationRepository;
 use Modules\CarInfo\Repositories\Eloquent\SafetyFeatureRepository;
 use Modules\CarInfo\Repositories\Eloquent\SeasonRepository;
+use Modules\CarInfo\Repositories\Eloquent\VehicleInfoRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -79,5 +81,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(InspectionRepositoryInterface::class, InspectionRepository::class);
         $this->app->bind(DriverRepositoryInterface::class, DriverRepository::class);
         $this->app->bind(EnquiryRepositoryInterface::class, EnquiryRepository::class);
+        $this->app->bind(VehicleInfoRepositoryInterface::class, VehicleInfoRepository::class);
     }
 }

@@ -44,21 +44,22 @@ use Modules\GeneralSetting\Models\GeneralSetting;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
+use Modules\CarInfo\Repositories\Contracts\VehicleInfoRepositoryInterface;
 
 class CarInfoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected VehicleInfoRepositoryInterface $vehicleInfoRepository;
+
+    public function __construct(VehicleInfoRepositoryInterface $vehicleInfoRepository)
+    {
+        $this->vehicleInfoRepository = $vehicleInfoRepository;
+    }
+
     public function vehiclelist(): View
     {
-        $langID = current_user()->language_id ?? 1;
+        $data = $this->vehicleInfoRepository->index();
 
-        $vechileName = VehicleInfo::orderBy('id', 'desc')->where("language_id", $langID)->get();
-        $vechileType = Cartype::orderBy('id', 'desc')->where("language_id", $langID)->get();
-        $vechileLocation = Location::orderBy('id', 'desc')->where("language_id", $langID)->get();
-
-        return view('carinfo::vehicle.index', compact("vechileName", "vechileType", "vechileLocation"));
+        return view('carinfo::vehicle.index', $data);
     }
 
     public function vehicleadd(): View
@@ -361,7 +362,7 @@ class CarInfoController extends Controller
             if (is_array($images)) {
                 foreach ($images as $image) {
                     $fileName = uploadFile($image, 'vehicles/images');
-                    $imagePaths[] = '/' . $fileName;
+                    $imagePaths[] = $fileName;
                 }
             }
 
@@ -381,8 +382,8 @@ class CarInfoController extends Controller
             $carDocPaths = [];
             if (is_array($carDocs)) {
                 foreach ($carDocs as $doc) {
-                    $fileName = uploadMutipleFile($doc, 'vehicles/document');
-                    $carDocPaths[] = 'vehicles/document/' . $fileName;
+                    $fileName = uploadFile($doc, 'vehicles/document');
+                    $carDocPaths[] = $fileName;
                 }
             }
 
@@ -401,8 +402,8 @@ class CarInfoController extends Controller
             $policyDocPaths = [];
             if (is_array($policyDocs)) {
                 foreach ($policyDocs as $doc) {
-                    $fileName = uploadMutipleFile($doc, 'vehicles/policy');
-                    $policyDocPaths[] = 'vehicles/policy/' . $fileName;
+                    $fileName = uploadFile($doc, 'vehicles/policy');
+                    $policyDocPaths[] = $fileName;
                 }
             }
 
@@ -728,8 +729,8 @@ class CarInfoController extends Controller
             $imagePaths = [];
             if (is_array($images)) {
                 foreach ($images as $image) {
-                    $fileName = uploadMutipleFile($image, 'vehicles/images');
-                    $imagePaths[] = 'vehicles/images/' . $fileName;
+                    $fileName = uploadFile($image, 'vehicles/images');
+                    $imagePaths[] = $fileName;
                 }
             }
 
@@ -759,8 +760,8 @@ class CarInfoController extends Controller
             $policyDocPaths = [];
             if (is_array($policyDocs)) {
                 foreach ($policyDocs as $doc) {
-                    $fileName = uploadMutipleFile($doc, 'vehicles/policy');
-                    $policyDocPaths[] = 'vehicles/policy/' . $fileName;
+                    $fileName = uploadFile($doc, 'vehicles/policy');
+                    $policyDocPaths[] = $fileName;
                 }
             }
 
@@ -1136,7 +1137,6 @@ class CarInfoController extends Controller
         ], 200);
     }
 
-
     public function vehicleLists(Request $request): JsonResponse
     {
         $query = VehicleInfo::with([
@@ -1194,7 +1194,6 @@ class CarInfoController extends Controller
                 $query->whereNotIn('id', $unavailableVehicleIds);
             }
         }
-
 
         if (!empty($request->name)) {
             $query->where('name', 'LIKE', '%' . $request->name . '%');
@@ -1262,7 +1261,6 @@ class CarInfoController extends Controller
                 });
             });
         }
-
 
         $fromPrice = $request->from_price ?? 1;
         $toPrice = $request->to_price ?? null;
@@ -1489,703 +1487,121 @@ class CarInfoController extends Controller
         ], 200);
     }
 
-
-
-
     public function getCarInfo(Request $request): JsonResponse
     {
-        try {
-            $vehicleSlug = $request->get('vehicle_slug');
-
-            // Find vehicle directly instead of checking twice
-            $vehicle = VehicleInfo::where('slug', $vehicleSlug)->first();
-
-            if (!$vehicle) {
-                return response()->json(['exists' => 'no'], 404);
-            }
-
-            return response()->json(['exists' => 'yes']);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'An error occurred: ' . $e->getMessage()
-            ], 500);
-        }
+        $response = $this->vehicleInfoRepository->checkVehicle($request);
+        return response()->json($response, $response['code']);
     }
 
     public function seasonalInfo(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
-
-        if (!$vehicleId) {
-            return response()->json(['success' => false, 'message' => 'Vehicle ID is required'], 400);
-        }
-
-        $vehicleSeasons = VehicleSeason::where("vehicle_id", $vehicleId)->get();
-
-        if ($vehicleSeasons->isEmpty()) {
-            return response()->json(['success' => true, 'message' => 'No info found', 'data' => [],], 200);
-        }
-
-        if ($vehicleSeasons->isEmpty()) {
-            return response()->json([
-                'success' => true,
-                'data' => [],
-                'message' => 'No seasonal data found.'
-            ], 200);
-        }
-
-        return response()->json(['success' => true, 'data' => $vehicleSeasons], 200);
+        $response = $this->vehicleInfoRepository->seasonalInfo($vehicleId);
+        return response()->json($response, $response['code']);
     }
 
     public function tarrifInfo(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
-
-        if (!$vehicleId) {
-            return response()->json(['success' => false, 'message' => 'Vehicle ID is required'], 400);
-        }
-
-        $vehicleTrraifs = VehicleTarrif::where("vehicle_id", $vehicleId)->get();
-
-        if ($vehicleTrraifs->isEmpty()) {
-            return response()->json(['success' => true, 'message' => 'No info found', 'data' => [],], 200);
-        }
-
-        return response()->json(['success' => true, 'data' => $vehicleTrraifs], 200);
+        $response = $this->vehicleInfoRepository->tariffInfo($vehicleId);
+        return response()->json($response, $response['code']);
     }
 
     public function documents(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
-
-        if (!$vehicleId) {
-            return response()->json(['success' => false, 'message' => 'Vehicle ID is required'], 400);
-        }
-
-        $documents = VehicleMeta::where("vehicle_id", $vehicleId)->get();
-
-        if ($documents->isEmpty()) {
-            return response()->json(['success' => true, 'message' => 'No info found', 'data' => [],], 200);
-        }
-
-        // Initialize response structure
-        $response = [
-            'vehicle_images' => [],
-            'vehicle_docs' => [],
-            'vehicle_policies' => [],
-        ];
-
-        foreach ($documents as $document) {
-            // Decode JSON value (since values are stored as JSON arrays)
-            $values = json_decode($document->value, true);
-
-            if (!is_array($values)) {
-                continue;
-            }
-
-            // Categorize based on key
-            switch ($document->key) {
-                case 'vehicle_image':
-                    $formattedImages = array_map(function ($image) {
-                        return asset('storage/' . $image); // Convert to URL format
-                    }, $values);
-
-                    $response['vehicle_images'] = array_merge($response['vehicle_images'], $formattedImages);
-                    break;
-
-                case 'vehicle_doc':
-                    $response['vehicle_docs'] = array_merge($response['vehicle_docs'], $values);
-                    break;
-
-                case 'vehicle_policy':
-                    $response['vehicle_policies'] = array_merge($response['vehicle_policies'], $values);
-                    break;
-            }
-        }
-
-        return response()->json(['success' => true, 'data' => $response], 200);
+        $response = $this->vehicleInfoRepository->documents($vehicleId);
+        return response()->json($response, $response['code']);
     }
 
     public function faq(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
-
-        if (!$vehicleId) {
-            return response()->json(['success' => false, 'message' => 'Vehicle ID is required'], 400);
-        }
-
-        $vehicleFaqs = VehicleFaq::where("vehicle_id", $vehicleId)->get();
-
-        if ($vehicleFaqs->isEmpty()) {
-            return response()->json(['success' => true, 'message' => 'No info found', 'data' => [],], 200);
-        }
-
-        return response()->json(['success' => true, 'data' => $vehicleFaqs], 200);
+        $response = $this->vehicleInfoRepository->faq($vehicleId);
+        return response()->json($response, $response['code']);
     }
 
     public function damage(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
-
-        if (!$vehicleId) {
-            return response()->json(['success' => false, 'message' => 'Vehicle ID is required'], 400);
-        }
-
-        $vehicleDamages = VehicleDamage::where("vehicle_id", $vehicleId)->get();
-
-        if ($vehicleDamages->isEmpty()) {
-            return response()->json(['success' => true, 'message' => 'No info found', 'data' => [],], 200);
-        }
-
-        return response()->json(['success' => true, 'data' => $vehicleDamages], 200);
+        $response = $this->vehicleInfoRepository->damage($vehicleId);
+        return response()->json($response, $response['code']);
     }
 
     public function insurance(Request $request): JsonResponse
     {
         $vehicleId = $request->vehicle_id;
-
-        if (!$vehicleId) {
-            return response()->json(['success' => false, 'message' => 'Vehicle ID is required'], 400);
-        }
-        $vehicleInsurance = VehicleInsurance::where("vehicle_id", $vehicleId)
-            ->with(['insurance', 'insuranceBenefits']) // Load related data
-            ->get();
-
-        if ($vehicleInsurance->isEmpty()) {
-            return response()->json(['success' => true, 'message' => 'No info found', 'data' => [],], 200);
-        }
-
-        /** @var \Illuminate\Database\Eloquent\Collection<int, \Modules\CarInfo\Models\VehicleInsurance> $vehicleInsurance */
-        $insuranceData = $vehicleInsurance->map(function (VehicleInsurance $insurance) {
-            $benefitCount = $insurance->insuranceBenefits->count();
-            $formattedBenefits = str_pad((string)$benefitCount, 2, '0', STR_PAD_LEFT);
-
-            return [
-                'id' => $insurance->id,
-                'vehicle_id' => $insurance->vehicle_id,
-                'insurances_id' => $insurance->insurances_id,
-                'insurance_name' => optional($insurance->insurance)->insurance_name, // Get insurance name
-                'value' => $insurance->value,
-                'price' => $insurance->price,
-                'benefits' => $formattedBenefits, // Count formatted
-                'created_at' => $insurance->created_at,
-                'updated_at' => $insurance->updated_at,
-                'deleted_at' => $insurance->deleted_at,
-            ];
-        });
-
-        return response()->json(['success' => true, 'data' => $insuranceData], 200);
+        $response = $this->vehicleInfoRepository->insurance($vehicleId);
+        return response()->json($response, $response['code']);
     }
 
     public function getModel(Request $request): JsonResponse
     {
-        $models = CarModel::where('brand_id', $request->brand_id)->get(['id', 'model_name']);
-
-        return response()->json($models);
+        $brandId = $request->brand_id;
+        $response = $this->vehicleInfoRepository->getModel($brandId);
+        return response()->json($response, $response['code']);
     }
 
     public function vehicleDetailsList(Request $request): JsonResponse
     {
-        $vehicleSlug = $request->vehicle_slug;
-
-        if (!$vehicleSlug) {
-            return response()->json(['success' => false, 'message' => 'Vehicle ID is required'], 400);
-        }
-
-        $query = VehicleInfo::with([
-            'carType:id,name',
-            'brand:id,brand_name',
-            'category:id,name',
-            'mainLocation:id,name',
-            'color:id,name,value',
-            'fuel_type:id,fuel_type',
-            'transmission:id,name',
-            'extraservices.extraService:id,name,icon,description,image',
-            'faqs:id,vehicle_id,question,answer',
-            'damages:id,Vehicle_id,damage_type,damage_loaction,image,description',
-            'tariffs:id,vehicle_id,tariff_title,tariff_daily_price,tariff_from_days,tariff_to_days,tariff_base_km,tariff_extra_price',
-            'seasonals:id,vehicle_id,seasonal_title,seasonal_start_date,seasonal_end_date,seasonal_daily_rate,seasonal_weekly_rate,seasonal_monthly_rate,seasonal_late_fee',
-            'owner.userDetails:id,user_id,profile_image'
-        ]);
-
-
-        $vehicles = $query->where('slug', $vehicleSlug)->get();
-
-        if ($vehicles->isEmpty()) {
-            return response()->json([
-                'code'  => 404,
-                'success' => false,
-                'message' => 'No vehicle found with the provided slug.',
-                'data' => [],
-            ], 404);
-        }
-
-        $data = [];
-
-        foreach ($vehicles as $vehicle) {
-            $featureIds = json_decode($vehicle->features ?? '', true);
-            $featureNames = SafetyFeature::whereIn('id', $featureIds)->pluck('feature');
-
-            $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
-                ->where('key', 'vehicle_image')
-                ->first();
-            $vehiclepolicys = VehicleMeta::where('vehicle_id', $vehicle->id)
-                ->where('key', 'vehicle_policy')
-                ->first();
-            $vehicleDoc = VehicleMeta::where('vehicle_id', $vehicle->id)
-                ->where('key', 'vehicle_doc')
-                ->first();
-            $filteredPrices = [];
-            $vehiclePrices = json_decode($vehicle->vehicle_price ?? '', true);
-            if (!empty($vehiclePrices)) {
-                foreach ($vehiclePrices as $price) {
-                    foreach ($price as $key => $value) {
-                        if ($value > 0) {
-                            $filteredPrices[] = [$key => $value]; // Store each key-value pair as a separate object
-                        }
-                    }
-                }
-            }
-
-            $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
-            $multiplePolicy = $vehiclepolicys ? json_decode($vehiclepolicys->value, true) : [];
-            $multipleDoc = $vehicleDoc ? json_decode($vehicleDoc->value, true) : [];
-
-            $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
-
-            if (!empty($vehicle->vehicle_image)) {
-                array_unshift($multipleImages, $vehicle->vehicle_image);
-            }
-
-            $multipleImages = array_map(function ($img) {
-                $img = '/' . ltrim($img, '/'); // Ensure single leading slash
-                return url('storage' . $img);
-            }, $multipleImages);
-            $user = null;
-            $wishlist = null;
-            if (Auth::guard('web')->check()) {
-                $user = Auth::guard('web')->user();
-                $wishlist = Wishlist::where('user_id', Auth::id())->where('vehicle_id', $vehicle->id)->first();
-            }
-            $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
-            /** @var \App\Models\User|null $auth */
-            $auth = current_user();
-            $authId = $auth?->id;
-
-            $wishlistExists = false;
-
-            $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
-            $currency = null;
-
-            if ($currencySetting && $currencySetting->value) {
-                $currency = Currency::find($currencySetting->value);
-            }
-            if ($authId) {
-                $wishlistExists = Wishlist::where("user_id", $authId)
-                    ->where("vehicle_id", $vehicle->id)
-                    ->exists();
-            }
-            $faqEnabled = GeneralSetting::where('group_id', 20)->where('key', 'faq')->first()->value;
-            $extraServiceEnabled = GeneralSetting::where('group_id', 20)->where('key', 'extraService')->first()->value;
-            $data = [
-                'id' => $vehicle->id,
-                'name' => $vehicle->name,
-                'slug' => $vehicle->slug,
-                'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
-                'multiple_vehicle_doc' => array_map(fn($doc) => url('storage/' . ($doc)), $multipleDoc),
-                'multiple_vehicle_policy' => array_map(fn($policy) => url('storage/' . ($policy)), $multiplePolicy),
-                'multiple_vehicle_images' => $multipleImages,
-                'has_multiple_image' => count($multipleImages) > 1,
-                'brand' => $vehicle->brand->brand_name ?? null,
-                'car_type' => $vehicle->carType->name ?? null,
-                'category' => $vehicle->category->name ?? null,
-                'location' => $vehicle->mainLocation->name ?? null,
-                'color' => $vehicle->color->name ?? null,
-                'fuel_type' => $vehicle->fuel_type->fuel_type ?? null,
-                'transmission' => $vehicle->transmission->name ?? null,
-                'wishlist' => $wishlistExists,
-                'year' => $vehicle->year,
-                'mileage' => $vehicle->mileage,
-                'vin' => $vehicle->vin,
-                'rating' => $rating,
-                'passenger_capacity' => $vehicle->passenger_capacity,
-                'num_seats' => $vehicle->num_seats,
-                'num_doors' => $vehicle->num_doors,
-                'num_airbags' => $vehicle->num_airbags,
-                'vehicle_video' => $vehicle->vehicle_video,
-                'price' => !empty($filteredPrices) ? $filteredPrices : null,
-                'created_at' => $vehicle->created_at,
-                'features' => $featureNames,
-                'currency' => getDefaultCurrencySymbol(),
-                'seo_title' => $vehicle->vehicle_metatitle,
-                'seo_key' => $vehicle->vehicle_metakeywords,
-                'seo_description' => $vehicle->vehicle_metadesc,
-                'is_featured' => (bool) rand(0, 1),
-                'is_top_rated' => (bool) rand(0, 1),
-                'authenticated' => Auth::guard('web')->check(),
-                'description' => $vehicle->description,
-                'extraservice' => $extraServiceEnabled ? $vehicle->extraservices->map(function (VehicleExtraService $extraservice) {
-                    return [
-                        'extra_service_id' => $extraservice->extra_service_id,
-                        'value' => $extraservice->value,
-                        'price' => $extraservice->price,
-                        'name' => optional($extraservice->extraService)->name,
-                        'icon' => uploadedAsset(optional($extraservice->extraService)->icon), // Convert icon to full URL
-                        'description' => optional($extraservice->extraService)->description,
-                        'image' => url('/storage/' . optional($extraservice->extraService)->image), // Convert image to full URL
-                    ];
-                }) : null,
-                'tariff' => $vehicle->tariffs->map(function (VehicleTarrif $tariff) {
-                    return [
-                        'tariff_title' => $tariff->tariff_title,
-                        'tariff_daily_price' => $tariff->tariff_daily_price,
-                        'tariff_from_days' => $tariff->tariff_from_days,
-                        'tariff_to_days' => $tariff->tariff_to_days,
-                        'tariff_base_km' => $tariff->tariff_base_km,
-                        'tariff_extra_price' => $tariff->tariff_extra_price,
-                    ];
-                }),
-                'seasonal' => $vehicle->seasonals->map(function (VehicleSeason $seasonal) {
-                    return [
-                        'seasonal_title' => $seasonal->seasonal_title,
-                        'seasonal_start_date' => $seasonal->seasonal_start_date,
-                        'seasonal_end_date' => $seasonal->seasonal_end_date,
-                        'seasonal_daily_rate' => $seasonal->seasonal_daily_rate,
-                        'seasonal_weekly_rate' => $seasonal->seasonal_weekly_rate,
-                        'seasonal_monthly_rate' => $seasonal->seasonal_monthly_rate,
-                        'seasonal_late_fee' => $seasonal->seasonal_late_fee,
-                    ];
-                }),
-                'faqs' => $faqEnabled ? $vehicle->faqs->map(function (VehicleFaq $faq) {
-                    return [
-                        'question' => $faq->question,
-                        'answer' => $faq->answer,
-                    ];
-                }) : [],
-                'damages' => $vehicle->damages->map(function (VehicleDamage $damage) {
-                    return [
-                        'damage_type' => $damage->damage_type,
-                        'damage_loaction' => $damage->damage_loaction,
-                        'image' => $damage->image,
-                        'description' => $damage->description,
-                    ];
-                }),
-                'owner_details' => $vehicle->owner ? [
-                    'name' => $vehicle->owner->name,
-                    'phone_number' => $vehicle->owner->mobile_number,
-                    'email' => $vehicle->owner->email,
-                    'image' => $vehicle->owner->userDetails ? url('/storage/' . $vehicle->owner->userDetails->profile_image) : null
-                ] : null
-            ];
-        }
-
-        return response()->json(['code' => 200, 'success' => true, 'data' => $data], 200);
+        $response = $this->vehicleInfoRepository->vehicleDetailsList($request);
+        return response()->json($response, $response['code']);
     }
 
     public function deleteVehicleImage(Request $request): JsonResponse
     {
-        $request->validate([
-            'vehicle_id' => 'required|exists:vehicle_metas,vehicle_id',
-            'image_path' => 'required|string',
-        ]);
-
-        $vehicleMeta = VehicleMeta::where('vehicle_id', $request->vehicle_id)
-            ->where('key', 'vehicle_image')
-            ->first();
-
-        if (!$vehicleMeta) {
-            return response()->json(['success' => false, 'message' => 'Vehicle images not found.'], 404);
-        }
-
-        $images = json_decode($vehicleMeta->value, true);
-
-        // Extract relative path from full URL if needed
-        $relativePath = null;
-        $imageToDelete = parse_url($request->image_path, PHP_URL_PATH);
-        if (is_string($imageToDelete)) {
-            $relativePath = ltrim(str_replace('/storage/', '', $imageToDelete), '/');
-        }
-
-        // Find and remove image
-        if (($key = array_search($relativePath, $images)) !== false) {
-            unset($images[$key]);
-            if ($relativePath) {
-                Storage::delete($relativePath);
-            }
-            $vehicleMeta->value = json_encode(array_values($images)) ?: '';
-            $vehicleMeta->save();
-
-            return response()->json(['success' => true, 'message' => 'Image deleted successfully.']);
-        }
-
-        return response()->json(['success' => false, 'message' => 'Image not found in database.'], 404);
+        $response = $this->vehicleInfoRepository->deleteVehicleImage($request);
+        return response()->json($response, $response['code']);
     }
-
-
 
     public function deleteVehiclePolicy(Request $request): JsonResponse
     {
-        $request->validate([
-            'vehicle_id' => 'required|exists:vehicle_metas,vehicle_id',
-            'file_path'  => 'required|string',
-        ]);
-
-        // Ensure the correct path format
-        $filePath = 'vehiclePolicy/' . $request->file_path;
-
-        $vehicleMeta = VehicleMeta::where('vehicle_id', $request->vehicle_id)
-            ->where('key', 'vehicle_policy')
-            ->first();
-
-        if (!$vehicleMeta) {
-            return response()->json(['success' => false, 'message' => 'Policy files not found.'], 404);
-        }
-
-        $policyFiles = json_decode($vehicleMeta->value, true);
-
-        // Find and remove the file from the array
-        if (($key = array_search($filePath, $policyFiles)) !== false) {
-            unset($policyFiles[$key]);
-            Storage::delete($filePath); // Delete from storage
-            $vehicleMeta->value = json_encode(array_values($policyFiles)) ?: '';
-            $vehicleMeta->save();
-
-            return response()->json(['success' => true, 'message' => 'Policy file deleted successfully.']);
-        }
-
-        return response()->json(['success' => false, 'message' => 'Policy file not found in database.'], 404);
+        $response = $this->vehicleInfoRepository->deleteVehiclePolicy($request);
+        return response()->json($response, $response['code']);
     }
 
-    public function vehicleIntrestLists(Request $request): JsonResponse
+    public function vehicleIntrestLists(): JsonResponse
     {
-        $authUser = current_user();
-
-        $lang_id = null;
-
-        if ($authUser && !empty($authUser->language_id)) {
-            $lang_id = $authUser->language_id;
-        } elseif (App::getLocale()) {
-            $currentLocale = App::getLocale();
-            $language = TranslationLanguage::where('code', $currentLocale)->first();
-            $lang_id = $language->id ?? null;
-        } else {
-            $defaultLang = Language::select("language_id")->where("default", 1)->first();
-            $lang_id = $defaultLang->language_id ?? 1;
-        }
-
-        $vehicles = VehicleInfo::with([
-            'carType:id,name',
-            'brand:id,brand_name',
-            'category:id,name',
-            'mainLocation:id,name',
-            'color:id,name,value',
-            'fuel_type:id,fuel_type',
-            'transmission:id,name',
-            'reviews:id,vehicle_id,average_ratings'
-        ])->where("language_id", $lang_id)->take(6)->get();
-
-        $data = $vehicles->map(function ($vehicle) {
-            $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
-                ->where('key', 'vehicle_image')
-                ->first();
-
-            $vehiclePrices = json_decode((string) $vehicle->vehicle_price, true) ?? [];
-            $filteredPrices = [];
-
-            if (!empty($vehiclePrices)) {
-                foreach ($vehiclePrices as $price) {
-                    foreach ($price as $key => $value) {
-                        if ($value > 0) {
-                            $filteredPrices[] = [$key => $value];
-                        }
-                    }
-                }
-            }
-
-            $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
-            if (!empty($vehicle->vehicle_image)) {
-                array_unshift($multipleImages, $vehicle->vehicle_image);
-            }
-            $multipleImages = array_map(fn($img) => url('storage/vehicles/' . basename($img)), $multipleImages);
-            /** @var \App\Models\User $auth|null */
-            $auth = current_user();
-            $authId = $auth->id ?? null;
-
-            $wishlistExists = false;
-            if ($authId) {
-                $wishlistExists = Wishlist::where("user_id", $authId)
-                    ->where("vehicle_id", $vehicle->id)
-                    ->exists();
-            }
-
-
-            $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
-            $currency = null;
-
-            if ($currencySetting && $currencySetting->value) {
-                $currency = Currency::find($currencySetting->value);
-            }
-
-            $currencySymbol = $currency->symbol ?? "$";
-
-            $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
-            $review_count = Review::where("vehicle_id", $vehicle->id)->count();
-
-            $user = User::where('id', $vehicle->created_by)
-                ->first();
-            $userDetail = null;
-
-            $defaultAvatar = asset('/backend/assets/img/default-profile.png');
-            $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
-
-            $avatarImage = $defaultAvatar;
-
-            if ($profileImagePath) {
-                $fullImagePath = storage_path('app/public/' . $profileImagePath);
-                if (file_exists($fullImagePath)) {
-                    $avatarImage = url('/storage/' . $profileImagePath);
-                }
-            }
-
-            return [
-                'id' => $vehicle->id,
-                'name' => $vehicle->name,
-                'slug' => $vehicle->slug,
-                'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
-                'avatar_image' => $avatarImage,
-                'brand' => $vehicle->brand->brand_name ?? null,
-                'car_type' => $vehicle->carType->name ?? null,
-                'category' => $vehicle->category->name ?? null,
-                'location' => $vehicle->mainLocation->name ?? null,
-                'color' => $vehicle->color->name ?? null,
-                'fuel_type' => $vehicle->fuel_type->fuel_type ?? null,
-                'transmission' => $vehicle->transmission->name ?? null,
-                'year' => $vehicle->year,
-                'mileage' => $vehicle->mileage,
-                'passenger_capacity' => $vehicle->passenger_capacity,
-                'num_seats' => $vehicle->num_seats,
-                'num_doors' => $vehicle->num_doors,
-                'num_airbags' => $vehicle->num_airbags,
-                'vehicle_video' => $vehicle->vehicle_video,
-                'features' => $vehicle->features,
-                'currency' => $currencySymbol,
-                'rating' => $rating,
-                'wishlist' => $wishlistExists,
-                'review_count' => $review_count,
-                'price' => !empty($filteredPrices) ? $filteredPrices : null,
-                'is_featured' => (bool) rand(0, 1),
-                'is_top_rated' => (bool) rand(0, 1),
-                'seo_title' => $vehicle->vehicle_metatitle,
-                'seo_key' => $vehicle->vehicle_metakeywords,
-                'seo_description' => $vehicle->vehicle_metadesc,
-                'authenticated' => Auth::guard('web')->check(),
-                'created_at' => $vehicle->created_at,
-                'status' => $vehicle->status,
-            ];
-        });
-
-        $html = view('frontend.home.list.recommended-vehicles', compact('data'))->render();
-        return response()->json([
-            'code' => 200,
-            'message' => __('Vehicles retrieved successfully.'),
-            // 'data' => $data,
-            'html' => $html
-        ], 200);
+        $response = $this->vehicleInfoRepository->vehicleInterestLists();
+        return response()->json($response, $response['code']);
     }
 
     public function delete(Request $request): JsonResponse
     {
         $vehicleId = $request->input('delete_id');
-
-        $vehicle = VehicleInfo::where('id', $vehicleId);
-
-        if ($vehicle != null) {
-            $vehicle->delete();
-
-            return response()->json(['success' => true]);
-        }
-
-        return response()->json(['success' => false, 'message' => 'Vehicle not found']);
+        $response = $this->vehicleInfoRepository->delete($vehicleId);
+        return response()->json($response, $response['code']);
     }
 
     public function getDamageDetails(Request $request): JsonResponse
     {
-        // Retrieve the damage ID from the request
         $damageId = $request->get('id');
-
-        // Fetch the damage details from the database
-        $damage = VehicleDamage::find($damageId);
-
-        if ($damage) {
-            return response()->json([
-                'success' => true,
-                'data' => $damage
-            ]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Damage not found.'
-        ]);
+        $response = $this->vehicleInfoRepository->getDamageDetails($damageId);
+        return response()->json($response, $response['code']);
     }
 
     public function deleteMultiple(Request $request): JsonResponse
     {
         $ids = $request->input('delete_id', []);
-
-        if (!is_array($ids) || empty($ids)) {
-            return response()->json(['success' => false, 'message' => 'No IDs provided.']);
-        }
-
-        try {
-            VehicleInfo::whereIn('id', $ids)->delete();
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Error deleting vehicles.']);
-        }
+        $response = $this->vehicleInfoRepository->delete($ids);
+        return response()->json($response, $response['code']);
     }
 
     public function setPopular(Request $request): JsonResponse
     {
-        /** @var VehicleInfo $vehicle */
-        $vehicle = VehicleInfo::find($request->id);
-
-        if ($vehicle == null) {
-            return response()->json(['error' => 'Vehicle not found'], 404);
-        }
-
-        $vehicle->popular = $request->popular ? 1 : 0;
-        $vehicle->save();
-
-        return response()->json(['success' => true]);
+        $response = $this->vehicleInfoRepository->setPopular($request);
+        return response()->json($response, $response['code']);
     }
 
     public function setRecommended(Request $request)
     {
-        /** @var VehicleInfo $vehicle */
-        $vehicle = VehicleInfo::find($request->id);
-
-        if ($vehicle == null) {
-            return response()->json(['error' => 'Vehicle not found'], 404);
-        }
-
-        $vehicle->recommended = $request->recommended ? 1 : 0;
-        $vehicle->save();
-
-        return response()->json(['success' => true]);
+        $response = $this->vehicleInfoRepository->setRecommended($request);
+        return response()->json($response, $response['code']);
     }
 
     public function setStatus(Request $request): JsonResponse
     {
-        $vehicle = VehicleInfo::find($request->vehicle_id);
-
-        if (!$vehicle) {
-            return response()->json(['error' => 'Vehicle not found'], 404);
-        }
-
-        $vehicle->status = $request->status ? 1 : 0;
-        $vehicle->save();
-
-        return response()->json(['success' => true]);
+        $response = $this->vehicleInfoRepository->setStatus($request);
+        return response()->json($response, $response['code']);
     }
 }

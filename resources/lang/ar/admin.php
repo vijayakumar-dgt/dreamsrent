@@ -1542,6 +1542,9 @@
     'cylinder_type_maxlength' => 'يجب ألا يتجاوز نوع الأسطوانة 30 حرفًا.',
     'checklist_required' => 'قائمة التحقق مطلوبة.',
     'color_code_unique' => 'كود اللون موجود بالفعل.',
+    'vehicle_delete_success' => 'تم حذف السيارة بنجاح.',
+    'popular_status_update_success' => 'تم تحديث حالة السيارة بنجاح.',
+    'recommended_status_update_success' => 'تم تحديث حالة السيارة بنجاح.',
   ),
   'user_management' => 
   array (

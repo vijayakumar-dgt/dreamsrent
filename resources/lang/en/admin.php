@@ -1545,6 +1545,9 @@ return array(
     'add_vehicle' => 'Add Vehicle',
     'view_review' => 'View Review',
     'color_code_unique' => 'Color code already exists.',
+    'vehicle_delete_success' => 'Vehicle deleted successfully.',
+    'popular_status_update_success' => 'Popular status updated successfully.',
+    'recommended_status_update_success' => 'Recommended status updated successfully.',
   ),
   'user_management' =>
   array(

@@ -1638,8 +1638,15 @@
                         showToast("error", response.message);
                     }
                 },
-                error: function () {
-                    showToast("error", "Failed to delete policy file.");
+                error: function (error) {
+                    if (error.responseJSON) {
+                        showToast("error", error.responseJSON.message);
+                    } else {
+                        showToast(
+                            "error",
+                            _l("admin.common.default_delete_error")
+                        );
+                    }
                 },
             });
         });
@@ -1762,6 +1769,19 @@
                 success: function (response) {
                     if (response.success) {
                         imageItem.remove();
+                        showToast("success", response.message);
+                    } else {
+                        showToast("error", response.message);
+                    }
+                },
+                error: function (xhr) {
+                    if (xhr.responseJSON) {
+                        showToast("error", xhr.responseJSON.message);
+                    } else {
+                        showToast(
+                            "error",
+                            _l("admin.common.default_delete_error")
+                        );
                     }
                 },
             });
@@ -2526,7 +2546,7 @@
                     "vehicle_damage",
                     JSON.stringify(damagePayload)
                 );
-                $("#seoFinalBtn").text("Please Wait...").prop("disabled", true);
+                $("#seoFinalBtn").text(_l('admin.common.please_wait')).prop("disabled", true);
 
                 $.ajax({
                     url: "/admin/update/vehicle",
@@ -2587,7 +2607,7 @@
                                 .text("Update & Exit")
                                 .prop("disabled", false);
                         } else {
-                            toastr(error.responseJSON.message, "bg-danger");
+                            showToast('error', error.responseJSON.message);
                             $("#seoFinalBtn")
                                 .text("Update & Exit")
                                 .prop("disabled", false);
@@ -2660,8 +2680,8 @@
                             '<option value="">Select Model</option>'
                         ); // Reset dropdown
 
-                        if (response.length > 0) {
-                            $.each(response, function (key, model) {
+                        if (response.data.length > 0) {
+                            $.each(response.data, function (key, model) {
                                 modelDropdown.append(
                                     `<option value="${model.id}">${model.model_name}</option>`
                                 );

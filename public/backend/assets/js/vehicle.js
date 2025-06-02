@@ -19,6 +19,10 @@
                 Accept: "application/json",
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
+            beforeSend: function () {
+                $("#loader-table").show();
+                $('.real-data, .table-footer').addClass('d-none');
+            },
             success: function (response) {
                 let tableBody = "";
 
@@ -28,32 +32,6 @@
                 if (response.code === 200 && response.data.length > 0) {
                     let data = response.data;
 
-                    console.log(data);
-                    function formatDateTime(dateString) {
-                        let date = new Date(dateString);
-
-                        let optionsDate = {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                        };
-                        let formattedDate = date.toLocaleDateString(
-                            "en-GB",
-                            optionsDate
-                        );
-
-                        let optionsTime = {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                        };
-                        let formattedTime = date.toLocaleTimeString(
-                            "en-US",
-                            optionsTime
-                        );
-
-                        return { formattedDate, formattedTime };
-                    }
                     function ucfirst(str) {
                         return str.charAt(0).toUpperCase() + str.slice(1);
                     }
@@ -139,7 +117,7 @@
                                 }
                             </span>
                         </td>
-             ${
+            ${
                  hasPermission(permissions, "vehicles", "edit") ||
                  hasPermission(permissions, "vehicles", "delete")
                      ? `<td>
@@ -148,42 +126,29 @@
                                         <i class="ti ti-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
-                                          ${
-                                              hasPermission(
-                                                  permissions,
-                                                  "vehicles",
-                                                  "edit"
-                                              )
-                                                  ? `<li>
-                                            <button class="dropdown-item edit-vehicles rounded-1 border-0 bg-white" data-id="${
-                                                value.slug
-                                            }">
+                                        ${hasPermission(permissions, "vehicles", "edit") ? 
+                                        `<li>
+                                            <button type="button" class="dropdown-item edit-vehicles rounded-1" data-id="${
+                                                    value.slug
+                                                }">
                                                 <i class="ti ti-edit me-1"></i>${_l(
                                                     "admin.common.edit"
                                                 )}
                                             </button>
-                                        </li>`
-                                                  : ""
-                                          }
-                                               ${
-                                                   hasPermission(
-                                                       permissions,
-                                                       "vehicles",
-                                                       "delete"
-                                                   )
-                                                       ? `<li>
-                                           <button 
-                                                class="dropdown-item border-0 bg-white rounded-1 delete-vehicle" 
+                                        </li>` : "" }
+                                        ${hasPermission(permissions, "vehicles", "delete") ? 
+                                        `<li>
+                                            <button
+                                                type="button"
+                                                class="dropdown-item rounded-1 delete-vehicle" 
                                                 data-id="${value.id}" 
-                                                data-bs-toggle="modal" 
+                                                data-bs-toggle="modal"
                                                 data-bs-target="#delete-modal">
                                                 <i class="ti ti-trash me-1"></i>${_l(
                                                     "admin.common.delete"
                                                 )}
                                             </button>
-                                        </li>`
-                                                       : ""
-                                               }
+                                        </li>` : "" }
                                     </ul>
                                 </div>
                             </td>`
@@ -242,7 +207,7 @@
                                 .removeClass("d-none");
                         },
                         language: {
-                            emptyTable: _l("admin.common.no_matching_records"),
+                            emptyTable: _l("admin.common.empty_table"),
                             info:
                                 _l("admin.common.showing") +
                                 " _START_ " +
@@ -280,11 +245,13 @@
                         },
                     });
                 }
-                $("#loader-table").hide();
-                $(".label-loader, .input-loader").hide();
-                $(".real-label, .real-input, .real-data").removeClass("d-none");
             },
             error: function (error) {},
+            complete: function () {
+                $("#loader-table").hide();
+                $(".label-loader, .input-loader").hide();
+                $(".real-label, .real-input, .real-data, .table-footer").removeClass("d-none");
+            }
         });
     }
 
@@ -368,10 +335,16 @@
                 popular: isChecked,
             },
             success: function (response) {
-                showToast("success", "Popular status updated.");
+                if (response.code === 200) {
+                    showToast("success", response.message);
+                }
             },
-            error: function (xhr, status, error) {
-                showToast("error", "Something went wrong.");
+            error: function (error) {
+                if (error.responseJSON) {
+                    showToast("error", error.responseJSON.message);
+                } else {
+                    showToast("error", _l("admin.common.default_update_error"));
+                }
             },
         });
     });
@@ -388,10 +361,16 @@
                 recommended: isChecked,
             },
             success: function (response) {
-                showToast("success", "Recommended status updated.");
+                if (response.code === 200) {
+                    showToast("success", response.message);
+                }
             },
-            error: function (xhr, status, error) {
-                showToast("error", "Something went wrong.");
+            error: function (error) {
+                if (error.responseJSON) {
+                    showToast("error", error.responseJSON.message);
+                } else {
+                    showToast("error", _l("admin.common.default_update_error"));
+                }
             },
         });
     });
@@ -470,7 +449,7 @@
 
             $submitBtn.prop("disabled", true); // Disable the button
             $submitBtn.html(
-                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Deleting...'
+                `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ${_l("admin.common.deleting")}...`
             ); // Show loading spinner
 
             $.ajax({
@@ -485,19 +464,25 @@
                     ),
                 },
                 success: function (response) {
-                    if (response.success) {
+                    if (response.code == 200) {
+                        showToast("success", response.message);
                         $("#delete-modal").modal("hide");
                         initTable();
-                    } else {
-                        alert("Failed to delete vehicle.");
                     }
                 },
                 error: function (error) {
-                    alert("An error occurred while deleting the vehicle.");
+                    if (error.responseJSON.code == 500) {
+                        showToast("success", error.responseJSON.message);
+                    } else {
+                        showToast(
+                            "error",
+                            _l("admin.common.default_delete_error")
+                        );
+                    }
                 },
                 complete: function () {
                     $submitBtn.prop("disabled", false); // Re-enable the button
-                    $submitBtn.html("Yes, Delete"); // Reset the button text
+                    $submitBtn.html(_l("admin.common.yes_delete")); // Reset the button text
                 },
             });
         });
@@ -513,7 +498,7 @@
             });
 
             if (vehicleIds.length === 0) {
-                showToast("error", "No vehicles selected.");
+                showToast("error", _l('admin.common.select_atleast_one_item_delete'));
                 return;
             }
 
@@ -529,18 +514,20 @@
                     ),
                 },
                 success: function (response) {
-                    if (response.success) {
+                    if (response.code == 200) {
                         initTable();
-                        showToast(
-                            "success",
-                            "Selected Vehicles delated successfully."
-                        );
-                    } else {
-                        alert("Failed to delete vehicle(s).");
+                        showToast("success", response.message);
                     }
                 },
-                error: function () {
-                    alert("An error occurred while deleting the vehicles.");
+                error: function (error) {
+                    if (error.responseJSON.code == 500) {
+                        showToast("success", error.responseJSON.message);
+                    } else {
+                        showToast(
+                            "error",
+                            _l("admin.common.default_delete_error")
+                        );
+                    }
                 },
             });
         });
@@ -594,16 +581,21 @@
                     ),
                 },
                 success: function (response) {
-                    if (response.success) {
+                    if (response.code == 200) {
                         initTable();
                         $("#status-modal").modal("hide");
-                        showToast("success", "Vehicle status updated.");
-                    } else {
-                        showToast("error", "Failed to update status.");
+                        showToast("success", response.message);
                     }
                 },
-                error: function () {
-                    showToast("error", "An error occurred.");
+                error: function (error) {
+                    if (error.responseJSON.code == 500) {
+                        showToast("success", error.responseJSON.message);
+                    } else {
+                        showToast(
+                            "error",
+                            _l("admin.common.default_status_error")
+                        );
+                    }
                 },
             });
         });
@@ -619,5 +611,15 @@
                 $("#vehicle_status").val(status).trigger("change"); // Important for Select2
             }
         );
+    });
+
+    const tableWrapper = '.table-responsive';
+
+    $(document).on('show.bs.dropdown', tableWrapper, function () {
+        $(this).css('overflow', 'hidden');
+    });
+
+    $(document).on('hide.bs.dropdown', tableWrapper, function () {
+        $(this).css('overflow', 'auto');
     });
 })();

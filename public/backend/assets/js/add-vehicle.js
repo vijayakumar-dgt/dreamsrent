@@ -1,9 +1,6 @@
 (async () => {
     "use strict";
-
     await loadTranslationFile("admin", "rentals, common");
-
-    const permissions = await loadUserPermissions();
 
     $(document).ready(function () {
         let currency = $("#currency").val();
@@ -1862,11 +1859,10 @@
                                 .text("Save & Exit")
                                 .prop("disabled", false);
                         } else {
-                            toastr(error.responseJSON.message, "bg-danger");
+                            showToast('error', error.responseJSON.message);
                             $("#seoFinalBtn")
                                 .text("Save & Exit")
                                 .prop("disabled", false);
-                            F;
                         }
                     });
             }
@@ -1900,8 +1896,8 @@
                             '<option value="">Select Model</option>'
                         ); // Reset dropdown
 
-                        if (response.length > 0) {
-                            $.each(response, function (key, model) {
+                        if (response.data.length > 0) {
+                            $.each(response.data, function (key, model) {
                                 modelDropdown.append(
                                     `<option value="${model.id}">${model.model_name}</option>`
                                 );
