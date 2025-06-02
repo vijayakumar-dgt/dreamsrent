@@ -31,7 +31,7 @@
                                     @if(!empty($vehicle['multiple_vehicle_images']) && count($vehicle['multiple_vehicle_images']) > 0)
                                     @foreach($vehicle['multiple_vehicle_images'] as $image)
                                     <div class="slide-images">
-                                        <a href="listing-details.html">
+                                        <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">
                                             <img src="{{ $image }}" class="img-fluid" alt="img">
                                         </a>
                                     </div>
@@ -62,18 +62,15 @@
                                             <span>{{ $vehicle['rating'] }} Reviews</span>
                                         </div>
                                         <h3 class="listing-title">
-                                            <a href="listing-details.html">{{ $vehicle['name'] ?? "" }}</a>
+                                            <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">{{ $vehicle['name'] ?? "" }}</a>
                                         </h3>					
                                     </div>
-                                    {{-- <div class="list-km">
-                                        <span class="km-count"><img src="{{ asset('frontend/assets/img/icons/map-pin.svg') }}" alt="author">3.6m</span>
-                                    </div> --}}
                                 </div> 
                                 <div class="listing-details-group">
                                     <ul>
                                         <li>
                                             <span><img src="{{ asset('frontend/assets/img/icons/bike-icon-01.svg') }}" alt="img"></span>
-                                            <p>Drum</p>
+                                            <p>{{ $vehicle['break_type'] ?? ""}}</p>
                                         </li>
                                         <li>
                                             <span><img src="{{ asset('frontend/assets/img/icons/bike-icon-02.svg') }}" alt="img"></span>
@@ -85,7 +82,7 @@
                                         </li>
                                         <li>
                                             <span><img src="{{ asset('frontend/assets/img/icons/bike-icon-04.svg') }}" alt="img"></span>
-                                            <p>Tubeless</p>
+                                            <p>{{ $vehicle['tube_type'] ?? "" }}</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -108,7 +105,7 @@
                                             <i class="feather-heart"></i>
                                         </a>		
                                         @endif
-                                        <a href="listing-details.html" class="btn btn-order">Book Now</a>
+                                        <a href="{{ route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-order">Book Now</a>
                                     </div>
                                 </div>
                                 @if($vehicle['is_featured'] == 1)
@@ -126,7 +123,7 @@
                     @endforeach
                 </div>
                 <div class="view-all-btn text-center aos" data-aos="fade-down">
-                    <a href="listing-grid.html" class="btn btn-secondary">View all Bikes</a>
+                    <a href="{{ route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-secondary">View all Bikes</a>
                 </div>
                 @endif
             </div>
