@@ -66,6 +66,23 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body p-2">
+                                            <a href="javascript:void(0);">
+                                                <img src="{{ asset('backend/assets/img/theme-03.svg') }}" alt="theme" class="theme-img" data-id="theme_03">
+                                            </a>
+                                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                                <label class="form-check-label" for="theme_03" data-id="theme_03">
+                                                    <span class="text-gray-9">{{ __('admin.general_settings.theme') }} 3</span>
+                                                </label>
+                                                <div class="form-check form-check-md">
+                                                    <input type="radio" name="theme" id="theme_03" class="form-check-input default_theme" data-id="theme_03">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
