@@ -2,46 +2,62 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Country;
+use App\Http\Requests\AddCountryRequest;
+use App\Http\Requests\EditCountryRequest;
+use App\Repositories\Contracts\CountryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class CountryController extends Controller
 {
+    protected $countryRepository;
+
+    public function __construct(CountryInterface $countryRepository)
+    {
+        $this->countryRepository = $countryRepository;
+    }
+
     public function index(): View
     {
         return view('admin.country.index');
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(AddCountryRequest $request): JsonResponse
     {
-        $id = $request->id ?? null;
+        try {
+            $data = [
+                'name' => $request->name,
+                'code' => $request->code,
+                'status' => (int) ($request->status ?? 1),
+            ];
+            // dd($data);
+            if ($request->filled('id')) {
+                $this->countryRepository->update($request->id, $data);
+                $message = __('admin.cms.country_update_success');
+            } else {
+                $this->countryRepository->create($data);
+                $message = __('admin.cms.country_create_success');
+            }
 
-        $validator = Validator::make($request->all(), [
-            'name' => [
-                'required',
-                'max:255',
-                Rule::unique('countries')->ignore($id)
-            ],
-        ], [
-            'name.required' => __('admin.cms.country_required'),
-            'name.unique' => __('admin.cms.country_exists'),
-        ]);
-
-        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'success',
+                'code' => 200,
+                'message' => $message,
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'code' => 422,
-                'errors' => $validator->errors()->toArray()
-            ], 422);
+                'code' => 500,
+                'message' => $request->filled('id')
+                    ? __('admin.common.default_update_error')
+                    : __('admin.common.default_create_error'),
+            ], 500);
         }
+    }
 
-        $successMsg = empty($id) ? __('admin.cms.country_create_success') : __('admin.cms.country_update_success');
-        $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
-
+    public function update(EditCountryRequest $request): JsonResponse
+    {
         try {
             $data = [
                 'name' => $request->name,
@@ -49,45 +65,36 @@ class CountryController extends Controller
                 'status' => $request->status ?? 1
             ];
 
-            if (empty($id)) {
-                Country::create($data);
-            } else {
-                Country::where('id', $id)->update($data);
-            }
+            $this->countryRepository->update($request->id, $data);
 
             return response()->json([
                 'status' => 'success',
                 'code' => 200,
-                'message' => $successMsg
+                'message' => __('admin.cms.country_update_success')
             ]);
-        } catch (\Exception $th) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'code' => 500,
-                'message' => $errorMsg
+                'message' => __('admin.common.default_update_error')
             ], 500);
         }
     }
 
     public function list(Request $request): JsonResponse
     {
-        $orderBy = $request->order_by ?? 'desc';
-
         try {
-            $data = Country::when($request->search, function ($query) use ($request) {
-                $query->where('name', 'LIKE', "%{$request->search}%");
-            })
-                ->when($request->filled('status'), function ($query) use ($request) {
-                    $query->where('status', $request->status);
-                })
-                ->orderBy('id', $orderBy)
-                ->get();
+            $data = $this->countryRepository->search(
+                $request->search,
+                $request->status,
+                $request->order_by ?? 'desc'
+            );
 
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.common.default_retrieve_success'),
                 'data' => $data,
-            ], 200);
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -99,28 +106,25 @@ class CountryController extends Controller
 
     public function edit(Request $request): JsonResponse
     {
-        $id = $request->id;
-        $country = Country::find($id);
+        $country = $this->countryRepository->find($request->id);
 
         return response()->json([
             'status' => 'success',
             'code' => 200,
             'data' => $country
-        ], 200);
+        ]);
     }
 
     public function delete(Request $request): JsonResponse
     {
         try {
-            $id = $request->id;
-
-            Country::where('id', $id)->delete();
+            $this->countryRepository->delete($request->id);
 
             return response()->json([
                 'status' => 'success',
                 'code' => 200,
                 'message' => __('admin.common.default_delete_success'),
-            ], 200);
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -135,11 +139,17 @@ class CountryController extends Controller
         $ids = $request->ids;
 
         if (!$ids || count($ids) == 0) {
-            return response()->json(['success' => false, 'message' => __('admin.common.no_data_found'),]);
+            return response()->json([
+                'success' => false,
+                'message' => __('admin.common.no_data_found')
+            ]);
         }
 
-        Country::whereIn('id', $ids)->delete();
+        $this->countryRepository->bulkDelete($ids);
 
-        return response()->json(['success' => true, 'message' => __('admin.common.default_delete_success')]);
+        return response()->json([
+            'success' => true,
+            'message' => __('admin.common.default_delete_success')
+        ]);
     }
 }
