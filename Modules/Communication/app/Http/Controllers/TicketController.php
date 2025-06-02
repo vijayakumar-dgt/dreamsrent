@@ -3,26 +3,35 @@
 namespace Modules\Communication\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Modules\Communication\Http\Requests\AddTicketRequest;
+use Modules\Communication\Http\Requests\UpdateTicketRequest;
+use Modules\Communication\Http\Requests\AssignTicketRequest;
 use Modules\Communication\Models\TicketCategory;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Modules\Communication\Models\Ticket;
 use Modules\Communication\Models\TicketHistory;
+use Modules\Communication\Repositories\Contracts\TicketInterface;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
+    protected TicketInterface $repository;
+
+    public function __construct(TicketInterface $repository)
+    {
+        $this->repository = $repository;
+    }
+
     public function index(): View
     {
         $category = TicketCategory::all();
 
         $users = User::whereIn('user_type', [1, 2])
-            ->with('userDetail') // eager load the related user details
+            ->with('userDetail')
             ->get()
             ->map(function ($user) {
                 $fullName = $user->name;
@@ -43,6 +52,7 @@ class TicketController extends Controller
         $category = TicketCategory::all();
         return view('communication::ticket.admin-ticket-details', compact('category'));
     }
+
     public function userTicket(): View
     {
         $category = TicketCategory::all();
@@ -50,7 +60,7 @@ class TicketController extends Controller
         return view('communication::ticket.user-ticket', compact('category', 'seo_title'));
     }
 
-    public function userTicketStore(Request $request): JsonResponse
+    public function userTicketStore(AddTicketRequest $request): JsonResponse
     {
         try {
             $user = Auth::guard('admin')->check() ? Auth::guard('admin')->user() : Auth::guard('web')->user();
@@ -60,22 +70,6 @@ class TicketController extends Controller
                     'code' => 401,
                     'message' => 'Unauthenticated'
                 ], 401);
-            }
-
-            $validator = Validator::make($request->all(), [
-                'category' => 'required',
-                'priority' => 'required|string|in:Low,Medium,High',
-                'description' => 'required|string|max:1000',
-                'document' => 'array|max:10',
-                'document.*' => 'nullable|file|mimes:pdf,txt,doc,docx|max:10240',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'code' => 422,
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors()
-                ], 422);
             }
 
             // Generate ticket ID
@@ -95,7 +89,7 @@ class TicketController extends Controller
             }
 
             // Create ticket
-            $ticket = Ticket::create([
+            $ticket = $this->repository->create([
                 'ticket_id' => $ticketId,
                 'priority' => $request->priority,
                 'user_id' => $user->id,
@@ -120,6 +114,7 @@ class TicketController extends Controller
             ], 500);
         }
     }
+
     public function listTickets(Request $request): JsonResponse
     {
         try {
@@ -132,87 +127,15 @@ class TicketController extends Controller
                 ], 401);
             }
 
-            $ticketId = $request->input('ticketId');
-            $priorityFilters = $request->input('priority', []);
-            $statusFilters = $request->input('status', []);
-            $sortBy = $request->input('sort_by', 'latest');
-            $searchTermInput = $request->input('search', '');
-            $searchTerm = is_string($searchTermInput) ? $searchTermInput : '';
-
-            $withRelations = [
-                'user:id,name,email',
-                'user.userDetail:id,user_id,first_name,last_name,profile_image',
-                'category:id,name',
-                'assignee:id,name,email',
-                'assignee.userDetail:id,user_id,first_name,last_name,profile_image',
-                'ticketHistories:id,ticket_id,user_id,description,created_by,updated_by,created_at',
-                'ticketHistories.user:id,name,email',
-                'ticketHistories.user.userDetail:id,user_id,first_name,last_name,profile_image',
+            $filters = [
+                'ticketId' => $request->input('ticketId'),
+                'priority' => $request->input('priority', []),
+                'status' => $request->input('status', []),
+                'sort_by' => $request->input('sort_by', 'latest'),
+                'search' => $request->input('search', ''),
             ];
 
-            $query = Ticket::query()->with($withRelations);
-
-            if ($user->user_type == 1) {
-                if ($ticketId) {
-                    $query->where('id', $ticketId);
-                }
-            } elseif ($user->user_type == 3) {
-                $query->where('user_id', $user->id);
-                if ($ticketId) {
-                    $query->where('id', $ticketId);
-                }
-            } elseif ($user->user_type == 2) {
-                $query->where('assignee_id', $user->id);
-                if ($ticketId) {
-                    $query->where('id', $ticketId);
-                }
-            } else {
-                return response()->json([
-                    'code' => 403,
-                    'message' => 'Unauthorized access',
-                    'user' => $user
-                ], 403);
-            }
-
-            if (!empty($priorityFilters)) {
-                $query->whereIn('priority', $priorityFilters);
-            }
-
-            if (!empty($statusFilters)) {
-                $query->whereIn('status', $statusFilters);
-            }
-
-            if (!empty($searchTerm)) {
-                $query->where(function ($q) use ($searchTerm) {
-                    $q->where('ticket_id', 'like', '%' . $searchTerm . '%')
-                        ->orWhereHas('user', function ($q2) use ($searchTerm) {
-                            $q2->where('name', 'like', '%' . $searchTerm . '%');
-                        })
-                        ->orWhereHas('category', function ($q2) use ($searchTerm) {
-                            $q2->where('name', 'like', '%' . $searchTerm . '%');
-                        });
-                });
-            }
-
-            switch ($sortBy) {
-                case 'ascending':
-                    $query->orderBy('created_at', 'asc');
-                    break;
-                case 'descending':
-                    $query->orderBy('created_at', 'desc');
-                    break;
-                case 'last month':
-                    $query->whereBetween('created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()]);
-                    break;
-                case 'last 7 days':
-                    $query->whereBetween('created_at', [now()->subDays(7), now()]);
-                    break;
-                default:
-                    $query->latest();
-                    break;
-            }
-
-            $tickets = $query->get();
+            $tickets = $this->repository->getTicketsForUser($user->id, $user->user_type, $filters);
 
             $tickets->transform(function ($ticket) {
                 $ticket->formatted_created_at = formatDateTime($ticket->created_at, false);
@@ -234,7 +157,7 @@ class TicketController extends Controller
         }
     }
 
-    public function ticketUpdateAsssign(Request $request): JsonResponse
+    public function ticketUpdateAsssign(AssignTicketRequest $request): JsonResponse
     {
         try {
             $user = Auth::guard('admin')->check() ? Auth::guard('admin')->user() : Auth::guard('web')->user();
@@ -246,61 +169,11 @@ class TicketController extends Controller
                 ], 401);
             }
 
-            $validator = Validator::make($request->all(), [
-                'ticketid' => 'required|exists:tickets,id',
-                'assign_staff' => 'required|exists:users,id',
-                'reply' => 'nullable|string|max:3000'
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'code' => 422,
-                    'errors' => $validator->errors()
-                ], 422);
-            }
-
-            /** @var \Modules\Communication\Models\Ticket $ticket */
-            $ticket = Ticket::findOrFail($request->input('ticketid'));
-
-            // Only assign if the ticket is still open and not yet assigned
-            if ($user->user_type == 1) {
-                if ($ticket->status != 1) {
-                    return response()->json([
-                        'code' => 400,
-                        'message' => __('admin.support.ticket_assignment_failed_due_to_status')
-                    ], 400);
-                }
-
-                // Make sure assign_staff is properly validated and cast to int
-                $assignStaff = $request->input('assign_staff');
-                if (is_numeric($assignStaff)) {
-                    $ticket->assignee_id = (int)$assignStaff;
-                    $ticket->status = 2;
-                } else {
-                    return response()->json([
-                        'code' => 400,
-                        'message' => 'Invalid staff ID format'
-                    ], 400);
-                }
-            }
-
-            $ticket->updated_by = $user->id;
-            $ticket->save();
-
-            if ($request->filled('reply')) {
-                $reply = $request->input('reply', '');
-                if (!is_string($reply)) {
-                    $reply = '';
-                }
-
-                TicketHistory::create([
-                    'ticket_id' => $ticket->id,
-                    'user_id' => $user->id,
-                    'description' => strip_tags($reply),
-                    'created_by' => $user->id,
-                    'updated_by' => $user->id,
-                ]);
-            }
+            $ticket = $this->repository->assignTicket(
+                $request->ticketid,
+                $request->assign_staff,
+                $request->reply
+            );
 
             return response()->json([
                 'code' => 200,
@@ -316,7 +189,7 @@ class TicketController extends Controller
         }
     }
 
-    public function ticketUpdate(Request $request): JsonResponse
+   public function ticketUpdate(UpdateTicketRequest $request): JsonResponse
     {
         try {
             $user = Auth::guard('admin')->check() ? Auth::guard('admin')->user() : Auth::guard('web')->user();
@@ -328,96 +201,23 @@ class TicketController extends Controller
                 ], 401);
             }
 
-            $validator = Validator::make($request->all(), [
-                'ticketid' => 'required|exists:tickets,id',
-                'status' => 'required|in:1,2,3,4',
-                'reply' => [
-                    'required',
-                    'string',
-                    function ($attribute, $value, $fail) {
-                        if (str_word_count($value) > 60) {
-                            $fail(__('admin.support.reply_maxwords'));
-                        }
-                    },
-                ],
-            ], [
-                'reply.required' => __('admin.support.reply_required'),
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'code' => 422,
-                    'errors' => $validator->errors()
-                ], 422);
-            }
-
-            /** @var \Modules\Communication\Models\Ticket $ticket */
-            $ticket = Ticket::findOrFail($request->input('ticketid'));
-
-            $requestStatus = $request->input('status');
-            if (!is_numeric($requestStatus)) {
-                return response()->json([
-                    'code' => 400,
-                    'message' => 'Invalid status format'
-                ], 400);
-            }
-
-            $newStatus = (int)$requestStatus;
-            $currentStatus = (int)$ticket->status;
-            $statusChanged = ($currentStatus !== $newStatus);
-
-            if ($statusChanged) {
-                $allowedTransitions = [
-                    1 => [2],
-                    2 => [3],
-                    3 => [4],
-                ];
-
-                if (!isset($allowedTransitions[$currentStatus]) || !in_array($newStatus, $allowedTransitions[$currentStatus])) {
-                    return response()->json([
-                        'code' => 403,
-                        'message' => __('admin.support.invalid_status_transition')
-                    ], 403);
-                }
-
-                $ticket->status = $newStatus;
-            }
-
-            $ticket->updated_by = $user->id;
-            $ticket->save();
-
-            $finalStatus = (int)$ticket->status;
-            if ($finalStatus !== 3) {
-                return response()->json([
-                    'code' => 403,
-                    'message' => __('admin.support.reply_allowed_only_in_status_3')
-                ], 403);
-            }
-
-            $reply = $request->input('reply', '');
-            if (!is_string($reply)) {
-                $reply = '';
-            }
-
-            TicketHistory::create([
-                'ticket_id' => $ticket->id,
-                'user_id' => $user->id,
-                'description' => strip_tags($reply),
-                'created_by' => $user->id,
-                'updated_by' => $user->id,
-            ]);
+            $ticket = $this->repository->updateStatus(
+                (int)$request->ticketid,
+                (int)$request->status,
+                $request->reply
+            );
 
             return response()->json([
                 'code' => 200,
                 'message' => __('admin.support.ticket_update_success'),
                 'ticket' => $ticket
             ], 200);
+
         } catch (\Throwable $e) {
             return response()->json([
-                'code' => 500,
-                'message' => __('admin.common.default_update_error'),
-                'error' => $e->getMessage()
-            ], 500);
+                'code' => $e->getCode() >= 400 && $e->getCode() < 600 ? $e->getCode() : 500,
+                'message' => $e->getMessage(),
+            ], $e->getCode() >= 400 && $e->getCode() < 600 ? $e->getCode() : 500);
         }
     }
 
@@ -433,18 +233,15 @@ class TicketController extends Controller
                 ], 400);
             }
 
-            /** @var \Modules\Communication\Models\Ticket|null $ticket */
-            $ticket = Ticket::find($id);
+            $result = $this->repository->delete((int)$id);
 
-            if (!$ticket) {
+            if (!$result) {
                 return response()->json([
                     'code'    => 404,
                     'success' => false,
-                    'message' => 'Contact not found.'
+                    'message' => 'Ticket not found.'
                 ], 404);
             }
-
-            $ticket->delete();
 
             return response()->json([
                 'code'    => 200,

@@ -162,95 +162,61 @@
     </div>
     <!-- /Page Wrapper -->
 
-    <!-- Edit Status ticket -->
-    <div class="modal fade" id="edit_ticket">
-        <div class="modal-dialog modal-dialog-centered modal-md">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="mb-0">{{ __('admin.support.update_ticket') }}</h5>
-                    <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti ti-x fs-16"></i>
-                    </button>
-                </div>
-                <form id="editTicketstatus">
-                    <div class="modal-body pb-1">
-                        <div class="row">
-                            <input type="hidden" name="ticketid" id="ticketid">
-                            <!-- Assign Staff -->
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label class="form-label" for="assignStaff">
-                                        {{ __('admin.support.assign_staff') }} <span class="text-danger">*</span>
-                                    </label>
-                                    <select class="select form-control" id="assignStaff" name="assign_staff" data-placeholder="{{ __('admin.common.select') }}">
-                                        <option value="">{{ __('admin.common.select') }}</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->full_name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <span class="text-danger error-message" id="assignStaffError"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                            <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.update') }}</button>
-                        </div>
-                    </div>
-                </form>
+   <!-- Edit Ticket Status -->
+    <x-admin.modal className="editmodal" id="edit_ticket" :title="__('admin.support.update_ticket')"
+        formId="editTicketstatus" dialogClass="modal-dialog-centered modal-md">
+        <x-slot name="body">
+            <input type="hidden" name="ticketid" id="ticketid">
+            <div class="mb-3">
+                <label class="form-label" for="assignStaff">
+                    {{ __('admin.support.assign_staff') }} <span class="text-danger">*</span>
+                </label>
+                <select class="select form-control" id="assignStaff" name="assign_staff"
+                    data-placeholder="{{ __('admin.common.select') }}">
+                    <option value="">{{ __('admin.common.select') }}</option>
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}">{{ $user->full_name }}</option>
+                    @endforeach
+                </select>
+                <span class="text-danger error-message" id="assignStaffError"></span>
             </div>
-        </div>
-    </div>
-    <!-- /Edit Status ticket -->
+        </x-slot>
 
-    <!-- Edit Status ticket -->
-    <div class="modal fade" id="histroy_ticket">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="mb-0">Histroy Ticket</h5>
-                    <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="ti ti-x fs-16"></i>
-                    </button>
-                </div>
-                <form id="editTicketstatus">
-                    <div class="modal-body histroy-ticket pb-1"></div>
-                    <div class="modal-footer">
-                        <div class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary d-none">Update</button>
-                        </div>
-                    </div>
-                </form>
+        <x-slot name="footer">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
+                    {{ __('admin.common.cancel') }}
+                </button>
+                <button type="submit" class="btn btn-primary submitbtn">
+                    {{ __('admin.common.update') }}
+                </button>
             </div>
-        </div>
-    </div>
-    <!-- /Edit Status ticket -->
-     
-    <!-- Delete -->
-    <div class="modal fade" id="delete_ticket">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <form id="delete_ticket_form">
-                    <input type="hidden" name="delete_id" id="delete_id">
-                    <div class="modal-body text-center">
-                        <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-                            <i class="ti ti-trash-x fs-26"></i>
-                        </span>
-                        <h4 class="mb-1">{{ __('admin.support.delete_ticket') }}</h4>
-                        <p class="mb-3">{{ __('admin.support.delete_tickets_description') }}</p>
-                        <div class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                            <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
-                        </div>
-                    </div>
-                </form>
+        </x-slot>
+    </x-admin.modal>
+    <!-- /Edit Ticket Status -->
+
+    <!-- Ticket History -->
+    <x-admin.modal className="historymodal" id="histroy_ticket" title="Histroy Ticket"
+        formId="editTicketstatus" dialogClass="modal-dialog-centered modal-lg">
+        <x-slot name="body">
+            <div class="histroy-ticket pb-1"></div>
+        </x-slot>
+
+        <x-slot name="footer">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary d-none">Update</button>
             </div>
-        </div>
-    </div>
-    <!-- /Delete -->
+        </x-slot>
+    </x-admin.modal>
+    <!-- /Ticket History -->  
+
+   <!-- Delete Ticket -->
+    <x-admin.delete-modal className="deletemodal" id="delete_ticket" formId="delete_ticket_form"
+        :hiddenInputs="['delete_id' => '']" :title="__('admin.support.delete_ticket')"
+        :description="__('admin.support.delete_tickets_description')">
+    </x-admin.delete-modal>
+    <!-- /Delete Ticket -->
 @endsection
 
 @push('scripts')
