@@ -29,6 +29,7 @@ use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Arr;
 
 class PageController extends Controller
 {
@@ -249,7 +250,6 @@ class PageController extends Controller
                 'data' => []
             ], 200);
         } catch (\Exception $e) {
-            \Log::error('Page creation failed', ['error' => $e->getMessage()]);
             return response()->json([
                 'code' => 500,
                 'message' => __('Something went wrong while saving!')
@@ -1170,6 +1170,8 @@ class PageController extends Controller
                                 'brand' => $vehicle->brand->brand_name ?? null,
                                 'car_type' => $vehicle->carType->name ?? null,
                                 'category' => $vehicle->category->name ?? null,
+                                'tube_type' => Arr::random(['Tube', 'Tubeless']),
+                                'break_type' => Arr::random(['Drum', 'Disc']),
                                 'location' => $vehicle->mainLocation->name ?? null,
                                 'color' => $vehicle->color->name ?? null,
                                 'fuel_type' => $vehicle->fuel_type->fuel_type ?? null,
