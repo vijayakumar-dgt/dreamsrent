@@ -236,7 +236,7 @@
 
         $(document).on("click", "#deleteSitemap", function () {
             let delete_id = $(this).data("id");
-            $("#deleteForm #delete_id").val(delete_id);
+            $("#deleteForm #id").val(delete_id);
         });
 
         $(document).on("keyup", "#keyword", function () {

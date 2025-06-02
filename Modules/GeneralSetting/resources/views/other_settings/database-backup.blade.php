@@ -6,12 +6,9 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4 pb-0">
-            <x-admin.breadcrumb 
-                :title="__('admin.general_settings.settings')" 
-                :breadcrumbs="[
-                    __('admin.general_settings.settings') => ''
-                ]" 
-            />
+            <x-admin.breadcrumb :title="__('admin.general_settings.settings')" :breadcrumbs="[
+            __('admin.general_settings.settings') => ''
+        ]" />
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-xl-9">
@@ -23,8 +20,9 @@
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h6 class="mb-3">{{ __('admin.general_settings.database_backup') }}</h6>
                                 @if (hasPermission($permissions, 'other_settings', 'create'))
-                                <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#generate">{{ __('admin.general_settings.generate_backup') }}</a>
-                            @endif
+                                    <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#generate">{{ __('admin.general_settings.generate_backup') }}</a>
+                                @endif
                             </div>
                             <div class="custom-datatable-filter table-responsive position-relative vh-10 table-loader">
                                 @include('admin.content-loader')
@@ -63,8 +61,10 @@
                         <h4 class="mb-1">{{ __('admin.general_settings.generate_backup') }}</h4>
                         <p class="mb-3">{{ __('admin.general_settings.confirmation_generate_backup') }}</p>
                         <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
-                            <a href="{{ route('backup') }}" class="btn btn-primary">{{ __('admin.general_settings.generate_backup') }}</a>
+                            <a href="javascript:void(0);" class="btn btn-light me-3"
+                                data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
+                            <a href="{{ route('backup') }}"
+                                class="btn btn-primary">{{ __('admin.general_settings.generate_backup') }}</a>
                         </div>
                     </form>
                 </div>
@@ -74,30 +74,14 @@
     <!-- /Generate -->
 
     <!-- Delete  -->
-    <div class="modal fade deletemodal" id="delete_backup">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                    <form id="deleteDbBackup">
-                        <input type="hidden" name="delete_id" id="delete_id">
-                        <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-                            <i class="ti ti-trash-x fs-26"></i>
-                        </span>
-                        <h4 class="mb-1">{{ __('admin.general_settings.delete_backup') }}</h4>
-                        <p class="mb-3">{{ __('admin.general_settings.confirmation_delete_backup') }}</p>
-                        <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
-                            <button type="submit" class="btn btn-primary">{{ __('admin.general_settings.yes_delete') }}</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-admin.delete-modal className="deletemodal" id="delete_backup" formId="deleteDbBackup" :hiddenInputs="['delete_id' => '']" :title="__('admin.general_settings.delete_backup')"
+        :description="__('admin.general_settings.confirmation_delete_backup')"
+        cancelText="{{ __('admin.general_settings.cancel') }}" submitText="{{ __('admin.general_settings.yes_delete') }}">
+    </x-admin.delete-modal>
+
     <!-- /Delete -->
 @endsection
 
 @push('scripts')
-<script src="{{ asset('backend/assets/js/general_setting/database-settings.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/general_setting/database-settings.js') }}"></script>
 @endpush
-

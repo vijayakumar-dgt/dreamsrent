@@ -181,12 +181,12 @@
         });
 
         // Delete Testimonial
-        $("#deleteTestimonial").on("submit", function (e) {
+        $("#deleteTestimonialForm").on("submit", function (e) {
             e.preventDefault();
             $.ajax({
                 url: "/admin/testimonials/delete",
                 type: "POST",
-                data: { id: $("#delete_id").val() },
+                data: $(this).serialize(), 
                 headers: {
                     Accept: "application/json",
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
@@ -196,7 +196,7 @@
                 success: function (response) {
                     if (response.code === 200) {
                         showToast("success", response.message);
-                        $("#delete_testimonials").modal("hide");
+                        $("#delete_testimonial").modal("hide");
                         loadTestimonialsSettings();
                     }
                 },
@@ -488,11 +488,9 @@
                                                     class="dropdown-item rounded-1 delete-testimonial-btn" 
                                                     data-id="${testimonial.id}" 
                                                     data-bs-toggle="modal" 
-                                                    data-bs-target="#delete_testimonials"
+                                                    data-bs-target="#delete_testimonial" 
                                                 >
-                                                    <i class="ti ti-trash me-1"></i>${_l(
-                                                        "admin.common.delete"
-                                                    )}
+                                                    <i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}
                                                 </button>
 
                                             </li>`
@@ -611,7 +609,7 @@
     function bindDeleteHandler() {
         $(document).on("click", ".delete-testimonial-btn", function () {
             const id = $(this).data("id");
-            $("#delete_id").val(id);
+            $("#deleteTestimonialForm #id").val(id);
         });
     }
 

@@ -352,9 +352,10 @@
         });
     });
 
+   
     $(document).on("click", "#deleteCurrency", function () {
         let delete_id = $(this).data("id");
-        $("#deleteCurrencyForm #delete_id").val(delete_id);
+        $("#deleteCurrencyForm #id").val(delete_id);
     });
 
     $("#deleteCurrencyForm").on("submit", function (e) {

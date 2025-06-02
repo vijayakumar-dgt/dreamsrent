@@ -24,7 +24,10 @@ class CommunicationSettingRequest extends CustomFailedValidation
             ];
         }
 
-        if ($this->routeIs('admin.email-settings-store')) {
+         if (
+            $this->routeIs('admin.email-settings-store') ||
+            $this->routeIs('admin.smsstore-settings')  
+        )  {
             
             $type = $this->input('type');
             $rules = array_merge($rules, $this->getTypeSpecificRules($type));

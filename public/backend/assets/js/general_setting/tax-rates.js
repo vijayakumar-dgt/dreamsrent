@@ -206,7 +206,7 @@
 
         $(document).on("click", ".delete_tax_rate_btn", function () {
             const id = $(this).data("id");
-            $("#delete_tax_rate_id").val(id);
+            $("#delete_tax_rate_form #id").val(id);
         });
 
         $("#delete_tax_rate_form").on("submit", function (e) {
@@ -214,9 +214,7 @@
             $.ajax({
                 url: "/admin/settings/tax-rate/delete",
                 type: "POST",
-                data: {
-                    id: $("#delete_tax_rate_id").val(),
-                },
+                data: $(this).serialize(), 
                 headers: {
                     Accept: "application/json",
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
@@ -270,7 +268,7 @@
 
         $(document).on("click", ".delete_tax_group", function () {
             const id = $(this).data("id");
-            $("#delete_tax_group_id").val(id);
+            $("#delete_tax_group_form #id").val(id);
         });
 
         $("#delete_tax_group_form").on("submit", function (e) {
@@ -278,9 +276,7 @@
             $.ajax({
                 url: "/admin/settings/tax-group/delete",
                 type: "POST",
-                data: {
-                    id: $("#delete_tax_group_id").val(),
-                },
+                data: $(this).serialize(), 
                 headers: {
                     Accept: "application/json",
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
