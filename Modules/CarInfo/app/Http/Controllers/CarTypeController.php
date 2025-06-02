@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rule;
 use Modules\CarInfo\Http\Requests\VehicleTypeRequest;
+use Modules\CarInfo\Models\Category;
 use Modules\CarInfo\Repositories\Contracts\VehicleTypeRepositoryInterface;
 
 class CarTypeController extends Controller
@@ -27,7 +28,9 @@ class CarTypeController extends Controller
      */
     public function carTypes(): View
     {
-        return view('carinfo::cartype.index');
+        $langID = current_user()->language_id ?? 1;
+        $category = Category::orderBy('id', 'desc')->where("language_id", $langID)->get();
+        return view('carinfo::cartype.index', compact('category'));
     }
 
     /**

@@ -40,6 +40,7 @@ class BrandRepository implements BrandRepositoryInterface
 
             $data = [
                 'brand_name'   => $request->brand_name,
+                'category_id'   => $request->vehicle_category_id,
                 'language_id'  => $request->language_id ?? ($brand->language_id ?? $language_id),
                 'status'       => $request->status ?? ($brand->status ?? 1),
             ];
@@ -59,16 +60,16 @@ class BrandRepository implements BrandRepositoryInterface
             return [
                 'status' => 'success',
                 'code'   => 200,
-                'message' => empty($id) 
-                    ? __('admin.rentals.brand_create_success') 
+                'message' => empty($id)
+                    ? __('admin.rentals.brand_create_success')
                     : __('admin.rentals.brand_update_success')
             ];
         } catch (\Exception $e) {
             return [
                 'status' => 'error',
                 'code'   => 500,
-                'message' => empty($id) 
-                    ? __('admin.common.default_create_error') 
+                'message' => empty($id)
+                    ? __('admin.common.default_create_error')
                     : __('admin.common.default_update_error'),
                 'error' => $e->getMessage()
             ];
@@ -202,8 +203,8 @@ class BrandRepository implements BrandRepositoryInterface
 
         try {
             $data = Brand::when($search, function ($query) use ($search) {
-                    return $query->where('brand_name', 'LIKE', "%{$search}%");
-                })
+                return $query->where('brand_name', 'LIKE', "%{$search}%");
+            })
                 ->orderBy('id', $orderBy)
                 ->where('status', 1)
                 ->get(['id', 'brand_name']);
@@ -221,5 +222,4 @@ class BrandRepository implements BrandRepositoryInterface
             ];
         }
     }
-
 }

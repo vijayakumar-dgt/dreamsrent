@@ -13,6 +13,9 @@
     function initValidation() {
         $("#brandForm").validate({
             rules: {
+                vehicle_category_id: {
+                    required: true,
+                },
                 brand_name: {
                     required: true,
                     minlength: 3,
@@ -32,6 +35,9 @@
                 },
             },
             messages: {
+                vehicle_category_id: {
+                    required: _l("admin.rentals.category_required"),
+                },
                 brand_name: {
                     required: _l("admin.rentals.brand_name_required"),
                     minlength: _l("admin.rentals.brand_name_minlength"),
@@ -257,6 +263,7 @@
         $("#add_brand").on("click", () => {
             $(".modal-title").text(_l("admin.rentals.create_brand"));
             $(".submitbtn").text(_l("admin.common.create_new"));
+            $("#vehicle_category_id").val("").trigger("change");
             $("#brandForm")[0].reset();
             $("#id").val("");
             $(".form-control").removeClass("is-invalid is-valid");
@@ -319,6 +326,9 @@
                     const data = response.data;
                     $("#brandForm")[0].reset();
                     $("#brand_name").val(data.brand_name);
+                    $("#vehicle_category_id")
+                        .val(data.category_id)
+                        .trigger("change");
                     $("#total_cars").val(data.total_cars);
                     $("#status").prop("checked", data.status == 1);
                     $("#id").val(data.id);

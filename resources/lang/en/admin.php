@@ -937,6 +937,7 @@ return array(
     'select_state' => 'Select State',
     'select_city' => 'Select City',
     'name_required' => 'Please enter name',
+    'category_required' => 'Please select a category',
     'select_working_days' => 'Please select at least one working day',
     'create_driver' => 'Create Driver',
     'edit_driver' => 'Edit Driver',

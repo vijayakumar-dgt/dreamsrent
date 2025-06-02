@@ -30,6 +30,7 @@ class Brand extends Model
      * @var list<string>
      */
     protected $fillable = [
+        'category_id',
         'language_id',
         'brand_image',
         'brand_icon',

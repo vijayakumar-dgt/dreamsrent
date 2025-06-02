@@ -11,6 +11,7 @@ use Illuminate\View\View;
 use Modules\CarInfo\Models\Brand;
 use Illuminate\Http\UploadedFile;
 use Modules\CarInfo\Http\Requests\BrandRequest;
+use Modules\CarInfo\Models\Category;
 use Modules\CarInfo\Repositories\Contracts\BrandRepositoryInterface;
 
 class BrandController extends Controller
@@ -21,10 +22,12 @@ class BrandController extends Controller
     {
         $this->brandRepository = $brandRepository;
     }
-    
+
     public function index(): View
     {
-        return view('carinfo::brand.index');
+        $langID = current_user()->language_id ?? 1;
+        $category = Category::orderBy('id', 'desc')->where("language_id", $langID)->get();
+        return view('carinfo::brand.index', compact('category'));
     }
 
     public function store(BrandRequest $request)
