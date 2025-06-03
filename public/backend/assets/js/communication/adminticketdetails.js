@@ -135,7 +135,6 @@ function ticketDetails() {
             ticketId: ticketId
         },
         success: function (response) {
-
             let ticket = response.data[0];
 
             if (!ticket) {
@@ -143,7 +142,9 @@ function ticketDetails() {
                 return;
             }
 
-            $(".ticket_id").html(`#${ticket.ticket_id} - <span class="text-default category_name">${ticket.category?.name || ''}</span>`);
+            // Safely set plain text using .text()
+            $(".ticket_id").text(`#${ticket.ticket_id}`);
+            $(".category_name").text(ticket.category?.name || '');
             $(".user_name").text(`${ticket.user?.user_detail?.first_name || ''} ${ticket.user?.user_detail?.last_name || ''}`);
             $(".Priority").text(ticket.priority);
             $(".assigne_name").text(ticket.assignee?.user_detail?.first_name || 'Unassigned');
@@ -151,10 +152,11 @@ function ticketDetails() {
             $(".update_at").text(ticket.formatted_updated_at);
             $(".ticket_description").html(ticket.description || '');
 
+            // Set safe fallback value
             $("#status").val(ticket.status).trigger('change');
 
             const attachmentContainer = $(".attachmentContainer");
-            attachmentContainer.html("");
+            attachmentContainer.empty(); // safer than .html("")
 
             if (ticket.attachment) {
                 let attachments = [];
@@ -167,78 +169,103 @@ function ticketDetails() {
 
                 attachments.forEach(file => {
                     file = file.replace(/\\/g, '/');
-
                     const fileUrl = `/storage/${file}`;
                     const fileName = file.split('/').pop();
                     const ext = fileName.split('.').pop().toLowerCase();
                     const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext);
                     const isPdf = ext === 'pdf';
 
-                    let attachmentHTML = `
-                        <div class="bg-light br-5 p-3 d-flex align-items-center border mb-2">
-                            <span class="avatar bg-white d-flex align-items-center justify-content-center me-2">
-                                ${isPdf ? `<img src="/backend/assets/img/icons/pdf.svg" alt="pdf" class="w-10 h-10">` : ''}
-                                ${isImage ? `<img src="${fileUrl}" alt="img" class="w-10 h-10 rounded">` : ''}
-                            </span>
-                            <div class="me-2">
-                                <h6 class="fs-14 fw-medium mb-0">${fileName}</h6>
-                                <p class="fs-12 mb-0">${ext.toUpperCase()} File</p>
-                            </div>
-                            <a href="${fileUrl}" target="_blank" class="ms-auto btn btn-sm btn-primary d-flex align-items-center">
-                                <i class="ti ti-download fs-16 me-1"></i> ${_l('admin.common.download')}
-                            </a>
-                        </div>
-                    `;
+                    // Build elements safely using jQuery
+                    const attachmentDiv = $('<div>').addClass('bg-light br-5 p-3 d-flex align-items-center border mb-2');
 
-                    attachmentContainer.append(attachmentHTML);
+                    const avatarSpan = $('<span>').addClass('avatar bg-white d-flex align-items-center justify-content-center me-2');
+
+                    if (isPdf) {
+                        $('<img>', {
+                            src: '/backend/assets/img/icons/pdf.svg',
+                            alt: 'pdf',
+                            class: 'w-10 h-10'
+                        }).appendTo(avatarSpan);
+                    }
+
+                    if (isImage) {
+                        $('<img>', {
+                            src: fileUrl,
+                            alt: 'img',
+                            class: 'w-10 h-10 rounded'
+                        }).appendTo(avatarSpan);
+                    }
+
+                    const fileDetailsDiv = $('<div>').addClass('me-2');
+                    $('<h6>').addClass('fs-14 fw-medium mb-0').text(fileName).appendTo(fileDetailsDiv);
+                    $('<p>').addClass('fs-12 mb-0').text(`${ext.toUpperCase()} File`).appendTo(fileDetailsDiv);
+
+                    const downloadLink = $('<a>', {
+                        href: fileUrl,
+                        target: '_blank',
+                        class: 'ms-auto btn btn-sm btn-primary d-flex align-items-center'
+                    });
+                    $('<i>').addClass('ti ti-download fs-16 me-1').appendTo(downloadLink);
+                    downloadLink.append(document.createTextNode(_l('admin.common.download')));
+
+                    attachmentDiv.append(avatarSpan, fileDetailsDiv, downloadLink);
+                    attachmentContainer.append(attachmentDiv);
                 });
             } else {
-                attachmentContainer.html(`<p>${_l('admin.support.no_attachment_found')}</p>`);
+                attachmentContainer.empty().append($('<p>').text(_l('admin.support.no_attachment_found')));
             }
-            if (!ticket || !ticket.ticket_histories.length) {
-                $(".ticket_histroy").html(`<p class="text-center">${_l('admin.common.no_history_found')}</p>`);
+
+            const historyContainer = $(".ticket_histroy");
+            historyContainer.empty();
+
+            if (!ticket.ticket_histories?.length) {
+                historyContainer.append($('<p>').addClass('text-center').text(_l('admin.common.no_history_found')));
                 return;
             }
 
-            let historyHtml = "";
-
             ticket.ticket_histories.forEach(history => {
-                let userImage =  history.user && history.user.user_detail && history.user.user_detail.profile_image
-                                    ? '/storage/' + history.user.user_detail.profile_image
-                                    : '/backend/assets/img/default-profile.png';
+                const userImage = history.user?.user_detail?.profile_image
+                    ? '/storage/' + history.user.user_detail.profile_image
+                    : '/backend/assets/img/default-profile.png';
 
-               let userName = history.user?.user_detail?.first_name && history.user?.user_detail?.last_name
-                                ? `${history.user.user_detail.first_name} ${history.user.user_detail.last_name}`
-                                : (history.user?.name || "Unknown User");
-                let createdAt = new Date(history.created_at).toLocaleString();
+                const userName = history.user?.user_detail?.first_name && history.user?.user_detail?.last_name
+                    ? `${history.user.user_detail.first_name} ${history.user.user_detail.last_name}`
+                    : (history.user?.name || "Unknown User");
 
-                historyHtml += `
-                    <div class="comment-item mt-3">
-                        <div class="d-flex align-items-center mb-1">
-                            <span class="avatar avatar-l me-2 flex-shrink-0">
-                                <img src="${userImage}" alt="User Profile Image" class="img-fluid rounded-circle">
-                            </span>
-                            <div>
-                                <h6 class="mb-1">${userName}</h6>
-                                <p><i class="ti ti-calendar-bolt me-1"></i> ${_l('admin.common.updated_on')} ${createdAt}</p>
-                            </div>
-                        </div>
-                        <div class="border-bottom p-2">
-                            <p>${history.description}</p>
-                        </div>
-                    </div>
-                `;
+                const createdAt = new Date(history.created_at).toLocaleString();
+
+                const commentItem = $('<div>').addClass('comment-item mt-3');
+                const userInfo = $('<div>').addClass('d-flex align-items-center mb-1');
+                const avatar = $('<span>').addClass('avatar avatar-l me-2 flex-shrink-0').append(
+                    $('<img>', {
+                        src: userImage,
+                        alt: 'User Profile Image',
+                        class: 'img-fluid rounded-circle'
+                    })
+                );
+
+                const userDetails = $('<div>').append(
+                    $('<h6>').addClass('mb-1').text(userName),
+                    $('<p>').html(`<i class="ti ti-calendar-bolt me-1"></i> ${_l('admin.common.updated_on')} ${createdAt}`)
+                );
+
+                const commentText = $('<div>').addClass('border-bottom p-2').append(
+                    $('<p>').text(history.description)
+                );
+
+                userInfo.append(avatar, userDetails);
+                commentItem.append(userInfo, commentText);
+                historyContainer.append(commentItem);
             });
 
-            $(".ticket_histroy").html(historyHtml);
-
+            // Status text (plain text only)
             const statusMap = {
                 1: 'Open',
                 2: 'Assigned',
                 3: 'In Progress',
                 4: 'Closed'
             };
-            let statusText = statusMap[ticket.status] || 'Unknown';
+            const statusText = statusMap[ticket.status] || 'Unknown';
             $(".status-text").text(statusText);
         },
         error: function (error) {
