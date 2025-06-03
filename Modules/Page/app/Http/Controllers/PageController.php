@@ -752,7 +752,7 @@ class PageController extends Controller
                     }
                 }
 
-                // Category section
+                // Category section Bike
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     if (
                         isset($section['section_content']) &&
@@ -790,7 +790,7 @@ class PageController extends Controller
                     }
                 }
 
-                // Category section
+                // Category section Boat
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     if (
                         isset($section['section_content']) &&
@@ -810,8 +810,8 @@ class PageController extends Controller
                             ->whereNull('deleted_at')
                             ->get()
                             ->map(function ($cartype) use ($lang_id) {
-                                $cartype->car_count = VehicleInfo::where('type_id', $cartype->id)
-                                    ->where('language_id', $lang_id)
+                                 $cartype->boat_count = VehicleInfo::where('type_id', $cartype->id)
+                                    ->where('language_id', $lang_id)->where('type', 'boat')
                                     ->count();
 
                                 $cartype->image_url = $cartype->icon
@@ -1350,6 +1350,73 @@ class PageController extends Controller
                             $section['design'] = 'why_us_one';
                             $section['section_content'] = [
                                 "items" => $items,
+                            ];
+                        }
+                    }
+                }
+
+                   // Benefits Of Renting Yacht
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+
+                    if (is_string($content) && strpos($content, '[yart_benefit') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        $limit = isset($matches[1]) ? (int)$matches[1] : 10;
+                        $viewAll = $matches[2] ?? 'no';
+                        $order = $matches[3] ?? 'asc';
+
+                        $benefits = DB::table('sections')
+                            ->join('section_datas', function ($join) use ($lang_id) {
+                                $join->on('sections.id', '=', 'section_datas.section_id')
+                                    ->where('section_datas.language_id', '=', $lang_id);
+                            })
+                            ->select('sections.id', 'section_datas.datas')
+                            ->where('sections.name', 'Benefits Of Yacht')
+                            ->orderBy('sections.id', $order)
+                            ->limit($limit)
+                            ->get();
+
+                        if ($benefits->isNotEmpty()) {
+                            $first = $benefits[0];
+                            $data = json_decode($first->datas, true);
+
+                            $items = [];
+
+                            foreach (range(1, 6) as $i) {
+                                $label = $data["label_boat_benefits_$i"] ?? '';
+                                $description = $data["description_boat_benefits_$i"] ?? '';
+                                $thumbnail = $data["thumbnail_image_boat_benefits_$i"] ?? null;
+
+                                // Fallback if no image is set
+                                if (empty($thumbnail)) {
+                                    $fallbacks = [
+                                        1 => '/frontend/assets/img/icons/bx-selection.svg',
+                                        2 => '/frontend/assets/img/icons/bx-crown.svg',
+                                        3 => '/frontend/assets/img/icons/bx-user-check.svg',
+                                        4 => '/frontend/assets/img/icons/bx-map.svg',
+                                        5 => '/frontend/assets/img/icons/bx-briefcase.svg',
+                                        6 => '/frontend/assets/img/icons/bx-heart.svg',
+                                    ];
+                                    $thumbnail = asset($fallbacks[$i]);
+                                } else {
+                                    $thumbnail = asset('storage/' . $thumbnail);
+                                }
+
+                                if (!empty($label) || !empty($description) || !empty($thumbnail)) {
+                                    $items[] = [
+                                        'label'       => $label,
+                                        'description' => $description,
+                                        'image'       => $thumbnail,
+                                    ];
+                                }
+                            }
+
+                            $section['section_type'] = 'yacht_benefits';
+                            $section['type'] = 'yacht_benefits';
+                            $section['design'] = 'yacht_benefits_six';
+                            $section['section_content'] = [
+                                "items" => $items,
+                                "view_all" => $viewAll,
                             ];
                         }
                     }

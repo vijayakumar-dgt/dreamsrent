@@ -458,6 +458,165 @@
                 </div>
             </div>
         </div>
+
+        <div id="section_id_7" class="d-none">
+            <div class="row">
+                <!-- Title -->
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <input type="text" name="section_title_boat_benefits" id="section_title_boat_benefits" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_section_title') }}">
+                        <div class="invalid-feedback" id="section_title_boat_benefits_error"></div>
+                    </div>
+                </div>
+
+                <!-- Label 1 -->
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.label') }} 1</label>
+                        <input type="text" name="label_boat_benefits_1" id="label_boat_benefits_1" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_label') }}">
+                        <div class="invalid-feedback" id="label_boat_benefits_1_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.description') }} 1</label>
+                        <textarea name="description_boat_benefits_1" id="description_boat_benefits_1" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
+                        <div class="invalid-feedback" id="description_boat_benefits_1_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 1</label>
+                        <input type="file" name="thumbnail_image_boat_benefits_1" id="thumbnail_image_boat_benefits_1" class="form-control"
+                            accept="image/*" onchange="previewThumbnailBenefits(this, 1)">
+                        <div class="invalid-feedback" id="thumbnail_image_boat_benefits_1_error"></div>
+                        <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_benefits_1"
+                            class="mt-2 img-preview-thumb" alt="Image">
+                    </div>
+                </div>
+
+                <!-- Label 2 -->
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.label') }} 2</label>
+                        <input type="text" name="label_boat_benefits_2" id="label_boat_benefits_2" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_label') }}">
+                        <div class="invalid-feedback" id="label_boat_benefits_2_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.description') }} 2</label>
+                        <textarea name="description_boat_benefits_2" id="description_boat_benefits_2" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
+                        <div class="invalid-feedback" id="description_boat_benefits_2_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 2</label>
+                        <input type="file" name="thumbnail_image_boat_benefits_2" id="thumbnail_image_boat_benefits_2" class="form-control"
+                            accept="image/*" onchange="previewThumbnailBenefits(this, 2)">
+                        <div class="invalid-feedback" id="thumbnail_image_boat_benefits_2_error"></div>
+                        <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_benefits_2"
+                            class="mt-2 img-preview-thumb" alt="Image">
+                    </div>
+                </div>
+
+                <!-- Label 3 -->
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.label') }} 3</label>
+                        <input type="text" name="label_boat_benefits_3" id="label_boat_benefits_3" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_label') }}">
+                        <div class="invalid-feedback" id="label_boat_benefits_3_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.description') }} 3</label>
+                        <textarea name="description_boat_benefits_3" id="description_boat_benefits_3" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
+                        <div class="invalid-feedback" id="description_boat_benefits_3_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 3</label>
+                        <input type="file" name="thumbnail_image_boat_benefits_3" id="thumbnail_image_boat_benefits_3" class="form-control"
+                            accept="image/*" onchange="previewThumbnailBenefits(this, 3)">
+                        <div class="invalid-feedback" id="thumbnail_image_boat_benefits_3_error"></div>
+                        <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_benefits_3"
+                            class="mt-2 img-preview-thumb" alt="Image">
+                    </div>
+                </div>
+
+                <!-- Label 4 -->
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.label') }} 4</label>
+                        <input type="text" name="label_boat_benefits_4" id="label_boat_benefits_4" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_label') }}">
+                        <div class="invalid-feedback" id="label_boat_benefits_4_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.description') }} 4</label>
+                        <textarea name="description_boat_benefits_4" id="description_boat_benefits_4" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
+                        <div class="invalid-feedback" id="description_boat_benefits_4_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 4</label>
+                        <input type="file" name="thumbnail_image_boat_benefits_4" id="thumbnail_image_boat_benefits_4" class="form-control"
+                            accept="image/*" onchange="previewThumbnailBenefits(this, 4)">
+                        <div class="invalid-feedback" id="thumbnail_image_boat_benefits_4_error"></div>
+                        <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_benefits_4"
+                            class="mt-2 img-preview-thumb" alt="Image">
+                    </div>
+                </div>
+
+                <!-- Label 5 -->
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.label') }} 5</label>
+                        <input type="text" name="label_boat_benefits_5" id="label_boat_benefits_5" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_label') }}">
+                        <div class="invalid-feedback" id="label_boat_benefits_5_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.description') }} 5</label>
+                        <textarea name="description_boat_benefits_5" id="description_boat_benefits_5" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
+                        <div class="invalid-feedback" id="description_boat_benefits_5_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 5</label>
+                        <input type="file" name="thumbnail_image_boat_benefits_5" id="thumbnail_image_boat_benefits_5" class="form-control"
+                            accept="image/*" onchange="previewThumbnailBenefits(this, 5)">
+                        <div class="invalid-feedback" id="thumbnail_image_boat_benefits_5_error"></div>
+                        <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_benefits_5"
+                            class="mt-2 img-preview-thumb" alt="Image">
+                    </div>
+                </div>
+
+                <!-- Label 6 -->
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.label') }} 6</label>
+                        <input type="text" name="label_boat_benefits_6" id="label_boat_benefits_6" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_label') }}">
+                        <div class="invalid-feedback" id="label_boat_benefits_6_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.description') }} 6</label>
+                        <textarea name="description_boat_benefits_6" id="description_boat_benefits_6" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
+                        <div class="invalid-feedback" id="description_boat_benefits_6_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 6</label>
+                        <input type="file" name="thumbnail_image_boat_benefits_6" id="thumbnail_image_boat_benefits_6" class="form-control"
+                            accept="image/*" onchange="previewThumbnailBenefits(this, 6)">
+                        <div class="invalid-feedback" id="thumbnail_image_boat_benefits_6_error"></div>
+                        <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_benefits_6"
+                            class="mt-2 img-preview-thumb" alt="Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </x-slot>
 
     <x-slot name="footer">
