@@ -277,10 +277,6 @@
             $(".upload_icon, .upload_icon_2").removeClass("d-none");
         });
 
-        $("#total_cars").on("input", function () {
-            $(this).val(this.value.replace(/[^0-9]/g, ""));
-        });
-
         $("#brandDeleteForm").on("submit", function (e) {
             e.preventDefault();
             $.ajax({
@@ -329,7 +325,6 @@
                     $("#vehicle_category_id")
                         .val(data.category_id)
                         .trigger("change");
-                    $("#total_cars").val(data.total_cars);
                     $("#status").prop("checked", data.status == 1);
                     $("#id").val(data.id);
                     $("#language_id").val(data.language_id);
@@ -368,7 +363,11 @@
             processing: false,
             ajax: {
                 url: "/admin/brand/list",
-                type: "GET",
+                type: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
                 data: function (d) {
                     d.search = $("#search").val();
                     d.sort_by_status = $("#sort_by_status").val();

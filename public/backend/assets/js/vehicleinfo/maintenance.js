@@ -190,7 +190,7 @@
             destroy: true,
             ajax: {
                 url: "/admin/maintenance/list",
-                type: "GET",
+                type: "POST",
                 headers: {
                     Accept: "application/json",
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(

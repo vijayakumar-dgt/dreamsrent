@@ -98,11 +98,6 @@
 				</select>
 				<span class="text-danger error-text" id="brand_id_error"></span>
 			</div>
-			<div class="mb-3 d-none">
-				<label class="form-label">{{ __('admin.rentals.total_vehicles') }}<span class="text-danger"> *</span></label>
-				<input type="text" class="form-control" name="total_cars" id="total_cars">
-				<span id="total_cars_error" class="text-danger error-text"></span>
-			</div>
 	   </x-slot>
 	   <x-slot name="footer">
 			<div class="d-flex justify-content-between align-items-center w-100">

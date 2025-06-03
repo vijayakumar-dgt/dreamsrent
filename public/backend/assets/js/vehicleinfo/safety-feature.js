@@ -61,11 +61,10 @@
                 $(element).valid();
             },
             submitHandler: function (form) {
-                let formData = new FormData();
-                formData.append("feature", $("#feature").val());
+                let formData = new FormData(form);
                 if ($("#id").val() != "") {
-                    formData.append("id", $("#id").val());
-                    formData.append(
+                    formData.set("id", $("#id").val());
+                    formData.set(
                         "status",
                         $("#status").is(":checked") ? 1 : 0
                     );
@@ -79,9 +78,7 @@
                     contentType: false,
                     headers: {
                         Accept: "application/json",
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                            "content"
-                        ),
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
                     },
                     beforeSend: function () {
                         $(".submitbtn").attr("disabled", true).html(`
@@ -141,7 +138,11 @@
             processing: false,
             ajax: {
                 url: "/admin/safety-feature/list",
-                type: "GET",
+                type: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
                 data: function (d) {
                     d.search = $("#search").val();
                     d.sort_by_status = $("#sort_by_status").val();
