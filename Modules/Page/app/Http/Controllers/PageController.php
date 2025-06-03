@@ -665,10 +665,11 @@ class PageController extends Controller
                         $limit = $matches[1] ?? 6;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
+                        $categoryId = getCategoryId();
                         $category = Cartype::select('name', 'icon', 'id')
                             ->limit((int) $limit)
                             ->where('language_id', $lang_id)
+                            ->where('category_id', $categoryId)
                             ->where('status', 1)
                             ->whereNull('deleted_at')
                             ->get()
@@ -701,11 +702,11 @@ class PageController extends Controller
                         $limit = $matches[1] ?? 6;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
+                        $categoryId = getCategoryId();
                         $category = Cartype::select('name', 'icon', 'id', 'type')
                             ->limit((int) $limit)
-                            ->where('type', 'bike')
                             ->where('language_id', $lang_id)
+                            ->where('category_id', $categoryId)
                             ->where('status', 1)
                             ->whereNull('deleted_at')
                             ->get()
@@ -1083,6 +1084,7 @@ class PageController extends Controller
                                 'mileage' => $vehicle->mileage,
                                 'odometer' => $vehicle->odometer,
                                 'rating' => $rating,
+                                'total_review' => Review::where("vehicle_id", $vehicle->id)->count(),
                                 'currency' => $currencySymbol,
                                 'wishlist' => $wishlistExists,
                                 'passenger_capacity' => $vehicle->passenger_capacity,
@@ -1428,7 +1430,8 @@ class PageController extends Controller
             'show_decline_btn' => $cookieSettings['showDeclineButton_' . $language_id] ?? '',
             'cookies_page_link' => $cookieSettings['cookiesPageLink_' . $language_id] ?? '',
         ];
-
+        $categoryId = getCategoryId();
+        $vehicleTypes = Cartype::select('name', 'id')->where('language_id', $language_id)->where('category_id', $categoryId)->where('status', 1)->get();
         if ($page) {
             $data = [
                 'page_title' => $page->page_title,
@@ -1440,7 +1443,8 @@ class PageController extends Controller
                 'seo_title' => $page->seo_title,
                 'seo_description' => $page->seo_description,
                 'status' => $page->status,
-                'cookie_settings' => $cookieResponse
+                'cookie_settings' => $cookieResponse,
+                'vehicle_types' => $vehicleTypes
             ];
 
             $seo_title = $page->seo_title;
@@ -1736,10 +1740,11 @@ class PageController extends Controller
                         $limit = $matches[1] ?? 6;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
+                        $categoryId = getCategoryId();
                         $category = Cartype::select('name', 'icon', 'id')
                             ->limit((int) $limit)
                             ->where('language_id', $lang_id)
+                            ->where('category_id', $categoryId)
                             ->where('status', 1)
                             ->whereNull('deleted_at')
                             ->get()
@@ -1954,9 +1959,10 @@ class PageController extends Controller
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)/', $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $viewAll = $matches[2] ?? 'no';
-
+                        $categoryId = getCategoryId();
                         $cartypes = Cartype::select('name', 'icon', 'id')
                             ->where('language_id', $lang_id)
+                            ->where('category_id', $categoryId)
                             ->where('status', 1)
                             ->whereNull('deleted_at')
                             ->limit($limit)
@@ -2213,7 +2219,7 @@ class PageController extends Controller
                 }
             }
         }
-
+        
         if ($page) {
             $data = [
                 'page_title' => $page->page_title,

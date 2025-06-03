@@ -57,7 +57,7 @@
                                             @for ($i = 0; $i < $emptyStars; $i++)						
                                             <i class="fas fa-star"></i>
                                             @endfor
-                                            <span>{{ $vehicle['rating'] }} Reviews</span>
+                                            <span>{{ $vehicle['total_review'] }} Reviews</span>
                                         </div>
                                         <h3 class="listing-title">
                                             <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">{{ $vehicle['name'] ?? "" }}</a>
