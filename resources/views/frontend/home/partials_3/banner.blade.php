@@ -9,6 +9,8 @@
     $titleMain = implode(' ', array_slice($titleWords, 0, -$lastPartCount));
     $titleLastPart = implode(' ', array_slice($titleWords, -$lastPartCount));
     $vehicle_types = $data['vehicle_types'] ?? [];
+    $vehicle_models = $data['vehicle_models'] ?? [];
+    $locations = $data['locations'] ?? [];
 @endphp
 <!-- Banner -->
 <section class="banner-section banner-slider">		
@@ -23,7 +25,8 @@
                             <div class="search-input">
                                 <div class="input-block">
                                     <label>Any type</label>
-                                    <select class="select" name="vehicle_type_id">
+                                    <select class="select" name="category">
+                                        <option value="">Select</option>
                                         @if(!empty($vehicle_types) && count($vehicle_types) > 0)
                                         @foreach ($vehicle_types as $vehicle_type)
                                             <option value="{{ $vehicle_type->id }}">{{ $vehicle_type->name ?? "" }}</option>
@@ -35,18 +38,26 @@
                             <div class="search-input">
                                 <div class="input-block">
                                     <label>Model</label>
-                                    <select class="select">
-                                        <option>KTM 300</option>
-                                        <option>KTM RC 390</option>
+                                    <select class="select" name="vm">
+                                        <option value="">Select</option>
+                                        @if(!empty($vehicle_models) && count($vehicle_models) > 0)
+                                        @foreach ($vehicle_models as $vehicle_model)
+                                            <option value="{{ $vehicle_model->id }}">{{ $vehicle_model->name ?? "" }}</option>
+                                        @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
                             <div class="search-input">
                                 <div class="input-block">
                                     <label>Location</label>
-                                    <select class="select">
-                                        <option>Newyork</option>
-                                        <option>Los Angeles</option>
+                                    <select class="select" name="pickuplocation">
+                                        <option value="">Select</option>
+                                        @if(!empty($locations) && count($locations) > 0)
+                                        @foreach ($locations as $location)
+                                            <option value="{{ $location->name }}">{{ $location->name ?? "" }}</option>
+                                        @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>

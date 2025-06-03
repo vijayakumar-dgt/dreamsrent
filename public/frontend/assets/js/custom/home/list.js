@@ -37,7 +37,9 @@
     $(document).on('change','#sortBy', function(){
         fetchVehicles(); 
     });
-    fetchVehicles();
+    setTimeout(() => {
+        fetchVehicles();
+    }, 200);
     function fetchVehicles() {
         pl = $("#pickup-suggestions li.selected").data("id") || '';
         dl = $("#drop-suggestions li.selected").data("id") || '';
@@ -46,7 +48,7 @@
         ratings = $("input[name=rating]:checked").map(function () {
             return $(this).val();
         }).get();
-
+        
         let pickupdate = $("#pickupdate").val();
         let pickuptime = $("#pickuptime").val() ? $("#pickuptime").val() + ":00" : ""; // Default to midnight if empty
         let returndate = $("#returndate").val();

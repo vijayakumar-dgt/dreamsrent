@@ -24,6 +24,7 @@ use Modules\CarInfo\Models\Cartype;
 use Modules\CarInfo\Models\Location;
 use Modules\CarInfo\Models\VehicleInfo;
 use Modules\CarInfo\Models\VehicleMeta;
+use Modules\CarInfo\Models\CarModel;
 use Modules\GeneralSetting\Models\BlogCategory;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Models\GeneralSetting;
@@ -1531,6 +1532,8 @@ class PageController extends Controller
         ];
         $categoryId = getCategoryId();
         $vehicleTypes = Cartype::select('name', 'id')->where('language_id', $language_id)->where('category_id', $categoryId)->where('status', 1)->get();
+        $vehicleModels = CarModel::select('model_name as name', 'id')->where('language_id', $language_id)->where('category_id', $categoryId)->where('status', 1)->get();
+        $locations = Location::select('name','id')->where('status', 1)->where('language_id', $language_id)->get();
         if ($page) {
             $data = [
                 'page_title' => $page->page_title,
@@ -1543,7 +1546,9 @@ class PageController extends Controller
                 'seo_description' => $page->seo_description,
                 'status' => $page->status,
                 'cookie_settings' => $cookieResponse,
-                'vehicle_types' => $vehicleTypes
+                'vehicle_types' => $vehicleTypes,
+                'vehicle_models' => $vehicleModels,
+                'locations' => $locations
             ];
 
             $seo_title = $page->seo_title;
