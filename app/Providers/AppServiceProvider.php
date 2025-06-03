@@ -114,10 +114,11 @@ class AppServiceProvider extends ServiceProvider
             $companyPhoneNumber = GeneralSetting::where('key', 'company_phone')->first();
             $companyEmail = GeneralSetting::where('key', 'company_email')->first();
             $companyName = GeneralSetting::where('key', 'organization_name')->first();
-
+            $company_address_line = GeneralSetting::where('key', 'company_address_line')->first();
             $companyPhoneNumber = $companyPhoneNumber ? $companyPhoneNumber->value : '';
             $companyEmail = $companyEmail ? $companyEmail->value : '';
             $companyName = $companyName ? $companyName->value : 'Dreams Rent';
+            $company_address_line = $company_address_line ? $company_address_line->value : '';
             $theme = $defaultTheme ? $defaultTheme->value : 1;
             $language_switcher = GeneralSetting::where('group_id', 5)->where('key', 'language_switcher')->first();
             $language_switcher = $language_switcher ? $language_switcher->value : 0;
@@ -131,6 +132,7 @@ class AppServiceProvider extends ServiceProvider
                 'companyPhoneNumber' => $companyPhoneNumber,
                 'companyEmail' => $companyEmail,
                 'companyName' => $companyName,
+                'company_address_line' => $company_address_line,
                 'logo' => $logo,
                 'favicon' => $favicon,
                 'smallLogo' => $smallLogo,
@@ -169,7 +171,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function shareHeader(): void
     {
-        view()->composer(["frontend.theme_1.partials.header", "frontend.theme_2.partials.header","frontend.theme_3.partials.header"], function ($view) {
+        view()->composer(["frontend.theme_1.partials.header", "frontend.theme_2.partials.header","frontend.theme_3.partials.header","frontend.theme_4.partials.header"], function ($view) {
             $appLanguage = App::getLocale();
             $languageId = getLanguageId($appLanguage);
 
@@ -202,7 +204,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function shareFooter(): void
     {
-        view()->composer(["frontend.theme_1.partials.footer", "frontend.theme_2.partials.footer","frontend.theme_3.partials.footer"], function ($view) {
+        view()->composer(["frontend.theme_1.partials.footer", "frontend.theme_2.partials.footer","frontend.theme_3.partials.footer","frontend.theme_4.partials.footer"], function ($view) {
             $appLanguage = App::getLocale();
             $languageId = getLanguageId($appLanguage);
 
