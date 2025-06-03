@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\User;
 use App\Models\UserDetail;
 use App\Repositories\Contracts\HomeRepositoryInterface;
+use Illuminate\Http\Request;
 use Modules\Booking\Models\Booking;
 use Modules\CarInfo\Models\Brand;
 use Modules\CarInfo\Models\CarColor;
@@ -29,13 +30,15 @@ class HomeRepository implements HomeRepositoryInterface
         return $viewPath;
     }
 
-    public function getVehicles(): array
+    public function getVehicles(Request $request): array
     {
         $languageCode = app()->getLocale();
         $languageId = getLanguageId($languageCode);
         $brands = Brand::where('status', 1)->where("language_id", $languageId)->orderBy('brand_name', 'asc')->get();
+        $categoryId = getCategoryId();
         /** @var \Illuminate\Database\Eloquent\Collection<int, \Modules\CarInfo\Models\Cartype> $cartypes */
         $cartypes = Cartype::where('language_id', $languageId)
+            ->where('category_id', $categoryId)
             ->where('status', 1)
             ->orderBy('name', 'asc')
             ->get();
@@ -68,6 +71,7 @@ class HomeRepository implements HomeRepositoryInterface
         $pickuptime = "";
         $returndate = "";
         $returntime = "";
+        $vehiclemodel = "";
         $defaultTheme = GeneralSetting::where('key', 'default_theme')->first();
         $theme = $defaultTheme->value ?? 1;
         if ($theme == 1) {
@@ -75,13 +79,17 @@ class HomeRepository implements HomeRepositoryInterface
             $pickuptime = $request->pickuptime ?? '';
             $returndate = $request->returndate ?? '';
             $returntime = $request->returntime ?? '';
-        } else {
+        } elseif($theme == 2) {
             $pickupdatetime = $request->pickupdatetime ?? '';
             $returndatetime = $request->returndatetime ?? '';
             $pickupdate = $pickupdatetime ? date('d-m-Y', strtotime($pickupdatetime)) : '';
             $pickuptime = $pickupdatetime ? date('H:i:s', strtotime($pickupdatetime)) : '';
             $returndate = $returndatetime ? date('d-m-Y', strtotime($returndatetime)) : '';
             $returntime = $returndatetime ? date('H:i:s', strtotime($returndatetime)) : '';
+        } elseif($theme == 3) {
+            $vehiclemodel = $request->vm ?? '';
+            $category  = $request->vt ?? '';
+            //remove params from url
         }
         $_pickuplocation = Location::select('id', 'name')->where('status', 1)->where('language_id', $languageId)->where('name', 'like', '%' . $pickuplocation . '%')->first();
         $data = [

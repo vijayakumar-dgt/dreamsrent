@@ -22,7 +22,7 @@ class HomeController extends Controller
 
     public function list(Request $request): View|JsonResponse
     {
-        $data = $this->homeRepository->getVehicles();
+        $data = $this->homeRepository->getVehicles($request);
         return view('frontend.home.list.list', $data);
     }
 
