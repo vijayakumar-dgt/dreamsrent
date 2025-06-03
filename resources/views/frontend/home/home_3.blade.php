@@ -21,26 +21,29 @@
             @break
         @case('brands')
             @include('frontend.home.partials_3.brands', ['section' => $section])
-        @break
+            @break
         @case('feature_vehicle')
             @include('frontend.home.partials_3.feature_vehicles', ['section' => $section])
-        @break
+            @break
         @case('locations')
             @include('frontend.home.partials_3.locations', ['section' => $section])
-        @break
+            @break
         @case('facts_section')
             @include('frontend.home.partials_3.facts', ['section' => $section])
-        @break
+            @break
         @case('testimonial')
             @include('frontend.home.partials_3.testimonials', ['section' => $section])
-        @break
+            @break
         @case('blog')
             @include('frontend.home.partials_3.blogs', ['section' => $section, 'content_sections' => $content_sections])
             @break
         @case('marquee_section')
             @include('frontend.home.partials_3.marquee', ['section' => $section])
-        @break
+            @break
     @endswitch
 @endforeach
 @endif
 @endsection
+@push('scripts')
+<script src="{{ asset('frontend/assets/js/custom/home/home_3.js') }}"></script>
+@endpush
