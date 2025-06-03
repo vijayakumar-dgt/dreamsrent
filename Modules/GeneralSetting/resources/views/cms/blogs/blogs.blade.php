@@ -165,24 +165,13 @@
     <!-- /Page Wrapper -->
 
     <!-- Delete Blogs -->
-    <div class="modal fade" id="delete_blogs">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                    <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-                        <i class="ti ti-trash fs-26"></i>
-                    </span>
-                    <h4 class="mb-1">{{__('admin.blog.delete_blog')}}</h4>
-                    <p class="mb-3">{{__('admin.blog.are_you_sure_you_want_to_delete_blog')}}?</p>
-                    <input type="hidden" id="delete_blog_id">
-                    <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{__('admin.blog.cancel')}}</a>
-                        <a href="javascript:void(0);" class="btn btn-primary" id="confirmDelete">{{__('admin.blog.yes_delete')}}</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-admin.delete-modal
+        className="deletemodal"
+        id="delete_blogs"
+        :title="__('admin.blog.delete_blog')"
+        :hiddenInputs="['delete_blog_id' => '']"
+        :description="__('admin.blog.are_you_sure_you_want_to_delete_blog')">
+    </x-admin.delete-modal>
     <!-- /Delete Blogs -->
 @endsection
 
