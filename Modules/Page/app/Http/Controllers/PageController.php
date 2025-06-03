@@ -707,7 +707,7 @@ class PageController extends Controller
                             ->get()
                             ->map(function ($location) {
                                 $location->image = asset('storage/' . $location->image);
-                                $getCategoryId = getCategoryId();                               
+                                $getCategoryId = getCategoryId();
                                 $location->vehicle_count = DB::table('vehicle_info')
                                     ->where('main_location_id', $location->id)
                                     ->where('category_id', $getCategoryId)
@@ -1578,6 +1578,55 @@ class PageController extends Controller
                     }
                 }
 
+                // Yacht Experience
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+
+                    if (is_string($content) && strpos($content, '[experience') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        $limit = isset($matches[1]) ? (int)$matches[1] : 10;
+                        $order = $matches[3] ?? 'asc';
+
+                        $experiences = DB::table('sections')
+                            ->join('section_datas', function ($join) use ($lang_id) {
+                                $join->on('sections.id', '=', 'section_datas.section_id')
+                                    ->where('section_datas.language_id', '=', $lang_id);
+                            })
+                            ->select('sections.id', 'section_datas.datas')
+                            ->where('sections.name', 'Yacht Experience')
+                            ->orderBy('sections.id', $order)
+                            ->limit($limit)
+                            ->get();
+
+                        if ($experiences->isNotEmpty()) {
+                            $items = [];
+
+                            foreach ($experiences as $experience) {
+                                $data = json_decode($experience->datas, true);
+
+                                if (is_array($data)) {
+                                    // Normalize image URLs
+                                    foreach ($data as $key => $value) {
+                                        if (str_starts_with($key, 'thumbnail_image_') && !empty($value)) {
+                                            $data[$key] = asset('storage/' . ltrim($value, '/'));
+                                        }
+                                    }
+
+                                    $items[] = [
+                                        'id' => $experience->id,
+                                        'data' => $data,
+                                    ];
+                                }
+                            }
+
+                            $section['section_type'] = 'yacht_experience';
+                            $section['type'] = 'yacht_experience';
+                            $section['design'] = 'yacht_experience_six';
+                            $section['section_content'] = $items; // Directly assign items
+                        }
+                    }
+                }
+
                 //Blog Section
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
@@ -1786,7 +1835,7 @@ class PageController extends Controller
                 ->get();
 
             $content_sections = collect((array) $data['content_sections']);
-            // dd($content_sections);
+            dd($content_sections);
             if (request()->has('is_mobile') && request()->get('is_mobile') === "yes") {
                 return response()->json(['code' => "200", 'message' => __('Page details retrieved successfully.'), 'data' => $data], 200);
             } else {
