@@ -37,7 +37,7 @@ class DeleteModal extends Component
         $description = '',
         $deleteBtnType = 'submit',
         $deleteBtnId = '',
-        $deleteBtnText =  '',
+        $deleteBtnText =  null,
         $modalIconClass = 'ti ti-trash-x fs-26',
     ) {
         $this->className = $className;
