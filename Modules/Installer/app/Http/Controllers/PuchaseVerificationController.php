@@ -4,23 +4,23 @@ namespace Modules\Installer\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
-use Modules\Installer\Enums\InstallerInfo;
-use Modules\Installer\Models\Configuration;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
-use RuntimeException;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Modules\Installer\Http\Requests\PurchaseVerificationRequest;
+use Modules\Installer\Models\Configuration;
+use Modules\Installer\Repositories\Contracts\PurchaseVerificationInterface;
+use RuntimeException;
 
 class PuchaseVerificationController extends Controller
 {
-    public function __construct()
+    protected PurchaseVerificationInterface $verificationRepository;
+
+    public function __construct(PurchaseVerificationInterface $verificationRepository)
     {
+        $this->verificationRepository = $verificationRepository;
         set_time_limit(8000000);
     }
-
 
     public function index(): RedirectResponse
     {
@@ -30,27 +30,15 @@ class PuchaseVerificationController extends Controller
     /**
      * Validate the purchase code.
      *
-     * @param Request $request
+     * @param PurchaseVerificationRequest $request
      * @return JsonResponse
      */
-    public function validatePurchase(Request $request): JsonResponse
+    public function validatePurchase(PurchaseVerificationRequest $request): JsonResponse
     {
         session()->flush();
-        $request->validate([
-            'purchase_code' => 'required|string',
-        ]);
 
         try {
-            $response = Http::asForm()->post(InstallerInfo::VERIFICATION_URL->value, [
-                'purchase_code' => $request->purchase_code,
-            ]);
-
-            $data = $response->json();
-
-            // Validate response structure
-            if (!is_array($data)) {
-                throw new RuntimeException('Invalid verification response format');
-            }
+            $data = $this->verificationRepository->verifyPurchaseCode($request->purchase_code);
 
             // Check status with proper type safety
             if (isset($data['status']) && $data['status'] === true) {
