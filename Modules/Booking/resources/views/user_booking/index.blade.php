@@ -455,11 +455,10 @@
                                                 {{ $insurance->insurance_name }}
                                             </p>
                                             <div>
-                                                <x-admin.modal-link
-                                                    :text="'+' . $insurance->benefits_count . ' ' . __('web.home.benefits')"
-                                                    modalId="show_benifit"
-                                                    dataAttributes='["insurance-id" => $insurance->insurances_id]' />
-
+                                                <a href="#" class="show-benefits-link" data-bs-toggle="modal" data-bs-target="#show_benifit"
+                                                    data-insurance-id="{{ $insurance->insurances_id }}">
+                                                    +{{ $insurance->benefits_count }} {{ __('web.home.benefits') }}
+                                                </a>
                                             </div>
                                         </div>
                                         <div class="insurance-meta text-end">
@@ -932,12 +931,21 @@
 </div>
 
 
-<x-admin.modal id="show_benifit" size="md" :title="__('Insurance Benefits')" :headerClass="'border-0'">
-    <div class="modal-body">
-        <ul id="benefit-list" class="ps-3"></ul>
-    </div>
-</x-admin.modal>
+<div class="modal fade" id="show_benifit" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-start w-100">Insurance Benefits</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
+            <div class="modal-body">
+                <ul id="benefit-list" class="ps-3">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
 
