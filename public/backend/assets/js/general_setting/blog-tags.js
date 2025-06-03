@@ -159,7 +159,7 @@
             $("#delete_Tag").modal("show");
         });
 
-        $(document).on("click", "#delete_tag_btn", function () {
+        $(document).on("click", "#delete_Tag", function () {
             let id = $("#delete_tag_id").val();
             $.ajax({
                 url: "/admin/content/tags/" + id,

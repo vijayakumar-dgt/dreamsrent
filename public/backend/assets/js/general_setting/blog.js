@@ -169,8 +169,7 @@
             var blogId = $(this).data("id");
             $("#delete_blog_id").val(blogId);
         });
-
-        $("#confirmDelete").on("click", function () {
+        $(document).on('click', '#delete_blogs .btn-primary', function () {
             var blogId = $("#delete_blog_id").val();
 
             $.ajax({

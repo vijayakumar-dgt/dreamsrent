@@ -171,7 +171,7 @@
             $("#delete_Category").modal("show");
         });
 
-        $(document).on("click", "#delete_category_btn", function () {
+        $(document).on('click', '#delete_Category', function () {
             let id = $("#delete_category_id").val();
             $.ajax({
                 url: "/admin/content/categories/" + id,
