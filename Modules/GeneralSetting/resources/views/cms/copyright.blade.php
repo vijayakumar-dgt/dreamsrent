@@ -16,7 +16,8 @@
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-lg-9">
-                    <form @csrf id="copyRightForm">
+                    <form id="copyRightForm">
+                        @csrf
                         <div class="card h-100">
                             <!-- Card Header -->
                             <div class="card-header">

@@ -15,7 +15,8 @@
             <!-- Settings Prefix -->
             <div class="row">
                 <div class="col-lg-12">
-                    <form @csrf id="howItWorkForm">
+                    <form id="howItWorkForm">
+                        @csrf
                         <div class="card mb-0">
                             <!-- Card Header -->
                             <div class="card-header">
