@@ -14,7 +14,7 @@ use Modules\GeneralSetting\Http\Controllers\Admin\SitemapController;
 use Modules\GeneralSetting\Http\Controllers\Admin\TaxRateController;
 use Modules\GeneralSetting\Http\Controllers\Admin\SignatureSettingsController;
 use Modules\GeneralSetting\Http\Controllers\Admin\FaqController;
-use Modules\GeneralSetting\Http\Controllers\BlogsController;
+use Modules\GeneralSetting\Http\Controllers\Admin\BlogsController;
 use Modules\GeneralSetting\Http\Controllers\Admin\TestimonialController;
 use Modules\GeneralSetting\Http\Controllers\Admin\DbbackupController;
 

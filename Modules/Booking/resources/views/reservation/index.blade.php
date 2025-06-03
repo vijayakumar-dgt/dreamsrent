@@ -174,49 +174,32 @@
     <!-- /Page Wrapper -->
 
     <!-- Delete Modal  -->
-    <div class="modal fade" id="delete_modal">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <form id="reservation_delete_form">
-                    <input type="hidden" name="delete_id" id="delete_id">
-                    <div class="modal-body text-center">
-                        <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-                            <i class="ti ti-trash-x fs-26"></i>
-                        </span>
-                        <h4 class="mb-1">{{ __('admin.bookings.delete_reservation') }}</h4>
-                        <p class="mb-3">{{ __('admin.bookings.delete_reservation_confirmation') }}</p>
-                        <div class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                            <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <x-admin.delete-modal
+        className="deletemodal"
+        id="delete_modal"
+        action="{{ route('reservation.delete') }}"
+        formId="reservation_delete_form"
+        method="POST"
+        :hiddenInputs="['delete_id' => '']"
+        deleteBtnText="{{ __('admin.common.delete') }}"  
+        :title="__('admin.bookings.delete_reservation')"
+        :description="__('admin.bookings.delete_reservation_confirmation')">
+    </x-admin.delete-modal>
     <!-- /Delete Modal-->
 
     <!-- Complete Modal  -->
-    <div class="modal fade" id="complete_modal">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <form id="reservation_complete_form">
-                    <input type="hidden" name="compelete_id" id="compelete_id">
-                    <div class="modal-body text-center">
-                        <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-                            <i class="ti ti-circle-check fs-26"></i>
-                        </span>
-                        <h4 class="mb-1">{{ __('admin.bookings.complete_booking') }}</h4>
-                        <p class="mb-3">{{ __('admin.bookings.complete_reservation_confirmation') }}</p>
-                        <div class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                            <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_complete') }}</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <x-admin.delete-modal
+	className="deletemodal"
+	id="complete_modal"
+	action="{{ route('reservation.complete') }}"
+	formId="reservation_complete_form"
+	method="POST"
+	:hiddenInputs="['compelete_id' => '']"
+	:title="__('admin.bookings.complete_booking')"
+    deleteBtnText="{{ __('admin.common.yes_complete') }}"
+    modalIconClass="ti ti-circle-check fs-26"
+	:description="__('admin.bookings.complete_reservation_confirmation')">
+    </x-admin.delete-modal>
     <!-- /Complete Modal-->
 @endsection
 
