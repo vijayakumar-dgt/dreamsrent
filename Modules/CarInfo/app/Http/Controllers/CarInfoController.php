@@ -160,8 +160,7 @@ class CarInfoController extends Controller
 
     public function getDamageDetails(Request $request): JsonResponse
     {
-        $damageId = $request->get('id');
-        $response = $this->vehicleInfoRepository->getDamageDetails($damageId);
+        $response = $this->vehicleInfoRepository->getDamageDetails($request);
         return response()->json($response, $response['code']);
     }
 

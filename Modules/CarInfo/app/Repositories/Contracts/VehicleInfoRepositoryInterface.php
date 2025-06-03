@@ -14,7 +14,7 @@ interface VehicleInfoRepositoryInterface
     public function setPopular(Request $request);
     public function setRecommended(Request $request);
     public function setStatus(Request $request);
-    public function getDamageDetails(?int $id);
+    public function getDamageDetails(Request $request);
     public function vehicleInterestLists();
     public function deleteVehiclePolicy(Request $request);
     public function deleteVehicleImage(Request $request);

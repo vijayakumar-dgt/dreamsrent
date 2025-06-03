@@ -1285,6 +1285,7 @@ return array(
     'delete_tariff_confirmation' => 'Are you sure you want to delete this tariff?',
     'confirm_delete_tariff' => 'Yes, Delete',
     'create_seasonal_price' => 'Create Seasonal Pricing',
+    'edit_seasonal_price' => 'Edit Seasonal Pricing',
     'season_name' => 'Season Name',
     'start_date' => 'Start Date',
     'end_date' => 'End Date',

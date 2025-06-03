@@ -524,7 +524,7 @@
                                     </div>
                                     <div class="col-xl-9">
                                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-                                            <button type="button" class="btn btn-dark btn-md d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add-tarrif"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_new_tariff_rate') }}</button>
+                                            <button type="button" class="btn btn-dark btn-md d-flex align-items-center" id="add_tariff_btn" data-bs-toggle="modal" data-bs-target="#add-tarrif"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_new_tariff_rate') }}</button>
                                         </div>
                                         <div class="card bg-light mb-3">
                                             <div class="card-body pb-3" id="tariff_append">
@@ -541,7 +541,7 @@
                                     </div>
                                     <div class="col-xl-9">
                                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-                                            <button type="button" class="btn btn-dark btn-md d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_price"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_new_seasonal_pricing') }}</button>
+                                            <button type="button" class="btn btn-dark btn-md d-flex align-items-center" id="add_seasonal_price_btn" data-bs-toggle="modal" data-bs-target="#add_price"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_new_seasonal_pricing') }}</button>
                                         </div>
                                         <div class="empty-data bg-light text-center mb-3">
                                         </div>
@@ -853,474 +853,429 @@
     </div>
 </div>
 
-<div class="modal fade addmodal" id="add_price">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title mb-0" id="seas_title">{{ __('admin.rentals.create_seasonal_price') }}</h4>
-                <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti ti-x fs-16"></i>
-                </button>
+<x-admin.modal className="addmodal"
+	id="add-tarrif"
+	:title="__('admin.rentals.create_tariff')"
+	modalTitleId="tarrif_title">
+	<x-slot name="body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.rentals.tariff_name') }} <span class="text-danger">*</span></label>
+                    <input type="text" name="t_name" id="t_name" maxlength="50" class="form-control">
+                </div>
             </div>
-            <div class="modal-body pb-1">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('admin.rentals.season_name') }} <span class="text-danger">*</span></label>
-                            <input type="text" name="s_name" id="s_name" maxlength="50" class="form-control">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.rentals.daily_price') }} <span class="text-danger">*</span></label>
+                    <input type="text" name="t_price" id="t_price" maxlength="5" class="form-control priceLimit">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.rentals.from_days') }} <span class="text-danger">*</span></label>
+                    <input type="text" name="t_fromday" id="t_fromday" maxlength="10" class="form-control priceLimit">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.rentals.to_days') }} <span class="text-danger">*</span></label>
+                    <input type="text" name="t_today" id="t_today" maxlength="10" class="form-control priceLimit">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="mb-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <label class="form-label">{{ __('admin.rentals.base_km_per_day') }} <span class="text-danger">*</span></label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" name="unlimited1" id="unlimited1">
+                            <label class="form-check-label" for="unlimited1">
+                                {{ __('admin.rentals.unlimited') }}
+                            </label>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('admin.rentals.start_date') }} <span class="text-danger">*</span></label>
-                            <div class="input-icon-end position-relative">
-                                <input type="text" name="s_strdate" id="s_strdate" class="form-control datetimepickerVehicle" placeholder="dd/mm/yyyy">
+                    <input type="text" name="t_base" id="t_base" maxlength="5" class="form-control priceLimit">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.rentals.km_extra_price') }} <span class="text-danger">*</span></label>
+                    <input type="text" id="t_extra" name="t_extra" maxlength="5" class="form-control priceLimit">
+                </div>
+            </div>
+        </div>
+	</x-slot>
+	<x-slot name="footer">
+		<div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+            <button type="button" class="btn btn-primary" id="tarrif_btn">{{ __('admin.rentals.create_tariff') }}</button>
+        </div>
+	</x-slot>
+</x-admin.modal>
+
+<x-admin.delete-modal
+	className="deletemodal"
+	id="delete_tarrif"
+	:title="__('admin.rentals.delete_tariff')"
+	:description="__('admin.rentals.delete_tariff_confirmation')"
+	deleteBtnType="button">
+</x-admin.delete-modal>
+
+<x-admin.modal className="addmodal"
+	id="add_price"
+	:title="__('admin.rentals.create_seasonal_price')"
+	modalTitleId="seas_title">
+	<x-slot name="body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.rentals.season_name') }} <span class="text-danger">*</span></label>
+                    <input type="text" name="s_name" id="s_name" maxlength="50" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.rentals.start_date') }} <span class="text-danger">*</span></label>
+                    <div class="input-icon-end position-relative">
+                        <input type="text" name="s_strdate" id="s_strdate" class="form-control datetimepickerVehicle" placeholder="dd/mm/yyyy">
+                        <span class="input-icon-addon">
+                            <i class="ti ti-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.rentals.end_date') }} <span class="text-danger">*</span></label>
+                    <div class="input-icon-end position-relative">
+                        <input type="text" name="s_enddate" id="s_enddate" class="form-control datetimepickerVehicle" placeholder="dd/mm/yyyy">
+                        <span class="input-icon-addon">
+                            <i class="ti ti-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.rentals.daily_rate') }} <span class="text-danger">*</span></label>
+                    <input type="text" name="s_drate" id="s_drate" maxlength="5" class="form-control priceLimit">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.rentals.weekly_rate') }} <span class="text-danger">*</span></label>
+                    <input type="text" name="s_wrate" id="s_wrate" maxlength="5" class="form-control priceLimit">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.rentals.monthly_rate') }} <span class="text-danger">*</span></label>
+                    <input type="text" name="s_mrate" id="s_mrate" maxlength="5" class="form-control priceLimit">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.rentals.late_fees') }} <span class="text-danger">*</span></label>
+                    <input type="text" name="s_lrate" id="s_lrate" maxlength="5" class="form-control priceLimit">
+                </div>
+            </div>
+        </div>
+	</x-slot>
+	<x-slot name="footer">
+		<div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+            <button type="button" class="btn btn-primary" id="price_btn">{{ __('admin.rentals.create_new') }}</button>
+        </div>
+	</x-slot>
+</x-admin.modal>
+
+<x-admin.delete-modal
+	className="deletemodal"
+	id="delete_price"
+	:title="__('admin.rentals.delete_pricing')"
+	:description="__('admin.rentals.delete_pricing_confirmation')"
+	deleteBtnType="button">
+</x-admin.delete-modal>
+
+<x-admin.modal className="addmodal"
+	id="edit_price"
+	:title="__('admin.rentals.edit_pricing_title')">
+	<x-slot name="body">
+        <table class="table custom-table1">
+            <thead class="thead-white">
+                <tr>
+                    <th class="py-0">{{ __('admin.rentals.extra_features') }}</th>
+                    <th class="py-0">{{ __('admin.rentals.pricing') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($ExtraServices as $service)
+                @php
+                $serviceInfo = $ExtraServiceInfo->firstWhere('extra_service_id', $service->id);
+                $selectedValue = $serviceInfo->value ?? 'per_day';
+                $selectedPrice = $serviceInfo->price ?? '00.00';
+                @endphp
+                <tr>
+                    <td class="fw-medium text-gray-9" id="extra_name">{{ $service->name }}</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <select class="form-control" id="extra_value" name="extra_value[{{ $service->id }}]">
+                                <option value="per_day" {{ $selectedValue == 'per_day' ? 'selected' : '' }}>{{ __('admin.rentals.per_day') }}</option>
+                                <option value="one_time" {{ $selectedValue == 'one_time' ? 'selected' : '' }}>{{ __('admin.rentals.one_time') }}</option>
+                            </select>
+                            <div class="input-icon-start position-relative w-100 ms-2">
                                 <span class="input-icon-addon">
-                                    <i class="ti ti-calendar"></i>
+                                    <i class="ti ti-currency-dollar"></i>
                                 </span>
+                                <input type="text" class="form-control" id="extra_price" name="extra_price[{{ $service->id }}]" value="{{ number_format($selectedPrice, 2) }}">
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('admin.rentals.end_date') }} <span class="text-danger">*</span></label>
-                            <div class="input-icon-end position-relative">
-                                <input type="text" name="s_enddate" id="s_enddate" class="form-control datetimepickerVehicle" placeholder="dd/mm/yyyy">
-                                <span class="input-icon-addon">
-                                    <i class="ti ti-calendar"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('admin.rentals.daily_rate') }} <span class="text-danger">*</span></label>
-                            <input type="text" name="s_drate" id="s_drate" maxlength="5" class="form-control priceLimit">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('admin.rentals.weekly_rate') }} <span class="text-danger">*</span></label>
-                            <input type="text" name="s_wrate" id="s_wrate" maxlength="5" class="form-control priceLimit">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('admin.rentals.monthly_rate') }} <span class="text-danger">*</span></label>
-                            <input type="text" name="s_mrate" id="s_mrate" maxlength="5" class="form-control priceLimit">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">{{ __('admin.rentals.late_fees') }} <span class="text-danger">*</span></label>
-                            <input type="text" name="s_lrate" id="s_lrate" maxlength="5" class="form-control priceLimit">
-                        </div>
-                    </div>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+	</x-slot>
+	<x-slot name="footer">
+		<div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
+            <button type="button" class="btn btn-primary" id="service_save_btn">{{ __('admin.rentals.save_changes') }}</button>
+        </div>
+	</x-slot>
+</x-admin.modal>
+
+<x-admin.modal className="addmodal"
+	id="add-damage"
+	:title="__('admin.rentals.add_damage')"
+	modalTitleId="damage_title">
+	<x-slot name="body">
+		<div class="mb-3">
+            <label class="form-label">{{ __('admin.rentals.damage_image_label') }} <span class="text-danger">*</span></label>
+            <input type="file" name="dam_image" id="dam_image" class="form-control">
+            <img src="{{ uploadedAsset('', 'default') }}" class="mt-2 d-none" id="image_preview" alt="Damage Preview">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">{{ __('admin.rentals.damage_location_label') }} <span class="text-danger">*</span></label>
+            <select class="form-control custom-select" name="dam_name" id="dam_name">
+                <option>{{ __('admin.rentals.select') }}</option>
+                <option>{{ __('admin.rentals.interior') }}</option>
+                <option>{{ __('admin.rentals.exterior') }}</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">{{ __('admin.rentals.damage_type_label') }} <span class="text-danger">*</span></label>
+            <select class="form-control custom-select" name="dam_type" id="dam_type">
+                <option value="">{{ __('admin.rentals.select') }}</option>
+                @foreach($DamageTypes as $DamageTypesValue)
+                <option class="{{ $DamageTypesValue->id }}">{{ $DamageTypesValue->damage_type }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">{{ __('admin.rentals.description_label') }}</label>
+            <textarea class="form-control" name="dam_dis" id="dam_dis" maxlength="120" rows="3"></textarea>
+        </div>
+	</x-slot>
+	<x-slot name="footer">
+		<div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
+            <button type="button" class="btn btn-primary" id="damage_btn">{{ __('admin.rentals.create_new') }}</button>
+        </div>
+	</x-slot>
+</x-admin.modal>
+
+<x-admin.delete-modal
+	className="deletemodal"
+	id="delete_damage"
+	:title="__('admin.rentals.delete_damage_title')"
+	:description="__('admin.rentals.delete_damage_confirmation')"
+	deleteBtnType="button"
+	deleteBtnId="dete-damage">
+</x-admin.delete-modal>
+
+<x-admin.modal className="addmodal"
+	id="add-faq"
+	:title="__('admin.rentals.create_faq_title')"
+	modalTitleId="faq_title">
+	<x-slot name="body">
+		<div class="mb-3">
+            <label class="form-label">{{ __('admin.rentals.question_label') }} <span class="text-danger">*</span></label>
+            <input type="text" name="f_q" id="f_q" maxlength="60" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">{{ __('admin.rentals.answer_label') }} <span class="text-danger">*</span></label>
+            <textarea class="form-control" name="f_a" id="f_a" maxlength="120" rows="3"></textarea>
+        </div>
+	</x-slot>
+	<x-slot name="footer">
+		<div class="d-flex justify-content-center">
+			<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
+			<button type="button" class="btn btn-primary" id="faq_btn">{{ __('admin.rentals.create_new') }}</button>
+		</div>
+	</x-slot>
+</x-admin.modal>
+
+<x-admin.delete-modal
+	className="deletemodal"
+	id="delete_faq"
+	:title="__('admin.rentals.delete_faq_title')"
+	:description="__('admin.rentals.delete_faq_confirmation')"
+	deleteBtnType="button"
+	deleteBtnId="dete-faq">
+</x-admin.delete-modal>
+
+<x-admin.modal className="addmodal"
+	id="select_insurance"
+	:title="__('admin.rentals.select_insurance')"
+	formId="set_value">
+	<x-slot name="body">
+		@foreach($insurances as $insurance)
+		<div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" id="inCont">
+			<input type="hidden" id="insurance_id" value="{{ $insurance->id }}">
+			<div>
+				<h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">
+					{{ $insurance->insurance_name }}
+				</h6>
+				<input type="hidden" id="insurance_name" value="{{ $insurance->insurance_name }}">
+				<input type="hidden" id="insurance_price_type" value="{{ $insurance->priceType->pricing_type }}">
+				<input type="hidden" id="insurance_price_type_id" value="{{ $insurance->price_type_id }}">
+				<div class="d-flex align-items-center gap-2 flex-wrap">
+					<p class="fs-13 fw-medium border-end pe-2 mb-0">
+						{{ __('admin.rentals.price') }}: <span class="text-gray-9">
+							@if ($insurance->price_type_id == 7)
+							{{ rtrim(rtrim(number_format($insurance->price, 2), '0'), '.') }}%
+							@else
+							{{ $currencySymbol }}{{ number_format($insurance->price, 2) }}
+							@endif</span>
+						<input type="hidden" id="insurance_price" value="{{ $insurance->price }}">
+					</p>
+					<p class="fs-13 fw-medium mb-0">
+						{{ __('admin.common.benefits') }}: <span class="text-gray-9">{{ $insurance->insuranceBenefits->count() }}</span>
+						<input type="hidden" id="insurance_count" value="{{ $insurance->insuranceBenefits->count() }}">
+						@if($insurance->insuranceBenefits->isNotEmpty())
+						<i class="ti ti-info-circle-filled text-gray-5 ms-1"
+							data-bs-toggle="tooltip"
+							data-bs-placement="top"
+							title="{{ $insurance->insuranceBenefits->first()->benefit }}">
+						</i>
+						@endif
+					</p>
+				</div>
+			</div>
+			<div class="d-flex align-items-center icon-list delivery-add">
+				<button type="button" class="bg-transparent border-0">
+					<i class="ti ti-plus plus-active"></i>
+					<i class="ti ti-check check-active d-none"></i>
+				</button>
+				<input type="checkbox" id="insurance_checked" hidden>
+			</div>
+		</div>
+		@endforeach
+	</x-slot>
+	<x-slot name="footer">
+		<div class="d-flex justify-content-center">
+			<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+			<button type="button" class="btn btn-primary" id="in_btn">{{ __('admin.general_settings.add') }}</button>
+		</div>
+	</x-slot>
+</x-admin.modal>
+
+<x-admin.modal className="addmodal"
+	id="select_insurance"
+	:title="__('admin.rentals.select_insurance')"
+	formId="set_value">
+	<x-slot name="body">
+        @foreach($insurances as $insurance)
+        <div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" id="inCont">
+            <input type="hidden" id="insurance_id" value="{{ $insurance->id }}">
+            <div>
+                <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">
+                    {{ $insurance->insurance_name }}
+                </h6>
+                <input type="hidden" id="insurance_name" value="{{ $insurance->insurance_name }}">
+                <input type="hidden" id="insurance_price_type" value="{{ $insurance->priceType->pricing_type }}">
+                <input type="hidden" id="insurance_price_type_id" value="{{ $insurance->price_type_id }}">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <p class="fs-13 fw-medium border-end pe-2 mb-0">
+                        {{ __('admin.rentals.price') }}: <span class="text-gray-9">
+                            @if ($insurance->price_type_id == 7)
+                            {{ rtrim(rtrim(number_format($insurance->price, 2), '0'), '.') }}%
+                            @else
+                            {{ $currencySymbol }}{{ number_format($insurance->price, 2) }}
+                            @endif
+                        </span>
+                        <input type="hidden" id="insurance_price" value="{{ $insurance->price }}">
+                    </p>
+                    <p class="fs-13 fw-medium mb-0">
+                        {{ __('admin.common.benefits') }}: <span class="text-gray-9">{{ $insurance->insuranceBenefits->count() }}</span>
+                        <input type="hidden" id="insurance_count" value="{{ $insurance->insuranceBenefits->count() }}">
+                        @if($insurance->insuranceBenefits->isNotEmpty())
+                        <i class="ti ti-info-circle-filled text-gray-5 ms-1"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="{{ $insurance->insuranceBenefits->first()->benefit }}">
+                        </i>
+                        @endif
+                    </p>
                 </div>
             </div>
-            <div class="modal-footer">
-                <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                    <button type="button" class="btn btn-primary" id="price_btn">{{ __('admin.rentals.create_new') }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade deletemodal" id="delete_price">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <form action="">
-                    <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-                        <i class="ti ti-trash-x fs-26"></i>
-                    </span>
-                    <h4 class="mb-1">{{ __('admin.rentals.delete_pricing') }}</h4>
-                    <p class="mb-3">{{ __('admin.rentals.delete_pricing_confirmation') }}</p>
-                    <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                        <button type="button" class="btn btn-primary">{{ __('admin.rentals.confirm_delete_pricing') }}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade addmodal" id="add-tarrif">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title mb-0" id="tarrif_title">{{ __('admin.rentals.add_tariff') }}</h4>
-                <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti ti-x fs-16"></i>
+            <div class="d-flex align-items-center icon-list delivery-add">
+                <button type="button" class="bg-transparent border-0">
+                    <i class="ti ti-plus plus-active"></i>
+                    <i class="ti ti-check check-active d-none"></i>
                 </button>
-            </div>
-            <form action="">
-                <div class="modal-body pb-1">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{ __('admin.rentals.tariff_name') }} <span class="text-danger">*</span></label>
-                                <input type="text" name="t_name" id="t_name" maxlength="50" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{ __('admin.rentals.daily_price') }} <span class="text-danger">*</span></label>
-                                <input type="text" name="t_price" id="t_price" maxlength="5" class="form-control priceLimit">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{ __('admin.rentals.from_days') }} <span class="text-danger">*</span></label>
-                                <input type="text" name="t_fromday" id="t_fromday" maxlength="10" class="form-control priceLimit">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{ __('admin.rentals.to_days') }} <span class="text-danger">*</span></label>
-                                <input type="text" name="t_today" id="t_today" maxlength="10" class="form-control priceLimit">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <label class="form-label">{{ __('admin.rentals.base_km_per_day') }} <span class="text-danger">*</span></label>
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" name="unlimited1" id="unlimited1">
-                                        <label class="form-check-label" for="unlimited1">
-                                            {{ __('admin.rentals.unlimited') }}
-                                        </label>
-                                    </div>
-                                </div>
-                                <input type="text" name="t_base" id="t_base" maxlength="5" class="form-control priceLimit">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label class="form-label">{{ __('admin.rentals.km_extra_price') }} <span class="text-danger">*</span></label>
-                                <input type="text" id="t_extra" name="t_extra" maxlength="5" class="form-control priceLimit">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                        <button type="button" class="btn btn-primary" id="tarrif_btn">{{ __('admin.rentals.create_tariff') }}</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade deletemodal" id="delete_tarrif">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <form action="">
-                    <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-                        <i class="ti ti-trash-x fs-26"></i>
-                    </span>
-                    <h4 class="mb-1">{{ __('admin.rentals.delete_tariff') }}</h4>
-                    <p class="mb-3">{{ __('admin.rentals.delete_tariff_confirmation') }}</p>
-                    <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                        <button type="button" class="btn btn-primary">{{ __('admin.rentals.confirm_delete_tariff') }}</button>
-                    </div>
-                </form>
+                <input type="checkbox" id="insurance_checked" hidden>
             </div>
         </div>
-    </div>
-</div>
+        @endforeach
+	</x-slot>
+	<x-slot name="footer">
+		<div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+            <button type="button" class="btn btn-primary" id="in_btn">{{ __('admin.rentals.create_new') }}</button>
+        </div>
+	</x-slot>
+</x-admin.modal>
 
-<div class="modal fade addmodal" id="edit_price">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title mb-0">{{ __('admin.rentals.edit_pricing_title') }}</h4>
-                <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti ti-x fs-16"></i>
-                </button>
-            </div>
-            <div class="modal-body pb-1">
-                <table class="table custom-table1">
-                    <thead class="thead-white">
-                        <tr>
-                            <th class="py-0">{{ __('admin.rentals.extra_features') }}</th>
-                            <th class="py-0">{{ __('admin.rentals.pricing') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($ExtraServices as $service)
-                        @php
-                        $serviceInfo = $ExtraServiceInfo->firstWhere('extra_service_id', $service->id);
-                        $selectedValue = $serviceInfo->value ?? 'per_day';
-                        $selectedPrice = $serviceInfo->price ?? '00.00';
-                        @endphp
-
-                        <tr>
-                            <td class="fw-medium text-gray-9" id="extra_name">{{ $service->name }}</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <select class="form-control" id="extra_value" name="extra_value[{{ $service->id }}]">
-                                        <option value="per_day" {{ $selectedValue == 'per_day' ? 'selected' : '' }}>{{ __('admin.rentals.per_day') }}</option>
-                                        <option value="one_time" {{ $selectedValue == 'one_time' ? 'selected' : '' }}>{{ __('admin.rentals.one_time') }}</option>
-                                    </select>
-                                    <div class="input-icon-start position-relative w-100 ms-2">
-                                        <span class="input-icon-addon">
-                                            <i class="ti ti-currency-dollar"></i>
-                                        </span>
-                                        <input type="text" class="form-control" id="extra_price" name="extra_price[{{ $service->id }}]" value="{{ number_format($selectedPrice, 2) }}">
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
-                    <button type="button" class="btn btn-primary" id="service_save_btn">{{ __('admin.rentals.save_changes') }}</button>
+<x-admin.modal className="addmodal"
+	id="edit_insurance"
+	:title="__('admin.rentals.edit_insurance')">
+	<x-slot name="body">
+        <div class="mb-3">
+            <label class="form-label">{{ __('admin.rentals.price_type') }} <span class="text-danger"> *</span></label>
+            <div class="d-flex align-items-center">
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="radio" name="Radio" id="Radio-sm" checked>
+                    <label class="form-check-label" for="Radio-sm">
+                        {{ __('admin.rentals.daily') }}
+                    </label>
+                </div>
+                <div class="form-check me-3">
+                    <input class="form-check-input" type="radio" name="Radio" id="Radio-sm2">
+                    <label class="form-check-label" for="Radio-sm2">
+                        {{ __('admin.rentals.fixed') }}
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="Radio" id="Radio-sm3">
+                    <label class="form-check-label" for="Radio-sm3">
+                        {{ __('admin.rentals.percentage') }}
+                    </label>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="modal fade addmodal" id="add-faq">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title mb-0" id="faq_title">{{ __('admin.rentals.create_faq_title') }}</h4>
-                <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti ti-x fs-16"></i>
-                </button>
-            </div>
-            <div class="modal-body pb-1">
-                <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.question_label') }} <span class="text-danger">*</span></label>
-                    <input type="text" name="f_q" id="f_q" maxlength="60" class="form-control">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.answer_label') }} <span class="text-danger">*</span></label>
-                    <textarea class="form-control" name="f_a" id="f_a" maxlength="120" rows="3"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
-                    <a class="btn btn-primary" id="faq_btn">{{ __('admin.rentals.create_new') }}</a>
-                </div>
-            </div>
+        <div class="mb-3">
+            <label class="form-label">{{ __('admin.common.price') }} <span class="text-danger"> *</span></label>
+            <input type="text" class="form-control priceLimit" id="price" maxlength="5" value="">
         </div>
-    </div>
-</div>
-
-<div class="modal fade addmodal" id="select_insurance">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title mb-0">{{ __('admin.rentals.select_insurance') }}</h4>
-                <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti ti-x fs-16"></i>
-                </button>
-            </div>
-            <form id="set_value">
-                <div class="modal-body pb-1">
-                    @foreach($insurances as $insurance)
-                    <div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" id="inCont">
-                        <input type="hidden" id="insurance_id" value="{{ $insurance->id }}">
-                        <div>
-                            <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">
-                                {{ $insurance->insurance_name }}
-                            </h6>
-                            <input type="hidden" id="insurance_name" value="{{ $insurance->insurance_name }}">
-                            <input type="hidden" id="insurance_price_type" value="{{ $insurance->priceType->pricing_type }}">
-                            <input type="hidden" id="insurance_price_type_id" value="{{ $insurance->price_type_id }}">
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <p class="fs-13 fw-medium border-end pe-2 mb-0">
-                                    {{ __('admin.rentals.price') }}: <span class="text-gray-9">
-                                        @if ($insurance->price_type_id == 7)
-                                        {{ rtrim(rtrim(number_format($insurance->price, 2), '0'), '.') }}%
-                                        @else
-                                        {{ $currencySymbol }}{{ number_format($insurance->price, 2) }}
-                                        @endif
-                                    </span>
-                                    <input type="hidden" id="insurance_price" value="{{ $insurance->price }}">
-                                </p>
-                                <p class="fs-13 fw-medium mb-0">
-                                    {{ __('admin.common.benefits') }}: <span class="text-gray-9">{{ $insurance->insuranceBenefits->count() }}</span>
-                                    <input type="hidden" id="insurance_count" value="{{ $insurance->insuranceBenefits->count() }}">
-                                    @if($insurance->insuranceBenefits->isNotEmpty())
-                                    <i class="ti ti-info-circle-filled text-gray-5 ms-1"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        title="{{ $insurance->insuranceBenefits->first()->benefit }}">
-                                    </i>
-                                    @endif
-                                </p>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center icon-list delivery-add">
-                            <button type="button" class="bg-transparent border-0">
-                                <i class="ti ti-plus plus-active"></i>
-                                <i class="ti ti-check check-active d-none"></i>
-                            </button>
-                            <input type="checkbox" id="insurance_checked" hidden>
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-                <div class="modal-footer">
-                    <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                        <button type="button" class="btn btn-primary" id="in_btn">{{ __('admin.rentals.create_new') }}</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="edit_insurance">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="mb-0">{{ __('admin.general_settings.edit_insurance') }}</h4>
-                <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti ti-x fs-16"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">{{ __('admin.rentals.price_type') }} <span class="text-danger"> *</span></label>
-                    <div class="d-flex align-items-center">
-                        <div class="form-check me-3">
-                            <input class="form-check-input" type="radio" name="Radio" id="Radio-sm" checked>
-                            <label class="form-check-label" for="Radio-sm">
-                                {{ __('admin.rentals.daily') }}
-                            </label>
-                        </div>
-                        <div class="form-check me-3">
-                            <input class="form-check-input" type="radio" name="Radio" id="Radio-sm2">
-                            <label class="form-check-label" for="Radio-sm2">
-                                {{ __('admin.rentals.fixed') }}
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="Radio" id="Radio-sm3">
-                            <label class="form-check-label" for="Radio-sm3">
-                                {{ __('admin.rentals.percentage') }}
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Price <span class="text-danger"> *</span></label>
-                    <input type="text" class="form-control priceLimit" id="price" maxlength="5" value="">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                    <button type="button" class="btn btn-primary" id="save_update">{{ __('admin.rentals.create_new') }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade deletemodal" id="delete_faq">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-                    <i class="ti ti-trash-x fs-26"></i>
-                </span>
-                <h4 class="mb-1">{{ __('admin.rentals.delete_faq_title') }}</h4>
-                <p class="mb-3">{{ __('admin.rentals.delete_faq_confirmation') }}</p>
-                <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
-                    <button type="button" class="btn btn-primary" id="dete-faq">{{ __('admin.rentals.yes_delete') }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="add-damage">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title mb-0" id="damage_title">{{ __('admin.rentals.add_damage_title') }}</h5>
-                <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti ti-x fs-16"></i>
-                </button>
-            </div>
-            <form action="">
-                <div class="modal-body pb-1">
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.rentals.damage_image_label') }} <span class="text-danger">*</span></label>
-                        <input type="file" name="dam_image" id="dam_image" class="form-control">
-                        <img src="{{ uploadedAsset('', 'default') }}" class="mt-2 d-none" id="image_preview" alt="Damage Preview">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.rentals.damage_location_label') }} <span class="text-danger">*</span></label>
-                        <select class="select" name="dam_name" id="dam_name">
-                            <option>{{ __('admin.rentals.select') }}</option>
-                            <option>{{ __('admin.rentals.interior') }}</option>
-                            <option>{{ __('admin.rentals.exterior') }}</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.rentals.damage_type_label') }} <span class="text-danger">*</span></label>
-                        <select class="select" name="dam_type" id="dam_type">
-                            <option value="">{{ __('admin.rentals.select') }}</option>
-                            @foreach($DamageTypes as $DamageTypesValue)
-                            <option class="{{ $DamageTypesValue->id }}">{{ $DamageTypesValue->damage_type }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">{{ __('admin.rentals.description_label') }}</label>
-                        <textarea class="form-control" name="dam_dis" id="dam_dis" maxlength="120" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
-                        <button type="button" class="btn btn-primary" id="damage_btn">{{ __('admin.rentals.create_new') }}</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade deletemodal" id="delete_damage">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-                    <i class="ti ti-trash-x fs-26"></i>
-                </span>
-                <h4 class="mb-1">{{ __('admin.rentals.delete_damage_title') }}</h4>
-                <p class="mb-3">{{ __('admin.rentals.delete_damage_confirmation') }}</p>
-                <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
-                    <button type="button" class="btn btn-primary" id="dete-damage">{{ __('admin.rentals.yes_delete') }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+	</x-slot>
+	<x-slot name="footer">
+		<div class="d-flex justify-content-center">
+			<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+            <button type="button" class="btn btn-primary" id="save_update">{{ __('admin.rentals.create_new') }}</button>
+		</div>
+	</x-slot>
+</x-admin.modal>
 @endsection
 
 @push('scripts')

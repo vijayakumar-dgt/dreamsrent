@@ -492,7 +492,7 @@
 										</div>
 										<div class="card bg-light mb-3">
 											<div class="card-body pb-3" id="tariff_append">
-												<p class="noDataS text-center">{{ __('admin.common.empty_table') }}</p>
+												<p class="noDataT text-center">{{ __('admin.common.empty_table') }}</p>
 											</div>
 										</div>
 									</div>
@@ -506,13 +506,13 @@
 									</div>
 									<div class="col-xl-9">
 										<div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
-											<button type="button" class="btn btn-dark btn-md d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_price"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_new_seasonal_pricing') }}</button>
+											<button type="button" class="btn btn-dark btn-md d-flex align-items-center" id="add_seasonal_price_btn" data-bs-toggle="modal" data-bs-target="#add_price"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_new_seasonal_pricing') }}</button>
 										</div>
 										<div class="empty-data bg-light text-center mb-3">
 										</div>
 										<div class="card bg-light mb-3">
 											<div class="card-body pb-3" id="seasonal_append">
-												<p class="noDataT text-center">{{ __('admin.common.empty_table') }}</p>
+												<p class="noDataS text-center">{{ __('admin.common.empty_table') }}</p>
 											</div>
 										</div>
 									</div>
@@ -821,7 +821,7 @@
 
 <x-admin.modal className="addmodal"
 	id="add-tarrif"
-	:title="__('admin.rentals.add_tariff')"
+	:title="__('admin.rentals.create_tariff')"
 	modalTitleId="tarrif_title">
 	<x-slot name="body">
 		<div class="row">
@@ -1078,7 +1078,7 @@
 	<x-slot name="footer">
 		<div class="d-flex justify-content-center">
 			<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
-			<a class="btn btn-primary" id="faq_btn">{{ __('admin.rentals.create_new') }}</a>
+			<button type="button" class="btn btn-primary" id="faq_btn">{{ __('admin.rentals.create_new') }}</button>
 		</div>
 	</x-slot>
 </x-admin.modal>

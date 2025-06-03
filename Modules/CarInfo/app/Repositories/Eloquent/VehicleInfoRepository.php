@@ -2245,23 +2245,16 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         ];
     }
 
-    public function getDamageDetails(?int $id)
+    public function getDamageDetails(Request $request): array
     {
+        $id = $request->id;
         $damage = VehicleDamage::find($id);
 
-        if ($damage) {
-            return [
-                'code' => 200,
-                'success' => true,
-                'data' => $damage
-            ];
-        }
-
-        return response()->json([
-            'code' => 404,
-            'success' => false,
-            'message' => 'Damage not found.'
-        ]);
+        return [
+            'code' => 200,
+            'success' => true,
+            'data' => $damage
+        ];
     }
 
     public function delete(int|array $id): array

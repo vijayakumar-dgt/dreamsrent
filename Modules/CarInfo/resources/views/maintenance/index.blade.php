@@ -203,7 +203,7 @@
 		action="{{ route('maintenance.delete') }}" 
 		formId="maintenanceDeleteForm" 
 		method="POST"
-		:hiddenInputs="['delete_id' => '']" 
+		:hiddenInputs="['delete_id' => '']"
 		:title="__('admin.rentals.delete_maintenance')" 
 		:description="__('admin.rentals.delete_maintenance_confirmation')">
 	</x-admin.delete-modal>

@@ -12,13 +12,13 @@
                 @endif
                 <div class="modal-body text-center">
                     <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-                        <i class="ti ti-trash-x fs-26"></i>
+                        <i class="{{ $modalIconClass }}"></i>
                     </span>
                     <h4 class="mb-1">{{ $title }}</h4>
                     <p class="mb-3">{{ $description }}</p>
                     <div class="d-flex justify-content-center">
                         <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                        <button type="{{ $deleteBtnType ?? 'submit' }}" class="btn btn-primary" @if ($deleteBtnId) id="{{ $deleteBtnId }}" @endif>{{ __('admin.common.yes_delete') }}</button>
+                        <button type="{{ $deleteBtnType ?? 'submit' }}" class="btn btn-primary" @if ($deleteBtnId) id="{{ $deleteBtnId }}" @endif>{{ $deleteBtnText }}</button>
                     </div>
                 </div>
             @if (!empty($formId))

@@ -88,7 +88,7 @@
 					<option value="{{ $CategoryValues->id }}">{{ ucwords(strtolower($CategoryValues->name)) }}</option>
 					@endforeach
 				</select>
-				<span class="invalid-feedback" id="vehicle_category_id_error"></span>
+				<span class="text-danger error-text" id="vehicle_category_id_error"></span>
 			</div>
 		</div>
 		<div class="mb-3">

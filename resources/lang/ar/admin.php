@@ -1278,6 +1278,7 @@
     'delete_tariff_confirmation' => 'هل أنت متأكد أنك تريد حذف هذه التعرفة؟',
     'confirm_delete_tariff' => 'نعم، احذف',
     'create_seasonal_price' => 'إنشاء تسعير موسمي',
+    'edit_seasonal_price' => 'تحرير تسعير موسمي',
     'season_name' => 'اسم الموسم',
     'start_date' => 'تاريخ البدء',
     'end_date' => 'تاريخ الانتهاء',

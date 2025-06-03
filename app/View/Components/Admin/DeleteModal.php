@@ -22,9 +22,24 @@ class DeleteModal extends Component
     public string $description;
     public string $deleteBtnType;
     public string $deleteBtnId;
+    public string $deleteBtnText;
+    public string $modalIconClass;
     
-    public function __construct($className = '', $id = '', $formId = '', $action = '', $method = '', $formClass = '', $hiddenInputs = [], $title = '', $description = '', $deleteBtnType = 'submit', $deleteBtnId = '')
-    {
+    public function __construct(
+        $className = '',
+        $id = '',
+        $formId = '',
+        $action = '',
+        $method = '',
+        $formClass = '',
+        $hiddenInputs = [],
+        $title = '',
+        $description = '',
+        $deleteBtnType = 'submit',
+        $deleteBtnId = '',
+        $deleteBtnText =  '',
+        $modalIconClass = 'ti ti-trash-x fs-26',
+    ) {
         $this->className = $className;
         $this->id = $id;
         $this->formId = $formId;
@@ -36,6 +51,8 @@ class DeleteModal extends Component
         $this->description = $description;
         $this->deleteBtnType = $deleteBtnType;
         $this->deleteBtnId = $deleteBtnId;
+        $this->deleteBtnText = $deleteBtnText ?? __('admin.common.yes_delete');
+        $this->modalIconClass = $modalIconClass;
     }
 
     /**
