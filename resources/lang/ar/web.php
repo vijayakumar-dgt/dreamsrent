@@ -4,7 +4,7 @@
     'sign_in' => 'تسجيل الدخول',
     'email_confirmation_subtitle' => 'سنرسل رمز تأكيد إلى بريدك الإلكتروني.',
     'email' => 'البريد الإلكتروني',
-    'password' => 'كلمة المرور',
+    'auth_password' => 'كلمة المرور',
     'forgot_password' => 'هل نسيت كلمة المرور؟',
     'sign_in_with_otp' => 'تسجيل الدخول باستخدام رمز التحقق',
     'remember_me' => 'تذكرني',

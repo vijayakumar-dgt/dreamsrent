@@ -48,7 +48,7 @@
                             </div>
                             <div class="input-block">
                                 <label class="form-label">
-                                    {{ __('web.auth.password') }} <span class="text-danger">*</span>
+                                    {{ __('web.auth.auth_password') }} <span class="text-danger">*</span>
                                 </label>
                                 <div class="pass-group">
                                     <input type="password" class="form-control pass-input" id="password" name="password" >
@@ -82,7 +82,7 @@
                                 <div class="p-3 border d-flex flex-wrap align-items-center justify-content-between">
                                     <div>
                                         <span class="d-block"><strong>{{ __('web.auth.email') }}:</strong> demouser@example.com</span>
-                                        <span class="d-block"><strong>{{ __('web.auth.password') }}:</strong> 12345678</span>
+                                        <span class="d-block"><strong>{{ __('web.auth.auth_password') }}:</strong> 12345678</span>
                                     </div>
                                     <div>
                                         <a class="btn btn-primary copy-login-details" data-email="demouser@example.com" data-password="12345678">

@@ -33,7 +33,7 @@
                                 <span id="email_error" class="text-danger error-text"></span>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">{{ __('admin.common.password') }} <span class="text-danger">*</span></label>
+                                <label class="form-label">{{ __('admin.common.auth_password') }} <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <input type="password" class="pass-input form-control @error('password') is-invalid @enderror" id="password" name="password">
                                     <span class="input-group-text border-start-0">
@@ -62,7 +62,7 @@
                                 <div class="p-3 border d-flex flex-wrap align-items-center justify-content-between">
                                     <div>
                                         <span class="d-block"><strong>{{ __('admin.common.email') }} </strong>: demoadmin@example.com</span>
-                                        <span class="d-block"><strong>{{ __('admin.common.password') }} </strong>: 12345678</span>
+                                        <span class="d-block"><strong>{{ __('admin.common.auth_password') }} </strong>: 12345678</span>
                                     </div>
                                     <div>
                                         <a class="btn btn-primary copy-login-details" data-email="demoadmin@example.com"

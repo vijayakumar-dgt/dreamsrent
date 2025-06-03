@@ -5,7 +5,7 @@ return [
         'sign_in' => 'Sign In',
         'email_confirmation_subtitle' => "We'll send a confirmation code to your email.",
         'email' => 'Email',
-        'password' => 'Password',
+        'auth_password' => 'Password',
         'forgot_password' => 'Forgot Password?',
         'sign_in_with_otp' => 'Sign in with OTP',
         'remember_me' => 'Remember me',
