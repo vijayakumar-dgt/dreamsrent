@@ -6,14 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Modules\GeneralSetting\Http\Requests\UpdateAdminProfileRequest;
-use Modules\GeneralSetting\Repositories\AdminProfileRepository;
 use Illuminate\Http\Request;
+use Modules\GeneralSetting\Repositories\Contracts\AdminProfileInterface;
 
 class AdminProfileController extends Controller
 {
     protected $profileRepo;
 
-    public function __construct(AdminProfileRepository $profileRepo)
+    public function __construct(AdminProfileInterface $profileRepo)
     {
         $this->profileRepo = $profileRepo;
     }

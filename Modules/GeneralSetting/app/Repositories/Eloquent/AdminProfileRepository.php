@@ -1,18 +1,15 @@
 <?php
 
-namespace Modules\GeneralSetting\Repositories;
+namespace Modules\GeneralSetting\Repositories\Eloquent;
 
+use Modules\GeneralSetting\Repositories\Contracts\AdminProfileInterface;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\File;
-use Intervention\Image\Laravel\Facades\Image;
-use Illuminate\Support\Str;
 use App\Services\ImageResizer;
 
-class AdminProfileRepository
+class AdminProfileRepository implements AdminProfileInterface
 {
      protected ImageResizer $imageResizer;
 
