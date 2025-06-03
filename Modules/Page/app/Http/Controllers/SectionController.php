@@ -88,8 +88,8 @@ class SectionController extends Controller
             ], 400);
         }
 
-        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three', 'Banner Four'];
-        
+        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three', 'Banner Four', 'Benefits Of Yacht'];
+
         $sections = $this->sectionRepository->getFilteredSections($orderBy, $sortBy, $allowedNames);
 
         $data = [];
@@ -294,6 +294,56 @@ class SectionController extends Controller
                 'why_dis_3' => $request->why_dis_3,
                 'why_icon_3' => $this->processIcon($request, 'why_icon_3', $existingData['why_icon_3'] ?? null),
             ];
+        } elseif ($sectionId == 58) {
+            $data = [
+                'label_boat_benefits_1' => $request->label_boat_benefits_1,
+                'description_boat_benefits_1' => $request->description_boat_benefits_1,
+                'thumbnail_image_boat_benefits_1' => $this->processIcon(
+                    $request,
+                    'thumbnail_image_boat_benefits_1',
+                    $existingData['thumbnail_image_boat_benefits_1'] ?? null
+                ),
+
+                'label_boat_benefits_2' => $request->label_boat_benefits_2,
+                'description_boat_benefits_2' => $request->description_boat_benefits_2,
+                'thumbnail_image_boat_benefits_2' => $this->processIcon(
+                    $request,
+                    'thumbnail_image_boat_benefits_2',
+                    $existingData['thumbnail_image_boat_benefits_2'] ?? null
+                ),
+
+                'label_boat_benefits_3' => $request->label_boat_benefits_3,
+                'description_boat_benefits_3' => $request->description_boat_benefits_3,
+                'thumbnail_image_boat_benefits_3' => $this->processIcon(
+                    $request,
+                    'thumbnail_image_boat_benefits_3',
+                    $existingData['thumbnail_image_boat_benefits_3'] ?? null
+                ),
+
+                'label_boat_benefits_4' => $request->label_boat_benefits_4,
+                'description_boat_benefits_4' => $request->description_boat_benefits_4,
+                'thumbnail_image_boat_benefits_4' => $this->processIcon(
+                    $request,
+                    'thumbnail_image_boat_benefits_4',
+                    $existingData['thumbnail_image_boat_benefits_4'] ?? null
+                ),
+
+                'label_boat_benefits_5' => $request->label_boat_benefits_5,
+                'description_boat_benefits_5' => $request->description_boat_benefits_5,
+                'thumbnail_image_boat_benefits_5' => $this->processIcon(
+                    $request,
+                    'thumbnail_image_boat_benefits_5',
+                    $existingData['thumbnail_image_boat_benefits_5'] ?? null
+                ),
+
+                'label_boat_benefits_6' => $request->label_boat_benefits_6,
+                'description_boat_benefits_6' => $request->description_boat_benefits_6,
+                'thumbnail_image_boat_benefits_6' => $this->processIcon(
+                    $request,
+                    'thumbnail_image_boat_benefits_6',
+                    $existingData['thumbnail_image_boat_benefits_6'] ?? null
+                ),
+            ];
         }
 
         return $data;
@@ -315,6 +365,7 @@ class SectionController extends Controller
             42 => 'section_title_three',
             56 => 'section_title_boat',
             43 => 'section_title_five',
+            58 => 'section_title_boat_benefits',
             26 => 'section_title_four',
         ];
 
