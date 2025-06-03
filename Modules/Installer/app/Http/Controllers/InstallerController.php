@@ -24,6 +24,9 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use Modules\Installer\Http\Requests\DatabaseSubmitRequest;
+use Modules\Installer\Http\Requests\AccountSubmitRequest;
+use Modules\Installer\Http\Requests\ConfigurationSubmitRequest;
 
 class InstallerController extends Controller
 {
@@ -59,7 +62,7 @@ class InstallerController extends Controller
         ]);
     }
 
-    public function databaseSubmit(Request $request): JsonResponse|RedirectResponse
+    public function databaseSubmit(DatabaseSubmitRequest $request): JsonResponse|RedirectResponse
     {
         if (!$this->requirementsCompleteStatus()) {
             return redirect()->route('setup.requirements')
@@ -68,15 +71,7 @@ class InstallerController extends Controller
         }
 
         try {
-            $validated = $request->validate([
-                'host' => 'required|ip',
-                'port' => 'required|numeric',
-                'database' => 'required|string',
-                'user' => 'required|string',
-                'password' => InstallerInfo::isRemoteLocal() ? 'nullable' : 'required|string',
-                'reset_database' => 'nullable|string',
-                'fresh_install' => 'nullable|boolean',
-            ]);
+            $validated = $request->validated();
 
             $databaseDetails = [
                 'host' => $validated['host'],
@@ -202,15 +197,10 @@ class InstallerController extends Controller
         return redirect()->route('setup.database');
     }
 
-    public function accountSubmit(Request $request): JsonResponse
+    public function accountSubmit(AccountSubmitRequest $request): JsonResponse
     {
         try {
-            $validated = $request->validate([
-                'name' => 'required|string',
-                'email' => 'required|email',
-                'password' => 'required|string|same:confirm_password|min:8',
-                'confirm_password' => 'required|string|min:8'
-            ]);
+            $validated = $request->validated();
 
             // Ensure password is a string before hashing
             $password = $validated['password'];
@@ -272,16 +262,14 @@ class InstallerController extends Controller
         return view($view, compact('app_name'));
     }
 
-    public function configurationSubmit(Request $request): JsonResponse
+    public function configurationSubmit(ConfigurationSubmitRequest $request): JsonResponse
     {
         try {
-            $request->validate([
-                'config_app_name' => 'required|string',
-            ]);
+            $validated = $request->validated();
 
             Configuration::updateStep(3);
 
-            GeneralSetting::where('key', 'organization_name')->update(['value' => $request->config_app_name]);
+            GeneralSetting::where('key', 'organization_name')->update(['value' => $validated['config_app_name']]);
 
             if (Cache::has('last_updated_at')) {
                 GeneralSetting::where('key', 'last_update_date')->update(['value' => Cache::get('last_updated_at')]);
