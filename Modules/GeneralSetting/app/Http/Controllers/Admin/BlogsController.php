@@ -1,21 +1,13 @@
 <?php
 
-namespace Modules\GeneralSetting\Http\Controllers;
+namespace Modules\GeneralSetting\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Modules\GeneralSetting\Models\BlogCategory;
 use Modules\GeneralSetting\Repositories\Contracts\BlogCategoryRepositoryInterface;
-use Modules\GeneralSetting\Models\BlogTag;
-use Modules\GeneralSetting\Models\BlogPost;
-use Carbon\Carbon;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\DB;
-use Modules\GeneralSetting\Models\Language;
-use Illuminate\Support\Str;
 use Modules\GeneralSetting\Http\Requests\BlogCategoryRequest;
 use Modules\GeneralSetting\Http\Requests\CategoryUpdateRequest;
 use Modules\GeneralSetting\Http\Requests\BlogTagRequest;

@@ -30,7 +30,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
         Route::post('reservation-list', [BookingController::class, 'bookingList'])->name('reservation.list');
         Route::post('get-reservation-details', [BookingController::class, 'getBookingDetails']);
         Route::get('reservation-details/{id}', [BookingController::class, 'reservationViewDetails'])->name('reservation.details')->middleware('permission');
-        Route::post('cancel-booking', [BookingController::class, 'cancelBooking']);
+        Route::post('cancel-booking', [BookingController::class, 'cancelBooking'])->name('reservation.cancel');
     });
 
     Route::post('/get-filter-vehicles', [BookingController::class, 'getFilterVehicles']);

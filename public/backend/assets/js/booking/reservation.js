@@ -383,4 +383,15 @@
             }
         });
     }
+
+    const tableWrapper = '.table-responsive';
+
+    $(document).on('show.bs.dropdown', tableWrapper, function () {
+        $(this).css('overflow', 'hidden');
+    });
+
+    $(document).on('hide.bs.dropdown', tableWrapper, function () {
+        $(this).css('overflow', 'auto');
+    });
+
 })();
