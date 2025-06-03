@@ -24,6 +24,7 @@ use Modules\RolesPermission\Models\Permission;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Cache;
+use Modules\CarInfo\Models\Category;
 
 if (!function_exists('clearCache')) {
     function clearCache(): bool
@@ -575,3 +576,17 @@ function getCommonSettingData(?array $notifyData): array
     return $notifyData;
 }
 
+function getCategoryId()
+{
+    $defaultTheme = GeneralSetting::where('key', 'default_theme')->first()->value;
+    $theme_id = intval($defaultTheme) ?? 1;
+    $themes = [
+       1 => 'car',
+       2 => 'car',
+       3 => 'bike',
+       4 => 'boat',
+    ];
+    $languageId = getLanguageId(app()->getLocale());
+    $category   = Category::where('language_id', $languageId)->where('slug', $themes[$theme_id])->first();
+    return $category->id ?? 1;
+}
