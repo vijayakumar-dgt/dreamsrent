@@ -88,7 +88,7 @@ class SectionController extends Controller
             ], 400);
         }
 
-        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three'];
+        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three', 'Banner Four'];
         
         $sections = $this->sectionRepository->getFilteredSections($orderBy, $sortBy, $allowedNames);
 
@@ -109,6 +109,10 @@ class SectionController extends Controller
 
             if (!empty($decodedDatas['thumbnail_image_four'])) {
                 $decodedDatas['thumbnail_image_four'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_four'];
+            }
+
+            if (!empty($decodedDatas['thumbnail_image_boat'])) {
+                $decodedDatas['thumbnail_image_boat'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_boat'];
             }
 
             $data[] = array_merge([
@@ -249,6 +253,19 @@ class SectionController extends Controller
                 'description_three' => $request->description_three,
                 'thumbnail_image_four' => $thumbnailPath,
             ];
+        } elseif ($sectionId == 56) {
+            $thumbnailPath = $existingData['thumbnail_image_boat'] ?? null;
+            if ($request->hasFile('thumbnail_image_boat')) {
+                $thumbnailPath = uploadFile($request->file('thumbnail_image_boat'), 'general');
+            }
+
+            $data = [
+                'label_boat_one' => $request->label_boat_one,
+                'label_boat_two' => $request->label_boat_two,
+                'label_boat_three' => $request->label_boat_three,
+                'description_boat' => $request->description_boat,
+                'thumbnail_image_boat' => $thumbnailPath,
+            ];
         } elseif ($sectionId == 42) {
             $data = [
                 'vehicle_id' => $request->vehicle_id,
@@ -296,6 +313,7 @@ class SectionController extends Controller
             1 => 'section_title_one',
             29 => 'section_title_two',
             42 => 'section_title_three',
+            56 => 'section_title_boat',
             43 => 'section_title_five',
             26 => 'section_title_four',
         ];

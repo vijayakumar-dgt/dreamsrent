@@ -402,6 +402,62 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div id="section_id_6" class="d-none">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <input type="text" name="section_title_boat" id="section_title_boat" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_section_title') }}">
+                        <div class="invalid-feedback" id="section_title_boat_error"></div>
+                    </div>
+                </div>
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }}</label>
+                        <input type="file" name="thumbnail_image_boat" id="thumbnail_image_boat" class="form-control"
+                            accept="image/*" onchange="previewThumbnailTwo(this)">
+                        <div class="invalid-feedback" id="thumbnail_image_boat_error"></div>
+                    </div>
+                    <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat"
+                        class="mt-2 img-preview-thumb" alt="Image">
+                </div>
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.label') }}</label>
+                        <input type="text" name="label_boat_one" id="label_boat_one" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_label') }}">
+                        <div class="invalid-feedback" id="label_boat_one_error"></div>
+                    </div>
+                </div>
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.label') }}</label>
+                        <input type="text" name="label_boat_two" id="label_boat_two" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_label') }}">
+                        <div class="invalid-feedback" id="label_boat_two_error"></div>
+                    </div>
+                </div>
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.label') }}</label>
+                        <input type="text" name="label_boat_three" id="label_boat_three" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_label') }}">
+                        <div class="invalid-feedback" id="label_boat_three_error"></div>
+                    </div>
+                </div>
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.description') }}</label>
+                        <textarea type="text" name="description_boat" id="description_boat" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_description') }}"></textarea>
+                        <div class="invalid-feedback" id="description_boat_error"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </x-slot>
 
     <x-slot name="footer">

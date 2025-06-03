@@ -38,6 +38,14 @@ class AddSectionRequest extends FormRequest
                 'label_three_one' => 'required',
                 'thumbnail_image_four' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
             ];
+        } elseif ($this->section_id == 56) {
+            $rules = [
+                'description_boat' => 'required',
+                'label_boat_three' => 'required',
+                'label_boat_two' => 'required',
+                'label_boat_one' => 'required',
+                'thumbnail_image_boat' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ];
         } elseif ($this->section_id == 42) {
             $rules = [
                 'vehicle_id' => 'nullable',
