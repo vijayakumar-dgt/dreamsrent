@@ -1872,7 +1872,7 @@
                         $('#reservation_view_details').attr('href', response.view_details_url);
                         $('#reservation_completed').modal('show');
                         setTimeout(function () {
-                            window.location.href = '/admin/reservations';
+                            // window.location.href = '/admin/reservations';
                         }, 2000);
                     }
                 },

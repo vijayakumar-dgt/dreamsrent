@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Modules\Booking\Repositories\Contracts\BookingRepositoryInterface;
-use Modules\Booking\Http\Requests\BookingRequest;
+use Modules\Booking\Http\Request\BookingRequest;
 
 class BookingController extends Controller
 {
