@@ -28,3 +28,6 @@
 
 	<!-- Main CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
+
+	<!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/custom/custom-style.css') }}">

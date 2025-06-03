@@ -26,6 +26,11 @@
 	
 	<!-- Owl Carousel JS -->
 	<script src="{{ asset('frontend/assets/js/owl.carousel.min.js') }}"></script>
-	
+
+	<!-- Language JS -->
+    <script src="{{ asset('frontend/assets/js/custom/lang_script.js') }}"></script>
+	@stack('scripts')
+	  
 	<!-- Custom JS -->
 	<script src="{{ asset('frontend/assets/js/script.js') }}"></script>
+    <script src="{{ asset('frontend/assets/js/custom/custom-script.js') }}"></script>

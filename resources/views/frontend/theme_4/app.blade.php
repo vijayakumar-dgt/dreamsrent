@@ -1726,7 +1726,7 @@
 			</div>
 		</section>
 		<!-- /News & Insights -->
-
+		@include('frontend.toast')
 		@include('frontend.theme_4.partials.footer')
 
 	</div>
