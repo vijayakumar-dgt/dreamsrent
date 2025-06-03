@@ -16,7 +16,7 @@ use Modules\Booking\Http\Controllers\UserBookingController;
 use Illuminate\Support\Facades\Session;
 use Modules\CarInfo\Http\Controllers\CarInfoController;
 use Modules\CarInfo\Http\Controllers\MaintenanceController;
-use Modules\GeneralSetting\Http\Controllers\LanguageController;
+use Modules\GeneralSetting\Http\Controllers\Admin\LanguageController;
 
 Route::get('/documentation', function () {
     return response()->file(public_path('documentation/index.html'));
