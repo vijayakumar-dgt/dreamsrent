@@ -14,7 +14,7 @@
 				:buttonText="__('admin.rentals.add_new_fuel_type')"
 				:modalId="'fuel_type_modal'"
 				:buttonId="'add_fuel_type'"
-				:permissionKey="'vehicle_attributes'"
+				:permissionModule="'vehicle_attributes'"
 			/>
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">

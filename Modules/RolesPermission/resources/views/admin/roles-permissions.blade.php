@@ -14,7 +14,7 @@
                 :buttonText="__('admin.user_management.add_new_role')"
                 :modalId="'role_modal'"
                 :buttonId="'add_role'"
-                :permissionKey="'roles_permissions'"
+                :permissionModule="'roles_permissions'"
             />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-end flex-wrap row-gap-3 mb-3">

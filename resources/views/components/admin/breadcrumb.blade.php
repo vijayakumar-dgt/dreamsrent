@@ -17,7 +17,7 @@
             </ol>
         </nav>
     </div>
-    @if ($buttonText && $modalId && $permissionKey && hasPermission($permissions ?? [], $permissionKey, 'create'))
+    @if ($buttonText && $modalId && $permissionModule && hasPermission($permissions ?? [], $permissionModule, $permissionKey))
         <div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
             <div class="mb-2">
                 <button type="button" class="btn btn-primary d-flex align-items-center"
@@ -25,6 +25,11 @@
                     <i class="ti ti-plus me-2"></i>{{ $buttonText }}
                 </button>
             </div>
+        </div>
+    @endif
+    @if (isset($toolbar) && !empty($toolbar))
+        <div class="d-flex my-xl-auto right-content align-items-center flex-wrap">
+            {{ $toolbar }}
         </div>
     @endif
 </div>

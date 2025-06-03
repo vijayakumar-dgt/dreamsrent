@@ -8,7 +8,7 @@ use Illuminate\View\Component;
 
 class Breadcrumb extends Component
 {
-    public $title, $breadcrumbs, $buttonText, $buttonId, $modalId, $permissionKey;
+    public $title, $breadcrumbs, $buttonText, $buttonId, $modalId, $permissionKey, $permissionModule;
     /**
      * Create a new component instance.
      */
@@ -18,7 +18,8 @@ class Breadcrumb extends Component
         $buttonText = '',
         $buttonId = '',
         $modalId = '',
-        $permissionKey = ''
+        $permissionKey = 'create',
+        $permissionModule = '',
     ) {
         $this->title = $title;
         $this->breadcrumbs = $breadcrumbs;
@@ -26,6 +27,7 @@ class Breadcrumb extends Component
         $this->buttonId = $buttonId;
         $this->modalId = $modalId;
         $this->permissionKey = $permissionKey;
+        $this->permissionModule = $permissionModule;
     }
 
     /**

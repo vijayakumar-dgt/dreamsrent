@@ -14,7 +14,7 @@
 			:buttonText="__('admin.cms.add_country')"
 			:modalId="'country_modal'"
 			:buttonId="'add_country'"
-			:permissionKey="'cms_locations'"
+			:permissionModule="'cms_locations'"
 		/>
 		<!-- Table Header -->
 		<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">

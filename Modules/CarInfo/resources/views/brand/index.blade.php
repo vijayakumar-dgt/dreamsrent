@@ -14,7 +14,7 @@
 				:buttonText="__('admin.rentals.add_new_brand')"
 				:modalId="'brand_modal'"
 				:buttonId="'add_brand'"
-				:permissionKey="'vehicle_attributes'" />
+				:permissionModule="'vehicle_attributes'" />
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
 				<div class="d-flex align-items-center flex-wrap row-gap-3">

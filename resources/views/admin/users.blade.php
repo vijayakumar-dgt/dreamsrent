@@ -14,7 +14,7 @@
                 :buttonText="__('admin.user_management.add_new_user')"
                 :modalId="'add_user_modal'"
                 :buttonId="'add_user'"
-                :permissionKey="'users'"
+                :permissionModule="'users'"
             />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">

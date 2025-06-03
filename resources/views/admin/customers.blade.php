@@ -14,7 +14,7 @@
                 :buttonText="__('admin.manage.add_new_customer')"
                 :modalId="'add_customer_modal'"
                 :buttonId="'add_customer'"
-                :permissionKey="'customers'"
+                :permissionModule="'customers'"
             />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">

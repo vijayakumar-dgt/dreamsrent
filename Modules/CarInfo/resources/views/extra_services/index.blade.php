@@ -14,7 +14,7 @@
 				:buttonText="__('admin.rentals.add_new_extra_service')"
 				:modalId="'add_extra_service'"
 				:buttonId="'add_new_extra_service'"
-				:permissionKey="'extra_service'"
+				:permissionModule="'extra_service'"
 			/>
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">

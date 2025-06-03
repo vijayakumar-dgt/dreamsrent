@@ -14,7 +14,7 @@
             :buttonText="__('admin.bookings.add_new_booking')"
             :modalId="'add_booking'"
             :buttonId="'add_booking_button'"
-            :permissionKey="'calendar'"
+            :permissionModule="'calendar'"
         />
         <div class="row">
             <div class="col-md-10">

@@ -14,7 +14,7 @@
                 :buttonText="__('admin.manage.add_new_location')"
                 :modalId="'add_location'"
                 :buttonId="'add_new_location'"
-                :permissionKey="'locations'"
+                :permissionModule="'locations'"
             />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">

@@ -14,7 +14,7 @@
                 :buttonText="__('admin.manage.add_new_driver')"
                 :modalId="'add_driver_modal'"
                 :buttonId="'add_driver'"
-                :permissionKey="'drivers'"
+                :permissionModule="'drivers'"
             />
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">

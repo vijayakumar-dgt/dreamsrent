@@ -9,7 +9,7 @@
             <x-admin.breadcrumb :title="__('admin.general_settings.faq')" :breadcrumbs="[
             __('admin.general_settings.faq') => ''
         ]" :buttonText="__('admin.general_settings.add_faq')" :modalId="'add_FAQ'" :buttonId="'add_faq_btn'"
-                :permissionKey="'faq'" />
+                :permissionModule="'faq'" />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap gap-2">
