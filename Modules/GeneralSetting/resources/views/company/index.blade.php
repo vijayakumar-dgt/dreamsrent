@@ -15,7 +15,8 @@
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-xl-9">
                     <div class="card">
-                        <form @csrf id="companySettingForm" enctype="multipart/form-data">
+                        <form id="companySettingForm" enctype="multipart/form-data">
+                             @csrf
                             <div class="card-header">
                                 <h5 class="fw-bold">{{ __('admin.general_settings.website_settings') }}</h5>
                             </div>

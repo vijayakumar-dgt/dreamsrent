@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\GeneralSetting\Http\Controllers;
+namespace Modules\GeneralSetting\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
@@ -34,6 +34,8 @@ class InsuranceController extends Controller
                 'status',
                 'language_id'
             ]);
+            $data['status'] = ($request->has('status') && $request->status === 'on') ? 1 : 0;
+            $data['language_id'] = $data['language_id'] ?? 1;
             
             $insurance = $this->repository->saveInsurance(
                 $data,

@@ -55,7 +55,8 @@
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
                 <div class="modal-body text-center">
-                    <form @csrf action="">
+                    <form action="">
+                        @csrf 
                         <span class="avatar avatar-lg bg-primary-transparent rounded-circle text-primary mb-3">
                             <i class="ti ti-folders fs-26"></i>
                         </span>
