@@ -225,39 +225,37 @@
 </div>
 <!-- /Page Wrapper -->
 
-<div class="modal fade addmodal" id="booking_cancel_modal">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="mb-0 modal-title">{{ __('admin.bookings.cancel_booking') }}</h4>
-                <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti ti-x fs-16"></i>
+<x-admin.modal id="booking_cancel_modal" size="md" title="{{ __('admin.bookings.cancel_booking') }}">
+    <form id="cancelBookingForm" autocomplete="off">
+        @csrf
+        <input type="hidden" name="booking_id" id="booking_id" value="{{ $booking->id }}">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">
+                            {{ __('admin.bookings.cancel_reason') }}
+                            <span class="text-danger"> *</span>
+                        </label>
+                        <textarea class="form-control" rows="4" name="cancel_reason" id="cancel_reason"></textarea>
+                        <span class="text-danger error-text" id="cancel_reason_error"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
+                    {{ __('admin.common.close') }}
+                </button>
+                <button type="submit" class="btn btn-primary submitbtn">
+                    {{ __('admin.bookings.cancel_booking') }}
                 </button>
             </div>
-            <form id="cancelBookingForm" autocomplete="off">
-                @csrf
-                <input type="hidden" name="booking_id" id="booking_id" value="{{ $booking->id }}">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label class="form-label">{{ __('admin.bookings.cancel_reason') }}<span class="text-danger"> *</span></label>
-                                <textarea class="form-control" rows="4" name="cancel_reason" id="cancel_reason"></textarea>
-                                <span class="text-danger error-text" id="cancel_reason_error"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.close') }}</button>
-                        <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.bookings.cancel_booking') }}</button>
-                    </div>
-                </div>
-            </form>
         </div>
-    </div>
-</div>
+    </form>
+</x-admin.modal>
+
 @endsection
 
 @push('scripts')

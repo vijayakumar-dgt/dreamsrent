@@ -624,68 +624,74 @@
 <!-- /Page Wrapper -->
 
 <!-- Completed -->
-<div class="modal fade deletemodal" id="reservation_completed">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <span class="avatar avatar-lg bg-transparent-success rounded-circle text-success mb-3">
-                    <i class="ti ti-check fs-26"></i>
-                </span>
-                <h4 class="mb-1">{{ __('admin.common.created_successful') }}</h4>
-                <p class="mb-3">{{ __('admin.bookings.reservation_created_for_the')}} <span class="text-gray-9" id="final_vehicle_name"> </span> {{ __('admin.common.on')}} <span class="text-gray-9" id="final_reservation_date"></span></p>
-                <div class="d-flex justify-content-center">
-                    <a href="#" class="btn btn-primary w-100" id="reservation_view_details">{{ __('admin.common.view_details') }}</a>
-                </div>
+<x-admin.modal
+    className="deletemodal"
+    id="reservation_completed"
+    :title="__('admin.common.created_successful')"
+    :hasHeader="false"
+    :hasFooter="false">
+    <x-slot name="body">
+        <div class="text-center">
+            <span class="avatar avatar-lg bg-transparent-success rounded-circle text-success mb-3">
+                <i class="ti ti-check fs-26"></i>
+            </span>
+            <h4 class="mb-1">{{ __('admin.common.created_successful') }}</h4>
+            <p class="mb-3">
+                {{ __('admin.bookings.reservation_created_for_the') }}
+                <span class="text-gray-9" id="final_vehicle_name"> </span>
+                {{ __('admin.common.on') }}
+                <span class="text-gray-9" id="final_reservation_date"></span>
+            </p>
+            <div class="d-flex justify-content-center">
+                <a href="#" class="btn btn-primary w-100" id="reservation_view_details">
+                    {{ __('admin.common.view_details') }}
+                </a>
             </div>
         </div>
-    </div>
-</div>
+    </x-slot>
+</x-admin.modal>
+
 <!-- /Completed -->
 
 <!-- Edit Pricing -->
-<div class="modal fade addmodal" id="edit_price_modal">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title mb-0">{{ __('admin.bookings.edit_pricing') }}</h4>
-                <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti ti-x fs-16"></i>
-                </button>
+<x-admin.modal
+    className="addmodal"
+    id="edit_price_modal"
+    :title="__('admin.bookings.edit_pricing')"
+    formId="driverPriceForm"
+    method="POST"
+    :hasForm="true">
+    <x-slot name="body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.manage.drivers') }}<span class="text-danger"> *</span></label>
+                    <div class="d-flex align-items-center mt-2">
+                        <div class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0">
+                            <img src="{{ uploadedAsset('', 'profile') }}" class="edit_driver_img" alt="Profile Image">
+                        </div>
+                        <div>
+                            <div class="d-block fw-semibold edit_driver_name text-black"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <form id="driverPriceForm">
-                <div class="modal-body pb-1">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{ __('admin.manage.drivers') }}<span class="text-danger"> *</span></label>
-                                <div class="d-flex align-items-center mt-2">
-                                    <div class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0">
-                                        <img src="{{ uploadedAsset('', 'profile') }}" class="edit_driver_img" alt="Profile Image">
-                                    </div>
-                                    <div>
-                                        <div class="d-block fw-semibold edit_driver_name text-black"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{ __('admin.common.pricing') }}<span class="text-danger"> *</span></label>
-                                <input type="text" name="driver_price" id="driver_price" value="0" class="form-control">
-                            </div>
-                        </div>
-                    </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.common.pricing') }}<span class="text-danger"> *</span></label>
+                    <input type="text" name="driver_price" id="driver_price" value="0" class="form-control">
                 </div>
-                <div class="modal-footer">
-                    <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-                        <button type="submit" class="btn btn-primary driver_price_btn">{{ __('admin.common.save_changes') }}</button>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
+    </x-slot>
+    <x-slot name="footer">
+        <div class="d-flex justify-content-center">
+            <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
+            <button type="submit" class="btn btn-primary driver_price_btn">{{ __('admin.common.save_changes') }}</button>
+        </div>
+    </x-slot>
+</x-admin.modal>
+
 <!-- /Edit Pricing -->
 @endsection
 
