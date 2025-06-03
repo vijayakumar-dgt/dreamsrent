@@ -33,7 +33,7 @@
 	
     <!-- Language JS -->
     <script src="{{ asset('frontend/assets/js/custom/lang_script.js') }}"></script>
-	  @stack('scripts')
+	@stack('scripts')
 	  
 	<!-- Custom JS -->
 	<script src="{{ asset('frontend/assets/js/script.js') }}"></script>
