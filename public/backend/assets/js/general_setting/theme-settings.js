@@ -29,6 +29,8 @@
                             $("#theme_02").prop("checked", true);
                         } else if(setting.value == 3) {
                             $("#theme_03").prop("checked", true);
+                        } else if(setting.value == 4) {
+                            $("#theme_04").prop("checked", true);
                         }
                     });
                 }
@@ -55,6 +57,8 @@
                 theme_val = 2;
             }else if(themeId === "theme_03") {
                 theme_val = 3;
+            }else if(themeId === "theme_04") {
+                theme_val = 4;
             }
             if(theme_val === 0) {
                 return;

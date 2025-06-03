@@ -96,15 +96,11 @@
                                     </div>
                                     @endforeach
                                     <div class="d-flex align-items-center">
-                                        @if($vehicle['wishlist'] == 1)
-                                        <a href="javascript:void(0)" class="fav-icon selected" data-id="{{ $vehicle['id'] }}">
+                                        @auth
+                                        <a href="javascript:void(0)" class="fav-icon wishlist-icon @if($vehicle['wishlist'] == 1) selected @endif" data-id="{{ $vehicle['id'] }}">
                                             <i class="feather-heart"></i>
-                                        </a>		
-                                        @else
-                                        <a href="javascript:void(0)" class="fav-icon">
-                                            <i class="feather-heart"></i>
-                                        </a>		
-                                        @endif
+                                        </a>
+                                        @endauth
                                         <a href="{{ route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-order">Book Now</a>
                                     </div>
                                 </div>

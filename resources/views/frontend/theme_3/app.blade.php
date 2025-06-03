@@ -469,7 +469,7 @@
 			</div>
 		</section> --}}
 		<!-- /Best Section -->
-
+		@include('frontend.toast')
 		@include('frontend.theme_3.partials.footer')
 	</div>
 
