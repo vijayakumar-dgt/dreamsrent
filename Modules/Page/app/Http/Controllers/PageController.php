@@ -665,8 +665,10 @@ class PageController extends Controller
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
+                        $getCategoryId = getCategoryId();
                         $brands = DB::table('brands')
                             ->select('id', 'brand_image', 'brand_icon', 'brand_name', 'status')
+                            ->where('category_id', $getCategoryId)
                             ->where('language_id', $lang_id)
                             ->where('status', 1)
                             ->whereNull('deleted_at')
@@ -705,10 +707,18 @@ class PageController extends Controller
                             ->get()
                             ->map(function ($location) {
                                 $location->image = asset('storage/' . $location->image);
+                                $getCategoryId = getCategoryId();                               
+                                $location->vehicle_count = DB::table('vehicle_info')
+                                    ->where('main_location_id', $location->id)
+                                    ->where('category_id', $getCategoryId)
+                                    ->whereNull('deleted_at')
+                                    ->count();
+
                                 return $location;
                             });
 
                         $section['section_type'] = 'locations';
+                        $section['type'] = 'locations';
                         $section['design'] = 'brand_one';
                         $section['section_content'] = $locations;
                     }
@@ -810,7 +820,7 @@ class PageController extends Controller
                             ->whereNull('deleted_at')
                             ->get()
                             ->map(function ($cartype) use ($lang_id) {
-                                 $cartype->boat_count = VehicleInfo::where('type_id', $cartype->id)
+                                $cartype->boat_count = VehicleInfo::where('type_id', $cartype->id)
                                     ->where('language_id', $lang_id)->where('type', 'boat')
                                     ->count();
 
@@ -1207,6 +1217,152 @@ class PageController extends Controller
                     }
                 }
 
+                // Yachts
+                if ($section['status'] == 1) {
+                    if (isset($section['section_content']) && strpos($section['section_content'], '[yachts') !== false) {
+                        preg_match('/type=([a-zA-Z]+)\s+limit=(\d+)\s+viewall=(yes|no)/', $section['section_content'], $matches);
+                        $type = $matches[1] ?? 'all';
+                        $limit = $matches[2] ?? 10;
+                        $viewAll = $matches[3] ?? 'no';
+
+                        $query = VehicleInfo::with([
+                            'carType:id,name',
+                            'brand:id,brand_name',
+                            'category:id,name',
+                            'mainLocation:id,name',
+                            'color:id,name,value',
+                            'fuel_type:id,fuel_type',
+                            'transmission:id,name',
+                        ])->where('language_id', $lang_id);
+
+                        if ($type === 'popular') {
+                            $vehicles = $query->where('popular', 1)->where('type', 'boat')->get();
+                            $section['section_type'] = 'popular_vehicle';
+                            $section['design'] = 'vehicle_one';
+                        } elseif ($type === 'featured') {
+                            $vehicles = $query->where('recommended', 1)->where('type', 'boat')->get();
+                            $section['section_type'] = 'feature_vehicle';
+                            $section['design'] = 'vehicle_two';
+                        } else {
+                            $vehicles = $query->where('type', 'boat')->get();
+                            $section['section_type'] = 'al_vehicle';
+                            $section['design'] = 'vehicle_three';
+                        }
+
+                        $data = $vehicles->map(function ($vehicle) {
+                            $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
+                                ->where('key', 'vehicle_image')
+                                ->first();
+
+                            $vehiclePrices = $vehicle->vehicle_price ? json_decode($vehicle->vehicle_price, true) : [];
+                            $filteredPrices = [];
+
+                            if (!empty($vehiclePrices)) {
+                                foreach ($vehiclePrices as $price) {
+                                    $filteredPrice = array_filter($price, function ($value) {
+                                        return $value > 0; // Only keep values greater than 0
+                                    });
+
+                                    if (!empty($filteredPrice)) {
+                                        $filteredPrices[] = $filteredPrice;
+                                    }
+                                }
+                            }
+                            $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
+
+                            if (!empty($vehicle->vehicle_image)) {
+                                array_unshift($multipleImages, $vehicle->vehicle_image);
+                            }
+
+                            $multipleImages = array_map(function ($img) {
+                                $img = '/' . ltrim($img, '/'); // Ensure single leading slash
+                                return url('storage' . $img);
+                            }, $multipleImages);
+
+                            /** @var \App\Models\User|null $auth */
+                            $auth = current_user();
+                            $authId = $auth?->id;
+
+                            $wishlistExists = false;
+
+                            if ($authId) {
+                                $wishlistExists = Wishlist::where("user_id", $authId)
+                                    ->where("vehicle_id", $vehicle->id)
+                                    ->exists();
+                            }
+
+                            $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+                            $currency = null;
+
+                            if ($currencySetting && $currencySetting->value) {
+                                $currency = Currency::find($currencySetting->value);
+                            }
+
+                            $currencySymbol = $currency->symbol ?? "$";
+
+                            $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
+
+                            $user = User::where('id', $vehicle->created_by)
+                                ->first();
+
+                            $user = User::where('id', $vehicle->created_by)->first();
+                            $userDetail = null;
+                            $defaultAvatar = asset('/backend/assets/img/default-profile.png');
+                            $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
+
+                            $avatarImage = $defaultAvatar;
+
+                            if ($profileImagePath) {
+                                $fullImagePath = storage_path('app/public/' . $profileImagePath);
+                                if (file_exists($fullImagePath)) {
+                                    $avatarImage = url('/storage/' . $profileImagePath);
+                                }
+                            }
+                            return [
+                                'id' => $vehicle->id,
+                                'name' => $vehicle->name,
+                                'slug' => $vehicle->slug,
+                                'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
+                                'multiple_vehicle_images' => $multipleImages,
+                                'has_multiple_image' => count($multipleImages) > 1,
+                                'avatar_image' => $avatarImage,
+                                'brand_id' => $vehicle->brand_id ?? null,
+                                'brand' => $vehicle->brand->brand_name ?? null,
+                                'car_type' => $vehicle->carType->name ?? null,
+                                'category' => $vehicle->category->name ?? null,
+                                'tube_type' => Arr::random(['Tube', 'Tubeless']),
+                                'break_type' => Arr::random(['Drum', 'Disc']),
+                                'location' => $vehicle->mainLocation->name ?? null,
+                                'color' => $vehicle->color->name ?? null,
+                                'fuel_type' => $vehicle->fuel_type->fuel_type ?? null,
+                                'transmission' => $vehicle->transmission->name ?? null,
+                                'year' => $vehicle->year,
+                                'mileage' => $vehicle->mileage,
+                                'odometer' => $vehicle->odometer,
+                                'rating' => $rating,
+                                'total_review' => Review::where("vehicle_id", $vehicle->id)->count(),
+                                'currency' => $currencySymbol,
+                                'wishlist' => $wishlistExists,
+                                'passenger_capacity' => $vehicle->passenger_capacity,
+                                'num_seats' => $vehicle->num_seats,
+                                'num_doors' => $vehicle->num_doors,
+                                'num_airbags' => $vehicle->num_airbags,
+                                'vehicle_video' => $vehicle->vehicle_video,
+                                'features' => $vehicle->features,
+                                'price' => !empty($filteredPrices) ? $filteredPrices : null,
+                                'is_featured' => $vehicle->popular,
+                                'is_top_rated' => $vehicle->recommended,
+                                'seo_title' => $vehicle->vehicle_metatitle,
+                                'seo_key' => $vehicle->vehicle_metakeywords,
+                                'seo_description' => $vehicle->vehicle_metadesc,
+                                'created_at' => $vehicle->created_at,
+                            ];
+                        });
+
+                        $section['section_content'] = $data;
+                    }
+                }
+
                 // Car Type
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
@@ -1355,7 +1511,7 @@ class PageController extends Controller
                     }
                 }
 
-                   // Benefits Of Renting Yacht
+                // Benefits Of Renting Yacht
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
 
@@ -1600,7 +1756,7 @@ class PageController extends Controller
         $categoryId = getCategoryId();
         $vehicleTypes = Cartype::select('name', 'id')->where('language_id', $language_id)->where('category_id', $categoryId)->where('status', 1)->get();
         $vehicleModels = CarModel::select('model_name as name', 'id')->where('language_id', $language_id)->where('category_id', $categoryId)->where('status', 1)->get();
-        $locations = Location::select('name','id')->where('status', 1)->where('language_id', $language_id)->get();
+        $locations = Location::select('name', 'id')->where('status', 1)->where('language_id', $language_id)->get();
         if ($page) {
             $data = [
                 'page_title' => $page->page_title,
