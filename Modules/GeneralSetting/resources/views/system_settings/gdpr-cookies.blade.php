@@ -15,7 +15,7 @@
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-xl-9">
-                    <form id="cookiesSettingForm">
+                    <form @csrf id="cookiesSettingForm">
                         <div class="card">
                             <div class="card-header">
                                 <h5>{{ __('admin.general_settings.system_settings') }}</h5>

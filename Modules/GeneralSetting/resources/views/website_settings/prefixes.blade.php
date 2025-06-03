@@ -25,7 +25,7 @@
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-lg-9">
-                    <form id="prefixesSettingForm" autocomplete="off">
+                    <form @csrf id="prefixesSettingForm" autocomplete="off">
                         <div class="card h-100">
                             <div class="card-header">
                                 <h5 class="fw-bold">{{ __('admin.general_settings.website_settings') }}</h5>

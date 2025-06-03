@@ -21,7 +21,7 @@
                         </div>
                         @include('admin.general_settings_loader')
                         <div class="d-none real-card">
-                            <form id="rentalSettingForm">
+                            <form @csrf id="rentalSettingForm">
                                 <div class="card-body pb-0">
                                     <div class="localization-content mb-3">
                                         <div>

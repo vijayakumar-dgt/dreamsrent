@@ -76,7 +76,7 @@
                         <i class="ti ti-x fs-16"></i>
                     </button>
                 </div>
-                <form id="insuranceForm" autocomplete="off">
+                <form @csrf id="insuranceForm" autocomplete="off">
                     <input type="hidden" name="id" id="id">
                     <input type="hidden" name="language_id" id="language_id">
                     <div class="modal-body">
@@ -159,7 +159,7 @@
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
                 <div class="modal-body text-center">
-                    <form id="deleteInsurance">
+                    <form @csrf id="deleteInsurance">
                         <input type="hidden" name="delete_id" id="delete_id">
                         <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
                             <i class="ti ti-trash-x fs-26"></i>
