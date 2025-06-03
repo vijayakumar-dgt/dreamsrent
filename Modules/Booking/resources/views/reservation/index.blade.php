@@ -181,7 +181,6 @@
         formId="reservation_delete_form"
         method="POST"
         :hiddenInputs="['delete_id' => '']"
-        deleteBtnText="{{ __('admin.common.delete') }}"  
         :title="__('admin.bookings.delete_reservation')"
         :description="__('admin.bookings.delete_reservation_confirmation')">
     </x-admin.delete-modal>
@@ -189,16 +188,16 @@
 
     <!-- Complete Modal  -->
     <x-admin.delete-modal
-	className="deletemodal"
-	id="complete_modal"
-	action="{{ route('reservation.complete') }}"
-	formId="reservation_complete_form"
-	method="POST"
-	:hiddenInputs="['compelete_id' => '']"
-	:title="__('admin.bookings.complete_booking')"
-    deleteBtnText="{{ __('admin.common.yes_complete') }}"
-    modalIconClass="ti ti-circle-check fs-26"
-	:description="__('admin.bookings.complete_reservation_confirmation')">
+        className="deletemodal"
+        id="complete_modal"
+        action="{{ route('reservation.complete') }}"
+        formId="reservation_complete_form"
+        method="POST"
+        :hiddenInputs="['compelete_id' => '']"
+        :title="__('admin.bookings.complete_booking')"
+        deleteBtnText="{{ __('admin.common.yes_complete') }}"
+        modalIconClass="ti ti-circle-check fs-26"
+        :description="__('admin.bookings.complete_reservation_confirmation')">
     </x-admin.delete-modal>
     <!-- /Complete Modal-->
 @endsection

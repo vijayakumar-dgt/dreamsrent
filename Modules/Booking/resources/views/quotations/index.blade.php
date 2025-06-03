@@ -201,26 +201,16 @@
     <!-- /Page Wrapper -->
 
     <!-- Delete Modal  -->
-    <div class="modal fade" id="delete_modal">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <form id="quotation_delete_form">
-                    <input type="hidden" name="delete_id" id="delete_id">
-                    <div class="modal-body text-center">
-                        <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-                            <i class="ti ti-trash-x fs-26"></i>
-                        </span>
-                        <h4 class="mb-1">{{ __('admin.bookings.delete_quotation') }}</h4>
-                        <p class="mb-3">{{ __('admin.bookings.delete_quotation_confirmation') }}</p>
-                        <div class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                            <button type="submit" class="btn btn-primary">{{ __('admin.common.yes_delete') }}</a>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <x-admin.delete-modal
+        className="deletemodal"
+        id="delete_modal"
+        action="{{ route('quotations.delete') }}"
+        formId="quotation_delete_form"
+        method="POST"
+        :hiddenInputs="['delete_id' => '']"
+        :title="__('admin.bookings.delete_quotation')"
+        :description="__('admin.bookings.delete_quotation_confirmation')">
+    </x-admin.delete-modal>
     <!-- /Delete Modal-->
 @endsection
 
