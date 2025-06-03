@@ -37,23 +37,31 @@
 		@include('admin.partials.footer')
 	</div>
 	<!-- /Page Wrapper -->
-	<div class="modal fade deletemodal" id="clear_cache">
-		<div class="modal-dialog modal-dialog-centered modal-sm">
-			<div class="modal-content">
-				<div class="modal-body text-center">
-					<span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-						<i class="ti ti-trash-x fs-26"></i>
-					</span>
-					<h4 class="mb-1">{{ __('admin.general_settings.clear_cache') }}</h4>
-					<p class="mb-3">{{ __('admin.general_settings.want_to_clear_cache') }}</p>
-					<div class="d-flex justify-content-center">
-						<a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
-						<button type="submit"  id="clear-cache" class="btn btn-primary">{{ __('admin.general_settings.yes_clear_cache') }}</button>
-					</div>
-				</div>
+	<!-- Clear Cache Modal -->
+	<x-admin.modal className="deletemodal" id="clear_cache" :title="__('admin.general_settings.clear_cache')" dialogClass="modal-dialog-centered modal-sm">
+		<x-slot name="body">
+			<div class="text-center">
+				<span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
+					<i class="ti ti-trash-x fs-26"></i>
+				</span>
+				<h4 class="mb-1">{{ __('admin.general_settings.clear_cache') }}</h4>
+				<p class="mb-3">{{ __('admin.general_settings.want_to_clear_cache') }}</p>
 			</div>
-		</div>
-	</div>
+		</x-slot>
+
+		<x-slot name="footer">
+			<div class="d-flex justify-content-center">
+				<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
+					{{ __('admin.general_settings.cancel') }}
+				</button>
+				<button type="submit" id="clear-cache" class="btn btn-primary">
+					{{ __('admin.general_settings.yes_clear_cache') }}
+				</button>
+			</div>
+		</x-slot>
+	</x-admin.modal>
+	<!-- /Clear Cache Modal -->
+
 @endsection
 
 @push('scripts')

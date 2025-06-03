@@ -17,6 +17,7 @@
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-xl-9">
                     <form action="" id="notificationsSettingForm" enctype="multipart/form-data">
+                         @csrf
                         <input type="hidden" name="group_id" id="group_id" class="form-control" value="2" >
                         <div class="card mb-0">
                             <div class="card-header">

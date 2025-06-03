@@ -3,10 +3,10 @@
     await loadTranslationFile("admin", "rentals, common");
 
     $(document).ready(function () {
-        if ($('.custom-select').length > 0) {
-            $('.custom-select').select2({
+        if ($(".custom-select").length > 0) {
+            $(".custom-select").select2({
                 minimumResultsForSearch: -1,
-                width: '100%'
+                width: "100%",
             });
         }
         let currency = $("#currency").val();
@@ -565,16 +565,16 @@
         let editingTariffId = null;
         let deletingTariffId = null;
 
-        $(document).on('click', '#add_tariff_btn', function () {
-           $('#tarrif_title').text( _l('admin.rentals.add_tariff'));
-            $("#t_name").val(''); 
-            $("#t_price").val('');
-            $("#t_fromday").val('');
-            $("#t_today").val('');
-            $("#t_base").val('').attr('disabled', false);
-            $("#t_extra").val('');
+        $(document).on("click", "#add_tariff_btn", function () {
+            $("#tarrif_title").text(_l("admin.rentals.add_tariff"));
+            $("#t_name").val("");
+            $("#t_price").val("");
+            $("#t_fromday").val("");
+            $("#t_today").val("");
+            $("#t_base").val("").attr("disabled", false);
+            $("#t_extra").val("");
             $("#unlimited1").prop("checked", false);
-            $('#tarrif_btn').text(_l('admin.rentals.create_tariff'));
+            $("#tarrif_btn").text(_l("admin.rentals.create_tariff"));
         });
 
         $("#tarrif_btn").on("click", function () {
@@ -701,7 +701,12 @@
             let editElement = $("#" + editingTariffId);
 
             $("#t_name").val(editElement.find("h6").text());
-            $("#t_price").val(editElement.find(".daily-price span").text().replace(currency, ""));
+            $("#t_price").val(
+                editElement
+                    .find(".daily-price span")
+                    .text()
+                    .replace(currency, "")
+            );
             $("#t_fromday").val(editElement.find(".from-days span").text());
             $("#t_today").val(editElement.find(".to-days span").text());
 
@@ -714,7 +719,12 @@
                 $("#t_base").val(baseKmValue).prop("disabled", false);
             }
 
-            $("#t_extra").val(editElement.find(".extra-price span").text().replace(currency, ""));
+            $("#t_extra").val(
+                editElement
+                    .find(".extra-price span")
+                    .text()
+                    .replace(currency, "")
+            );
 
             $("#tarrif_title").text("Edit Tariff");
             $("#tarrif_btn").text("Update");
@@ -1867,7 +1877,7 @@
                                 .text("Save & Exit")
                                 .prop("disabled", false);
                         } else {
-                            showToast('error', error.responseJSON.message);
+                            showToast("error", error.responseJSON.message);
                             $("#seoFinalBtn")
                                 .text("Save & Exit")
                                 .prop("disabled", false);
@@ -1924,6 +1934,72 @@
                 });
             } else {
                 modelDropdown.html('<option value="">Select Model</option>'); // Reset if no brand is selected
+            }
+        });
+
+        $("#vehicle_category_id").on("change", function () {
+            let categoryId = $(this).val();
+            let modelTypeDropdown = $("#vehicle_type_id");
+            let modelBrandDropdown = $("#vehicle_brand_id");
+
+            modelTypeDropdown.html('<option value="">Loading...</option>');
+            modelBrandDropdown.html('<option value="">Loading...</option>');
+
+            if (categoryId) {
+                $.ajax({
+                    url: "/admin/get-type-brand",
+                    type: "GET",
+                    data: { category_id: categoryId },
+                    success: function (response) {
+                        modelTypeDropdown.html(
+                            '<option value="">Select Type</option>'
+                        );
+                        modelBrandDropdown.html(
+                            '<option value="">Select Brand</option>'
+                        );
+
+                        if (response.success) {
+                            if (response.types.length > 0) {
+                                $.each(response.types, function (key, type) {
+                                    modelTypeDropdown.append(
+                                        `<option value="${type.id}">${type.name}</option>`
+                                    );
+                                });
+                            } else {
+                                modelTypeDropdown.html(
+                                    '<option value="">No vehicle types found</option>'
+                                );
+                            }
+
+                            if (response.brands.length > 0) {
+                                $.each(response.brands, function (key, brand) {
+                                    modelBrandDropdown.append(
+                                        `<option value="${brand.id}">${brand.brand_name}</option>`
+                                    );
+                                });
+                            } else {
+                                modelBrandDropdown.html(
+                                    '<option value="">No brands found</option>'
+                                );
+                            }
+                        }
+                    },
+                    error: function () {
+                        modelTypeDropdown.html(
+                            '<option value="">Error loading vehicle types</option>'
+                        );
+                        modelBrandDropdown.html(
+                            '<option value="">Error loading brands</option>'
+                        );
+                    },
+                });
+            } else {
+                modelTypeDropdown.html(
+                    '<option value="">Select Model</option>'
+                );
+                modelBrandDropdown.html(
+                    '<option value="">Select Model</option>'
+                );
             }
         });
 
@@ -2081,7 +2157,9 @@
                     const displayPrice =
                         insurancePriceTypeId == 7
                             ? `${parseFloat(insurancePrice).toFixed(0)}%`
-                            : `${currency}${parseFloat(insurancePrice).toFixed(2)}`;
+                            : `${currency}${parseFloat(insurancePrice).toFixed(
+                                  2
+                              )}`;
                     const newInsuranceDiv = $(`
                     <div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" data-id="${uniqueId}">
                         <div>

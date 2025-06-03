@@ -19,7 +19,7 @@ use App\Http\Controllers\StateController;
 use App\Http\Controllers\TranslationController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Session;
-use Modules\GeneralSetting\Http\Controllers\LanguageController;
+use Modules\GeneralSetting\Http\Controllers\Admin\LanguageController;
 
 Route::get('/storage-linkadmin', function () {
     Artisan::call('storage:link');

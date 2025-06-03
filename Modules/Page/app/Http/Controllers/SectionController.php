@@ -88,7 +88,7 @@ class SectionController extends Controller
             ], 400);
         }
 
-        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three'];
+        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three', 'Banner Four'];
         
         $sections = $this->sectionRepository->getFilteredSections($orderBy, $sortBy, $allowedNames);
 
@@ -105,6 +105,14 @@ class SectionController extends Controller
 
             if (!empty($decodedDatas['thumbnail_image_two'])) {
                 $decodedDatas['thumbnail_image_two'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_two'];
+            }
+
+            if (!empty($decodedDatas['thumbnail_image_four'])) {
+                $decodedDatas['thumbnail_image_four'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_four'];
+            }
+
+            if (!empty($decodedDatas['thumbnail_image_boat'])) {
+                $decodedDatas['thumbnail_image_boat'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_boat'];
             }
 
             $data[] = array_merge([
@@ -147,7 +155,6 @@ class SectionController extends Controller
 
         $data = $this->processSectionData($request, $existingData);
 
-        // Update section title if provided
         $this->updateSectionTitle($request, $sectionId);
 
         try {
@@ -176,7 +183,6 @@ class SectionController extends Controller
 
         $data = $this->processSectionData($request, $existingData);
 
-        // Update section title if provided
         $this->updateSectionTitle($request, $sectionId);
 
         try {
@@ -234,6 +240,32 @@ class SectionController extends Controller
                 'description_two' => $request->description_two,
                 'thumbnail_image_two' => $thumbnailPath,
             ];
+        } elseif ($sectionId == 43) {
+            $thumbnailPath = $existingData['thumbnail_image_four'] ?? null;
+            if ($request->hasFile('thumbnail_image_four')) {
+                $thumbnailPath = uploadFile($request->file('thumbnail_image_four'), 'general');
+            }
+
+            $data = [
+                'label_three_one' => $request->label_three_one,
+                'label_three_two' => $request->label_three_two,
+                'label_three_three' => $request->label_three_three,
+                'description_three' => $request->description_three,
+                'thumbnail_image_four' => $thumbnailPath,
+            ];
+        } elseif ($sectionId == 56) {
+            $thumbnailPath = $existingData['thumbnail_image_boat'] ?? null;
+            if ($request->hasFile('thumbnail_image_boat')) {
+                $thumbnailPath = uploadFile($request->file('thumbnail_image_boat'), 'general');
+            }
+
+            $data = [
+                'label_boat_one' => $request->label_boat_one,
+                'label_boat_two' => $request->label_boat_two,
+                'label_boat_three' => $request->label_boat_three,
+                'description_boat' => $request->description_boat,
+                'thumbnail_image_boat' => $thumbnailPath,
+            ];
         } elseif ($sectionId == 42) {
             $data = [
                 'vehicle_id' => $request->vehicle_id,
@@ -281,6 +313,8 @@ class SectionController extends Controller
             1 => 'section_title_one',
             29 => 'section_title_two',
             42 => 'section_title_three',
+            56 => 'section_title_boat',
+            43 => 'section_title_five',
             26 => 'section_title_four',
         ];
 

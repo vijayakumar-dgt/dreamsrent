@@ -21,7 +21,8 @@
                             <h5 class="fw-bold">{{ __('admin.general_settings.app_settings') }}</h5>
                         </div>
                         @include('admin.general_settings_loader')
-                        <form id="invoiceSettingForm" class="d-none real-card">
+                        <form id="invoiceSettingForm"  class="d-none real-card">
+                            @csrf
                             <div class="card-body">
                                 <h6 class="fw-bold mb-3">{{ __('admin.general_settings.invoice_settings') }}</h6>
                                 <div class="row">

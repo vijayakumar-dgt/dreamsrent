@@ -27,9 +27,6 @@
                 brand_id: {
                     required: true,
                 },
-                total_cars: {
-                    required: true,
-                },
             },
             messages: {
                 model_name: {
@@ -39,9 +36,6 @@
                 },
                 brand_id: {
                     required: _l("admin.rentals.brand_required"),
-                },
-                total_cars: {
-                    required: _l("admin.rentals.total_vehicles_required"),
                 },
             },
             errorPlacement: function (error, element) {
@@ -82,7 +76,6 @@
             submitHandler: function (form) {
                 let formData = new FormData();
                 formData.append("model_name", $("#model_name").val());
-                formData.append("total_cars", $("#total_cars").val());
                 formData.append("brand_id", $("#brand_id").val());
                 formData.append("language_id", $("#language_id").val());
 
@@ -167,7 +160,11 @@
             processing: false,
             ajax: {
                 url: "/admin/vehicle-model/list",
-                type: "GET",
+                type: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
                 data: function (d) {
                     d.search = $("#search").val();
                     d.sort_by_status = $("#sort_by_status").val();
@@ -397,14 +394,6 @@
                 .addClass("justify-content-end");
         });
 
-        $("#total_cars").on("input", function () {
-            $(this).val(
-                $(this)
-                    .val()
-                    .replace(/[^0-9]/g, "")
-            );
-        });
-
         $("#deleteCarModel").on("submit", function (e) {
             e.preventDefault();
             $.ajax({
@@ -462,7 +451,6 @@
                 if (response.code === 200) {
                     let data = response.data;
                     $("#model_name").val(data.model_name);
-                    $("#total_cars").val(data.total_cars);
                     $("#brand_id").val(data.brand_id).trigger("change");
                     $("#status").prop("checked", data.status == 1);
                     $("#id").val(data.id);

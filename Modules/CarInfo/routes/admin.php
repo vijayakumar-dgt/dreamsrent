@@ -37,7 +37,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         // Door Types
         Route::get('door-types', [DoorTypeController::class, 'index'])->name('doorType.index')->middleware('permission');
         Route::post('door-type/save', [DoorTypeController::class, 'store'])->name('doorType.store');
-        Route::get('door-type/list', [DoorTypeController::class, 'list'])->name('doorType.list');
+        Route::post('door-type/list', [DoorTypeController::class, 'list'])->name('doorType.list');
         Route::get('door-type/edit/{id}', [DoorTypeController::class, 'edit'])->name('doorType.edit');
         Route::post('door-type/delete', [DoorTypeController::class, 'delete'])->name('doorType.delete');
         // Location Routes
@@ -61,13 +61,13 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         // Brand
         Route::get('brands', [BrandController::class, 'index'])->name('brand.index')->middleware('permission');
         Route::post('brand/save', [BrandController::class, 'store'])->name('brand.store');
-        Route::get('brand/list', [BrandController::class, 'list'])->name('brand.list');
+        Route::post('brand/list', [BrandController::class, 'list'])->name('brand.list');
         Route::get('brand/edit/{id}', [BrandController::class, 'edit'])->name('brand.edit');
         Route::post('brand/delete', [BrandController::class, 'delete'])->name('brand.delete');
         // Car Model
         Route::get('vehicle-models', [CarModelController::class, 'index'])->name('carModel.index')->middleware('permission');
         Route::post('vehicle-model/save', [CarModelController::class, 'store'])->name('carModel.store');
-        Route::get('vehicle-model/list', [CarModelController::class, 'list'])->name('carModel.list');
+        Route::post('vehicle-model/list', [CarModelController::class, 'list'])->name('carModel.list');
         Route::get('vehicle-model/edit/{id}', [CarModelController::class, 'edit'])->name('carModel.edit');
         Route::post('vehicle-model/delete', [CarModelController::class, 'delete'])->name('carModel.delete');
         //Cylinder Routes
@@ -86,7 +86,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         // Safety Features
         Route::get('safety-features', [SafetyFeatureController::class, 'index'])->name('safetyFeature.index')->middleware('permission');
         Route::post('safety-feature/save', [SafetyFeatureController::class, 'store'])->name('safetyFeature.store');
-        Route::get('safety-feature/list', [SafetyFeatureController::class, 'list'])->name('safetyFeature.list');
+        Route::post('safety-feature/list', [SafetyFeatureController::class, 'list'])->name('safetyFeature.list');
         Route::get('safety-feature/edit/{id}', [SafetyFeatureController::class, 'edit'])->name('safetyFeature.edit');
         Route::post('safety-feature/delete', [SafetyFeatureController::class, 'delete'])->name('safetyFeature.delete');
         // Car Seat Type
@@ -155,7 +155,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         // Maintenance
         Route::get('maintenance', [MaintenanceController::class, 'index'])->name('maintenance.index')->middleware('permission');
         Route::post('maintenance/save', [MaintenanceController::class, 'store'])->name('maintenance.store');
-        Route::get('maintenance/list', [MaintenanceController::class, 'list'])->name('maintenance.list');
+        Route::post('maintenance/list', [MaintenanceController::class, 'list'])->name('maintenance.list');
         Route::get('maintenance/edit/{id}', [MaintenanceController::class, 'edit'])->name('maintenance.edit');
         Route::post('maintenance/delete', [MaintenanceController::class, 'delete'])->name('maintenance.delete');
         //Enquire
@@ -183,6 +183,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::get('get-damage-info', [CarInfoController::class, 'damage'])->name('damage');
         Route::get('get-insurance-info', [CarInfoController::class, 'insurance'])->name('insurance');
         Route::get('get-model', [CarInfoController::class, 'getModel']);
+        Route::get('get-type-brand', [CarInfoController::class, 'getTypeAndModel']);
         Route::post('vehicle/image/delete', [CarInfoController::class, 'deleteVehicleImage']);
         Route::post('vehicle/policy/delete', [CarInfoController::class, 'deleteVehiclePolicy']);
         Route::post('vehicle-list', [CarInfoController::class, 'vehicleListApi']);

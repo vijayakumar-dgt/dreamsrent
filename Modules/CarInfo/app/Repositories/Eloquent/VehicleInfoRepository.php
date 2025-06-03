@@ -109,7 +109,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         }
 
         $currencySymbol = $currency->symbol ?? "$";
-        
+
         $data = [
             'carTypes' => $carTypes,
             'Brands' => $Brands,
@@ -132,7 +132,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         return $data;
     }
 
-    public function editVehicle(string $slug ,Request $request): array
+    public function editVehicle(string $slug, Request $request): array
     {
         if ($request->has('language_id')) {
             $language_id = $request->query('language_id');
@@ -219,7 +219,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 }
             }
         }
-        
+
         $selectedFeatures = [];
         if ($query && $query->features) {
             $selectedFeatures = json_decode($query->features, true);
@@ -272,7 +272,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         }
 
         $currencySymbol = $currency->symbol ?? "$";
-        
+
         $data = [
             'carTypes' => $carTypes,
             'Brands' => $Brands,
@@ -334,6 +334,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $BaseKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('basic_kilometer', null);
             $ExtraKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('extra_kilometer', null);
 
+            $category = Category::find($request->vehicle_category_id);
+
             $data = [
                 "vehicle_image" => $vehicleImagePath,
                 "language_id" => $request->lang_id,
@@ -344,6 +346,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 "brand_id" => $request->vehicle_brand_id,
                 "model_id" => $request->vehicle_model_id,
                 "category_id" => $request->vehicle_category_id,
+                "type" => $category?->slug ?? null,
                 "plate_number" => $request->plate_number,
                 "vin" => $request->vin_number,
                 "main_location_id" => $request->main_location_id,
@@ -677,6 +680,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $BaseKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('basic_kilometer', null);
             $ExtraKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('extra_kilometer', null);
 
+            $category = Category::find($request->vehicle_category_id);
+
             $data = [
                 "vehicle_image" => $vehicleImagePath,
                 "parent_id" => (int) $request->parent_id,
@@ -687,6 +692,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 "brand_id" => $request->vehicle_brand_id,
                 "model_id" => $request->vehicle_model_id,
                 "category_id" => $request->vehicle_category_id,
+                "type" => $category?->slug ?? null,
                 "plate_number" => $request->plate_number,
                 "vin" => $request->vin_number,
                 "main_location_id" => $request->main_location_id,
@@ -1020,48 +1026,48 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             }
             $languageId = $authId->language_id;
             $query = VehicleInfo::with([
-                    'carType:id,name',
-                    'brand:id,brand_name',
-                    'category:id,name',
-                    'mainLocation:id,name',
-                    'color:id,name,value'
-                ])->select(
-                    "id",
-                    "vehicle_image",
-                    "name",
-                    "slug",
-                    "type_id",
-                    "brand_id",
-                    "category_id",
-                    "main_location_id",
-                    "color_id",
-                    "vehicle_price",
-                    "vehicle_basekm",
-                    "created_at",
-                    "perma_link",
-                    "model_id",
-                    "plate_number",
-                    "vin",
-                    "other_location_id",
-                    "fuel_type_id",
-                    "odometer",
-                    "year",
-                    "transmission_id",
-                    "mileage",
-                    "passenger_capacity",
-                    "num_seats",
-                    "num_doors",
-                    "num_airbags",
-                    "vehicle_video",
-                    "vehicle_extrakmprice",
-                    "vehicle_metatitle",
-                    "vehicle_metadesc",
-                    "vehicle_metakeywords",
-                    "features",
-                    "popular",
-                    "recommended",
-                    "status"
-                );
+                'carType:id,name',
+                'brand:id,brand_name',
+                'category:id,name',
+                'mainLocation:id,name',
+                'color:id,name,value'
+            ])->select(
+                "id",
+                "vehicle_image",
+                "name",
+                "slug",
+                "type_id",
+                "brand_id",
+                "category_id",
+                "main_location_id",
+                "color_id",
+                "vehicle_price",
+                "vehicle_basekm",
+                "created_at",
+                "perma_link",
+                "model_id",
+                "plate_number",
+                "vin",
+                "other_location_id",
+                "fuel_type_id",
+                "odometer",
+                "year",
+                "transmission_id",
+                "mileage",
+                "passenger_capacity",
+                "num_seats",
+                "num_doors",
+                "num_airbags",
+                "vehicle_video",
+                "vehicle_extrakmprice",
+                "vehicle_metatitle",
+                "vehicle_metadesc",
+                "vehicle_metakeywords",
+                "features",
+                "popular",
+                "recommended",
+                "status"
+            );
 
             // Apply filters if provided
             if (!is_null($request->name)) {
@@ -1755,6 +1761,27 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         }
     }
 
+    public function getTypeAndModel(?int $categoryId): array
+    {
+        try {
+            $types = Cartype::where('category_id', $categoryId)->get(['id', 'name']);
+            $brands = Brand::where('category_id', $categoryId)->get(['id', 'brand_name']);
+
+            return [
+                'code'    => 200,
+                'success' => true,
+                'types'   => $types,
+                'brands'  => $brands,
+            ];
+        } catch (\Exception $e) {
+            return [
+                'code'    => 500,
+                'success' => false,
+                'message' => __('admin.common.default_retrieve_error'),
+            ];
+        }
+    }
+
     public function vehicleDetailsList(Request $request): array
     {
         try {
@@ -1988,8 +2015,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
         try {
             $vehicleMeta = VehicleMeta::where('vehicle_id', $request->vehicle_id)
-            ->where('key', 'vehicle_image')
-            ->first();
+                ->where('key', 'vehicle_image')
+                ->first();
 
             if (!$vehicleMeta) {
                 return [

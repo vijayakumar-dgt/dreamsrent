@@ -17,7 +17,11 @@
             processing: false,
             ajax: {
                 url: "/admin/door-type/list",
-                type: "GET",
+                type: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
                 data: function (d) {
                     d.search = $("#search").val();
                     d.sort_by_status = $("#sort_by_status").val();
@@ -263,11 +267,10 @@
                 $(element).valid();
             },
             submitHandler: function (form) {
-                let formData = new FormData();
-                formData.append("door_type", $("#door_type").val());
+                let formData = new FormData(form);
                 if ($("#id").val() != "") {
-                    formData.append("id", $("#id").val());
-                    formData.append(
+                    formData.set("id", $("#id").val());
+                    formData.set(
                         "status",
                         $("#status").is(":checked") ? 1 : 0
                     );

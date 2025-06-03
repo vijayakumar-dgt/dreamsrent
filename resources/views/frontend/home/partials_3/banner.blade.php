@@ -8,6 +8,7 @@
 
     $titleMain = implode(' ', array_slice($titleWords, 0, -$lastPartCount));
     $titleLastPart = implode(' ', array_slice($titleWords, -$lastPartCount));
+    $vehicle_types = $data['vehicle_types'] ?? [];
 @endphp
 <!-- Banner -->
 <section class="banner-section banner-slider">		
@@ -18,13 +19,16 @@
                     <h1>{{ $titleMain ?? "" }} <span>{{ $titleLastPart ?? "" }} </span></h1>
                     <h4>{{ optional($section_content[0])->description }}</h4>
                     <div class="banner-search">
-                        <form action="listing-grid.html" class="form-block d-flex align-items-center">
+                        <form action="{{ route('list') }}" class="form-block d-flex align-items-center">
                             <div class="search-input">
                                 <div class="input-block">
                                     <label>Any type</label>
-                                    <select class="select">
-                                        <option>Cruiser</option>
-                                        <option>Scooters</option>
+                                    <select class="select" name="vehicle_type_id">
+                                        @if(!empty($vehicle_types) && count($vehicle_types) > 0)
+                                        @foreach ($vehicle_types as $vehicle_type)
+                                            <option value="{{ $vehicle_type->id }}">{{ $vehicle_type->name ?? "" }}</option>
+                                        @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>

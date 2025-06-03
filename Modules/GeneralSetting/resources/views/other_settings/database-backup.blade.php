@@ -49,29 +49,32 @@
     </div>
     <!-- /Page Wrapper -->
 
-    <!-- Generate  -->
-    <div class="modal fade deletemodal" id="generate">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                    <form action="">
-                        <span class="avatar avatar-lg bg-primary-transparent rounded-circle text-primary mb-3">
-                            <i class="ti ti-folders fs-26"></i>
-                        </span>
-                        <h4 class="mb-1">{{ __('admin.general_settings.generate_backup') }}</h4>
-                        <p class="mb-3">{{ __('admin.general_settings.confirmation_generate_backup') }}</p>
-                        <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-light me-3"
-                                data-bs-dismiss="modal">{{ __('admin.general_settings.cancel') }}</a>
-                            <a href="{{ route('backup') }}"
-                                class="btn btn-primary">{{ __('admin.general_settings.generate_backup') }}</a>
-                        </div>
-                    </form>
-                </div>
+    <!-- Generate Backup Modal -->
+    <x-admin.modal className="deletemodal" id="generate" :title="__('admin.general_settings.generate_backup')" dialogClass="modal-dialog-centered modal-sm">
+        <x-slot name="body">
+            @csrf
+            <div class="text-center">
+                <span class="avatar avatar-lg bg-primary-transparent rounded-circle text-primary mb-3">
+                    <i class="ti ti-folders fs-26"></i>
+                </span>
+                <h4 class="mb-1">{{ __('admin.general_settings.generate_backup') }}</h4>
+                <p class="mb-3">{{ __('admin.general_settings.confirmation_generate_backup') }}</p>
             </div>
-        </div>
-    </div>
-    <!-- /Generate -->
+        </x-slot>
+
+        <x-slot name="footer">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
+                    {{ __('admin.general_settings.cancel') }}
+                </button>
+                <a href="{{ route('backup') }}" class="btn btn-primary">
+                    {{ __('admin.general_settings.generate_backup') }}
+                </a>
+            </div>
+        </x-slot>
+    </x-admin.modal>
+    <!-- /Generate Backup Modal -->
+
 
     <!-- Delete  -->
     <x-admin.delete-modal className="deletemodal" id="delete_backup" formId="deleteDbBackup" :hiddenInputs="['delete_id' => '']" :title="__('admin.general_settings.delete_backup')"
