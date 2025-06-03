@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Modules\CarInfo\Models\Brand;
+use Modules\CarInfo\Models\Category;
 use Modules\CarInfo\Repositories\Contracts\BrandRepositoryInterface;
 
 class BrandRepository implements BrandRepositoryInterface
@@ -38,9 +39,12 @@ class BrandRepository implements BrandRepositoryInterface
                 ];
             }
 
+            $category = Category::find($request->vehicle_category_id);
+
             $data = [
                 'brand_name'   => $request->brand_name,
                 'category_id'   => $request->vehicle_category_id,
+                "type" => $category?->slug ?? null,
                 'language_id'  => $request->language_id ?? ($brand->language_id ?? $language_id),
                 'status'       => $request->status ?? ($brand->status ?? 1),
             ];

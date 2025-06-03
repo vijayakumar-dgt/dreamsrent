@@ -30,6 +30,7 @@ use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Illuminate\Support\Arr;
+
 class PageController extends Controller
 {
     protected $pageRepository;
@@ -68,7 +69,7 @@ class PageController extends Controller
                 ->first();
 
             if ($basePage) {
-                 $query = Page::where('parent_id', $basePage->id)
+                $query = Page::where('parent_id', $basePage->id)
                     ->where('language_id', $languageId)
                     ->first();
                 if (!$query) {
@@ -328,12 +329,13 @@ class PageController extends Controller
             $defaultLang = Language::select("language_id")->where("default", 1)->first();
             $lang_id = $defaultLang->language_id ?? 1;
         }
-        if (in_array($themeId, [1, 2, 3], true)) {
+        if (in_array($themeId, [1, 2, 3, 4], true)) {
             if ($slug === null || $slug === '/') {
                 $slug = match ((int)$themeId) {
                     1 => 'home-screen-one',
                     2 => 'home-screen-two',
                     3 => 'home-screen-three',
+                    4 => 'home-screen-four',
                 };
             }
         }
@@ -526,6 +528,63 @@ class PageController extends Controller
                     }
                 }
 
+                // Banner Four
+                if ($section['status'] == 1) {
+                    if (isset($section['section_content']) && strpos($section['section_content'], '[banner_four') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
+
+                        $limit = (int)($matches[1] ?? 10);  // Explicitly cast to integer
+                        $viewAll = $matches[2] ?? 'no';
+                        $order = $matches[3] ?? 'asc';
+
+                        $banners = DB::table('sections')
+                            ->join('section_datas', function ($join) use ($lang_id) {
+                                $join->on('sections.id', '=', 'section_datas.section_id')
+                                    ->where('section_datas.language_id', '=', $lang_id);
+                            })
+                            ->select('sections.id', 'section_datas.datas')
+                            ->where('sections.name', 'Banner Four')
+                            ->orderBy('sections.id', $order)
+                            ->limit($limit)  // Ensure $limit is an integer
+                            ->get();
+
+                        $userCount = User::count();
+
+                        foreach ($banners as &$banner) {
+                            $decodedData = json_decode($banner->datas, true);
+
+                            $banner->label = $decodedData['label_boat_one'] ?? null;
+                            $banner->higlight_label = $decodedData['label_boat_two'] ?? null;
+                            $banner->description = $decodedData['description_boat'] ?? null;
+
+                            $relativePath = 'storage/' . ($decodedData['thumbnail_image_boat'] ?? '');
+                            $defaultImage = asset('backend/assets/img/car/car-right.png');
+                            $thumbnailKey = 'thumbnail_image_boat';
+
+                            $banner->thumbnail_image = (
+                                isset($decodedData[$thumbnailKey]) &&
+                                !empty($decodedData[$thumbnailKey]) &&
+                                file_exists(public_path($relativePath))
+                            ) ? asset($relativePath) : $defaultImage;
+
+                            $banner->customer_count = $userCount;
+
+                            $banner->customer_images = [
+                                asset('backend/assets/img/profiles/avatar-01.jpg'),
+                                asset('backend/assets/img/profiles/avatar-02.jpg'),
+                                asset('backend/assets/img/profiles/avatar-03.jpg'),
+                            ];
+
+                            unset($banner->datas);
+                        }
+
+                        $section['section_type'] = 'banner_four';
+                        $section['type'] = 'banner_four';
+                        $section['design'] = 'banner_four';
+                        $section['section_content'] = $banners;
+                    }
+                }
+
                 // BestVehicle
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
@@ -668,6 +727,7 @@ class PageController extends Controller
                         $categoryId = getCategoryId();
                         $category = Cartype::select('name', 'icon', 'id')
                             ->limit((int) $limit)
+                            ->where('type', 'car')
                             ->where('language_id', $lang_id)
                             ->where('category_id', $categoryId)
                             ->where('status', 1)
@@ -705,6 +765,7 @@ class PageController extends Controller
                         $categoryId = getCategoryId();
                         $category = Cartype::select('name', 'icon', 'id', 'type')
                             ->limit((int) $limit)
+                            ->where('type', 'bike')
                             ->where('language_id', $lang_id)
                             ->where('category_id', $categoryId)
                             ->where('status', 1)
@@ -727,6 +788,44 @@ class PageController extends Controller
                         $section['section_content'] = $category;
                     }
                 }
+
+                // Category section
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    if (
+                        isset($section['section_content']) &&
+                        is_string($section['section_content']) &&
+                        strpos($section['section_content'], '[boat_category ') !== false
+                    ) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
+                        $limit = $matches[1] ?? 6;
+                        $viewAll = $matches[2] ?? 'no';
+                        $order = $matches[3] ?? 'asc';
+
+                        $category = Cartype::select('name', 'icon', 'id', 'type')
+                            ->limit((int) $limit)
+                            ->where('type', 'boat')
+                            ->where('language_id', $lang_id)
+                            ->where('status', 1)
+                            ->whereNull('deleted_at')
+                            ->get()
+                            ->map(function ($cartype) use ($lang_id) {
+                                $cartype->car_count = VehicleInfo::where('type_id', $cartype->id)
+                                    ->where('language_id', $lang_id)
+                                    ->count();
+
+                                $cartype->image_url = $cartype->icon
+                                    ? asset('storage/' . ltrim($cartype->icon, '/'))
+                                    : asset('images/default.png');
+
+                                return $cartype;
+                            });
+
+                        $section['section_type'] = 'featured_category';
+                        $section['design'] = 'category_one';
+                        $section['section_content'] = $category;
+                    }
+                }
+
 
                 // FAQ Section (with Facts)
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
@@ -1459,6 +1558,7 @@ class PageController extends Controller
                 ->get();
 
             $content_sections = collect((array) $data['content_sections']);
+            // dd($content_sections);
             if (request()->has('is_mobile') && request()->get('is_mobile') === "yes") {
                 return response()->json(['code' => "200", 'message' => __('Page details retrieved successfully.'), 'data' => $data], 200);
             } else {
@@ -2219,7 +2319,7 @@ class PageController extends Controller
                 }
             }
         }
-        
+
         if ($page) {
             $data = [
                 'page_title' => $page->page_title,

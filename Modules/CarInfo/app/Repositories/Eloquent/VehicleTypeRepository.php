@@ -6,6 +6,7 @@ use App\Services\ImageResizer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Modules\CarInfo\Models\Cartype;
+use Modules\CarInfo\Models\Category;
 use Modules\CarInfo\Repositories\Contracts\VehicleTypeRepositoryInterface;
 
 class VehicleTypeRepository implements VehicleTypeRepositoryInterface
@@ -28,16 +29,16 @@ class VehicleTypeRepository implements VehicleTypeRepositoryInterface
                 'message' => 'Unauthorized: User not authenticated.'
             ];
         }
-        
+
         $language_id = $authUser->language_id;
         $id = $request->id ?? null;
         $folderPath = 'vehicles/types';
 
-        $successMessage = empty($id) 
-            ? __('admin.rentals.vehicle_type_added') 
+        $successMessage = empty($id)
+            ? __('admin.rentals.vehicle_type_added')
             : __('admin.rentals.vehicle_type_updated');
-        $errorMessage = empty($id) 
-            ? __('admin.common.default_create_error') 
+        $errorMessage = empty($id)
+            ? __('admin.common.default_create_error')
             : __('admin.common.default_update_error');
 
         try {
@@ -50,9 +51,13 @@ class VehicleTypeRepository implements VehicleTypeRepositoryInterface
                     'message' => __('admin.common.not_found')
                 ];
             }
+
+            $category = Category::find($request->vehicle_category_id);
+
             $data = [
                 'name'   => $request->name,
                 'category_id'   => $request->vehicle_category_id,
+                "type" => $category?->slug ?? null,
                 'language_id'  => $request->language_id ?? ($vehicleType->language_id ?? $language_id),
                 'status'       => $id ? ($request->input('status') == 'on' ? 1 : 0) : 1,
             ];
@@ -197,7 +202,7 @@ class VehicleTypeRepository implements VehicleTypeRepositoryInterface
             $search = $request->search ?? null;
 
             $carTypes = Cartype::when($search, function ($query) use ($search) {
-                    return $query->where('name', 'LIKE', "%{$search}%");
+                return $query->where('name', 'LIKE', "%{$search}%");
             })
                 ->orderBy('id', $orderBy)
                 ->where('status', 1)
@@ -216,5 +221,4 @@ class VehicleTypeRepository implements VehicleTypeRepositoryInterface
             ];
         }
     }
-
 }

@@ -334,6 +334,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $BaseKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('basic_kilometer', null);
             $ExtraKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('extra_kilometer', null);
 
+            $category = Category::find($request->vehicle_category_id);
+
             $data = [
                 "vehicle_image" => $vehicleImagePath,
                 "language_id" => $request->lang_id,
@@ -344,6 +346,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 "brand_id" => $request->vehicle_brand_id,
                 "model_id" => $request->vehicle_model_id,
                 "category_id" => $request->vehicle_category_id,
+                "type" => $category?->slug ?? null,
                 "plate_number" => $request->plate_number,
                 "vin" => $request->vin_number,
                 "main_location_id" => $request->main_location_id,
@@ -677,6 +680,8 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $BaseKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('basic_kilometer', null);
             $ExtraKilo = ($request->has('unlimited') && $request->unlimited === 'on') ? null : $request->input('extra_kilometer', null);
 
+            $category = Category::find($request->vehicle_category_id);
+
             $data = [
                 "vehicle_image" => $vehicleImagePath,
                 "parent_id" => (int) $request->parent_id,
@@ -687,6 +692,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 "brand_id" => $request->vehicle_brand_id,
                 "model_id" => $request->vehicle_model_id,
                 "category_id" => $request->vehicle_category_id,
+                "type" => $category?->slug ?? null,
                 "plate_number" => $request->plate_number,
                 "vin" => $request->vin_number,
                 "main_location_id" => $request->main_location_id,

@@ -30,6 +30,7 @@ class Brand extends Model
      */
     protected $fillable = [
         'category_id',
+        'type',
         'language_id',
         'brand_image',
         'brand_icon',
