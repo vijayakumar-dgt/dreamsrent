@@ -12,8 +12,14 @@ class Breadcrumb extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct($title, $breadcrumbs = [], $buttonText = null, $buttonId = null, $modalId = null, $permissionKey = null)
-    {
+    public function __construct(
+        $title,
+        $breadcrumbs = [],
+        $buttonText = '',
+        $buttonId = '',
+        $modalId = '',
+        $permissionKey = ''
+    ) {
         $this->title = $title;
         $this->breadcrumbs = $breadcrumbs;
         $this->buttonText = $buttonText;
