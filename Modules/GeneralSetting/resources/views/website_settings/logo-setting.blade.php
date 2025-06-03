@@ -17,6 +17,7 @@
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-lg-9">
                     <form id="logoSettingForm">
+                        @csrf
                         <div class="card h-100">
                             <div class="card-header">
                                 <h5 class="fw-bold">{{ __('admin.general_settings.website_settings') }}</h5>

@@ -16,6 +16,7 @@
                 <div class="col-xl-9">
                     <div class="card">
                         <form id="companySettingForm" enctype="multipart/form-data">
+                             @csrf
                             <div class="card-header">
                                 <h5 class="fw-bold">{{ __('admin.general_settings.website_settings') }}</h5>
                             </div>
@@ -162,4 +163,5 @@
 @endsection
 @push('scripts')
 <script src="{{ asset('backend/assets/js/general_setting/company.js') }}"></script>
+<!-- Removed inline JS for Codecanyon compliance -->
 @endpush

@@ -3,20 +3,22 @@
 namespace Modules\Page\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Notification;
 use App\Models\Review;
 use App\Models\User;
 use App\Models\UserDetail;
 use App\Models\Wishlist;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
+use Modules\Page\Http\Requests\PageRequest;
 use Modules\Page\Models\Page;
+use Modules\Page\Repositories\Contracts\PageInterface;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Modules\CarInfo\Models\Brand;
 use Modules\CarInfo\Models\Cartype;
 use Modules\CarInfo\Models\Location;
@@ -27,15 +29,16 @@ use Modules\GeneralSetting\Models\Currency;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\TranslationLanguage;
-use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
-
 class PageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $pageRepository;
+
+    public function __construct(PageInterface $pageRepository)
+    {
+        $this->pageRepository = $pageRepository;
+    }
+
     public function index(): View
     {
         $authUser = current_user();
@@ -59,17 +62,15 @@ class PageController extends Controller
         $query = Page::whereIn('slug', $slugsToTry)
             ->when($languageId, fn($q) => $q->where('language_id', $languageId))
             ->first();
-
         if (!$query && $languageId) {
             $basePage = Page::whereIn('slug', $slugsToTry)
                 ->whereNull('parent_id')
                 ->first();
 
             if ($basePage) {
-                $query = Page::where('parent_id', $basePage->id)
+                 $query = Page::where('parent_id', $basePage->id)
                     ->where('language_id', $languageId)
                     ->first();
-
                 if (!$query) {
                     $query = new Page([
                         'language_id' => $languageId,
@@ -85,11 +86,9 @@ class PageController extends Controller
 
             if ($basePage) {
                 $parentId = $basePage->parent_id ?? $basePage->id;
-
                 $query = Page::where('parent_id', $parentId)
                     ->where('language_id', $languageId)
                     ->first();
-
                 if (!$query) {
                     $query = new Page([
                         'language_id' => $languageId,
@@ -111,13 +110,11 @@ class PageController extends Controller
     {
         try {
             $pageSlug = $request->get('page_slug');
-
-            $page = Page::where('slug', $pageSlug)->first();
+            $page = $this->pageRepository->findBySlug($pageSlug);
 
             if (!$page) {
                 $fallbackSlug = 'pages/' . ltrim($pageSlug, '/');
-                $page = Page::where('slug', $fallbackSlug)
-                    ->first();
+                $page = $this->pageRepository->findBySlug($fallbackSlug);
             }
 
             if (!$page) {
@@ -143,8 +140,7 @@ class PageController extends Controller
             ], 400);
         }
 
-        /** @var \Modules\Page\Models\Page|null $page */
-        $page = Page::find($pageId);
+        $page = $this->pageRepository->findById($pageId);
 
         if (!$page) {
             return response()->json([
@@ -161,8 +157,7 @@ class PageController extends Controller
         ], 200);
     }
 
-
-    public function pageStore(Request $request): JsonResponse
+    public function pageStore(PageRequest $request): JsonResponse
     {
         $authUser = current_user();
 
@@ -173,35 +168,6 @@ class PageController extends Controller
             ], 401);
         }
 
-        $rules = [
-            'title' => 'required|max:100|unique:pages,page_title',
-            'slug' => 'required|max:100|unique:pages,slug',
-            'section_title' => 'nullable|array|min:1',
-            'section_title.*' => 'nullable|string',
-            'section_label' => 'nullable|array|min:1',
-            'section_label.*' => 'nullable|string',
-            'page_content' => 'nullable|array|min:1',
-            'page_content.*' => 'nullable|string',
-        ];
-
-        $messages = [
-            'title.required' => __('The page title field is required.'),
-            'slug.required' => __('The slug field is required.'),
-            'slug.unique' => __('The slug has already been taken.'),
-            'section_title.required' => __('At least one section title is required.'),
-            'section_label.required' => __('At least one section label is required.'),
-            'page_content.required' => __('At least one page content section is required.'),
-            'section_title.*.required' => __('Each section title is required.'),
-            'section_label.*.required' => __('Each section label is required.'),
-            'page_content.*.required' => __('Each page content section is required.'),
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
         if (empty($request->page_content) || count($request->page_content) === 0) {
             return response()->json([
                 'code' => 422,
@@ -210,21 +176,7 @@ class PageController extends Controller
             ], 422);
         }
 
-        $sections = [];
-        $titles = $request->input('section_title', []);
-        $labels = $request->input('section_label', []);
-        $contents = $request->input('page_content', []);
-        $statuses = $request->input('page_status', []);
-
-        for ($i = 0; $i < count($titles); $i++) {
-            $sections[] = [
-                'section_title' => $titles[$i] ?? '',
-                'section_label' => $labels[$i] ?? '',
-                'section_content' => $contents[$i] ?? '',
-                'status' => isset($statuses[$i]) ? 1 : 0,
-            ];
-        }
-
+        $sections = $this->prepareSections($request);
         $slug = Str::slug($request->slug);
 
         $data = [
@@ -232,7 +184,7 @@ class PageController extends Controller
             'slug' => $slug,
             'page_content' => json_encode($sections),
             'seo_tag' => $request->meta_key,
-            'seo_title' => $request->mete_title,
+            'seo_title' => $request->meta_title,
             'seo_description' => $request->meta_description,
             'keywords' => $request->keyword,
             'canonical_url' => $request->canonical_url,
@@ -243,7 +195,7 @@ class PageController extends Controller
         ];
 
         try {
-            Page::create($data);
+            $this->pageRepository->create($data);
             return response()->json([
                 'code' => 200,
                 'message' => __('page_create_success'),
@@ -257,51 +209,17 @@ class PageController extends Controller
         }
     }
 
-    public function pageUpdate(Request $request): JsonResponse
+    public function pageUpdate(PageRequest $request): JsonResponse
     {
-        $rules = [
-            'page_id' => 'nullable|exists:pages,id',
-            'language_id' => 'nullable|integer|exists:translation_languages,id',
-            'title' => 'required|string|max:255',
-            'section_title' => 'required|array',
-            'section_label' => 'required|array',
-            'page_content' => 'required|array|min:1',
-        ];
-
-        if ($request->read !== 'static') {
-            $rules = [
-                'slug' => 'required|string|max:255',
-            ];
-        }
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $titles = $request->input('section_title');
-        $labels = $request->input('section_label');
-        $contents = $request->input('page_content');
-        $statuses = $request->input('page_status', []);
-
-        $sections = [];
-        for ($i = 0; $i < count($titles); $i++) {
-            $sections[] = [
-                'section_title' => $titles[$i],
-                'section_label' => $labels[$i],
-                'section_content' => $contents[$i],
-                'status' => isset($statuses[$i]) ? 1 : 0,
-            ];
-        }
-
+        $sections = $this->prepareSections($request);
         $slug = Str::slug($request->slug);
+
         $data = [
             'page_title' => $request->title,
             'parent_id' => $request->parent_id,
             'page_content' => json_encode($sections),
             'seo_tag' => $request->meta_key,
-            'seo_title' => $request->mete_title,
+            'seo_title' => $request->meta_title,
             'seo_description' => $request->meta_description,
             'keywords' => $request->keyword,
             'canonical_url' => $request->canonical_url,
@@ -311,30 +229,23 @@ class PageController extends Controller
         ];
 
         if ($request->read !== 'static') {
-            $data['slug'] = Str::slug($request->slug);
+            $data['slug'] = $slug;
         }
 
-
-        // Only set language_id if it's present and not null
         if ($request->filled('language_id')) {
             $data['language_id'] = $request->language_id;
         }
 
         if ($request->filled('page_id')) {
-            /** @var \Modules\Page\Models\Page $page */
-            $page = Page::findOrFail($request->page_id);
-            $page->update($data);
-
+            $page = $this->pageRepository->update($request->page_id, $data);
             return response()->json([
                 'code' => 200,
                 'message' => __('Page updated successfully'),
                 'data' => $page
             ]);
         } else {
-            // When creating, language_id is mandatory, so no conditional check here
             $data['language_id'] = $request->language_id;
-            $page = Page::create($data);
-
+            $page = $this->pageRepository->create($data);
             return response()->json([
                 'code' => 200,
                 'message' => __('Page created successfully'),
@@ -345,45 +256,16 @@ class PageController extends Controller
 
     public function indexBuilderList(Request $request): JsonResponse
     {
-        $search = $request->input('search');
-        $status = $request->input('status');
-        $sortType = $request->input('sort');
-        $sortLang = $request->input('language_id') ?? $request->input('lang_id');
+        $filters = [
+            'search' => $request->input('search'),
+            'status' => $request->input('status'),
+            'sort' => $request->input('sort'),
+            'language_id' => $request->input('language_id') ?? $request->input('lang_id'),
+        ];
 
-        $query = Page::query();
-
-        // Apply search filter
-        if (!empty($search)) {
-            $query->where('page_title', 'LIKE', "%{$search}%");
-        }
-
-        // Apply status filter
-        if (!is_null($status)) {
-            $query->where('status', $status);
-        }
-
-        // Apply language filter
-        if (!empty($sortLang)) {
-            $query->where('language_id', $sortLang);
-        }
-
-        // Apply sorting filter
-        if ($sortType === 'asc') {
-            $query->orderBy('created_at', 'asc');
-        } elseif ($sortType === 'desc') {
-            $query->orderBy('created_at', 'desc');
-        } elseif ($sortType === 'last_month') {
-            $query->whereBetween('created_at', [now()->subMonth(), now()]);
-        } elseif ($sortType === 'last_7_days') {
-            $query->whereBetween('created_at', [now()->subDays(7), now()]);
-        } else {
-            $query->orderBy('created_at', 'desc');
-        }
-
-        $pages = $query->get();
+        $pages = $this->pageRepository->getPagesWithFilters($filters);
 
         $data = [];
-
         foreach ($pages as $page) {
             $data[] = [
                 'id' => $page->id,
@@ -402,6 +284,27 @@ class PageController extends Controller
             'data'   => $data,
         ]);
     }
+
+    protected function prepareSections(Request $request): array
+    {
+        $sections = [];
+        $titles = $request->input('section_title', []);
+        $labels = $request->input('section_label', []);
+        $contents = $request->input('page_content', []);
+        $statuses = $request->input('page_status', []);
+
+        for ($i = 0; $i < count($titles); $i++) {
+            $sections[] = [
+                'section_title' => $titles[$i] ?? '',
+                'section_label' => $labels[$i] ?? '',
+                'section_content' => $contents[$i] ?? '',
+                'status' => isset($statuses[$i]) ? 1 : 0,
+            ];
+        }
+
+        return $sections;
+    }
+
 
     public function pageBuilderApi(Request $request): View|JsonResponse
     {

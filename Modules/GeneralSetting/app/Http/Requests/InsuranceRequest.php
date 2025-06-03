@@ -36,8 +36,8 @@ class InsuranceRequest extends CustomFailedValidation
             'price_type_id' => 'required|exists:pricing_types,id',
             'price' => 'required|numeric|min:0',
             'benefit.*' => 'required|string|max:255',
-            'status' => 'sometimes|boolean',
-            'language_id' => 'sometimes|integer'
+            'status' => 'sometimes',
+            'language_id' => 'sometimes'
         ];
     }
 

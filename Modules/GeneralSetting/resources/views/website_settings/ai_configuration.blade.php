@@ -20,6 +20,7 @@
                             <h5 class="fw-bold">{{ __('admin.general_settings.website_settings') }}</h5>
                         </div>
                         <form id="ai_configuration_form">
+                            @csrf 
                             <div class="card-body pb-0">
                                 <h6 class="fw-bold mb-3">{{ __('admin.general_settings.ai_configuration') }}</h6>
                                 <div class="row align-items-center mb-3">
@@ -81,5 +82,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('backend/assets/js/general_setting/ai-configuration.js') }}"></script>
+<script src="{{ asset('backend/assets/js/general_setting/ai-configuration.js') }}"></script-->
 @endpush

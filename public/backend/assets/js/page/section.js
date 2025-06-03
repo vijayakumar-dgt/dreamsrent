@@ -165,18 +165,22 @@
             } else if (ID == 43) {
                 $("#section_id_5").removeClass("d-none");
                 $("#section_id").val(ID);
-                $("#section_title_five").val($(this).data("section_title_five"));
+                $("#section_title_five").val(
+                    $(this).data("section_title_five")
+                );
                 $("#description_three").val($(this).data("description_three"));
-                $("#label_three").val($(this).data("label_three"));
+                $("#label_three_one").val($(this).data("label_three_one"));
+                $("#label_three_two").val($(this).data("label_three_two"));
+                $("#label_three_three").val($(this).data("label_three_three"));
 
                 let thumbnailImageUrl = $(this).data("thumbnail_image_four");
 
                 if (thumbnailImageUrl) {
-                    $("#thumbnail_preview_three")
+                    $("#thumbnail_preview_four")
                         .attr("src", thumbnailImageUrl)
                         .removeClass("d-none");
                 } else {
-                    $("#thumbnail_preview_three").addClass("d-none");
+                    $("#thumbnail_preview_four").addClass("d-none");
                 }
             }
         });
@@ -262,6 +266,9 @@
                                                 data-section_title_four="${
                                                     value.title
                                                 }"
+                                                data-section_title_five="${
+                                                    value.title
+                                                }"
                                                 data-label_1="${value.label_1}"
                                                 data-label_2="${value.label_2}"
                                                 data-label_3="${value.label_3}"
@@ -304,11 +311,19 @@
                                                 data-label_three="${
                                                     value.label_three ?? ""
                                                 }"
-                                                data-section_title_five="${
-                                                    value.section_title_five ?? ""
-                                                }"
                                                 data-description_three="${
-                                                    value.description_three ?? ""
+                                                    value.description_three ??
+                                                    ""
+                                                }"
+                                                data-label_three_one="${
+                                                    value.label_three_one ?? ""
+                                                }"
+                                                data-label_three_two="${
+                                                    value.label_three_two ?? ""
+                                                }"
+                                                data-label_three_three="${
+                                                    value.label_three_three ??
+                                                    ""
                                                 }"
                                                 data-line_one="${
                                                     value.line_one ?? ""
@@ -538,5 +553,16 @@
         };
 
         img.src = objectURL;
+    }
+    function previewThumbnailThree(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                $("#thumbnail_preview_four")
+                    .attr("src", e.target.result)
+                    .show();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
     }
 })();

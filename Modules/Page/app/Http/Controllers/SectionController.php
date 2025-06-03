@@ -107,6 +107,10 @@ class SectionController extends Controller
                 $decodedDatas['thumbnail_image_two'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_two'];
             }
 
+            if (!empty($decodedDatas['thumbnail_image_four'])) {
+                $decodedDatas['thumbnail_image_four'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_four'];
+            }
+
             $data[] = array_merge([
                 'id' => $section->id,
                 'theme_id' => $section->theme_id,
@@ -147,7 +151,6 @@ class SectionController extends Controller
 
         $data = $this->processSectionData($request, $existingData);
 
-        // Update section title if provided
         $this->updateSectionTitle($request, $sectionId);
 
         try {
@@ -176,7 +179,6 @@ class SectionController extends Controller
 
         $data = $this->processSectionData($request, $existingData);
 
-        // Update section title if provided
         $this->updateSectionTitle($request, $sectionId);
 
         try {
@@ -234,6 +236,19 @@ class SectionController extends Controller
                 'description_two' => $request->description_two,
                 'thumbnail_image_two' => $thumbnailPath,
             ];
+        } elseif ($sectionId == 43) {
+            $thumbnailPath = $existingData['thumbnail_image_four'] ?? null;
+            if ($request->hasFile('thumbnail_image_four')) {
+                $thumbnailPath = uploadFile($request->file('thumbnail_image_four'), 'general');
+            }
+
+            $data = [
+                'label_three_one' => $request->label_three_one,
+                'label_three_two' => $request->label_three_two,
+                'label_three_three' => $request->label_three_three,
+                'description_three' => $request->description_three,
+                'thumbnail_image_four' => $thumbnailPath,
+            ];
         } elseif ($sectionId == 42) {
             $data = [
                 'vehicle_id' => $request->vehicle_id,
@@ -281,6 +296,7 @@ class SectionController extends Controller
             1 => 'section_title_one',
             29 => 'section_title_two',
             42 => 'section_title_three',
+            43 => 'section_title_five',
             26 => 'section_title_four',
         ];
 
