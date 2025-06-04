@@ -837,7 +837,6 @@ class PageController extends Controller
                     }
                 }
 
-
                 // FAQ Section (with Facts)
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
@@ -1729,6 +1728,53 @@ class PageController extends Controller
                         $section['type'] = 'marquee_section';
                         $section['design'] = 'marquee_one';
                         $section['section_content'] = $keywordsJsonArray;
+                    }
+                }
+
+                // Bike Experience
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+
+                    if (is_string($content) && strpos($content, '[second_card') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        $limit = isset($matches[1]) ? (int)$matches[1] : 10;
+                        $order = $matches[3] ?? 'asc';
+
+                        $experiences = DB::table('sections')
+                            ->join('section_datas', function ($join) use ($lang_id) {
+                                $join->on('sections.id', '=', 'section_datas.section_id')
+                                    ->where('section_datas.language_id', '=', $lang_id);
+                            })
+                            ->select('sections.id', 'section_datas.datas')
+                            ->where('sections.name', 'Ad Card Two')
+                            ->orderBy('sections.id', $order)
+                            ->limit($limit)
+                            ->get();
+
+                        if ($experiences->isNotEmpty()) {
+                            $items = [];
+
+                            foreach ($experiences as $experience) {
+                                $data = json_decode($experience->datas, true);
+
+                                if (is_array($data)) {
+                                    foreach ($data as $key => $value) {
+                                        if (str_starts_with($key, 'thumbnail_image_') && !empty($value)) {
+                                            $data[$key] = asset('storage/' . ltrim($value, '/'));
+                                        }
+                                    }
+
+                                    $items[] = [
+                                        'data' => $data,
+                                    ];
+                                }
+                            }
+
+                            $section['section_type'] = 'bike_experience';
+                            $section['type'] = 'bike_experience';
+                            $section['design'] = 'bike_experience_six';
+                            $section['section_content'] = $items; // Directly assign items
+                        }
                     }
                 }
 

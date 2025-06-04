@@ -88,7 +88,7 @@ class SectionController extends Controller
             ], 400);
         }
 
-        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three', 'Banner Four', 'Benefits Of Yacht', 'Yacht Experience'];
+        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three', 'Banner Four', 'Benefits Of Yacht', 'Yacht Experience', 'Ad Card Two'];
 
         $sections = $this->sectionRepository->getFilteredSections($orderBy, $sortBy, $allowedNames);
 
@@ -310,6 +310,15 @@ class SectionController extends Controller
                     $existingData['thumbnail_image_boat_experience_2'] ?? null
                 ),
             ];
+        } elseif ($sectionId == 71) {
+            $data = [
+                'label_bike_experience_1' => $request->label_bike_experience_1,
+                'thumbnail_image_bike_experience_1' => $this->processIcon(
+                    $request,
+                    'thumbnail_image_bike_experience_1',
+                    $existingData['thumbnail_image_bike_experience_1'] ?? null
+                ),
+            ];
         }
 
         return $data;
@@ -334,6 +343,7 @@ class SectionController extends Controller
             58 => 'section_title_boat_benefits',
             26 => 'section_title_four',
             68 => 'section_title_boat_experience',
+            71 => 'section_title_bike_experience',
         ];
 
         if (isset($titleFieldMap[$sectionId]) && $request->has($titleFieldMap[$sectionId])) {

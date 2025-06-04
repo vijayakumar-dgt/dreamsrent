@@ -663,6 +663,38 @@
             </div>
         </div>
 
+        <div id="section_id_9" class="d-none">
+            <div class="row">
+                <!-- Title -->
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <input type="text" name="section_title_bike_experience" id="section_title_bike_experience" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_section_title') }}">
+                        <div class="invalid-feedback" id="section_title_bike_experience_error"></div>
+                    </div>
+                </div>
+
+                <!-- Label 1 -->
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.label') }} 1</label>
+                        <input type="text" name="label_bike_experience_1" id="label_bike_experience_1" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_label') }}">
+                        <div class="invalid-feedback" id="label_bike_experience_1_error"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 1</label>
+                        <input type="file" name="thumbnail_image_bike_experience_1" id="thumbnail_image_bike_experience_1" class="form-control"
+                            accept="image/*" onchange="previewThumbnailExperience(this, 1)">
+                        <div class="invalid-feedback" id="thumbnail_image_bike_experience_1_error"></div>
+                        <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_bike_experience_1"
+                            class="mt-2 img-preview-thumb" alt="Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </x-slot>
 
     <x-slot name="footer">
