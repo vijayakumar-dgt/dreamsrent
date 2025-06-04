@@ -30,6 +30,15 @@
 		}
 	}
 
+	window.isValidUrl = function (url) {
+		try {
+			const parsed = new URL(url);
+			return ['http:', 'https:'].includes(parsed.protocol);
+		} catch (e) {
+			return false;
+		}
+	}
+
 	if ($(".datetimepickerVehicle").length > 0) {
 		$(".datetimepickerVehicle").datetimepicker({
 			format: "DD-MM-YYYY",

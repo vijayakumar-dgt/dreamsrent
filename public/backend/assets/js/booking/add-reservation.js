@@ -25,6 +25,7 @@
 
     let vehiclePrice = "";
     let vehiclePriceType = "";
+    const baseUrl = window.location.origin;
 
     $(document).ready(function() {
         initDateTimePicker();
@@ -1270,12 +1271,15 @@
                     // --- Profile image & name ---
                     let $profileCol = $('<div>').addClass('col-md-4');
                     let $profileWrapper = $('<div>').addClass('d-flex align-items-center');
+                    let $safeImage = isValidUrl(data.profile_image) ? data.profile_image : `${baseUrl}/backend/assets/img/default-profile.png`;
                     let $avatar = $('<span>').addClass('avatar avatar-rounded flex-shrink-0 me-2').append(
-                        $('<img>', { src: data.profile_image, alt: '' })
+                        $('<img>', { src: $safeImage, alt: 'Profile Image' })
                     );
                     let $profileInfo = $('<div>').append(
                         $('<h6>').addClass('fs-14 mb-1').text(data.full_name),
-                        $('<span>').addClass('badge bg-info-transparent').text(`${data.bookings_count} ${_l('admin.bookings.bookings')}`)
+                        $('<span>').addClass('badge bg-info-transparent').text(
+                            `${parseInt(data.bookings_count) || 0} ${_l('admin.bookings.bookings')}`
+                        )
                     );
                     $profileWrapper.append($avatar, $profileInfo);
                     $profileCol.append($profileWrapper);
@@ -1358,6 +1362,13 @@
                 if (response.code === 200 && response.data) {
                     let data = response.data;
 
+                    const safeText = (value) => typeof value === 'string' ? value : '';
+                    const safePrice = typeof data.price === 'number' ? data.price : 0;
+                    const safePhone = safeText(data.phone_number);
+                    const safeDriverName = safeText(data.driver_name);
+
+                    let safeImage = isValidUrl(data.image) ? data.image : `${baseUrl}/backend/assets/img/default-profile.png`;
+
                     // Edit Price Button
                     let $editBtnWrapper = $('<div>').addClass('d-flex align-items-center justify-content-end mb-3');
                     let $editBtn = $('<button>', {
@@ -1365,26 +1376,26 @@
                         class: 'text-purple text-decoration-underline fw-medium edit_driver_price border-0 bg-transparent',
                         'data-bs-toggle': 'modal',
                         'data-bs-target': '#edit_price_modal',
-                        'data-image': data.image,
-                        'data-driver_name': data.driver_name,
-                        'data-phone': data.phone_number,
-                        'data-price': 0
+                        'data-image': safeImage,
+                        'data-driver_name': safeDriverName,
+                        'data-phone': safePhone,
+                        'data-price': safePrice
                     }).text(_l('admin.bookings.edit_price'));
                     $editBtnWrapper.append($editBtn);
 
                     // Driver Card
                     let $card = $('<div>', {
                         class: 'card bg-light',
-                        id: 'driver_detail',
-                        'data-image': data.image,
-                        'data-name': data.driver_name,
-                        'data-phone': data.phone_number
+                        id: 'driver_detail'
+                    }).data({
+                        image: safeImage,
+                        name: safeDriverName,
+                        phone: safePhone
                     });
 
                     let $cardBody = $('<div>').addClass('card-body');
                     let $row = $('<div>').addClass('row align-items-center gy-3');
 
-                    // Left content
                     let $leftCol = $('<div>').addClass('col-md-11');
                     let $innerRow = $('<div>').addClass('row gx-2 gy-3');
 
@@ -1392,10 +1403,10 @@
                     let $profileCol = $('<div>').addClass('col-md-5');
                     let $profileWrap = $('<div>').addClass('d-flex align-items-center');
                     let $avatar = $('<span>').addClass('avatar avatar-rounded flex-shrink-0 me-2').append(
-                        $('<img>', { src: data.image, alt: '' })
+                        $('<img>', { src: safeImage, alt: 'driver' })
                     );
                     let $profileInfo = $('<div>').append(
-                        $('<h6>').addClass('fs-14 mb-1').text(data.driver_name),
+                        $('<h6>').addClass('fs-14 mb-1').text(safeDriverName),
                         $('<span>').addClass('badge bg-violet-transparent').text(`0 ${_l('admin.bookings.rides')}`)
                     );
                     $profileWrap.append($avatar, $profileInfo);
@@ -1405,7 +1416,7 @@
                     let $phoneCol = $('<div>').addClass('col-md-4').append(
                         $('<div>').append(
                             $('<h6>').addClass('fs-14 mb-1').text(_l('admin.common.phone')),
-                            $('<p>').text(data.phone_number)
+                            $('<p>').text(safePhone || '-')
                         )
                     );
 
@@ -1413,15 +1424,17 @@
                     let $priceCol = $('<div>').addClass('col-md-3').append(
                         $('<div>').append(
                             $('<h6>').addClass('fs-14 mb-1').text(_l('admin.common.price')),
-                            $('<p>').html(`${default_currency}<span class="td-driver-price">0</span>`)
+                            $('<p>').append(
+                                document.createTextNode(default_currency),
+                                $('<span>').addClass('td-driver-price').text(safePrice)
+                            )
                         )
                     );
 
-                    // Combine inner row
                     $innerRow.append($profileCol, $phoneCol, $priceCol);
                     $leftCol.append($innerRow);
 
-                    // --- Remove button ---
+                    // --- Remove Button ---
                     let $removeCol = $('<div>').addClass('col-md-1');
                     let $removeWrap = $('<div>').addClass('d-flex align-items-center justify-content-end');
                     let $removeBtn = $('<button>', {
@@ -1432,13 +1445,11 @@
                     $removeWrap.append($removeBtn);
                     $removeCol.append($removeWrap);
 
-                    // Final assembly
                     $row.append($leftCol, $removeCol);
                     $cardBody.append($row);
                     $card.append($cardBody);
 
-                    // Append everything to the container
-                    $('#driver_details_list').html('').append($editBtnWrapper, $card);
+                    $('#driver_details_list').empty().append($editBtnWrapper, $card);
                 }
             },
             error: function(error){
