@@ -1906,6 +1906,7 @@ class PageController extends Controller
         $vehicleTypes = Cartype::select('name', 'id')->where('language_id', $language_id)->where('category_id', $categoryId)->where('status', 1)->get();
         $vehicleModels = CarModel::select('model_name as name', 'id')->where('language_id', $language_id)->where('category_id', $categoryId)->where('status', 1)->get();
         $locations = Location::select('name', 'id')->where('status', 1)->where('language_id', $language_id)->get();
+        $totalReviews = Review::count();
         if ($page) {
             $data = [
                 'page_title' => $page->page_title,
@@ -1920,7 +1921,8 @@ class PageController extends Controller
                 'cookie_settings' => $cookieResponse,
                 'vehicle_types' => $vehicleTypes,
                 'vehicle_models' => $vehicleModels,
-                'locations' => $locations
+                'locations' => $locations,
+                'total_reviews' => $totalReviews
             ];
 
             $seo_title = $page->seo_title;

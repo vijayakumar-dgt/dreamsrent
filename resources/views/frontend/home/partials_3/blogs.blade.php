@@ -44,7 +44,7 @@
                             <p class="blog-description">{!! $blogDesc ?? "" !!}</p>
                             <div class="blog-footer">
                                 <p><i class="bx bx-calendar"></i>{{ $blog['updated_at'] }}</p>
-                                <a href="{{ route('blogs.detail', $blog['slug']) }}" class="read-more">Read More<i class="bx bx-right-arrow-alt"></i></a>
+                                <a href="{{ route('blogs.detail', $blog['slug']) }}" class="read-more">{{ __('web.blog.read_more') }}<i class="bx bx-right-arrow-alt"></i></a>
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
             </div>
         </div>
         <div class="view-all-btn text-center aos-init aos-animate" data-aos="fade-down">
-            <a href="{{ route('blogs.list') }}" class="btn btn-secondary">View all Blog</a>
+            <a href="{{ route('blogs.list') }}" class="btn btn-secondary">{{ __('web.home.view_all_blogs') }}</a>
         </div>
 
     </div>

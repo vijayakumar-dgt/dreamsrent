@@ -25,8 +25,8 @@
 
         <div class="row">
             <div class="col-md-12">
+                @if(!empty($sectionContent) && count($sectionContent) > 0)
                 <div class="recommend-slider owl-carousel">
-                   @if(!empty($sectionContent) && count($sectionContent) > 0)
                    @foreach($sectionContent as $vehicle)
                     <div class="listing-item bike-list">											
                         <div class="listing-img">
@@ -48,7 +48,7 @@
                                         @for ($i = 0; $i < $emptyStar; $i++)						
                                         <i class="fas fa-star"></i>
                                         @endfor
-                                        <span>{{ $vehicle['total_review'] ?? 0}} Reviews</span>
+                                        <span>{{ $vehicle['total_review'] ?? 0}} {{ __('web.home.reviews') }}</span>
                                     </div>
                                     <h3 class="listing-title">
                                         <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">{{ $vehicle['name'] ?? "" }}</a>
@@ -90,14 +90,18 @@
                                         <i class="feather-heart"></i>
                                     </a>		
                                     @endauth
-                                    <a href="{{ route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-order">Book Now</a>
+                                    <a href="{{ route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-order">{{ __('web.home.book_now') }}</a>
                                 </div>
                             </div>	
                         </div>
                     </div>
                     @endforeach
-                    @endif
                 </div>
+                @else
+                <div class="col-12">
+                    <p class="text-center">{{ __('web.common.empty_table') }}</p>
+                </div>
+                @endif
             </div>
         </div>
 

@@ -37,8 +37,8 @@
                     </div>
                     <div class="destination-content">
                         <h5>{{ $location->name ?? "" }}</h5>
-                        <p>50 Bikes</p>
-                        <a href="{{ route('list') }}" class="btn btn-primary">Explore all bikes<i class="bx bx-right-arrow-alt"></i></a>
+                        <p>{{ $location->vehicle_count ?? 0 }} {{ __('web.home.bikes') }}</p>
+                        <a href="{{ route('list') }}" class="btn btn-primary">{{ __('web.home.explore_all_bikes') }}<i class="bx bx-right-arrow-alt"></i></a>
                     </div>
                 </div>
             </div>

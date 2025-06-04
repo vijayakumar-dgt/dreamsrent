@@ -57,7 +57,7 @@
                                             @for ($i = 0; $i < $emptyStars; $i++)						
                                             <i class="fas fa-star"></i>
                                             @endfor
-                                            <span>{{ $vehicle['total_review'] }} Reviews</span>
+                                            <span>{{ $vehicle['total_review'] }} {{ __('web.home.reviews') }}</span>
                                         </div>
                                         <h3 class="listing-title">
                                             <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">{{ $vehicle['name'] ?? "" }}</a>
@@ -99,7 +99,7 @@
                                             <i class="feather-heart"></i>
                                         </a>
                                         @endauth		
-                                        <a href="{{ route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-order">Book Now</a>
+                                        <a href="{{ route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-order">{{ __('web.home.book_now') }}</a>
                                     </div>
                                 </div>	
                             </div>
