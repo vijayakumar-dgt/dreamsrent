@@ -1,6 +1,8 @@
 @php 
     $sectionContent = $section['section_content'];
     $sectionContent = isset($section['section_content'][0]) ? $section['section_content'][0] : [];
+    $vehicle_types = $data['vehicle_types'] ?? [];
+    $locations = $data['locations'] ?? [];
 @endphp
 <!-- Banner -->
 <section class="banner-section banner-sec-two banner-slider">	
@@ -27,37 +29,44 @@
                             <p>{{ $sectionContent->description}}</p>
                         </div>
                         <div class="banner-form">
-                            <form action="listing-grid.html">
+                            <form action="{{ route('list') }}">
                                 <div class="banner-search-list">
                                     <div class="input-block">
                                         <label><i class="bx bx-map"></i>Location</label>
-                                        <select class="select">
-                                            <option>Choose Location</option>
-                                            <option>Newyork</option>
+                                        <select class="select" name="pickuplocation">
+                                           <option value="">Select</option>
+                                            @if(!empty($locations) && count($locations) > 0)
+                                            @foreach ($locations as $location)
+                                                <option value="{{ $location->name }}">{{ $location->name ?? "" }}</option>
+                                            @endforeach
+                                            @endif
                                         </select>
                                     </div>
                                     <div class="input-block">
                                         <label><i class="bx bx-calendar"></i>Pickup Date</label>
                                         <div class="date-widget">												
                                             <div class="group-img">
-                                            <input type="text" class="form-control datetimepicker" placeholder="04/11/2023">
+                                            <input type="text" class="form-control datetimepicker" placeholder="DD-MM-YYYY" name="pickupdate">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="input-block">
-                                        <label><i class="bx bx-calendar"></i>Pickup Date</label>
+                                        <label><i class="bx bx-calendar"></i>Return Date</label>
                                         <div class="date-widget">												
                                             <div class="group-img">
-                                            <input type="text" class="form-control datetimepicker" placeholder="04/11/2023">
+                                            <input type="text" class="form-control datetimepicker" placeholder="DD-MM-YYYY" name="returndate">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="input-block">
                                         <label><i class="bx bxs-ship"></i>Yacht Type</label>
-                                        <select class="select">
-                                            <option>Catamaran</option>
-                                            <option>Motor yachts</option>
-                                            <option>Sailing yachts</option>
+                                        <select class="select" name="category">
+                                            <option value="">Select</option>
+                                            @if(!empty($vehicle_types) && count($vehicle_types) > 0)
+                                            @foreach ($vehicle_types as $vehicle_type)
+                                                <option value="{{ $vehicle_type->id }}">{{ $vehicle_type->name ?? "" }}</option>
+                                            @endforeach
+                                            @endif
                                         </select>
                                     </div>
                                 </div>
