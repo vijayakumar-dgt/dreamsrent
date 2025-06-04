@@ -45,8 +45,8 @@
                 }
 
                 if (response.last_message) {
-                    $(".user-last-chat").html(response.last_message.message);
-                    $(".last-chat-time").html(response.last_message.created_at);
+                    $(".user-last-chat").text(response.last_message.message);
+                    $(".last-chat-time").text(response.last_message.created_at);
                 }
 
                 if (offset === null) $("#messagebody").off("scroll");
