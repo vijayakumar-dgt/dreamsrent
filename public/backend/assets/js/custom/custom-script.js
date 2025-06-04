@@ -32,15 +32,37 @@
 	}
 
 	window.isValidUrl = function (url, defaultImage = 'profile') {
-		try {
-			let parsed = new URL(url);
-			if (['http:', 'https:'].includes(parsed.protocol)) {
-                return url;
-            }
-		} catch (e) {
-			return `${baseUrl}/backend/assets/img/default-profile.png`;
+		const fallbackImage = `${baseUrl}/backend/assets/img/default-${defaultImage}.png`;
+
+		if (typeof url !== 'string' || !url.trim()) {
+			return fallbackImage;
 		}
-	}
+
+		// Sanitize the URL
+		let sanitizedUrl = DOMPurify.sanitize(url, { ALLOWED_URI_REGEXP: /^(https?|ftp):/ });
+
+		try {
+			const parsed = new URL(sanitizedUrl);
+
+			// Optional: Restrict to safe protocols
+			if (!['http:', 'https:'].includes(parsed.protocol)) {
+				return fallbackImage;
+			}
+
+			// Optional: Basic image extension check (only for image URLs)
+			const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+			const lowerUrl = parsed.pathname.toLowerCase();
+
+			if (!allowedExtensions.some(ext => lowerUrl.endsWith(ext))) {
+				return fallbackImage;
+			}
+
+			return sanitizedUrl;
+		} catch (e) {
+			return fallbackImage;
+		}
+	};
+
 
 	if ($(".datetimepickerVehicle").length > 0) {
 		$(".datetimepickerVehicle").datetimepicker({

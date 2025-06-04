@@ -1366,15 +1366,15 @@
                 if (response.code === 200 && response.data) {
                     let data = response.data;
 
-                    // Helper for safely escaping text
-                    const safeText = (value) => $('<div>').text(value ?? '').text();
+                    // --- Helpers ---
+                    const safeText = (value) => DOMPurify.sanitize(value ?? '');
                     const safePrice = typeof data.price === 'number' ? data.price : 0;
                     const safePhone = safeText(data.phone_number);
                     const safeDriverName = safeText(data.driver_name);
 
                     let safeImage = isValidUrl(data.image, 'profile');
 
-                    // Edit Price Button
+                    // --- Edit Price Button ---
                     let $editBtnWrapper = $('<div>').addClass('d-flex align-items-center justify-content-end mb-3');
                     let $editBtn = $('<button>', {
                         type: 'button',
@@ -1388,7 +1388,7 @@
                     }).text(_l('admin.bookings.edit_price'));
                     $editBtnWrapper.append($editBtn);
 
-                    // Driver Card
+                    // --- Driver Card ---
                     let $card = $('<div>', {
                         class: 'card bg-light',
                         id: 'driver_detail'
