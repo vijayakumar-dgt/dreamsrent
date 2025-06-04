@@ -25,42 +25,6 @@
 	<div class="main-wrapper home-three">
 		@include('frontend.theme_3.partials.header')
         @yield('content')
-		
-
-		
-
-		
-
-		
-
-		
-
-
-		
-
-		
-
-		<!-- Best Section -->
-		{{-- <section class="section rental-section">
-			<div class="container">
-				<div class="rental-wrap">
-					<div class="rental-content">
-						<h2>We Make Finding The Right Bike Simple</h2>
-						<div class="btn-item">
-							<a href="listing-grid.html" class="btn btn-theme">View all Bikes</a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="rental-bg">
-				<img class="img-fluid ban-bg" src="assets/img/bg/bike-bg.jpg" alt="Image">
-				<img class="img-fluid shape-01" src="assets/img/bg/ban-bg-05.png" alt="Image">
-				<img class="img-fluid shape-02" src="assets/img/bg/ban-bg-06.png" alt="Image">
-				<img class="img-fluid shape-03" src="assets/img/bg/shape-bg.png" alt="Image">
-				<img class="img-fluid shape-04" src="assets/img/bg/ban-bg-04.png" alt="Image">
-			</div>
-		</section> --}}
-		<!-- /Best Section -->
 		@include('frontend.toast')
 		@include('frontend.theme_3.partials.footer')
 	</div>

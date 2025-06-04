@@ -43,6 +43,9 @@
         @case('top_recommended')
             @include('frontend.home.partials_3.top_recommended', ['section' => $section])
             @break
+        @case('bike_experience')
+            @include('frontend.home.partials_3.bike_experience', ['section' => $section])
+            @break
     @endswitch
 @endforeach
 @endif
