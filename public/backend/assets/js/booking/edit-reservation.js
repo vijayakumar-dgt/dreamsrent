@@ -185,19 +185,7 @@
                         if (resp.code === 200) {
                             showToast('success', resp.message);
                             $("#add_driver_modal").modal('hide');
-                            try {
-                                const redirectUrl = new URL(resp.redirect_url, window.location.origin);
-                              
-                                // Ensure the redirect stays within the same origin
-                                if (redirectUrl.origin === window.location.origin) {
-                                  window.location.href = redirectUrl.href;
-                                } else {
-                                  console.warn('Blocked redirect to external origin');
-                                }
-                              } catch (e) {
-                                console.warn('Invalid redirect URL');
-                              }
-                               
+                            window.location.href = route('reservation.index');
                         }
                     },
                     error:function(error){
