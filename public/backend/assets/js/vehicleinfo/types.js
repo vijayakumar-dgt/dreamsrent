@@ -30,7 +30,7 @@
                         },
                     },
                     extension: "jpeg|jpg|png|svg",
-                    filesize: 10,
+                    filesize: 2048,
                     imageDimension: [50, 150],
                 },
             },
