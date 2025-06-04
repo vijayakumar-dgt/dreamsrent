@@ -1421,26 +1421,12 @@
             if (response.code === 200 && response.data) {
                 const data = response.data;
 
-                // --- Safe value helpers ---
-                const safeText = (value) => $('<div>').text(value ?? '').text();
-                const safeNumber = (value) => !isNaN(parseInt(value)) ? parseInt(value) : 0;
-
-                const safeImageUrl = (url) => {
-                    try {
-                        const parsed = new URL(url, window.location.origin);
-                        if (['http:', 'https:'].includes(parsed.protocol)) {
-                            return parsed.href;
-                        }
-                    } catch {}
-                    return `${baseUrl}/backend/assets/img/default-profile.png`;
-                };
-
                 // Sanitize all remote values
-                const imageUrl = safeImageUrl(data.profile_image);
-                const fullName = safeText(data.full_name);
-                const phone = safeText(data.phone_number);
-                const email = safeText(data.email);
-                const bookingsCount = safeNumber(data.bookings_count);
+                const imageUrl = DOMPurify.sanitize(data.profile_image);
+                const fullName = DOMPurify.sanitize(data.full_name);
+                const phone = DOMPurify.sanitize(data.phone_number);
+                const email = DOMPurify.sanitize(data.email);
+                const bookingsCount = DOMPurify.sanitize(data.bookings_count);
 
                 // --- Build Card ---
                 const $card = $('<div>', {
@@ -1555,6 +1541,8 @@
                     let data = response.data;
                     let driverPrice = edit_driver_price !== '' ? edit_driver_price : 0;
 
+                    const safeText = (value) => DOMPurify.sanitize(value ?? '');
+
                     // Edit button row
                     let $editBtnRow = $('<div>').addClass('d-flex align-items-center justify-content-end mb-3');
                     let $editBtn = $('<button>', {
@@ -1562,10 +1550,10 @@
                         class: 'text-purple text-decoration-underline fw-medium edit_driver_price border-0 bg-transparent',
                         'data-bs-toggle': 'modal',
                         'data-bs-target': '#edit_price_modal',
-                        'data-image': data.image,
-                        'data-driver_name': data.driver_name,
-                        'data-phone': data.phone_number,
-                        'data-price': driverPrice
+                        'data-image': safeText(data.image),
+                        'data-driver_name': safeText(data.driver_name),
+                        'data-phone': safeText(data.phone_number),
+                        'data-price': safeText(driverPrice)
                     }).text(_l('admin.bookings.edit_price'));
                     $editBtnRow.append($editBtn);
 
@@ -1573,9 +1561,9 @@
                     let $card = $('<div>', {
                         class: 'card bg-light',
                         id: 'driver_detail',
-                        'data-image': data.image,
-                        'data-name': data.driver_name,
-                        'data-phone': data.phone_number
+                        'data-image': safeText(data.image),
+                        'data-name': safeText(data.driver_name),
+                        'data-phone': safeText(data.phone_number)
                     });
 
                     let $cardBody = $('<div>').addClass('card-body');
@@ -1589,10 +1577,10 @@
                     let $profileCol = $('<div>').addClass('col-md-5');
                     let $profileWrap = $('<div>').addClass('d-flex align-items-center');
                     let $avatar = $('<span>').addClass('avatar avatar-rounded flex-shrink-0 me-2')
-                        .append($('<img>', { src: data.image, alt: '' }));
+                        .append($('<img>', { src: safeText(data.image), alt: 'Driver' }));
                     let $info = $('<div>')
                         .append(
-                            $('<h6>').addClass('fs-14 mb-1').text(data.driver_name),
+                            $('<h6>').addClass('fs-14 mb-1').text(safeText(data.driver_name)),
                             $('<span>').addClass('badge bg-violet-transparent').text(`0 ${_l('admin.bookings.rides')}`)
                         );
                     $profileWrap.append($avatar, $info);
@@ -1603,7 +1591,7 @@
                         .append(
                             $('<div>').append(
                                 $('<h6>').addClass('fs-14 mb-1').text(_l('admin.common.phone')),
-                                $('<p>').text(data.phone_number)
+                                $('<p>').text(safeText(data.phone_number))
                             )
                         );
 
@@ -1612,7 +1600,7 @@
                         .append(
                             $('<div>').append(
                                 $('<h6>').addClass('fs-14 mb-1').text(_l('admin.common.price')),
-                                $('<p>').html(`${default_currency}<span class="td-driver-price">${driverPrice}</span>`)
+                                $('<p>').html(`${default_currency}<span class="td-driver-price">${safeText(driverPrice)}</span>`)
                             )
                         );
 
