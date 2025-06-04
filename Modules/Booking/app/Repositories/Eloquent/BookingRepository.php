@@ -22,6 +22,7 @@ use Modules\CarInfo\Models\VehicleTarrif;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\InsuranceBenefit;
 use Modules\Booking\Repositories\Contracts\BookingRepositoryInterface;
+use Modules\GeneralSetting\Models\Insurance;
 
 class BookingRepository implements BookingRepositoryInterface
 {
@@ -883,6 +884,7 @@ class BookingRepository implements BookingRepositoryInterface
 
             $booking->insurance_count = 0;
             $booking->insurance_benefits_formatted = [];
+            $booking->insurance_names = [];
 
             if (!empty($booking->insurance)) {
                 $insuranceArray = json_decode($booking->insurance, true);
@@ -890,6 +892,7 @@ class BookingRepository implements BookingRepositoryInterface
                     $booking->insurance_formatted = $insuranceArray;
                     $booking->insurance_count = count($insuranceArray);
                     $insuranceIds = collect($insuranceArray)->pluck('id')->toArray();
+                    $booking->insurance_names = Insurance::whereIn('id', $insuranceIds)->pluck('insurance_name')->toArray();
                     $booking->insurance_benefits_formatted = InsuranceBenefit::whereIn('insurance_id', $insuranceIds)->pluck('benefit')->toArray();
                 }
             }

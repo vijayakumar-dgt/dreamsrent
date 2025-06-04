@@ -13,5 +13,5 @@ interface DriverRepositoryInterface
     public function getById(int $id);
     public function changeStatus(Request $request);
     public function getDrivers(Request $request);
-    public function getDriverDetails(int $driverId);
+    public function getDriverDetails(?int $driverId);
 }

@@ -359,7 +359,7 @@ class DriverRepository implements DriverRepositoryInterface
         }
     }
 
-    public function getDriverDetails(int $driverId): array
+    public function getDriverDetails(?int $driverId): array
     {
         try {
             $driver = Driver::select(

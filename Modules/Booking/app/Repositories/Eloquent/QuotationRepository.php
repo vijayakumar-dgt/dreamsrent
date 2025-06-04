@@ -21,6 +21,7 @@ use Modules\CarInfo\Models\VehicleSeason;
 use Modules\CarInfo\Models\VehicleTarrif;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\Booking\Repositories\Contracts\QuotationRepositoryInterface;
+use Modules\GeneralSetting\Models\Insurance;
 use Modules\GeneralSetting\Models\InsuranceBenefit;
 
 class QuotationRepository implements QuotationRepositoryInterface
@@ -541,6 +542,7 @@ class QuotationRepository implements QuotationRepositoryInterface
 
             $booking->insurance_count = 0;
             $booking->insurance_benefits_formatted = [];
+            $booking->insurance_names = [];
 
             if (!empty($booking->insurance)) {
                 $insuranceArray = json_decode($booking->insurance, true);
@@ -548,6 +550,7 @@ class QuotationRepository implements QuotationRepositoryInterface
                     $booking->insurance_formatted = $insuranceArray;
                     $booking->insurance_count = count($insuranceArray);
                     $insuranceIds = collect($insuranceArray)->pluck('id')->toArray();
+                    $booking->insurance_names = Insurance::whereIn('id', $insuranceIds)->pluck('insurance_name')->toArray();
                     $booking->insurance_benefits_formatted = InsuranceBenefit::whereIn('insurance_id', $insuranceIds)->pluck('benefit')->toArray();
                 }
             }
@@ -576,8 +579,6 @@ class QuotationRepository implements QuotationRepositoryInterface
         ]);
 
         $data = ['bookingHistories' => $bookingHistories, 'booking' => $booking];
-
-        // dd($data);
 
         return $data;
     }
