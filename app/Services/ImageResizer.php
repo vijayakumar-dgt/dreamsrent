@@ -62,7 +62,7 @@ class ImageResizer
         }
 
         try {
-           $image = Image::read($file);
+            $image = Image::read($file);
         } catch (\Exception $e) {
             \Log::error('Image read error: ' . $e->getMessage());
             return null;

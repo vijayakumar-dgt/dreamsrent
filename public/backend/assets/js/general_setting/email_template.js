@@ -480,9 +480,8 @@
                 type: "GET",
                 url: "/admin/settings/get_email_template/" + id,
                 success: function (response) {
-                    let description = response.data.description;
+                    let description = response.data.description;                   
                     let regex = /{([a-zA-Z0-9_]+)}/g;
-
                     description = description.replace(
                         regex,
                         (match, placeholder) => {
@@ -490,11 +489,18 @@
                         }
                     );
 
+                    let cleanDescription = DOMPurify.sanitize(description);
+
                     $("#view_template_title").text(response.data.title);
-                    $("#preview_box").empty().append(description);
+
+                    $("#preview_box").empty().append(cleanDescription);
+
+                    $("#view_template").modal("show");
+                },
+                error: function () {
+                    showToast("error", "Failed to load template.");
                 },
             });
-            $("#view_template").modal("show");
         });
     });
 

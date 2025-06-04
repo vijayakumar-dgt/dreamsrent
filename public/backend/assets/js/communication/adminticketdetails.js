@@ -134,7 +134,7 @@ function ticketDetails() {
         data: {
             ticketId: ticketId
         },
-        success: function (response) {
+      success: function (response) {
             let ticket = response.data[0];
 
             if (!ticket) {
@@ -142,7 +142,6 @@ function ticketDetails() {
                 return;
             }
 
-            // Safely set plain text using .text()
             $(".ticket_id").text(`#${ticket.ticket_id}`);
             $(".category_name").text(ticket.category?.name || '');
             $(".user_name").text(`${ticket.user?.user_detail?.first_name || ''} ${ticket.user?.user_detail?.last_name || ''}`);
@@ -150,13 +149,13 @@ function ticketDetails() {
             $(".assigne_name").text(ticket.assignee?.user_detail?.first_name || 'Unassigned');
             $(".created_at").text(ticket.formatted_created_at);
             $(".update_at").text(ticket.formatted_updated_at);
-            $(".ticket_description").html(ticket.description || '');
 
-            // Set safe fallback value
+            let cleanDescription = DOMPurify.sanitize(ticket.description || '');
+            $(".ticket_description").html(cleanDescription);
+
             $("#status").val(ticket.status).trigger('change');
 
-            const attachmentContainer = $(".attachmentContainer");
-            attachmentContainer.empty(); // safer than .html("")
+            const attachmentContainer = $(".attachmentContainer").empty();
 
             if (ticket.attachment) {
                 let attachments = [];
@@ -175,15 +174,13 @@ function ticketDetails() {
                     const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext);
                     const isPdf = ext === 'pdf';
 
-                    // Build elements safely using jQuery
                     const attachmentDiv = $('<div>').addClass('bg-light br-5 p-3 d-flex align-items-center border mb-2');
-
                     const avatarSpan = $('<span>').addClass('avatar bg-white d-flex align-items-center justify-content-center me-2');
 
                     if (isPdf) {
                         $('<img>', {
                             src: '/backend/assets/img/icons/pdf.svg',
-                            alt: 'pdf',
+                            alt: 'PDF File',
                             class: 'w-10 h-10'
                         }).appendTo(avatarSpan);
                     }
@@ -191,7 +188,7 @@ function ticketDetails() {
                     if (isImage) {
                         $('<img>', {
                             src: fileUrl,
-                            alt: 'img',
+                            alt: 'Image File',
                             class: 'w-10 h-10 rounded'
                         }).appendTo(avatarSpan);
                     }
@@ -203,8 +200,11 @@ function ticketDetails() {
                     const downloadLink = $('<a>', {
                         href: fileUrl,
                         target: '_blank',
+                        rel: 'noopener noreferrer',
                         class: 'ms-auto btn btn-sm btn-primary d-flex align-items-center'
                     });
+
+                    // Hardcoded icon (safe)
                     $('<i>').addClass('ti ti-download fs-16 me-1').appendTo(downloadLink);
                     downloadLink.append(document.createTextNode(_l('admin.common.download')));
 
@@ -212,11 +212,10 @@ function ticketDetails() {
                     attachmentContainer.append(attachmentDiv);
                 });
             } else {
-                attachmentContainer.empty().append($('<p>').text(_l('admin.support.no_attachment_found')));
+                attachmentContainer.append($('<p>').text(_l('admin.support.no_attachment_found')));
             }
 
-            const historyContainer = $(".ticket_histroy");
-            historyContainer.empty();
+            const historyContainer = $(".ticket_histroy").empty();
 
             if (!ticket.ticket_histories?.length) {
                 historyContainer.append($('<p>').addClass('text-center').text(_l('admin.common.no_history_found')));
@@ -258,15 +257,14 @@ function ticketDetails() {
                 historyContainer.append(commentItem);
             });
 
-            // Status text (plain text only)
             const statusMap = {
                 1: 'Open',
                 2: 'Assigned',
                 3: 'In Progress',
                 4: 'Closed'
             };
-            const statusText = statusMap[ticket.status] || 'Unknown';
-            $(".status-text").text(statusText);
+
+            $(".status-text").text(statusMap[ticket.status] || 'Unknown');
         },
         error: function (error) {
             showToast('error', error.responseJSON?.error || "An error occurred while retrieving tickets!");

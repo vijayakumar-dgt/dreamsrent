@@ -9,6 +9,7 @@
 
 <!-- Feather Icon JS -->
 <script src="{{ asset('backend/assets/js/feather.min.js') }}"></script>
+<script src="{{ asset('backend/assets/js/purify.min.js') }}"></script>
 
 <!-- Bootstrap Core JS -->
 <script src="{{ asset('backend/assets/js/bootstrap.bundle.min.js') }}"></script>
