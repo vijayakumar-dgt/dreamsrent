@@ -1,6 +1,6 @@
 @extends('frontend.theme_4.app')
 @section('content')
-@dd($content_sections);
+{{-- @dd($content_sections); --}}
 @if(!empty($content_sections) && count($content_sections) > 0)
 @foreach ($content_sections as $section)
         @switch($section['section_type'] ?? "")
@@ -30,6 +30,9 @@
                 @break
             @case('blog')
                 @include('frontend.home.partials_4.blogs', ['section' => $section])
+                @break
+            @case('faq')
+                @include('frontend.home.partials_4.faq', ['section' => $section])
                 @break
         @endswitch
 @endforeach
