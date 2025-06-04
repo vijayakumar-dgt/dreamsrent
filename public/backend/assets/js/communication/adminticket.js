@@ -401,45 +401,9 @@
     function showTicketHistory(ticketId) {
     let ticket = ticketData.find(t => t.id === ticketId); // Use global ticketData
     localStorage.setItem('ticketId', ticketId);
-    window.location.href = "/admin/ticket-details";
+    window.location.href = "/admin/ticket-details";   
 
-    if (!ticket || !ticket.ticket_histories.length) {
-        $(".ticket_histroy").html('<p class="text-center">No history available for this ticket.</p>');
-        return;
-    }
-
-    let historyHtml = "";
-
-    ticket.ticket_histories.forEach(history => {
-        let userImage = history.user && history.user.user_detail && history.user.user_detail.profile_image
-            ? '/storage/' + history.user.user_detail.profile_image
-            : '/backend/assets/img/profiles/avatar-01.jpg';
-
-        let userName = history.user?.user_detail?.first_name && history.user?.user_detail?.last_name
-            ? `${history.user.user_detail.first_name} ${history.user.user_detail.last_name}`
-            : (history.user?.name || "Unknown User");
-
-        let createdAt = new Date(history.created_at).toLocaleString();
-
-        historyHtml += `
-            <div class="comment-item mt-3">
-                <div class="d-flex align-items-center mb-1">
-                    <span class="avatar avatar-l me-2 flex-shrink-0">
-                        <img src="${userImage}" alt="User Profile Image" class="img-fluid rounded-circle">
-                    </span>
-                    <div>
-                        <h6 class="mb-1">${userName}</h6>
-                        <p><i class="ti ti-calendar-bolt me-1"></i> Updated on ${createdAt}</p>
-                    </div>
-                </div>
-                <div class="border-bottom p-2">
-                    <p>${history.description}</p>
-                </div>
-            </div>
-        `;
-    });
-
-    $(".ticket_histroy").html(historyHtml);
+    
 }
     function populateEditForm(ticketId, assigneeId,  priority, status, reply) {
         $('#editTicketstatus').attr('data-ticket-id', ticketId);

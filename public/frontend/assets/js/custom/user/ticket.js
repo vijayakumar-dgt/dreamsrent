@@ -519,52 +519,52 @@
 
         function showTicketHistory(ticketId) {
             let ticket = ticketData.find((t) => t.id === ticketId); // Use global ticketData
+            const $historyContainer = $(".ticket_histroy").empty(); // Clear previous history
 
             if (!ticket || !ticket.ticket_histories.length) {
-                $(".ticket_histroy").html(
-                    `<p class="text-center ticket_no_data">${_l(
-                        "web.common.empty_table"
-                    )}</p>`
+                $historyContainer.append(
+                    $('<p>').addClass('text-center ticket_no_data').text(_l("web.common.empty_table"))
                 );
                 return;
             }
 
-            let historyHtml = "";
-
             ticket.ticket_histories.forEach((history) => {
-                let userImage =
-                    history.user &&
-                    history.user.user_detail &&
-                    history.user.user_detail.profile_image
-                        ? "/storage/" + history.user.user_detail.profile_image
-                        : "/backend/assets/img/profiles/avatar-01.jpg";
+                const userImage = (history.user?.user_detail?.profile_image)
+                    ? "/storage/" + history.user.user_detail.profile_image
+                    : "/backend/assets/img/profiles/avatar-01.jpg";
 
-                let userName =
-                    history.user?.user_detail?.first_name &&
-                    history.user?.user_detail?.last_name
-                        ? `${history.user.user_detail.first_name} ${history.user.user_detail.last_name}`
-                        : history.user?.name || "Unknown User";
-                let createdAt = new Date(history.created_at).toLocaleString();
+                const userName = (history.user?.user_detail?.first_name && history.user?.user_detail?.last_name)
+                    ? `${history.user.user_detail.first_name} ${history.user.user_detail.last_name}`
+                    : (history.user?.name || "Unknown User");
 
-                historyHtml += `
-                    <div class="comment-item mt-3">
-                        <div class="d-flex align-items-center mb-1">
-                            <span class="avatar avatar-l me-2 flex-shrink-0">
-                                <img src="${userImage}" alt="User Profile Image" class="img-fluid rounded-circle">
-                            </span>
-                            <div>
-                                <h6 class="mb-1">${userName}</h6>
-                                <p><i class="ti ti-calendar-bolt me-1"></i> Updated on ${createdAt}</p>
-                            </div>
-                        </div>
-                        <div class="border-bottom p-2">
-                            <p>${history.description}</p>
-                        </div>
-                    </div>
-                `;
+                const createdAt = new Date(history.created_at).toLocaleString();
+                const description = history.description || '';
+
+                const $commentItem = $('<div>').addClass('comment-item mt-3');
+
+                const $userInfo = $('<div>').addClass('d-flex align-items-center mb-1');
+                const $avatar = $('<span>').addClass('avatar avatar-l me-2 flex-shrink-0').append(
+                    $('<img>', {
+                        src: userImage,
+                        alt: 'User Profile Image',
+                        class: 'img-fluid rounded-circle'
+                    })
+                );
+
+                const $userDetails = $('<div>').append(
+                    $('<h6>').addClass('mb-1').text(userName),
+                    $('<p>').html(`<i class="ti ti-calendar-bolt me-1"></i> ${_l('admin.common.updated_on')} ${createdAt}`)
+                );
+
+                $userInfo.append($avatar, $userDetails);
+
+                const $commentText = $('<div>').addClass('border-bottom p-2').append(
+                    $('<p>').text(description) 
+                );
+
+                $commentItem.append($userInfo, $commentText);
+                $historyContainer.append($commentItem);
             });
-
-            $(".ticket_histroy").html(historyHtml);
         }
 
         function populateEditForm(

@@ -400,11 +400,15 @@
 
     function getTaxRates() {
         $.get("/admin/settings/get-tax-rates", function (res) {
-            if (res.code === 200) {
-                let options = res.data.map(
-                    (t) => `<option value="${t.id}">${t.tax_name}</option>`
-                );
-                $("#sub_tax").html(options.join(""));
+            if (res.code === 200 && Array.isArray(res.data)) {
+                const $subTax = $("#sub_tax").empty();
+
+                res.data.forEach(tax => {
+                    const $option = $('<option>')
+                        .val(tax.id)
+                        .text(tax.tax_name);
+                    $subTax.append($option);
+                });
             }
         });
     }

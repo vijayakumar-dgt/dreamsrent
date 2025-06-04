@@ -547,34 +547,31 @@
                                 )}</td></tr>`
                             );
                         }
-                        let lastPasswordChanged = "";
-                        if (
-                            response.data.last_password_changed_at &&
-                            response.data.last_password_changed_at !== "null"
-                        ) {
-                            lastPasswordChanged = `<i class="ti ti-circle-check-filled text-success me-1"></i> ${_l(
-                                "admin.general_settings.last_changed"
-                            )} ${response.data.last_password_changed_at}`;
+                      
+                        const iconSuccess = $('<i>').addClass('ti ti-circle-check-filled text-success me-1');
+                        const iconDanger = $('<i>').addClass('ti ti-circle-check-filled text-danger me-1');
+                        const iconPointSuccess = $('<i>').addClass('ti ti-point-filled text-success me-1');
+                        const iconPointDanger = $('<i>').addClass('ti ti-point-filled text-danger me-1');
+
+                        // Clear and safely set last_changed
+                        const lastChangedContainer = $(".last_changed").empty();
+                        if (response.data.last_password_changed_at && response.data.last_password_changed_at !== "null") {
+                            lastChangedContainer.append(iconSuccess)
+                                .append(document.createTextNode(' ' + _l("admin.general_settings.last_changed") + ' '))
+                                .append(document.createTextNode(response.data.last_password_changed_at));
                         } else {
-                            lastPasswordChanged = `<i class="ti ti-circle-check-filled text-danger me-1"></i> ${_l(
-                                "admin.general_settings.not_changed"
-                            )}`;
+                            lastChangedContainer.append(iconDanger)
+                                .append(document.createTextNode(' ' + _l("admin.general_settings.not_changed")));
                         }
-                        let google_authText = "";
-                        if (
-                            response.data.user &&
-                            response.data.user.google_auth_enabled
-                        ) {
-                            google_authText = `<i class="ti ti-point-filled text-success me-1"></i> ${_l(
-                                "admin.general_settings.connected"
-                            )}`;
+
+                        const googleAuthContainer = $(".google_auth").empty();
+                        if (response.data.user && response.data.user.google_auth_enabled) {
+                            googleAuthContainer.append(iconPointSuccess)
+                                .append(document.createTextNode(' ' + _l("admin.general_settings.connected")));
                         } else {
-                            google_authText = `<i class="ti ti-point-filled text-danger me-1"></i> ${_l(
-                                "admin.general_settings.disconnected"
-                            )}`;
-                        }
-                        $(".last_changed").html(lastPasswordChanged);
-                        $(".google_auth").html(google_authText);
+                            googleAuthContainer.append(iconPointDanger)
+                                .append(document.createTextNode(' ' + _l("admin.general_settings.disconnected")));
+                        }                       
                         if (response.data.user.google_auth_enabled) {
                             $("#google_auth").prop("checked", true);
                         } else {
