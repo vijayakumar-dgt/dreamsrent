@@ -1,5 +1,6 @@
 (function () {
     "use strict";
+    const baseUrl = window.location.origin;
 	window.showToast = function (toastType, message) {
 		let toastId = '';
 		if (toastType == 'success') {
@@ -30,12 +31,14 @@
 		}
 	}
 
-	window.isValidUrl = function (url) {
+	window.isValidUrl = function (url, defaultImage = 'profile') {
 		try {
-			const parsed = new URL(url);
-			return ['http:', 'https:'].includes(parsed.protocol);
+			let parsed = new URL(url);
+			if (['http:', 'https:'].includes(parsed.protocol)) {
+                return url;
+            }
 		} catch (e) {
-			return false;
+			return `${baseUrl}/backend/assets/img/default-profile.png`;
 		}
 	}
 
