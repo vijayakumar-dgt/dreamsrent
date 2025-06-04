@@ -214,6 +214,7 @@
                     trigger.data("description_boat_benefits_6")
                 );
 
+                const imageMian = trigger.data("thumbnail_image_boat_benefits_main");
                 const image1 = trigger.data("thumbnail_image_boat_benefits_1");
                 const image2 = trigger.data("thumbnail_image_boat_benefits_2");
                 const image3 = trigger.data("thumbnail_image_boat_benefits_3");
@@ -221,6 +222,11 @@
                 const image5 = trigger.data("thumbnail_image_boat_benefits_5");
                 const image6 = trigger.data("thumbnail_image_boat_benefits_6");
 
+                if (imageMian) {
+                    $("#thumbnail_preview_boat_benefits_main")
+                        .attr("src", imageMian)
+                        .removeClass("d-none");
+                }
                 if (image1) {
                     $("#thumbnail_preview_boat_benefits_1")
                         .attr("src", image1)
@@ -641,6 +647,12 @@
                                                 data-thumbnail_image_boat_experience_2="${
                                                     value.thumbnail_image_boat_experience_2
                                                         ? `/storage/${value.thumbnail_image_boat_experience_2}`
+                                                        : ""
+                                                }"
+                                                
+                                                data-thumbnail_image_boat_benefits_main="${
+                                                    value.thumbnail_image_boat_benefits_main
+                                                        ? `/storage/${value.thumbnail_image_boat_benefits_main}`
                                                         : ""
                                                 }"
                                                 

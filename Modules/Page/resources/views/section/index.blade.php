@@ -471,6 +471,15 @@
                     </div>
                 </div>
 
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.cms.thumbnail_image') }}</label>
+                    <input type="file" name="thumbnail_image_boat_benefits_main" id="thumbnail_image_boat_benefits_main" class="form-control"
+                        accept="image/*" onchange="previewThumbnailBenefits(this, 1)">
+                    <div class="invalid-feedback" id="thumbnail_image_boat_benefits_main_error"></div>
+                    <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_benefits_main"
+                        class="mt-2 img-preview-thumb" alt="Image">
+                </div>
+
                 <!-- Label 1 -->
                 <div class="form-group col-md-12">
                     <div class="mb-3">

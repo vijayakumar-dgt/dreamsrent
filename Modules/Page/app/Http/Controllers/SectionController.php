@@ -319,7 +319,26 @@ class SectionController extends Controller
                     $existingData['thumbnail_image_bike_experience_1'] ?? null
                 ),
             ];
+        } elseif ($sectionId == 58) {
+            $data = [
+                'thumbnail_image_boat_benefits_main' => $this->processIcon(
+                    $request,
+                    'thumbnail_image_boat_benefits_main',
+                    $existingData['thumbnail_image_boat_benefits_main'] ?? null
+                ),
+            ];
+
+            for ($i = 1; $i <= 6; $i++) {
+                $data["label_boat_benefits_$i"] = $request->input("label_boat_benefits_$i");
+                $data["description_boat_benefits_$i"] = $request->input("description_boat_benefits_$i");
+                $data["thumbnail_image_boat_benefits_$i"] = $this->processIcon(
+                    $request,
+                    "thumbnail_image_boat_benefits_$i",
+                    $existingData["thumbnail_image_boat_benefits_$i"] ?? null
+                );
+            }
         }
+
 
         return $data;
     }

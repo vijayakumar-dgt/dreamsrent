@@ -1562,7 +1562,7 @@ class PageController extends Controller
                     }
                 }
 
-                // Benefits Of Renting Yacht
+                 // Benefits Of Renting Yacht
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
 
@@ -1588,42 +1588,43 @@ class PageController extends Controller
                             $data = json_decode($first->datas, true);
 
                             $items = [];
+                            $fallbacks = [
+                                1 => '/frontend/assets/img/icons/bx-selection.svg',
+                                2 => '/frontend/assets/img/icons/bx-crown.svg',
+                                3 => '/frontend/assets/img/icons/bx-user-check.svg',
+                                4 => '/frontend/assets/img/icons/bx-map.svg',
+                                5 => '/frontend/assets/img/icons/bx-briefcase.svg',
+                                6 => '/frontend/assets/img/icons/bx-heart.svg',
+                            ];
 
                             foreach (range(1, 6) as $i) {
                                 $label = $data["label_boat_benefits_$i"] ?? '';
                                 $description = $data["description_boat_benefits_$i"] ?? '';
                                 $thumbnail = $data["thumbnail_image_boat_benefits_$i"] ?? null;
 
-                                // Fallback if no image is set
-                                if (empty($thumbnail)) {
-                                    $fallbacks = [
-                                        1 => '/frontend/assets/img/icons/bx-selection.svg',
-                                        2 => '/frontend/assets/img/icons/bx-crown.svg',
-                                        3 => '/frontend/assets/img/icons/bx-user-check.svg',
-                                        4 => '/frontend/assets/img/icons/bx-map.svg',
-                                        5 => '/frontend/assets/img/icons/bx-briefcase.svg',
-                                        6 => '/frontend/assets/img/icons/bx-heart.svg',
-                                    ];
-                                    $thumbnail = asset($fallbacks[$i]);
-                                } else {
-                                    $thumbnail = asset('storage/' . $thumbnail);
-                                }
+                                $image = $thumbnail ? asset('storage/' . $thumbnail) : asset($fallbacks[$i]);
 
-                                if (!empty($label) || !empty($description) || !empty($thumbnail)) {
+                                if ($label || $description || $thumbnail) {
                                     $items[] = [
                                         'label'       => $label,
                                         'description' => $description,
-                                        'image'       => $thumbnail,
+                                        'image'       => $image,
                                     ];
                                 }
                             }
+
+                            // Handle main thumbnail if set
+                            $mainImage = !empty($data['thumbnail_image_boat_benefits_main'])
+                                ? asset('storage/' . $data['thumbnail_image_boat_benefits_main'])
+                                : null;
 
                             $section['section_type'] = 'yacht_benefits';
                             $section['type'] = 'yacht_benefits';
                             $section['design'] = 'yacht_benefits_six';
                             $section['section_content'] = [
-                                "items" => $items,
-                                "view_all" => $viewAll,
+                                'main_image' => $mainImage,
+                                'items'      => $items,
+                                'view_all'   => $viewAll ?? null, // Optional: only if $viewAll is defined
                             ];
                         }
                     }
@@ -1933,7 +1934,7 @@ class PageController extends Controller
                 ->get();
 
             $content_sections = collect((array) $data['content_sections']);
-            // dd($content_sections);
+            dd($content_sections);
             if (request()->has('is_mobile') && request()->get('is_mobile') === "yes") {
                 return response()->json(['code' => "200", 'message' => __('Page details retrieved successfully.'), 'data' => $data], 200);
             } else {
