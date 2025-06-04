@@ -40,6 +40,9 @@
         @case('marquee_section')
             @include('frontend.home.partials_3.marquee', ['section' => $section])
             @break
+        @case('top_recommended')
+            @include('frontend.home.partials_3.top_recommended', ['section' => $section])
+            @break
     @endswitch
 @endforeach
 @endif
