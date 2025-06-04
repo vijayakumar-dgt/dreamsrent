@@ -14,7 +14,7 @@
 				:buttonText="__('admin.rentals.add_new_maintenance')"
 				:modalId="'maintenance_modal'"
 				:buttonId="'add_maintenance'"
-				:permissionKey="'maintenance'"
+				:permissionModule="'maintenance'"
 			/>
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">

@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Modules\Booking\Repositories\Contracts\QuotationRepositoryInterface;
-use Modules\Booking\Http\Requests\QuotationRequest;
+use Modules\Booking\Http\Request\QuotationRequest;
 
 
 class QuotationController extends Controller

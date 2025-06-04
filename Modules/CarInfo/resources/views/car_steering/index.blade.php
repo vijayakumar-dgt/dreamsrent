@@ -14,7 +14,7 @@
 				:buttonText="__('admin.rentals.add_new_steering_type')"
 				:modalId="'steering_type_modal'"
 				:buttonId="'add_steering_type'"
-				:permissionKey="'vehicle_attributes'"
+				:permissionModule="'vehicle_attributes'"
 			/>
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">

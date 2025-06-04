@@ -1,11 +1,10 @@
 <?php
 
-namespace Modules\Booking\Http\Requests;
+namespace Modules\Booking\Http\Request;
 
 use App\Library\CustomFailedValidation;
-use Illuminate\Foundation\Http\FormRequest;
 
-class BookingRequest extends FormRequest
+class BookingRequest extends CustomFailedValidation
 {
     /**
      * Determine if the user is authorized to make this request.

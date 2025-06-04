@@ -66,7 +66,7 @@
                             </div>
                             <div class="input-block">
                                 <label class="form-label" for="password">
-                                    {{ __('web.auth.password') }} <span class="text-danger">*</span>
+                                    {{ __('web.auth.auth_password') }} <span class="text-danger">*</span>
                                 </label>
                                 <div class="pass-group">
                                     <input type="password" class="form-control pass-input" id="password" name="password" placeholder="">

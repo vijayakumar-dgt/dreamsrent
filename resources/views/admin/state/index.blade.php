@@ -14,7 +14,7 @@
 				:buttonText="__('admin.cms.add_state')"
 				:modalId="'state_modal'"
 				:buttonId="'add_state'"
-				:permissionKey="'cms_locations'"
+				:permissionModule="'cms_locations'"
 			/>
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">

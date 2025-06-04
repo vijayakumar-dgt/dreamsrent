@@ -629,7 +629,7 @@
 <!-- /Page Wrapper -->
 
 <!-- Completed -->
-<x-admin.modal className="deletemodal" id="reservation_completed" isHeader="{{ false }}">
+<x-admin.modal className="deletemodal" id="reservation_completed" isHeader="{{ false }}" dialogClassName="modal-sm" modalBodyClass="text-center">
     <x-slot name="body">
         <span class="avatar avatar-lg bg-transparent-success rounded-circle text-success mb-3">
             <i class="ti ti-check fs-26"></i>
@@ -644,7 +644,12 @@
 <!-- /Completed -->
 
 <!-- Edit Pricing -->
-<x-admin.modal className="addmodal" id="edit_price_modal" :title="__('admin.bookings.edit_pricing')" action="{{  route('reservation.store') }}" formId="driverPriceForm" method="POST" enctype="multipart/form-data">
+<x-admin.modal
+    className="addmodal"
+    id="edit_price_modal"
+    dialogClassName="modal-md"
+    :title="__('admin.bookings.edit_pricing')"
+    formId="driverPriceForm">
     <x-slot name="body">
         <div class="row">
             <div class="col-md-6">
@@ -673,11 +678,18 @@
             <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
             <button type="submit" class="btn btn-primary driver_price_btn">{{ __('admin.common.save_changes') }}</button>
         </div>
-    </x-slot>n
+    </x-slot>
 </x-admin.modal>
 <!-- /Edit Pricing -->
 
-<x-admin.modal className="addmodal" id="booking_cancel_modal" :title="__('admin.bookings.cancel_booking')" action="{{  route('reservation.cancel') }}" formId="cancelBookingForm" method="POST" enctype="multipart/form-data">
+<x-admin.modal
+    className="addmodal"
+    id="booking_cancel_modal"
+    dialogClassName="modal-md"
+    :title="__('admin.bookings.cancel_booking')"
+    action="{{ route('reservation.cancel') }}"
+    formId="cancelBookingForm"
+    method="POST">
     <x-slot name="body">
         <div class="row">
             <div class="col-md-12">

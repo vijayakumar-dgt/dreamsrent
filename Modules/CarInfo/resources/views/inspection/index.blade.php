@@ -14,7 +14,7 @@
 				:buttonText="__('admin.rentals.add_new_inspection')"
 				:modalId="'add_inspection'"
 				:buttonId="'add_new_inspection'"
-				:permissionKey="'inspections'"
+				:permissionModule="'inspections'"
 			/>
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3"> 

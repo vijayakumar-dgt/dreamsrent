@@ -419,6 +419,12 @@ function getLanguageId(?string $langCode = 'en'): int
     return $languageId ?? 1;
 }
 
+function getLanguageName(?string $langCode = 'en'): string
+{
+    $languageName = TranslationLanguage::where('code', $langCode)->value('name');
+    return $languageName ?? "English";
+}
+
 /**
  * Get the profile image URL of the current user.
  *

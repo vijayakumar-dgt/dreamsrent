@@ -70,7 +70,7 @@
             var ID = $(this).data("id");
 
             $(
-                "#section_id_1, #section_id_2, #section_id_3, #section_id_4, #section_id_5,  #section_id_6, #section_id_7"
+                "#section_id_1, #section_id_2, #section_id_3, #section_id_4, #section_id_5,  #section_id_6, #section_id_7, #section_id_8"
             ).addClass("d-none");
 
             if (ID == 1) {
@@ -251,6 +251,40 @@
                         .attr("src", image6)
                         .removeClass("d-none");
                 }
+            } else if (ID == 68) {
+                $("#section_id_8").removeClass("d-none");
+                $("#section_id").val(ID);
+
+                const trigger = $(this);
+
+                $("#section_title_boat_experience").val(
+                    trigger.data("section_title_boat_experience")
+                );
+
+                $("#label_boat_experience_1").val(
+                    trigger.data("label_boat_experience_1")
+                );
+                $("#description_boat_experience_1").val(
+                    trigger.data("description_boat_experience_1")
+                );
+
+                const image1 = trigger.data(
+                    "thumbnail_image_boat_experience_1"
+                );
+                if (image1) {
+                    $("#thumbnail_preview_boat_experience_1")
+                        .attr("src", image1)
+                        .removeClass("d-none");
+                }
+
+                const image2 = trigger.data(
+                    "thumbnail_image_boat_experience_2"
+                );
+                if (image2) {
+                    $("#thumbnail_preview_boat_experience_2")
+                        .attr("src", image2)
+                        .removeClass("d-none");
+                }
             } else if (ID == 43) {
                 $("#section_id_5").removeClass("d-none");
                 $("#section_id").val(ID);
@@ -384,6 +418,9 @@
                                                 data-section_title_boat_benefits="${
                                                     value.title
                                                 }"
+                                                data-section_title_boat_experience="${
+                                                    value.title
+                                                }"
                                                 data-label_1="${value.label_1}"
                                                 data-label_2="${value.label_2}"
                                                 data-label_3="${value.label_3}"
@@ -478,10 +515,12 @@
                                                     value.why_dis_3 ?? ""
                                                 }"
                                                 data-label_boat_benefits_1="${
-                                                    value.label_boat_benefits_1 ?? ""
+                                                    value.label_boat_benefits_1 ??
+                                                    ""
                                                 }"
                                                 data-description_boat_benefits_1="${
-                                                    value.description_boat_benefits_1 ?? ""
+                                                    value.description_boat_benefits_1 ??
+                                                    ""
                                                 }"
                                                 data-thumbnail_image_boat_benefits_1="${
                                                     value.thumbnail_image_boat_benefits_1
@@ -489,10 +528,12 @@
                                                         : ""
                                                 }"
                                                   data-label_boat_benefits_2="${
-                                                    value.label_boat_benefits_2 ?? ""
-                                                }"
+                                                      value.label_boat_benefits_2 ??
+                                                      ""
+                                                  }"
                                                 data-description_boat_benefits_2="${
-                                                    value.description_boat_benefits_2 ?? ""
+                                                    value.description_boat_benefits_2 ??
+                                                    ""
                                                 }"
                                                 data-thumbnail_image_boat_benefits_2="${
                                                     value.thumbnail_image_boat_benefits_2
@@ -501,10 +542,12 @@
                                                 }"
 
                                                  data-label_boat_benefits_3="${
-                                                    value.label_boat_benefits_3 ?? ""
-                                                }"
+                                                     value.label_boat_benefits_3 ??
+                                                     ""
+                                                 }"
                                                 data-description_boat_benefits_3="${
-                                                    value.description_boat_benefits_3 ?? ""
+                                                    value.description_boat_benefits_3 ??
+                                                    ""
                                                 }"
                                                 data-thumbnail_image_boat_benefits_3="${
                                                     value.thumbnail_image_boat_benefits_3
@@ -513,10 +556,12 @@
                                                 }"
 
                                                  data-label_boat_benefits_4="${
-                                                    value.label_boat_benefits_4 ?? ""
-                                                }"
+                                                     value.label_boat_benefits_4 ??
+                                                     ""
+                                                 }"
                                                 data-description_boat_benefits_4="${
-                                                    value.description_boat_benefits_4 ?? ""
+                                                    value.description_boat_benefits_4 ??
+                                                    ""
                                                 }"
                                                 data-thumbnail_image_boat_benefits_4="${
                                                     value.thumbnail_image_boat_benefits_4
@@ -525,10 +570,12 @@
                                                 }"
 
                                                     data-label_boat_benefits_5="${
-                                                    value.label_boat_benefits_5 ?? ""
-                                                }"
+                                                        value.label_boat_benefits_5 ??
+                                                        ""
+                                                    }"
                                                 data-description_boat_benefits_5="${
-                                                    value.description_boat_benefits_5 ?? ""
+                                                    value.description_boat_benefits_5 ??
+                                                    ""
                                                 }"
                                                 data-thumbnail_image_boat_benefits_5="${
                                                     value.thumbnail_image_boat_benefits_5
@@ -537,14 +584,35 @@
                                                 }"
 
                                                     data-label_boat_benefits_6="${
-                                                    value.label_boat_benefits_6 ?? ""
-                                                }"
+                                                        value.label_boat_benefits_6 ??
+                                                        ""
+                                                    }"
                                                 data-description_boat_benefits_6="${
-                                                    value.description_boat_benefits_6 ?? ""
+                                                    value.description_boat_benefits_6 ??
+                                                    ""
                                                 }"
                                                 data-thumbnail_image_boat_benefits_6="${
                                                     value.thumbnail_image_boat_benefits_6
                                                         ? `/storage/${value.thumbnail_image_boat_benefits_6}`
+                                                        : ""
+                                                }"
+
+                                                 data-label_boat_experience_1="${
+                                                        value.label_boat_experience_1 ??
+                                                        ""
+                                                    }"
+                                                data-description_boat_experience_1="${
+                                                    value.description_boat_experience_1 ??
+                                                    ""
+                                                }"
+                                                data-thumbnail_image_boat_experience_1="${
+                                                    value.thumbnail_image_boat_experience_1
+                                                        ? `/storage/${value.thumbnail_image_boat_experience_1}`
+                                                        : ""
+                                                }"
+                                                data-thumbnail_image_boat_experience_2="${
+                                                    value.thumbnail_image_boat_experience_2
+                                                        ? `/storage/${value.thumbnail_image_boat_experience_2}`
                                                         : ""
                                                 }"
                                                 

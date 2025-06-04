@@ -14,7 +14,7 @@
                 :buttonText="__('admin.user_management.add_new_user')"
                 :modalId="'add_user_modal'"
                 :buttonId="'add_user'"
-                :permissionKey="'users'"
+                :permissionModule="'users'"
             />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
@@ -129,239 +129,221 @@
     <!-- /Page Wrapper -->
 
     <!-- Add User -->
-    <div class="modal fade" id="add_user_modal">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <form id="userForm" autocomplete="off">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="mb-0">{{ __('admin.user_management.create_user') }}</h5>
-                        <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <i class="ti ti-x fs-16"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body pb-1">
-                        <div class="row">
-                            <div class="mb-3">
-                                <label class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
-                                <div class="d-flex align-items-center flex-wrap row-gap-3">
-                                    <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-                                        <img src="{{ uploadedAsset('', 'profile') }}" class="img-fluid rounded d-none" id="imagePreview" alt="Profile Image">
-                                        <i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
-                                    </div>
-                                    <div class="profile-upload">
-                                        <div class="profile-uploader d-flex align-items-center">
-                                            <div class="drag-upload-btn btn btn-md btn-dark">
-                                                <i class="ti ti-photo-up fs-14"></i>
-                                                {{ __('admin.common.upload') }}
-                                                <input type="file" class="form-control image-sign" name="image" id="image">
-                                            </div>
-                                        </div>
-                                        <div class="mt-2">
-                                            <p class="fs-14">{{ __('admin.common.upload_image_size', ['size' => 2]) }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="text-danger error-text" id="image_error"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" name="first_name" id="first_name">
-                                    <span class="text-danger error-text" id="first_name_error"></span>
+    <x-admin.modal 
+		className="addmodal"
+		id="add_user_modal"
+        dialogClassName="modal-lg"
+		:title="__('admin.user_management.create_user')"
+		action="{{  route('admin.save-user') }}"
+		formId="userForm"
+		method="POST"
+        enctype="multipart/form-data">
+		<x-slot name="body">
+            <div class="row">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
+                    <div class="d-flex align-items-center flex-wrap row-gap-3">
+                        <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
+                            <img src="{{ uploadedAsset('', 'profile') }}" class="img-fluid rounded d-none" id="imagePreview" alt="Profile Image">
+                            <i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
+                        </div>
+                        <div class="profile-upload">
+                            <div class="profile-uploader d-flex align-items-center">
+                                <div class="drag-upload-btn btn btn-md btn-dark">
+                                    <i class="ti ti-photo-up fs-14"></i>
+                                    {{ __('admin.common.upload') }}
+                                    <input type="file" class="form-control image-sign" name="image" id="image">
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" name="last_name" id="last_name">
-                                    <span class="text-danger error-text" id="last_name_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.user_management.role') }}<span class="text-danger"> *</span></label>
-                                    <select class="form-control role" name="role_id" id="role_id" data-placeholder="{{ __('admin.common.select') }}">
-                                        <option value="">{{ __('admin.common.select') }}</option>
-                                        @if ($roles)
-                                            @foreach ($roles as $role)
-                                                <option value="{{ $role->id }}">{{ $role->role_name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                    <span class="text-danger error-text" id="role_id_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control user_phone_number" id="phone_number" name="phone_number">
-                                    <input type="hidden" id="international_phone_number" name="international_phone_number">
-                                    <span id="phone_number_error" class="text-danger error-text"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
-                                    <input class="form-control" type="text" name="email" id="email">
-                                    <span id="email_error" class="text-danger error-text"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.password') }}<span class="text-danger"> *</span></label>
-                                    <div class="pass-group">
-                                        <input type="password" class="pass-inputs form-control" name="password" id="password">
-                                        <span class="ti toggle-passwords ti-eye-off"></span>
-                                    </div>
-                                    <span class="error-text text-danger" id="password_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.confirm_password') }}<span class="text-danger"> *</span></label>
-                                    <div class="pass-group">
-                                        <input type="password" class="form-control pass-inputa" name="confirm_password" id="confirm_password">
-                                        <span class="ti toggle-passworda ti-eye-off"></span>
-                                    </div>
-                                    <span class="error-text text-danger" id="confirm_password_error"></span>
-                                </div>
+                            <div class="mt-2">
+                                <p class="fs-14">{{ __('admin.common.upload_image_size', ['size' => 2]) }}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <div class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                            <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
-                        </div>
+                    <span class="text-danger error-text" id="image_error"></span>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger"> *</span></label>
+                        <input type="text" class="form-control" name="first_name" id="first_name">
+                        <span class="text-danger error-text" id="first_name_error"></span>
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger"> *</span></label>
+                        <input type="text" class="form-control" name="last_name" id="last_name">
+                        <span class="text-danger error-text" id="last_name_error"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.user_management.role') }}<span class="text-danger"> *</span></label>
+                        <select class="form-control role" name="role_id" id="role_id" data-placeholder="{{ __('admin.common.select') }}">
+                            <option value="">{{ __('admin.common.select') }}</option>
+                            @if ($roles)
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->id }}">{{ $role->role_name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        <span class="text-danger error-text" id="role_id_error"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
+                        <input type="text" class="form-control user_phone_number" id="phone_number" name="phone_number">
+                        <input type="hidden" id="international_phone_number" name="international_phone_number">
+                        <span id="phone_number_error" class="text-danger error-text"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
+                        <input class="form-control" type="text" name="email" id="email">
+                        <span id="email_error" class="text-danger error-text"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.password') }}<span class="text-danger"> *</span></label>
+                        <div class="pass-group">
+                            <input type="password" class="pass-inputs form-control" name="password" id="password">
+                            <span class="ti toggle-passwords ti-eye-off"></span>
+                        </div>
+                        <span class="error-text text-danger" id="password_error"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.confirm_password') }}<span class="text-danger"> *</span></label>
+                        <div class="pass-group">
+                            <input type="password" class="form-control pass-inputa" name="confirm_password" id="confirm_password">
+                            <span class="ti toggle-passworda ti-eye-off"></span>
+                        </div>
+                        <span class="error-text text-danger" id="confirm_password_error"></span>
+                    </div>
+                </div>
+            </div>
+		</x-slot>
+		<x-slot name="footer">
+			<div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+                <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.create_new') }}</button>
+            </div>
+		</x-slot>
+	</x-admin.modal>
     <!-- /Add User -->
 
     <!-- Edit User -->
-    <div class="modal fade" id="edit_user_modal">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <form id="editUserForm" autocomplete="off">
-                <input type="hidden" name="id" id="id">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="mb-0">{{ __('admin.user_management.edit_user') }}</h5>
-                        <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <i class="ti ti-x fs-16"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body pb-1">
-                        <div class="row">
-                            <div class="mb-3">
-                                <label class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
-                                <div class="d-flex align-items-center flex-wrap row-gap-3">
-                                    <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
-                                        <img src="{{ uploadedAsset('', 'profile') }}" class="img-fluid rounded d-none" id="editImagePreview" alt="Profile Image">
-                                        <i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
-                                    </div>
-                                    <div class="profile-upload">
-                                        <div class="profile-uploader d-flex align-items-center">
-                                            <div class="drag-upload-btn btn btn-md btn-dark">
-                                                <i class="ti ti-photo-up fs-14"></i>
-                                                {{ __('admin.common.upload') }}
-                                                <input type="file" class="form-control image-sign" name="image" id="edit_image">
-                                            </div>
-                                        </div>
-                                        <div class="mt-2">
-                                            <p class="fs-14">{{ __('admin.common.upload_image_size', ['size' => 2]) }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="text-danger error-text" id="edit_image_error"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" name="first_name" id="edit_first_name">
-                                    <span class="text-danger error-text" id="edit_first_name_error"></span>
+    <x-admin.modal 
+		className="addmodal"
+		id="edit_user_modal"
+        dialogClassName="modal-lg"
+		:title="__('admin.user_management.edit_user')"
+		action="{{  route('admin.save-user') }}"
+		formId="editUserForm"
+		method="POST"
+        enctype="multipart/form-data">
+		<x-slot name="body">
+            <input type="hidden" name="id" id="id">
+            <div class="row">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.common.image') }}<span class="text-danger"> *</span></label>
+                    <div class="d-flex align-items-center flex-wrap row-gap-3">
+                        <div class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark frames">
+                            <img src="{{ uploadedAsset('', 'profile') }}" class="img-fluid rounded d-none" id="editImagePreview" alt="Profile Image">
+                            <i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
+                        </div>
+                        <div class="profile-upload">
+                            <div class="profile-uploader d-flex align-items-center">
+                                <div class="drag-upload-btn btn btn-md btn-dark">
+                                    <i class="ti ti-photo-up fs-14"></i>
+                                    {{ __('admin.common.upload') }}
+                                    <input type="file" class="form-control image-sign" name="image" id="edit_image">
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control" name="last_name" id="edit_last_name">
-                                    <span class="text-danger error-text" id="edit_last_name_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.user_management.role') }}<span class="text-danger"> *</span></label>
-                                    <select class="form-control edit_role" name="role_id" id="edit_role_id" data-placeholder="{{ __('admin.common.select') }}">
-                                        <option value="">{{ __('admin.common.select') }}</option>
-                                        @if ($roles)
-                                            @foreach ($roles as $role)
-                                                <option value="{{ $role->id }}">{{ $role->role_name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                    <span class="text-danger error-text" id="edit_role_id_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
-                                    <input type="text" class="form-control edit_user_phone_number" id="edit_phone_number" name="phone_number">
-                                    <input type="hidden" id="edit_international_phone_number" name="international_phone_number">
-                                    <span id="edit_phone_number_error" class="text-danger error-text"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="mb-3">
-                                    <label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
-                                    <input class="form-control" type="text" name="email" id="edit_email">
-                                    <span id="edit_email_error" class="text-danger error-text"></span>
-                                </div>
+                            <div class="mt-2">
+                                <p class="fs-14">{{ __('admin.common.upload_image_size', ['size' => 2]) }}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <div class="d-flex justify-content-between align-items-center w-100">
-                            <div class="form-check form-check-md form-switch me-2">
-                                <label for="status" class="form-check-label form-label mt-0 mb-0">
-                                <input class="form-check-input form-label me-2 status" id="status" name="status" type="checkbox" role="switch">
-                                    {{ __('admin.common.status') }}
-                                </label>
-                            </div>
-                            <div class="d-flex justify-content-center">
-                                <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                                <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.save_changes') }}</button>
-                            </div>
-                        </div>
+                    <span class="text-danger error-text" id="edit_image_error"></span>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.first_name') }}<span class="text-danger"> *</span></label>
+                        <input type="text" class="form-control" name="first_name" id="edit_first_name">
+                        <span class="text-danger error-text" id="edit_first_name_error"></span>
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.last_name') }}<span class="text-danger"> *</span></label>
+                        <input type="text" class="form-control" name="last_name" id="edit_last_name">
+                        <span class="text-danger error-text" id="edit_last_name_error"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.user_management.role') }}<span class="text-danger"> *</span></label>
+                        <select class="form-control edit_role" name="role_id" id="edit_role_id" data-placeholder="{{ __('admin.common.select') }}">
+                            <option value="">{{ __('admin.common.select') }}</option>
+                            @if ($roles)
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->id }}">{{ $role->role_name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                        <span class="text-danger error-text" id="edit_role_id_error"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.phone_number') }}<span class="text-danger"> *</span></label>
+                        <input type="text" class="form-control edit_user_phone_number" id="edit_phone_number" name="phone_number">
+                        <input type="hidden" id="edit_international_phone_number" name="international_phone_number">
+                        <span id="edit_phone_number_error" class="text-danger error-text"></span>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.email') }}<span class="text-danger"> *</span></label>
+                        <input class="form-control" type="text" name="email" id="edit_email">
+                        <span id="edit_email_error" class="text-danger error-text"></span>
+                    </div>
+                </div>
+            </div>
+		</x-slot>
+		<x-slot name="footer">
+			<div class="d-flex justify-content-between align-items-center w-100">
+                <div class="form-check form-check-md form-switch me-2">
+                    <label for="status" class="form-check-label form-label mt-0 mb-0">
+                    <input class="form-check-input form-label me-2 status" id="status" name="status" type="checkbox" role="switch">
+                        {{ __('admin.common.status') }}
+                    </label>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+                    <button type="submit" class="btn btn-primary submitbtn">{{ __('admin.common.save_changes') }}</button>
+                </div>
+            </div>
+		</x-slot>
+	</x-admin.modal>
     <!-- /Edit User -->
 
     <!-- Delete  -->
-    <div class="modal fade" id="delete_modal">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <form id="deleteUserForm">
-                    <input type="hidden" name="delete_id" id="delete_id">
-                    <div class="modal-body text-center">
-                        <span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-                            <i class="ti ti-trash-x fs-26"></i>
-                        </span>
-                        <h4 class="mb-1">{{ __('admin.user_management.delete_user') }}</h4>
-                        <p class="mb-3">{{ __('admin.user_management.delete_user_confirmation') }}</p>
-                        <div class="d-flex justify-content-center">
-                            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-                            <button type="submit" class="btn btn-primary">{{ __('admin.common.delete') }}</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <x-admin.delete-modal
+		className="deletemodal"
+		id="delete_modal"
+		action="{{ route('admin.user-delete') }}"
+		formId="deleteUserForm"
+		method="POST"
+		:hiddenInputs="['delete_id' => '']"
+		:title="__('admin.user_management.delete_user')"
+		:description="__('admin.user_management.delete_user_confirmation')">
+	</x-admin.delete-modal>
     <!-- /Delete -->
 @endsection
 

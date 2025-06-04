@@ -14,7 +14,7 @@
                 :buttonText="__('admin.support.add_new_announcement')"
                 :modalId="'add_announcement_modal'"
                 :buttonId="'add_announcement'"
-                :permissionKey="'announcements'"
+                :permissionModule="'announcements'"
             />
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">

@@ -9,7 +9,7 @@
             <x-admin.breadcrumb :title="__('admin.cms.menu_management')" :breadcrumbs="[
             __('admin.cms.menu_management') => ''
         ]" :buttonText="__('admin.cms.add_new_menu')" :modalId="'add_menu'" :buttonId="'add_menu_button'"
-                :permissionKey="'menu_management'" />
+                :permissionModule="'menu_management'" />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">

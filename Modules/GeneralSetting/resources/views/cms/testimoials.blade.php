@@ -6,10 +6,15 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <x-admin.breadcrumb :title="__('admin.general_settings.testimonials')" :breadcrumbs="[
-            __('admin.general_settings.testimonials') => ''
-        ]" :buttonText="__('admin.cms.add_new_testimonial')"
-                :modalId="'add_testimonial'" :buttonId="'add_testimonial_btn'" :permissionKey="'testimonials'" />
+            <x-admin.breadcrumb 
+                :title="__('admin.general_settings.testimonials')" 
+                :breadcrumbs="[
+                    __('admin.general_settings.testimonials') => ''
+                ]"
+                :buttonText="__('admin.cms.add_new_testimonial')"
+                :modalId="'add_testimonial'"
+                :buttonId="'add_testimonial_btn'"
+                :permissionModule="'testimonials'" />
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">

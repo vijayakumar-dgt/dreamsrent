@@ -225,7 +225,13 @@
 </div>
 <!-- /Page Wrapper -->
 
-<x-admin.modal className="addmodal" id="booking_cancel_modal" :title="__('admin.bookings.cancel_booking')" action="{{  route('reservation.cancel') }}" formId="cancelBookingForm" method="POST" enctype="multipart/form-data">
+<x-admin.modal
+    className="addmodal"
+    id="booking_cancel_modal"
+    :title="__('admin.bookings.cancel_booking')"
+    action="{{  route('reservation.cancel') }}"
+    formId="cancelBookingForm"
+    method="POST">
     <x-slot name="body">
         <input type="hidden" name="booking_id" id="booking_id" value="{{ $booking->id }}">
         <div class="row">

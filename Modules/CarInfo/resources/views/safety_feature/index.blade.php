@@ -14,7 +14,7 @@
 				:buttonText="__('admin.rentals.add_new_safety_feature')"
 				:modalId="'safety_feature_modal'"
 				:buttonId="'add_safety_feature'"
-				:permissionKey="'vehicle_attributes'"
+				:permissionModule="'vehicle_attributes'"
 			/>
 			<!-- Table Header -->
 			<div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">

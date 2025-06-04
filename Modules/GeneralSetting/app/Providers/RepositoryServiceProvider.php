@@ -3,6 +3,7 @@
 namespace Modules\GeneralSetting\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\GeneralSetting\Repositories\Contracts\AdminProfileInterface;
 use Modules\GeneralSetting\Repositories\Contracts\CommunicationSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\CurrencySettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\DbbackupInterface;
@@ -17,6 +18,7 @@ use Modules\GeneralSetting\Repositories\Contracts\SignatureSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\SitemapSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\TaxRateSettingInterface;
 use Modules\GeneralSetting\Repositories\Contracts\TestimonialInterface;
+use Modules\GeneralSetting\Repositories\Eloquent\AdminProfileRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\CommunicationSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\CurrencySettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\DbbackupRepository;
@@ -44,6 +46,7 @@ class RepositoryServiceProvider extends ServiceProvider
 
     protected function registerBindings(): void
     {
+        $this->app->bind(AdminProfileInterface::class, AdminProfileRepository::class);
         $this->app->bind(GeneralSettingInterface::class, GeneralSettingRepository::class);
         $this->app->bind(LanguageSettingInterface::class, LanguageSettingRepository::class);
         $this->app->bind(EmailTemplateRepositoryInterface::class, EmailTemplateSettingRepository::class);

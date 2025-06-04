@@ -2126,7 +2126,7 @@ return array(
     'email_valid' => 'Please enter a valid email address.',
     'email_unique' => 'Email already exists.',
     'no_data_found' => 'No data found',
-    'password' => 'Password',
+    'auth_password' => 'Password',
     'confirm_password' => 'Confirm Password',
     'password_required' => 'Password is required.',
     'password_minlength' => 'Password should be at least 8 characters.',
