@@ -731,6 +731,33 @@
             </div>
         </div>
 
+        <div id="section_id_11" class="d-none">
+            <div class="row">
+                <!-- Title -->
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <input type="text" name="section_title_boat_offer " id="section_title_boat_offer" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_section_title') }}">
+                        <div class="invalid-feedback" id="section_title_boat_offer_error"></div>
+                    </div>
+                </div>
+
+                <!-- Label 1 -->
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 1</label>
+                        <input type="file" name="thumbnail_image_boat_offer" id="thumbnail_image_boat_offer" class="form-control"
+                            accept="image/*" onchange="previewThumbnailExperience(this, 1)">
+                        <div class="invalid-feedback" id="thumbnail_image_boat_offer_error"></div>
+                        <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat_offer"
+                            class="mt-2 img-preview-thumb" alt="Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </x-slot>
 
     <x-slot name="footer">
