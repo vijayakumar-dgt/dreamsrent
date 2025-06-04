@@ -625,10 +625,16 @@
             $suggestions.html("");
             if (data.length > 0) {
                 data.forEach(location => {
-                    $suggestions.append(`<li data-id="${location.id}">${location.name}</li>`);
+                    const $li = $('<li>')
+                        .attr('data-id', location.id)
+                        .text(location.name);
+                    $suggestions.append($li);
                 });
             } else {
-                $suggestions.append(`<li class="no-result">${_l('web.home.no_location_found')}</li>`);
+                const $li = $('<li>')
+                    .addClass('no-result')
+                    .text(_l('web.home.no_location_found'));
+                $suggestions.append($li);
             }
             $suggestions.show();
         }

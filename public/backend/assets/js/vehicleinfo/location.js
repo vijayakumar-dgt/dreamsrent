@@ -597,15 +597,28 @@
         selectedId = null
     ) => {
         const $dropdown = $(selector);
-        $dropdown.empty().append(`<option value="">${placeholder}</option>`);
+        $dropdown.empty();
+
+        $dropdown.append(
+            $('<option>', {
+                value: '',
+                text: placeholder
+            })
+        );
 
         data.forEach((item) => {
-            const selected =
-                selectedId && item.id == selectedId ? "selected" : "";
-            $dropdown.append(
-                `<option value="${item.id}" ${selected}>${item.name}</option>`
-            );
+            const option = $('<option>', {
+                value: item.id,
+                text: item.name
+            });
+
+            if (selectedId && item.id == selectedId) {
+                option.prop('selected', true);
+            }
+
+            $dropdown.append(option);
         });
+
     };
 
     // Edit location handler
