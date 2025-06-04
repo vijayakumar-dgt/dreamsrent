@@ -72,7 +72,7 @@
                     contentType: false,
                     success: function (resp) {
                         if (resp.status) {
-                            window.location.href = DOMPurify.sanitize(resp.redirect_url);
+                            window.location.href = '/admin';
                         } else {
                             showToast("error", resp.message);
                             $("#loginForm .submitbtn").text(

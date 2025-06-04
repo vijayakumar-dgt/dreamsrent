@@ -1030,7 +1030,7 @@
                     $('#extra_service_list_container').empty();
 
                     data.forEach(item => {
-                        let isSelected = selected_extra_service_ids.includes(item.id.toString()) || 
+                        let isSelected = selected_extra_service_ids.includes(item.id.toString()) ||
                                         edit_extra_service.find(service => service.id == item.id);
 
                         let isActive = isSelected ? 'active' : '';
@@ -1047,7 +1047,7 @@
                                 extraServiceType = 'Percentage';
                                 break;
                             default:
-                                extraServiceType = $('<div>').text(item.extra_service_type).html(); // sanitize fallback
+                                extraServiceType = DOMPurify.sanitize(item.extra_service_type); // safe fallback
                         }
 
                         const $col = $('<div>').addClass('col-md-6');
@@ -1059,8 +1059,8 @@
                             type: 'checkbox',
                             class: 'form-check-input vehicle_extra_service',
                             name: 'extra_services[]',
-                            id: `extra-service-${item.id}`,
-                            value: item.id,
+                            id: `extra-service-${DOMPurify.sanitize(item.id)}`,
+                            value: DOMPurify.sanitize(item.id),
                             checked: isSelected,
                             'data-price': DOMPurify.sanitize(item.price),
                             'data-price_type': DOMPurify.sanitize(item.extra_service_type),
@@ -1068,34 +1068,34 @@
                         });
                         $formCheck.append($checkbox);
 
-                        // Label and description
+                        // Label and description (sanitized text content only)
                         const $labelWrap = $('<div>').addClass('d-flex align-items-center justify-content-between');
                         const $label = $('<label>', {
                             class: 'form-check-label ms-2 ps-4',
-                            for: `extra-service-${item.id}`
+                            for: `extra-service-${DOMPurify.sanitize(item.id)}`
                         });
-                        $('<span>').addClass('fw-semibold text-gray-9 d-block mb-1').text(item.name).appendTo($label);
-                        $('<span>').addClass('d-block').text(item.description).appendTo($label);
+                        $('<span>').addClass('fw-semibold text-gray-9 d-block mb-1').text(item.name || '').appendTo($label);
+                        $('<span>').addClass('d-block').text(item.description || '').appendTo($label);
 
                         // Price and type
                         const $priceInfo = $('<div>').addClass('text-end');
                         $('<p>').addClass('mb-1').text(extraServiceType).appendTo($priceInfo);
 
                         let priceDisplay = item.extra_service_type === 'percentage'
-                            ? `${item.price}%`
-                            : `${default_currency}${item.price}`;
+                            ? `${DOMPurify.sanitize(item.price)}%`
+                            : `${default_currency}${DOMPurify.sanitize(item.price)}`;
 
                         $('<h6>').text(priceDisplay).appendTo($priceInfo);
 
                         $labelWrap.append($label, $priceInfo);
 
-                        // Combine everything
+                        // Combine and append
                         $customCheckbox.append($formCheck, $labelWrap);
                         $col.append($customCheckbox);
                         $('#extra_service_list_container').append($col);
                     });
 
-                    // Price calculation and UI updates
+                    // Update price UI
                     const response = calculateVehiclePrice();
                     if (response) {
                         $('.extra_service_price').text(response[0]['total_extra_service_price']);
@@ -1106,11 +1106,10 @@
 
                     initializeTooltips();
                 } else {
-                    $('#extra_service_list_container').html(`
-                        <div class="row">
-                            <span class="text-center mb-3">${_l('admin.bookings.no_extra_services_found')}</span>
-                        </div>
-                    `);
+                    const $emptyRow = $('<div>').addClass('row');
+                    const $message = $('<span>').addClass('text-center mb-3').text(_l('admin.bookings.no_extra_services_found'));
+                    $emptyRow.append($message);
+                    $('#extra_service_list_container').empty().append($emptyRow);
                 }
             },
             error: function (error) {
