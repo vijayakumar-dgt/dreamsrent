@@ -768,20 +768,6 @@
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             success: function (result) {
-                // if (result.data && result.data.length > 0) {
-                //     let data = result.data;
-
-                //     let options = data
-                //         .map((item) => {
-                //             return `<option value="${item.id}" ${
-                //                 item.id == selected_driver_id ? "selected" : ""
-                //             }>${item.driver_name}</option>`;
-                //         })
-                //         .join("");
-
-                //     $("#driver_id").find("option:not(:first)").remove();
-                //     $("#driver_id").append(options);
-                // }
                 if (result.data && result.data.length > 0) {
                     let data = result.data;
 
