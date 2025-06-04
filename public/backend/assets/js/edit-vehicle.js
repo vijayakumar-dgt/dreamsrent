@@ -1042,7 +1042,7 @@
                 editElement
                     .find("input[name='seasonal_late_fee[]']")
                     .val(lateFee);
-                
+
                 editingId = null;
             } else {
                 let uniqueId = `season_${crypto.randomUUID()}`;
@@ -1109,13 +1109,13 @@
 
         $(document).on("click", "#add_seasonal_price_btn", function () {
             $("#seas_title").text(_l("admin.rentals.create_seasonal_price"));
-            $("#s_name").val('');
-            $("#s_strdate").val('');
-            $("#s_enddate").val('');
-            $("#s_drate").val('');
-            $("#s_wrate").val('');
-            $("#s_mrate").val('');
-            $("#s_lrate").val('');
+            $("#s_name").val("");
+            $("#s_strdate").val("");
+            $("#s_enddate").val("");
+            $("#s_drate").val("");
+            $("#s_wrate").val("");
+            $("#s_mrate").val("");
+            $("#s_lrate").val("");
             $("#price_btn").text(_l("admin.common.create_new"));
             editingId = null;
         });
@@ -2545,7 +2545,9 @@
                     "vehicle_damage",
                     JSON.stringify(damagePayload)
                 );
-                $("#seoFinalBtn").text(_l('admin.common.please_wait')).prop("disabled", true);
+                $("#seoFinalBtn")
+                    .text(_l("admin.common.please_wait"))
+                    .prop("disabled", true);
 
                 $.ajax({
                     url: "/admin/update/vehicle",
@@ -2606,7 +2608,7 @@
                                 .text("Update & Exit")
                                 .prop("disabled", false);
                         } else {
-                            showToast('error', error.responseJSON.message);
+                            showToast("error", error.responseJSON.message);
                             $("#seoFinalBtn")
                                 .text("Update & Exit")
                                 .prop("disabled", false);
@@ -2701,6 +2703,86 @@
                 modelDropdown.html('<option value="">Select Model</option>'); // Reset if no brand is selected
             }
         });
+
+        $("#vehicle_category_id").on("change", function () {
+            let categoryId = $(this).val();
+            let modelTypeDropdown = $("#vehicle_type_id");
+            let modelBrandDropdown = $("#vehicle_brand_id");
+
+            modelTypeDropdown.html('<option value="">Loading...</option>');
+            modelBrandDropdown.html('<option value="">Loading...</option>');
+
+            if (categoryId) {
+                $.ajax({
+                    url: "/admin/get-type-brand",
+                    type: "GET",
+                    data: { category_id: categoryId },
+                    success: function (response) {
+                        modelTypeDropdown.html(
+                            '<option value="">Select Type</option>'
+                        );
+                        modelBrandDropdown.html(
+                            '<option value="">Select Brand</option>'
+                        );
+
+                        let selectedTypeId = $("#type_id").val();
+                        let selectedBrandId = $("#brand_id").val();
+
+                        if (response.success) {
+                            if (response.types.length > 0) {
+                                $.each(response.types, function (key, type) {
+                                    let selected =
+                                        type.id == selectedTypeId
+                                            ? "selected"
+                                            : "";
+                                    modelTypeDropdown.append(
+                                        `<option value="${type.id}" ${selected}>${type.name}</option>`
+                                    );
+                                });
+                            } else {
+                                modelTypeDropdown.html(
+                                    '<option value="">No vehicle types found</option>'
+                                );
+                            }
+
+                            if (response.brands.length > 0) {
+                                $.each(response.brands, function (key, brand) {
+                                    let selected =
+                                        brand.id == selectedBrandId
+                                            ? "selected"
+                                            : "";
+                                    modelBrandDropdown.append(
+                                        `<option value="${brand.id}" ${selected}>${brand.brand_name}</option>`
+                                    );
+                                });
+                            } else {
+                                modelBrandDropdown.html(
+                                    '<option value="">No brands found</option>'
+                                );
+                            }
+                        }
+                    },
+                    error: function () {
+                        modelTypeDropdown.html(
+                            '<option value="">Error loading vehicle types</option>'
+                        );
+                        modelBrandDropdown.html(
+                            '<option value="">Error loading brands</option>'
+                        );
+                    },
+                });
+            } else {
+                modelTypeDropdown.html(
+                    '<option value="">Select Model</option>'
+                );
+                modelBrandDropdown.html(
+                    '<option value="">Select Model</option>'
+                );
+            }
+        });
+
+        // 🔥 Trigger the change event on initial page load
+        $("#vehicle_category_id").trigger("change");
 
         function toggleKilometerFields() {
             if ($("#Baseunlimited").is(":checked")) {
@@ -2934,7 +3016,9 @@
             } else {
                 // Keep fixed or daily prices as currency
                 updatedPrice = parseFloat(updatedPrice).toFixed(2); // Keep as 2 decimals
-                $(`.priceIn[data-id='${uniqueId}']`).text(`${currency}${updatedPrice}`);
+                $(`.priceIn[data-id='${uniqueId}']`).text(
+                    `${currency}${updatedPrice}`
+                );
                 $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
                 $(`.priceTypeIn[data-id='${uniqueId}']`).text(updatedPriceType);
                 $(`#insurance_price_type_one_${uniqueId}`).val(

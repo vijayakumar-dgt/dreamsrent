@@ -55,7 +55,7 @@
                     </ul>
                     <fieldset id="first-field">
                         <form id="carBasicInfoForm" autocomplete="off">
-							<input type="hidden" name="currency" id="currency" value="{{ $currencySymbol }}">
+                            <input type="hidden" name="currency" id="currency" value="{{ $currencySymbol }}">
                             <input type="hidden" name="vehicle_id" id="vehicle_id" value="{{ $query->id }}">
                             <input type="hidden" name="language_id" id="language_id" value="{{ $query->language_id }}">
                             <input type="hidden" name="parent_id" id="parent_id" value="{{ $query->parent_id }}">
@@ -126,17 +126,27 @@
                                         <div class="row">
                                             <div class="col-lg-4 col-md-6">
                                                 <div class="mb-3">
+                                                    <label class="form-label">{{ __('admin.rentals.category') }} <span class="text-danger">*</span></label>
+                                                    <select name="vehicle_category_id" class="form-control select" id="vehicle_category_id">
+                                                        <option value="">{{ __('admin.rentals.select') }}</option>
+                                                        @foreach($Category as $CategoryValues)
+                                                        <option value="{{ $CategoryValues->id }}"
+                                                            {{ $query->category_id == $CategoryValues->id ? 'selected' : '' }}>
+                                                            {{ ucwords(strtolower($CategoryValues->name)) }}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                    <span class="invalid-feedback" id="vehicle_category_id_error"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
                                                     <div class="d-flex align-items-center justify-content-between">
                                                         <label class="form-label">{{ __('admin.rentals.vehicle_type') }} <span class="text-danger">*</span></label>
                                                     </div>
+                                                    <input type="hidden" id="type_id" value="{{ $query->type_id }}">
                                                     <select name="vehicle_type_id" class="form-control select" id="vehicle_type_id">
                                                         <option value="">{{ __('admin.rentals.select') }}</option>
-                                                        @foreach($carTypes as $carTypesValues)
-                                                        <option value="{{ $carTypesValues->id }}"
-                                                            {{ $query->type_id == $carTypesValues->id ? 'selected' : '' }}>
-                                                            {{ ucwords(strtolower($carTypesValues->name)) }}
-                                                        </option>
-                                                        @endforeach
                                                     </select>
                                                     <span class="invalid-feedback" id="vehicle_type_id_error"></span>
                                                 </div>
@@ -146,14 +156,9 @@
                                                     <div class="d-flex align-items-center justify-content-between">
                                                         <label class="form-label">{{ __('admin.rentals.brand') }} <span class="text-danger">*</span></label>
                                                     </div>
+                                                    <input type="hidden" id="brand_id" value="{{ $query->brand_id }}">
                                                     <select name="vehicle_brand_id" class="form-control select" id="vehicle_brand_id">
                                                         <option value="">Select</option>
-                                                        @foreach($Brands as $BrandValues)
-                                                        <option value="{{ $BrandValues->id }}"
-                                                            {{ $query->brand_id == $BrandValues->id ? 'selected' : '' }}>
-                                                            {{ ucwords(strtolower($BrandValues->brand_name )) }}
-                                                        </option>
-                                                        @endforeach
                                                     </select>
                                                     <span class="invalid-feedback" id="vehicle_brand_id_error"></span>
                                                 </div>
@@ -173,21 +178,6 @@
                                                         @endforeach
                                                     </select>
                                                     <span class="invalid-feedback" id="vehicle_model_id_error"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">{{ __('admin.rentals.category') }} <span class="text-danger">*</span></label>
-                                                    <select name="vehicle_category_id" class="form-control select" id="vehicle_category_id">
-                                                        <option value="">{{ __('admin.rentals.select') }}</option>
-                                                        @foreach($Category as $CategoryValues)
-                                                        <option value="{{ $CategoryValues->id }}"
-                                                            {{ $query->category_id == $CategoryValues->id ? 'selected' : '' }}>
-                                                            {{ ucwords(strtolower($CategoryValues->name)) }}
-                                                        </option>
-                                                        @endforeach
-                                                    </select>
-                                                    <span class="invalid-feedback" id="vehicle_category_id_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4 col-md-6">
@@ -854,10 +844,10 @@
 </div>
 
 <x-admin.modal className="addmodal"
-	id="add-tarrif"
-	:title="__('admin.rentals.create_tariff')"
-	modalTitleId="tarrif_title">
-	<x-slot name="body">
+    id="add-tarrif"
+    :title="__('admin.rentals.create_tariff')"
+    modalTitleId="tarrif_title">
+    <x-slot name="body">
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3">
@@ -904,28 +894,28 @@
                 </div>
             </div>
         </div>
-	</x-slot>
-	<x-slot name="footer">
-		<div class="d-flex justify-content-center">
+    </x-slot>
+    <x-slot name="footer">
+        <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
             <button type="button" class="btn btn-primary" id="tarrif_btn">{{ __('admin.rentals.create_tariff') }}</button>
         </div>
-	</x-slot>
+    </x-slot>
 </x-admin.modal>
 
 <x-admin.delete-modal
-	className="deletemodal"
-	id="delete_tarrif"
-	:title="__('admin.rentals.delete_tariff')"
-	:description="__('admin.rentals.delete_tariff_confirmation')"
-	deleteBtnType="button">
+    className="deletemodal"
+    id="delete_tarrif"
+    :title="__('admin.rentals.delete_tariff')"
+    :description="__('admin.rentals.delete_tariff_confirmation')"
+    deleteBtnType="button">
 </x-admin.delete-modal>
 
 <x-admin.modal className="addmodal"
-	id="add_price"
-	:title="__('admin.rentals.create_seasonal_price')"
-	modalTitleId="seas_title">
-	<x-slot name="body">
+    id="add_price"
+    :title="__('admin.rentals.create_seasonal_price')"
+    modalTitleId="seas_title">
+    <x-slot name="body">
         <div class="row">
             <div class="col-md-12">
                 <div class="mb-3">
@@ -980,27 +970,27 @@
                 </div>
             </div>
         </div>
-	</x-slot>
-	<x-slot name="footer">
-		<div class="d-flex justify-content-center">
+    </x-slot>
+    <x-slot name="footer">
+        <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
             <button type="button" class="btn btn-primary" id="price_btn">{{ __('admin.rentals.create_new') }}</button>
         </div>
-	</x-slot>
+    </x-slot>
 </x-admin.modal>
 
 <x-admin.delete-modal
-	className="deletemodal"
-	id="delete_price"
-	:title="__('admin.rentals.delete_pricing')"
-	:description="__('admin.rentals.delete_pricing_confirmation')"
-	deleteBtnType="button">
+    className="deletemodal"
+    id="delete_price"
+    :title="__('admin.rentals.delete_pricing')"
+    :description="__('admin.rentals.delete_pricing_confirmation')"
+    deleteBtnType="button">
 </x-admin.delete-modal>
 
 <x-admin.modal className="addmodal"
-	id="edit_price"
-	:title="__('admin.rentals.edit_pricing_title')">
-	<x-slot name="body">
+    id="edit_price"
+    :title="__('admin.rentals.edit_pricing_title')">
+    <x-slot name="body">
         <table class="table custom-table1">
             <thead class="thead-white">
                 <tr>
@@ -1035,21 +1025,21 @@
                 @endforeach
             </tbody>
         </table>
-	</x-slot>
-	<x-slot name="footer">
-		<div class="d-flex justify-content-center">
+    </x-slot>
+    <x-slot name="footer">
+        <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
             <button type="button" class="btn btn-primary" id="service_save_btn">{{ __('admin.rentals.save_changes') }}</button>
         </div>
-	</x-slot>
+    </x-slot>
 </x-admin.modal>
 
 <x-admin.modal className="addmodal"
-	id="add-damage"
-	:title="__('admin.rentals.add_damage')"
-	modalTitleId="damage_title">
-	<x-slot name="body">
-		<div class="mb-3">
+    id="add-damage"
+    :title="__('admin.rentals.add_damage')"
+    modalTitleId="damage_title">
+    <x-slot name="body">
+        <div class="mb-3">
             <label class="form-label">{{ __('admin.rentals.damage_image_label') }} <span class="text-danger">*</span></label>
             <input type="file" name="dam_image" id="dam_image" class="form-control">
             <img src="{{ uploadedAsset('', 'default') }}" class="mt-2 d-none" id="image_preview" alt="Damage Preview">
@@ -1075,30 +1065,30 @@
             <label class="form-label">{{ __('admin.rentals.description_label') }}</label>
             <textarea class="form-control" name="dam_dis" id="dam_dis" maxlength="120" rows="3"></textarea>
         </div>
-	</x-slot>
-	<x-slot name="footer">
-		<div class="d-flex justify-content-center">
+    </x-slot>
+    <x-slot name="footer">
+        <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
             <button type="button" class="btn btn-primary" id="damage_btn">{{ __('admin.rentals.create_new') }}</button>
         </div>
-	</x-slot>
+    </x-slot>
 </x-admin.modal>
 
 <x-admin.delete-modal
-	className="deletemodal"
-	id="delete_damage"
-	:title="__('admin.rentals.delete_damage_title')"
-	:description="__('admin.rentals.delete_damage_confirmation')"
-	deleteBtnType="button"
-	deleteBtnId="dete-damage">
+    className="deletemodal"
+    id="delete_damage"
+    :title="__('admin.rentals.delete_damage_title')"
+    :description="__('admin.rentals.delete_damage_confirmation')"
+    deleteBtnType="button"
+    deleteBtnId="dete-damage">
 </x-admin.delete-modal>
 
 <x-admin.modal className="addmodal"
-	id="add-faq"
-	:title="__('admin.rentals.create_faq_title')"
-	modalTitleId="faq_title">
-	<x-slot name="body">
-		<div class="mb-3">
+    id="add-faq"
+    :title="__('admin.rentals.create_faq_title')"
+    modalTitleId="faq_title">
+    <x-slot name="body">
+        <div class="mb-3">
             <label class="form-label">{{ __('admin.rentals.question_label') }} <span class="text-danger">*</span></label>
             <input type="text" name="f_q" id="f_q" maxlength="60" class="form-control">
         </div>
@@ -1106,85 +1096,85 @@
             <label class="form-label">{{ __('admin.rentals.answer_label') }} <span class="text-danger">*</span></label>
             <textarea class="form-control" name="f_a" id="f_a" maxlength="120" rows="3"></textarea>
         </div>
-	</x-slot>
-	<x-slot name="footer">
-		<div class="d-flex justify-content-center">
-			<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
-			<button type="button" class="btn btn-primary" id="faq_btn">{{ __('admin.rentals.create_new') }}</button>
-		</div>
-	</x-slot>
+    </x-slot>
+    <x-slot name="footer">
+        <div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.rentals.cancel') }}</button>
+            <button type="button" class="btn btn-primary" id="faq_btn">{{ __('admin.rentals.create_new') }}</button>
+        </div>
+    </x-slot>
 </x-admin.modal>
 
 <x-admin.delete-modal
-	className="deletemodal"
-	id="delete_faq"
-	:title="__('admin.rentals.delete_faq_title')"
-	:description="__('admin.rentals.delete_faq_confirmation')"
-	deleteBtnType="button"
-	deleteBtnId="dete-faq">
+    className="deletemodal"
+    id="delete_faq"
+    :title="__('admin.rentals.delete_faq_title')"
+    :description="__('admin.rentals.delete_faq_confirmation')"
+    deleteBtnType="button"
+    deleteBtnId="dete-faq">
 </x-admin.delete-modal>
 
 <x-admin.modal className="addmodal"
-	id="select_insurance"
-	:title="__('admin.rentals.select_insurance')"
-	formId="set_value">
-	<x-slot name="body">
-		@foreach($insurances as $insurance)
-		<div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" id="inCont">
-			<input type="hidden" id="insurance_id" value="{{ $insurance->id }}">
-			<div>
-				<h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">
-					{{ $insurance->insurance_name }}
-				</h6>
-				<input type="hidden" id="insurance_name" value="{{ $insurance->insurance_name }}">
-				<input type="hidden" id="insurance_price_type" value="{{ $insurance->priceType->pricing_type }}">
-				<input type="hidden" id="insurance_price_type_id" value="{{ $insurance->price_type_id }}">
-				<div class="d-flex align-items-center gap-2 flex-wrap">
-					<p class="fs-13 fw-medium border-end pe-2 mb-0">
-						{{ __('admin.rentals.price') }}: <span class="text-gray-9">
-							@if ($insurance->price_type_id == 7)
-							{{ rtrim(rtrim(number_format($insurance->price, 2), '0'), '.') }}%
-							@else
-							{{ $currencySymbol }}{{ number_format($insurance->price, 2) }}
-							@endif</span>
-						<input type="hidden" id="insurance_price" value="{{ $insurance->price }}">
-					</p>
-					<p class="fs-13 fw-medium mb-0">
-						{{ __('admin.common.benefits') }}: <span class="text-gray-9">{{ $insurance->insuranceBenefits->count() }}</span>
-						<input type="hidden" id="insurance_count" value="{{ $insurance->insuranceBenefits->count() }}">
-						@if($insurance->insuranceBenefits->isNotEmpty())
-						<i class="ti ti-info-circle-filled text-gray-5 ms-1"
-							data-bs-toggle="tooltip"
-							data-bs-placement="top"
-							title="{{ $insurance->insuranceBenefits->first()->benefit }}">
-						</i>
-						@endif
-					</p>
-				</div>
-			</div>
-			<div class="d-flex align-items-center icon-list delivery-add">
-				<button type="button" class="bg-transparent border-0">
-					<i class="ti ti-plus plus-active"></i>
-					<i class="ti ti-check check-active d-none"></i>
-				</button>
-				<input type="checkbox" id="insurance_checked" hidden>
-			</div>
-		</div>
-		@endforeach
-	</x-slot>
-	<x-slot name="footer">
-		<div class="d-flex justify-content-center">
-			<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-			<button type="button" class="btn btn-primary" id="in_btn">{{ __('admin.general_settings.add') }}</button>
-		</div>
-	</x-slot>
+    id="select_insurance"
+    :title="__('admin.rentals.select_insurance')"
+    formId="set_value">
+    <x-slot name="body">
+        @foreach($insurances as $insurance)
+        <div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" id="inCont">
+            <input type="hidden" id="insurance_id" value="{{ $insurance->id }}">
+            <div>
+                <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">
+                    {{ $insurance->insurance_name }}
+                </h6>
+                <input type="hidden" id="insurance_name" value="{{ $insurance->insurance_name }}">
+                <input type="hidden" id="insurance_price_type" value="{{ $insurance->priceType->pricing_type }}">
+                <input type="hidden" id="insurance_price_type_id" value="{{ $insurance->price_type_id }}">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <p class="fs-13 fw-medium border-end pe-2 mb-0">
+                        {{ __('admin.rentals.price') }}: <span class="text-gray-9">
+                            @if ($insurance->price_type_id == 7)
+                            {{ rtrim(rtrim(number_format($insurance->price, 2), '0'), '.') }}%
+                            @else
+                            {{ $currencySymbol }}{{ number_format($insurance->price, 2) }}
+                            @endif</span>
+                        <input type="hidden" id="insurance_price" value="{{ $insurance->price }}">
+                    </p>
+                    <p class="fs-13 fw-medium mb-0">
+                        {{ __('admin.common.benefits') }}: <span class="text-gray-9">{{ $insurance->insuranceBenefits->count() }}</span>
+                        <input type="hidden" id="insurance_count" value="{{ $insurance->insuranceBenefits->count() }}">
+                        @if($insurance->insuranceBenefits->isNotEmpty())
+                        <i class="ti ti-info-circle-filled text-gray-5 ms-1"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="{{ $insurance->insuranceBenefits->first()->benefit }}">
+                        </i>
+                        @endif
+                    </p>
+                </div>
+            </div>
+            <div class="d-flex align-items-center icon-list delivery-add">
+                <button type="button" class="bg-transparent border-0">
+                    <i class="ti ti-plus plus-active"></i>
+                    <i class="ti ti-check check-active d-none"></i>
+                </button>
+                <input type="checkbox" id="insurance_checked" hidden>
+            </div>
+        </div>
+        @endforeach
+    </x-slot>
+    <x-slot name="footer">
+        <div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+            <button type="button" class="btn btn-primary" id="in_btn">{{ __('admin.general_settings.add') }}</button>
+        </div>
+    </x-slot>
 </x-admin.modal>
 
 <x-admin.modal className="addmodal"
-	id="select_insurance"
-	:title="__('admin.rentals.select_insurance')"
-	formId="set_value">
-	<x-slot name="body">
+    id="select_insurance"
+    :title="__('admin.rentals.select_insurance')"
+    formId="set_value">
+    <x-slot name="body">
         @foreach($insurances as $insurance)
         <div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" id="inCont">
             <input type="hidden" id="insurance_id" value="{{ $insurance->id }}">
@@ -1228,19 +1218,19 @@
             </div>
         </div>
         @endforeach
-	</x-slot>
-	<x-slot name="footer">
-		<div class="d-flex justify-content-center">
+    </x-slot>
+    <x-slot name="footer">
+        <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
             <button type="button" class="btn btn-primary" id="in_btn">{{ __('admin.rentals.create_new') }}</button>
         </div>
-	</x-slot>
+    </x-slot>
 </x-admin.modal>
 
 <x-admin.modal className="addmodal"
-	id="edit_insurance"
-	:title="__('admin.rentals.edit_insurance')">
-	<x-slot name="body">
+    id="edit_insurance"
+    :title="__('admin.rentals.edit_insurance')">
+    <x-slot name="body">
         <div class="mb-3">
             <label class="form-label">{{ __('admin.rentals.price_type') }} <span class="text-danger"> *</span></label>
             <div class="d-flex align-items-center">
@@ -1268,13 +1258,13 @@
             <label class="form-label">{{ __('admin.common.price') }} <span class="text-danger"> *</span></label>
             <input type="text" class="form-control priceLimit" id="price" maxlength="5" value="">
         </div>
-	</x-slot>
-	<x-slot name="footer">
-		<div class="d-flex justify-content-center">
-			<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+    </x-slot>
+    <x-slot name="footer">
+        <div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
             <button type="button" class="btn btn-primary" id="save_update">{{ __('admin.rentals.create_new') }}</button>
-		</div>
-	</x-slot>
+        </div>
+    </x-slot>
 </x-admin.modal>
 @endsection
 
