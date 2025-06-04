@@ -848,7 +848,8 @@ class BookingRepository implements BookingRepositoryInterface
             'booking_details.vehicle_price_type',
             'bookings.rental_type',
             'bookings.delivery_type',
-            'bookings.booking_by'
+            'bookings.booking_by',
+            'driving_types.name as driving_type_name'
         )
             ->leftjoin('booking_details', 'booking_details.booking_id', '=', 'bookings.id')
             ->join('users', 'users.id', '=', 'bookings.customer_id')
@@ -858,6 +859,7 @@ class BookingRepository implements BookingRepositoryInterface
             ->join('vehicle_info', 'vehicle_info.id', '=', 'bookings.vehicle_id')
             ->leftJoin('cartypes', 'cartypes.id', '=', 'vehicle_info.type_id')
             ->leftjoin('drivers', 'drivers.id', '=', 'bookings.driver_id')
+            ->leftjoin('driving_types', 'driving_types.id', '=', 'bookings.driving_type')
             ->where('bookings.id', $bookingId)
             ->firstOrFail();
 

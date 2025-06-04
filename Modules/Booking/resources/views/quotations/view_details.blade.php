@@ -59,11 +59,7 @@
                                         </div>
                                         <div class="d-flex align-items-center justify-content-between mb-2">
                                             <h6 class="fw-medium fs-14">{{ __('admin.bookings.driving_type') }}</h6>
-                                            @if ($booking->booking_by == 'admin')
-                                                <p>{{ $booking->driving_type ?? '-' }}</p>
-                                            @else
-                                                <p>{{ $booking->delivery_type ?? '-' }}</p>
-                                            @endif
+                                            <p>{{ $booking->driving_type_name ?? '-' }}</p>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
