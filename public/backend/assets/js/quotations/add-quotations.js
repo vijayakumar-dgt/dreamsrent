@@ -629,105 +629,108 @@
             success: function (result) {
                 if (result.data && result.data.data.length > 0) {
                     let data = result.data.data;
-                    lastPage =
-                        result.data.current_page >= result.data.last_page;
+                    lastPage = result.data.current_page >= result.data.last_page;
 
-                    let options = data
-                        .map(function (item) {
-                            return `
-                            <div class="card vehicle-card" id="vehicle_${
-                                item.id
-                            }" data-image="${item.image}" data-type="${item.vehicle_type}" data-name="${item.vehicle_name}" data-price="${item.vehicle_price}" data-price_type="${item.vehicle_price_type}">
-                                <div class="card-body">
-                                    <div class="row gy-3">
-                                        <div class="col-3">
-                                            <div class="d-flex align-items-center">
-                                                <div class="form-check form-check-md me-3">
-                                                    <input class="form-check-input vehicle_select" name="vehicle_id" id="vehicle_select_${
-                                                        item.id
-                                                    }" value="${item.id}" type="radio" data-price="${item.vehicle_price}" data-price_type="${item.vehicle_price_type}" data-vehicle_name="${item.vehicle_name}" data-vehicle_season_id="${item.vehicle_season_id ?? ""}" data-vehicle_tariff_id="${item.vehicle_tariff_id ?? ""}">
-                                                </div>
-                                                <span class="avatar flex-shrink-0 me-2">
-                                                    <img src="${
-                                                        item.image
-                                                    }" alt="">
-                                                </span>
-                                                <div>
-                                                    <p class="mb-1">${
-                                                        item.vehicle_type
-                                                    }</p>
-                                                    <h6 class="fs-14">${
-                                                        item.vehicle_name
-                                                    }</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="d-flex gy-3 gap-5">
-                                                <div class="">
-                                                    <div>
-                                                        <p class="mb-1">${_l(
-                                                            "admin.common.color"
-                                                        )}</p>
-                                                        <h6 class="fs-14 d-inline-flex align-items-center">
-                                                            <i class="ti ti-square-filled me-1" style="color: ${
-                                                                item.color_value
-                                                            };"></i>${item.color_name}
-                                                        </h6>
-                                                    </div>
-                                                </div>
-                                                <div class="">
-                                                    <div>
-                                                        <p class="mb-1">${_l(
-                                                            "admin.common.year"
-                                                        )}</p>
-                                                        <h6 class="fs-14">${
-                                                            item.year
-                                                        }</h6>
-                                                    </div>
-                                                </div>
-                                                <div class="">
-                                                    <div>
-                                                        <p class="mb-1">${_l(
-                                                            "admin.common.price"
-                                                        )}</p>
-                                                        <h6 class="fs-14">${default_currency}${item.vehicle_price}<span class="text-gray-5 mt-1">/${item.vehicle_price_type}</span></h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="float-md-start">
-                                                <span class="badge bg-orange-transparent d-inline-flex align-items-center badge-sm mb-1">
-                                                    <i class="ti ti-point-filled me-1"></i>${_l(
-                                                        "admin.common.available"
-                                                    )}
-                                                </span>
-                                                <h6 class="fs-14">${
-                                                    item.model_name
-                                                }</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>`;
-                        })
-                        .join("");
-
-                    if (isLoadMore) {
-                        $("#vehicle_list_container").append(options);
-                    } else {
-                        $("#vehicle_list_container").empty().html(options);
+                    if (!isLoadMore) {
+                        $("#vehicle_list_container").empty();
                     }
+
+                    data.forEach(item => {
+                        const cardDiv = $('<div>')
+                            .addClass('card vehicle-card mb-2')
+                            .attr('id', `vehicle_${item.id}`)
+                            .attr('data-image', item.image)
+                            .attr('data-type', item.vehicle_type)
+                            .attr('data-name', item.vehicle_name)
+                            .attr('data-price', item.vehicle_price)
+                            .attr('data-price_type', item.vehicle_price_type);
+
+                        const cardBody = $('<div>').addClass('card-body');
+                        const rowDiv = $('<div>').addClass('row gy-3');
+
+                        // First column (image and vehicle name)
+                        const col1 = $('<div>').addClass('col-3');
+                        const alignDiv = $('<div>').addClass('d-flex align-items-center');
+
+                        const formCheck = $('<div>').addClass('form-check form-check-md me-3');
+                        const radioInput = $('<input>', {
+                            class: 'form-check-input vehicle_select',
+                            name: 'vehicle_id',
+                            id: `vehicle_select_${item.id}`,
+                            type: 'radio',
+                            value: item.id,
+                            'data-price': item.vehicle_price,
+                            'data-price_type': item.vehicle_price_type,
+                            'data-vehicle_name': item.vehicle_name,
+                            'data-vehicle_season_id': item.vehicle_season_id || '',
+                            'data-vehicle_tariff_id': item.vehicle_tariff_id || ''
+                        });
+                        formCheck.append(radioInput);
+
+                        const avatarSpan = $('<span>').addClass('avatar flex-shrink-0 me-2');
+                        $('<img>', {
+                            src: item.image,
+                            alt: ''
+                        }).appendTo(avatarSpan);
+
+                        const vehicleInfo = $('<div>');
+                        $('<p>').addClass('mb-1').text(item.vehicle_type).appendTo(vehicleInfo);
+                        $('<h6>').addClass('fs-14').text(item.vehicle_name).appendTo(vehicleInfo);
+
+                        alignDiv.append(formCheck, avatarSpan, vehicleInfo);
+                        col1.append(alignDiv);
+
+                        // Second column (color, year, price)
+                        const col2 = $('<div>').addClass('col-6');
+                        const gapDiv = $('<div>').addClass('d-flex gy-3 gap-5');
+
+                        // Color
+                        const colorDiv = $('<div>');
+                        $('<p>').addClass('mb-1').text(_l("admin.common.color")).appendTo(colorDiv);
+                        const colorH6 = $('<h6>').addClass('fs-14 d-inline-flex align-items-center');
+                        $('<i>', {
+                            class: 'ti ti-square-filled me-1',
+                            style: `color: ${item.color_value}`
+                        }).appendTo(colorH6);
+                        colorH6.append(document.createTextNode(item.color_name));
+                        colorDiv.append(colorH6);
+                        gapDiv.append(colorDiv);
+
+                        // Year
+                        const yearDiv = $('<div>');
+                        $('<p>').addClass('mb-1').text(_l("admin.common.year")).appendTo(yearDiv);
+                        $('<h6>').addClass('fs-14').text(item.year).appendTo(yearDiv);
+                        gapDiv.append(yearDiv);
+
+                        // Price
+                        const priceDiv = $('<div>');
+                        $('<p>').addClass('mb-1').text(_l("admin.common.price")).appendTo(priceDiv);
+                        $('<h6>').addClass('fs-14').html(`${default_currency}${item.vehicle_price}<span class="text-gray-5 mt-1">/${item.vehicle_price_type}</span>`).appendTo(priceDiv);
+                        gapDiv.append(priceDiv);
+                        col2.append(gapDiv);
+
+                        // Third column (model name)
+                        const col3 = $('<div>').addClass('col-3');
+                        const modelDiv = $('<div>').addClass('float-md-start');
+                        $('<span>').addClass('badge bg-orange-transparent d-inline-flex align-items-center badge-sm mb-1')
+                            .html(`<i class="ti ti-point-filled me-1"></i>${_l("admin.common.available")}`)
+                            .appendTo(modelDiv);
+                        $('<h6>').addClass('fs-14').text(item.model_name).appendTo(modelDiv);
+                        col3.append(modelDiv);
+
+                        rowDiv.append(col1, col2, col3);
+                        cardBody.append(rowDiv);
+                        cardDiv.append(cardBody);
+
+                        $("#vehicle_list_container").append(cardDiv);
+                    });
 
                     currentPage = result.data.current_page;
                     totalPage = result.data.last_page;
                 } else if (!isLoadMore) {
                     $("#vehicle_list_container").html(`
                         <div class="row">
-                            <span class="text-center mb-3">${_l(
-                                "admin.bookings.no_vehicles_found"
-                            )}</span>
+                            <span class="text-center mb-3">${_l("admin.bookings.no_vehicles_found")}</span>
                         </div>
                     `);
                 }
@@ -765,19 +768,37 @@
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             success: function (result) {
+                // if (result.data && result.data.length > 0) {
+                //     let data = result.data;
+
+                //     let options = data
+                //         .map((item) => {
+                //             return `<option value="${item.id}" ${
+                //                 item.id == selected_driver_id ? "selected" : ""
+                //             }>${item.driver_name}</option>`;
+                //         })
+                //         .join("");
+
+                //     $("#driver_id").find("option:not(:first)").remove();
+                //     $("#driver_id").append(options);
+                // }
                 if (result.data && result.data.length > 0) {
                     let data = result.data;
 
-                    let options = data
-                        .map((item) => {
-                            return `<option value="${item.id}" ${
-                                item.id == selected_driver_id ? "selected" : ""
-                            }>${item.driver_name}</option>`;
-                        })
-                        .join("");
-
                     $("#driver_id").find("option:not(:first)").remove();
-                    $("#driver_id").append(options);
+
+                    data.forEach(item => {
+                        const option = $('<option>', {
+                            value: item.id,
+                            text: item.driver_name
+                        });
+
+                        if (item.id == selected_driver_id) {
+                            option.prop('selected', true);
+                        }
+
+                        $("#driver_id").append(option);
+                    });
                 }
             },
             error: function (error) {

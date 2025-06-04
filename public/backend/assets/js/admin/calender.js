@@ -661,102 +661,155 @@
                     lastPage =
                         result.data.current_page >= result.data.last_page;
 
-                    let options = data
-                        .map(function (item) {
-                            return `
-                        <div class="card vehicle-card" id="vehicle_${
-                            item.id
-                        }" data-image="${item.image}" data-type="${item.vehicle_type}" data-name="${item.vehicle_name}" data-price="${item.vehicle_price}" data-price_type="${item.vehicle_price_type}">
-                            <div class="card-body">
-                                <div class="row gy-3">
-                                    <div class="col-3">
-                                        <div class="d-flex align-items-center">
-                                            <div class="form-check form-check-md me-3">
-                                                <input class="form-check-input vehicle_select" name="vehicle_id" id="vehicle_select_${
-                                                    item.id
-                                                }" value="${item.id}" type="radio" data-price="${item.vehicle_price}" data-price_type="${item.vehicle_price_type}" data-vehicle_name="${item.vehicle_name}" data-vehicle_season_id="${item.vehicle_season_id ?? ""}" data-vehicle_tariff_id="${item.vehicle_tariff_id ?? ""}">
-                                            </div>
-                                            <span class="avatar flex-shrink-0 me-2">
-                                                <img src="${item.image}" alt="">
-                                            </span>
-                                            <div>
-                                                <p class="mb-1">${
-                                                    item.vehicle_type
-                                                }</p>
-                                                <h6 class="fs-14">${
-                                                    item.vehicle_name
-                                                }</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="d-flex gy-3 gap-5">
-                                            <div class="">
-                                                <div>
-                                                    <p class="mb-1">${_l(
-                                                        "admin.common.color"
-                                                    )}</p>
-                                                    <h6 class="fs-14 d-inline-flex align-items-center">
-                                                        <i class="ti ti-square-filled me-1" style="color: ${
-                                                            item.color_value
-                                                        };"></i>${item.color_name}
-                                                    </h6>
-                                                </div>
-                                            </div>
-                                            <div class="">
-                                                <div>
-                                                    <p class="mb-1">${_l(
-                                                        "admin.common.year"
-                                                    )}</p>
-                                                    <h6 class="fs-14">${
-                                                        item.year
-                                                    }</h6>
-                                                </div>
-                                            </div>
-                                            <div class="">
-                                                <div>
-                                                    <p class="mb-1">${_l(
-                                                        "admin.common.price"
-                                                    )}</p>
-                                                    <h6 class="fs-14">${default_currency}${item.vehicle_price}<span class="text-gray-5 mt-1">/${item.vehicle_price_type}</span></h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3">
-                                        <div class="float-md-start">
-                                            <span class="badge bg-orange-transparent d-inline-flex align-items-center badge-sm mb-1">
-                                                <i class="ti ti-point-filled me-1"></i>${_l(
-                                                    "admin.common.available"
-                                                )}
-                                            </span>
-                                            <h6 class="fs-14">${
-                                                item.model_name
-                                            }</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`;
-                        })
-                        .join("");
-
-                    if (isLoadMore) {
-                        $("#vehicle_list_container").append(options);
-                    } else {
-                        $("#vehicle_list_container").empty().html(options);
+                    if (!isLoadMore) {
+                        $("#vehicle_list_container").empty();
                     }
+
+                    data.forEach((item) => {
+                        const cardDiv = $("<div>")
+                            .addClass("card vehicle-card mb-2")
+                            .attr("id", `vehicle_${item.id}`)
+                            .attr("data-image", item.image)
+                            .attr("data-type", item.vehicle_type)
+                            .attr("data-name", item.vehicle_name)
+                            .attr("data-price", item.vehicle_price)
+                            .attr("data-price_type", item.vehicle_price_type);
+
+                        const cardBody = $("<div>").addClass("card-body");
+                        const rowDiv = $("<div>").addClass("row gy-3");
+
+                        // Column 1: Vehicle info
+                        const col1 = $("<div>").addClass("col-3");
+                        const alignDiv = $("<div>").addClass(
+                            "d-flex align-items-center"
+                        );
+
+                        const formCheck = $("<div>").addClass(
+                            "form-check form-check-md me-3"
+                        );
+                        const radioInput = $("<input>", {
+                            class: "form-check-input vehicle_select",
+                            name: "vehicle_id",
+                            id: `vehicle_select_${item.id}`,
+                            type: "radio",
+                            value: item.id,
+                            "data-price": item.vehicle_price,
+                            "data-price_type": item.vehicle_price_type,
+                            "data-vehicle_name": item.vehicle_name,
+                            "data-vehicle_season_id":
+                                item.vehicle_season_id || "",
+                            "data-vehicle_tariff_id":
+                                item.vehicle_tariff_id || "",
+                        });
+                        formCheck.append(radioInput);
+
+                        const avatarSpan = $("<span>").addClass(
+                            "avatar flex-shrink-0 me-2"
+                        );
+                        $("<img>", {
+                            src: item.image,
+                            alt: "",
+                        }).appendTo(avatarSpan);
+
+                        const vehicleInfo = $("<div>");
+                        $("<p>")
+                            .addClass("mb-1")
+                            .text(item.vehicle_type)
+                            .appendTo(vehicleInfo);
+                        $("<h6>")
+                            .addClass("fs-14")
+                            .text(item.vehicle_name)
+                            .appendTo(vehicleInfo);
+
+                        alignDiv.append(formCheck, avatarSpan, vehicleInfo);
+                        col1.append(alignDiv);
+
+                        // Column 2: Color, Year, Price
+                        const col2 = $("<div>").addClass("col-6");
+                        const gapDiv = $("<div>").addClass("d-flex gy-3 gap-5");
+
+                        // Color
+                        const colorDiv = $("<div>");
+                        $("<p>")
+                            .addClass("mb-1")
+                            .text(_l("admin.common.color"))
+                            .appendTo(colorDiv);
+                        const colorH6 = $("<h6>").addClass(
+                            "fs-14 d-inline-flex align-items-center"
+                        );
+                        $("<i>", {
+                            class: "ti ti-square-filled me-1",
+                            style: `color: ${item.color_value}`,
+                        }).appendTo(colorH6);
+                        colorH6.append(
+                            document.createTextNode(item.color_name)
+                        );
+                        colorDiv.append(colorH6);
+                        gapDiv.append(colorDiv);
+
+                        // Year
+                        const yearDiv = $("<div>");
+                        $("<p>")
+                            .addClass("mb-1")
+                            .text(_l("admin.common.year"))
+                            .appendTo(yearDiv);
+                        $("<h6>")
+                            .addClass("fs-14")
+                            .text(item.year)
+                            .appendTo(yearDiv);
+                        gapDiv.append(yearDiv);
+
+                        // Price
+                        const priceDiv = $("<div>");
+                        $("<p>")
+                            .addClass("mb-1")
+                            .text(_l("admin.common.price"))
+                            .appendTo(priceDiv);
+                        $("<h6>")
+                            .addClass("fs-14")
+                            .html(
+                                `${default_currency}${item.vehicle_price}<span class="text-gray-5 mt-1">/${item.vehicle_price_type}</span>`
+                            );
+                        priceDiv.appendTo(gapDiv);
+
+                        col2.append(gapDiv);
+
+                        // Column 3: Model name
+                        const col3 = $("<div>").addClass("col-3");
+                        const modelDiv = $("<div>").addClass("float-md-start");
+                        $("<span>")
+                            .addClass(
+                                "badge bg-orange-transparent d-inline-flex align-items-center badge-sm mb-1"
+                            )
+                            .html(
+                                `<i class="ti ti-point-filled me-1"></i>${_l(
+                                    "admin.common.available"
+                                )}`
+                            )
+                            .appendTo(modelDiv);
+                        $("<h6>")
+                            .addClass("fs-14")
+                            .text(item.model_name)
+                            .appendTo(modelDiv);
+                        col3.append(modelDiv);
+
+                        rowDiv.append(col1, col2, col3);
+                        cardBody.append(rowDiv);
+                        cardDiv.append(cardBody);
+
+                        $("#vehicle_list_container").append(cardDiv);
+                    });
 
                     currentPage = result.data.current_page;
                     totalPage = result.data.last_page;
                 } else if (!isLoadMore) {
                     $("#vehicle_list_container").html(`
-                    <div class="row">
-                        <span class="text-center mb-3">${_l(
-                            "admin.bookings.no_vehicles_found"
-                        )}</span>
-                    </div>
-                `);
+                        <div class="row">
+                            <span class="text-center mb-3">${_l(
+                                "admin.bookings.no_vehicles_found"
+                            )}</span>
+                        </div>
+                    `);
                 }
             },
             error: function (error) {
@@ -826,62 +879,94 @@
                 if (response.code === 200 && response.data) {
                     let data = response.data;
 
-                    $("#customer_details_list").html(`
-                    <div class="card bg-light" id="customer_detail" data-image="${
-                        data.profile_image
-                    }" data-name="${data.full_name}" data-phone="${
-                        data.phone_number
-                    }">
-                        <div class="card-body">
-                            <div class="row align-items-center gy-3">
-                                <div class="col-md-11">
-                                    <div class="row gx-2 gy-3">
-                                        <div class="col-md-4">
-                                            <div class="d-flex align-items-center">
-                                                <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                                    <img src="${
-                                                        data.profile_image
-                                                    }" alt="">
-                                                </span>
-                                                <div>
-                                                    <h6 class="fs-14 mb-1">${
-                                                        data.full_name
-                                                    }</h6>
-                                                    <span class="badge bg-info-transparent">${
-                                                        data.bookings_count
-                                                    } ${_l(
-                        "admin.bookings.bookings"
-                    )}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div>
-                                                <h6 class="fs-14 mb-1">${_l(
-                                                    "admin.common.phone"
-                                                )}</h6>
-                                                <p>${data.phone_number}</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div>
-                                                <h6 class="fs-14 mb-1">${_l(
-                                                    "admin.common.email"
-                                                )}</h6>
-                                                <p>${data.email}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-1">
-                                    <div class="d-flex align-items-center justify-content-end">
-                                        <a href="javascript:void(0);" id="remove_customer"><i class="ti ti-trash"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `);
+                    // Create the main card container
+                    const $card = $("<div>")
+                        .addClass("card bg-light")
+                        .attr("id", "customer_detail")
+                        .attr("data-image", data.profile_image)
+                        .attr("data-name", data.full_name)
+                        .attr("data-phone", data.phone_number);
+
+                    // Create the card body
+                    const $cardBody = $("<div>").addClass("card-body");
+                    const $row = $("<div>").addClass(
+                        "row align-items-center gy-3"
+                    );
+
+                    // Main content column
+                    const $mainCol = $("<div>").addClass("col-md-11");
+                    const $innerRow = $("<div>").addClass("row gx-2 gy-3");
+
+                    // Profile image and name
+                    const $profileCol = $("<div>").addClass("col-md-4");
+                    const $profileDiv = $("<div>").addClass(
+                        "d-flex align-items-center"
+                    );
+                    const $avatarSpan = $("<span>").addClass(
+                        "avatar avatar-rounded flex-shrink-0 me-2"
+                    );
+                    $("<img>", {
+                        src: data.profile_image,
+                        alt: "",
+                    }).appendTo($avatarSpan);
+
+                    const $profileTextDiv = $("<div>");
+                    $("<h6>")
+                        .addClass("fs-14 mb-1")
+                        .text(data.full_name)
+                        .appendTo($profileTextDiv);
+                    $("<span>")
+                        .addClass("badge bg-info-transparent")
+                        .text(
+                            `${data.bookings_count} ${_l(
+                                "admin.bookings.bookings"
+                            )}`
+                        )
+                        .appendTo($profileTextDiv);
+
+                    $profileDiv.append($avatarSpan, $profileTextDiv);
+                    $profileCol.append($profileDiv);
+
+                    // Phone number
+                    const $phoneCol = $("<div>").addClass("col-md-4");
+                    $("<h6>")
+                        .addClass("fs-14 mb-1")
+                        .text(_l("admin.common.phone"))
+                        .appendTo($phoneCol);
+                    $("<p>").text(data.phone_number).appendTo($phoneCol);
+
+                    // Email
+                    const $emailCol = $("<div>").addClass("col-md-4");
+                    $("<h6>")
+                        .addClass("fs-14 mb-1")
+                        .text(_l("admin.common.email"))
+                        .appendTo($emailCol);
+                    $("<p>").text(data.email).appendTo($emailCol);
+
+                    // Assemble inner rows
+                    $innerRow.append($profileCol, $phoneCol, $emailCol);
+                    $mainCol.append($innerRow);
+
+                    // Trash icon column
+                    const $trashCol = $("<div>").addClass("col-md-1");
+                    const $trashDiv = $("<div>").addClass(
+                        "d-flex align-items-center justify-content-end"
+                    );
+                    $("<a>", {
+                        href: "javascript:void(0);",
+                        id: "remove_customer",
+                    })
+                        .append($("<i>").addClass("ti ti-trash"))
+                        .appendTo($trashDiv);
+                    $trashCol.append($trashDiv);
+
+                    // Combine everything
+                    $row.append($mainCol, $trashCol);
+                    $cardBody.append($row);
+                    $card.append($cardBody);
+
+                    // Render the card in the container
+                    $("#customer_details_list").empty().append($card);
                 }
             },
             error: function (error) {
@@ -925,68 +1010,112 @@
                 if (response.code === 200 && response.data) {
                     let data = response.data;
 
-                    $("#driver_details_list").html(`
-                    <div class="d-flex align-items-center justify-content-end mb-3">
-                        <a href="javascript:void(0);" class="text-purple text-decoration-underline fw-medium edit_driver_price" data-bs-toggle="modal" data-bs-target="#edit_price_modal"
-                        data-image="${data.image}"
-                        data-driver_name="${data.driver_name}"
-                        data-phone="${data.phone_number}" data-price="0">${_l(
-                        "admin.bookings.edit_price"
-                    )}</a>
-                    </div>
-                    <div class="card bg-light" id="driver_detail" data-image="${
-                        data.image
-                    }" data-name="${data.driver_name}" data-phone="${
-                        data.phone_number
-                    }">
-                        <div class="card-body">
-                            <div class="row align-items-center gy-3">
-                                <div class="col-md-11">
-                                    <div class="row gx-2 gy-3">
-                                        <div class="col-md-5">
-                                            <div class="d-flex align-items-center">
-                                                <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                                    <img src="${
-                                                        data.image
-                                                    }" alt="">
-                                                </span>
-                                                <div>
-                                                    <h6 class="fs-14 mb-1">${
-                                                        data.driver_name
-                                                    }</h6>
-                                                    <span class="badge bg-violet-transparent">0 ${_l(
-                                                        "admin.bookings.rides"
-                                                    )}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div>
-                                                <h6 class="fs-14 mb-1">${_l(
-                                                    "admin.common.phone"
-                                                )}</h6>
-                                                <p>${data.phone_number}</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div>
-                                                <h6 class="fs-14 mb-1">${_l(
-                                                    "admin.common.price"
-                                                )}</h6>
-                                                <p>${default_currency}<span class="td-driver-price">0</span></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-1">
-                                    <div class="d-flex align-items-center justify-content-end">
-                                        <a href="javascript:void(0);" id="remove_driver"><i class="ti ti-trash"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `);
+                    // Clear container
+                    $("#driver_details_list").empty();
+
+                    // Edit driver price link
+                    const editLinkDiv = $("<div>").addClass(
+                        "d-flex align-items-center justify-content-end mb-3"
+                    );
+                    const editLink = $("<a>", {
+                        href: "javascript:void(0);",
+                        class: "text-purple text-decoration-underline fw-medium edit_driver_price",
+                        "data-bs-toggle": "modal",
+                        "data-bs-target": "#edit_price_modal",
+                        "data-image": data.image,
+                        "data-driver_name": data.driver_name,
+                        "data-phone": data.phone_number,
+                        "data-price": 0,
+                        text: _l("admin.bookings.edit_price"),
+                    });
+                    editLinkDiv.append(editLink);
+
+                    // Driver detail card
+                    const cardDiv = $("<div>")
+                        .addClass("card bg-light")
+                        .attr("id", "driver_detail")
+                        .attr("data-image", data.image)
+                        .attr("data-name", data.driver_name)
+                        .attr("data-phone", data.phone_number);
+
+                    const cardBody = $("<div>").addClass("card-body");
+                    const rowDiv = $("<div>").addClass(
+                        "row align-items-center gy-3"
+                    );
+
+                    // Column 1
+                    const col1 = $("<div>").addClass("col-md-11");
+                    const innerRow = $("<div>").addClass("row gx-2 gy-3");
+
+                    // Profile column
+                    const profileCol = $("<div>").addClass("col-md-5");
+                    const profileDiv = $("<div>").addClass(
+                        "d-flex align-items-center"
+                    );
+                    const avatarSpan = $("<span>").addClass(
+                        "avatar avatar-rounded flex-shrink-0 me-2"
+                    );
+                    $("<img>", {
+                        src: data.image,
+                        alt: "",
+                    }).appendTo(avatarSpan);
+
+                    const profileTextDiv = $("<div>");
+                    $("<h6>")
+                        .addClass("fs-14 mb-1")
+                        .text(data.driver_name)
+                        .appendTo(profileTextDiv);
+                    $("<span>")
+                        .addClass("badge bg-violet-transparent")
+                        .text(`0 ${_l("admin.bookings.rides")}`)
+                        .appendTo(profileTextDiv);
+
+                    profileDiv.append(avatarSpan, profileTextDiv);
+                    profileCol.append(profileDiv);
+
+                    // Phone column
+                    const phoneCol = $("<div>").addClass("col-md-4");
+                    $("<h6>")
+                        .addClass("fs-14 mb-1")
+                        .text(_l("admin.common.phone"))
+                        .appendTo(phoneCol);
+                    $("<p>").text(data.phone_number).appendTo(phoneCol);
+
+                    // Price column
+                    const priceCol = $("<div>").addClass("col-md-3");
+                    $("<h6>")
+                        .addClass("fs-14 mb-1")
+                        .text(_l("admin.common.price"))
+                        .appendTo(priceCol);
+                    $("<p>")
+                        .html(
+                            `${default_currency}<span class="td-driver-price">0</span>`
+                        )
+                        .appendTo(priceCol);
+
+                    // Combine profile, phone, price
+                    innerRow.append(profileCol, phoneCol, priceCol);
+                    col1.append(innerRow);
+
+                    // Trash icon column
+                    const col2 = $("<div>").addClass("col-md-1");
+                    const trashDiv = $("<div>").addClass(
+                        "d-flex align-items-center justify-content-end"
+                    );
+                    $("<a>", {
+                        href: "javascript:void(0);",
+                        id: "remove_driver",
+                    })
+                        .append($("<i>").addClass("ti ti-trash"))
+                        .appendTo(trashDiv);
+                    col2.append(trashDiv);
+
+                    rowDiv.append(col1, col2);
+                    cardBody.append(rowDiv);
+                    cardDiv.append(cardBody);
+
+                    // Append everything to the container
+                    $("#driver_details_list").append(editLinkDiv, cardDiv);
                 }
             },
             error: function (error) {
@@ -1059,16 +1188,20 @@
                 if (result.data && result.data.length > 0) {
                     let data = result.data;
 
-                    let options = data
-                        .map((item) => {
-                            return `<option value="${item.id}" ${
-                                item.id == selected_driver_id ? "selected" : ""
-                            }>${item.driver_name}</option>`;
-                        })
-                        .join("");
-
                     $("#driver_id").find("option:not(:first)").remove();
-                    $("#driver_id").append(options);
+
+                    data.forEach((item) => {
+                        const option = $("<option>", {
+                            value: item.id,
+                            text: item.driver_name,
+                        });
+
+                        if (item.id == selected_driver_id) {
+                            option.prop("selected", true);
+                        }
+
+                        $("#driver_id").append(option);
+                    });
                 }
             },
             error: function (error) {
@@ -1686,78 +1819,99 @@
             success: function (result) {
                 if (result.data && result.data.length > 0) {
                     let data = result.data;
+                    $("#extra_service_list_container").empty();
 
-                    let options = data
-                        .map((item) => {
-                            let isChecked = selected_extra_service_ids.includes(
-                                item.id.toString()
-                            )
-                                ? "checked"
-                                : "";
-                            let isActive = selected_extra_service_ids.includes(
-                                item.id.toString()
-                            )
-                                ? "active"
-                                : "";
+                    data.forEach((item) => {
+                        let isChecked = selected_extra_service_ids.includes(
+                            item.id.toString()
+                        );
+                        let isActive = isChecked ? "active" : "";
 
-                            let extraServiceType = "";
-                            switch (item.extra_service_type) {
-                                case "per_day":
-                                    extraServiceType = "Per Day";
-                                    break;
-                                case "one_time":
-                                    extraServiceType = "One Time";
-                                    break;
-                                case "percentage":
-                                    extraServiceType = "Percentage";
-                                    break;
-                                default:
-                                    extraServiceType = item.extra_service_type;
-                            }
+                        let extraServiceType = "";
+                        switch (item.extra_service_type) {
+                            case "per_day":
+                                extraServiceType = "Per Day";
+                                break;
+                            case "one_time":
+                                extraServiceType = "One Time";
+                                break;
+                            case "percentage":
+                                extraServiceType = "Percentage";
+                                break;
+                            default:
+                                extraServiceType = item.extra_service_type;
+                        }
 
-                            return `
-                        <div class="col-md-6">
-                            <div class="custom-checkbox ${isActive}">
-                                <div class="form-check form-check-md">
-                                    <input class="form-check-input vehicle_extra_service" type="checkbox" name="extra_services[]" value="${
-                                        item.id
-                                    }" id="extra-service-${
-                                item.id
-                            }" ${isChecked} data-price="${
-                                item.price
-                            }" data-price_type="${
-                                item.extra_service_type
-                            }" data-name="${item.name}">
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <label class="form-check-label ms-2 ps-4" for="extra-service-${
-                                        item.id
-                                    }">
-                                        <span class="fw-semibold text-gray-9 d-block mb-1">${
-                                            item.name
-                                        }</span>
-                                        <span class="d-block">${
-                                            item.description
-                                        }</span>
-                                    </label>
-                                    <div class="text-end">
-                                        <p class="mb-1">${extraServiceType}</p>
-                                        ${
-                                            item.extra_service_type ==
-                                            "percentage"
-                                                ? `<h6>${item.price}%</h6>`
-                                                : `<h6>${default_currency}${item.price}</h6>`
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                        })
-                        .join("");
+                        // Outer column div
+                        const colDiv = $("<div>").addClass("col-md-6");
 
-                    $("#extra_service_list_container").empty().html(options);
-                    var response = calculateVehiclePrice();
+                        // Custom checkbox container
+                        const customCheckbox = $("<div>").addClass(
+                            `custom-checkbox ${isActive}`
+                        );
+
+                        // Form check input
+                        const formCheckDiv = $("<div>").addClass(
+                            "form-check form-check-md"
+                        );
+                        const inputCheckbox = $("<input>", {
+                            class: "form-check-input vehicle_extra_service",
+                            type: "checkbox",
+                            name: "extra_services[]",
+                            value: item.id,
+                            id: `extra-service-${item.id}`,
+                            "data-price": item.price,
+                            "data-price_type": item.extra_service_type,
+                            "data-name": item.name,
+                        });
+                        if (isChecked) {
+                            inputCheckbox.prop("checked", true);
+                        }
+                        formCheckDiv.append(inputCheckbox);
+
+                        // Flex container for label and price
+                        const flexDiv = $("<div>").addClass(
+                            "d-flex align-items-center justify-content-between"
+                        );
+
+                        // Label container
+                        const label = $("<label>", {
+                            class: "form-check-label ms-2 ps-4",
+                            for: `extra-service-${item.id}`,
+                        });
+                        $("<span>")
+                            .addClass("fw-semibold text-gray-9 d-block mb-1")
+                            .text(item.name)
+                            .appendTo(label);
+                        $("<span>")
+                            .addClass("d-block")
+                            .text(item.description)
+                            .appendTo(label);
+
+                        // Price container
+                        const priceDiv = $("<div>").addClass("text-end");
+                        $("<p>")
+                            .addClass("mb-1")
+                            .text(extraServiceType)
+                            .appendTo(priceDiv);
+                        if (item.extra_service_type === "percentage") {
+                            $("<h6>").text(`${item.price}%`).appendTo(priceDiv);
+                        } else {
+                            $("<h6>")
+                                .html(`${default_currency}${item.price}`)
+                                .appendTo(priceDiv);
+                        }
+
+                        // Combine
+                        flexDiv.append(label, priceDiv);
+                        customCheckbox.append(formCheckDiv, flexDiv);
+                        colDiv.append(customCheckbox);
+
+                        $("#extra_service_list_container").append(colDiv);
+                    });
+
+                    // Price Calculation
+                    let response = calculateVehiclePrice();
                     if (response) {
                         $(".extra_service_price").text(
                             response[0]["total_extra_service_price"]
@@ -1773,15 +1927,16 @@
                             response[0]["extra_service_name"]
                         );
                     }
+
                     initializeTooltips();
                 } else {
                     $("#extra_service_list_container").html(`
-                    <div class="row">
-                        <span class="text-center mb-3">${_l(
-                            "admin.bookings.no_extra_services_found"
-                        )}</span>
-                    </div>
-                `);
+        <div class="row">
+            <span class="text-center mb-3">${_l(
+                "admin.bookings.no_extra_services_found"
+            )}</span>
+        </div>
+    `);
                 }
             },
             error: function (error) {
@@ -1830,85 +1985,114 @@
             success: function (result) {
                 if (result.data && result.data.length > 0) {
                     let data = result.data;
+                    $("#insurance_list_container").empty();
 
-                    let options = data
-                        .map((item) => {
-                            let isChecked = selected_insurance_ids.includes(
-                                item.id.toString()
-                            )
-                                ? "checked"
-                                : "";
-                            let isActive = selected_insurance_ids.includes(
-                                item.id.toString()
-                            )
-                                ? "active"
-                                : "";
-                            let benefits = item.insurance_benefits
-                                .map((b) => b.benefit)
-                                .join(", ");
-                            let tooltip = benefits
-                                ? `data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="${benefits}"`
-                                : "";
+                    data.forEach((item) => {
+                        let isChecked = selected_insurance_ids.includes(
+                            item.id.toString()
+                        );
+                        let isActive = isChecked ? "active" : "";
 
-                            let insuranceType = "";
-                            switch (item.insurance_type) {
-                                case "fixed":
-                                    insuranceType = "Fixed";
-                                    break;
-                                case "daily":
-                                    insuranceType = "Daily";
-                                    break;
-                                case "percentage":
-                                    insuranceType = "Percentage";
-                                    break;
-                                default:
-                                    insuranceType = item.insurance_type;
-                            }
+                        let benefits = item.insurance_benefits
+                            .map((b) => b.benefit)
+                            .join(", ");
 
-                            return `
-                        <div class="col-md-6">
-                            <div class="custom-checkbox ${isActive}">
-                                <div class="form-check form-check-md">
-                                    <input class="form-check-input vehicle_insurance" type="checkbox" name="insurances[]" id="insurance_${
-                                        item.id
-                                    }" value="${
-                                item.id
-                            }" ${isChecked} data-price="${
-                                item.price
-                            }" data-price_type="${
-                                item.insurance_type
-                            }" data-name="${item.insurance_name}">
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <label class="form-check-label ms-2 ps-4" for="insurance_${
-                                        item.id
-                                    }">
-                                        <span class="fw-semibold text-gray-9 d-block mb-1">${
-                                            item.insurance_name
-                                        }</span>
-                                        <span class="d-block text-info">+${
-                                            item.insurance_benefits_count
-                                        } ${_l(
-                                "admin.common.benefits"
-                            )}<i class="ti ti-info-circle-filled text-gray-5 ms-1" ${tooltip}></i></span>
-                                    </label>
-                                    <div class="text-end">
-                                        <p class="mb-1">${insuranceType}</p>
-                                        ${
-                                            item.insurance_type == "percentage"
-                                                ? `<h6>${item.price}%</h6>`
-                                                : `<h6>${default_currency}${item.price}</h6>`
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                        })
-                        .join("");
+                        let insuranceType = "";
+                        switch (item.insurance_type) {
+                            case "fixed":
+                                insuranceType = "Fixed";
+                                break;
+                            case "daily":
+                                insuranceType = "Daily";
+                                break;
+                            case "percentage":
+                                insuranceType = "Percentage";
+                                break;
+                            default:
+                                insuranceType = item.insurance_type;
+                        }
 
-                    $("#insurance_list_container").empty().html(options);
-                    var response = calculateVehiclePrice();
+                        // Outer column div
+                        const colDiv = $("<div>").addClass("col-md-6");
+                        const customCheckbox = $("<div>").addClass(
+                            `custom-checkbox ${isActive}`
+                        );
+
+                        // Form check input
+                        const formCheckDiv = $("<div>").addClass(
+                            "form-check form-check-md"
+                        );
+                        const inputCheckbox = $("<input>", {
+                            class: "form-check-input vehicle_insurance",
+                            type: "checkbox",
+                            name: "insurances[]",
+                            id: `insurance_${item.id}`,
+                            value: item.id,
+                            "data-price": item.price,
+                            "data-price_type": item.insurance_type,
+                            "data-name": item.insurance_name,
+                        });
+                        if (isChecked) {
+                            inputCheckbox.prop("checked", true);
+                        }
+                        formCheckDiv.append(inputCheckbox);
+
+                        // Label and benefits
+                        const flexDiv = $("<div>").addClass(
+                            "d-flex align-items-center justify-content-between"
+                        );
+
+                        const label = $("<label>", {
+                            class: "form-check-label ms-2 ps-4",
+                            for: `insurance_${item.id}`,
+                        });
+                        $("<span>")
+                            .addClass("fw-semibold text-gray-9 d-block mb-1")
+                            .text(item.insurance_name)
+                            .appendTo(label);
+
+                        const benefitsSpan = $("<span>")
+                            .addClass("d-block text-info")
+                            .text(
+                                `+${item.insurance_benefits_count} ${_l(
+                                    "admin.common.benefits"
+                                )}`
+                            );
+                        if (benefits) {
+                            const tooltipIcon = $("<i>", {
+                                class: "ti ti-info-circle-filled text-gray-5 ms-1",
+                                "data-bs-toggle": "tooltip",
+                                "data-bs-placement": "top",
+                                "data-bs-original-title": benefits,
+                            });
+                            benefitsSpan.append(tooltipIcon);
+                        }
+                        label.append(benefitsSpan);
+
+                        // Price section
+                        const priceDiv = $("<div>").addClass("text-end");
+                        $("<p>")
+                            .addClass("mb-1")
+                            .text(insuranceType)
+                            .appendTo(priceDiv);
+                        if (item.insurance_type === "percentage") {
+                            $("<h6>").text(`${item.price}%`).appendTo(priceDiv);
+                        } else {
+                            $("<h6>")
+                                .html(`${default_currency}${item.price}`)
+                                .appendTo(priceDiv);
+                        }
+
+                        // Combine
+                        flexDiv.append(label, priceDiv);
+                        customCheckbox.append(formCheckDiv, flexDiv);
+                        colDiv.append(customCheckbox);
+
+                        $("#insurance_list_container").append(colDiv);
+                    });
+
+                    // Update price section
+                    let response = calculateVehiclePrice();
                     if (response) {
                         $(".total_insurance_price").text(
                             response[0]["total_insurance_price"]
@@ -1922,6 +2106,7 @@
                             response[0]["insurance_name"]
                         );
                     }
+
                     initializeTooltips();
                 } else {
                     $("#insurance_list_container").html(`
@@ -2215,19 +2400,24 @@
                                         $("#car_title").text(
                                             booking.vehicle.name
                                         );
-                                        $("#car_type").text(vehicleType.name);
-                                        $("#car_price").html(
-                                            `$${booking.vehicle_total_price}<span class="text-gray-5 fw-normal">/${booking.rental_type}</span>`
+
+                                        const $carPrice = $("#car_price");
+                                        $carPrice.empty(); // Clear existing content
+
+                                        $carPrice.append(
+                                            `$${booking.vehicle_total_price}`
                                         );
+
                                         $("#start_date_time").text(
                                             booking.start_datetime
                                         );
                                         $("#end_date_time").text(
                                             booking.end_datetime
                                         );
-                                        $("#rent_period").html(
+                                        $("#rent_period").text(
                                             `${booking.no_of_days} Days`
                                         );
+
                                         $("#drive_type").text(
                                             booking.delivery_type &&
                                                 booking.delivery_type !== "N/A"
@@ -2259,7 +2449,7 @@
                                         } else {
                                             $(".driverInfo").addClass("d-none");
                                         }
-                                        $("#final_price").html(
+                                        $("#final_price").text(
                                             `$${booking.final_price}`
                                         );
 
@@ -2377,7 +2567,7 @@
                                 const returnLocation = response.returnLocation;
                                 const driverDetails = response.driverDetails;
                                 const customer = response.customerDetails;
-                                const  currency = response.currency;
+                                const currency = response.currency;
 
                                 if (customer) {
                                     $("#customer_name").text(
@@ -2444,16 +2634,16 @@
                                 );
                                 $("#car_title").text(booking.vehicle.name);
                                 $("#car_type").text(vehicleType.name);
-                                $("#car_price").html(
-                                    `${currency}${booking.vehicle_price}<span class="text-gray-5 fw-normal">/${booking.rental_type}</span>`
-                                );
+                                $("#car_price").text(`${currency}${booking.vehicle_price}/${booking.rental_type}`);
+
                                 $("#start_date_time").text(
                                     booking.start_datetime
                                 );
                                 $("#end_date_time").text(booking.end_datetime);
-                                $("#rent_period").html(
+                                $("#rent_period").text(
                                     `${booking.no_of_days} Days`
                                 );
+
                                 $("#drive_type").text(
                                     booking.delivery_type &&
                                         booking.delivery_type !== "N/A"
@@ -2484,10 +2674,12 @@
                                 } else {
                                     $(".driverInfo").addClass("d-none");
                                 }
-                                $("#totalValue").html(
+                                $("#totalValue").text(
                                     `${currency}${booking.vehicle_total_price}`
                                 );
-                                $("#taxValue").html(`${currency}${booking.tax_val ?? 0}`);
+                                $("#taxValue").html(
+                                    `${currency}${booking.tax_val ?? 0}`
+                                );
                                 $("#extraService").html(
                                     `${currency}${booking.total_extra_service_price}`
                                 );

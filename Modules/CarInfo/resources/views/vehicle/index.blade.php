@@ -5,26 +5,21 @@
 @section('content')
     <div class="page-wrapper">
         <div class="content me-4">
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h4 class="mb-1">{{__('admin.rentals.all_vehicle')}}</h4>
-                    <nav class="l">
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">{{ __('admin.rentals.home') }}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('admin.rentals.all_vehicle') }}</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
+            <x-admin.breadcrumb 
+                :title="__('admin.rentals.all_vehicle')" 
+                :breadcrumbs="[
+                    __('admin.rentals.all_vehicle') => ''
+                ]">
+                <x-slot name="toolbar">
                     <div class="mb-2">
                         @if (hasPermission($permissions, 'vehicles', 'create'))
-                        <a href="{{ route('vehicle.vehicleadd') }}" class="btn btn-primary d-flex align-items-center"><i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_vehicle') }}</a>
+                        <a href="{{ route('vehicle.vehicleadd') }}" class="btn btn-primary d-flex align-items-center">
+                            <i class="ti ti-plus me-2"></i>{{ __('admin.rentals.add_new_vehicle') }}
+                        </a>
                         @endif
                     </div>
-                </div>
-            </div>
+                </x-slot>
+            </x-admin.breadcrumb>
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
                     <div class="dropdown me-2">
