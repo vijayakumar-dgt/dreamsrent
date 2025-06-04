@@ -6,8 +6,8 @@
     <div class="page-wrapper admin-security-settings">
         <div class="content">
             <x-admin.breadcrumb :title="__('admin.general_settings.settings')" :breadcrumbs="[
-            __('admin.general_settings.settings') => ''
-        ]" />
+                __('admin.general_settings.settings') => ''
+            ]" />
             <div class="row">
                 @include('admin.partials.general_settings_side_menu')
                 <div class="col-xl-9">
@@ -24,7 +24,7 @@
                                         <div class="row">
                                             <div class="col-xl-5">
                                                 <div>
-                                                    <h6 class="fs-14 fw-medium mb-1">{{ __('admin.common.password') }}</h6>
+                                                    <h6 class="fs-14 fw-medium mb-1">{{ __('admin.common.auth_password') }}</h6>
                                                 </div>
                                             </div>
                                             <div class="col-xl-4">

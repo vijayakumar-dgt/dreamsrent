@@ -207,7 +207,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
-                        <label class="form-label">{{ __('admin.common.password') }}<span class="text-danger"> *</span></label>
+                        <label class="form-label">{{ __('admin.common.auth_password') }}<span class="text-danger"> *</span></label>
                         <div class="pass-group">
                             <input type="password" class="pass-inputs form-control" name="password" id="password">
                             <span class="ti toggle-passwords ti-eye-off"></span>
