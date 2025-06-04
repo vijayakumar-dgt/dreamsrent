@@ -364,6 +364,7 @@ class PageController extends Controller
             $pageContentSections = [];
         } else {
             foreach ($pageContentSections as &$section) {
+
                 // Banner One
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
@@ -1239,6 +1240,22 @@ class PageController extends Controller
                         ])->where('language_id', $lang_id);
 
                         if ($type === 'popular') {
+                            $getCategoryId = getCategoryId();
+                            $brands = DB::table('brands')
+                                ->select('id', 'brand_image', 'brand_icon', 'brand_name', 'status')
+                                ->where('category_id', $getCategoryId)
+                                ->where('language_id', $lang_id)
+                                ->where('status', 1)
+                                ->whereNull('deleted_at')
+                                ->orderBy('created_at', $order)
+                                ->limit($limit)
+                                ->get()
+                                ->map(function ($brand) {
+                                    $brand->brand_image = asset('storage/' . $brand->brand_image);
+                                    $brand->brand_icon = asset('storage/' . $brand->brand_icon);
+                                    $brand->brand_title = "Select From Professional Charter Companies";
+                                    return $brand;
+                                });
                             $vehicles = $query->where('popular', 1)->where('type', 'boat')->get();
                             $section['section_type'] = 'popular_vehicle';
                             $section['design'] = 'vehicle_one';
@@ -1362,7 +1379,10 @@ class PageController extends Controller
                             ];
                         });
 
-                        $section['section_content'] = $data;
+                        $section['section_content'] = [
+                            'brands' => $brands,
+                            'vehicles' => $data,
+                        ];
                     }
                 }
 
