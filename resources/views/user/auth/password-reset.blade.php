@@ -43,7 +43,7 @@
                             <div class="input-block">
                                 <input type="hidden" name="email" id="email">
                                 <label class="form-label">
-                                    {{ __('web.auth.new_password') }} <span class="text-danger">*</span>
+                                    {{ __('web.auth.auth_new_password') }} <span class="text-danger">*</span>
                                 </label>
                                 <div class="pass-group">
                                     <input type="password" class="pass-inputs form-control" name="current_password" id="current_password">

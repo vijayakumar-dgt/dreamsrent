@@ -285,6 +285,28 @@
                         .attr("src", image2)
                         .removeClass("d-none");
                 }
+            } else if (ID == 71) {
+                $("#section_id_9").removeClass("d-none");
+                $("#section_id").val(ID);
+
+                const trigger = $(this);
+
+                $("#section_title_bike_experience").val(
+                    trigger.data("section_title_bike_experience")
+                );
+
+                $("#label_bike_experience_1").val(
+                    trigger.data("label_bike_experience_1")
+                );
+
+                const image1 = trigger.data(
+                    "thumbnail_image_bike_experience_1"
+                );
+                if (image1) {
+                    $("#thumbnail_preview_bike_experience_1")
+                        .attr("src", image1)
+                        .removeClass("d-none");
+                }
             } else if (ID == 43) {
                 $("#section_id_5").removeClass("d-none");
                 $("#section_id").val(ID);
@@ -421,6 +443,9 @@
                                                 data-section_title_boat_experience="${
                                                     value.title
                                                 }"
+                                                data-section_title_bike_experience="${
+                                                    value.title
+                                                }"
                                                 data-label_1="${value.label_1}"
                                                 data-label_2="${value.label_2}"
                                                 data-label_3="${value.label_3}"
@@ -513,6 +538,9 @@
                                                 }"
                                                 data-why_dis_3="${
                                                     value.why_dis_3 ?? ""
+                                                }"
+                                                data-label_bike_experience_1="${
+                                                    value.label_bike_experience_1 ?? ""
                                                 }"
                                                 data-label_boat_benefits_1="${
                                                     value.label_boat_benefits_1 ??
@@ -613,6 +641,12 @@
                                                 data-thumbnail_image_boat_experience_2="${
                                                     value.thumbnail_image_boat_experience_2
                                                         ? `/storage/${value.thumbnail_image_boat_experience_2}`
+                                                        : ""
+                                                }"
+                                                
+                                                data-thumbnail_image_bike_experience_1="${
+                                                    value.thumbnail_image_bike_experience_1
+                                                        ? `/storage/${value.thumbnail_image_bike_experience_1}`
                                                         : ""
                                                 }"
                                                 

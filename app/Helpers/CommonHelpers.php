@@ -186,38 +186,65 @@ if (!function_exists('uploadedAssetDetails')) {
 }
 
 /**
- * Encrypts data using AES-128-CBC encryption.
+ * Encrypts data using AES-128-CBC encryption securely.
  *
- * @param string $data The data to be encrypted.
- * @param string $key The encryption key (optional).
+ * @param string|int|null $data The data to be encrypted.
+ * @param string $key The encryption key.
  * @return string The encrypted and encoded string, or an empty string on failure.
  */
 function customEncrypt(string|int|null $data, string $key = 'default_secret_key'): string
 {
     $cipher = 'AES-128-CBC';
-    $iv = substr(md5($key), 0, 16);
-    $encrypted = openssl_encrypt((string) $data, $cipher, $key, 0, $iv);
+    $data = (string) $data;
 
+    // Use a secure method to derive a 128-bit (16 bytes) key
+    $key = substr(hash('sha256', $key, true), 0, 16); // 128-bit key
+
+    // Generate a secure random IV
+    $ivLength = openssl_cipher_iv_length($cipher);
+    $iv = openssl_random_pseudo_bytes($ivLength);
+
+    // Encrypt the data
+    $encrypted = openssl_encrypt($data, $cipher, $key, OPENSSL_RAW_DATA, $iv);
     if ($encrypted === false) {
-        return ''; // or throw an exception depending on your needs
+        return '';
     }
 
-    return rtrim(strtr(base64_encode($encrypted), '+/', '-_'), '=');
+    // Prepend the IV to the encrypted data and base64-url encode it
+    $output = base64_encode($iv . $encrypted);
+    return rtrim(strtr($output, '+/', '-_'), '=');
 }
 
+/**
+ * Decrypts data that was encrypted with customEncrypt().
+ *
+ * @param string|int|null $encryptedData The encrypted data.
+ * @param string $key The encryption key.
+ * @return string|null The decrypted string, or null on failure.
+ */
 function customDecrypt(string|int|null $encryptedData, string $key = 'default_secret_key'): ?string
 {
     $cipher = 'AES-128-CBC';
-    $iv = substr(md5($key), 0, 16);
-
     $encryptedData = strtr((string)$encryptedData, '-_', '+/');
     $decoded = base64_decode($encryptedData, true);
 
     if ($decoded === false) {
-        return null; // base64 decode failed
+        return null;
     }
 
-    $decrypted = openssl_decrypt($decoded, $cipher, $key, 0, $iv);
+    $ivLength = openssl_cipher_iv_length($cipher);
+    if (strlen($decoded) <= $ivLength) {
+        return null; // Not enough data
+    }
+
+    // Extract IV and encrypted data
+    $iv = substr($decoded, 0, $ivLength);
+    $ciphertext = substr($decoded, $ivLength);
+
+    // Derive key securely
+    $key = substr(hash('sha256', $key, true), 0, 16); // 128-bit key
+
+    $decrypted = openssl_decrypt($ciphertext, $cipher, $key, OPENSSL_RAW_DATA, $iv);
 
     return $decrypted !== false ? $decrypted : null;
 }

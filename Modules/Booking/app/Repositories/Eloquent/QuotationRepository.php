@@ -517,7 +517,7 @@ class QuotationRepository implements QuotationRepositoryInterface
             ->leftJoin('cartypes', 'cartypes.id', '=', 'vehicle_info.type_id')
             ->leftjoin('drivers', 'drivers.id', '=', 'bookings.driver_id')
             ->where('bookings.id', $bookingId)
-            ->first();
+            ->firstOrFail();
 
         if ($booking) {
             $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
