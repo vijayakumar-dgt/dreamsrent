@@ -880,6 +880,48 @@ class PageController extends Controller
                     }
                 }
 
+                 // FAQ Section (with Facts)
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+
+                    if (is_string($content) && strpos($content, '[fact_blogs') !== false) {
+                        // Parse shortcode parameters
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        $limit = $matches[1] ?? 10;
+                        $viewAll = $matches[2] ?? 'no';
+                        $order = $matches[3] ?? 'asc';
+
+                        // Fetch FAQ data
+                        $faqs = DB::table('faqs')
+                            ->select('id', 'question', 'answer', 'status')
+                            ->where('status', 1)
+                            ->whereNull('deleted_at')
+                            ->where('language_id', $lang_id)
+                            ->orderBy('created_at', $order)
+                            ->limit((int) $limit)
+                            ->get();
+
+                        // Fetch Facts data
+                        $userCount = User::count(); // Get total users
+                        $vehicleCount = VehicleInfo::where('type', 'boat')->count(); // Get total vehicles
+                        $locationCount = Location::count(); // Get total locations
+                        $totalKm = 1976; // Keeping total_km static
+
+                        $facts = [
+                            ["key" => "happy_customers", "value" => $userCount],
+                            ["key" => "vehicle_count", "value" => $vehicleCount],
+                            ["key" => "location_count", "value" => $locationCount],
+                            ["key" => "total_km", "value" => $totalKm],
+                        ];
+
+                        // Set section attributes
+                        $section['section_type'] = 'faq_with_facts';
+                        $section['design'] = 'faq_two_with_facts';
+                        $section['faqs'] = $faqs;
+                        $section['facts'] = $facts;
+                    }
+                }
+
                 // FAQ Section
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
