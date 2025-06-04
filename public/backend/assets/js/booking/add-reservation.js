@@ -1253,10 +1253,10 @@
                 if (response.code === 200 && response.data) {
                     let data = response.data;
 
-                    let safeImage = isValidUrl(data.profile_image, 'profile');
-                    let fullName = $('<div>').text(data.full_name).text();
-                    let phoneNumber = $('<div>').text(data.phone_number ?? '-').text();
-                    let email = $('<div>').text(data.email ?? '-').text();
+                    let safeImage = DOMPurify.sanitize(data.profile_image);
+                    let fullName = DOMPurify.sanitize(data.full_name || '-');
+                    let phoneNumber = DOMPurify.sanitize(data.phone_number || '-');
+                    let email = DOMPurify.sanitize(data.email || '-');
                     let bookingsCount = parseInt(data.bookings_count) || 0;
 
                     let $card = $('<div>', {
@@ -1277,7 +1277,12 @@
                     let $profileCol = $('<div>').addClass('col-md-4');
                     let $profileWrapper = $('<div>').addClass('d-flex align-items-center');
 
-                    let $img = $('<img>').attr('src', safeImage).attr('alt', 'Profile Image');
+                    let $img = $('<img>', {
+                        src: safeImage,
+                        alt: 'Profile Image',
+                        loading: 'lazy'
+                    });
+
                     let $avatar = $('<span>').addClass('avatar avatar-rounded flex-shrink-0 me-2').append($img);
 
                     let $profileInfo = $('<div>')
@@ -1324,7 +1329,7 @@
                     $cardBody.append($row);
                     $card.append($cardBody);
 
-                    $('#customer_details_list').empty().append($card); // use empty() to clear old data safely
+                    $('#customer_details_list').empty().append($card); // safe rendering
                 }
             },
             error: function(error){
@@ -1368,11 +1373,9 @@
 
                     // --- Helpers ---
                     const safeText = (value) => DOMPurify.sanitize(value ?? '');
-                    const safePrice = typeof data.price === 'number' ? data.price : 0;
+                    const safePrice = DOMPurify.sanitize(data.price ?? '');
                     const safePhone = safeText(data.phone_number);
                     const safeDriverName = safeText(data.driver_name);
-
-                    let safeImage = isValidUrl(data.image, 'profile');
 
                     // --- Edit Price Button ---
                     let $editBtnWrapper = $('<div>').addClass('d-flex align-items-center justify-content-end mb-3');
@@ -1381,7 +1384,7 @@
                         class: 'text-purple text-decoration-underline fw-medium edit_driver_price border-0 bg-transparent',
                         'data-bs-toggle': 'modal',
                         'data-bs-target': '#edit_price_modal',
-                        'data-image': safeImage,
+                        'data-image': DOMPurify.sanitize(data.image ?? ''),
                         'data-driver_name': safeDriverName,
                         'data-phone': safePhone,
                         'data-price': safePrice
@@ -1393,7 +1396,7 @@
                         class: 'card bg-light',
                         id: 'driver_detail'
                     }).data({
-                        image: safeImage,
+                        image: DOMPurify.sanitize(data.image ?? ''),
                         name: safeDriverName,
                         phone: safePhone
                     });
@@ -1407,7 +1410,7 @@
                     // --- Driver profile ---
                     let $profileCol = $('<div>').addClass('col-md-5');
                     let $profileWrap = $('<div>').addClass('d-flex align-items-center');
-                    let $img = $('<img>').attr('src', safeImage).attr('alt', 'Driver');
+                    let $img = $('<img>').attr('src', DOMPurify.sanitize(data.image ?? '')).attr('alt', 'Driver');
                     let $avatar = $('<span>').addClass('avatar avatar-rounded flex-shrink-0 me-2').append($img);
                     let $profileInfo = $('<div>')
                         .append($('<h6>').addClass('fs-14 mb-1').text(safeDriverName))
