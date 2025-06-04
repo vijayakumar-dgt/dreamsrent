@@ -44,7 +44,6 @@ class AddSectionRequest extends FormRequest
                 'label_boat_three' => 'required',
                 'label_boat_two' => 'required',
                 'label_boat_one' => 'required',
-                'thumbnail_image_boat' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
             ];
         } elseif ($this->section_id == 42) {
             $rules = [

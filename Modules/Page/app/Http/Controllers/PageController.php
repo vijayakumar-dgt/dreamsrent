@@ -546,7 +546,7 @@ class PageController extends Controller
                             ->select('sections.id', 'section_datas.datas')
                             ->where('sections.name', 'Banner Four')
                             ->orderBy('sections.id', $order)
-                            ->limit($limit)  // Ensure $limit is an integer
+                            ->limit($limit)
                             ->get();
 
                         $userCount = User::count();
@@ -558,16 +558,17 @@ class PageController extends Controller
                             $banner->higlight_label = $decodedData['label_boat_two'] ?? null;
                             $banner->description = $decodedData['description_boat'] ?? null;
 
-                            $relativePath = 'storage/' . ($decodedData['thumbnail_image_boat'] ?? '');
                             $defaultImage = asset('backend/assets/img/car/car-right.png');
-                            $thumbnailKey = 'thumbnail_image_boat';
+                            $thumbnailImages = [];
 
-                            $banner->thumbnail_image = (
-                                isset($decodedData[$thumbnailKey]) &&
-                                !empty($decodedData[$thumbnailKey]) &&
-                                file_exists(public_path($relativePath))
-                            ) ? asset($relativePath) : $defaultImage;
+                            if (!empty($decodedData['thumbnail_image_boat']) && is_array($decodedData['thumbnail_image_boat'])) {
+                                foreach ($decodedData['thumbnail_image_boat'] as $imagePath) {
+                                    $fullPath = public_path('storage/' . $imagePath);
+                                    $thumbnailImages[] = file_exists($fullPath) ? asset('storage/' . $imagePath) : $defaultImage;
+                                }
+                            }
 
+                            $banner->thumbnail_images = $thumbnailImages;
                             $banner->customer_count = $userCount;
 
                             $banner->customer_images = [
@@ -1562,7 +1563,7 @@ class PageController extends Controller
                     }
                 }
 
-                 // Benefits Of Renting Yacht
+                // Benefits Of Renting Yacht
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
 

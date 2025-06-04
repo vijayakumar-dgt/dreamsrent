@@ -417,9 +417,10 @@
                 <div class="form-group col-md-12">
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.cms.thumbnail_image') }}</label>
-                        <input type="file" name="thumbnail_image_boat" id="thumbnail_image_boat" class="form-control"
-                            accept="image/*" onchange="previewThumbnailTwo(this)">
+                        <input type="file" name="thumbnail_image_boat[]" id="thumbnail_image_boat" class="form-control"
+                            accept="image/*" multiple onchange="previewMultipleThumbnails(this)">
                         <div class="invalid-feedback" id="thumbnail_image_boat_error"></div>
+                        <div id="thumbnail_preview_boat_container" class="mt-2 d-flex flex-wrap gap-2"></div>
                     </div>
                     <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_boat"
                         class="mt-2 img-preview-thumb" alt="Image">

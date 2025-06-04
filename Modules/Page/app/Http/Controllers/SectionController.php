@@ -112,7 +112,13 @@ class SectionController extends Controller
             }
 
             if (!empty($decodedDatas['thumbnail_image_boat'])) {
-                $decodedDatas['thumbnail_image_boat'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_boat'];
+                if (is_array($decodedDatas['thumbnail_image_boat'])) {
+                    $decodedDatas['thumbnail_image_boat'] = array_map(function ($path) use ($baseUrl) {
+                        return $baseUrl . '/' . $path;
+                    }, $decodedDatas['thumbnail_image_boat']);
+                } else {
+                    $decodedDatas['thumbnail_image_boat'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_boat'];
+                }
             }
 
             $data[] = array_merge([
@@ -254,9 +260,16 @@ class SectionController extends Controller
                 'thumbnail_image_four' => $thumbnailPath,
             ];
         } elseif ($sectionId == 56) {
-            $thumbnailPath = $existingData['thumbnail_image_boat'] ?? null;
+            $thumbnails = $existingData['thumbnail_image_boat'] ?? [];
+
+            if (!is_array($thumbnails)) {
+                $thumbnails = $thumbnails ? [$thumbnails] : [];
+            }
+
             if ($request->hasFile('thumbnail_image_boat')) {
-                $thumbnailPath = uploadFile($request->file('thumbnail_image_boat'), 'general');
+                foreach ($request->file('thumbnail_image_boat') as $image) {
+                    $thumbnails[] = uploadFile($image, 'general');
+                }
             }
 
             $data = [
@@ -264,7 +277,7 @@ class SectionController extends Controller
                 'label_boat_two' => $request->label_boat_two,
                 'label_boat_three' => $request->label_boat_three,
                 'description_boat' => $request->description_boat,
-                'thumbnail_image_boat' => $thumbnailPath,
+                'thumbnail_image_boat' => $thumbnails, // Store as array
             ];
         } elseif ($sectionId == 42) {
             $data = [

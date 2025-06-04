@@ -214,7 +214,9 @@
                     trigger.data("description_boat_benefits_6")
                 );
 
-                const imageMian = trigger.data("thumbnail_image_boat_benefits_main");
+                const imageMian = trigger.data(
+                    "thumbnail_image_boat_benefits_main"
+                );
                 const image1 = trigger.data("thumbnail_image_boat_benefits_1");
                 const image2 = trigger.data("thumbnail_image_boat_benefits_2");
                 const image3 = trigger.data("thumbnail_image_boat_benefits_3");
@@ -344,14 +346,16 @@
                 $("#label_boat_two").val($(this).data("label_boat_two"));
                 $("#label_boat_three").val($(this).data("label_boat_three"));
 
-                let thumbnailImageUrl = $(this).data("thumbnail_image_boat");
+                let thumbnails = $(this).data("thumbnail_image_boat");
 
-                if (thumbnailImageUrl) {
-                    $("#thumbnail_preview_boat")
-                        .attr("src", thumbnailImageUrl)
-                        .removeClass("d-none");
-                } else {
-                    $("#thumbnail_preview_boat").addClass("d-none");
+                console.log(thumbnails);
+                if (thumbnails && Array.isArray(thumbnails)) {
+                    $("#thumbnail_preview_boat_container").empty();
+                    thumbnails.forEach((url) => {
+                        $("#thumbnail_preview_boat_container").append(
+                            `<img src="${url}" class="img-preview-thumb me-2 mb-2" style="width: 100px; height: auto;">`
+                        );
+                    });
                 }
             }
         });
@@ -491,10 +495,7 @@
                                                     value.thumbnail_image_four ??
                                                     ""
                                                 }"
-                                                data-thumbnail_image_boat="${
-                                                    value.thumbnail_image_boat ??
-                                                    ""
-                                                }"
+                                                data-thumbnail_image_boat='@json($value->thumbnail_image_boat ?? [])'
                                                 data-label_three="${
                                                     value.label_three ?? ""
                                                 }"
@@ -546,7 +547,8 @@
                                                     value.why_dis_3 ?? ""
                                                 }"
                                                 data-label_bike_experience_1="${
-                                                    value.label_bike_experience_1 ?? ""
+                                                    value.label_bike_experience_1 ??
+                                                    ""
                                                 }"
                                                 data-label_boat_benefits_1="${
                                                     value.label_boat_benefits_1 ??
@@ -632,9 +634,9 @@
                                                 }"
 
                                                  data-label_boat_experience_1="${
-                                                        value.label_boat_experience_1 ??
-                                                        ""
-                                                    }"
+                                                     value.label_boat_experience_1 ??
+                                                     ""
+                                                 }"
                                                 data-description_boat_experience_1="${
                                                     value.description_boat_experience_1 ??
                                                     ""
@@ -882,3 +884,20 @@
         }
     }
 })();
+
+function previewMultipleThumbnails(input) {
+    let container = $("#thumbnail_preview_boat_container");
+    container.empty();
+
+    if (input.files) {
+        Array.from(input.files).forEach((file) => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                container.append(
+                    `<img src="${e.target.result}" class="img-preview-thumb" style="width: 100px; height: auto;">`
+                );
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+}
