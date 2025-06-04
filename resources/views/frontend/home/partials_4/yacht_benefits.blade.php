@@ -35,7 +35,7 @@
                 @endif
             </ul>
             <div class="yatcht-center-img">
-                <span><img src="/frontend/assets/img/bg/benifits-sec-bg-01.png" class="img-fluid" alt="Img"></span>
+                <span><img src="{{ $section['section_content']['main_image'] ?? "" }}" class="img-fluid" alt="Img"></span>
                 <span class="roung-img-bg"></span>
             </div>
             <ul>
