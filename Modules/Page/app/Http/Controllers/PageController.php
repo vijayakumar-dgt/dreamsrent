@@ -1097,10 +1097,14 @@ class PageController extends Controller
                             $vehicles = $query->where('recommended', 1)->where('type', 'bike')->get();
                             $section['section_type'] = 'feature_vehicle';
                             $section['design'] = 'vehicle_two';
-                        } else {
-                            $vehicles = $query->where('type', 'bike')->get();
-                            $section['section_type'] = 'al_vehicle';
+                        } elseif ($type === 'top_rated') {
+                            $vehicles = $query->where('recommended', 1)->where('type', 'bike')->get();
+                            $section['section_type'] = 'top_recommended';
                             $section['design'] = 'vehicle_three';
+                        } else {
+                            $vehicles = $query->where('recommended', 1)->where('type', 'bike')->get();
+                            $section['section_type'] = 'top_recommended';
+                            $section['design'] = 'vehicle_four';
                         }
 
                         $data = $vehicles->map(function ($vehicle) {
@@ -1835,6 +1839,7 @@ class PageController extends Controller
                 ->get();
 
             $content_sections = collect((array) $data['content_sections']);
+            dd($content_sections);
             if (request()->has('is_mobile') && request()->get('is_mobile') === "yes") {
                 return response()->json(['code' => "200", 'message' => __('Page details retrieved successfully.'), 'data' => $data], 200);
             } else {
