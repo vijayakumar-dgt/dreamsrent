@@ -26,13 +26,13 @@ class AnnouncementController extends Controller
         return view('communication::announcement.index');
     }
 
-      public function store(AnnouncementRequest $request): JsonResponse
+    public function store(AnnouncementRequest $request): JsonResponse
     {
         $result = $this->announcementRepository->store($request);
         return response()->json($result, $result['code']);
     }
 
-      public function list(Request $request): JsonResponse
+    public function list(Request $request): JsonResponse
     {
         $result = $this->announcementRepository->list($request);
         return response()->json($result, $result['code']);

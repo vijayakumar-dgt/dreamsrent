@@ -5,14 +5,13 @@ namespace Modules\CarInfo\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-
 class CategoryRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
      */
     public function rules(): array
-     {
+    {
         $id = $this->input('id'); // Retrieve the category ID from the route (if present)
 
         return [
@@ -23,7 +22,7 @@ class CategoryRequest extends FormRequest
             ],
         ];
     }
-    
+
     public function message(): array
     {
         return [

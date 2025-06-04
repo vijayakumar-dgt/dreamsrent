@@ -28,8 +28,8 @@ class EnquireController extends Controller
 
     public function store(EnquiryRequest $request): JsonResponse
     {
-       $response = $this->enquiryRepository->store($request);
-       return response()->json($response, $response['code']);
+        $response = $this->enquiryRepository->store($request);
+        return response()->json($response, $response['code']);
     }
     public function list(Request $request): JsonResponse
     {

@@ -11,7 +11,6 @@ use Modules\Booking\Http\Request\BookingRequest;
 
 class BookingController extends Controller
 {
-
     protected BookingRepositoryInterface $bookingRepository;
 
     public function __construct(BookingRepositoryInterface $bookingRepository)
@@ -42,7 +41,7 @@ class BookingController extends Controller
     }
 
     public function store(BookingRequest $request): JsonResponse
-    { 
+    {
         $response = $this->bookingRepository->store($request);
         return response()->json($response, $response['code'] ?? 200);
     }
@@ -50,7 +49,7 @@ class BookingController extends Controller
     public function edit(Request $request, string|int|null $id): View
     {
         $data = $this->bookingRepository->edit($request, $id);
-        return view('booking::reservation.edit',  [...$data]);
+        return view('booking::reservation.edit', [...$data]);
     }
     public function delete(Request $request): JsonResponse
     {
@@ -85,7 +84,7 @@ class BookingController extends Controller
     public function calculateTotalPrice(Request $request): JsonResponse
     {
         $response = $this->bookingRepository->calculateTotalPrice($request);
-        return response()->json($response, $response['code'] ?? 200);   
+        return response()->json($response, $response['code'] ?? 200);
     }
 
     public function cancelBooking(Request $request): JsonResponse

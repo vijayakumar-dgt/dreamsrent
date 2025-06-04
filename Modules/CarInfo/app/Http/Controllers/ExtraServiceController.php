@@ -50,7 +50,7 @@ class ExtraServiceController extends Controller
 
     /**
      * Retrieve a specific extra service by its ID.
-     * 
+     *
      * @param int $id The ID of the extra service to retrieve.
      * @return \Illuminate\Http\JsonResponse JSON response containing the status, code, and extra service data.
      */

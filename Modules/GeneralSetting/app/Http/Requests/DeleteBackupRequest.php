@@ -6,10 +6,10 @@ use App\Library\CustomFailedValidation;
 
 class DeleteBackupRequest extends CustomFailedValidation
 {
-     public function rules(): array
+    public function rules(): array
     {
         return [
-            'id' => 'required|integer|exists:dbbackups,id'
+           'id' => 'required|integer|exists:dbbackups,id'
         ];
     }
 

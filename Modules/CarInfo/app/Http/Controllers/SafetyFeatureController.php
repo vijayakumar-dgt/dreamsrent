@@ -14,7 +14,7 @@ use Modules\CarInfo\Repositories\Contracts\SafetyFeatureRepositoryInterface;
 
 class SafetyFeatureController extends Controller
 {
-     protected SafetyFeatureRepositoryInterface $SafetyFeatureRepository;
+    protected SafetyFeatureRepositoryInterface $SafetyFeatureRepository;
 
     public function __construct(SafetyFeatureRepositoryInterface $SafetyFeatureRepository)
     {
@@ -26,14 +26,14 @@ class SafetyFeatureController extends Controller
         return view('carinfo::safety_feature.index');
     }
 
-   public function store(SafetyFeatureRequest $request): JsonResponse
+    public function store(SafetyFeatureRequest $request): JsonResponse
     {
         $response = $this->SafetyFeatureRepository->store($request);
         return response()->json($response, $response['code']);
     }
 
 
-   public function list(Request $request): JsonResponse
+    public function list(Request $request): JsonResponse
     {
         $response = $this->SafetyFeatureRepository->list($request);
         return response()->json($response, $response['code']);
@@ -50,5 +50,4 @@ class SafetyFeatureController extends Controller
         $response = $this->SafetyFeatureRepository->delete((int) $request->id);
         return response()->json($response, $response['code']);
     }
-
 }

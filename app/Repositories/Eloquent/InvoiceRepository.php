@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repositories\Eloquent;
+
 use Illuminate\Support\Facades\DB;
 use App\Repositories\Contracts\InvoiceRepositoryInterface;
 use App\Models\Invoice;
@@ -17,15 +18,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Modules\GeneralSetting\Models\Language;
 
-
 class InvoiceRepository implements InvoiceRepositoryInterface
 {
     public function index(): array
     {
        /** @var \App\Models\User|null $authId */
-       $authId = current_user();
-       $languageId = $authId ? $authId->language_id : null;
-       $invoices = Invoice::with('items')
+        $authId = current_user();
+        $languageId = $authId ? $authId->language_id : null;
+        $invoices = Invoice::with('items')
            ->leftJoin('users', 'invoices.customer_id', '=', 'users.id')
            ->leftJoin('user_details', 'users.id', '=', 'user_details.user_id')
            ->select('invoices.*', 'users.name', 'users.email', 'user_details.profile_image', 'user_details.first_name', 'user_details.last_name')
@@ -36,9 +36,8 @@ class InvoiceRepository implements InvoiceRepositoryInterface
                return $invoice;
            });
 
-        $data = ['invoices' => $invoices,];   
+        $data = ['invoices' => $invoices,];
         return $data;
-
     }
 
     public function addInvoice(): array
@@ -84,10 +83,9 @@ class InvoiceRepository implements InvoiceRepositoryInterface
 
         $languages = Language::with('transLang')->where('deleted_at', null)->get();
 
-        $data = ['cars' => $cars, 'currencies' => $currencies, 'users' => $users, 'currentUser' => $currentUser, 'payments' => $payments, 'symbol' => $symbol, 'bookings' => $bookings, 'languages' => $languages];   
+        $data = ['cars' => $cars, 'currencies' => $currencies, 'users' => $users, 'currentUser' => $currentUser, 'payments' => $payments, 'symbol' => $symbol, 'bookings' => $bookings, 'languages' => $languages];
 
         return $data;
-
     }
 
     public function store(Request $request)
@@ -185,10 +183,9 @@ class InvoiceRepository implements InvoiceRepositoryInterface
 
         $languages = Language::with('transLang')->where('deleted_at', null)->get();
 
-        $data = ['cars' => $cars, 'currencies' => $currencies, 'users' => $users, 'currentUser' => $currentUser, 'payments' => $payments, 'symbol' => $symbol, 'invoice' => $invoice, 'bookings' => $bookings, 'languages' => $languages];   
+        $data = ['cars' => $cars, 'currencies' => $currencies, 'users' => $users, 'currentUser' => $currentUser, 'payments' => $payments, 'symbol' => $symbol, 'invoice' => $invoice, 'bookings' => $bookings, 'languages' => $languages];
 
         return $data;
-
     }
 
     public function delete(int $id)
@@ -254,5 +251,4 @@ class InvoiceRepository implements InvoiceRepositoryInterface
             return back()->with('error', __('admin.common.default_update_error'));
         }
     }
-
 }

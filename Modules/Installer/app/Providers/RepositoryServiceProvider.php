@@ -11,7 +11,8 @@ class RepositoryServiceProvider extends ServiceProvider
     /**
      * Register the service provider.
      */
- public function register(): void {
+    public function register(): void
+    {
         $this->registerBindings();
     }
 

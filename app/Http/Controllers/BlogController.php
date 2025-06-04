@@ -10,7 +10,6 @@ use App\Http\Requests\BlogRequest;
 
 class BlogController extends Controller
 {
-
     protected BlogRepositoryInterface $blogRepository;
 
     public function __construct(BlogRepositoryInterface $blogRepository)

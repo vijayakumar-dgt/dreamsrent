@@ -26,5 +26,4 @@ class BlogRequest extends CustomFailedValidation
             'comment' => 'required|string|max:1000',
         ];
     }
-
 }

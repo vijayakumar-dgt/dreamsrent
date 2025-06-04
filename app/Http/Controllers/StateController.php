@@ -116,7 +116,7 @@ class StateController extends Controller
 
         if (!$ids || count($ids) == 0) {
             return response()->json([
-                'success' => false, 
+                'success' => false,
                 'message' => __('admin.common.no_data_found')
             ]);
         }
@@ -124,7 +124,7 @@ class StateController extends Controller
         $this->stateRepository->bulkDelete($ids);
 
         return response()->json([
-            'success' => true, 
+            'success' => true,
             'message' => __('admin.cms.state_delete_success')
         ]);
     }

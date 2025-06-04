@@ -15,7 +15,7 @@ class ContactMessagesRepository implements ContactMessagesRepositoryInterface
     {
         try {
             $data = $request->only(['name', 'email', 'phone_number', 'message']);
-            
+
             if ($request->hasFile('image')) {
                 $data['image'] = $request->file('image')->store('contacts', 'public');
             }
@@ -129,6 +129,4 @@ class ContactMessagesRepository implements ContactMessagesRepositoryInterface
             ];
         }
     }
-
-
 }

@@ -48,7 +48,7 @@ class BookingRepository implements BookingRepositoryInterface
         return $data;
     }
 
-    public function getCustomerDetails(Request $request) : array
+    public function getCustomerDetails(Request $request): array
     {
         try {
             $customerId = $request->customer_id ?? '';
@@ -87,7 +87,7 @@ class BookingRepository implements BookingRepositoryInterface
         }
     }
 
-    public function getFilterVehicles(Request $request): array 
+    public function getFilterVehicles(Request $request): array
     {
         try {
             $orderBy = $request->order_by ?? 'desc';
@@ -340,7 +340,7 @@ class BookingRepository implements BookingRepositoryInterface
                 return $vehicle;
             });
 
-            $response =[
+            $response = [
                 'code' => 200,
                 'message' => __('Vehicles retrieved successfully.'),
                 'data' => $vehicles,
@@ -532,7 +532,7 @@ class BookingRepository implements BookingRepositoryInterface
         } catch (\Exception $e) {
             DB::rollBack();
 
-            $response =[
+            $response = [
                 'code' => 500,
                 'message' => $errorMsg,
                 'error' => $e->getMessage(),
@@ -572,7 +572,7 @@ class BookingRepository implements BookingRepositoryInterface
             Booking::where('id', $id)->delete();
             BookingDetail::where('booking_id', $id)->delete();
 
-            $response =[
+            $response = [
                 'status' => 'success',
                 'code'   => 200,
                 'message' => __('admin.bookings.reservation_delete_success')
@@ -594,13 +594,12 @@ class BookingRepository implements BookingRepositoryInterface
             $id = $request->id;
             Booking::where('id', $id)->update(['booking_status' => 5]);
 
-            $response =[
+            $response = [
                 'status' => 'success',
                 'code'   => 200,
                 'message' => __('admin.bookings.reservation_complete_success')
             ];
             return $response;
-
         } catch (\Exception $e) {
             $$response = [
                 'status' => 'error',
@@ -608,7 +607,6 @@ class BookingRepository implements BookingRepositoryInterface
                 'message' => __('admin.common.default_delete_error'),
             ];
             return $response;
-
         }
     }
 
@@ -751,12 +749,12 @@ class BookingRepository implements BookingRepositoryInterface
             $id = $request->booking_id ?? '';
 
             if (empty($id)) {
-                 $response =[
+                 $response = [
                     'status' => 'error',
                     'code'   => 400,
                     'message' => 'Booking id is required.'
-                ];
-                return $response;
+                 ];
+                 return $response;
             }
 
             $booking = Booking::select(
@@ -790,7 +788,7 @@ class BookingRepository implements BookingRepositoryInterface
                 $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
             }
 
-            $response =[
+            $response = [
                 'code' => 200,
                 'message' => 'Success',
                 'data' => $booking,
@@ -1062,7 +1060,7 @@ class BookingRepository implements BookingRepositoryInterface
             $booking = Booking::find($bookingId);
 
             if (!$booking) {
-                $response =[
+                $response = [
                     'code' => 404,
                     'message' => __('admin.bookings.not_found'),
                 ];
@@ -1163,7 +1161,7 @@ class BookingRepository implements BookingRepositoryInterface
             } catch (\Exception $e) {
             }
 
-            $response =[
+            $response = [
                 'code' => 200,
                 'message' => __('admin.bookings.reservation_cancel_success'),
                 'redirect_url' => route('reservation.index'),
@@ -1171,7 +1169,7 @@ class BookingRepository implements BookingRepositoryInterface
 
             return $response;
         } catch (\Throwable $e) {
-            $response =[
+            $response = [
                 'code' => 500,
                 'message' => __('admin.bookings.reservation_cancel_error'),
                 'error' => $e->getMessage(),

@@ -31,7 +31,7 @@ class EmailTemplateController extends Controller
         try {
             $emailTemplate = $this->repository->createOrUpdateEmailTemplate($request->all());
 
-            $message = $request->has('id') 
+            $message = $request->has('id')
                 ? __('admin.general_settings.email_template_updated_success')
                 : __('admin.general_settings.email_templated_success');
 
@@ -49,7 +49,7 @@ class EmailTemplateController extends Controller
     {
         try {
             $result = $this->repository->getEmailTemplates($request->all());
-            
+
             return response()->json([
                 'draw' => $request->draw,
                 'recordsTotal' => $result['totalRecords'],
@@ -65,7 +65,7 @@ class EmailTemplateController extends Controller
     {
         try {
             $emailTemplate = $this->repository->getEmailTemplateById($id);
-            
+
             return response()->json([
                 'status' => 'success',
                 'code' => 200,
@@ -80,7 +80,7 @@ class EmailTemplateController extends Controller
     {
         try {
             $this->repository->deleteEmailTemplate($request->id);
-            
+
             return response()->json([
                 'status' => 'success',
                 'code' => 200,
@@ -95,7 +95,7 @@ class EmailTemplateController extends Controller
     {
         try {
             $data = $this->repository->getTagsByNotificationType($id);
-            
+
             return response()->json([
                 'status' => 'success',
                 'code' => 200,

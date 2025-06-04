@@ -15,13 +15,13 @@ class RepositoryServiceProvider extends ServiceProvider
     /**
      * Register the service provider.
      */
-    public function register(): void 
+    public function register(): void
     {
         $this->registerBindings();
     }
 
     public function registerBindings(): void
-    { 
+    {
         $this->app->bind(AnnouncementRepositoryInterface::class, AnnouncementRepository::class);
         $this->app->bind(ContactMessagesRepositoryInterface::class, ContactMessagesRepository::class);
         $this->app->bind(TicketInterface::class, TicketRepository::class);

@@ -20,7 +20,7 @@ class SitemapSettingRepository implements SitemapSettingInterface
         $sitemap->url = $data['url'];
         $sitemap->save();
         $this->generateSitemap();
-        
+
         return $sitemap;
     }
 
@@ -63,14 +63,14 @@ class SitemapSettingRepository implements SitemapSettingInterface
                     }
                 }
             }
-            
+
             $relativePath = 'sitemaps/sitemap.xml';
             $fullPath = public_path($relativePath);
             $sitemap->writeToFile($fullPath);
             if (!file_exists($fullPath)) {
                 return '';
             }
-            
+
             $latestUrl = SitemapUrl::orderByDesc('id')->first();
             if ($latestUrl) {
                 $latestUrl->update(['sitemap_path' => $relativePath]);
@@ -123,11 +123,11 @@ class SitemapSettingRepository implements SitemapSettingInterface
     public function deleteSitemapUrl(int $id)
     {
         $sitemapUrl = SitemapUrl::findOrFail($id);
-        
+
         if (!empty($sitemapUrl->sitemap_path) && file_exists(public_path($sitemapUrl->sitemap_path))) {
             unlink(public_path($sitemapUrl->sitemap_path));
         }
-        
+
         return $sitemapUrl->delete();
     }
 }

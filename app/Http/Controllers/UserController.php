@@ -58,8 +58,8 @@ class UserController extends Controller
 
     public function cancelRide(Request $request): JsonResponse
     {
-       $response = $this->userRepository->cancelBooking($request);
-       return response()->json($response, $response['code'] ?? 200);
+        $response = $this->userRepository->cancelBooking($request);
+        return response()->json($response, $response['code'] ?? 200);
     }
 
     public function completeRide(Request $request): JsonResponse
@@ -70,8 +70,8 @@ class UserController extends Controller
 
     public function startRide(Request $request): JsonResponse
     {
-       $response = $this->userRepository->startRide($request);
-       return response()->json($response, $response['code'] ?? 200);
+        $response = $this->userRepository->startRide($request);
+        return response()->json($response, $response['code'] ?? 200);
     }
 
     public function deleteRide(Request $request): JsonResponse
@@ -110,8 +110,8 @@ class UserController extends Controller
 
     public function userprofile(UserProfileRequest $request): JsonResponse
     {
-       $response = $this->userRepository->updateProfile($request);
-       return response()->json($response, $response['code'] ?? 200);
+        $response = $this->userRepository->updateProfile($request);
+        return response()->json($response, $response['code'] ?? 200);
     }
 
     public function userpreference(): View
@@ -192,9 +192,9 @@ class UserController extends Controller
     public function getNotifications(): JsonResponse
     {
         $response = $this->userRepository->getNotifications();
-        return response()->json($response, $response['code'] ?? 200);  
+        return response()->json($response, $response['code'] ?? 200);
     }
-    
+
     public function markAllAsRead(): JsonResponse
     {
         $response = $this->userRepository->markAllAsRead();
@@ -217,8 +217,8 @@ class UserController extends Controller
 
     public function notifications(Request $request): View|JsonResponse
     {
-        $notifications = $this->userRepository->notifications(); 
-        
+        $notifications = $this->userRepository->notifications();
+
         if ($request->ajax()) {
             $view = view('frontend.user.partials.notification-items', compact('notifications'))->render();
 

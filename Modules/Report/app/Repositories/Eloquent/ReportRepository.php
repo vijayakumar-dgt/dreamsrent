@@ -8,53 +8,52 @@ use Modules\CarInfo\Models\VehicleInfo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-
 class ReportRepository implements ReportRepositoryInterface
 {
     public function incomeReport(): array
     {
         $bookings = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
         ->get();
-    $bookingsCount = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
+        $bookingsCount = Booking::Join('vehicle_info', 'bookings.vehicle_id', '=', 'vehicle_info.id')
         ->orderby('bookings.id', 'desc')->paginate(10);
-    $totalIncome = $bookings->filter(function ($booking) {
-        if ($booking->booking_by === 'admin') {
-            return is_null($booking->payment_status) || $booking->payment_status == 2;
-        } else {
-            return $booking->payment_status == 2;
-        }
-    })->sum('final_price');
-    $topEarningCar = $bookings
+        $totalIncome = $bookings->filter(function ($booking) {
+            if ($booking->booking_by === 'admin') {
+                return is_null($booking->payment_status) || $booking->payment_status == 2;
+            } else {
+                return $booking->payment_status == 2;
+            }
+        })->sum('final_price');
+        $topEarningCar = $bookings
         ->groupBy('vehicle_id')
         ->map(fn($group) => $group->sum('final_price'))
         ->sortDesc()
         ->keys()
         ->first();
 
-    $vehicle = VehicleInfo::find($topEarningCar);
-    $vehicleInfo = VehicleInfo::where('status', 1)->where('deleted_at', null)->get();
+        $vehicle = VehicleInfo::find($topEarningCar);
+        $vehicleInfo = VehicleInfo::where('status', 1)->where('deleted_at', null)->get();
 
-    $startOfThisWeek = now()->startOfWeek();
-    $endOfThisWeek = now()->endOfWeek();
+        $startOfThisWeek = now()->startOfWeek();
+        $endOfThisWeek = now()->endOfWeek();
 
-    $startOfLastWeek = now()->subWeek()->startOfWeek();
-    $endOfLastWeek = now()->subWeek()->endOfWeek();
+        $startOfLastWeek = now()->subWeek()->startOfWeek();
+        $endOfLastWeek = now()->subWeek()->endOfWeek();
 
-    $thisWeekIncome = Booking::whereBetween('booking_date', [$startOfThisWeek, $endOfThisWeek])->sum('final_price');
-    $lastWeekIncome = Booking::whereBetween('booking_date', [$startOfLastWeek, $endOfLastWeek])->sum('final_price');
+        $thisWeekIncome = Booking::whereBetween('booking_date', [$startOfThisWeek, $endOfThisWeek])->sum('final_price');
+        $lastWeekIncome = Booking::whereBetween('booking_date', [$startOfLastWeek, $endOfLastWeek])->sum('final_price');
 
-    if ($lastWeekIncome > 0) {
-        $percentageChange = (($thisWeekIncome - $lastWeekIncome) / $lastWeekIncome) * 100;
-        $sign = $percentageChange >= 0 ? '+' : '-';
-    } else {
-        $percentageChange = $thisWeekIncome > 0 ? 100 : 0;
-        $sign = $thisWeekIncome > 0 ? '+' : '0'; // If last week was 0, show +100% increase
-    }
-    $symbol = getDefaultCurrencySymbol();
+        if ($lastWeekIncome > 0) {
+            $percentageChange = (($thisWeekIncome - $lastWeekIncome) / $lastWeekIncome) * 100;
+            $sign = $percentageChange >= 0 ? '+' : '-';
+        } else {
+            $percentageChange = $thisWeekIncome > 0 ? 100 : 0;
+            $sign = $thisWeekIncome > 0 ? '+' : '0'; // If last week was 0, show +100% increase
+        }
+        $symbol = getDefaultCurrencySymbol();
 
-    $bookings->groupBy(function ($booking) {
-        return Carbon::parse($booking->booking_date)->format('Y-m-d'); // Group by date
-    })
+        $bookings->groupBy(function ($booking) {
+            return Carbon::parse($booking->booking_date)->format('Y-m-d'); // Group by date
+        })
         ->map(function ($dayBookings) {
             return [
                 'date' => $dayBookings->first()?->booking_date,
@@ -67,9 +66,8 @@ class ReportRepository implements ReportRepositoryInterface
 
         ->values(); // Convert collection to array
 
-        $data = ['totalIncome' => $totalIncome, 'topEarningCar' => $topEarningCar, 'vehicle' => $vehicle, 'percentageChange' => $percentageChange, 'sign' => $sign, 'symbol' => $symbol, 'bookings' => $bookings, 'vehicleInfo' => $vehicleInfo, 'bookingsCount' => $bookingsCount];   
+        $data = ['totalIncome' => $totalIncome, 'topEarningCar' => $topEarningCar, 'vehicle' => $vehicle, 'percentageChange' => $percentageChange, 'sign' => $sign, 'symbol' => $symbol, 'bookings' => $bookings, 'vehicleInfo' => $vehicleInfo, 'bookingsCount' => $bookingsCount];
         return $data;
-
     }
 
     public function earningReport(): array
@@ -167,7 +165,7 @@ class ReportRepository implements ReportRepositoryInterface
 
         $symbol = getDefaultCurrencySymbol();
 
-        $data = ['symbol' => $symbol, 'totalIncome' => $totalIncome, 'bookings' => $bookings, 'percentageChangeFormatted' => $percentageChangeFormatted, 'sign' => $sign, 'vehicle' => $vehicle, 'topEarningCarTotal' => $topEarningCarTotal, 'percentageCarChangeFormatted' => $percentageCarChangeFormatted, 'signCar' => $signCar, 'grandTotal' => $grandTotal, 'percentageBreakChangeFormatted' => $percentageBreakChangeFormatted, 'signbreak' => $signbreak, 'bookingCount' => $bookingCount];   
+        $data = ['symbol' => $symbol, 'totalIncome' => $totalIncome, 'bookings' => $bookings, 'percentageChangeFormatted' => $percentageChangeFormatted, 'sign' => $sign, 'vehicle' => $vehicle, 'topEarningCarTotal' => $topEarningCarTotal, 'percentageCarChangeFormatted' => $percentageCarChangeFormatted, 'signCar' => $signCar, 'grandTotal' => $grandTotal, 'percentageBreakChangeFormatted' => $percentageBreakChangeFormatted, 'signbreak' => $signbreak, 'bookingCount' => $bookingCount];
         return $data;
     }
 
@@ -186,7 +184,7 @@ class ReportRepository implements ReportRepositoryInterface
 
     public function getEarningsBreakdown(): array
     {
-        
+
         $breakdown = Booking::select(
             DB::raw('SUM(total_insurance_price) as total_insurance_price'),
             DB::raw('SUM(total_extra_service_price) as total_extra_service_price'),
@@ -195,5 +193,4 @@ class ReportRepository implements ReportRepositoryInterface
 
         return $breakdown;
     }
-  
 }

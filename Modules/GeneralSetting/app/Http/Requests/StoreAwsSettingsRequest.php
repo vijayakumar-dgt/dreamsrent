@@ -6,7 +6,7 @@ use App\Library\CustomFailedValidation;
 
 class StoreAwsSettingsRequest extends CustomFailedValidation
 {
-   public function rules(): array
+    public function rules(): array
     {
         return [
             'aws_access_key' => 'required|string',

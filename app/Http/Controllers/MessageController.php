@@ -16,14 +16,14 @@ use Illuminate\View\View;
 class MessageController extends Controller
 {
     protected MessageRepositoryInterface $messageRepository;
-    
+
     public function __construct(MessageRepositoryInterface $messageRepository)
     {
         $this->messageRepository = $messageRepository;
     }
     public function index(): View
     {
-        $data = $this->messageRepository->getUserData();   
+        $data = $this->messageRepository->getUserData();
         return view('frontend.user.messages', $data);
     }
 
@@ -43,6 +43,6 @@ class MessageController extends Controller
     public function fetchMessages(Request $request): JsonResponse
     {
         $response = $this->messageRepository->fetchMessages($request);
-        return response()->json($response, $response['code'] ?? 200);   
+        return response()->json($response, $response['code'] ?? 200);
     }
 }

@@ -26,13 +26,12 @@ class DamageTypeRepository implements DamageTypeRepositoryInterface
         $successMessage = $id
             ? __('admin.rentals.damage_type_updated')
             : __('admin.rentals.damage_type_added');
-        
+
         $errorMessage = $id
             ? __('admin.common.default_update_error')
             : __('admin.common.default_create_error');
-        
-        try {
 
+        try {
             $data = [
                 'language_id'  => $id ? $request->input('language_id') : $authUser->language_id,
                 'damage_type'  => $request->input('damage_type'),
@@ -63,13 +62,13 @@ class DamageTypeRepository implements DamageTypeRepositoryInterface
             $language_id = $authUser->language_id;
             $damageTypes = DamageType::when($request->has('keyword') && $request->keyword != "", function ($query) use ($request) {
                     $query->where('damage_type', 'like', '%' . $request->keyword . '%');
-                })
+            })
                 ->when($request->has('status') && $request->status != "", function ($query) use ($request) {
                     $query->where('status', $request->status);
                 })
                 ->where("language_id", $language_id)
                 ->orderBy('damage_type', 'asc')->get();
-                
+
             return [
                 'status' => 'success',
                 'code'   => 200,

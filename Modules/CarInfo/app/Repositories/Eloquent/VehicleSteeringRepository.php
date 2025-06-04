@@ -12,7 +12,7 @@ class VehicleSteeringRepository implements VehicleSteeringRepositoryInterface
     public function store(Request $request): array
     {
         $id = $request->id ?? null;
-        
+
         $successMsg = empty($id) ? __('admin.rentals.steering_type_create_success') : __('admin.rentals.steering_type_update_success');
         $errorMsg = empty($id) ? __('admin.common.default_create_error') : __('admin.common.default_update_error');
 

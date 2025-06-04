@@ -29,7 +29,7 @@ class UserRepository implements UserRepositoryInterface
 {
     public function getDashboardData(): array
     {
-       $user = Auth::guard('web')->user();
+        $user = Auth::guard('web')->user();
 
         if (!$user) {
             abort(403, 'Unauthorized access');
@@ -119,9 +119,9 @@ class UserRepository implements UserRepositoryInterface
                             $query->orderBy('name', 'asc');
                         }
                     ])->orderBy(
-                            DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
-                            'asc'
-                        );
+                        DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
+                        'asc'
+                    );
                     break;
             }
         }
@@ -174,9 +174,9 @@ class UserRepository implements UserRepositoryInterface
                             $query->orderBy('name', 'asc');
                         }
                     ])->orderBy(
-                            DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
-                            'asc'
-                        );
+                        DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
+                        'asc'
+                    );
                     break;
             }
         }
@@ -276,7 +276,7 @@ class UserRepository implements UserRepositoryInterface
                 'code' => 200,
                 'message' => __('web.user.reservation_cancelled')
             ];
-            
+
             return $response;
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -290,7 +290,7 @@ class UserRepository implements UserRepositoryInterface
     }
     public function getDuration(?string $duration, ?string $customFromDate = null, ?string $customToDate = null): array
     {
-         switch ($duration) {
+        switch ($duration) {
             case 'this_week':
                 $duration = [
                     'from' => date('Y-m-d 00:00:00', strtotime('monday this week')),
@@ -384,7 +384,6 @@ class UserRepository implements UserRepositoryInterface
             ];
             DB::commit();
             return $response;
-
         } catch (\Throwable $th) {
             DB::rollBack();
             $response = [
@@ -427,7 +426,6 @@ class UserRepository implements UserRepositoryInterface
             ];
             DB::commit();
             return $response;
-
         } catch (\Throwable $th) {
             DB::rollBack();
             $response = [
@@ -453,10 +451,9 @@ class UserRepository implements UserRepositoryInterface
                 'code' => 200,
                 'message' => __('web.user.booking_deleted')
             ];
-            
+
             DB::commit();
             return $response;
-
         } catch (\Throwable $th) {
             $response = [
                 'status' => 'error',
@@ -507,7 +504,7 @@ class UserRepository implements UserRepositoryInterface
             $response = [
                 'status' => 'error',
                 'code' => 500,
-                'message' => __('web.user.error_occured') 
+                'message' => __('web.user.error_occured')
             ];
             return $response;
         }
@@ -564,17 +561,16 @@ class UserRepository implements UserRepositoryInterface
                 ]
             );
             $profileImage = UserDetail::where('user_id', $user?->id)->value('profile_image');
-            
+
             $response = [
                 'status' => 'success',
                 'code' => 200,
                 'message' => __('web.user.profile_updated_successfully'),
                 'data' => [
                     'profile_image' => uploadedAsset($profileImage, 'profile')
-                ],  
+                ],
             ];
             return $response;
-
         } catch (\Exception $e) {
             $response = [
                 'status' => 'error',
@@ -686,7 +682,7 @@ class UserRepository implements UserRepositoryInterface
             $user->last_password_changed_at = now();
             $user->save();
         }
-        
+
         $response = [
             'status' => 'success',
             'code' => 200,
@@ -871,12 +867,12 @@ class UserRepository implements UserRepositoryInterface
             ];
             return $response;
         } else {
-           $response = [
+            $response = [
                 'status' => 'error',
                 'code' => 500,
                 'message' => __('web.user.all_notofocations_marked_as_read')
-           ];
-           return $response;
+            ];
+            return $response;
         }
     }
 
@@ -921,9 +917,9 @@ class UserRepository implements UserRepositoryInterface
                             $query->orderBy('name', 'asc');
                         }
                     ])->orderBy(
-                            DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
-                            'asc'
-                        );
+                        DB::raw('(SELECT name FROM vehicle_info WHERE vehicle_info.id = bookings.vehicle_id)'),
+                        'asc'
+                    );
                     break;
             }
         }

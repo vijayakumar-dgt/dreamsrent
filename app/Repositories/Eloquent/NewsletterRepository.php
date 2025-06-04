@@ -28,7 +28,6 @@ class NewsLetterRepository implements NewsLetterRepositoryInterface
                 ];
                 sendNewsletterEmail($request->subscriber_email, 'newsletter', $notifyData);
             } catch (\Exception $e) {
-            
             }
 
             return [
@@ -184,5 +183,4 @@ class NewsLetterRepository implements NewsLetterRepositoryInterface
             ];
         }
     }
-
 }

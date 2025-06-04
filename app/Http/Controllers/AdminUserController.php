@@ -10,7 +10,7 @@ use Illuminate\View\View;
 
 class AdminUserController extends Controller
 {
-    protected AdminUserRepositoryInterface  $adminUserRepository;
+    protected AdminUserRepositoryInterface $adminUserRepository;
 
     public function __construct(AdminUserRepositoryInterface $adminUserRepository)
     {
@@ -26,7 +26,7 @@ class AdminUserController extends Controller
     public function store(AdminUserRequest $request): JsonResponse
     {
         $response = $this->adminUserRepository->store($request);
-        return response()->json($response, $response['code']);   
+        return response()->json($response, $response['code']);
     }
 
     public function list(Request $request): JsonResponse

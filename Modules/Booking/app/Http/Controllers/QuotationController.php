@@ -9,7 +9,6 @@ use Illuminate\View\View;
 use Modules\Booking\Repositories\Contracts\QuotationRepositoryInterface;
 use Modules\Booking\Http\Request\QuotationRequest;
 
-
 class QuotationController extends Controller
 {
     protected QuotationRepositoryInterface $quotationRepository;

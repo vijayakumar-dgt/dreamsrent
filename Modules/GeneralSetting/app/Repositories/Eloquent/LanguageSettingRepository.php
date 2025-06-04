@@ -48,7 +48,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
             }
 
             $this->initializeLanguageFiles($languageTranslation->code);
-            
+
             return [
                 'status' => 'success',
                 'code' => 200,
@@ -67,7 +67,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
     public function getLanguages(array $filters = []): array
     {
         $languages = Language::query();
-        
+
         if (isset($filters['search']) && $filters['search'] != "") {
             $languages->where(function ($query) use ($filters) {
                 $query->whereHas('transLang', function ($query) use ($filters) {
@@ -83,11 +83,13 @@ class LanguageSettingRepository implements LanguageSettingInterface
         $totalKeys = $this->countTotalTranslationKeys($langDefaultFiles);
 
         foreach ($languages as $language) {
-            if (!$language->transLang) continue;
-            
+            if (!$language->transLang) {
+                continue;
+            }
+
             $translatedCount = $this->countTranslatedKeys($language->transLang->code, $langDefaultFiles);
             $progress = $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100, 2) : 0;
-            
+
             $responseArray[$language->transLang->code] = [
                 'id' => $language->id,
                 'language_name' => $language->transLang->name,
@@ -116,19 +118,19 @@ class LanguageSettingRepository implements LanguageSettingInterface
             $language = Language::findOrFail($id);
             $languageCode = $language->transLang->code ?? null;
             $field = $data['field'];
-            
+
             if ($field == 'default') {
                 Language::where('default', 1)->update(['default' => 0]);
                 session()->forget(['app_locale', 'app_locale_user']);
                 session(['app_locale' => $languageCode, 'app_locale_user' => $languageCode]);
-                
+
                 if (Auth::guard('admin')->check()) {
                     Auth::guard('admin')->user()->update(['language_id' => $language->language_id]);
                 }
             }
-            
+
             $language->update([$field => $data['value']]);
-            
+
             return [
                 'status' => 'success',
                 'code' => 200,
@@ -199,7 +201,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
         $language = Language::with('transLang')
             ->whereHas('transLang', fn($query) => $query->where('code', $code))
             ->firstOrFail();
-            
+
         $langCode = $language->transLang->code ?? null;
         $flag = asset("backend/assets/img/flags/{$langCode}.svg");
 
@@ -359,7 +361,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
         if (!isset($translatedTranslations[$module])) {
             $translatedTranslations[$module] = [];
         }
-        
+
         $translatedTranslations[$module][$key] = $value;
         file_put_contents($translatedPath, '<?php return ' . var_export($translatedTranslations, true) . ';');
 
@@ -417,7 +419,7 @@ class LanguageSettingRepository implements LanguageSettingInterface
     }
 
     // Helper Methods
-    
+
     protected function initializeLanguageFiles(string $langCode): void
     {
         $defaultLang = 'en';
@@ -443,12 +445,12 @@ class LanguageSettingRepository implements LanguageSettingInterface
             }
         }
     }
-    
+
     protected function countTotalTranslationKeys(array $files): int
     {
         $totalKeys = 0;
         $defaultLang = 'en';
-        
+
         foreach ($files as $file) {
             $filePath = base_path("resources/lang/{$defaultLang}/{$file}");
             if (file_exists($filePath)) {
@@ -459,14 +461,14 @@ class LanguageSettingRepository implements LanguageSettingInterface
                 }
             }
         }
-        
+
         return $totalKeys;
     }
-    
+
     protected function countTranslatedKeys(string $langCode, array $files): int
     {
         $translatedCount = 0;
-        
+
         foreach ($files as $file) {
             $filePath = base_path("resources/lang/{$langCode}/{$file}");
             if (file_exists($filePath)) {
@@ -481,10 +483,10 @@ class LanguageSettingRepository implements LanguageSettingInterface
                 }
             }
         }
-        
+
         return $translatedCount;
     }
-    
+
     protected function countKeys(array $array, bool $checkEmpty = false): int
     {
         $count = 0;
@@ -497,39 +499,44 @@ class LanguageSettingRepository implements LanguageSettingInterface
         }
         return $count;
     }
-    
+
     protected function getProgressColor(float $progress): string
     {
         switch (true) {
-            case $progress >= 100: return "bg-success";
-            case $progress >= 75: return "bg-pink";
-            case $progress >= 50: return "bg-warning";
-            case $progress >= 25: return "bg-danger";
-            default: return "bg-danger";
+            case $progress >= 100:
+                return "bg-success";
+            case $progress >= 75:
+                return "bg-pink";
+            case $progress >= 50:
+                return "bg-warning";
+            case $progress >= 25:
+                return "bg-danger";
+            default:
+                return "bg-danger";
         }
     }
-    
+
     protected function calculateModuleProgress(string $langCode, string $tab, string $module): float
     {
         $defaultLang = 'en';
         $defaultPath = base_path("resources/lang/{$defaultLang}/{$tab}.php");
         $translatedPath = base_path("resources/lang/{$langCode}/{$tab}.php");
-        
+
         $defaultTranslations = file_exists($defaultPath) ? include $defaultPath : [];
         $translatedTranslations = file_exists($translatedPath) ? include $translatedPath : [];
-        
+
         $moduleKeys = $defaultTranslations[$module] ?? [];
         $translatedModuleKeys = $translatedTranslations[$module] ?? [];
-        
+
         $translatedCount = 0;
         $totalKeys = count($moduleKeys);
-        
+
         foreach ($moduleKeys as $key => $value) {
             if (!empty($translatedModuleKeys[$key] ?? '')) {
                 $translatedCount++;
             }
         }
-        
+
         return $totalKeys > 0 ? round(($translatedCount / $totalKeys) * 100, 2) : 0;
     }
 }

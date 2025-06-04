@@ -9,8 +9,8 @@
         <x-admin.breadcrumb
             :title="__('admin.blog.blog_categories')"
             :breadcrumbs="[
-					__('admin.blog.blog_categories') => ''
-				]"
+                    __('admin.blog.blog_categories') => ''
+                ]"
             :buttonText="__('admin.blog.add_category')"
             :modalId="'add_Category'"
             :buttonId="'addCategoryButton'"

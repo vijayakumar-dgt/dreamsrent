@@ -143,7 +143,7 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
         return $data;
     }
 
-    public function blogDetails(string $id) : array
+    public function blogDetails(string $id): array
     {
         $languages = Language::with('transLang')->get();
         $blogPosts = BlogPost::Join('blog_categories', 'blog_posts.category', '=', 'blog_categories.id')

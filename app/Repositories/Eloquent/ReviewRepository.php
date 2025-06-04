@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Modules\Booking\Models\Booking;
 use Illuminate\Contracts\Auth\Authenticatable;
+
 class ReviewRepository implements ReviewRepositoryInterface
 {
     protected ?Authenticatable $authUser;
@@ -318,7 +319,7 @@ class ReviewRepository implements ReviewRepositoryInterface
                     : uploadedAsset(null, 'profile');
                 return $item;
             });
-            
+
             $response = [
                 "draw" => intval($request->draw),
                 "recordsTotal" => $totalRecords,

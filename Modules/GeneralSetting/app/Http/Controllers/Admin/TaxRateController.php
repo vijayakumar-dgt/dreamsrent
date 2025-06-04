@@ -40,10 +40,10 @@ class TaxRateController extends Controller
             $success = $this->taxRateSettingRepository->createOrUpdateTaxRate($data);
 
             if ($success) {
-                $message = isset($request->id) 
-                    ? __('admin.general_settings.tax_rate_update_success') 
+                $message = isset($request->id)
+                    ? __('admin.general_settings.tax_rate_update_success')
                     : __('admin.general_settings.tax_rate_create_success');
-                
+
                 return response()->json([
                     'status' => 'success',
                     'code'   => 200,
@@ -52,12 +52,11 @@ class TaxRateController extends Controller
             }
 
             throw new \Exception('Failed to save tax rate');
-
         } catch (\Exception $e) {
-            $message = isset($request->id) 
-                ? __('admin.common.default_update_error') 
+            $message = isset($request->id)
+                ? __('admin.common.default_update_error')
                 : __('admin.common.default_create_error');
-            
+
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,
@@ -142,7 +141,7 @@ class TaxRateController extends Controller
                 $message = isset($request->id)
                     ? __('admin.general_settings.tax_group_update_success')
                     : __('admin.general_settings.tax_group_create_success');
-                
+
                 return response()->json([
                     'status' => 'success',
                     'code'   => 200,
@@ -151,12 +150,11 @@ class TaxRateController extends Controller
             }
 
             throw new \Exception('Failed to save tax group');
-
         } catch (\Exception $e) {
             $message = isset($request->id)
                 ? __('admin.common.default_update_error')
                 : __('admin.common.default_create_error');
-            
+
             return response()->json([
                 'status' => 'error',
                 'code'   => 500,

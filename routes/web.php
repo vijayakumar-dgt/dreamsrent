@@ -29,7 +29,7 @@ Route::get('/storage-link', function () {
 Route::group(['middleware' => ['checkInstallerStatus', 'setLocaleUser', 'securityHeader']], function () {
 
     Route::get('/user/translations/{file}/{module}', [TranslationController::class, 'getFileTranslations'])->name('translations');
-    Route::get('/', [PageController::class, 'pageBuilderApi'])->middleware('checkInstallerStatus','maintenance')->name('home');
+    Route::get('/', [PageController::class, 'pageBuilderApi'])->middleware('checkInstallerStatus', 'maintenance')->name('home');
     Route::middleware('maintenance')->controller(HomeController::class)->group(function () {
         Route::get('/vehicles', 'list')->name('list');
         Route::get('/vehicle-details/{slug}', 'vehicleDetails')->name('vehicleDetails');
@@ -37,7 +37,7 @@ Route::group(['middleware' => ['checkInstallerStatus', 'setLocaleUser', 'securit
         Route::get('/contact-us', 'contactUs')->name('contact-us');
         Route::get('test', 'test');
     });
-    
+
     Route::middleware('maintenance')->group(function () {
         Route::get('/login', [UserLoginRegisterController::class, 'userLogin'])->name('user-login');
         Route::get('/register', [UserLoginRegisterController::class, 'userRegister'])->name('user-register');

@@ -28,15 +28,15 @@ class InsuranceController extends Controller
     {
         try {
             $data = $request->only([
-                'insurance_name', 
-                'price_type_id', 
+                'insurance_name',
+                'price_type_id',
                 'price',
                 'status',
                 'language_id'
             ]);
             $data['status'] = ($request->has('status') && $request->status === 'on') ? 1 : 0;
             $data['language_id'] = $data['language_id'] ?? 1;
-            
+
             $insurance = $this->repository->saveInsurance(
                 $data,
                 $request->benefit ?? [],

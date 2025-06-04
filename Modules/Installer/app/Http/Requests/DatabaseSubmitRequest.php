@@ -5,7 +5,6 @@ namespace Modules\Installer\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Modules\Installer\Enums\InstallerInfo;
 
-
 class DatabaseSubmitRequest extends FormRequest
 {
     public function authorize(): bool

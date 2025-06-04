@@ -30,7 +30,7 @@ class CarTransmissionContollerController extends Controller
     }
 
     public function list(Request $request): JsonResponse
-    { 
+    {
         $response = $this->vehicleTransmissionRepository->list($request);
         return response()->json($response, $response['code']);
     }

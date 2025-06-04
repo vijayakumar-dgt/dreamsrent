@@ -42,13 +42,13 @@ class CategoryRepository implements CategoryRepositoryInterface
             return [
                 'status' => 'error',
                 'code' => 500,
-                'message' => empty($id) 
-                    ? __('admin.common.default_create_error') 
+                'message' => empty($id)
+                    ? __('admin.common.default_create_error')
                     : __('admin.common.default_update_error'),
             ];
         }
     }
-   public function list(Request $request): array
+    public function list(Request $request): array
     {
         try {
             $orderBy = $request->order_by ?? 'desc';
@@ -79,10 +79,10 @@ class CategoryRepository implements CategoryRepositoryInterface
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
-                'message' => __('admin.common.default_retrieve_error'),
-                'error' => $e->getMessage(),
+              'status' => 'error',
+              'code' => 500,
+              'message' => __('admin.common.default_retrieve_error'),
+              'error' => $e->getMessage(),
             ];
         }
     }
@@ -201,5 +201,4 @@ class CategoryRepository implements CategoryRepositoryInterface
             return response()->json(['error' => 'Error generating PDF: ' . $e->getMessage()], 500);
         }
     }
-
 }

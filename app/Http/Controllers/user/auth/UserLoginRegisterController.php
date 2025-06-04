@@ -69,7 +69,7 @@ class UserLoginRegisterController extends Controller
         $response = $this->userLoginRegisterRepository->getOtpSettings($request);
         return response()->json($response, $response['code'] ?? 200);
     }
-    
+
     public function verifyOtp(Request $request): JsonResponse
     {
         $response = $this->userLoginRegisterRepository->verifyOtp($request);

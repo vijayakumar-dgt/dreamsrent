@@ -364,7 +364,6 @@ class PageController extends Controller
             $pageContentSections = [];
         } else {
             foreach ($pageContentSections as &$section) {
-
                 // Banner One
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';

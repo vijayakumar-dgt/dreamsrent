@@ -6,7 +6,7 @@ use App\Library\CustomFailedValidation;
 
 class FaqStoreRequest extends CustomFailedValidation
 {
-   public function rules(): array
+    public function rules(): array
     {
         return [
             'question' => 'required|string|max:255|unique:faqs,question',

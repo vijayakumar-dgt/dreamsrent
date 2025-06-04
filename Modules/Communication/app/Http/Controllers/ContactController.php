@@ -23,7 +23,7 @@ class ContactController extends Controller
     public function index(): View
     {
         return view('communication::contact-message.index');
-    }  
+    }
 
     public function store(ContactMessagesRequest $request): JsonResponse
     {
@@ -31,7 +31,7 @@ class ContactController extends Controller
         return response()->json($result, $result['code']);
     }
 
-       public function list(Request $request): JsonResponse
+    public function list(Request $request): JsonResponse
     {
         $result = $this->contactMessagesRepository->list($request);
         return response()->json($result, $result['code']);

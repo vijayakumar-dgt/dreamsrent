@@ -84,7 +84,9 @@ class PaymentRepository implements PaymentInterface
 
     protected function applySorting($query, ?string $sortBy): void
     {
-        if (!$sortBy) return;
+        if (!$sortBy) {
+            return;
+        }
 
         switch (strtolower($sortBy)) {
             case 'latest':
@@ -111,7 +113,7 @@ class PaymentRepository implements PaymentInterface
 
     protected function formatPaymentType(string $paymentType): string
     {
-        return $paymentType == 'cod' 
+        return $paymentType == 'cod'
             ? strtoupper(str_replace('_', ' ', $paymentType))
             : ucfirst(str_replace('_', ' ', $paymentType));
     }

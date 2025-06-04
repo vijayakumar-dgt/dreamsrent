@@ -27,16 +27,16 @@ class VehicleFuelRepository implements VehicleFuelRepositoryInterface
             return [
                 'status' => 'success',
                 'code'   => 200,
-                'message' => empty($id) 
-                    ? __('admin.rentals.fuel_type_create_success') 
+                'message' => empty($id)
+                    ? __('admin.rentals.fuel_type_create_success')
                     : __('admin.rentals.fuel_type_update_success'),
             ];
         } catch (\Exception $th) {
             return [
                 'status' => 'error',
                 'code'   => 500,
-                'message' => empty($id) 
-                    ? __('admin.common.default_create_error') 
+                'message' => empty($id)
+                    ? __('admin.common.default_create_error')
                     : __('admin.common.default_update_error'),
             ];
         }

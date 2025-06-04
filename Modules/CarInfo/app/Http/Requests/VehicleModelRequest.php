@@ -49,5 +49,4 @@ class VehicleModelRequest extends CustomFailedValidation
             'total_cars.required' => __('admin.rentals.total_vehicles_required'),
         ];
     }
-
 }

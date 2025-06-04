@@ -6,7 +6,6 @@ use App\Models\Country;
 use App\Repositories\Contracts\CountryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
-
 class CountryRepository implements CountryInterface
 {
     protected $model;
@@ -50,7 +49,7 @@ class CountryRepository implements CountryInterface
     {
         return $this->model->when($search, function ($query) use ($search) {
                 $query->where('name', 'LIKE', "%{$search}%");
-            })
+        })
             ->when(!is_null($status), function ($query) use ($status) {
                 $query->where('status', $status);
             })

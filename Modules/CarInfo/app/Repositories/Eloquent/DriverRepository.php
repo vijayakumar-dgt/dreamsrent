@@ -389,5 +389,4 @@ class DriverRepository implements DriverRepositoryInterface
             ];
         }
     }
-
 }

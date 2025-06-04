@@ -35,7 +35,7 @@ class CarFuelController extends Controller
     }
 
     public function list(Request $request): JsonResponse
-    {   
+    {
         $response = $this->vehicleFuelRepository->list($request);
         return response()->json($response, $response['code']);
     }

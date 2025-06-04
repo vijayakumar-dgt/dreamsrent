@@ -10,7 +10,6 @@ use Illuminate\View\View;
 use App\Repositories\Contracts\InvoiceRepositoryInterface;
 use App\Http\Requests\InvoiceRequest;
 
-
 class InvoiceController extends Controller
 {
     protected InvoiceRepositoryInterface $invoiceRepository;

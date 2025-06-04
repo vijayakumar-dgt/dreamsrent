@@ -6,7 +6,7 @@ use App\Library\CustomFailedValidation;
 
 class StorageStatusUpdateRequest extends CustomFailedValidation
 {
-   public function rules(): array
+    public function rules(): array
     {
         return [
             'storage_type' => 'required|in:local_storage,aws_storage',

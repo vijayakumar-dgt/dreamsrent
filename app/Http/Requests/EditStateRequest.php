@@ -5,10 +5,9 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-
 class EditStateRequest extends FormRequest
 {
-     public function authorize(): bool
+    public function authorize(): bool
     {
         return true;
     }
@@ -16,7 +15,7 @@ class EditStateRequest extends FormRequest
     public function rules(): array
     {
         $id = $this->route('id') ?? $this->input('id');
-        
+
         return [
             'id' => 'required|exists:states,id',
             'name' => [

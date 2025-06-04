@@ -1,6 +1,7 @@
 <?php
 
 namespace Modules\GeneralSetting\Repositories\Eloquent;
+
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Laravel\Facades\Image;
@@ -12,7 +13,6 @@ use Modules\GeneralSetting\Models\UserDevice;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Modules\GeneralSetting\Repositories\Contracts\GeneralSettingInterface;
-
 
 class GeneralSettingRepository implements GeneralSettingInterface
 {
@@ -271,7 +271,6 @@ class GeneralSettingRepository implements GeneralSettingInterface
                     ['value' => $value, 'group_id' => $groupId]
                 );
             }
-
         } catch (Exception $e) {
             // Optionally log the error
             \Log::error('Maintenance settings update failed: ' . $e->getMessage(), [
@@ -443,7 +442,6 @@ class GeneralSettingRepository implements GeneralSettingInterface
                     ['value' => $value, 'group_id' => $groupId]
                 );
             }
-
         } catch (Exception $e) {
             \Log::error('Invoice settings update failed: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString(),
@@ -608,8 +606,9 @@ class GeneralSettingRepository implements GeneralSettingInterface
         }
 
         $device = UserDevice::find($data['id']);
-        if ($device)
+        if ($device) {
             $device->delete();
+        }
 
         return ['success' => true, 'message' => __('admin.general_settings.device_removed_successfully')];
     }
@@ -738,7 +737,7 @@ class GeneralSettingRepository implements GeneralSettingInterface
         }
     }
 
-     public function updateOrCreateStorageSetting(array $conditions, array $data): bool
+    public function updateOrCreateStorageSetting(array $conditions, array $data): bool
     {
         return (bool) GeneralSetting::updateOrCreate($conditions, $data);
     }
@@ -765,8 +764,4 @@ class GeneralSettingRepository implements GeneralSettingInterface
             ->where('key', 'how_it_works_' . $languageId)
             ->first();
     }
-
-   
-
-
 }

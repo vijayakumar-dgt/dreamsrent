@@ -32,7 +32,7 @@ class SeasonController extends Controller
         return response()->json($result, $result['code']);
     }
 
-   public function getSeasons(Request $request): JsonResponse
+    public function getSeasons(Request $request): JsonResponse
     {
         $result = $this->SeasonRepository->getSeasons($request);
         return response()->json($result, $result['code']);
@@ -49,5 +49,4 @@ class SeasonController extends Controller
         $response = $this->SeasonRepository->delete($request);
         return response()->json($response, $response['code']);
     }
-
 }

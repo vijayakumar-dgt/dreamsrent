@@ -66,11 +66,11 @@ class CityRepository implements CityInterface
         $query = $this->city->with(['state.country']);
 
         if ($search) {
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhereHas('state', function($q) use ($search) {
+                  ->orWhereHas('state', function ($q) use ($search) {
                       $q->where('name', 'like', "%{$search}%")
-                        ->orWhereHas('country', function($q) use ($search) {
+                        ->orWhereHas('country', function ($q) use ($search) {
                             $q->where('name', 'like', "%{$search}%");
                         });
                   });

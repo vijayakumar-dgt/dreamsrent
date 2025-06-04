@@ -6,7 +6,7 @@ use App\Library\CustomFailedValidation;
 
 class StoreRentalSettingsRequest extends CustomFailedValidation
 {
-   public function authorize(): bool
+    public function authorize(): bool
     {
         return true;
     }

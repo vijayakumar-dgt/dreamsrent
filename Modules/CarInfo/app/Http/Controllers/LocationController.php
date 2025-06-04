@@ -40,7 +40,7 @@ class LocationController extends Controller
     public function storeLocation(LocationRequest $request): JsonResponse
     {
         $response = $this->locationRepository->store($request);
-        return response()->json($response, $response['code']);   
+        return response()->json($response, $response['code']);
     }
 
     /**

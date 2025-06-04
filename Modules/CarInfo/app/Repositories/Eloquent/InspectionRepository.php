@@ -228,5 +228,4 @@ class InspectionRepository implements InspectionRepositoryInterface
 
         return ['exists' => $exists];
     }
-
 }

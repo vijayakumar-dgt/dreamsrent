@@ -16,7 +16,6 @@ use Modules\GeneralSetting\Http\Requests\BlogPostRequest;
 
 class BlogsController extends Controller
 {
-    
     protected BlogCategoryRepositoryInterface $blogRepository;
 
     public function __construct(BlogCategoryRepositoryInterface $blogRepository)
@@ -33,7 +32,6 @@ class BlogsController extends Controller
     {
         $response = $this->blogRepository->categoryStore($request);
         return $response;
-        
     }
     public function categoryUpdate(CategoryUpdateRequest $request, int $id): RedirectResponse
     {
@@ -47,7 +45,7 @@ class BlogsController extends Controller
     }
     public function blogTags(): View
     {
-        $data = $this->blogRepository->blogTags();       
+        $data = $this->blogRepository->blogTags();
         return view('generalsetting::cms.blogs.blog-tags', [...$data]);
     }
     public function tagStore(BlogTagRequest $request): JsonResponse
@@ -74,22 +72,22 @@ class BlogsController extends Controller
     }
     public function blogComments(): View
     {
-        $data = $this->blogRepository->blogComments();       
+        $data = $this->blogRepository->blogComments();
         return view('generalsetting::cms.blogs.blog-comments', [...$data]);
     }
     public function blogs(): View
     {
-        $data = $this->blogRepository->blogs();       
+        $data = $this->blogRepository->blogs();
         return view('generalsetting::cms.blogs.blogs', [...$data]);
     }
     public function blogDetails(string $id): View
     {
-        $data = $this->blogRepository->blogDetails($id);     
+        $data = $this->blogRepository->blogDetails($id);
         return view('generalsetting::cms.blogs.blog-details', [...$data]);
     }
     public function blogAdd(): View
     {
-        $data = $this->blogRepository->blogAdd();     
+        $data = $this->blogRepository->blogAdd();
         return view('generalsetting::cms.blogs.add-blog', [...$data]);
     }
     public function blogStore(BlogPostRequest $request): JsonResponse
@@ -104,7 +102,7 @@ class BlogsController extends Controller
     }
     public function blogEdit(int $id): View
     {
-        $data = $this->blogRepository->blogEdit($id);   
+        $data = $this->blogRepository->blogEdit($id);
         return view('generalsetting::cms.blogs.edit-blog', [...$data]);
     }
     public function BlogUpdate(Request $request, int $id): JsonResponse

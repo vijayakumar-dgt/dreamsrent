@@ -11,7 +11,7 @@ use Modules\GeneralSetting\Repositories\Contracts\LanguageSettingInterface;
 class LanguageController extends Controller
 {
     protected $languageRepository;
-    
+
     public function __construct(LanguageSettingInterface $languageRepository)
     {
         $this->languageRepository = $languageRepository;

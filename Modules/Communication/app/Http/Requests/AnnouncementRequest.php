@@ -4,7 +4,6 @@ namespace Modules\Communication\Http\Requests;
 
 use App\Library\CustomFailedValidation;
 
-
 class AnnouncementRequest extends CustomFailedValidation
 {
     public function rules(): array
@@ -32,4 +31,3 @@ class AnnouncementRequest extends CustomFailedValidation
         ];
     }
 }
-

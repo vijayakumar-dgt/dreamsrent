@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 
 class EditCityRequest extends FormRequest
 {
-     public function authorize(): bool
+    public function authorize(): bool
     {
         return true;
     }
@@ -15,7 +15,7 @@ class EditCityRequest extends FormRequest
     public function rules(): array
     {
         $id = $this->route('id') ?? $this->input('id');
-        
+
         return [
             'id' => 'required|exists:cities,id',
             'name' => [

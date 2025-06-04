@@ -10,12 +10,12 @@ class CylinderRequest extends FormRequest
      * Get the validation rules that apply to the request.
      */
     public function rules(): array
-   {
+    {
         return [
             'cylinder_type' => 'required|unique:cylinders,cylinder_type,' . $this->id . ',id,deleted_at,NULL|not_regex:/<\/?script\b[^>]*>/i',
         ];
     }
- public function messages(): array
+    public function messages(): array
     {
         return [
             'cylinder_type.required' => __('admin.rentals.cylinder_type_required'),

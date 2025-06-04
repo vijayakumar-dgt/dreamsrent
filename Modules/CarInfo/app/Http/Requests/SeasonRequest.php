@@ -1,8 +1,8 @@
 <?php
 
 namespace Modules\CarInfo\Http\Requests;
-use Illuminate\Validation\Rule;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SeasonRequest extends FormRequest
@@ -31,5 +31,4 @@ class SeasonRequest extends FormRequest
             'name.not_regex' => __('admin.common.script_tag_not_allowed'),
         ];
     }
-    
 }

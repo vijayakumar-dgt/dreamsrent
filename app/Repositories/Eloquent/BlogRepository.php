@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repositories\Eloquent;
+
 use Illuminate\Support\Facades\DB;
 use App\Repositories\Contracts\BlogRepositoryInterface;
 use Illuminate\Contracts\View\View;
@@ -16,8 +17,6 @@ use Modules\GeneralSetting\Models\BlogReviews;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-
-
 
 class BlogRepository implements BlogRepositoryInterface
 {
@@ -90,7 +89,6 @@ class BlogRepository implements BlogRepositoryInterface
             'frontend.blogs.blog-list',
             compact('blogPosts', 'languages', 'categories', 'tags', 'latestblogs', 'seo_title')
         );
-
     }
 
     public function BlogDetail(int|string $id): array
@@ -157,5 +155,4 @@ class BlogRepository implements BlogRepositoryInterface
 
         return redirect()->back()->with('success', 'Review Added successfully.');
     }
-
 }

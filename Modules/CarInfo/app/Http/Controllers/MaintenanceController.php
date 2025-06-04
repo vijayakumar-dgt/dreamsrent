@@ -27,7 +27,7 @@ class MaintenanceController extends Controller
     public function store(MaintenanceRequest $request): JsonResponse
     {
         $response = $this->maintenanceRepository->store($request);
-        return response()->json($response, $response['code']);   
+        return response()->json($response, $response['code']);
     }
 
     public function list(Request $request): JsonResponse

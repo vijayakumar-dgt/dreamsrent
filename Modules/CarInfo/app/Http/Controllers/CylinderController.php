@@ -31,7 +31,7 @@ class CylinderController extends Controller
         return response()->json($response, $response['code']);
     }
 
-   public function getCylinders(): JsonResponse
+    public function getCylinders(): JsonResponse
     {
         $response = $this->CylinderRepository->getCylinders();
         return response()->json($response, $response['code']);
@@ -44,7 +44,7 @@ class CylinderController extends Controller
         return response()->json($response, $response['code']);
     }
 
-   
+
     public function deleteCylinder(Request $request): JsonResponse
     {
         $result = $this->CylinderRepository->deleteCylinder($request);
@@ -56,6 +56,4 @@ class CylinderController extends Controller
         $result = $this->CylinderRepository->getCylinderServerside($request);
         return response()->json($result);
     }
-
-
 }

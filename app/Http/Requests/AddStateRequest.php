@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-
 class AddStateRequest extends FormRequest
 {
     public function authorize(): bool
@@ -13,7 +12,7 @@ class AddStateRequest extends FormRequest
         return true;
     }
 
-   public function rules(): array
+    public function rules(): array
     {
         $stateId = $this->id;
         return [

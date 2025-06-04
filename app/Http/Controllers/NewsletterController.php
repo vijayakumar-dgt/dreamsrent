@@ -37,22 +37,21 @@ class NewsletterController extends Controller
         return response()->json($result, $result['code']);
     }
 
-     public function list(Request $request): JsonResponse
+    public function list(Request $request): JsonResponse
     {
         $result = $this->NewsLetterRepository->list($request);
         return response()->json($result, $result['code']);
     }
 
-      public function delete(Request $request): JsonResponse
+    public function delete(Request $request): JsonResponse
     {
         $result = $this->NewsLetterRepository->delete($request);
         return response()->json($result, $result['code']);
     }
 
-       public function sendNewsletter(SendNewsLetterRequest $request): JsonResponse
+    public function sendNewsletter(SendNewsLetterRequest $request): JsonResponse
     {
         $result = $this->NewsLetterRepository->sendNewsletter($request);
         return response()->json($result, $result['code']);
     }
-
 }

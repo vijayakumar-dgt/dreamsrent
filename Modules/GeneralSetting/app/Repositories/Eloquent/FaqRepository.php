@@ -33,9 +33,9 @@ class FaqRepository implements FaqInterface
 
         return Faq::when($filters['language_id'] ?? null, function ($query, $languageId) {
                 return $query->where('language_id', $languageId);
-            }, function ($query) use ($defaultLanguage) {
-                return $query->where('language_id', $defaultLanguage);
-            })
+        }, function ($query) use ($defaultLanguage) {
+            return $query->where('language_id', $defaultLanguage);
+        })
             ->when(isset($filters['status']), fn($query) => $query->where('status', $filters['status']))
             ->when($filters['sort_by'] ?? null, function ($query, $sort) {
                 return match ($sort) {

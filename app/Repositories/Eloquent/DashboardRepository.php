@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Repositories\Eloquent;
+
 use Illuminate\Support\Facades\DB;
 use App\Repositories\Contracts\DashboardRepositoryInterface;
 use Modules\CarInfo\Models\VehicleInfo;
@@ -10,7 +11,6 @@ use App\Models\Invoice;
 use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Currency;
 use Modules\CarInfo\Models\Maintenance;
-
 
 class DashboardRepository implements DashboardRepositoryInterface
 {
@@ -264,7 +264,5 @@ class DashboardRepository implements DashboardRepositoryInterface
         $data = ['current_user' => $current_user, 'carTypes' => $carTypes, 'bookingCount' => $bookingCount, 'upcomingCount' => $upcomingCount, 'symbol' => $symbol, 'amount' => $amount, 'booking' => $booking, 'percentageChange' => $percentageChange, 'sign' => $sign, 'amountPercentageChange' => $amountPercentageChange, 'amountSymbol' => $amountSymbol, 'carSymbol' => $carSymbol, 'carPercentageChange' => $carPercentageChange, 'reservations' => $reservations, 'users' => $users, 'chartbooking' => $chartbooking, 'maintenances' => $maintenances, 'drivers' => $drivers, 'dates' => $dates, 'times' => $times, 'series' => $series, 'formattedDates' => $formattedDates, 'invoices' => $invoices];
 
         return $data;
-
     }
-
 }

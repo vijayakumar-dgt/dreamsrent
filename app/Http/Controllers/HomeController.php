@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use App\Repositories\Contracts\HomeRepositoryInterface;
+
 class HomeController extends Controller
 {
     protected HomeRepositoryInterface $homeRepository;

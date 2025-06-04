@@ -31,7 +31,7 @@ class LocalizationController extends Controller
         $weekdays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
         $availableLanguages = Language::where('status', 1)->pluck('language_id');
         $languages = TranslationLanguage::whereIn('id', $availableLanguages)->where('status', 1)->get();
-        
+
         return view('generalsetting::website_settings.localization', [
             'page_title' => 'Localization',
             'timezones' => $this->repository->getTimezones(),
@@ -46,7 +46,7 @@ class LocalizationController extends Controller
     public function getTimezones(Request $request): JsonResponse
     {
         $timezones = $this->repository->searchTimezones($request->search);
-        
+
         return response()->json([
             'status' => 'success',
             'code' => 200,
@@ -74,7 +74,7 @@ class LocalizationController extends Controller
             ];
 
             $this->repository->updateLocalization($localizationArray);
-            
+
             $timezone = $this->repository->getTimezoneById($request->timezone);
             $timezoneName = $timezone ? $timezone->name : 'UTC';
             config(['app.timezone' => $timezoneName]);
@@ -96,7 +96,7 @@ class LocalizationController extends Controller
     public function getTimezone(): JsonResponse
     {
         $settingTimezone = $this->repository->getCurrentTimezone();
-        
+
         if ($settingTimezone) {
             $timezones = $this->repository->getTimezoneById($settingTimezone->value);
             return response()->json([
@@ -106,7 +106,7 @@ class LocalizationController extends Controller
                 'message' => __('admin.general_settings.timezone_success'),
             ]);
         }
-        
+
         return response()->json([
             'status' => 'error',
             'code' => 500,

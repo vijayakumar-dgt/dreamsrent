@@ -26,7 +26,7 @@ class SitemapController extends Controller
     {
         try {
             $this->sitemapSetting->store($request->validated());
-            
+
             return response()->json([
                 'status' => 'success',
                 'code' => 200,
@@ -45,11 +45,11 @@ class SitemapController extends Controller
     public function generateSitemap(): JsonResponse
     {
         $result = $this->sitemapSetting->generateSitemap();
-        
+
         return response()->json([
             'status' => !empty($result) ? 'success' : 'error',
-            'message' => !empty($result) 
-                ? __('admin.general_settings.sitemap_generated') 
+            'message' => !empty($result)
+                ? __('admin.general_settings.sitemap_generated')
                 : __('admin.general_settings.sitemap_generation_failed')
         ]);
     }
@@ -57,7 +57,7 @@ class SitemapController extends Controller
     public function getSitemapUrls(): JsonResponse
     {
         $data = $this->sitemapSetting->getSitemapUrls(request()->all());
-        
+
         return response()->json($data);
     }
 
@@ -65,7 +65,7 @@ class SitemapController extends Controller
     {
         try {
             $this->sitemapSetting->deleteSitemapUrl(request()->id);
-            
+
             return response()->json([
                 'status' => 'success',
                 'code' => 200,

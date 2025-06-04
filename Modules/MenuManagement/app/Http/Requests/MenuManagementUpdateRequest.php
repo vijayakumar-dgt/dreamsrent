@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class MenuManagementUpdateRequest extends FormRequest
 {
-     public function authorize()
+    public function authorize()
     {
         return true;
     }
@@ -15,7 +15,7 @@ class MenuManagementUpdateRequest extends FormRequest
     {
         return [
             'menu_id' => 'required|exists:menus,id',
-            'menu_items' => 'required|array|min:1',           
+            'menu_items' => 'required|array|min:1',
         ];
     }
 

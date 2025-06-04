@@ -10,10 +10,9 @@ use Modules\CarInfo\Models\Cylinder;
 use Modules\CarInfo\Models\SafetyFeature;
 use Modules\CarInfo\Repositories\Contracts\SafetyFeatureRepositoryInterface;
 
-
 class SafetyFeatureRepository implements SafetyFeatureRepositoryInterface
 {
-   public function store(SafetyFeatureRequest $request): array
+    public function store(SafetyFeatureRequest $request): array
     {
         $id = $request->id ?? '';
         $authUser = current_user();
@@ -47,10 +46,10 @@ class SafetyFeatureRepository implements SafetyFeatureRepositoryInterface
             ];
         } catch (\Exception $e) {
             return [
-                'status' => 'error',
-                'code' => 500,
-                'message' => $errorMsg,
-                'error' => $e->getMessage()
+              'status' => 'error',
+              'code' => 500,
+              'message' => $errorMsg,
+              'error' => $e->getMessage()
             ];
         }
     }
@@ -135,8 +134,4 @@ class SafetyFeatureRepository implements SafetyFeatureRepositoryInterface
             ];
         }
     }
-
- 
-
-
 }

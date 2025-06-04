@@ -56,7 +56,6 @@ class CurrencyController extends Controller
             }
 
             throw new \Exception('Failed to save currency');
-
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
@@ -119,7 +118,6 @@ class CurrencyController extends Controller
                 'data' => $currency,
                 'message' => __('admin.general_settings.currency_fetched_successfully')
             ]);
-
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
@@ -143,10 +141,9 @@ class CurrencyController extends Controller
                 'code' => 200,
                 'message' => __('admin.general_settings.currency_deleted_successfully')
             ]);
-
         } catch (\Throwable $th) {
             $code = $th->getMessage() === __('admin.general_settings.currency_not_found') ? 404 : 500;
-            
+
             return response()->json([
                 'status' => 'error',
                 'code' => $code,

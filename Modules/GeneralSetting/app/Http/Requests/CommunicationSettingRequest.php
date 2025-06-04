@@ -4,19 +4,18 @@ namespace Modules\GeneralSetting\Http\Requests;
 
 use App\Library\CustomFailedValidation;
 
-
 class CommunicationSettingRequest extends CustomFailedValidation
 {
-    public function authorize(): bool  
+    public function authorize(): bool
     {
         return true;
     }
 
     public function rules(): array
     {
-       $rules = [
+        $rules = [
         'type' => 'required|string|in:nexmo,twilio,twofactor,phpmail,smtp,sendgrid,fcm',
-    ];
+        ];
         if ($this->routeIs('admin.statusUpdate-settings')) {
             $rules = [
                 'gateway' => 'required|in:nexmo,twilio,twofactor,phpmail,smtp,sendgrid',
@@ -24,11 +23,10 @@ class CommunicationSettingRequest extends CustomFailedValidation
             ];
         }
 
-         if (
-            $this->routeIs('admin.email-settings-store') ||
-            $this->routeIs('admin.smsstore-settings')  
-        )  {
-            
+        if (
+             $this->routeIs('admin.email-settings-store') ||
+             $this->routeIs('admin.smsstore-settings')
+        ) {
             $type = $this->input('type');
             $rules = array_merge($rules, $this->getTypeSpecificRules($type));
         }

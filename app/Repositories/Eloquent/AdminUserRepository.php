@@ -31,7 +31,7 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             ->where('status', 1)
             ->where('created_by', $userId)
             ->get();
-        
+
         $data = ['roles' => $roles];
         return $data;
     }
@@ -342,7 +342,7 @@ class AdminUserRepository implements AdminUserRepositoryInterface
             'message' => __('web.user.notification_marked_as_read')
         ];
     }
-    
+
     public function deleteNotification(int $id): array
     {
         Notification::where('id', $id)->delete();

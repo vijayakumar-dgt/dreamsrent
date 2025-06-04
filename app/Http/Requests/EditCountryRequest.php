@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 
 class EditCountryRequest extends FormRequest
 {
-public function authorize(): bool
+    public function authorize(): bool
     {
         return true;
     }
@@ -15,13 +15,13 @@ public function authorize(): bool
     public function rules(): array
     {
         $id = $this->route('id') ?? $this->input('id');
-        
+
         return [
             'id' => 'required|exists:countries,id',
             'name' => [
                 'required',
                 'max:255',
-               
+
             ],
             'code' => 'nullable|max:50',
             'status' => 'nullable|boolean',

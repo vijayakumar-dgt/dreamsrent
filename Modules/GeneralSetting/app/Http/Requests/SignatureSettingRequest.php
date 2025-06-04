@@ -6,7 +6,7 @@ use App\Library\CustomFailedValidation;
 
 class SignatureSettingRequest extends CustomFailedValidation
 {
-   public function authorize()
+    public function authorize()
     {
         return true;
     }
@@ -19,11 +19,11 @@ class SignatureSettingRequest extends CustomFailedValidation
             'status' => 'nullable|boolean',
         ];
 
-        
+
         if ($this->has('id')) {
             $rules['id'] = 'required|integer|exists:signature_settings,id';
             $rules['signature_image'] = 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120';
-        } else {           
+        } else {
             $rules['signature_image'] = 'required|image|mimes:jpeg,png,jpg,gif|max:5120';
         }
 

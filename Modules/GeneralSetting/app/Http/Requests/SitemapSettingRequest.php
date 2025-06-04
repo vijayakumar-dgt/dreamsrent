@@ -6,7 +6,7 @@ use App\Library\CustomFailedValidation;
 
 class SitemapSettingRequest extends CustomFailedValidation
 {
-   public function authorize()
+    public function authorize()
     {
         return true;
     }

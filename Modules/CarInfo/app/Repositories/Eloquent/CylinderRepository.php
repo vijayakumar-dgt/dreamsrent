@@ -8,10 +8,9 @@ use Modules\CarInfo\Models\CarFuel;
 use Modules\CarInfo\Models\Cylinder;
 use Modules\CarInfo\Repositories\Contracts\CylinderRepositoryInterface;
 
-
 class CylinderRepository implements CylinderRepositoryInterface
 {
-   public function storeCylinderType(Request $request): array
+    public function storeCylinderType(Request $request): array
     {
         try {
             $successMessage = '';
@@ -43,9 +42,9 @@ class CylinderRepository implements CylinderRepositoryInterface
             ];
         } catch (\Throwable $th) {
             return [
-                'status' => 'error',
-                'code'   => 422,
-                'message' => $th->getMessage()
+              'status' => 'error',
+              'code'   => 422,
+              'message' => $th->getMessage()
             ];
         }
     }
@@ -94,7 +93,7 @@ class CylinderRepository implements CylinderRepositoryInterface
         }
     }
 
-   public function deleteCylinder(Request $request): array
+    public function deleteCylinder(Request $request): array
     {
         try {
             $cylinder = Cylinder::where('id', $request->delete_id)->firstOrFail();
@@ -107,15 +106,15 @@ class CylinderRepository implements CylinderRepositoryInterface
             ];
         } catch (ModelNotFoundException $e) {
             return [
-                'status' => 'error',
-                'code' => 422,
-                'message' => __('admin.rentals.cylinder_type_not_found')
+              'status' => 'error',
+              'code' => 422,
+              'message' => __('admin.rentals.cylinder_type_not_found')
             ];
         } catch (\Throwable $th) {
             return [
-                'status' => 'error',
-                'code' => 422,
-                'message' => $th->getMessage()
+             'status' => 'error',
+             'code' => 422,
+             'message' => $th->getMessage()
             ];
         }
     }
@@ -153,6 +152,4 @@ class CylinderRepository implements CylinderRepositoryInterface
             'data' => $cylinders
         ];
     }
-
-
 }

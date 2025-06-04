@@ -7,7 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ContactMessagesRequest extends CustomFailedValidation
 {
- 
     public function rules(): array
     {
         return [
@@ -34,7 +33,7 @@ class ContactMessagesRequest extends CustomFailedValidation
         ];
     }
 
-  
+
     public function authorize(): bool
     {
         return true;

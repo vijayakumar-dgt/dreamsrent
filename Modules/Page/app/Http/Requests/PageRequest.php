@@ -34,11 +34,9 @@ class PageRequest extends FormRequest
         $pageId = $this->input('page_id');
 
         if (!$pageId) {
-           
             $rules['title'] = 'required|max:100|unique:pages,page_title';
             $rules['slug'] = 'required|max:100|unique:pages,slug';
         } else {
-            
             $rules['page_id'] = 'nullable|exists:pages,id';
             $rules['title'] = 'required|max:100|unique:pages,page_title,' . $pageId;
             $rules['slug'] = 'nullable|max:100|unique:pages,slug,' . $pageId;

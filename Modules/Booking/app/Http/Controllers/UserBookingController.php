@@ -41,7 +41,7 @@ class UserBookingController extends Controller
     public function index(Request $request, string $slug): View|RedirectResponse
     {
         $data = $this->userBookingRepository->getVehicleInfo($request, $slug);
-        if($data && isset($data['redirect_url'])){
+        if ($data && isset($data['redirect_url'])) {
             return redirect()->to($data['redirect_url']);
         }
         return view('booking::user_booking.index', $data)->with($request->all());
@@ -54,7 +54,7 @@ class UserBookingController extends Controller
     }
 
     public function getCities(int $state_id): JsonResponse
-    {  
+    {
         $response = $this->userBookingRepository->getCities($state_id);
         return response()->json($response);
     }
@@ -80,7 +80,7 @@ class UserBookingController extends Controller
     public function userPayments(Request $request): JsonResponse
     {
         $response = $this->userBookingRepository->userPayments($request);
-        if($response){
+        if ($response) {
             return response()->json($response, $response['code'] ?? 200);
         }
         return response()->json(['error' => __('web.home.failed_to_create_booking')], 500);
@@ -89,7 +89,7 @@ class UserBookingController extends Controller
     public function paypalPaymentSuccess(Request $request): JsonResponse|RedirectResponse
     {
         $response = $this->userBookingRepository->paypalPaymentSuccess($request);
-        if($response && isset($response['redirect_url'])){
+        if ($response && isset($response['redirect_url'])) {
             return redirect($response['redirect_url']);
         }
         return response()->json($response, $response['code'] ?? 200);
@@ -98,7 +98,7 @@ class UserBookingController extends Controller
     public function paypalPaymentFailed(Request $request): JsonResponse|RedirectResponse
     {
         $response = $this->userBookingRepository->paypalPaymentFailed($request);
-        if($response && isset($response['redirect_url'])){
+        if ($response && isset($response['redirect_url'])) {
             return redirect($response['redirect_url']);
         }
         return response()->json($response, $response['code'] ?? 200);
@@ -107,7 +107,7 @@ class UserBookingController extends Controller
     public function stripPaymentSuccess(Request $request): JsonResponse|RedirectResponse
     {
         $response = $this->userBookingRepository->stripPaymentSuccess($request);
-        if($response && isset($response['redirect_url'])){
+        if ($response && isset($response['redirect_url'])) {
             return redirect($response['redirect_url']);
         }
         return response()->json($response, $response['code'] ?? 200);

@@ -5,7 +5,6 @@ namespace Modules\Report\Repositories\Contracts;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-
 interface ReportRepositoryInterface
 {
     public function incomeReport(): array;

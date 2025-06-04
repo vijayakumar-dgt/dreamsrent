@@ -79,7 +79,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::post('country/update', [CountryController::class, 'update'])->name('country.update');
         Route::post('country/delete', [CountryController::class, 'delete'])->name('country.delete');
         Route::post('country/delete-bulk', [CountryController::class, 'bulkDelete'])->name('country.bulkDelete');
-        
+
         //State
         Route::get('state', [StateController::class, 'index'])->name('state.index')->middleware('permission');
         Route::post('state/store', [StateController::class, 'store'])->name('state.store');
@@ -88,7 +88,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::post('state/update', [StateController::class, 'update'])->name('state.update');
         Route::post('state/delete', [StateController::class, 'delete'])->name('state.delete');
         Route::post('state/delete-bulk', [StateController::class, 'bulkDelete'])->name('state.bulkDelete');
-        
+
         //city
         Route::get('city', [CityController::class, 'index'])->name('city.index')->middleware('permission');
         Route::post('city/store', [CityController::class, 'store'])->name('city.store');
@@ -97,16 +97,16 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::post('city/update', [CityController::class, 'update'])->name('city.update');
         Route::post('city/delete', [CityController::class, 'delete'])->name('city.delete');
         Route::post('city/delete-bulk', [CityController::class, 'bulkDelete'])->name('city.bulkDelete');
-        
+
         //Payment Transation
         Route::get('payments', [PaymentController::class, 'index'])->name('payment.payment')->middleware('permission');
         Route::post('payments-info', [PaymentController::class, 'paymentList'])->name('payment.list');
-        
+
         //calander
         Route::get('calendar', [CalanderController::class, 'index'])->name('calendar.index');
         Route::post('/calendar-info', [CalanderController::class, 'getCalenderBooking'])->name('calendar.info');
         Route::get('calendar-detail', [CalanderController::class, 'getBookingDetail'])->name('calendar.booking.info');
-        
+
         // Customers
         Route::get('/customers', [CustomerController::class, 'index'])->name('admin.customers')->middleware('permission');
         Route::post('/customer/save', [CustomerController::class, 'store'])->name('admin.save-customer');
@@ -115,7 +115,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::get('/customer-details/{id}', [CustomerController::class, 'customerDetails'])->name('admin.customer-details');
         Route::get('/customer-details/{id}/recent-rents', [CustomerController::class, 'customerDetails'])->name('admin.customer-recent-rents');
         Route::post('/customer/delete', [CustomerController::class, 'delete'])->name('admin.customer-delete');
-        
+
         // Users
         Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users')->middleware('permission');
         Route::prefix('user')->group(function () {

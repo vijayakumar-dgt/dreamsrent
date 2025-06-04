@@ -34,13 +34,13 @@ use Modules\GeneralSetting\Repositories\Eloquent\TaxRateSettingRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\TestimonialRepository;
 use Modules\GeneralSetting\Repositories\Eloquent\BlogCategoryRepository;
 
-
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.
      */
-    public function register(): void {
+    public function register(): void
+    {
         $this->registerBindings();
     }
 
@@ -61,5 +61,5 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TestimonialInterface::class, TestimonialRepository::class);
         $this->app->bind(BlogCategoryRepositoryInterface::class, BlogCategoryRepository::class);
         $this->app->bind(FaqInterface::class, FaqRepository::class);
-    }    
+    }
 }

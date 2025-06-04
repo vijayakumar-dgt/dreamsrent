@@ -189,7 +189,7 @@ class TicketController extends Controller
         }
     }
 
-   public function ticketUpdate(UpdateTicketRequest $request): JsonResponse
+    public function ticketUpdate(UpdateTicketRequest $request): JsonResponse
     {
         try {
             $user = Auth::guard('admin')->check() ? Auth::guard('admin')->user() : Auth::guard('web')->user();
@@ -212,11 +212,10 @@ class TicketController extends Controller
                 'message' => __('admin.support.ticket_update_success'),
                 'ticket' => $ticket
             ], 200);
-
         } catch (\Throwable $e) {
             return response()->json([
-                'code' => $e->getCode() >= 400 && $e->getCode() < 600 ? $e->getCode() : 500,
-                'message' => $e->getMessage(),
+              'code' => $e->getCode() >= 400 && $e->getCode() < 600 ? $e->getCode() : 500,
+              'message' => $e->getMessage(),
             ], $e->getCode() >= 400 && $e->getCode() < 600 ? $e->getCode() : 500);
         }
     }

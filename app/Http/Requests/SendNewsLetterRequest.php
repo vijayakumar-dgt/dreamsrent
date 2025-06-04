@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use App\Library\CustomFailedValidation;
 
-
 class SendNewsLetterRequest extends CustomFailedValidation
 {
     public function authorize(): bool

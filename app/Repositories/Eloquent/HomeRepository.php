@@ -79,7 +79,7 @@ class HomeRepository implements HomeRepositoryInterface
             $pickuptime = $request->pickuptime ?? '';
             $returndate = $request->returndate ?? '';
             $returntime = $request->returntime ?? '';
-        } elseif($theme == 2) {
+        } elseif ($theme == 2) {
             $pickupdatetime = $request->pickupdatetime ?? '';
             $returndatetime = $request->returndatetime ?? '';
             $pickupdate = $pickupdatetime ? date('d-m-Y', strtotime($pickupdatetime)) : '';
@@ -107,7 +107,7 @@ class HomeRepository implements HomeRepositoryInterface
             'seo_title' => __('web.common.vehicles'),
             'initialPickupLocation' => $pickuplocation ? $_pickuplocation : null
         ];
-        
+
         return $data;
     }
 

@@ -126,7 +126,7 @@ class CalendarRepository implements CalendarRepositoryInterface
 
         if (!$booking) {
             return [
-                'code' => 404, 
+                'code' => 404,
                 'message' => 'Booking not found'
             ];
         }

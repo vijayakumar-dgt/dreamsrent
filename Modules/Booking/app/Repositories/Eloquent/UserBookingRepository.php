@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Modules\Booking\Repositories\Eloquent;
 
@@ -40,11 +40,11 @@ class UserBookingRepository implements UserBookingRepositoryInterface
         } else {
             $this->provider = new PayPalClient();
             $this->provider->getAccessToken();
-        }    
+        }
     }
     public function getVehicleInfo(Request $request, string $slug): array|RedirectResponse
     {
-      if (!Auth::guard('web')->check()) {
+        if (!Auth::guard('web')->check()) {
             session(['intended_url' => url()->current()]);
             session([
                 'intended_booking' => [
@@ -52,10 +52,10 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                     'data' => $request->except('_token')
                 ]
             ]);
-            $response = [
+              $response = [
                 'redirect_url' => route('user-login')
-            ];
-            return $response;
+              ];
+              return $response;
         }
         $vehicle = VehicleInfo::select('id', 'name', 'slug', 'vehicle_image', 'main_location_id', 'other_location_id', 'vehicle_price', 'passenger_capacity')
             ->where('slug', $slug)
@@ -1046,7 +1046,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             return $response;
         }
     }
-    
+
     public function paypalPaymentSuccess(Request $request): array
     {
         try {
@@ -1149,7 +1149,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
 
             $response = [
                 'code' => 500,
-                'message' => 'An error occurred: ' . $e->getMessage(),  
+                'message' => 'An error occurred: ' . $e->getMessage(),
             ];
             return $response;
         }

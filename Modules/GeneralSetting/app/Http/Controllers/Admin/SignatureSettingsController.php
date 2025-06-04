@@ -47,13 +47,15 @@ class SignatureSettingsController extends Controller
                 $request->file('signature_image')
             );
 
-            return $this->jsonResponse(200, 
+            return $this->jsonResponse(
+                200,
                 __('admin.general_settings.signature_success'),
                 $signature,
                 ['totalRecords' => $this->repository->getTotalSignaturesCount()]
             );
         } catch (\Exception $e) {
-            return $this->jsonResponse(500, 
+            return $this->jsonResponse(
+                500,
                 __('admin.general_settings.retrive_error'),
                 null,
                 ['error' => $e->getMessage()]
@@ -70,12 +72,14 @@ class SignatureSettingsController extends Controller
                 $request->file('signature_image')
             );
 
-            return $this->jsonResponse(200, 
+            return $this->jsonResponse(
+                200,
                 __('admin.general_settings.signature_update_success'),
                 $signature
             );
         } catch (\Exception $e) {
-            return $this->jsonResponse(500, 
+            return $this->jsonResponse(
+                500,
                 __('admin.general_settings.retrive_error'),
                 null,
                 ['error' => $e->getMessage()]
@@ -88,13 +92,15 @@ class SignatureSettingsController extends Controller
         try {
             $signatures = $this->repository->getAllSignatures($request->input('search'));
 
-            return $this->jsonResponse(200, 
+            return $this->jsonResponse(
+                200,
                 __('admin.general_settings.signature_list_fetch_success'),
                 $signatures,
                 ['totalRecords' => $signatures->count()]
             );
         } catch (\Exception $e) {
-            return $this->jsonResponse(500, 
+            return $this->jsonResponse(
+                500,
                 __('admin.general_settings.fail_signature_list'),
                 [],
                 ['error' => $e->getMessage()]
@@ -107,13 +113,15 @@ class SignatureSettingsController extends Controller
         try {
             $totalRecords = $this->repository->deleteSignature($request->id);
 
-            return $this->jsonResponse(200, 
+            return $this->jsonResponse(
+                200,
                 __('admin.general_settings.signature_deleted_successfully'),
                 null,
                 ['totalRecords' => $totalRecords]
             );
         } catch (\Exception $e) {
-            return $this->jsonResponse(500, 
+            return $this->jsonResponse(
+                500,
                 __('admin.general_settings.fail_delete_signature'),
                 null,
                 ['error' => $e->getMessage()]

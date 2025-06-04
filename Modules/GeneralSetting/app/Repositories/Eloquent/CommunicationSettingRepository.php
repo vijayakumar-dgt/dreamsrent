@@ -44,8 +44,8 @@ class CommunicationSettingRepository implements CommunicationSettingInterface
         }
 
         return [
-            'message' => $status == 1 
-                ? __('admin.general_settings.activated_successfully') 
+            'message' => $status == 1
+                ? __('admin.general_settings.activated_successfully')
                 : __('admin.general_settings.deactivated_successfully'),
             'data' => $saveSiteKey
         ];
@@ -84,8 +84,8 @@ class CommunicationSettingRepository implements CommunicationSettingInterface
         $userId = $user->id ?? null;
 
         $userDetail = UserDetail::where('user_id', $userId)->first();
-        $name = ($userDetail && $userDetail->first_name) 
-            ? $userDetail->first_name . ' ' . $userDetail->last_name 
+        $name = ($userDetail && $userDetail->first_name)
+            ? $userDetail->first_name . ' ' . $userDetail->last_name
             : 'Admin';
 
         $notifyData = [

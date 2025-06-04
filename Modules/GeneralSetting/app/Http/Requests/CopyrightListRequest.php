@@ -6,7 +6,7 @@ use App\Library\CustomFailedValidation;
 
 class CopyrightListRequest extends CustomFailedValidation
 {
-     public function authorize(): bool
+    public function authorize(): bool
     {
         return true;
     }

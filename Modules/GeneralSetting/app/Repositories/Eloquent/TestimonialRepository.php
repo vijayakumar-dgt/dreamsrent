@@ -39,9 +39,9 @@ class TestimonialRepository implements TestimonialInterface
         $query = Testimonial::query();
 
         if (!empty($filters['search'])) {
-            $query->where(function($q) use ($filters) {
-                $q->where('customer_name', 'like', '%'.$filters['search'].'%')
-                  ->orWhere('review', 'like', '%'.$filters['search'].'%');
+            $query->where(function ($q) use ($filters) {
+                $q->where('customer_name', 'like', '%' . $filters['search'] . '%')
+                  ->orWhere('review', 'like', '%' . $filters['search'] . '%');
             });
         }
 
@@ -73,9 +73,9 @@ class TestimonialRepository implements TestimonialInterface
         $query = Testimonial::query();
 
         if (!empty($filters['search'])) {
-            $query->where(function($q) use ($filters) {
-                $q->where('customer_name', 'like', '%'.$filters['search'].'%')
-                  ->orWhere('review', 'like', '%'.$filters['search'].'%');
+            $query->where(function ($q) use ($filters) {
+                $q->where('customer_name', 'like', '%' . $filters['search'] . '%')
+                  ->orWhere('review', 'like', '%' . $filters['search'] . '%');
             });
         }
 

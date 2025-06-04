@@ -4,7 +4,6 @@ namespace Modules\GeneralSetting\Http\Requests;
 
 use App\Library\CustomFailedValidation;
 
-
 class CompanySettingRequest extends CustomFailedValidation
 {
     public function authorize(): bool

@@ -37,7 +37,6 @@ class SeasonRepository implements SeasonRepositoryInterface
                     : __('admin.rentals.season_update_success'),
             ];
         } catch (\Throwable $th) {
-
             return [
                 'status' => 'error',
                 'code' => 500,
@@ -78,7 +77,7 @@ class SeasonRepository implements SeasonRepositoryInterface
         }
     }
 
-     public function getSeason($id): array
+    public function getSeason($id): array
     {
         try {
             $season = Season::findOrFail($id);
@@ -129,7 +128,4 @@ class SeasonRepository implements SeasonRepositoryInterface
             ];
         }
     }
-
- 
-
 }

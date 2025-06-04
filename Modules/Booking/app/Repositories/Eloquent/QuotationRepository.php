@@ -394,7 +394,7 @@ class QuotationRepository implements QuotationRepositoryInterface
             ];
             return $response;
         } catch (\Exception $e) {
-            $response =[
+            $response = [
                 'code' => 500,
                 'message' => __('admin.common.default_retrieve_error'),
                 'error' => $e->getMessage(),
@@ -448,14 +448,14 @@ class QuotationRepository implements QuotationRepositoryInterface
                 $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
             }
 
-            $response =[
+            $response = [
                 'code' => 200,
                 'message' => 'Success',
                 'data' => $booking,
             ];
             return $response;
         } catch (\Exception $e) {
-            $response =[
+            $response = [
                 'code' => 500,
                 'message' => __('admin.common.default_retrieve_error'),
                 'error' => $e->getMessage(),
@@ -589,14 +589,14 @@ class QuotationRepository implements QuotationRepositoryInterface
             Booking::where('id', $id)->delete();
             BookingDetail::where('booking_id', $id)->delete();
 
-            $response =[
+            $response = [
                 'status' => 'success',
                 'code'   => 200,
                 'message' => __('admin.bookings.quotation_delete_success')
             ];
             return $response;
         } catch (\Exception $e) {
-            $response =[
+            $response = [
                 'status' => 'error',
                 'code'   => 500,
                 'message' => __('admin.common.default_delete_error'),

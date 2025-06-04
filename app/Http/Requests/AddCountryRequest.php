@@ -14,7 +14,7 @@ class AddCountryRequest extends FormRequest
 
     public function rules(): array
     {
-       $countryId = $this->input('id');
+        $countryId = $this->input('id');
 
         return [
             'name' => [

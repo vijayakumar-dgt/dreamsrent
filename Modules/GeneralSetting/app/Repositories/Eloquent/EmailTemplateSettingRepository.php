@@ -23,13 +23,13 @@ class EmailTemplateSettingRepository implements EmailTemplateRepositoryInterface
     public function getEmailTemplates(array $params): array
     {
         $query = EmailTemplate::query();
-        
+
         if (!empty($params['keyword'])) {
             $query->where('title', 'like', '%' . $params['keyword'] . '%');
         }
 
         $totalRecords = $filteredRecords = $query->count();
-        
+
         $emailTemplates = $query->orderBy('id', 'desc')
             ->skip($params['start'] ?? 0)
             ->take($params['length'] ?? 10)
@@ -90,11 +90,11 @@ class EmailTemplateSettingRepository implements EmailTemplateRepositoryInterface
     {
         $notificationType = NotificationType::find($notificationTypeId);
         $defaultTags = NotificationTag::where('status', true)->pluck('title')->toArray();
-        
+
         return [
             'notification_type' => $notificationType,
-            'tags' => $notificationType && $notificationType->tags 
-                ? json_decode($notificationType->tags) 
+            'tags' => $notificationType && $notificationType->tags
+                ? json_decode($notificationType->tags)
                 : $defaultTags
         ];
     }

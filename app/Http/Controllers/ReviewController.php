@@ -21,7 +21,7 @@ class ReviewController extends Controller
 
     public function addreview(Request $request): JsonResponse
     {
-        
+
         $response = $this->reviewRepository->addReview($request);
         return response()->json($response, $response['code'] ?? 200);
     }

@@ -38,7 +38,7 @@ class CarModelController extends Controller
     public function list(Request $request): JsonResponse
     {
         $response = $this->vehicleModelRepository->list($request);
-        return response()->json($response, $response['code']);   
+        return response()->json($response, $response['code']);
     }
 
 

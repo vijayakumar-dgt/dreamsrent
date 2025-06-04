@@ -40,7 +40,7 @@ class InsuranceSettingRepository implements InsuranceSettingInterface
         // Search
         if (!empty($params['search'])) {
             $search = $params['search'];
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('insurance_name', 'like', "%{$search}%")
                   ->orWhere('price', 'like', "%{$search}%");
             });
@@ -54,14 +54,14 @@ class InsuranceSettingRepository implements InsuranceSettingInterface
         // Pagination
         $start = $params['start'] ?? 0;
         $length = $params['length'] ?? 10;
-        
+
         $filterTotal = $query->count();
         $totalRecords = Insurance::count();
-        
+
         $data = $query->skip($start)->take($length)->get()->map(function ($item) {
             $priceType = $item->priceType->pricing_type ?? '';
-            $item->price = ($priceType == 'percentage') 
-                ? $item->price . '%' 
+            $item->price = ($priceType == 'percentage')
+                ? $item->price . '%'
                 : getDefaultCurrencySymbol() . $item->price;
             return $item;
         });

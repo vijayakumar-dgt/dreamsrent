@@ -417,7 +417,7 @@ class CustomerRepository implements CustomerRepositoryInterface
             'bookingHistories' => $bookingHistories,
             'defaultCurrency' => $defaultCurrency,
         ];
-        
+
         return $data;
     }
 

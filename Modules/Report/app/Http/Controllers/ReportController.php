@@ -12,10 +12,8 @@ use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
 use Modules\Report\Repositories\Contracts\ReportRepositoryInterface;
 
-
 class ReportController extends Controller
 {
-
     protected ReportRepositoryInterface $reportRepository;
 
     public function __construct(ReportRepositoryInterface $reportRepository)
@@ -40,7 +38,7 @@ class ReportController extends Controller
     public function getMonthlyEarnings(): JsonResponse
     {
         $monthlyEarnings = $this->reportRepository->getMonthlyEarnings();
-        return response()->json($monthlyEarnings); 
+        return response()->json($monthlyEarnings);
     }
 
     public function getEarningsBreakdown(): JsonResponse

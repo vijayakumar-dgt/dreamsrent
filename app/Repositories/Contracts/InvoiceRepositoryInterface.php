@@ -5,7 +5,6 @@ namespace App\Repositories\Contracts;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-
 interface InvoiceRepositoryInterface
 {
     public function addInvoice(): array;

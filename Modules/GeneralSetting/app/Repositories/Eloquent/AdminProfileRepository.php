@@ -11,7 +11,7 @@ use App\Services\ImageResizer;
 
 class AdminProfileRepository implements AdminProfileInterface
 {
-     protected ImageResizer $imageResizer;
+    protected ImageResizer $imageResizer;
 
     public function __construct(ImageResizer $imageResizer)
     {
@@ -146,7 +146,7 @@ class AdminProfileRepository implements AdminProfileInterface
                     'message' => __('admin.general_settings.user_not_found'),
                 ];
             }
-            
+
             if ($user instanceof \App\Models\User) {
                 $user->delete();
             }

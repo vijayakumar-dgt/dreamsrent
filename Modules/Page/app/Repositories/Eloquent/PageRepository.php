@@ -29,8 +29,6 @@ use Modules\GeneralSetting\Models\TranslationLanguage;
 use Illuminate\View\View;
 use Illuminate\Support\Arr;
 
-
-
 class PageRepository implements PageInterface
 {
     public function index(): Collection
@@ -103,9 +101,7 @@ class PageRepository implements PageInterface
             ->first();
     }
 
-     public function pageBuilderApi( array $request)
-     {
-        
-     }
-    
+    public function pageBuilderApi(array $request)
+    {
+    }
 }

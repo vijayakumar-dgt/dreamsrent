@@ -38,5 +38,4 @@ class EnquiryRequest extends CustomFailedValidation
             'enquiry_details.max'    => 'Enquiry details may not be greater than 500 characters.',
         ];
     }
-
 }

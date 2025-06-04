@@ -21,7 +21,7 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
 
         return $data;
     }
-    
+
     public function store(Request $request): array
     {
         /** @var \App\Models\User|null $authUser */
@@ -199,7 +199,7 @@ class VehicleModelRepository implements VehicleModelRepositoryInterface
 
             $data = CarModel::when(function ($query) use ($search) {
                     return $query->where('model_name', 'LIKE', "%{$search}%");
-                })
+            })
                 ->orderBy('id', $orderBy)
                 ->where('status', 1)
                 ->get([

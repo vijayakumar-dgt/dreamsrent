@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Repositories\Eloquent;
 
@@ -128,7 +128,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             'otp' => $otp,
             'expires_at' => $expiresAt,
             'email_subject' => $subject,
-            'email_content' => $content  
+            'email_content' => $content
         ];
     }
     public function generateOtp(int $digitLimit): string
@@ -291,7 +291,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
 
     public function register(Request $request): array
     {
-       $regStatus = DB::table('general_settings')->where('key', 'register')->value('value');
+        $regStatus = DB::table('general_settings')->where('key', 'register')->value('value');
         if ($regStatus === "0") {
             $user = User::create([
                 'email' => $request->email,
@@ -390,7 +390,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             return [
                 'status' => false,
                 'code'   => 422,
-                'message' => __('web.auth.admin_access_not_allowed'),  
+                'message' => __('web.auth.admin_access_not_allowed'),
             ];
         }
         if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password], $request->has('remember'))) {
@@ -429,7 +429,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                 'message' => __('web.auth.login_success'),
             ];
         }
-        
+
         return [
             'status' => false,
             'code'   => 401,

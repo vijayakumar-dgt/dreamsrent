@@ -19,7 +19,7 @@ class MaintenanceRepository implements MaintenanceRepositoryInterface
         ];
         return $data;
     }
-    
+
     public function store(Request $request): array
     {
         $id = $request->id ?? '';

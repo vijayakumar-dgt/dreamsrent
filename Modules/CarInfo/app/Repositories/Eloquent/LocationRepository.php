@@ -56,7 +56,7 @@ class LocationRepository implements LocationRepositoryInterface
                 $location->status = $request->status == 'on' ? 1 : 0;
                 $location->language_id = $request->language_id ?? $authUser->language_id;
             }
-           
+
             $folderName = 'vehicles/location';
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
@@ -284,5 +284,4 @@ class LocationRepository implements LocationRepositoryInterface
             'data' => $locations
         ];
     }
-
 }

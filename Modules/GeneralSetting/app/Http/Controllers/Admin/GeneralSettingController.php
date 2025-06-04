@@ -217,7 +217,6 @@ class GeneralSettingController extends Controller
             }
 
             throw new \Exception(__('admin.general_settings.update_failed'));
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -248,7 +247,6 @@ class GeneralSettingController extends Controller
             }
 
             throw new \Exception(__('admin.general_settings.update_failed'));
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -616,7 +614,7 @@ class GeneralSettingController extends Controller
             ], 500);
         }
     }
-   
+
     public function paymentIndex(Request $request): View
     {
         return view('generalsetting::payment.index');
@@ -635,7 +633,6 @@ class GeneralSettingController extends Controller
             }
 
             throw new \Exception(__('admin.general_settings.update_failed'));
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,
@@ -657,7 +654,6 @@ class GeneralSettingController extends Controller
             }
 
             throw new \Exception(__('admin.general_settings.update_failed'));
-
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -679,7 +675,6 @@ class GeneralSettingController extends Controller
                 'message' => __('admin.general_settings.general_settings_success'),
                 'data' => $data,
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'code' => 500,

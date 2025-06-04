@@ -36,5 +36,4 @@ class VehicleSeatRequest extends CustomFailedValidation
             'seat_type.not_regex'  => __('admin.common.script_tag_not_allowed'),
         ];
     }
-
 }
