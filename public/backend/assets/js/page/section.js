@@ -70,7 +70,7 @@
             var ID = $(this).data("id");
 
             $(
-                "#section_id_1, #section_id_2, #section_id_3, #section_id_4, #section_id_5,  #section_id_6, #section_id_7, #section_id_8"
+                "#section_id_1, #section_id_2, #section_id_3, #section_id_4, #section_id_5,  #section_id_6, #section_id_7, #section_id_8, section_id_9, section_id_10"
             ).addClass("d-none");
 
             if (ID == 1) {
@@ -357,6 +357,21 @@
                         );
                     });
                 }
+            } else if (ID == 72) {
+                $("#section_id_10").removeClass("d-none");
+                $("#section_id").val(ID);
+                $("#section_title_boat_seasonal").val(
+                    $(this).data("section_title_boat_seasonal")
+                );
+                let thumbnails = $(this).data("thumbnail_image_boat_seasonal");
+
+                if (thumbnails) {
+                    $("#thumbnail_preview_boat_seasonal")
+                        .attr("src", thumbnails)
+                        .removeClass("d-none");
+                } else {
+                    $("#thumbnail_preview_boat_seasonal").addClass("d-none");
+                }
             }
         });
     });
@@ -456,6 +471,9 @@
                                                 data-section_title_bike_experience="${
                                                     value.title
                                                 }"
+                                                data-section_title_boat_seasonal="${
+                                                    value.title
+                                                }"
                                                 data-label_1="${value.label_1}"
                                                 data-label_2="${value.label_2}"
                                                 data-label_3="${value.label_3}"
@@ -482,6 +500,10 @@
                                                 }"
                                                 data-line_two="${
                                                     value.line_two ?? ""
+                                                }"
+                                                data-thumbnail_image_boat_seasonal="${
+                                                    value.thumbnail_image_boat_seasonal ??
+                                                    ""
                                                 }"
                                                 data-thumbnail_image_one="${
                                                     value.thumbnail_image_one ??

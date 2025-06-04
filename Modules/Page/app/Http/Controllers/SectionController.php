@@ -88,7 +88,7 @@ class SectionController extends Controller
             ], 400);
         }
 
-        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three', 'Banner Four', 'Benefits Of Yacht', 'Yacht Experience', 'Ad Card Two'];
+        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three', 'Banner Four', 'Benefits Of Yacht', 'Yacht Experience', 'Ad Card Two', 'Theme Four AD Card'];
 
         $sections = $this->sectionRepository->getFilteredSections($orderBy, $sortBy, $allowedNames);
 
@@ -109,6 +109,10 @@ class SectionController extends Controller
 
             if (!empty($decodedDatas['thumbnail_image_four'])) {
                 $decodedDatas['thumbnail_image_four'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_four'];
+            }
+
+            if (!empty($decodedDatas['thumbnail_image_boat_seasonal'])) {
+                $decodedDatas['thumbnail_image_boat_seasonal'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_boat_seasonal'];
             }
 
             if (!empty($decodedDatas['thumbnail_image_boat'])) {
@@ -350,6 +354,15 @@ class SectionController extends Controller
                     $existingData["thumbnail_image_boat_benefits_$i"] ?? null
                 );
             }
+        } elseif ($sectionId == 72) {
+            $thumbnailPath = $existingData['thumbnail_image_boat_seasonal'] ?? null;
+            if ($request->hasFile('thumbnail_image_boat_seasonal')) {
+                $thumbnailPath = uploadFile($request->file('thumbnail_image_boat_seasonal'), 'general');
+
+                $data = [
+                    'thumbnail_image_boat_seasonal' => $thumbnailPath,
+                ];
+            }
         }
 
 
@@ -376,6 +389,7 @@ class SectionController extends Controller
             26 => 'section_title_four',
             68 => 'section_title_boat_experience',
             71 => 'section_title_bike_experience',
+            72 => 'section_title_boat_seasonal',
         ];
 
         if (isset($titleFieldMap[$sectionId]) && $request->has($titleFieldMap[$sectionId])) {
