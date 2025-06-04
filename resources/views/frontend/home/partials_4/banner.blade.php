@@ -7,15 +7,13 @@
 <!-- Banner -->
 <section class="banner-section banner-sec-two banner-slider">	
     <div class="banner-img-slider owl-carousel">
+        @if(!empty($sectionContent->thumbnail_images) && count($sectionContent->thumbnail_images) > 0)
+            @foreach($sectionContent->thumbnail_images as $image)
         <div class="slider-img">
-            <img src="/frontend/assets/img/bg/home-banner-img.png" alt="Img">
+            <img src="{{ $image }}" alt="Img">
         </div>
-        <div class="slider-img">
-            <img src="/frontend/assets/img/bg/home-banner-img-02.png" alt="Img">
-        </div>
-        <div class="slider-img">
-            <img src="/frontend/assets/img/bg/home-banner-img-03.png" alt="Img">
-        </div>
+            @endforeach
+        @endif
     </div>	
     <div class="container">
         <div class="home-banner">		
