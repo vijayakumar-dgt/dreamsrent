@@ -74,7 +74,7 @@ class HomeRepository implements HomeRepositoryInterface
         $vehiclemodel = "";
         $defaultTheme = GeneralSetting::where('key', 'default_theme')->first();
         $theme = $defaultTheme->value ?? 1;
-        if ($theme == 1) {
+        if ($theme == 1 || $theme == 4) {
             $pickupdate = $request->pickupdate ?? '';
             $pickuptime = $request->pickuptime ?? '';
             $returndate = $request->returndate ?? '';
@@ -86,10 +86,6 @@ class HomeRepository implements HomeRepositoryInterface
             $pickuptime = $pickupdatetime ? date('H:i:s', strtotime($pickupdatetime)) : '';
             $returndate = $returndatetime ? date('d-m-Y', strtotime($returndatetime)) : '';
             $returntime = $returndatetime ? date('H:i:s', strtotime($returndatetime)) : '';
-        } elseif($theme == 3) {
-            $vehiclemodel = $request->vm ?? '';
-            $category  = $request->vt ?? '';
-            //remove params from url
         }
         $_pickuplocation = Location::select('id', 'name')->where('status', 1)->where('language_id', $languageId)->where('name', 'like', '%' . $pickuplocation . '%')->first();
         $data = [
