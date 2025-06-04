@@ -151,18 +151,14 @@ class RolesPermissionRepository implements RolesPermissionRepositoryInterface
         }
     }
 
-    public function permissions(int $roleId, int $userId): array
+    public function permissions(?int $roleId, ?int $userId): array
     {
         $userType = User::where('id', $userId)->value('user_type');
         if ($userType == 2) {
             $userType = 1;
         }
 
-        $role = Role::select('id', 'role_name')->where('id', $roleId)->first();
-
-        if (!$role) {
-            abort(404);
-        }
+        $role = Role::select('id', 'role_name')->where('id', $roleId)->firstOrFail();
 
         $modules = ModuleModel::select('id', 'module_name', 'module_slug', 'parent_id')
             ->with([
