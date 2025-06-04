@@ -83,39 +83,6 @@
 
                         <div class="footer-list">
                             <ul>
-                                <li class="country-flag">
-                                    <div class="dropdown">
-                                        <a class="dropdown-toggle nav-tog" data-bs-toggle="dropdown" href="javascript:void(0);">
-                                            <img src="{{asset('frontend/assets/img/flags/us.png')}}" alt="Img">English
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <img src="{{ asset('frontend/assets/img/flags/fr.png') }}" alt="Img">French
-                                            </a>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <img src="{{ asset('frontend/assets/img/flags/es.png') }}" alt="Img">Spanish
-                                            </a>
-                                            <a href="javascript:void(0);" class="dropdown-item">
-                                                <img src="{{ asset('frontend/assets/img/flags/de.png') }}" alt="Img">German
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="country-flag lang-nav">
-                                    <div class="dropdown">
-                                        <a class="dropdown-toggle nav-tog" data-bs-toggle="dropdown" href="javascript:void(0);">
-                                        <i class="bx bx-globe"></i>USD
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a href="javascript:void(0);" class="dropdown-item">
-                                            <img src="{{ asset('frontend/assets/img/flags/fr.png') }}" alt="Img">Euro
-                                        </a>
-                                        <a href="javascript:void(0);" class="dropdown-item">
-                                            <img src="{{ asset('frontend/assets/img/flags/es.png') }}" alt="Img">INR
-                                        </a>
-                                    </div>
-                                    </div>
-                                </li>
                                 <li>
                                     <ul class="social-icon">
                                         <li>
