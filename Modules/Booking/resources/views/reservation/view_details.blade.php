@@ -149,7 +149,7 @@
                                     @endif
                                     <div class="d-flex align-items-center justify-content-between mb-2">
                                         <h6 class="fw-medium d-flex align-items-center fs-14">{{ $booking->insurance_count }} {{ __('admin.common.insurances') }}
-                                            <a href="javascript:void(0);" class="me-2 ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="{{ !empty($booking->insurance_benefits_formatted) ? implode(', ', $booking->insurance_benefits_formatted) : '' }}">
+                                            <a href="javascript:void(0);" class="me-2 ms-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="{{ !empty($booking->insurance_names) ? implode(', ', $booking->insurance_names) : '' }}">
                                                 <i class="ti ti-info-circle-filled"></i>
                                             </a>
                                         </h6>

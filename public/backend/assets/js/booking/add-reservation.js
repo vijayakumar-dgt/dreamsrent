@@ -934,12 +934,19 @@
             success: function (result) {
                 if (result.data && result.data.length > 0) {
                     let data = result.data;
+                    $('#insurance_list_container').empty(); // Clear existing content
 
-                    let options = data.map(item => {
-                        let isChecked = selected_insurance_ids.includes(item.id.toString()) ? 'checked' : '';
-                        let isActive = selected_insurance_ids.includes(item.id.toString()) ? 'active' : '';
+                    data.forEach(item => {
+                        let isSelected = selected_insurance_ids.includes(item.id.toString());
+                        let isChecked = isSelected ? true : false;
+                        let isActive = isSelected ? 'active' : '';
+
                         let benefits = item.insurance_benefits.map(b => b.benefit).join(', ');
-                        let tooltip = benefits ? `data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="${benefits}"` : '';
+                        let tooltipAttr = benefits ? {
+                            'data-bs-toggle': 'tooltip',
+                            'data-bs-placement': 'top',
+                            'data-bs-original-title': benefits
+                        } : {};
 
                         let insuranceType = '';
                         switch (item.insurance_type) {
@@ -956,37 +963,62 @@
                                 insuranceType = item.insurance_type;
                         }
 
-                        return `
-                            <div class="col-md-6">
-                                <div class="custom-checkbox ${isActive}">
-                                    <div class="form-check form-check-md">
-                                        <input class="form-check-input vehicle_insurance" type="checkbox" name="insurances[]" id="insurance_${item.id}" value="${item.id}" ${isChecked} data-price="${item.price}" data-price_type="${item.insurance_type}" data-name="${item.insurance_name}">
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <label class="form-check-label ms-2 ps-4" for="insurance_${item.id}">
-                                            <span class="fw-semibold text-gray-9 d-block mb-1">${item.insurance_name}</span>
-                                            <span class="d-block text-info">+${item.insurance_benefits_count} ${_l('admin.common.benefits')}<i class="ti ti-info-circle-filled text-gray-5 ms-1" ${tooltip}></i></span>
-                                        </label>
-                                        <div class="text-end">
-                                            <p class="mb-1">${insuranceType}</p>
-                                            ${ item.insurance_type == 'percentage' ?
-                                                `<h6>${item.price}%</h6>` : `<h6>${default_currency}${item.price}</h6>`
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
+                        // Build structure
+                        let $col = $('<div>').addClass('col-md-6');
+                        let $checkboxWrapper = $('<div>').addClass(`custom-checkbox ${isActive}`);
 
-                    $('#insurance_list_container').empty().html(options);
-                    var response = calculateVehiclePrice();
+                        // Checkbox input
+                        let $formCheck = $('<div>').addClass('form-check form-check-md');
+                        let $input = $('<input>', {
+                            type: 'checkbox',
+                            class: 'form-check-input vehicle_insurance',
+                            name: 'insurances[]',
+                            id: `insurance_${item.id}`,
+                            value: item.id,
+                            checked: isChecked,
+                            'data-price': item.price,
+                            'data-price_type': item.insurance_type,
+                            'data-name': item.insurance_name
+                        });
+                        $formCheck.append($input);
+
+                        // Label and info section
+                        let $labelSection = $('<div>').addClass('d-flex align-items-center justify-content-between');
+
+                        let $label = $('<label>', {
+                            class: 'form-check-label ms-2 ps-4',
+                            for: `insurance_${item.id}`
+                        });
+
+                        $('<span>').addClass('fw-semibold text-gray-9 d-block mb-1').text(item.insurance_name).appendTo($label);
+
+                        let $benefitSpan = $('<span>').addClass('d-block text-info').html(`+${item.insurance_benefits_count} ${_l('admin.common.benefits')}`);
+                        let $tooltipIcon = $('<i>').addClass('ti ti-info-circle-filled text-gray-5 ms-1').attr(tooltipAttr);
+                        $benefitSpan.append($tooltipIcon);
+                        $label.append($benefitSpan);
+
+                        // Price section
+                        let $priceInfo = $('<div>').addClass('text-end');
+                        $('<p>').addClass('mb-1').text(insuranceType).appendTo($priceInfo);
+                        $('<h6>').html(item.insurance_type === 'percentage' ? `${item.price}%` : `${default_currency}${item.price}`).appendTo($priceInfo);
+
+                        // Combine all parts
+                        $labelSection.append($label).append($priceInfo);
+                        $checkboxWrapper.append($formCheck).append($labelSection);
+                        $col.append($checkboxWrapper);
+
+                        $('#insurance_list_container').append($col);
+                    });
+
+                    // Price calculation + tooltip update
+                    let response = calculateVehiclePrice();
                     if (response) {
                         $('.total_insurance_price').text(response[0]['total_insurance_price']);
                         $('.total_price_val').text(response[0]['total_price']);
                         $('.insurance_count').text(response[0]['total_insurance']);
                         $('.insurance_tooltip').attr('data-bs-original-title', response[0]['insurance_name']);
                     }
+
                     initializeTooltips();
                 } else {
                     $('#insurance_list_container').html(`
@@ -1200,9 +1232,10 @@
 
     $('#customer_id').on('change', function() {
         let customerId = $(this).val();
+        $(this).valid();
 
-        if (customerId !== '') {
-            $(this).valid();
+        if (!customerId) {
+            return;
         }
 
         $.ajax({
@@ -1217,52 +1250,74 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response){
-
                 if (response.code === 200 && response.data) {
                     let data = response.data;
 
-                    $('#customer_details_list').html(`
-                        <div class="card bg-light" id="customer_detail" data-image="${data.profile_image}" data-name="${data.full_name}" data-phone="${data.phone_number}">
-                            <div class="card-body">
-                                <div class="row align-items-center gy-3">
-                                    <div class="col-md-11">
-                                        <div class="row gx-2 gy-3">
-                                            <div class="col-md-4">
-                                                <div class="d-flex align-items-center">
-                                                    <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                                        <img src="${data.profile_image}" alt="">
-                                                    </span>
-                                                    <div>
-                                                        <h6 class="fs-14 mb-1">${data.full_name}</h6>
-                                                        <span class="badge bg-info-transparent">${data.bookings_count} ${_l('admin.bookings.bookings')}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div>
-                                                    <h6 class="fs-14 mb-1">${_l('admin.common.phone')}</h6>
-                                                    <p>${data.phone_number ?? '-'}</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div>
-                                                    <h6 class="fs-14 mb-1">${_l('admin.common.email')}</h6>
-                                                    <p>${data.email}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <div class="d-flex align-items-center justify-content-end">
-                                            <button type="button" class="btn border-0 bg-transparent" id="remove_customer"><i class="ti ti-trash"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `);
-                }
+                    let $card = $('<div>', {
+                        class: 'card bg-light',
+                        id: 'customer_detail',
+                        'data-image': data.profile_image,
+                        'data-name': data.full_name,
+                        'data-phone': data.phone_number
+                    });
 
+                    let $cardBody = $('<div>').addClass('card-body');
+                    let $row = $('<div>').addClass('row align-items-center gy-3');
+
+                    let $infoCol = $('<div>').addClass('col-md-11');
+                    let $infoInnerRow = $('<div>').addClass('row gx-2 gy-3');
+
+                    // --- Profile image & name ---
+                    let $profileCol = $('<div>').addClass('col-md-4');
+                    let $profileWrapper = $('<div>').addClass('d-flex align-items-center');
+                    let $avatar = $('<span>').addClass('avatar avatar-rounded flex-shrink-0 me-2').append(
+                        $('<img>', { src: data.profile_image, alt: '' })
+                    );
+                    let $profileInfo = $('<div>').append(
+                        $('<h6>').addClass('fs-14 mb-1').text(data.full_name),
+                        $('<span>').addClass('badge bg-info-transparent').text(`${data.bookings_count} ${_l('admin.bookings.bookings')}`)
+                    );
+                    $profileWrapper.append($avatar, $profileInfo);
+                    $profileCol.append($profileWrapper);
+
+                    // --- Phone ---
+                    let $phoneCol = $('<div>').addClass('col-md-4').append(
+                        $('<div>').append(
+                            $('<h6>').addClass('fs-14 mb-1').text(_l('admin.common.phone')),
+                            $('<p>').text(data.phone_number ?? '-')
+                        )
+                    );
+
+                    // --- Email ---
+                    let $emailCol = $('<div>').addClass('col-md-4').append(
+                        $('<div>').append(
+                            $('<h6>').addClass('fs-14 mb-1').text(_l('admin.common.email')),
+                            $('<p>').text(data.email)
+                        )
+                    );
+
+                    // Combine inner info row
+                    $infoInnerRow.append($profileCol, $phoneCol, $emailCol);
+                    $infoCol.append($infoInnerRow);
+
+                    // --- Remove Button ---
+                    let $removeCol = $('<div>').addClass('col-md-1');
+                    let $removeWrapper = $('<div>').addClass('d-flex align-items-center justify-content-end');
+                    let $removeBtn = $('<button>', {
+                        type: 'button',
+                        class: 'btn border-0 bg-transparent',
+                        id: 'remove_customer'
+                    }).append($('<i>').addClass('ti ti-trash'));
+                    $removeWrapper.append($removeBtn);
+                    $removeCol.append($removeWrapper);
+
+                    // Final assembly
+                    $row.append($infoCol, $removeCol);
+                    $cardBody.append($row);
+                    $card.append($cardBody);
+
+                    $('#customer_details_list').html($card);
+                }
             },
             error: function(error){
                 if (error.responseJSON.code === 500) {
@@ -1283,8 +1338,9 @@
         let driver_id = $(this).val();
         selected_driver_id = driver_id;
 
-        if (driver_id !== '') {
+        if (!driver_id) {
             $(this).valid();
+            return;
         }
 
         $.ajax({
@@ -1299,58 +1355,91 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response){
-
                 if (response.code === 200 && response.data) {
                     let data = response.data;
 
-                    $('#driver_details_list').html(`
-                        <div class="d-flex align-items-center justify-content-end mb-3">
-                            <button type="button" class="text-purple text-decoration-underline fw-medium edit_driver_price border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#edit_price_modal"
-                            data-image="${data.image}"
-                            data-driver_name="${data.driver_name}"
-                            data-phone="${data.phone_number}" data-price="0">${_l('admin.bookings.edit_price')}</button>
-                        </div>
-                        <div class="card bg-light" id="driver_detail" data-image="${data.image}" data-name="${data.driver_name}" data-phone="${data.phone_number}">
-                            <div class="card-body">
-                                <div class="row align-items-center gy-3">
-                                    <div class="col-md-11">
-                                        <div class="row gx-2 gy-3">
-                                            <div class="col-md-5">
-                                                <div class="d-flex align-items-center">
-                                                    <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                                        <img src="${data.image}" alt="">
-                                                    </span>
-                                                    <div>
-                                                        <h6 class="fs-14 mb-1">${data.driver_name}</h6>
-                                                        <span class="badge bg-violet-transparent">0 ${_l('admin.bookings.rides')}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div>
-                                                    <h6 class="fs-14 mb-1">${_l('admin.common.phone')}</h6>
-                                                    <p>${data.phone_number}</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div>
-                                                    <h6 class="fs-14 mb-1">${_l('admin.common.price')}</h6>
-                                                    <p>${default_currency}<span class="td-driver-price">0</span></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <div class="d-flex align-items-center justify-content-end">
-                                            <button type="button" class="btn border-0 bg-transparent" id="remove_driver"><i class="ti ti-trash"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `);
-                }
+                    // Edit Price Button
+                    let $editBtnWrapper = $('<div>').addClass('d-flex align-items-center justify-content-end mb-3');
+                    let $editBtn = $('<button>', {
+                        type: 'button',
+                        class: 'text-purple text-decoration-underline fw-medium edit_driver_price border-0 bg-transparent',
+                        'data-bs-toggle': 'modal',
+                        'data-bs-target': '#edit_price_modal',
+                        'data-image': data.image,
+                        'data-driver_name': data.driver_name,
+                        'data-phone': data.phone_number,
+                        'data-price': 0
+                    }).text(_l('admin.bookings.edit_price'));
+                    $editBtnWrapper.append($editBtn);
 
+                    // Driver Card
+                    let $card = $('<div>', {
+                        class: 'card bg-light',
+                        id: 'driver_detail',
+                        'data-image': data.image,
+                        'data-name': data.driver_name,
+                        'data-phone': data.phone_number
+                    });
+
+                    let $cardBody = $('<div>').addClass('card-body');
+                    let $row = $('<div>').addClass('row align-items-center gy-3');
+
+                    // Left content
+                    let $leftCol = $('<div>').addClass('col-md-11');
+                    let $innerRow = $('<div>').addClass('row gx-2 gy-3');
+
+                    // --- Driver profile ---
+                    let $profileCol = $('<div>').addClass('col-md-5');
+                    let $profileWrap = $('<div>').addClass('d-flex align-items-center');
+                    let $avatar = $('<span>').addClass('avatar avatar-rounded flex-shrink-0 me-2').append(
+                        $('<img>', { src: data.image, alt: '' })
+                    );
+                    let $profileInfo = $('<div>').append(
+                        $('<h6>').addClass('fs-14 mb-1').text(data.driver_name),
+                        $('<span>').addClass('badge bg-violet-transparent').text(`0 ${_l('admin.bookings.rides')}`)
+                    );
+                    $profileWrap.append($avatar, $profileInfo);
+                    $profileCol.append($profileWrap);
+
+                    // --- Phone ---
+                    let $phoneCol = $('<div>').addClass('col-md-4').append(
+                        $('<div>').append(
+                            $('<h6>').addClass('fs-14 mb-1').text(_l('admin.common.phone')),
+                            $('<p>').text(data.phone_number)
+                        )
+                    );
+
+                    // --- Price ---
+                    let $priceCol = $('<div>').addClass('col-md-3').append(
+                        $('<div>').append(
+                            $('<h6>').addClass('fs-14 mb-1').text(_l('admin.common.price')),
+                            $('<p>').html(`${default_currency}<span class="td-driver-price">0</span>`)
+                        )
+                    );
+
+                    // Combine inner row
+                    $innerRow.append($profileCol, $phoneCol, $priceCol);
+                    $leftCol.append($innerRow);
+
+                    // --- Remove button ---
+                    let $removeCol = $('<div>').addClass('col-md-1');
+                    let $removeWrap = $('<div>').addClass('d-flex align-items-center justify-content-end');
+                    let $removeBtn = $('<button>', {
+                        type: 'button',
+                        class: 'btn border-0 bg-transparent',
+                        id: 'remove_driver'
+                    }).append($('<i>').addClass('ti ti-trash'));
+                    $removeWrap.append($removeBtn);
+                    $removeCol.append($removeWrap);
+
+                    // Final assembly
+                    $row.append($leftCol, $removeCol);
+                    $cardBody.append($row);
+                    $card.append($cardBody);
+
+                    // Append everything to the container
+                    $('#driver_details_list').html('').append($editBtnWrapper, $card);
+                }
             },
             error: function(error){
                 if (error.responseJSON.code === 500) {
