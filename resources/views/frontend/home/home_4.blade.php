@@ -34,6 +34,12 @@
             @case('faq')
                 @include('frontend.home.partials_4.faq', ['section' => $section])
                 @break
+            @case('feature_vehicle')
+                @include('frontend.home.partials_4.feature_vehicles', ['section' => $section])
+                @break
+            @case('yacht_experience')
+                @include('frontend.home.partials_4.yacht_experience', ['section' => $section])
+                @break
         @endswitch
 @endforeach
 @endif
