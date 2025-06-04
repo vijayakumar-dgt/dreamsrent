@@ -655,6 +655,7 @@
             <button type="submit" class="btn btn-primary driver_price_btn">{{ __('admin.common.save_changes') }}</button>
         </div>
     </x-slot>
+    </x-admin.modal>
     <!-- /Edit Pricing -->
     @endsection
 

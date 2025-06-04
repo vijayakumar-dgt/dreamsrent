@@ -46,6 +46,6 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus']], function (
         Route::post('quotations-list', [QuotationController::class, 'bookingList'])->name('quotations.list');
         Route::post('get-quotations-details', [BookingController::class, 'getBookingDetails']);
         Route::get('quotations-details/{id}', [QuotationController::class, 'reservationViewDetails'])->name('quotations.details');
-        Route::post('cancel-booking', [BookingController::class, 'cancelBooking']);
+        Route::post('cancel-booking', [BookingController::class, 'cancelBooking'])->name('reservation.cancel');
     });
 });

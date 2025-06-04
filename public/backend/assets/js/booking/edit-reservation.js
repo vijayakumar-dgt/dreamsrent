@@ -185,7 +185,9 @@
                         if (resp.code === 200) {
                             showToast('success', resp.message);
                             $("#add_driver_modal").modal('hide');
-                            window.location.href = resp.redirect_url;
+                            if (resp.redirect_url.startsWith('/') && !resp.redirect_url.startsWith('//')) {
+                                window.location.href = resp.redirect_url;
+                              } 
                         }
                     },
                     error:function(error){
