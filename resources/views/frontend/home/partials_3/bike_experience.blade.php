@@ -9,7 +9,7 @@
             <div class="rental-content">
                 <h2>{{ $content['data']['label_bike_experience_1'] ?? "" }}</h2>
                 <div class="btn-item">
-                    <a href="{{ route('list') }}" class="btn btn-theme">View all Bikes</a>
+                    <a href="{{ route('list') }}" class="btn btn-theme">{{ __('web.home.view_all_bikes') }}</a>
                 </div>
             </div>
         </div>

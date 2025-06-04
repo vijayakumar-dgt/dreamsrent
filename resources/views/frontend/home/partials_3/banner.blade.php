@@ -19,14 +19,14 @@
             <div class="row align-items-center">					    
                 <div class="col-lg-7" data-aos="fade-down">
                     <h1>{{ $titleMain ?? "" }} <span>{{ $titleLastPart ?? "" }} </span></h1>
-                    <h4>{{ optional($section_content[0])->description }}</h4>
+                    <h4>{{ $section_content[0]->description ?? ""}}</h4>
                     <div class="banner-search">
                         <form action="{{ route('list') }}" class="form-block d-flex align-items-center">
                             <div class="search-input">
                                 <div class="input-block">
-                                    <label>Any type</label>
+                                    <label>{{ __('web.home.any_type') }}</label>
                                     <select class="select" name="category">
-                                        <option value="">Select</option>
+                                        <option value="">{{ __('web.common.select') }}</option>
                                         @if(!empty($vehicle_types) && count($vehicle_types) > 0)
                                         @foreach ($vehicle_types as $vehicle_type)
                                             <option value="{{ $vehicle_type->id }}">{{ $vehicle_type->name ?? "" }}</option>
@@ -37,9 +37,9 @@
                             </div>
                             <div class="search-input">
                                 <div class="input-block">
-                                    <label>Model</label>
+                                    <label>{{ __('web.home.model') }}</label>
                                     <select class="select" name="vm">
-                                        <option value="">Select</option>
+                                        <option value="">{{ __('web.common.select') }}</option>
                                         @if(!empty($vehicle_models) && count($vehicle_models) > 0)
                                         @foreach ($vehicle_models as $vehicle_model)
                                             <option value="{{ $vehicle_model->id }}">{{ $vehicle_model->name ?? "" }}</option>
@@ -50,9 +50,9 @@
                             </div>
                             <div class="search-input">
                                 <div class="input-block">
-                                    <label>Location</label>
+                                    <label>{{ __('web.user.location') }}</label>
                                     <select class="select" name="pickuplocation">
-                                        <option value="">Select</option>
+                                        <option value="">{{ __('web.common.select') }}</option>
                                         @if(!empty($locations) && count($locations) > 0)
                                         @foreach ($locations as $location)
                                             <option value="{{ $location->name }}">{{ $location->name ?? "" }}</option>
@@ -62,11 +62,11 @@
                                 </div>
                             </div>
                             <div class="search-btn">
-                                <button class="btn btn-primary" type="submit"><i class="bx bx-search-alt"></i>Search</button>
+                                <button class="btn btn-primary" type="submit"><i class="bx bx-search-alt"></i>{{ __('web.user.search') }}</button>
                             </div>
                         </form>
                     </div>
-                    <p>Experience the ultimate freedown of Dreamsrental - tailor adventure by choosing from Premium  bikes</p>
+                    <p>{{ __('web.home.theme_3_banner_text') }}</p>
                     <div class="customer-list">
                         <div class="users-wrap">
                             <ul class="users-list">
@@ -79,12 +79,12 @@
                                 @endif
                             </ul>
                             <div class="customer-info">
-                                <h4>{{ optional($section_content[0])->customer_count }} + Customers</h4>
-                                <p>has used our renting services </p>
+                                <h4>{{ $section_content[0]->customer_count ?? 0}} + {{ __('web.home.customers') }}</h4>
+                                <p>{{ __('web.home.has_used_rental') }} </p>
                             </div>
                         </div>
                         <div class="view-all">
-                            <a href="{{ route('list') }}" class="btn btn-view d-inline-flex align-items-center">Rent a Bike</a>
+                            <a href="{{ route('list') }}" class="btn btn-view d-inline-flex align-items-center">{{ __('web.home.rent_a_bike') }}</a>
                         </div>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
     </div>
     <div class="banner-image">
         <div class="banner-bg-img"   data-aos="fade-left">
-            <img src="{{ optional($section_content[0])->thumbnail_image }}" class="img-fluid" alt="img">
+            <img src="{{ $section_content[0]->thumbnail_image ?? "" }}" class="img-fluid" alt="img">
             <div class="banner-bg">
                 <img src="{{ asset('frontend/assets/img/bg/ban-bg.png') }}" class="img-fluid" alt="img">
             </div>

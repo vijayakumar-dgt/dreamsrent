@@ -34,7 +34,7 @@
                                 <img src="{{ $vehicleType->image_url }}" class="img-fluid" alt="image">
                             </span>
                             <h6>{{ $vehicleType->name }} </h6>
-                            <p>{{ $vehicleType->car_count }} Bikes</p>
+                            <p>{{ $vehicleType->car_count }} {{ __('web.home.bikes') }}</p>
                         </a>
                     </div>
                     @endforeach
@@ -43,7 +43,7 @@
                 <!-- /Category List -->
 
                 <div class="view-all-btn text-center aos" data-aos="fade-down">
-                    <a href="{{ route('list') }}" class="btn btn-secondary">View all Categories</a>
+                    <a href="{{ route('list') }}" class="btn btn-secondary">{{ __('web.home.view_all_categories') }}</a>
                 </div>
             </div>
         </div>

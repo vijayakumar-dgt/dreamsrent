@@ -59,7 +59,7 @@
                                             @for ($i = 0; $i < $emptyStars; $i++)						
                                             <i class="fas fa-star"></i>
                                             @endfor
-                                            <span>{{ $vehicle['total_review'] }} Reviews</span>
+                                            <span>{{ $vehicle['total_review'] }} {{ __('web.home.reviews') }}</span>
                                         </div>
                                         <h3 class="listing-title">
                                             <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">{{ $vehicle['name'] ?? "" }}</a>
@@ -101,16 +101,16 @@
                                             <i class="feather-heart"></i>
                                         </a>
                                         @endauth
-                                        <a href="{{ route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-order">Book Now</a>
+                                        <a href="{{ route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-order">{{ __('web.home.book_now') }}</a>
                                     </div>
                                 </div>
                                 @if($vehicle['is_featured'] == 1)
                                 <div class="feature-text">
-                                    <span class="bg-danger">Featured</span>
+                                    <span class="bg-danger">{{ __('web.home.featured') }}</span>
                                 </div>
                                 @elseif($vehicle['is_top_rated'] == 1)
                                 <div class="feature-text">
-                                    <span class="bg-warning">Top Rated</span>
+                                    <span class="bg-warning">{{ __('web.home.top_rated') }}</span>
                                 </div>			
                                 @endif
                             </div>
@@ -119,8 +119,10 @@
                     @endforeach
                 </div>
                 <div class="view-all-btn text-center aos" data-aos="fade-down">
-                    <a href="{{ route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-secondary">View all Bikes</a>
+                    <a href="{{ route('vehicleDetails', $vehicle['slug']) }}" class="btn btn-secondary">{{ __('web.home.view_all_bikes') }}</a>
                 </div>
+                @else
+                <p class="text-center">{{ __('web.common.empty_table') }}</p>
                 @endif
             </div>
         </div>

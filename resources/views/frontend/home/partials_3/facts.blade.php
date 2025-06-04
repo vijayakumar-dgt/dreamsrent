@@ -30,7 +30,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="customer-content">
-                    <p>Overall, car rental counters serve as the primary point of contact for customers to pick up their rental vehicles and complete the necessary paperwork before embarking on their journey. The rental agents are there to assist customers every step of the way and ensure a smooth and seamless rental experience.</p>
+                    <p>{{ __('web.home.theme_3_fact_desc') }}</p>
                     @php 
                     $factsContent = $section['facts_content'];
                     $locationCount = array_filter($factsContent, function ($item) {
@@ -61,7 +61,7 @@
                                 </span>
                                 <div class="count-info">
                                     <h3><span class="counterUp">{{ $locationCount[0]['value'] }}</span>+</h3>
-                                    <p>Locations to Pickup</p>
+                                    <p>{{ __('web.home.locations_to_pickup') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                                 </span>
                                 <div class="count-info">
                                     <h3><span class="counterUp">{{ $vehicleCount[0]['value'] }}</span>+</h3>
-                                    <p>Count of Bikes</p>
+                                    <p>{{ __('web.home.count_of_bikes') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                                 </span>
                                 <div class="count-info">
                                     <h3><span class="counterUp">{{ $totalKm[0]['value'] }}</span></h3>
-                                    <p>Total Kilometers</p>
+                                    <p>{{ __('web.home.total_kilometers') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -94,7 +94,7 @@
                                 </span>
                                 <div class="count-info">
                                     <h3><span class="counterUp">{{ $customersCount[0]['value'] }}</span>+</h3>
-                                    <p>Happy Customers</p>
+                                    <p>{{ __('web.home.happy_customers') }}</p>
                                 </div>
                             </div>
                         </div>

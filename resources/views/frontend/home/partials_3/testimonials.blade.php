@@ -24,7 +24,7 @@
                     <img src="{{ asset('frontend/assets/img/testimonial-img.jpg') }}" alt="img" class="img-fluid">
                     <div class="feedback-item">
                         <div class="feedback-info">
-                            <h6>Great</h6>
+                            <h6>{{ __('web.home.greate') }}</h6>
                             <div class="rate-icon">
                                 <span><i class="bx bxs-star"></i></span>
                                 <span><i class="bx bxs-star"></i></span>
@@ -32,10 +32,10 @@
                                 <span><i class="bx bxs-star"></i></span>
                                 <span><i class="bx bxs-star"></i></span>
                             </div>
-                            <p>Based on 5,801 Reviews</p>
+                            <p>{{ __('web.home.based_on') }} {{ $data['total_reviews'] ?? 0 }} {{ __('web.home.reviews') }}</p>
                         </div>
                         <div class="feedback-user">
-                            <h3><i class="bx bxs-star"></i>Trustpilot</h3>
+                            <h3><i class="bx bxs-star"></i>{{ __('web.home.trustpilot') }}</h3>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                                             <span><i class="bx bx-star"></i></span>
                                         @endfor
                                     </div>
-                                    <p><i class="bx bxs-check-circle"></i>Verified</p>
+                                    <p><i class="bx bxs-check-circle"></i>{{ __('web.home.verified') }}</p>
                                 </div>
                             </div>	
                             <div class="testimonial-content">					
@@ -74,6 +74,10 @@
                             </div>
                         </div>
                         @endforeach
+                        @else
+                        <div class="col-12">
+                            <p class="text-center">{{ __('web.common.empty_table') }}</p>
+                        </div>
                         @endif
                     </div>
                     <div class="slider testimonial-thumbnails">
