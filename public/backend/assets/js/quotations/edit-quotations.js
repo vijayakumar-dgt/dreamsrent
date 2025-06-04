@@ -209,7 +209,7 @@
                         if (resp.code === 200) {
                             showToast("success", resp.message);
                             $("#add_driver_modal").modal("hide");
-                            window.location.href = resp.redirect_url;
+                            window.location.href =  route('reservation.index');
                         }
                     },
                     error: function (error) {

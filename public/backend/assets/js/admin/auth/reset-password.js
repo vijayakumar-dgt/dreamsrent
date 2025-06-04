@@ -58,7 +58,7 @@
                         }
                         $("#resetpasswordForm .submitbtn").text(_l('admin.auth.we_are_redirecting_you'));
                         setTimeout(() => {
-                            window.location.href = resp.redirect_url;
+                            window.location.href = route('admin-login');
                         }, 3000);
                     },
                     error: function (error) {
