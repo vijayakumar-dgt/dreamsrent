@@ -10,6 +10,7 @@ use App\Services\ImageResizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -305,32 +306,11 @@ class AdminUserRepository implements AdminUserRepositoryInterface
         }
     }
 
-    public function notifications(Request $request): array
+    public function notifications(Request $request): LengthAwarePaginator
     {
         $authUser = Auth::guard('admin')->user();
-        $notifications = collect();
-        if ($authUser !== null) {
-            $notifications = Notification::where('user_id', $authUser->id)->orderBy('created_at', 'desc')->paginate(10);
-            if ($request->ajax()) {
-                $view = view('admin.partials.notification-items', compact('notifications'))->render();
-                return [
-                    'html' => $view,
-                    'current_page' => $notifications->currentPage(),
-                    'last_page' => $notifications->lastPage(),
-                    'prev_page_url' => $notifications->previousPageUrl(),
-                    'next_page_url' => $notifications->nextPageUrl(),
-                    'count' => $notifications->total()
-                ];
-            }
-        }
-        return [
-            'html' => '',
-            'current_page' => 1,
-            'last_page' => 1,
-            'prev_page_url' => null,
-            'next_page_url' => null,
-            'count' => 0,
-        ];
+        $notifications = Notification::where('user_id', $authUser->id)->orderBy('created_at', 'desc')->paginate(10);
+        return $notifications;
     }
 
     public function markNotificationAsRead(Request $request): array

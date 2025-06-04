@@ -932,9 +932,9 @@
                             id: `extra-service-${item.id}`,
                             value: item.id,
                             checked: isSelected,
-                            'data-price': item.price,
-                            'data-price_type': item.extra_service_type,
-                            'data-name': item.name
+                            'data-price': DOMPurify.sanitize(item.price),
+                            'data-price_type': DOMPurify.sanitize(item.extra_service_type),
+                            'data-name': DOMPurify.sanitize(item.name)
                         });
                         $formCheck.append($checkbox);
 

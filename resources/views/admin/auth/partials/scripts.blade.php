@@ -14,6 +14,9 @@
 <!-- Toastr JS -->
 <script src="{{ asset('backend/assets/plugins/toastr/toastr.min.js') }}"></script>
 
+<!-- Purify JS -->
+<script src="{{ asset('backend/assets/js/purify.min.js') }}"></script>
+
 <!-- Custom JS -->
 <script src="{{ asset('backend/assets/js/script.js') }}"></script>
 

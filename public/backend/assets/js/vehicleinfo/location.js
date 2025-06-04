@@ -373,11 +373,11 @@
                     .join("");
 
                 const statusClass =
-                    location.status == 1
+                    DOMPurify.sanitize(location.status) == 1
                         ? "badge-success-transparent"
                         : "badge-danger-transparent";
                 const statusText =
-                    location.status == 1
+                    DOMPurify.sanitize(location.status) == 1
                         ? _l("admin.common.active")
                         : _l("admin.common.inactive");
 
@@ -406,21 +406,21 @@
                         <div class="d-flex align-items-center file-name-icon">
                             <div class="avatar avatar-lg border">
                                 <img src="${
-                                    location.image_url
+                                    DOMPurify.sanitize(location.image_url)
                                 }" class="img-fluid" alt="Image Preview">
                             </div>
                             <div class="ms-2">
                                 <h6 class="fw-medium text-black">${
-                                    location.name
+                                    DOMPurify.sanitize(location.name)
                                 }</h6>
                             </div>
                         </div>
                     </td>
                     <td><h6 class="fw-medium text-black">${
-                        location.address
+                        DOMPurify.sanitize(location.address)
                     }</h6></td>
                     <td><h6 class="fw-medium text-black">${
-                        location.phone
+                        DOMPurify.sanitize(location.phone)
                     }</h6></td>
                     <td><div class="working-days">${workingDaysHtml}</div></td>
                     <td>

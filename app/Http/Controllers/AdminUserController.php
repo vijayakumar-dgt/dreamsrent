@@ -63,8 +63,19 @@ class AdminUserController extends Controller
 
     public function notifications(Request $request): View|JsonResponse
     {
-        $data = $this->adminUserRepository->notifications($request);
-        return view('admin.partials.notifications', $data);
+        $notifications = $this->adminUserRepository->notifications($request);
+        if ($request->ajax()) {
+            $view = view('admin.partials.notification-items', compact('notifications'))->render();
+            return response()->json([
+                'html' => $view,
+                'current_page' => $notifications->currentPage(),
+                'last_page' => $notifications->lastPage(),
+                'prev_page_url' => $notifications->previousPageUrl(),
+                'next_page_url' => $notifications->nextPageUrl(),
+                'count' => $notifications->total()
+            ]);
+        }
+        return view('admin.partials.notifications', compact('notifications'));
     }
 
     public function markNotificationAsRead(Request $request): JsonResponse

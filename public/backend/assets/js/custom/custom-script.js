@@ -1,6 +1,5 @@
 (function () {
     "use strict";
-    const baseUrl = window.location.origin;
 	window.showToast = function (toastType, message) {
 		let toastId = '';
 		if (toastType == 'success') {
@@ -101,7 +100,7 @@
 			url: "/admin/get-notifications",
 			dataType: "json",
 			success: function (response) {
-				$(".noti-content").html(response.html);
+				$(".noti-content").html(DOMPurify.sanitize(response.html));
 				if(response.count > 0){
 					$("#newNotificationBadge").removeClass("d-none");
 					$(".has-notification").removeClass("d-none");
