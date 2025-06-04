@@ -185,26 +185,6 @@ if (!function_exists('uploadedAssetDetails')) {
     }
 }
 
-// /**
-//  * Encrypts data using AES-128-CBC encryption.
-//  *
-//  * @param string $data The data to be encrypted.
-//  * @param string $key The encryption key (optional).
-//  * @return string The encrypted and encoded string, or an empty string on failure.
-//  */
-// function customEncrypt(string|int|null $data, string $key = 'default_secret_key'): string
-// {
-//     $cipher = 'AES-128-CBC';
-//     $iv = substr(md5($key), 0, 16);
-//     $encrypted = openssl_encrypt((string) $data, $cipher, $key, 0, $iv);
-
-//     if ($encrypted === false) {
-//         return ''; // or throw an exception depending on your needs
-//     }
-
-//     return rtrim(strtr(base64_encode($encrypted), '+/', '-_'), '=');
-// }
-
 /**
  * Encrypts data using AES-128-CBC encryption securely.
  *
@@ -234,24 +214,6 @@ function customEncrypt(string|int|null $data, string $key = 'default_secret_key'
     $output = base64_encode($iv . $encrypted);
     return rtrim(strtr($output, '+/', '-_'), '=');
 }
-
-
-// function customDecrypt(string|int|null $encryptedData, string $key = 'default_secret_key'): ?string
-// {
-//     $cipher = 'AES-128-CBC';
-//     $iv = substr(md5($key), 0, 16);
-
-//     $encryptedData = strtr((string)$encryptedData, '-_', '+/');
-//     $decoded = base64_decode($encryptedData, true);
-
-//     if ($decoded === false) {
-//         return null; // base64 decode failed
-//     }
-
-//     $decrypted = openssl_decrypt($decoded, $cipher, $key, 0, $iv);
-
-//     return $decrypted !== false ? $decrypted : null;
-// }
 
 /**
  * Decrypts data that was encrypted with customEncrypt().
