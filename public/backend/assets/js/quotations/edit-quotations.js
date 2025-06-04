@@ -1027,16 +1027,23 @@
                 if (result.data && result.data.length > 0) {
                     let data = result.data;
 
+                    const $safeContainer = $('<div>'); // Use temporary DOM container
                     $('#extra_service_list_container').empty();
 
                     data.forEach(item => {
-                        let isSelected = selected_extra_service_ids.includes(item.id.toString()) ||
-                                        edit_extra_service.find(service => service.id == item.id);
+                        const id = DOMPurify.sanitize(item.id.toString());
+                        const name = DOMPurify.sanitize(item.name || '');
+                        const description = DOMPurify.sanitize(item.description || '');
+                        const price = DOMPurify.sanitize(item.price);
+                        const type = DOMPurify.sanitize(item.extra_service_type);
+
+                        let isSelected = selected_extra_service_ids.includes(id) ||
+                                        edit_extra_service.find(service => service.id.toString() === id);
 
                         let isActive = isSelected ? 'active' : '';
                         let extraServiceType = '';
 
-                        switch (item.extra_service_type) {
+                        switch (type) {
                             case 'per_day':
                                 extraServiceType = 'Per Day';
                                 break;
@@ -1047,53 +1054,52 @@
                                 extraServiceType = 'Percentage';
                                 break;
                             default:
-                                extraServiceType = DOMPurify.sanitize(item.extra_service_type); // safe fallback
+                                extraServiceType = DOMPurify.sanitize(type); // fallback
                         }
 
                         const $col = $('<div>').addClass('col-md-6');
                         const $customCheckbox = $('<div>').addClass(`custom-checkbox ${isActive}`);
 
-                        // Checkbox
                         const $formCheck = $('<div>').addClass('form-check form-check-md');
                         const $checkbox = $('<input>', {
                             type: 'checkbox',
                             class: 'form-check-input vehicle_extra_service',
                             name: 'extra_services[]',
-                            id: `extra-service-${DOMPurify.sanitize(item.id)}`,
-                            value: DOMPurify.sanitize(item.id),
+                            id: `extra-service-${id}`,
+                            value: id,
                             checked: isSelected,
-                            'data-price': DOMPurify.sanitize(item.price),
-                            'data-price_type': DOMPurify.sanitize(item.extra_service_type),
-                            'data-name': DOMPurify.sanitize(item.name)
+                            'data-price': price,
+                            'data-price_type': type,
+                            'data-name': name
                         });
                         $formCheck.append($checkbox);
 
-                        // Label and description (sanitized text content only)
                         const $labelWrap = $('<div>').addClass('d-flex align-items-center justify-content-between');
+
                         const $label = $('<label>', {
                             class: 'form-check-label ms-2 ps-4',
-                            for: `extra-service-${DOMPurify.sanitize(item.id)}`
+                            for: `extra-service-${id}`
                         });
-                        $('<span>').addClass('fw-semibold text-gray-9 d-block mb-1').text(item.name || '').appendTo($label);
-                        $('<span>').addClass('d-block').text(item.description || '').appendTo($label);
+                        $('<span>').addClass('fw-semibold text-gray-9 d-block mb-1').text(name).appendTo($label);
+                        $('<span>').addClass('d-block').text(description).appendTo($label);
 
-                        // Price and type
                         const $priceInfo = $('<div>').addClass('text-end');
                         $('<p>').addClass('mb-1').text(extraServiceType).appendTo($priceInfo);
 
-                        let priceDisplay = item.extra_service_type === 'percentage'
-                            ? `${DOMPurify.sanitize(item.price)}%`
-                            : `${default_currency}${DOMPurify.sanitize(item.price)}`;
+                        const priceDisplay = type === 'percentage'
+                            ? `${price}%`
+                            : `${default_currency}${price}`;
 
                         $('<h6>').text(priceDisplay).appendTo($priceInfo);
 
                         $labelWrap.append($label, $priceInfo);
-
-                        // Combine and append
                         $customCheckbox.append($formCheck, $labelWrap);
                         $col.append($customCheckbox);
-                        $('#extra_service_list_container').append($col);
+
+                        $safeContainer.append($col); // Append to temporary safe container
                     });
+
+                    $('#extra_service_list_container').append($safeContainer.children()); // Final append once
 
                     // Update price UI
                     const response = calculateVehiclePrice();
