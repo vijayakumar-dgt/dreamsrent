@@ -16,7 +16,7 @@
                     headers: { "X-Requested-With": "XMLHttpRequest" },
                 });
                 const data = await response.json();
-                $blogContainer.html(data.html);
+                $blogContainer.text(data.html);
                 bindPaginationLinks();
 
                 window.scrollTo({
