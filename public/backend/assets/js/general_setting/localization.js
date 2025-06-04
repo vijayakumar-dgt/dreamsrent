@@ -196,25 +196,30 @@
                     type: "GET",
                     url: "/admin/settings/get-timezone",
                     success: function (resp) {
-                        if (resp.code === 200) {
-                            $("#timezone").empty();
-                            $("#timezone").append(
-                                `<option value="">${_l(
-                                    "admin.general_settings.select"
-                                )}</option>`
+                        const timezoneSelect = $("#timezone");
+                        timezoneSelect.empty();
+
+                        timezoneSelect.append(
+                            $("<option>")
+                                .val("")
+                                .text(_l("admin.general_settings.select"))
+                        );
+
+                        if (
+                            resp.code === 200 &&
+                            resp.data?.id &&
+                            resp.data?.name
+                        ) {
+                            const safeId = DOMPurify.sanitize(
+                                resp.data.id.toString()
                             );
-                            $("#timezone").append(
-                                `<option value="${resp.data.id}">${resp.data.name}</option>`
-                            );
-                            $("#timezone").trigger("change");
-                        } else {
-                            $("#timezone").empty();
-                            $("#timezone").append(
-                                `<option value="">${_l(
-                                    "admin.general_settings.select"
-                                )}</option>`
+                            const safeName = DOMPurify.sanitize(resp.data.name);
+
+                            timezoneSelect.append(
+                                $("<option>").val(safeId).text(safeName)
                             );
                         }
+                        timezoneSelect.trigger("change");
                         resolve(resp);
                     },
                     error: function (error) {

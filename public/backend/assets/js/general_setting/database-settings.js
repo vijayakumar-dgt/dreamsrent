@@ -15,68 +15,129 @@
                 tableBody.empty();
 
                 if (response.data.length === 0) {
-                    tableBody.append(`
-                    <tr>
-                        <td colspan="3">
-                            <p class="text-gray-9 text-center m-0">${_l(
-                                "admin.common.empty_table"
-                            )}</p>
-                        </td>
-                    </tr>
-                `);
+                    const emptyRow = $("<tr>").append(
+                        $("<td>")
+                            .attr("colspan", 3)
+                            .append(
+                                $("<p>")
+                                    .addClass("text-gray-9 text-center m-0")
+                                    .text(_l("admin.common.empty_table"))
+                            )
+                    );
+                    tableBody.append(emptyRow);
                     return;
                 }
 
                 response.data.forEach((backup) => {
-                    let row = `
-                    <tr>
-                        <td>
-                            <h6 class="fw-semibold fs-14">
-                                <a href="${backup.download_url}" download>${
-                        backup.name
-                    }</a>
-                            </h6>
-                        </td>
-                        <td>
-                            <p class="text-gray-9">${backup.created_on}</p>
-                        </td>
-                        <td>
-                            <div class="dropdown">
-                                <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="ti ti-dots-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end p-2">
-                                    <li>
-                                        <a class="dropdown-item rounded-1" href="${
-                                            backup.download_url
-                                        }" download>
-                                            <i class="ti ti-download me-1"></i>${_l(
-                                                "admin.common.download"
-                                            )}
-                                        </a>
-                                    </li>
-                                    ${
+                   
+                    const safeName = DOMPurify.sanitize(backup.name || "");
+                    const safeCreatedOn = DOMPurify.sanitize(
+                        backup.created_on || ""
+                    );
+                    const safeDownloadUrl = DOMPurify.sanitize(
+                        backup.download_url || ""
+                    );
+                    const safeId = DOMPurify.sanitize(
+                        backup.id?.toString() || ""
+                    );
+
+                    const row = $("<tr>");
+
+                    
+                    const nameTd = $("<td>").append(
+                        $("<h6>")
+                            .addClass("fw-semibold fs-14")
+                            .append(
+                                $("<a>")
+                                    .attr("href", safeDownloadUrl)
+                                    .attr("download", "")
+                                    .text(safeName)
+                            )
+                    );
+
+                   
+                    const createdTd = $("<td>").append(
+                        $("<p>").addClass("text-gray-9").text(safeCreatedOn)
+                    );
+
+                   
+                    const actionTd = $("<td>").append(
+                        $("<div>")
+                            .addClass("dropdown")
+                            .append(
+                                $("<button>")
+                                    .addClass("btn btn-icon btn-sm")
+                                    .attr({
+                                        type: "button",
+                                        "data-bs-toggle": "dropdown",
+                                        "aria-expanded": "false",
+                                    })
+                                    .append(
+                                        $("<i>").addClass("ti ti-dots-vertical")
+                                    ),
+                                $("<ul>")
+                                    .addClass(
+                                        "dropdown-menu dropdown-menu-end p-2"
+                                    )
+                                    .append(
+                                       
+                                        $("<li>").append(
+                                            $("<a>")
+                                                .addClass(
+                                                    "dropdown-item rounded-1"
+                                                )
+                                                .attr({
+                                                    href: safeDownloadUrl,
+                                                    download: "",
+                                                })
+                                                .append(
+                                                    $("<i>").addClass(
+                                                        "ti ti-download me-1"
+                                                    ),
+                                                    document.createTextNode(
+                                                        _l(
+                                                            "admin.common.download"
+                                                        )
+                                                    )
+                                                )
+                                        ),
+                                        
                                         hasPermission(
                                             permissions,
                                             "other_settings",
                                             "delete"
                                         )
-                                            ? `<li>
-                                            <button type="button" class="dropdown-item rounded-1" data-bs-toggle="modal" data-bs-target="#delete_backup" data-id="${
-                                                backup.id
-                                            }" id="delete-backup">
-                                                <i class="ti ti-trash me-1"></i>${_l(
-                                                    "admin.general_settings.delete"
-                                                )}
-                                            </button>
-                                        </li>`
-                                            : ""
-                                    }
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                                            ? $("<li>").append(
+                                                  $("<button>")
+                                                      .addClass(
+                                                          "dropdown-item rounded-1"
+                                                      )
+                                                      .attr({
+                                                          type: "button",
+                                                          "data-bs-toggle":
+                                                              "modal",
+                                                          "data-bs-target":
+                                                              "#delete_backup",
+                                                          "data-id": safeId,
+                                                          id: "delete-backup",
+                                                      })
+                                                      .append(
+                                                          $("<i>").addClass(
+                                                              "ti ti-trash me-1"
+                                                          ),
+                                                          document.createTextNode(
+                                                              _l(
+                                                                  "admin.general_settings.delete"
+                                                              )
+                                                          )
+                                                      )
+                                              )
+                                            : null
+                                    )
+                            )
+                    );
+
+                    row.append(nameTd, createdTd, actionTd);
                     tableBody.append(row);
                 });
             },

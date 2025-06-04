@@ -14,74 +14,100 @@
             method: "GET",
             dataType: "json",
             success: function (response) {
-                let tableBody = $("#system-backup-list");
+                const tableBody = $("#system-backup-list");
                 tableBody.empty();
-                if (response.data.length === 0) {
-                    tableBody.append(`
-                    <tr>
-                        <td colspan="4">
-                            <p class="text-gray-9 text-center">${_l(
-                                "admin.common.empty_table"
-                            )}</p>
-                        </td>
-                    </tr>
-                `);
-                }
-                response.data.forEach((backup) => {
-                    let row = `
-                    <tr>
-                        <td>
-                            <h6 class="fw-semibold fs-14">
-                                <a href="${backup.download_url}" download>${
-                        backup.name
-                    }</a>
-                            </h6>
-                        </td>
-                        <td>
-                            <p class="text-gray-9">${backup.created_on}</p>
-                        </td>
-                        <td>
-                            <div class="dropdown">
-                                <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="ti ti-dots-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end p-2">
-                                    <li>
-                                        <a class="dropdown-item rounded-1" href="${
-                                            backup.download_url
-                                        }" download>
-                                            <i class="ti ti-download me-1"></i>${_l(
-                                                "admin.common.download"
-                                            )}
-                                        </a>
-                                    </li>
-                                    ${
-                                        hasPermission(
-                                            permissions,
-                                            "other_settings",
-                                            "delete"
-                                        )
-                                            ? `<li>
-                                       <button 
-                                            type="button" 
-                                            class="dropdown-item rounded-1 delete-backup-btn" 
-                                            data-id="${backup.id}" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#delete_backup"
-                                        >
-                                            <i class="ti ti-trash me-1"></i>${_l(
-                                                "admin.general_settings.delete"
-                                            )}
-                                        </button>
 
-                                    </li>`
-                                            : ""
-                                    }
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                if (!response.data || response.data.length === 0) {
+                    tableBody.append(
+                        $("<tr>").append(
+                            $("<td>")
+                                .attr("colspan", 4)
+                                .append(
+                                    $("<p>")
+                                        .addClass("text-gray-9 text-center")
+                                        .text(_l("admin.common.empty_table"))
+                                )
+                        )
+                    );
+                    return;
+                }
+
+                response.data.forEach((backup) => {
+                    const downloadUrl = DOMPurify.sanitize(
+                        backup.download_url || ""
+                    );
+                    const backupName = DOMPurify.sanitize(backup.name || "");
+                    const createdOn = DOMPurify.sanitize(
+                        backup.created_on || ""
+                    );
+
+                    const row = $("<tr>");
+
+                    const nameCell = $("<td>").append(
+                        $("<h6>")
+                            .addClass("fw-semibold fs-14")
+                            .append(
+                                $("<a>")
+                                    .attr({ href: downloadUrl, download: "" })
+                                    .text(backupName)
+                            )
+                    );
+
+                    const createdCell = $("<td>").append(
+                        $("<p>").addClass("text-gray-9").text(createdOn)
+                    );
+
+                    const dropdownBtn = $("<button>")
+                        .addClass("btn btn-icon btn-sm")
+                        .attr({
+                            type: "button",
+                            "data-bs-toggle": "dropdown",
+                            "aria-expanded": "false",
+                        })
+                        .append($("<i>").addClass("ti ti-dots-vertical"));
+
+                    const downloadItem = $("<a>")
+                        .addClass("dropdown-item rounded-1")
+                        .attr({ href: downloadUrl, download: "" })
+                        .append($("<i>").addClass("ti ti-download me-1"))
+                        .append(
+                            document.createTextNode(_l("admin.common.download"))
+                        );
+
+                    const dropdownList = $("<ul>")
+                        .addClass("dropdown-menu dropdown-menu-end p-2")
+                        .append($("<li>").append(downloadItem));
+
+                    if (
+                        hasPermission(permissions, "other_settings", "delete")
+                    ) {
+                        const deleteBtn = $("<button>")
+                            .addClass(
+                                "dropdown-item rounded-1 delete-backup-btn"
+                            )
+                            .attr({
+                                type: "button",
+                                "data-id": backup.id,
+                                "data-bs-toggle": "modal",
+                                "data-bs-target": "#delete_backup",
+                            })
+                            .append($("<i>").addClass("ti ti-trash me-1"))
+                            .append(
+                                document.createTextNode(
+                                    _l("admin.general_settings.delete")
+                                )
+                            );
+
+                        dropdownList.append($("<li>").append(deleteBtn));
+                    }
+
+                    const actionsCell = $("<td>").append(
+                        $("<div>")
+                            .addClass("dropdown")
+                            .append(dropdownBtn, dropdownList)
+                    );
+
+                    row.append(nameCell, createdCell, actionsCell);
                     tableBody.append(row);
                 });
             },

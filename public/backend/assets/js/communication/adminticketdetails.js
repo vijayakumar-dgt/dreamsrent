@@ -134,7 +134,7 @@ function ticketDetails() {
         data: {
             ticketId: ticketId
         },
-      success: function (response) {
+        success: function (response) {
             let ticket = response.data[0];
 
             if (!ticket) {
@@ -204,7 +204,6 @@ function ticketDetails() {
                         class: 'ms-auto btn btn-sm btn-primary d-flex align-items-center'
                     });
 
-                    // Hardcoded icon (safe)
                     $('<i>').addClass('ti ti-download fs-16 me-1').appendTo(downloadLink);
                     downloadLink.append(document.createTextNode(_l('admin.common.download')));
 
@@ -222,9 +221,11 @@ function ticketDetails() {
                 return;
             }
 
-            ticket.ticket_histories.forEach(history => {
-                const userImage = history.user?.user_detail?.profile_image
-                    ? '/storage/' + history.user.user_detail.profile_image
+           ticket.ticket_histories.forEach(history => {
+                const rawImage = history.user?.user_detail?.profile_image || '';
+                const isValidImage = /^[\w\-./]+$/.test(rawImage);
+                const userImage = isValidImage
+                    ? `/storage/${rawImage.replace(/\\/g, '/')}`
                     : '/backend/assets/img/default-profile.png';
 
                 const userName = history.user?.user_detail?.first_name && history.user?.user_detail?.last_name
@@ -235,13 +236,16 @@ function ticketDetails() {
 
                 const commentItem = $('<div>').addClass('comment-item mt-3');
                 const userInfo = $('<div>').addClass('d-flex align-items-center mb-1');
-                const avatar = $('<span>').addClass('avatar avatar-l me-2 flex-shrink-0').append(
-                    $('<img>', {
-                        src: userImage,
-                        alt: 'User Profile Image',
-                        class: 'img-fluid rounded-circle'
-                    })
-                );
+
+                const avatarImg = $('<img>', {
+                    src: userImage,
+                    alt: 'User Profile Image',
+                    class: 'img-fluid rounded-circle'
+                });
+
+                const avatar = $('<span>')
+                    .addClass('avatar avatar-l me-2 flex-shrink-0')
+                    .append(avatarImg);
 
                 const userDetails = $('<div>').append(
                     $('<h6>').addClass('mb-1').text(userName),
