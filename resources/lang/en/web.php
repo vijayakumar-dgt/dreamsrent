@@ -24,7 +24,7 @@ return [
         'email_address' => 'Email Address',
         'reset_password_title' => 'Reset Password',
         'reset_password_description' => 'Your new password must be different from previously used passwords.',
-        'new_password' => 'New Password',
+        'auth_new_password' => 'New Password',
         'confirm_password' => 'Confirm Password',
         'save_changes' => 'Save Changes',
         'invalid_email' => 'Please provide a valid email address.',
