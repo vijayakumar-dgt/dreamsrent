@@ -491,7 +491,7 @@
                     );
 
                     $("#view_template_title").text(response.data.title);
-                    $("#preview_box").append(description);
+                    $("#preview_box").empty().append(description);
                 },
             });
             $("#view_template").modal("show");
@@ -521,7 +521,7 @@
                             )
                             .join("");
                     }
-                    $("#placeholders").append(placeholders);
+                    $("#placeholders").text(placeholders.html);
                 }
             },
         });

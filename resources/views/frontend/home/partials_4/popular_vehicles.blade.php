@@ -1,3 +1,7 @@
+@php
+    $yachts = $section['section_content']['vehicles'] ?? [];
+    $brands = $section['section_content']['brands'] ?? [];
+@endphp
 <!-- Top Feature Yacht -->
 <section class="top-features-yachts">
     <div class="sec-bg">
@@ -9,23 +13,19 @@
         <div class="sec-title">
             <h4>Select From Professional Charter Companies</h4>
         </div>
+        @if(!empty($brands) && count($brands) > 0)
         <div class="charter-company-slider owl-carousel">
+            @foreach ($brands as $brand)
             <div class="charter-company-logo">
-                <span><img src="/frontend/assets/img/icons/charter-company-01.svg" alt="Icon"></span>
+                <span><img src="{{ $brand->brand_icon }}" alt="Icon"></span>
             </div>
-            <div class="charter-company-logo">
-                <span><img src="/frontend/assets/img/icons/charter-company-02.svg" alt="Icon"></span>
-            </div>
-            <div class="charter-company-logo">
-                <span><img src="/frontend/assets/img/icons/charter-company-03.svg" alt="Icon"></span>
-            </div>
-            <div class="charter-company-logo">
-                <span><img src="/frontend/assets/img/icons/charter-company-04.svg" alt="Icon"></span>
-            </div>
-            <div class="charter-company-logo">
-                <span><img src="/frontend/assets/img/icons/charter-company-05.svg" alt="Icon"></span>
-            </div>
+            @endforeach
         </div>
+        @else
+        <div class="col-md-12 mb-3">
+            <p class="text-center">{{ __('web.common.empty_table') }}</p>
+        </div>
+        @endif
         <div class="top-rated-yachts">
             <div class="row align-items-center">
                 <div class="col-lg-4">
@@ -37,8 +37,8 @@
                 </div>
                 <div class="col-lg-8">
                     <div class="top-rated-yachts-slider owl-carousel">
-                        @if(!empty($section['section_content']) && count($section['section_content']) > 0)
-                        @foreach ($section['section_content'] as $yacht)
+                        @if(!empty($yachts) && count($yachts) > 0)
+                        @foreach ($yachts as $yacht)
                         <div class="top-rated-card">
                             <div class="rated-yacht-img slide-card-images">
                                 <div class="image-slider owl-carousel">

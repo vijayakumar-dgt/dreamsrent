@@ -1,13 +1,11 @@
 (async () => {
     await loadTranslationFile('admin', 'common, bookings');
     let default_currency = $('body').data('currency');
-    let edit_customer_id = '';
     let edit_driver_id = '';
     let edit_driver_price = '';
     let edit_vehicle_id = '';
     let edit_insurance = '';
     let edit_extra_service = [];
-    let edit_vehicle_price = '';
 
     let startDate = '';
     let startTime = '';
@@ -717,77 +715,103 @@
                     let data = result.data.data;
                     lastPage = result.data.current_page >= result.data.last_page;
 
-                    let options = data.map(function (item) {
-                        let is_checked = item.id == edit_vehicle_id ? 'checked' : '';
-
-                        return `
-                            <div class="card vehicle-card" id="vehicle_${item.id}" data-image="${item.image}" data-type="${item.vehicle_type}" data-name="${item.vehicle_name}" data-price="${item.vehicle_price}" data-price_type="${item.vehicle_price_type}">
-                                <div class="card-body">
-                                    <div class="row gy-3">
-                                        <div class="col-3">
-                                            <div class="d-flex align-items-center">
-                                                <div class="form-check form-check-md me-3">
-                                                    <input class="form-check-input vehicle_select" name="vehicle_id" id="vehicle_select_${item.id}" value="${item.id}" type="radio" data-price="${item.vehicle_price}" data-price_type="${item.vehicle_price_type}" data-vehicle_name="${item.vehicle_name}" data-vehicle_season_id="${item.vehicle_season_id ?? ''}" data-vehicle_tariff_id="${item.vehicle_tariff_id ?? ''}" ${is_checked}>
-                                                </div>
-                                                <span class="avatar flex-shrink-0 me-2">
-                                                    <img src="${item.image}" alt="">
-                                                </span>
-                                                <div>
-                                                    <p class="mb-1">${item.vehicle_type}</p>
-                                                    <h6 class="fs-14">${item.vehicle_name}</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="d-flex gy-3 gap-5">
-                                                <div class="">
-                                                    <div>
-                                                        <p class="mb-1">${_l('admin.common.color')}</p>
-                                                        <h6 class="fs-14 d-inline-flex align-items-center">
-                                                            <i class="ti ti-square-filled me-1" style="color: ${item.color_value};"></i>${item.color_name}
-                                                        </h6>
-                                                    </div>
-                                                </div>
-                                                <div class="">
-                                                    <div>
-                                                        <p class="mb-1">${_l('admin.common.year')}</p>
-                                                        <h6 class="fs-14">${item.year}</h6>
-                                                    </div>
-                                                </div>
-                                                <div class="">
-                                                    <div>
-                                                        <p class="mb-1">${_l('admin.common.price')}</p>
-                                                        <h6 class="fs-14">${default_currency}${item.vehicle_price}<span class="text-gray-5 mt-1">/${item.vehicle_price_type}</span></h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="float-md-start">
-                                                <span class="badge bg-orange-transparent d-inline-flex align-items-center badge-sm mb-1">
-                                                    <i class="ti ti-point-filled me-1"></i>${_l('admin.common.available')}
-                                                </span>
-                                                <h6 class="fs-14">${item.model_name}</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>`;
-                        }).join('');
-                        
-                        
-                    if (isLoadMore) {
-                        $('#vehicle_list_container').append(options);
-                    } else {
-                        $('#vehicle_list_container').empty().html(options);
-                        let checkedVehicle = $('.vehicle_select:checked');
-                        if (checkedVehicle.length > 0) {
-                            checkedVehicle.trigger('click');
-                        } 
+                    if (!isLoadMore) {
+                        $('#vehicle_list_container').empty();
                     }
+
+                    data.forEach(item => {
+                        let isChecked = item.id == edit_vehicle_id;
+
+                        const $card = $('<div>')
+                            .addClass('card vehicle-card')
+                            .attr('id', `vehicle_${item.id}`)
+                            .attr('data-image', item.image)
+                            .attr('data-type', item.vehicle_type)
+                            .attr('data-name', item.vehicle_name)
+                            .attr('data-price', item.vehicle_price)
+                            .attr('data-price_type', item.vehicle_price_type);
+
+                        const $cardBody = $('<div>').addClass('card-body');
+                        const $row = $('<div>').addClass('row gy-3');
+
+                        // === Column 1 ===
+                        const $col1 = $('<div>').addClass('col-3');
+                        const $alignDiv = $('<div>').addClass('d-flex align-items-center');
+
+                        const $formCheck = $('<div>').addClass('form-check form-check-md me-3');
+                        const $radio = $('<input>', {
+                            type: 'radio',
+                            class: 'form-check-input vehicle_select',
+                            name: 'vehicle_id',
+                            id: `vehicle_select_${item.id}`,
+                            value: item.id,
+                            checked: isChecked,
+                            'data-price': item.vehicle_price,
+                            'data-price_type': item.vehicle_price_type,
+                            'data-vehicle_name': item.vehicle_name,
+                            'data-vehicle_season_id': item.vehicle_season_id || '',
+                            'data-vehicle_tariff_id': item.vehicle_tariff_id || ''
+                        });
+                        $formCheck.append($radio);
+
+                        const $avatar = $('<span>').addClass('avatar flex-shrink-0 me-2');
+                        $('<img>', { src: item.image, alt: '' }).appendTo($avatar);
+
+                        const $vehicleInfo = $('<div>');
+                        $('<p>').addClass('mb-1').text(item.vehicle_type).appendTo($vehicleInfo);
+                        $('<h6>').addClass('fs-14').text(item.vehicle_name).appendTo($vehicleInfo);
+
+                        $alignDiv.append($formCheck, $avatar, $vehicleInfo);
+                        $col1.append($alignDiv);
+
+                        // === Column 2 ===
+                        const $col2 = $('<div>').addClass('col-6');
+                        const $gapDiv = $('<div>').addClass('d-flex gy-3 gap-5');
+
+                        const $colorDiv = $('<div>');
+                        $('<p>').addClass('mb-1').text(_l('admin.common.color')).appendTo($colorDiv);
+                        const $colorH6 = $('<h6>').addClass('fs-14 d-inline-flex align-items-center');
+                        $('<i>', { class: 'ti ti-square-filled me-1', style: `color: ${item.color_value}` }).appendTo($colorH6);
+                        $colorH6.append(document.createTextNode(item.color_name));
+                        $colorDiv.append($colorH6);
+
+                        const $yearDiv = $('<div>');
+                        $('<p>').addClass('mb-1').text(_l('admin.common.year')).appendTo($yearDiv);
+                        $('<h6>').addClass('fs-14').text(item.year).appendTo($yearDiv);
+
+                        const $priceDiv = $('<div>');
+                        $('<p>').addClass('mb-1').text(_l('admin.common.price')).appendTo($priceDiv);
+                        $('<h6>').addClass('fs-14').html(`${default_currency}${item.vehicle_price}<span class="text-gray-5 mt-1">/${item.vehicle_price_type}</span>`).appendTo($priceDiv);
+
+                        $gapDiv.append($colorDiv, $yearDiv, $priceDiv);
+                        $col2.append($gapDiv);
+
+                        // === Column 3 ===
+                        const $col3 = $('<div>').addClass('col-3');
+                        const $modelDiv = $('<div>').addClass('float-md-start');
+                        $('<span>')
+                            .addClass('badge bg-orange-transparent d-inline-flex align-items-center badge-sm mb-1')
+                            .html(`<i class="ti ti-point-filled me-1"></i>${_l('admin.common.available')}`)
+                            .appendTo($modelDiv);
+                        $('<h6>').addClass('fs-14').text(item.model_name).appendTo($modelDiv);
+                        $col3.append($modelDiv);
+
+                        $row.append($col1, $col2, $col3);
+                        $cardBody.append($row);
+                        $card.append($cardBody);
+
+                        $('#vehicle_list_container').append($card);
+                    });
 
                     currentPage = result.data.current_page;
                     totalPage = result.data.last_page;
+
+                    if (!isLoadMore) {
+                        const $checked = $('.vehicle_select:checked');
+                        if ($checked.length > 0) {
+                            $checked.trigger('click');
+                        }
+                    }
                 } else if (!isLoadMore) {
                     $('#vehicle_list_container').html(`
                         <div class="row">
@@ -826,14 +850,23 @@
             success: function (result) {
                 if (result.data && result.data.length > 0) {
                     let data = result.data;
-                    
-                    let options = data.map(item => {
-                        return `<option value="${item.id}" ${(item.id == selected_driver_id ) ? 'selected' : ''}>${item.driver_name}</option>`;
-                    }).join('');
 
-                    $('#driver_id').find('option:not(:first)').remove();
-                    $('#driver_id').append(options);
-                    $('#driver_id').val(edit_driver_id).trigger('change');
+                    $("#driver_id").find("option:not(:first)").remove();
+
+                    data.forEach(item => {
+                        const option = $('<option>', {
+                            value: item.id,
+                            text: item.driver_name
+                        });
+
+                        if (item.id == selected_driver_id) {
+                            option.prop('selected', true);
+                        }
+
+                        $("#driver_id").append(option);
+                    });
+
+                    $("#driver_id").val(edit_driver_id).trigger("change");
                 }
             },
             error: function (error) {
@@ -862,14 +895,15 @@
                 if (result.data && result.data.length > 0) {
                     let data = result.data;
 
-                    let options = data.map(item => {
-                        let isChecked = (selected_extra_service_ids.includes(item.id.toString()) || 
-                            edit_extra_service.find(service => service.id == item.id)) ? 'checked' : '';
+                    $('#extra_service_list_container').empty();
 
-                        let isActive = (selected_extra_service_ids.includes(item.id.toString()) || 
-                                edit_extra_service.find(service => service.id == item.id)) ? 'active' : '';
+                    data.forEach(item => {
+                        let isSelected = selected_extra_service_ids.includes(item.id.toString()) || 
+                                        edit_extra_service.find(service => service.id == item.id);
 
+                        let isActive = isSelected ? 'active' : '';
                         let extraServiceType = '';
+                        
                         switch (item.extra_service_type) {
                             case 'per_day':
                                 extraServiceType = 'Per Day';
@@ -884,37 +918,59 @@
                                 extraServiceType = item.extra_service_type;
                         }
 
-                        return `
-                            <div class="col-md-6">
-                                <div class="custom-checkbox ${isActive}">
-                                    <div class="form-check form-check-md">
-                                        <input class="form-check-input vehicle_extra_service" type="checkbox" name="extra_services[]" value="${item.id}" id="extra-service-${item.id}" ${isChecked} data-price="${item.price}" data-price_type="${item.extra_service_type}" data-name="${item.name}">
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <label class="form-check-label ms-2 ps-4" for="extra-service-${item.id}">
-                                            <span class="fw-semibold text-gray-9 d-block mb-1">${item.name}</span>
-                                            <span class="d-block">${item.description}</span>
-                                        </label>
-                                        <div class="text-end">
-                                            <p class="mb-1">${extraServiceType}</p>
-                                            ${ item.extra_service_type == 'percentage' ?
-                                                `<h6>${item.price}%</h6>` : `<h6>${default_currency}${item.price}</h6>`
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
+                        const $col = $('<div>').addClass('col-md-6');
+                        const $customCheckbox = $('<div>').addClass(`custom-checkbox ${isActive}`);
 
-                    $('#extra_service_list_container').empty().html(options);
-                    var response = calculateVehiclePrice();
+                        // Checkbox
+                        const $formCheck = $('<div>').addClass('form-check form-check-md');
+                        const $checkbox = $('<input>', {
+                            type: 'checkbox',
+                            class: 'form-check-input vehicle_extra_service',
+                            name: 'extra_services[]',
+                            id: `extra-service-${item.id}`,
+                            value: item.id,
+                            checked: isSelected,
+                            'data-price': item.price,
+                            'data-price_type': item.extra_service_type,
+                            'data-name': item.name
+                        });
+                        $formCheck.append($checkbox);
+
+                        // Label and description
+                        const $labelWrap = $('<div>').addClass('d-flex align-items-center justify-content-between');
+                        const $label = $('<label>', {
+                            class: 'form-check-label ms-2 ps-4',
+                            for: `extra-service-${item.id}`
+                        });
+                        $('<span>').addClass('fw-semibold text-gray-9 d-block mb-1').text(item.name).appendTo($label);
+                        $('<span>').addClass('d-block').text(item.description).appendTo($label);
+
+                        // Price and type
+                        const $priceInfo = $('<div>').addClass('text-end');
+                        $('<p>').addClass('mb-1').text(extraServiceType).appendTo($priceInfo);
+                        if (item.extra_service_type === 'percentage') {
+                            $('<h6>').text(`${item.price}%`).appendTo($priceInfo);
+                        } else {
+                            $('<h6>').text(`${default_currency}${item.price}`).appendTo($priceInfo);
+                        }
+
+                        $labelWrap.append($label, $priceInfo);
+
+                        // Combine everything
+                        $customCheckbox.append($formCheck, $labelWrap);
+                        $col.append($customCheckbox);
+                        $('#extra_service_list_container').append($col);
+                    });
+
+                    // Price calculation and UI updates
+                    const response = calculateVehiclePrice();
                     if (response) {
                         $('.extra_service_price').text(response[0]['total_extra_service_price']);
                         $('.total_price_val').text(response[0]['total_price_val']);
                         $('.extra_service_count').text(response[0]['total_extra_service']);
                         $('.extra_service_tooltip').attr('data-bs-original-title', response[0]['extra_service_name']);
                     }
+
                     initializeTooltips();
                 } else {
                     $('#extra_service_list_container').html(`

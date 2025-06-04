@@ -915,14 +915,43 @@ class PageController extends Controller
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
-                        $how_it_works = DB::table('general_settings')->select('id', 'key', 'value', 'group_id')
-                            ->where(['group_id' => 10])
-                            ->where('language_id', $lang_id)
-                            ->orderBy('created_at', $order)
-                            ->limit((int) $limit)
-                            ->get();
+                        if ($themeId == 3) {
+                            // Theme 3: Fetch by specific key
+                            $how_it_works = DB::table('general_settings')
+                                ->select('id', 'key', 'value', 'group_id')
+                                ->where('key', 'how_it_works_theme_3')
+                                ->where('language_id', $lang_id)
+                                ->orderBy('created_at', $order)
+                                ->limit((int) $limit)
+                                ->get();
 
-                        $section['section_type'] = 'how_it_works';
+                            $sectionType = 'how_it_works';
+                        } elseif ($themeId == 4) {
+                            // Theme 4: Fetch by specific key
+                            $how_it_works = DB::table('general_settings')
+                                ->select('id', 'key', 'value', 'group_id')
+                                ->where('key', 'how_it_works_theme_4')
+                                ->where('language_id', $lang_id)
+                                ->orderBy('created_at', $order)
+                                ->limit((int) $limit)
+                                ->get();
+
+                            $sectionType = 'how_it_works';
+                        } else {
+                            // Other themes: Use group_id = 10
+                            $how_it_works = DB::table('general_settings')
+                                ->select('id', 'key', 'value', 'group_id')
+                                ->where('group_id', 10)
+                                ->where('language_id', $lang_id)
+                                ->orderBy('created_at', $order)
+                                ->limit((int) $limit)
+                                ->get();
+
+                            $sectionType = 'how_it_works';
+                        }
+
+                        // Build section
+                        $section['section_type'] = $sectionType;
                         $section['design'] = 'how_it_works_one';
                         $section['section_content'] = $how_it_works;
                     }

@@ -9,8 +9,8 @@
             method: 'GET',
             success: function (response) {
                 if(response.count > 0){
-                    $('#notification-list').html(response.html);
-                    $('#pagination-container').html(renderPagination(response)); 
+                    $('#notification-list').text(response.html);
+                    $('#pagination-container').text(renderPagination(response.html)); 
                     $("#notification_action").removeClass("d-none");
                 }else{
                     $('#notification-list').html(`<p class="text-center">${_l('web.user.no_notifications_found')}</p>`);

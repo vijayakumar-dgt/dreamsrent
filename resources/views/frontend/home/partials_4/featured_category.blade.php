@@ -116,7 +116,7 @@
             </div>
             @else 
             <div class="col-md-12">
-                <p>{{ __('web.common.empty_table') }}</p>
+                <p class="text-center">{{ __('web.common.empty_table') }}</p>
             </div>
             @endif
         </div>
