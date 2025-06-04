@@ -1059,17 +1059,22 @@
                 if (result.data && result.data.length > 0) {
                     let data = result.data;
 
-                    let options = data
-                        .map((item) => {
-                            return `<option value="${item.id}" ${
-                                item.id == selected_driver_id ? "selected" : ""
-                            }>${item.driver_name}</option>`;
-                        })
-                        .join("");
+                $("#driver_id").find("option:not(:first)").remove();
 
-                    $("#driver_id").find("option:not(:first)").remove();
-                    $("#driver_id").append(options);
-                }
+                data.forEach(item => {
+                    const option = $('<option>', {
+                        value: item.id,
+                        text: item.driver_name
+                    });
+
+                    if (item.id == selected_driver_id) {
+                        option.prop('selected', true);
+                    }
+
+                    $("#driver_id").append(option);
+                });
+            }
+
             },
             error: function (error) {
                 if (error.responseJSON.code === 500) {
