@@ -142,7 +142,10 @@
 
                                     if (!optionExists) {
                                         element.append(
-                                            `<option value="${setting.value}">${setting.value}</option>`
+                                            $("<option>", {
+                                                value: setting.value,
+                                                text: setting.value,
+                                            })
                                         );
                                     }
 

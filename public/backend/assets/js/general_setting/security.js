@@ -56,9 +56,7 @@
                     ),
                 },
                 new_password: {
-                    required: _l(
-                        "admin.general_settings.enter_new_password"
-                    ),
+                    required: _l("admin.general_settings.enter_new_password"),
                     minlength: _l("admin.general_settings.password_character"),
                     notEqualTo: _l(
                         "admin.general_settings.new_paasword_different"
@@ -68,7 +66,9 @@
                     required: _l(
                         "admin.general_settings.enter_confirm_password"
                     ),
-                    equalTo: _l("admin.general_settings.confirm_password_match"),
+                    equalTo: _l(
+                        "admin.general_settings.confirm_password_match"
+                    ),
                 },
             },
             errorPlacement: function (error, element) {
@@ -548,7 +548,10 @@
                             );
                         }
                         let lastPasswordChanged = "";
-                        if (response.data.last_password_changed_at != "null") {
+                        if (
+                            response.data.last_password_changed_at &&
+                            response.data.last_password_changed_at !== "null"
+                        ) {
                             lastPasswordChanged = `<i class="ti ti-circle-check-filled text-success me-1"></i> ${_l(
                                 "admin.general_settings.last_changed"
                             )} ${response.data.last_password_changed_at}`;
@@ -558,12 +561,15 @@
                             )}`;
                         }
                         let google_authText = "";
-                        if (response.data.user.google_auth_enabled) {
+                        if (
+                            response.data.user &&
+                            response.data.user.google_auth_enabled
+                        ) {
                             google_authText = `<i class="ti ti-point-filled text-success me-1"></i> ${_l(
                                 "admin.general_settings.connected"
                             )}`;
                         } else {
-                            google_authText = `<i class="ti ti-point-filled text-danger me-1"></i>${_l(
+                            google_authText = `<i class="ti ti-point-filled text-danger me-1"></i> ${_l(
                                 "admin.general_settings.disconnected"
                             )}`;
                         }
