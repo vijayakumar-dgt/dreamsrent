@@ -5,35 +5,26 @@
 @section('content')
     <div class="page-wrapper">
         <div class="content me-4 pb-0">
-            <!-- Breadcrumb -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h4 class="mb-1">{{__('admin.reports.income')}}</h4>
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">{{__('admin.common.home')}}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{__('admin.common.reports')}}</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
+            <x-admin.breadcrumb 
+                :title="__('admin.reports.income')" 
+                :breadcrumbs="[
+                    __('admin.reports.income') => ''
+                ]">
+                <x-slot name="toolbar">
                     <div class="mb-2 me-2">
-                        <a href="javascript:void(0);" id="printButton" class="btn btn-white d-flex align-items-center">
+                        <button type="button" id="printButton" class="btn btn-white d-flex align-items-center">
                             <i class="ti ti-printer me-2"></i>{{__('admin.common.print')}}
-                        </a>
+                        </button>
                     </div>
                     <div class="mb-2">
                         <div class="dropdown">
-                            <a href="javascript:void(0);" id="exportButton" class="btn btn-dark d-inline-flex align-items-center">
+                            <button type="button" id="exportButton" class="btn btn-dark d-inline-flex align-items-center">
                                 <i class="ti ti-upload me-1"></i>{{__('admin.common.export')}}
-                            </a>
+                            </button>
                         </div>
                     </div>
-                </div>
-            </div>
-            <!-- /Breadcrumb -->
+                </x-slot>
+            </x-admin.breadcrumb>
             <!-- Charts -->
             <div class="row border-bottom mb-4">
                 <!-- Total Earnings -->
@@ -122,15 +113,15 @@
                                     </div>
                                 </div>
                                 <div class="dropdown me-2">
-                                    <a href="javascript:void(0);" class="dropdown-filter dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                                    <button type="button" class="dropdown-filter dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                                         <i class="ti ti-calendar me-1"></i> {{__('admin.reports.this_week')}}
-                                    </a>
+                                    </button>
                                     <ul class="dropdown-menu  dropdown-menu-end p-2">
                                         <li>
-                                            <a href="javascript:void(0);" class="dropdown-item dropdown-item-chat rounded-1">{{__('admin.reports.this_week')}}</a>
+                                            <button type="button" class="dropdown-item dropdown-item-chat rounded-1">{{__('admin.reports.this_week')}}</button>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0);" class=" dropdown-item dropdown-item-chat rounded-1">{{__('admin.reports.last_week')}}</a>
+                                            <button type="button" class=" dropdown-item dropdown-item-chat rounded-1">{{__('admin.reports.last_week')}}</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -140,7 +131,6 @@
                                     <p class="mb-0 text-gray-5">{{__('admin.reports.income')}} {{__('admin.reports.this_week')}}</p>
                                     <h5>{{$symbol}} <span class="text-success fs-13 fw-semibold">0%</span></h5>
                                 </div>
-
                             </div>
                         </div>
                         <div class="card-body py-0">
@@ -164,15 +154,15 @@
                         <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                             <div class="d-flex align-items-center flex-wrap row-gap-3">
                                 <div class="dropdown me-2">
-                                    <a href="javascript:void(0);" class="dropdown-toggle dropdown-toggle-chat btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="selectedFilter">
+                                    <button type="button" class="dropdown-toggle dropdown-toggle-chat btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" id="selectedFilter">
                                         <i class="ti ti-filter me-1"></i> {{__('admin.common.sort_by')}} : <span >{{__('admin.common.latest')}}</span>
-                                    </a>
+                                    </button>
                                     <ul class="dropdown-menu dropdown-menu-end p-2">
-                                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-filter="latest">{{__('admin.common.latest')}}</a></li>
-                                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-filter="asc">{{__('admin.common.ascending')}}</a></li>
-                                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-filter="desc">{{__('admin.common.descending')}}</a></li>
-                                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-filter="lastMonth">{{__('admin.common.last_month')}}</a></li>
-                                        <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-filter="last7days">{{__('admin.common.last_7_days')}}</a></li>
+                                        <li><button type="button" class="dropdown-item rounded-1 filter-option" data-filter="latest">{{__('admin.common.latest')}}</button></li>
+                                        <li><button type="button" class="dropdown-item rounded-1 filter-option" data-filter="asc">{{__('admin.common.ascending')}}</button></li>
+                                        <li><button type="button" class="dropdown-item rounded-1 filter-option" data-filter="desc">{{__('admin.common.descending')}}</button></li>
+                                        <li><button type="button" class="dropdown-item rounded-1 filter-option" data-filter="lastMonth">{{__('admin.common.last_month')}}</button></li>
+                                        <li><button type="button" class="dropdown-item rounded-1 filter-option" data-filter="last7days">{{__('admin.common.last_7_days')}}</button></li>
                                     </ul>
                                 </div>
                                 <div class="me-2">
@@ -205,10 +195,10 @@
                             <div class="filterbox mb-3 d-flex align-items-center">
                                 <h6 class="me-3">{{__('admin.common.filters')}}</h6>
                                 <div class="dropdown me-2" id="carFilterDropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                    <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                                         {{__('admin.reports.select_vehicles')}}
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-lg p-2">
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-lg p-2 custom-scroll">
                                         @foreach($vehicleInfo as $car)
                                         <li>
                                             <label class="dropdown-item d-flex align-items-center rounded-1">
@@ -219,9 +209,9 @@
                                     </ul>
                                 </div>
                                 <div class="dropdown me-2">
-                                    <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                    <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                                         {{__('admin.common.status')}}
-                                    </a>
+                                    </button>
                                     <ul class="dropdown-menu dropdown-menu-lg p-2">
                                         <li>
                                             <label class="dropdown-item d-flex align-items-center rounded-1">
@@ -235,7 +225,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <a href="javascript:void(0);" class="text-danger links" onclick="location.reload();">{{__('admin.common.clear_all')}}</a>
+                                <button type="button" class="text-danger links border-0 bg-transparent" onclick="location.reload();">{{__('admin.common.clear_all')}}</button>
                             </div>
                         </div>
                         <!-- Custom Data Table -->

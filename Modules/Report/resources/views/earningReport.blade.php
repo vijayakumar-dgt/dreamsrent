@@ -6,35 +6,26 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-4">
-            <!-- Breadcrumb -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h2 class="mb-1">{{ __('admin.reports.earning_report') }}</h2>
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">{{ __('admin.common.home') }}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('admin.common.reports') }}</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
+            <x-admin.breadcrumb 
+                :title="__('admin.reports.earning_report')" 
+                :breadcrumbs="[
+                    __('admin.reports.earning_report') => ''
+                ]">
+                <x-slot name="toolbar">
                     <div class="mb-2 me-2">
-                        <a href="javascript:void(0);" class="btn btn-white d-flex align-items-center btn-print">
+                        <button type="button" class="btn btn-white d-flex align-items-center btn-print">
                             <i class="ti ti-printer me-2"></i>{{ __('admin.common.print') }}
-                        </a>
+                        </button>
                     </div>
                     <div class="mb-2">
                         <div class="dropdown">
-                            <a href="javascript:void(0);" class="btn btn-dark d-inline-flex align-items-center btn-export">
+                            <button type="button" class="btn btn-dark d-inline-flex align-items-center btn-export">
                                 <i class="ti ti-upload me-1"></i>{{ __('admin.common.export') }}
-                            </a>
+                            </button>
                         </div>
                     </div>
-                </div>
-            </div>
-            <!-- /Breadcrumb -->
+                </x-slot>
+            </x-admin.breadcrumb>
             <!-- Charts -->
             <div class="row">
                 <!-- Total Earnings -->
@@ -48,9 +39,9 @@
                                             <span class="fs-14 fw-normal text-truncate mb-1">{{ __('admin.reports.total_earnings') }}</span>
                                             <h5>{{$symbol}}{{$totalIncome}}</h5>
                                         </div>
-                                        <a href="javascript:void(0);" class="avatar avatar-md avatar-rounded bg-orange border border-primary">
+                                        <div class="avatar avatar-md avatar-rounded bg-orange border border-primary">
                                             <span class="text-primary"><i class="ti ti-currency-dollar text-white"></i></span>
-                                        </a>
+                                        </div>
                                     </div>
                                     <p class="fs-12 fw-normal d-flex align-items-center justify-content-center text-truncate mt-2">
                                         @if($sign == '+')
@@ -75,9 +66,9 @@
                                             <span class="fs-14 fw-normal text-truncate mb-1">{{ __('admin.reports.revenue_breakdown') }}</span>
                                             <h5>{{$symbol}}{{$grandTotal}}</h5>
                                         </div>
-                                        <a href="javascript:void(0);" class="avatar avatar-md avatar-rounded bg-success border border-success">
+                                        <div class="avatar avatar-md avatar-rounded bg-success border border-success">
                                             <span class="text-primary"><i class="ti ti-chart-donut-4 text-white"></i></span>
-                                        </a>
+                                        </div>
                                     </div>
                                     <p class="fs-12 fw-normal d-flex align-items-center justify-content-center text-truncate mt-2">
                                         @if($signbreak == '+')
@@ -102,9 +93,9 @@
                                             <span class="fs-14 fw-normal text-truncate mb-1">{{ __('admin.reports.net_profit') }}</span>
                                             <h5>{{$symbol}}{{$totalIncome}}</h5>
                                         </div>
-                                        <a href="javascript:void(0);" class="avatar avatar-md avatar-rounded bg-info border border-info">
+                                        <div class="avatar avatar-md avatar-rounded bg-info border border-info">
                                             <span class="text-primary"><i class="ti ti-stairs-up text-white"></i></span>
-                                        </a>
+                                        </div>
                                     </div>
                                     <p class="fs-12 fw-normal d-flex align-items-center justify-content-center text-truncate mt-2">
                                         @if($sign == '+')
@@ -129,9 +120,9 @@
                                             <span class="fs-14 fw-normal text-truncate mb-1">{{ __('admin.reports.top_performing_vehicles') }}</span>
                                             <h5>{{$vehicle->name ?? ''}} : {{$symbol}}{{$topEarningCarTotal ?? ''}}</h5>
                                         </div>
-                                        <a href="javascript:void(0);" class="avatar avatar-md avatar-rounded bg-danger border border-danger">
+                                        <div class="avatar avatar-md avatar-rounded bg-danger border border-danger">
                                             <span class="text-primary"><i class="ti ti-car text-white"></i></span>
-                                        </a>
+                                        </div>
                                     </div>
                                     <p class="fs-12 fw-normal d-flex align-items-center justify-content-center text-truncate mt-2">
                                         @if($signCar == '+')
@@ -163,7 +154,6 @@
                                 <div class="earning-square d-flex align-items-center">
                                     <span class="me-2"></span>
                                     <p class="fs-12 text-gray-5">{{__('admin.reports.earnings')}}</p>
-
                                 </div>
                             </div>
                         </div>
@@ -203,15 +193,15 @@
                 <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                     <div class="d-flex align-items-center flex-wrap row-gap-3">
                         <div class="dropdown me-2">
-                            <a href="javascript:void(0);" id="filterDropdown" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                            <button type="button" id="filterDropdown" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                                 <i class="ti ti-filter me-1"></i> {{ __('admin.common.sort_by') }} : <span id="filterText">{{ __('admin.common.latest') }}</span>
-                            </a>
+                            </button>
                             <ul class="dropdown-menu dropdown-menu-end p-2">
-                                <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-filter="latest">{{ __('admin.common.latest') }}</a></li>
-                                <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-filter="ascending">{{ __('admin.common.ascending') }}</a></li>
-                                <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-filter="descending">{{ __('admin.common.descending') }}</a></li>
-                                <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-filter="last_month">{{ __('admin.common.last_month') }}</a></li>
-                                <li><a href="javascript:void(0);" class="dropdown-item rounded-1 filter-option" data-filter="last_7_days">{{ __('admin.common.last_7_days') }}</a></li>
+                                <li><button type="button" class="dropdown-item rounded-1 filter-option" data-filter="latest">{{ __('admin.common.latest') }}</button></li>
+                                <li><button type="button" class="dropdown-item rounded-1 filter-option" data-filter="ascending">{{ __('admin.common.ascending') }}</button></li>
+                                <li><button type="button" class="dropdown-item rounded-1 filter-option" data-filter="descending">{{ __('admin.common.descending') }}</button></li>
+                                <li><button type="button" class="dropdown-item rounded-1 filter-option" data-filter="last_month">{{ __('admin.common.last_month') }}</button></li>
+                                <li><button type="button" class="dropdown-item rounded-1 filter-option" data-filter="last_7_days">{{ __('admin.common.last_7_days') }}</button></li>
                             </ul>
                         </div>
                         <div class="me-2">
@@ -235,9 +225,9 @@
                 <div class="filterbox mb-3 d-flex align-items-center">
                     <h6 class="me-3">{{__('admin.common.filters')}}</h6>
                     <div class="dropdown me-2">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                        <button type="button" class="dropdown-toggle btn btn-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                             {{__('admin.reports.payment_method')}}
-                        </a>
+                        </button>
                         <ul class="dropdown-menu dropdown-menu-lg p-2">
                             <li>
                                 <label class="dropdown-item d-flex align-items-center rounded-1">
@@ -298,7 +288,7 @@
                             </li>
                         </ul>
                     </div>
-                    <a href="javascript:void(0);" class="text-danger links" onclick="location.reload();">{{__('admin.common.clear_all')}}</a>
+                    <button type="button" class="text-danger links border-0 bg-transparent" onclick="location.reload();">{{__('admin.common.clear_all')}}</button>
                 </div>
             </div>
             <!-- Custom Data Table -->

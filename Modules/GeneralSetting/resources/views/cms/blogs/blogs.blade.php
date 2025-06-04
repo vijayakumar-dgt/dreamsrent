@@ -6,20 +6,12 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content me-0 me-md-0 me-lg-4">
-            <!-- Breadcrumb -->
-            <div class="d-md-flex d-block align-items-center justify-content-between page-breadcrumb mb-3">
-                <div class="my-auto mb-2">
-                    <h4 class="mb-1">{{__('admin.blog.blogs')}}</h4>
-                    <nav>
-                        <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item">
-                                <a href="/admin">{{__('admin.blog.home')}}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{__('admin.blog.blogs')}}</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="d-flex my-xl-auto right-content align-items-center flex-wrap ">
+            <x-admin.breadcrumb 
+                :title="__('admin.blog.blogs')" 
+                :breadcrumbs="[
+                    __('admin.blog.blogs') => ''
+                ]">
+                <x-slot name="toolbar">
                     <div class="p-1 border rounded bg-white me-3 mb-2">
                         <a href="javascript:void(0);" id="listViewBtn" class="p-1 rounded d-inline-flex align-items-center justify-content-center me-1">
                             <i class="ti ti-list-tree"></i>
@@ -35,9 +27,8 @@
                         </a>
                         @endif
                     </div>
-                </div>
-            </div>
-            <!-- /Breadcrumb -->
+                </x-slot>
+            </x-admin.breadcrumb>
             <!-- Table Header -->
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="d-flex align-items-center flex-wrap row-gap-3">
