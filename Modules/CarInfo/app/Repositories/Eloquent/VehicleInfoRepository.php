@@ -1778,6 +1778,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 'code'    => 500,
                 'success' => false,
                 'message' => __('admin.common.default_retrieve_error'),
+                'error'   => $e->getMessage(),
             ];
         }
     }

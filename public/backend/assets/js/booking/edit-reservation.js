@@ -867,6 +867,8 @@
                     });
 
                     $("#driver_id").val(edit_driver_id).trigger("change");
+                } else {
+                    $("#driver_id").find("option:not(:first)").remove();
                 }
             },
             error: function (error) {
@@ -1418,88 +1420,88 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response){
-            if (response.code === 200 && response.data) {
-                const data = response.data;
+                if (response.code === 200 && response.data) {
+                    const data = response.data;
 
-                // Sanitize all remote values
-                const imageUrl = DOMPurify.sanitize(data.profile_image);
-                const fullName = DOMPurify.sanitize(data.full_name);
-                const phone = DOMPurify.sanitize(data.phone_number);
-                const email = DOMPurify.sanitize(data.email);
-                const bookingsCount = DOMPurify.sanitize(data.bookings_count);
+                    // Sanitize all remote values
+                    const imageUrl = DOMPurify.sanitize(data.profile_image);
+                    const fullName = DOMPurify.sanitize(data.full_name);
+                    const phone = DOMPurify.sanitize(data.phone_number);
+                    const email = DOMPurify.sanitize(data.email);
+                    const bookingsCount = DOMPurify.sanitize(data.bookings_count);
 
-                // --- Build Card ---
-                const $card = $('<div>', {
-                    class: 'card bg-light',
-                    id: 'customer_detail',
-                    'data-image': imageUrl,
-                    'data-name': fullName,
-                    'data-phone': phone
-                });
+                    // --- Build Card ---
+                    const $card = $('<div>', {
+                        class: 'card bg-light',
+                        id: 'customer_detail',
+                        'data-image': imageUrl,
+                        'data-name': fullName,
+                        'data-phone': phone
+                    });
 
-                const $cardBody = $('<div>').addClass('card-body');
-                const $mainRow = $('<div>').addClass('row align-items-center gy-3');
+                    const $cardBody = $('<div>').addClass('card-body');
+                    const $mainRow = $('<div>').addClass('row align-items-center gy-3');
 
-                // Left column (profile info, phone, email)
-                const $leftCol = $('<div>').addClass('col-md-11');
-                const $detailsRow = $('<div>').addClass('row gx-2 gy-3');
+                    // Left column (profile info, phone, email)
+                    const $leftCol = $('<div>').addClass('col-md-11');
+                    const $detailsRow = $('<div>').addClass('row gx-2 gy-3');
 
-                // --- Profile ---
-                const $profileCol = $('<div>').addClass('col-md-4');
-                const $profileWrap = $('<div>').addClass('d-flex align-items-center');
-                const $avatar = $('<span>').addClass('avatar avatar-rounded flex-shrink-0 me-2')
-                    .append($('<img>', { src: imageUrl, alt: 'Profile Image' }));
-                const $profileInfo = $('<div>')
-                    .append(
-                        $('<h6>').addClass('fs-14 mb-1').text(fullName),
-                        $('<span>').addClass('badge bg-info-transparent').text(`${bookingsCount} ${_l('admin.bookings.bookings')}`)
-                    );
-                $profileWrap.append($avatar, $profileInfo);
-                $profileCol.append($profileWrap);
+                    // --- Profile ---
+                    const $profileCol = $('<div>').addClass('col-md-4');
+                    const $profileWrap = $('<div>').addClass('d-flex align-items-center');
+                    const $avatar = $('<span>').addClass('avatar avatar-rounded flex-shrink-0 me-2')
+                        .append($('<img>', { src: imageUrl, alt: 'Profile Image' }));
+                    const $profileInfo = $('<div>')
+                        .append(
+                            $('<h6>').addClass('fs-14 mb-1').text(fullName),
+                            $('<span>').addClass('badge bg-info-transparent').text(`${bookingsCount} ${_l('admin.bookings.bookings')}`)
+                        );
+                    $profileWrap.append($avatar, $profileInfo);
+                    $profileCol.append($profileWrap);
 
-                // --- Phone ---
-                const $phoneCol = $('<div>').addClass('col-md-4')
-                    .append(
-                        $('<div>')
-                            .append(
-                                $('<h6>').addClass('fs-14 mb-1').text(_l('admin.common.phone')),
-                                $('<p>').text(phone || '-')
-                            )
-                    );
+                    // --- Phone ---
+                    const $phoneCol = $('<div>').addClass('col-md-4')
+                        .append(
+                            $('<div>')
+                                .append(
+                                    $('<h6>').addClass('fs-14 mb-1').text(_l('admin.common.phone')),
+                                    $('<p>').text(phone || '-')
+                                )
+                        );
 
-                // --- Email ---
-                const $emailCol = $('<div>').addClass('col-md-4')
-                    .append(
-                        $('<div>')
-                            .append(
-                                $('<h6>').addClass('fs-14 mb-1').text(_l('admin.common.email')),
-                                $('<p>').text(email || '-')
-                            )
-                    );
+                    // --- Email ---
+                    const $emailCol = $('<div>').addClass('col-md-4')
+                        .append(
+                            $('<div>')
+                                .append(
+                                    $('<h6>').addClass('fs-14 mb-1').text(_l('admin.common.email')),
+                                    $('<p>').text(email || '-')
+                                )
+                        );
 
-                // Append to row
-                $detailsRow.append($profileCol, $phoneCol, $emailCol);
-                $leftCol.append($detailsRow);
+                    // Append to row
+                    $detailsRow.append($profileCol, $phoneCol, $emailCol);
+                    $leftCol.append($detailsRow);
 
-                // Right column (remove button)
-                const $rightCol = $('<div>').addClass('col-md-1');
-                const $btnWrap = $('<div>').addClass('d-flex align-items-center justify-content-end');
-                const $removeBtn = $('<button>', {
-                    type: 'button',
-                    class: 'btn border-0 bg-transparent',
-                    id: 'remove_customer'
-                }).append($('<i>').addClass('ti ti-trash'));
-                $btnWrap.append($removeBtn);
-                $rightCol.append($btnWrap);
+                    // Right column (remove button)
+                    const $rightCol = $('<div>').addClass('col-md-1');
+                    const $btnWrap = $('<div>').addClass('d-flex align-items-center justify-content-end');
+                    const $removeBtn = $('<button>', {
+                        type: 'button',
+                        class: 'btn border-0 bg-transparent',
+                        id: 'remove_customer'
+                    }).append($('<i>').addClass('ti ti-trash'));
+                    $btnWrap.append($removeBtn);
+                    $rightCol.append($btnWrap);
 
-                // Assemble card
-                $mainRow.append($leftCol, $rightCol);
-                $cardBody.append($mainRow);
-                $card.append($cardBody);
+                    // Assemble card
+                    $mainRow.append($leftCol, $rightCol);
+                    $cardBody.append($mainRow);
+                    $card.append($cardBody);
 
-                // Inject into DOM
-                $('#customer_details_list').empty().append($card);
-            }
+                    // Inject into DOM
+                    $('#customer_details_list').empty().append($card);
+                }
             },
             error: function(error){
                 if (error.responseJSON.code === 500) {

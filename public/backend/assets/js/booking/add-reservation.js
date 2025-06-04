@@ -699,6 +699,8 @@
 
                         $("#driver_id").append(option);
                     });
+                } else {
+                    $("#driver_id").find("option:not(:first)").remove();
                 }
             },
             error: function (error) {
@@ -1373,7 +1375,6 @@
 
                     // --- Helpers ---
                     const safeText = (value) => DOMPurify.sanitize(value ?? '');
-                    const safePrice = DOMPurify.sanitize(data.price ?? '');
                     const safePhone = safeText(data.phone_number);
                     const safeDriverName = safeText(data.driver_name);
 
@@ -1387,7 +1388,7 @@
                         'data-image': DOMPurify.sanitize(data.image ?? ''),
                         'data-driver_name': safeDriverName,
                         'data-phone': safePhone,
-                        'data-price': safePrice
+                        'data-price': 0
                     }).text(_l('admin.bookings.edit_price'));
                     $editBtnWrapper.append($editBtn);
 
@@ -1432,7 +1433,7 @@
                             .append(
                                 $('<p>').append(
                                     document.createTextNode(default_currency),
-                                    $('<span>').addClass('td-driver-price').text(safePrice)
+                                    $('<span>').addClass('td-driver-price').text(0)
                                 )
                             )
                     );
