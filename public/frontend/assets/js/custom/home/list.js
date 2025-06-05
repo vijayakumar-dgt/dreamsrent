@@ -112,8 +112,10 @@
                     }else{
                         var html = response.data.map(vehicle => createVehicleListCard(vehicle)).join('');
                     }
+                    
                     html += renderPagination(response.pagination);
-                    $(".vehicleListCard").html(html);
+                    const cleanHTML = DOMPurify.sanitize(html);
+                    $(".vehicleListCard").html(cleanHTML);
                     let total_vehicles = _l('web.common.showing') + " " + response.pagination.from + " - " + response.pagination.to + " " + _l('web.common.of') + " " + response.pagination.total + " " + _l('web.common.vehicles');
                     $("#total_vehicles").text(total_vehicles);
                     //initialize owl carousel after 150ms,wait for images to load

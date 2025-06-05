@@ -1201,16 +1201,16 @@
                     if (response.length > 0) {
                         response.forEach((item, index) => {
                             const number = index + 1;
-                            $list.append(
-                                `<li class="mb-2">${number}. ${item.benefit}</li>`
-                            );
+                            const $li = $('<li class="mb-2"></li>');
+                            $li.text(`${number}. ${item.benefit}`);
+                            $list.append($li);
                         });
                     } else {
-                        $list.append("<li>No benefits available.</li>");
+                        $list.append($('<li></li>').text("No benefits available."));
                     }
 
                     $("#show_benifit").modal("show");
-                },
+                }
             });
         });
     });

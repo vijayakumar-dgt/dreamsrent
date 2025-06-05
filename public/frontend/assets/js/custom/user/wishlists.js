@@ -18,7 +18,8 @@
             const data = await response.json();
             if (data.code === 200 && data.data.length > 0) {
                 const html = data.data.map(createWishlistCard).join('');
-                document.querySelector(".listview-car").innerHTML = html;
+                const cleanHTML = DOMPurify.sanitize(html);
+                document.querySelector(".listview-car").innerHTML = cleanHTML;
             } else {
                 document.querySelector(".listview-car").innerHTML = `<p class="text-center">${_l('web.common.empty_table')}</p>`;
             }
