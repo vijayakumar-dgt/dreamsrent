@@ -8,6 +8,7 @@
 
     $titleMain = implode(' ', array_slice($titleWords, 0, -$lastPartCount));
     $titleLastPart = implode(' ', array_slice($titleWords, -$lastPartCount));
+    $vehicles = $sectionContent['vehicles'] ?? [];
 @endphp
 <!-- Featured Services -->
 <section class="section features-section">		
@@ -21,9 +22,9 @@
                     <p>{{ $section['section_label'] ?? "" }}</p>
                 </div>
                 <!-- /Heading title -->
-                @if(!empty($sectionContent) && count($sectionContent) > 0)
+                @if(!empty($vehicles) && count($vehicles) > 0)
                 <div class="bike-feature-slider nav-center owl-carousel">
-                    @foreach($sectionContent as $vehicle)
+                    @foreach($vehicles as $vehicle)
                     <div class="item">
                         <div class="listing-item bike-list">											
                             <div class="listing-img">
@@ -39,14 +40,14 @@
                                     @endif
                                 </div>
                                 <div class="fav-item justify-content-end">
-                                    <span class="img-count"><i class="feather-image"></i>{{ count($vehicle['multiple_vehicle_images']) }}</span>
+                                    <span class="img-count"><i class="feather-image"></i>{{ isset($vehicle['multiple_vehicle_images']) ? count($vehicle['multiple_vehicle_images']) : 0 }}</span>
                                     <a href="javascript:void(0)" class="author-img">
                                         <img src="{{ asset('frontend/assets/img/profiles/avatar-04.jpg') }}" alt="author">
                                     </a>								
                                 </div>	
                             </div>									
                             @php 
-                            $filledStars = floor($vehicle['rating']);
+                            $filledStars = floor($vehicle['rating'] ?? 0);
                             $emptyStars = 5 - $filledStars;
                             @endphp	
                             <div class="listing-content">
@@ -59,7 +60,7 @@
                                             @for ($i = 0; $i < $emptyStars; $i++)						
                                             <i class="fas fa-star"></i>
                                             @endfor
-                                            <span>{{ $vehicle['total_review'] }} {{ __('web.home.reviews') }}</span>
+                                            <span>{{ $vehicle['total_review'] ?? 0 }} {{ __('web.home.reviews') }}</span>
                                         </div>
                                         <h3 class="listing-title">
                                             <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">{{ $vehicle['name'] ?? "" }}</a>

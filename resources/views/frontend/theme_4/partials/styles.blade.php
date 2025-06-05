@@ -1,6 +1,9 @@
-    <!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}">
-
+     @if($isRTL)
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.rtl.min.css') }}">
+    @else
+        <link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}">
+    @endif
 	<!-- Fontawesome CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/fontawesome.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('frontend/assets/plugins/fontawesome/css/all.min.css') }}">
@@ -25,9 +28,11 @@
 		
 	<!-- Owl carousel CSS -->
 	<link rel="stylesheet" href="{{ asset('frontend/assets/css/owl.carousel.min.css') }}">
-
-	<!-- Main CSS -->
-	<link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
-
-	<!-- Custom CSS -->
+ 	@stack('styles')
+    @if($isRTL)
+        <!-- Main CSS -->
+        <link rel="stylesheet" href="{{ asset('frontend/assets/css/style-rtl.css') }}">
+    @else
+        <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
+    @endif
     <link rel="stylesheet" href="{{ asset('backend/assets/css/custom/custom-style.css') }}">

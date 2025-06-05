@@ -24,7 +24,7 @@
                             <h1>{{ $sectionContent->label ?? "" }} 
                                 <span>{{ $sectionContent->higlight_label ?? "" }}</span>
                             </h1>
-                            <p>{{ $sectionContent->description}}</p>
+                            <p>{{ $sectionContent->description ?? ""}}</p>
                         </div>
                         <div class="banner-form">
                             <form action="{{ route('list') }}">
