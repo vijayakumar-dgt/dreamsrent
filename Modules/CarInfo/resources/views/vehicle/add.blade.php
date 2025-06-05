@@ -763,7 +763,7 @@
 										<p>{{ __('admin.rentals.faq_description') }}</p>
 									</div>
 									<div class="col-xl-9">
-										<button type="button" class="btn btn-dark btn-md d-inline-flex align-items-center mb-3" data-bs-toggle="modal" data-bs-target="#add-faq"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_faq_button') }}</button>
+										<button type="button" class="btn btn-dark btn-md d-inline-flex align-items-center mb-3" id="add_faq_btn" data-bs-toggle="modal" data-bs-target="#add-faq"><i class="ti ti-plus me-1"></i>{{ __('admin.rentals.add_faq_button') }}</button>
 										<div class="card border-0 bg-light mb-0">
 											<div class="card-body">
 												<h6 class="mb-3">{{ __('admin.rentals.total_faq') }} : <span id="faq_count">00</span></h6>

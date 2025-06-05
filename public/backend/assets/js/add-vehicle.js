@@ -1426,16 +1426,20 @@
 
             // Close modal and reset form
             $("#add-faq").modal("hide");
-            $("#faq_title").text("Create FAQ");
-            $("#faq_btn").text("Create New");
-            $("#f_q").val("");
-            $("#f_a").val("");
         });
 
         function updateFaqCount() {
             let totalDamages = $(".car_faq_append > div").length;
             $("#faq_count").text(totalDamages.toString().padStart(2, "0"));
         }
+
+        $(document).on("click", "#add_faq_btn", function () {
+            $("#f_q").val('');
+            $("#f_a").val('');
+            $("#faq_title").text(_l("admin.rentals.create_faq_title"));
+            $("#faq_btn").text(_l("admin.common.create_new"));
+            editingFAQ = null;
+        });
 
         // Edit FAQ
         $(document).on("click", ".edit-faq", function () {
@@ -1448,8 +1452,8 @@
             // Populate modal with existing values
             $("#f_q").val(question);
             $("#f_a").val(answer);
-            $("#faq_title").text("Edit FAQ");
-            $("#faq_btn").text("Update");
+            $("#faq_title").text(_l("admin.rentals.edit_faq_title"));
+            $("#faq_btn").text(_l("admin.common.update"));
 
             editingFAQ = faqID; // Store the current editing ID
 

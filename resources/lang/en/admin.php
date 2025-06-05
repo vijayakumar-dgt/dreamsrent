@@ -1378,6 +1378,7 @@ return array(
     'delete_damage_confirmation' => 'Are you sure you want to delete Damage?',
     'yes_delete' => 'Yes, Delete',
     'create_faq_title' => 'Create FAQ',
+    'edit_faq_title' => 'Edit FAQ',
     'question_label' => 'Question',
     'answer_label' => 'Answer',
     'delete_faq_title' => 'Delete FAQ',
