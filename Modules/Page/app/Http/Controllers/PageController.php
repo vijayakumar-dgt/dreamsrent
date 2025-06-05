@@ -1964,6 +1964,162 @@ class PageController extends Controller
                     }
                 }
 
+                // Bike Experience
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+
+                    if (is_string($content) && strpos($content, '[exclusive_yacht ') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        $limit = isset($matches[1]) ? (int)$matches[1] : 10;
+                        $order = $matches[3] ?? 'asc';
+
+                        $experiences = DB::table('sections')
+                            ->join('section_datas', function ($join) use ($lang_id) {
+                                $join->on('sections.id', '=', 'section_datas.section_id')
+                                    ->where('section_datas.language_id', '=', $lang_id);
+                            })
+                            ->select('sections.id', 'section_datas.datas')
+                            ->where('sections.name', 'Exclusive Yacht')
+                            ->orderBy('sections.id', $order)
+                            ->limit($limit)
+                            ->get();
+
+                        if ($experiences->isNotEmpty()) {
+                            $items = [];
+
+                            $query = VehicleInfo::with([
+                                'carType:id,name',
+                                'brand:id,brand_name',
+                                'category:id,name',
+                                'mainLocation:id,name',
+                                'color:id,name,value',
+                                'fuel_type:id,fuel_type',
+                                'transmission:id,name',
+                            ])->where('language_id', $lang_id);
+
+                            $vehicles = $query->where('type', 'boat')->take(4)->get();
+
+                            $data = $vehicles->map(function ($vehicle) {
+                                $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
+                                    ->where('key', 'vehicle_image')
+                                    ->first();
+
+                                $vehiclePrices = $vehicle->vehicle_price ? json_decode($vehicle->vehicle_price, true) : [];
+                                $filteredPrices = [];
+
+                                if (!empty($vehiclePrices)) {
+                                    foreach ($vehiclePrices as $price) {
+                                        $filteredPrice = array_filter($price, fn($value) => $value > 0);
+                                        if (!empty($filteredPrice)) {
+                                            $filteredPrices[] = $filteredPrice;
+                                        }
+                                    }
+                                }
+
+                                $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
+
+                                if (!empty($vehicle->vehicle_image)) {
+                                    array_unshift($multipleImages, $vehicle->vehicle_image);
+                                }
+
+                                $multipleImages = array_map(function ($img) {
+                                    $img = '/' . ltrim($img, '/');
+                                    return url('storage' . $img);
+                                }, $multipleImages);
+
+                                $auth = current_user();
+                                $authId = $auth?->id;
+
+                                $wishlistExists = $authId
+                                    ? Wishlist::where("user_id", $authId)->where("vehicle_id", $vehicle->id)->exists()
+                                    : false;
+
+                                $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+                                $currency = $currencySetting && $currencySetting->value
+                                    ? Currency::find($currencySetting->value)
+                                    : null;
+
+                                $currencySymbol = $currency->symbol ?? "$";
+
+                                $rating = Review::where("vehicle_id", $vehicle->id)->value("average_ratings") ?? 0;
+
+                                $defaultAvatar = asset('/backend/assets/img/default-profile.png');
+                                $profileImagePath = optional($vehicle->owner->userDetails)->profile_image;
+                                $avatarImage = $defaultAvatar;
+
+                                if ($profileImagePath) {
+                                    $fullImagePath = storage_path('app/public/' . $profileImagePath);
+                                    if (file_exists($fullImagePath)) {
+                                        $avatarImage = url('/storage/' . $profileImagePath);
+                                    }
+                                }
+
+                                return [
+                                    'id' => $vehicle->id,
+                                    'name' => $vehicle->name,
+                                    'slug' => $vehicle->slug,
+                                    'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
+                                    'multiple_vehicle_images' => $multipleImages,
+                                    'has_multiple_image' => count($multipleImages) > 1,
+                                    'avatar_image' => $avatarImage,
+                                    'brand_id' => $vehicle->brand_id ?? null,
+                                    'brand' => $vehicle->brand->brand_name ?? null,
+                                    'car_type' => $vehicle->carType->name ?? null,
+                                    'category' => $vehicle->category->name ?? null,
+                                    'tube_type' => Arr::random(['Tube', 'Tubeless']),
+                                    'break_type' => Arr::random(['Drum', 'Disc']),
+                                    'location' => $vehicle->mainLocation->name ?? null,
+                                    'color' => $vehicle->color->name ?? null,
+                                    'fuel_type' => $vehicle->fuel_type->fuel_type ?? null,
+                                    'transmission' => $vehicle->transmission->name ?? null,
+                                    'year' => $vehicle->year,
+                                    'mileage' => $vehicle->mileage,
+                                    'odometer' => $vehicle->odometer,
+                                    'rating' => $rating,
+                                    'total_review' => Review::where("vehicle_id", $vehicle->id)->count(),
+                                    'currency' => $currencySymbol,
+                                    'wishlist' => $wishlistExists,
+                                    'passenger_capacity' => $vehicle->passenger_capacity,
+                                    'num_seats' => $vehicle->num_seats,
+                                    'num_doors' => $vehicle->num_doors,
+                                    'num_airbags' => $vehicle->num_airbags,
+                                    'vehicle_video' => $vehicle->vehicle_video,
+                                    'features' => $vehicle->features,
+                                    'price' => !empty($filteredPrices) ? $filteredPrices : null,
+                                    'is_featured' => $vehicle->popular,
+                                    'is_top_rated' => $vehicle->recommended,
+                                    'seo_title' => $vehicle->vehicle_metatitle,
+                                    'seo_key' => $vehicle->vehicle_metakeywords,
+                                    'seo_description' => $vehicle->vehicle_metadesc,
+                                    'created_at' => $vehicle->created_at,
+                                ];
+                            });
+
+                            foreach ($experiences as $experience) {
+                                $experienceData = json_decode($experience->datas, true);
+
+                                if (is_array($experienceData)) {
+                                    foreach ($experienceData as $key => $value) {
+                                        if (str_starts_with($key, 'thumbnail_image_') && !empty($value)) {
+                                            $experienceData[$key] = asset('storage/' . ltrim($value, '/'));
+                                        }
+                                    }
+
+                                    $items[] = [
+                                        'data' => $experienceData,
+                                        'vehicles' => $data->toArray(), // ✅ attach all vehicle data here
+                                    ];
+                                }
+                            }
+
+                            $section['section_type'] = 'bike_exclusive';
+                            $section['type'] = 'bike_exclusive';
+                            $section['design'] = 'bike_exclusive_six';
+                            $section['section_content'] = $items; // Directly assign items
+                        }
+                    }
+                }
+
                 // All Category section
                 if (
                     is_array($section) &&

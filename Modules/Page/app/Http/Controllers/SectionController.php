@@ -88,7 +88,7 @@ class SectionController extends Controller
             ], 400);
         }
 
-        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three', 'Banner Four', 'Benefits Of Yacht', 'Yacht Experience', 'Ad Card Two', 'Theme Four AD Card', 'Offer Card'];
+        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three', 'Banner Four', 'Benefits Of Yacht', 'Yacht Experience', 'Ad Card Two', 'Theme Four AD Card', 'Offer Card', 'Exclusive Yacht'];
 
         $sections = $this->sectionRepository->getFilteredSections($orderBy, $sortBy, $allowedNames);
 
@@ -117,6 +117,10 @@ class SectionController extends Controller
 
             if (!empty($decodedDatas['thumbnail_image_boat_offer'])) {
                 $decodedDatas['thumbnail_image_boat_offer'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_boat_offer'];
+            }
+
+            if (!empty($decodedDatas['thumbnail_image_boat_exclusive'])) {
+                $decodedDatas['thumbnail_image_boat_exclusive'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_boat_exclusive'];
             }
 
             if (!empty($decodedDatas['thumbnail_image_boat'])) {
@@ -376,6 +380,15 @@ class SectionController extends Controller
                     'thumbnail_image_boat_offer' => $thumbnailPath,
                 ];
             }
+        } elseif ($sectionId == 74) {
+            $thumbnailPath = $existingData['thumbnail_image_boat_exclusive'] ?? null;
+            if ($request->hasFile('thumbnail_image_boat_exclusive')) {
+                $thumbnailPath = uploadFile($request->file('thumbnail_image_boat_exclusive'), 'general');
+
+                $data = [
+                    'thumbnail_image_boat_exclusive' => $thumbnailPath,
+                ];
+            }
         }
 
 
@@ -404,6 +417,7 @@ class SectionController extends Controller
             71 => 'section_title_bike_experience',
             72 => 'section_title_boat_seasonal',
             73 => 'section_title_boat_offer',
+            74 => 'section_title_boat_exclusive',
         ];
 
         if (isset($titleFieldMap[$sectionId]) && $request->has($titleFieldMap[$sectionId])) {
