@@ -115,9 +115,16 @@
         };
 
         const label = labels[status] ?? '-';
-        const badgeClass = label === '-' ? 'badge-light-dark' : `badge-light-${getStatusColor(label)}`;
+        const badge = document.createElement('span');
+        badge.classList.add('badge');
 
-        return `<span class="badge ${badgeClass}">${_l(`web.common.${label}`)}</span>`;
+        const badgeClass = label === '-' ? 'badge-light-dark' : `badge-light-${getStatusColor(label)}`;
+        badge.classList.add(badgeClass);
+
+        const text = label === '-' ? '-' : _l(`web.common.${label}`);
+        badge.textContent = text;
+
+        return badge;
     }
 
     function getTransactionStatusLabel(status) {
@@ -165,6 +172,8 @@
         img.src = booking.vehicle_image ?? '';
         img.alt = ucfirst(booking.vehicle_name ?? '');
 
+        a1.appendChild(img);
+
         const nameDiv = document.createElement('div');
         nameDiv.className = "table-head-name flex-grow-1";
 
@@ -176,7 +185,6 @@
         const typeP = document.createElement('p');
         typeP.textContent = `${_l('web.common.rental_type')} : ${ucfirst(booking.rental_type ?? '')}`;
 
-        a1.appendChild(img);
         nameDiv.appendChild(nameLink);
         nameDiv.appendChild(typeP);
 
@@ -186,21 +194,37 @@
 
         // Column 2: Start Date
         const td2 = document.createElement('td');
-        td2.innerHTML = `<h6>${_l('web.common.start_date')}</h6><p>${booking.formated_start_datetime}</p>`;
+        const h6Start = document.createElement('h6');
+        h6Start.textContent = _l('web.common.start_date');
+        const pStart = document.createElement('p');
+        pStart.textContent = booking.formated_start_datetime ?? '';
+        td2.appendChild(h6Start);
+        td2.appendChild(pStart);
 
         // Column 3: End Date
         const td3 = document.createElement('td');
-        td3.innerHTML = `<h6>${_l('web.common.end_date')}</h6><p>${booking.formated_end_datetime}</p>`;
+        const h6End = document.createElement('h6');
+        h6End.textContent = _l('web.common.end_date');
+        const pEnd = document.createElement('p');
+        pEnd.textContent = booking.formated_end_datetime ?? '';
+        td3.appendChild(h6End);
+        td3.appendChild(pEnd);
 
         // Column 4: Price
         const td4 = document.createElement('td');
-        td4.innerHTML = `<h6>${_l('web.common.price')}</h6><h5 class="text-danger">${booking.currency}${booking.total_amount}</h5>`;
+        const h6Price = document.createElement('h6');
+        h6Price.textContent = _l('web.common.price');
+        const h5Price = document.createElement('h5');
+        h5Price.className = 'text-danger';
+        h5Price.textContent = `${booking.currency ?? ''}${booking.total_amount ?? ''}`;
+        td4.appendChild(h6Price);
+        td4.appendChild(h5Price);
 
         // Column 5: Status
         const td5 = document.createElement('td');
-        td5.innerHTML = getBookingStatusLabel(booking.status);
+        td5.appendChild(getBookingStatusLabel(booking.status));
 
-        // Append all to row
+        // Append all TDs to TR
         tr.appendChild(td1);
         tr.appendChild(td2);
         tr.appendChild(td3);
