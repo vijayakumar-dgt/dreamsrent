@@ -31,8 +31,11 @@ class UserLoginRegisterController extends Controller
     {
         $this->userLoginRegisterRepository = $userLoginRegisterRepository;
     }
-    public function userLogin(): View|RedirectResponse
+    public function userLogin(Request $request): View|RedirectResponse
     {
+        if ($request->has(['email', 'password'])) {
+            return redirect()->route('user-login')->with('error', 'Invalid request method. Please use the login form.');
+        }
         if (Auth::guard('web')->check()) {
             return redirect()->route('home');
         }

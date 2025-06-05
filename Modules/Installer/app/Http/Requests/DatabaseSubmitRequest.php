@@ -19,7 +19,7 @@ class DatabaseSubmitRequest extends FormRequest
             'port' => 'required|numeric',
             'database' => 'required|string',
             'user' => 'required|string',
-            'password' => InstallerInfo::isRemoteLocal() ? 'nullable' : 'required|string',
+            'db_password' => InstallerInfo::isRemoteLocal() ? 'nullable' : 'required|string',
             'reset_database' => 'nullable|string',
             'fresh_install' => 'nullable|boolean',
         ];

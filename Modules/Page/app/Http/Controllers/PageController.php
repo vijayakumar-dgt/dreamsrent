@@ -868,10 +868,11 @@ class PageController extends Controller
                             ->get();
 
                         // Fetch Facts data
-                        $userCount = User::count(); // Get total users
-                        $vehicleCount = VehicleInfo::count(); // Get total vehicles
-                        $locationCount = Location::count(); // Get total locations
-                        $totalKm = 1976; // Keeping total_km static
+                        $getCategoryId = getCategoryId();
+                        $userCount = User::where("user_type", 3)->count();
+                        $vehicleCount = VehicleInfo::where('category_id', $getCategoryId)->count();
+                        $locationCount = Location::where('language_id', $lang_id)->count();
+                        $totalKm = 1976;
 
                         $facts = [
                             ["key" => "happy_customers", "value" => $userCount],

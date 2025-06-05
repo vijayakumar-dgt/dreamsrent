@@ -78,7 +78,7 @@ class InstallerController extends Controller
                 'port' => is_numeric($validated['port']) ? (int)$validated['port'] : $validated['port'],
                 'database' => $validated['database'],
                 'user' => $validated['user'],
-                'password' => $validated['password'] ?? '',
+                'password' => $validated['db_password'] ?? '',
                 'reset_database' => $validated['reset_database'] ?? null,
             ];
 
@@ -118,10 +118,9 @@ class InstallerController extends Controller
                 ], 200);
             }
 
-            // Create properly typed config array
             $envConfig = [
                 'host' => $validated['host'],
-                'port' => $databaseDetails['port'], // Already properly typed
+                'port' => $databaseDetails['port'],
                 'database' => $validated['database'],
                 'user' => $validated['user'],
                 'password' => $validated['password'] ?? '',

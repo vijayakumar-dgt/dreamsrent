@@ -1405,7 +1405,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
         $perPage = $request->paginate ?? 1;
 
-        $vehicles = $query->where("language_id", $lang_id)->where('status', 1)->paginate($perPage);
+        $getCategoryId = getCategoryId();
+
+        $vehicles = $query->where("language_id", $lang_id)->where('category_id', $getCategoryId)->where('status', 1)->paginate($perPage);
 
         $data = $vehicles->map(function (VehicleInfo $vehicle): array {
             $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)

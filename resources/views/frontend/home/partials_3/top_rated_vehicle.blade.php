@@ -8,7 +8,6 @@
 
     $titleMain = implode(' ', array_slice($titleWords, 0, -$lastPartCount));
     $titleLastPart = implode(' ', array_slice($titleWords, -$lastPartCount));
-    $vehicles = $sectionContent['vehicles'] ?? [];
 @endphp
 <!-- Featured Services -->
 <section class="section features-section">		
@@ -22,9 +21,9 @@
                     <p>{{ $section['section_label'] ?? "" }}</p>
                 </div>
                 <!-- /Heading title -->
-                @if(!empty($vehicles) && count($vehicles) > 0)
+                @if(!empty($sectionContent) && count($sectionContent) > 0)
                 <div class="bike-feature-slider nav-center owl-carousel">
-                    @foreach($vehicles as $vehicle)
+                    @foreach($sectionContent as $vehicle)
                     <div class="item">
                         <div class="listing-item bike-list">											
                             <div class="listing-img">
