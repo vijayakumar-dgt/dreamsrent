@@ -8,7 +8,6 @@
 
     $titleMain = implode(' ', array_slice($titleWords, 0, -$lastPartCount));
     $titleLastPart = implode(' ', array_slice($titleWords, -$lastPartCount));
-    $vehicles = $sectionContent['vehicles'] ?? [];
 @endphp
 <!-- Popular Section -->
 <section class="section popular-section">
@@ -22,8 +21,8 @@
                 </div>
                 <!-- /Heading title -->
                 <div class="row">
-                    @if(!empty($vehicles) && count($vehicles) > 0)
-                    @foreach ($vehicles as $vehicle)
+                    @if(!empty($sectionContent) && count($sectionContent) > 0)
+                    @foreach ($sectionContent as $vehicle)
                     <div class="col-lg-6">
                         <div class="listing-item bike-list">											
                             <div class="listing-img">
