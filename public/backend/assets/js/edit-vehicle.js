@@ -113,67 +113,119 @@
     function addinsurances(insurances) {
         const appendContainer = document.getElementById("insurance_car_append");
 
-        const uniqueId = `insurance_${Date.now()}_${Math.floor(
-            Math.random() * 1000
-        )}`;
+        const uniqueId = `insurance_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
 
-        // Create a new div element
+        // Create container div
         const newInsuranceDiv = document.createElement("div");
-        newInsuranceDiv.setAttribute(
-            "class",
-            "d-flex align-items-center justify-content-between bg-white border br-5 gap-3 flex-wrap p-20 mb-2"
-        );
-        newInsuranceDiv.setAttribute("data-id", uniqueId);
+        newInsuranceDiv.className = "d-flex align-items-center justify-content-between bg-white border br-5 gap-3 flex-wrap p-20 mb-2";
+        newInsuranceDiv.dataset.id = uniqueId;
 
-        newInsuranceDiv.innerHTML = `
-        <div>
-            <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">${
-                insurances.insurance_name
-            }</h6>
-            <div class="d-flex align-items-center gap-2 flex-wrap">
-                <p class="fs-13 fw-medium border-end pe-2 mb-0">${_l(
-                    "admin.rentals.insurance_price"
-                )} : 
-                   <span class="text-gray-9 priceIn" data-id="${uniqueId}">${
-            insurances.value == "Percentage"
-                ? `${parseFloat(insurances.price)}%`
-                : `${currency}${parseFloat(insurances.price)}`
-        }</span>
-                </p>
-                <input type="hidden" name="insurance_id_one[]" id="insurance_id_one_${uniqueId}" value="${
-            insurances.insurances_id
-        }">
-                <input type="hidden" name="insurance_price_one[]" id="insurance_price_one_${uniqueId}" value="${
-            insurances.price
-        }">
-                <p class="fs-13 fw-medium mb-0">${_l(
-                    "admin.rentals.insurance_benefits"
-                )} : <span class="text-gray-9">${insurances.benefits}</span></p>
-                <p class="fs-13 fw-medium mb-0">${_l(
-                    "admin.rentals.insurance_price_type"
-                )} : 
-                    <span class="text-gray-9 priceTypeIn" data-id="${uniqueId}">${
-            insurances.value
-        }</span>
-                </p>
-                <input type="hidden" name="insurance_price_type_one[]" id="insurance_price_type_one_${uniqueId}" value="${
-            insurances.value
-        }">
-            </div>
-        </div>
-        <div class="d-flex align-items-center icon-list">
-            <a href="#" class="edit-icon me-2" data-bs-toggle="modal" data-bs-target="#edit_insurance" 
-                data-id="${uniqueId}" data-price="${
-            insurances.price
-        }" data-price-type="${insurances.value}">
-                <i class="ti ti-edit"></i>
-            </a>
-            <a href="#" class="trash-icon" data-bs-toggle="modal" data-bs-target="#delete_insurance">
-                <i class="ti ti-trash"></i>
-            </a>
-        </div>
-    `;
+        // LEFT SECTION
+        const leftDiv = document.createElement("div");
 
+        const nameHeading = document.createElement("h6");
+        nameHeading.className = "fs-14 fw-semibold d-inline-flex align-items-center mb-1";
+        nameHeading.textContent = insurances.insurance_name;
+
+        leftDiv.appendChild(nameHeading);
+
+        const infoContainer = document.createElement("div");
+        infoContainer.className = "d-flex align-items-center gap-2 flex-wrap";
+
+        // Price Display
+        const priceWrapper = document.createElement("p");
+        priceWrapper.className = "fs-13 fw-medium border-end pe-2 mb-0";
+        priceWrapper.innerHTML = `${_l("admin.rentals.insurance_price")} : `;
+
+        const priceSpan = document.createElement("span");
+        priceSpan.className = "text-gray-9 priceIn";
+        priceSpan.dataset.id = uniqueId;
+        priceSpan.textContent = insurances.value === "Percentage"
+            ? `${parseFloat(insurances.price)}%`
+            : `${currency}${parseFloat(insurances.price)}`;
+
+        priceWrapper.appendChild(priceSpan);
+        infoContainer.appendChild(priceWrapper);
+
+        // Hidden Inputs
+        const idInput = document.createElement("input");
+        idInput.type = "hidden";
+        idInput.name = "insurance_id_one[]";
+        idInput.id = `insurance_id_one_${uniqueId}`;
+        idInput.value = insurances.insurances_id;
+
+        const priceInput = document.createElement("input");
+        priceInput.type = "hidden";
+        priceInput.name = "insurance_price_one[]";
+        priceInput.id = `insurance_price_one_${uniqueId}`;
+        priceInput.value = insurances.price;
+
+        infoContainer.appendChild(idInput);
+        infoContainer.appendChild(priceInput);
+
+        // Benefits
+        const benefitsP = document.createElement("p");
+        benefitsP.className = "fs-13 fw-medium mb-0";
+        benefitsP.innerHTML = `${_l("admin.rentals.insurance_benefits")} : `;
+
+        const benefitsSpan = document.createElement("span");
+        benefitsSpan.className = "text-gray-9";
+        benefitsSpan.textContent = insurances.benefits;
+        benefitsP.appendChild(benefitsSpan);
+
+        infoContainer.appendChild(benefitsP);
+
+        // Price Type
+        const priceTypeP = document.createElement("p");
+        priceTypeP.className = "fs-13 fw-medium mb-0";
+        priceTypeP.innerHTML = `${_l("admin.rentals.insurance_price_type")} : `;
+
+        const priceTypeSpan = document.createElement("span");
+        priceTypeSpan.className = "text-gray-9 priceTypeIn";
+        priceTypeSpan.dataset.id = uniqueId;
+        priceTypeSpan.textContent = insurances.value;
+
+        priceTypeP.appendChild(priceTypeSpan);
+        infoContainer.appendChild(priceTypeP);
+
+        const priceTypeInput = document.createElement("input");
+        priceTypeInput.type = "hidden";
+        priceTypeInput.name = "insurance_price_type_one[]";
+        priceTypeInput.id = `insurance_price_type_one_${uniqueId}`;
+        priceTypeInput.value = insurances.value;
+        infoContainer.appendChild(priceTypeInput);
+
+        leftDiv.appendChild(infoContainer);
+
+        // RIGHT SECTION (Icons)
+        const iconDiv = document.createElement("div");
+        iconDiv.className = "d-flex align-items-center icon-list";
+
+        // Edit button
+        const editBtn = document.createElement("a");
+        editBtn.href = "#";
+        editBtn.className = "edit-icon me-2";
+        editBtn.setAttribute("data-bs-toggle", "modal");
+        editBtn.setAttribute("data-bs-target", "#edit_insurance");
+        editBtn.dataset.id = uniqueId;
+        editBtn.dataset.price = insurances.price;
+        editBtn.dataset.priceType = insurances.value;
+        editBtn.innerHTML = `<i class="ti ti-edit"></i>`;
+
+        // Delete button
+        const deleteBtn = document.createElement("a");
+        deleteBtn.href = "#";
+        deleteBtn.className = "trash-icon";
+        deleteBtn.setAttribute("data-bs-toggle", "modal");
+        deleteBtn.setAttribute("data-bs-target", "#delete_insurance");
+        deleteBtn.innerHTML = `<i class="ti ti-trash"></i>`;
+
+        iconDiv.appendChild(editBtn);
+        iconDiv.appendChild(deleteBtn);
+
+        // Append to main wrapper
+        newInsuranceDiv.appendChild(leftDiv);
+        newInsuranceDiv.appendChild(iconDiv);
         appendContainer.appendChild(newInsuranceDiv);
     }
 

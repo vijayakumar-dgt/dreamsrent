@@ -319,7 +319,6 @@
         });
     };
 
-    // Render data table
     const renderTable = (response) => {
         let tableBody = "";
 
@@ -330,12 +329,11 @@
         if (response.code === 200 && response.data.length > 0) {
             tableBody = generateTableRows(response.data);
         } else {
-            tableBody = `<tr><td colspan="7" class="text-center">${_l(
-                "admin.common.empty_table"
-            )}</td></tr>`;
+            tableBody = `<tr><td colspan="7" class="text-center">${_l("admin.common.empty_table")}</td></tr>`;
             $(".table-footer").empty();
         }
 
+        // Set as text node for security or use safe HTML via jQuery if you’re confident
         $locationTable.find("tbody").html(tableBody);
 
         if (response.data.length > 0) {
@@ -343,59 +341,40 @@
         }
     };
 
-    // Generate table rows
+    // Generate safe table rows
     const generateTableRows = (data) => {
         return data
             .map((location) => {
                 const workingDaysSet = new Set(
-                    location.working_days?.map((day) =>
-                        day.day.toLowerCase()
-                    ) || []
+                    location.working_days?.map((day) => day.day.toLowerCase()) || []
                 );
 
                 const workingDaysHtml = [
-                    "monday",
-                    "tuesday",
-                    "wednesday",
-                    "thursday",
-                    "friday",
-                    "saturday",
-                    "sunday",
+                    "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"
                 ]
                     .map((day) => {
-                        const className = workingDaysSet.has(day)
-                            ? "working"
-                            : "non-working";
-                        return `<span class="${className}">${day
-                            .charAt(0)
-                            .toUpperCase()}</span>`;
+                        const className = workingDaysSet.has(day) ? "working" : "non-working";
+                        return `<span class="${className}">${day.charAt(0).toUpperCase()}</span>`;
                     })
                     .join("");
 
-                const statusClass =
-                    DOMPurify.sanitize(location.status) == 1
-                        ? "badge-success-transparent"
-                        : "badge-danger-transparent";
-                const statusText =
-                    DOMPurify.sanitize(location.status) == 1
-                        ? _l("admin.common.active")
-                        : _l("admin.common.inactive");
+                const name = DOMPurify.sanitize(location.name);
+                const address = DOMPurify.sanitize(location.address);
+                const phone = DOMPurify.sanitize(location.phone);
+                const imageUrl = DOMPurify.sanitize(location.image_url);
+                const status = parseInt(DOMPurify.sanitize(location.status));
+                const id = DOMPurify.sanitize(location.id);
+
+                const statusClass = status == 1 ? "badge-success-transparent" : "badge-danger-transparent";
+                const statusText = status == 1 ? _l("admin.common.active") : _l("admin.common.inactive");
 
                 const actionButtons = [
                     hasPermission(permissions, "locations", "edit")
-                        ? `<li><button type="button" class="dropdown-item rounded-1 edit-location-btn" data-id="${
-                              location.id
-                          }"><i class="ti ti-edit me-1"></i>${_l(
-                              "admin.common.edit"
-                          )}</button></li>`
+                        ? `<li><button type="button" class="dropdown-item rounded-1 edit-location-btn" data-id="${id}"><i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}</button></li>`
                         : "",
                     hasPermission(permissions, "locations", "delete")
-                        ? `<li><button type="button" class="dropdown-item rounded-1 delete-location-btn" data-id="${
-                              location.id
-                          }" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l(
-                              "admin.common.delete"
-                          )}</button></li>`
-                        : "",
+                        ? `<li><button type="button" class="dropdown-item rounded-1 delete-location-btn" data-id="${id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}</button></li>`
+                        : ""
                 ]
                     .filter(Boolean)
                     .join("");
@@ -405,38 +384,29 @@
                     <td>
                         <div class="d-flex align-items-center file-name-icon">
                             <div class="avatar avatar-lg border">
-                                <img src="${
-                                    DOMPurify.sanitize(location.image_url)
-                                }" class="img-fluid" alt="Image Preview">
+                                <img src="${imageUrl}" class="img-fluid" alt="Image Preview">
                             </div>
                             <div class="ms-2">
-                                <h6 class="fw-medium text-black">${
-                                    DOMPurify.sanitize(location.name)
-                                }</h6>
+                                <h6 class="fw-medium text-black">${name}</h6>
                             </div>
                         </div>
                     </td>
-                    <td><h6 class="fw-medium text-black">${
-                        DOMPurify.sanitize(location.address)
-                    }</h6></td>
-                    <td><h6 class="fw-medium text-black">${
-                        DOMPurify.sanitize(location.phone)
-                    }</h6></td>
+                    <td><h6 class="fw-medium text-black">${address}</h6></td>
+                    <td><h6 class="fw-medium text-black">${phone}</h6></td>
                     <td><div class="working-days">${workingDaysHtml}</div></td>
                     <td>
                         <span class="badge ${statusClass} d-inline-flex align-items-center badge-sm">
                             <i class="ti ti-point-filled me-1"></i>${statusText}
                         </span>
                     </td>
-                    ${
-                        actionButtons
-                            ? `<td><div class="dropdown">
-                        <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="ti ti-dots-vertical"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end p-2">${actionButtons}</ul>
-                    </div></td>`
-                            : ""
+                    ${actionButtons
+                        ? `<td><div class="dropdown">
+                            <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="ti ti-dots-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end p-2">${actionButtons}</ul>
+                        </div></td>`
+                        : ""
                     }
                 </tr>`;
             })
