@@ -30,7 +30,7 @@
                         <div class="location-contents">
                             <div class="location-city-name">
                                 <h4><a href="javascript:void(0);">{{ $content->name }}</a></h4>
-                                <span>{{ $content->vehicle_count ?? 0 }} Yachts</span>
+                                <span>{{ $content->vehicle_count ?? 0 }} {{ __('web.home.yachts') }}</span>
                             </div>
                             <a href="{{ route('list', ['pickuplocation' => $content->name]) }}" class="arrow-right"><i class="bx bx-right-arrow-alt"></i></a>
                         </div>

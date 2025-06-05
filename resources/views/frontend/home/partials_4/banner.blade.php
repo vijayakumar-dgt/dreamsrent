@@ -30,9 +30,9 @@
                             <form action="{{ route('list') }}">
                                 <div class="banner-search-list">
                                     <div class="input-block">
-                                        <label><i class="bx bx-map"></i>Location</label>
+                                        <label><i class="bx bx-map"></i>{{ __('web.user.location') }}</label>
                                         <select class="select" name="pickuplocation">
-                                           <option value="">Select</option>
+                                           <option value="">{{ __('web.common.select') }}</option>
                                             @if(!empty($locations) && count($locations) > 0)
                                             @foreach ($locations as $location)
                                                 <option value="{{ $location->name }}">{{ $location->name ?? "" }}</option>
@@ -41,7 +41,7 @@
                                         </select>
                                     </div>
                                     <div class="input-block">
-                                        <label><i class="bx bx-calendar"></i>Pickup Date</label>
+                                        <label><i class="bx bx-calendar"></i>{{ __('web.home.pickup_date') }}</label>
                                         <div class="date-widget">												
                                             <div class="group-img">
                                             <input type="text" class="form-control datetimepicker" placeholder="DD-MM-YYYY" name="pickupdate">
@@ -49,7 +49,7 @@
                                         </div>
                                     </div>
                                     <div class="input-block">
-                                        <label><i class="bx bx-calendar"></i>Return Date</label>
+                                        <label><i class="bx bx-calendar"></i>{{ __('web.home.return_date') }}</label>
                                         <div class="date-widget">												
                                             <div class="group-img">
                                             <input type="text" class="form-control datetimepicker" placeholder="DD-MM-YYYY" name="returndate">
@@ -57,9 +57,9 @@
                                         </div>
                                     </div>
                                     <div class="input-block">
-                                        <label><i class="bx bxs-ship"></i>Yacht Type</label>
+                                        <label><i class="bx bxs-ship"></i>{{ __('web.home.yacht_type') }}</label>
                                         <select class="select" name="category">
-                                            <option value="">Select</option>
+                                            <option value="">{{ __('web.common.select') }}</option>
                                             @if(!empty($vehicle_types) && count($vehicle_types) > 0)
                                             @foreach ($vehicle_types as $vehicle_type)
                                                 <option value="{{ $vehicle_type->id }}">{{ $vehicle_type->name ?? "" }}</option>
@@ -70,7 +70,7 @@
                                 </div>
                                 <div class="input-block-btn">
                                     <button class="btn btn-primary" type="submit">
-                                        <i class="bx bx-search-alt me-2"></i> Search
+                                        <i class="bx bx-search-alt me-2"></i> {{ __('web.common.search') }}
                                     </button>
                                 </div>
                             </form>
@@ -85,8 +85,8 @@
                                     @endforeach
                                 @endif
                                 <li class="users-text">
-                                    <h5>{{ $sectionContent->customer_count ?? 0 }} + Customers</h5>
-                                    <span>has used our renting services </span>
+                                    <h5>{{ $sectionContent->customer_count ?? 0 }} + {{ __('web.home.customers') }}</h5>
+                                    <span>{{ __('web.home.has_used_rental') }} </span>
                                 </li>
                             </ul>
                         </div>
@@ -98,7 +98,7 @@
         </div>	
         <div class="video-btn text-center">
             <a href="https://www.youtube.com/embed/ExJZAegsOis" data-fancybox><span><i class="bx bx-play"></i></span></a>
-            <h6>Check Our Video</h6>
+            <h6>{{ __('web.home.check_our_video') }}</h6>
         </div>
     </div>
 </section>
