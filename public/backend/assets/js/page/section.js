@@ -70,7 +70,7 @@
             var ID = $(this).data("id");
 
             $(
-                "#section_id_1, #section_id_2, #section_id_3, #section_id_4, #section_id_5,  #section_id_6, #section_id_7, #section_id_8, #section_id_9, #section_id_10, #section_id_11"
+                "#section_id_1, #section_id_2, #section_id_3, #section_id_4, #section_id_5,  #section_id_6, #section_id_7, #section_id_8, #section_id_9, #section_id_10, #section_id_11, #section_id_12"
             ).addClass("d-none");
 
             if (ID == 1) {
@@ -387,6 +387,21 @@
                 } else {
                     $("#thumbnail_preview_boat_offer").addClass("d-none");
                 }
+            } else if (ID == 74) {
+                $("#section_id_12").removeClass("d-none");
+                $("#section_id").val(ID);
+                $("#section_title_boat_exclusive").val(
+                    $(this).data("section_title_boat_exclusive")
+                );
+                let thumbnails = $(this).data("thumbnail_image_boat_exclusive");
+
+                if (thumbnails) {
+                    $("#thumbnail_preview_boat_exclusive")
+                        .attr("src", thumbnails)
+                        .removeClass("d-none");
+                } else {
+                    $("#thumbnail_preview_boat_exclusive").addClass("d-none");
+                }
             }
         });
     });
@@ -492,6 +507,9 @@
                                                 data-section_title_boat_offer="${
                                                     value.title
                                                 }"
+                                                data-section_title_boat_exclusive="${
+                                                    value.title
+                                                }"
                                                 data-label_1="${value.label_1}"
                                                 data-label_2="${value.label_2}"
                                                 data-label_3="${value.label_3}"
@@ -525,6 +543,10 @@
                                                 }"
                                                 data-thumbnail_image_boat_offer="${
                                                     value.thumbnail_image_boat_offer ??
+                                                    ""
+                                                }"
+                                                data-thumbnail_image_boat_exclusive="${
+                                                    value.thumbnail_image_boat_exclusive ??
                                                     ""
                                                 }"
                                                 data-thumbnail_image_one="${
