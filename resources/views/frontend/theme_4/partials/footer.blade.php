@@ -1,5 +1,5 @@
 <!-- Footer -->
-<footer class="footer-two">
+<footer class="footer-two overflow-hidden">
     <div class="sec-bg">
         <img src="/frontend/assets/img/bg/sec-bg-wave.png" alt="Img">
         <img src="/frontend/assets/img/bg/anchor-img-02.png" alt="Img">

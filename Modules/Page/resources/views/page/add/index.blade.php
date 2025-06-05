@@ -10,7 +10,7 @@
             <a href="{{ route('admin.pageIndex') }}" class="d-flex align-items-center"><span class="me-1"><i class="ti ti-arrow-narrow-left"></i></span>{{__('admin.page.pages')}}</a>
         </div>
         <div class="row">
-            <div class="add_page col-md-8 pageSectionList shadow-sm">
+            <div class="add_page col-lg-8 pageSectionList shadow-sm">
                 <div class="card mb-0">
                     <div class="card-header">
                         <h5>{{ __('admin.page.add_page') }}</h5>
@@ -99,19 +99,20 @@
                     </form>
                 </div>
             </div>
-            <div class="add_page col-md-4">
-                <div class="card mb-0">
+            <div class="add_page col-lg-4">
+                <div class="card mb-0"> 
                     <div class="card-header">
                         <h5>{{ __('admin.page.section_list') }}</h5>
                     </div>
-                    <div class="d-flex align-items-center justify-content-center setSection mb-3">
-                        <button class="btn btn-primary w-100 rounded-0">{{ __('admin.page.screen_one') }}</button>
-                        <button class="btn btn-dark w-100 rounded-0">{{ __('admin.page.screen_two') }}</button>
-                        <button class="btn btn-dark w-100 rounded-0">{{ __('admin.page.screen_three') }}</button>
+                    <div class="d-flex align-items-center justify-content-center setSection mb-3 flex-wrap">
+                        <button class="btn btn-primary w-lg-100 w-50 rounded-0">{{ __('admin.page.screen_one') }}</button>
+                        <button class="btn btn-dark w-lg-100 w-50 rounded-0">{{ __('admin.page.screen_two') }}</button>
+                        <button class="btn btn-dark w-lg-100 w-50 rounded-0">{{ __('admin.page.screen_three') }}</button>
+                        <button class="btn btn-dark w-lg-100 w-50 rounded-0">{{ __('admin.page.screen_three') }}</button>
                     </div>
                     <div class="d-flex align-items-center justify-content-center setSection">
-                        <div id="cardContainer" class="section-list d-none real-table"></div>
-                        <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10">
+                        <div id="cardContainer" class="section-list d-none real-table px-3 pb-3"></div>
+                        <div class="custom-datatable-filter table-responsive table-loader position-relative vh-10 gap-row-2">
                             @include('admin.content-loader')
                         </div>
                     </div>

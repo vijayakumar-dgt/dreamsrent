@@ -3,7 +3,7 @@
     $facts = $section['facts'] ?? [];
 @endphp
 <!-- FAQ -->
-<section class="faq-sec-two">
+<section class="faq-sec-two overflow-hidden">
     <div class="sec-round-colors">
         <span class="bg-orange round-small"></span>
         <span class="bg-orange round-small"></span>

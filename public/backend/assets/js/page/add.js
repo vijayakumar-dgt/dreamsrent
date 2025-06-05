@@ -326,7 +326,7 @@
             },
             success: function (response) {
                 if (response.code === 200) {
-                    var sectionHtml = '<div class="row p-1">';
+                    var sectionHtml = '<div class="row p-1 row-gap-3">';
 
                     $.each(response.data, function (index, section) {
                         $.each(section, function (key, value) {
@@ -336,10 +336,10 @@
                                 key !== "status"
                             ) {
                                 sectionHtml += `
-                        <div class="col-md-6">
-                            <div class="card mb-3 draggable-card shadow-sm rounded-0" draggable="true" data-value="${value}">
+                        <div class="col-xl-6 col-lg-12 col-md-4 col-sm-6 d-flex">
+                            <div class="card mb-0 draggable-card shadow-sm rounded flex-fill" draggable="true" data-value="${value}">
                                 <div class="py-2 text-center">
-                                    <p class="fs-14 fw-bold mb-0">${section.name}</p>
+                                    <p class="fs-13 fw-medium mb-0">${section.name}</p>
                                 </div>
                             </div>
                         </div>
