@@ -297,10 +297,10 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             }
 
             // Handle redirect
-            $redirectTo = session('intended_url', route('home'));
+            $redirectTo = session('intended_url', '/');
             session()->forget('intended_url');
             if (session()->has('intended_booking')) {
-                $redirectTo = route('user.booking.redirect');
+                $redirectTo = '/redirect-to-booking';
             }
             return [
                 'status' => true,
