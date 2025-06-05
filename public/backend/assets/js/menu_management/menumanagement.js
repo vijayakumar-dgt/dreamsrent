@@ -357,11 +357,10 @@
                 url: `/admin/menus/list?id=${menuId}`,
                 type: "GET",
                 success: function (response) {
-                    let menuList = $("#simple-list");
-                    menuList.empty();
+                    const menuList = $("#simple-list").empty();
 
                     if (response.code === 200 && response.data) {
-                        let menu = response.data;
+                        const menu = response.data;
 
                         if (!menu.menus || menu.menus.trim() === "") {
                             menuList.html(
@@ -371,60 +370,44 @@
                         }
 
                         try {
-                            let menuItems = JSON.parse(menu.menus);
+                            const menuItems = JSON.parse(menu.menus);
 
                             menuItems.forEach((item) => {
-                                let uniqueId = `menu-${Date.now()}-${Math.floor(
-                                    Math.random() * 1000
-                                )}`;
+                                const uniqueId = `menu-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+                                const safeLabel = DOMPurify.sanitize(item.label || "Untitled");
+                                const safeLink = DOMPurify.sanitize(item.link || "/");
+                                const slug = safeLink === "/" ? "/" : safeLink.replace(/^\/+/, "");
+                                const previewLink = `${BASE_URL}/${slug}`;
 
-                                let slug =
-                                    item.link === "/"
-                                        ? "/"
-                                        : item.link.replace(/^\/+/, "");
+                                const $li = $("<li>")
+                                    .addClass("list-group-item")
+                                    .attr({ "data-title": safeLabel, "data-link": slug });
 
-                                let previewLink = `${BASE_URL}/${slug}`;
-
-                                let newItem = `
-                                <li class="list-group-item" data-title="${
-                                    item.label
-                                }" data-link="${slug}">
+                                const $accordion = $(`
                                     <div class="accordion" id="accordionExample">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header">
                                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                                     data-bs-target="#collapse-${uniqueId}" aria-expanded="false" aria-controls="collapse-${uniqueId}">
-                                                    <span class="me-2"><i class="ti ti-grid-dots"></i></span>${
-                                                        item.label
-                                                    }
+                                                    <span class="me-2"><i class="ti ti-grid-dots"></i></span>${safeLabel}
                                                 </button>
                                             </h2>
                                             <div id="collapse-${uniqueId}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
-                                                    <!-- Menu Name Field -->
                                                     <div class="mb-3">
                                                         <label for="menu_name_${uniqueId}" class="form-label">Menu <span class="text-danger">*</span></label>
-                                                        <input type="text" id="menu_name_${uniqueId}" name="menu_name" class="form-control" value="${
-                                    item.label
-                                }" required>
+                                                        <input type="text" id="menu_name_${uniqueId}" name="menu_name" class="form-control" value="${safeLabel}" required>
                                                         <span class="error-message text-danger d-none">Menu name is required.</span>
                                                     </div>
-
-                                                    <!-- Slug Field -->
                                                     <div class="mb-2">
                                                         <label for="menu_link_${uniqueId}" class="form-label">Slug</label>
                                                         <input type="text" id="menu_link_${uniqueId}" name="menu_link" class="form-control" value="${slug}">
                                                         <span class="error-message text-danger d-none">Please enter a valid slug.</span>
                                                     </div>
-
-                                                    <!-- Preview Link -->
                                                     <p>Preview : <a href="${previewLink}" target="_blank" class="text-info">${previewLink}</a></p>
-
-                                                    <!-- Status Toggle -->
                                                     <div class="form-check form-check-md form-switch me-2">
-                                                        <input class="form-check-input" type="checkbox" role="switch" id="menu_status_${uniqueId}" name="menu_status" ${
-                                    item.status ? "checked" : ""
-                                }>
+                                                        <input class="form-check-input" type="checkbox" role="switch"
+                                                            id="menu_status_${uniqueId}" name="menu_status" ${item.status ? "checked" : ""}>
                                                         <label for="menu_status_${uniqueId}" class="form-check-label form-label mt-0 mb-0">
                                                             Status
                                                         </label>
@@ -433,9 +416,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                </li>`;
+                                `);
 
-                                menuList.append(newItem);
+                                $li.append($accordion);
+                                menuList.append($li);
                             });
                         } catch (error) {
                             menuList.html(

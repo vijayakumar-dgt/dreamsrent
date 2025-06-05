@@ -553,27 +553,26 @@
                         const iconPointSuccess = $('<i>').addClass('ti ti-point-filled text-success me-1');
                         const iconPointDanger = $('<i>').addClass('ti ti-point-filled text-danger me-1');
 
-                        // Clear and safely set last_changed
-                       const lastChangedContainer = $(".last_changed").empty();
+                        const lastChangedContainer = $(".last_changed").empty();
 
-                        if (
-                            response.data.last_password_changed_at &&
-                            response.data.last_password_changed_at !== "null"
-                        ) {
-                            const iconSuccess = $('<i>').addClass('ti ti-circle-check-filled text-success me-1');
+                        const rawChangedAt = response.data.last_password_changed_at;
+                        const isChanged = rawChangedAt && rawChangedAt !== "null";
+
+                        if (isChanged) {
+                            const safeChangedAt = DOMPurify.sanitize(rawChangedAt);
+
+                            const iconSuccess = $("<i>").addClass("ti ti-circle-check-filled text-success me-1");
 
                             lastChangedContainer
                                 .append(iconSuccess)
-                                .append(document.createTextNode(' ' + _l("admin.general_settings.last_changed") + ' '))
-                                .append(document.createTextNode(response.data.last_password_changed_at));
-                        } else {
-                            const iconDanger = $('<i>').addClass('ti ti-circle-check-filled text-danger me-1');
+                                .append(document.createTextNode(" " + _l("admin.general_settings.last_changed") + " "))
+                                .append(document.createTextNode(safeChangedAt));
+                            const iconDanger = $("<i>").addClass("ti ti-circle-check-filled text-danger me-1");
 
                             lastChangedContainer
                                 .append(iconDanger)
-                                .append(document.createTextNode(' ' + _l("admin.general_settings.not_changed")));
+                                .append(document.createTextNode(" " + _l("admin.general_settings.not_changed")));
                         }
-
 
                         const googleAuthContainer = $(".google_auth").empty();
                         if (response.data.user && response.data.user.google_auth_enabled) {

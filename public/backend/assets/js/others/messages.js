@@ -48,7 +48,7 @@
                         }, 10);
                     } else {
                         let oldScrollHeight = messageContainer[0].scrollHeight;
-                        messageArea.prepend(html);
+                        messageArea.prepend(cleanHTML);
                         setTimeout(() => {
                             let newScrollHeight = messageContainer[0].scrollHeight;
                             messageContainer.scrollTop(newScrollHeight - oldScrollHeight);
