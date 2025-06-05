@@ -282,7 +282,6 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             return $response;
         }
 
-        // Check for overlapping bookings on the same vehicle
         $isUnavailable = Booking::where('vehicle_id', $vehicleId)
             ->where(function ($query) use ($pickupDatetime, $returnDatetime) {
                 $query->where('start_datetime', '<', $returnDatetime)
@@ -296,6 +295,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                 'message' => __('web.home.vehicle_already_booked_for_selected_time'),
                 'code'    => 200
             ];
+            return $response;
         }
         $response = [
             'status' => 'success',
@@ -445,7 +445,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
 
     public function userPayments(Request $request): array
     {
-         /** @var \App\Models\User|null $authUser */
+        /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
         if (!$authUser) {
             $response = [
@@ -776,7 +776,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             Stripe::setApiKey(is_string($stripeSecret) ? $stripeSecret : '');
 
             $purchase_units = [];
-            $currency_details = "USD"; // Fix currency
+            $currency_details = "USD";
 
             $session = Session::create([
                 'line_items' => [[
