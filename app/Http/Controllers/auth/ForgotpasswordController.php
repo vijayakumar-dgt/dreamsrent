@@ -132,6 +132,7 @@ class ForgotpasswordController extends Controller
                     'status' => true,
                     'code' => 200,
                     'redirect_url' => route('reset-password', ['token' => $token]),
+                    'token' => $token,
                     'message' => __('admin.auth.otp_verified_successfully')
                 ]);
             } else {

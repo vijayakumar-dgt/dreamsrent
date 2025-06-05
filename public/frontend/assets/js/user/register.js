@@ -197,7 +197,7 @@ $(document).ready(function () {
                         $("#userRegisterForm")[0].reset();
                         $(".form-control").removeClass("is-invalid is-valid");           
                         if (response.redirect_url) {
-                                    window.location.href = response.redirect_url;
+                                    window.location.href = route('home');
                                     return; 
                         }                   
                         
