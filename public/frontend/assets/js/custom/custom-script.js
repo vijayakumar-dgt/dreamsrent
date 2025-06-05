@@ -543,7 +543,8 @@
             url: "/user/get-notifications",
             dataType: "json",
             success: function (response) {
-                $(".notification-list").html(response.html);
+                const cleanHTML = DOMPurify.sanitize(response.html);
+                $(".notification-list").html(cleanHTML);
                 if(response.count > 0){
                     $("#newNotificationBadge").removeClass("d-none");
                     $(".has-notification").removeClass("d-none");
