@@ -337,15 +337,17 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             ];
         }
         $email = $request->email;
-        if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return [
                 'status' => false,
                 'code' => 400,
                 'message' => __('web.auth.valid_email')
             ];
         }
+
         $settings = GeneralSetting::whereIn('key', ['otp_digit_limit', 'otp_expire_time', 'otp_type'])
             ->pluck('value', 'key');
+
         if (!in_array($settings['otp_type'], ['email', 'sms'])) {
             return [
                 'status' => false,
@@ -353,35 +355,44 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                 'message' => __('web.auth.unsupported_otp_type')
             ];
         }
+
         $otp = $this->generateOtp($settings['otp_digit_limit']);
         $expiresAt = now()
             ->addMinutes((int) $settings['otp_expire_time'])
             ->setTimezone('Asia/Kolkata')
             ->format('Y-m-d H:i:s');
+
         DB::table('otp_settings')->updateOrInsert(
             ['email' => $email],
             ['otp' => $otp, 'expires_at' => $expiresAt]
         );
-        $subject = __('web.auth.otp_verification_for_register');
-        $content = __('web.auth.your_otp_verification_code_for_register') . ' {{otp}} ';
-        $content = str_replace(
-            ['{{otp}}'],
-            [$otp],
-            $content
-        );
+        $notifyData =[
+            'otp' => $otp,
+            'user_name' => $request->first_name ?? '',
+            'company_name' => GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Our Company',
+        ];
+        try {
+            sendNotification($request->email, 'register-otp', $notifyData);
+        } catch (\Throwable $e) {
+            \Log::error("Failed to send welcome email: " . $e->getMessage());
+             return [
+                'status' => false,
+                'code' => 500,
+                'message' => __('web.auth.failed_to_send_email_otp')
+            ];
+        }
+
         return [
             'status' => true,
             'code' => 200,
             'register_status' => $regStatus,
             'message' => __('web.auth.otp_sent_success'),
             'otp_type' => $settings['otp_type'],
-            'otp' => $otp,
             'expires_at' => $expiresAt,
-            'email_subject' => $subject,
-            'email_content' => $content,
             'name' => $request->username,
             'phone_number' => $request->phone_number,
-            'email' => $request->email,
+            'email' => $email,
+            'otp_digit_limit' => $settings['otp_digit_limit'],
         ];
     }
 

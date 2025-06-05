@@ -198,13 +198,16 @@ function ticketDetails() {
                     $('<p>').addClass('fs-12 mb-0').text(`${ext.toUpperCase()} File`).appendTo(fileDetailsDiv);
 
                     const downloadLink = $('<a>', {
-                        href: fileUrl,
+                        href: encodeURI(fileUrl),
                         target: '_blank',
                         rel: 'noopener noreferrer',
                         class: 'ms-auto btn btn-sm btn-primary d-flex align-items-center'
                     });
 
-                    $('<i>').addClass('ti ti-download fs-16 me-1').appendTo(downloadLink);
+                    const $icon = document.createElement('i');
+                    $icon.className = 'ti ti-download fs-16 me-1';
+                    downloadLink.append($icon);
+
                     downloadLink.append(document.createTextNode(_l('admin.common.download')));
 
                     attachmentDiv.append(avatarSpan, fileDetailsDiv, downloadLink);

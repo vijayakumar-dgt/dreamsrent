@@ -1374,6 +1374,7 @@ return array (
     'delete_damage_confirmation' => 'هل أنت متأكد أنك تريد حذف هذا الضرر؟',
     'yes_delete' => 'نعم، احذف',
     'create_faq_title' => 'إنشاء سؤال شائع',
+    'edit_faq_title' => 'تعديل سؤال شائع',
     'question_label' => 'السؤال',
     'answer_label' => 'الإجابة',
     'delete_faq_title' => 'حذف السؤال الشائع',

@@ -188,17 +188,48 @@
     }
 
     function updateDeviceList(devices) {
-        const deviceList = devices.length
-            ? devices.map(device => `
-                <tr>
-                    <td><h6 class="fs-14">${device.browser || ''} - ${device.os || ''}</h6></td>
-                    <td><p class="text-gray-9">${device.date || '-'}</p></td>
-                    <td><p class="text-gray-9">${device.ip_address || '-'}</p></td>
-                    <td><p class="text-gray-9">${device.location || '-'}</p></td>
-                </tr>`).join('')
-            : `<tr><td colspan="5" class="text-center">${_l('web.user.no_data_found')}</td></tr>`;
+        const $tbody = $("#userDevicesTable tbody");
+        $tbody.empty();
 
-        $("#userDevicesTable tbody").html(deviceList);
+        if (devices.length) {
+            devices.forEach(device => {
+                const row = $('<tr>');
+
+                row.append(
+                    $('<td>').append(
+                        $('<h6>').addClass('fs-14').text(`${device.browser || ''} - ${device.os || ''}`)
+                    )
+                );
+
+                row.append(
+                    $('<td>').append(
+                        $('<p>').addClass('text-gray-9').text(device.date || '-')
+                    )
+                );
+
+                row.append(
+                    $('<td>').append(
+                        $('<p>').addClass('text-gray-9').text(device.ip_address || '-')
+                    )
+                );
+
+                row.append(
+                    $('<td>').append(
+                        $('<p>').addClass('text-gray-9').text(device.location || '-')
+                    )
+                );
+
+                $tbody.append(row);
+            });
+        } else {
+            const emptyRow = $('<tr>').append(
+                $('<td>', {
+                    colspan: 5,
+                    class: 'text-center'
+                }).text(_l('web.user.no_data_found'))
+            );
+            $tbody.append(emptyRow);
+        }
     }
 
     function updateLastChangedInfo(data) {

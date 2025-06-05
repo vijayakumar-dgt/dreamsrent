@@ -31,6 +31,7 @@ use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 class PageController extends Controller
 {
@@ -502,7 +503,7 @@ class PageController extends Controller
                             $banner->description = $decodedData['description_three'] ?? null;
 
                             $relativePath = 'storage/' . ($decodedData['thumbnail_image_four'] ?? '');
-                            $defaultImage = asset('backend/assets/img/car/car-right.png');
+                            $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
                             $thumbnailKey = 'thumbnail_image_four';
 
                             $banner->thumbnail_image = (
@@ -698,6 +699,8 @@ class PageController extends Controller
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
+                        $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+
                         $locations = DB::table('locations')
                             ->select('id', 'name', 'image')
                             ->where('language_id', $lang_id)
@@ -706,8 +709,13 @@ class PageController extends Controller
                             ->orderBy('created_at', $order)
                             ->limit($limit)
                             ->get()
-                            ->map(function ($location) {
-                                $location->image = asset('storage/' . $location->image);
+                            ->map(function ($location) use ($defaultImage) {
+                                if ($location->image && Storage::disk('public')->exists($location->image)) {
+                                    $location->image = asset('storage/' . $location->image);
+                                } else {
+                                    $location->image = $defaultImage;
+                                }
+
                                 $getCategoryId = getCategoryId();
                                 $location->vehicle_count = DB::table('vehicle_info')
                                     ->where('main_location_id', $location->id)
@@ -1605,6 +1613,66 @@ class PageController extends Controller
                     }
                 }
 
+                // Exclusive Bike Section
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+
+                    if (is_string($content) && strpos($content, '[exclusive_bike') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        $limit = isset($matches[1]) ? (int)$matches[1] : 10;
+                        $viewAll = $matches[2] ?? 'no';
+                        $order = $matches[3] ?? 'asc';
+
+                        $whyus = DB::table('sections')
+                            ->join('section_datas', function ($join) use ($lang_id) {
+                                $join->on('sections.id', '=', 'section_datas.section_id')
+                                    ->where('section_datas.language_id', '=', $lang_id);
+                            })
+                            ->select('sections.id', 'section_datas.datas')
+                            ->where('sections.name', 'Exclusive Bike')
+                            ->orderBy('sections.id', $order)
+                            ->limit($limit)
+                            ->get();
+
+                        if ($whyus->isNotEmpty()) {
+                            $first = $whyus[0];
+                            $data = json_decode($first->datas, true);
+
+                            $items = [];
+                            $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+
+                            $previewImage = $defaultImage;
+                            if (!empty($data['thumbnail_image_bike_exclusive'])) {
+                                $relativePath = ltrim($data['thumbnail_image_bike_exclusive'], '/');
+                                $fullPath = storage_path('app/public/' . $relativePath);
+                                if (file_exists($fullPath)) {
+                                    $previewImage = asset('storage/' . $relativePath);
+                                }
+                            }
+
+                            foreach ([1, 2, 3, 4] as $i) {
+                                $label = $data["bike_label_$i"] ?? '';
+                                $description = $data["bike_dis_$i"] ?? '';
+
+                                if ($label || $description) {
+                                    $items[] = [
+                                        'bike_label' => $label,
+                                        'bike_dis'   => $description,
+                                    ];
+                                }
+                            }
+
+                            $section['section_type'] = 'exclusive_bike';
+                            $section['type'] = 'exclusive_bike';
+                            $section['design'] = 'exclusive_bike';
+                            $section['section_content'] = [
+                                "bike_icon" => $previewImage,
+                                "items" => $items,
+                            ];
+                        }
+                    }
+                }
+
                 // AD Card Seasonal Section
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
@@ -1991,7 +2059,13 @@ class PageController extends Controller
                                 if (is_array($data)) {
                                     foreach ($data as $key => $value) {
                                         if (str_starts_with($key, 'thumbnail_image_') && !empty($value)) {
-                                            $data[$key] = asset('storage/' . ltrim($value, '/'));
+                                            // Check if file exists in storage
+                                            if (Storage::disk('public')->exists(ltrim($value, '/'))) {
+                                                $data[$key] = asset('storage/' . ltrim($value, '/'));
+                                            } else {
+                                                // Fallback default image path
+                                                $data[$key] = asset('backend/assets/img/default-placeholder-image.png');
+                                            }
                                         }
                                     }
 

@@ -301,4 +301,5 @@
     <script src="{{ asset('frontend/assets/js/custom/user/ticket.js') }}"></script>
     <!-- summernote JS -->
     <script src="{{ asset('backend/assets/plugins/summernote/summernote-bs5.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/purify.min.js') }}"></script>
     @endpush

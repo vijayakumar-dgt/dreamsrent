@@ -1,6 +1,5 @@
 @extends('frontend.theme_4.app')
 @section('content')
-{{-- @dd($content_sections); --}}
 @if(!empty($content_sections) && count($content_sections) > 0)
 @foreach ($content_sections as $section)
         @switch($section['section_type'] ?? "")

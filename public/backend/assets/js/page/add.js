@@ -253,29 +253,6 @@
             $(this).closest(".textarea-item").remove();
         });
 
-        let pageId = $("#page_id").val();
-
-        if (pageId) {
-            $.ajax({
-                url: "{{ route('admin.pageContent') }}",
-                type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    page_id: pageId,
-                },
-                success: function (response) {
-                    if (response.success) {
-                        $("#page-content").html(response.data.page_content);
-                    } else {
-                        $("#page-content").html("<p>No content available.</p>");
-                    }
-                },
-                error: function () {
-                    $("#page-content").html("<p>Error fetching content.</p>");
-                },
-            });
-        }
-
         $(document).on("click", ".setSection button", function () {
             updateThemeSelection(this);
         });

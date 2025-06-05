@@ -84,7 +84,7 @@
         $("#carBasicInfoForm").validate({
             rules: {
                 vehicle_image: {
-                    required: false,
+                    required: true,
                 },
                 title: {
                     required: false,
@@ -517,13 +517,13 @@
 
         $(document).on("click", "#add_seasonal_price_btn", function () {
             $("#seas_title").text(_l("admin.rentals.create_seasonal_price"));
-            $("#s_name").val('');
-            $("#s_strdate").val('');
-            $("#s_enddate").val('');
-            $("#s_drate").val('');
-            $("#s_wrate").val('');
-            $("#s_mrate").val('');
-            $("#s_lrate").val('');
+            $("#s_name").val("");
+            $("#s_strdate").val("");
+            $("#s_enddate").val("");
+            $("#s_drate").val("");
+            $("#s_wrate").val("");
+            $("#s_mrate").val("");
+            $("#s_lrate").val("");
             $("#price_btn").text(_l("admin.common.create_new"));
             editingId = null;
         });
@@ -1074,39 +1074,42 @@
                     continue;
                 }
 
-                let imageUrl = URL.createObjectURL(file);
-                let img = new Image();
-                img.src = imageUrl;
+                const reader = new FileReader();
 
-                img.onload = function () {
-                    if (this.width === 690 && this.height === 420) {
-                        selectedImages.set(file.name, file);
-                        validFiles.push(file);
+                reader.onload = function (e) {
+                    let img = new Image();
+                    img.src = e.target.result;
 
-                        imageListContainer.append(`
-                            <div class="uploaded-img" data-file="${file.name}">
-                                <img src="${imageUrl}" alt="img">
-                                <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
-                            </div>
-                        `);
-                    } else {
-                        showToast(
-                            "error",
-                            `Image "${file.name}" must be 690x420 pixels.`
-                        );
-                        URL.revokeObjectURL(imageUrl);
-                    }
+                    img.onload = function () {
+                        if (this.width === 690 && this.height === 420) {
+                            selectedImages.set(file.name, file);
+                            validFiles.push(file);
 
-                    pending--;
-                    if (pending === 0) updateImageInput(validFiles);
+                            imageListContainer.append(`
+                        <div class="uploaded-img" data-file="${file.name}">
+                            <img src="${e.target.result}" alt="img">
+                            <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
+                        </div>
+                    `);
+                        } else {
+                            showToast(
+                                "error",
+                                `Image "${file.name}" must be 690x420 pixels.`
+                            );
+                        }
+
+                        pending--;
+                        if (pending === 0) updateImageInput(validFiles);
+                    };
+
+                    img.onerror = function () {
+                        showToast("error", `Failed to load "${file.name}".`);
+                        pending--;
+                        if (pending === 0) updateImageInput(validFiles);
+                    };
                 };
 
-                img.onerror = function () {
-                    showToast("error", `Failed to load "${file.name}".`);
-                    URL.revokeObjectURL(imageUrl);
-                    pending--;
-                    if (pending === 0) updateImageInput(validFiles);
-                };
+                reader.readAsDataURL(file);
             }
         });
 
@@ -1426,16 +1429,20 @@
 
             // Close modal and reset form
             $("#add-faq").modal("hide");
-            $("#faq_title").text("Create FAQ");
-            $("#faq_btn").text("Create New");
-            $("#f_q").val("");
-            $("#f_a").val("");
         });
 
         function updateFaqCount() {
             let totalDamages = $(".car_faq_append > div").length;
             $("#faq_count").text(totalDamages.toString().padStart(2, "0"));
         }
+
+        $(document).on("click", "#add_faq_btn", function () {
+            $("#f_q").val("");
+            $("#f_a").val("");
+            $("#faq_title").text(_l("admin.rentals.create_faq_title"));
+            $("#faq_btn").text(_l("admin.common.create_new"));
+            editingFAQ = null;
+        });
 
         // Edit FAQ
         $(document).on("click", ".edit-faq", function () {
@@ -1448,8 +1455,8 @@
             // Populate modal with existing values
             $("#f_q").val(question);
             $("#f_a").val(answer);
-            $("#faq_title").text("Edit FAQ");
-            $("#faq_btn").text("Update");
+            $("#faq_title").text(_l("admin.rentals.edit_faq_title"));
+            $("#faq_btn").text(_l("admin.common.update"));
 
             editingFAQ = faqID; // Store the current editing ID
 

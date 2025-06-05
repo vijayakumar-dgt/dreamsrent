@@ -1026,24 +1026,16 @@
             success: function (result) {
                 if (result.data && result.data.length > 0) {
                     let data = result.data;
-
-                    const $safeContainer = $('<div>'); // Use temporary DOM container
-                    $('#extra_service_list_container').empty();
+                    $('#extra_service_list_container').empty(); // Clear container
 
                     data.forEach(item => {
-                        const id = DOMPurify.sanitize(item.id.toString());
-                        const name = DOMPurify.sanitize(item.name || '');
-                        const description = DOMPurify.sanitize(item.description || '');
-                        const price = DOMPurify.sanitize(item.price);
-                        const type = DOMPurify.sanitize(item.extra_service_type);
-
-                        let isSelected = selected_extra_service_ids.includes(id) ||
-                                        edit_extra_service.find(service => service.id.toString() === id);
-
+                        let isSelected = selected_extra_service_ids.includes(item.id.toString()) ||
+                            edit_extra_service.find(service => service.id.toString() == item.id.toString());
+                        let isChecked = isSelected ? true : false;
                         let isActive = isSelected ? 'active' : '';
-                        let extraServiceType = '';
 
-                        switch (type) {
+                        let extraServiceType = '';
+                        switch (item.extra_service_type) {
                             case 'per_day':
                                 extraServiceType = 'Per Day';
                                 break;
@@ -1054,55 +1046,53 @@
                                 extraServiceType = 'Percentage';
                                 break;
                             default:
-                                extraServiceType = DOMPurify.sanitize(type); // fallback
+                                extraServiceType = item.extra_service_type;
                         }
 
-                        const $col = $('<div>').addClass('col-md-6');
-                        const $customCheckbox = $('<div>').addClass(`custom-checkbox ${isActive}`);
+                        // Build structure
+                        let $col = $('<div>').addClass('col-md-6');
+                        let $checkboxWrapper = $('<div>').addClass(`custom-checkbox ${isActive}`);
 
-                        const $formCheck = $('<div>').addClass('form-check form-check-md');
-                        const $checkbox = $('<input>', {
+                        // Checkbox
+                        let $formCheck = $('<div>').addClass('form-check form-check-md');
+                        let $input = $('<input>', {
                             type: 'checkbox',
                             class: 'form-check-input vehicle_extra_service',
                             name: 'extra_services[]',
-                            id: `extra-service-${id}`,
-                            value: id,
-                            checked: isSelected,
-                            'data-price': price,
-                            'data-price_type': type,
-                            'data-name': name
+                            id: `extra-service-${item.id}`,
+                            value: item.id,
+                            checked: isChecked,
+                            'data-price': item.price,
+                            'data-price_type': item.extra_service_type,
+                            'data-name': item.name
                         });
-                        $formCheck.append($checkbox);
+                        $formCheck.append($input);
 
-                        const $labelWrap = $('<div>').addClass('d-flex align-items-center justify-content-between');
-
-                        const $label = $('<label>', {
+                        // Label + description
+                        let $labelSection = $('<div>').addClass('d-flex align-items-center justify-content-between');
+                        let $label = $('<label>', {
                             class: 'form-check-label ms-2 ps-4',
-                            for: `extra-service-${id}`
+                            for: `extra-service-${item.id}`
                         });
-                        $('<span>').addClass('fw-semibold text-gray-9 d-block mb-1').text(name).appendTo($label);
-                        $('<span>').addClass('d-block').text(description).appendTo($label);
 
-                        const $priceInfo = $('<div>').addClass('text-end');
+                        $('<span>').addClass('fw-semibold text-gray-9 d-block mb-1').text(item.name).appendTo($label);
+                        $('<span>').addClass('d-block').text(item.description).appendTo($label);
+
+                        // Price section
+                        let $priceInfo = $('<div>').addClass('text-end');
                         $('<p>').addClass('mb-1').text(extraServiceType).appendTo($priceInfo);
+                        $('<h6>').html(item.extra_service_type === 'percentage' ? `${item.price}%` : `${default_currency}${item.price}`).appendTo($priceInfo);
 
-                        const priceDisplay = type === 'percentage'
-                            ? `${price}%`
-                            : `${default_currency}${price}`;
+                        // Assemble the label row
+                        $labelSection.append($label).append($priceInfo);
+                        $checkboxWrapper.append($formCheck).append($labelSection);
+                        $col.append($checkboxWrapper);
 
-                        $('<h6>').text(priceDisplay).appendTo($priceInfo);
-
-                        $labelWrap.append($label, $priceInfo);
-                        $customCheckbox.append($formCheck, $labelWrap);
-                        $col.append($customCheckbox);
-
-                        $safeContainer.append($col); // Append to temporary safe container
+                        $('#extra_service_list_container').append($col);
                     });
 
-                    $('#extra_service_list_container').append($safeContainer.children()); // Final append once
-
-                    // Update price UI
-                    const response = calculateVehiclePrice();
+                    // Price calculation and tooltip update
+                    let response = calculateVehiclePrice();
                     if (response) {
                         $('.extra_service_price').text(response[0]['total_extra_service_price']);
                         $('.total_price_val').text(response[0]['total_price_val']);
@@ -1112,10 +1102,11 @@
 
                     initializeTooltips();
                 } else {
-                    const $emptyRow = $('<div>').addClass('row');
-                    const $message = $('<span>').addClass('text-center mb-3').text(_l('admin.bookings.no_extra_services_found'));
-                    $emptyRow.append($message);
-                    $('#extra_service_list_container').empty().append($emptyRow);
+                    $('#extra_service_list_container').html(`
+                        <div class="row">
+                            <span class="text-center mb-3">${_l('admin.bookings.no_extra_services_found')}</span>
+                        </div>
+                    `);
                 }
             },
             error: function (error) {

@@ -85,46 +85,63 @@
                $(".table-loader").removeClass("d-none");
                $(".real-table").addClass("d-none");
            },
-           success: (response) => {
-               const currencySymbol = response.currency_symbol || '$';
+            success: (response) => {
+                const currencySymbol = response.currency_symbol || '$';
                 $(".total_credit").text(`${currencySymbol}${parseFloat(response.total_credit).toFixed(2)}`);
                 $(".total_debit").text(`${currencySymbol}${parseFloat(response.total_debit).toFixed(2)}`);
                 $(".available_balance").text(`${currencySymbol}${parseFloat(response.total_balance).toFixed(2)}`);
 
-                const tableBody = response.data.length
-                    ? response.data.map((value) => `
-                        <tr>
-                            <td>#${value.id || 'N/A'}</td>
-                            <td>
-                                <div class="table-avatar">
-                                    <div class="table-head-name flex-grow-1">
-                                        <a href="javascript:void(0);" class="mb-0">${ucfirst(value.payment_type)}</a>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>${value.formatted_created_at}</td>
-                            <td class="text-${value.status === 'Completed' ? 'success' : 'danger'}-light">
-                                ${value.status === 'Completed' ? '+ ' : '- '} ${currencySymbol}${value.amount}
-                            </td>
-                            <td>
-                                <span class="badge badge-light-${value.status === 'Completed' ? 'success' : 'danger'}">
-                                    ${value.status}
-                                </span>
-                            </td>
-                        </tr>`).join('')
-                    : `<tr>
-                        <td colspan="5" class="text-center">${_l('web.common.empty_table')}</td>
-                    </tr>`;
-
-                walletTableElement.find("tbody").html(tableBody);
+                const $tbody = walletTableElement.find("tbody");
+                $tbody.empty(); // Clear old content
 
                 if (response.data.length) {
+                    response.data.forEach((value) => {
+                        const row = $('<tr>');
+
+                        // ID Cell
+                        row.append($('<td>').text(`#${value.id || 'N/A'}`));
+
+                        // Payment Type Cell
+                        const paymentLink = $('<a>', {
+                            href: 'javascript:void(0);',
+                            class: 'mb-0'
+                        }).text(ucfirst(value.payment_type));
+
+                        const paymentTypeCell = $('<td>').append(
+                            $('<div>').addClass('table-avatar').append(
+                                $('<div>').addClass('table-head-name flex-grow-1').append(paymentLink)
+                            )
+                        );
+                        row.append(paymentTypeCell);
+
+                        // Date Cell
+                        row.append($('<td>').text(value.formatted_created_at));
+
+                        // Amount Cell with conditional class
+                        const statusClass = value.status === 'Completed' ? 'success' : 'danger';
+                        const prefix = value.status === 'Completed' ? '+ ' : '- ';
+                        const amountCell = $('<td>')
+                            .addClass(`text-${statusClass}-light`)
+                            .text(`${prefix}${currencySymbol}${value.amount}`);
+                        row.append(amountCell);
+
+                        // Status Badge
+                        const badge = $('<span>')
+                            .addClass(`badge badge-light-${statusClass}`)
+                            .text(value.status);
+                        row.append($('<td>').append(badge));
+
+                        $tbody.append(row);
+                    });
+
+                    // Initialize DataTable
                     walletTableElement.DataTable({
                         ordering: false,
                         searching: false,
                         pageLength: 10,
                         lengthChange: false,
-                        drawCallback: function() {
+                        destroy: true, // In case it's reinitialized
+                        drawCallback: function () {
                             $(".dataTables_info").addClass('d-none');
                             $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
 
@@ -133,18 +150,26 @@
                             var pagination = tableWrapper.find('.dataTables_paginate');
 
                             $('.table-footer').empty()
-                                .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
-                                    .append($('<div class="datatable-info"></div>').append(info.clone(true)))
-                                    .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
+                                .append($('<div class="d-flex justify-content-between align-items-center w-100">')
+                                    .append($('<div class="datatable-info">').append(info.clone(true)))
+                                    .append($('<div class="datatable-pagination">').append(pagination.clone(true)))
                                 );
                             $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
                         }
                     });
+
                 } else {
+                    $tbody.append(
+                        $('<tr>').append(
+                            $('<td>', {
+                                colspan: 5,
+                                class: 'text-center'
+                            }).text(_l('web.common.empty_table'))
+                        )
+                    );
                     $('.table-footer').empty();
                 }
-           },
-           error: (error) => {
+            },error: (error) => {
                const errorMessage = error.responseJSON?.error || _l('web.user.errot_occured_while_retrieving_wallet_history');
                 showToast('error', errorMessage);
            },

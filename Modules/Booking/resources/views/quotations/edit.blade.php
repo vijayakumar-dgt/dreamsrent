@@ -329,7 +329,7 @@
                                         <div class="card-footer px-0 pb-0">
                                             <div class="d-flex align-items-center justify-content-end flex-wrap row-gap-3">
                                                 <div class="field-btns">
-                                                    <a class="btn btn-light me-2" href="{{ route('reservation.index') }}"><i class="ti ti-chevron-left me-1"></i>{{ __('admin.common.cancel') }}</a>
+                                                    <a class="btn btn-light me-2" href="{{ route('quotations.index') }}"><i class="ti ti-chevron-left me-1"></i>{{ __('admin.common.cancel') }}</a>
                                                 </div>
                                                 <div class="field-btns">
                                                     <button class="btn btn-primary" id="basic_info_btn" type="button">{{ __('admin.bookings.add_customer') }}<i class="ti ti-chevron-right ms-1"></i></button>

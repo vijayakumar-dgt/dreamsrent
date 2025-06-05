@@ -530,12 +530,12 @@
 
             ticket.ticket_histories.forEach((history) => {
                 const userImage = (history.user?.user_detail?.profile_image)
-                    ? "/storage/" + history.user.user_detail.profile_image
+                    ? `/storage/${encodeURIComponent(history.user.user_detail.profile_image)}`
                     : "/backend/assets/img/profiles/avatar-01.jpg";
 
-                const userName = (history.user?.user_detail?.first_name && history.user?.user_detail?.last_name)
-                    ? `${history.user.user_detail.first_name} ${history.user.user_detail.last_name}`
-                    : (history.user?.name || "Unknown User");
+                const firstName = history.user?.user_detail?.first_name || '';
+                const lastName = history.user?.user_detail?.last_name || '';
+                const userName = firstName && lastName ? `${firstName} ${lastName}` : (history.user?.name || "Unknown User");
 
                 const createdAt = new Date(history.created_at).toLocaleString();
                 const description = history.description || '';
@@ -543,23 +543,27 @@
                 const $commentItem = $('<div>').addClass('comment-item mt-3');
 
                 const $userInfo = $('<div>').addClass('d-flex align-items-center mb-1');
-                const $avatar = $('<span>').addClass('avatar avatar-l me-2 flex-shrink-0').append(
-                    $('<img>', {
-                        src: userImage,
-                        alt: 'User Profile Image',
-                        class: 'img-fluid rounded-circle'
-                    })
-                );
+                
+                const $avatarImg = $('<img>', {
+                    src: userImage,
+                    alt: 'User Profile Image',
+                    class: 'img-fluid rounded-circle'
+                });
+
+                const $avatar = $('<span>').addClass('avatar avatar-l me-2 flex-shrink-0').append($avatarImg);
 
                 const $userDetails = $('<div>').append(
                     $('<h6>').addClass('mb-1').text(userName),
-                    $('<p>').html(`<i class="ti ti-calendar-bolt me-1"></i> ${_l('admin.common.updated_on')} ${createdAt}`)
+                    $('<p>').append(
+                        $('<i>').addClass('ti ti-calendar-bolt me-1'),
+                        document.createTextNode(`${_l('admin.common.updated_on')} ${createdAt}`)
+                    )
                 );
 
                 $userInfo.append($avatar, $userDetails);
 
                 const $commentText = $('<div>').addClass('border-bottom p-2').append(
-                    $('<p>').text(description) 
+                    $('<p>').text(description)
                 );
 
                 $commentItem.append($userInfo, $commentText);

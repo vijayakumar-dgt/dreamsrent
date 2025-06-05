@@ -306,7 +306,137 @@
             type: "GET",
             data: { search, status },
             success: (response) => {
-                renderTable(response);
+                let tableBody = "";
+
+                if ($.fn.DataTable.isDataTable($locationTable)) {
+                    $locationTable.DataTable().destroy();
+                }
+
+                if (response.code === 200 && response.data.length > 0) {
+                    const data = response.data;
+
+                    $.each(data, function(index, location) {
+                        const workingDaysSet = new Set(
+                            (location.working_days || []).map(day => day.day.toLowerCase())
+                        );
+
+                        const workingDaysHtml = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"]
+                            .map(day => {
+                                const className = workingDaysSet.has(day) ? "working" : "non-working";
+                                return `<span class="${className}">${day.charAt(0).toUpperCase()}</span>`;
+                            })
+                            .join("");
+
+                        const name = DOMPurify.sanitize(location.name);
+                        const address = DOMPurify.sanitize(location.address);
+                        const phone = DOMPurify.sanitize(location.phone);
+                        const imageUrl = DOMPurify.sanitize(location.image_url);
+                        const status = parseInt(DOMPurify.sanitize(location.status));
+                        const id = DOMPurify.sanitize(location.id);
+
+                        const statusClass = status === 1 ? "badge-success-transparent" : "badge-danger-transparent";
+                        const statusText = status === 1 ? _l("admin.common.active") : _l("admin.common.inactive");
+
+                        let actionColumn = "";
+                        if (
+                            hasPermission(permissions, "locations", "edit") ||
+                            hasPermission(permissions, "locations", "delete")
+                        ) {
+                            actionColumn = `
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="ti ti-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end p-2">
+                                            ${
+                                                hasPermission(permissions, "locations", "edit")
+                                                    ? `<li><button type="button" class="dropdown-item rounded-1 edit-location-btn" data-id="${id}"><i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}</button></li>`
+                                                    : ""
+                                            }
+                                            ${
+                                                hasPermission(permissions, "locations", "delete")
+                                                    ? `<li><button type="button" class="dropdown-item rounded-1 delete-location-btn" data-id="${id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}</button></li>`
+                                                    : ""
+                                            }
+                                        </ul>
+                                    </div>
+                                </td>`;
+                        }
+
+                        tableBody += `
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center file-name-icon">
+                                        <div class="avatar avatar-lg border">
+                                            <img src="${imageUrl}" class="img-fluid" alt="Image Preview">
+                                        </div>
+                                        <div class="ms-2">
+                                            <h6 class="fw-medium text-black">${name}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><h6 class="fw-medium text-black">${address}</h6></td>
+                                <td><h6 class="fw-medium text-black">${phone}</h6></td>
+                                <td><div class="working-days">${workingDaysHtml}</div></td>
+                                <td>
+                                    <span class="badge ${statusClass} d-inline-flex align-items-center badge-sm">
+                                        <i class="ti ti-point-filled me-1"></i>${statusText}
+                                    </span>
+                                </td>
+                                ${actionColumn}
+                            </tr>`;
+                    });
+                } else {
+                    tableBody = `
+                        <tr>
+                            <td colspan="7" class="text-center">${_l("admin.common.empty_table")}</td>
+                        </tr>`;
+                    $(".table-footer").empty();
+                }
+
+                $locationTable.find("tbody").html(tableBody);
+
+                if (response.data.length > 0) {
+                    $locationTable.DataTable({
+                        ordering: false,
+                        searching: false,
+                        pageLength: 10,
+                        lengthChange: false,
+                        drawCallback: function() {
+                            $(".dataTables_info").addClass("d-none");
+                            $(".dataTables_wrapper .dataTables_paginate").addClass("d-none");
+
+                            var tableWrapper = $(this).closest(".dataTables_wrapper");
+                            var info = tableWrapper.find(".dataTables_info");
+                            var pagination = tableWrapper.find(".dataTables_paginate");
+
+                            $(".table-footer")
+                                .empty()
+                                .append(
+                                    $('<div class="d-flex justify-content-between align-items-center w-100"></div>')
+                                        .append($('<div class="datatable-info"></div>').append(info.clone(true)))
+                                        .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
+                                );
+                            $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
+                        },
+                        language: {
+                            emptyTable: _l("admin.common.empty_table"),
+                            info: _l("admin.common.showing") + " _START_ " + _l("admin.common.to") + " _END_ " + _l("admin.common.of") + " _TOTAL_ " + _l("admin.common.entries"),
+                            infoEmpty: _l("admin.common.showing") + " 0 " + _l("admin.common.to") + " 0 " + _l("admin.common.of") + " 0 " + _l("admin.common.entries"),
+                            infoFiltered: "(" + _l("admin.common.filtered_from") + " _MAX_ " + _l("admin.common.total_entries") + ")",
+                            lengthMenu: _l("admin.common.show") + " _MENU_ " + _l("admin.common.entries"),
+                            search: _l("admin.common.search") + ":",
+                            zeroRecords: _l("admin.common.empty_table"),
+                            paginate: {
+                                first: _l("admin.common.first"),
+                                last: _l("admin.common.last"),
+                                next: _l("admin.common.next"),
+                                previous: _l("admin.common.previous")
+                            }
+                        }
+                    });
+                }
             },
             error: (error) => {
                 showToast("error", error.responseJSON.message);
@@ -315,182 +445,6 @@
                 $(".table-loader").hide();
                 $(".label-loader, .input-loader").hide();
                 $(".real-label, .real-table, .real-data").removeClass("d-none");
-            },
-        });
-    };
-
-    const renderTable = (response) => {
-        let tableBody = "";
-
-        if ($.fn.DataTable.isDataTable($locationTable)) {
-            $locationTable.DataTable().destroy();
-        }
-
-        if (response.code === 200 && response.data.length > 0) {
-            tableBody = generateTableRows(response.data);
-        } else {
-            tableBody = `<tr><td colspan="7" class="text-center">${_l("admin.common.empty_table")}</td></tr>`;
-            $(".table-footer").empty();
-        }
-
-        // Set as text node for security or use safe HTML via jQuery if you’re confident
-        $locationTable.find("tbody").html(tableBody);
-
-        if (response.data.length > 0) {
-            initDataTable();
-        }
-    };
-
-    // Generate safe table rows
-    const generateTableRows = (data) => {
-        return data
-            .map((location) => {
-                const workingDaysSet = new Set(
-                    location.working_days?.map((day) => day.day.toLowerCase()) || []
-                );
-
-                const workingDaysHtml = [
-                    "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"
-                ]
-                    .map((day) => {
-                        const className = workingDaysSet.has(day) ? "working" : "non-working";
-                        return `<span class="${className}">${day.charAt(0).toUpperCase()}</span>`;
-                    })
-                    .join("");
-
-                const name = DOMPurify.sanitize(location.name);
-                const address = DOMPurify.sanitize(location.address);
-                const phone = DOMPurify.sanitize(location.phone);
-                const imageUrl = DOMPurify.sanitize(location.image_url);
-                const status = parseInt(DOMPurify.sanitize(location.status));
-                const id = DOMPurify.sanitize(location.id);
-
-                const statusClass = status == 1 ? "badge-success-transparent" : "badge-danger-transparent";
-                const statusText = status == 1 ? _l("admin.common.active") : _l("admin.common.inactive");
-
-                const actionButtons = [
-                    hasPermission(permissions, "locations", "edit")
-                        ? `<li><button type="button" class="dropdown-item rounded-1 edit-location-btn" data-id="${id}"><i class="ti ti-edit me-1"></i>${_l("admin.common.edit")}</button></li>`
-                        : "",
-                    hasPermission(permissions, "locations", "delete")
-                        ? `<li><button type="button" class="dropdown-item rounded-1 delete-location-btn" data-id="${id}" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="ti ti-trash me-1"></i>${_l("admin.common.delete")}</button></li>`
-                        : ""
-                ]
-                    .filter(Boolean)
-                    .join("");
-
-                return `
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center file-name-icon">
-                            <div class="avatar avatar-lg border">
-                                <img src="${imageUrl}" class="img-fluid" alt="Image Preview">
-                            </div>
-                            <div class="ms-2">
-                                <h6 class="fw-medium text-black">${name}</h6>
-                            </div>
-                        </div>
-                    </td>
-                    <td><h6 class="fw-medium text-black">${address}</h6></td>
-                    <td><h6 class="fw-medium text-black">${phone}</h6></td>
-                    <td><div class="working-days">${workingDaysHtml}</div></td>
-                    <td>
-                        <span class="badge ${statusClass} d-inline-flex align-items-center badge-sm">
-                            <i class="ti ti-point-filled me-1"></i>${statusText}
-                        </span>
-                    </td>
-                    ${actionButtons
-                        ? `<td><div class="dropdown">
-                            <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="ti ti-dots-vertical"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end p-2">${actionButtons}</ul>
-                        </div></td>`
-                        : ""
-                    }
-                </tr>`;
-            })
-            .join("");
-    };
-
-    // Initialize DataTable
-    const initDataTable = () => {
-        $locationTable.DataTable({
-            ordering: false,
-            searching: false,
-            pageLength: 10,
-            lengthChange: false,
-            drawCallback: function () {
-                $(".dataTables_info").addClass("d-none");
-                $(".dataTables_wrapper .dataTables_paginate").addClass(
-                    "d-none"
-                );
-
-                const tableWrapper = $(this).closest(".dataTables_wrapper");
-                $(".table-footer")
-                    .empty()
-                    .append(
-                        $(
-                            '<div class="d-flex justify-content-between align-items-center w-100"></div>'
-                        )
-                            .append(
-                                $('<div class="datatable-info"></div>').append(
-                                    tableWrapper
-                                        .find(".dataTables_info")
-                                        .clone(true)
-                                )
-                            )
-                            .append(
-                                $(
-                                    '<div class="datatable-pagination"></div>'
-                                ).append(
-                                    tableWrapper
-                                        .find(".dataTables_paginate")
-                                        .clone(true)
-                                )
-                            )
-                    );
-
-                $(".table-footer")
-                    .find(".dataTables_paginate")
-                    .removeClass("d-none");
-            },
-            language: {
-                emptyTable: _l("admin.common.empty_table"),
-                info:
-                    _l("admin.common.showing") +
-                    " _START_ " +
-                    _l("admin.common.to") +
-                    " _END_ " +
-                    _l("admin.common.of") +
-                    " _TOTAL_ " +
-                    _l("admin.common.entries"),
-                infoEmpty:
-                    _l("admin.common.showing") +
-                    " 0 " +
-                    _l("admin.common.to") +
-                    " 0 " +
-                    _l("admin.common.of") +
-                    " 0 " +
-                    _l("admin.common.entries"),
-                infoFiltered:
-                    "(" +
-                    _l("admin.common.filtered_from") +
-                    " _MAX_ " +
-                    _l("admin.common.total_entries") +
-                    ")",
-                lengthMenu:
-                    _l("admin.common.show") +
-                    " _MENU_ " +
-                    _l("admin.common.entries"),
-                search: _l("admin.common.search") + ":",
-                zeroRecords: _l("admin.common.empty_table"),
-                paginate: {
-                    first: _l("admin.common.first"),
-                    last: _l("admin.common.last"),
-                    next: _l("admin.common.next"),
-                    previous: _l("admin.common.previous"),
-                },
             },
         });
     };
