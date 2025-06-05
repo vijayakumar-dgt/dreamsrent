@@ -181,5 +181,6 @@
 @endsection
 
 @push('scripts')
+<script src="{{ asset('/frontend/assets/js/purify.min.js') }}"></script>
 <script src="{{ asset('frontend/assets/js/custom/user/dashboard.js') }}"></script>
 @endpush
