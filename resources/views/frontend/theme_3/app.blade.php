@@ -21,11 +21,17 @@
 	@endphp
     @include('frontend.theme_3.partials.styles')
 </head>
-<body>
+<body data-theme="{{ $theme ?? 1 }}" data-dir="{{ $isRTL ? 'rtl' : 'ltr' }}">
 	<div class="main-wrapper home-three">
 		@include('frontend.theme_3.partials.header')
         @yield('content')
 		@include('frontend.toast')
+		@if(request()->routeIs('home'))
+			@include('frontend.home.cookie.consent')
+		@endif
+		@if(!request()->routeIs('home'))
+		    @include('frontend.preloader')
+		@endif
 		@include('frontend.theme_3.partials.footer')
 	</div>
 

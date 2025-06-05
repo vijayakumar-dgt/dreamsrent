@@ -34,7 +34,10 @@
     <!-- Language JS -->
     <script src="{{ asset('frontend/assets/js/custom/lang_script.js') }}"></script>
 	@stack('scripts')
-	  
-	<!-- Custom JS -->
-	<script src="{{ asset('frontend/assets/js/script.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/custom/custom-script.js') }}"></script>
+	@if($isRTL)
+		<script src="{{ asset('frontend/assets/js/script-rtl.js') }}"></script>
+	@else
+		<script src="{{ asset('frontend/assets/js/script.js') }}"></script>
+	@endif
+	
+	<script src="{{ asset('frontend/assets/js/custom/custom-script.js') }}"></script>

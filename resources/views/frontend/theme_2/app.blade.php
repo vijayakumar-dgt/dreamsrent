@@ -20,7 +20,7 @@
 	@include('frontend.theme_2.partials.styles')
 	
 </head>
-<body data-theme={{ $theme ?? 1 }} data-dir="{{ $isRTL ? 'rtl' : 'ltr' }}">
+<body data-theme="{{ $theme ?? 1 }}" data-dir="{{ $isRTL ? 'rtl' : 'ltr' }}">
 	<div class="main-wrapper home-three">
 		<!-- Header -->
 		@include('frontend.theme_2.partials.header')

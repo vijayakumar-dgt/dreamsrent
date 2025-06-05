@@ -21,7 +21,7 @@
 	@endphp
     @include('frontend.theme_4.partials.styles')
 </head>
-<body class="home-two">
+<body class="home-two" data-theme="{{ $theme ?? 1 }}" data-dir="{{ $isRTL ? 'rtl' : 'ltr' }}">
 	
 	<div class="main-wrapper">
 
@@ -34,6 +34,13 @@
 			@endif
 			@yield('content')
 		</div>
+		<!-- Cookie Consent -->
+		@if(request()->routeIs('home'))
+			@include('frontend.home.cookie.consent')
+		@endif
+		@if(!request()->routeIs('home'))
+		@include('frontend.preloader')
+		@endif
 		@include('frontend.toast')
 		@include('frontend.theme_4.partials.footer')
 
