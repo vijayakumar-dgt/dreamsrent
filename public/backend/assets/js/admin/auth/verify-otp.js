@@ -109,7 +109,7 @@
                             $(".resetpasswordbtn").prop("disabled", true);
                             $(".resetpasswordbtn").text(_l('admin.auth.we_are_redirecting_you'));
                             setTimeout(function () {
-                                window.location.href = route('reset-password', { token: response.token });
+                                window.location.href = `/user/reset-password/`;
                             }, 3000);
                         } else {
                             $(".otp-error-text").text(response.message);
