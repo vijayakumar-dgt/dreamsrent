@@ -447,6 +447,7 @@ return array (
     'engine' => 'المحرك',
     'years_of' => 'سنوات من',
     'experience' => 'الخبرة',
+    'count_of_yachts' => 'عدد اليخوت',
   ),
   'common' =>
   array (

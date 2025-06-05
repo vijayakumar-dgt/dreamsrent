@@ -534,7 +534,7 @@ class PageController extends Controller
                     if (isset($section['section_content']) && strpos($section['section_content'], '[banner_four') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $section['section_content'], $matches);
 
-                        $limit = (int)($matches[1] ?? 10);  // Explicitly cast to integer
+                        $limit = (int)($matches[1] ?? 10);
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
@@ -558,7 +558,7 @@ class PageController extends Controller
                             $banner->higlight_label = $decodedData['label_boat_two'] ?? null;
                             $banner->description = $decodedData['description_boat'] ?? null;
 
-                            $defaultImage = asset('backend/assets/img/car/car-right.png');
+                            $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
                             $thumbnailImages = [];
 
                             if (!empty($decodedData['thumbnail_image_boat']) && is_array($decodedData['thumbnail_image_boat'])) {
@@ -1632,9 +1632,18 @@ class PageController extends Controller
                                 $data = json_decode($experience->datas, true);
 
                                 if (is_array($data)) {
+                                    $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+
                                     foreach ($data as $key => $value) {
-                                        if (str_starts_with($key, 'thumbnail_image_') && !empty($value)) {
-                                            $data[$key] = asset('storage/' . ltrim($value, '/'));
+                                        if (str_starts_with($key, 'thumbnail_image_')) {
+                                            $imagePath = ltrim($value, '/');
+                                            $fullPath = storage_path('app/public/' . $imagePath);
+
+                                            if (!empty($value) && file_exists($fullPath)) {
+                                                $data[$key] = asset('storage/' . $imagePath);
+                                            } else {
+                                                $data[$key] = $defaultImage;
+                                            }
                                         }
                                     }
 
@@ -1679,9 +1688,18 @@ class PageController extends Controller
                                 $data = json_decode($experience->datas, true);
 
                                 if (is_array($data)) {
+                                    $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+
                                     foreach ($data as $key => $value) {
-                                        if (str_starts_with($key, 'thumbnail_image_') && !empty($value)) {
-                                            $data[$key] = asset('storage/' . ltrim($value, '/'));
+                                        if (str_starts_with($key, 'thumbnail_image_')) {
+                                            $imagePath = ltrim($value, '/');
+                                            $fullPath = storage_path('app/public/' . $imagePath);
+
+                                            if (!empty($value) && file_exists($fullPath)) {
+                                                $data[$key] = asset('storage/' . $imagePath);
+                                            } else {
+                                                $data[$key] = $defaultImage;
+                                            }
                                         }
                                     }
 
@@ -1729,8 +1747,8 @@ class PageController extends Controller
                                 1 => '/frontend/assets/img/icons/bx-selection.svg',
                                 2 => '/frontend/assets/img/icons/bx-crown.svg',
                                 3 => '/frontend/assets/img/icons/bx-user-check.svg',
-                                4 => '/frontend/assets/img/icons/bx-map.svg',
-                                5 => '/frontend/assets/img/icons/bx-briefcase.svg',
+                                4 => '/frontend/assets/img/icons/bx-selection.svg',
+                                5 => '/frontend/assets/img/icons/bx-selection.svg',
                                 6 => '/frontend/assets/img/icons/bx-heart.svg',
                             ];
 
@@ -1739,7 +1757,17 @@ class PageController extends Controller
                                 $description = $data["description_boat_benefits_$i"] ?? '';
                                 $thumbnail = $data["thumbnail_image_boat_benefits_$i"] ?? null;
 
-                                $image = $thumbnail ? asset('storage/' . $thumbnail) : asset($fallbacks[$i]);
+                                // Default to fallback icon
+                                $image = asset($fallbacks[$i]);
+
+                                if (!empty($thumbnail)) {
+                                    $relativePath = ltrim($thumbnail, '/');
+                                    $fullPath = storage_path('app/public/' . $relativePath);
+
+                                    if (file_exists($fullPath)) {
+                                        $image = asset('storage/' . $relativePath);
+                                    }
+                                }
 
                                 if ($label || $description || $thumbnail) {
                                     $items[] = [
@@ -1750,10 +1778,18 @@ class PageController extends Controller
                                 }
                             }
 
-                            // Handle main thumbnail if set
-                            $mainImage = !empty($data['thumbnail_image_boat_benefits_main'])
-                                ? asset('storage/' . $data['thumbnail_image_boat_benefits_main'])
-                                : null;
+                            $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+
+                            $mainImage = $defaultImage;
+
+                            if (!empty($data['thumbnail_image_boat_benefits_main'])) {
+                                $relativePath = ltrim($data['thumbnail_image_boat_benefits_main'], '/');
+                                $fullPath = storage_path('app/public/' . $relativePath);
+
+                                if (file_exists($fullPath)) {
+                                    $mainImage = asset('storage/' . $relativePath);
+                                }
+                            }
 
                             $section['section_type'] = 'yacht_benefits';
                             $section['type'] = 'yacht_benefits';
@@ -1795,9 +1831,18 @@ class PageController extends Controller
 
                                 if (is_array($data)) {
                                     // Normalize image URLs
+                                    $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+
                                     foreach ($data as $key => $value) {
-                                        if (str_starts_with($key, 'thumbnail_image_') && !empty($value)) {
-                                            $data[$key] = asset('storage/' . ltrim($value, '/'));
+                                        if (str_starts_with($key, 'thumbnail_image_')) {
+                                            $imagePath = ltrim($value, '/');
+                                            $fullPath = storage_path('app/public/' . $imagePath);
+
+                                            if (!empty($value) && file_exists($fullPath)) {
+                                                $data[$key] = asset('storage/' . $imagePath);
+                                            } else {
+                                                $data[$key] = $defaultImage;
+                                            }
                                         }
                                     }
 
@@ -2099,9 +2144,18 @@ class PageController extends Controller
                                 $experienceData = json_decode($experience->datas, true);
 
                                 if (is_array($experienceData)) {
-                                    foreach ($experienceData as $key => $value) {
-                                        if (str_starts_with($key, 'thumbnail_image_') && !empty($value)) {
-                                            $experienceData[$key] = asset('storage/' . ltrim($value, '/'));
+                                    $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+
+                                    foreach ($data as $key => $value) {
+                                        if (str_starts_with($key, 'thumbnail_image_')) {
+                                            $imagePath = ltrim($value, '/');
+                                            $fullPath = storage_path('app/public/' . $imagePath);
+
+                                            if (!empty($value) && file_exists($fullPath)) {
+                                                $data[$key] = asset('storage/' . $imagePath);
+                                            } else {
+                                                $data[$key] = $defaultImage;
+                                            }
                                         }
                                     }
 

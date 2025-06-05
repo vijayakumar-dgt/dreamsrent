@@ -31,7 +31,7 @@
             @case('blog')
                 @include('frontend.home.partials_4.blogs', ['section' => $section])
                 @break
-            @case('faq')
+            @case('facts_section')
                 @include('frontend.home.partials_4.faq', ['section' => $section])
                 @break
             @case('feature_vehicle')
@@ -39,6 +39,12 @@
                 @break
             @case('yacht_experience')
                 @include('frontend.home.partials_4.yacht_experience', ['section' => $section])
+                @break
+            @case('bike_exclusive')
+                @include('frontend.home.partials_4.exclusive_yachts', ['section' => $section])
+            @break
+            @case('yacht_offer')
+                @include('frontend.home.partials_4.yacht_offer', ['section' => $section])
                 @break
         @endswitch
 @endforeach

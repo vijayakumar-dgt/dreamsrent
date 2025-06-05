@@ -879,93 +879,106 @@
                 if (response.code === 200 && response.data) {
                     let data = response.data;
 
-                    // Create the main card container
-                    const $card = $("<div>")
-                        .addClass("card bg-light")
-                        .attr("id", "customer_detail")
-                        .attr("data-image", data.profile_image)
-                        .attr("data-name", data.full_name)
-                        .attr("data-phone", data.phone_number);
+                    let safeImage = DOMPurify.sanitize(data.profile_image);
+                    let fullName = DOMPurify.sanitize(data.full_name || "-");
+                    let phoneNumber = DOMPurify.sanitize(
+                        data.phone_number || "-"
+                    );
+                    let email = DOMPurify.sanitize(data.email || "-");
+                    let bookingsCount = parseInt(data.bookings_count) || 0;
 
-                    // Create the card body
-                    const $cardBody = $("<div>").addClass("card-body");
-                    const $row = $("<div>").addClass(
+                    let $card = $("<div>", {
+                        class: "card bg-light",
+                        id: "customer_detail",
+                        "data-image": safeImage,
+                        "data-name": fullName,
+                        "data-phone": phoneNumber,
+                    });
+
+                    let $cardBody = $("<div>").addClass("card-body");
+                    let $row = $("<div>").addClass(
                         "row align-items-center gy-3"
                     );
 
-                    // Main content column
-                    const $mainCol = $("<div>").addClass("col-md-11");
-                    const $innerRow = $("<div>").addClass("row gx-2 gy-3");
+                    let $infoCol = $("<div>").addClass("col-md-11");
+                    let $infoInnerRow = $("<div>").addClass("row gx-2 gy-3");
 
-                    // Profile image and name
-                    const $profileCol = $("<div>").addClass("col-md-4");
-                    const $profileDiv = $("<div>").addClass(
+                    // --- Profile image & name ---
+                    let $profileCol = $("<div>").addClass("col-md-4");
+                    let $profileWrapper = $("<div>").addClass(
                         "d-flex align-items-center"
                     );
-                    const $avatarSpan = $("<span>").addClass(
-                        "avatar avatar-rounded flex-shrink-0 me-2"
-                    );
-                    $("<img>", {
-                        src: data.profile_image,
-                        alt: "",
-                    }).appendTo($avatarSpan);
 
-                    const $profileTextDiv = $("<div>");
-                    $("<h6>")
-                        .addClass("fs-14 mb-1")
-                        .text(data.full_name)
-                        .appendTo($profileTextDiv);
-                    $("<span>")
-                        .addClass("badge bg-info-transparent")
-                        .text(
-                            `${data.bookings_count} ${_l(
-                                "admin.bookings.bookings"
-                            )}`
-                        )
-                        .appendTo($profileTextDiv);
+                    let $img = $("<img>", {
+                        src: safeImage,
+                        alt: "Profile Image",
+                        loading: "lazy",
+                    });
 
-                    $profileDiv.append($avatarSpan, $profileTextDiv);
-                    $profileCol.append($profileDiv);
+                    let $avatar = $("<span>")
+                        .addClass("avatar avatar-rounded flex-shrink-0 me-2")
+                        .append($img);
 
-                    // Phone number
-                    const $phoneCol = $("<div>").addClass("col-md-4");
-                    $("<h6>")
-                        .addClass("fs-14 mb-1")
-                        .text(_l("admin.common.phone"))
-                        .appendTo($phoneCol);
-                    $("<p>").text(data.phone_number).appendTo($phoneCol);
+                    let $profileInfo = $("<div>")
+                        .append($("<h6>").addClass("fs-14 mb-1").text(fullName))
+                        .append(
+                            $("<span>")
+                                .addClass("badge bg-info-transparent")
+                                .text(
+                                    `${bookingsCount} ${_l(
+                                        "admin.bookings.bookings"
+                                    )}`
+                                )
+                        );
 
-                    // Email
-                    const $emailCol = $("<div>").addClass("col-md-4");
-                    $("<h6>")
-                        .addClass("fs-14 mb-1")
-                        .text(_l("admin.common.email"))
-                        .appendTo($emailCol);
-                    $("<p>").text(data.email).appendTo($emailCol);
+                    $profileWrapper.append($avatar, $profileInfo);
+                    $profileCol.append($profileWrapper);
 
-                    // Assemble inner rows
-                    $innerRow.append($profileCol, $phoneCol, $emailCol);
-                    $mainCol.append($innerRow);
+                    // --- Phone ---
+                    let $phoneCol = $("<div>")
+                        .addClass("col-md-4")
+                        .append(
+                            $("<div>").append(
+                                $("<h6>")
+                                    .addClass("fs-14 mb-1")
+                                    .text(_l("admin.common.phone")),
+                                $("<p>").text(phoneNumber)
+                            )
+                        );
 
-                    // Trash icon column
-                    const $trashCol = $("<div>").addClass("col-md-1");
-                    const $trashDiv = $("<div>").addClass(
+                    // --- Email ---
+                    let $emailCol = $("<div>")
+                        .addClass("col-md-4")
+                        .append(
+                            $("<div>").append(
+                                $("<h6>")
+                                    .addClass("fs-14 mb-1")
+                                    .text(_l("admin.common.email")),
+                                $("<p>").text(email)
+                            )
+                        );
+
+                    $infoInnerRow.append($profileCol, $phoneCol, $emailCol);
+                    $infoCol.append($infoInnerRow);
+
+                    // --- Remove Button ---
+                    let $removeCol = $("<div>").addClass("col-md-1");
+                    let $removeWrapper = $("<div>").addClass(
                         "d-flex align-items-center justify-content-end"
                     );
-                    $("<a>", {
-                        href: "javascript:void(0);",
+                    let $removeBtn = $("<button>", {
+                        type: "button",
+                        class: "btn border-0 bg-transparent",
                         id: "remove_customer",
-                    })
-                        .append($("<i>").addClass("ti ti-trash"))
-                        .appendTo($trashDiv);
-                    $trashCol.append($trashDiv);
+                    }).append($("<i>").addClass("ti ti-trash"));
 
-                    // Combine everything
-                    $row.append($mainCol, $trashCol);
+                    $removeWrapper.append($removeBtn);
+                    $removeCol.append($removeWrapper);
+
+                    $row.append($infoCol, $removeCol);
                     $cardBody.append($row);
                     $card.append($cardBody);
 
-                    // Render the card in the container
                     $("#customer_details_list").empty().append($card);
                 }
             },
@@ -991,8 +1004,9 @@
         let driver_id = $(this).val();
         selected_driver_id = driver_id;
 
-        if (driver_id !== "") {
+        if (!driver_id) {
             $(this).valid();
+            return;
         }
 
         $.ajax({
@@ -1010,112 +1024,128 @@
                 if (response.code === 200 && response.data) {
                     let data = response.data;
 
-                    // Clear container
-                    $("#driver_details_list").empty();
+                    // --- Helpers ---
+                    const safeText = (value) => DOMPurify.sanitize(value ?? "");
+                    const safePhone = safeText(data.phone_number);
+                    const safeDriverName = safeText(data.driver_name);
 
-                    // Edit driver price link
-                    const editLinkDiv = $("<div>").addClass(
+                    // --- Edit Price Button ---
+                    let $editBtnWrapper = $("<div>").addClass(
                         "d-flex align-items-center justify-content-end mb-3"
                     );
-                    const editLink = $("<a>", {
-                        href: "javascript:void(0);",
-                        class: "text-purple text-decoration-underline fw-medium edit_driver_price",
+                    let $editBtn = $("<button>", {
+                        type: "button",
+                        class: "text-purple text-decoration-underline fw-medium edit_driver_price border-0 bg-transparent",
                         "data-bs-toggle": "modal",
                         "data-bs-target": "#edit_price_modal",
-                        "data-image": data.image,
-                        "data-driver_name": data.driver_name,
-                        "data-phone": data.phone_number,
+                        "data-image": DOMPurify.sanitize(data.image ?? ""),
+                        "data-driver_name": safeDriverName,
+                        "data-phone": safePhone,
                         "data-price": 0,
-                        text: _l("admin.bookings.edit_price"),
+                    }).text(_l("admin.bookings.edit_price"));
+                    $editBtnWrapper.append($editBtn);
+
+                    // --- Driver Card ---
+                    let $card = $("<div>", {
+                        class: "card bg-light",
+                        id: "driver_detail",
+                    }).data({
+                        image: DOMPurify.sanitize(data.image ?? ""),
+                        name: safeDriverName,
+                        phone: safePhone,
                     });
-                    editLinkDiv.append(editLink);
 
-                    // Driver detail card
-                    const cardDiv = $("<div>")
-                        .addClass("card bg-light")
-                        .attr("id", "driver_detail")
-                        .attr("data-image", data.image)
-                        .attr("data-name", data.driver_name)
-                        .attr("data-phone", data.phone_number);
-
-                    const cardBody = $("<div>").addClass("card-body");
-                    const rowDiv = $("<div>").addClass(
+                    let $cardBody = $("<div>").addClass("card-body");
+                    let $row = $("<div>").addClass(
                         "row align-items-center gy-3"
                     );
 
-                    // Column 1
-                    const col1 = $("<div>").addClass("col-md-11");
-                    const innerRow = $("<div>").addClass("row gx-2 gy-3");
+                    let $leftCol = $("<div>").addClass("col-md-11");
+                    let $innerRow = $("<div>").addClass("row gx-2 gy-3");
 
-                    // Profile column
-                    const profileCol = $("<div>").addClass("col-md-5");
-                    const profileDiv = $("<div>").addClass(
+                    // --- Driver profile ---
+                    let $profileCol = $("<div>").addClass("col-md-5");
+                    let $profileWrap = $("<div>").addClass(
                         "d-flex align-items-center"
                     );
-                    const avatarSpan = $("<span>").addClass(
-                        "avatar avatar-rounded flex-shrink-0 me-2"
-                    );
-                    $("<img>", {
-                        src: data.image,
-                        alt: "",
-                    }).appendTo(avatarSpan);
-
-                    const profileTextDiv = $("<div>");
-                    $("<h6>")
-                        .addClass("fs-14 mb-1")
-                        .text(data.driver_name)
-                        .appendTo(profileTextDiv);
-                    $("<span>")
-                        .addClass("badge bg-violet-transparent")
-                        .text(`0 ${_l("admin.bookings.rides")}`)
-                        .appendTo(profileTextDiv);
-
-                    profileDiv.append(avatarSpan, profileTextDiv);
-                    profileCol.append(profileDiv);
-
-                    // Phone column
-                    const phoneCol = $("<div>").addClass("col-md-4");
-                    $("<h6>")
-                        .addClass("fs-14 mb-1")
-                        .text(_l("admin.common.phone"))
-                        .appendTo(phoneCol);
-                    $("<p>").text(data.phone_number).appendTo(phoneCol);
-
-                    // Price column
-                    const priceCol = $("<div>").addClass("col-md-3");
-                    $("<h6>")
-                        .addClass("fs-14 mb-1")
-                        .text(_l("admin.common.price"))
-                        .appendTo(priceCol);
-                    $("<p>")
-                        .html(
-                            `${default_currency}<span class="td-driver-price">0</span>`
+                    let $img = $("<img>")
+                        .attr("src", DOMPurify.sanitize(data.image ?? ""))
+                        .attr("alt", "Driver");
+                    let $avatar = $("<span>")
+                        .addClass("avatar avatar-rounded flex-shrink-0 me-2")
+                        .append($img);
+                    let $profileInfo = $("<div>")
+                        .append(
+                            $("<h6>")
+                                .addClass("fs-14 mb-1")
+                                .text(safeDriverName)
                         )
-                        .appendTo(priceCol);
+                        .append(
+                            $("<span>")
+                                .addClass("badge bg-violet-transparent")
+                                .text(`0 ${_l("admin.bookings.rides")}`)
+                        );
+                    $profileWrap.append($avatar, $profileInfo);
+                    $profileCol.append($profileWrap);
 
-                    // Combine profile, phone, price
-                    innerRow.append(profileCol, phoneCol, priceCol);
-                    col1.append(innerRow);
+                    // --- Phone ---
+                    let $phoneCol = $("<div>")
+                        .addClass("col-md-4")
+                        .append(
+                            $("<div>")
+                                .append(
+                                    $("<h6>")
+                                        .addClass("fs-14 mb-1")
+                                        .text(_l("admin.common.phone"))
+                                )
+                                .append($("<p>").text(safePhone || "-"))
+                        );
 
-                    // Trash icon column
-                    const col2 = $("<div>").addClass("col-md-1");
-                    const trashDiv = $("<div>").addClass(
+                    // --- Price ---
+                    let $priceCol = $("<div>")
+                        .addClass("col-md-3")
+                        .append(
+                            $("<div>")
+                                .append(
+                                    $("<h6>")
+                                        .addClass("fs-14 mb-1")
+                                        .text(_l("admin.common.price"))
+                                )
+                                .append(
+                                    $("<p>").append(
+                                        document.createTextNode(
+                                            default_currency
+                                        ),
+                                        $("<span>")
+                                            .addClass("td-driver-price")
+                                            .text(0)
+                                    )
+                                )
+                        );
+
+                    $innerRow.append($profileCol, $phoneCol, $priceCol);
+                    $leftCol.append($innerRow);
+
+                    // --- Remove Button ---
+                    let $removeCol = $("<div>").addClass("col-md-1");
+                    let $removeWrap = $("<div>").addClass(
                         "d-flex align-items-center justify-content-end"
                     );
-                    $("<a>", {
-                        href: "javascript:void(0);",
+                    let $removeBtn = $("<button>", {
+                        type: "button",
+                        class: "btn border-0 bg-transparent",
                         id: "remove_driver",
-                    })
-                        .append($("<i>").addClass("ti ti-trash"))
-                        .appendTo(trashDiv);
-                    col2.append(trashDiv);
+                    }).append($("<i>").addClass("ti ti-trash"));
+                    $removeWrap.append($removeBtn);
+                    $removeCol.append($removeWrap);
 
-                    rowDiv.append(col1, col2);
-                    cardBody.append(rowDiv);
-                    cardDiv.append(cardBody);
+                    $row.append($leftCol, $removeCol);
+                    $cardBody.append($row);
+                    $card.append($cardBody);
 
-                    // Append everything to the container
-                    $("#driver_details_list").append(editLinkDiv, cardDiv);
+                    $("#driver_details_list")
+                        .empty()
+                        .append($editBtnWrapper, $card);
                 }
             },
             error: function (error) {
@@ -2372,6 +2402,7 @@
                                             response.driverDetails;
                                         const customer =
                                             response.customerDetails;
+                                        const currency = response.currency;
 
                                         if (customer) {
                                             $("#customer_name").text(
@@ -2401,11 +2432,8 @@
                                             booking.vehicle.name
                                         );
 
-                                        const $carPrice = $("#car_price");
-                                        $carPrice.empty(); // Clear existing content
-
-                                        $carPrice.append(
-                                            `$${booking.vehicle_total_price}`
+                                        $("#car_price").text(
+                                            `${currency}${booking.vehicle_price}/${booking.rental_type}`
                                         );
 
                                         $("#start_date_time").text(
@@ -2634,7 +2662,9 @@
                                 );
                                 $("#car_title").text(booking.vehicle.name);
                                 $("#car_type").text(vehicleType.name);
-                                $("#car_price").text(`${currency}${booking.vehicle_price}/${booking.rental_type}`);
+                                $("#car_price").text(
+                                    `${currency}${booking.vehicle_price}/${booking.rental_type}`
+                                );
 
                                 $("#start_date_time").text(
                                     booking.start_datetime
@@ -2677,16 +2707,16 @@
                                 $("#totalValue").text(
                                     `${currency}${booking.vehicle_total_price}`
                                 );
-                                $("#taxValue").html(
+                                $("#taxValue").text(
                                     `${currency}${booking.tax_val ?? 0}`
                                 );
-                                $("#extraService").html(
+                                $("#extraService").text(
                                     `${currency}${booking.total_extra_service_price}`
                                 );
-                                $("#inService").html(
+                                $("#inService").text(
                                     `${currency}${booking.total_insurance_price}`
                                 );
-                                $("#final_price").html(
+                                $("#final_price").text(
                                     `${currency}${booking.final_price}`
                                 );
 

@@ -1,3 +1,7 @@
+@php
+    $faqs = $section['faqs'] ?? [];
+    $facts = $section['facts'] ?? [];
+@endphp
 <!-- FAQ -->
 <section class="faq-sec-two">
     <div class="sec-round-colors">
@@ -21,9 +25,22 @@
                             <div class="count-img">
                                 <img src="{{ asset('frontend/assets/img/icons/counter-icon-01.svg') }}" alt="Icon">
                             </div>
+                            @php
+                               $mappedFacts = [];
+                                foreach ($facts as $item) {
+                                    if (isset($item['key'])) {
+                                        $mappedFacts[$item['key']] = $item;
+                                    }
+                                }
+
+                                $vehicle_count   = $mappedFacts['vehicle_count'] ?? null;
+                                $happy_customers = $mappedFacts['happy_customers'] ?? null;
+                                $location_count  = $mappedFacts['location_count'] ?? null;
+                                $total_km        = $mappedFacts['total_km'] ?? null;
+                            @endphp
                             <div class="count-content">
-                                <h4><span class="counterUp">2547</span>+</h4>
-                                <p>Count of Yachts</p>
+                                <h4><span class="counterUp">{{ $vehicle_count['value'] ?? 0 }}</span>+</h4>
+                                <p>{{ __('web.home.count_of_yachts') }}</p>
                             </div>
                         </div>
                     </div>
@@ -35,8 +52,8 @@
                                 <img src="{{ asset('frontend/assets/img/icons/counter-icon-02.svg') }}" alt="Icon">
                             </div>
                             <div class="count-content">
-                                <h4><span class="counterUp">16</span>k</h4>
-                                <p>Happy Customers</p>
+                                <h4><span class="counterUp">{{ $happy_customers['value'] ?? 0 }}</span></h4>
+                                 <p>{{ __('web.home.happy_customers') }}</p>
                             </div>
                         </div>
                     </div>
@@ -48,8 +65,8 @@
                                 <img src="{{ asset('frontend/assets/img/icons/counter-icon-03.svg') }}" alt="Icon">
                             </div>
                             <div class="count-content">
-                                <h4><span class="counterUp">15000</span></h4>
-                                <p>Total Nauticles</p>
+                                <h4><span class="counterUp">{{ $total_km['value'] ?? 0 }}</span></h4>
+                                <p>{{ __('web.home.total_kilometers') }}</p>
                             </div>
                         </div>
                     </div>
@@ -61,8 +78,8 @@
                                 <img src="{{ asset('frontend/assets/img/icons/counter-icon-04.svg') }}" alt="Icon">
                             </div>
                             <div class="count-content">
-                                <h4><span class="counterUp">5000</span>+</h4>
-                                <p>Booking Completed</p>
+                                <h4><span class="counterUp">{{ $location_count['value'] ?? 0 }}</span>+</h4>
+                                <p>{{ __('web.home.locations_to_pickup') }}</p>
                             </div>
                         </div>
                     </div>
@@ -74,15 +91,12 @@
                 <h2>{{ $section['section_title'] ?? "" }}</h2>
                 <p>{{ $section['section_label'] ?? "" }}</p>
             </div>
-            @php 
-                $section_content = $section['section_content'];
-            @endphp
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="faq-main-items" id="faq-details">
                         <!-- FAQ Item -->
-                        @if(!empty($section_content) && count($section_content) > 0)
-                            @foreach($section_content as $k => $faq)
+                        @if(!empty($faqs) && count($faqs) > 0)
+                            @foreach($faqs as $k => $faq)
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="faq-{{ $k }}">
                                     <a href="javascript:void(0);" 

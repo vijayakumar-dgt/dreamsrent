@@ -97,8 +97,8 @@
                                     _l("admin.general_settings.delete")
                                 )
                             );
-
-                        dropdownList.append($("<li>").append(deleteBtn));
+                        const cleandeleteBtn = DOMPurify.sanitize(deleteBtn);
+                        dropdownList.append($("<li>").append(cleandeleteBtn));
                     }
 
                     const actionsCell = $("<td>").append(
