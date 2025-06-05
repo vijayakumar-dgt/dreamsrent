@@ -39,7 +39,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
 
     public function getOtpSettings(Request $request): array
     {
-         $email = $request->input('email');
+        $email = $request->input('email');
         if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return [
                 'code' => 400,
@@ -48,7 +48,8 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
         }
         $user = User::where('email', $email)->first();
         $type = $request->input('type');
-        if (!$user || ($type === 'forgot' && ($email === 'demouser@gmail.com' || $email === 'demoprovider@gmail.com'))) {
+
+        if (!$user || ($type === 'forgot' && in_array($email, ['demouser@gmail.com', 'demoprovider@gmail.com']))) {
             return [
                 'code' => 400,
                 'error' => __('web.auth.email_not_registered')
@@ -62,73 +63,48 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                 'error' => __('web.auth.unsupported_otp_type')
             ];
         }
-        if ($email === 'demouser@gmail.com') {
-            $otp = '1234';
-        } elseif ($email === 'demoprovider@gmail.com') {
-            $otp = '1234';
-        } else {
-            $otp = $this->generateOtp($settings['otp_digit_limit']);
-        }
+
+        $otp = in_array($email, ['demouser@gmail.com', 'demoprovider@gmail.com']) 
+            ? '1234' 
+            : $this->generateOtp($settings['otp_digit_limit']);
+
         $otpExpireMinutes = (int) filter_var($settings['otp_expire_time'], FILTER_SANITIZE_NUMBER_INT);
         $expiresAt = now()
             ->addMinutes($otpExpireMinutes)
             ->setTimezone('Asia/Kolkata')
             ->format('Y-m-d H:i:s');
-        $existingOtp = DB::table('otp_settings')->where('email', $email)->first();
-        if ($existingOtp) {
-            DB::table('otp_settings')
-                ->where('email', $email)
-                ->update([
-                    'otp' => $otp,
-                    'expires_at' => $expiresAt,
-                ]);
-        } else {
-            DB::table('otp_settings')->insert([
-                'email' => $email,
-                'otp' => $otp,
-                'expires_at' => $expiresAt,
-            ]);
-        }
-        $subject = __('web.auth.otp_verification_for_login');
-        $content = __('web.auth.your_otp_verification_code_for_login');
-        if ($settings['otp_type'] === 'email') {
-            $notificationType = ($type === 'forgot') ? 9 : 8;
 
-            $template = EmailTemplate::select('subject', 'description')
-                ->where('notification_type', $notificationType)
-                ->first();
+        DB::table('otp_settings')->updateOrInsert(
+            ['email' => $email],
+            ['otp' => $otp, 'expires_at' => $expiresAt]
+        );
 
-            $subject = $template?->subject ?: __('web.auth.otp_verification');
-            $content = $template?->description ?: __('web.auth.your_otp_verification');
-        } elseif ($settings['otp_type'] === 'sms') {
-            $notificationType = 2;
-            $template = EmailTemplate::select('subject', 'content')
-                ->where('type', 2)
-                ->where('notification_type', $notificationType)
-                ->first();
-            if (!$template) {
-                return [
-                    'code' => 404,
-                    'error' => __('web.auth.sms_template_not_found')
-                ];
-            }
-            $subject = $template->subject ?? '';
-            $content = str_replace(
-                ['{{user_name}}', '{{otp}}'],
-                [$user->name, $otp],
-                $template->content ?? ''
-            );
+        $notifyData = [
+            'otp' => $otp,
+            'expires_at' => $expiresAt,
+            'otp_digit_limit' => $settings['otp_digit_limit'],
+            'user_name' => $user->name
+        ];
+
+        $notificationslug = $type === 'forgot' ? 'forgot-otp' : 'login-otp';
+
+        try {
+            sendNotification($email, $notificationslug, $notifyData);
+        } catch (\Throwable $e) {
+            \Log::error("Failed to send OTP notification: " . $e->getMessage());
+            return [
+                'code' => 500,
+                'error' => __('web.auth.failed_to_send_otp')
+            ];
         }
+
         return [
             'code' => 200,
             'name' => $user->name,
             'otp_digit_limit' => $settings['otp_digit_limit'],
             'otp_expire_time' => $settings['otp_expire_time'],
             'otp_type' => $settings['otp_type'],
-            'otp' => $otp,
             'expires_at' => $expiresAt,
-            'email_subject' => $subject,
-            'email_content' => $content
         ];
     }
     public function generateOtp(int $digitLimit): string

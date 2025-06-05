@@ -5,13 +5,13 @@
     $(document).ready(function () {
         
         let emailTimerInterval;
+        let emailTimerTime;
         $(document).on("click", "#forgot_otp, .resendEmailOtpForgot", function (event) {
             event.preventDefault();
 
             const username = $('[name="email"]').val().trim();
 
-            if (!username || !isValidEmail(username)) {
-                // Check if translation is loaded correctly
+            if (!username || !isValidEmail(username)) {                
                 const errorMessage = _l('web.auth.invalid_email') || "Please provide a valid email address.";
                 showToast("error", errorMessage);
                 return;
@@ -26,13 +26,10 @@
                 },
                 success: function (data) {
                     const userName = data.name;
-                    const otpExpireTime = parseInt(data.otp_expire_time.split(" ")[0]); // Extract expiration time
-                    const otpDigitLimit = parseInt(data.otp_digit_limit); // Extract OTP digit limit
-                    const otp = data.otp; // Extract OTP
-                    const otpType = data.otp_type; // Extract OTP type
-                    const emailSubject = data.email_subject; // Extract email subject
-                    const emailContent = data.email_content; // Extract email content
-                    const username = $('[name="email"]').val().trim(); // Get email from input field
+                    const otpExpireTime = parseInt(data.otp_expire_time.split(" ")[0]);
+                    const otpDigitLimit = parseInt(data.otp_digit_limit);
+                    const otpType = data.otp_type;
+                    const username = $('[name="email"]').val().trim();
 
                     const inputContainer = $(".inputcontainer");
                     inputContainer.empty();
@@ -54,7 +51,6 @@
                     inputsHtml += "</div>";
                     inputContainer.append(inputsHtml);
 
-                    // OTP Input Auto-Focus Logic
                     $(".inputcontainer").off("input").on("input", "input", function () {
                         if (this.value.length >= 1) {
                             const next = $(this).data("next");
@@ -77,30 +73,10 @@
                         $(this).select();
                     });
 
-                    // Send OTP via Email if OTP Type is 'email'
-                    if (otpType === "email") {
-                        const emailData = {
-                            subject: emailSubject,
-                            content: `${emailContent}: ${otp}` // Include OTP in email content
-                        };
-
-                        sendEmail(username, emailData, "email", userName, otp)
-                            .then(() => {
-                                const successMessage = _l('web.auth.otp_sent_to_email', { username: username }) || "OTP sent to your Email Address";
-                                $("#otp-email-message").text(successMessage);
-                                $("#otp-email-modal").modal("show");
-                                startTimer(otpExpireTime);
-                            })
-                            .catch(() => {
-                                showToast("error", _l('web.auth.failed_to_send_email_otp') || "Failed to send email OTP. Please try again.");
-                            });
-                    } else {
-                        // Show OTP Modal immediately if not using email
-                        const successMessage = _l('web.auth.otp_sent_to_email', { username: username }) || "OTP sent to your Email Address";
-                        $("#otp-email-message").text(successMessage);
-                        $("#otp-email-modal").modal("show");
-                        startTimer(otpExpireTime);
-                    }
+                    const successMessage = _l('web.auth.otp_sent_to_email', { username }) || "OTP sent to your Email Address";
+                    $("#otp-email-message").text(successMessage);
+                    $("#otp-email-modal").modal("show");
+                    startTimer(otpExpireTime);
                 },
                 error: function (xhr) {
                     const errorMessage = xhr.responseJSON?.error || _l('web.auth.failed_fetch_otp') || "Failed to fetch OTP settings. Please try again.";
@@ -199,38 +175,7 @@
                     }
                 }, 1000);
             }, 500); // Ensures modal and elements are visible
-        }
-
-        function sendEmail(email, emailData, userName, otp) {
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    url: "/api/mail/sendmail",
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        otp_type: "email",
-                        to_email: email,
-                        notification_type: 2,
-                        type: 1,
-                        user_name: userName,
-                        otp: otp,
-                        subject: emailData.subject,
-                        content: emailData.content,
-                    },
-                    headers: {
-                        Authorization:
-                            "Bearer " + localStorage.getItem("admin_token"),
-                        Accept: "application/json",
-                    },
-                    success: function (response) {
-                        resolve(response);
-                    },
-                    error: function (error) {
-                        reject(error);
-                    },
-                });
-            });
-        }
+        }       
     });
 })();
 
