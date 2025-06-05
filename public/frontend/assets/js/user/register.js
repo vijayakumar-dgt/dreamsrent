@@ -47,37 +47,7 @@ $(document).ready(function () {
     function validateEmail(email) {
         var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
-    }
-    function sendEmail(email, emailData, userName, otp) {
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                url: "/api/mail/sendmail",
-                type: "POST",
-                dataType: "json",
-                data: {
-                    otp_type: "email",
-                    to_email: email,
-                    notification_type: 2,
-                    type: 1,
-                    user_name: userName,
-                    otp: otp,
-                    subject: emailData.subject,
-                    content: emailData.content,
-                },
-                headers: {
-                    Authorization:
-                        "Bearer " + localStorage.getItem("admin_token"),
-                    Accept: "application/json",
-                },
-                success: function (response) {
-                    resolve(response);
-                },
-                error: function (error) {
-                    reject(error);
-                },
-            });
-        });
-    }
+    }   
 
     function startTimer(duration) {
         let timer = duration;

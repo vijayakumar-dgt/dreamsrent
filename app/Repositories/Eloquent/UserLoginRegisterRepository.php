@@ -367,7 +367,7 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             ['otp' => $otp, 'expires_at' => $expiresAt]
         );
         $notifyData =[
-            // 'otp' => $otp,
+            'otp' => $otp,
             'user_name' => $request->first_name ?? '',
             'company_name' => GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Our Company',
         ];
@@ -375,6 +375,11 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             sendNotification($request->email, 'register-otp', $notifyData);
         } catch (\Throwable $e) {
             \Log::error("Failed to send welcome email: " . $e->getMessage());
+             return [
+                'status' => false,
+                'code' => 500,
+                'message' => __('web.auth.failed_to_send_email_otp')
+            ];
         }
 
         return [
@@ -383,7 +388,6 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             'register_status' => $regStatus,
             'message' => __('web.auth.otp_sent_success'),
             'otp_type' => $settings['otp_type'],
-            'otp' => $otp,
             'expires_at' => $expiresAt,
             'name' => $request->username,
             'phone_number' => $request->phone_number,
