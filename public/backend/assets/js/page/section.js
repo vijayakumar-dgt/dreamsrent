@@ -70,7 +70,7 @@
             var ID = $(this).data("id");
 
             $(
-                "#section_id_1, #section_id_2, #section_id_3, #section_id_4, #section_id_5,  #section_id_6, #section_id_7, #section_id_8, #section_id_9, #section_id_10, #section_id_11, #section_id_12"
+                "#section_id_1, #section_id_2, #section_id_3, #section_id_4, #section_id_5,  #section_id_6, #section_id_7, #section_id_8, #section_id_9, #section_id_10, #section_id_11, #section_id_12, #section_id_13"
             ).addClass("d-none");
 
             if (ID == 1) {
@@ -125,6 +125,29 @@
                 $("#dis_4").val($(this).data("dis_4"));
                 $("#dis_5").val($(this).data("dis_5"));
                 $("#dis_6").val($(this).data("dis_6"));
+            } else if (ID == 75) {
+                $("#section_id_13").removeClass("d-none");
+                $("#section_title_bike").val(
+                    $(this).data("section_title_bike")
+                );
+                $("#section_id").val(ID);
+
+                $("#bike_label_1").val($(this).data("bike_label_1"));
+                $("#bike_label_2").val($(this).data("bike_label_2"));
+                $("#bike_label_3").val($(this).data("bike_label_3"));
+                $("#bike_label_4").val($(this).data("bike_label_4"));
+
+                $("#bike_dis_1").val($(this).data("bike_dis_1"));
+                $("#bike_dis_2").val($(this).data("bike_dis_2"));
+                $("#bike_dis_3").val($(this).data("bike_dis_3"));
+                $("#bike_dis_4").val($(this).data("bike_dis_4"));
+
+                const imageOne = $(this).data("thumbnail_image_bike_exclusive");
+                if (imageOne) {
+                    $("#thumbnail_preview_bike_exclusive")
+                        .attr("src", imageOne)
+                        .removeClass("d-none");
+                }
             } else if (ID == 26) {
                 $("#section_id_4").removeClass("d-none");
                 $("#section_id").val(ID);
@@ -510,12 +533,23 @@
                                                 data-section_title_boat_exclusive="${
                                                     value.title
                                                 }"
+                                                data-section_title_bike="${
+                                                    value.title
+                                                }"
                                                 data-label_1="${value.label_1}"
                                                 data-label_2="${value.label_2}"
                                                 data-label_3="${value.label_3}"
                                                 data-label_4="${value.label_4}"
                                                 data-label_5="${value.label_5}"
                                                 data-label_6="${value.label_6}"
+                                                data-bike_label_1="${value.bike_label_1}"
+                                                data-bike_label_2="${value.bike_label_2}"
+                                                data-bike_label_3="${value.bike_label_3}"
+                                                data-bike_label_4="${value.bike_label_4}"
+                                                data-bike_dis_1="${value.bike_dis_1}"
+                                                data-bike_dis_2="${value.bike_dis_2}"
+                                                data-bike_dis_3="${value.bike_dis_3}"
+                                                data-bike_dis_4="${value.bike_dis_4}"
                                                 data-dis_1="${value.dis_1}"
                                                 data-dis_2="${value.dis_2}"
                                                 data-dis_3="${value.dis_3}"
@@ -627,6 +661,11 @@
                                                 data-thumbnail_image_boat_benefits_1="${
                                                     value.thumbnail_image_boat_benefits_1
                                                         ? `/storage/${value.thumbnail_image_boat_benefits_1}`
+                                                        : ""
+                                                }"
+                                                data-thumbnail_image_bike_exclusive="${
+                                                    value.thumbnail_image_bike_exclusive
+                                                        ? `/storage/${value.thumbnail_image_bike_exclusive}`
                                                         : ""
                                                 }"
                                                   data-label_boat_benefits_2="${

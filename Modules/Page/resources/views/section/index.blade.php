@@ -783,6 +783,99 @@
             </div>
         </div>
 
+        <div id="section_id_13" class="d-none">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <input type="text" name="section_title_bike" id="section_title_bike" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_section_title') }}">
+                        <div class="invalid-feedback" id="section_title_bike_error"></div>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }}</label>
+                        <input type="file" name="thumbnail_image_bike_exclusive" id="thumbnail_image_bike_exclusive" class="form-control"
+                            accept="image/*" onchange="previewThumbnailExperience(this, 1)">
+                        <div class="invalid-feedback" id="thumbnail_image_bike_exclusive_error"></div>
+                        <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_bike_exclusive"
+                            class="mt-2 img-preview-thumb" alt="Image">
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.label') }} 1</label>
+                        <input type="text" name="bike_label_1" id="bike_label_1" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
+                        <div class="invalid-feedback" id="bike_label_1_error"></div>
+                    </div>
+                </div>
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.description') }} 1</label>
+                        <input type="text" name="bike_dis_1" id="bike_dis_1" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
+                        <div class="invalid-feedback" id="bike_dis_1_error"></div>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.label') }} 2</label>
+                        <input type="text" name="bike_label_2" id="bike_label_2" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
+                        <div class="invalid-feedback" id="bike_label_2_error"></div>
+                    </div>
+                </div>
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.description') }} 2</label>
+                        <input type="text" name="bike_dis_2" id="bike_dis_2" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
+                        <div class="invalid-feedback" id="bike_dis_2_error"></div>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.label') }} 3</label>
+                        <input type="text" name="bike_label_3" id="bike_label_3" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
+                        <div class="invalid-feedback" id="bike_label_3_error"></div>
+                    </div>
+                </div>
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.description') }} 3</label>
+                        <input type="text" name="bike_dis_3" id="bike_dis_3" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
+                        <div class="invalid-feedback" id="bike_dis_3_error"></div>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.label') }} 4</label>
+                        <input type="text" name="bike_label_4" id="bike_label_4" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_label') }}" maxlength="50">
+                        <div class="invalid-feedback" id="bike_label_4_error"></div>
+                    </div>
+                </div>
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.common.description') }} 4</label>
+                        <input type="text" name="bike_dis_4" id="bike_dis_4" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_description') }}" maxlength="100">
+                        <div class="invalid-feedback" id="bike_dis_4_error"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
     </x-slot>
 

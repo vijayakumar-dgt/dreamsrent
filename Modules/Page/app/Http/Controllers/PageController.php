@@ -1605,6 +1605,66 @@ class PageController extends Controller
                     }
                 }
 
+                // Exclusive Bike Section
+                if (is_array($section) && ($section['status'] ?? 0) == 1) {
+                    $content = $section['section_content'] ?? '';
+
+                    if (is_string($content) && strpos($content, '[exclusive_bike') !== false) {
+                        preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
+                        $limit = isset($matches[1]) ? (int)$matches[1] : 10;
+                        $viewAll = $matches[2] ?? 'no';
+                        $order = $matches[3] ?? 'asc';
+
+                        $whyus = DB::table('sections')
+                            ->join('section_datas', function ($join) use ($lang_id) {
+                                $join->on('sections.id', '=', 'section_datas.section_id')
+                                    ->where('section_datas.language_id', '=', $lang_id);
+                            })
+                            ->select('sections.id', 'section_datas.datas')
+                            ->where('sections.name', 'Exclusive Bike')
+                            ->orderBy('sections.id', $order)
+                            ->limit($limit)
+                            ->get();
+
+                        if ($whyus->isNotEmpty()) {
+                            $first = $whyus[0];
+                            $data = json_decode($first->datas, true);
+
+                            $items = [];
+                            $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+
+                            $previewImage = $defaultImage;
+                            if (!empty($data['thumbnail_image_bike_exclusive'])) {
+                                $relativePath = ltrim($data['thumbnail_image_bike_exclusive'], '/');
+                                $fullPath = storage_path('app/public/' . $relativePath);
+                                if (file_exists($fullPath)) {
+                                    $previewImage = asset('storage/' . $relativePath);
+                                }
+                            }
+
+                            foreach ([1, 2, 3, 4] as $i) {
+                                $label = $data["bike_label_$i"] ?? '';
+                                $description = $data["bike_dis_$i"] ?? '';
+
+                                if ($label || $description) {
+                                    $items[] = [
+                                        'bike_label' => $label,
+                                        'bike_dis'   => $description,
+                                    ];
+                                }
+                            }
+
+                            $section['section_type'] = 'exclusive_bike';
+                            $section['type'] = 'exclusive_bike';
+                            $section['design'] = 'exclusive_bike';
+                            $section['section_content'] = [
+                                "bike_icon" => $previewImage,
+                                "items" => $items,
+                            ];
+                        }
+                    }
+                }
+
                 // AD Card Seasonal Section
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
