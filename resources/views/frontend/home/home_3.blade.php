@@ -1,6 +1,5 @@
 @extends('frontend.theme_3.app')
 @section('content')
-{{-- @dd($content_sections); --}}
 @if(!empty($content_sections) && count($content_sections) > 0)
 @foreach ($content_sections as $section)
     @switch($section['section_type'] ?? "")
@@ -13,8 +12,8 @@
         @case('popular_vehicle')
             @include('frontend.home.partials_3.top_rated_vehicle', ['section' => $section])
             @break
-        @case('ad_card_section')
-            @include('frontend.home.partials_3.ad_card', ['section' => $section])
+        @case('exclusive_bike')
+            @include('frontend.home.partials_3.exclusive_bike', ['section' => $section])
             @break
         @case('how_it_works')
             @include('frontend.home.partials_3.how-it-works', ['section' => $section])
