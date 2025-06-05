@@ -234,17 +234,16 @@ $(document).ready(function () {
                         };
                     
                         sendEmail(userName, emailData)
-                            .then(() => {
-                               
+                            .then(() => {                               
                                 if (response.redirect_url) {
-                                    window.location.href = response.redirect_url;
-                                    return; 
+                                    safeRedirect(response.redirect_url);
+                                    return;
                                 }
                             })
                             .catch(() => {
                                 if (response.redirect_url) {
-                                    window.location.href = response.redirect_url;
-                                    return; 
+                                    safeRedirect(response.redirect_url);
+                                    return;
                                 }
                             });
                     } else if (response.register_status === "1") {
@@ -365,6 +364,20 @@ $(document).ready(function () {
     });
 });
 
+function safeRedirect(redirectUrl) {
+    try {
+       
+        const parsedUrl = new URL(redirectUrl, window.location.origin);
+
+        if (parsedUrl.origin === window.location.origin) {
+            window.location.href = parsedUrl.href;
+        } else {
+            window.location.href = '/';
+        }
+    } catch (e) {
+        window.location.href = '/';
+    }
+}
 }) ();
 
 })(jQuery);
