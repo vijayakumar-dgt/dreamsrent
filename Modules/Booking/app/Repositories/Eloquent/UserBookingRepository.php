@@ -1244,6 +1244,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
 
         $transactions = Booking::where('customer_id', $user->id)
             ->where('created_at', '>=', $startDate)
+            ->where('booking_by', 'user')
             ->with('vehicle')
             ->latest()
             ->limit(3)

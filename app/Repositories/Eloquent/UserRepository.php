@@ -86,7 +86,8 @@ class UserRepository implements UserRepositoryInterface
         if (!$user) {
             abort(403, 'Unauthorized access');
         }
-        $bookings = Booking::where('customer_id', $user->id);
+        $bookings = Booking::where('customer_id', $user->id)
+            ->where('booking_by', '!=', 'quotation');
 
         if ($request->has('duration') && $request->duration != "") {
             $customFrom = $request->custom_from_date ?? "";
@@ -137,7 +138,8 @@ class UserRepository implements UserRepositoryInterface
         if (!$user) {
             abort(403, 'Unauthorized access');
         }
-        $bookings = Booking::where('customer_id', $user->id);
+        $bookings = Booking::where('customer_id', $user->id)
+            ->where('booking_by', '!=', 'quotation');
 
         if ($request->has('limit')) {
             $bookings->take($request->limit);

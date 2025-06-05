@@ -45,15 +45,21 @@
 
     function renderBookings(response) {
         const $tbody = $("#bookingTable tbody");
-        let html = '';
+        $tbody.empty(); // Clear existing rows
 
         if (response.status === 'success' && response.data.length) {
-            html = response.data.map(createBookingRow).join('');
+            response.data.forEach(booking => {
+                $tbody[0].appendChild(createBookingRow(booking)); // Use DOM API
+            });
         } else {
-            html = `<tr><td colspan="5" class="text-center">${_l('web.common.no_bookings_found')}</td></tr>`;
+            const tr = document.createElement('tr');
+            const td = document.createElement('td');
+            td.colSpan = 5;
+            td.className = 'text-center';
+            td.textContent = _l('web.common.no_bookings_found');
+            tr.appendChild(td);
+            $tbody[0].appendChild(tr);
         }
-
-        $tbody.html(html);
     }
 
     // Fetch Transactions
@@ -74,21 +80,27 @@
                 $(".trans-table-loader").hide();
                 $(".trans-real-table").removeClass("d-none");
             },
-            error: console.log
         });
     }
 
     function renderTransactions(response) {
         const $tbody = $("#transactionTable tbody");
-        let html = '';
+        $tbody.empty();
 
         if (response.status === 'success' && response.data.length) {
-            html = response.data.map(createTransactionRow).join('');
+            response.data.forEach(transaction => {
+                const rows = createTransactionRow(transaction);
+                rows.forEach(row => $tbody[0].appendChild(row));
+            });
         } else {
-            html = `<tr><td colspan="5" class="text-center">${_l('web.user.no_transactions_found')}</td></tr>`;
+            const tr = document.createElement("tr");
+            const td = document.createElement("td");
+            td.colSpan = 5;
+            td.className = "text-center";
+            td.textContent = _l("web.user.no_transactions_found");
+            tr.appendChild(td);
+            $tbody[0].appendChild(tr);
         }
-
-        $tbody.html(html);
     }
 
     // Reusable helpers
@@ -135,62 +147,137 @@
         return map[label] ?? 'dark';
     }
 
-    // Template creators
     function createBookingRow(booking) {
-        return `
-        <tr>
-            <td>
-                <div class="table-avatar">
-                    <a href="${booking.vehicle_page_url}" target="_blank" class="avatar flex-shrink-0">
-                        <img class="avatar-img" src="${booking.vehicle_image}" alt="${ucfirst(booking.vehicle_name ?? '')}">
-                    </a>
-                    <div class="table-head-name flex-grow-1">
-                        <a href="${booking.vehicle_page_url}" target="_blank">${ucfirst(booking.vehicle_name ?? '')}</a>
-                        <p>${_l('web.common.rental_type')} : ${ucfirst(booking.rental_type ?? '')}</p>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <h6>${_l('web.common.start_date')}</h6>
-                <p>${booking.formated_start_datetime}</p>
-            </td>
-            <td>
-                <h6>${_l('web.common.end_date')}</h6>
-                <p>${booking.formated_end_datetime}</p>
-            </td>
-            <td>
-                <h6>${_l('web.common.price')}</h6>
-                <h5 class="text-danger">${booking.currency}${booking.total_amount}</h5>
-            </td>
-            <td>${getBookingStatusLabel(booking.status)}</td>
-        </tr>`;
+        const tr = document.createElement('tr');
+
+        // Column 1: Vehicle Info
+        const td1 = document.createElement('td');
+        const avatarDiv = document.createElement('div');
+        avatarDiv.className = "table-avatar";
+
+        const a1 = document.createElement('a');
+        a1.href = booking.vehicle_page_url ?? '#';
+        a1.target = "_blank";
+        a1.className = "avatar flex-shrink-0";
+
+        const img = document.createElement('img');
+        img.className = "avatar-img";
+        img.src = booking.vehicle_image ?? '';
+        img.alt = ucfirst(booking.vehicle_name ?? '');
+
+        const nameDiv = document.createElement('div');
+        nameDiv.className = "table-head-name flex-grow-1";
+
+        const nameLink = document.createElement('a');
+        nameLink.href = booking.vehicle_page_url ?? '#';
+        nameLink.target = "_blank";
+        nameLink.textContent = ucfirst(booking.vehicle_name ?? '');
+
+        const typeP = document.createElement('p');
+        typeP.textContent = `${_l('web.common.rental_type')} : ${ucfirst(booking.rental_type ?? '')}`;
+
+        a1.appendChild(img);
+        nameDiv.appendChild(nameLink);
+        nameDiv.appendChild(typeP);
+
+        avatarDiv.appendChild(a1);
+        avatarDiv.appendChild(nameDiv);
+        td1.appendChild(avatarDiv);
+
+        // Column 2: Start Date
+        const td2 = document.createElement('td');
+        td2.innerHTML = `<h6>${_l('web.common.start_date')}</h6><p>${booking.formated_start_datetime}</p>`;
+
+        // Column 3: End Date
+        const td3 = document.createElement('td');
+        td3.innerHTML = `<h6>${_l('web.common.end_date')}</h6><p>${booking.formated_end_datetime}</p>`;
+
+        // Column 4: Price
+        const td4 = document.createElement('td');
+        td4.innerHTML = `<h6>${_l('web.common.price')}</h6><h5 class="text-danger">${booking.currency}${booking.total_amount}</h5>`;
+
+        // Column 5: Status
+        const td5 = document.createElement('td');
+        td5.innerHTML = getBookingStatusLabel(booking.status);
+
+        // Append all to row
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        tr.appendChild(td5);
+
+        return tr;
     }
 
     function createTransactionRow(booking) {
-        return `
-        <tr>
-            <td class="border-0">
-                <div class="table-avatar">
-                    <a href="/user/bookings" class="avatar avatar-md flex-shrink-0">
-                        <img class="avatar-img" src="${booking.vehicle_image}" alt="Booking">
-                    </a>
-                    <div class="table-head-name flex-grow-1">
-                        <a href="/user/bookings">${ucfirst(booking.vehicle_name ?? '')}</a>
-                        <p>${_l('web.user.rent_type')} : ${ucfirst(booking.rent_type ?? '')}</p>
-                    </div>
-                </div>
-            </td>
-            <td class="border-0 text-end">
-                ${getTransactionStatusLabel(booking.status)}
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" class="pt-0">
-                <div class="status-box">
-                    <p><span>${_l('web.common.status')} : </span>${_l('web.user.on')} ${booking.updated_at ?? ''}</p>
-                </div>
-            </td>
-        </tr>`;
+        const rows = [];
+
+        // Row 1 - Main transaction info
+        const tr1 = document.createElement("tr");
+
+        const td1 = document.createElement("td");
+        td1.className = "border-0";
+
+        const avatarDiv = document.createElement("div");
+        avatarDiv.className = "table-avatar";
+
+        const avatarLink = document.createElement("a");
+        avatarLink.href = "/user/bookings";
+        avatarLink.className = "avatar avatar-md flex-shrink-0";
+
+        const img = document.createElement("img");
+        img.className = "avatar-img";
+        img.src = booking.vehicle_image ?? '';
+        img.alt = "Booking";
+
+        avatarLink.appendChild(img);
+
+        const nameDiv = document.createElement("div");
+        nameDiv.className = "table-head-name flex-grow-1";
+
+        const nameLink = document.createElement("a");
+        nameLink.href = "/user/bookings";
+        nameLink.textContent = ucfirst(booking.vehicle_name ?? '');
+
+        const typePara = document.createElement("p");
+        typePara.textContent = `${_l('web.user.rent_type')} : ${ucfirst(booking.rent_type ?? '')}`;
+
+        nameDiv.appendChild(nameLink);
+        nameDiv.appendChild(typePara);
+
+        avatarDiv.appendChild(avatarLink);
+        avatarDiv.appendChild(nameDiv);
+        td1.appendChild(avatarDiv);
+
+        const td2 = document.createElement("td");
+        td2.className = "border-0 text-end";
+        td2.innerHTML = getTransactionStatusLabel(booking.status); // Make sure this returns safe HTML or sanitize
+
+        tr1.appendChild(td1);
+        tr1.appendChild(td2);
+
+        // Row 2 - Status info
+        const tr2 = document.createElement("tr");
+        const td3 = document.createElement("td");
+        td3.colSpan = 2;
+        td3.className = "pt-0";
+
+        const statusBox = document.createElement("div");
+        statusBox.className = "status-box";
+
+        const p = document.createElement("p");
+        const span = document.createElement("span");
+        span.textContent = `${_l('web.common.status')} : `;
+        p.appendChild(span);
+        p.append(`${_l('web.user.on')} ${booking.updated_at ?? ''}`);
+
+        statusBox.appendChild(p);
+        td3.appendChild(statusBox);
+        tr2.appendChild(td3);
+
+        rows.push(tr1, tr2);
+        return rows;
     }
 
     function renderTransactionSkeletonLoader(count = 3) {
@@ -225,5 +312,4 @@
             `);
         }
     }
-    
 })(jQuery);

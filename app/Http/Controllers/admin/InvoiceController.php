@@ -48,7 +48,6 @@ class InvoiceController extends Controller
         return $response;
     }
 
-
     public function update(InvoiceRequest $request, ?int $id): RedirectResponse
     {
         $response = $this->invoiceRepository->update($request, $id);
