@@ -554,7 +554,8 @@
              type: "GET",
              success: function (response) {
                  if (response.code === 200) {
-                     $("#recommended-vehicle").html(response.html);
+                    let cleanHtml = DOMPurify.sanitize(response.html);
+                    $("#recommended-vehicle").html(cleanHtml);   
                      setTimeout(function () {
                         reInitializeCarousel('.rental-deal-slider');
                      }, 150);
@@ -739,15 +740,14 @@
     }
 
     function renderReviewsMeta(reviews_meta) {
-        $("#overall_ratings").html(
-            `${reviews_meta.overall_avg_ratings}<span>/5</span>`
-        );
+        
+        let cleanDescription = DOMPurify.sanitize(reviews_meta.overall_avg_ratings);
+        $("#overall_ratings").empty().append(`${cleanDescription}<span>/5</span>`);
         $("#rating_description").text(reviews_meta.rating_description);
-        $("#total_reviews").html(
-            `${_l("web.home.based_on")} ${reviews_meta.total_reviews} ${_l(
+        let totalReview = DOMPurify.sanitize(reviews_meta.total_reviews);
+        $("#total_reviews").empty().append(`${_l("web.home.based_on")} ${totalReview} ${_l(
                 "web.common.reviews"
-            )}`
-        );
+            )}`);
 
         $("#service_progress").attr(
             "style",
@@ -1084,9 +1084,11 @@
         );
         $(".vehicle_doors").text(vehicle.num_doors ?? "");
         let vehicleImages = createVehicleCard(vehicle);
-        $(".detail-product").html(vehicleImages);
+        let cleanImage = DOMPurify.sanitize(vehicleImages);
+        $(".detail-product").empty().append(cleanImage);
         let ratingHtml = renderStars(vehicle.rating || 0);
-        $(".headratings").html(ratingHtml);
+        let cleanRating = DOMPurify.sanitize(ratingHtml);
+        $(".headratings").html(cleanRating);
         $("#vin").text(vehicle.vin ?? "");
 
         renderDescription(vehicle);
@@ -1157,7 +1159,8 @@
             }
         });
 
-        $(".price_options").html(priceOptions);
+        let cleanDescription = DOMPurify.sanitize(priceOptions);
+        $(".price_options").empty().append(cleanDescription);
         let has_pickup_date =  $("#has_pickup_date").val();
         if(!has_pickup_date){
             $(".price-rate-option").on("change", handlePriceChange);
@@ -1339,7 +1342,9 @@
             }
 
             html += "</div>";
-            featureSection.find(".listing-description").html(html);
+            
+            let cleanHtml = DOMPurify.sanitize(html);
+            featureSection.find(".listing-description").html(cleanHtml);
             featureSection.show();
         } else {
             featureSection.hide();
@@ -1379,7 +1384,9 @@
             </div>
         `;
 
-        $(".gallery_section").html(html).show();
+        let cleanHtml = DOMPurify.sanitize(html);
+        $(".gallery_section").html(cleanHtml).show();
+
 
         if (vehicle.vehicle_video && vehicle.vehicle_video != "") {
             $(".video_section").removeClass("d-none");
@@ -1428,7 +1435,9 @@
             )
             .join("");
 
-        $("#tarrifTable tbody").html(html);
+            let cleanHtml = DOMPurify.sanitize(html);
+            $("#tarrifTable tbody").html(cleanHtml);
+            
         $(".tariff_section").show();
     }
 
@@ -1464,7 +1473,9 @@
                 </div>
         `;
 
-        $(".faq_section").html(html).show();
+        let cleanHtml = DOMPurify.sanitize(html);
+        $(".faq_section").html(cleanHtml).show();
+
     }
 
     function createExtraService(vehicle) {
@@ -1493,7 +1504,9 @@
                             </div>
                         </div>
                     </div>`;
-            $(".extra-service-div").html(html);
+            let cleanHtml = DOMPurify.sanitize(html);
+            $(".extra-service-div").html(cleanHtml);
+
         } else {
             $(".extra-service-div").hide();
         }
