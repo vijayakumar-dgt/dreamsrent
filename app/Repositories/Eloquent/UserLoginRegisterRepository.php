@@ -298,25 +298,29 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                 'password' => Hash::make($request->password),
                 'user_type' => 3,
             ]);
+
             UserDetail::create([
                 'user_id' => $user->id,
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
             ]);
+
             Auth::login($user);
             session(['user_id' => $user->id]);
-            $notificationType = 1;
-            $template = EmailTemplate::select('subject', 'description')
-                ->where('notification_type', $notificationType)
-                ->first();
 
             $companyName = GeneralSetting::where('key', 'organization_name')->value('value') ?? 'Default Company Name';
-            $subject = $template->subject ?? '';
-            $content = str_replace(
-                ['{user_name}', '{company_name}'],
-                [$request->username, $companyName],
-                $template->description ?? ''
-            );
+            $notifyData = [
+                'user_name' => $request->first_name,
+                'company_name' => $companyName,
+            ];
+
+            try {
+                sendNotification($request->email, 'welcome-email', $notifyData);
+            } catch (\Throwable $e) {
+                \Log::error("Failed to send welcome email: " . $e->getMessage());
+            }
+
+            // Handle redirect
             $redirectTo = session('intended_url', route('home'));
             session()->forget('intended_url');
             if (session()->has('intended_booking')) {
@@ -327,8 +331,6 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
                 'code' => 200,
                 'register_status' => $regStatus,
                 'name' => $request->username,
-                'email_subject' => $subject,
-                'email_content' => $content,
                 'redirect_url' => $redirectTo,
                 'email' => $request->email,
                 'message' => __('web.auth.registration_success'),
