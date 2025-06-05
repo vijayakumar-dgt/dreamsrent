@@ -78,19 +78,35 @@
                 );
                 chart.render();
 
-                // Render List Below Chart
-                let breakdownList = document.getElementById("breakdown-list");
-                breakdownList.innerHTML = "";
-                values.forEach((value, index) => {
-                    breakdownList.innerHTML += `<li>
-                        <p class="text-gray-9 fs-10 d-flex align-items-center mb-0">
-                            <i class="ti ti-point-filled" style="color: ${
-                                colors[index]
-                            };"></i> ${categories[index]}
-                        </p>
-                        <span class="fs-10 text-gray-5">$${value.toLocaleString()}</span>
-                    </li>`;
-                });
+              let breakdownList = document.getElementById("breakdown-list");
+
+            breakdownList.textContent = "";
+
+            values.forEach((value, index) => {
+                const listItem = document.createElement("li");
+
+                const paragraph = document.createElement("p");
+                paragraph.className = "text-gray-9 fs-10 d-flex align-items-center mb-0";
+
+                const icon = document.createElement("i");
+                icon.className = "ti ti-point-filled";
+                icon.style.color = colors[index];
+
+                const categoryText = document.createTextNode(` ${categories[index]}`);
+
+                paragraph.appendChild(icon);
+                paragraph.appendChild(categoryText);
+
+                const valueSpan = document.createElement("span");
+                valueSpan.className = "fs-10 text-gray-5";
+                valueSpan.textContent = `$${value.toLocaleString()}`;
+
+                listItem.appendChild(paragraph);
+                listItem.appendChild(valueSpan);
+
+                breakdownList.appendChild(listItem);
+            });
+
             })
             .catch((error) =>
                 console.error("Error loading earnings breakdown:", error)
