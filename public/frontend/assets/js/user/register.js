@@ -197,8 +197,9 @@ $(document).ready(function () {
                         $("#userRegisterForm")[0].reset();
                         $(".form-control").removeClass("is-invalid is-valid");           
                         if (response.redirect_url) {
-                                    window.location.href = route('home');
-                                    return; 
+                            const BASE_URL = window.location.origin;
+                            window.location.href = BASE_URL + resp.redirect_url;
+                            return; 
                         }                   
                         
                     } else if (response.register_status === "1") {
