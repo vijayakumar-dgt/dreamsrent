@@ -75,7 +75,9 @@
         `;
 
         // Sanitize final HTML block before appending
-        let sanitizedHtml = DOMPurify.sanitize(newDamage, { SAFE_FOR_JQUERY: true });
+        let sanitizedHtml = DOMPurify.sanitize(newDamage, {
+            SAFE_FOR_JQUERY: true,
+        });
         $("#car_damage_append").append(sanitizedHtml);
 
         updateDamageCount();
@@ -123,18 +125,22 @@
     function addinsurances(insurances) {
         const appendContainer = document.getElementById("insurance_car_append");
 
-        const uniqueId = `insurance_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+        const uniqueId = `insurance_${Date.now()}_${Math.floor(
+            Math.random() * 1000
+        )}`;
 
         // Create container div
         const newInsuranceDiv = document.createElement("div");
-        newInsuranceDiv.className = "d-flex align-items-center justify-content-between bg-white border br-5 gap-3 flex-wrap p-20 mb-2";
+        newInsuranceDiv.className =
+            "d-flex align-items-center justify-content-between bg-white border br-5 gap-3 flex-wrap p-20 mb-2";
         newInsuranceDiv.dataset.id = uniqueId;
 
         // LEFT SECTION
         const leftDiv = document.createElement("div");
 
         const nameHeading = document.createElement("h6");
-        nameHeading.className = "fs-14 fw-semibold d-inline-flex align-items-center mb-1";
+        nameHeading.className =
+            "fs-14 fw-semibold d-inline-flex align-items-center mb-1";
         nameHeading.textContent = insurances.insurance_name;
 
         leftDiv.appendChild(nameHeading);
@@ -150,9 +156,10 @@
         const priceSpan = document.createElement("span");
         priceSpan.className = "text-gray-9 priceIn";
         priceSpan.dataset.id = uniqueId;
-        priceSpan.textContent = insurances.value === "Percentage"
-            ? `${parseFloat(insurances.price)}%`
-            : `${currency}${parseFloat(insurances.price)}`;
+        priceSpan.textContent =
+            insurances.value === "Percentage"
+                ? `${parseFloat(insurances.price)}%`
+                : `${currency}${parseFloat(insurances.price)}`;
 
         priceWrapper.appendChild(priceSpan);
         infoContainer.appendChild(priceWrapper);
@@ -277,52 +284,102 @@
     function addSeasonalPricing(season) {
         let uniqueId = "season_" + season.id;
         let newSeasonalPricing = `
-            <div id="${DOMPurify.sanitize(uniqueId)}" class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-1">
+            <div id="${DOMPurify.sanitize(
+                uniqueId
+            )}" class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-1">
                 <div class="flex-grow-1">
-                    <input type="hidden" name="seasonal_id[]" value="${DOMPurify.sanitize(season.id.toString())}">
-                    <h6 class="fs-14 fw-semibold mb-1">${DOMPurify.sanitize(season.seasonal_title)}</h6>
-                    <input type="hidden" name="seasonal_title[]" value="${DOMPurify.sanitize(season.seasonal_title)}">
+                    <input type="hidden" name="seasonal_id[]" value="${DOMPurify.sanitize(
+                        season.id.toString()
+                    )}">
+                    <h6 class="fs-14 fw-semibold mb-1">${DOMPurify.sanitize(
+                        season.seasonal_title
+                    )}</h6>
+                    <input type="hidden" name="seasonal_title[]" value="${DOMPurify.sanitize(
+                        season.seasonal_title
+                    )}">
                     <div class="d-flex align-items-center gap-2 flex-wrap">
                         <p class="fs-13 fw-medium border-end pe-2 mb-0 start-date">
-                            ${_l("admin.rentals.start_date")} : <span class="text-gray-9">${DOMPurify.sanitize(season.seasonal_start_date)}</span>
-                            <input type="hidden" name="seasonal_start_date[]" value="${DOMPurify.sanitize(season.seasonal_start_date)}">
+                            ${_l(
+                                "admin.rentals.start_date"
+                            )} : <span class="text-gray-9">${DOMPurify.sanitize(
+            season.seasonal_start_date
+        )}</span>
+                            <input type="hidden" name="seasonal_start_date[]" value="${DOMPurify.sanitize(
+                                season.seasonal_start_date
+                            )}">
                         </p>
                         <p class="fs-13 fw-medium border-end pe-2 mb-0 end-date">
-                            ${_l("admin.rentals.end_date")} : <span class="text-gray-9">${DOMPurify.sanitize(season.seasonal_end_date)}</span>
-                            <input type="hidden" name="seasonal_end_date[]" value="${DOMPurify.sanitize(season.seasonal_end_date)}">
+                            ${_l(
+                                "admin.rentals.end_date"
+                            )} : <span class="text-gray-9">${DOMPurify.sanitize(
+            season.seasonal_end_date
+        )}</span>
+                            <input type="hidden" name="seasonal_end_date[]" value="${DOMPurify.sanitize(
+                                season.seasonal_end_date
+                            )}">
                         </p>
                         <p class="fs-13 fw-medium border-end pe-2 mb-0 daily-price">
-                            ${_l("admin.rentals.seasonal_daily_price")} : <span class="text-gray-9">${currency}${parseFloat(season.seasonal_daily_rate).toFixed(0)}</span>
-                            <input type="hidden" name="seasonal_daily_rate[]" value="${parseFloat(season.seasonal_daily_rate).toFixed(0)}">
+                            ${_l(
+                                "admin.rentals.seasonal_daily_price"
+                            )} : <span class="text-gray-9">${currency}${parseFloat(
+            season.seasonal_daily_rate
+        ).toFixed(0)}</span>
+                            <input type="hidden" name="seasonal_daily_rate[]" value="${parseFloat(
+                                season.seasonal_daily_rate
+                            ).toFixed(0)}">
                         </p>
                         <p class="fs-13 fw-medium border-end pe-2 mb-0 weekly-price">
-                            ${_l("admin.rentals.seasonal_weekly_price")} : <span class="text-gray-9">${currency}${parseFloat(season.seasonal_weekly_rate).toFixed(0)}</span>
-                            <input type="hidden" name="seasonal_weekly_rate[]" value="${parseFloat(season.seasonal_weekly_rate).toFixed(0)}">
+                            ${_l(
+                                "admin.rentals.seasonal_weekly_price"
+                            )} : <span class="text-gray-9">${currency}${parseFloat(
+            season.seasonal_weekly_rate
+        ).toFixed(0)}</span>
+                            <input type="hidden" name="seasonal_weekly_rate[]" value="${parseFloat(
+                                season.seasonal_weekly_rate
+                            ).toFixed(0)}">
                         </p>
                         <p class="fs-13 fw-medium border-end pe-2 mb-0 monthly-price">
-                            ${_l("admin.rentals.seasonal_monthly_price")} : <span class="text-gray-9">${currency}${parseFloat(season.seasonal_monthly_rate).toFixed(0)}</span>
-                            <input type="hidden" name="seasonal_monthly_rate[]" value="${parseFloat(season.seasonal_monthly_rate).toFixed(0)}">
+                            ${_l(
+                                "admin.rentals.seasonal_monthly_price"
+                            )} : <span class="text-gray-9">${currency}${parseFloat(
+            season.seasonal_monthly_rate
+        ).toFixed(0)}</span>
+                            <input type="hidden" name="seasonal_monthly_rate[]" value="${parseFloat(
+                                season.seasonal_monthly_rate
+                            ).toFixed(0)}">
                         </p>
                         <p class="fs-13 fw-medium pe-2 mb-0 late-fee">
-                            ${_l("admin.rentals.seasonal_late_fee")} : <span class="text-gray-9">${currency}${parseFloat(season.seasonal_late_fee).toFixed(0)}</span>
-                            <input type="hidden" name="seasonal_late_fee[]" value="${parseFloat(season.seasonal_late_fee).toFixed(0)}">
+                            ${_l(
+                                "admin.rentals.seasonal_late_fee"
+                            )} : <span class="text-gray-9">${currency}${parseFloat(
+            season.seasonal_late_fee
+        ).toFixed(0)}</span>
+                            <input type="hidden" name="seasonal_late_fee[]" value="${parseFloat(
+                                season.seasonal_late_fee
+                            ).toFixed(0)}">
                         </p>
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-2 icon-list">
                     <a href="#" class="edit-icon d-flex align-items-center justify-content-center me-2" 
-                    data-id="${DOMPurify.sanitize(uniqueId)}" data-bs-toggle="modal" data-bs-target="#add_price">
+                    data-id="${DOMPurify.sanitize(
+                        uniqueId
+                    )}" data-bs-toggle="modal" data-bs-target="#add_price">
                         <i class="ti ti-edit"></i>
                     </a>
                     <a href="#" class="trash-icon d-flex align-items-center justify-content-center"
-                    data-id="${DOMPurify.sanitize(uniqueId)}" data-bs-toggle="modal" data-bs-target="#delete_price">
+                    data-id="${DOMPurify.sanitize(
+                        uniqueId
+                    )}" data-bs-toggle="modal" data-bs-target="#delete_price">
                         <i class="ti ti-trash"></i>
                     </a>
                 </div>
             </div>`;
 
         // Sanitize the entire HTML string before appending
-        let sanitizedHTML = DOMPurify.sanitize(newSeasonalPricing, {SAFE_FOR_JQUERY: true});
+        let sanitizedHTML = DOMPurify.sanitize(newSeasonalPricing, {
+            SAFE_FOR_JQUERY: true,
+        });
         $("#seasonal_append").append(sanitizedHTML);
     }
 
@@ -365,51 +422,85 @@
         let uniqueId = "tariff_" + new Date().getTime();
 
         let newTariff = `
-        <div id="${DOMPurify.sanitize(uniqueId)}" class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-1">
+        <div id="${DOMPurify.sanitize(
+            uniqueId
+        )}" class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-1">
             <div>
-                <input type="hidden" name="tariff_id[]" value="${DOMPurify.sanitize(tarrif.id.toString())}">
-                <h6 class="fs-14 fw-semibold mb-1">${DOMPurify.sanitize(tarrif.tariff_title)}</h6>
-                <input type="hidden" name="tariff_title[]" value="${DOMPurify.sanitize(tarrif.tariff_title)}">
+                <input type="hidden" name="tariff_id[]" value="${DOMPurify.sanitize(
+                    tarrif.id.toString()
+                )}">
+                <h6 class="fs-14 fw-semibold mb-1">${DOMPurify.sanitize(
+                    tarrif.tariff_title
+                )}</h6>
+                <input type="hidden" name="tariff_title[]" value="${DOMPurify.sanitize(
+                    tarrif.tariff_title
+                )}">
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                     <p class="fs-13 fw-medium border-end pe-2 mb-0 daily-price">
                         ${_l("admin.rentals.day_price")} : 
-                        <span class="text-gray-9">${currency}${parseFloat(tarrif.tariff_daily_price).toFixed(0)}</span>
-                        <input type="hidden" name="tariff_daily_price[]" value="${parseFloat(tarrif.tariff_daily_price).toFixed(0)}">
+                        <span class="text-gray-9">${currency}${parseFloat(
+            tarrif.tariff_daily_price
+        ).toFixed(0)}</span>
+                        <input type="hidden" name="tariff_daily_price[]" value="${parseFloat(
+                            tarrif.tariff_daily_price
+                        ).toFixed(0)}">
                     </p>
                     <p class="fs-13 fw-medium border-end pe-2 mb-0 from-days">
                         ${_l("admin.rentals.from_days")} : 
-                        <span class="text-gray-9">${DOMPurify.sanitize(tarrif.tariff_from_days.toString())}</span>
-                        <input type="hidden" name="tariff_from_days[]" value="${DOMPurify.sanitize(tarrif.tariff_from_days.toString())}">
+                        <span class="text-gray-9">${DOMPurify.sanitize(
+                            tarrif.tariff_from_days.toString()
+                        )}</span>
+                        <input type="hidden" name="tariff_from_days[]" value="${DOMPurify.sanitize(
+                            tarrif.tariff_from_days.toString()
+                        )}">
                     </p>
                     <p class="fs-13 fw-medium border-end pe-2 mb-0 to-days">
                         ${_l("admin.rentals.to_days")} : 
-                        <span class="text-gray-9">${DOMPurify.sanitize(tarrif.tariff_to_days.toString())}</span>
-                        <input type="hidden" name="tariff_to_days[]" value="${DOMPurify.sanitize(tarrif.tariff_to_days.toString())}">
+                        <span class="text-gray-9">${DOMPurify.sanitize(
+                            tarrif.tariff_to_days.toString()
+                        )}</span>
+                        <input type="hidden" name="tariff_to_days[]" value="${DOMPurify.sanitize(
+                            tarrif.tariff_to_days.toString()
+                        )}">
                     </p>
                     <p class="fs-13 fw-medium border-end pe-2 mb-0 base-km">
                         ${_l("admin.rentals.base_km")} : 
-                        <span class="text-gray-9">${DOMPurify.sanitize(tarrif.tariff_base_km.toString())}</span>
-                        <input type="hidden" name="tariff_base_km[]" value="${DOMPurify.sanitize(tarrif.tariff_base_km.toString())}">
+                        <span class="text-gray-9">${DOMPurify.sanitize(
+                            tarrif.tariff_base_km.toString()
+                        )}</span>
+                        <input type="hidden" name="tariff_base_km[]" value="${DOMPurify.sanitize(
+                            tarrif.tariff_base_km.toString()
+                        )}">
                     </p>
                     <p class="fs-13 fw-medium pe-2 mb-0 extra-price">
                         ${_l("admin.rentals.extra_price")} : 
-                        <span class="text-gray-9">${currency}${parseFloat(tarrif.tariff_extra_price).toFixed(0)}</span>
-                        <input type="hidden" name="tariff_extra_price[]" value="${parseFloat(tarrif.tariff_extra_price).toFixed(0)}">
+                        <span class="text-gray-9">${currency}${parseFloat(
+            tarrif.tariff_extra_price
+        ).toFixed(0)}</span>
+                        <input type="hidden" name="tariff_extra_price[]" value="${parseFloat(
+                            tarrif.tariff_extra_price
+                        ).toFixed(0)}">
                     </p>
                 </div>
             </div>
             <div class="d-flex align-items-center icon-list">
-                <a href="#" class="edit-tariff me-2" data-id="${DOMPurify.sanitize(uniqueId)}" data-bs-toggle="modal" data-bs-target="#add-tarrif">
+                <a href="#" class="edit-tariff me-2" data-id="${DOMPurify.sanitize(
+                    uniqueId
+                )}" data-bs-toggle="modal" data-bs-target="#add-tarrif">
                     <i class="ti ti-edit"></i>
                 </a>
-                <a href="#" class="trash-tariff" data-id="${DOMPurify.sanitize(uniqueId)}" data-bs-toggle="modal" data-bs-target="#delete_tarrif">
+                <a href="#" class="trash-tariff" data-id="${DOMPurify.sanitize(
+                    uniqueId
+                )}" data-bs-toggle="modal" data-bs-target="#delete_tarrif">
                     <i class="ti ti-trash"></i>
                 </a>
             </div>
         </div>`;
 
         // Sanitize the entire HTML string before appending
-        const sanitizedHTML = DOMPurify.sanitize(newTariff, { SAFE_FOR_JQUERY: true });
+        const sanitizedHTML = DOMPurify.sanitize(newTariff, {
+            SAFE_FOR_JQUERY: true,
+        });
         $("#tariff_append").append(sanitizedHTML);
     }
 
@@ -468,7 +559,9 @@
         `;
 
         // Sanitize entire HTML block to be safe before appending
-        let sanitizedHtml = DOMPurify.sanitize(faqItem, { SAFE_FOR_JQUERY: true });
+        let sanitizedHtml = DOMPurify.sanitize(faqItem, {
+            SAFE_FOR_JQUERY: true,
+        });
 
         $(".car_faq_append").append(sanitizedHtml);
         updateFaqCount();
@@ -1712,39 +1805,45 @@
                     continue;
                 }
 
-                let imageUrl = URL.createObjectURL(file);
-                let img = new Image();
-                img.src = imageUrl;
+                const reader = new FileReader();
 
-                img.onload = function () {
-                    if (this.width === 690 && this.height === 420) {
-                        selectedImages.set(file.name, file);
-                        validFiles.push(file);
+                reader.onload = function (e) {
+                    let img = new Image();
+                    img.src = e.target.result;
 
-                        imageListContainer.append(`
-                            <div class="uploaded-img" data-file="${file.name}">
-                                <img src="${imageUrl}" alt="img">
-                                <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
-                            </div>
-                        `);
-                    } else {
+                    img.onload = function () {
+                        if (this.width === 690 && this.height === 420) {
+                            selectedImages.set(file.name, file);
+                            validFiles.push(file);
+
+                            imageListContainer.append(`
+                        <div class="uploaded-img" data-file="${file.name}">
+                            <img src="${e.target.result}" alt="img">
+                            <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
+                        </div>
+                    `);
+                        } else {
+                            showToast(
+                                "error",
+                                `Image "${file.name}" must be exactly 690x420 pixels.`
+                            );
+                        }
+
+                        remainingChecks--;
+                        if (remainingChecks === 0) updateImageInput(validFiles);
+                    };
+
+                    img.onerror = function () {
                         showToast(
                             "error",
-                            `Image "${file.name}" must be exactly 690x420 pixels.`
+                            `Could not load image "${file.name}".`
                         );
-                        URL.revokeObjectURL(imageUrl);
-                    }
-
-                    remainingChecks--;
-                    if (remainingChecks === 0) updateImageInput(validFiles);
+                        remainingChecks--;
+                        if (remainingChecks === 0) updateImageInput(validFiles);
+                    };
                 };
 
-                img.onerror = function () {
-                    showToast("error", `Could not load image "${file.name}".`);
-                    URL.revokeObjectURL(imageUrl);
-                    remainingChecks--;
-                    if (remainingChecks === 0) updateImageInput(validFiles);
-                };
+                reader.readAsDataURL(file);
             }
         });
 
@@ -2149,8 +2248,8 @@
         }
 
         $(document).on("click", "#add_faq_btn", function () {
-            $("#f_q").val('');
-            $("#f_a").val('');
+            $("#f_q").val("");
+            $("#f_a").val("");
             $("#faq_title").text(_l("admin.rentals.create_faq_title"));
             $("#faq_btn").text(_l("admin.common.create_new"));
             editingFAQ = null;
