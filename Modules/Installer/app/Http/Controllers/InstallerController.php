@@ -118,10 +118,9 @@ class InstallerController extends Controller
                 ], 200);
             }
 
-            // Create properly typed config array
             $envConfig = [
                 'host' => $validated['host'],
-                'port' => $databaseDetails['port'], // Already properly typed
+                'port' => $databaseDetails['port'],
                 'database' => $validated['database'],
                 'user' => $validated['user'],
                 'password' => $validated['password'] ?? '',
