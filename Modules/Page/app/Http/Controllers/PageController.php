@@ -31,6 +31,7 @@ use Modules\GeneralSetting\Models\GeneralSetting;
 use Modules\GeneralSetting\Models\Language;
 use Modules\GeneralSetting\Models\TranslationLanguage;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 class PageController extends Controller
 {
@@ -502,7 +503,7 @@ class PageController extends Controller
                             $banner->description = $decodedData['description_three'] ?? null;
 
                             $relativePath = 'storage/' . ($decodedData['thumbnail_image_four'] ?? '');
-                            $defaultImage = asset('backend/assets/img/car/car-right.png');
+                            $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
                             $thumbnailKey = 'thumbnail_image_four';
 
                             $banner->thumbnail_image = (
@@ -698,6 +699,8 @@ class PageController extends Controller
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
+                        $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+
                         $locations = DB::table('locations')
                             ->select('id', 'name', 'image')
                             ->where('language_id', $lang_id)
@@ -706,8 +709,13 @@ class PageController extends Controller
                             ->orderBy('created_at', $order)
                             ->limit($limit)
                             ->get()
-                            ->map(function ($location) {
-                                $location->image = asset('storage/' . $location->image);
+                            ->map(function ($location) use ($defaultImage) {
+                                if ($location->image && Storage::disk('public')->exists($location->image)) {
+                                    $location->image = asset('storage/' . $location->image);
+                                } else {
+                                    $location->image = $defaultImage;
+                                }
+
                                 $getCategoryId = getCategoryId();
                                 $location->vehicle_count = DB::table('vehicle_info')
                                     ->where('main_location_id', $location->id)
@@ -2051,7 +2059,13 @@ class PageController extends Controller
                                 if (is_array($data)) {
                                     foreach ($data as $key => $value) {
                                         if (str_starts_with($key, 'thumbnail_image_') && !empty($value)) {
-                                            $data[$key] = asset('storage/' . ltrim($value, '/'));
+                                            // Check if file exists in storage
+                                            if (Storage::disk('public')->exists(ltrim($value, '/'))) {
+                                                $data[$key] = asset('storage/' . ltrim($value, '/'));
+                                            } else {
+                                                // Fallback default image path
+                                                $data[$key] = asset('backend/assets/img/default-placeholder-image.png');
+                                            }
                                         }
                                     }
 
