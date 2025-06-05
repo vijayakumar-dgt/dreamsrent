@@ -61,7 +61,8 @@ $(document).ready(function () {
                         $(".form-control").removeClass("is-invalid is-valid");
                         showToast('success', resp.message);
                         if (resp.redirect_url) {
-                            window.location.href = route('home');
+                            const BASE_URL = window.location.origin;
+                            window.location.href = BASE_URL + resp.redirect_url;
                         }
 
                     }
