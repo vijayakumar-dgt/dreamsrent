@@ -446,6 +446,7 @@ return [
         'engine' => 'Engine',
         'years_of' => 'Years of',
         'experience' => 'Experience',
+        'count_of_yachts' => 'Count of Yachts',
     ],
     'common' => [
         'back_to_home' => 'Back to Home',

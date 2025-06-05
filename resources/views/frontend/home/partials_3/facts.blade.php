@@ -32,26 +32,20 @@
                 <div class="customer-content">
                     <p>{{ __('web.home.theme_3_fact_desc') }}</p>
                     @php 
-                    $factsContent = $section['facts_content'];
-                    $locationCount = array_filter($factsContent, function ($item) {
-                        return $item['key'] == 'location_count';
-                    });
-                    $locationCount = array_values($locationCount);
+                        $factsContent = $section['facts_content'];
 
-                    $vehicleCount = array_filter($factsContent, function ($item) {
-                        return $item['key'] == 'vehicle_count';
-                    });
-                    $vehicleCount = array_values($vehicleCount);
+                        $mappedFacts = [];
+                        foreach ($factsContent as $item) {
+                            if (isset($item['key'])) {
+                                $mappedFacts[$item['key']] = $item;
+                            }
+                        }
 
-                    $totalKm = array_filter($factsContent, function ($item) {
-                        return $item['key'] == 'total_km';
-                    });
-                    $totalKm = array_values($totalKm);
+                        $locationCount   = $mappedFacts['location_count'] ?? null;
+                        $vehicleCount    = $mappedFacts['vehicle_count'] ?? null;
+                        $totalKm         = $mappedFacts['total_km'] ?? null;
+                        $customersCount  = $mappedFacts['happy_customers'] ?? null;
 
-                    $customersCount = array_filter($factsContent, function ($item) {
-                        return $item['key'] == 'happy_customers'; 
-                    });
-                    $customersCount = array_values($customersCount);
                     @endphp
                     <div class="row">
                         <div class="col-md-6">
@@ -60,7 +54,7 @@
                                     <img src="{{ asset('frontend/assets/img/icons/count-01.svg') }}" class="img-fluid" alt="img">
                                 </span>
                                 <div class="count-info">
-                                    <h3><span class="counterUp">{{ $locationCount[0]['value'] }}</span>+</h3>
+                                    <h3><span class="counterUp">{{ $locationCount['value'] ?? 0 }}</span>+</h3>
                                     <p>{{ __('web.home.locations_to_pickup') }}</p>
                                 </div>
                             </div>
@@ -71,7 +65,7 @@
                                     <img src="{{ asset('frontend/assets/img/icons/count-02.svg') }}" class="img-fluid" alt="img">
                                 </span>
                                 <div class="count-info">
-                                    <h3><span class="counterUp">{{ $vehicleCount[0]['value'] }}</span>+</h3>
+                                    <h3><span class="counterUp">{{ $vehicleCount['value'] ?? 0}}</span>+</h3>
                                     <p>{{ __('web.home.count_of_bikes') }}</p>
                                 </div>
                             </div>
@@ -82,7 +76,7 @@
                                     <img src="{{ asset('frontend/assets/img/icons/count-03.svg') }}" class="img-fluid" alt="img">
                                 </span>
                                 <div class="count-info">
-                                    <h3><span class="counterUp">{{ $totalKm[0]['value'] }}</span></h3>
+                                    <h3><span class="counterUp">{{ $totalKm['value'] ?? 0}}</span></h3>
                                     <p>{{ __('web.home.total_kilometers') }}</p>
                                 </div>
                             </div>
@@ -93,7 +87,7 @@
                                     <img src="{{ asset('frontend/assets/img/icons/count-04.svg') }}" class="img-fluid" alt="img">
                                 </span>
                                 <div class="count-info">
-                                    <h3><span class="counterUp">{{ $customersCount[0]['value'] }}</span>+</h3>
+                                    <h3><span class="counterUp">{{ $customersCount['value'] ?? 0 }}</span>+</h3>
                                     <p>{{ __('web.home.happy_customers') }}</p>
                                 </div>
                             </div>
