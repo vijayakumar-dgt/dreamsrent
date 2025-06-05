@@ -33,21 +33,25 @@
                 }
 
                 response.data.forEach((backup) => {
-                    const downloadUrl = DOMPurify.sanitize(backup.download_url || "");
+                    const downloadUrl = DOMPurify.sanitize(
+                        backup.download_url || ""
+                    );
                     const backupName = DOMPurify.sanitize(backup.name || "");
-                    const createdOn = DOMPurify.sanitize(backup.created_on || "");
+                    const createdOn = DOMPurify.sanitize(
+                        backup.created_on || ""
+                    );
 
                     const row = $("<tr>");
 
-                    const nameLink = $("<a>")
-                        .attr({ href: downloadUrl, download: "" })
-                        .text(backupName);
-
-                    const nameHeading = $("<h6>")
-                        .addClass("fw-semibold fs-14")
-                        .append(nameLink);
-
-                    const nameCell = $("<td>").append(nameHeading);
+                    const nameCell = $("<td>").append(
+                        $("<h6>")
+                            .addClass("fw-semibold fs-14")
+                            .append(
+                                $("<a>")
+                                    .attr({ href: downloadUrl, download: "" })
+                                    .text(backupName)
+                            )
+                    );
 
                     const createdCell = $("<td>").append(
                         $("<p>").addClass("text-gray-9").text(createdOn)
@@ -74,9 +78,13 @@
                         .addClass("dropdown-menu dropdown-menu-end p-2")
                         .append($("<li>").append(downloadItem));
 
-                    if (hasPermission(permissions, "other_settings", "delete")) {
+                    if (
+                        hasPermission(permissions, "other_settings", "delete")
+                    ) {
                         const deleteBtn = $("<button>")
-                            .addClass("dropdown-item rounded-1 delete-backup-btn")
+                            .addClass(
+                                "dropdown-item rounded-1 delete-backup-btn"
+                            )
                             .attr({
                                 type: "button",
                                 "data-id": backup.id,

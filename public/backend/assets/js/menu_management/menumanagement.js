@@ -364,8 +364,8 @@
                         let menu = response.data;
 
                         if (!menu.menus || menu.menus.trim() === "") {
-                            menuList.append(
-                                $('<li>').addClass('list-group-item text-center text-muted').text('No data found')
+                            menuList.html(
+                                `<li class="list-group-item text-center text-muted">No data found</li>`
                             );
                             return;
                         }
@@ -374,120 +374,77 @@
                             let menuItems = JSON.parse(menu.menus);
 
                             menuItems.forEach((item) => {
-                                const uniqueId = `menu-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+                                let uniqueId = `menu-${Date.now()}-${Math.floor(
+                                    Math.random() * 1000
+                                )}`;
 
-                                const label = item.label || '';
-                                const rawSlug = item.link || '';
-                                const slug = rawSlug === "/" ? "/" : rawSlug.replace(/^\/+/, '');
-                                const previewLink = `${BASE_URL}/${slug}`;
+                                let slug =
+                                    item.link === "/"
+                                        ? "/"
+                                        : item.link.replace(/^\/+/, "");
 
-                                const li = $('<li>')
-                                    .addClass('list-group-item')
-                                    .attr('data-title', label)
-                                    .attr('data-link', slug);
+                                let previewLink = `${BASE_URL}/${slug}`;
 
-                                const accordion = $('<div>').addClass('accordion').attr('id', 'accordionExample');
-                                const accordionItem = $('<div>').addClass('accordion-item');
-                                const header = $('<h2>').addClass('accordion-header');
-                                const button = $('<button>')
-                                    .addClass('accordion-button')
-                                    .attr({
-                                        type: 'button',
-                                        'data-bs-toggle': 'collapse',
-                                        'data-bs-target': `#collapse-${uniqueId}`,
-                                        'aria-expanded': 'false',
-                                        'aria-controls': `collapse-${uniqueId}`
-                                    })
-                                    .append($('<span>').addClass('me-2').append($('<i>').addClass('ti ti-grid-dots')))
-                                    .append(document.createTextNode(label));
+                                let newItem = `
+                                <li class="list-group-item" data-title="${
+                                    item.label
+                                }" data-link="${slug}">
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapse-${uniqueId}" aria-expanded="false" aria-controls="collapse-${uniqueId}">
+                                                    <span class="me-2"><i class="ti ti-grid-dots"></i></span>${
+                                                        item.label
+                                                    }
+                                                </button>
+                                            </h2>
+                                            <div id="collapse-${uniqueId}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    <!-- Menu Name Field -->
+                                                    <div class="mb-3">
+                                                        <label for="menu_name_${uniqueId}" class="form-label">Menu <span class="text-danger">*</span></label>
+                                                        <input type="text" id="menu_name_${uniqueId}" name="menu_name" class="form-control" value="${
+                                    item.label
+                                }" required>
+                                                        <span class="error-message text-danger d-none">Menu name is required.</span>
+                                                    </div>
 
-                                const collapseDiv = $('<div>')
-                                    .addClass('accordion-collapse collapse')
-                                    .attr({
-                                        id: `collapse-${uniqueId}`,
-                                        'data-bs-parent': '#accordionExample'
-                                    });
+                                                    <!-- Slug Field -->
+                                                    <div class="mb-2">
+                                                        <label for="menu_link_${uniqueId}" class="form-label">Slug</label>
+                                                        <input type="text" id="menu_link_${uniqueId}" name="menu_link" class="form-control" value="${slug}">
+                                                        <span class="error-message text-danger d-none">Please enter a valid slug.</span>
+                                                    </div>
 
-                                const body = $('<div>').addClass('accordion-body');
+                                                    <!-- Preview Link -->
+                                                    <p>Preview : <a href="${previewLink}" target="_blank" class="text-info">${previewLink}</a></p>
 
-                                // Menu name input
-                                body.append(
-                                    $('<div>').addClass('mb-3').append(
-                                        $('<label>')
-                                            .addClass('form-label')
-                                            .attr('for', `menu_name_${uniqueId}`)
-                                            .html(`Menu <span class="text-danger">*</span>`),
-                                        $('<input>')
-                                            .addClass('form-control')
-                                            .attr({
-                                                type: 'text',
-                                                id: `menu_name_${uniqueId}`,
-                                                name: 'menu_name',
-                                                value: label,
-                                                required: true
-                                            }),
-                                        $('<span>').addClass('error-message text-danger d-none').text('Menu name is required.')
-                                    )
-                                );
+                                                    <!-- Status Toggle -->
+                                                    <div class="form-check form-check-md form-switch me-2">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="menu_status_${uniqueId}" name="menu_status" ${
+                                    item.status ? "checked" : ""
+                                }>
+                                                        <label for="menu_status_${uniqueId}" class="form-check-label form-label mt-0 mb-0">
+                                                            Status
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>`;
 
-                                // Slug input
-                                body.append(
-                                    $('<div>').addClass('mb-2').append(
-                                        $('<label>')
-                                            .addClass('form-label')
-                                            .attr('for', `menu_link_${uniqueId}`)
-                                            .text('Slug'),
-                                        $('<input>')
-                                            .addClass('form-control')
-                                            .attr({
-                                                type: 'text',
-                                                id: `menu_link_${uniqueId}`,
-                                                name: 'menu_link',
-                                                value: slug
-                                            }),
-                                        $('<span>').addClass('error-message text-danger d-none').text('Please enter a valid slug.')
-                                    )
-                                );
-
-                                // Preview link
-                                body.append(
-                                    $('<p>').html(`Preview : <a href="${previewLink}" target="_blank" class="text-info">${previewLink}</a>`)
-                                );
-
-                                // Status switch
-                                const statusToggle = $('<div>').addClass('form-check form-check-md form-switch me-2');
-                                statusToggle.append(
-                                    $('<input>')
-                                        .addClass('form-check-input')
-                                        .attr({
-                                            type: 'checkbox',
-                                            role: 'switch',
-                                            id: `menu_status_${uniqueId}`,
-                                            name: 'menu_status'
-                                        })
-                                        .prop('checked', item.status),
-                                    $('<label>')
-                                        .addClass('form-check-label form-label mt-0 mb-0')
-                                        .attr('for', `menu_status_${uniqueId}`)
-                                        .text('Status')
-                                );
-                                body.append(statusToggle);
-
-                                // Build accordion
-                                header.append(button);
-                                accordionItem.append(header, collapseDiv.append(body));
-                                accordion.append(accordionItem);
-                                li.append(accordion);
-                                menuList.append(li);
+                                menuList.append(newItem);
                             });
                         } catch (error) {
-                            menuList.append(
-                                $('<li>').addClass('list-group-item text-center text-danger').text('Error loading menu data')
+                            menuList.html(
+                                `<li class="list-group-item text-center text-danger">Error loading menu data</li>`
                             );
                         }
                     } else {
-                        menuList.append(
-                            $('<li>').addClass('list-group-item text-center text-muted').text('No data found')
+                        menuList.html(
+                            `<li class="list-group-item text-center text-muted">No data found</li>`
                         );
                     }
                 },
