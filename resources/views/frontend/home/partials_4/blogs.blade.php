@@ -42,14 +42,14 @@
                     <div class="article-title">
                         <h4><a href="{{ route('blog.details', $blog['slug'] ?? '') }}">{{ $blog['title'] ?? "" }}</a></h4>
                         <p>{{ $blogDesc ?? "" }}</p>
-                        <a href="{{ route('blog.details', $blog['slug'] ?? '') }}" class="read-more">Read More <i class="bx bx-right-arrow-alt ms-2"></i></a>
+                        <a href="{{ route('blog.details', $blog['slug'] ?? '') }}" class="read-more">{{ __('web.blog.read_more') }} <i class="bx bx-right-arrow-alt ms-2"></i></a>
                     </div>
                 </div>
             </div>
             @endforeach
             <div class="col-md-12">
                 <div class="view-more text-center">
-                    <a href="{{ route('blogs.list') }}" class="btn btn-secondary">View all Articles</a>
+                    <a href="{{ route('blogs.list') }}" class="btn btn-secondary">{{ __('web.home.view_all_blogs') }}</a>
                 </div>
             </div>
             @else 

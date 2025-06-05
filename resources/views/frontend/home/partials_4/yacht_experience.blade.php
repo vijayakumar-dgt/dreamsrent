@@ -21,7 +21,7 @@
                     <span class="sec-left-one"><img src="{{ $content['data']['thumbnail_image_boat_experience_1'] ?? asset('frontend/assets/img/bg/sec-modal-img-01.jpg') }}" class="img-fluid" alt="Img"></span>
                     <span class="sec-left-two"><img src="{{ $content['data']['thumbnail_image_boat_experience_2'] ?? asset('frontend/assets/img/bg/sec-modal-img-02.jpg') }}" class="img-fluid" alt="Img"></span>
                     <div class="experience-info">
-                        <h5>{{ $content['data']['label_boat_experience_1'] ?? 0 }}+ <span>Years of <br> Experience</span></h5>
+                        <h5>{{ $content['data']['label_boat_experience_1'] ?? 0 }}+ <span>{{ __('web.home.years_of') }} <br> {{ __('web.home.experience') }}</span></h5>
                     </div>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                     <h2>{{ $section['section_title'] ?? "" }}</h2>
                     <h4>{{ $content['section_label'] ?? "" }}</h4>
                     <p>{{ $content['data']['description_boat_experience_1'] ?? "" }}</p>
-                    <a href="{{ route('list') }}" class="btn btn-primary d-flex align-items-center"><i class="bx bx-bar-chart me-2"></i>Learn More</a>
+                    <a href="{{ route('list') }}" class="btn btn-primary d-flex align-items-center"><i class="bx bx-bar-chart me-2"></i>{{ __('web.common.learn_more') }}</a>
                 </div>
             </div>
         </div>

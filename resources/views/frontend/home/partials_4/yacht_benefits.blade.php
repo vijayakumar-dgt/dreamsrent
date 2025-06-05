@@ -17,8 +17,8 @@
             <p>{{ $section['section_label'] ?? "" }}</p>
         </div>
         @php 
-            $firstHalfPoints = !empty($section['section_content']['items']) && count($section['section_content']['items']) > 0 ? array_slice($section['section_content']['items'], 0, 3) : [];//section_content first 3 points
-            $lastHalfPoints = !empty($section['section_content']['items']) && count($section['section_content']['items']) > 0 ? array_slice($section['section_content']['items'], 3) : [];//section_content last 3 points
+            $firstHalfPoints = !empty($section['section_content']['items']) && count($section['section_content']['items']) > 0 ? array_slice($section['section_content']['items'], 0, 3) : [];
+            $lastHalfPoints = !empty($section['section_content']['items']) && count($section['section_content']['items']) > 0 ? array_slice($section['section_content']['items'], 3) : [];
         @endphp
         <div class="renting-yacht-benifits d-flex align-items-center justify-content-between">
             <ul>

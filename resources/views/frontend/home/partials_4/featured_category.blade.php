@@ -102,7 +102,7 @@
                     <div class="card-content d-flex align-items-center justify-content-between">
                         <div>
                             <h4><a href="{{ route('list') }}">{{ $yacht->name ?? "" }}</a></h4>
-                            <span>{{ $yacht->boat_count ?? 0 }} Yachts</span>
+                            <span>{{ $yacht->boat_count ?? 0 }} {{ __('web.home.yachts') }}</span>
                         </div>
                         <a href="{{ route('list', ['category' => $yacht->id]) }}" class="arrow-right"><i class="bx bx-right-arrow-alt"></i></a>
                     </div>
@@ -111,7 +111,7 @@
             @endforeach
             <div class="col-md-12">
                 <div class="view-more-btn text-center">
-                    <a href="{{ route('list') }}" class="btn btn-secondary">View  More Categories</a>
+                    <a href="{{ route('list') }}" class="btn btn-secondary">{{ __('web.home.view_all_categories') }}</a>
                 </div>
             </div>
             @else 

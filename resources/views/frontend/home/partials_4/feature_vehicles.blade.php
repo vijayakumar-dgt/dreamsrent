@@ -55,19 +55,19 @@
                                 <ul class="yacht-features-info">
                                     <li>
                                         <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/yacht-feature-icon-01.svg" alt="Img"></span>
-                                        <h6>People <span> : {{ $yacht['passenger_capacity'] ?? 0 }}</span></h6>
+                                        <h6>{{ __('web.home.people') }} <span> : {{ $yacht['passenger_capacity'] ?? 0 }}</span></h6>
                                     </li>
                                     <li>
                                         <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/yacht-feature-icon-02.svg" alt="Img"></span>
-                                        <h6>Length <span> : 4.6m</span></h6>
+                                        <h6>{{ __('web.home.length') }} <span> : 4.6m</span></h6>
                                     </li>
                                     <li>
                                         <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/yacht-feature-icon-04.svg" alt="Img"></span>
-                                        <h6>Build <span> : {{ $yacht['year'] ?? "" }}</span></h6>
+                                        <h6>{{ __('web.home.build') }} <span> : {{ $yacht['year'] ?? "" }}</span></h6>
                                     </li>
                                     <li>
                                         <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/yacht-feature-icon-06.svg" alt="Img"></span>
-                                        <h6>Cabins <span> : 4</span></h6>
+                                        <h6>{{ __('web.home.cabins') }} <span> : 4</span></h6>
                                     </li>
                                 </ul>
                             </div>
@@ -76,11 +76,11 @@
                             @endphp
                             <div class="yacht-content-footer">
                                 @foreach($prices as $price_type => $price_val)
-                                <p>From <span>{{ $data['currency'] }}{{ $price_val }}  </span> /{{ ucfirst($price_type) }}</p>
+                                <p>{{ __('web.home.from') }} <span>{{ $data['currency'] }}{{ $price_val }}  </span> /{{ ucfirst($price_type) }}</p>
                                 @endforeach
                                 <div class="yacht-book-btn">
                                     <a href="javascript:void(0);" class="yacht-user-img"><img src="{{ $yacht['avatar_image'] }}" alt="Img"></a>
-                                    <a href="{{ route('vehicleDetails', $yacht['slug']) }}" class="btn btn-secondary">Book Now</a>
+                                    <a href="{{ route('vehicleDetails', $yacht['slug']) }}" class="btn btn-secondary">{{ __('web.home.book_now') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                 @endforeach
                 <div class="col-md-12">
                     <div class="view-more-btn text-center">
-                        <a href="{{ route('list') }}" class="btn btn-secondary">View all Yachts</a>
+                        <a href="{{ route('list') }}" class="btn btn-secondary">{{ __('web.home.view_all_yachts') }}</a>
                     </div>
                 </div>
                 @else
