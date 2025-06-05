@@ -1656,7 +1656,7 @@ class PageController extends Controller
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
 
-                    if (is_string($content) && strpos($content, '[seasonal_card') !== false) {
+                    if (is_string($content) && strpos($content, '[offer_card') !== false) {
                         preg_match('/limit=(\d+)\s+viewall=(yes|no)\s+order=(asc|desc)/', $content, $matches);
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $order = $matches[3] ?? 'asc';
@@ -2107,7 +2107,7 @@ class PageController extends Controller
 
                                     $items[] = [
                                         'data' => $experienceData,
-                                        'vehicles' => $data->toArray(), // ✅ attach all vehicle data here
+                                        'vehicles' => $data->toArray(),
                                     ];
                                 }
                             }
