@@ -82,8 +82,7 @@
                 let breakdownList = document.getElementById("breakdown-list");
                 breakdownList.innerHTML = "";
                 values.forEach((value, index) => {
-                    breakdownList.innerHTML += `
-                    <li>
+                    breakdownList.innerHTML += `<li>
                         <p class="text-gray-9 fs-10 d-flex align-items-center mb-0">
                             <i class="ti ti-point-filled" style="color: ${
                                 colors[index]
