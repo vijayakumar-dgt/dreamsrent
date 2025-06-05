@@ -17,7 +17,7 @@
         <div class="charter-company-slider owl-carousel">
             @foreach ($brands as $brand)
             <div class="charter-company-logo">
-                <span><img src="{{ $brand->brand_icon }}" alt="Icon"></span>
+                <span><img src="{{ $brand->brand_image }}" alt="Icon"></span>
             </div>
             @endforeach
         </div>
