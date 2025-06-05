@@ -9071,7 +9071,7 @@ table .badge {
 }
 
 .bike-feature-slider .listing-item .feature-text {
-	z-index: 0;
+	z-index: 1;
 }
 
 .yacht-image-slider.owl-carousel .owl-nav {
@@ -10099,6 +10099,7 @@ table .badge {
 .listing-item.bike-list .listing-img img {
 	width: auto;
 	margin: 0 auto;
+	border-radius: 10px;
 }
 
 .listing-item.bike-list .listing-content {
