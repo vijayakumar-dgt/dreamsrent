@@ -4,7 +4,4 @@
         <input type="hidden" name="{{ $key }}" value="{{ $value }}">
     @endforeach
 </form>
-
-<script>
-    document.getElementById('auto-booking-form').submit();
-</script>
+<script src="{{ asset('frontend/assets/js/custom/redirect-to-booking.js') }}"></script>
