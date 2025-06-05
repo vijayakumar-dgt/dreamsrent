@@ -41,7 +41,8 @@
                     let html = newMessages.map(message => createMessageCard(message)).join('');
 
                     if (initial) {
-                        messageArea.html(html);
+                        const cleanHTML = DOMPurify.sanitize(html);
+                        messageArea.html(cleanHTML);
                         setTimeout(() => {
                             messageContainer.scrollTop(messageContainer[0].scrollHeight);
                         }, 10);
