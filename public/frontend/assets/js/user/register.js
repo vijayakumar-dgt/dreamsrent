@@ -4,6 +4,7 @@
     await loadTranslationFile('web', 'auth, common');
 $(document).ready(function () {
     let emailExists = false;
+    let userRegisterData;
 
     $("#email").on("keyup", function () {
         var email = $(this).val().trim();
@@ -244,15 +245,10 @@ $(document).ready(function () {
 
                         const userName = response.email;
                         const otp = response.otp;
-                        const phoneNumber = response.phone_number || "";
                         const otpDigitLimit = parseInt(response.otp_digit_limit || 4);
-
-
                         const expiresAt = new Date(response.expires_at);
                         const now = new Date();
-                        const diffMs = expiresAt - now;
-                        const otpExpireTime = Math.floor(diffMs / 1000);
-
+                        const otpExpireTime = Math.floor((expiresAt - now) / 1000);
 
                         const inputContainer = $(".inputcontainerreg");
                         inputContainer.empty();
@@ -269,7 +265,7 @@ $(document).ready(function () {
                                     data-next="${nextId}"
                                     data-previous="${prevId}"
                                     maxlength="1"
-                                    >
+                                >
                             `;
                         }
                         inputsHtml += "</div>";
@@ -295,30 +291,17 @@ $(document).ready(function () {
                             $(this).select();
                         });
 
-                        // Show OTP modal after input fields are rendered
                         if (response.otp_type === "email") {
-                            const emailData = {
-                                subject: response.email_subject,
-                                content: response.email_content,
-                            };
+                            const otpEmailMessage = document.getElementById("otp-email-message");
+                            if (otpEmailMessage) {
+                                otpEmailMessage.textContent = `${_l('web.auth.otp_sent_to_email')} ${userName}`;
+                            }
 
-                            sendEmail(userName, emailData, "email", userName, otp)
-                                .then(() => {
-                                    const otpEmailMessage = document.getElementById("otp-email-message");
-                                    if (otpEmailMessage) {
-                                        otpEmailMessage.textContent = `${_l('web.auth.otp_sent_to_email')} ${userName}`;
-                                    }
-
-                                    $("#otp-email-reg-modal").modal("show");
-                                    startTimer(otpExpireTime);
-                                })
-                                .catch(() => {
-                                    $("#otp_error").modal("show");
-                                });
+                            $("#otp-email-reg-modal").modal("show");
+                            startTimer(otpExpireTime);
                         }
-
-                        // You can add SMS handling similarly
                     }
+
 
 
                     $(".btn-outline-light").text(_l('web.auth.sign_in')).prop('disabled', false);
