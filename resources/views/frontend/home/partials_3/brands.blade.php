@@ -12,7 +12,7 @@
             <div class="brand-slider owl-carousel">
                 @foreach($sectionContent as $brand)
                 <div class="brand-item">
-                    <img src="{{ $brand->brand_icon ?? "" }}" class="img-fluid" alt="brand">
+                    <img src="{{ $brand->brand_image ?? "" }}" class="img-fluid" alt="brand">
                 </div>
                 @endforeach
             </div>
