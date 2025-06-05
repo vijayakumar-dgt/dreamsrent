@@ -449,6 +449,7 @@ return [
         'count_of_yachts' => 'Count of Yachts',
     ],
     'common' => [
+        'updated_on' => 'Updated On',
         'back_to_home' => 'Back to Home',
         'view_reply'  => 'View & Reply',
         'search' => 'Search',

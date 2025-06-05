@@ -169,7 +169,7 @@ class ReportRepository implements ReportRepositoryInterface
         return $data;
     }
 
-    public function getMonthlyEarnings(): array
+    public function getMonthlyEarnings()
     {
         $monthlyEarnings = Booking::select(
             DB::raw('SUM(final_price) as total_income'),
@@ -182,7 +182,7 @@ class ReportRepository implements ReportRepositoryInterface
         return $monthlyEarnings;
     }
 
-    public function getEarningsBreakdown(): array
+    public function getEarningsBreakdown()
     {
 
         $breakdown = Booking::select(

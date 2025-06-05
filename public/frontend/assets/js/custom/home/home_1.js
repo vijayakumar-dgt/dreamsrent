@@ -49,8 +49,11 @@
             $suggestions.empty();
 
             if (data.length > 0) {
-                data.forEach(location => {
-                    $suggestions.append(`<li data-id="${location.id}">${location.name}</li>`);
+                 data.forEach(location => {
+                    const $li = $('<li></li>')
+                        .attr('data-id', location.id)
+                        .text(location.name);
+                    $suggestions.append($li);
                 });
                 $searchBtn.prop("disabled", false);
             } else {

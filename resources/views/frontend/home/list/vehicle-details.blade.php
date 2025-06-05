@@ -774,7 +774,6 @@
     <!-- Fancybox JS -->
     <script src="{{asset('frontend/assets/plugins/fancybox/fancybox.umd.js')}}"></script>
     <script src="{{ asset('backend/assets/plugins/intltelinput/js/intlTelInput.js') }}"></script>
+    <script src="{{ asset('/frontend/assets/js/purify.min.js') }}"></script>
     <script src="{{ asset('/frontend/assets/js/custom/home/vehicle-details.js') }}"></script>
-    <script src="{{ asset('/frontend/assets/js/custom/home/vehicle-details.js') }}"></script>
-    <script src="{{ asset('/frontend/assets/js/custom/home/purify.min.js') }}"></script>
     @endpush

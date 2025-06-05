@@ -12,7 +12,7 @@
                     <div class="media-body flex-grow-1">
                         <p class="noti-details">
                             <span class="noti-title">
-                                <span class="text-dark fw-bold">{{ __('web.common.notice') }}:</span> {{ e($notificationContent) }}
+                                <span class="text-dark fw-bold">{{ __('web.common.notice') }}:</span> {{ $notificationContent }}
                             </span>
                         </p>
                         <p class="noti-time">

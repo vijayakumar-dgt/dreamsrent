@@ -416,27 +416,32 @@ function sendNotification(string $email, string $slug, array $notifyData = []): 
         return;
     }
     $parsedTemplate = [
-        'subject'     => $replaced($template->subject),
-        'content' => $replaced($template->description),
-        'sms_content' => $replaced($template->sms_content ?? ''),
+        'subject'              => $replaced($template->subject),
+        'content'              => $replaced($template->description),
+        'sms_content'          => $replaced($template->sms_content ?? ''),
         'notification_content' => $replaced($template->notification_content ?? ''),
     ];
 
     $payload = [
         'to_email' => $email,
-        'subject' => $parsedTemplate['subject'],
-        'content' => $parsedTemplate['content'],
+        'subject'  => $parsedTemplate['subject'],
+        'content'  => $parsedTemplate['content'],
     ];
-    $emailPayload   = new Request($payload);
+
+    $emailPayload    = new Request($payload);
     $emailController = new EmailController();
     $emailController->sendEmail($emailPayload);
-    $user = User::where('email', $email)->first();
-    if ($user) {
-        Notification::create([
-            'user_id' => $user->id,
-            'subject' => $parsedTemplate['subject'],
-            'content' => $parsedTemplate['notification_content']
-        ]);
+
+    $excludedSlugs = ['login-otp', 'forgot-otp', 'register-otp', 'welcome-email'];
+    if (!in_array($slug, $excludedSlugs)) {
+        $user = User::where('email', $email)->first();
+        if ($user) {
+            Notification::create([
+                'user_id' => $user->id,
+                'subject' => $parsedTemplate['subject'],
+                'content' => $parsedTemplate['notification_content'],
+            ]);
+        }
     }
 }
 

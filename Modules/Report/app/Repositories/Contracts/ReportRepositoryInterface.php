@@ -9,6 +9,6 @@ interface ReportRepositoryInterface
 {
     public function incomeReport(): array;
     public function earningReport(): array;
-    public function getMonthlyEarnings(): array;
-    public function getEarningsBreakdown(): array;
+    public function getMonthlyEarnings();
+    public function getEarningsBreakdown();
 }

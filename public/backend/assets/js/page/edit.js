@@ -194,94 +194,74 @@
                 success: function (response) {
                     if (response.success) {
                         var data = response.data;
-                        if (
-                            data.page_content &&
-                            data.page_content.trim() !== ""
-                        ) {
-                            var pageContentArray = JSON.parse(
-                                data.page_content
-                            );
-
+                        if (data.page_content && data.page_content.trim() !== "") {
+                            var pageContentArray = JSON.parse(data.page_content);
                             let count = 1;
-
                             let summernoteId = "";
 
                             pageContentArray.forEach(function (section) {
-                                const uniqueId = Date.now();
-                                const textareaTemplate = `
-                            <div class="textarea-item border p-3 mb-3 mt-3 bg-light">
-                                <div class="d-flex align-items-center justify-content-end mt-1">
-                                    <label for="${uniqueId}" class="me-2 fw-bold">${_l(
-                                    "admin.common.status"
-                                )}</label>
-                                    <div class="status-toggle modal-status">
-                                        <input type="checkbox" name="page_status[]" id="${uniqueId}" value="1" class="check user8" checked>
-                                        <label for="${uniqueId}" class="checktoggle"></label>
-                                    </div>
-                                    <a class="removeTextarea ms-3">
-                                        <i class="ti ti-trash fs-20 fw-bold"></i>
-                                    </a>
-                                </div>
-                
-                                <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">${_l(
-                                            "admin.page.section_title"
-                                        )} <span class="text-danger">*</span></label>
-                                        <input type="text" name="section_title[]"  value="${
-                                            section.section_title
-                                        }" placeholder="${_l(
-                                    "admin.page.enter_title"
-                                )}" class="form-control">
-                                        <span class="invalid-feedback"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">${_l(
-                                            "admin.page.section_label"
-                                        )} <span class="text-danger">*</span></label>
-                                        <input type="text" name="section_label[]" value="${
-                                            section.section_label
-                                        }" placeholder="${_l(
-                                    "admin.page.enter_label"
-                                )}" class="form-control">
-                                        <span class="invalid-feedback"></span>
-                                    </div>
-                                </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="mb-3">
-                                        <label class="form-label">${_l(
-                                            "admin.page.section_des"
-                                        )} </label>
-                                        <textarea name="page_content[]" placeholder="${_l(
-                                            "admin.page.enter_content"
-                                        )}" cols="10" rows="3" class="form-control summer" id="summernote_${count}"></textarea>
-                                        <span class="invalid-feedback"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
+                                const uniqueId = "status_" + Date.now() + "_" + count;
 
-                                $(".textareasContainer").append(
-                                    textareaTemplate
-                                );
+                                // Sanitize dynamic inputs
+                                const sectionTitle = DOMPurify.sanitize(section.section_title ?? "");
+                                const sectionLabel = DOMPurify.sanitize(section.section_label ?? "");
+                                const sectionContent = DOMPurify.sanitize(section.section_content ?? "");
+
+                                // Create the HTML block with sanitized content
+                                let rawHTML = `
+                                    <div class="textarea-item border p-3 mb-3 mt-3 bg-light">
+                                        <div class="d-flex align-items-center justify-content-end mt-1">
+                                            <label for="${uniqueId}" class="me-2 fw-bold">${_l("admin.common.status")}</label>
+                                            <div class="status-toggle modal-status">
+                                                <input type="checkbox" name="page_status[]" id="${uniqueId}" value="1" class="check user8" checked>
+                                                <label for="${uniqueId}" class="checktoggle"></label>
+                                            </div>
+                                            <a class="removeTextarea ms-3">
+                                                <i class="ti ti-trash fs-20 fw-bold"></i>
+                                            </a>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">${_l("admin.page.section_title")} <span class="text-danger">*</span></label>
+                                                    <input type="text" name="section_title[]" value="${sectionTitle}" placeholder="${_l("admin.page.enter_title")}" class="form-control">
+                                                    <span class="invalid-feedback"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">${_l("admin.page.section_label")} <span class="text-danger">*</span></label>
+                                                    <input type="text" name="section_label[]" value="${sectionLabel}" placeholder="${_l("admin.page.enter_label")}" class="form-control">
+                                                    <span class="invalid-feedback"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">${_l("admin.page.section_des")}</label>
+                                                <textarea name="page_content[]" placeholder="${_l("admin.page.enter_content")}" cols="10" rows="3" class="form-control summer" id="summernote_${count}"></textarea>
+                                                <span class="invalid-feedback"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+
+                                // Sanitize the whole block before appending
+                                let sanitizedHTML = DOMPurify.sanitize(rawHTML, { SAFE_FOR_JQUERY: true });
+
+                                $(".textareasContainer").append(sanitizedHTML);
+
+                                summernoteId = `#summernote_${count}`;
                                 initializeSummernote();
-                                summernoteId = `#summernote_${count++}`;
-                                $(summernoteId).summernote(
-                                    "code",
-                                    section.section_content
-                                );
+                                $(summernoteId).summernote("code", sectionContent);
+                                count++;
                             });
                         }
                     }
                     $(".table-loader").hide();
                     $(".label-loader, .input-loader").hide();
-                    $(
-                        ".real-label, .real-table, .real-data, .real-input"
-                    ).removeClass("d-none");
+                    $(".real-label, .real-table, .real-data, .real-input").removeClass("d-none");
                 },
                 error: function () {
                     $("#page-content").html("<p>Error fetching content.</p>");
@@ -450,7 +430,6 @@
             },
             success: function (response) {
                 if (response.code === 200) {
-                    console.log(response);
                     var sectionHtml = '<div class="row p-1">';
 
                     $.each(response.data, function (index, section) {

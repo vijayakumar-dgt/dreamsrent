@@ -61,7 +61,8 @@
 
         if (data.length > 0) {
             data.forEach(location => {
-                $container.append(`<li>${location.name}</li>`);
+                const $li = $('<li></li>').text(location.name); // Safe way
+                $container.append($li);
             });
             $searchBtn.prop("disabled", false);
         } else {

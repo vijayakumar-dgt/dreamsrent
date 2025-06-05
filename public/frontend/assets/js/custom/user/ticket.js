@@ -556,7 +556,7 @@
                     $('<h6>').addClass('mb-1').text(userName),
                     $('<p>').append(
                         $('<i>').addClass('ti ti-calendar-bolt me-1'),
-                        document.createTextNode(`${_l('admin.common.updated_on')} ${createdAt}`)
+                        document.createTextNode(`${_l('web.common.updated_on')} ${createdAt}`)
                     )
                 );
 

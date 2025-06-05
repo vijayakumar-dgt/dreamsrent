@@ -76,7 +76,7 @@ const fetchUserBookings = (callback = null) => {
 
         table.draw();
         $(".booking-headers").trigger("click");
-        $("#totalBookingCount").html(response.data.length || 0);
+        $("#totalBookingCount").text(response.data.length || 0);
     },
     complete: () => { 
        if(callback){
