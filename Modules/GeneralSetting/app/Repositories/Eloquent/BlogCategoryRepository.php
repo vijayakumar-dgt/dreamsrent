@@ -17,10 +17,17 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Modules\GeneralSetting\Models\Language;
+use App\Services\ImageResizer;
 use Illuminate\Support\Str;
 
 class BlogCategoryRepository implements BlogCategoryRepositoryInterface
 {
+    protected ImageResizer $imageResizer;
+
+    public function __construct(ImageResizer $imageResizer)
+    {
+        $this->imageResizer = $imageResizer;
+    }
     public function blogCategory(): array
     {
         /** @var \App\Models\User|null $authId */
@@ -171,7 +178,7 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
     public function blogStore(Request $request): JsonResponse
     {
         assert($request->file('image') instanceof \Illuminate\Http\UploadedFile);
-        $imagePath = $request->hasFile('image') ? $request->file('image')->store('blogs/images', 'public') : null;
+        $imagePath = $this->imageResizer->uploadFile($request->file('image'), 'blogs/images', null);
         BlogPost::create([
             'title' => $request->title,
             'slug' => Str::slug($request->title),
@@ -228,9 +235,9 @@ class BlogCategoryRepository implements BlogCategoryRepositoryInterface
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             if ($file) {
-                $path = $file->store('blogs/images', 'public');
-                if (is_string($path)) {
-                    $blog->image = $path;
+                $imagePath = $this->imageResizer->uploadFile($request->file('image'), 'blogs/images', null);
+                if (is_string($imagePath)) {
+                    $blog->image = $imagePath;
                 }
             }
         }
