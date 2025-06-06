@@ -5,6 +5,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\TranslationController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -35,8 +36,8 @@ Route::group(['middleware' => ['checkInstallerStatus', 'setLocaleUser', 'securit
         Route::get('/vehicle-details/{slug}', 'vehicleDetails')->name('vehicleDetails');
         Route::get('search-locations', 'searchLocations');
         Route::get('/contact-us', 'contactUs')->name('contact-us');
-        Route::get('test', 'test');
     });
+    Route::get('theme/{slug}', [ThemeController::class, 'theme'])->name('theme')->middleware('maintenance');
 
     Route::middleware('maintenance')->group(function () {
         Route::get('/login', [UserLoginRegisterController::class, 'userLogin'])->name('user-login');

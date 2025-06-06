@@ -35,7 +35,7 @@
 		@endif
 		@include('frontend.toast')
 	</div>
-	@if(!request()->routeIs('home'))
+	@if(!request()->routeIs(['home', 'theme']))
 	@include('frontend.preloader')
 	@endif
 	<!-- scrollToTop start -->

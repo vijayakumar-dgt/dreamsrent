@@ -628,3 +628,16 @@ function getCategoryId()
     $category   = Category::where('language_id', $languageId)->where('slug', $themes[$theme_id])->first();
     return $category->id ?? 1;
 }
+
+function getCustomThemeCategoryId($theme_id)
+{
+    $themes = [
+        1 => 'car',
+        2 => 'car',
+        3 => 'bike',
+        4 => 'boat',
+    ];
+    $languageId = getLanguageId(app()->getLocale());
+    $category   = Category::where('language_id', $languageId)->where('slug', $themes[$theme_id])->first();
+    return $category->id ?? 1;
+}

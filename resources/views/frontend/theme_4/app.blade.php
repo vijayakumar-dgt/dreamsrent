@@ -38,7 +38,7 @@
 		@if(request()->routeIs('home'))
 			@include('frontend.home.cookie.consent')
 		@endif
-		@if(!request()->routeIs('home'))
+		@if(!request()->routeIs(['home', 'theme']))
 		@include('frontend.preloader')
 		@endif
 		@include('frontend.toast')
