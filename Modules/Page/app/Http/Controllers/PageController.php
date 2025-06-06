@@ -1027,15 +1027,15 @@ class PageController extends Controller
                         ])->where('language_id', $lang_id);
 
                         if ($type === 'popular') {
-                            $vehicles = $query->where('popular', 1)->get();
+                            $vehicles = $query->where('popular', 1)->where('type', 'car')->get();
                             $section['section_type'] = 'popular_vehicle';
                             $section['design'] = 'vehicle_one';
                         } elseif ($type === 'featured') {
-                            $vehicles = $query->where('recommended', 1)->get();
+                            $vehicles = $query->where('recommended', 1)->where('type', 'car')->get();
                             $section['section_type'] = 'feature_vehicle';
                             $section['design'] = 'vehicle_two';
                         } else {
-                            $vehicles = $query->get();
+                            $vehicles = $query->where('type', 'car')->get();
                             $section['section_type'] = 'al_vehicle';
                             $section['design'] = 'vehicle_three';
                         }
