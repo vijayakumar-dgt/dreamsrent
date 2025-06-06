@@ -2205,6 +2205,7 @@ return array(
     'new' => 'New',
     'notice' => 'Notice',
     'no_notifications_found' => 'No notifications found',
+    'image_size_600_420' => 'Upload Image size 600*420, within 2MB',
   ),
   'page' => [
     'pages' => 'Pages',

@@ -2203,6 +2203,7 @@ return array (
     'new' => 'جديد',
     'notice' => 'ملاحظة',
     'no_notifications_found' => 'لم يتم العثور على اشعارات',
+    'image_size_600_420' => 'قم بتحميل صورة بحجم 600*420، بحجم 2MB',
   ),
   'page' =>
   array (

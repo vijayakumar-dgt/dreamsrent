@@ -95,7 +95,7 @@
                 image: {
                     required: false,
                     filesize: 2048,
-                    imageDimension: [180, 180],
+                    imageDimension: [600, 420],
                     extension: "jpeg|jpg|png|svg",
                 },
                 name: {
@@ -208,7 +208,7 @@
                 reader.onload = (e) => (img.src = e.target.result);
 
                 img.onload = function () {
-                    valid = img.width === 180 && img.height === 180;
+                    valid = img.width === 600 && img.height === 420;
                     $(element).data("valid-dimension", valid);
                     $(element).valid();
                 };
@@ -216,7 +216,7 @@
                 reader.readAsDataURL(file);
                 return $(element).data("valid-dimension") !== false;
             },
-            "Image dimensions must be exactly 180x180 pixels."
+            _l("admin.common.image_size_600_420")
         );
 
         $.validator.addMethod(
@@ -232,7 +232,7 @@
 
                 return timeToMinutes(value) > timeToMinutes(startTime);
             },
-            "End time must be greater than start time."
+            ""
         );
     };
 
