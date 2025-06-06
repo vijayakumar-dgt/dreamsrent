@@ -129,11 +129,15 @@
                         <div class="card-body pb-0">
                     <input type="hidden" name="theme_id" id="theme_id" value="{{ $query->theme_id }}">
                     @php $themeId = $query->theme_id ?? 1; @endphp
-                    <div class="d-flex align-items-center justify-content-center setSection">
+                    <div class="d-flex align-items-center justify-content-center">
                         @if ($themeId == 1)
                         <button class="btn btn-primary rounded-0 w-100">{{ __('admin.page.screen_one') }}</button>
                         @elseif ($themeId == 2)
                         <button class="btn btn-primary rounded-0 w-100">{{ __('admin.page.screen_two') }}</button>
+                        @elseif ($themeId == 3)
+                        <button class="btn btn-primary rounded-0 w-100">{{ __('admin.page.screen_three') }}</button>
+                        @elseif ($themeId == 4)
+                        <button class="btn btn-primary rounded-0 w-100">{{ __('admin.page.screen_four') }}</button>
                         @endif
                     </div>
                     <div id="cardContainer" class="section-list d-none real-table"></div>
