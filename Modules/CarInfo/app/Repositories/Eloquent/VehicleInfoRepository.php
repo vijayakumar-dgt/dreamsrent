@@ -669,9 +669,9 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $vehicleImagePath = null;
             if ($request->hasFile('vehicle_image')) {
                 $file = $request->file('vehicle_image');
-                $existingImage = $vehicle->vehicle_image;
+                $existingImage = $vehicle->vehicle_image ?? null;
                 if ($file && $file->isValid()) {
-                    $vehicleImagePath = uploadFile($file, 'vehicles/images/', $existingImage);
+                    $vehicleImagePath = $this->imageResizer->uploadFile($file, 'vehicles/images', $existingImage);
                 }
             } else {
                 $vehicleImagePath = $vehicle->vehicle_image;

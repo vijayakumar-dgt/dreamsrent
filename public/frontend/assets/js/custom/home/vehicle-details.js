@@ -1531,21 +1531,30 @@
                     : `${price}${currency}`
                 : "";
 
-        const html = vehicle.tariff
-            .map(
-                (value) => `
-            <tr>
-                <td>${value.tariff_title ?? ""}</td>
-                <td>${formatPrice(value.tariff_daily_price)}</td>
-                <td>${value.tariff_base_km ?? 0}</td>
-                <td>${formatPrice(value.tariff_extra_price)}</td>
-            </tr>
-        `
-            )
-            .join("");
+        const tbody = document.querySelector("#tarrifTable tbody");
 
-        let cleanHtml = DOMPurify.sanitize(html);
-        $("#tarrifTable tbody").html(cleanHtml);
+        tbody.innerHTML = "";
+
+        vehicle.tariff.forEach((value) => {
+            const tr = document.createElement("tr");
+
+            const td1 = document.createElement("td");
+            td1.textContent = value.tariff_title ?? "";
+
+            const td2 = document.createElement("td");
+            td2.textContent = formatPrice(value.tariff_daily_price);
+
+            const td3 = document.createElement("td");
+            td3.textContent = value.tariff_base_km ?? 0;
+
+            const td4 = document.createElement("td");
+            td4.textContent = formatPrice(value.tariff_extra_price);
+
+            tr.append(td1, td2, td3, td4);
+
+            tbody.appendChild(tr);
+        });
+
 
         $(".tariff_section").show();
     }

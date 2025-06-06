@@ -134,7 +134,7 @@ return [
         'pickup_date' => 'Pickup Date',
         'return_date' => 'Return Date',
         'view_all_cars' => 'View All Vehicles',
-        'car_listings' => 'Car Listings',
+        'car_listings' => 'Vehicle Listings',
         'year'        => 'Year',
         'fuel_type'   => 'Fuel Type',
         'mileage'     => 'Mileage',

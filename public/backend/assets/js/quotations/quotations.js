@@ -154,10 +154,10 @@
                 .removeClass("d-none");
         });
 
-        $("#reservation_delete_form").on("submit", function (e) {
+        $("#quotation_delete_form").on("submit", function (e) {
             e.preventDefault();
             $.ajax({
-                url: "/admin/delete-quotations",
+                url: "/admin/delete-quotation",
                 type: "POST",
                 data: {
                     id: $("#delete_id").val(),
@@ -188,7 +188,7 @@
             });
         });
 
-        $(document).on("click", ".deleteReservation", function () {
+        $(document).on("click", ".delete-quotation", function () {
             let id = $(this).data("id");
             $("#delete_id").val(id);
         });
