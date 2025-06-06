@@ -2,9 +2,9 @@
 
 namespace Modules\CarInfo\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 
-class CylinderRequest extends FormRequest
+class CylinderRequest extends CustomFailedValidation
 {
     /**
      * Get the validation rules that apply to the request.

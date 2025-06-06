@@ -1598,7 +1598,7 @@
                         .append(
                             $('<div>').append(
                                 $('<h6>').addClass('fs-14 mb-1').text(_l('admin.common.price')),
-                                $('<p>').html(`${default_currency}<span class="td-driver-price">${safeText(driverPrice)}</span>`)
+                                $('<p>').html(`${default_currency}<span class="td-driver-price">${DOMPurify.sanitize(driverPrice) || 0}</span>`)
                             )
                         );
 

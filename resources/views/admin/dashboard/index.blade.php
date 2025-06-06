@@ -368,7 +368,13 @@
                                         </td>
                                         <td class="text-end">
                                             <p class="fs-13 mb-1 text-default">{{ __('admin.dashboard.odometer') }}</p>
-                                            <h6 class="fs-14 fw-semibold">{{$maintenance->odometer}} {{ __('admin.dashboard.km') }}</h6>
+                                            <h6 class="fs-14 fw-semibold">
+                                                @if ($maintenance->odometer) 
+                                                    {{$maintenance->odometer}} {{ __('admin.dashboard.km') }} 
+                                                @else 
+                                                -
+                                                @endif
+                                            </h6>
                                         </td>
                                     </tr>
                                     @endforeach

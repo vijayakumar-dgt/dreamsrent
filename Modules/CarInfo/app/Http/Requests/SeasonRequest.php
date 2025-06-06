@@ -2,10 +2,10 @@
 
 namespace Modules\CarInfo\Http\Requests;
 
+use App\Library\CustomFailedValidation;
 use Illuminate\Validation\Rule;
-use Illuminate\Foundation\Http\FormRequest;
 
-class SeasonRequest extends FormRequest
+class SeasonRequest extends CustomFailedValidation
 {
     public function rules(): array
     {

@@ -3,7 +3,6 @@
 namespace Modules\CarInfo\Http\Requests;
 
 use App\Library\CustomFailedValidation;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class VehicleSeatRequest extends CustomFailedValidation

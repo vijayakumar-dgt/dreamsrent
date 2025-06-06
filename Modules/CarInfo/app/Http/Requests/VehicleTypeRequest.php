@@ -2,10 +2,10 @@
 
 namespace Modules\CarInfo\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 use Illuminate\Validation\Rule;
 
-class VehicleTypeRequest extends FormRequest
+class VehicleTypeRequest extends CustomFailedValidation
 {
     public function authorize(): bool
     {
