@@ -2354,6 +2354,7 @@ class PageController extends Controller
 
             $vehicleBrand = Brand::select("id", "brand_name", "brand_image", "brand_icon")
                 ->where("language_id", $language_id)
+                ->where("category_id", $categoryId)
                 ->where("status", 1)
                 ->get();
 

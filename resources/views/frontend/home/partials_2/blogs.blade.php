@@ -4,6 +4,10 @@
                 <h2>{{ ucfirst($section['section_title'] ?? "") }}</h2>
                 <p>{{ ucfirst($section['section_label'] ?? "") }}</p>
             </div>
+            @php
+                $blogs = $section['section_content'] ?? [];
+                $section['section_content'] = array_slice($blogs, 0, 3);
+            @endphp
             <div class="row row-gap-3 justify-content-center">
                 @if(!empty($section['section_content'] && count($section['section_content']) > 0))
                     @foreach($section['section_content'] as $k => $content)
