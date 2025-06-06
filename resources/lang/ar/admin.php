@@ -2407,7 +2407,7 @@ return array (
     'please_enter_the_name' => 'الرجاء إدخال الاسم',
     'no_blog_found' => 'لم يتم العثور على مدونة',
     'no_data_found' => 'لم يتم العثور على بيانات',
-    'image_dimensions_must_be_exactly_735_310_pixels' => 'يجب أن تكون أبعاد الصورة 735 × 310 بكسل بالضبط',
+    'image_dimensions_must_be_exactly_900_600_pixels' => 'يجب أن تكون أبعاد الصورة 900 × 600 بكسل بالضبط',
     'blog_details' => 'تفاصيل المدونة',
   ),
   'auth' =>
