@@ -67,7 +67,19 @@
                         }
                         @endphp
                         <li class="{{ $active }}">
+                            @if($rawLink == '/')
+                            <li class="has-submenu">
+                                <a href="javascript:void(0);">{{ __('web.home.home') }}</a>
+                                <ul class="submenu">
+                                    <li><a href="{{ url('/theme/home-01') }}">{{ __('web.home.home') }} 1</a></li>
+                                    <li><a href="{{ url('/theme/home-02') }}">{{ __('web.home.home') }} 2</a></li>
+                                    <li><a href="{{ url('/theme/home-03') }}">{{ __('web.home.home') }} 3</a></li>
+                                    <li><a href="{{ url('/theme/home-04') }}">{{ __('web.home.home') }} 4</a></li>
+                                </ul>
+                            </li>
+                            @else
                             <a href="{{ $menuLink }}">{{ $menu['label'] }}</a>
+                            @endif
                         </li>
                         @endforeach
                         @endif
