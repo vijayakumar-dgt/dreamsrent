@@ -38,7 +38,7 @@
                                                     <span id="selectedFileNameAdd" class="fs-14 text-muted">{{__('admin.blog.no_file_chosen')}}</span>
                                                 </div>
                                                 <div class="mt-2">
-                                                    <p class="fs-14">{{__('admin.blog.image_dimensions_must_be_exactly_735_310_pixels')}}</p>
+                                                    <p class="fs-14">{{__('admin.blog.image_dimensions_must_be_exactly_900_600_pixels')}}</p>
                                                 </div>
                                             </div>
                                         </div>
