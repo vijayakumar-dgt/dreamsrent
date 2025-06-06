@@ -4,28 +4,7 @@
                 <div class="blog grid-blog">
                     <div class="blog-image-list custom-blog-list-img">
                         <a href="{{ route('blogs.detail', $blogPost->slug) }}">
-                            <!-- <img class="img-fluid" src="{{ asset('storage/' . $blogPost->image) }}" alt="Post Image"> -->
-                            @php
-    $imagePath = $blogPost->image;
-    $filename = basename($imagePath);
-@endphp
-
-<picture>
-    {{-- Small screen (mobile first) --}}
-    <source media="(max-width: 767px)" srcset="{{ asset('storage/blogs/images/thumbnail/' . $filename) }}">
-
-    {{-- Medium screen (tablets) --}}
-    <source media="(max-width: 1199px)" srcset="{{ asset('storage/blogs/images/medium/' . $filename) }}">
-
-    {{-- Large screen (desktop and up) --}}
-    <source media="(min-width: 1200px)" srcset="{{ asset('storage/blogs/images/large/' . $filename) }}">
-
-    {{-- Fallback if none match (safe to use medium here) --}}
-    <img class="img-fluid" src="{{ asset('storage/blogs/images/medium/' . $filename) }}" alt="Post Image">
-</picture>
-
-
-
+                            <img class="img-fluid" src="{{ asset('storage/' . $blogPost->image) }}" alt="Post Image">
                         </a>
                     </div>
                     <div class="blog-content">
