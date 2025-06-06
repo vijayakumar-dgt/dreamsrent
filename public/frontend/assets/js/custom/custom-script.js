@@ -548,11 +548,15 @@
                 const safeContent = safeDoc.body;
 
                 const container = document.querySelector('.notification-list');
-                container.innerHTML = '';
 
-                Array.from(safeContent.childNodes).forEach(node => {
-                    container.appendChild(node);
-                });
+                if (container) {
+                    container.innerHTML = '';
+
+                    Array.from(safeContent.childNodes).forEach(node => {
+                        container.appendChild(node);
+                    });
+                }
+
                 if(response.count > 0){
                     $("#newNotificationBadge").removeClass("d-none");
                     $(".has-notification").removeClass("d-none");
