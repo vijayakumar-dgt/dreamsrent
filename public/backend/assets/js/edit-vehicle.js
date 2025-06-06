@@ -1812,22 +1812,15 @@
                     img.src = e.target.result;
 
                     img.onload = function () {
-                        if (this.width === 690 && this.height === 420) {
-                            selectedImages.set(file.name, file);
-                            validFiles.push(file);
+                        selectedImages.set(file.name, file);
+                        validFiles.push(file);
 
-                            imageListContainer.append(`
-                        <div class="uploaded-img" data-file="${file.name}">
-                            <img src="${e.target.result}" alt="img">
-                            <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
-                        </div>
-                    `);
-                        } else {
-                            showToast(
-                                "error",
-                                `Image "${file.name}" must be exactly 690x420 pixels.`
-                            );
-                        }
+                        imageListContainer.append(`
+                    <div class="uploaded-img" data-file="${file.name}">
+                        <img src="${e.target.result}" alt="img">
+                        <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
+                    </div>
+                `);
 
                         remainingChecks--;
                         if (remainingChecks === 0) updateImageInput(validFiles);

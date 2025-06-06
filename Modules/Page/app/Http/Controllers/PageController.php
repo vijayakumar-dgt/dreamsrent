@@ -1067,6 +1067,9 @@ class PageController extends Controller
 
                             $multipleImages = array_map(function ($img) {
                                 $img = '/' . ltrim($img, '/'); // Ensure single leading slash
+
+                                $img = str_replace('vehicles/images/', 'vehicles/images/small/', $img);
+
                                 return url('storage' . $img);
                             }, $multipleImages);
 
@@ -1214,6 +1217,9 @@ class PageController extends Controller
 
                             $multipleImages = array_map(function ($img) {
                                 $img = '/' . ltrim($img, '/'); // Ensure single leading slash
+
+                                $img = str_replace('vehicles/images/', 'vehicles/images/small/', $img);
+
                                 return url('storage' . $img);
                             }, $multipleImages);
 
@@ -1376,6 +1382,9 @@ class PageController extends Controller
 
                             $multipleImages = array_map(function ($img) {
                                 $img = '/' . ltrim($img, '/'); // Ensure single leading slash
+
+                                $img = str_replace('vehicles/images/', 'vehicles/images/small/', $img);
+
                                 return url('storage' . $img);
                             }, $multipleImages);
 

@@ -31,23 +31,21 @@ class ImageResizer
         $basePath = storage_path("app/public/$baseFolder/");
         $sizes = [
             'original'   => null,
-            'large'      => 1200,
-            'medium'     => 800,
-            'thumbnail'  => 300,
+            'large'      => [1200, 1000],
+            'medium'     => [900, 600],
+            'small'      => [690, 420],
+            'thumbnail'  => [300, 200],
         ];
 
-        // Create required folders
         foreach ($sizes as $folder => $_) {
             $path = $basePath . ($folder === 'original' ? '' : "$folder/");
             File::ensureDirectoryExists($path, 0755, true);
         }
 
         if ($isSvg) {
-            // Save SVG as original only
             $svgPath = $basePath . $uniqueName;
             $file->move(dirname($svgPath), basename($svgPath));
 
-            // Delete old SVG if exists
             if ($oldFilePath) {
                 $oldFilename = basename($oldFilePath);
                 foreach ($sizes as $folder => $_) {
@@ -68,16 +66,12 @@ class ImageResizer
             return null;
         }
 
-        // Save resized images
-        foreach ($sizes as $folder => $width) {
+        foreach ($sizes as $folder => $dimensions) {
             $targetPath = $basePath . ($folder === 'original' ? '' : "$folder/") . $uniqueName;
             $resized = clone $image;
 
-            if ($width) {
-                $resized->resize($width, $width, function ($c) {
-                    $c->aspectRatio();
-                    $c->upsize();
-                });
+            if ($dimensions) {
+                $resized->resize($dimensions[0], $dimensions[1]);
             }
 
             try {
@@ -87,7 +81,6 @@ class ImageResizer
             }
         }
 
-        // Delete old files if needed
         if ($oldFilePath) {
             $oldFilename = basename($oldFilePath);
             foreach ($sizes as $folder => $_) {
