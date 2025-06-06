@@ -1,5 +1,10 @@
 @php
-    $yachts = $section['section_content']['vehicles'] ?? [];
+    $yachtsCollection = $section['section_content']['vehicles'] ?? [];
+     if (!is_null($yachtsCollection) && $yachtsCollection->isNotEmpty()) {
+        $yachts = $yachtsCollection->take(4);
+    } else {
+        $yachts = collect();
+    }
 @endphp
 <!-- Yacht Offer -->
 <section class="yacht-offer-sec">
@@ -8,7 +13,7 @@
     </div>
     <div class="container">
         <div class="section-header-two">
-            <h2>{{ $section['section_title'] ?? "" }}</h2>
+            <h2>{{ $section['section_title'] ?? "" }} </h2>
             <p>{{ $section['section_label'] ?? "" }}</p>
         </div>
         <div class="yacht-list-cards">

@@ -6,7 +6,10 @@
             <p>{{ $section['section_label'] }}</p>
         </div>
         <!-- /Heading title -->
-
+         @php
+             $blogs = $section['section_content'] ?? [];
+             $section['section_content'] = array_slice($blogs, 0, 3);
+         @endphp
         <div class="row">
             @if(!empty($section['section_content']) && count($section['section_content']) > 0)
             @foreach($section['section_content'] as $blog)
