@@ -13,7 +13,7 @@
             <div class="add_page col-md-8 pageSectionList shadow-sm">
                 <div class="card mb-0">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <h5>{{ __('admin.page.add_page') }}</h5>
+                        <h5>{{ __('admin.page.edit_page') }}</h5>
                         <div>
                             <select name="language_id" id="language_id" class="form-control select">
                                 <option value="">Select Lang</option>

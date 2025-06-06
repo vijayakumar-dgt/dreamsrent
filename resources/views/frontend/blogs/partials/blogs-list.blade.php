@@ -8,8 +8,8 @@
                         </a>
                     </div>
                     <div class="blog-content">
-                        <div class="blog-list-date">
-                            <ul class="meta-item-list move-cal">
+                        <div class="blog-list-date gap-2 flex-wrap">
+                            <ul class="meta-item-list gap-2 flex-wrap">
                                 <li>
                                     <div class="post-author">
                                         <div class="post-author-img">

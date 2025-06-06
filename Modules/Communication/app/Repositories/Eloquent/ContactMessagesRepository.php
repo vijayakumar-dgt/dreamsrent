@@ -29,8 +29,6 @@ class ContactMessagesRepository implements ContactMessagesRepositoryInterface
                 'data' => $contact,
             ];
         } catch (\Exception $e) {
-            Log::error('Contact message creation failed: ' . $e->getMessage());
-
             return [
                 'code' => 500,
                 'success' => false,

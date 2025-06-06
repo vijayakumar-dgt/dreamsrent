@@ -28,7 +28,7 @@
             const port = $("#port").val().trim();
             const database = $("#database").val().trim();
             const username = $("#user").val().trim();
-            const db_password = $("#password").val();
+            const db_pass = $("#password").val();
             const csrfToken = $('meta[name="csrf-token"]').attr("content");
 
             const freshInstall = $("#fresh_install").is(":checked");
@@ -70,7 +70,7 @@
                         port,
                         database,
                         user: username,
-                        db_password,
+                        db_pass,
                         _token: csrfToken,
                         ...(freshInstall && { fresh_install: 1 }),
                         ...(resetDatabase && { reset_database: 1 }),

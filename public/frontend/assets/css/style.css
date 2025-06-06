@@ -7041,6 +7041,9 @@ table .badge {
 .yacht-cat-grid .yatch-card-img img {
 	border-radius: 5px 5px 0 0;
 	transition: 0.5s all;
+	width: 100%;
+	height: 137px;
+	object-fit: cover;
 }
 
 .yacht-cat-grid .yatch-card-img:hover img {
@@ -7328,11 +7331,15 @@ table .badge {
 	}
 }
 
+.charter-company-logo {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
 .charter-company-slider .charter-company-logo span {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	min-height: 74px;
+	min-height: 80px;
 	width: 100%;
 	box-shadow: 0px 4px 24px 0px rgba(225, 225, 225, 0.25);
 	background: #fff;
@@ -7341,6 +7348,8 @@ table .badge {
 
 .charter-company-slider .charter-company-logo span img {
 	width: auto;
+    object-fit: cover;
+    height: 84px;
 }
 
 .top-rated-yachts .section-header-two {
@@ -7988,7 +7997,6 @@ table .badge {
 
 .yacht-list-cards .top-rated-card {
 	display: flex;
-	align-items: center;
 	margin-bottom: 24px;
 }
 
@@ -9831,6 +9839,10 @@ table .badge {
 	position: relative;
 	overflow: hidden;
 }
+.work-section .work-wrapper {
+	padding-bottom: 0px;
+
+}
 
 .work-bg .shape-01 {
 	position: absolute;
@@ -9950,6 +9962,15 @@ table .badge {
 .brand-sec p {
 	color: #000;
 }
+.brand-sec .owl-carousel .brand-item {
+	height: 85px;
+}
+.brand-sec .owl-carousel .brand-item img{
+	width: auto;
+    height: 100%;
+    object-fit: cover;
+}
+
 
 .owl-carousel .brand-item {
 	display: -webkit-box;
@@ -10226,6 +10247,7 @@ table .badge {
 .popular-section {
 	position: relative;
 	padding: 80px 0 56px;
+	background: rgb(242, 247, 246);
 }
 
 @media (max-width: 991.96px) {
@@ -16438,19 +16460,19 @@ iframe {
 	flex-wrap: wrap;
 }
 
-.blog-section .blog-content .blog-list-date .meta-item-list li .post-author .post-author-img {
+.blog-section .blog-content .blog-list-date .meta-item-list .post-author .post-author-img {
 	width: 25px;
 	margin-right: 7px;
 }
 
-.blog-section .blog-content .blog-list-date .meta-item-list li .post-author .post-author-img img {
+.blog-section .blog-content .blog-list-date .meta-item-list .post-author .post-author-img img {
 	width: 25px;
 	height: 25px;
 	border-radius: 50px;
 	border: 1.5px solid #fff;
 }
 
-.blog-section .blog-content .blog-list-date .meta-item-list li .post-author a span {
+.blog-section .blog-content .blog-list-date .meta-item-list .post-author a span {
 	font-size: 14px;
 	color: #737373;
 }
@@ -28954,4 +28976,44 @@ a#category-filter.active {
 .yacht-offer-sec {
 	overflow: hidden;
 }
+
+/* Yatch card */
+
+.yacht-list-cards .top-rated-card .rated-yacht-img .yacht-image-slider,
+.yacht-list-cards .top-rated-card .rated-yacht-img .owl-carousel .owl-stage-outer,
+.yacht-list-cards .top-rated-card .rated-yacht-img .owl-stage,
+.yacht-list-cards .top-rated-card .rated-yacht-img .owl-item,
+.yacht-list-cards .top-rated-card .rated-yacht-img .slide-images {
+	height: 100%;
+}
+.yacht-list-cards .top-rated-card .rated-yacht-img .slide-images a {
+	height: 100%;
+	display: block;
+}
+.yacht-list-cards .top-rated-card .rated-yacht-img .slide-images img {
+	height: 100%;
+    object-fit: cover;
+}
+
+/* Popular Section */
+.popular-section .img-slider,
+.popular-section .owl-stage-outer,
+.popular-section .owl-stage,
+.popular-section .owl-stage .owl-item,
+.popular-section .owl-stage .slide-images {
+	height: 100%;
+}
+.popular-section .owl-stage .slide-images a{
+	height: 100%;
+	display: block;
+}
+.popular-section .owl-stage .slide-images a img{
+    height: 100%;
+    object-fit: cover;
+}
+.popular-section .img-slider.owl-carousel .owl-dots {
+	bottom: 5px;
+}
+
+
 

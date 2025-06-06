@@ -13,7 +13,7 @@ class ContactMessagesRequest extends CustomFailedValidation
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:contacts,email',
             'phone_number' => 'required|string|max:255',
-            'message' => 'required|string',
+            'message' => 'required|string|not_regex:/<\/?script\b[^>]*>/i',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
@@ -27,6 +27,7 @@ class ContactMessagesRequest extends CustomFailedValidation
             'email.email' => __('admin.support.email_invalid'),
             'phone_number.required' => __('admin.support.phone_required'),
             'message.required' => __('admin.support.message_required'),
+            'message.not_regex' => __('admin.common.script_tag_not_allowed'),
             'image.image' => __('admin.support.image_must_be_image'),
             'image.mimes' => __('admin.support.image_mime_invalid'),
             'image.max' => __('admin.support.image_size_exceeded'),

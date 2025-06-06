@@ -216,14 +216,8 @@
                 var img = new Image();
                 img.src = URL.createObjectURL(file);
                 img.onload = function () {
-                    if (this.width !== 690 || this.height !== 420) {
-                        $("#vehicle_image_error_container").html(
-                            '<span class="text-danger">The image must be 690px × 420px.</span>'
-                        );
-                        $("#vehicle_image").val("");
-                    } else {
-                        $("#vehicle_image_error_container").html("");
-                    }
+                    // Removed dimension check and validation
+                    $("#vehicle_image_error_container").html("");
                 };
             }
         });
@@ -1077,36 +1071,24 @@
                 const reader = new FileReader();
 
                 reader.onload = function (e) {
-                    let img = new Image();
-                    img.src = e.target.result;
+                    selectedImages.set(file.name, file);
+                    validFiles.push(file);
 
-                    img.onload = function () {
-                        if (this.width === 690 && this.height === 420) {
-                            selectedImages.set(file.name, file);
-                            validFiles.push(file);
+                    imageListContainer.append(`
+                <div class="uploaded-img" data-file="${file.name}">
+                    <img src="${e.target.result}" alt="img">
+                    <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
+                </div>
+            `);
 
-                            imageListContainer.append(`
-                        <div class="uploaded-img" data-file="${file.name}">
-                            <img src="${e.target.result}" alt="img">
-                            <a href="javascript:void(0);" class="trash-icon fs-12 delete-image"><i class="ti ti-trash"></i></a>
-                        </div>
-                    `);
-                        } else {
-                            showToast(
-                                "error",
-                                `Image "${file.name}" must be 690x420 pixels.`
-                            );
-                        }
+                    pending--;
+                    if (pending === 0) updateImageInput(validFiles);
+                };
 
-                        pending--;
-                        if (pending === 0) updateImageInput(validFiles);
-                    };
-
-                    img.onerror = function () {
-                        showToast("error", `Failed to load "${file.name}".`);
-                        pending--;
-                        if (pending === 0) updateImageInput(validFiles);
-                    };
+                reader.onerror = function () {
+                    showToast("error", `Failed to load "${file.name}".`);
+                    pending--;
+                    if (pending === 0) updateImageInput(validFiles);
                 };
 
                 reader.readAsDataURL(file);

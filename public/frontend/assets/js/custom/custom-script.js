@@ -543,7 +543,20 @@
             url: "/user/get-notifications",
             dataType: "json",
             success: function (response) {
-                $(".notification-list").html(response.html);
+                const parser = new DOMParser();
+                const safeDoc = parser.parseFromString(response.html, 'text/html');
+                const safeContent = safeDoc.body;
+
+                const container = document.querySelector('.notification-list');
+
+                if (container) {
+                    container.innerHTML = '';
+
+                    Array.from(safeContent.childNodes).forEach(node => {
+                        container.appendChild(node);
+                    });
+                }
+
                 if(response.count > 0){
                     $("#newNotificationBadge").removeClass("d-none");
                     $(".has-notification").removeClass("d-none");

@@ -198,8 +198,14 @@ $(document).ready(function () {
                         $(".form-control").removeClass("is-invalid is-valid");           
                         if (response.redirect_url) {
                             const BASE_URL = window.location.origin;
-                            window.location.href = BASE_URL + response.redirect_url;
-                            return; 
+                            const redirectUrl = response.redirect_url;
+
+                            if (redirectUrl && redirectUrl.startsWith('/') && !redirectUrl.startsWith('//')) {
+                                window.location.href = BASE_URL + redirectUrl;
+                            } else {
+                                window.location.href = BASE_URL + '/';
+                            }                       
+                            
                         }                   
                         
                     } else if (response.register_status === "1") {

@@ -1432,9 +1432,11 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
             $multipleImages = array_map(function ($img) {
                 $img = '/' . ltrim($img, '/'); // Ensure single leading slash
+
+                $img = str_replace('vehicles/images/', 'vehicles/images/small/', $img);
+
                 return url('storage' . $img);
             }, $multipleImages);
-
 
             /** @var \App\Models\User $auth */
             $auth = current_user();
@@ -1487,7 +1489,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 'id' => $vehicle->id,
                 'name' => $vehicle->name,
                 'slug' => $vehicle->slug,
-                'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
+                'vehicle_image' => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
                 'multiple_vehicle_images' => $multipleImages,
                 'has_multiple_image' => count($multipleImages) > 1,
                 'avatar_image' => $avatarImage,
@@ -1851,7 +1853,6 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                     }
                 }
 
-                $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
                 $multiplePolicy = $vehiclepolicys ? json_decode($vehiclepolicys->value, true) : [];
                 $multipleDoc = $vehicleDoc ? json_decode($vehicleDoc->value, true) : [];
 
@@ -1863,8 +1864,12 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
                 $multipleImages = array_map(function ($img) {
                     $img = '/' . ltrim($img, '/'); // Ensure single leading slash
+
+                    $img = str_replace('vehicles/images/', 'vehicles/images/medium/', $img);
+
                     return url('storage' . $img);
                 }, $multipleImages);
+
                 $user = null;
                 $wishlist = null;
                 if (Auth::guard('web')->check()) {
