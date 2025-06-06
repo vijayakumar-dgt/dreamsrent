@@ -90,8 +90,8 @@
                                             <h6>{{ __('web.home.people') }} <span> : {{ $yacht['passenger_capacity'] ?? 0 }}</span></h6>
                                         </li>
                                         <li>
-                                            <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/yacht-feature-icon-02.svg" alt="Img"></span>
-                                            <h6>{{ __('web.home.length') }} <span> : 4.6m</span></h6>
+                                            <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/color.svg" alt="Img"></span>
+                                            <h6>{{ __('web.common.color') }} <span> : {{ $yacht['color'] ?? "" }}</span></h6>
                                         </li>
                                         <li>
                                             <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/yacht-feature-icon-03.svg" alt="Img"></span>
@@ -102,12 +102,12 @@
                                             <h6>{{ __('web.home.build') }} <span> : {{ $yacht['year'] ?? "" }}</span></h6>
                                         </li>
                                         <li>
-                                            <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/yacht-feature-icon-05.svg" alt="Img"></span>
-                                            <h6>{{ __('web.home.engine') }} <span> : MTU</span></h6>
+                                            <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="Img"></span>
+                                            <h6>{{ __('web.common.seats') }} <span> : {{ $yacht['num_seats'] ?? "" }}</span></h6>
                                         </li>
                                         <li>
-                                            <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/yacht-feature-icon-06.svg" alt="Img"></span>
-                                            <h6>{{ __('web.home.cabins') }} <span> :4</span></h6>
+                                            <span class="yacht-feature-icon"><img src="/frontend/assets/img/icons/car-parts-02.svg" alt="Img"></span>
+                                            <h6>{{ __('web.home.mileage') }} <span> : {{ round($yacht['mileage']) ?? "" }}</span></h6>
                                         </li>
                                     </ul>
                                 </div>

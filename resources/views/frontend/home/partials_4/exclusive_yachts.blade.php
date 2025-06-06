@@ -30,9 +30,9 @@
                                 </div>
                             </div>
                             <ul class="ship-features">
-                                <li>{{ __('web.home.cabins') }} : 4</li>
-                                <li>{{ __('web.home.people') }} : 8</li>
-                                <li>{{ __('web.home.length') }} : 4.6</li>
+                                <li>{{ __('web.home.build') }} : {{ $yacht['year'] ?? "" }}</li>
+                                <li>{{ __('web.home.people') }} : {{ $yacht['passenger_capacity'] ?? 0 }}</li>
+                                <li>{{ __('web.common.color') }} : {{ $yacht['color'] ?? "" }}</li>
                             </ul>
                             @php    
                                 $prices = array_slice($yacht['price'][0], 0, 1);
