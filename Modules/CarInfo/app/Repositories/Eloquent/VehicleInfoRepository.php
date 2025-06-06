@@ -1496,6 +1496,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 'category' => $vehicle->category->name ?? null,
                 'location' => $vehicle->mainLocation->name ?? null,
                 'color' => $vehicle->color->name ?? null,
+                'color_code' => $vehicle->color->value ?? null,
                 'fuel_type' => $vehicle->fuel_type->fuel_type ?? null,
                 'transmission' => $vehicle->transmission->name ?? null,
                 'year' => $vehicle->year,
