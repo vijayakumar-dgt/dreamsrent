@@ -27,7 +27,7 @@
 
 		<!-- Hero Sec Main -->
 		<div class="hero-sec-main">
-			@if(request()->routeIs('home'))
+			@if(request()->routeIs(['home', 'theme']))
 		    @include('frontend.theme_4.partials.header')
 			@else
 			@include('frontend.theme_1.partials.header')

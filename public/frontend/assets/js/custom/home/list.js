@@ -292,7 +292,18 @@
                         </button>` : ''}
                     </div>
                 </div>`;
-
+        let attrIcon = '';
+        if(vehicle.category == 'Car'){
+            attrIcon = `<li>
+                        <span><img src="/frontend/assets/img/icons/door-icon.svg" alt="${vehicle.num_doors ?? 0}"></span>
+                        <p>${vehicle.num_doors ?? 0}</p>
+                    </li>`;
+        }else{
+            attrIcon = `<li>
+                        <span><img src="/frontend/assets/img/icons/color.svg" alt="${vehicle.color ?? ''}"></span>
+                        <p>${vehicle.color ?? ''}</p>
+                    </li>`;
+        }
         const featureList = `<ul>
                                 <li>
                                     <span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${ucfirst(vehicle.transmission ?? '')}"></span>
@@ -306,10 +317,7 @@
                                     <span><img src="/frontend/assets/img/icons/car-parts-03.svg" alt="${ucfirst(vehicle.fuel_type ?? '')}"></span>
                                     <p>${ucfirst(vehicle.fuel_type ?? '')}</p>
                                 </li>
-                                <li>
-                                    <span><img src="/frontend/assets/img/icons/door-icon.svg" alt="${vehicle.num_doors ?? 0}"></span>
-                                    <p>${vehicle.num_doors ?? 0}</p>
-                                </li>
+                                ${attrIcon}
                                 <li>
                                     <span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="${_l('web.home.persons')}"></span>
                                     <p>${vehicle.passenger_capacity ?? 0} ${_l('web.home.persons')}</p>
@@ -431,7 +439,13 @@
                     </div>
                     <span class="featured-text">${ucfirst(vehicle.brand ?? "")}</span>
                 </div>`;
-
+        let attrIcon = '';
+        
+        if(vehicle.category == 'Car'){
+            attrIcon = `<li><span><img src="/frontend/assets/img/icons/door-icon.svg" alt="Power"></span><p>${vehicle.num_doors ?? 0}</p></li>`;
+        }else{
+            attrIcon = `<li><span><img src="/frontend/assets/img/icons/color.svg" alt="Power"></span><p>${vehicle.color ?? ''}</p></li>`;
+        }
         const featureList = `
             <ul>
                 <li><span><img src="/frontend/assets/img/icons/car-parts-01.svg" alt="${ucfirst(vehicle.transmission ?? "")}"></span><p>${ucfirst(vehicle.transmission ?? "")}</p></li>
@@ -439,7 +453,7 @@
                 <li><span><img src="/frontend/assets/img/icons/car-parts-03.svg" alt="${ucfirst(vehicle.fuel_type ?? "")}"></span><p>${ucfirst(vehicle.fuel_type ?? "")}</p></li>
             </ul>
             <ul>
-                <li><span><img src="/frontend/assets/img/icons/door-icon.svg" alt="Power"></span><p>${vehicle.num_doors ?? 0}</p></li>
+                ${attrIcon}
                 <li><span><img src="/frontend/assets/img/icons/car-parts-05.svg" alt="${vehicle.year ?? ""}"></span><p>${vehicle.year ?? ""}</p></li>
                 <li><span><img src="/frontend/assets/img/icons/car-parts-06.svg" alt="${_l('web.home.persons')}"></span><p>${vehicle.passenger_capacity ?? 0} ${_l('web.home.persons')}</p></li>
             </ul>`;
