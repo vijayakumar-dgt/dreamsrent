@@ -87,25 +87,25 @@
                     required: true,
                 },
                 title: {
-                    required: false,
+                    required: true,
                     minlength: 3,
                     maxlength: 50,
                 },
                 perma_link: {
                     required: false,
-                    url: false,
+                    url: true,
                 },
                 vehicle_type_id: {
-                    required: false,
+                    required: true,
                 },
                 vehicle_brand_id: {
-                    required: false,
+                    required: true,
                 },
                 vehicle_model_id: {
-                    required: false,
+                    required: true,
                 },
                 vehicle_category_id: {
-                    required: false,
+                    required: true,
                 },
                 plate_number: {
                     required: false,
@@ -114,7 +114,7 @@
                     required: false,
                 },
                 main_location_id: {
-                    required: false,
+                    required: true,
                 },
                 other_location: {
                     required: false,
@@ -126,13 +126,13 @@
                     required: false,
                 },
                 vehicle_color_id: {
-                    required: false,
+                    required: true,
                 },
                 vehicle_year: {
-                    required: false,
+                    required: true,
                 },
                 vehicle_passenger: {
-                    required: false,
+                    required: true,
                 },
             },
             messages: {
