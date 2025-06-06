@@ -78,7 +78,7 @@ class InstallerController extends Controller
                 'port' => is_numeric($validated['port']) ? (int)$validated['port'] : $validated['port'],
                 'database' => $validated['database'],
                 'user' => $validated['user'],
-                'password' => $validated['db_password'] ?? '',
+                'password' => $validated['db_pass'] ?? '',
                 'reset_database' => $validated['reset_database'] ?? null,
             ];
 
