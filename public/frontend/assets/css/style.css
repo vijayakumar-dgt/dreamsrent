@@ -10247,6 +10247,7 @@ table .badge {
 .popular-section {
 	position: relative;
 	padding: 80px 0 56px;
+	background: rgb(242, 247, 246);
 }
 
 @media (max-width: 991.96px) {
@@ -16459,19 +16460,19 @@ iframe {
 	flex-wrap: wrap;
 }
 
-.blog-section .blog-content .blog-list-date .meta-item-list li .post-author .post-author-img {
+.blog-section .blog-content .blog-list-date .meta-item-list .post-author .post-author-img {
 	width: 25px;
 	margin-right: 7px;
 }
 
-.blog-section .blog-content .blog-list-date .meta-item-list li .post-author .post-author-img img {
+.blog-section .blog-content .blog-list-date .meta-item-list .post-author .post-author-img img {
 	width: 25px;
 	height: 25px;
 	border-radius: 50px;
 	border: 1.5px solid #fff;
 }
 
-.blog-section .blog-content .blog-list-date .meta-item-list li .post-author a span {
+.blog-section .blog-content .blog-list-date .meta-item-list .post-author a span {
 	font-size: 14px;
 	color: #737373;
 }

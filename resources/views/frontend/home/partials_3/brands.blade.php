@@ -2,7 +2,7 @@
     $sectionContent = $section['section_content'];    
 @endphp
 <!-- Brand Slider -->
- <div class = "custom-brand-section section overflow-hidden pb-0">
+ <div class = "custom-brand-section section overflow-hidden">
     <div class="row w-100">
         <div class="col-md-12">
             <div class="brand-sec">
