@@ -10403,6 +10403,7 @@ table .badge {
 .destination-section {
 	position: relative;
 	padding: 80px 0 56px;
+	background-color: #fff;
 }
 
 @media (max-width: 991.96px) {
@@ -10682,6 +10683,7 @@ table .badge {
 .testimonials-three {
 	background: #F2F7F6;
 	position: relative;
+	background-color: #fff;
 }
 
 @media (max-width: 991.96px) {
@@ -10884,8 +10886,8 @@ table .badge {
 
 .testimonial-wrapper {
 	background: #FCFCFC;
-	box-shadow: 0px 4px 24px 0px rgba(225, 225, 225, 0.25);
-	border-radius: 5px;
+    box-shadow: 0px 4px 24px 0px rgb(225 225 225 / 88%);
+    border-radius: 5px;
 	margin: 0 0 0 100px;
 	padding: 24px;
 }
@@ -11023,7 +11025,7 @@ table .badge {
 	background: #F2F7F6;
 	position: relative;
 	z-index: 1;
-	padding: 0;
+	padding: 80px 0px 0px;
 }
 
 .recommend-section .section-heading {
@@ -11904,6 +11906,7 @@ table .badge {
 	padding: 120px 0 40px;
 	z-index: 1;
 	position: relative;
+	overflow: hidden;
 }
 
 .banner-section-four h1 {
@@ -29014,6 +29017,21 @@ a#category-filter.active {
 .popular-section .img-slider.owl-carousel .owl-dots {
 	bottom: 5px;
 }
+body {
+    overflow-x: hidden !important;
+}
+.custom-banner-serch-item .form-control {
+	padding: 9px 21px 9px 0px !important;
+}
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 100%; 
+}
+
+
 
 
 

@@ -1,4 +1,4 @@
-    <section class="banner-section-four">
+    <section class="banner-section-four ">
         <div class="container">
             <div class="home-banner">
             <div class="row align-items-center">
@@ -49,7 +49,7 @@
             $searchSection = $content_sections->where('section_type', 'search_section')->first();
             @endphp
             @if(!empty($searchSection))
-            <div class="banner-search">
+            <div class="banner-search custom-banner-serch-item">
                 <form action="{{ route('list') }}" method="GET" class="form-block d-flex align-items-center">
                     <div class="search-input">
                         <div class="input-block">

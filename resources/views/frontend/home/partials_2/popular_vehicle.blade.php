@@ -8,7 +8,7 @@
                 <!-- Car List -->
                 @if(!empty($section['section_content']) && count($section['section_content']) > 0)
                 @foreach($section['section_content'] as $content)
-                <div class="col-lg-4 col-md-6">
+                <div class="col-xl-4 col-lg-6 col-md-6">
                     <div class="listing-item listing-item-two theme2-popularcar">
                         <div class="listing-img">
                             <div class="img-slider owl-carousel">

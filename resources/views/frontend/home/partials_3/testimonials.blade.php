@@ -17,7 +17,7 @@
                 <div class="testimonial-feedback">
                     <!-- Heading title-->
                     <div class="section-heading heading-three" data-aos="fade-down">
-                        <h2 class="title">{{ $titleMain ?? "" }} <br><span>{{ $titleLastPart ?? "" }}</span> </h2>
+                        <h2 class="title">{{ $titleMain ?? "" }}<span>{{ $titleLastPart ?? "" }}</span> </h2>
                     </div>
                     <!-- /Heading title -->
 
