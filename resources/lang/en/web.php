@@ -541,6 +541,8 @@ return [
         'logout' => 'Logout',
         'learn_more' => 'Learn More',
         'notice' => 'Notice',
+        'color' => 'Color',
+        'seats' => 'Seats',
     ],
     'user' => [
         'user_dashboard' => 'User Dashboard',
