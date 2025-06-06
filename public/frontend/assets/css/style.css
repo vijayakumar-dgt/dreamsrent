@@ -29032,9 +29032,12 @@ body {
 }
 
 
-@media (max-width :1300px) {
-	.listing-item.listing-item-two .listing-content {
-		padding: 11px;
+@media (max-width :1399px) {
+	.listing-item.listing-item-two .listing-content .price {
+		font-size: 20px;
+	}
+	.listing-item .listing-content .listing-features .listing-title {
+		font-size: 20px;
 	}
 }
 
