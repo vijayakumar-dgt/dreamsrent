@@ -2172,10 +2172,19 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             }
 
             $multipleImages = $vehicleImages ? json_decode($vehicleImages->value, true) : [];
+
             if (!empty($vehicle->vehicle_image)) {
                 array_unshift($multipleImages, $vehicle->vehicle_image);
             }
-            $multipleImages = array_map(fn($img) => url('storage/vehicles/' . basename($img)), $multipleImages);
+
+            $multipleImages = array_map(function ($img) {
+                $img = '/' . ltrim($img, '/'); // Ensure single leading slash
+
+                $img = str_replace('vehicles/images/', 'vehicles/images/small/', $img);
+
+                return url('storage' . $img);
+            }, $multipleImages);
+
             /** @var \App\Models\User $auth|null */
             $auth = current_user();
             $authId = $auth->id ?? null;
@@ -2212,7 +2221,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
                 'id' => $vehicle->id,
                 'name' => $vehicle->name,
                 'slug' => $vehicle->slug,
-                'vehicle_image' => uploadedAsset($vehicle->vehicle_image ?? '', 'default2'),
+                'vehicle_image' => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
                 'avatar_image' => $avatarImage,
                 'brand' => $vehicle->brand->brand_name ?? null,
                 'car_type' => $vehicle->carType->name ?? null,

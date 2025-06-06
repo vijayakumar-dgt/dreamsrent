@@ -41,20 +41,20 @@ class ThemeController extends Controller
     public function theme(Request $request, string|null $slug)
     {
         $themeId = null;
-        if(!empty($slug)) {
+        if (!empty($slug)) {
             if (preg_match('/(\d+)$/', $slug, $matches)) {
                 $number = $matches[1];
             } else {
-                $number = null; 
+                $number = null;
             }
             if ($number) {
                 $themeId = intval($number);
                 $slug = '/';
-            }else{
+            } else {
                 abort(404);
-            }   
+            }
         }
-        
+
         $authUser = current_user();
 
         $lang_id = null;
@@ -804,6 +804,9 @@ class ThemeController extends Controller
 
                             $multipleImages = array_map(function ($img) {
                                 $img = '/' . ltrim($img, '/'); // Ensure single leading slash
+
+                                $img = str_replace('vehicles/images/', 'vehicles/images/small/', $img);
+
                                 return url('storage' . $img);
                             }, $multipleImages);
 
@@ -850,7 +853,7 @@ class ThemeController extends Controller
                                 'id' => $vehicle->id,
                                 'name' => $vehicle->name,
                                 'slug' => $vehicle->slug,
-                                'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
+                                'vehicle_image' => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
                                 'multiple_vehicle_images' => $multipleImages,
                                 'has_multiple_image' => count($multipleImages) > 1,
                                 'avatar_image' => $avatarImage,
@@ -951,6 +954,9 @@ class ThemeController extends Controller
 
                             $multipleImages = array_map(function ($img) {
                                 $img = '/' . ltrim($img, '/'); // Ensure single leading slash
+
+                                $img = str_replace('vehicles/images/', 'vehicles/images/small/', $img);
+
                                 return url('storage' . $img);
                             }, $multipleImages);
 
@@ -997,7 +1003,7 @@ class ThemeController extends Controller
                                 'id' => $vehicle->id,
                                 'name' => $vehicle->name,
                                 'slug' => $vehicle->slug,
-                                'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
+                                'vehicle_image' => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
                                 'multiple_vehicle_images' => $multipleImages,
                                 'has_multiple_image' => count($multipleImages) > 1,
                                 'avatar_image' => $avatarImage,
@@ -1113,6 +1119,9 @@ class ThemeController extends Controller
 
                             $multipleImages = array_map(function ($img) {
                                 $img = '/' . ltrim($img, '/'); // Ensure single leading slash
+
+                                $img = str_replace('vehicles/images/', 'vehicles/images/small/', $img);
+
                                 return url('storage' . $img);
                             }, $multipleImages);
 
@@ -1159,7 +1168,7 @@ class ThemeController extends Controller
                                 'id' => $vehicle->id,
                                 'name' => $vehicle->name,
                                 'slug' => $vehicle->slug,
-                                'vehicle_image' => url('/storage/' . $vehicle->vehicle_image),
+                                'vehicle_image' => url('/storage/' . str_replace('vehicles/images/', 'vehicles/images/small/', $vehicle->vehicle_image)),
                                 'multiple_vehicle_images' => $multipleImages,
                                 'has_multiple_image' => count($multipleImages) > 1,
                                 'avatar_image' => $avatarImage,
@@ -2063,10 +2072,10 @@ class ThemeController extends Controller
         $categoryId = getCustomThemeCategoryId($themeId);
         $vehicleTypes = Cartype::select('name', 'id')->where('language_id', $language_id)->where('category_id', $categoryId)->where('status', 1)->get();
         $vehicleModels = CarModel::select('model_name as name', 'id')->where('language_id', $language_id)
-                              ->whereHas('brand', function ($query) use ($categoryId) {
-                                  $query->where('category_id', $categoryId);
-                                  })
-                                  ->where('status', 1)->get();
+            ->whereHas('brand', function ($query) use ($categoryId) {
+                $query->where('category_id', $categoryId);
+            })
+            ->where('status', 1)->get();
         $locations = Location::select('name', 'id')->where('status', 1)->where('language_id', $language_id)->get();
         $totalReviews = Review::count();
         // theme code
