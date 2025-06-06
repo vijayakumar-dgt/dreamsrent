@@ -22,12 +22,12 @@
     <!-- Select2 CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/plugins/select2/css/select2.min.css') }}">
     @endif
-    @if (request()->routeIs(['home', 'list', 'vehicleDetails', 'booking.checkout']))
+    @if (request()->routeIs(['home', 'list', 'vehicleDetails', 'booking.checkout','theme']))
     <!-- Datepicker CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap-datetimepicker.min.css') }}">
     @endif
 
-    @if (request()->routeIs(['home', 'pages', 'contact-us']))
+    @if (request()->routeIs(['home', 'pages', 'contact-us','theme']))
     <!-- Aos CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/plugins/aos/aos.css') }}">
     @endif
@@ -35,7 +35,7 @@
     <!-- Fearther CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/feather.css') }}">
 
-    @if (request()->routeIs(['home', 'list', 'vehicleDetails', 'pages*']))
+    @if (request()->routeIs(['home', 'list', 'vehicleDetails', 'pages*','theme']))
     <!-- Owl carousel CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/owl.carousel.min.css') }}">
     @endif
