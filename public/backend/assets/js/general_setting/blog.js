@@ -265,7 +265,7 @@
                     reader.onload = function (e) {
                         const img = new Image();
                         img.onload = function () {
-                            if (img.width === 735 && img.height === 310) {
+                            if (img.width === 900 && img.height === 600) {
                                 fileNameDisplayAdd.textContent = file.name;
                                 if (preview) {
                                     preview.src = e.target.result;
@@ -274,7 +274,7 @@
                                 showToast(
                                     "error",
                                     _l(
-                                        "admin.blog.image_dimensions_must_be_exactly_735_310_pixels"
+                                        "admin.blog.image_dimensions_must_be_exactly_900_600_pixels"
                                     )
                                 );
                                 inputAdd.value = "";
@@ -308,7 +308,7 @@
                     reader.onload = function (e) {
                         const img = new Image();
                         img.onload = function () {
-                            if (img.width === 735 && img.height === 310) {
+                            if (img.width === 900 && img.height === 600) {
                                 fileNameDisplay.textContent = file.name;
 
                                 previewContainer.innerHTML = "";
@@ -324,7 +324,7 @@
                                 showToast(
                                     "error",
                                     _l(
-                                        "admin.blog.image_dimensions_must_be_exactly_735_310_pixels"
+                                        "admin.blog.image_dimensions_must_be_exactly_900_600_pixels"
                                     )
                                 );
                                 input.value = "";

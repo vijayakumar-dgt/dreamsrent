@@ -2411,7 +2411,7 @@ return array(
     'please_enter_the_name' => 'Please Enter The Name',
     'no_blog_found' => 'No Data Available',
     'no_data_found' => 'No Data Available',
-    'image_dimensions_must_be_exactly_735_310_pixels' => 'Image dimensions must be exactly 735 x 310 pixels',
+    'image_dimensions_must_be_exactly_900_600_pixels' => 'Image dimensions must be exactly 900 x 600 pixels',
     'blog_details' => 'Blog Details',
   ],
   'auth' =>
