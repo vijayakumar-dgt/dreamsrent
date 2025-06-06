@@ -29030,6 +29030,9 @@ body {
   display: block;
   max-width: 100%; 
 }
+.custom-brand-section {
+	padding: 60px 0px;
+}
 
 
 @media (max-width :1399px) {
