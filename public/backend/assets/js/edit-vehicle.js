@@ -901,14 +901,8 @@
                 var img = new Image();
                 img.src = URL.createObjectURL(file);
                 img.onload = function () {
-                    if (this.width !== 690 || this.height !== 420) {
-                        $("#vehicle_image_error_container").html(
-                            '<span class="text-danger">The image must be 690px × 420px.</span>'
-                        );
-                        $("#vehicle_image").val("");
-                    } else {
-                        $("#vehicle_image_error_container").html("");
-                    }
+                    // No validation; optionally still use image load event if needed
+                    $("#vehicle_image_error_container").html("");
                 };
             }
         });
