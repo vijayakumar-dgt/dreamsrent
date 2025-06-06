@@ -275,7 +275,9 @@
                 ? 1
                 : selectedText === "Second Screen"
                 ? 2
-                : 3;
+                : selectedText === "Third Screen"
+                ? 3
+                : 4;
 
         $("#theme_id").val(themeId);
 

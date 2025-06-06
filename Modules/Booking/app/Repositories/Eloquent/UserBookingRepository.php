@@ -52,10 +52,10 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                     'data' => $request->except('_token')
                 ]
             ]);
-              $response = [
+            $response = [
                 'redirect_url' => route('user-login')
-              ];
-              return $response;
+            ];
+            return $response;
         }
         $vehicle = VehicleInfo::select('id', 'name', 'slug', 'vehicle_image', 'main_location_id', 'other_location_id', 'vehicle_price', 'passenger_capacity')
             ->where('slug', $slug)
@@ -627,7 +627,27 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             }
             $order['intent'] = 'CAPTURE';
 
-            $currency_details = "USD"; // Fix currency
+            $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+            $currency = null;
+
+            if ($currencySetting && $currencySetting->value) {
+                $currency = Currency::find($currencySetting->value);
+            }
+
+            $currency_details = $currency->code ?? "usd";
+
+            // dd($currency_details);
+
+            $allowedCurrencies = ['usd', 'inr', 'eur', 'aed'];
+
+            $currency = strtolower(trim($currency_details));
+            if (!in_array($currency, $allowedCurrencies)) {
+                return [
+                    'code' => 422,
+                    'success' => false,
+                    'message' => 'Invalid currency selected. Please use a supported currency like USD, INR, EUR, etc.',
+                ];
+            }
 
             $purchase_units = [];
 
@@ -756,11 +776,14 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             ]);
 
             $approve_paypal_url = $response['links'][1]['href'];
+
             $response = [
                 'code' => 200,
                 'message' => __('web.home.order_created_successfully'),
                 'paypal_url' => $approve_paypal_url
             ];
+
+            return $response;
         }
 
         if ($request->payment_type == "stripe") {
@@ -776,12 +799,31 @@ class UserBookingRepository implements UserBookingRepositoryInterface
             Stripe::setApiKey(is_string($stripeSecret) ? $stripeSecret : '');
 
             $purchase_units = [];
-            $currency_details = "USD";
+
+            $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
+            $currency = null;
+
+            if ($currencySetting && $currencySetting->value) {
+                $currency = Currency::find($currencySetting->value);
+            }
+
+            $currency_details = $currency->code ?? "usd";
+
+            $allowedCurrencies = ['usd', 'inr', 'eur', 'aed'];
+
+            $currency = strtolower(trim($currency_details));
+            if (!in_array($currency, $allowedCurrencies)) {
+                return [
+                    'code' => 422,
+                    'success' => false,
+                    'message' => 'Invalid currency selected. Please use a supported currency like USD, INR, EUR, etc.',
+                ];
+            }
 
             $session = Session::create([
                 'line_items' => [[
                     'price_data' => [
-                        'currency' => "USD",
+                        'currency' => $currency_details,
                         'product_data' => ['name' => "Rental Services"],
                         'unit_amount' => intval((float) (is_numeric($request->input('total_price')) ? $request->input('total_price') : 0) * 100),
                     ],

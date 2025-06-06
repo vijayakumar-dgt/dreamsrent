@@ -1405,9 +1405,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
 
         $perPage = $request->paginate ?? 1;
 
-        $getCategoryId = getCategoryId();
-
-        $vehicles = $query->where("language_id", $lang_id)->where('category_id', $getCategoryId)->where('status', 1)->paginate($perPage);
+        $vehicles = $query->where("language_id", $lang_id)->where('status', 1)->paginate($perPage);
 
         $data = $vehicles->map(function (VehicleInfo $vehicle): array {
             $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
@@ -2137,6 +2135,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             $lang_id = $defaultLang->language_id ?? 1;
         }
 
+        $getCategoryId = getCategoryId();
         $vehicles = VehicleInfo::with([
             'carType:id,name',
             'brand:id,brand_name',
@@ -2146,7 +2145,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             'fuel_type:id,fuel_type',
             'transmission:id,name',
             'reviews:id,vehicle_id,average_ratings'
-        ])->where("language_id", $lang_id)->take(6)->get();
+        ])->where("language_id", $lang_id)->where('category_id', $getCategoryId)->take(6)->get();
 
         $data = $vehicles->map(function ($vehicle) {
             $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)
