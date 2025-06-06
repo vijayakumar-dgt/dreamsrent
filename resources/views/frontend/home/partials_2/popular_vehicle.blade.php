@@ -4,6 +4,12 @@
                 <h2>{{ $section['section_title'] }}</h2>
                 <p>{{ $section['section_label']  }}</p>
             </div>
+            @php
+                if (!empty($section['section_content']) && $section['section_content'] instanceof \Illuminate\Support\Collection) {
+                    $section['section_content'] = $section['section_content']->take(6);
+                }
+            @endphp
+
             <div class="row">
                 <!-- Car List -->
                 @if(!empty($section['section_content']) && count($section['section_content']) > 0)
