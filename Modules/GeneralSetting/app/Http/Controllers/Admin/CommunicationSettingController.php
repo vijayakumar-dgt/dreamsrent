@@ -85,7 +85,7 @@ class CommunicationSettingController extends Controller
     public function sendTestMail(Request $request): JsonResponse
     {
         try {
-            $result = $this->communicationSetting->sendTestMail($request->validated());
+            $result = $this->communicationSetting->sendTestMail($request);
             return response()->json([
                 'code' => 200,
                 'message' => $result['message'],

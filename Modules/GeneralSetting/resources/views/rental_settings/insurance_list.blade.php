@@ -70,7 +70,6 @@
     <x-admin.modal className="addmodal" id="insurance_modal" :title="__('admin.general_settings.create_insurance')"
         formId="insuranceForm" dialogClass="modal-dialog-centered modal-md">
         <x-slot name="body">
-            @csrf
             <input type="hidden" name="id" id="id">
             <input type="hidden" name="language_id" id="language_id">
 

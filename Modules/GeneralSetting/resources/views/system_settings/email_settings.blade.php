@@ -159,7 +159,7 @@
 
     <!-- Add php mailer -->
     <x-admin.modal className="addmodal" id="phpmailersettings" :title="__('admin.general_settings.php_mailer')"
-        formId="php_mailer_form" dialogClass="modal-dialog-centered">
+        formId="php_mailer_form">
         <x-slot name="body">
             <div class="row">
                 <div class="col-md-12 mb-3">

@@ -61,7 +61,7 @@
     <!-- /Page Wrapper -->
 
     <x-admin.modal className="addmodal" id="add_email" :title="__('admin.general_settings.create_template')"
-        formId="mailTemplateForm" dialogClass="modal-dialog-centered modal-lg">
+        formId="mailTemplateForm" dialogClassName="modal-lg">
         <x-slot name="body">
             @csrf
             <input type="hidden" name="id" id="id">

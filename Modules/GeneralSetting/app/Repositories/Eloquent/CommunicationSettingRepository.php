@@ -6,6 +6,7 @@ use Modules\GeneralSetting\Repositories\Contracts\CommunicationSettingInterface;
 use Modules\GeneralSetting\Models\CommunicationSetting;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserDetail;
+use Illuminate\Http\Request;
 
 class CommunicationSettingRepository implements CommunicationSettingInterface
 {
@@ -78,7 +79,7 @@ class CommunicationSettingRepository implements CommunicationSettingInterface
         ];
     }
 
-    public function sendTestMail(array $data): array
+    public function sendTestMail(Request $request): array
     {
         $user = Auth::guard('admin')->user();
         $userId = $user->id ?? null;
@@ -92,7 +93,7 @@ class CommunicationSettingRepository implements CommunicationSettingInterface
             'user_name' => $name,
         ];
 
-        sendNewsletterEmail($data['email_address'], 'test_mail', $notifyData);
+        sendNewsletterEmail($request->email_address, 'test_mail', $notifyData);
 
         return [
             'message' => __('admin.general_settings.test_mail_sent_success')

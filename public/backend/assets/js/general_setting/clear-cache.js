@@ -11,7 +11,7 @@
             },
             success: function (resp) {
                 showToast("success", resp.message);
-                $("#clear_cache").hide("show");
+                $("#clear_cache").modal('hide');
                 setTimeout(function () {
                     location.reload();
                 }, 500);

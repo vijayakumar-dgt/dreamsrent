@@ -9,7 +9,7 @@ use Modules\GeneralSetting\Repositories\Contracts\SignatureSettingInterface;
 
 class SignatureSettingRepository implements SignatureSettingInterface
 {
-    public function getAllSignatures(string $search = null)
+    public function getAllSignatures(string|null $search)
     {
         return SignatureSetting::when($search, function ($query) use ($search) {
             $query->where('signature_name', 'like', "%{$search}%");
@@ -22,7 +22,7 @@ class SignatureSettingRepository implements SignatureSettingInterface
             });
     }
 
-    public function createSignature(array $data, UploadedFile $image = null)
+    public function createSignature(array $data, UploadedFile|null $image)
     {
         $imagePath = $image ? $this->uploadSignatureImage($image) : null;
 
@@ -38,7 +38,7 @@ class SignatureSettingRepository implements SignatureSettingInterface
         ]);
     }
 
-    public function updateSignature(int $id, array $data, UploadedFile $image = null)
+    public function updateSignature(int $id, array $data, UploadedFile|null $image)
     {
         $signature = SignatureSetting::findOrFail($id);
 
@@ -48,13 +48,14 @@ class SignatureSettingRepository implements SignatureSettingInterface
         }
 
         if (isset($data['is_default']) && $data['is_default'] == 1) {
-            $this->resetDefaultSignature();
+            $this->resetDefaultSignature($id);
         }
 
+        $isDefault = (isset($data['is_default']) && $data['is_default'] == 1) ? 1 : 0;
 
         $signature->update([
             'signature_name' => $data['signature_name'],
-            'is_default' => isset($data['is_default']) ? 1 : 0,
+            'is_default' => $isDefault,
             'status' => !empty($data['status']) ? 1 : 0
         ]);
 
@@ -69,9 +70,15 @@ class SignatureSettingRepository implements SignatureSettingInterface
         return SignatureSetting::count();
     }
 
-    protected function resetDefaultSignature()
+    protected function resetDefaultSignature(int|null $excludeId = null)
     {
-        SignatureSetting::where('is_default', 1)->update(['is_default' => 0]);
+        $query = SignatureSetting::where('is_default', 1);
+
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        $query->update(['is_default' => 0]);
     }
 
     protected function uploadSignatureImage(UploadedFile $file): string

@@ -38,28 +38,18 @@
 	</div>
 	<!-- /Page Wrapper -->
 	<!-- Clear Cache Modal -->
-	<x-admin.modal className="deletemodal" id="clear_cache" :title="__('admin.general_settings.clear_cache')" dialogClass="modal-dialog-centered modal-sm">
-		<x-slot name="body">
-			<div class="text-center">
-				<span class="avatar avatar-lg bg-transparent-danger rounded-circle text-danger mb-3">
-					<i class="ti ti-trash-x fs-26"></i>
-				</span>
-				<h4 class="mb-1">{{ __('admin.general_settings.clear_cache') }}</h4>
-				<p class="mb-3">{{ __('admin.general_settings.want_to_clear_cache') }}</p>
-			</div>
-		</x-slot>
-
-		<x-slot name="footer">
-			<div class="d-flex justify-content-center">
-				<button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
-					{{ __('admin.general_settings.cancel') }}
-				</button>
-				<button type="submit" id="clear-cache" class="btn btn-primary">
-					{{ __('admin.general_settings.yes_clear_cache') }}
-				</button>
-			</div>
-		</x-slot>
-	</x-admin.modal>
+	<x-admin.delete-modal 
+		className="deletemodal"
+		id="clear_cache"
+		action="{{ route('admin.clear-cache') }}"
+		method="POST"
+		:title="__('admin.general_settings.clear_cache')"
+		:description="__('admin.general_settings.want_to_clear_cache')"
+		modalIconClass="ti ti-trash-x fs-26"
+		deleteBtnType="button"
+		deleteBtnId="clear-cache"
+		deleteBtnText="{{ __('admin.general_settings.yes_clear_cache') }}">
+	</x-admin.delete-modal>
 	<!-- /Clear Cache Modal -->
 
 @endsection

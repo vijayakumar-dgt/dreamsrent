@@ -27,6 +27,7 @@ class InsuranceController extends Controller
     public function store(InsuranceRequest $request): JsonResponse
     {
         try {
+            $id = $request->id ?? null;
             $data = $request->only([
                 'insurance_name',
                 'price_type_id',
@@ -34,7 +35,7 @@ class InsuranceController extends Controller
                 'status',
                 'language_id'
             ]);
-            $data['status'] = ($request->has('status') && $request->status === 'on') ? 1 : 0;
+            $data['status'] = ($request->has('status') && $request->status == 1 || empty($id)) ? 1 : 0;
             $data['language_id'] = $data['language_id'] ?? 1;
 
             $insurance = $this->repository->saveInsurance(
@@ -43,7 +44,7 @@ class InsuranceController extends Controller
                 $request->id ?? null
             );
 
-            $successMsg = empty($request->id)
+            $successMsg = empty($id)
                 ? __('admin.general_settings.insurance_create_success')
                 : __('admin.general_settings.insurance_update_success');
 
@@ -53,7 +54,7 @@ class InsuranceController extends Controller
                 'message' => $successMsg
             ]);
         } catch (\Exception $e) {
-            $errorMsg = empty($request->id)
+            $errorMsg = empty($id)
                 ? __('admin.common.default_create_error')
                 : __('admin.common.default_update_error');
 
@@ -61,7 +62,6 @@ class InsuranceController extends Controller
                 'status' => 'error',
                 'code' => 500,
                 'message' => $errorMsg,
-                'error' => $e->getMessage()
             ], 500);
         }
     }
