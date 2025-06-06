@@ -2205,6 +2205,7 @@ return array(
     'new' => 'New',
     'notice' => 'Notice',
     'no_notifications_found' => 'No notifications found',
+    'image_size_600_420' => 'Upload Image size 600*420, within 2MB',
   ),
   'page' => [
     'pages' => 'Pages',
@@ -2251,7 +2252,8 @@ return array(
     'section_title' => 'Section Title',
     'enter_title' => 'Enter Section Title',
     'section_label' => 'Section Label',
-    'screen_three' => 'Second Three',
+    'screen_three' => 'Third Screen',
+    'screen_four' => 'Fourth Screen',
     'enter_label' => 'Enter Section Label',
     'section_des' => 'Section Content',
     'enter_content' => 'Enter Section Content',

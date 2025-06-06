@@ -108,7 +108,7 @@
                         <button class="btn btn-primary w-lg-100 w-50 rounded-0">{{ __('admin.page.screen_one') }}</button>
                         <button class="btn btn-dark w-lg-100 w-50 rounded-0">{{ __('admin.page.screen_two') }}</button>
                         <button class="btn btn-dark w-lg-100 w-50 rounded-0">{{ __('admin.page.screen_three') }}</button>
-                        <button class="btn btn-dark w-lg-100 w-50 rounded-0">{{ __('admin.page.screen_three') }}</button>
+                        <button class="btn btn-dark w-lg-100 w-50 rounded-0">{{ __('admin.page.screen_four') }}</button>
                     </div>
                     <div class="d-flex align-items-center justify-content-center setSection">
                         <div id="cardContainer" class="section-list d-none real-table px-3 pb-3"></div>

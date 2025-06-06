@@ -275,7 +275,9 @@
                 ? 1
                 : selectedText === "Second Screen"
                 ? 2
-                : 3;
+                : selectedText === "Third Screen"
+                ? 3
+                : 4;
 
         $("#theme_id").val(themeId);
 
@@ -316,6 +318,7 @@
                         <div class="col-xl-6 col-lg-12 col-md-4 col-sm-6 d-flex">
                             <div class="card mb-0 draggable-card shadow-sm rounded flex-fill" draggable="true" data-value="${value}">
                                 <div class="py-2 text-center">
+                                    <i class="ti ti-edit fs-25 mb-2"></i>
                                     <p class="fs-13 fw-medium mb-0">${section.name}</p>
                                 </div>
                             </div>

@@ -115,7 +115,7 @@ class HomeRepository implements HomeRepositoryInterface
     {
         $slug = $slug;
 
-        $vehicle = VehicleInfo::select('id', 'main_location_id', "other_location_id", 'views')
+        $vehicle = VehicleInfo::select('id', 'main_location_id', "other_location_id", 'views', "category_id")
             ->where('slug', $slug)->first();
         if (!$vehicle) {
             abort(404);

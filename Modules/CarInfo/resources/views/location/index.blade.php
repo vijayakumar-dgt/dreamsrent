@@ -105,7 +105,7 @@
                                 </div>
                             </div>
                             <div class="mt-2">
-                                <p class="fs-14">{{ __('admin.common.upload_image_size', ['pixel' => '180*180', 'size' => 2]) }}</p>
+                                <p class="fs-14">{{ __('admin.common.image_size_600_420', ['pixel' => '180*180', 'size' => 2]) }}</p>
                             </div>
                         </div>
                     </div>

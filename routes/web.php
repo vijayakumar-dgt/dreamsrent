@@ -152,7 +152,7 @@ Route::group(['middleware' => ['checkInstallerStatus', 'setLocaleUser', 'securit
     Route::get('vehicle-list-api', [CarInfoController::class,'vehicleLists'])->middleware('web');
     Route::post('vehicle-list-detail-api', [CarInfoController::class,'vehicleDetailsList'])->middleware('web');
     Route::get('recent-transation', [UserBookingController::class,'transaction'])->middleware('web');
-    Route::get('vehicle-intrset-list', [CarInfoController::class,'vehicleIntrestLists'])->middleware('web');
+    Route::post('vehicle-intrset-list', [CarInfoController::class,'vehicleIntrestLists'])->middleware('web');
 
     Route::post('user/flag-change-language', [LanguageController::class,'userFlagChangeLanguage'])
     ->name('user.flag-change-language');
