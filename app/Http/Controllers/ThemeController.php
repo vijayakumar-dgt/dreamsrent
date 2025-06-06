@@ -2062,7 +2062,11 @@ class ThemeController extends Controller
         ];
         $categoryId = getCustomThemeCategoryId($themeId);
         $vehicleTypes = Cartype::select('name', 'id')->where('language_id', $language_id)->where('category_id', $categoryId)->where('status', 1)->get();
-        $vehicleModels = CarModel::select('model_name as name', 'id')->where('language_id', $language_id)->where('category_id', $categoryId)->where('status', 1)->get();
+        $vehicleModels = CarModel::select('model_name as name', 'id')->where('language_id', $language_id)
+                              ->whereHas('brand', function ($query) use ($categoryId) {
+                                  $query->where('category_id', $categoryId);
+                                  })
+                                  ->where('status', 1)->get();
         $locations = Location::select('name', 'id')->where('status', 1)->where('language_id', $language_id)->get();
         $totalReviews = Review::count();
         // theme code
