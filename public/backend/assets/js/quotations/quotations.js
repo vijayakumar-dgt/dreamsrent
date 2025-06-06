@@ -188,7 +188,7 @@
             });
         });
 
-        $(document).on("click", ".deleteReservation", function () {
+        $(document).on("click", ".delete-quotation", function () {
             let id = $(this).data("id");
             $("#delete_id").val(id);
         });
