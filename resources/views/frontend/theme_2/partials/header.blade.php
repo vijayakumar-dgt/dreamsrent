@@ -68,7 +68,7 @@
                                     @endphp
                                     <li class="{{ $active }}">
                                         @if($rawLink == '/')
-                                        <li class="has-submenu">
+                                        <li class="has-submenu {{ request()->routeIs(['home', 'theme']) ? 'active' : '' }}">
                                             <a href="javascript:void(0);">{{ __('web.home.home') }}</a>
                                             <ul class="submenu">
                                                 <li><a href="{{ url('/theme/home-01') }}">{{ __('web.home.home') }} 1</a></li>
