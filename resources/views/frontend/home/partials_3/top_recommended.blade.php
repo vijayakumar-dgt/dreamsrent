@@ -8,6 +8,11 @@
 
     $titleMain = implode(' ', array_slice($titleWords, 0, -$lastPartCount));
     $titleLastPart = implode(' ', array_slice($titleWords, -$lastPartCount));
+    if (!is_null($sectionContent) && $sectionContent->isNotEmpty()) {
+        $vehicles = $sectionContent->take(8);
+    } else {
+        $vehicles = collect();
+    }
 @endphp
 <!-- Recommended Section -->
 <section class="section recommend-section">
@@ -25,9 +30,9 @@
 
         <div class="row">
             <div class="col-md-12">
-                @if(!empty($sectionContent) && count($sectionContent) > 0)
+                @if(!empty($vehicles) && count($vehicles) > 0)
                 <div class="recommend-slider owl-carousel">
-                   @foreach($sectionContent as $vehicle)
+                   @foreach($vehicles as $vehicle)
                     <div class="listing-item bike-list">											
                         <div class="listing-img">
                             <a href="{{ route('vehicleDetails', $vehicle['slug']) }}">
