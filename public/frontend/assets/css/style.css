@@ -29032,6 +29032,10 @@ body {
 }
 
 
-
+@media (max-width :1300px) {
+	.listing-item.listing-item-two .listing-content {
+		padding: 11px;
+	}
+}
 
 
