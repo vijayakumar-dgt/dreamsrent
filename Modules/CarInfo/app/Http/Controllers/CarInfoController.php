@@ -145,9 +145,9 @@ class CarInfoController extends Controller
         return response()->json($response, $response['code']);
     }
 
-    public function vehicleIntrestLists(): JsonResponse
+    public function vehicleIntrestLists(Request $request): JsonResponse
     {
-        $response = $this->vehicleInfoRepository->vehicleInterestLists();
+        $response = $this->vehicleInfoRepository->vehicleInterestLists($request);
         return response()->json($response, $response['code']);
     }
 

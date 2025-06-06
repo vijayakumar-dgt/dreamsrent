@@ -2119,7 +2119,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
         }
     }
 
-    public function vehicleInterestLists(): array
+    public function vehicleInterestLists(Request $request): array
     {
         $authUser = current_user();
         $lang_id = null;
@@ -2145,7 +2145,7 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             'fuel_type:id,fuel_type',
             'transmission:id,name',
             'reviews:id,vehicle_id,average_ratings'
-        ])->where("language_id", $lang_id)->where('category_id', $getCategoryId)->take(6)->get();
+        ])->where("language_id", $lang_id)->where('category_id', $request->category_id)->take(6)->get();
 
         $data = $vehicles->map(function ($vehicle) {
             $vehicleImages = VehicleMeta::where('vehicle_id', $vehicle->id)

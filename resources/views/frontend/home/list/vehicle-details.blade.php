@@ -470,6 +470,7 @@
                                 <h4>{{ __('web.home.pricing') }}</h4>
                             </div>
                             <input type="hidden" name="vehicle_slug" id="vehicle_slug" value="{{ $slug }}">
+                            <input type="hidden" name="category_id" id="category_id" value="{{ $vehicle->category_id }}">
                             <input type="hidden" name="vehicle_id" id="vehicle_id" value="{{ $vehicle->id }}">
                             <input type="hidden" name="price_type" id="price_type" value="">
                             <input type="hidden" name="rent_value" id="rent_value" value="">

@@ -9,7 +9,7 @@
         fetchVehicleDetails();
         fetchRecommendedVehicles();
         listReviews();
-        
+
         $("#reviewForm").validate({
             rules: {
                 comments: {
@@ -278,7 +278,9 @@
         $("#delivery_remeber").change(function () {
             if ($(this).is(":checked")) {
                 let locationValue = $("#delivery_location").val();
-                $("#delivery_return_location").val(locationValue).trigger("change"); // Update Select2 correctly
+                $("#delivery_return_location")
+                    .val(locationValue)
+                    .trigger("change"); // Update Select2 correctly
             } else {
                 $("#delivery_return_location").val("").trigger("change"); // Clear Select2 selection
             }
@@ -287,15 +289,18 @@
         // Listen for Select2 change event
         $("#delivery_location").on("change", function () {
             if ($("#delivery_remeber").is(":checked")) {
-                $("#delivery_return_location").val($(this).val()).trigger("change");
+                $("#delivery_return_location")
+                    .val($(this).val())
+                    .trigger("change");
             }
         });
-
 
         $("#pickup_remeber").change(function () {
             if ($(this).is(":checked")) {
                 let locationValue = $("#pickup_location").val();
-                $("#pickup_return_location").val(locationValue).trigger("change"); // Update Select2 correctly
+                $("#pickup_return_location")
+                    .val(locationValue)
+                    .trigger("change"); // Update Select2 correctly
             } else {
                 $("#pickup_return_location").val("").trigger("change"); // Clear Select2 selection
             }
@@ -304,7 +309,9 @@
         // Listen for Select2 change event
         $("#pickup_location").on("change", function () {
             if ($("#pickup_remeber").is(":checked")) {
-                $("#pickup_return_location").val($(this).val()).trigger("change");
+                $("#pickup_return_location")
+                    .val($(this).val())
+                    .trigger("change");
             }
         });
 
@@ -334,13 +341,14 @@
             );
 
             if (selectedPriceType === "daily") {
-                $("#pickup_date, #pickup_time, #return_date, #return_time").prop(
-                    "readonly",
-                    false
-                );
+                $(
+                    "#pickup_date, #pickup_time, #return_date, #return_time"
+                ).prop("readonly", false);
 
                 let durationDays = Math.ceil(
-                    moment.duration(returnDateTime.diff(pickupDateTime)).asDays()
+                    moment
+                        .duration(returnDateTime.diff(pickupDateTime))
+                        .asDays()
                 );
                 durationDays = durationDays <= 0 ? 1 : durationDays; // Minimum 1 day
 
@@ -364,7 +372,7 @@
                     default:
                         return;
                 }
-                if(_pricing_type != 'daily'){
+                if (_pricing_type != "daily") {
                     $("#return_date").val(returnDateTime.format("DD-MM-YYYY"));
                     $("#return_time").val(returnDateTime.format("HH:mm"));
                 }
@@ -395,7 +403,9 @@
             }
 
             // Validate pickup/return locations based on rent type
-            let selectedRentType = $("input[name='rent_type']:checked").attr("id");
+            let selectedRentType = $("input[name='rent_type']:checked").attr(
+                "id"
+            );
             let pickupLocation = "",
                 returnLocation = "";
 
@@ -436,7 +446,9 @@
                 } else {
                     if (returnDateTime.isBefore(pickupDateTime, "minute")) {
                         errors.push(
-                            _l("web.home.return_date_cannot_be_before_pickup_date")
+                            _l(
+                                "web.home.return_date_cannot_be_before_pickup_date"
+                            )
                         );
                     }
 
@@ -475,7 +487,9 @@
                 },
                 headers: {
                     Accept: "application/json",
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
                 },
                 success: function (response) {
                     if (response.status === "success") {
@@ -548,163 +562,218 @@
         });
     });
 
-    function fetchRecommendedVehicles(){
-         $.ajax({
-             url: "/vehicle-intrset-list",
-             type: "GET",
-             success: function (response) {
-                 if (response.code === 200) {
-                    let cleanHtml = DOMPurify.sanitize(response.html);
-                    $("#recommended-vehicle").html(cleanHtml);   
-                     setTimeout(function () {
-                        reInitializeCarousel('.rental-deal-slider');
-                     }, 150);
-                 }
-             } 
-         }); 
-    }
-    
-    if ($(".bookingpickupdate").length > 0) {
-        $(".bookingpickupdate").datetimepicker({
-            format: "DD-MM-YYYY",
-            useCurrent: false,
-            minDate: moment().startOf("day"),
-            icons: {
-                up: "fas fa-angle-up",
-                down: "fas fa-angle-down",
-                next: "fas fa-angle-right",
-                previous: "fas fa-angle-left",
+    function fetchRecommendedVehicles() {
+        $.ajax({
+            url: "/vehicle-intrset-list",
+            type: "POST",
+            data: {
+                category_id: $("#category_id").val(),
             },
-        }).on("dp.change", function (e) {
-            const pickupDate = e.date;
-            const returnDate = $(".bookingreturndate").data("DateTimePicker").date();
-            
-            if (pickupDate && pickupDate.isSame(moment(), "day")) {
-                $(".booking_timepicker").data("DateTimePicker").minDate(moment());
-            } else {
-                $(".booking_timepicker").data("DateTimePicker").minDate(false);     
-            }
-
-            if (pickupDate) {
-                const pickupOnly = pickupDate.clone().startOf("day");
-                if(_pricing_type == "daily"){
-                    $(".bookingreturndate").data("DateTimePicker").date(null);
+            headers: {
+                Accept: "application/json",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                if (response.code === 200) {
+                    let cleanHtml = DOMPurify.sanitize(response.html);
+                    $("#recommended-vehicle").html(cleanHtml);
+                    setTimeout(function () {
+                        reInitializeCarousel(".rental-deal-slider");
+                    }, 150);
                 }
-                $(".bookingreturndate").data("DateTimePicker").minDate(pickupOnly);
-            }
-
-            if (returnDate) {
-                const returnOnly = returnDate.clone().startOf("day");
-                // $(".bookingpickupdate").data("DateTimePicker").maxDate(returnOnly);
-            } else {
-                $(".bookingpickupdate").data("DateTimePicker").maxDate(false);
-            }
+            },
         });
+    }
+
+    if ($(".bookingpickupdate").length > 0) {
+        $(".bookingpickupdate")
+            .datetimepicker({
+                format: "DD-MM-YYYY",
+                useCurrent: false,
+                minDate: moment().startOf("day"),
+                icons: {
+                    up: "fas fa-angle-up",
+                    down: "fas fa-angle-down",
+                    next: "fas fa-angle-right",
+                    previous: "fas fa-angle-left",
+                },
+            })
+            .on("dp.change", function (e) {
+                const pickupDate = e.date;
+                const returnDate = $(".bookingreturndate")
+                    .data("DateTimePicker")
+                    .date();
+
+                if (pickupDate && pickupDate.isSame(moment(), "day")) {
+                    $(".booking_timepicker")
+                        .data("DateTimePicker")
+                        .minDate(moment());
+                } else {
+                    $(".booking_timepicker")
+                        .data("DateTimePicker")
+                        .minDate(false);
+                }
+
+                if (pickupDate) {
+                    const pickupOnly = pickupDate.clone().startOf("day");
+                    if (_pricing_type == "daily") {
+                        $(".bookingreturndate")
+                            .data("DateTimePicker")
+                            .date(null);
+                    }
+                    $(".bookingreturndate")
+                        .data("DateTimePicker")
+                        .minDate(pickupOnly);
+                }
+
+                if (returnDate) {
+                    const returnOnly = returnDate.clone().startOf("day");
+                    // $(".bookingpickupdate").data("DateTimePicker").maxDate(returnOnly);
+                } else {
+                    $(".bookingpickupdate")
+                        .data("DateTimePicker")
+                        .maxDate(false);
+                }
+            });
     }
 
     if ($(".booking_timepicker").length > 0) {
-        $(".booking_timepicker").datetimepicker({
-            format: "HH:mm",
-            useCurrent: true,
-            icons: {
-                up: "fas fa-angle-up",
-                down: "fas fa-angle-down",
-                next: "fas fa-angle-right",
-                previous: "fas fa-angle-left",
-            },
-            stepping: 15, // Set interval to 15 minutes
-        }).on("dp.change", function (e) {
-            const pickupTime = e.date;
-            const pickupDate = $(".bookingpickupdate").data("DateTimePicker").date();
-            const returnDate = $(".bookingreturndate").data("DateTimePicker").date();
-            const returnTimePicker = $(".booking_return_timepicker").data("DateTimePicker");
-            const returnTime = returnTimePicker.date();
+        $(".booking_timepicker")
+            .datetimepicker({
+                format: "HH:mm",
+                useCurrent: true,
+                icons: {
+                    up: "fas fa-angle-up",
+                    down: "fas fa-angle-down",
+                    next: "fas fa-angle-right",
+                    previous: "fas fa-angle-left",
+                },
+                stepping: 15, // Set interval to 15 minutes
+            })
+            .on("dp.change", function (e) {
+                const pickupTime = e.date;
+                const pickupDate = $(".bookingpickupdate")
+                    .data("DateTimePicker")
+                    .date();
+                const returnDate = $(".bookingreturndate")
+                    .data("DateTimePicker")
+                    .date();
+                const returnTimePicker = $(".booking_return_timepicker").data(
+                    "DateTimePicker"
+                );
+                const returnTime = returnTimePicker.date();
 
-            if (!pickupDate || !returnDate || !pickupTime) return;
+                if (!pickupDate || !returnDate || !pickupTime) return;
 
-            const isSameDay = pickupDate.isSame(returnDate, "day");
-            const minReturnTime = moment(pickupTime).add(1, "hour");
+                const isSameDay = pickupDate.isSame(returnDate, "day");
+                const minReturnTime = moment(pickupTime).add(1, "hour");
 
-            if (isSameDay) {
-                returnTimePicker.minDate(minReturnTime);
-                if (!returnTime || returnTime.isBefore(minReturnTime)) {
-                    returnTimePicker.date(minReturnTime);
+                if (isSameDay) {
+                    returnTimePicker.minDate(minReturnTime);
+                    if (!returnTime || returnTime.isBefore(minReturnTime)) {
+                        returnTimePicker.date(minReturnTime);
+                    }
+                } else {
+                    returnTimePicker.minDate(false);
                 }
-            } else {
-                returnTimePicker.minDate(false);
-            }
-        });
+            });
     }
 
     if ($(".bookingreturndate").length > 0) {
-        $(".bookingreturndate").datetimepicker({
-            format: "DD-MM-YYYY",
-            useCurrent: false,
-            minDate: moment().startOf("day"),
-            icons: {
-                up: "fas fa-angle-up",
-                down: "fas fa-angle-down",
-                next: "fas fa-angle-right",
-                previous: "fas fa-angle-left",
-            },
-        }).on("dp.change", function (e) {
-            const returnDate = e.date;
-            const pickupDate = $(".bookingpickupdate").data("DateTimePicker").date();
-            
-            if (!pickupDate || !returnDate) return;
-            
-            const returnOnly = returnDate.clone().startOf("day");
-            const pickupOnly = pickupDate.clone().startOf("day");
+        $(".bookingreturndate")
+            .datetimepicker({
+                format: "DD-MM-YYYY",
+                useCurrent: false,
+                minDate: moment().startOf("day"),
+                icons: {
+                    up: "fas fa-angle-up",
+                    down: "fas fa-angle-down",
+                    next: "fas fa-angle-right",
+                    previous: "fas fa-angle-left",
+                },
+            })
+            .on("dp.change", function (e) {
+                const returnDate = e.date;
+                const pickupDate = $(".bookingpickupdate")
+                    .data("DateTimePicker")
+                    .date();
 
-            // $(".bookingpickupdate").data("DateTimePicker").maxDate(returnOnly);
-            $(".bookingreturndate").data("DateTimePicker").minDate(pickupOnly);
+                if (!pickupDate || !returnDate) return;
 
-            if (returnOnly.isSame(pickupOnly, "day")) {
-                const pickupTime = $(".booking_timepicker").data("DateTimePicker").date();
-                if (pickupTime) {
-                    const minReturnTime = moment(pickupTime).add(1, "hour");
-                    $(".booking_return_timepicker").data("DateTimePicker").minDate(minReturnTime);
+                const returnOnly = returnDate.clone().startOf("day");
+                const pickupOnly = pickupDate.clone().startOf("day");
+
+                // $(".bookingpickupdate").data("DateTimePicker").maxDate(returnOnly);
+                $(".bookingreturndate")
+                    .data("DateTimePicker")
+                    .minDate(pickupOnly);
+
+                if (returnOnly.isSame(pickupOnly, "day")) {
+                    const pickupTime = $(".booking_timepicker")
+                        .data("DateTimePicker")
+                        .date();
+                    if (pickupTime) {
+                        const minReturnTime = moment(pickupTime).add(1, "hour");
+                        $(".booking_return_timepicker")
+                            .data("DateTimePicker")
+                            .minDate(minReturnTime);
+                    }
+                } else if (returnOnly.isSame(moment(), "day")) {
+                    $(".booking_return_timepicker")
+                        .data("DateTimePicker")
+                        .minDate(moment().add(1, "hour"));
+                } else {
+                    $(".booking_return_timepicker")
+                        .data("DateTimePicker")
+                        .minDate(false);
                 }
-                
-            } else if (returnOnly.isSame(moment(), "day")) {
-                
-                $(".booking_return_timepicker").data("DateTimePicker").minDate(moment().add(1, "hour"));
-            } else {
-                $(".booking_return_timepicker").data("DateTimePicker").minDate(false);
-            }
-        });
+            });
     }
 
     if ($(".booking_return_timepicker").length > 0) {
-        $(".booking_return_timepicker").datetimepicker({
-            format: "HH:mm",
-            useCurrent: true,
-            icons: {
-                up: "fas fa-angle-up",
-                down: "fas fa-angle-down",
-                next: "fas fa-angle-right",
-                previous: "fas fa-angle-left",
-            },
-            stepping: 15, // 15-minute interval
-        }).on("dp.change", function (e) {
-            const returnTime = e.date;
-            const pickupTime = $(".booking_timepicker").data("DateTimePicker").date();
-            const pickupDate = $(".bookingpickupdate").data("DateTimePicker").date();
-            const returnDate = $(".bookingreturndate").data("DateTimePicker").date();
-        
-            if (
-                pickupDate &&
-                returnDate &&
-                pickupTime &&
-                returnTime &&
-                pickupDate.isSame(returnDate, "day")
-            ) {
-                if (!returnTime.isAfter(moment(pickupTime).add(59, "minutes"))) {
-                    $(this).data("DateTimePicker").date(null);
-                    alert("Return time must be at least 1 hour after pickup time.");
+        $(".booking_return_timepicker")
+            .datetimepicker({
+                format: "HH:mm",
+                useCurrent: true,
+                icons: {
+                    up: "fas fa-angle-up",
+                    down: "fas fa-angle-down",
+                    next: "fas fa-angle-right",
+                    previous: "fas fa-angle-left",
+                },
+                stepping: 15, // 15-minute interval
+            })
+            .on("dp.change", function (e) {
+                const returnTime = e.date;
+                const pickupTime = $(".booking_timepicker")
+                    .data("DateTimePicker")
+                    .date();
+                const pickupDate = $(".bookingpickupdate")
+                    .data("DateTimePicker")
+                    .date();
+                const returnDate = $(".bookingreturndate")
+                    .data("DateTimePicker")
+                    .date();
+
+                if (
+                    pickupDate &&
+                    returnDate &&
+                    pickupTime &&
+                    returnTime &&
+                    pickupDate.isSame(returnDate, "day")
+                ) {
+                    if (
+                        !returnTime.isAfter(
+                            moment(pickupTime).add(59, "minutes")
+                        )
+                    ) {
+                        $(this).data("DateTimePicker").date(null);
+                        alert(
+                            "Return time must be at least 1 hour after pickup time."
+                        );
+                    }
                 }
-            }
-        });
+            });
     }
 
     function listReviews() {
@@ -740,14 +809,21 @@
     }
 
     function renderReviewsMeta(reviews_meta) {
-        
-        let cleanDescription = DOMPurify.sanitize(reviews_meta.overall_avg_ratings);
-        $("#overall_ratings").empty().append(`${cleanDescription}<span>/5</span>`);
+        let cleanDescription = DOMPurify.sanitize(
+            reviews_meta.overall_avg_ratings
+        );
+        $("#overall_ratings")
+            .empty()
+            .append(`${cleanDescription}<span>/5</span>`);
         $("#rating_description").text(reviews_meta.rating_description);
         let totalReview = DOMPurify.sanitize(reviews_meta.total_reviews);
-        $("#total_reviews").empty().append(`${_l("web.home.based_on")} ${totalReview} ${_l(
-                "web.common.reviews"
-            )}`);
+        $("#total_reviews")
+            .empty()
+            .append(
+                `${_l("web.home.based_on")} ${totalReview} ${_l(
+                    "web.common.reviews"
+                )}`
+            );
 
         $("#service_progress").attr(
             "style",
@@ -776,7 +852,9 @@
         $("#avg_value_for_money_ratings").text(
             reviews_meta.avg_value_for_money_ratings
         );
-        $("#avg_cleanliness_ratings").text(reviews_meta.avg_cleanliness_ratings);
+        $("#avg_cleanliness_ratings").text(
+            reviews_meta.avg_cleanliness_ratings
+        );
         $("#total_reviews_count").text(
             `${_l("web.common.showing")} ${reviews_meta.total_reviews} ${_l(
                 "web.common.reviews"
@@ -797,7 +875,8 @@
                         i === Math.ceil(review.average_ratings) &&
                         review.average_ratings % 1 !== 0
                     ) {
-                        starsHtml += '<i class="fas fa-star-half-alt filled"></i>';
+                        starsHtml +=
+                            '<i class="fas fa-star-half-alt filled"></i>';
                     } else {
                         starsHtml += '<i class="far fa-star"></i>';
                     }
@@ -824,7 +903,9 @@
                                 <div class="reviewbox-list-rating">
                                     <p>
                                         ${starsHtml}
-                                        <span> (${review.average_ratings})</span>
+                                        <span> (${
+                                            review.average_ratings
+                                        })</span>
                                     </p>
                                 </div>
                             </div>
@@ -833,15 +914,15 @@
                                 ${
                                     $("#auth_user_id").val() != ""
                                         ? `<button type="button" class="btn review_reply_btn" data-id="${
-                                            review.id
-                                        }">
+                                              review.id
+                                          }">
                                     <i class="fa-solid fa-reply"></i>${_l(
                                         "web.home.reply"
                                     )}
                                 </button>`
                                         : `<a class="btn" href="/login" data-id="${
-                                            review.id
-                                        }">
+                                              review.id
+                                          }">
                                     <i class="fa-solid fa-reply"></i>${_l(
                                         "web.home.reply"
                                     )}
@@ -1026,10 +1107,13 @@
                             .removeAttr("disabled")
                             .html(_l("web.common.send_reply"));
                         if (error.responseJSON.code === 422) {
-                            $.each(error.responseJSON.errors, function (key, val) {
-                                $("#" + key).addClass("is-invalid");
-                                $("#" + key + "_error").text(val[0]);
-                            });
+                            $.each(
+                                error.responseJSON.errors,
+                                function (key, val) {
+                                    $("#" + key).addClass("is-invalid");
+                                    $("#" + key + "_error").text(val[0]);
+                                }
+                            );
                         } else {
                             showToast("error", error.responseJSON.message);
                         }
@@ -1132,7 +1216,10 @@
     function renderPriceDetails(vehicle) {
         let currency = vehicle.currency;
         let priceOptions = "";
-        if(vehicle.multiple_vehicle_policy && vehicle.multiple_vehicle_policy.length > 0){
+        if (
+            vehicle.multiple_vehicle_policy &&
+            vehicle.multiple_vehicle_policy.length > 0
+        ) {
             $("#policy-section").removeClass("d-none");
         }
         $.each(vehicle.price, function (index, value) {
@@ -1153,16 +1240,16 @@
                                     }</span>
                                 </span>
                             </label>`;
-                
-            if(index === 0){
+
+            if (index === 0) {
                 _pricing_type = priceType;
             }
         });
 
         let cleanDescription = DOMPurify.sanitize(priceOptions);
         $(".price_options").empty().append(cleanDescription);
-        let has_pickup_date =  $("#has_pickup_date").val();
-        if(!has_pickup_date){
+        let has_pickup_date = $("#has_pickup_date").val();
+        if (!has_pickup_date) {
             $(".price-rate-option").on("change", handlePriceChange);
             $(".price-rate-option:checked").trigger("change");
             setTimeout(() => {
@@ -1177,31 +1264,36 @@
                 $(".bookingreturndate").trigger("focus");
                 $(".bookingreturndate").trigger("blur");
             }, 500);
-        }else{
+        } else {
             setTimeout(function () {
                 let $picker = $(".bookingpickupdate");
                 let $booking_timepicker = $(".booking_timepicker");
-                let pickup_time = $booking_timepicker.data("DateTimePicker").date();
+                let pickup_time = $booking_timepicker
+                    .data("DateTimePicker")
+                    .date();
                 $picker.trigger("dp.change");
                 setTimeout(function () {
-                    $booking_timepicker.data("DateTimePicker").date(pickup_time);
+                    $booking_timepicker
+                        .data("DateTimePicker")
+                        .date(pickup_time);
                     $booking_timepicker.trigger("dp.change");
                 }, 100);
                 $(".bookingpickupdate").trigger("focus");
                 $(".bookingpickupdate").trigger("blur");
                 $(".bookingreturndate").trigger("focus");
                 $(".bookingreturndate").trigger("blur");
-
             }, 500);
-            
         }
     }
 
-    $(document).on('click', '.view-policies', function () {
-        let policies = _vehicleDetails && _vehicleDetails.multiple_vehicle_policy ? _vehicleDetails.multiple_vehicle_policy : [];
+    $(document).on("click", ".view-policies", function () {
+        let policies =
+            _vehicleDetails && _vehicleDetails.multiple_vehicle_policy
+                ? _vehicleDetails.multiple_vehicle_policy
+                : [];
         if (policies.length > 0) {
             $.each(policies, function (index, policy) {
-                window.open(policy, '_blank');
+                window.open(policy, "_blank");
             });
         }
     });
@@ -1240,10 +1332,9 @@
                 $("#return_date, #return_time").prop("readonly", true);
                 break;
         }
-        if(_pricing_type != "daily"){
-            
+        if (_pricing_type != "daily") {
             $("#return_date").val(returnDateTime.format("DD-MM-YYYY"));
-            $("#return_time").val(returnDateTime.format("HH:mm"));    
+            $("#return_time").val(returnDateTime.format("HH:mm"));
         }
 
         if (selectedPriceType === "daily") {
@@ -1268,9 +1359,13 @@
         if (vehicle.description && vehicle.description.trim() !== "") {
             const maxWords = 50; // Number of words to show before truncation
             // Convert HTML to text first
-            const plainText = $("<div>").html(vehicle.description.trim()).text();
-            const words = plainText.split(/\s+/).filter(word => word.length > 0);
-            
+            const plainText = $("<div>")
+                .html(vehicle.description.trim())
+                .text();
+            const words = plainText
+                .split(/\s+/)
+                .filter((word) => word.length > 0);
+
             let html = `
                 <div class="review-header">
                     <h4>${_l("web.home.desc_of_listing")}</h4>
@@ -1278,30 +1373,45 @@
                 <div class="description-list">`;
 
             if (words.length > maxWords) {
-                const visibleWords = words.slice(0, maxWords).join(' ');
-                const hiddenWords = words.slice(maxWords).join(' ');
+                const visibleWords = words.slice(0, maxWords).join(" ");
+                const hiddenWords = words.slice(maxWords).join(" ");
 
                 html += `
-                    <div class="visible-text">${escapeHtml(visibleWords)}...</div>
+                    <div class="visible-text">${escapeHtml(
+                        visibleWords
+                    )}...</div>
                     <div class="read-more">
-                        <div class="more-text" style="display: none;">${escapeHtml(hiddenWords)}</div>
-                        <button type="button" class="border-0 bg-white  more-link">${_l("web.home.show_more")}</button>
+                        <div class="more-text" style="display: none;">${escapeHtml(
+                            hiddenWords
+                        )}</div>
+                        <button type="button" class="border-0 bg-white  more-link">${_l(
+                            "web.home.show_more"
+                        )}</button>
                     </div>`;
             } else {
-                html += `<div class="visible-text">${escapeHtml(plainText)}</div>`;
+                html += `<div class="visible-text">${escapeHtml(
+                    plainText
+                )}</div>`;
             }
 
             html += `</div>`;
             descriptionSection.html(html).show();
 
             // Click handler
-            descriptionSection.find(".more-link").off("click").on("click", function() {
-                const moreText = $(this).siblings(".more-text");
-                const isVisible = moreText.is(":visible");
-                
-                moreText.slideToggle(200);
-                $(this).text(isVisible ? _l("web.home.show_more") : _l("web.home.show_less"));
-            });
+            descriptionSection
+                .find(".more-link")
+                .off("click")
+                .on("click", function () {
+                    const moreText = $(this).siblings(".more-text");
+                    const isVisible = moreText.is(":visible");
+
+                    moreText.slideToggle(200);
+                    $(this).text(
+                        isVisible
+                            ? _l("web.home.show_more")
+                            : _l("web.home.show_less")
+                    );
+                });
         }
     }
 
@@ -1342,7 +1452,7 @@
             }
 
             html += "</div>";
-            
+
             let cleanHtml = DOMPurify.sanitize(html);
             featureSection.find(".listing-description").html(cleanHtml);
             featureSection.show();
@@ -1386,7 +1496,6 @@
 
         let cleanHtml = DOMPurify.sanitize(html);
         $(".gallery_section").html(cleanHtml).show();
-
 
         if (vehicle.vehicle_video && vehicle.vehicle_video != "") {
             $(".video_section").removeClass("d-none");
@@ -1435,9 +1544,9 @@
             )
             .join("");
 
-            let cleanHtml = DOMPurify.sanitize(html);
-            $("#tarrifTable tbody").html(cleanHtml);
-            
+        let cleanHtml = DOMPurify.sanitize(html);
+        $("#tarrifTable tbody").html(cleanHtml);
+
         $(".tariff_section").show();
     }
 
@@ -1475,7 +1584,6 @@
 
         let cleanHtml = DOMPurify.sanitize(html);
         $(".faq_section").html(cleanHtml).show();
-
     }
 
     function createExtraService(vehicle) {
@@ -1486,7 +1594,11 @@
                     (service) =>
                         `<div class="servicelist d-flex align-items-center col-xxl-3 col-xl-4 col-sm-6">
                     <div class="service-img">
-                        <img src="${service.icon}" class="extra-service-img" alt="${service.name ?? ""}">
+                        <img src="${
+                            service.icon
+                        }" class="extra-service-img" alt="${
+                            service.name ?? ""
+                        }">
                     </div>
                     <div class="service-info">
                         <p>${service.name ?? ""}</p>
@@ -1496,7 +1608,7 @@
                 .join("");
             html += `<div class="pb-0 extra-service">
                         <div class="review-header">
-                            <h4>${_l('web.user.extra_services')}</h4>
+                            <h4>${_l("web.user.extra_services")}</h4>
                         </div>
                         <div class="lisiting-service">
                             <div class="row">
@@ -1506,7 +1618,6 @@
                     </div>`;
             let cleanHtml = DOMPurify.sanitize(html);
             $(".extra-service-div").html(cleanHtml);
-
         } else {
             $(".extra-service-div").hide();
         }
@@ -1529,10 +1640,10 @@
                     ${
                         vehicle.authenticated
                             ? `<button type="button" data-id="${
-                                vehicle.id
-                            }" class="fav-icon border-0 wishlist-icon ${
-                                vehicle.wishlist ? "selected" : ""
-                            }">
+                                  vehicle.id
+                              }" class="fav-icon border-0 wishlist-icon ${
+                                  vehicle.wishlist ? "selected" : ""
+                              }">
                         <i class="fa-regular fa-heart"></i>
                     </button>`
                             : ""
@@ -1566,7 +1677,9 @@
 
     function reinitializeSleek() {
         let isRtl =
-            $("body").data("dir") && $("body").data("dir") == "rtl" ? true : false;
+            $("body").data("dir") && $("body").data("dir") == "rtl"
+                ? true
+                : false;
         if ($(".detail-bigimg").length > 0) {
             $(".detail-bigimg").slick({
                 slidesToShow: 1,
@@ -1592,8 +1705,8 @@
         }
     }
 
-    function reInitializeCarousel(className){
-        let isRtl = $('body').data('dir') && $('body').data('dir') == 'rtl';
+    function reInitializeCarousel(className) {
+        let isRtl = $("body").data("dir") && $("body").data("dir") == "rtl";
         $(className).owlCarousel({
             loop: true,
             margin: 24,
@@ -1604,22 +1717,22 @@
             autoplay: false,
             navText: [
                 '<i class="fa-solid fa-chevron-left"></i>',
-                '<i class="fa-solid fa-chevron-right"></i>'
+                '<i class="fa-solid fa-chevron-right"></i>',
             ],
             responsive: {
                 0: {
-                    items: 1
+                    items: 1,
                 },
                 550: {
-                    items: 1
+                    items: 1,
                 },
                 768: {
-                    items: 2
+                    items: 2,
                 },
                 1000: {
-                    items: 4
-                }
-            }
+                    items: 4,
+                },
+            },
         });
     }
 
@@ -1646,9 +1759,7 @@
                     showToast("error", response.message);
                 }
             },
-            error: function (error) {
-                
-            },
+            error: function (error) {},
         });
     });
 
