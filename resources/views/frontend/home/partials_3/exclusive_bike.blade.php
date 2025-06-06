@@ -4,7 +4,7 @@
     $items = $sectionContent['items'] ?? [];
 @endphp
 <!-- Choose Us Section -->
-<section class="section choose-us-section">
+<section class="section choose-us-section overflow-hidden">
     <div class="container">
         <div class="row">
             <div class="col-lg-7">
