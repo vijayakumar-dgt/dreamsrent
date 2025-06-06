@@ -198,7 +198,7 @@ $(document).ready(function () {
                         $(".form-control").removeClass("is-invalid is-valid");           
                         if (response.redirect_url) {
                             const BASE_URL = window.location.origin;
-                            window.location.href = BASE_URL + resp.redirect_url;
+                            window.location.href = BASE_URL + response.redirect_url;
                             return; 
                         }                   
                         
