@@ -5,8 +5,6 @@ namespace App\Repositories\Eloquent;
 use App\Models\NewsletterSubscriber;
 use App\Models\UserDetail;
 use App\Repositories\Contracts\NewsLetterRepositoryInterface;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
