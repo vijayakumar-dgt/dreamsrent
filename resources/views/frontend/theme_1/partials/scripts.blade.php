@@ -8,7 +8,7 @@
     <!-- Bootstrap JS -->
     <script src="{{ asset('frontend/assets/js/bootstrap.bundle.min.js') }}"></script>
 
-    @if (request()->routeIs('home', 'pages'))
+    @if (request()->routeIs('home', 'pages','theme'))
     <!-- Counterup JS -->
     <script src="{{ asset('frontend/assets/js/jquery.waypoints.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/jquery.counterup.min.js') }}"></script>
@@ -27,7 +27,7 @@
     <script src="{{ asset('frontend/assets/plugins/select2/js/select2.min.js') }}"></script>
     @endif
 
-    @if (request()->routeIs(['home', 'pages', 'contact-us']))
+    @if (request()->routeIs(['home', 'pages', 'contact-us','theme']))
     <!-- Aos JS -->
     <script src="{{ asset('frontend/assets/plugins/aos/aos.js') }}"></script>
     @endif
@@ -38,12 +38,12 @@
     <!-- Moment JS -->
     <script src="{{ asset('frontend/assets/plugins/moment/moment.min.js') }}"></script>
 
-    @if (request()->routeIs(['home', 'list', 'vehicleDetails', 'booking.checkout']))
+    @if (request()->routeIs(['home', 'list', 'vehicleDetails', 'booking.checkout','theme']))
     <!-- Datetimepicker JS -->
     <script src="{{ asset('frontend/assets/js/bootstrap-datetimepicker.min.js') }}"></script>
     @endif
 
-    @if (request()->routeIs(['home', 'list', 'vehicleDetails', 'pages*']))
+    @if (request()->routeIs(['home', 'list', 'vehicleDetails', 'pages*','theme']))
     <!-- Owl carousel JS -->
     <script src="{{ asset('frontend/assets/js/owl.carousel.min.js') }}"></script>
     @endif

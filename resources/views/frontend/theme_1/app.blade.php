@@ -31,7 +31,7 @@
 			@include('frontend.home.cookie.consent')
 		@endif
 	</div>
-	@if(!request()->routeIs('home'))
+	@if(!request()->routeIs(['home', 'theme']))
 	    @include('frontend.preloader')
 	@endif
 	<div class="progress-wrap active-progress">
