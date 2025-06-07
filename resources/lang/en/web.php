@@ -490,7 +490,7 @@ return [
         'custom' => 'Custom',
         'sort_by_asc' => 'Sort By Ascending',
         'sort_by_desc' => 'Sort By Descending',
-        'sort_by_alpha' => 'Sort By Alphabete',
+        'sort_by_alpha' => 'Sort By Alphabet',
         'date' => 'Date',
         'total' => 'Total',
         'status' => 'Status',

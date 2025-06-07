@@ -41,7 +41,7 @@ const fetchUserBookings = (callback = null) => {
 
         if (!$.fn.DataTable.isDataTable(tableSelector)) {
         $(tableSelector).DataTable({
-            ordering: true,
+            ordering: false,
             searching: false,
             pageLength: 10,
             lengthChange: false,
@@ -67,9 +67,12 @@ const fetchUserBookings = (callback = null) => {
         table.clear();
 
         if (response.status === 'success' && response.data.length > 0) {
-        response.data.forEach(booking => {
-            table.row.add($(createBookingCard(booking)));
-        });
+            response.data.forEach(booking => {
+                table.row.add($(createBookingCard(booking)));
+            });
+            setTimeout(() => {
+                table.columns.adjust().draw();
+            });
         } else {
         $("#bookingTable tbody").html(`<tr><td colspan="5" class="text-center">${_l("we.common.no_bookings_found")}</td></tr>`);
         }
