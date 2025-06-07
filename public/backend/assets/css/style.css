@@ -21197,3 +21197,9 @@ span.flatpickr-weekday {
 body {
   overflow-x: hidden !important;
 }
+.admin-vehicle-image{
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  object-fit: inherit !important;
+}
