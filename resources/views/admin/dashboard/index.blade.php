@@ -197,8 +197,14 @@
                                                 <a href="javascript:void(0);" class="avatar flex-shrink-0">
                                                     @php
                                                     $imagePath = $reservation->vehicle_image ?? "";
+                                                    $filename = basename($imagePath);
+                                                    $newpath = 'vehicles/images/small/' . $filename;
+                                                    $file = public_path('storage/' . $newpath);
+                                                    if (file_exists($file)) {
+                                                        $imagePath = $newpath;
+                                                    }
                                                     @endphp
-                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" alt="Vehicle Image">
+                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" class="admin-vehicle-image" alt="Vehicle Image">
                                                 </a>
                                                 <?php
                                                 $start = \Carbon\Carbon::parse($reservation->start_datetime);
