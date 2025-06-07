@@ -112,7 +112,7 @@
                                         <?php
                                         $category = isset($blogPost) ? Modules\GeneralSetting\Models\BlogCategory::where('id', $blogPost->category)->first() : null;
                                         ?>
-                                        {{$category->name ?? '-'}}
+                                        {{ucfirst($category->name) ?? '-'}}
                                     </span>
                                 </div>
                             </div>
@@ -138,6 +138,7 @@
                         </div>
                     </div>
                 </div>
+                <?php echo count($blogPosts); ?>
                 @endforeach
             </div>
             <div class="d-flex align-items-center justify-content-center mt-3">
