@@ -319,7 +319,9 @@
                                 <p class="text-gray-9">{{$symbol}}{{$booking->final_price}}</p>
                             </td>
                             <td>
-                                <p class="text-gray-9">{{ucfirst($booking->payment_type) ?? '-'}}</p>
+                                <p class="text-gray-9">
+                                    {{ $booking->payment_type === 'cod' ? strtoupper($booking->payment_type) : ucfirst($booking->payment_type ?? '-') }}
+                                </p>
                             </td>
                             <td>
                                 <p class="text-gray-9">{{ formatDateTime($booking->booking_date, false) }}</p>

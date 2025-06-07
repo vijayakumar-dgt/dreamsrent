@@ -469,7 +469,7 @@
         }
 
         function applyFiltersAndRender() {
-            visibleCount = 6;
+            visibleCount = 15;
             filterAndSortBlogs();
             renderBlogs();
         }

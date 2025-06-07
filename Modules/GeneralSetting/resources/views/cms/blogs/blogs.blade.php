@@ -138,7 +138,6 @@
                         </div>
                     </div>
                 </div>
-                <?php echo count($blogPosts); ?>
                 @endforeach
             </div>
             <div class="d-flex align-items-center justify-content-center mt-3">
