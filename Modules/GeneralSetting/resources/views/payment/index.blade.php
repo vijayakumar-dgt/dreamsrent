@@ -157,10 +157,8 @@
     <x-admin.modal className="addmodal" id="add_paypal" :title="__('admin.common.paypal')" formId="PaypalSettingForm"
         dialogClass="modal-dialog-centered modal-md">
         <x-slot name="body">
-            @csrf
             <input type="hidden" name="group_id" value="13">
             <input type="hidden" name="id" id="paypal_id">
-
             <div class="row mb-3">
                 <div class="col-lg-12">
                     <label class="form-label">{{ __('admin.general_settings.api_keys') }}<span
@@ -169,7 +167,6 @@
                     <span id="paypal_key_error" class="text-danger error-text"></span>
                 </div>
             </div>
-
             <div class="row mb-3">
                 <div class="col-lg-12">
                     <label class="form-label">{{ __('admin.general_settings.secret_key') }}<span
@@ -179,24 +176,14 @@
                 </div>
             </div>
         </x-slot>
-
         <x-slot name="footer">
-            <div class="d-flex justify-content-between align-items-center w-100">
-                <div class="form-check form-check-md form-switch me-2 d-none" id="paypal_status_div">
-                    <label class="form-check-label form-label mt-0 mb-0">
-                        <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status"
-                            id="paypal_status">
-                        {{ __('admin.general_settings.status') }}
-                    </label>
-                </div>
-                <div class="d-flex justify-content-center">
-                    <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">
-                        {{ __('admin.general_settings.cancel') }}
-                    </a>
-                    <button type="submit" class="btn btn-primary submitbtn savebtn">
-                        {{ __('admin.common.submit') }}
-                    </button>
-                </div>
+            <div class="d-flex justify-content-center">
+                <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">
+                    {{ __('admin.general_settings.cancel') }}
+                </a>
+                <button type="submit" class="btn btn-primary submitbtn savebtn">
+                    {{ __('admin.common.submit') }}
+                </button>
             </div>
         </x-slot>
     </x-admin.modal>
@@ -205,10 +192,8 @@
     <x-admin.modal className="addmodal" id="add_stripe" :title="__('admin.common.stripe')" formId="StripeSettingForm"
         dialogClass="modal-dialog-centered modal-md">
         <x-slot name="body">
-            @csrf
             <input type="hidden" name="group_id" value="13">
             <input type="hidden" name="id" id="stripe_id">
-
             <div class="row mb-3">
                 <div class="col-lg-12">
                     <label class="form-label">{{ __('admin.general_settings.api_keys') }}<span
@@ -217,7 +202,6 @@
                     <span id="stripe_key_error" class="text-danger error-text"></span>
                 </div>
             </div>
-
             <div class="row mb-3">
                 <div class="col-lg-12">
                     <label class="form-label">{{ __('admin.general_settings.secret_key') }}<span
@@ -227,29 +211,17 @@
                 </div>
             </div>
         </x-slot>
-
         <x-slot name="footer">
-            <div class="d-flex justify-content-between align-items-center w-100">
-                <div class="form-check form-check-md form-switch me-2 d-none" id="stripe_status_div">
-                    <label class="form-check-label form-label mt-0 mb-0">
-                        <input class="form-check-input form-label me-2" type="checkbox" role="switch" name="status"
-                            id="stripe_status">
-                        {{ __('admin.general_settings.status') }}
-                    </label>
-                </div>
-                <div class="d-flex justify-content-center">
-                    <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">
-                        {{ __('admin.general_settings.cancel') }}
-                    </a>
-                    <button type="submit" class="btn btn-primary submitbtn savebtn">
-                        {{ __('admin.common.submit') }}
-                    </button>
-                </div>
+            <div class="d-flex justify-content-center">
+                <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">
+                    {{ __('admin.general_settings.cancel') }}
+                </a>
+                <button type="submit" class="btn btn-primary submitbtn savebtn">
+                    {{ __('admin.common.submit') }}
+                </button>
             </div>
         </x-slot>
     </x-admin.modal>
-
-
 @endsection
 
 @push('scripts')

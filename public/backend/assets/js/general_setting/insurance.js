@@ -153,16 +153,6 @@
         });
     });
 
-    // $('.price_type').on('change', function () {
-    //     const selectedType = $(this).data('price_type');
-    //     const label = $('#price_label');
-
-    //     if (selectedType === 'percentage') {
-    //         label.html(`${_l("admin.common.percentage")}<span class="text-danger"> *</span>`);
-    //     } else {
-    //         label.html(`${_l("admin.common.price")}<span class="text-danger"> *</span>`);
-    //     }
-    // });
     $(document).on("click", ".edit-insurance-btn", function () {
         const id = $(this).data("id");
         editInsurance(id);

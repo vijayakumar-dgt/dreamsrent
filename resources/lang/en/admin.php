@@ -2282,7 +2282,7 @@ return array(
     'new_page_created' => 'New Page Created Successfully!',
     'page_slug' => 'Page Slug',
   ],
-  'dashboard' =>
+   'dashboard' =>
   [
     'dashboard' => 'Dashboard',
     'admin_dashboard' => 'Admin Dashboard',

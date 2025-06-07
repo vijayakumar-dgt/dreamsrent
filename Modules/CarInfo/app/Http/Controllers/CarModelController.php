@@ -5,12 +5,8 @@ namespace Modules\CarInfo\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Modules\CarInfo\Http\Requests\VehicleModelRequest;
-use Modules\CarInfo\Models\Brand;
-use Modules\CarInfo\Models\CarModel;
 use Modules\CarInfo\Repositories\Contracts\VehicleModelRepositoryInterface;
 
 class CarModelController extends Controller
@@ -34,13 +30,11 @@ class CarModelController extends Controller
         return response()->json($response, $response['code']);
     }
 
-
     public function list(Request $request): JsonResponse
     {
         $response = $this->vehicleModelRepository->list($request);
         return response()->json($response, $response['code']);
     }
-
 
     public function edit(Request $request): JsonResponse
     {

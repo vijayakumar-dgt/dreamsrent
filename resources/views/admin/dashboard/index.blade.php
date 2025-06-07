@@ -197,8 +197,14 @@
                                                 <a href="javascript:void(0);" class="avatar flex-shrink-0">
                                                     @php
                                                     $imagePath = $reservation->vehicle_image ?? "";
+                                                    $filename = basename($imagePath);
+                                                    $newpath = 'vehicles/images/small/' . $filename;
+                                                    $file = public_path('storage/' . $newpath);
+                                                    if (file_exists($file)) {
+                                                        $imagePath = $newpath;
+                                                    }
                                                     @endphp
-                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" alt="Vehicle Image">
+                                                    <img src="{{ uploadedAsset($imagePath, 'default') }}" class="admin-vehicle-image" alt="Vehicle Image">
                                                 </a>
                                                 <?php
                                                 $start = \Carbon\Carbon::parse($reservation->start_datetime);
@@ -368,7 +374,13 @@
                                         </td>
                                         <td class="text-end">
                                             <p class="fs-13 mb-1 text-default">{{ __('admin.dashboard.odometer') }}</p>
-                                            <h6 class="fs-14 fw-semibold">{{$maintenance->odometer}} {{ __('admin.dashboard.km') }}</h6>
+                                            <h6 class="fs-14 fw-semibold">
+                                                @if ($maintenance->odometer) 
+                                                    {{$maintenance->odometer}} {{ __('admin.dashboard.km') }} 
+                                                @else 
+                                                -
+                                                @endif
+                                            </h6>
                                         </td>
                                     </tr>
                                     @endforeach

@@ -155,7 +155,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
 
         //clear cache
         Route::get('clear-cache', [SignatureSettingsController::class, 'clearCache'])->name('admin.clearCache-settings');
-        Route::post('clear', [SignatureSettingsController::class, 'clear']);
+        Route::post('clear', [SignatureSettingsController::class, 'clear'])->name('admin.clear-cache');
 
         // Payment settings
         Route::get('payment-methods', [GeneralSettingController::class, 'paymentIndex'])->name('admin.paymentIndex-settings')->middleware('permission');

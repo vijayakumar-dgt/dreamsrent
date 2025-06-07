@@ -1302,6 +1302,15 @@ class UserBookingRepository implements UserBookingRepositoryInterface
         }
 
         $data = $transactions->map(function ($transaction) {
+            $imgpath = $transaction->vehicle ? $transaction->vehicle->vehicle_image : '';
+            if ($imgpath) {
+                $filename = basename($imgpath);
+                $newpath = 'vehicles/images/thumbnail/' . $filename;
+                $file = public_path('storage/' . $newpath);
+                if (file_exists($file)) {
+                    $transaction->vehicle->vehicle_image = $newpath;
+                }
+            }
             return [
                 'id'             => $transaction->id,
                 'vehicle_name'   => $transaction->vehicle->name ?? 'N/A',

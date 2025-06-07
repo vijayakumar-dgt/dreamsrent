@@ -542,6 +542,8 @@ return array (
     'learn_more' => 'تعرف على المزيد',
     'notice' => 'إشعار',
     'view_reply' => 'عرض والرد',
+    'color' => 'لون',
+    'seats' => 'مقاعد', 
   ),
   'user' =>
   array (

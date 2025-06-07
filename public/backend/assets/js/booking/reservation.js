@@ -233,7 +233,7 @@
             columns: [
                 { data: 'reservation_id', render: function(data, type, row) {
                     return `<div class="d-flex align-items-center">
-                            <div class="avatar me-2 flex-shrink-0"><img src="${row.vehicle_image}" alt="${_l('admin.common.image')}"></div>
+                            <div class="avatar me-2 flex-shrink-0"><img src="${row.vehicle_image}" class="admin-vehicle-image" alt="${_l('admin.common.image')}"></div>
                             <div>
                                 <a href="/admin/reservation-details/${row.encrypted_id}" class="text-info d-block mb-1">#${row.reservation_id}</a>
                                 <h6 class="fs-14 text-black">${row.vehicle_name}</h6>

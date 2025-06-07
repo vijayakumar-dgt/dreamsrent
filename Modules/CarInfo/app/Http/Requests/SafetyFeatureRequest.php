@@ -2,10 +2,10 @@
 
 namespace Modules\CarInfo\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Library\CustomFailedValidation;
 use Illuminate\Validation\Rule;
 
-class SafetyFeatureRequest extends FormRequest
+class SafetyFeatureRequest extends CustomFailedValidation
 {
     /**
      * Get the validation rules that apply to the request.

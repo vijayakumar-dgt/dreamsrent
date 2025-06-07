@@ -404,6 +404,9 @@
                         ),
                     },
                     success: function (response) {
+                        if (response.code == 200) {
+                            showToast("success", response.message);
+                        }
                         loadSMSSetting();
                     },
                     error: function (err) {

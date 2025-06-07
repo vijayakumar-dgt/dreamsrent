@@ -23,7 +23,7 @@
 
                                 <div class="d-flex my-xl-auto right-content align-items-center flex-wrap row-gap-3">
                                     @if (hasPermission($permissions, 'app_settings', 'create'))
-                                        <button type="button" data-bs-toggle="modal" data-bs-target="#add_signatures"
+                                        <button type="button" id="add_signature_btn" data-bs-toggle="modal" data-bs-target="#add_signatures"
                                             class="btn btn-primary">
                                             <i class="ti ti-plus me-2"></i>{{ __('admin.general_settings.add_new_signature') }}
                                         </button>
@@ -68,11 +68,9 @@
                         <label for="signature_image" class="form-label">{{ __('admin.common.image') }} <span
                                 class="text-danger">*</span></label>
                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
-                            <div
-                                class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 flex-shrink-0 text-dark frames">
-                                <img id="image_photo_preview"
-                                    src="{{ asset('backend/assets/img/default-placeholder-image.png') }}" class="img-fluid"
-                                    alt="Profile Photo">
+                            <div class="d-flex align-items-center justify-content-center avatar avatar-xxl me-3 border flex-shrink-0 text-dark">
+                                <img id="image_photo_preview" src="{{ uploadedAsset('', 'default') }}" class="img-fluid" alt="Signature Image">
+                                <i class="ti ti-photo-up text-gray-4 fs-24 upload_icon"></i>
                             </div>
                             <div class="profile-upload">
                                 <div class="profile-uploader d-flex align-items-center">
@@ -95,8 +93,7 @@
                     <!-- Default Checkbox -->
                     <div class="mb-3">
                         <label class="form-check-label form-label" for="is_default">
-                            <input class="form-check-input form-label" type="checkbox" id="is_default" name="is_default"
-                                value="1" checked>
+                            <input class="form-check-input form-label" type="checkbox" id="is_default" name="is_default" value="0">
                             {{ __('admin.general_settings.mark_as_default') }}
                         </label>
                         <span id="is_default_error" class="text-danger error-text"></span>
@@ -127,17 +124,16 @@
 
         <x-admin.modal className="addmodal" id="edit_signature" :title="__('admin.general_settings.edit_signature')"
             formId="editSignatureForm" dialogClass="modal-dialog-centered modal-md">
-            <input type="hidden" id="edit_signature_id" name="id" />
-
             <x-slot name="body">
+                <input type="hidden" id="edit_signature_id" name="id" />
                 <div class="row">
                     <!-- Signature Image Upload -->
                     <div class="mb-3">
                         <label class="form-label">{{ __('admin.common.image') }} <span class="text-danger">*</span></label>
                         <div class="d-flex align-items-center flex-wrap row-gap-3 mb-3">
                             <div
-                                class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 p-2 flex-shrink-0 text-dark frames">
-                                <img src="{{ uploadedAsset('', 'default') }}" class="img-fluid rounded object-fit-contain"
+                                class="d-flex align-items-center justify-content-center avatar avatar-xxl border me-3 flex-shrink-0 text-dark">
+                                <img src="{{ uploadedAsset('', 'default') }}" class="img-fluid"
                                     id="edit_signature_preview" alt="img">
                             </div>
                             <div class="profile-upload">
@@ -178,18 +174,20 @@
             </x-slot>
 
             <x-slot name="footer">
-                <div class="form-check form-check-md form-switch me-2">
-                    <input type="checkbox" id="edit_signature_status" name="status" class="form-check-input" value="1">
-                    <label for="edit_signature_status"
-                        class="form-check-label form-label">{{ __('admin.common.status') }}</label>
-                </div>
-                <div class="d-flex justify-content-center">
-                    <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
-                        {{ __('admin.common.cancel') }}
-                    </button>
-                    <button type="submit" class="btn btn-primary edit_btn">
-                        {{ __('admin.common.save_changes') }}
-                    </button>
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <div class="form-check form-check-md form-switch me-2">
+                        <input type="checkbox" id="edit_signature_status" name="status" class="form-check-input" value="1">
+                        <label for="edit_signature_status"
+                            class="form-check-label form-label">{{ __('admin.common.status') }}</label>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">
+                            {{ __('admin.common.cancel') }}
+                        </button>
+                        <button type="submit" class="btn btn-primary edit_btn">
+                            {{ __('admin.common.save_changes') }}
+                        </button>
+                    </div>
                 </div>
             </x-slot>
         </x-admin.modal>

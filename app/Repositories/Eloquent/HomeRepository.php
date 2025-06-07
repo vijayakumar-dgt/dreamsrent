@@ -35,10 +35,8 @@ class HomeRepository implements HomeRepositoryInterface
         $languageCode = app()->getLocale();
         $languageId = getLanguageId($languageCode);
         $brands = Brand::where('status', 1)->where("language_id", $languageId)->orderBy('brand_name', 'asc')->get();
-        $categoryId = getCategoryId();
         /** @var \Illuminate\Database\Eloquent\Collection<int, \Modules\CarInfo\Models\Cartype> $cartypes */
         $cartypes = Cartype::where('language_id', $languageId)
-            ->where('category_id', $categoryId)
             ->where('status', 1)
             ->orderBy('name', 'asc')
             ->get();

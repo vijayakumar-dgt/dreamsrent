@@ -717,8 +717,15 @@ class BookingRepository implements BookingRepositoryInterface
 
             // Format Response Data
             $bookings->map(function ($booking) {
+                $imagePath = $booking->vehicle_image;
+                $filename = basename($imagePath);
+                $newpath = 'vehicles/images/small/' . $filename;
+                $file = public_path('storage/' . $newpath);
+                if (file_exists($file)) {
+                    $imagePath = $newpath;
+                }
                 $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
-                $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
+                $booking->vehicle_image = uploadedAsset($imagePath);
                 $booking->booking_status_text = is_numeric($booking->booking_status)
                     ? Booking::getStatusLabel((int) $booking->booking_status)
                     : null;

@@ -15,16 +15,15 @@ class SignatureSettingRequest extends CustomFailedValidation
     {
         $rules = [
             'signature_name' => 'required|string|max:255',
-            'is_default' => 'nullable|boolean',
+            'is_default' => 'nullable',
             'status' => 'nullable|boolean',
         ];
 
-
-        if ($this->has('id')) {
+        if (empty($this->id)) {
             $rules['id'] = 'required|integer|exists:signature_settings,id';
             $rules['signature_image'] = 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120';
         } else {
-            $rules['signature_image'] = 'required|image|mimes:jpeg,png,jpg,gif|max:5120';
+            $rules['signature_image'] = 'image|mimes:jpeg,png,jpg,gif|max:5120';
         }
 
         return $rules;

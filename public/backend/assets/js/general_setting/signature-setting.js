@@ -10,6 +10,16 @@
         $("#edit_signature_image").on("change", function (event) {
             editpreviewImage(event);
         });
+
+        $(document).on("click", "#add_signature_btn", function () {
+            $("#image_photo_preview").addClass("d-none");
+            $('.upload_icon').removeClass('d-none');
+            $("#addSignatureForm")[0].reset();
+            $("#addSignatureForm").find(".is-invalid").removeClass("is-invalid");
+            $("#addSignatureForm").find(".is-valid").removeClass("is-valid");
+            $("#addSignatureForm").find(".error-text").text("");
+        });
+
         $(document).on("click", ".edit-signature-btn", function () {
             const id = $(this).data("id");
             const name = $(this).data("name");
@@ -256,9 +266,11 @@
                                 </h6>
                             </td>
                             <td>
-                                <img src="${
-                                    value.signature_image
-                                }" alt="Signature">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar-xxl me-2 flex-shrink-0">
+                                        <img src="${value.signature_image}" alt="Image">
+                                    </div>
+                                </div>
                             </td>
                             <td>
                                <span class="badge badge-${
@@ -495,6 +507,8 @@
         const file = event.target.files[0];
         const reader = new FileReader();
         const preview = document.getElementById("image_photo_preview");
+        $('.upload_icon').addClass('d-none');
+        $("#image_photo_preview").removeClass("d-none");
 
         if (!file) return;
 
