@@ -1389,86 +1389,173 @@
 											<p class="text-success">composer install</p>
 											<img src="assets/img/installation/composer-install.png"
 												alt="composer-install" class="img-fluid mb-4">
-											<p class="fw-semibold mb-0">Description:</p>
-											<p>Installs all the dependencies listed in the <code
-													class="text-success bg-white">composer.json</code> file. This
-												command is used when setting up a project for the first time or when a
-												team member clones the repository.</p>
-											<p class="fw-semibold mb-0">Purpose:</p>
-											<p>Ensures all necessary PHP packages required for the Laravel application
-												are downloaded and installed in the <code
-													class="text-success bg-white">vendor</code> directory.</p>
+											<p class="d-flex align-items-start mb-1">
+  <span>
+    <h6 class="me-1 fw-bold d-flex align-items-center">
+      <i class="fa-solid fa-circle fs-10 me-2"></i>Description:
+    </h6>
+    <p class="ms-4 mb-2">
+      Installs all the dependencies listed in the <code>composer.json</code> file. This command is used when setting up a project for the first time or when a team member clones the repository.
+    </p>
+  </span>
+</p>
+
+											<p class="d-flex align-items-start mb-1">
+  <span>
+    <h6 class="me-1 fw-bold d-flex align-items-center">
+      <i class="fa-solid fa-circle fs-10 me-2"></i>Purpose:
+    </h6>
+    <p class="ms-4 mb-2">
+      Ensures all necessary PHP packages required for the Laravel application are downloaded and installed in the vendor directory.
+    </p>
+  </span>
+</p>
+
 										</div>
 
 										<div>
 											<p class="text-success">Composer update (If you already have a vendor file.
 												You can use this command.)</p>
-											<p class="fw-semibold mb-0">Description:</p>
-											<p>Updates all installed dependencies to the latest versions allowed by the
-												constraints defined in the <code
-													class="text-success bg-white">composer.json</code> file. Use this
-												when you want to bring packages up to date while staying within
-												specified version ranges.</p>
-											<p class="fw-semibold mb-0">Purpose:</p>
-											<p>Keeps the project dependencies updated and ensures compatibility with the
-												latest versions.</p>
+											<p class="d-flex align-items-start mb-1">
+  <span>
+    <h6 class="me-1 fw-bold d-flex align-items-center">
+      <i class="fa-solid fa-circle fs-10 me-2"></i>Description:
+    </h6>
+    <p class="ms-4 mb-2">
+      Updates all installed dependencies to the latest versions allowed by the constraints defined in the <code>composer.json</code> file. Use this when you want to bring packages up to date while staying within specified version ranges.
+    </p>
+  </span>
+</p>
+
+											<p class="d-flex align-items-start mb-1">
+  <span>
+    <h6 class="me-1 fw-bold d-flex align-items-center">
+      <i class="fa-solid fa-circle fs-10 me-2"></i>Purpose:
+    </h6>
+    <p class="ms-4 mb-2">
+      Keeps the project dependencies updated and ensures compatibility with the latest versions.
+    </p>
+  </span>
+</p>
+
 										</div>
 
 										<div>
 											<p class="text-success">php artisan storage:link</p>
 											<img src="assets/img/installation/storage-link.png" alt="storage-link"
 												class="img-fluid mb-4">
-											<p class="fw-semibold mb-0">Description:</p>
-											<p>The <span class="text-success">php artisan storage:link</span> command
-												creates a symbolic link from <span
-													class="text-success">public/storage</span> to <span
-													class="text-success">storage/app/public</span>, making files in the
-												storage folder accessible via a public URL.</p>
+											<p class="d-flex align-items-start mb-1">
+  <span>
+    <h6 class="me-1 fw-bold d-flex align-items-center">
+      <i class="fa-solid fa-circle fs-10 me-2"></i>Description:
+    </h6>
+    <p class="ms-4 mb-2">
+      The <code>php artisan storage:link</code> command creates a symbolic link from <code>public/storage</code> to <code>storage/app/public</code>, making files in the storage folder accessible via a public URL.
+    </p>
+  </span>
+</p>
+
 										</div>
 
 										<div>
 											<p class="text-success">php artisan serve</p>
 											<img src="assets/img/installation/server.png" alt="server"
 												class="img-fluid mb-4">
-											<p class="fw-semibold mb-0">Description:</p>
-											<p>Starts a built-in development server for running the Laravel application
-												locally. No need for an external web server like Apache or Nginx during
-												development.</p>
-											<p class="fw-semibold mb-0">Purpose:</p>
-											<p>Simplifies testing and development by providing a quick way to host the
-												application locally.</p>
+											<p class="d-flex align-items-start mb-1">
+  <span>
+    <h6 class="me-1 fw-bold d-flex align-items-center">
+      <i class="fa-solid fa-circle fs-10 me-2"></i>Description:
+    </h6>
+    <p class="ms-4 mb-2">
+      Starts a built-in development server for running the application locally.
+    </p>
+  </span>
+</p>
+
+											<p class="d-flex align-items-start mb-1">
+  <span>
+    <h6 class="me-1 fw-bold d-flex align-items-center">
+      <i class="fa-solid fa-circle fs-10 me-2"></i>Purpose:
+    </h6>
+    <p class="ms-4 mb-2">
+      No need for an external web server like Apache or Nginx during development.
+    </p>
+  </span>
+</p>
+
 										</div>
 
 										<div>
 											<p class="text-success">php artisan cache:clear</p>
 											<img src="assets/img/installation/clear-cache.png" alt="clear-cache"
 												class="img-fluid mb-4">
-											<p>Clears all application caches, including data cached via the cache()
-												helper or Cache facade.</p>
+<p class="d-flex align-items-start mb-1">
+  <span>
+    <h6 class="me-1 fw-bold d-flex align-items-center">
+      <i class="fa-solid fa-circle fs-10 me-2"></i>Description:
+    </h6>
+    <p class="ms-4 mb-2">
+      Clears all application caches, including data cached via the cache()<br>
+      helper or Cache facade.
+    </p>
+  </span>
+</p>
+
 										</div>
 
 										<div>
 											<p class="text-success">php artisan config:clear</p>
 											<img src="assets/img/installation/config-clear.png" alt="config-clear"
 												class="img-fluid mb-4">
-											<p>Clears the configuration cache, ensuring that updates to .env or config
-												files take effect.</p>
+<p class="d-flex align-items-start mb-1">
+  <span>
+    <h6 class="me-1 fw-bold d-flex align-items-center">
+      <i class="fa-solid fa-circle fs-10 me-2"></i>Description:
+    </h6>
+    <p class="ms-4 mb-2">
+      Clears the configuration cache, ensuring that updates to <code>.env</code> or config<br>
+      files take effect.
+    </p>
+  </span>
+</p>
+
 										</div>
 
 										<div>
 											<p class="text-success">php artisan route:clear</p>
 											<img src="assets/img/installation/route-clear.png" alt="route-clear"
 												class="img-fluid mb-4">
-											<p>Removes the cached routes to reflect new or updated routes in the
-												application.</p>
+											<p class="d-flex align-items-start mb-1">
+												<span>
+													<h6 class="me-1 fw-bold d-flex align-items-center">
+														<i class="fa-solid fa-circle fs-10 me-2"></i>Description:
+													</h6>
+													<p class="ms-4 mb-2">
+														Removes the cached routes to reflect new or updated routes in
+														the<br>
+														application.
+													</p>
+												</span>
+											</p>
+
 										</div>
 
 										<div>
 											<p class="text-success">php artisan view:clear</p>
 											<img src="assets/img/installation/view-clear.png" alt="view-clear"
 												class="img-fluid mb-4">
-											<p>Clears compiled Blade templates, forcing the framework to regenerate
-												them.</p>
+											<p class="d-flex align-items-start mb-1">
+												<span>
+													<h6 class="me-1 fw-bold d-flex align-items-center">
+														<i class="fa-solid fa-circle fs-10 me-2"></i>Description:
+													</h6>
+													<p class="ms-4 mb-2">
+														Clears compiled Blade templates, forcing the framework to
+														regenerate them.
+													</p>
+												</span>
+											</p>
+
 										</div>
 									</div>
 								</div>
@@ -1492,56 +1579,249 @@
 										<h5>Verification</h5>
 										<img src="assets/img/installer/verfication.png" alt="verfication"
 											class="img-fluid">
-										<p class="fw-semibold mb-0">Purpose:</p>
-										<p>The "Verify Purchase" form ensures the legitimacy of the installation by
-											validating the purchase code. It also facilitates a smooth installation
-											process by allowing demo mode users to bypass verification, ensuring
-											flexibility for testing and development environments.</p>
-										<p class="fw-semibold mb-0">Layout:</p>
-										<p>The form features a clean and intuitive design with a heading, an input field
-											for the purchase code, and action buttons ("Check" and "Continue"). Clear
-											messages guide users, and a loading spinner appears during verification for
-											visual feedback. A footer provides support information for additional
-											assistance.</p>
-										<p class="fw-semibold mb-0">Responsive Design:</p>
-										<p>Built with Bootstrap classes, the form is fully responsive, ensuring an
-											optimal user experience across all devices, including desktops, tablets, and
-											mobile screens.</p>
+										<p class="d-flex align-items-start mb-1">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Purpose:
+												</h6>
+												<p class="ms-4 mb-2">
+													The Verify Purchase form ensures the legitimacy of the installation
+													by validating your purchase code.
+													For demo mode, this step can be skipped, providing flexibility for
+													testing and development.
+												</p>
+											</span>
+										</p>
+										<p class="d-flex align-items-start mb-1">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Layout:
+												</h6>
+												<p class="ms-4 mb-2">1. A clean, intuitive form layout featuring:</p>
+												<p class="ms-5 mb-1">- A heading</p>
+												<p class="ms-5 mb-1">- An input field for your purchase code</p>
+												<p class="ms-5 mb-1">- Action buttons (Check and Continue)</p>
+												<p class="ms-4 mb-1">2. Clear guidance messages and a loading spinner
+													for
+													feedback</p>
+												<p class="ms-4 mb-2">3. A footer with support information for assistance
+												</p>
+											</span>
+										</p>
 
+										<p class="d-flex align-items-start mb-1">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Responsive Design:
+												</h6>
+												<p class="ms-4 mb-2">
+													Built with Bootstrap classes, ensuring optimal usability on
+													desktops, tablets, and mobile screens.
+												</p>
+											</span>
+										</p>
 										<h5>Requirements</h5>
 										<img src="assets/img/installer/requirement.png" alt="requirement"
-											class="img-fluid">
-										<p class="fw-semibold mb-0">Purpose:</p>
-										<p>The "Minimum Requirements" form verifies system compatibility by checking PHP
-											version, required extensions, and file permissions. It ensures all
-											prerequisites are met before proceeding with the installation, guiding users
-											to resolve missing components.</p>
-										<p class="fw-semibold mb-0">Layout:</p>
-										<p>The form presents a clean, user-friendly list of checks with indicators:
-											green checkmarks for passed items and red icons with informative messages
-											for failures. Each failed check includes optional links for further
-											assistance. Navigation buttons allow users to go back or proceed if all
-											checks are successful.The form presents a clean, user-friendly list of
-											checks with indicators: green checkmarks for passed items and red icons with
-											informative messages for failures. Each failed check includes optional links
-											for further assistance. Navigation buttons allow users to go back or proceed
-											if all checks are successful.</p>
-										<p class="fw-semibold mb-0">Responsive Design:</p>
-										<p>Utilizing Bootstrap, the form adapts seamlessly across devices, ensuring an
-											optimal experience on desktops, tablets, and mobile screens.</p>
+											class="img-fluid mb-2">
+										<p class="d-flex align-items-start mb-1 mt-2">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Purpose:
+												</h6>
+												<p class="ms-4 mb-2">
+													The Minimum Requirements step checks system compatibility,
+													including:
+													<br>1. PHP version
+													<br>2. Required extensions
+													<br>3. File permissions
+												</p>
+											</span>
+										</p>
+
+										<p class="d-flex align-items-start mb-1">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Layout:
+												</h6>
+												<p class="ms-4 mb-2">
+													1. A user-friendly list of checks with indicators:<br>
+													&nbsp;&nbsp;- Green checkmarks for passed items<br>
+													&nbsp;&nbsp;- Red icons with informative messages for failed
+													items<br>
+													2. Failed checks include links for guidance.<br>
+													3. Navigation buttons to Go Back or Proceed once all checks are
+													successful.
+												</p>
+											</span>
+										</p>
+
+										<p class="d-flex align-items-start mb-1">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Responsive Design:
+												</h6>
+												<p class="ms-4 mb-2">
+													Built with Bootstrap classes, ensuring optimal usability on
+													desktops, tablets, and mobile screens.
+												</p>
+											</span>
+										</p>
 
 										<h5>Database Setup</h5>
 										<img src="assets/img/installer/installer-03.png" alt="requirement"
 											class="img-fluid mb-4">
+										<p class="d-flex align-items-start mb-1 mt-3">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Purpose:
+												</h6>
+												<p class="ms-4 mb-2">
+													Allows users to configure the database by entering:<br>
+													1. Hostname<br>
+													2. Database name<br>
+													3. Username<br>
+													4. Password<br>
+													This step ensures database connectivity and smooth operation.
+												</p>
+											</span>
+										</p>
+										<p class="d-flex align-items-start mb-1">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Layout:
+												</h6>
+												<p class="ms-4 mb-2">
+													1. Clean form fields with helpful placeholders and tooltips<br>
+													2. Clear error messaging for invalid or missing details
+												</p>
+											</span>
+										</p>
+										<p class="d-flex align-items-start mb-1">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Responsive Design:
+												</h6>
+												<p class="ms-4 mb-2">
+													Optimized with Bootstrap for use on desktops, tablets, and mobile
+													devices.
+												</p>
+											</span>
+										</p>
+
+
+
 										<h5>Account Setup</h5>
 										<img src="assets/img/installer/installer-04.png" alt="requirement"
 											class="img-fluid mb-4">
+										<p class="d-flex align-items-start mb-1 mt-2">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Purpose:
+												</h6>
+												<p class="ms-4 mb-2">
+													Enables users to create an Admin Account with:
+													<br>1. Username
+													<br>2. Email
+													<br>3. Password
+												</p>
+											</span>
+										</p>
+										<p class="d-flex align-items-start mb-1">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Layout:
+												</h6>
+												<p class="ms-4 mb-2">
+													1. Straightforward form fields with labels and placeholders<br>
+													2. Password strength indicator (optional)<br>
+													3. Clear instructions and validation messages
+												</p>
+											</span>
+										</p>
+										<p class="d-flex align-items-start mb-1">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Responsive Design:
+												</h6>
+												<p class="ms-4 mb-2">
+													Built with Bootstrap to work seamlessly on all screen sizes.
+												</p>
+											</span>
+										</p>
 										<h5>Configuration</h5>
 										<img src="assets/img/installer/installer-05.png" alt="requirement"
-											class="img-fluid mb-4">
+											class="img-fluid">
+
+										<p class="d-flex align-items-start mb-1 mt-2">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Purpose:
+												</h6>
+												<p class="ms-4 mb-2">
+													Allows users to configure additional system settings, such as:<br>
+													1. App URL<br>
+													2. Mail settings<br>
+													3. Other essential configurations
+												</p>
+											</span>
+										</p>
+										<p class="d-flex align-items-start mb-1">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Layout:
+												</h6>
+												<p class="ms-4 mb-2">
+													1. Organized sections with labels, fields, and tooltips<br>
+													2. Clear instructions for each field
+												</p>
+											</span>
+										</p>
+										<p class="d-flex align-items-start mb-1">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Responsive Design:
+												</h6>
+												<p class="ms-4 mb-2">
+													Bootstrap ensures the layout adapts for all devices.
+												</p>
+											</span>
+										</p>
 										<h5>Completed</h5>
 										<img src="assets/img/installer/installer-06.png" alt="requirement"
 											class="img-fluid">
+										<p class="d-flex align-items-start mb-1">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Purpose:
+												</h6>
+												<p class="ms-4 mb-2">
+													Confirms that the installation is complete and the application is
+													ready to use.
+												</p>
+											</span>
+										</p>
+										<p class="d-flex align-items-start mb-1">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Layout:
+												</h6>
+												<p class="ms-4 mb-2">
+													1. A friendly success message<br>
+													2. Direct links to the Admin Panel and Front-end<br>
+													3. Optionally, a link to the documentation
+												</p>
+											</span>
+										</p>
+										<p class="d-flex align-items-start mb-1">
+											<span>
+												<h6 class="me-1 fw-bold d-flex align-items-center">
+													<i class="fa-solid fa-circle fs-10 me-2"></i>Responsive Design:
+												</h6>
+												<p class="ms-4 mb-2">
+													Optimized with Bootstrap for consistency across all devices.
+												</p>
+											</span>
+										</p>
 									</div>
 								</div>
 						</section>
