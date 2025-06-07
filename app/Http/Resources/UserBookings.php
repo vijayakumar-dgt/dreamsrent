@@ -17,6 +17,15 @@ class UserBookings extends JsonResource
     public function toArray(Request $request): array
     {
         $resource = $this->resource;
+        $imgpath = $resource->vehicle ? $resource->vehicle->vehicle_image : '';
+        if ($imgpath) {
+            $filename = basename($imgpath);
+            $newpath = 'vehicles/images/thumbnail/' . $filename;
+            $file = public_path('storage/' . $newpath);
+            if (file_exists($file)) {
+                $resource->vehicle->vehicle_image = $newpath;
+            }
+        }
         return [
             'id' => $resource->id,
             'reservation_id' => $resource->reservation_id,

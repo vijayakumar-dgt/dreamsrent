@@ -28,7 +28,7 @@
             });
 
             const table = $('#bookingTable').DataTable({
-                ordering: true,
+                ordering: false,
                 searching: false,
                 pageLength: 10,
                 lengthChange: false,
@@ -55,6 +55,9 @@
             if (response.status === 'success' && response.data.length > 0) {
                 response.data.forEach(booking => {
                     table.row.add($(createBookingCard(booking)));
+                });
+                setTimeout(() => {
+                    table.columns.adjust().draw();
                 });
             } else {
                 table.clear().draw();
@@ -90,7 +93,7 @@
                     </div>
                 </td>
                 <td>
-                    <p><span class="d-block">${booking.formated_end_datetime || ""}</span></p>
+                    <p><span class="d-block">${booking.formated_booked_on || ""}</span></p>
                 </td>
                 <td>
                     <p class="text-darker">${booking.currency}${booking.total_amount}</p>
