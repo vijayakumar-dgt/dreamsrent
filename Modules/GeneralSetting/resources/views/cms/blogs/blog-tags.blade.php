@@ -63,10 +63,10 @@
                     @foreach($tags as $tag)
                     <tr data-created="{{ $tag->created_at }}" data-name="{{ strtolower($tag->name) }}">
                         <td>
-                            <span class="text-gray-9">{{$tag->name}}</span>
+                            <span class="text-gray-9">{{ucfirst($tag->name)}}</span>
                         </td>
                         <td>
-                            <span class="text-gray-9">{{ \Carbon\Carbon::parse($tag->created_at)->format('d M Y') }}</span>
+                            <span class="text-gray-9">{{ formatDateTime($tag->created_at, false) }}</span>
                         </td>
                         <td>
                             @if($tag->status == 1)

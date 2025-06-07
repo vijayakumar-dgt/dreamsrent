@@ -112,7 +112,7 @@
                                         <?php
                                         $category = isset($blogPost) ? Modules\GeneralSetting\Models\BlogCategory::where('id', $blogPost->category)->first() : null;
                                         ?>
-                                        {{$category->name ?? '-'}}
+                                        {{ucfirst($category->name) ?? '-'}}
                                     </span>
                                 </div>
                             </div>
