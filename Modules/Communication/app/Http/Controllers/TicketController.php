@@ -27,8 +27,7 @@ class TicketController extends Controller
     }
 
     public function index(): View
-    {
-        $category = TicketCategory::all();
+    {       
 
         $users = User::whereIn('user_type', [1, 2])
             ->with('userDetail')
@@ -44,20 +43,18 @@ class TicketController extends Controller
                 return $user;
             });
 
-        return view('communication::ticket.index', compact('category', 'users'));
+        return view('communication::ticket.index', compact( 'users'));
     }
 
     public function ticketDetails(): View
-    {
-        $category = TicketCategory::all();
-        return view('communication::ticket.admin-ticket-details', compact('category'));
+    {        
+        return view('communication::ticket.admin-ticket-details');
     }
 
     public function userTicket(): View
-    {
-        $category = TicketCategory::all();
+    {      
         $seo_title = __('web.user.tickets');
-        return view('communication::ticket.user-ticket', compact('category', 'seo_title'));
+        return view('communication::ticket.user-ticket', compact( 'seo_title'));
     }
 
     public function userTicketStore(AddTicketRequest $request): JsonResponse
