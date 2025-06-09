@@ -1167,6 +1167,7 @@
             vehicle.mileage ? Math.ceil(vehicle.mileage) : ""
         );
         $(".vehicle_doors").text(vehicle.num_doors ?? "");
+        $(".vehicle_hatch").text(vehicle.hatch ?? "");
         let vehicleImages = createVehicleCard(vehicle);
         let cleanImage = DOMPurify.sanitize(vehicleImages);
         $(".detail-product").empty().append(cleanImage);

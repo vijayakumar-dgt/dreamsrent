@@ -999,6 +999,9 @@ return array(
     'no_data_available' => 'No data available.',
     'maintenance' => 'Maintenance',
     'add_new_maintenance' => 'Add New Maintenance',
+    'water_tight' => 'No of Water Tight',
+    'sliding' => 'No of Sliding',
+    'hatch' => 'No of Hatch',
     'create_maintenance' => 'Create Maintenance',
     'edit_maintenance' => 'Edit Maintenance',
     'delete_maintenance' => 'Delete Maintenance',
@@ -2281,7 +2284,7 @@ return array(
     'new_page_created' => 'New Page Created Successfully!',
     'page_slug' => 'Page Slug',
   ],
-   'dashboard' =>
+  'dashboard' =>
   [
     'dashboard' => 'Dashboard',
     'admin_dashboard' => 'Admin Dashboard',

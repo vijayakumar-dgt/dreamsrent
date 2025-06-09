@@ -400,6 +400,8 @@ return [
         'print_order' => 'Print Order',
         'daily' => 'Daily',
         'weekly' => 'Weekly',
+        'hatch' => 'Hatch',
+        'door' => 'Door',
         'monthly' => 'Monthly',
         'yearly' => 'Yearly',
         'newest' => 'Newest',

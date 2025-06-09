@@ -5,9 +5,9 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/plugins/intltelinput/css/intlTelInput.css') }}">
     @endpush
     @section('content')
-    
+
     <div class="container skeleton-container position-relative vh-50">
-        
+
     </div>
     <!-- Breadscrumb Section -->
     <div class="breadcrumb-bar d-none real-data">
@@ -91,10 +91,10 @@
                             </div>
                         </div>
                         <div class="slider detail-bigimg">
-                            
+
                         </div>
                         <div class="slider slider-nav-thumbnails">
-                            
+
                         </div>
                     </div>
                     <!-- Extra Services -->
@@ -123,7 +123,11 @@
                                 <div class="row">
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                         <div class="feature-img">
-                                            <img src="{{asset('frontend/assets/img/specification/specification-icon-1.svg')}}" alt="Icon">
+                                            @if(in_array($vehicle->category_id, [3, 6]))
+                                            <img src="{{ asset('frontend/assets/img/specification/specification-icon-13.svg') }}" alt="Icon">
+                                            @else
+                                            <img src="{{ asset('frontend/assets/img/specification/specification-icon-1.svg') }}" alt="Icon">
+                                            @endif
                                         </div>
                                         <div class="featues-info">
                                             <span>{{__('web.home.body')}} </span>
@@ -179,7 +183,11 @@
 
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                         <div class="feature-img">
-                                            <img src="{{asset('frontend/assets/img/specification/specification-icon-9.svg')}}" alt="Icon">
+                                            @if(in_array($vehicle->category_id, [3, 6]))
+                                            <img src="{{ asset('frontend/assets/img/specification/specification-icon-14.svg') }}" alt="Icon">
+                                            @else
+                                            <img src="{{ asset('frontend/assets/img/specification/specification-icon-1.svg') }}" alt="Icon">
+                                            @endif
                                         </div>
                                         <div class="featues-info">
                                             <span>{{ __('web.home.vin') }} </span>
@@ -188,11 +196,20 @@
                                     </div>
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                         <div class="feature-img">
+                                            @if(in_array($vehicle->category_id, [3, 6]))
+                                            <img src="{{ asset('frontend/assets/img/specification/specification-icon-15.svg') }}" alt="Icon">
+                                            @else
                                             <img src="{{asset('frontend/assets/img/specification/specification-icon-10.svg')}}" alt="Icon">
+                                            @endif
                                         </div>
                                         <div class="featues-info">
-                                            <span>Door </span>
+                                            @if(in_array($vehicle->category_id, [3, 6]))
+                                            <span>{{ __('web.home.hatch') }} </span>
+                                            <h6 class="vehicle_hatch"></h6>
+                                            @else
+                                            <span>{{ __('web.home.door') }} </span>
                                             <h6 class="vehicle_doors"></h6>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -237,7 +254,7 @@
                         <div class="review-header">
                             <h4>{{ __('web.home.gallery') }}</h4>
                         </div>
-                        
+
                     </div>
                     <!-- /Gallery -->
                     <!-- Video -->
@@ -483,7 +500,7 @@
                                     <ul class="nav">
                                         <li class="d-none">
                                             <label class="booking_custom_check">
-                                                <input type="radio" name="rent_type" id="location_delivery" >
+                                                <input type="radio" name="rent_type" id="location_delivery">
                                                 <span class="booking_checkmark">
                                                     <span class="checked-title">{{__('web.home.delivery')}}</span>
                                                 </span>
@@ -748,7 +765,7 @@
                         </div>
                         <label class="custom_check w-100">
                             <input type="checkbox" name="terms" id="terms" value="1">
-                            <span class="checkmark"></span> {{ __('web.home.enquire_aggree_with') }} <a href="{{ route('pages', 'terms-conditions') }}">{{ __('web.home.terms_of_service') }}</a> & <button type="button" class="border-0 bg-white" >{{ __('web.home.privacy_policy') }}</button>
+                            <span class="checkmark"></span> {{ __('web.home.enquire_aggree_with') }} <a href="{{ route('pages', 'terms-conditions') }}">{{ __('web.home.terms_of_service') }}</a> & <button type="button" class="border-0 bg-white">{{ __('web.home.privacy_policy') }}</button>
                         </label>
                         <span class="error-text text-danger" id="terms_error"></span>
                         <div class="modal-btn modal-btn-sm">

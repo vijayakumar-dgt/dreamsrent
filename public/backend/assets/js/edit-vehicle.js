@@ -741,6 +741,28 @@
     }
 
     $(document).ready(function () {
+        function handleCategoryChange() {
+            const selectedOption = $("#vehicle_category_id").find(
+                "option:selected"
+            );
+            const slug = selectedOption.data("slug");
+
+            $(".CarContain, .BoatContain").hide();
+
+            if (slug === "car") {
+                $(".CarContain").show();
+            } else if (slug === "bike") {
+                $(".CarContain").show();
+                $(".car-doors-field").hide();
+            } else if (slug === "boat") {
+                $(".BoatContain").show();
+            }
+        }
+
+        $("#vehicle_category_id").on("change", handleCategoryChange);
+
+        handleCategoryChange();
+
         getSeasonalInfo();
         getTrraifInfo();
         getDocumentsInfo();
