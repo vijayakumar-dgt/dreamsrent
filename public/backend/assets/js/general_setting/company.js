@@ -342,7 +342,7 @@
                     } else {
                         showToast(
                             "error",
-                            _l("admin.general_settings.image_dimension")
+                            _l("admin.general_settings.image_dimension_must_be") + " 500x500 pixels"
                         );
                         $("#company_profile_photo").val(""); // Reset file input
                     }
@@ -365,7 +365,7 @@
                     let data = response.data;
                     $("#country").empty();
                     $("#country").append(
-                        '<option value="">Select Country</option>'
+                        `<option value="">${_l("admin.common.select")}</option>`
                     );
                     $.each(data, function (key, value) {
                         $("#country").append(
@@ -395,7 +395,7 @@
                     let data = response.data;
                     $("#state").empty();
                     $("#state").append(
-                        '<option value="">Select State</option>'
+                        `<option value="">${_l("admin.common.select")}</option>`
                     );
                     $.each(data, function (key, value) {
                         $("#state").append(
@@ -408,7 +408,7 @@
                     });
 
                     $("#city").empty();
-                    $("#city").append('<option value="">Select City</option>');
+                    $("#city").append(`<option value="">${_l("admin.common.select")}</option>`);
                 }
             },
         });
@@ -427,7 +427,7 @@
                 if (response.code === 200) {
                     let data = response.data;
                     $("#city").empty();
-                    $("#city").append('<option value="">Select City</option>');
+                    $("#city").append(`${_l("admin.common.select")}`);
                     $.each(data, function (key, value) {
                         $("#city").append(
                             '<option value="' +
@@ -456,7 +456,7 @@
                         let data = response.data;
                         $("#country").empty();
                         $("#country").append(
-                            '<option value="">Select Country</option>'
+                            `${_l("admin.common.select")}`
                         );
                         $.each(data, function (key, value) {
                             if (value.id == id) {
@@ -507,7 +507,7 @@
                         let data = response.data;
                         $("#state").empty();
                         $("#state").append(
-                            '<option value="">Select State</option>'
+                            `${_l("admin.common.select")}`
                         );
                         $.each(data, function (key, value) {
                             if (value.id == id) {
@@ -558,7 +558,7 @@
                         let data = response.data;
                         $("#city").empty();
                         $("#city").append(
-                            '<option value="">Select City</option>'
+                            `${_l("admin.common.select")}`
                         );
                         $.each(data, function (key, value) {
                             if (value.id == id) {
@@ -592,28 +592,27 @@
         });
     }
      function initInternationalPhoneInput() {
-            const userPhoneInput = document.querySelector("#company_phone");
-    const intlPhoneInput = document.querySelector(
-        "#international_phone_number"
-    );
+        const userPhoneInput = document.querySelector("#company_phone");
+        const intlPhoneInput = document.querySelector(
+            "#international_phone_number"
+        );
 
-    if (userPhoneInput) {
-        window.iti = intlTelInput(userPhoneInput, {
-            utilsScript: "/backend/assets/plugins/intltelinput/js/utils.js",
-            separateDialCode: true,
-            placeholderNumberType: "",
-            autoPlaceholder: "off"
-        });
-    }
+        if (userPhoneInput) {
+            window.iti = intlTelInput(userPhoneInput, {
+                utilsScript: "/backend/assets/plugins/intltelinput/js/utils.js",
+                separateDialCode: true,
+                placeholderNumberType: "",
+                autoPlaceholder: "off"
+            });
+        }
 
-    document
-        .querySelector("#companySettingForm")
-        .addEventListener("submit", function (event) {
-            event.preventDefault();
-            if (window.iti) {
-                const intlNumber = window.iti.getNumber();
-                intlPhoneInput.value = intlNumber;
-            }
-        });
+        document.querySelector("#companySettingForm")
+            .addEventListener("submit", function (event) {
+                event.preventDefault();
+                if (window.iti) {
+                    const intlNumber = window.iti.getNumber();
+                    intlPhoneInput.value = intlNumber;
+                }
+            });
      }
 })();
