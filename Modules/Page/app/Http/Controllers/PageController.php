@@ -2005,6 +2005,7 @@ class PageController extends Controller
                             ->where('language_id', $lang_id)
                             ->where('status', 1)
                             ->whereNull('deleted_at')
+                            ->orderByDesc('id')
                             ->get();
 
                         $blogs = [];
