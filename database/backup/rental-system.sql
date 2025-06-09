@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2025 at 12:26 PM
+-- Generation Time: Jun 09, 2025 at 01:13 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -55468,6 +55468,9 @@ CREATE TABLE `vehicle_info` (
   `transmission_id` int(11) DEFAULT NULL,
   `mileage` decimal(10,2) DEFAULT NULL,
   `passenger_capacity` int(11) DEFAULT NULL,
+  `water_tight` int(11) NOT NULL,
+  `sliding` int(11) NOT NULL,
+  `hatch` int(11) NOT NULL,
   `num_seats` int(11) DEFAULT NULL,
   `num_doors` int(11) DEFAULT NULL,
   `num_airbags` int(11) DEFAULT NULL,
