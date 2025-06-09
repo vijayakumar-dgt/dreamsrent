@@ -250,6 +250,12 @@
                                                 <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
                                                     @php
                                                     $imagePath = $booking->vehicle_image ?? '';
+                                                    $filename = basename($imagePath);
+                                                    $newpath = 'vehicles/images/small/' . $filename;
+                                                    $file = public_path('storage/' . $newpath);
+                                                    if (file_exists($file)) {
+                                                        $imagePath = $newpath;
+                                                    }
                                                     @endphp
                                                     <img src="{{ uploadedAsset($imagePath, 'default') }}" class="rounded-3" alt="Image Preview"></a>
                                                 <div>
