@@ -1559,7 +1559,7 @@ class PageController extends Controller
                                 }
 
                                 // Assign default image initially
-                                $value['image'] = asset('backend/assets/img/default-placeholder-image.png');
+                                $value['image'] = asset('frontend/assets/img/placeholder/placeholder3.jpg');
 
                                 $item->value = $value;
                                 return $item;
@@ -1587,7 +1587,7 @@ class PageController extends Controller
                                     if (str_starts_with($key, 'thumbnail_image_') && !empty($val)) {
                                         $imageUrl = Storage::disk('public')->exists(ltrim($val, '/'))
                                             ? asset('storage/' . ltrim($val, '/'))
-                                            : asset('backend/assets/img/default-placeholder-image.png');
+                                            : asset('frontend/assets/img/placeholder/placeholder3.jpg');
                                         $imageList[] = $imageUrl;
                                     }
                                 }
@@ -2123,7 +2123,7 @@ class PageController extends Controller
                                                 $data[$key] = asset('storage/' . ltrim($value, '/'));
                                             } else {
                                                 // Fallback default image path
-                                                $data[$key] = asset('backend/assets/img/default-placeholder-image.png');
+                                                $data[$key] = asset('frontend/assets/img/placeholder/placeholder3.jpg');
                                             }
                                         }
                                     }
@@ -2985,7 +2985,6 @@ class PageController extends Controller
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
                         $how_it_works = DB::table('general_settings')
                             ->select('key', 'value')
                             ->where(['group_id' => 15])
@@ -2995,37 +2994,58 @@ class PageController extends Controller
                             ->map(function ($item) {
                                 $value = json_decode($item->value, true);
 
-                                if (is_array($value)) {
-                                    // Handle structured value (assuming it may have an image path)
-                                    if (isset($value['image']) && !empty($value['image'])) {
-                                        if (Storage::disk('public')->exists(ltrim($value['image'], '/'))) {
-                                            $value['image'] = asset('storage/' . ltrim($value['image'], '/'));
-                                        } else {
-                                            $value['image'] = asset('backend/assets/img/default-placeholder-image.png');
-                                        }
-                                    } else {
-                                        $value['image'] = asset('backend/assets/img/default-placeholder-image.png');
-                                    }
-
-                                    $item->value = $value;
-                                } else {
-                                    // Handle simple value (fallback)
-                                    $item->value = [
-                                        'text' => $item->value,
-                                        'image' => asset('backend/assets/img/default-placeholder-image.png'),
-                                    ];
+                                if (!is_array($value)) {
+                                    $value = ['text' => $item->value];
                                 }
 
+                                // Assign default image initially
+                                $value['image'] = asset('frontend/assets/img/placeholder/placeholder3.jpg');
+
+                                $item->value = $value;
                                 return $item;
                             });
 
+                        // Now fetch image block
+                        $imageBlocks = DB::table('sections')
+                            ->join('section_datas', function ($join) use ($lang_id) {
+                                $join->on('sections.id', '=', 'section_datas.section_id')
+                                    ->where('section_datas.language_id', '=', $lang_id);
+                            })
+                            ->select('sections.id', 'section_datas.datas')
+                            ->where('sections.name', 'Ad Card one')
+                            ->orderBy('sections.id', $order)
+                            ->limit($limit)
+                            ->get();
+
+                        // Decode image blocks
+                        $imageList = [];
+
+                        foreach ($imageBlocks as $block) {
+                            $data = json_decode($block->datas, true);
+                            if (is_array($data)) {
+                                foreach ($data as $key => $val) {
+                                    if (str_starts_with($key, 'thumbnail_image_') && !empty($val)) {
+                                        $imageUrl = Storage::disk('public')->exists(ltrim($val, '/'))
+                                            ? asset('storage/' . ltrim($val, '/'))
+                                            : asset('frontend/assets/img/placeholder/placeholder3.jpg');
+                                        $imageList[] = $imageUrl;
+                                    }
+                                }
+                            }
+                        }
+
+                        // Inject images into $how_it_works items
+                        foreach ($how_it_works as $index => $item) {
+                            if (isset($imageList[$index])) {
+                                $item->value['image'] = $imageList[$index];
+                            }
+                        }
 
                         $section['section_type'] = 'ad_card_section';
                         $section['design'] = 'ad_card_section_one';
                         $section['section_content'] = $how_it_works;
                     }
                 }
-
                 // Why Choose us Section
                 if (is_array($section) && ($section['status'] ?? 0) == 1) {
                     $content = $section['section_content'] ?? '';
