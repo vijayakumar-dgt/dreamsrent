@@ -518,9 +518,9 @@ class ReviewRepository implements ReviewRepositoryInterface
             $query->offset($request->start)->limit($request->length);
 
             $reviews = $query->get()->map(function ($item) {
-                $item->vehicle_image = is_string($item->vehicle_image) || is_null($item->vehicle_image)
-                    ? uploadedAsset($item->vehicle_image, 'default')
-                    : uploadedAsset(null, 'default');
+                $filename = basename($item->vehicle_image ?? '');
+                $vehicleImagePath = 'vehicles/images/small/' . $filename;
+                $item->vehicle_image = uploadedAsset($vehicleImagePath);
                 $item->profile_image = is_string($item->profile_image) || is_null($item->profile_image)
                     ? uploadedAsset($item->profile_image, 'profile')
                     : uploadedAsset(null, 'profile');

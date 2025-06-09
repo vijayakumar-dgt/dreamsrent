@@ -128,7 +128,9 @@ class InspectionRepository implements InspectionRepositoryInterface
                     }
                 }
                 if ($inspection->car) {
-                    $inspection->car->vehicle_image = uploadedAsset($inspection->car->vehicle_image ?? null, 'default');
+                    $filename = basename($inspection->car->vehicle_image ?? '');
+                    $vehicleImagePath = 'vehicles/images/small/' . $filename;
+                    $inspection->car->vehicle_image = uploadedAsset($vehicleImagePath);
                 }
                 unset($inspection->inspector->userDetails);
                 return $inspection;
