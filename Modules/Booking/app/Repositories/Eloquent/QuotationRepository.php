@@ -381,7 +381,14 @@ class QuotationRepository implements QuotationRepositoryInterface
             // Format Response Data
             $bookings->map(function ($booking) {
                 $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
-                $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
+                $vehicleImagePath = $booking->vehicle_image ?? '';
+                $filename = basename($vehicleImagePath);
+                $newpath = 'vehicles/images/small/' . $filename;
+                $file = public_path('storage/' . $newpath);
+                if (file_exists($file)) {
+                    $vehicleImagePath = $newpath;
+                }
+                $booking->vehicle_image = uploadedAsset($vehicleImagePath);
                 $booking->booking_status_text = Booking::getStatusLabel((int) $booking->booking_status);
 
                 return $booking;
@@ -532,7 +539,14 @@ class QuotationRepository implements QuotationRepositoryInterface
         if ($booking) {
             $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
             $booking->driver_image = uploadedAsset($booking->driver_image, 'profile');
-            $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
+            $vehicleImagePath = $booking->vehicle_image ?? '';
+            $filename = basename($vehicleImagePath);
+            $newpath = 'vehicles/images/small/' . $filename;
+            $file = public_path('storage/' . $newpath);
+            if (file_exists($file)) {
+                $vehicleImagePath = $newpath;
+            }
+            $booking->vehicle_image = uploadedAsset($vehicleImagePath);
 
             $booking->extra_service_count = 0;
             $booking->extra_service_names = [];

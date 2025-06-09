@@ -335,7 +335,14 @@ class BookingRepository implements BookingRepositoryInterface
                 ->paginate($perPage, ['*'], 'page', $page);
 
             $vehicles->getCollection()->map(function ($vehicle) {
-                $vehicle->image = uploadedAsset($vehicle->image);
+                $vehicleImagePath = $vehicle->image ?? '';
+                $filename = basename($vehicleImagePath);
+                $newpath = 'vehicles/images/small/' . $filename;
+                $file = public_path('storage/' . $newpath);
+                if (file_exists($file)) {
+                    $vehicleImagePath = $newpath;
+                }
+                $vehicle->image = uploadedAsset($vehicleImagePath);
                 $vehicle->vehicle_price = number_format((float) $vehicle->vehicle_price, 2, '.', '');
                 $vehicle->encrypted_id = customEncrypt($vehicle->id, Booking::$reservationSecretKey);
                 return $vehicle;
@@ -785,7 +792,15 @@ class BookingRepository implements BookingRepositoryInterface
 
             if (!empty($booking)) {
                 $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
-                $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
+                $vehicleImagePath = $booking->vehicle_image ?? '';
+                $filename = basename($vehicleImagePath);
+                $newpath = 'vehicles/images/small/' . $filename;
+                $file = public_path('storage/' . $newpath);
+                if (file_exists($file)) {
+                    $vehicleImagePath = $newpath;
+                }
+                $booking->vehicle_image = uploadedAsset($vehicleImagePath);
+
                 if ($booking->insurance) {
                     $booking->insurance_formatted = json_decode($booking->insurance);
                 }
@@ -872,7 +887,14 @@ class BookingRepository implements BookingRepositoryInterface
         if ($booking) {
             $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
             $booking->driver_image = uploadedAsset($booking->driver_image, 'profile');
-            $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
+            $vehicleImagePath = $booking->vehicle_image ?? '';
+            $filename = basename($vehicleImagePath);
+            $newpath = 'vehicles/images/small/' . $filename;
+            $file = public_path('storage/' . $newpath);
+            if (file_exists($file)) {
+                $vehicleImagePath = $newpath;
+            }
+            $booking->vehicle_image = uploadedAsset($vehicleImagePath);
 
             $booking->extra_service_count = 0;
             $booking->extra_service_names = [];

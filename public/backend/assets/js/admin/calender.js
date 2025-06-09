@@ -708,7 +708,8 @@
                         );
                         $("<img>", {
                             src: item.image,
-                            alt: "",
+                            class: "admin-vehicle-image",
+                            alt: "vehicle image",
                         }).appendTo(avatarSpan);
 
                         const vehicleInfo = $("<div>");
@@ -769,9 +770,8 @@
                             .addClass("fs-14")
                             .html(
                                 `${default_currency}${item.vehicle_price}<span class="text-gray-5 mt-1">/${item.vehicle_price_type}</span>`
-                            );
+                            ).appendTo(priceDiv);
                         priceDiv.appendTo(gapDiv);
-
                         col2.append(gapDiv);
 
                         // Column 3: Model name

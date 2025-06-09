@@ -54,16 +54,14 @@
 
                         tableBody += `<tr>
                             <td>
-                                <div class="form-check form-check-md" data-id="${
-                                    value.id
-                                }">
-                                                <input class="form-check-input" type="checkbox">
+                                <div class="form-check form-check-md" data-id="${value.id}">
+                                    <input class="form-check-input" type="checkbox">
                                 </div>
                             </td>
                             <td>
                             <div class="d-flex align-items-start">
 								<div class="avatar me-2 flex-shrink-0">
-									<img src="${value.vehicle_image}" class="rounded-3" alt="">
+									<img src="${value.vehicle_image}" class="admin-vehicle-image" alt="">
 								</div>
 								<div class="text-start">
 									<h6><p class="fs-14 fw-semibold">${ucfirst(

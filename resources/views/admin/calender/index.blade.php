@@ -158,129 +158,122 @@
 <!-- /Page Wrapper -->
 
 <!-- Booking Details -->
-<div class="modal fade" id="booking_details_modal">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="d-inline-flex align-items-center">{{ __('admin.bookings.booking_details') }}</h4>
-                <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti ti-x"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="border-bottom mb-3">
-                    <div class="border rounded p-3 bg-light mb-3">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="d-flex align-items-center">
-                                    <span class="avatar flex-shrink-0 me-2">
-                                        <img src="{{ uploadedAsset('', 'profile')}}" id="car_img" alt="Vehicle Image">
-                                    </span>
-                                    <div>
-                                        <h6 id="car_title" class="fs-14 mb-1"></h6>
-                                        <p id="car_type"></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div>
-                                    <h6 class="fs-14 mb-1">{{ __('admin.general_settings.price') }}</h6>
-                                    <p class="fs-14 text-gray-9" id="car_price"> <span class="text-gray-5 fw-normal"></span></p>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div>
-                                    <h6 class="fs-14 mb-1">{{ __('admin.general_settings.status') }}</h6>
-                                    <span class="badge badge-soft-success d-inline-flex align-items-center badge-sm" id="book_status">
-                                        <i class="ti ti-point-filled me-1"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="border-bottom mb-3">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h6 class="fw-medium fs-14">{{ __('admin.rentals.start_date') }}</h6>
-                        <p id="start_date_time"></p>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h6 class="fw-medium fs-14">{{ __('admin.rentals.end_date') }}</h6>
-                        <p id="end_date_time"></p>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h6 class="fw-medium fs-14">{{ __('admin.bookings.rental_period') }}</h6>
-                        <p id="rent_period"></p>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h6 class="fw-medium fs-14">{{ __('admin.dashboard.driving_type') }}</h6>
-                        <p id="drive_type"></p>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h6 class="fw-medium fs-14">{{ __('admin.bookings.pickup_location') }}</h6>
-                        <p id="pickLan"></p>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <h6 class="fw-medium fs-14">{{ __('admin.bookings.return_location') }}</h6>
-                        <p id="retLan"></p>
-                    </div>
-                </div>
-                <div class="border-bottom mb-3">
-                    <div id="customer_section" class="d-flex align-items-center justify-content-between d-none">
-                        <div class="mb-3">
-                            <h6 class="d-inline-flex align-items-center fs-14 fw-medium">{{ __('admin.common.customer') }}</h6>
-                        </div>
-                        <div class="d-flex align-items-center mb-3">
-                            <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                <img src="{{ uploadedAsset('', 'profile')}}" id="customer_img" alt="Profile Image">
+<x-admin.modal 
+    className="addmodal"
+    id="booking_details_modal"
+    :title="__('admin.bookings.booking_details')">
+    <x-slot name="body">
+        <div class="border-bottom mb-3">
+            <div class="border rounded p-3 bg-light mb-3">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="d-flex align-items-center">
+                            <span class="avatar flex-shrink-0 me-2">
+                                <img src="{{ uploadedAsset('', 'profile')}}" class="admin-vehicle-image" id="car_img" alt="Vehicle Image">
                             </span>
                             <div>
-                                <h6 class="fs-14 fw-medium mb-1" id="customer_name"></h6>
-                                <p id="customer_num"></p>
+                                <h6 id="car_title" class="fs-14 mb-1"></h6>
+                                <p id="car_type"></p>
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center justify-content-between driverInfo">
-                        <div class="mb-3">
-                            <h6 class="d-inline-flex align-items-center fs-14 fw-medium ">{{ __('admin.common.driver') }}</h6>
+                    <div class="col-3">
+                        <div>
+                            <h6 class="fs-14 mb-1">{{ __('admin.general_settings.price') }}</h6>
+                            <p class="fs-14 text-gray-9" id="car_price"> <span class="text-gray-5 fw-normal"></span></p>
                         </div>
-                        <div class="d-flex align-items-center mb-3">
-                            <span class="avatar avatar-rounded flex-shrink-0 me-2">
-                                <img src="{{ uploadedAsset('', 'profile')}}" id="driver_img" alt="Profile Image">
+                    </div>
+                    <div class="col-3">
+                        <div>
+                            <h6 class="fs-14 mb-1">{{ __('admin.general_settings.status') }}</h6>
+                            <span class="badge badge-soft-success d-inline-flex align-items-center badge-sm" id="book_status">
+                                <i class="ti ti-point-filled me-1"></i>
                             </span>
-                            <div>
-                                <h6 class="fs-14 fw-medium mb-1" id="driver_name"></h6>
-                                <p id="driver_num"></p>
-                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="border-bottom mb-3 extraInfo">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <p>{{ __('admin.common.extra_service') }}</p>
-                        <p id="extraService"></p>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <p>{{ __('admin.common.insurance') }}</p>
-                        <p id="inService"></p>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <p>{{ __('admin.finance_accounts.tax') }}</p>
-                        <p id="taxValue"></p>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <p>{{ __('admin.bookings.vehicle_price') }}</p>
-                        <p id="totalValue"></p>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center justify-content-between">
-                    <h6>{{ __('admin.finance_accounts.total_price') }}</h6>
-                    <h6 id="final_price"></h6>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+        <div class="border-bottom mb-3">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h6 class="fw-medium fs-14">{{ __('admin.rentals.start_date') }}</h6>
+                <p id="start_date_time"></p>
+            </div>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h6 class="fw-medium fs-14">{{ __('admin.rentals.end_date') }}</h6>
+                <p id="end_date_time"></p>
+            </div>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h6 class="fw-medium fs-14">{{ __('admin.bookings.rental_period') }}</h6>
+                <p id="rent_period"></p>
+            </div>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h6 class="fw-medium fs-14">{{ __('admin.dashboard.driving_type') }}</h6>
+                <p id="drive_type"></p>
+            </div>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h6 class="fw-medium fs-14">{{ __('admin.bookings.pickup_location') }}</h6>
+                <p id="pickLan"></p>
+            </div>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h6 class="fw-medium fs-14">{{ __('admin.bookings.return_location') }}</h6>
+                <p id="retLan"></p>
+            </div>
+        </div>
+        <div class="border-bottom mb-3">
+            <div id="customer_section" class="d-flex align-items-center justify-content-between d-none">
+                <div class="mb-3">
+                    <h6 class="d-inline-flex align-items-center fs-14 fw-medium">{{ __('admin.common.customer') }}</h6>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <span class="avatar avatar-rounded flex-shrink-0 me-2">
+                        <img src="{{ uploadedAsset('', 'profile')}}" id="customer_img" alt="Profile Image">
+                    </span>
+                    <div>
+                        <h6 class="fs-14 fw-medium mb-1" id="customer_name"></h6>
+                        <p id="customer_num"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center justify-content-between driverInfo">
+                <div class="mb-3">
+                    <h6 class="d-inline-flex align-items-center fs-14 fw-medium ">{{ __('admin.common.driver') }}</h6>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <span class="avatar avatar-rounded flex-shrink-0 me-2">
+                        <img src="{{ uploadedAsset('', 'profile')}}" id="driver_img" alt="Profile Image">
+                    </span>
+                    <div>
+                        <h6 class="fs-14 fw-medium mb-1" id="driver_name"></h6>
+                        <p id="driver_num"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="border-bottom mb-3 extraInfo">
+            <div class="d-flex align-items-center justify-content-between">
+                <p>{{ __('admin.common.extra_service') }}</p>
+                <p id="extraService"></p>
+            </div>
+            <div class="d-flex align-items-center justify-content-between">
+                <p>{{ __('admin.common.insurance') }}</p>
+                <p id="inService"></p>
+            </div>
+            <div class="d-flex align-items-center justify-content-between">
+                <p>{{ __('admin.finance_accounts.tax') }}</p>
+                <p id="taxValue"></p>
+            </div>
+            <div class="d-flex align-items-center justify-content-between">
+                <p>{{ __('admin.bookings.vehicle_price') }}</p>
+                <p id="totalValue"></p>
+            </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-between">
+            <h6>{{ __('admin.finance_accounts.total_price') }}</h6>
+            <h6 id="final_price"></h6>
+        </div>
+    </x-slot>
+</x-admin.modal>
 <!-- /Booking Details -->
 
 <!-- Add Booking -->
@@ -841,49 +834,42 @@
 <!-- /Add Booking -->
 
 <!-- Edit Pricing -->
-<div class="modal fade addmodal" id="edit_price_modal">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title mb-0">{{ __('admin.bookings.edit_pricing') }}</h4>
-                <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="ti ti-x fs-16"></i>
-                </button>
+<x-admin.modal
+    className="addmodal"
+    id="edit_price_modal"
+    dialogClassName="modal-md"
+    :title="__('admin.bookings.edit_pricing')"
+    formId="driverPriceForm">
+    <x-slot name="body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.manage.drivers') }}<span class="text-danger"> *</span></label>
+                    <div class="d-flex align-items-center mt-2">
+                        <div class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0">
+                            <img src="{{ uploadedAsset('', 'profile')}}" class="edit_driver_img" alt="Profile Image">
+                        </div>
+                        <div>
+                            <div class="d-block fw-semibold edit_driver_name text-black"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <form id="driverPriceForm">
-                <div class="modal-body pb-1">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{ __('admin.manage.drivers') }} <span class="text-danger">*</span></label>
-                                <div class="d-flex align-items-center mt-2">
-                                    <a class="avatar avatar-sm avatar-rounded me-2 flex-shrink-0">
-                                        <img src="{{ uploadedAsset('', 'profile')}}" class="edit_driver_img" alt="Profile Image">
-                                    </a>
-                                    <div>
-                                        <a href="#" class="d-block fw-semibold edit_driver_name"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{ __('admin.rentals.pricing') }} <span class="text-danger">*</span></label>
-                                <input type="text" name="driver_price" id="driver_price" value="0" class="form-control">
-                            </div>
-                        </div>
-                    </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label class="form-label">{{ __('admin.common.pricing') }}<span class="text-danger"> *</span></label>
+                    <input type="text" name="driver_price" id="driver_price" value="0" class="form-control">
                 </div>
-                <div class="modal-footer">
-                    <div class="d-flex justify-content-center">
-                        <a href="javascript:void(0);" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</a>
-                        <button type="submit" class="btn btn-primary driver_price_btn">{{ __('admin.common.save_changes') }}</button>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
+    </x-slot>
+    <x-slot name="footer">
+        <div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
+            <button type="submit" class="btn btn-primary driver_price_btn">{{ __('admin.common.save_changes') }}</button>
+        </div>
+    </x-slot>
+</x-admin.modal>
 <!-- /Edit Pricing -->
 @endsection
 

@@ -1143,7 +1143,14 @@ class VehicleInfoRepository implements VehicleInfoRepositoryInterface
             }
 
             $vehicles = $query->where("language_id", $languageId)->get()->map(function ($vehicle) {
-                $vehicle->vehicle_image = uploadedAsset($vehicle->vehicle_image);
+                $vehicleImagePath = $vehicle->vehicle_image ?? '';
+                $filename = basename($vehicleImagePath);
+                $newpath = 'vehicles/images/small/' . $filename;
+                $file = public_path('storage/' . $newpath);
+                if (file_exists($file)) {
+                    $vehicleImagePath = $newpath;
+                }
+                $vehicle->vehicle_image = uploadedAsset($vehicleImagePath);
 
                 $currencySetting = GeneralSetting::where("key", "currency_symbol")->first();
                 $currency = null;
