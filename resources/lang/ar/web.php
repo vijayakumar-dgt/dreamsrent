@@ -543,7 +543,7 @@ return array (
     'notice' => 'إشعار',
     'view_reply' => 'عرض والرد',
     'color' => 'لون',
-    'seats' => 'مقاعد', 
+    'seats' => 'مقاعد',
   ),
   'user' =>
   array (

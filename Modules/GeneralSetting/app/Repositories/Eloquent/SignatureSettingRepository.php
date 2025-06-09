@@ -90,7 +90,7 @@ class SignatureSettingRepository implements SignatureSettingInterface
 
     protected function uploadSignatureImage(UploadedFile $file): string
     {
-        return $this->imageResizer->uploadFile($file, 'signatures', null);        
+        return $this->imageResizer->uploadFile($file, 'signatures', null);
     }
 
     protected function deleteSignatureImage(?string $imagePath)

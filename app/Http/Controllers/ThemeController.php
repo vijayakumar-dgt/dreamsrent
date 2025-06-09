@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Controllers\Controller;
 use App\Models\Review;
 use App\Models\User;
@@ -34,7 +33,6 @@ use Modules\GeneralSetting\Models\TranslationLanguage;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Modules\MenuManagement\Models\Menu;
-
 
 class ThemeController extends Controller
 {

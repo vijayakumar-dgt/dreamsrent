@@ -64,8 +64,8 @@ class UserLoginRegisterRepository implements UserLoginRegisterInterface
             ];
         }
 
-        $otp = in_array($email, ['demouser@gmail.com', 'demoprovider@gmail.com']) 
-            ? '1234' 
+        $otp = in_array($email, ['demouser@gmail.com', 'demoprovider@gmail.com'])
+            ? '1234'
             : $this->generateOtp($settings['otp_digit_limit']);
 
         $otpExpireMinutes = (int) filter_var($settings['otp_expire_time'], FILTER_SANITIZE_NUMBER_INT);
