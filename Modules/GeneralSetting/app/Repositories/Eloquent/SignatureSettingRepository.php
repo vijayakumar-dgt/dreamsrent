@@ -6,9 +6,16 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Modules\GeneralSetting\Models\SignatureSetting;
 use Modules\GeneralSetting\Repositories\Contracts\SignatureSettingInterface;
+use App\Services\ImageResizer;
 
 class SignatureSettingRepository implements SignatureSettingInterface
 {
+    protected ImageResizer $imageResizer;
+
+    public function __construct(ImageResizer $imageResizer)
+    {
+        $this->imageResizer = $imageResizer;
+    }
     public function getAllSignatures(string|null $search)
     {
         return SignatureSetting::when($search, function ($query) use ($search) {
@@ -83,7 +90,7 @@ class SignatureSettingRepository implements SignatureSettingInterface
 
     protected function uploadSignatureImage(UploadedFile $file): string
     {
-        return uploadFile($file, 'signatures');
+        return $this->imageResizer->uploadFile($file, 'signatures', null);        
     }
 
     protected function deleteSignatureImage(?string $imagePath)

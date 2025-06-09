@@ -19,7 +19,7 @@ class SignatureSettingRequest extends CustomFailedValidation
             'status' => 'nullable|boolean',
         ];
 
-        if (empty($this->id)) {
+        if (isset($this->id)) {
             $rules['id'] = 'required|integer|exists:signature_settings,id';
             $rules['signature_image'] = 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120';
         } else {
