@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2025 at 02:14 PM
+-- Generation Time: Jun 09, 2025 at 03:11 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -440,6 +440,18 @@ CREATE TABLE `categories` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `language_id`, `slug`, `name`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'car', 'Car', 1, '2025-06-03 10:58:49', '2025-06-03 10:58:49', NULL),
+(2, 1, 'bike', 'Bike', 1, '2025-06-03 10:58:49', '2025-06-03 10:58:49', NULL),
+(3, 1, 'boat', 'Boat', 1, '2025-06-03 10:58:49', '2025-06-03 10:58:49', NULL),
+(4, 2, 'car', 'سيارة', 1, '2025-06-03 10:58:49', '2025-06-03 10:58:49', NULL),
+(5, 2, 'bike', 'دراجة', 1, '2025-06-03 10:58:49', '2025-06-03 10:58:49', NULL),
+(6, 2, 'boat', 'قارب', 1, '2025-06-03 10:58:49', '2025-06-03 10:58:49', NULL);
 
 -- --------------------------------------------------------
 
@@ -55484,8 +55496,8 @@ CREATE TABLE `vehicle_info` (
   `description` longtext DEFAULT NULL,
   `features` varchar(225) DEFAULT NULL,
   `popular` int(11) DEFAULT 1,
-  `recommended` int(11) DEFAULT NULL,
-  `feature` int(11) DEFAULT NULL,
+  `recommended` int(11) DEFAULT 1,
+  `feature` int(11) DEFAULT 1,
   `views` int(11) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_by` int(11) DEFAULT NULL,
@@ -56350,7 +56362,7 @@ ALTER TABLE `car_steerings`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `checklists`
