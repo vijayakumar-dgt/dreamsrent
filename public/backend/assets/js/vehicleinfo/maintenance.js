@@ -243,7 +243,7 @@
                             <div class="d-flex align-items-center">
                                 <div class="avatar me-2 flex-shrink-0"><img src="${
                                     row.vehicle_image
-                                }" alt="${_l("admin.common.image")}"></div>
+                                }" class="admin-vehicle-image" alt="${_l("admin.common.image")}"></div>
                                 <div>
                                     <div class="d-block fw-semibold text-black">${
                                         row.vehicle_name ? row.vehicle_name : ""

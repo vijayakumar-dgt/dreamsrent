@@ -185,22 +185,9 @@
                 const img = new Image();
                 img.src = e.target.result;
 
-                img.onload = function () {
-                    if (img.width === 500 && img.height === 500) {
-                        preview.attr("src", e.target.result).show();
-                        $(".frames").removeClass("d-none");
-                    } else {
-                        showToast(
-                            "error",
-                            _l("admin.general_settings.image_dimension")
-                        );
-                        const preview = document.getElementById(
-                            "maintenance_photo_preview"
-                        );
-                        preview.src = $(".remove-maintenance-image").data(
-                            "default_image"
-                        );
-                    }
+                img.onload = function () {                   
+                    preview.attr("src", e.target.result).show();
+                    $(".frames").removeClass("d-none");                   
                 };
             };
 

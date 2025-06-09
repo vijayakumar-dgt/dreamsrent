@@ -83,13 +83,13 @@
                 aws_access_key: {
                     required: _l("admin.general_settings.enter_aws_access_key"),
                     minlength: _l(
-                        "admin.general_settings.enter_aws_access_key_characters"
+                        "admin.general_settings.enter_aws_access_key"
                     ),
                 },
                 aws_secret_key: {
                     required: _l("admin.general_settings.enter_aws_secret_key"),
                     minlength: _l(
-                        "admin.general_settings.enter_aws_access_key_characters"
+                        "admin.general_settings.enter_aws_access_key"
                     ),
                 },
                 aws_bucket_name: {

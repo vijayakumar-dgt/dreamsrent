@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-lg-5 d-none d-lg-block">
                     <div class="car-holder">
-                        <img class="app-car img-fluid" src="{{asset('frontend/assets/img/app-car.png')}}" alt="App Available"  data-aos="fade-down">
+                        <img class="app-car img-fluid" src="{{ $section['section_content'][0]->value['image'] ?? asset('frontend/assets/img/app-car.png') }}" alt="App Available" data-aos="fade-down">
                     </div>
                 </div>
             </div>

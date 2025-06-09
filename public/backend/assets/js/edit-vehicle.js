@@ -2721,8 +2721,8 @@
                     let serviceName = row
                         .querySelector("#extra_name")
                         .innerText.trim();
-                    let extraValue = row.querySelector("#extra_value").value;
-                    let extraPrice = row.querySelector("#extra_price").value;
+                    let extraValue = row.querySelector(".extra_value").value;
+                    let extraPrice = row.querySelector(".extra_price").value;
 
                     // Find the matching service card in the main list
                     let serviceCards = document.querySelectorAll(
@@ -2740,14 +2740,14 @@
                                 extraValue === "per_day"
                                     ? _l("admin.rentals.per_day")
                                     : _l("admin.rentals.one_time");
-                            card.querySelector("#service_value").value =
+                            card.querySelector(".service_value").value =
                                 extraValue;
 
                             // Update the price
                             card.querySelector(
                                 "#set_price"
                             ).innerText = `${currency}${extraPrice}`;
-                            card.querySelector("#service_price").value =
+                            card.querySelector(".service_price").value =
                                 extraPrice;
                         }
                     });
@@ -2976,7 +2976,7 @@
             const $container = $(this);
             const $plusIcon = $container.find(".plus-active");
             const $checkIcon = $container.find(".check-active");
-            const $checkbox = $container.find("#insurance_checked");
+            const $checkbox = $container.find(".insurance_checked");
 
             $container.on("click", function (event) {
                 event.preventDefault();
@@ -3004,19 +3004,19 @@
                 const $checkbox = $(this);
                 const $container = $checkbox.closest("#inCont");
 
-                const insuranceId = $container.find("#insurance_id").val();
-                const insuranceName = $container.find("#insurance_name").val();
+                const insuranceId = $container.find(".insurance_id").val();
+                const insuranceName = $container.find(".insurance_name").val();
                 const insurancePrice = $container
-                    .find("#insurance_price")
+                    .find(".insurance_price")
                     .val();
                 const insuranceCount = $container
-                    .find("#insurance_count")
+                    .find(".insurance_count")
                     .val();
                 const insurancePriceType = $container
-                    .find("#insurance_price_type")
+                    .find(".insurance_price_type")
                     .val();
                 const insurancePriceTypeId = $container
-                    .find("#insurance_price_type_id")
+                    .find(".insurance_price_type_id")
                     .val();
 
                 const uniqueId =
@@ -3089,6 +3089,7 @@
                     $radio.prop("checked", true);
                 }
             });
+            $("#save_update").attr("data-id", uniqueId);
         });
 
         $("#save_update").on("click", function () {
@@ -3096,7 +3097,7 @@
             const selectedRadio = $("input[name='Radio']:checked");
             const updatedPriceType = selectedRadio.next().text().trim();
 
-            const uniqueId = $("#edit_insurance").attr("data-id");
+            const uniqueId = $(this).attr("data-id");
 
             // If percentage, format price and set symbol
             if (updatedPriceType.toLowerCase() === "percentage") {
@@ -3134,7 +3135,7 @@
                     const $checkbox = $(this);
                     const $parentContainer = $checkbox.closest("#inCont");
                     const insuranceId = $parentContainer
-                        .find("#insurance_id")
+                        .find(".insurance_id")
                         .val();
 
                     const matchedInput = $(`#insurance_id_one_${uniqueId}`);

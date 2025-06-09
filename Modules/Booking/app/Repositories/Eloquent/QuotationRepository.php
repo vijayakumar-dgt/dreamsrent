@@ -438,7 +438,14 @@ class QuotationRepository implements QuotationRepositoryInterface
 
             if (!empty($booking)) {
                 $booking->customer_image = uploadedAsset($booking->customer_image, 'profile');
-                $booking->vehicle_image = uploadedAsset($booking->vehicle_image);
+                $vehicleImagePath = $booking->vehicle_image ?? '';
+                $filename = basename($vehicleImagePath);
+                $newpath = 'vehicles/images/small/' . $filename;
+                $file = public_path('storage/' . $newpath);
+                if (file_exists($file)) {
+                    $vehicleImagePath = $newpath;
+                }
+                $booking->vehicle_image = uploadedAsset($vehicleImagePath);
                 if (!empty($booking->insurance)) {
                     $booking->insurance_formatted = json_decode($booking->insurance, true);
                 }

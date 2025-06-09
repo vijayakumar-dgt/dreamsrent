@@ -196,18 +196,9 @@
             reader.onload = function (e) {
                 const img = new Image();
                 img.onload = function () {
-                    if (this.width === 500 && this.height === 500) {
+                   
                         preview.src = e.target.result;
-                    } else {
-                        // Reset the input and show error
-                        input.value = "";
-                        preview.src =
-                            "/backend/assets/img/default-placeholder-image.png"; // default image
-                        showToast(
-                            "error",
-                            "Image must be exactly 500px × 500px"
-                        );
-                    }
+                   
                 };
                 img.src = e.target.result;
             };
