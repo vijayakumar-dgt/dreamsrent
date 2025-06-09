@@ -504,71 +504,50 @@
                             let deviceList = "";
                             $.each(devices, function (index, device) {
                                 deviceList += `<tr>
-                                                <td>
-                                                        <h6 class="fs-14">${
-                                                            device.browser ?? ""
-                                                        } - ${
-                                    device.os ?? ""
-                                }</h6>
-                                                    </td>
-                                                    <td>
-                                                        <p class="text-gray-9">${
-                                                            device.date ?? "-"
-                                                        }</p>
-                                                    </td>
-                                                    <td>
-                                                        <p class="text-gray-9">${
-                                                            device.ip_address ??
-                                                            "-"
-                                                        }</p>
-                                                    </td>
-                                                    <td>
-                                                        <p class="text-gray-9">${
-                                                            device.location ??
-                                                            "-"
-                                                        }</p>
-                                                    </td>
-                                                    <td>
-                                                        <div class="action-btn">
-                                                            <a href="javascript:void(${
-                                                                device.id
-                                                            });" data-id="${
-                                    device.id
-                                }" class="p-1 logoutDevice"><i class="ti ti-logout text-dark"></i></a>
-                                                        </div>
-                                                    </td>
-                                                </tr>`;
+                                    <td>
+                                        <h6 class="fs-14">${device.browser ?? ""} - ${device.os ?? ""}</h6>
+                                    </td>
+                                    <td>
+                                        <p class="text-gray-9">${device.date ?? "-"}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-gray-9">${device.ip_address ?? "-"}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-gray-9">${device.location ?? "-"}</p>
+                                    </td>
+                                    <td>
+                                        <div class="action-btn">
+                                            <a href="javascript:void(${device.id});" data-id="${device.id}" class="p-1 logoutDevice">
+                                                <i class="ti ti-logout text-dark"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>`;
                             });
                             $("#userDevicesTable tbody").html(deviceList);
                         } else {
                             $("#userDevicesTable tbody").html(
-                                `<tr><td colspan="5" class="text-center">${_l(
-                                    "admin.common.no_data_found"
-                                )}</td></tr>`
+                                `<tr><td colspan="5" class="text-center">${_l("admin.common.no_data_found")}</td></tr>`
                             );
                         }
-                      
+
                         const iconSuccess = $('<i>').addClass('ti ti-circle-check-filled text-success me-1');
                         const iconDanger = $('<i>').addClass('ti ti-circle-check-filled text-danger me-1');
                         const iconPointSuccess = $('<i>').addClass('ti ti-point-filled text-success me-1');
                         const iconPointDanger = $('<i>').addClass('ti ti-point-filled text-danger me-1');
 
                         const lastChangedContainer = $(".last_changed").empty();
-
                         const rawChangedAt = response.data.last_password_changed_at;
                         const isChanged = rawChangedAt && rawChangedAt !== "null";
 
                         if (isChanged) {
                             const safeChangedAt = DOMPurify.sanitize(rawChangedAt);
-
-                            const iconSuccess = $("<i>").addClass("ti ti-circle-check-filled text-success me-1");
-
                             lastChangedContainer
                                 .append(iconSuccess)
                                 .append(document.createTextNode(" " + _l("admin.general_settings.last_changed") + " "))
                                 .append(document.createTextNode(safeChangedAt));
-                            const iconDanger = $("<i>").addClass("ti ti-circle-check-filled text-danger me-1");
-
+                        } else {
                             lastChangedContainer
                                 .append(iconDanger)
                                 .append(document.createTextNode(" " + _l("admin.general_settings.not_changed")));
@@ -578,19 +557,15 @@
                         if (response.data.user && response.data.user.google_auth_enabled) {
                             googleAuthContainer.append(iconPointSuccess)
                                 .append(document.createTextNode(' ' + _l("admin.general_settings.connected")));
+                            $("#google_auth").prop("checked", true);
                         } else {
                             googleAuthContainer.append(iconPointDanger)
                                 .append(document.createTextNode(' ' + _l("admin.general_settings.disconnected")));
-                        }                       
-                        if (response.data.user.google_auth_enabled) {
-                            $("#google_auth").prop("checked", true);
-                        } else {
                             $("#google_auth").prop("checked", false);
                         }
+
                         $(".verified_emailtxt").text(response.data.user.email);
-                        $(".verified_phonetxt").text(
-                            response.data.user.phone_number ?? "-"
-                        );
+                        $(".verified_phonetxt").text(response.data.user.phone_number ?? "-");
                     }
                 },
                 complete: function () {
