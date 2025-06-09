@@ -755,7 +755,7 @@
                         $formCheck.append($radio);
 
                         const $avatar = $('<span>').addClass('avatar flex-shrink-0 me-2');
-                        $('<img>', { src: item.image, alt: '' }).appendTo($avatar);
+                        $('<img>', { src: item.image, class: 'admin-vehicle-image', alt: 'vehicle image' }).appendTo($avatar);
 
                         const $vehicleInfo = $('<div>');
                         $('<p>').addClass('mb-1').text(item.vehicle_type).appendTo($vehicleInfo);

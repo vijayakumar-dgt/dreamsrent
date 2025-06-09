@@ -107,7 +107,14 @@ class EnquiryRepository implements EnquiryRepositoryInterface
                     }
                 })
                 ->get()->map(function ($enquiry) {
-                    $enquiry->vehicle_image = uploadedAsset($enquiry->vehicle_image ?? null, 'default');
+                    $vehicleImagePath = $enquiry->vehicle_image ?? '';
+                    $filename = basename($vehicleImagePath);
+                    $newpath = 'vehicles/images/small/' . $filename;
+                    $file = public_path('storage/' . $newpath);
+                    if (file_exists($file)) {
+                        $vehicleImagePath = $newpath;
+                    }
+                    $enquiry->vehicle_image = uploadedAsset($vehicleImagePath);
                     $enquiry->customer_name = ucwords($enquiry->customer_name);
                     $enquiry->formatted_created_at = formatDateTime($enquiry->created_at, false);
                     return $enquiry;

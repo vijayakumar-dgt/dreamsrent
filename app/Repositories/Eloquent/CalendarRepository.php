@@ -135,9 +135,14 @@ class CalendarRepository implements CalendarRepositoryInterface
         $vehicle = $booking->vehicle;
         $vehicleType = null;
         if ($vehicle) {
-            $vehicle->vehicle_image = is_string($vehicle->vehicle_image)
-                ? uploadedAsset($vehicle->vehicle_image ?? '')
-                : uploadedAsset('', 'default');
+            $vehicleImagePath = $vehicle->vehicle_image ?? '';
+            $filename = basename($vehicleImagePath);
+            $newpath = 'vehicles/images/small/' . $filename;
+            $file = public_path('storage/' . $newpath);
+            if (file_exists($file)) {
+                $vehicleImagePath = $newpath;
+            }
+            $vehicle->vehicle_image = uploadedAsset($vehicleImagePath);
             $vehicleTypeId = $vehicle->type_id ?? null;
             $vehicleType = Cartype::select('name')->where("id", $vehicleTypeId)->first();
         }

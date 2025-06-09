@@ -28,7 +28,7 @@
                                             <div class="col-8">
                                                 <div class="d-flex align-items-center">
                                                     <span class="avatar flex-shrink-0 me-2">
-                                                        <img src="{{ $booking->vehicle_image }}" alt="Vehicle Image">
+                                                        <img src="{{ $booking->vehicle_image }}" class="admin-vehicle-image" alt="Vehicle Image">
                                                     </span>
                                                     <div>
                                                         <p class="mb-1">{{ $booking->vehicle_type }}</p>

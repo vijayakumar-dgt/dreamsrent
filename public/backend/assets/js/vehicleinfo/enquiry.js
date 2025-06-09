@@ -241,7 +241,7 @@
                                     <div class="avatar me-2 flex-shrink-0">
                                         <img src="${
                                             value.vehicle_image
-                                        }" alt="Vehicle Image" class="avatar-img">
+                                        }" alt="Vehicle Image" class="avatar-img admin-vehicle-image">
                                     </div>
                                     <div>
                                         <div class="fw-semibold d-block text-black">${
