@@ -38,7 +38,7 @@
                                                     $emptyStars = 5 - $rating;
                                                     $fullStars = $rating;
                                                 @endphp
-                                                <div class="list-rating">
+                                                <div class="list-rating text-start">
                                                     @for ($i = 0; $i < $fullStars; $i++)
                                                         <i class="fas fa-star filled"></i>
                                                     @endfor
