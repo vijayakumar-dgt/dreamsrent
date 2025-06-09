@@ -149,7 +149,7 @@
                         class="text-danger">*</span></label>
                 <div class="pass-group">
                     <div class="position-relative">
-                        <input type="password" class="form-control" name="current_password" id="current_password">
+                        <input type="password" class="form-control pass-inputs" name="current_password" id="current_password">
                         <span
                             class="ti toggle-passwords ti-eye-off position-absolute top-50 translate-middle-y cursor-pointer"></span>
                     </div>
