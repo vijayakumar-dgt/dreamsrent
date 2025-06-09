@@ -91,7 +91,7 @@ Route::group(['middleware' => ['setLocale', 'checkInstallerStatus', 'securityHea
         Route::post('save_email_template', [EmailTemplateController::class, 'store'])->name('email_templates.store');
         Route::post('get_emailtemplates', [EmailTemplateController::class, 'getEmailTemplates']);
         Route::get('get_email_template/{id}', [EmailTemplateController::class, 'getEmailTemplate']);
-        Route::post('delete-emailtemplate', [EmailTemplateController::class, 'deleteEmailTeplate']);
+        Route::post('delete-emailtemplate', [EmailTemplateController::class, 'deleteEmailTemplate']);
         Route::get('get_tags/{id}', [EmailTemplateController::class, 'getTags']);
 
         //smsGateway
