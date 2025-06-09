@@ -107,7 +107,7 @@
                     render: function (data, type, row) {
                         return `<div class="d-flex align-items-center">
                                     <div class="avatar avatar-lg border">
-                                        <img src="${row.vehicle_image}" class="img-fluid" alt="${_l('admin.common.image')}">
+                                        <img src="${row.vehicle_image}" class="img-fluid admin-vehicle-image" alt="${_l('admin.common.image')}">
                                     </div>
                                     <div class="ms-2">
                                         <h6 class="fw-medium text-black">${row.vehicle_name}</h6>

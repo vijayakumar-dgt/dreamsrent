@@ -144,11 +144,14 @@ class MaintenanceRepository implements MaintenanceRepositoryInterface
             $data->map(function ($maintenance) {
                 $maintenance->start_date = formatDateTime($maintenance->start_date, false);
                 $maintenance->end_date = formatDateTime($maintenance->end_date, false);
-                // $maintenance->vehicle_image = uploadedAsset($maintenance->vehicle_image ?? null);
-
-                $filename = basename($maintenance->vehicle_image ?? '');
-                $vehicleImgae = 'vehicles/images/small/' . $filename;
-                $maintenance->vehicle_image = uploadedAsset($vehicleImgae);
+                $vehicleImagePath = $maintenance->vehicle_image ?? '';
+                $filename = basename($vehicleImagePath);
+                $newpath = 'vehicles/images/small/' . $filename;
+                $file = public_path('storage/' . $newpath);
+                if (file_exists($file)) {
+                    $vehicleImagePath = $newpath;
+                }
+                $maintenance->vehicle_image = uploadedAsset($vehicleImagePath);
                 $maintenance->odometer = number_format((float)$maintenance->odometer, 0, ',');
 
                 $statusMap = [

@@ -599,7 +599,7 @@
                                                     name="extra_service[]"
                                                     value="{{ $service->id }}"
                                                     @if($ExtraServiceInfo->contains('extra_service_id', $service->id)) checked @endif>
-                                                <input class="form-check-input" type="hidden" id="service_id" name="service_id[]" value="{{ $service->id }}">
+                                                <input class="form-check-input service_id" type="hidden" id="service_id_{{ $service->id }}" name="service_id[]" value="{{ $service->id }}">
                                                 <span class="service-icon bg-dark d-flex align-items-center justify-content-center me-2 ms-2">
                                                     <img src="{{ asset('storage/' . $service->icon) }}" alt="Extra Service">
                                                 </span>
@@ -610,9 +610,9 @@
                                             </div>
                                             <div>
                                                 <p class="fs-13 mb-1" id="set_value">{{ $formattedServiceValue }}</p>
-                                                <input type="hidden" name="service_value[]" id="service_value" value="{{ $serviceValue }}">
+                                                <input type="hidden" class="service_value" name="service_value[]" id="service_value_{{ $service->id }}" value="{{ $serviceValue }}">
                                                 <h6 class="fs-14 fw-semibold" id="set_price">{{ $currencySymbol }}{{ number_format($servicePrice, 2) }}</h6>
-                                                <input type="hidden" name="service_price[]" id="service_price" value="{{ $servicePrice }}">
+                                                <input type="hidden" class="service_price" name="service_price[]" id="service_price_{{ $service->id }}" value="{{ $servicePrice }}">
                                             </div>
                                         </div>
                                     </div>
@@ -1009,7 +1009,7 @@
                     <td class="fw-medium text-gray-9" id="extra_name">{{ $service->name }}</td>
                     <td>
                         <div class="d-flex align-items-center">
-                            <select class="form-control" id="extra_value" name="extra_value[{{ $service->id }}]">
+                            <select class="form-control extra_value" id="extra_value_{{ $service->id }}" name="extra_value[{{ $service->id }}]">
                                 <option value="per_day" {{ $selectedValue == 'per_day' ? 'selected' : '' }}>{{ __('admin.rentals.per_day') }}</option>
                                 <option value="one_time" {{ $selectedValue == 'one_time' ? 'selected' : '' }}>{{ __('admin.rentals.one_time') }}</option>
                             </select>
@@ -1017,7 +1017,7 @@
                                 <span class="input-icon-addon">
                                     <i class="ti ti-currency-dollar"></i>
                                 </span>
-                                <input type="text" class="form-control" id="extra_price" name="extra_price[{{ $service->id }}]" value="{{ number_format($selectedPrice, 2) }}">
+                                <input type="text" class="form-control extra_price" id="extra_price_{{ $service->id }}" name="extra_price[{{ $service->id }}]" value="{{ number_format($selectedPrice, 2) }}">
                             </div>
                         </div>
                     </td>
@@ -1121,14 +1121,14 @@
     <x-slot name="body">
         @foreach($insurances as $insurance)
         <div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" id="inCont">
-            <input type="hidden" id="insurance_id" value="{{ $insurance->id }}">
+            <input type="hidden" class="insurance_id" id="insurance_id_{{ $insurance->id }}" value="{{ $insurance->id }}">
             <div>
                 <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">
                     {{ $insurance->insurance_name }}
                 </h6>
-                <input type="hidden" id="insurance_name" value="{{ $insurance->insurance_name }}">
-                <input type="hidden" id="insurance_price_type" value="{{ $insurance->priceType->pricing_type }}">
-                <input type="hidden" id="insurance_price_type_id" value="{{ $insurance->price_type_id }}">
+                <input type="hidden" class="insurance_name" id="insurance_name_{{ $insurance->id }}" value="{{ $insurance->insurance_name }}">
+                <input type="hidden" class="insurance_price_type" id="insurance_price_type_{{ $insurance->id }}" value="{{ $insurance->priceType->pricing_type }}">
+                <input type="hidden" class="insurance_price_type_id" id="insurance_price_type_id_{{ $insurance->id }}" value="{{ $insurance->price_type_id }}">
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                     <p class="fs-13 fw-medium border-end pe-2 mb-0">
                         {{ __('admin.rentals.price') }}: <span class="text-gray-9">
@@ -1137,11 +1137,11 @@
                             @else
                             {{ $currencySymbol }}{{ number_format($insurance->price, 2) }}
                             @endif</span>
-                        <input type="hidden" id="insurance_price" value="{{ $insurance->price }}">
+                        <input type="hidden" class="insurance_price" id="insurance_price_{{ $insurance->id }}" value="{{ $insurance->price }}">
                     </p>
                     <p class="fs-13 fw-medium mb-0">
                         {{ __('admin.common.benefits') }}: <span class="text-gray-9">{{ $insurance->insuranceBenefits->count() }}</span>
-                        <input type="hidden" id="insurance_count" value="{{ $insurance->insuranceBenefits->count() }}">
+                        <input type="hidden" class="insurance_count" id="insurance_count_{{ $insurance->id }}" value="{{ $insurance->insuranceBenefits->count() }}">
                         @if($insurance->insuranceBenefits->isNotEmpty())
                         <i class="ti ti-info-circle-filled text-gray-5 ms-1"
                             data-bs-toggle="tooltip"
@@ -1157,7 +1157,7 @@
                     <i class="ti ti-plus plus-active"></i>
                     <i class="ti ti-check check-active d-none"></i>
                 </button>
-                <input type="checkbox" id="insurance_checked" hidden>
+                <input type="checkbox" class="insurance_checked" id="insurance_checked_{{ $insurance->id }}" hidden>
             </div>
         </div>
         @endforeach
@@ -1166,63 +1166,6 @@
         <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
             <button type="button" class="btn btn-primary" id="in_btn">{{ __('admin.general_settings.add') }}</button>
-        </div>
-    </x-slot>
-</x-admin.modal>
-
-<x-admin.modal className="addmodal"
-    id="select_insurance"
-    :title="__('admin.rentals.select_insurance')"
-    formId="set_value">
-    <x-slot name="body">
-        @foreach($insurances as $insurance)
-        <div class="d-flex align-items-center justify-content-between flex-wrap bg-white gap-3 border br-5 p-20 mb-3" id="inCont">
-            <input type="hidden" id="insurance_id" value="{{ $insurance->id }}">
-            <div>
-                <h6 class="fs-14 fw-semibold d-inline-flex align-items-center mb-1">
-                    {{ $insurance->insurance_name }}
-                </h6>
-                <input type="hidden" id="insurance_name" value="{{ $insurance->insurance_name }}">
-                <input type="hidden" id="insurance_price_type" value="{{ $insurance->priceType->pricing_type }}">
-                <input type="hidden" id="insurance_price_type_id" value="{{ $insurance->price_type_id }}">
-                <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <p class="fs-13 fw-medium border-end pe-2 mb-0">
-                        {{ __('admin.rentals.price') }}: <span class="text-gray-9">
-                            @if ($insurance->price_type_id == 7)
-                            {{ rtrim(rtrim(number_format($insurance->price, 2), '0'), '.') }}%
-                            @else
-                            {{ $currencySymbol }}{{ number_format($insurance->price, 2) }}
-                            @endif
-                        </span>
-                        <input type="hidden" id="insurance_price" value="{{ $insurance->price }}">
-                    </p>
-                    <p class="fs-13 fw-medium mb-0">
-                        {{ __('admin.common.benefits') }}: <span class="text-gray-9">{{ $insurance->insuranceBenefits->count() }}</span>
-                        <input type="hidden" id="insurance_count" value="{{ $insurance->insuranceBenefits->count() }}">
-                        @if($insurance->insuranceBenefits->isNotEmpty())
-                        <i class="ti ti-info-circle-filled text-gray-5 ms-1"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="top"
-                            title="{{ $insurance->insuranceBenefits->first()->benefit }}">
-                        </i>
-                        @endif
-                    </p>
-                </div>
-            </div>
-            <div class="d-flex align-items-center icon-list delivery-add">
-                <button type="button" class="bg-transparent border-0">
-                    <i class="ti ti-plus plus-active"></i>
-                    <i class="ti ti-check check-active d-none"></i>
-                </button>
-                <input type="checkbox" id="insurance_checked" hidden>
-            </div>
-        </div>
-        @endforeach
-    </x-slot>
-    <x-slot name="footer">
-        <div class="d-flex justify-content-center">
-            <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-            <button type="button" class="btn btn-primary" id="in_btn">{{ __('admin.rentals.create_new') }}</button>
         </div>
     </x-slot>
 </x-admin.modal>
@@ -1262,7 +1205,7 @@
     <x-slot name="footer">
         <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-light me-3" data-bs-dismiss="modal">{{ __('admin.common.cancel') }}</button>
-            <button type="button" class="btn btn-primary" id="save_update">{{ __('admin.rentals.create_new') }}</button>
+            <button type="button" class="btn btn-primary" id="save_update">{{ __('admin.common.update') }}</button>
         </div>
     </x-slot>
 </x-admin.modal>

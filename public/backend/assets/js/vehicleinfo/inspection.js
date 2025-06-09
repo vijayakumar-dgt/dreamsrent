@@ -394,9 +394,7 @@
                                                 <div class="avatar me-2 flex-shrink-0">
                                                     <img src="${
                                                         value.car.vehicle_image
-                                                    }" alt="${_l(
-                            "admin.common.image"
-                        )}">
+                                                    }" class="admin-vehicle-image" alt="${_l("admin.common.image")}">
                                                 </div>
                                                 <div>
                                                     <div class="fw-semibold d-block text-black">${

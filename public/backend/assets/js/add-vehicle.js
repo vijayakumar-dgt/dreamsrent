@@ -2050,8 +2050,8 @@
                     let serviceName = row
                         .querySelector("#extra_name")
                         .innerText.trim();
-                    let extraValue = row.querySelector("#extra_value").value;
-                    let extraPrice = row.querySelector("#extra_price").value;
+                    let extraValue = row.querySelector(".extra_value").value;
+                    let extraPrice = row.querySelector(".extra_price").value;
 
                     let serviceCards = document.querySelectorAll(
                         ".extra-service-card"
@@ -2067,13 +2067,13 @@
                                 extraValue === "per_day"
                                     ? _l("admin.rentals.per_day")
                                     : _l("admin.rentals.one_time");
-                            card.querySelector("#service_value").value =
+                            card.querySelector(".service_value").value =
                                 extraValue;
 
                             card.querySelector(
                                 "#set_price"
                             ).innerText = `${currency}${extraPrice}`;
-                            card.querySelector("#service_price").value =
+                            card.querySelector(".service_price").value =
                                 extraPrice;
                         }
                     });
@@ -2087,7 +2087,7 @@
             const $container = $(this);
             const $plusIcon = $container.find(".plus-active");
             const $checkIcon = $container.find(".check-active");
-            const $checkbox = $container.find("#insurance_checked");
+            const $checkbox = $container.find(".insurance_checked");
 
             $container.on("click", function (event) {
                 event.preventDefault();
@@ -2119,6 +2119,7 @@
                     $(this).prop("checked", true);
                 }
             });
+            $("#save_update").attr("data-id", uniqueId);
         });
 
         // Add insurance button click
@@ -2136,21 +2137,21 @@
                 $selectedInsurances.each(function () {
                     const $checkbox = $(this);
                     const $container = $checkbox.closest("#inCont");
-                    const insuranceId = $container.find("#insurance_id").val();
+                    const insuranceId = $container.find(".insurance_id").val();
                     const insuranceName = $container
-                        .find("#insurance_name")
+                        .find(".insurance_name")
                         .val();
                     const insurancePrice = $container
-                        .find("#insurance_price")
+                        .find(".insurance_price")
                         .val();
                     const insuranceCount = $container
-                        .find("#insurance_count")
+                        .find(".insurance_count")
                         .val();
                     const insurancePriceType = $container
-                        .find("#insurance_price_type")
+                        .find(".insurance_price_type")
                         .val();
                     const insurancePriceTypeId = $container
-                        .find("#insurance_price_type_id")
+                        .find(".insurance_price_type_id")
                         .val();
 
                     const uniqueId = `insurance_${crypto.randomUUID()}`;
@@ -2167,7 +2168,7 @@
                             <div class="d-flex align-items-center gap-2 flex-wrap">
                                 <p class="fs-13 fw-medium border-end pe-2 mb-0">${_l(
                                     "admin.rentals.insurance_price"
-                                )} : <span class="text-gray-9 priceIn" data-id="${uniqueId}">${displayPrice}</span></p>
+                                )} : <span class="text-gray-9 priceIn" data-id="ins_price_${uniqueId}">${displayPrice}</span></p>
                                 <input type="hidden" name="insurance_id_one[]" id="insurance_id_one_${uniqueId}" value="${insuranceId}">
                                 <input type="hidden" name="insurance_price_one[]" id="insurance_price_one_${uniqueId}" value="${insurancePrice}">
                                 <p class="fs-13 fw-medium mb-0">${_l(
@@ -2217,7 +2218,7 @@
                 const updatedPriceRaw = $("#price").val().trim();
                 const $selectedRadio = $("input[name='Radio']:checked");
                 const updatedPriceType = $selectedRadio.val();
-                const uniqueId = $("#edit_insurance").data("id");
+                const uniqueId = $saveUpdateBtn.data("id");
 
                 if (updatedPriceRaw === "" || isNaN(updatedPriceRaw)) {
                     alert("Please enter a valid price.");
@@ -2239,7 +2240,7 @@
                     displayPrice = `${currency}${updatedPrice}`;
                 }
 
-                $(`.priceIn[data-id='${uniqueId}']`).text(displayPrice);
+                $(`.priceIn[data-id='ins_price_${uniqueId}']`).text(displayPrice);
                 $(`#insurance_price_one_${uniqueId}`).val(updatedPrice);
                 $(`.priceTypeIn[data-id='${uniqueId}']`).text(priceTypeLabel);
                 $(`#insurance_price_type_one_${uniqueId}`).val(
@@ -2263,7 +2264,7 @@
                     const $checkbox = $(this);
                     const $parentContainer = $checkbox.closest("#inCont");
                     const insuranceId = $parentContainer
-                        .find("#insurance_id")
+                        .find(".insurance_id")
                         .val();
 
                     if (
