@@ -14,7 +14,6 @@ class TicketRepository implements TicketInterface
         return Ticket::with([
             'user:id,name,email',
             'user.userDetail:id,user_id,first_name,last_name,profile_image',
-            'category:id,name',
             'assignee:id,name,email',
             'assignee.userDetail:id,user_id,first_name,last_name,profile_image',
             'ticketHistories:id,ticket_id,user_id,description,created_by,updated_by,created_at',
@@ -43,8 +42,7 @@ class TicketRepository implements TicketInterface
     {
         return Ticket::with([
             'user:id,name,email',
-            'user.userDetail:id,user_id,first_name,last_name,profile_image',
-            'category:id,name',
+            'user.userDetail:id,user_id,first_name,last_name,profile_image',           
             'assignee:id,name,email',
             'assignee.userDetail:id,user_id,first_name,last_name,profile_image',
             'ticketHistories:id,ticket_id,user_id,description,created_by,updated_by,created_at',
@@ -57,8 +55,7 @@ class TicketRepository implements TicketInterface
     {
         $query = Ticket::with([
             'user:id,name,email',
-            'user.userDetail:id,user_id,first_name,last_name,profile_image',
-            'category:id,name',
+            'user.userDetail:id,user_id,first_name,last_name,profile_image',            
             'assignee:id,name,email',
             'assignee.userDetail:id,user_id,first_name,last_name,profile_image',
             'ticketHistories:id,ticket_id,user_id,description,created_by,updated_by,created_at',
@@ -94,9 +91,6 @@ class TicketRepository implements TicketInterface
             $query->where(function ($q) use ($filters) {
                 $q->where('ticket_id', 'like', '%' . $filters['search'] . '%')
                     ->orWhereHas('user', function ($q2) use ($filters) {
-                        $q2->where('name', 'like', '%' . $filters['search'] . '%');
-                    })
-                    ->orWhereHas('category', function ($q2) use ($filters) {
                         $q2->where('name', 'like', '%' . $filters['search'] . '%');
                     });
             });
