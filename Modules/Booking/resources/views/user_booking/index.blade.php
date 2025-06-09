@@ -675,7 +675,7 @@
                                                 </label>
                                             </li>
                                             @endif
-                                            @if ($stripeStatus == 1)
+                                            @if ($codStatus == 1)
                                             <li>
                                                 <label class="payment_custom_check">
                                                     <input type="radio" name="payment_type" id="cod" value="cod">
