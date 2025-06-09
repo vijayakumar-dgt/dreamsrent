@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2025 at 06:37 AM
+-- Generation Time: Jun 09, 2025 at 08:17 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49486,9 +49486,10 @@ INSERT INTO `email_templates` (`id`, `title`, `notification_type`, `description`
 (8, 'Booking Confirmation to admin', 4, '<p>{user_name} has booked vehicle<br></p>', 'New Vehicle Booking', '{user_name} has booked vehicle', '{user_name} has booked vehicle', 1, '2025-04-10 10:22:15', '2025-04-10 10:22:15', NULL),
 (9, 'Booking Cancelled to user', 5, '<p>Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.</p>', 'Booking cancelled', 'Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.', 'Hello {user_name}, your reservation #{reservation_id} has been cancelled successfully.', 1, '2025-04-10 11:06:04', '2025-04-10 11:06:04', NULL),
 (10, 'Booking cancelled to admin', 6, '<p>Hello Admin, #{reservation_id} reservation has been cancelled.</p>', 'Booking cancelled', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 'Hello Admin, #{reservation_id} reservation has been cancelled.', 1, '2025-04-10 11:07:18', '2025-05-12 02:58:43', NULL),
-(11, 'Login OTP', 8, '<p>Your OTP Verification for login</p>', 'OTP Verification for login', 'Your OTP Verification for login', 'Your OTP Verification for login', 1, '2025-05-08 23:49:29', '2025-05-08 23:49:29', NULL),
-(12, 'Forgot OTP', 9, '<p>Your OTP Verification for Forgot password</p>', 'OTP Verification for Forgot password', 'Your OTP Verification for Forgot password', 'Your OTP Verification for Forgot password', 1, '2025-05-08 23:51:10', '2025-05-08 23:51:10', NULL),
-(13, 'Test Mail', 7, '<p>Hello {user_name},<br><br>\r\n        This is a test email to confirm that the email configuration for admin notifications is working correctly.<br><br>\r\n        If you have received this email, everything is set up properly on your end. No further action is required.<br><br>\r\n        Regards,</p><p>{company_name}<br>\r\n        System Administrator\"</p>', 'Reg - Test Mail', 'This is a test email to confirm that the email configuration for admin notifications is working correctly.', 'This is a test email to confirm that the email configuration for admin notifications is working correctly.', 1, '2025-05-15 13:52:57', '2025-05-15 13:52:57', NULL);
+(11, 'Login OTP', 8, '<p>Your OTP Verification for login {otp}</p>', 'OTP Verification for login', 'Your OTP Verification for login', 'Your OTP Verification for login', 1, '2025-05-08 23:49:29', '2025-06-05 02:47:21', NULL),
+(12, 'Register OTP', 10, 'Your OTP Verification for Register {otp}', 'OTP Verification for Register', 'Verification for Register', 'Verification for Register', 1, '2025-05-08 23:51:10', '2025-06-05 02:05:04', NULL),
+(13, 'Test Mail', 7, '<p>Hello {user_name},<br><br>\r\n        This is a test email to confirm that the email configuration for admin notifications is working correctly.<br><br>\r\n        If you have received this email, everything is set up properly on your end. No further action is required.<br><br>\r\n        Regards,</p><p>{company_name}<br>\r\n        System Administrator\"</p>', 'Reg - Test Mail', 'This is a test email to confirm that the email configuration for admin notifications is working correctly.', 'This is a test email to confirm that the email configuration for admin notifications is working correctly.', 1, '2025-05-15 13:52:57', '2025-05-15 13:52:57', NULL),
+(14, 'Forgot OTP', 9, 'Your OTP Verification for Forgot Password {otp}', 'OTP Verification for Forgot Password', 'OTP Verification for Forgot Password', 'OTP Verification for Forgot Password', 1, '2025-06-05 03:49:30', '2025-06-05 03:52:41', NULL);
 
 -- --------------------------------------------------------
 
@@ -49918,7 +49919,7 @@ INSERT INTO `menus` (`id`, `name`, `menu_type`, `permenantlink`, `menus`, `langu
 (1, 'Header', 'header', 'https://rental-system.dreamstechnologies.com/', '[{\"label\":\"Home\",\"link\":\"\\/\",\"status\":true},{\"label\":\"Vehicles\",\"link\":\"vehicles\",\"status\":true},{\"label\":\"Blogs\",\"link\":\"blogs\",\"status\":true},{\"label\":\"About Us\",\"link\":\"pages\\/about-us\",\"status\":true},{\"label\":\"Contact us\",\"link\":\"contact-us\",\"status\":true},{\"label\":\"Terms & Conditions\",\"link\":\"pages\\/terms-conditions\",\"status\":false},{\"label\":\"Privacy Policy\",\"link\":\"pages\\/privacy-policy\",\"status\":false}]', 1, 1, '2025-03-19 04:04:49', '2025-04-29 10:58:52', NULL),
 (2, 'Quick links', 'footer', 'https://www.example.com', '[{\"label\":\"Home\",\"link\":\"\\/\",\"status\":true},{\"label\":\"All Blogs\",\"link\":\"blogs\",\"status\":true},{\"label\":\"Privacy Policy\",\"link\":\"pages\\/privacy-policy\",\"status\":true},{\"label\":\"Terms & Conditions\",\"link\":\"pages\\/terms-conditions\",\"status\":true}]', 1, 1, '2025-03-24 14:03:18', '2025-04-29 11:02:43', NULL),
 (3, 'Header', 'header', 'https://rental-system.dreamstechnologies.com/', '[{\"label\":\"\\u0627\\u0644\\u0635\\u0641\\u062d\\u0629\\u0627\\u0644\\u0631\\u0626\\u064a\\u0633\\u064a\\u0629\",\"link\":\"\\/\",\"status\":true},{\"label\":\"\\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0627\\u062a\",\"link\":\"vehicles\",\"status\":true},{\"label\":\"\\u0627\\u0644\\u0645\\u062f\\u0648\\u0646\\u0627\\u062a\",\"link\":\"blogs\",\"status\":true},{\"label\":\"\\u0645\\u0639\\u0644\\u0648\\u0645\\u0627\\u062a\\u0639\\u0646\\u0627\",\"link\":\"pages\\/about-us\",\"status\":true},{\"label\":\"\\u0627\\u062a\\u0635\\u0644\\u0628\\u0646\\u0627\",\"link\":\"contact-us\",\"status\":true}]', 2, 1, '2025-04-11 13:39:14', '2025-04-29 11:13:06', NULL),
-(4, 'Vehicle Type', 'footer', 'https://www.dreamstechnologies.com', '[{\"label\":\"All Vehicles\",\"link\":\"vehicles\",\"status\":true},{\"label\":\"Audi A8\",\"link\":\"vehicle-details\\/audi-a8\",\"status\":true},{\"label\":\"Benz\",\"link\":\"vehicle-details\\/benz\",\"status\":true},{\"label\":\"BMW\",\"link\":\"vehicle-details\\/bmw\",\"status\":true}]', 1, 1, '2025-04-11 22:23:25', '2025-05-08 12:54:17', NULL),
+(4, 'Vehicle Type', 'footer', 'https://www.dreamstechnologies.com', '[{\"label\":\"All Vehicles\",\"link\":\"vehicles\",\"status\":true}]', 1, 1, '2025-04-11 22:23:25', '2025-05-08 12:54:17', NULL),
 (5, 'Pages', 'footer', 'https://www.dreamstechnologiess.com', '[{\"label\":\"About Us\",\"link\":\"pages\\/about-us\",\"status\":true},{\"label\":\"Contact us\",\"link\":\"contact-us\",\"status\":true},{\"label\":\"Sign in\",\"link\":\"login\",\"status\":true},{\"label\":\"Sign Up\",\"link\":\"register\",\"status\":true}]', 1, 1, '2025-04-11 22:27:19', '2025-04-29 11:01:19', NULL),
 (6, 'روابط سريعة', 'footer', 'https://www.example.com', '[{\"label\":\"\\u0627\\u0644\\u0635\\u0641\\u062d\\u0629 \\u0627\\u0644\\u0631\\u0626\\u064a\\u0633\\u064a\\u0629\",\"link\":\"https:\\/\\/dreamsrent-laravel.dreamstechnologies.com\",\"status\":true},{\"label\":\"\\u0643\\u0644 \\u0627\\u0644\\u0645\\u062f\\u0648\\u0646\\u0627\\u062a\",\"link\":\"https:\\/\\/dreamsrent-laravel.dreamstechnologies.com\\/blogs\",\"status\":true},{\"label\":\"\\u0633\\u064a\\u0627\\u0633\\u0629 \\u0627\\u0644\\u062e\\u0635\\u0648\\u0635\\u064a\\u0629\",\"link\":\"https:\\/\\/dreamsrent-laravel.dreamstechnologies.com\\/pages\\/privacy-policy\",\"status\":true},{\"label\":\"\\u0627\\u0644\\u0634\\u0631\\u0648\\u0637 \\u0648\\u0627\\u0644\\u0623\\u062d\\u0643\\u0627\\u0645\",\"link\":\"https:\\/\\/dreamsrent-laravel.dreamstechnologies.com\\/pages\\/terms-conditions\",\"status\":true}]', 2, 1, '2025-03-24 14:03:18', '2025-04-23 15:10:36', NULL),
 (7, 'نوع المركبة', 'footer', 'https://www.dreamstechnologies.com', '[{\"label\":\"\\u062c\\u0645\\u064a\\u0639 \\u0627\\u0644\\u0645\\u0631\\u0643\\u0628\\u0627\\u062a\",\"link\":\"vehicles\",\"status\":true},{\"label\":\"\\u0628\\u064a \\u0625\\u0645 \\u062f\\u0628\\u0644\\u064a\\u0648 S2\",\"link\":\"vehicle-details\\/by-am-dblyo-s2\",\"status\":true},{\"label\":\"\\u0623\\u0648\\u062f\\u064a A3\",\"link\":\"vehicle-details\\/aody-a3\",\"status\":true},{\"label\":\"\\u0628\\u064a \\u0625\\u0645 \\u062f\\u0628\\u0644\\u064a\\u0648\",\"link\":\"vehicle-details\\/by-am-dblyo\",\"status\":true}]', 2, 1, '2025-04-11 22:23:25', '2025-05-08 13:01:08', NULL),
@@ -50152,15 +50153,16 @@ CREATE TABLE `notification_types` (
 --
 
 INSERT INTO `notification_types` (`id`, `title`, `slug`, `tags`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Welcome Email', NULL, NULL, 1, NULL, NULL),
+(1, 'Welcome Email', 'welcome-email', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, NULL, NULL),
 (2, 'Booking Confirmation to user', 'booking-confirmation-to-user', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, NULL, NULL),
 (3, 'Newsletter', 'newsletter', '[\"owner_name\",\"company_name\",\"company_email\",\"company_phone\",\"company_address\", \"company_postal_code\"]', 1, NULL, NULL),
 (4, 'Booking Confirmation to Admin', 'booking-confirmation-to-admin', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, '2025-04-10 14:04:55', '2025-04-10 14:04:55'),
 (5, 'Booking cancelled to admin', 'booking-cancelled-to-admin', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, '2025-04-10 16:31:30', '2025-04-10 16:31:30'),
 (6, 'Booking cancelled to user', 'booking-cancelled-to-user', '[\"user_name\",\"company_name\",\"email\",\"phonenumber\",\"vehicle_name\",\"driver_name\",\"reservation_id\",\"start_date\",\"end_date\",\"pickup_location\",\"delivery_type\",\"rental_type\",\"payment_type\",\"payment_status\",\"tototal_amount\"]', 1, '2025-04-10 16:33:10', '2025-04-10 16:33:10'),
 (7, 'Test Mail', 'test_mail', '[\"user_name\",\"company_name\",\"company_email\",\"company_phone\"]', 1, '2025-04-10 16:33:10', '2025-04-10 16:33:10'),
-(8, 'Login Otp', 'login-otp', '[\"user_name\",\"company_name\",\"company_email\",\"company_phone\"]', 1, NULL, NULL),
-(9, 'Forgot Otp', 'forgot-otp', '[\"user_name\",\"company_name\",\"company_email\",\"company_phone\"]', 1, NULL, NULL);
+(8, 'Login Otp', 'login-otp', '[\"user_name\",\"company_name\",\"company_email\",\"otp\",\"company_phone\"]', 1, '2025-06-12 06:45:06', '2025-06-19 06:45:10'),
+(9, 'Forgot Otp', 'forgot-otp', '[\"user_name\",\"company_name\",\"company_email\",\"otp\",\"company_phone\"]', 1, '2025-06-12 06:45:12', '2025-06-11 06:45:14'),
+(10, 'Register OTP', 'register-otp', '[\"user_name\",\"company_name\",\"company_email\",\"otp\",\"company_phone\"]', 1, '2025-06-05 06:45:17', '2025-06-04 06:45:19');
 
 -- --------------------------------------------------------
 
@@ -50420,6 +50422,7 @@ CREATE TABLE `sections` (
   `name` varchar(255) NOT NULL,
   `datas` longtext NOT NULL,
   `content` longtext DEFAULT NULL,
+  `icon` varchar(225) DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -50430,63 +50433,68 @@ CREATE TABLE `sections` (
 -- Dumping data for table `sections`
 --
 
-INSERT INTO `sections` (`id`, `theme_id`, `order_by`, `title`, `name`, `datas`, `content`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 1, 'Banner Theme One', 'Banner One', '{\"banner_one\":\"[banner]\"}', NULL, 1, '2024-11-06 11:52:16', '2025-05-21 06:02:43', NULL),
-(2, 1, 2, 'Category', 'Category', '{\"category\":\"[category type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(3, 1, 3, 'Recommended Vehicle', 'Recommended Vehicle', '{\"feature_vehicle\":\"[vehicle type=featured limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:33', NULL),
-(4, 1, 4, 'Popular Vehicle', 'Popular Vehicle', '{\"popular_vehicle\":\"[vehicle type=popular limit=10 viewall=no]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:39', NULL),
-(5, 1, 5, 'Vehicle', 'Vehicle', '{\"vehicle\":\"[vehicle type=all limit=10 viewall=yes]\"}', NULL, 1, '2024-11-07 10:27:43', '2024-11-07 05:01:55', NULL),
-(11, 1, 11, 'Faq', 'Faq', '{\"faq\":\"[faq limit=10 viewall=yes order=asc]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 22:41:02', NULL),
-(14, 1, 14, 'Testimonial', 'Testimonial', '{\"testimonial\":\"[testimonial limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 07:41:02', NULL),
-(15, 1, 15, 'How It Work', 'How It Work', '{\"how_it_work\":\"[how_it_work limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 22:32:42', NULL),
-(16, 1, 16, 'Blog', 'Blog', '{\"blog\":\"[blogs type=all limit=10 viewall=yes]\"}\n', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
-(22, 1, 22, 'Search Vehicle', 'Search Vehicle', '{\"search\":\"[search viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(23, 1, 23, 'Car Type', 'Car Type', '{\"car_type\":\"[car_type type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(25, 1, 25, 'Ad Card', 'Ad Card', '{\"ad_card\":\"[ad_card type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(26, 1, 26, 'Why Choose Us Theme', 'Why Choose Us', '{\"why_us\":\"[why_us type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2025-05-21 06:13:19', NULL),
-(27, 1, 27, 'Facts', 'Facts', '{\"facts\":\"[facts type=all limit=10 viewall=yes]\"}\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(29, 2, 29, 'Banner Theme Two', 'Banner Two', '{\"banner_two\":\"[banner]\"}', NULL, 1, '2024-11-06 11:52:16', '2025-05-21 06:09:05', NULL),
-(30, 2, 30, 'Festured Category', 'Festured Category', '{\"category\":\"[category type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(31, 2, 31, 'Recommended Vehicle', 'Recommended Vehicle', '{\"feature_vehicle\":\"[vehicle type=featured limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:33', NULL),
-(32, 2, 32, 'Popular Vehicle', 'Popular Vehicle', '{\"popular_vehicle\":\"[vehicle type=popular limit=10 viewall=no]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:39', NULL),
-(33, 2, 33, 'Faq', 'Faq', '{\"faq\":\"[faq limit=10 viewall=yes order=asc]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 22:41:02', NULL),
-(34, 2, 34, 'Testimonial', 'Testimonial', '{\"testimonial\":\"[testimonial limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 07:41:02', NULL),
-(35, 2, 35, 'Blog', 'Blog', '{\"blog\":\"[blogs type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
-(36, 2, 36, 'Ad Card', 'Ad Card', '{\"ad_card\":\"[ad_card type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(37, 2, 37, 'Facts', 'Facts', '{\"facts\":\"[facts type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(38, 2, 38, 'Brands', 'Brands', '{\"brand\":\"[brand type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(39, 2, 39, 'Search Vehicle', 'Search Vehicle', '{\"search\":\"[search viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(40, 2, 40, 'All Category', 'All Category', '{\"category\":\"[all_category type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(41, 2, 41, 'Marquee', 'Marquee', '{\"marquee\":\"[marquee type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(42, 2, 42, 'Best Vehicle On all', 'Best Vehicle', '{\"best_vehicle\":\"[bestVehicle type=best_vehicle limit=10 viewall=no]\"}', '{\"vehicle_id\":\"60\",\"label_1\":\"iyiuyiu\",\"dis_1\":\"yiuyiuyiuyiu\",\"label_2\":\"yiuyiuyiuyiuy\",\"dis_2\":\"iuyiuyiuyiuyiu\",\"label_3\":\"yiuyiuyiuyiuyiu\",\"dis_3\":\"yiuyiuyiuyiuyiu\",\"label_4\":\"yiuyiuyiuyiuy\",\"dis_4\":\"iuyiuyiuyiuyiu\",\"label_5\":\"yiuyiuyiuyiuy\",\"dis_5\":\"iuyiuyiuyiuyiu\",\"label_6\":\"yiuyiuyiuyiuy\",\"dis_6\":\"iuyiuyiuyiuyiuyiuyi\"}', 1, '2024-11-06 11:52:16', '2025-06-03 16:05:28', NULL),
-(43, 3, 43, 'Banner Three Home', 'Banner Three', '{\"banner_three\":\"[banner]\"}', NULL, 1, '2024-11-06 11:52:16', '2025-06-02 23:23:14', NULL),
-(44, 3, 2, 'Category', 'Category', '{\"category\":\"[bike_category type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(45, 3, 3, 'Recommended Bike', 'Recommended Bike', '{\"feature_bike\":\"[bike type=featured limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:33', NULL),
-(46, 3, 4, 'Popular Bike', 'Popular Bike', '{\"popular_bike\":\"[bike type=popular limit=10 viewall=no]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:39', NULL),
-(47, 3, 5, 'Bike', 'Bike', '{\"bike\":\"[bike type=all limit=10 viewall=yes]\"}', NULL, 1, '2024-11-07 10:27:43', '2024-11-07 05:01:55', NULL),
-(48, 3, 11, 'Faq', 'Faq', '{\"bike_faq\":\"[bike_faq limit=10 viewall=yes order=asc]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 22:41:02', NULL),
-(49, 3, 14, 'Testimonial', 'Testimonial', '{\"testimonial\":\"[testimonial limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 07:41:02', NULL),
-(50, 3, 35, 'Blog', 'Blog', '{\"blog\":\"[blogs type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
-(51, 3, 36, 'Ad Card', 'Ad Card', '{\"ad_card\":\"[ad_card type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(52, 3, 38, 'Brands', 'Brands', '{\"brand\":\"[brand type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(53, 3, 41, 'Marquee', 'Marquee', '{\"marquee\":\"[marquee type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(54, 3, 15, 'How It Work', 'How It Work', '{\"how_it_work\":\"[how_it_work limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 22:32:42', NULL),
-(55, 3, 16, 'Location', 'Location', '{\"location\":\"[location type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
-(56, 4, 56, 'Banner Four Home', 'Banner Four', '{\"banner_four\":\"[banner_four]\"}', NULL, 1, '2024-11-06 11:52:16', '2025-06-03 01:11:07', NULL),
-(57, 4, 57, 'Category', 'Category', '{\"category\":\"[boat_category type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(58, 4, 58, 'Benefits Of Yachts', 'Benefits Of Yacht', '{\"benefit\":\"[yart_benefit type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2025-06-03 03:04:19', NULL),
-(59, 4, 58, 'Boat Brand', 'Boat Brand', '{\"brand\":\"[brand type=all limit=5 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2025-06-03 03:04:19', NULL),
-(60, 4, 60, 'Popular Yachts', 'Popular Yachts', '{\"popular_yachts\":\"[yachts type=popular limit=10 viewall=no]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 04:45:39', NULL),
-(61, 4, 61, 'How It Work', 'How It Work', '{\"how_it_work\":\"[how_it_work limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 22:32:42', NULL),
-(62, 4, 62, 'Location', 'Location', '{\"location\":\"[location type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
-(63, 4, 63, 'Testimonial', 'Testimonial', '{\"testimonial\":\"[testimonial limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-07 07:41:02', NULL),
-(64, 4, 64, 'Facts', 'Facts', '{\"facts\":\"[facts type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(65, 4, 65, 'Faq', 'Faq', '{\"bike_faq\":\"[bike_faq limit=10 viewall=yes order=asc]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 22:41:02', NULL),
-(66, 4, 66, 'Ad Card', 'Ad Card', '{\"ad_card\":\"[ad_card type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
-(67, 4, 67, 'Blog', 'Blog', '{\"blog\":\"[blogs type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
-(68, 4, 68, 'Yacht Experience', 'Yacht Experience', '{\"yacht_experience\":\"[experience type=all limit=10 viewall=yes]\"}\r\n', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
-(69, 4, 69, 'Recommended Yachts', 'Recommended Yachts', '{\"recommended_yachts\":\"[yachts type=featured limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
-(70, 3, 69, 'Top Rated Bikes', 'Top Rated Bikes', '{\"bike\":\"[bike type=top_rated limit=10 viewall=yes]\"}', NULL, 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL);
+INSERT INTO `sections` (`id`, `theme_id`, `order_by`, `title`, `name`, `datas`, `content`, `icon`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 1, 'Banner Theme One', 'Banner One', '{\"banner_one\":\"[banner]\"}', NULL, '<i class=\"ti ti-home fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2025-05-21 06:02:43', NULL),
+(2, 1, 2, 'Category', 'Category', '{\"category\":\"[category type=all limit=5 viewall=yes]\"}', NULL, '<i class=\"ti ti-category fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(3, 1, 3, 'Recommended Vehicle', 'Recommended Vehicle', '{\"feature_vehicle\":\"[vehicle type=featured limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-stars fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 04:45:33', NULL),
+(4, 1, 4, 'Popular Vehicle', 'Popular Vehicle', '{\"popular_vehicle\":\"[vehicle type=popular limit=10 viewall=no]\"}', NULL, '<i class=\"ti ti-star fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 04:45:39', NULL),
+(5, 1, 5, 'Vehicle', 'Vehicle', '{\"vehicle\":\"[vehicle type=all limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-car fs-25 mb-2\"></i>', 1, '2024-11-07 10:27:43', '2024-11-07 05:01:55', NULL),
+(11, 1, 11, 'Faq', 'Faq', '{\"faq\":\"[faq limit=10 viewall=yes order=asc]\"}', NULL, '<i class=\"ti ti-help-circle fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-12 22:41:02', NULL),
+(14, 1, 14, 'Testimonial', 'Testimonial', '{\"testimonial\":\"[testimonial limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-quote fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 07:41:02', NULL),
+(15, 1, 15, 'How It Work', 'How It Work', '{\"how_it_work\":\"[how_it_work limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-settings-cog fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 22:32:42', NULL),
+(16, 1, 16, 'Blog', 'Blog', '{\"blog\":\"[blogs type=all limit=10 viewall=yes]\"}\n', NULL, '<i class=\"ti ti-notes fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
+(22, 1, 22, 'Search Vehicle', 'Search Vehicle', '{\"search\":\"[search viewall=yes]\"}', NULL, '<i class=\"ti ti-search fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(23, 1, 23, 'Car Type', 'Car Type', '{\"car_type\":\"[car_type type=all limit=10 viewall=yes]\"}\r\n', NULL, '<i class=\"ti ti-tag fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(25, 1, 25, 'Ad Card one', 'Ad Card one', '{\"ad_card\":\"[ad_card type=all limit=10 viewall=yes]\"}\n', NULL, '<i class=\"ti ti-broadcast fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(26, 1, 26, 'Why Choose Us Theme', 'Why Choose Us', '{\"why_us\":\"[why_us type=all limit=10 viewall=yes]\"}\n', NULL, '<i class=\"ti ti-shield-check fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2025-05-21 06:13:19', NULL),
+(27, 1, 27, 'Facts', 'Facts', '{\"facts\":\"[facts type=all limit=10 viewall=yes]\"}\n', NULL, '<i class=\"ti ti-bulb fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(29, 2, 29, 'Banner Theme Two', 'Banner Two', '{\"banner_two\":\"[banner]\"}', NULL, '<i class=\"ti ti-home fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2025-05-21 06:09:05', NULL),
+(30, 2, 30, 'Festured Category', 'Festured Category', '{\"category\":\"[category type=all limit=5 viewall=yes]\"}', NULL, '<i class=\"ti ti-category fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(31, 2, 31, 'Recommended Vehicle', 'Recommended Vehicle', '{\"feature_vehicle\":\"[vehicle type=featured limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-stars fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 04:45:33', NULL),
+(32, 2, 32, 'Popular Vehicle', 'Popular Vehicle', '{\"popular_vehicle\":\"[vehicle type=popular limit=10 viewall=no]\"}', NULL, '<i class=\"ti ti-trending-up fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 04:45:39', NULL),
+(33, 2, 33, 'Faq', 'Faq', '{\"faq\":\"[faq limit=10 viewall=yes order=asc]\"}', NULL, '<i class=\"ti ti-help-circle fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-12 22:41:02', NULL),
+(34, 2, 34, 'Testimonial', 'Testimonial', '{\"testimonial\":\"[testimonial limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-quote fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 07:41:02', NULL),
+(35, 2, 35, 'Blog', 'Blog', '{\"blog\":\"[blogs type=all limit=10 viewall=yes]\"}\r\n', NULL, '<i class=\"ti ti-notes fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
+(36, 2, 36, 'Ad Card', 'Ad Card', '{\"ad_card\":\"[ad_card type=all limit=10 viewall=yes]\"}\n', NULL, '<i class=\"ti ti-broadcast fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(37, 2, 37, 'Facts', 'Facts', '{\"facts\":\"[facts type=all limit=10 viewall=yes]\"}\r\n', NULL, '<i class=\"ti ti-bulb fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(38, 2, 38, 'Brands', 'Brands', '{\"brand\":\"[brand type=all limit=5 viewall=yes]\"}', NULL, '<i class=\"ti ti-car fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(39, 2, 39, 'Search Vehicle', 'Search Vehicle', '{\"search\":\"[search viewall=yes]\"}', NULL, '<i class=\"ti ti-search fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(40, 2, 40, 'All Category', 'All Category', '{\"category\":\"[all_category type=all limit=5 viewall=yes]\"}', NULL, '<i class=\"ti ti-category fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(41, 2, 41, 'Marquee', 'Marquee', '{\"marquee\":\"[marquee type=all limit=5 viewall=yes]\"}', NULL, '<i class=\"ti ti-tag fs-25\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(42, 2, 42, 'BesT Vehicle On all', 'Best Vehicle', '{\"best_vehicle\":\"[bestVehicle type=best_vehicle limit=10 viewall=no]\"}', '{\"vehicle_id\":\"60\",\"label_1\":\"iyiuyiu\",\"dis_1\":\"yiuyiuyiuyiu\",\"label_2\":\"yiuyiuyiuyiuy\",\"dis_2\":\"iuyiuyiuyiuyiu\",\"label_3\":\"yiuyiuyiuyiuyiu\",\"dis_3\":\"yiuyiuyiuyiuyiu\",\"label_4\":\"yiuyiuyiuyiuy\",\"dis_4\":\"iuyiuyiuyiuyiu\",\"label_5\":\"yiuyiuyiuyiuy\",\"dis_5\":\"iuyiuyiuyiuyiu\",\"label_6\":\"yiuyiuyiuyiuy\",\"dis_6\":\"iuyiuyiuyiuyiuyiuyi\"}', '<i class=\"ti ti-shield-check fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2025-05-21 06:13:10', NULL),
+(43, 3, 43, 'Banner Three Home', 'Banner Three', '{\"banner_three\":\"[banner]\"}', NULL, '<i class=\"ti ti-home fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2025-06-02 23:23:14', NULL),
+(44, 3, 2, 'Category', 'Category', '{\"category\":\"[bike_category type=all limit=5 viewall=yes]\"}', NULL, '<i class=\"ti ti-category fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(45, 3, 3, 'Recommended Bike', 'Recommended Bike', '{\"feature_bike\":\"[bike type=featured limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-stars fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 04:45:33', NULL),
+(46, 3, 4, 'Popular Bike', 'Popular Bike', '{\"popular_bike\":\"[bike type=popular limit=10 viewall=no]\"}', NULL, '<i class=\"ti ti-trending-up fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 04:45:39', NULL),
+(47, 3, 5, 'Bike', 'Bike', '{\"bike\":\"[bike type=all limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-bike fs-25\"></i>', 1, '2024-11-07 10:27:43', '2024-11-07 05:01:55', NULL),
+(48, 3, 11, 'Faq', 'Faq', '{\"bike_faq\":\"[bike_faq limit=10 viewall=yes order=asc]\"}', NULL, '<i class=\"ti ti-help-circle fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-12 22:41:02', NULL),
+(49, 3, 14, 'Testimonial', 'Testimonial', '{\"testimonial\":\"[testimonial limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-quote fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 07:41:02', NULL),
+(50, 3, 35, 'Blog', 'Blog', '{\"blog\":\"[blogs type=all limit=10 viewall=yes]\"}\r\n', NULL, '<i class=\"ti ti-notes fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
+(51, 3, 36, 'Ad Card', 'Ad Card', '{\"ad_card\":\"[ad_card type=all limit=10 viewall=yes]\"}\r\n', NULL, '<i class=\"ti ti-broadcast fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(52, 3, 38, 'Brands', 'Brands', '{\"brand\":\"[brand type=all limit=5 viewall=yes]\"}', NULL, '<i class=\"ti ti-tag fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(53, 3, 41, 'Marquee', 'Marquee', '{\"marquee\":\"[marquee type=all limit=5 viewall=yes]\"}', NULL, '<i class=\"fa fa-tags fs-25\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(54, 3, 15, 'How It Work', 'How It Work', '{\"how_it_work\":\"[how_it_work limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-settings-cog fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 22:32:42', NULL),
+(55, 3, 16, 'Location', 'Location', '{\"location\":\"[location type=all limit=10 viewall=yes]\"}\r\n', NULL, '<i class=\"fa fa-industry\"></i>', 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
+(56, 4, 56, 'Banner Four Home', 'Banner Four', '{\"banner_four\":\"[banner_four]\"}', NULL, '<i class=\"ti ti-home fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2025-06-03 01:11:07', NULL),
+(57, 4, 57, 'Category', 'Category', '{\"category\":\"[boat_category type=all limit=5 viewall=yes]\"}', NULL, '<i class=\"ti ti-category fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(58, 4, 58, 'Benefits Of Yachts', 'Benefits Of Yacht', '{\"benefit\":\"[yart_benefit type=all limit=5 viewall=yes]\"}', NULL, '<i class=\"ti ti-stars fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2025-06-03 03:04:19', NULL),
+(59, 4, 58, 'Boat Brand', 'Boat Brand', '{\"brand\":\"[brand type=all limit=5 viewall=yes]\"}', NULL, '<i class=\"ti ti-ship fs-25\"></i>', 1, '2024-11-06 11:52:16', '2025-06-03 03:04:19', NULL),
+(60, 4, 60, 'Popular Yachts', 'Popular Yachts', '{\"popular_yachts\":\"[yachts type=popular limit=10 viewall=no]\"}', NULL, '<i class=\"ti ti-trending-up fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 04:45:39', NULL),
+(61, 4, 61, 'How It Work', 'How It Work', '{\"how_it_work\":\"[how_it_work limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-settings-cog fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 22:32:42', NULL),
+(62, 4, 62, 'Location', 'Location', '{\"location\":\"[location type=all limit=10 viewall=yes]\"}\r\n', NULL, '<i class=\"ti ti-map-pin fs-25\"></i>', 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
+(63, 4, 63, 'Testimonial', 'Testimonial', '{\"testimonial\":\"[testimonial limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-quote fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 07:41:02', NULL),
+(64, 4, 64, 'Facts', 'Facts', '{\"facts\":\"[facts type=all limit=10 viewall=yes]\"}\r\n', NULL, '<i class=\"ti ti-shield-check fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(65, 4, 65, 'Faq And Facts', 'Faq And Facts', '{\"bike_faq\":\"[fact_faq limit=10 viewall=yes order=asc]\"}', NULL, '<i class=\"ti ti-help-circle fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-12 22:41:02', NULL),
+(66, 4, 66, 'Ad Card', 'Ad Card', '{\"ad_card\":\"[ad_card type=all limit=10 viewall=yes]\"}\r\n', NULL, '<i class=\"ti ti-broadcast fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-12-11 10:59:50', NULL),
+(67, 4, 67, 'Blog', 'Blog', '{\"blog\":\"[blogs type=all limit=10 viewall=yes]\"}\n', NULL, '<i class=\"ti ti-notes fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
+(68, 4, 68, 'Yacht Experience', 'Yacht Experience', '{\"yacht_experience\":\"[experience type=all limit=10 viewall=yes]\"}\n', NULL, '<i class=\"ti ti-wave-saw-tool fs-25\"></i>', 1, '2024-11-06 11:52:16', '2024-11-12 04:32:09', NULL),
+(69, 4, 3, 'Recommended Yachts', 'Recommended Yachts', '{\"recommended_yachts\":\"[yachts type=featured limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-anchor fs-25\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 04:45:33', NULL),
+(70, 3, 70, 'Top Rated Bikes', 'Top Rated Bikes', '{\"bike\":\"[bike type=top_rated limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-shield-check fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2024-11-07 04:45:33', NULL),
+(71, 3, 71, 'Theme Three AD Card', 'Ad Card Two', '{\"ad_card\":\"[second_card limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-bulb fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2025-06-04 04:15:16', NULL),
+(72, 4, 72, 'Theme Four AD Card', 'Theme Four AD Card', '{\"ad_card\":\"[seasonal_card limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-bulb fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2025-06-04 04:15:16', NULL),
+(73, 4, 73, 'Offer Card', 'Offer Card', '{\"ad_card\":\"[offer_card limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-tag fs-25 mb-2\"></i>', 1, '2024-11-06 11:52:16', '2025-06-04 04:15:16', NULL),
+(74, 4, 74, 'Exclusive Yacht', 'Exclusive Yacht', '{\"exclusive_yacht\":\"[exclusive_yacht limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-crown fs-25\"></i>', 1, '2024-11-06 11:52:16', '2025-06-04 04:15:16', NULL),
+(75, 3, 75, 'Exclusive Bike', 'Exclusive Bike', '{\"exclusive_bike\":\"[exclusive_bike limit=10 viewall=yes]\"}', NULL, '<i class=\"ti ti-award fs-25\"></i>', 1, '2024-11-06 11:52:16', '2025-06-04 04:15:16', NULL);
 
 -- --------------------------------------------------------
 
@@ -56435,7 +56443,7 @@ ALTER TABLE `driving_types`
 -- AUTO_INCREMENT for table `email_templates`
 --
 ALTER TABLE `email_templates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `enquiries`
@@ -56567,7 +56575,7 @@ ALTER TABLE `notification_tags`
 -- AUTO_INCREMENT for table `notification_types`
 --
 ALTER TABLE `notification_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `otp_settings`
@@ -56639,7 +56647,7 @@ ALTER TABLE `seat_types`
 -- AUTO_INCREMENT for table `sections`
 --
 ALTER TABLE `sections`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `section_datas`
