@@ -1545,12 +1545,61 @@ class PageController extends Controller
                         $limit = isset($matches[1]) ? (int)$matches[1] : 10;
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
-
-                        $how_it_works = DB::table('general_settings')->select('key', 'value')
+                        $how_it_works = DB::table('general_settings')
+                            ->select('key', 'value')
                             ->where(['group_id' => 15])
                             ->orderBy('created_at', $order)
                             ->limit($limit)
+                            ->get()
+                            ->map(function ($item) {
+                                $value = json_decode($item->value, true);
+
+                                if (!is_array($value)) {
+                                    $value = ['text' => $item->value];
+                                }
+
+                                // Assign default image initially
+                                $value['image'] = asset('backend/assets/img/default-placeholder-image.png');
+
+                                $item->value = $value;
+                                return $item;
+                            });
+
+                        // Now fetch image block
+                        $imageBlocks = DB::table('sections')
+                            ->join('section_datas', function ($join) use ($lang_id) {
+                                $join->on('sections.id', '=', 'section_datas.section_id')
+                                    ->where('section_datas.language_id', '=', $lang_id);
+                            })
+                            ->select('sections.id', 'section_datas.datas')
+                            ->where('sections.name', 'Ad Card one')
+                            ->orderBy('sections.id', $order)
+                            ->limit($limit)
                             ->get();
+
+                        // Decode image blocks
+                        $imageList = [];
+
+                        foreach ($imageBlocks as $block) {
+                            $data = json_decode($block->datas, true);
+                            if (is_array($data)) {
+                                foreach ($data as $key => $val) {
+                                    if (str_starts_with($key, 'thumbnail_image_') && !empty($val)) {
+                                        $imageUrl = Storage::disk('public')->exists(ltrim($val, '/'))
+                                            ? asset('storage/' . ltrim($val, '/'))
+                                            : asset('backend/assets/img/default-placeholder-image.png');
+                                        $imageList[] = $imageUrl;
+                                    }
+                                }
+                            }
+                        }
+
+                        // Inject images into $how_it_works items
+                        foreach ($how_it_works as $index => $item) {
+                            if (isset($imageList[$index])) {
+                                $item->value['image'] = $imageList[$index];
+                            }
+                        }
 
                         $section['section_type'] = 'ad_card_section';
                         $section['design'] = 'ad_card_section_one';
@@ -2937,11 +2986,39 @@ class PageController extends Controller
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
-                        $how_it_works = DB::table('general_settings')->select('key', 'value')
+                        $how_it_works = DB::table('general_settings')
+                            ->select('key', 'value')
                             ->where(['group_id' => 15])
                             ->orderBy('created_at', $order)
                             ->limit($limit)
-                            ->get();
+                            ->get()
+                            ->map(function ($item) {
+                                $value = json_decode($item->value, true);
+
+                                if (is_array($value)) {
+                                    // Handle structured value (assuming it may have an image path)
+                                    if (isset($value['image']) && !empty($value['image'])) {
+                                        if (Storage::disk('public')->exists(ltrim($value['image'], '/'))) {
+                                            $value['image'] = asset('storage/' . ltrim($value['image'], '/'));
+                                        } else {
+                                            $value['image'] = asset('backend/assets/img/default-placeholder-image.png');
+                                        }
+                                    } else {
+                                        $value['image'] = asset('backend/assets/img/default-placeholder-image.png');
+                                    }
+
+                                    $item->value = $value;
+                                } else {
+                                    // Handle simple value (fallback)
+                                    $item->value = [
+                                        'text' => $item->value,
+                                        'image' => asset('backend/assets/img/default-placeholder-image.png'),
+                                    ];
+                                }
+
+                                return $item;
+                            });
+
 
                         $section['section_type'] = 'ad_card_section';
                         $section['design'] = 'ad_card_section_one';

@@ -875,6 +875,31 @@
             </div>
         </div>
 
+           <div id="section_id_14" class="d-none">
+            <div class="row">
+                <!-- Title -->
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.title') }}</label>
+                        <input type="text" name="section_title_car_ad " id="section_title_car_ad" class="form-control"
+                            placeholder="{{ __('admin.cms.enter_section_title') }}">
+                        <div class="invalid-feedback" id="section_title_car_ad_error"></div>
+                    </div>
+                </div>
+
+                <!-- Label 1 -->
+                <div class="form-group col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label">{{ __('admin.cms.thumbnail_image') }} 1</label>
+                        <input type="file" name="thumbnail_image_car_ad" id="thumbnail_image_car_ad" class="form-control"
+                            accept="image/*" onchange="previewThumbnailExperience(this, 1)">
+                        <div class="invalid-feedback" id="thumbnail_image_car_ad_error"></div>
+                        <img src="{{ uploadedAsset('', 'default2') }}" id="thumbnail_preview_car_ad"
+                            class="mt-2 img-preview-thumb" alt="Image">
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
     </x-slot>

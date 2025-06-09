@@ -49,6 +49,7 @@ class SectionController extends Controller
             $data[] = array_merge([
                 'id' => $section->id,
                 'name' => $section->title,
+                'icon' => $section->icon,
                 'status' => $section->status,
             ], $decodedDatas);
 
@@ -88,7 +89,7 @@ class SectionController extends Controller
             ], 400);
         }
 
-        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three', 'Banner Four', 'Benefits Of Yacht', 'Yacht Experience', 'Ad Card Two', 'Theme Four AD Card', 'Offer Card', 'Exclusive Yacht', 'Exclusive Bike'];
+        $allowedNames = ['Banner One', 'Why Choose Us', 'Banner Two', 'Best Vehicle', 'Banner Three', 'Banner Four', 'Benefits Of Yacht', 'Yacht Experience', 'Ad Card Two', 'Theme Four AD Card', 'Offer Card', 'Exclusive Yacht', 'Exclusive Bike', 'Ad Card one'];
 
         $sections = $this->sectionRepository->getFilteredSections($orderBy, $sortBy, $allowedNames);
 
@@ -113,6 +114,10 @@ class SectionController extends Controller
 
             if (!empty($decodedDatas['thumbnail_image_boat_seasonal'])) {
                 $decodedDatas['thumbnail_image_boat_seasonal'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_boat_seasonal'];
+            }
+
+            if (!empty($decodedDatas['thumbnail_image_car_ad'])) {
+                $decodedDatas['thumbnail_image_car_ad'] = $baseUrl . '/' . $decodedDatas['thumbnail_image_car_ad'];
             }
 
             if (!empty($decodedDatas['thumbnail_image_boat_offer'])) {
@@ -371,6 +376,15 @@ class SectionController extends Controller
                     'thumbnail_image_boat_seasonal' => $thumbnailPath,
                 ];
             }
+        } elseif ($sectionId == 25) {
+            $thumbnailPath = $existingData['thumbnail_image_car_ad'] ?? null;
+            if ($request->hasFile('thumbnail_image_car_ad')) {
+                $thumbnailPath = uploadFile($request->file('thumbnail_image_car_ad'), 'general');
+
+                $data = [
+                    'thumbnail_image_car_ad' => $thumbnailPath,
+                ];
+            }
         } elseif ($sectionId == 73) {
             $thumbnailPath = $existingData['thumbnail_image_boat_offer'] ?? null;
             if ($request->hasFile('thumbnail_image_boat_offer')) {
@@ -436,6 +450,7 @@ class SectionController extends Controller
             73 => 'section_title_boat_offer',
             74 => 'section_title_boat_exclusive',
             75 => 'section_title_bike',
+            25 => 'section_title_car_ad',
         ];
 
         if (isset($titleFieldMap[$sectionId]) && $request->has($titleFieldMap[$sectionId])) {

@@ -22,5 +22,5 @@ class Section extends Model
 
     protected $table = "sections";
 
-    protected $fillable = ["name", "theme_id", "content", "status", "datas"];
+    protected $fillable = ["name", "theme_id", "content", "status", "datas", "icon"];
 }
