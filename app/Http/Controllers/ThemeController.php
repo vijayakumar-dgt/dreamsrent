@@ -184,7 +184,7 @@ class ThemeController extends Controller
                             $banner->description = $decodedData['description_two'] ?? null;
 
                             $relativePath = 'storage/' . ($decodedData['thumbnail_image_two'] ?? '');
-                            $defaultImage = asset('backend/assets/img/car/car-right.png');
+                            $defaultImage = asset('frontend/assets/img/placeholder/placeholder1.jpg');
                             $thumbnailKey = 'thumbnail_image_two';
 
                             $banner->thumbnail_image = (
@@ -240,7 +240,7 @@ class ThemeController extends Controller
                             $banner->description = $decodedData['description_three'] ?? null;
 
                             $relativePath = 'storage/' . ($decodedData['thumbnail_image_four'] ?? '');
-                            $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+                           $defaultImage = asset('frontend/assets/img/placeholder/placeholder1.jpg');
                             $thumbnailKey = 'thumbnail_image_four';
 
                             $banner->thumbnail_image = (
@@ -296,7 +296,7 @@ class ThemeController extends Controller
                             $banner->higlight_label = $decodedData['label_boat_two'] ?? null;
                             $banner->description = $decodedData['description_boat'] ?? null;
 
-                            $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+                            $defaultImage = asset('frontend/assets/img/placeholder/placeholder1.jpg');
                             $thumbnailImages = [];
 
                             if (!empty($decodedData['thumbnail_image_boat']) && is_array($decodedData['thumbnail_image_boat'])) {
@@ -436,7 +436,7 @@ class ThemeController extends Controller
                         $viewAll = $matches[2] ?? 'no';
                         $order = $matches[3] ?? 'asc';
 
-                        $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+                       $defaultImage = asset('frontend/assets/img/placeholder/placeholder3.jpg');
 
                         $locations = DB::table('locations')
                             ->select('id', 'name', 'image')
@@ -1386,7 +1386,7 @@ class ThemeController extends Controller
                             $data = json_decode($first->datas, true);
 
                             $items = [];
-                            $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+                           $defaultImage = asset('frontend/assets/img/placeholder/placeholder3.jpg');
 
                             $previewImage = $defaultImage;
                             if (!empty($data['thumbnail_image_bike_exclusive'])) {
@@ -1447,7 +1447,7 @@ class ThemeController extends Controller
                                 $data = json_decode($experience->datas, true);
 
                                 if (is_array($data)) {
-                                    $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+                                   $defaultImage = asset('frontend/assets/img/placeholder/placeholder3.jpg');
 
                                     foreach ($data as $key => $value) {
                                         if (str_starts_with($key, 'thumbnail_image_')) {
@@ -1503,7 +1503,7 @@ class ThemeController extends Controller
                                 $data = json_decode($experience->datas, true);
 
                                 if (is_array($data)) {
-                                    $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+                                   $defaultImage = asset('frontend/assets/img/placeholder/placeholder3.jpg');
 
                                     foreach ($data as $key => $value) {
                                         if (str_starts_with($key, 'thumbnail_image_')) {
@@ -1593,7 +1593,7 @@ class ThemeController extends Controller
                                 }
                             }
 
-                            $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+                           $defaultImage = asset('frontend/assets/img/placeholder/placeholder3.jpg');
 
                             $mainImage = $defaultImage;
 
@@ -1646,7 +1646,7 @@ class ThemeController extends Controller
 
                                 if (is_array($data)) {
                                     // Normalize image URLs
-                                    $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+                                   $defaultImage = asset('frontend/assets/img/placeholder/placeholder3.jpg');
 
                                     foreach ($data as $key => $value) {
                                         if (str_starts_with($key, 'thumbnail_image_')) {
@@ -1965,7 +1965,7 @@ class ThemeController extends Controller
                                 $experienceData = json_decode($experience->datas, true);
 
                                 if (is_array($experienceData)) {
-                                    $defaultImage = asset('backend/assets/img/default-placeholder-image.png');
+                                   $defaultImage = asset('frontend/assets/img/placeholder/placeholder3.jpg');
 
                                     foreach ($data as $key => $value) {
                                         if (str_starts_with($key, 'thumbnail_image_')) {
