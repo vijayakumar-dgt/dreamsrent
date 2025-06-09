@@ -1741,6 +1741,7 @@ class ThemeController extends Controller
                             ->limit((int) $limit)
                             ->where('language_id', $lang_id)
                             ->where('status', 1)
+                            ->orderByDesc('id')
                             ->whereNull('deleted_at')
                             ->get();
 
