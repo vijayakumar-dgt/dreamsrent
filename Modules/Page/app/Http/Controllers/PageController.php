@@ -2228,7 +2228,7 @@ class PageController extends Controller
                                 if ($profileImagePath) {
                                     $fullImagePath = storage_path('app/public/' . $profileImagePath);
                                     if (file_exists($fullImagePath)) {
-                                        $avatarImage = url('/storage/' . $profileImagePath);
+                                        $avatarImage = url('/storage/thumbnail' . $profileImagePath);
                                     }
                                 }
 

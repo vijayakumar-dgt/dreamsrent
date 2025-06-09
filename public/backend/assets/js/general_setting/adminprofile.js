@@ -20,17 +20,9 @@
                     const img = new Image();
                     img.src = e.target.result;
 
-                    img.onload = function () {
-                        if (img.width === 500 && img.height === 500) {
-                            preview.attr("src", e.target.result).show();
-                            $(".frames").removeClass("d-none");
-                        } else {
-                            showToast(
-                                "error",
-                                _l("admin.general_settings.image_dimension_must_be")  + " 500x500 pixels"
-                            );
-                            $("#profile_photo").val("");
-                        }
+                    img.onload = function () {                       
+                        preview.attr("src", e.target.result).show();
+                        $(".frames").removeClass("d-none");                       
                     };
                 };
 

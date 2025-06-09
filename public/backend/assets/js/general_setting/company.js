@@ -335,17 +335,9 @@
                 const img = new Image();
                 img.src = e.target.result;
 
-                img.onload = function () {
-                    if (img.width === 500 && img.height === 500) {
-                        preview.attr("src", e.target.result).show(); // Update preview
-                        $(".frames").removeClass("d-none"); // Show the image container
-                    } else {
-                        showToast(
-                            "error",
-                            _l("admin.general_settings.image_dimension_must_be") + " 500x500 pixels"
-                        );
-                        $("#company_profile_photo").val(""); // Reset file input
-                    }
+                img.onload = function () {                   
+                    preview.attr("src", e.target.result).show();
+                    $(".frames").removeClass("d-none");                    
                 };
             };
 
