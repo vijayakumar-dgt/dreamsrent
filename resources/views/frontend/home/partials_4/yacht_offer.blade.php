@@ -12,7 +12,7 @@
             <div class="yacht-owner-title">
                 <h3>{{ $section['section_title'] ?? "" }}</h3>
                 <p>{{ $section['section_label'] ?? "" }}</p>
-                <a href="{{ route('list') }}" class="btn btn-primary">View Yachts</a>
+                <a href="{{ route('list') }}" class="btn btn-primary">{{ __('web.home.view_all_yachts') }}</a>
             </div>
         </div>
     </div>
