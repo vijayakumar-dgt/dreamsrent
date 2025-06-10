@@ -92,11 +92,12 @@
             <p>{{ $section['section_label'] ?? "" }}</p>
         </div>
         @php
-            $yachtTypes = $section['section_content'] ?? [];
-            if(count($yachtTypes) == 10) {
-                $yachtTypes = array_slice($yachtTypes, 0, 10);
-            }elseif(count($yachtTypes) >= 5 && count($yachtTypes) < 10) {
-                $yachtTypes = array_slice($yachtTypes, 0, 5);
+            $yachtTypes = collect($section['section_content'] ?? []);
+                        
+            if ($yachtTypes->count() == 10) {
+                $yachtTypes = $yachtTypes->take(10);
+            } elseif ($yachtTypes->count() >= 5 && $yachtTypes->count() < 10) {
+                $yachtTypes = $yachtTypes->take(5);
             }
         @endphp
         <div class="row yacht-category-lists">
