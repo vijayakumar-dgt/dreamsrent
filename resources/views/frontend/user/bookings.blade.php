@@ -408,6 +408,7 @@
         </div>
     </div>
     <!-- /Custom Date Modal -->
+    @include('frontend.user.partials.add_review_modal')
     @endsection
     @push('scripts')
     <!-- Datatable JS -->

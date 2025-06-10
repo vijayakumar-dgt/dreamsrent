@@ -2,8 +2,141 @@
 "use strict";
 
 (async () => {
-    await loadTranslationFile('web', 'user,common');
+    await loadTranslationFile('web', 'user,common,home');
     fetchUserBookings();
+        
+    $("#reviewForm").validate({
+        rules: {
+            comments: {
+                required: true,
+                minlength: 3,
+            },
+        },
+        messages: {
+            comments: {
+                required: _l("web.home.comments_required"),
+                minlength: _l("web.home.comments_minlength"),
+            },
+        },
+        errorPlacement: function (error, element) {
+            if (element.hasClass("select2-hidden-accessible")) {
+                var errorId = element.attr("id") + "_error";
+                $("#" + errorId).text(error.text());
+            } else {
+                var errorId = element.attr("id") + "_error";
+                $("#" + errorId).text(error.text());
+            }
+        },
+        highlight: function (element) {
+            if ($(element).hasClass("select2-hidden-accessible")) {
+                $(element)
+                    .next(".select2-container")
+                    .addClass("is-invalid")
+                    .removeClass("is-valid");
+            }
+            $(element).addClass("is-invalid").removeClass("is-valid");
+        },
+        unhighlight: function (element) {
+            if ($(element).hasClass("select2-hidden-accessible")) {
+                $(element)
+                    .next(".select2-container")
+                    .removeClass("is-invalid")
+                    .addClass("is-valid");
+            }
+            $(element).removeClass("is-invalid").addClass("is-valid");
+            var errorId = element.id + "_error";
+            $("#" + errorId).text("");
+        },
+        onkeyup: function (element) {
+            $(element).valid();
+        },
+        onchange: function (element) {
+            $(element).valid();
+        },
+        submitHandler: function (form) {
+            let formData = new FormData();
+            formData.append("comments", $("#comments").val());
+            formData.append(
+                "service_ratings",
+                $('#service_ratings input[type="checkbox"]:checked').length
+            );
+            formData.append(
+                "location_ratings",
+                $('#location_ratings input[type="checkbox"]:checked').length
+            );
+            formData.append(
+                "facility_ratings",
+                $('#facility_ratings input[type="checkbox"]:checked').length
+            );
+            formData.append(
+                "value_for_money_ratings",
+                $('#value_for_money_ratings input[type="checkbox"]:checked')
+                    .length
+            );
+            formData.append(
+                "cleanliness_ratings",
+                $('#cleanliness_ratings input[type="checkbox"]:checked')
+                    .length
+            );
+            formData.append("vehicle_id", $("#reviewForm .vehicle_id").val());
+
+            $.ajax({
+                type: "POST",
+                url: "/user/add-review",
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    Accept: "application/json",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                beforeSend: function () {
+                    $(".submit-review").attr("disabled", true).html(`
+                        <span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> ${_l(
+                            "web.home.submitting"
+                        )}..
+                    `);
+                },
+                success: function (resp) {
+                    $(".error-text").text("");
+                    $(".form-control").removeClass("is-invalid is-valid");
+                    $(".submit-review")
+                        .removeAttr("disabled")
+                        .html(_l("web.home.submit_review"));
+                    $("#reviewForm")[0].reset();
+                    $(
+                        ".service_ratings, .location_ratings, .facility_ratings, .value_for_money_ratings, .cleanliness_ratings"
+                    ).prop("checked", false);
+
+                    if (resp.code === 200) {
+                        showToast("success", resp.message);
+                        $("#addReviewModal").modal("hide");
+                        fetchUserBookings();
+                    }
+                },
+                error: function (error) {
+                    $(".error-text").text("");
+                    $(".form-control").removeClass("is-invalid is-valid");
+                    $(".submit-review")
+                        .removeAttr("disabled")
+                        .html(_l("web.home.submit_review"));
+                    if (error.responseJSON.code === 422) {
+                        $.each(
+                            error.responseJSON.errors,
+                            function (key, val) {
+                                $("#" + key).addClass("is-invalid");
+                                $("#" + key + "_error").text(val[0]);
+                            }
+                        );
+                    } else {
+                        showToast("error", error.responseJSON.message);
+                    }
+                },
+            });
+        },
+    });
 })();
 
 const fetchUserBookings = (callback = null) => {
@@ -189,7 +322,9 @@ $(document).on("click", ".status_filter", function () {
 const createBookingCard = (booking) => {
     let drivingType = (booking.driving_type ?? "").replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
     let statusLabel = formatStatusLabel(booking.status);
-
+    let addReviewButton = `<a class="dropdown-item add_review" href="javascript:void(0);" data-vehicle_id="${booking.vehicle_id}">
+                            <i class="feather-plus"></i> ${_l("web.user.add_review")}
+                        </a>`;  
     return `<tr>
     <td><a href="javascript:void(${booking.id});" class="view_booking" data-id="${booking.id}">#${booking.reservation_id}</a></td>
     <td>
@@ -218,6 +353,7 @@ const createBookingCard = (booking) => {
             <a class="dropdown-item view_booking" href="javascript:void(0);" data-id="${booking.id}">
             <i class="feather-eye"></i> ${_l("web.common.view")}
             </a>
+            ${booking.status == 5 && booking.review_added === false ? addReviewButton : ""}
             <a class="dropdown-item" href="javascript:void(0);" id="delete_booking" data-id="${booking.id}" data-bs-toggle="modal" data-bs-target="#delete_modal">
             <i class="feather-trash-2"></i> ${_l("web.common.delete")}
             </a>
@@ -479,6 +615,45 @@ $(document).on('click', '.sort-filter', e => {
 
 // Spinner HTML Helper
 const spinnerHTML = () => `<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span>`;
+
+ $(".service_ratings").on("click", function () {
+    let selectedValue = $(this).val();
+    $(".service_ratings").each(function () {
+        $(this).prop("checked", $(this).val() >= selectedValue);
+    });
+});
+$(".location_ratings").on("click", function () {
+    let selectedValue = $(this).val();
+    $(".location_ratings").each(function () {
+        $(this).prop("checked", $(this).val() >= selectedValue);
+    });
+});
+$(".facility_ratings").on("click", function () {
+    let selectedValue = $(this).val();
+    $(".facility_ratings").each(function () {
+        $(this).prop("checked", $(this).val() >= selectedValue);
+    });
+});
+$(".value_for_money_ratings").on("click", function () {
+    let selectedValue = $(this).val();
+    $(".value_for_money_ratings").each(function () {
+        $(this).prop("checked", $(this).val() >= selectedValue);
+    });
+});
+$(".cleanliness_ratings").on("click", function () {
+    let selectedValue = $(this).val();
+    $(".cleanliness_ratings").each(function () {
+        $(this).prop("checked", $(this).val() >= selectedValue);
+    });
+});
+
+$(document).on('click', '.add_review', e => {
+    let vehicle_id = $(e.currentTarget).data('vehicle_id');
+    console.log(vehicle_id);
+    
+    $("#reviewForm .vehicle_id").val(vehicle_id);
+    $("#addReviewModal").modal("show");
+});
 
 })(jQuery);
 

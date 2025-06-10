@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Booking\Models\Booking;
@@ -28,6 +29,7 @@ class UserBookings extends JsonResource
         }
         return [
             'id' => $resource->id,
+            'vehicle_id' => $resource->vehicle_id,
             'reservation_id' => $resource->reservation_id,
             'vehicle_name' => $resource->vehicle ? $resource->vehicle->name : '',
             'vehicle_image' => $resource->vehicle ? uploadedAsset($resource->vehicle->vehicle_image)
@@ -57,7 +59,8 @@ class UserBookings extends JsonResource
             'no_of_passengers' => $resource->no_of_passengers,
             'customer' => $resource->customer ? $resource->customer : null,
             'customer_detail' => $resource->customerDetail ? $resource->customerDetail : null,
-            'booking_user_info' => $resource->userInfo ? $resource->userInfo : null
+            'booking_user_info' => $resource->userInfo ? $resource->userInfo : null,
+            'review_added' => $this->reviewAdded($resource->vehicle_id),
         ];
     }
 
@@ -88,5 +91,15 @@ class UserBookings extends JsonResource
         }
 
         return "";
+    }
+
+    public function reviewAdded($vehicle_id)
+    {
+       $authUser = current_user();
+       $review = Review::where('vehicle_id', $vehicle_id)->where('user_id', $authUser->id)->first();
+       if($review){
+           return true;
+       }
+       return false;
     }
 }
