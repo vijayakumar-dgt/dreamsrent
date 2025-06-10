@@ -803,6 +803,7 @@ return array (
     'phone_number_required' => 'رقم الهاتف مطلوب.',
     'enter_subject' => 'أدخل الموضوع',
     'subject_required' => 'الموضوع مطلوب',
+    'add_review' => 'اضافة مراجعة',
   ),
   'blog' =>
   array (

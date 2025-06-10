@@ -93,7 +93,7 @@
                     <!-- Default Checkbox -->
                     <div class="mb-3">
                         <label class="form-check-label form-label" for="is_default">
-                            <input class="form-check-input form-label" type="checkbox" id="is_default" name="is_default" value="0">
+                            <input class="form-check-input form-label" type="checkbox" id="is_default" name="is_default" value="1">
                             {{ __('admin.general_settings.mark_as_default') }}
                         </label>
                         <span id="is_default_error" class="text-danger error-text"></span>

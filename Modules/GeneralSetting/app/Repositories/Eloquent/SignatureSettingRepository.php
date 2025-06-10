@@ -33,15 +33,17 @@ class SignatureSettingRepository implements SignatureSettingInterface
     {
         $imagePath = $image ? $this->uploadSignatureImage($image) : null;
 
-        if (!empty($data['is_default'])) {
+        if (isset($data['is_default']) && $data['is_default'] == 1) {
             $this->resetDefaultSignature();
         }
+
+        $isDefault = (isset($data['is_default']) && $data['is_default'] == 1) ? 1 : 0;
 
         return SignatureSetting::create([
             'signature_name' => $data['signature_name'],
             'signature_image' => $imagePath,
             'status' => 1,
-            'is_default' => !empty($data['is_default']) ? 1 : 0,
+            'is_default' => $isDefault,
         ]);
     }
 
