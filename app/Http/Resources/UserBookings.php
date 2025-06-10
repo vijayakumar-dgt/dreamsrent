@@ -95,11 +95,11 @@ class UserBookings extends JsonResource
 
     public function reviewAdded($vehicle_id)
     {
-       $authUser = current_user();
-       $review = Review::where('vehicle_id', $vehicle_id)->where('user_id', $authUser->id)->first();
-       if($review){
-           return true;
-       }
-       return false;
+        $authUser = current_user();
+        $review = Review::where('vehicle_id', $vehicle_id)->where('user_id', $authUser->id)->first();
+        if ($review) {
+            return true;
+        }
+        return false;
     }
 }

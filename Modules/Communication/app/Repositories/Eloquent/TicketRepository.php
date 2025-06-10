@@ -42,7 +42,7 @@ class TicketRepository implements TicketInterface
     {
         return Ticket::with([
             'user:id,name,email',
-            'user.userDetail:id,user_id,first_name,last_name,profile_image',           
+            'user.userDetail:id,user_id,first_name,last_name,profile_image',
             'assignee:id,name,email',
             'assignee.userDetail:id,user_id,first_name,last_name,profile_image',
             'ticketHistories:id,ticket_id,user_id,description,created_by,updated_by,created_at',
@@ -55,7 +55,7 @@ class TicketRepository implements TicketInterface
     {
         $query = Ticket::with([
             'user:id,name,email',
-            'user.userDetail:id,user_id,first_name,last_name,profile_image',            
+            'user.userDetail:id,user_id,first_name,last_name,profile_image',
             'assignee:id,name,email',
             'assignee.userDetail:id,user_id,first_name,last_name,profile_image',
             'ticketHistories:id,ticket_id,user_id,description,created_by,updated_by,created_at',
