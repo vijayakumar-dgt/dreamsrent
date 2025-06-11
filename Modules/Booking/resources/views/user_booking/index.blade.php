@@ -449,7 +449,7 @@
                                 <div class="booking-info-body insuranceCardContiner">
                                     @if($vehicleInsurance->isNotEmpty())
                                     @foreach($vehicleInsurance as $insurance)
-                                    <div class="insurance-select" data-insurance-id="{{ $insurance->insurances_id }}">
+                                    <div class="insurance-select cursor-pointer" data-insurance-id="{{ $insurance->insurances_id }}">
                                         <div class="insurance-info">
                                             <p class="fs-14 insurance-name d-inline-flex align-items-center mb-1">
                                                 {{ $insurance->insurance_name }}
