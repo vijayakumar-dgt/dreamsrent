@@ -2390,6 +2390,14 @@ class PageController extends Controller
             ->where('status', 1)->get();
         $locations = Location::select('name', 'id')->where('status', 1)->where('language_id', $language_id)->get();
         $totalReviews = Review::count();
+        $page = Page::where('slug', $slug)->where('theme_id', $themeId)->where('language_id', $lang_id)->first();
+        if (!$page) {
+            $basePage = Page::where('slug', $slug)->whereNull('parent_id')->first();
+
+            if ($basePage) {
+                $page = Page::where('parent_id', $basePage->id)->where('language_id', $lang_id)->where('theme_id', $themeId)->first();
+            }
+        }
         if ($page) {
             $data = [
                 'page_title' => $page->page_title,
