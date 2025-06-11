@@ -191,7 +191,7 @@
                                         </div>
                                         <div class="featues-info">
                                             <span>{{ __('web.home.vin') }} </span>
-                                            <h6 id="vin"> 45456444</h6>
+                                            <h6 id="vin"> </h6>
                                         </div>
                                     </div>
                                     <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
