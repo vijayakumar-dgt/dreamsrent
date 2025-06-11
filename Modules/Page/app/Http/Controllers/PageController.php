@@ -189,7 +189,7 @@ class PageController extends Controller
             'seo_tag' => $request->meta_key,
             'seo_title' => $request->mete_title,
             'seo_description' => $request->meta_description,
-            'keywords' => $request->keyword,
+            'keywords' => $request->meta_key,
             'canonical_url' => $request->canonical_url,
             'og_title' => $request->og_title,
             'og_description' => $request->og_description,
@@ -216,7 +216,7 @@ class PageController extends Controller
     {
         $sections = $this->prepareSections($request);
         $slug = Str::slug($request->slug);
-
+      
         $data = [
             'page_title' => $request->title,
             'parent_id' => $request->parent_id,
@@ -224,13 +224,12 @@ class PageController extends Controller
             'seo_tag' => $request->meta_key,
             'seo_title' => $request->mete_title,
             'seo_description' => $request->meta_description,
-            'keywords' => $request->keyword,
+            'keywords' => $request->meta_key,
             'canonical_url' => $request->canonical_url,
             'og_title' => $request->og_title,
             'og_description' => $request->og_description,
             'status' => 1,
         ];
-
         if ($request->read !== 'static') {
             $data['slug'] = $slug;
         }
