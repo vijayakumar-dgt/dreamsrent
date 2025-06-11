@@ -449,6 +449,10 @@ return [
         'years_of' => 'Years of',
         'experience' => 'Experience',
         'count_of_yachts' => 'Count of Yachts',
+        'bike' => 'Bike',
+        'car'  => 'Car',
+        'yacht' => 'Yacht',
+        'car_theme' => 'Car Theme',
     ],
     'common' => [
         'updated_on' => 'Updated On',

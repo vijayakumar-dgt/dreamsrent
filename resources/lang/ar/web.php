@@ -448,6 +448,10 @@ return array (
     'years_of' => 'سنوات من',
     'experience' => 'الخبرة',
     'count_of_yachts' => 'عدد اليخوت',
+    'bike' => 'دراجة',
+    'car'  => 'سيارة',
+    'yacht' => 'يخت',
+    'car_theme' => 'سيارة',
   ),
   'common' =>
   array (
