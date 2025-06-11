@@ -81,7 +81,6 @@ class ThemeController extends Controller
             return response()->json(["status" => "error", "message" =>  __('Slug must be specified')]);
         }
         $page = Page::where('slug', $slug)->where('theme_id', $themeId)->where('language_id', $lang_id)->first();
-
         if (!$page) {
             $basePage = Page::where('slug', $slug)->whereNull('parent_id')->first();
 
@@ -2203,6 +2202,14 @@ class ThemeController extends Controller
             'smallLogo' => $smallLogo,
             'language_switcher' => $language_switcher
         ];
+        $page = Page::where('slug', $slug)->where('theme_id', $themeId)->where('language_id', $lang_id)->first();
+        if (!$page) {
+            $basePage = Page::where('slug', $slug)->whereNull('parent_id')->first();
+
+            if ($basePage) {
+                $page = Page::where('parent_id', $basePage->id)->where('language_id', $lang_id)->where('theme_id', $themeId)->first();
+            }
+        }
         if ($page) {
             $data = [
                 'page_title' => $page->page_title,
@@ -2220,7 +2227,6 @@ class ThemeController extends Controller
                 'locations' => $locations,
                 'total_reviews' => $totalReviews
             ];
-
             $seo_title = $page->seo_title;
             $seo_description = $page->seo_description;
             $og_title = $page->og_title;
