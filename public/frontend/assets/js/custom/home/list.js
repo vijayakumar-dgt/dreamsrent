@@ -61,11 +61,14 @@
         returndate = formatDate(returndate);
         let pickupdatetime = pickupdate + " " + pickuptime;
         let returndatetime = returndate + " " + returntime;
-        if(viewType === "grid"){
-            $(".grid_loader_div").removeClass('d-none');
-        }else{
-            $(".list_loader_div").removeClass('d-none');
+       if (viewType === "grid") {
+            $("#grid-loader-wrapper").removeClass('d-none');
+            $("#list-loader-wrapper").addClass('d-none');
+        } else {
+            $("#list-loader-wrapper").removeClass('d-none');
+            $("#grid-loader-wrapper").addClass('d-none');
         }
+
         $(".listCardDiv").addClass('d-none');
         sort_by = $("#sortBy").val();
         rental_type = $("input[name=rental_type]:checked").val();
@@ -128,8 +131,8 @@
             },
             complete: function(){
                 setTimeout(function(){
-                    $(".grid_loader_div").addClass('d-none');
-                    $(".list_loader_div").addClass('d-none');
+                    $("#grid-loader-wrapper").addClass('d-none');
+                    $("#list-loader-wrapper").addClass('d-none');
                     $(".listCardDiv").removeClass('d-none');
                 },500);
             }
