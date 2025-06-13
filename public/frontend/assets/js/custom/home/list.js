@@ -61,14 +61,15 @@
         returndate = formatDate(returndate);
         let pickupdatetime = pickupdate + " " + pickuptime;
         let returndatetime = returndate + " " + returntime;
-       if (viewType === "grid") {
-            $("#grid-loader-wrapper").removeClass('d-none');
-            $("#list-loader-wrapper").addClass('d-none');
-        } else {
-            $("#list-loader-wrapper").removeClass('d-none');
-            $("#grid-loader-wrapper").addClass('d-none');
-        }
+        let loaderHtml = $("#global-loader").html();
 
+        if (viewType === "grid") {
+            $("#grid-loader-wrapper").removeClass('d-none').html(loaderHtml);
+            $("#list-loader-wrapper").addClass('d-none').empty();
+        } else {
+            $("#list-loader-wrapper").removeClass('d-none').html(loaderHtml);
+            $("#grid-loader-wrapper").addClass('d-none').empty();
+        }
         $(".listCardDiv").addClass('d-none');
         sort_by = $("#sortBy").val();
         rental_type = $("input[name=rental_type]:checked").val();
