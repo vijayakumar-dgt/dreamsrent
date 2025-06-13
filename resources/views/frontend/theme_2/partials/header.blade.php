@@ -56,8 +56,9 @@
                                         $isFullUrl = filter_var($rawLink, FILTER_VALIDATE_URL);
                                         $menuLink = $isFullUrl ? rtrim($rawLink, '/') : rtrim(url($rawLink), '/');
                                         $currentUrl = rtrim(Request::url(), '/');
-                                        $active = '';
+                                        $isHome = $rawLink === '/';
 
+                                        $active = '';
                                         if (
                                             $currentUrl === $menuLink ||
                                             (Str::contains($menuLink, 'vehicles') && Str::contains($currentUrl, 'vehicle-details')) ||
@@ -65,20 +66,23 @@
                                         ) {
                                             $active = 'active';
                                         }
+
+                                        if ($isHome && request()->routeIs(['home', 'theme'])) {
+                                            $active = 'active';
+                                        }
                                     @endphp
-                                    <li class="{{ $active }}">
-                                        @if($rawLink == '/')
-                                        <li class="has-submenu {{ request()->routeIs(['home', 'theme']) ? 'active' : '' }}">
-                                            <a href="javascript:void(0);">{{ __('web.home.home') }}</a>
+
+                                    <li class="{{ $isHome ? 'has-submenu' : '' }} {{ $active }}">
+                                        @if ($isHome)
+                                            <a href="javascript:void(0);">{{ __('web.home.home') }} <i class="fas fa-chevron-down"></i></a>
                                             <ul class="submenu">
                                                 <li><a href="{{ url('/theme/home-01') }}">{{ __('web.home.car_theme') }} 1</a></li>
                                                 <li><a href="{{ url('/theme/home-02') }}">{{ __('web.home.car_theme') }} 2</a></li>
                                                 <li><a href="{{ url('/theme/home-03') }}">{{ __('web.home.bike') }}</a></li>
                                                 <li><a href="{{ url('/theme/home-04') }}">{{ __('web.home.yacht') }}</a></li>
                                             </ul>
-                                        </li>
                                         @else
-                                        <a href="{{ $menuLink }}">{{ $menu['label'] }}</a>
+                                            <a href="{{ $menuLink }}">{{ $menu['label'] }}</a>
                                         @endif
                                     </li>
                                 @endforeach
@@ -99,6 +103,7 @@
                         </li>
                     @endif
                 </ul>
+
             </div>
             <ul class="nav header-navbar-rht">
                 @if(!empty($language_switcher) && $language_switcher == 1)
