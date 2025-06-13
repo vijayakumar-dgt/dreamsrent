@@ -153,12 +153,14 @@
         <div class="container">
             <div class="row">
                 @include('frontend.home.list.filter')
-                <div class="col-lg-9 grid_loader_div position-relative">
+                <div id="grid-loader-wrapper" class="col-lg-9 grid_loader_div position-relative">
                     @include('frontend.content-loader')
                 </div>
-                <div class="col-lg-8 col-sm-12 col-12 d-none list_loader_div position-relative">
-                    @include('frontend.content-loader') 
+
+                <div id="list-loader-wrapper" class="col-lg-8 col-sm-12 col-12 d-none list_loader_div position-relative">
+                    @include('frontend.content-loader')
                 </div>
+
                 <div class="col-lg-9 listCardDiv position-relative d-none">
                     <div class="row">
                     </div>
