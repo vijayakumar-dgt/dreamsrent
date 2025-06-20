@@ -19,7 +19,7 @@
                                 <div class="review-profile">
                                     <div class="review-img">
                                         <img src="{{ $testimonial->image }}" class="img-fluid"
-                                            alt="{{ $testimonial->customer_name }}">
+                                            alt="" role="presentation">
                                     </div>
                                 </div>
                                 <div class="review-details">

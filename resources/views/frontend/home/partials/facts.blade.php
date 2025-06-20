@@ -21,7 +21,7 @@
                                 <div class="count-group flex-fill">
                                     <div class="customer-count d-flex align-items-center">
                                         <div class="count-img">
-                                            <img src="{{ asset('frontend/assets/img/icons/bx-heart.svg') }}" alt="Icon">
+                                            <img src="{{ asset('frontend/assets/img/icons/bx-heart.svg') }}" alt="{{ $fact['value'] }} {{ __('web.home.happy_customers') }}">
                                         </div>
                                         <div class="count-content">
                                             <h4><span class="counterUp">{{ $fact['value'] }}</span>+</h4>
@@ -36,7 +36,7 @@
                                 <div class="count-group flex-fill">
                                     <div class="customer-count d-flex align-items-center">
                                         <div class="count-img">
-                                            <img src="{{ asset('frontend/assets/img/icons/bx-car.svg') }}" alt="Icon">
+                                            <img src="{{ asset('frontend/assets/img/icons/bx-car.svg') }}" alt="{{ $fact['value'] }} {{ __('web.home.vehicle_count') }}">
                                         </div>
                                         <div class="count-content">
                                             <h4><span class="counterUp">{{ $fact['value'] }}</span>+</h4>
@@ -51,7 +51,7 @@
                                 <div class="count-group flex-fill">
                                     <div class="customer-count d-flex align-items-center">
                                         <div class="count-img">
-                                            <img src="{{ asset('frontend/assets/img/icons/bx-headphone.svg') }}" alt="Icon">
+                                            <img src="{{ asset('frontend/assets/img/icons/bx-headphone.svg') }}" alt="{{ $fact['value'] }} {{ __('web.home.vehicle_center') }}">
                                         </div>
                                         <div class="count-content">
                                             <h4><span class="counterUp">{{ $fact['value'] }}</span>+</h4>
@@ -66,7 +66,7 @@
                                 <div class="count-group flex-fill">
                                     <div class="customer-count d-flex align-items-center">
                                         <div class="count-img">
-                                            <img src="{{ asset('frontend/assets/img/icons/bx-history.svg') }}" alt="Icon">
+                                            <img src="{{ asset('frontend/assets/img/icons/bx-history.svg') }}" alt="{{ $fact['value'] }} {{ __('web.home.total_km') }}">
                                         </div>
                                         <div class="count-content">
                                             <h4><span class="counterUp">{{ $fact['value'] }}</span>+</h4>

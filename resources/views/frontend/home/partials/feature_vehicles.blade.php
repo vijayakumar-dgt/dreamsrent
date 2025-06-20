@@ -18,7 +18,7 @@
                                 <div class="listing-img">
                                     <a href="{{route('vehicleDetails', $vehicle['slug']) }}">
                                         <img src="{{ $vehicle['vehicle_image'] }}" class="img-fluid"
-                                            alt="{{ ucfirst($vehicle['name']) }}">
+                                            alt="{{ ucfirst($vehicle['name']) }} - Vehicle Image">
                                     </a>
                                     <div class="fav-item justify-content-end">
                                         @if(Auth::guard('web')->check())
@@ -65,34 +65,34 @@
                                         <ul>
                                             <li>
                                                 <span><img src="{{ asset('frontend/assets/img/icons/car-parts-01.svg') }}"
-                                                        alt="{{ ucfirst($vehicle['transmission'] ?? '') }}"></span>
+                                                        alt="{{ ucfirst($vehicle['transmission'] ?? '') }} Transmission Icon"></span>
                                                 <p>{{ ucfirst($vehicle['transmission'] ?? "")}}</p>
                                             </li>
                                             <li>
                                                 <span><img src="{{ asset('frontend/assets/img/icons/car-parts-02.svg') }}"
-                                                        alt="{{ $vehicle['mileage'] ? round($vehicle['mileage']) : '' }} KM"></span>
+                                                        alt="Mileage: {{ $vehicle['mileage'] ? round($vehicle['mileage']) . ' KM' : 'Not available' }}"></span>
                                                 <p>{{ $vehicle['mileage'] ? round($vehicle['mileage']) : "" }} KM</p>
                                             </li>
                                             <li>
                                                 <span><img src="{{ asset('frontend/assets/img/icons/car-parts-03.svg') }}"
-                                                        alt="{{ $vehicle['fuel_type'] ? ucfirst($vehicle['fuel_type']) : '' }}"></span>
+                                                        alt="{{ $vehicle['fuel_type'] ? ucfirst($vehicle['fuel_type']) : '' }} Fuel Type"></span>
                                                 <p>{{ $vehicle['fuel_type'] ? ucfirst($vehicle['fuel_type']) : ""}}</p>
                                             </li>
                                         </ul>
                                         <ul>
                                             <li>
                                                 <span><img src="{{ asset('frontend/assets/img/icons/door-icon.svg') }}"
-                                                        alt="Power"></span>
+                                                        alt="{{ $vehicle['num_doors'] ?? '' }} Doors"></span>
                                                 <p>{{ $vehicle['num_doors'] ?? ""}}</p>
                                             </li>
                                             <li>
                                                 <span><img src="{{ asset('frontend/assets/img/icons/car-parts-05.svg') }}"
-                                                        alt="{{ $vehicle['year'] ?? '' }}"></span>
+                                                        alt="Build Year {{ $vehicle['year'] ?? '' }}"></span>
                                                 <p>{{ $vehicle['year']}}</p>
                                             </li>
                                             <li>
                                                 <span><img src="{{ asset('frontend/assets/img/icons/car-parts-06.svg') }}"
-                                                        alt="{{ __('web.home.persons') }}"></span>
+                                                        alt="Persons: {{ __('web.home.persons') }}"></span>
                                                 <p>{{ $vehicle['passenger_capacity'] ?? 0 }} {{ __('web.home.persons') }}</p>
                                             </li>
                                         </ul>

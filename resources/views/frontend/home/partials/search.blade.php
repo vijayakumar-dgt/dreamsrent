@@ -6,7 +6,7 @@
                         <ul class="align-items-center">
                             <li class="column-group-main position-relative">
                                 <div class="input-block">
-                                    <label>{{ __('web.home.pickup_location') }}</label>
+                                    <label for="pickuplocation">{{ __('web.home.pickup_location') }}</label>
                                     <div class="group-img position-relative">
                                         <input type="text" name="pickuplocation" id="pickup-location-input" autocomplete="off" class="form-control" placeholder="{{ __('web.home.location_place_holder') }}">
                                         <span><i class="feather-map-pin"></i></span>
@@ -16,7 +16,7 @@
                             </li>
                             <li class="column-group-main">
                                 <div class="input-block">
-                                    <label>{{ __('web.home.pickup_date') }}</label>
+                                    <label for="pickupdate">{{ __('web.home.pickup_date') }}</label>
                                 </div>
                                 <div class="input-block-wrapp">
                                     <div class="input-block date-widget">
@@ -35,7 +35,7 @@
                             </li>
                             <li class="column-group-main">
                                 <div class="input-block">
-                                    <label>{{ __('web.home.return_date') }}</label>
+                                    <label for="returndate">{{ __('web.home.return_date') }}</label>
                                 </div>
                                 <div class="input-block-wrapp">
                                     <div class="input-block date-widge">

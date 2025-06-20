@@ -2,7 +2,7 @@
 <html lang="{{ app()->getLocale() }}">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{{ isset($seo_title) ? $seo_title : config('app.name') }}</title>
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<meta name="description" content="{{ isset($seo_description) ? $seo_description : config('app.name') }}">
