@@ -14,7 +14,7 @@
                         </div>
                         <div class="col-lg-6" data-aos="fade-down">
                             <div class="banner-imgs">
-                                <img src="{{ $section['section_content'][0]->thumbnail_image }}" class="img-fluid aos" alt="bannerimage">							
+                                <img src="{{ $section['section_content'][0]->thumbnail_image }}" class="img-fluid aos" alt="" role="presentation">							
                             </div>
                         </div>
                     </div>

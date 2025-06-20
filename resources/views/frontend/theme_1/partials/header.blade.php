@@ -72,19 +72,46 @@
                                         }
                                     @endphp
 
-                                    <li class="{{ $isHome ? 'has-submenu' : '' }} {{ $active }}">
+                                   <li class="{{ $isHome ? 'has-submenu' : '' }} {{ $active }}">
                                         @if ($isHome)
-                                            <a href="javascript:void(0);">{{ __('web.home.home') }} <i class="fas fa-chevron-down"></i></a>
-                                            <ul class="submenu">
-                                                <li><a href="{{ url('/theme/home-01') }}">{{ __('web.home.car_theme') }} 1</a></li>
-                                                <li><a href="{{ url('/theme/home-02') }}">{{ __('web.home.car_theme') }} 2</a></li>
-                                                <li><a href="{{ url('/theme/home-03') }}">{{ __('web.home.bike') }}</a></li>
-                                                <li><a href="{{ url('/theme/home-04') }}">{{ __('web.home.yacht') }}</a></li>
+                                            <a href="javascript:void(0);"
+                                            aria-haspopup="true"
+                                            aria-expanded="false"
+                                            aria-controls="home-submenu"
+                                            id="home-menu">
+                                                {{ __('web.home.home') }}
+                                                <i class="fas fa-chevron-down"></i>
+                                            </a>
+
+                                            <ul class="submenu" role="menu" id="home-submenu" aria-labelledby="home-menu">
+                                                <li role="none">
+                                                    <a role="menuitem" href="{{ url('/theme/home-01') }}">
+                                                        {{ __('web.home.car_theme') }} 1
+                                                    </a>
+                                                </li>
+                                                <li role="none">
+                                                    <a role="menuitem" href="{{ url('/theme/home-02') }}">
+                                                        {{ __('web.home.car_theme') }} 2
+                                                    </a>
+                                                </li>
+                                                <li role="none">
+                                                    <a role="menuitem" href="{{ url('/theme/home-03') }}">
+                                                        {{ __('web.home.bike') }}
+                                                    </a>
+                                                </li>
+                                                <li role="none">
+                                                    <a role="menuitem" href="{{ url('/theme/home-04') }}">
+                                                        {{ __('web.home.yacht') }}
+                                                    </a>
+                                                </li>
                                             </ul>
                                         @else
-                                            <a href="{{ $menuLink }}">{{ $menu['label'] }}</a>
+                                            <a href="{{ $menuLink }}">
+                                                {{ $menu['label'] }}
+                                            </a>
                                         @endif
                                     </li>
+
                                 @endforeach
                             @endif
                         @endforeach
@@ -140,7 +167,7 @@
                     <li class="nav-item dropdown logged-item noti-nav noti-wrapper">
                         <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                             <span class="bell-icon">
-                                <img src="{{ asset('frontend/assets/img/icons/bell-icon.svg') }}" alt="Bell">
+                                <img src="{{ asset('frontend/assets/img/icons/bell-icon.svg') }}" alt="" role="presentation">
                             </span>
                             <span class="badge badge-pill d-none" id="newNotificationBadge"></span>
                         </a>

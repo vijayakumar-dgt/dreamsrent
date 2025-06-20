@@ -86,10 +86,10 @@
                             <div class="copyright-menu">
                                 <div class="vistors-details">
                                     <ul class="d-flex">
-                                        <li><a href="javascript:void(0)"><img class="img-fluid" src="{{ asset('frontend/assets/img/icons/paypal.svg') }}" alt="Paypal"></a></li>
-                                        <li><a href="javascript:void(0)"><img class="img-fluid" src="{{ asset('frontend/assets/img/icons/visa.svg') }}" alt="Visa"></a></li>
-                                        <li><a href="javascript:void(0)"><img class="img-fluid" src="{{ asset('frontend/assets/img/icons/master.svg') }}" alt="Master"></a></li>
-                                        <li><a href="javascript:void(0)"><img class="img-fluid" src="{{ asset('frontend/assets/img/icons/applegpay.svg') }}" alt="applegpay"></a></li>
+                                        <li><a href="javascript:void(0)"><img class="img-fluid" src="{{ asset('frontend/assets/img/icons/paypal.svg') }}" alt="" role="presentation"></a></li>
+                                        <li><a href="javascript:void(0)"><img class="img-fluid" src="{{ asset('frontend/assets/img/icons/visa.svg') }}" alt="" role="presentation"></a></li>
+                                        <li><a href="javascript:void(0)"><img class="img-fluid" src="{{ asset('frontend/assets/img/icons/master.svg') }}" alt="" role="presentation"></a></li>
+                                        <li><a href="javascript:void(0)"><img class="img-fluid" src="{{ asset('frontend/assets/img/icons/applegpay.svg') }}" alt="" role="presentation"></a></li>
                                     </ul>
                                 </div>
                             </div>

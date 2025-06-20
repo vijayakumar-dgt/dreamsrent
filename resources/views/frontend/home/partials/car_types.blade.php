@@ -14,7 +14,7 @@
                         <div class="listing-owl-item">
                             <div class="listing-owl-group">
                                 <div class="listing-owl-img">
-                                    <img src="{{ $cartype->image_url }}" class="img-fluid" alt="Popular Cartypes">
+                                    <img src="{{ $cartype->image_url }}" class="img-fluid" alt="{{ $cartype->name ?? "" }} {{ __('web.common.vehicles') }}">
                                 </div>
                                 <h6>{{ ucfirst($cartype->name ?? "") }}</h6>
                                 <p>{{ $cartype->car_count ?? ""}} {{ __('web.common.vehicles') }}</p>
