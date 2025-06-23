@@ -1,3 +1,5 @@
+/* global $, document, loadTranslationFile, showToast, _l, setTimeout, DOMPurify, moment, FormData, window, Fancybox*/
+
 (async () => {
     "use strict";
     await loadTranslationFile("web", "user,common,home");
@@ -465,7 +467,6 @@
 
                 if (returnDate) {
                     const returnOnly = returnDate.clone().startOf("day");
-                    // $(".bookingpickupdate").data("DateTimePicker").maxDate(returnOnly);
                 } else {
                     $(".bookingpickupdate")
                         .data("DateTimePicker")
@@ -605,9 +606,7 @@
                         )
                     ) {
                         $(this).data("DateTimePicker").date(null);
-                        alert(
-                            "Return time must be at least 1 hour after pickup time."
-                        );
+                        showToast("error", "Return time must be at least 1 hour after pickup time.");
                     }
                 }
             });
@@ -865,12 +864,12 @@
                     minlength: _l("web.home.reply_comments_minlength"),
                 },
             },
-            errorPlacement: function (error, element) {
+          errorPlacement: function (error, element) {
+                const errorId = element.attr("id") + "_error";
+
                 if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 } else {
-                    var errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 }
             },
@@ -1606,7 +1605,7 @@
                     showToast("error", response.message);
                 }
             },
-            error: function (error) {},
+            error: function () {},
         });
     });
 
