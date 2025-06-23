@@ -1,3 +1,5 @@
+/* global $, loadTranslationFile, clearTimeout, setTimeout, document, showToast, _l */
+
 (function () {
     "use strict";
 
@@ -93,8 +95,8 @@
             success: function (response) {
                 showToast(response.status, response.message);
             },
-            error: function (error) {
-                console.error(error);
+            error: function () {
+                showToast('error', 'Something went wrong. Please try again.');
             }
         });
     });

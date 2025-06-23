@@ -1,3 +1,5 @@
+/* global $, loadTranslationFile, window, showToast, _l, FormData */
+
 (async () => {
     "use strict";
     await loadTranslationFile("web", "home, common");
@@ -88,7 +90,7 @@
         onchange: function(element) {
             $(element).valid();
         },
-        submitHandler: function(form) {
+        submitHandler: function() {
            let contactFormData = new FormData();
            contactFormData.append("name", $("#contact_name").val());
            contactFormData.append("email", $("#contact_email").val());
