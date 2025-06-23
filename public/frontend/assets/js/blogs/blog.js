@@ -1,3 +1,5 @@
+/* global $, document, loadTranslationFile, URLSearchParams, window, showToast, _l, FormData, fetch, URL */
+
 (async () => {
     "use strict";
 
@@ -5,48 +7,48 @@
 
     $(function () {
         const $blogContainer = $("#blogListContainer");
+        const $searchInput = $("#blogSearch");
+        const $reviewForm = $("#blogReviewForm");
+        const csrfToken = $('meta[name="csrf-token"]').attr("content");
         let activeFilters = {};
 
         const fetchFilteredBlogs = async (params = {}) => {
             activeFilters = { ...params };
-            const query = new URLSearchParams(params).toString();
+            const query = new URLSearchParams(activeFilters).toString();
 
             try {
                 const response = await fetch(`/blogs?${query}`, {
                     headers: { "X-Requested-With": "XMLHttpRequest" },
                 });
+
                 const data = await response.json();
                 $blogContainer.html(data.html);
-                bindPaginationLinks();
-
                 window.scrollTo({
                     top: $blogContainer.offset().top - 100,
                     behavior: "smooth",
                 });
-            } catch (error) {
-                console.error(_l('web.common.default_retrieve_error'));
+            } catch {
+                showToast("error", _l("web.common.default_retrieve_error"));
             }
         };
 
-        const bindPaginationLinks = () => {
-            $(".pagination a").off("click").on("click", function (e) {
-                e.preventDefault();
-                const url = new URL(this.href);
-                const page = url.searchParams.get("page");
-                fetchFilteredBlogs({ ...activeFilters, page });
-            });
-        };
+        // Handle pagination clicks
+        $(document).on("click", ".pagination a", function (e) {
+            e.preventDefault();
+            const url = new URL(this.href);
+            const page = url.searchParams.get("page");
+            fetchFilteredBlogs({ ...activeFilters, page });
+        });
 
-        // Category filter
-        $("[data-category]").off("click").on("click", function () {
+        // Category filter clicks
+        $(document).on("click", "[data-category]", function () {
             const category = $(this).data("category");
             fetchFilteredBlogs({ category });
         });
 
-        // Search input
-        const $searchInput = $("#blogSearch");
+        // Search on Enter key
         if ($searchInput.length) {
-            $searchInput.off("keypress").on("keypress", function (e) {
+            $searchInput.on("keypress", function (e) {
                 if (e.key === "Enter") {
                     const search = $searchInput.val().trim();
                     fetchFilteredBlogs({ search });
@@ -54,46 +56,41 @@
             });
         }
 
-        // Initial pagination binding
-        bindPaginationLinks();
-
-        // Review form
-        const $reviewForm = $("#blogReviewForm");
+        // Review form submission
         if ($reviewForm.length) {
-            $reviewForm.off("submit").on("submit", function (e) {
+            $reviewForm.on("submit", function (e) {
                 e.preventDefault();
-
                 const formData = new FormData(this);
 
-                if (
-                    !formData.get("comment")
-                ) {
+                if (!formData.get("comment")) {
                     showToast("error", _l("web.blog.all_fields_are_required"));
                     return;
                 }
 
                 $.ajax({
                     url: $reviewForm.attr("action"),
-                    type: "POST",
-                    headers: {
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-                    },
+                    method: "POST",
+                    headers: { "X-CSRF-TOKEN": csrfToken },
                     data: formData,
                     processData: false,
                     contentType: false,
                     success: () => {
-                        showToast("success", _l('web.blog.review_added_successfully'));
-                        $reviewForm[0].reset();
+                        showToast("success", _l("web.blog.review_added_successfully"));
+                        this.reset();
                     },
-                    error: xhr => {
-                        if (xhr.responseJSON?.message) {
-                            showToast("error", xhr.responseJSON.message);
-                        } else {
-                            showToast("error", _l('web.common.something_went_wrong'));
-                        }
+                    error: (xhr) => {
+                        const msg = xhr.responseJSON?.message || _l("web.common.something_went_wrong");
+                        showToast("error", msg);
                     },
                 });
             });
+        }
+
+        // Initial load binding (if needed)
+        if ($(".pagination a").length) {
+            const url = new URL(window.location.href);
+            const page = url.searchParams.get("page");
+            if (page) fetchFilteredBlogs({ page });
         }
     });
 })();
