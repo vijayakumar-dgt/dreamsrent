@@ -1,3 +1,5 @@
+/* global window, fetch*/
+
 (function () {
     "use strict";
     window.loadTranslationFile = async function(file, module) {
@@ -15,7 +17,7 @@
                 ...data[file]
             };
 
-        } catch (error) {
+        } catch {
             window.translations = window.translations || {};
             window.translations[file] = window.translations[file] || {};
         }
