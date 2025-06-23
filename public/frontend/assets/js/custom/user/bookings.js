@@ -1,3 +1,5 @@
+/* global loadTranslationFile,  document, showToast, setTimeout, moment, FormData, window, _l,  jQuery,  FullCalendar*/
+
 (($) => {
 "use strict";
 
@@ -18,14 +20,9 @@
                 minlength: _l("web.home.comments_minlength"),
             },
         },
-        errorPlacement: function (error, element) {
-            if (element.hasClass("select2-hidden-accessible")) {
-                var errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
-            } else {
-                var errorId = element.attr("id") + "_error";
-                $("#" + errorId).text(error.text());
-            }
+       errorPlacement: function (error, element) {
+            const errorId = element.attr("id") + "_error";
+            $("#" + errorId).text(error.text());
         },
         highlight: function (element) {
             if ($(element).hasClass("select2-hidden-accessible")) {
@@ -53,7 +50,7 @@
         onchange: function (element) {
             $(element).valid();
         },
-        submitHandler: function (form) {
+        submitHandler: function () {
             let formData = new FormData();
             formData.append("comments", $("#comments").val());
             formData.append(
@@ -140,7 +137,6 @@
 })();
 
 const fetchUserBookings = (callback = null) => {
-    const limit = 3;
     const status = $(".status_filter.active").data("status") || "";
     const customFrom = $("#custom_from_date").val();
     const customTo = $("#custom_to_date").val();
@@ -223,7 +219,6 @@ const fetchUserBookings = (callback = null) => {
             $(".real-table").removeClass("d-none");
         }
     },
-    error: console.log
     });
 };
 
@@ -649,7 +644,6 @@ $(".cleanliness_ratings").on("click", function () {
 
 $(document).on('click', '.add_review', e => {
     let vehicle_id = $(e.currentTarget).data('vehicle_id');
-    console.log(vehicle_id);
     
     $("#reviewForm .vehicle_id").val(vehicle_id);
     $("#addReviewModal").modal("show");

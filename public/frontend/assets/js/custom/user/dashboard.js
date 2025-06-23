@@ -1,3 +1,5 @@
+/* global loadTranslationFile, document, jQuery, _l*/
+
 (function ($) {
     "use strict";
 
@@ -29,7 +31,6 @@
             beforeSend: showBookingLoader,
             success: renderBookings,
             complete: hideBookingLoader,
-            error: console.log
         });
     }
 
