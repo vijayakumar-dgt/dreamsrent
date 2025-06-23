@@ -1,8 +1,9 @@
+/* global loadTranslationFile,  document, showToast, setTimeout, _l,  jQuery*/
+
 (($) => {
     "use strict";
 
     const fetchUserTransactions = async () => {
-        const limit = 5;
         const status = $(".status_filter.active").data('status') || '';
         const customFromDate = $("#custom_from_date").val();
         const customToDate = $("#custom_to_date").val();
@@ -66,8 +67,8 @@
 
             table.draw();
             $(".payment-header").trigger("click");
-        } catch (error) {
-            console.error(error);
+        } catch {
+            showToast("error", "Something went wrong. Please try again.");
         } finally {
             $(".table-loader").hide();
             $(".real-table").removeClass("d-none");

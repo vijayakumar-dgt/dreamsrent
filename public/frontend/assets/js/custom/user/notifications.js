@@ -1,3 +1,5 @@
+/* global loadTranslationFile, document, showToast, _l, jQuery*/
+
 (($) => {
     "use strict";
 
@@ -17,8 +19,8 @@
                 $('#pagination-container').html('');
                 $("#notification_action").addClass("d-none");
             }
-        } catch (error) {
-            console.error('Error loading notifications:', error);
+        } catch {
+            showToast("error", "Error loading notifications.");
         }
     };
 
