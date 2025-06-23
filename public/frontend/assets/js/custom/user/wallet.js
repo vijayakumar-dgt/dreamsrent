@@ -1,3 +1,4 @@
+/* global $, loadTranslationFile, bootstrap, window, document, showToast, _l */
 (async () => {
     "use strict";
 
@@ -64,7 +65,8 @@
                             if (parsed.message) {
                                 errorMessage = parsed.message;
                             }
-                        } catch (e) {
+                        } catch {
+                          // intentionally empty: ignoring JSON parse error
                         }
                     }
                     showToast('error', errorMessage);

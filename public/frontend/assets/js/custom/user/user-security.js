@@ -1,3 +1,4 @@
+/* global $, loadTranslationFile, FormData, setTimeout, document, showToast, _l, window,  */
 (async () => {
     "use strict";
     await loadTranslationFile('web', 'user,common');
@@ -234,7 +235,6 @@
 
     function updateLastChangedInfo(data) {
         const lastPasswordChanged = data.last_password_changed_at || _l('web.user.not_yet');
-        const lastDeletedAt = data.deleted_at || _l('web.user.not_available');
         const lastDeviceManagement = (data.devices?.[0]?.date) || _l('web.user.not_available');
 
         $('.change_password_time').text(`${_l('web.user.last_changed')} : ${lastPasswordChanged}`);
@@ -281,7 +281,7 @@
                     showToast('error', data.message || 'An error occurred while deleting your account.');
                 }
             },
-            error: (xhr) => {
+            error: () => {
                 showToast('error', 'Failed to delete your account. Please try again later.');
             }
         });

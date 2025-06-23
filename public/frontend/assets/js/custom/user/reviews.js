@@ -1,3 +1,4 @@
+/* global $, loadTranslationFile, document, showToast, _l */
 (async () => {
     "use strict";
     await loadTranslationFile('web', 'user,common');
@@ -50,7 +51,6 @@
                     {
                         data: "vehicle_name",
                         render: (data, type, row) => {
-                            const delivery_type = (row.delivery_type ?? "").replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
                             return `
                                 <div class="table-avatar">
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#add_review" class="avatar flex-shrink-0">
