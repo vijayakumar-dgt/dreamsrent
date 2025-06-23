@@ -104,7 +104,7 @@
             url: "/user/add-to-wishlist",
             data: {
                 id: id,
-                _token: $('meta[name="csrf-token"]').attr("content"),
+                _token: $("meta[name=\"csrf-token\"]").attr("content")
             },
             dataType: "json",
             success: function (response) {
