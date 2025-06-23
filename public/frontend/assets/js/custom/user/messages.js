@@ -1,9 +1,10 @@
+/* global loadTranslationFile, document, showToast, setTimeout, FormData, _l, jQuery, mqtt*/
+
 (function ($) {
     "use strict";
 
     (async () => {
         await loadTranslationFile('web', 'user,common');
-        const adminId = $("#messageinput").data('receiverid');
         const customerId = $("#messageinput").data('senderid');
         listenMqttForNewMessages(customerId);
         fetchMessages();
