@@ -1,3 +1,5 @@
+/* global $,  document, toastr, setTimeout, window*/
+
 (function () {
     "use strict";
     $(document).ready(function () {
@@ -46,7 +48,6 @@
                     submitBtn.prop("disabled", false).html("Save Config");
                 }
             } catch (error) {
-                console.error("AJAX error", error);
                 submitBtn.prop("disabled", false).html("Save Config");
 
                 if (error.responseJSON?.errors) {

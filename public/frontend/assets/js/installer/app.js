@@ -1,3 +1,5 @@
+/* global $,  document, toastr*/
+
 (function () {
     "use strict";
     $.ajaxSetup({

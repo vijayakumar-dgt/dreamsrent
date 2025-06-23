@@ -1,3 +1,5 @@
+/* global $,  document, toastr, setTimeout, window*/
+
 (function () {
     "use strict";
     $(document).ready(function () {
@@ -45,8 +47,6 @@
                     }, 4000);
                 }
             } catch (error) {
-                console.error("Verification error:", error);
-
                 if (error.responseJSON) {
                     if (error.responseJSON.errors) {
                         $.each(

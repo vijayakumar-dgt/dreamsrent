@@ -1,3 +1,5 @@
+/* global $,  document, setTimeout, window, toastr*/
+
 (function () {
     "use strict";
     $(document).ready(function () {
@@ -84,7 +86,6 @@
                     submitBtn.prop("disabled", false).html("Create Account");
                 }
             } catch (error) {
-                console.error("AJAX error", error);
                 submitBtn.prop("disabled", false).html("Create Account");
 
                 if (error.responseJSON?.errors) {

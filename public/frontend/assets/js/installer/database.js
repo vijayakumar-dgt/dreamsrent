@@ -1,3 +1,5 @@
+/* global $,  document, toastr, setTimeout, window*/
+
 (function () {
     "use strict";
 
@@ -98,7 +100,6 @@
                     submitBtn.prop("disabled", false).html("Setup Database");
                 }
             } catch (error) {
-                console.error("AJAX error", error);
                 submitBtn.prop("disabled", false).html("Setup Database");
 
                 if (error.responseJSON?.errors) {
