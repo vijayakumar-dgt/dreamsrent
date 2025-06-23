@@ -1,3 +1,4 @@
+/* global $, loadTranslationFile, FormData, document, showToast, _l */
 (async () => {
     "use strict";
     await loadTranslationFile("web", "user,common");
@@ -309,9 +310,6 @@
                                     : value.assignee
                                     ? value.assignee.name
                                     : _l("web.user.unassigned");
-                            let createdDate = new Date(
-                                value.created_at
-                            ).toLocaleDateString();
                             let assigneeImage = value.assignee?.user_detail
                                 ?.profile_image
                                 ? "/storage/" + value.assignee.user_detail.profile_image

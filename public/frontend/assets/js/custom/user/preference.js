@@ -1,3 +1,4 @@
+/* global location, loadTranslationFile, jQuery, setTimeout, document, showToast */
 (($) => {
     "use strict";
 
@@ -39,7 +40,7 @@
                     isInitialLoad = false;
                 }
             } catch (error) {
-                console.error("Error fetching preferences:", error);
+                showToast("error", `Error fetching preferences: ${error.message}`);
             }
         };
 
