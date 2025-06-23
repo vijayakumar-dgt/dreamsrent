@@ -1,3 +1,5 @@
+/* global $, loadTranslationFile,  document, showToast, FormData, window,  _l,  alert, FileReader*/
+
 (async () => {
     "use strict";
 
@@ -178,7 +180,6 @@
         let $totalPriceElement = $("#total_price"); // Hidden input for total price
         let $totalPriceExtra = $("#extra_price_total"); // Hidden input for total price
         let $totalPriceInsurance = $("#insurance_price_total"); // Hidden input for total price
-        let $totalPriceDriver = $("#driver_price_total"); // Hidden input for total price
         let $totalPriceSpan = $(".vehicle-total-price span"); // Display total price
         let $submitButton = $("#sumbit_btn"); // Display final price button
 
@@ -612,18 +613,17 @@
             },
             errorElement: "span",
             errorPlacement: function (error, element) {
-                error.addClass("text-danger"); // Ensure the error text is red
+                error.addClass("text-danger");
 
                 if (element.attr("type") === "checkbox") {
                     element.closest(".custom_check").append(error);
                 } else if (element.attr("type") === "file") {
                     $("#driver_file_error").html(error);
-                } else if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
+                } else if (element.hasClass("select2-hidden-accessible") || $("#" + element.attr("id") + "_error").length) {
+                    const errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 } else {
-                    var errorId = element.attr("id") + "_error";
-                    $("#" + errorId).text(error.text());
+                    element.after(error);
                 }
             },
             highlight: function (element) {
@@ -817,7 +817,7 @@
                     },
                 })
 
-                    .done((response, statusText, xhr) => {
+                    .done((response) => {
                         if (response.code === 200 && response.cod) {
                             showToast("success", response.message);
                             window.location.href = response.redirect_url; // Redirect to success page
@@ -1177,7 +1177,6 @@
         $(".show-benefits-link").on("click", function (e) {
             e.preventDefault();
             const insuranceId = $(this).data("insurance-id");
-            const token = $('meta[name="csrf-token"]').attr("content");
 
             $("#benefit-list").html(`
     <div class="d-flex justify-content-center py-3">
