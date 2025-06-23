@@ -1,3 +1,4 @@
+/* global $, loadTranslationFile, document, _l, showToast, localStorage, window, clearInterval, setTimeout, setInterval */
 (async () => {
     "use strict";
     await loadTranslationFile('web', 'user,common,auth');
@@ -25,10 +26,8 @@
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
                 },
                 success: function (data) {
-                    const userName = data.name;
                     const otpExpireTime = parseInt(data.otp_expire_time.split(" ")[0]);
                     const otpDigitLimit = parseInt(data.otp_digit_limit);
-                    const otpType = data.otp_type;
                     const username = $('[name="email"]').val().trim();
 
                     const inputContainer = $(".inputcontainer");
@@ -157,7 +156,7 @@
                 let otpTimerDisplay = document.getElementById("otp-timer");
 
                 if (!otpTimerDisplay) {
-                    console.error("OTP Timer element not found!");
+                    showToast("error", "OTP Timer element not found!")
                     return;
                 }
 
@@ -178,8 +177,6 @@
         }       
     });
 })();
-
-
 
 
 
