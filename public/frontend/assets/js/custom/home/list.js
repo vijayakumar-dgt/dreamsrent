@@ -1,7 +1,8 @@
+/* global $, document, loadTranslationFile, showToast, _l, setTimeout, clearTimeout, DOMPurify, moment */
+
 (async () => {
     "use strict";
     await loadTranslationFile('web', 'home,common');
-    let rtl = $('body').data('dir');
     let pl;
     let dl;
     let pd;
@@ -110,23 +111,28 @@
                         $(".listCardDiv").addClass('col-xl-9 col-lg-8 col-sm-12 col-12');
                         $(".listCardDiv .row").addClass('vehicleListCard');
                     }
-                if (response.code === 200 && response.data && response.data.length > 0) {
-                    if(viewType === "grid"){
-                        var html = response.data.map(vehicle => createVehicleGridCard(vehicle)).join('');
-                    }else{
-                        var html = response.data.map(vehicle => createVehicleListCard(vehicle)).join('');
+                     if (response.code === 200 && response.data && response.data.length > 0) {
+                        let html = "";
+
+                        if (viewType === "grid") {
+                            html = response.data.map(vehicle => createVehicleGridCard(vehicle)).join('');
+                        } else {
+                            html = response.data.map(vehicle => createVehicleListCard(vehicle)).join('');
+                        }
+
+                        html += renderPagination(response.pagination);
+                        const cleanHTML = DOMPurify.sanitize(html);
+                        $(".vehicleListCard").html(cleanHTML);
+
+                        const total_vehicles = _l('web.common.showing') + " " + response.pagination.from + " - " + response.pagination.to + " " + _l('web.common.of') + " " + response.pagination.total + " " + _l('web.common.vehicles');
+                        $("#total_vehicles").text(total_vehicles);
+
+                        // initialize owl carousel after 150ms
+                        setTimeout(function () {
+                            reInitializeCarousel(".img-slider");
+                        }, 150);
                     }
-                    
-                    html += renderPagination(response.pagination);
-                    const cleanHTML = DOMPurify.sanitize(html);
-                    $(".vehicleListCard").html(cleanHTML);
-                    let total_vehicles = _l('web.common.showing') + " " + response.pagination.from + " - " + response.pagination.to + " " + _l('web.common.of') + " " + response.pagination.total + " " + _l('web.common.vehicles');
-                    $("#total_vehicles").text(total_vehicles);
-                    //initialize owl carousel after 150ms,wait for images to load
-                    setTimeout(function () {
-                        reInitializeCarousel(".img-slider");
-                    }, 150);
-                } else {
+                    else {
                     $(".vehicleListCard").html(`<p class="text-center">${_l('web.common.no_vehicles_found')}</p>`);
                 }
             },
@@ -592,8 +598,8 @@
                     showToast('error', response.message);
                 }
             },
-            error: function (error) {
-               
+            error: function () {
+               showToast("error", "Something went wrong. Please try again.");
             }
         });
     });
