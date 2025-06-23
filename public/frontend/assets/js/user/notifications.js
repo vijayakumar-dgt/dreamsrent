@@ -1,3 +1,4 @@
+/* global loadTranslationFile, document, showToast, _l, jQuery */
 (function($) {
     "use strict";
 

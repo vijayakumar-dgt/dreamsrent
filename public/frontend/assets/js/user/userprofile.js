@@ -1,3 +1,4 @@
+/* global $, loadTranslationFile, setTimeout, document, showToast, _l, FormData, intlTelInput, window, Image, FileReader, URL */
 (async () => {
     "use strict";
     await loadTranslationFile('web', 'user,common,home');
@@ -108,11 +109,10 @@
                 },
             },
             errorPlacement: function (error, element) {
+                var errorId = element.attr("id") + "_error";
                 if (element.hasClass("select2-hidden-accessible")) {
-                    var errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 } else {
-                    var errorId = element.attr("id") + "_error";
                     $("#" + errorId).text(error.text());
                 }
             },
@@ -205,7 +205,7 @@
         }
     }
         
-    $('#profile_photo').on('change', function (event) {
+    $('#profile_photo').on('change', function () {
         let file = this.files[0];
         let error = '';
 

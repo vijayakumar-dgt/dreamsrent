@@ -1,4 +1,4 @@
-
+/* global loadTranslationFile, document, _l, FormData, showToast, window, setTimeout, clearInterval, setInterval, jQuery */
 (function($) {
     "use strict";
 (async () => {
@@ -115,8 +115,8 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
-let emailTimerInterval, smsTimerInterval;
-let emailTimerTime, smsTimerTime;
+let emailTimerInterval;
+let emailTimerTime;
 
 function startTimer(expireTime) {
     clearInterval(emailTimerInterval); // Clear any existing timer
@@ -126,7 +126,7 @@ function startTimer(expireTime) {
         let otpTimerDisplay = document.getElementById("otp-timer");
 
         if (!otpTimerDisplay) {
-            console.error("OTP Timer element not found!");
+            showToast("error", "OTP Timer element not found!")
             return;
         }
 
@@ -173,7 +173,6 @@ $(document).ready(function () {
                     return;
                 }
 
-                const userName = data.name;
                 const otpExpireTime = parseInt(data.otp_expire_time.split(" ")[0]);
                 const otpDigitLimit = parseInt(data.otp_digit_limit);
 

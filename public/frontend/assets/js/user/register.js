@@ -1,3 +1,4 @@
+/* global loadTranslationFile, setTimeout, document, showToast, _l, setInterval, clearInterval, location, FormData, window, jQuery */
 (function($) {
     "use strict";
 (async () => {
@@ -97,7 +98,7 @@ $(document).ready(function () {
                     '<div class="spinner-border text-light" role="status"></div>'
                 );
             },
-            success: function (response) {
+            success: function () {
                 $("#otp-email-reg-modal").modal("hide");
                 $("#reg_success_modal").modal("show");
 
@@ -221,7 +222,6 @@ $(document).ready(function () {
                         };
 
                         const userName = response.email;
-                        const otp = response.otp;
                         const otpDigitLimit = parseInt(response.otp_digit_limit || 4);
                         const expiresAt = new Date(response.expires_at);
                         const now = new Date();

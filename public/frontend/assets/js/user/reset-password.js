@@ -1,3 +1,4 @@
+/* global $, loadTranslationFile, showToast, _l, localStorage, FormData, window */
 (async () => {
     "use strict";
 
