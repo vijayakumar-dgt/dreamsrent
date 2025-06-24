@@ -31,7 +31,7 @@
             const database = $("#database").val().trim();
             const username = $("#user").val().trim();
             const db_pass = $("#password").val();
-            const csrfToken = $('meta[name="csrf-token"]').attr("content");
+            const csrfToken = $("meta[name=\"csrf-token\"]").attr("content");
 
             const freshInstall = $("#fresh_install").is(":checked");
             const resetDatabase = $("#reset_database").is(":checked");
@@ -58,7 +58,7 @@
             // Show loading state
             submitBtn
                 .html(
-                    'Migrating... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+                    "Migrating... <span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>"
                 )
                 .prop("disabled", true);
 

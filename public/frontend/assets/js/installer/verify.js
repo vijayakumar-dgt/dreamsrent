@@ -19,7 +19,7 @@
 
             submitBtn
                 .html(
-                    'Checking... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+                    "Checking... <span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>"
                 )
                 .prop("disabled", true);
 

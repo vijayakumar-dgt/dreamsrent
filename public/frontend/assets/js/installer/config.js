@@ -10,7 +10,7 @@
 
             const configAppName = $("#config_app_name").val().trim();
             const submitBtn = $("#submit_btn");
-            const csrfToken = $('meta[name="csrf-token"]').attr("content");
+            const csrfToken = $("meta[name=\"csrf-token\"]").attr("content");
 
             // Input validation
             if (!configAppName) {
@@ -22,7 +22,7 @@
             // Show loading state
             submitBtn
                 .html(
-                    'Saving... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+                    "Saving... <span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>"
                 )
                 .prop("disabled", true);
 
