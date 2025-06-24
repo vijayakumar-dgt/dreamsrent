@@ -1,23 +1,26 @@
-/* global $,  document, toastr, setTimeout, window*/
+/* global $, document, toastr, setTimeout, window */
 
 (function () {
     "use strict";
-    $(document).ready(function () {
+
+    $(function () {
         $(document).on("submit", "#verify_form", async function (e) {
             e.preventDefault();
-
-            const code = $("#purchase_code").val().trim();
-            const submitBtn = $("#submit_btn");
-            const form = $(this);
-
             toastr.clear();
+
+            const $codeInput = $("#purchase_code");
+            const code = $codeInput.val().trim();
+            const $submitBtn = $("#submit_btn");
+            const $form = $(this);
 
             if (!code) {
                 toastr.warning("Purchase code is required");
+                $codeInput.focus();
                 return;
             }
 
-            submitBtn
+            // Show loading state
+            $submitBtn
                 .html(
                     "Checking... <span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>"
                 )
@@ -25,48 +28,48 @@
 
             try {
                 const response = await $.ajax({
-                    url: form.attr("action"),
+                    url: $form.attr("action"),
                     method: "POST",
-                    data: {
-                        purchase_code: code,
-                    },
-                    dataType: "json",
+                    data: { purchase_code: code },
+                    dataType: "json"
                 });
 
                 if (response.success) {
                     toastr.success(response.message);
-                    submitBtn.addClass("btn-success").html("Redirecting...");
-                    setTimeout(() => {
+                    $submitBtn.addClass("btn-success").html("Redirecting...");
+                    setTimeout(function () {
                         window.location.href = "/setup/requirements";
                     }, 1500);
                 } else {
-                    $("#purchase_code").val("");
+                    $codeInput.val("");
                     toastr.error(response.message);
-                    setTimeout(() => {
+                    setTimeout(function () {
                         window.location.reload();
                     }, 4000);
                 }
             } catch (error) {
+                $codeInput.val("");
+
                 if (error.responseJSON) {
-                    if (error.responseJSON.errors) {
-                        $.each(
-                            error.responseJSON.errors,
-                            function (key, value) {
+                    const { errors, message } = error.responseJSON;
+                    if (errors) {
+                        $.each(errors, function (key, value) {
+                            if (Array.isArray(value)) {
+                                toastr.error(value[0]);
+                            } else {
                                 toastr.error(value);
                             }
-                        );
-                    } else if (error.responseJSON.message) {
-                        toastr.error(error.responseJSON.message);
+                        });
+                    } else if (message) {
+                        toastr.error(message);
+                    } else {
+                        toastr.error("An unknown server error occurred.");
                     }
                 } else {
-                    toastr.error(
-                        "An unexpected error occurred. Please try again."
-                    );
+                    toastr.error("An unexpected error occurred. Please try again.");
                 }
-
-                $("#purchase_code").val("");
             } finally {
-                submitBtn
+                $submitBtn
                     .html("Check")
                     .prop("disabled", false)
                     .removeClass("btn-success");
