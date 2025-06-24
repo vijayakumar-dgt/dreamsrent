@@ -37,7 +37,7 @@
                 } else {
                     showToast("error", _l("web.common.default_retrieve_error"));
                 }
-            } catch (error) {
+            } catch {
                 showToast("error", _l("web.common.default_retrieve_error"));
             }
         };
