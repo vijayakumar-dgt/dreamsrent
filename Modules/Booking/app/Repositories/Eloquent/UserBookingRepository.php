@@ -443,7 +443,7 @@ class UserBookingRepository implements UserBookingRepositoryInterface
         return $booking;
     }
 
-    public function userPayments(Request $request): array
+    public function userPayments(Request $request)
     {
         /** @var \App\Models\User|null $authUser */
         $authUser = current_user();
@@ -1138,9 +1138,9 @@ class UserBookingRepository implements UserBookingRepositoryInterface
                     } catch (\Exception $e) {
                     }
                     $response = [
-                        'redirect_url' => redirect()->route('payment.success.page', ['transaction_id' => $response['id']])
+                        'redirect_url' => route('payment.success.page', ['transaction_id' => $response['id']])
                     ];
-
+                    
                     return $response;
                 }
                 $response = [
