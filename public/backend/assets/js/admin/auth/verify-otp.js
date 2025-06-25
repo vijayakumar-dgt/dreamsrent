@@ -1,3 +1,4 @@
+/* global $, loadTranslationFile, document, _l, showToast, setInterval, window, setTimeout, clearInterval */
 (async () => {
     "use strict";
     await loadTranslationFile("admin", "common, auth");
@@ -7,12 +8,12 @@
         startCountdown(59);
         function startCountdown(duration) {
             let coundown = $(".timer").html(
-                `<i class="ti ti-clock me-1"></i>` + " " + formatTime(duration)
+                "<i class='ti ti-clock me-1'></i>" + " " + formatTime(duration)
             );
             let timer = setInterval(function () {
                 duration--;
                 coundown.html(
-                    `<i class="ti ti-clock me-1"></i>` +
+                    "<i class='ti ti-clock me-1'></i>" +
                         " " +
                         formatTime(duration)
                 );
@@ -46,7 +47,7 @@
                 type: "POST",
                 url: "/forgot-password/resend-otp",
                 data: {
-                    _token: $('meta[name="csrf-token"]').attr("content"),
+                    _token: $("meta[name='csrf-token']").attr("content"),
                     token: token,
                 },
                 success: function (response) {
@@ -65,8 +66,8 @@
         });
 
         // Auto move to the next input when a digit is entered
-        $(document).on("keyup", ".otpinput", function (e) {
-            if ($(this).val().length == 1) {
+        $(document).on("keyup", ".otpinput", function () {
+            if ($(this).val().length === 1) {
                 $(this).next(".otpinput").focus();
             }
             $(".otp-error-text").text("");
@@ -84,7 +85,7 @@
             e.preventDefault();
             $(".resetpasswordbtn").prop("disabled", true);
             $(".resetpasswordbtn").html(
-                '<span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span>'
+                "<span class='spinner-border spinner-border-sm align-middle' role='status' aria-hidden='true'></span>"
             );
             //check is all input is filled
             let otp = [];
@@ -98,7 +99,7 @@
                     type: "POST",
                     url: "/forgot-password/confirm-otp",
                     data: {
-                        _token: $('meta[name="csrf-token"]').attr("content"),
+                        _token: $("meta[name='csrf-token']").attr("content"),
                         token: token,
                         otp: otp_input,
                     },
@@ -107,26 +108,26 @@
                             showToast("success", response.message);
                             $(".otp-error-text").text("");
                             $(".resetpasswordbtn").prop("disabled", true);
-                            $(".resetpasswordbtn").text(_l('admin.auth.we_are_redirecting_you'));
+                            $(".resetpasswordbtn").text(_l("admin.auth.we_are_redirecting_you"));
                             setTimeout(function () {
                                 window.location.href = `/reset-password?token=${encodeURIComponent(response.token)}`;
                             }, 3000);
                         } else {
                             $(".otp-error-text").text(response.message);
                             $(".resetpasswordbtn").prop("disabled", false);
-                            $(".resetpasswordbtn").html(_l('admin.auth.reset_password'));
+                            $(".resetpasswordbtn").html(_l("admin.auth.reset_password"));
                         }
                     },
                     error: function (error) {
                         $(".otp-error-text").text(error.responseJSON.message);
                         $(".resetpasswordbtn").prop("disabled", false);
-                        $(".resetpasswordbtn").html(_l('admin.auth.reset_password'));
+                        $(".resetpasswordbtn").html(_l("admin.auth.reset_password"));
                     },
                 });
             } else {
-                $(".otp-error-text").text(_l('admin.auth.enter_valid_otp'));
+                $(".otp-error-text").text(_l("admin.auth.enter_valid_otp"));
                 $(".resetpasswordbtn").prop("disabled", false);
-                $(".resetpasswordbtn").html(_l('admin.auth.reset_password'));
+                $(".resetpasswordbtn").html(_l("admin.auth.reset_password"));
                 return;
             }
         });

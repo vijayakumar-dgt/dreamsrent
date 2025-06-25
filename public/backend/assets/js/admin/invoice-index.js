@@ -1,27 +1,28 @@
+/* global $, loadTranslationFile, location, document, showToast, _l */
 (function () {
     "use strict";
 
     (async () => {
 
-        await loadTranslationFile('admin', 'common, finance_accounts');
+        await loadTranslationFile("admin", "common, finance_accounts");
 
-        $('#invoicesTable').DataTable({
+        $("#invoicesTable").DataTable({
             ordering: false,
             searching: false,
             pageLength: 10,
             lengthChange: false,
             "drawCallback": function () {
-                $(".dataTables_info").addClass('d-none');
-                $(".dataTables_wrapper .dataTables_paginate").addClass('d-none');
+                $(".dataTables_info").addClass("d-none");
+                $(".dataTables_wrapper .dataTables_paginate").addClass("d-none");
 
-                var tableWrapper = $(this).closest('.dataTables_wrapper');
-                var info = tableWrapper.find('.dataTables_info');
-                var pagination = tableWrapper.find('.dataTables_paginate');
+                var tableWrapper = $(this).closest(".dataTables_wrapper");
+                var info = tableWrapper.find(".dataTables_info");
+                var pagination = tableWrapper.find(".dataTables_paginate");
 
-                $('.table-footer').empty()
-                    .append($('<div class="d-flex justify-content-between align-items-center w-100"></div>')
-                        .append($('<div class="datatable-info"></div>').append(info.clone(true)))
-                        .append($('<div class="datatable-pagination"></div>').append(pagination.clone(true)))
+                $(".table-footer").empty()
+                    .append($("<div class='d-flex justify-content-between align-items-center w-100'></div>")
+                        .append($("<div class='datatable-info'></div>").append(info.clone(true)))
+                        .append($("<div class='datatable-pagination'></div>").append(pagination.clone(true)))
                     );
                 $(".table-footer").find(".dataTables_paginate").removeClass("d-none");
             },
@@ -177,16 +178,16 @@
 
     $(document).ready(function () {
 
-        $(document).on('click', '#delete-invoice-btn', function () {
-            const invoiceId = $(this).data('id');
-            $('#delete_modal').data('id', invoiceId);
+        $(document).on("click", "#delete-invoice-btn", function () {
+            const invoiceId = $(this).data("id");
+            $("#delete_modal").data("id", invoiceId);
         });
 
-        $(document).on('click', '#delete_modal .btn-primary', function () {
-            const invoiceId = $('#delete_modal').data('id');
+        $(document).on("click", "#delete_modal .btn-primary", function () {
+            const invoiceId = $("#delete_modal").data("id");
             $.ajax({
-                url: '/admin/delete-invoices/' + invoiceId,
-                type: 'GET',
+                url: "/admin/delete-invoices/" + invoiceId,
+                type: "GET",
                 success: function (response) {
                     if (response.success) {
                         showToast("success", response.message);

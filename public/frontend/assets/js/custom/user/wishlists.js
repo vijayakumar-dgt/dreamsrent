@@ -1,12 +1,13 @@
 /* global loadTranslationFile, document, showToast, _l, fetch, DOMPurify */
 (async () => {
     "use strict";
-    await loadTranslationFile('web', 'user,common');
+
+    await loadTranslationFile("web", "user,common");
 
     const listViewCar = document.querySelector(".listview-car");
     const dataLoader = document.querySelector(".data-loader");
     const realTable = document.querySelector(".real-table");
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    const csrfToken = document.querySelector("meta[name=\"csrf-token\"]").content;
 
     const fetchHeaders = {
         "Content-Type": "application/json",
@@ -14,11 +15,11 @@
     };
 
     const labels = {
-        emptyTable: _l('web.common.empty_table'),
-        rentNow: _l('web.user.rent_now'),
-        removeFromWishlist: _l('web.user.remove_from_wishlist'),
-        category: _l('web.common.category'),
-        persons: _l('web.user.persons')
+        emptyTable: _l("web.common.empty_table"),
+        rentNow: _l("web.user.rent_now"),
+        removeFromWishlist: _l("web.user.remove_from_wishlist"),
+        category: _l("web.common.category"),
+        persons: _l("web.user.persons")
     };
 
     const postJSON = async (url, body = {}) => {
@@ -27,18 +28,29 @@
             headers: fetchHeaders,
             body: JSON.stringify(body)
         });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         return response.json();
     };
 
     const showLoader = (show) => {
-        dataLoader.style.display = show ? "block" : "none";
-        realTable.classList.toggle('d-none', show);
+        if (dataLoader) {
+            dataLoader.style.display = show ? "block" : "none";
+        }
+        if (realTable) {
+            realTable.classList.toggle("d-none", show);
+        }
     };
 
     const createRatingStars = (rating) => {
-        const stars = Array.from({ length: 5 }, (_, i) =>
-            `<i class="fas fa-star${i < Math.round(rating) ? ' filled' : ''}"></i>`
-        ).join('');
+        const stars = Array.from({ length: 5 }, (_, i) => {
+            const filled = i < Math.round(rating) ? " filled" : "";
+            return `<i class="fas fa-star${filled}"></i>`;
+        }).join("");
+
         return `${stars}<span>(${rating})</span>`;
     };
 
@@ -51,16 +63,16 @@
             { icon: "car-parts-06.svg", value: `${passenger_capacity || 0} ${labels.persons}` }
         ];
 
-        return details.map(({ icon, value }) => `
-            <li>
+        return details.map(({ icon, value }) => (
+            `<li>
                 <span><img src="/frontend/assets/img/icons/${icon}" alt="${value}"></span>
                 <p>${value}</p>
-            </li>
-        `).join('');
+            </li>`
+        )).join("");
     };
 
-    const createWishlistCard = (wishlist) => `
-        <div class="card">
+    const createWishlistCard = (wishlist) => (
+        `<div class="card">
             <div class="blog-widget d-flex">
                 <div class="blog-img">
                     <a href="/vehicle-details/${wishlist.slug}">
@@ -102,16 +114,23 @@
                     </div>
                 </div>
             </div>
-        </div>
-    `;
+        </div>`
+    );
 
     const fetchWishlists = async () => {
         try {
             showLoader(true);
             const { code, data = [] } = await postJSON("/user/ajax-wishlists");
-            listViewCar.innerHTML = (code === 200 && data.length)
-                ? (typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(data.map(createWishlistCard).join('')) : data.map(createWishlistCard).join(''))
-                : `<p class="text-center">${labels.emptyTable}</p>`;
+
+            let htmlContent = `<p class="text-center">${labels.emptyTable}</p>`;
+            if (code === 200 && data.length) {
+                const wishlistHTML = data.map(createWishlistCard).join("");
+                htmlContent = (typeof DOMPurify !== "undefined")
+                    ? DOMPurify.sanitize(wishlistHTML)
+                    : wishlistHTML;
+            }
+
+            listViewCar.innerHTML = htmlContent;
         } catch (error) {
             showToast("error", `Error fetching wishlists: ${error.message || error}`);
         } finally {
@@ -120,18 +139,22 @@
     };
 
     let isProcessingWishlist = false;
-    document.addEventListener('click', async (event) => {
-        const icon = event.target.closest('.wishlist-icon');
-        if (!icon || isProcessingWishlist) return;
+
+    document.addEventListener("click", async (event) => {
+        const icon = event.target.closest(".wishlist-icon");
+        if (!icon || isProcessingWishlist) {
+            return;
+        }
 
         isProcessingWishlist = true;
         try {
             const { status, message } = await postJSON("/user/add-to-wishlist", { id: icon.dataset.id });
-            showToast(status === 'success' ? 'success' : 'error', message);
-            if (status === 'success') await fetchWishlists();
+            showToast(status === "success" ? "success" : "error", message);
+            if (status === "success") {
+                await fetchWishlists();
+            }
         } catch (error) {
             showToast("error", `Error updating wishlist: ${error.message || error}`);
-
         } finally {
             isProcessingWishlist = false;
         }

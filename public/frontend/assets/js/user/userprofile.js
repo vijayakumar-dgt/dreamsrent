@@ -1,309 +1,199 @@
-/* global $, loadTranslationFile, setTimeout, document, showToast, _l, FormData, intlTelInput, window, Image, FileReader, URL */
+/* global $, loadTranslationFile, setTimeout, document, showToast, _l, FormData, window, Image, FileReader, URL */
 (async () => {
-    "use strict";
-    await loadTranslationFile('web', 'user,common,home');
-    $(document).ready(function () {
-        initIntelInput();
-        initValidation();
-        initSelect2();
-        initEvents();
+  "use strict";
+
+  await loadTranslationFile("web", "user,common,home");
+
+  $(document).ready(() => {
+    initIntelInput();
+    initValidation();
+    initSelect2();
+    initEvents();
+  });
+
+  function initEvents() {
+    setTimeout(() => $("#country").trigger("change"), 100);
+
+    $("#country").on("change", function () {
+      const id = $(this).val();
+      id ? fetchStatesByCountry(id) : (updateStateOptions(), updateCityOptions());
     });
-     
-    function initEvents(){
-        setTimeout(function () {
-            $("#country").trigger('change');
-        }, 100);
-        $("#country").on('change', function () {
-            let id = $(this).val();
-            if (id) {
-                fetchStatesByCountry(id);
+
+    $("#state").on("change", function () {
+      const id = $(this).val();
+      id ? fetchCitiesByState(id) : updateCityOptions();
+    });
+  }
+
+  function updateStateOptions() {
+    $("#state").empty().append(`<option value="">${_l("web.common.select")}</option>`);
+  }
+
+  function updateCityOptions() {
+    $("#city").empty().append(`<option value="">${_l("web.common.select")}</option>`);
+  }
+
+  function initSelect2() {
+    $(".custom-select2").select2();
+  }
+
+  function initValidation() {
+    $.validator.addMethod("filesize", (value, el, param) => !el.files.length || el.files[0].size <= param * 1024, "File size must be less than {0} KB.");
+
+    $("#userProfileForm").validate({
+      rules: {
+        profile_photo: { extension: "jpeg|jpg|png", filesize: 2048 },
+        first_name: { required: true, maxlength: 30 },
+        last_name: { required: true, maxlength: 30 },
+        email: { required: true, email: true },
+        user_phone: { required: true, minlength: 10, maxlength: 15 },
+        address_line: { required: true, maxlength: 50 },
+        country: { required: true },
+        state: { required: true },
+        city: { required: true },
+        postal_code: { required: true, pattern: /^[0-9a-zA-Z]+$/ }
+      },
+      messages: {
+        first_name: { required: _l("web.user.enter_first_name"), maxlength: _l("web.common.maxlength_30") },
+        last_name: { required: _l("web.user.enter_last_name"), maxlength: _l("web.common.maxlength_30") },
+        email: { required: _l("web.user.enter_email"), email: _l("web.home.valid_email") },
+        user_phone: { required: _l("web.user.phone_number_required"), minlength: _l("web.home.phone_number_minlength"), maxlength: _l("web.home.phone_number_maxlength") },
+        address_line: { required: _l("web.user.enter_address"), maxlength: _l("web.user.maxlength_50") },
+        postal_code: { required: _l("web.home.enter_pincode"), pattern: "Please enter a valid postal code" }
+      },
+      errorPlacement: (error, element) => $("#" + element.attr("id") + "_error").text(error.text()),
+      highlight: (el) => {
+        const $el = $(el);
+        $el.addClass("is-invalid").removeClass("is-valid");
+        if ($el.hasClass("select2-hidden-accessible")) $el.next(".select2-container").addClass("is-invalid").removeClass("is-valid");
+      },
+      unhighlight: (el) => {
+        const $el = $(el);
+        $el.removeClass("is-invalid").addClass("is-valid");
+        if ($el.hasClass("select2-hidden-accessible")) $el.next(".select2-container").removeClass("is-invalid").addClass("is-valid");
+        $("#" + el.id + "_error").text("");
+      },
+      submitHandler: function (form) {
+        const data = new FormData(form);
+        data.set("user_phone", $("#international_phone_number").val());
+        data.append("_token", $("meta[name='csrf-token']").attr("content"));
+
+        const $btn = $(".btn-primary").text(_l("web.user.plz_wait")).prop("disabled", true);
+
+        $.ajax({
+          type: "POST",
+          url: "/userprofile",
+          data: data,
+          processData: false,
+          contentType: false,
+          success: (resp) => {
+            showToast("success", resp.message);
+            if (resp.data.profile_image) $(".header_profile_image").attr("src", resp.data.profile_image);
+            $btn.text(_l("web.user.save_changes")).prop("disabled", false);
+          },
+          error: (err) => {
+            $btn.text(_l("web.user.save_changes")).prop("disabled", false);
+            $(".form-control").removeClass("is-invalid is-valid");
+            if (err.responseJSON?.code === 422) {
+              $.each(err.responseJSON.errors, (k, v) => {
+                $("#" + k).addClass("is-invalid");
+                $("#" + k + "_error").text(v[0]);
+              });
             } else {
-                $("#state").empty();
-                $("#state").append(`<option value="">${_l('web.common.select')}</option>`);
-                $("#city").empty();
-                $("#city").append(`<option value="">${_l('web.common.select')}</option>`);
+              showToast("error", err.responseJSON?.message || "An error occurred.");
             }
+          }
         });
+      }
+    });
+  }
 
-        $("#state").on('change', function () {
-            let id = $(this).val();
-            if (id) {
-                fetchCitiesByState(id);
-            } else {
-                $("#city").empty();
-                $("#city").append(`<option value="">${_l('web.common.select')}</option>`);
-            }
-        });
-    }
-    function initSelect2() {
-        $('.custom-select2').select2();
-    }
-    function initValidation(){
-        $("#userProfileForm").validate({
-            rules: {
-                profile_photo: {
-                    required: false,
-                    extension: "jpeg|jpg|png",
-                    filesize: 2048
-                },
-                first_name: {
-                    required: true,
-                    maxlength: 30
-                },
-                last_name: {
-                    required: true,
-                    maxlength: 30
-                },
-                email: {
-                    required: true,
-                    email: true
-                },
-                user_phone: {
-                    required: true,
-                    maxlength: 15 ,
-                    minlength: 10
-                },
-                address_line: {
-                    required: true,
-                    maxlength: 50
-                },
-                country: {
-                    required: true,
-                },
-                state: {
-                    required: true,
-                },
-                city: {
-                    required: true,
-                },
-                postal_code: {
-                    required: true,
-                    pattern: /^[0-9a-zA-Z]+$/ // Pattern for alphanumeric postal code
-                },
-            },
-            messages: {
-                first_name: {
-                    required: _l('web.user.enter_first_name'),
-                    maxlength: _l('web.common.maxlength_30')
-                },
-                last_name: {
-                    required: _l('web.user.enter_last_name'),
-                    maxlength: _l('web.common.maxlength_30')
-                },
-                email: {
-                    required: _l('web.user.enter_email'),
-                    email: _l('web.home.valid_email')
-                },
-                user_phone: {
-                    required: _l('web.user.phone_number_required'),
-                    maxlength: _l('web.home.phone_number_maxlength'),
-                    minlength: _l('web.home.phone_number_minlength')
-                },
-                address_line: {
-                    required: _l('web.user.enter_address'),
-                    maxlength: _l('web.user.maxlength_50')
-                },
-                postal_code: {
-                    required: _l('web.home.enter_pincode'),
-                    pattern: "Please enter a valid postal code"
-                },
-            },
-            errorPlacement: function (error, element) {
-                var errorId = element.attr("id") + "_error";
-                if (element.hasClass("select2-hidden-accessible")) {
-                    $("#" + errorId).text(error.text());
-                } else {
-                    $("#" + errorId).text(error.text());
-                }
-            },
-            highlight: function (element) {
-                if ($(element).hasClass("select2-hidden-accessible")) {
-                    $(element).next(".select2-container").addClass("is-invalid").removeClass('is-valid');
-                }
-                $(element).addClass("is-invalid").removeClass("is-valid");
-            },
-            unhighlight: function (element) {
-                if ($(element).hasClass("select2-hidden-accessible")) {
-                    $(element).next(".select2-container").removeClass("is-invalid").addClass('is-valid');
-                }
-                $(element).removeClass("is-invalid").addClass("is-valid");
-                var errorId = element.id + "_error";
-                $("#" + errorId).text("");
-            },
-            onkeyup: function(element) {
-                $(element).valid();
-            },
-            onchange: function(element) {
-                $(element).valid();
-            },
-            submitHandler: function (form) {
-                let adminProfileData = new FormData(form);
-                adminProfileData.set('user_phone', $('#international_phone_number').val());
+  function initIntelInput() {
+    const input = document.querySelector(".user_phone");
+    const intl = document.querySelector("#international_phone_number");
+    const form = document.querySelector("#userProfileForm");
+    if (!input || !form) return;
 
-                // CSRF Token
-                adminProfileData.append("_token", $('meta[name="csrf-token"]').attr('content'));
+    const iti = window.intlTelInput(input, {
+      utilsScript: `${window.location.origin}/frontend/assets/plugins/intltelinput/js/utils.js`,
+      separateDialCode: true,
+      placeholderNumberType: "",
+      autoPlaceholder: "off"
+    });
 
-                $(".btn-primary").text(_l('web.user.plz_wait')).prop('disabled', true);
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const num = iti.getNumber();
+      if (num) intl.value = num;
+    });
+  }
 
-                $.ajax({
-                    type: "POST",
-                    url: "/userprofile",
-                    data: adminProfileData,
-                    processData: false,
-                    contentType: false,
-                    success: function (resp) {
-                        showToast('success', resp.message);
-                        if (resp.data.profile_image) {
-                            $('.header_profile_image').attr('src', resp.data.profile_image);
-                        }
-                        $(".btn-primary").text(_l('web.user.save_changes')).prop('disabled', false);
-                    },
-                    error: function (error) {
-                        $(".btn-primary").text(_l('web.user.save_changes')).prop('disabled', false);
-                        if (error.responseJSON && error.responseJSON.code === 422) {
-                            $.each(error.responseJSON.errors, function (key, val) {
-                                $("#" + key).addClass("is-invalid");
-                                $("#" + key + "_error").text(val[0]);
-                            });
-                        } else {
-                            showToast('error', error.responseJSON?.message || "An error occurred.");
-                        }
-                    }
-                });
-            }
-        });
+  $("#profile_photo").on("change", function () {
+    const file = this.files[0];
+    const $preview = $("#profile_photo_preview");
+    const $error = $("#profile_photo_error");
 
-        $.validator.addMethod("filesize", function (value, element, param) {
-            if (element.files.length === 0) return true;
-            return element.files[0].size <= param * 1024;
-        }, "File size must be less than {0} KB.");
-    }
-    function initIntelInput(){
-        const userPhoneInput = document.querySelector(".user_phone");
-        const intlPhoneInput = document.querySelector("#international_phone_number");
-        const userProfileForm = document.querySelector("#userProfileForm");
+    let errMsg = "";
+    if (file) {
+      const types = ["image/jpeg", "image/png", "image/jpg"];
+      if (!types.includes(file.type)) errMsg = "Only jpg, jpeg and png formats are allowed.";
+      else if (file.size > 2 * 1024 * 1024) errMsg = "Image size should be less than 2MB.";
 
-        if (userPhoneInput && userProfileForm) {
-            const iti = intlTelInput(userPhoneInput, {
-                utilsScript: `${window.location.origin}/frontend/assets/plugins/intltelinput/js/utils.js`,
-                separateDialCode: true,
-                placeholderNumberType: "",
-                autoPlaceholder: "off"
-            });
-
-            userPhoneInput.classList.add("iti");
-            userPhoneInput.parentElement.classList.add("intl-tel-input");
-
-            userProfileForm.addEventListener("submit", function (event) {
-                event.preventDefault();
-
-                const intlNumber = iti.getNumber();
-                if (intlNumber) {
-                    intlPhoneInput.value = intlNumber;
-                }
-            });
-        }
-    }
-        
-    $('#profile_photo').on('change', function () {
-        let file = this.files[0];
-        let error = '';
-
-        if (file) {
-            let allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-            if (!allowedTypes.includes(file.type)) {
-                error = 'Only jpg, jpeg and png formats are allowed.';
-            }
-
-            if (file.size > 2 * 1024 * 1024) {
-                error = 'Image size should be less than 2MB.';
-            }
-
-            if (error) {
-                $('#profile_photo_error').text(error);
-                $('#profile_photo_preview').attr('src', '').addClass('d-none');
-                return;
-            }
-
-            let img = new Image();
-            let objectURL = URL.createObjectURL(file);
-            img.onload = function () {
-                if (this.width < 180 || this.height < 180) {
-                    $('#profile_photo_error').text('Image should be at least 180 x 180 pixels.');
-                    $('#profile_photo_preview').attr('src', '').addClass('d-none');
-                } else {
-                    $('#profile_photo_error').text('');
-                    let reader = new FileReader();
-                    reader.onload = function (e) {
-                        $('#profile_photo_preview').attr('src', e.target.result).removeClass('d-none');
-                    };
-                    reader.readAsDataURL(file);
-                }
-                URL.revokeObjectURL(objectURL);
-            };
-            img.src = objectURL;
-        }
-
+      if (errMsg) {
+        $error.text(errMsg);
+        $preview.attr("src", "").addClass("d-none");
         $(this).valid();
-    });
+        return;
+      }
 
-    function fetchStatesByCountry(country_id) {
-        $.ajax({
-            type: "POST",
-            url: "/api/states",
-            data: { country_id: country_id },
-            headers: {
-                'accept': 'application/json',
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (response) {
-                if (response.code === 200) {
-                    let data = response.data;
-                    $("#state").empty();
-                    $("#state").append('<option value="">Select</option>');
-                    $.each(data, function (key, value) {
-                        $("#state").append('<option value="' + value.id + '">' + value.name + '</option>');
-                    });
-                    let defaultState = $("#state").data('default-id');
-                    setTimeout(function () {
-                        if(defaultState) {
-                            $("#state").val(defaultState).trigger('change');
-                        }
-                    }, 100);
-                    // empty cities
-                    $("#city").empty();
-                    $("#city").append('<option value="">Select</option>');
-                }
-            }
-        });
+      const img = new Image();
+      const objURL = URL.createObjectURL(file);
+      img.onload = () => {
+        if (img.width < 180 || img.height < 180) {
+          $error.text("Image should be at least 180 x 180 pixels.");
+          $preview.attr("src", "").addClass("d-none");
+        } else {
+          $error.text("");
+          const reader = new FileReader();
+          reader.onload = (e) => $preview.attr("src", e.target.result).removeClass("d-none");
+          reader.readAsDataURL(file);
+        }
+        URL.revokeObjectURL(objURL);
+      };
+      img.onerror = () => {
+        $error.text("Invalid image file.");
+        $preview.attr("src", "").addClass("d-none");
+        URL.revokeObjectURL(objURL);
+      };
+      img.src = objURL;
+    } else {
+      $error.text("");
+      $preview.attr("src", "").addClass("d-none");
     }
+    $(this).valid();
+  });
 
-    function fetchCitiesByState(state_id) {
-        $.ajax({
-            type: "POST",
-            url: "/api/cities",
-            data: { state_id: state_id },
-            headers: {
-                'accept': 'application/json',
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (response) {
-                if (response.code === 200) {
-                    let data = response.data;
-                    $("#city").empty();
-                    $("#city").append('<option value="">Select</option>');
-                    $.each(data, function (key, value) {
-                        $("#city").append('<option value="' + value.id + '">' + value.name + '</option>');
-                    });
-                    let defaultState = $("#city").data('default-id');
-                    setTimeout(function () {
-                        if(defaultState) {
-                            $("#city").val(defaultState).trigger('change');
-                        }
-                    }, 100);
-                    $("#city").trigger('change');
-                }
-            }
-        });
-    }
+  function fetchStatesByCountry(id) {
+    $.post("/api/states", { country_id: id }, (res) => {
+      if (res.code === 200) {
+        const $state = $("#state").empty().append("<option value=''>Select</option>");
+        $.each(res.data, (_, item) => $state.append(`<option value="${item.id}">${item.name}</option>`));
+        const defaultId = $state.data("default-id");
+        if (defaultId) setTimeout(() => $state.val(defaultId).trigger("change"), 100);
+        updateCityOptions();
+      }
+    }).fail(() => showToast("error", "Failed to fetch states."));
+  }
+
+  function fetchCitiesByState(id) {
+    $.post("/api/cities", { state_id: id }, (res) => {
+      if (res.code === 200) {
+        const $city = $("#city").empty().append("<option value=''>Select</option>");
+        $.each(res.data, (_, item) => $city.append(`<option value="${item.id}">${item.name}</option>`));
+        const defaultId = $city.data("default-id");
+        if (defaultId) setTimeout(() => $city.val(defaultId).trigger("change"), 100);
+        else $city.trigger("change");
+      }
+    }).fail(() => showToast("error", "Failed to fetch cities."));
+  }
 })();
