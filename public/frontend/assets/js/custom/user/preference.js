@@ -1,5 +1,6 @@
 /* global location, loadTranslationFile, jQuery, setTimeout, document, showToast */
-(($) => {
+
+(function ($) {
     "use strict";
 
     (async () => {
@@ -8,78 +9,81 @@
         let isInitialLoad = true;
 
         $(document).ready(() => {
-            $('.custom-select2').select2();
+            $(".custom-select2").select2();
             fetchPreference();
         });
 
-        $(document).on('change', '#language_id', function () {
-            if (isInitialLoad) return;
-            updatePreference({ language_id: $(this).val() });
+        $(document).on("change", "#language_id", function () {
+            if (!isInitialLoad) {
+                updatePreference({ language_id: $(this).val() });
+            }
         });
 
-        $(document).on('change', '#region_id', function () {
-            if (isInitialLoad) return;
-            updatePreference({ region_id: $(this).val() });
+        $(document).on("change", "#region_id", function () {
+            if (!isInitialLoad) {
+                updatePreference({ region_id: $(this).val() });
+            }
         });
 
         const fetchPreference = async () => {
             try {
-                const resp = await $.ajax({
+                const response = await $.ajax({
                     type: "POST",
                     url: "/user/get-preferences",
                     dataType: "json",
                     headers: {
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        Accept: "application/json",
+                        "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr("content")
                     }
                 });
 
-                if (resp.code === 200) {
-                    $("#language_id").val(resp.data.language_id).trigger('change');
-                    $("#region_id").val(resp.data.region_id).trigger('change');
+                if (response.code === 200 && response.data) {
+                    $("#language_id").val(response.data.language_id).trigger("change");
+                    $("#region_id").val(response.data.region_id).trigger("change");
                     isInitialLoad = false;
                 }
             } catch (error) {
-                showToast("error", `Error fetching preferences: ${error.message}`);
+                showToast("error", `Error fetching preferences: ${error?.message || "Unknown error"}`);
             }
         };
 
         const updatePreference = async (formData = {}) => {
             try {
-                const resp = await $.ajax({
+                const response = await $.ajax({
                     type: "POST",
                     url: "/user/preference/update",
                     data: formData,
                     dataType: "json",
                     headers: {
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        Accept: "application/json",
+                        "X-CSRF-TOKEN": $("meta[name=\"csrf-token\"]").attr("content")
                     }
                 });
 
-                $(".error-text").text("");
-                $(".form-control").removeClass("is-invalid is-valid");
+                clearErrors();
 
-                if (resp.code === 200) {
-                    showToast('success', resp.message);
-                    setTimeout(() => {
-                        location.reload();
-                    },3000);
+                if (response.code === 200) {
+                    showToast("success", response.message);
+                    setTimeout(() => location.reload(), 3000);
                 }
             } catch (error) {
-                $(".error-text").text("");
-                $(".form-control").removeClass("is-invalid is-valid");
+                clearErrors();
+                const errorData = error?.responseJSON;
 
-                if (error.responseJSON?.code === 422) {
-                    Object.entries(error.responseJSON.errors).forEach(([key, val]) => {
+                if (errorData?.code === 422 && errorData.errors) {
+                    Object.entries(errorData.errors).forEach(([key, val]) => {
                         $(`#${key}`).addClass("is-invalid");
                         $(`#${key}_error`).text(val[0]);
                     });
                 } else {
-                    showToast('error', error.responseJSON?.message || "An error occurred");
+                    showToast("error", errorData?.message || "An error occurred");
                 }
             }
         };
 
+        const clearErrors = () => {
+            $(".error-text").text("");
+            $(".form-control").removeClass("is-invalid is-valid");
+        };
     })();
 })(jQuery);

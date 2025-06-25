@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 (function ($) {
     "use strict";
 
@@ -5,18 +6,34 @@
         await loadTranslationFile('web', 'user,common');
         const adminId = $("#messageinput").data('receiverid');
         const customerId = $("#messageinput").data('senderid');
+=======
+/* global loadTranslationFile, document, showToast, setTimeout, FormData, _l, jQuery, mqtt */
+
+(function ($) {
+    "use strict";
+
+    (async function initChat() {
+        await loadTranslationFile("web", "user,common");
+
+        const customerId = $("#messageinput").data("senderid");
+>>>>>>> Stashed changes
         listenMqttForNewMessages(customerId);
         fetchMessages();
     })();
 
-    const userId = $("#messageinput").data('receiverid');
-    
+    const userId = $("#messageinput").data("receiverid");
     let offset = "";
     let isLoading = false;
     let lastOffset = "";
 
+    /**
+     * Fetch messages from server.
+     * @param {boolean} initial
+     * @param {boolean} reset
+     */
     async function fetchMessages(initial = true, reset = false) {
         if (isLoading || offset === null) return;
+
         isLoading = true;
 
         if (reset) {
@@ -25,19 +42,20 @@
         }
 
         $.ajax({
-            url: '/user/fetch-messages',
-            type: 'POST',
+            url: "/user/fetch-messages",
+            type: "POST",
+            dataType: "json",
             data: {
                 user_id: userId,
-                offset,
-                reset,
+                offset: offset,
+                reset: reset,
                 last_offset: lastOffset,
-                _token: $('meta[name="csrf-token"]').attr('content')
+                _token: $("meta[name='csrf-token']").attr("content")
             },
-            beforeSend: () => {
-                if (initial) $("#messagearea").html('');
+            beforeSend: function () {
+                if (initial) $("#messagearea").html("");
             },
-            success: (response) => {
+            success: function (response) {
                 if (response.code === 200 && response.messages.length > 0) {
                     updateMessageView(response.messages, initial);
                     offset = response.next_offset;
@@ -49,49 +67,52 @@
                     $(".last-chat-time").text(response.last_message.created_at);
                 }
 
-                if (offset === null) $("#messagebody").off("scroll");
-                isLoading = false;
+                if (offset === null) {
+                    $("#messagebody").off("scroll");
+                }
             },
-            error: () => {
+            complete: function () {
                 isLoading = false;
             }
         });
     }
 
     function updateMessageView(messages, initial) {
-        const messageContainer = $("#messagebody");
-        const messageArea = $("#messageArea");
-        const existingMessages = new Set();
+        const $container = $("#messagebody");
+        const $area = $("#messageArea");
+        const existing = new Set();
 
         $(".message-card").each(function () {
-            existingMessages.add($(this).data("message-id"));
+            existing.add($(this).data("message-id"));
         });
 
-        const newMessages = messages.filter(msg => !existingMessages.has(msg.id));
-        const html = newMessages.map(createMessageCard).join('');
+        const newMessages = messages.filter(msg => !existing.has(msg.id));
+        const html = newMessages.map(createMessageCard).join("");
 
         if (initial) {
-            messageArea.html(html);
-            scrollToBottom(messageContainer);
+            $area.html(html);
+            scrollToBottom($container);
         } else {
-            const oldScrollHeight = messageContainer[0].scrollHeight;
-            messageArea.prepend(html);
-            adjustScrollPosition(messageContainer, oldScrollHeight);
+            const oldHeight = $container[0].scrollHeight;
+            $area.prepend(html);
+            adjustScrollPosition($container, oldHeight);
         }
 
-        setTimeout(() => $(".message-card").addClass("loaded"), 10);
-    }
-
-    function scrollToBottom(container) {
         setTimeout(() => {
-            container.scrollTop(container[0].scrollHeight);
+            $(".message-card").addClass("loaded");
         }, 10);
     }
 
-    function adjustScrollPosition(container, oldScrollHeight) {
+    function scrollToBottom($container) {
         setTimeout(() => {
-            const newScrollHeight = container[0].scrollHeight;
-            container.scrollTop(newScrollHeight - oldScrollHeight);
+            $container.scrollTop($container[0].scrollHeight);
+        }, 10);
+    }
+
+    function adjustScrollPosition($container, oldHeight) {
+        setTimeout(() => {
+            const newHeight = $container[0].scrollHeight;
+            $container.scrollTop(newHeight - oldHeight);
         }, 50);
     }
 
@@ -102,76 +123,83 @@
     });
 
     function listenMqttForNewMessages(customerId) {
-        
         const topic = `dreamsrent/to_user/${customerId}`;
-        
-        if (typeof mqtt === 'undefined') {
-            showToast('error', 'MQTT not connected! Please refresh the page.');
+
+        if (typeof mqtt === "undefined") {
+            showToast("error", "MQTT not connected! Please refresh the page.");
             return;
         }
-        const client = mqtt.connect('wss://broker.emqx.io:8084/mqtt', {
+
+        const client = mqtt.connect("wss://broker.emqx.io:8084/mqtt", {
             clientId: `client_${Math.random().toString(16).substr(2, 8)}`,
             clean: true,
             reconnectPeriod: 1000,
             connectTimeout: 5000
         });
 
-        client.on('connect', () => client.subscribe(topic, { qos: 1 }));
-        client.on('message', () => {
+        client.on("connect", function () {
+            client.subscribe(topic, { qos: 1 });
+        });
+
+        client.on("message", function () {
             offset = "";
             fetchMessages(true, true);
         });
     }
 
-    $(document).on('keydown', '#messageinput', function (e) {
-        if (e.keyCode === 13) $("#sendmsg").trigger('click');
+    $(document).on("keydown", "#messageinput", function (e) {
+        if (e.keyCode === 13) {
+            $("#sendmsg").trigger("click");
+        }
     });
 
-    $(document).on('click', '#sendmsg', function () {
-        const $messageInput = $("#messageinput");
-        const message = $messageInput.val().trim();
-        const senderId = $messageInput.data('senderid');
-        const receiverId = $messageInput.data('receiverid');
+    $(document).on("click", "#sendmsg", function () {
+        const $input = $("#messageinput");
+        const message = $input.val().trim();
+        const senderId = $input.data("senderid");
+        const receiverId = $input.data("receiverid");
         const topic = `dreamsrent/to_user/${receiverId}`;
         const file = $("#fileupload")[0].files[0];
 
         if (!message && !file) {
-            showToast('error', _l('web.user.type_message_or_file'));
+            showToast("error", _l("web.user.type_message_or_file"));
             return;
         }
 
         const formData = new FormData();
-        formData.append('message', message);
-        formData.append('sender_id', senderId);
-        formData.append('receiver_id', receiverId);
-        formData.append('topic', topic);
-        formData.append('messageType', file ? 'file' : 'text');
-        if (file) formData.append('file', file);
-        formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+        formData.append("message", message);
+        formData.append("sender_id", senderId);
+        formData.append("receiver_id", receiverId);
+        formData.append("topic", topic);
+        formData.append("messageType", file ? "file" : "text");
+        if (file) {
+            formData.append("file", file);
+        }
+        formData.append("_token", $("meta[name='csrf-token']").attr("content"));
 
         $.ajax({
             url: "/user/send-message",
-            type: 'POST',
+            type: "POST",
             data: formData,
             processData: false,
             contentType: false,
-            beforeSend: () => {
-                $messageInput.val('').prop('disabled', true);
-                $("#sendmsg").prop('disabled', true);
+            beforeSend: function () {
+                $input.val("").prop("disabled", true);
+                $("#sendmsg").prop("disabled", true);
             },
-            success: () => {
+            success: function () {
                 offset = "";
                 lastOffset = "";
                 fetchMessages(true, true);
             },
-            complete: () => {
-                $messageInput.prop('disabled', false);
-                $("#sendmsg").prop('disabled', false);
-                $("#fileupload").val('');
-                $("#messageinput").val('');
-                $(".selected_file").text('').addClass('d-none');
+            complete: function () {
+                $input.prop("disabled", false);
+                $("#sendmsg").prop("disabled", false);
+                $("#fileupload").val("");
+                $input.val("");
+                $(".selected_file").text("").addClass("d-none");
             },
-            error: () => {
+            error: function () {
                 offset = "";
                 lastOffset = "";
                 fetchMessages(true, true);
@@ -180,18 +208,22 @@
     });
 
     function createMessageCard(message) {
-        const isRightAligned = message.alignment === 'right';
-        const messageContent = message.message_type === 'text'
-            ? message.message
-            : `<a href="${message.file_path}" target="_blank"><i class="fa fa-link"></i> ${message.message}</a>`;
+        const isRight = message.alignment === "right";
+        const msgContent =
+            message.message_type === "text"
+                ? message.message
+                : `<a href="${message.file_path}" target="_blank"><i class="fa fa-link"></i> ${message.message}</a>`;
 
         return `
-            <li class="notify-block ${isRightAligned ? 'sent' : 'received'} d-flex">
-                ${!isRightAligned ? `<div class="avatar flex-shrink-0"><img src="${message.admin_avatar}" alt="User Image" class="avatar-img rounded-circle"></div>` : ''}
+            <li class="notify-block ${isRight ? "sent" : "received"} d-flex message-card" data-message-id="${message.id}">
+                ${!isRight ? `
+                    <div class="avatar flex-shrink-0">
+                        <img src="${message.admin_avatar}" alt="User Image" class="avatar-img rounded-circle">
+                    </div>` : ""}
                 <div class="media-body flex-grow-1">
                     <div class="msg-box">
                         <div>
-                            <p>${messageContent}</p>
+                            <p>${msgContent}</p>
                             <ul class="chat-msg-info">
                                 <li>
                                     <div class="chat-time">
@@ -205,14 +237,19 @@
             </li>`;
     }
 
-    $(document).on('change', '#fileupload', function () {
-        const fileName = this.files.length > 0 ? this.files[0].name : '';
-        const displayName = fileName.length > 20 ? `${fileName.substring(0, 20)}...` : fileName;
+    $(document).on("change", "#fileupload", function () {
+        const fileName = this.files.length > 0 ? this.files[0].name : "";
+        const shortName = fileName.length > 20 ? `${fileName.slice(0, 20)}...` : fileName;
 
         if (!fileName) {
-            $(".selected_file").text('').addClass('d-none');
+            $(".selected_file").text("").addClass("d-none");
         } else {
-            $(".selected_file").removeClass('d-none').text(displayName);
+            $(".selected_file").removeClass("d-none").text(shortName);
         }
     });
+<<<<<<< Updated upstream
 })(jQuery);
+=======
+
+})(jQuery);
+>>>>>>> Stashed changes

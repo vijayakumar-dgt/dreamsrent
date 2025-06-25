@@ -1,3 +1,4 @@
+/* global $, loadTranslationFile, showToast, _l, document, FormData, setTimeout, window */
 (async () => {
     "use strict";
     await loadTranslationFile("admin", "common, auth");
@@ -15,12 +16,12 @@
             },
             messages: {
                 password: {
-                    required: _l('admin.common.password_required'),
+                    required: _l("admin.common.password_required"),
                     minlength: _l("admin.common.password_minlength")
                 },
                 password_confirmation: {
-                    required: _l('admin.common.confirm_password_required'),
-                    equalTo: _l('admin.common.confirm_password_equal_to')
+                    required: _l("admin.common.confirm_password_required"),
+                    equalTo: _l("admin.common.confirm_password_equal_to")
                 },
             },
             errorPlacement: function (error, element) {
@@ -43,7 +44,7 @@
             },
             submitHandler: function (form) {
                 let cylinderFormData = new FormData(form);
-                $("#resetpasswordForm .submitbtn").text(_l('admin.common.please_wait'));
+                $("#resetpasswordForm .submitbtn").text(_l("admin.common.please_wait"));
                 $("#resetpasswordForm .submitbtn").attr("disabled", true);
                 $(".password-error-text").text("");
                 $.ajax({
@@ -56,7 +57,7 @@
                         if (resp.code === 200) {
                             showToast("success", resp.message);
                         }
-                        $("#resetpasswordForm .submitbtn").text(_l('admin.auth.we_are_redirecting_you'));
+                        $("#resetpasswordForm .submitbtn").text(_l("admin.auth.we_are_redirecting_you"));
                         setTimeout(() => {
                             window.location.href = "/admin/login";
                         }, 3000);
@@ -65,7 +66,7 @@
                         $(".password-error-text").text(
                             error.responseJSON.message
                         );
-                        $("#resetpasswordForm .submitbtn").text(_l('admin.common.reset_password'));
+                        $("#resetpasswordForm .submitbtn").text(_l("admin.common.reset_password"));
                         $("#resetpasswordForm .submitbtn").prop(
                             "disabled",
                             false
